@@ -1,4 +1,4 @@
-package healthcocopad.healthcoco.com.healthcocopad;
+package com.healthcoco.healthcocopad;
 
 import org.junit.Test;
 
