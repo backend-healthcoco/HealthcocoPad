@@ -3,4 +3,21 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <color name="blue_action_bar">#0077b5</color>
+    <color name="blue_primary_dark">#016EA7</color>
+    <color name="white">#ffffff</color>
+    <color name="white_translucent">#80ffffff</color>
+    <color name="grey_light_text">#9C9C9C</color>
+    <color name="grey_dark_text">#656565</color>
+    <color name="black_greyish">#282828</color>
+    <color name="black_translucent">#80000000</color>
+    <color name="black_translucent_more">#60000000</color>
+    <color name="grey_translucent">#404C4C4C</color>
+    <color name="black">#000000</color>
+    <color name="grey_hint_color">#CACACF</color>
+    <color name="grey_light_divider">#EDEDED</color>
+    <color name="white_translucent_forgot_password">#F2ffffff</color>
+    <color name="green_logo">#30CA70</color>
+
 </resources>

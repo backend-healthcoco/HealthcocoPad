@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/HealthcocoPad.iml" filepath="$PROJECT_DIR$/HealthcocoPad.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SugarOrm/SugarOrm.iml" filepath="$PROJECT_DIR$/SugarOrm/SugarOrm.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

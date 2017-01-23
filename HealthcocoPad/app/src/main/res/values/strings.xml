@@ -1,3 +1,94 @@
 <resources>
     <string name="app_name">HealthcocoPad</string>
+    <string name="app_version_name">1.0.0</string>
+    <string name="database_name">healthcoco_pad.db</string>
+    <string name="join">Join</string>
+    <string name="sign_in">Sign In</string>
+
+    <string name="title_hcc_twenty_four_seven">Day or Night \n your clinic is always open</string>
+    <string name="text_hcc_twenty_four_seven">Too many patients waiting for their turn- Find your clinic always open 24x7</string>
+
+    <string name="title_hcc_conn">Connect.Access.Share</string>
+    <string name="text_hcc_conn">View entire patient medical data and history, with patient\'s consent</string>
+
+    <string name="title_hcc_records">Anywhere. Anytime. Across Devices.</string>
+    <string name="text_hcc_records">Safely store all patients records and access them anytime, from anywhere, and on multiple devices</string>
+
+    <string name="title_hcc_profile">Build your Profile &amp; Reach out to the Healthcare Community</string>
+    <string name="text_hcc_profile">Improve your online presence by creating a public profile and managing your clinic profile</string>
+
+    <string name="title_hcc_prescription">Go Paperless with Digital Rx</string>
+    <string name="text_hcc_rx">Top class Rx templates readily available to prescribe your patients in no time</string>
+
+    <!--Sign up screen -->
+    <string name="forgot_your_password">Forgot Your Password&#160;?</string>
+    <string name="to_reset_password">To reset password, Please enter Email associated with your account.</string>
+
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="signin_accept_terms_and_conditions">By Signing in,you agree to HealthcocoPlus\'s</string>
+
+    <string name="underlined_terms_of_service"><u>Terms of Service</u></string>
+    <string name="and">&#160;and&#160;</string>
+    <string name="underlined_privacy_policy"><u>Privacy Policy</u></string>
+    <string name="cancel">Cancel</string>
+
+    <!--Sign Up Dialog Fragment-->
+    <string name="full_name">Full Name</string>
+    <string name="mobile_number">Mobile Number</string>
+    <string name="title_dr">Dr.</string>
+    <string name="male">&#160;&#160;Male</string>
+    <string name="female">&#160;&#160;Female</string>
+
+    <string name="email_address">Email Address</string>
+    <string name="city">City</string>
+    <string name="select_city">Select City</string>
+    <string name="select_speciality">Select Speciality</string>
+    <string name="speciality">Speciality</string>
+    <string name="user_offline">User is Offline</string>
+    //versoin check
+    <string name="title_update_available">Update Available</string>
+    <string name="message_update_available">A new version of Healthcoco+ is available. Please update.</string>
+    <string name="message_force_update">In Order to Continue, you must update Healthcoco+ now. This should only take a few moments.</string>
+    <string name="update">Update</string>
+    <string name="later">Later</string>
+
+    <!-- Login form ater Messages-->
+    <!-- Alert Messages -->
+    <string name="please_enter_email_id_And_password_to_login">Please Enter Email ID and Password to Login</string>
+    <string name="please_enter_email_id_to_login">Please Enter Email ID to Login</string>
+    <string name="please_enter_password_to_login">Please Enter Password to Login</string>
+    <string name="please_enter_username">Please Enter Username</string>
+    <string name="please_enter_password">Please Enter Password</string>
+    <string name="password_minimum_eight_characters">Password should be of Minimum 8 Characters</string>
+    <string name="please_confirm_password">Please Confirm Password</string>
+    <string name="please_enter_email_address">Please enter Email Address</string>
+    <string name="please_enter_valid_email_address">Please enter a valid Email Address</string>
+
+    <string name="userstate_verified">User Verified</string>
+    <string name="userstate_not_verified">Pending Email Verification</string>
+    <string name="userstate_not_activated">Pending Healthcoco Verification</string>
+    <string name="userstate_incomplete">Pending Signup</string>
+    <string name="userstate_complete_active">Active</string>
+
+    <string name="verification">Verification</string>
+    <string name="title_please_verify">Please Verify</string>
+    <string name="alert_verify">Verification email has been sent to your registered email address.\nPlease check your Inbox/Spam folder.</string>
+
+    <string name="title_activation">Activation</string>
+    <string name="alert_activation">Your Activation is under process.\nWe will contact you shortly to get you started with Healthcoco+.</string>
+    <string name="message_thank_you">Thank You for Contacting us.Our Team will contact you shortly.</string>
+    <string name="thank_you">Thank You</string>
+    <string name="loading_taking_time">Please wait&#8230;</string>
+    <string name="save">Save</string>
+    <string name="error">Error</string>
+    <string name="email_sent_to">Email sent to&#160;</string>
+    <string name="reset">Reset</string>
+
+    <string name="terms_of_service">Terms of Service</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="sign_up">Sign Up</string>
+
+    <string name="page_no_loaded">Something went wrong while loading Page</string>
+
 </resources>
