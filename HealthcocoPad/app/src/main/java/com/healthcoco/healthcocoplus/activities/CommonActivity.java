@@ -52,7 +52,7 @@ public class CommonActivity extends HealthCocoActivity {
     private void initMembers() {
         LogUtils.LOGD(TAG, "initMembers");
         transaction = getSupportFragmentManager().beginTransaction();
-//        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
     }
 
     private void initFragment(int ordinal) {
@@ -60,8 +60,7 @@ public class CommonActivity extends HealthCocoActivity {
         switch (fragmentType) {
             case LOGIN_SIGN_UP:
 //                mApp.addActivityToStack(this);
-                openFragment(ActionbarType.TITLE, R.string.sign_up, new LoginSignupFragment());
-//                hideActionBar();
+                openFragment(ActionbarType.HIDDEN, R.string.sign_up, new LoginSignupFragment());
                 break;
             case CONTINUE_SIGN_UP:
                 break;
@@ -73,6 +72,7 @@ public class CommonActivity extends HealthCocoActivity {
                 break;
         }
     }
+
 
     private void openFragment(ActionbarType actionbarType, int actionBarTitleId, HealthCocoFragment fragment) {
         openFragment(actionbarType, null, actionBarTitleId, fragment);
@@ -92,7 +92,7 @@ public class CommonActivity extends HealthCocoActivity {
     }
 
     private void openFragment(ActionbarType actionbarType, ActionbarLeftRightActionType actionbarLeftRightActionType, String actionBarTitle, HealthCocoFragment fragment) {
-//        initActionBar(actionbarType, actionbarLeftRightActionType, actionBarTitle);
+        initActionBar(actionbarType, actionbarLeftRightActionType, actionBarTitle);
         transaction.add(R.id.layout_fragment_common_open_up, fragment, fragment.getClass().getSimpleName());
         transaction.commit();
     }

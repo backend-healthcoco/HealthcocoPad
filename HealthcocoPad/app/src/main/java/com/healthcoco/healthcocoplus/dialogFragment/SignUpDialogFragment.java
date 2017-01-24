@@ -3,13 +3,16 @@ package com.healthcoco.healthcocoplus.dialogFragment;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.android.volley.Response;
@@ -17,11 +20,21 @@ import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocoplus.HealthCocoDialogFragment;
 import com.healthcoco.healthcocoplus.activities.CommonActivity;
 import com.healthcoco.healthcocoplus.activities.HomeActivity;
+import com.healthcoco.healthcocoplus.bean.server.CityResponse;
+import com.healthcoco.healthcocoplus.bean.server.Specialities;
+import com.healthcoco.healthcocoplus.custom.AutoCompleteTextViewAdapter;
 import com.healthcoco.healthcocoplus.bean.server.LoginResponse;
 import com.healthcoco.healthcocoplus.bean.server.User;
+import com.healthcoco.healthcocoplus.enums.AutoCompleteTextViewType;
+import com.healthcoco.healthcocoplus.enums.CommonListDialogType;
 import com.healthcoco.healthcocoplus.enums.CommonOpenUpFragmentType;
+import com.healthcoco.healthcocoplus.enums.LocalBackgroundTaskType;
+import com.healthcoco.healthcocoplus.enums.LocalTabelType;
 import com.healthcoco.healthcocoplus.enums.WebServiceType;
 import com.healthcoco.healthcocoplus.enums.WebViewType;
+import com.healthcoco.healthcocoplus.listeners.CommonListDialogItemClickListener;
+import com.healthcoco.healthcocoplus.listeners.LocalDataBackgroundtaskOptimised;
+import com.healthcoco.healthcocoplus.listeners.LocalDoInBackgroundListenerOptimised;
 import com.healthcoco.healthcocoplus.services.GsonRequest;
 import com.healthcoco.healthcocoplus.bean.VolleyResponseBean;
 import com.healthcoco.healthcocoplus.services.impl.LocalDataServiceImpl;
@@ -34,19 +47,36 @@ import com.healthcoco.healthcocoplus.utilities.Util;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import static com.healthcoco.healthcocoplus.enums.WebServiceType.GET_SPECIALITIES;
+
 /**
  * Created by Shreshtha on 19-01-2017.
  */
 
-public class SignUpDialogFragment extends HealthCocoDialogFragment implements View.OnClickListener, GsonRequest.ErrorListener, Response.Listener<VolleyResponseBean> {
+public class SignUpDialogFragment extends HealthCocoDialogFragment implements View.OnClickListener, GsonRequest.ErrorListener, Response.Listener<VolleyResponseBean>, CommonListDialogItemClickListener, LocalDoInBackgroundListenerOptimised {
     private View view;
     private Button bt_cancel;
-    private EditText editUserName;
-    private EditText editPassword;
-    private Button btLogin;
-    private Button btForgotPassword;
+    private EditText editName;
+    private EditText editMobileNo;
+    private EditText editEmailAddress;
+    private EditText editCity;
+    private TextView tvSpeciality;
+    private ArrayList<Specialities> specialitiesResponse;
+    private CommonListDialogFragment commonListDialogFragment;
+    private boolean openSpecialitiesScreen;
+    private AutoCompleteTextView autoTvTitle;
+    private RadioGroup radioGroupGender;
+    private Button btGetStarted;
+    private Button btAlreadyHaveAnAccount;
     private TextView tvTermsOfService;
     private TextView tvPrivacyPolicy;
+    public static final ArrayList<Object> TITLES_LIST = new ArrayList<Object>() {{
+        add("Dr.");
+        add("Mr.");
+        add("Ms.");
+    }};
+    private boolean isFromLoginScreen;
+    public static final String TAG_IS_FROM_LOGIN_SCREEN = "isFromLoginScreen";
 
 
     @Override
@@ -63,52 +93,79 @@ public class SignUpDialogFragment extends HealthCocoDialogFragment implements Vi
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        Intent intent = mActivity.getIntent();
+        if (intent != null)
+            isFromLoginScreen = intent.getBooleanExtra(TAG_IS_FROM_LOGIN_SCREEN, false);
         init();
-//        if (DevConfig.PRE_FILLED_FORM) {
-//            preFillForm();
-//        }
     }
 
     public void init() {
         initViews();
         initListeners();
-        initData();
-    }
-
-    private void preFillForm() {
-        editUserName.setText("abhijeet.shukla@healthcoco.com");
-        editPassword.setText("neha1234");
+        initAutoTvAdapter(autoTvTitle, AutoCompleteTextViewType.DOCTOR_TITLES, TITLES_LIST);
     }
 
     public void initListeners() {
+        editCity.setOnClickListener(this);
+        tvSpeciality.setOnClickListener(this);
+        btGetStarted.setOnClickListener(this);
+        btAlreadyHaveAnAccount.setOnClickListener(this);
         bt_cancel.setOnClickListener(this);
-        btForgotPassword.setOnClickListener(this);
-        btLogin.setOnClickListener(this);
         tvTermsOfService.setOnClickListener(this);
         tvPrivacyPolicy.setOnClickListener(this);
     }
 
+    @Override
     public void initData() {
 
     }
 
     public void initViews() {
         bt_cancel = (Button) view.findViewById(R.id.bt_cancel);
-        editUserName = (EditText) view.findViewById(R.id.edit_username);
-        editPassword = (EditText) view.findViewById(R.id.edit_password);
-        btLogin = (Button) view.findViewById(R.id.bt_login);
-        btForgotPassword = (Button) view.findViewById(R.id.bt_forgot_password);
+        editName = (EditText) view.findViewById(R.id.edit_name);
+        editMobileNo = (EditText) view.findViewById(R.id.edit_mobile_number);
+        editEmailAddress = (EditText) view.findViewById(R.id.edit_email_address);
+        editCity = (EditText) view.findViewById(R.id.edit_city);
+        tvSpeciality = (TextView) view.findViewById(R.id.tv_speciality);
+        autoTvTitle = (AutoCompleteTextView) view.findViewById(R.id.autotv_title);
+        radioGroupGender = (RadioGroup) view.findViewById(R.id.rg_gender_select);
+        btGetStarted = (Button) view.findViewById(R.id.bt_get_started);
+        btAlreadyHaveAnAccount = (Button) view.findViewById(R.id.bt_alreay_have_an_account);
         tvTermsOfService = (TextView) view.findViewById(R.id.tv_terms_of_service);
         tvPrivacyPolicy = (TextView) view.findViewById(R.id.tv_privacy_policy);
+    }
+
+    private void initAutoTvAdapter(AutoCompleteTextView autoCompleteTextView, AutoCompleteTextViewType autoCompleteTextViewType, ArrayList<Object> list) {
+        try {
+            if (!Util.isNullOrEmptyList(list)) {
+                AutoCompleteTextViewAdapter textViewAdapter = new AutoCompleteTextViewAdapter(mActivity, R.layout.spinner_drop_down_item_grey_background,
+                        list, autoCompleteTextViewType);
+                autoCompleteTextView.setThreshold(0);
+                autoCompleteTextView.setAdapter(textViewAdapter);
+                autoCompleteTextView.setDropDownAnchor(autoCompleteTextView.getId());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.tv_speciality:
+                if (!Util.isNullOrEmptyList(specialitiesResponse))
+                    openListPopUp(CommonListDialogType.SPECIALITY, specialitiesResponse);
+                else
+                    getSpecialitiesList(true);
+                break;
+            case R.id.bt_get_started:
+                validateData();
+                break;
+            case R.id.bt_alreay_have_an_account:
+                openLoginDialogFragment();
+                break;
             case R.id.bt_cancel:
                 getDialog().cancel();
-                break;
-            case R.id.bt_login:
                 break;
             case R.id.tv_terms_of_service:
                 openCommonOpenUpActivity(CommonOpenUpFragmentType.TERMS_OF_SERVICE, WebViewType.TERMS_OF_SERVICE.ordinal(), 0);
@@ -121,38 +178,75 @@ public class SignUpDialogFragment extends HealthCocoDialogFragment implements Vi
         }
     }
 
-//    private void validateData() {
-//        ArrayList<View> errorViewList = new ArrayList<>();
-//        String userName = Util.getValidatedValueOrNull(editUserName);
-//        String password = Util.getValidatedValueOrBlankWithoutTrimming(editPassword);
-//        String msg = null;
-//        if (Util.isNullOrBlank(userName) && Util.isNullOrBlank(password)) {
-//            msg = getResources().getString(R.string.please_enter_email_id_And_password_to_login);
-//            errorViewList.add(editUserName);
-//            errorViewList.add(editPassword);
-//        } else if (Util.isNullOrBlank(userName)) {
-//            msg = getResources().getString(R.string.please_enter_email_id_to_login);
-//            errorViewList.add(editUserName);
-//        } else if (!Util.isValidEmail(userName)) {
-//            msg = getResources().getString(R.string.please_enter_valid_email_address);
-//            errorViewList.add(editUserName);
-//        } else if (Util.isNullOrBlank(password)) {
-//            errorViewList.add(editPassword);
-//            msg = getResources().getString(R.string.please_enter_password_to_login);
-//        }
-//        if (Util.isNullOrBlank(msg))
-//            loginUser(userName, password);
-//        else {
-//            EditTextTextViewErrorUtil.showErrorOnEditText(mActivity, view, errorViewList, msg);
-//        }
-//    }
-//
-//    private void loginUser(String userName, String password) {
-//        User user = new User();
-//        user.setUsername(userName);
-//        user.setPassword(Util.getSHA3SecurePassword(password));
-//        WebDataServiceImpl.getInstance(mApp).loginUser(LoginResponse.class, user, this, this);
-//    }
+    private void openLoginDialogFragment() {
+        getDialog().dismiss();
+        Bundle args = new Bundle();
+        LoginDialogFragment dialogFragment = new LoginDialogFragment();
+        dialogFragment.setArguments(args);
+        dialogFragment.show(mFragmentManager, dialogFragment.getClass().getSimpleName());
+    }
+
+    private void getSpecialitiesList(boolean openSpecialitiesScreen) {
+        this.openSpecialitiesScreen = openSpecialitiesScreen;
+        mActivity.showLoading(false);
+        long updatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.SPECIALITIES);
+        WebDataServiceImpl.getInstance(mApp).getSpecialities(Specialities.class, updatedTime, this, this);
+    }
+
+    private void openListPopUp(CommonListDialogType popupType, ArrayList<?> list) {
+        commonListDialogFragment = new CommonListDialogFragment(this, popupType, list);
+        commonListDialogFragment.show(mFragmentManager, CommonListDialogFragment.class.getSimpleName());
+    }
+
+    private void validateData() {
+        ArrayList<View> errorViewList = new ArrayList<>();
+        String msg = null;
+        String name = Util.getValidatedValueOrNull(editName);
+        View checkedRadioButton = view.findViewById(radioGroupGender.getCheckedRadioButtonId());
+        String mobileNo = Util.getValidatedValueOrNull(editMobileNo);
+        String emailAddress = Util.getValidatedValueOrNull(editEmailAddress);
+        String speciality = Util.getValidatedValueOrNull(tvSpeciality);
+        String city = Util.getValidatedValueOrNull(editCity);
+
+        if (Util.isNullOrBlank(name)) {
+            errorViewList.add(editName);
+            msg = getResources().getString(R.string.please_enter_name);
+        } else if (checkedRadioButton == null) {
+            msg = getResources().getString(R.string.please_select_gender);
+        } else if (Util.isNullOrBlank(mobileNo)) {
+            errorViewList.add(editMobileNo);
+            msg = getResources().getString(R.string.please_enter_mobile_no);
+        } else if (!Util.isValidMobileNo(mobileNo)) {
+            errorViewList.add(editMobileNo);
+            msg = getResources().getString(R.string.please_enter_valid_mobile_no);
+        } else if (Util.isNullOrBlank(emailAddress)) {
+            errorViewList.add(editEmailAddress);
+            msg = getResources().getString(R.string.please_enter_email_address);
+        } else if (!Util.isValidEmail(emailAddress)) {
+            errorViewList.add(editEmailAddress);
+            msg = getResources().getString(R.string.please_enter_valid_email_address);
+        } else if (Util.isNullOrBlank(speciality)) {
+            errorViewList.add(tvSpeciality);
+            msg = getResources().getString(R.string.please_select_speciality);
+        } else if (Util.isNullOrBlank(city)) {
+            errorViewList.add(editCity);
+            msg = getResources().getString(R.string.please_select_city);
+        }
+
+        if (Util.isNullOrBlank(msg)) {
+            sendContactUsRequest(name, String.valueOf(checkedRadioButton.getTag()), mobileNo, emailAddress, speciality, city);
+        } else {
+            EditTextTextViewErrorUtil.showErrorOnEditText(mActivity, view, errorViewList, msg);
+        }
+    }
+
+    private void sendContactUsRequest(String name, String s, String mobileNo, String emailAddress, String speciality, String city) {
+        mActivity.showLoading(false);
+//        DoctorContactUs doctorContactUs = new DoctorContactUs(Util.getValidatedValueOrNull(autoTvTitle), name, gender, mobileNo, emailAddress, new ArrayList<String>() {{
+//            add(speciality);
+//        }}, city);
+//        WebDataServiceImpl.getInstance(mApp).sendContactUsRequest(String.class, doctorContactUs, this, this);
+    }
 
     /**
      * @param fragmentType
@@ -169,49 +263,6 @@ public class SignUpDialogFragment extends HealthCocoDialogFragment implements Vi
             startActivity(intent);
         else
             startActivityForResult(intent, requestCode);
-    }
-
-    private void openResetPasswordDialogFragment(String emailAddress) {
-        Bundle args = new Bundle();
-        args.putString(HealthCocoConstants.TAG_EMAIL_ID, emailAddress);
-        ForgotPasswordDialogFragment dialogFragment = new ForgotPasswordDialogFragment();
-        dialogFragment.setArguments(args);
-        dialogFragment.show(mFragmentManager, dialogFragment.getClass().getSimpleName());
-    }
-
-    private void validateData() {
-        ArrayList<View> errorViewList = new ArrayList<>();
-        String userName = Util.getValidatedValueOrNull(editUserName);
-        String password = Util.getValidatedValueOrBlankWithoutTrimming(editPassword);
-        String msg = null;
-        if (Util.isNullOrBlank(userName) && Util.isNullOrBlank(password)) {
-            msg = getResources().getString(R.string.please_enter_email_id_And_password_to_login);
-            errorViewList.add(editUserName);
-            errorViewList.add(editPassword);
-//            editUserName.setError(msg);
-        } else if (Util.isNullOrBlank(userName)) {
-            msg = getResources().getString(R.string.please_enter_email_id_to_login);
-            errorViewList.add(editUserName);
-        } else if (!Util.isValidEmail(userName)) {
-            msg = getResources().getString(R.string.please_enter_valid_email_address);
-            errorViewList.add(editUserName);
-        } else if (Util.isNullOrBlank(password)) {
-            errorViewList.add(editPassword);
-            msg = getResources().getString(R.string.please_enter_password_to_login);
-        }
-        if (Util.isNullOrBlank(msg))
-            loginUser(userName, password);
-        else {
-            EditTextTextViewErrorUtil.showErrorOnEditText(mActivity, view, errorViewList, msg);
-        }
-    }
-
-    private void loginUser(String userName, String password) {
-        mActivity.showLoading(false);
-        User user = new User();
-        user.setUsername(userName);
-        user.setPassword(Util.getSHA3SecurePassword(password));
-        WebDataServiceImpl.getInstance(mApp).loginUser(LoginResponse.class, user, this, this);
     }
 
     @Override
@@ -231,38 +282,33 @@ public class SignUpDialogFragment extends HealthCocoDialogFragment implements Vi
 
     @Override
     public void onResponse(VolleyResponseBean response) {
-        if (response.isValidData(response)) {
-            LoginResponse doctor = (LoginResponse) response.getData();
-            if (doctor.getUser() != null && doctor.getUser().getUserState() != null) {
-                LocalDataServiceImpl.getInstance(mApp).addDoctor(doctor);
-                switch (doctor.getUser().getUserState()) {
-                    case USERSTATEINCOMPLETE:
-                        openContinueSignUpFragment(doctor);
-                        break;
-                    case USERSTATECOMPLETE:
-                        openHomeActivity();
-                        break;
-                    case NOTVERIFIED:
-                        Util.showAlert(mActivity, R.string.title_please_verify, R.string.alert_verify);
-                        break;
-                    case NOTACTIVATED:
-                        Util.showAlert(mActivity, R.string.title_activation, R.string.alert_activation);
-                        break;
-                }
+        if (response != null && response.getWebServiceType() != null) {
+            switch (response.getWebServiceType()) {
+                case GET_SPECIALITIES:
+                    LogUtils.LOGD(TAG, "Success GET_SPECIALITIES");
+                    if (response.isDataFromLocal()) {
+                        specialitiesResponse = (ArrayList<Specialities>) (ArrayList<?>) response.getDataList();
+                        if (!Util.isNullOrEmptyList(specialitiesResponse))
+                            LogUtils.LOGD(TAG, "Success onResponse specialitiesResponse Size " + specialitiesResponse.size() + " isDataFromLocal " + response.isDataFromLocal());
+                        if (!response.isFromLocalAfterApiSuccess() && response.isUserOnline()) {
+                            getSpecialitiesList(false);
+                            return;
+                        }
+                    } else if (!Util.isNullOrEmptyList(response.getDataList())) {
+                        if (specialitiesResponse == null)
+                            specialitiesResponse = new ArrayList<>();
+                        specialitiesResponse.addAll((ArrayList<Specialities>) (ArrayList<?>) response
+                                .getDataList());
+                        response.setIsFromLocalAfterApiSuccess(true);
+                        new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_SPECIALITIES, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                        return;
+                    }
+                    if (openSpecialitiesScreen)
+                        onClick(tvSpeciality);
+                    break;
             }
         }
         mActivity.hideLoading();
-    }
-
-    private void openContinueSignUpFragment(LoginResponse doctor) {
-        LogUtils.LOGD(TAG, "Open Continue Signup");
-//        Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
-//        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.CONTINUE_SIGN_UP.ordinal());
-//        intent.putExtra(ContinueSignUpFragment.TAG_IS_FROM_LOGIN_SCREEN, true);
-//        if (loginResponse != null && loginResponse.getUser() != null)
-//            intent.putExtra(HealthCocoConstants.TAG_DOCTOR_USER_ID, loginResponse.getUser().getUniqueId());
-//        startActivity(intent);
-//        ((CommonOpenUpActivity) mActivity).finish();
     }
 
     private void openHomeActivity() {
@@ -273,4 +319,38 @@ public class SignUpDialogFragment extends HealthCocoDialogFragment implements Vi
         mActivity.finish();
     }
 
+    @Override
+    public VolleyResponseBean doInBackground(VolleyResponseBean response) {
+        VolleyResponseBean volleyResponseBean = null;
+        switch (response.getLocalBackgroundTaskType()) {
+            case ADD_SPECIALITIES:
+                LocalDataServiceImpl.getInstance(mApp).addSpecialities((ArrayList<Specialities>) (ArrayList<?>) response.getDataList());
+            case GET_SPECIALITIES:
+                volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getSpecialitiesListVolleyResponse(GET_SPECIALITIES, null, null);
+                break;
+        }
+        if (volleyResponseBean == null)
+            volleyResponseBean = new VolleyResponseBean();
+        volleyResponseBean.setIsFromLocalAfterApiSuccess(response.isFromLocalAfterApiSuccess());
+        return volleyResponseBean;
+    }
+
+    @Override
+    public void onPostExecute(VolleyResponseBean aVoid) {
+
+    }
+
+    @Override
+    public void onDialogItemClicked(CommonListDialogType commonListDialogType, Object object) {
+        switch (commonListDialogType) {
+            case SPECIALITY:
+                if (object instanceof Specialities) {
+                    Specialities selectedSpeciality = (Specialities) object;
+                    tvSpeciality.setText(selectedSpeciality.getSuperSpeciality());
+                }
+                break;
+        }
+        if (commonListDialogFragment != null)
+            commonListDialogFragment.dismiss();
+    }
 }

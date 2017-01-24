@@ -22,5 +22,12 @@
         <item name="android:windowBackground">@android:color/transparent</item>
         <!--<item name="android:windowAnimationStyle">@style/DialogBottomEnterExitAnimation</item>-->
     </style>
-
+    <style name="DialogTopEnterExitAnimation">
+        <item name="android:windowEnterAnimation">@anim/slide_in_from_top_dialog</item>
+        <item name="android:windowExitAnimation">@anim/slide_out_to_top_dialog</item>
+    </style>
+    <style name="Dialog_Top_No_Border">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowAnimationStyle">@style/DialogTopEnterExitAnimation</item>
+    </style>
 </resources>

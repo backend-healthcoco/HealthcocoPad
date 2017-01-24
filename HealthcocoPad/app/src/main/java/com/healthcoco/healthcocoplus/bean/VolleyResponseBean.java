@@ -1,5 +1,6 @@
 package com.healthcoco.healthcocoplus.bean;
 
+import com.healthcoco.healthcocoplus.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocoplus.enums.WebServiceType;
 import com.healthcoco.healthcocoplus.utilities.Util;
 
@@ -11,7 +12,6 @@ import java.util.Map;
  */
 public class VolleyResponseBean {
     private WebServiceType webServiceType;
-    protected boolean isDataFromLocal;
     protected boolean isUserOnline = true;
     private Map<String, String> headers;
 
@@ -20,6 +20,13 @@ public class VolleyResponseBean {
     private ArrayList<Object> dataList = new ArrayList<Object>();
     private String errMsg;
 
+    protected boolean isFromLocalAfterApiSuccess;
+    private LocalBackgroundTaskType localBackgroundTaskType;
+    protected boolean isDataFromLocal;
+
+    public void setFromLocalAfterApiSuccess(boolean fromLocalAfterApiSuccess) {
+        isFromLocalAfterApiSuccess = fromLocalAfterApiSuccess;
+    }
 
     public String getErrMsg() {
         return errMsg;
@@ -87,5 +94,21 @@ public class VolleyResponseBean {
         if (response != null && response.getData() != null)
             return true;
         return false;
+    }
+
+    public boolean isFromLocalAfterApiSuccess() {
+        return isFromLocalAfterApiSuccess;
+    }
+
+    public void setIsFromLocalAfterApiSuccess(boolean isFromLocalAfterApiSuccess) {
+        this.isFromLocalAfterApiSuccess = isFromLocalAfterApiSuccess;
+    }
+
+    public LocalBackgroundTaskType getLocalBackgroundTaskType() {
+        return localBackgroundTaskType;
+    }
+
+    public void setLocalBackgroundTaskType(LocalBackgroundTaskType localBackgroundTaskType) {
+        this.localBackgroundTaskType = localBackgroundTaskType;
     }
 }

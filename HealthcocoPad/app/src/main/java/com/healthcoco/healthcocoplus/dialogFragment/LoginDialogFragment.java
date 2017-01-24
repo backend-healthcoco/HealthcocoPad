@@ -15,7 +15,6 @@ import android.widget.TextView;
 
 import com.android.volley.Response;
 import com.healthcoco.healthcocopad.R;
-import com.healthcoco.healthcocoplus.HealthCocoApplication;
 import com.healthcoco.healthcocoplus.HealthCocoDialogFragment;
 import com.healthcoco.healthcocoplus.activities.CommonActivity;
 import com.healthcoco.healthcocoplus.activities.HomeActivity;
@@ -35,7 +34,6 @@ import com.healthcoco.healthcocoplus.utilities.Util;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Objects;
 
 /**
  * Created by Shreshtha on 19-01-2017.
@@ -43,6 +41,7 @@ import java.util.Objects;
 
 public class LoginDialogFragment extends HealthCocoDialogFragment implements View.OnClickListener, GsonRequest.ErrorListener, Response.Listener<VolleyResponseBean> {
     public static final String INTENT_SIGNUP_SUCCESS = "com.healthcoco.healthcocoplus.dialogFragment.LoginDialogFragment";
+
     private View view;
     private EditText editUserName;
     private EditText editPassword;

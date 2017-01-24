@@ -4,6 +4,7 @@
     <string name="database_name">healthcoco_pad.db</string>
     <string name="join">Join</string>
     <string name="sign_in">Sign In</string>
+    <string name="get_started">Get Started</string>
 
     <string name="title_hcc_twenty_four_seven">Day or Night \n your clinic is always open</string>
     <string name="text_hcc_twenty_four_seven">Too many patients waiting for their turn- Find your clinic always open 24x7</string>
@@ -17,12 +18,16 @@
     <string name="title_hcc_profile">Build your Profile &amp; Reach out to the Healthcare Community</string>
     <string name="text_hcc_profile">Improve your online presence by creating a public profile and managing your clinic profile</string>
 
+    <string name="title_hcc_sync">Everything is in sync</string>
+    <string name="text_hcc_sync">Whatever you do on one device is reflected everywhere, you can always pick up wherever you left off. </string>
+
     <string name="title_hcc_prescription">Go Paperless with Digital Rx</string>
     <string name="text_hcc_rx">Top class Rx templates readily available to prescribe your patients in no time</string>
 
     <!--Sign up screen -->
     <string name="forgot_your_password">Forgot Your Password&#160;?</string>
     <string name="to_reset_password">To reset password, Please enter Email associated with your account.</string>
+    <string name="already_have_an_account">Already have an Account&#160;?&#160;Sign in</string>
 
     <string name="email">Email</string>
     <string name="password">Password</string>
@@ -91,4 +96,30 @@
 
     <string name="page_no_loaded">Something went wrong while loading Page</string>
 
+
+    <!--Sign Up page-->
+    <string name="enter_birthdate">Enter Birthdate</string>
+    <string name="passwords_dont_match">Password does not match the Confirm Password.</string>
+    <string name="please_enter_clinic_name">Please enter Clinic Name</string>
+    <string name="please_enter_speciality">Please enter Speciality</string>
+    <string name="please_select_speciality">Please select Speciality</string>
+    <string name="please_select_city">Please select City</string>
+    <string name="please_enter_otp">Please Enter OTP</string>
+    <string name="please_enter_city">Please enter City</string>
+    <string name="please_enter_address">Please enter Address</string>
+    <string name="please_enter_registration_number">Please enter Registration Number</string>
+    <string name="please_select_role">Please select Role</string>
+    <string name="please_enter_name">Please enter Name</string>
+    <string name="please_select_gender">Please select Gender</string>
+    <string name="please_enter_full_name">Please enter Full Name</string>
+    <string name="please_enter_valid_mobile_no">Please enter valid Mobile Number</string>
+    <string name="please_enter_mobile_no">Please enter Mobile Number</string>
+
+    <string name="search_city">Search City</string>
+    <string name="search_speciality">Search Speciality</string>
+    <string name="no_result_found_for_your_search">No result found for your Search</string>
+    <string name="search_patient">Search Patient</string>
+
+    <!--error messages-->
+    <string name="error_local_data">Something went wrong while getting data from local</string>
 </resources>
