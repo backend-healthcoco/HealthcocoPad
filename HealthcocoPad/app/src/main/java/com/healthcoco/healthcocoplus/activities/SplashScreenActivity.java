@@ -3,6 +3,7 @@ package com.healthcoco.healthcocoplus.activities;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
@@ -67,9 +68,9 @@ public class SplashScreenActivity extends HealthCocoActivity implements GsonRequ
      */
     private void init() {
         Util.checkNetworkStatus(this);
-        if (HealthCocoConstants.isNetworkOnline) {
-            checkVersion();
-        } else {
+//        if (HealthCocoConstants.isNetworkOnline) {
+//            checkVersion();
+//        } else {
             handler = new Handler();
             runnable = new Runnable() {
                 @Override
@@ -78,7 +79,7 @@ public class SplashScreenActivity extends HealthCocoActivity implements GsonRequ
                 }
             };
             handler.postDelayed(runnable, SPLASH_TIME);
-        }
+//        }
     }
 
     /**
@@ -107,23 +108,23 @@ public class SplashScreenActivity extends HealthCocoActivity implements GsonRequ
     }
 
     private void saveVersionCode() {
-//        try {
-//            int lastVersionCode = Util.getVersionCodeFromPreferences(this);
-//            PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
-//            int currentVersionCode = packageInfo.versionCode;
-//            if (lastVersionCode < currentVersionCode) {
-//                RegisteredPatientDetailsUpdated.deleteAll(RegisteredPatientDetailsUpdated.class);
-//                Util.addVersionCodeInPreferences(this, currentVersionCode);
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+       /* try {
+            int lastVersionCode = Util.getVersionCodeFromPreferences(this);
+            PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+            int currentVersionCode = packageInfo.versionCode;
+            if (lastVersionCode < currentVersionCode) {
+                RegisteredPatientDetailsUpdated.deleteAll(RegisteredPatientDetailsUpdated.class);
+                Util.addVersionCodeInPreferences(this, currentVersionCode);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }*/
     }
 
     @Override
     public void onErrorResponse(VolleyResponseBean volleyResponseBean, String errorMessage) {
-//        super.onErrorResponse(volleyResponseBean, errorMessage);
-        openNextActivity();
+        super.onErrorResponse(volleyResponseBean, errorMessage);
+        launchNextActivity();
     }
 
     @Override
@@ -145,7 +146,7 @@ public class SplashScreenActivity extends HealthCocoActivity implements GsonRequ
                             showAlert(VersionCheckType.PATCH);
 //                            openNextActivity();
                         } else
-                            openNextActivity();
+                            launchNextActivity();
                         break;
                     }
             }
@@ -176,7 +177,7 @@ public class SplashScreenActivity extends HealthCocoActivity implements GsonRequ
                             System.exit(0);
                             break;
                         case PATCH:
-                            openNextActivity();
+                            launchNextActivity();
                             break;
                     }
                 }
@@ -193,14 +194,14 @@ public class SplashScreenActivity extends HealthCocoActivity implements GsonRequ
 //        } catch (android.content.ActivityNotFoundException anfe) {
 //            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + appPackageName)));
 //        }
-        openNextActivity();
+        launchNextActivity();
     }
 
-
-    private void openNextActivity() {
-        Intent intent = new Intent(this, CommonActivity.class);
-        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.LOGIN_SIGN_UP.ordinal());
-        startActivity(intent);
-        finish();
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (handler != null && runnable != null)
+            handler.removeCallbacks(runnable);
     }
+
 }

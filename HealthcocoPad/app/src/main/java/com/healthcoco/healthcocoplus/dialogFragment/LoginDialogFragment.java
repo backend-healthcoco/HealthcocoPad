@@ -5,6 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,11 +21,14 @@ import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocoplus.HealthCocoDialogFragment;
 import com.healthcoco.healthcocoplus.activities.CommonActivity;
 import com.healthcoco.healthcocoplus.activities.HomeActivity;
+import com.healthcoco.healthcocoplus.bean.server.DoctorProfile;
 import com.healthcoco.healthcocoplus.bean.server.LoginResponse;
 import com.healthcoco.healthcocoplus.bean.server.User;
 import com.healthcoco.healthcocoplus.enums.CommonOpenUpFragmentType;
+import com.healthcoco.healthcocoplus.enums.DefaultSyncServiceType;
 import com.healthcoco.healthcocoplus.enums.WebServiceType;
 import com.healthcoco.healthcocoplus.enums.WebViewType;
+import com.healthcoco.healthcocoplus.fragments.InitialSyncFragment;
 import com.healthcoco.healthcocoplus.services.GsonRequest;
 import com.healthcoco.healthcocoplus.bean.VolleyResponseBean;
 import com.healthcoco.healthcocoplus.services.impl.LocalDataServiceImpl;
@@ -65,7 +71,7 @@ public class LoginDialogFragment extends HealthCocoDialogFragment implements Vie
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         init();
-//        preFillForm();
+        preFillForm();
     }
 
     private void preFillForm() {
@@ -114,6 +120,7 @@ public class LoginDialogFragment extends HealthCocoDialogFragment implements Vie
                 if (HealthCocoConstants.isNetworkOnline) {
                     validateData();
                 } else Util.showToast(mActivity, R.string.user_offline);
+//                openHomeActivity();
                 break;
             case R.id.bt_forgot_password:
                 openResetPasswordDialogFragment(Util.getValidatedValue(String.valueOf(editUserName.getText())));
@@ -242,8 +249,6 @@ public class LoginDialogFragment extends HealthCocoDialogFragment implements Vie
         Intent intent = new Intent(mActivity, HomeActivity.class);
         intent.putExtra(HealthCocoConstants.TAG_IS_FROM_LOGIN_SIGNUP, true);
         startActivity(intent);
-        getDialog().dismiss();
-        mActivity.finish();
     }
 
     BroadcastReceiver signUpSuccessReceiver = new BroadcastReceiver() {

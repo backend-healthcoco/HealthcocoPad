@@ -19,6 +19,8 @@ import com.healthcoco.healthcocoplus.HealthCocoFragment;
 import com.healthcoco.healthcocoplus.enums.ActionbarLeftRightActionType;
 import com.healthcoco.healthcocoplus.enums.ActionbarType;
 import com.healthcoco.healthcocoplus.enums.CommonOpenUpFragmentType;
+import com.healthcoco.healthcocoplus.enums.DefaultSyncServiceType;
+import com.healthcoco.healthcocoplus.fragments.InitialSyncFragment;
 import com.healthcoco.healthcocoplus.fragments.LoginSignupFragment;
 import com.healthcoco.healthcocoplus.fragments.WebViewFragments;
 import com.healthcoco.healthcocoplus.utilities.HealthCocoConstants;
@@ -70,9 +72,11 @@ public class CommonActivity extends HealthCocoActivity {
             case PRIVACY_POLICY:
                 openFragment(ActionbarType.TITLE, ActionbarLeftRightActionType.WITH_CROSS, R.string.privacy_policy, new WebViewFragments());
                 break;
+            case INITIAL_SYNC:
+                openFragment(ActionbarType.HIDDEN, R.string.sync, new InitialSyncFragment());
+                break;
         }
     }
-
 
     private void openFragment(ActionbarType actionbarType, int actionBarTitleId, HealthCocoFragment fragment) {
         openFragment(actionbarType, null, actionBarTitleId, fragment);
