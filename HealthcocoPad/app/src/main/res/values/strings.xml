@@ -193,6 +193,8 @@
     <string name="cancelled">Cancelled</string>
     <string name="reschedule">Reschedule</string>
     <string name="confirmed">Confirmed</string>
+    <string name="years">Years</string>
+    <string name="no_text_dash">--</string>
     <integer name="id_item_all">11</integer>
     <integer name="id_item_confirmed">12</integer>
     <integer name="id_item_cancelled">13</integer>

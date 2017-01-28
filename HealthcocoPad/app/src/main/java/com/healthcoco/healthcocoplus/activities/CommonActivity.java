@@ -61,7 +61,7 @@ public class CommonActivity extends HealthCocoActivity {
         fragmentType = CommonOpenUpFragmentType.values()[ordinal];
         switch (fragmentType) {
             case LOGIN_SIGN_UP:
-//                mApp.addActivityToStack(this);
+                mApp.addActivityToStack(this);
                 openFragment(ActionbarType.HIDDEN, R.string.sign_up, new LoginSignupFragment());
                 break;
             case CONTINUE_SIGN_UP:

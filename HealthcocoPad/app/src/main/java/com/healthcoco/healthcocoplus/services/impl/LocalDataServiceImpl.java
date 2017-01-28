@@ -1,32 +1,52 @@
 package com.healthcoco.healthcocoplus.services.impl;
 
 import android.database.sqlite.SQLiteDatabase;
-import android.location.Location;
 import android.util.Log;
 
 import com.android.volley.Response;
+import com.google.gson.Gson;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocoplus.HealthCocoApplication;
 import com.healthcoco.healthcocoplus.bean.VolleyResponseBean;
+import com.healthcoco.healthcocoplus.bean.server.AccessModule;
+import com.healthcoco.healthcocoplus.bean.server.Achievement;
+import com.healthcoco.healthcocoplus.bean.server.AppointmentSlot;
 import com.healthcoco.healthcocoplus.bean.server.BloodGroup;
 import com.healthcoco.healthcocoplus.bean.server.CalendarEvents;
 import com.healthcoco.healthcocoplus.bean.server.CityResponse;
 import com.healthcoco.healthcocoplus.bean.server.ClinicDetailResponse;
 import com.healthcoco.healthcocoplus.bean.server.ClinicDoctorProfile;
+import com.healthcoco.healthcocoplus.bean.server.ClinicImage;
+import com.healthcoco.healthcocoplus.bean.server.ClinicWorkingSchedule;
 import com.healthcoco.healthcocoplus.bean.server.Complaint;
 import com.healthcoco.healthcocoplus.bean.server.ComplaintSuggestions;
+import com.healthcoco.healthcocoplus.bean.server.ConsultationFee;
+import com.healthcoco.healthcocoplus.bean.server.DOB;
 import com.healthcoco.healthcocoplus.bean.server.Diagnoses;
 import com.healthcoco.healthcocoplus.bean.server.DiagnosisSuggestions;
 import com.healthcoco.healthcocoplus.bean.server.Disease;
+import com.healthcoco.healthcocoplus.bean.server.DoctorClinicProfile;
+import com.healthcoco.healthcocoplus.bean.server.DoctorExperience;
+import com.healthcoco.healthcocoplus.bean.server.DoctorExperienceDetail;
 import com.healthcoco.healthcocoplus.bean.server.DoctorProfile;
+import com.healthcoco.healthcocoplus.bean.server.DoctorRegistrationDetail;
+import com.healthcoco.healthcocoplus.bean.server.DoctorWorkingSchedule;
 import com.healthcoco.healthcocoplus.bean.server.Drug;
 import com.healthcoco.healthcocoplus.bean.server.DrugDirection;
 import com.healthcoco.healthcocoplus.bean.server.DrugDosage;
 import com.healthcoco.healthcocoplus.bean.server.DrugDurationUnit;
 import com.healthcoco.healthcocoplus.bean.server.DrugType;
+import com.healthcoco.healthcocoplus.bean.server.Education;
+import com.healthcoco.healthcocoplus.bean.server.ForeignAppointmentBookingNumber;
+import com.healthcoco.healthcocoplus.bean.server.ForeignOtherEmailAddresses;
+import com.healthcoco.healthcocoplus.bean.server.ForeignProfessionalMemberships;
+import com.healthcoco.healthcocoplus.bean.server.ForeignSpecialities;
+import com.healthcoco.healthcocoplus.bean.server.ForieignAdditionalNumbers;
 import com.healthcoco.healthcocoplus.bean.server.Hospital;
 import com.healthcoco.healthcocoplus.bean.server.Investigation;
 import com.healthcoco.healthcocoplus.bean.server.InvestigationSuggestions;
+import com.healthcoco.healthcocoplus.bean.server.Location;
+import com.healthcoco.healthcocoplus.bean.server.LocationAndAccessControl;
 import com.healthcoco.healthcocoplus.bean.server.LoginResponse;
 import com.healthcoco.healthcocoplus.bean.server.Observation;
 import com.healthcoco.healthcocoplus.bean.server.ObservationSuggestions;
@@ -35,14 +55,19 @@ import com.healthcoco.healthcocoplus.bean.server.Profession;
 import com.healthcoco.healthcocoplus.bean.server.Records;
 import com.healthcoco.healthcocoplus.bean.server.Reference;
 import com.healthcoco.healthcocoplus.bean.server.RegisteredPatientDetailsUpdated;
+import com.healthcoco.healthcocoplus.bean.server.Role;
 import com.healthcoco.healthcocoplus.bean.server.Specialities;
 import com.healthcoco.healthcocoplus.bean.server.TempTemplate;
 import com.healthcoco.healthcocoplus.bean.server.User;
 import com.healthcoco.healthcocoplus.bean.server.UserGroups;
+import com.healthcoco.healthcocoplus.bean.server.WorkingHours;
+import com.healthcoco.healthcocoplus.bean.server.WorkingSchedule;
 import com.healthcoco.healthcocoplus.enums.BooleanTypeValues;
 import com.healthcoco.healthcocoplus.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocoplus.enums.LocalTabelType;
 import com.healthcoco.healthcocoplus.enums.WebServiceType;
+import com.healthcoco.healthcocoplus.enums.WeekDayNameType;
+import com.healthcoco.healthcocoplus.fragments.ClinicalProfileFragment;
 import com.healthcoco.healthcocoplus.services.GsonRequest;
 import com.healthcoco.healthcocoplus.utilities.DateTimeUtil;
 import com.healthcoco.healthcocoplus.utilities.HealthCocoConstants;
@@ -92,11 +117,93 @@ public class LocalDataServiceImpl {
             if (!Util.isNullOrBlank(doctor.getUser().getUniqueId())) {
                 doctor.setForeignUserId(doctor.getUser().getUniqueId());
             }
+            // setting DOB
+            if (doctor.getUser().getDob() != null) {
+                doctor.getUser().getDob().setForeignUniqueId(doctor.getUser().getUniqueId());
+                deleteDOBRecordIfAlreadyPresent(LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, doctor.getUser().getUniqueId());
+                doctor.getUser().getDob().save();
+            }
+
+            if (!Util.isNullOrEmptyList(doctor.getHospitals())) {
+                if (Util.isNullOrBlank(doctor.getUser().getForeignHospitalId()) && Util.isNullOrBlank(doctor.getUser().getForeignLocationId())) {
+                    Hospital defaultHospital = doctor.getHospitals().get(0);
+                    //setting foreignHospital id for user
+
+                    if (Util.isNullOrBlank(doctor.getUser().getForeignLocationId()) || Util.isNullOrBlank(doctor.getUser().getForeignLocationId())) {
+                        doctor.getUser().setForeignHospitalId(defaultHospital.getUniqueId());
+                        doctor.getUser().setForeignLocationId(defaultHospital.getLocationsAndAccessControl().get(0).getUniqueId());
+                    }
+                }
+                deleteAllFrom(Hospital.class, LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, doctor.getForeignUserId());
+                for (Hospital hospital : doctor.getHospitals()) {
+                    hospital.setForeignUniqueId(doctor.getForeignUserId());
+                    // setting locations
+                    if (!Util.isNullOrEmptyList(hospital.getLocationsAndAccessControl())) {
+                        for (LocationAndAccessControl locationAndAccessControl : hospital.getLocationsAndAccessControl()) {
+                            //saving location
+//                            Location location = locationAndAccessControl.getLocation();
+//                            if (location != null) {
+                            locationAndAccessControl.setDoctorId(doctor.getUser().getUniqueId());
+                            locationAndAccessControl.setForeignHospitalId(hospital.getUniqueId());
+                            if (!Util.isNullOrEmptyList(locationAndAccessControl.getImages()))
+                                addClinicImages(LocalDatabaseUtils.KEY_FOREIGN_LOCATION_ID, locationAndAccessControl.getUniqueId(), locationAndAccessControl.getImages());
+
+                            deleteAllWorkingSchedules(locationAndAccessControl.getUniqueId(), doctor.getUser().getUniqueId(), DoctorWorkingSchedule.class);
+                            if (!Util.isNullOrEmptyList(locationAndAccessControl.getWorkingSchedules())) {
+                                locationAndAccessControl.setDoctorId(doctor.getUser().getUniqueId());
+                                addDoctorWorkingSchedules(doctor.getUser().getUniqueId(), LocalDatabaseUtils.KEY_FOREIGN_LOCATION_ID, locationAndAccessControl.getUniqueId(), locationAndAccessControl.getWorkingSchedules());
+                            }
+                            if (!Util.isNullOrEmptyList(locationAndAccessControl.getRoles())) {
+                                for (Role role :
+                                        locationAndAccessControl.getRoles()) {
+                                    if (!Util.isNullOrEmptyList(role.getAccessModules())) {
+                                        for (AccessModule accessModule : role.getAccessModules()) {
+                                            if (!Util.isNullOrEmptyList(accessModule.getAccessPermissionTypes()))
+                                                accessModule.setStringAccessPermissionTypes(new Gson().toJson(accessModule.getAccessPermissionTypes()));
+                                            accessModule.setForeignRoleId(role.getUniqueId());
+                                            accessModule.save();
+                                        }
+                                    }
+                                    role.save();
+                                }
+                            }
+                            locationAndAccessControl.save();
+                        }
+                    }
+                    hospital.save();
+                }
+            }
             clearUser();
             doctor.getUser().save();
         }
         clearDoctor();
         doctor.save();
+    }
+
+    private void addDoctorWorkingSchedules(String doctorId, String key, String value, List<DoctorWorkingSchedule> workingSchedulesList) {
+        try {
+            for (DoctorWorkingSchedule workingSchedule :
+                    workingSchedulesList) {
+                workingSchedule.setDoctorId(doctorId);
+                if (key.equals(LocalDatabaseUtils.KEY_FOREIGN_LOCATION_ID))
+                    workingSchedule.setForeignLocationId(value);
+                workingSchedule.setCustomUniqueId(workingSchedule.getForeignLocationId() + workingSchedule.getWorkingDay() + workingSchedule.getDoctorId());
+//delete all working schedules and hours first
+//                deleteDoctorWorkingSchedules(workingSchedule.getDoctorId(), workingSchedule.getCustomUniqueId());
+//                deleteWorkingHoursIfAlreadyPresent(LocalDatabaseUtils.KEY_FOREIGN_TABLE_ID, workingSchedule.getCustomUniqueId());
+                if (!Util.isNullOrEmptyList(workingSchedule.getWorkingHours()))
+                    addWorkingHoursList(DoctorWorkingSchedule.class.getSimpleName(), workingSchedule.getCustomUniqueId(), workingSchedule.getWorkingHours());
+
+//                addWorkingHoursList(DoctorWorkingSchedule.class.getSimpleName(), LocalDatabaseUtils.KEY_FOREIGN_TABLE_ID, workingSchedule.getCustomUniqueId(), workingSchedule.getWorkingHours());
+                workingSchedule.save();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void deleteDOBRecordIfAlreadyPresent(String key, String value) {
+        DOB.deleteAll(DOB.class, key + "= ?", value);
     }
 
     private void clearUser() {
@@ -298,109 +405,6 @@ public class LocalDataServiceImpl {
         }
     }
 
-//    public void addDoctorProfile(DoctorProfile doctorProfile) {
-//        // setting DOB
-//        if (doctorProfile.getDob() != null) {
-//            doctorProfile.getDob().setForeignUniqueId(doctorProfile.getDoctorId());
-//            doctorProfile.getDob().save();
-//        }
-//
-//        deleteAdditionalNumbersIfAlreadyPresent(LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, doctorProfile.getDoctorId());
-//        //saving additionalNumbers
-//        if (!Util.isNullOrEmptyList(doctorProfile.getAdditionalNumbers())) {
-//            addAdditionalNumbers(LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, doctorProfile.getDoctorId(), doctorProfile.getAdditionalNumbers());
-//        }
-//
-//        deleteOtherEmailAddressesIfAlreadyPresent(LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, doctorProfile.getDoctorId());
-//        //saving EmailAddresses
-//        if (!Util.isNullOrEmptyList(doctorProfile.getOtherEmailAddresses())) {
-//            addOtherEmailAddressesList(LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, doctorProfile.getDoctorId(), doctorProfile.getOtherEmailAddresses());
-//        }
-//
-//        //saving doctor Experience
-//        if (doctorProfile.getExperience() != null) {
-//            doctorProfile.getExperience().setForeignUniqueId(doctorProfile.getDoctorId());
-//            doctorProfile.getExperience().save();
-//        }
-//        //saving Education Details
-//        addEducationsList(doctorProfile.getDoctorId(), doctorProfile.getEducation());
-//
-//        //saving Specialities
-//        addSpecialities(doctorProfile.getDoctorId(), doctorProfile.getSpecialities());
-//
-//        deleteAchievementsIfAlreadyExists(LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, doctorProfile.getDoctorId());
-//        //saving Achievement Details
-//        if (!Util.isNullOrEmptyList(doctorProfile.getAchievements())) {
-//            addAchievements(LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, doctorProfile.getDoctorId(), doctorProfile.getAchievements());
-//        }
-//        //saving Registration Details
-//        addRegistrationDetailsList(doctorProfile.getDoctorId(), doctorProfile.getRegistrationDetails());
-//
-//        deleteExperienceDetailIfAlreadyExists(LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, doctorProfile.getDoctorId());
-//        //saving Experience Details
-//        if (!Util.isNullOrEmptyList(doctorProfile.getExperienceDetails())) {
-//            addExperienceDetailsList(LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, doctorProfile.getDoctorId(), doctorProfile.getExperienceDetails());
-//        }
-//        deleteProfessionalMembershipsIfAlreadyPresent(LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, doctorProfile.getDoctorId());
-//        //saving Professional Memberships
-//        if (!Util.isNullOrEmptyList(doctorProfile.getProfessionalMemberships())) {
-//            addProfessionalMemberships(LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, doctorProfile.getDoctorId(), doctorProfile.getProfessionalMemberships());
-//        }
-//
-//
-//        //deleteClinicProfile
-//        deleteDoctorClinicProfile(LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, doctorProfile.getDoctorId());
-//        //saving Clinic Profile
-//        if (!Util.isNullOrEmptyList(doctorProfile.getClinicProfile())) {
-//            for (DoctorClinicProfile clinicProfile :
-//                    doctorProfile.getClinicProfile()) {
-//                addDoctorClinicProfile(doctorProfile.getDoctorId(), clinicProfile);
-//            }
-//        }
-//
-//        doctorProfile.save();
-//    }
-
-    //    public void addDoctorClinicProfile(String doctorId, DoctorClinicProfile clinicProfile) {
-//        clinicProfile.setForeignUniqueId(doctorId);
-//        deleteAppointmentBookingNumbers(LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, clinicProfile.getUniqueId());
-//        //saving appointmentBookingNumber
-//        if (!Util.isNullOrEmptyList(clinicProfile.getAppointmentBookingNumber())) {
-//            for (String string :
-//                    clinicProfile.getAppointmentBookingNumber()) {
-//                ForeignAppointmentBookingNumber appointmentBookingNumber = new ForeignAppointmentBookingNumber();
-//                appointmentBookingNumber.setForeignUniqueId(clinicProfile.getUniqueId());
-//                appointmentBookingNumber.setAppintmentBookingNumber(string);
-//                appointmentBookingNumber.setCustomUniqueId(appointmentBookingNumber.getForeignUniqueId() + appointmentBookingNumber.getAppintmentBookingNumber());
-//                appointmentBookingNumber.save();
-//            }
-//        }
-//
-//        //saving consultation fee
-//        if (clinicProfile.getConsultationFee() != null) {
-//            clinicProfile.getConsultationFee().setForeignUniqueId(clinicProfile.getUniqueId());
-//            clinicProfile.getConsultationFee().save();
-//        }
-//
-//        //saving AppointmentSlot
-//        if (clinicProfile.getAppointmentSlot() != null) {
-//            clinicProfile.getAppointmentSlot().setForeignUniqueId(clinicProfile.getUniqueId());
-//            clinicProfile.getAppointmentSlot().save();
-//        }
-//
-////                deleteWorkingSchedulesIfAlreadyPresent(LocalDatabaseUtils.KEY_FOREIGN_LOCATION_ID, clinicProfile.getLocationId());
-//        deleteAllWorkingSchedules(clinicProfile.getLocationId(), doctorId, DoctorWorkingSchedule.class);
-//        //saving working schedules
-//        if (!Util.isNullOrEmptyList(clinicProfile.getWorkingSchedules())) {
-//            addDoctorWorkingSchedules(doctorId, LocalDatabaseUtils.KEY_FOREIGN_LOCATION_ID, clinicProfile.getLocationId(), clinicProfile.getWorkingSchedules());
-//        }
-//        deleteClinicImages(LocalDatabaseUtils.KEY_FOREIGN_LOCATION_ID, clinicProfile.getUniqueId());
-//        //saving clinic Images
-//        if (!Util.isNullOrEmptyList(clinicProfile.getImages())) {
-//            addClinicImages(LocalDatabaseUtils.KEY_FOREIGN_LOCATION_ID, clinicProfile.getUniqueId(), clinicProfile.getImages());
-//        }
-//        clinicProfile.save();
-//    }
     public VolleyResponseBean getClinicDetailsResponse(WebServiceType webServiceType, String locationId, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
         volleyResponseBean.setWebServiceType(webServiceType);
@@ -422,10 +426,57 @@ public class LocalDataServiceImpl {
                 .where(Condition.prop(LocalDatabaseUtils.KEY_UNIQUE_ID).eq(locationId));
         ClinicDetailResponse clinicDetailResponse = selectQuery.first();
         if (clinicDetailResponse != null) {
-//            clinicDetailResponse.setDoctors(getClinicDoctorsList(ClinicalProfileFragment.MAX_DOCTORS_LIST_COUNT, locationId));
-//            clinicDetailResponse.setLocation(getLocation(locationId));
+            clinicDetailResponse.setDoctors(getClinicDoctorsList(ClinicalProfileFragment.MAX_DOCTORS_LIST_COUNT, locationId));
+            clinicDetailResponse.setLocation(getLocation(locationId));
         }
         return clinicDetailResponse;
+    }
+
+    public List<ClinicWorkingSchedule> getClinicWorkingSchedules(String key, String value) {
+        List<ClinicWorkingSchedule> list = Select.from(ClinicWorkingSchedule.class)
+                .where(Condition.prop(key).eq(value)).list();
+        if (!Util.isNullOrEmptyList(list)) {
+            for (ClinicWorkingSchedule workingSchedule :
+                    list) {
+                workingSchedule.setWorkingHours((List<WorkingHours>) getListByKeyValue(WorkingHours.class, LocalDatabaseUtils.KEY_FOREIGN_TABLE_ID, workingSchedule.getCustomUniqueId()));
+            }
+        }
+        return list;
+    }
+
+    public List<ClinicDoctorProfile> getClinicDoctorsList(int maxSize, String locationId) {
+        String whereCondition = "Select * from " + StringUtil.toSQLName(ClinicDoctorProfile.class.getSimpleName())
+                + " where "
+                + LocalDatabaseUtils.KEY_LOCATION_ID + "=\"" + locationId + "\"";
+
+        //specifying order by limit and offset query
+        String conditionsLimit = " ORDER BY " + LocalDatabaseUtils.KEY_CREATED_TIME + " DESC ";
+
+        if (maxSize > 0)
+            conditionsLimit = conditionsLimit + " LIMIT " + maxSize;
+
+        whereCondition = whereCondition + conditionsLimit;
+        LogUtils.LOGD(TAG, "Select Query " + whereCondition);
+        List<ClinicDoctorProfile> clinicDoctorProfilesList = SugarRecord.findWithQuery(ClinicDoctorProfile.class, whereCondition);
+        if (!Util.isNullOrEmptyList(clinicDoctorProfilesList)) {
+            for (ClinicDoctorProfile clinicDoctorProfile :
+                    clinicDoctorProfilesList) {
+                clinicDoctorProfile.setSpecialities(getSpecialities(LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, clinicDoctorProfile.getUniqueId()));
+            }
+        }
+        return clinicDoctorProfilesList;
+    }
+
+    public Location getLocation(String locationId) {
+        Select<Location> selectQuery = Select.from(Location.class)
+                .where(Condition.prop(LocalDatabaseUtils.KEY_UNIQUE_ID).eq(locationId));
+        Location location = selectQuery.first();
+        if (location != null) {
+            location.setAlternateClinicNumbers(getAdditionalNumbersList(LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, location.getUniqueId()));
+            location.setImages((List<ClinicImage>) getListByKeyValue(ClinicImage.class, LocalDatabaseUtils.KEY_FOREIGN_LOCATION_ID, location.getUniqueId()));
+            location.setClinicWorkingSchedules(getClinicWorkingSchedules(LocalDatabaseUtils.KEY_FOREIGN_LOCATION_ID, location.getUniqueId()));
+        }
+        return location;
     }
 
     public VolleyResponseBean getDrugTypeListAdResponse(WebServiceType webServiceType, String doctorId, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
@@ -895,17 +946,17 @@ public class LocalDataServiceImpl {
     }
 
     private void addSpecialities(String value, List<String> list) {
-//        deleteSpecialitiesIfAlreadyPresent(LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, value);
-//        //saving Specialities
-//        if (!Util.isNullOrEmptyList(list)) {
-//            for (String string :
-//                    list) {
-//                ForeignSpecialities specialities = new ForeignSpecialities();
-//                specialities.setForeignUniqueId(value);
-//                specialities.setSpecialities(string);
-//                specialities.save();
-//            }
-//        }
+        deleteSpecialitiesIfAlreadyPresent(LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, value);
+        //saving Specialities
+        if (!Util.isNullOrEmptyList(list)) {
+            for (String string :
+                    list) {
+                ForeignSpecialities specialities = new ForeignSpecialities();
+                specialities.setForeignUniqueId(value);
+                specialities.setSpecialities(string);
+                specialities.save();
+            }
+        }
     }
 
     private void deleteAllFrom(Class<?> class1, String key, String value) {
@@ -913,25 +964,335 @@ public class LocalDataServiceImpl {
     }
 
     private void deleteAdditionalNumbersIfAlreadyPresent(String key, String value) {
-//        ForieignAdditionalNumbers.deleteAll(ForieignAdditionalNumbers.class, key + "= ?", value);
+        ForieignAdditionalNumbers.deleteAll(ForieignAdditionalNumbers.class, key + "= ?", value);
     }
 
     public void addLocation(Location location) {
 
-//        deleteAdditionalNumbersIfAlreadyPresent(LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, location.getUniqueId());
-        //saving additionalNumbers/alernateNumbers
-//        if (!Util.isNullOrEmptyList(location.getAlternateClinicNumbers())) {
-//            addAdditionalNumbers(LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, location.getUniqueId(), location.getAlternateClinicNumbers());
-//        }
-//        //delete all clinic images first
-//        deleteClinicImages(LocalDatabaseUtils.KEY_FOREIGN_LOCATION_ID, location.getUniqueId());
-//        if (!Util.isNullOrEmptyList(location.getImages()))
-//            addClinicImages(LocalDatabaseUtils.KEY_FOREIGN_LOCATION_ID, location.getUniqueId(), location.getImages());
-//
-//        deleteAllWorkingSchedules(location.getUniqueId(), "", ClinicWorkingSchedule.class);
-//        if (!Util.isNullOrEmptyList(location.getClinicWorkingSchedules()))
-//            addClinicWorkingSchedules(LocalDatabaseUtils.KEY_FOREIGN_LOCATION_ID, location.getUniqueId(), location.getClinicWorkingSchedules());
-//
-//        location.save();
+        deleteAdditionalNumbersIfAlreadyPresent(LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, location.getUniqueId());
+//        saving additionalNumbers/alernateNumbers
+        if (!Util.isNullOrEmptyList(location.getAlternateClinicNumbers())) {
+            addAdditionalNumbers(LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, location.getUniqueId(), location.getAlternateClinicNumbers());
+        }
+        //delete all clinic images first
+        deleteClinicImages(LocalDatabaseUtils.KEY_FOREIGN_LOCATION_ID, location.getUniqueId());
+        if (!Util.isNullOrEmptyList(location.getImages()))
+            addClinicImages(LocalDatabaseUtils.KEY_FOREIGN_LOCATION_ID, location.getUniqueId(), location.getImages());
+
+        deleteAllWorkingSchedules(location.getUniqueId(), "", ClinicWorkingSchedule.class);
+        if (!Util.isNullOrEmptyList(location.getClinicWorkingSchedules()))
+            addClinicWorkingSchedules(LocalDatabaseUtils.KEY_FOREIGN_LOCATION_ID, location.getUniqueId(), location.getClinicWorkingSchedules());
+
+        location.save();
     }
+
+    private void addClinicImages(String key, String value, List<ClinicImage> list) {
+        for (ClinicImage image :
+                list) {
+            if (key.equals(LocalDatabaseUtils.KEY_FOREIGN_LOCATION_ID))
+                image.setForeignLocationId(value);
+            image.setCustomUniqueId(image.getForeignLocationId() + image.getImageUrl());
+            image.save();
+        }
+    }
+
+    private void deleteClinicImages(String key, String value) {
+        List<ClinicImage> list = (List<ClinicImage>) getListByKeyValue(ClinicImage.class, key, value);
+        ClinicImage.deleteInTx(list);
+    }
+
+    private void addAdditionalNumbers(String key, String value, List<String> list) {
+        for (String number :
+                list) {
+            if (!Util.isNullOrBlank(number)) {
+                ForieignAdditionalNumbers additionalNumbers = new ForieignAdditionalNumbers();
+                additionalNumbers.setForeignUniqueId(value);
+                additionalNumbers.setAdditionalNumber(number);
+                additionalNumbers.setCustomUniqueId(additionalNumbers.getForeignUniqueId() + additionalNumbers.getAdditionalNumber());
+                additionalNumbers.save();
+            }
+        }
+    }
+
+    private void addOtherEmailAddressesList(String key, String value, List<String> list) {
+        for (String string :
+                list) {
+            ForeignOtherEmailAddresses otherEmailAddresses = new ForeignOtherEmailAddresses();
+            otherEmailAddresses.setForeignUniqueId(value);
+            otherEmailAddresses.setOtherEmailAddress(string);
+            otherEmailAddresses.save();
+        }
+    }
+
+    public VolleyResponseBean getDoctorProfileResponse(WebServiceType webServiceType, String doctorId, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
+        volleyResponseBean.setWebServiceType(webServiceType);
+        volleyResponseBean.setDataFromLocal(true);
+        volleyResponseBean.setUserOnline(HealthCocoConstants.isNetworkOnline);
+        try {
+            DoctorProfile doctorProfile = getDoctorProfileObject(doctorId);
+            volleyResponseBean.setData(doctorProfile);
+            if (responseListener != null)
+                responseListener.onResponse(volleyResponseBean);
+        } catch (Exception e) {
+            e.printStackTrace();
+            showErrorLocal(volleyResponseBean, errorListener);
+        }
+        return volleyResponseBean;
+    }
+
+    public DoctorProfile getDoctorProfileObject(String doctorId) {
+        DoctorProfile doctorProfile = Select.from(DoctorProfile.class).where(Condition.prop(LocalDatabaseUtils.KEY_DOCTOR_ID).eq(doctorId)).first();
+        if (doctorProfile != null) {
+            doctorProfile.setDob((DOB) getObject(DOB.class, LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, doctorProfile.getDoctorId()));
+            doctorProfile.setAdditionalNumbers(getAdditionalNumbersList(LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, doctorProfile.getDoctorId()));
+            doctorProfile.setOtherEmailAddresses(getOtherEmailAddresses(LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, doctorProfile.getDoctorId()));
+            doctorProfile.setExperience((DoctorExperience) getObject(DoctorExperience.class, LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, doctorProfile.getDoctorId()));
+            doctorProfile.setEducation((List<Education>) getListByKeyValue(Education.class, LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, doctorProfile.getDoctorId()));
+            doctorProfile.setSpecialities(getSpecialities(LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, doctorProfile.getDoctorId()));
+            doctorProfile.setAchievements((List<Achievement>) getListByKeyValue(Achievement.class, LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, doctorProfile.getDoctorId()));
+            doctorProfile.setRegistrationDetails((List<DoctorRegistrationDetail>) getListByKeyValue(DoctorRegistrationDetail.class, LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, doctorProfile.getDoctorId()));
+            doctorProfile.setExperienceDetails((List<DoctorExperienceDetail>) getListByKeyValue(DoctorExperienceDetail.class, LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, doctorProfile.getDoctorId()));
+            doctorProfile.setProfessionalMemberships(getProfessionalMemberships(LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, doctorProfile.getDoctorId()));
+            doctorProfile.setClinicProfile(getDoctorClinicProfile(doctorProfile.getDoctorId()));
+        }
+        return doctorProfile;
+    }
+
+    private Object getObject(Class<?> class1, String key, String value) {
+        return Select.from(class1).where(Condition.prop(key).eq(value)).first();
+    }
+
+    public ArrayList<String> getAdditionalNumbersList(String key, String value) {
+        ArrayList<ForieignAdditionalNumbers> additionalNumbersList = (ArrayList<ForieignAdditionalNumbers>) getListByKeyValue(ForieignAdditionalNumbers.class, key, value);
+        if (!Util.isNullOrEmptyList(additionalNumbersList)) {
+            ArrayList<String> numbersList = new ArrayList<>();
+            for (ForieignAdditionalNumbers additionalNumbers :
+                    additionalNumbersList) {
+                numbersList.add(additionalNumbers.getAdditionalNumber());
+            }
+            return numbersList;
+        }
+        return null;
+    }
+
+    public List<String> getOtherEmailAddresses(String key, String value) {
+        List<ForeignOtherEmailAddresses> emailAddressesList = (List<ForeignOtherEmailAddresses>) getListByKeyValue(ForeignOtherEmailAddresses.class, key, value);
+        if (!Util.isNullOrEmptyList(emailAddressesList)) {
+            List<String> stringList = new ArrayList<>();
+            for (ForeignOtherEmailAddresses emailAddress :
+                    emailAddressesList) {
+                stringList.add(emailAddress.getOtherEmailAddress());
+            }
+            return stringList;
+        }
+        return null;
+    }
+
+    public List<String> getSpecialities(String key, String value) {
+        List<ForeignSpecialities> specialitiesList = (List<ForeignSpecialities>) getListByKeyValue(ForeignSpecialities.class, key, value);
+        if (!Util.isNullOrEmptyList(specialitiesList)) {
+            List<String> stringList = new ArrayList<>();
+            for (ForeignSpecialities specialities :
+                    specialitiesList) {
+                stringList.add(specialities.getSpecialities());
+            }
+            return stringList;
+        }
+        return null;
+    }
+
+    public List<String> getProfessionalMemberships(String key, String value) {
+        List<ForeignProfessionalMemberships> professionalMembershipList = (List<ForeignProfessionalMemberships>) getListByKeyValue(ForeignProfessionalMemberships.class, key, value);
+        if (!Util.isNullOrEmptyList(professionalMembershipList)) {
+            List<String> stringList = new ArrayList<>();
+            for (ForeignProfessionalMemberships professionalMembership :
+                    professionalMembershipList) {
+                stringList.add(professionalMembership.getProfessionalMemberships());
+            }
+            return stringList;
+        }
+        return null;
+    }
+
+    public List<DoctorClinicProfile> getDoctorClinicProfile(String doctorId) {
+        List<DoctorClinicProfile> list = Select.from(DoctorClinicProfile.class)
+                .where(Condition.prop(LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID).eq(doctorId)).list();
+        if (!Util.isNullOrEmptyList(list)) {
+            for (DoctorClinicProfile clinicProfile :
+                    list) {
+                clinicProfile.setAppointmentBookingNumber(getAppointmentBookingNumber(LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, clinicProfile.getUniqueId()));
+                clinicProfile.setConsultationFee((ConsultationFee) getObject(ConsultationFee.class, LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, clinicProfile.getUniqueId()));
+                clinicProfile.setAppointmentSlot(getAppointmentSlot(clinicProfile.getUniqueId()));
+                clinicProfile.setWorkingSchedules(getWorkingSchedulesForDoctor(doctorId, clinicProfile.getLocationId()));
+                clinicProfile.setImages((List<ClinicImage>) getListByKeyValue(ClinicImage.class, LocalDatabaseUtils.KEY_FOREIGN_LOCATION_ID, clinicProfile.getUniqueId()));
+            }
+        }
+        return list;
+    }
+
+    private AppointmentSlot getAppointmentSlot(String uniqueId) {
+        return (AppointmentSlot) getObject(AppointmentSlot.class, LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, uniqueId);
+
+    }
+
+    public List<DoctorWorkingSchedule> getWorkingSchedulesForDoctor(String doctorId, String locationId) {
+        if (!Util.isNullOrBlank(doctorId)) {
+            List<DoctorWorkingSchedule> list = Select.from(DoctorWorkingSchedule.class)
+                    .where(Condition.prop(LocalDatabaseUtils.KEY_DOCTOR_ID).eq(doctorId),
+                            Condition.prop(LocalDatabaseUtils.KEY_FOREIGN_LOCATION_ID).eq(locationId)).list();
+            if (!Util.isNullOrEmptyList(list)) {
+                for (DoctorWorkingSchedule workingSchedule :
+                        list) {
+                    workingSchedule.setWorkingHours((List<WorkingHours>) getListByKeyValue(WorkingHours.class, LocalDatabaseUtils.KEY_FOREIGN_TABLE_ID, workingSchedule.getCustomUniqueId()));
+                }
+            }
+            return list;
+        }
+        return null;
+    }
+
+    public List<String> getAppointmentBookingNumber(String key, String value) {
+        List<ForeignAppointmentBookingNumber> appointmentBookingNumbersList = (List<ForeignAppointmentBookingNumber>) getListByKeyValue(ForeignAppointmentBookingNumber.class, key, value);
+        if (!Util.isNullOrEmptyList(appointmentBookingNumbersList)) {
+            List<String> stringList = new ArrayList<>();
+            for (ForeignAppointmentBookingNumber bookingNumber :
+                    appointmentBookingNumbersList) {
+                stringList.add(bookingNumber.getAppintmentBookingNumber());
+            }
+            return stringList;
+        }
+        return null;
+    }
+
+    private List<?> getListByKeyValue(Class<?> class1, String key, String value) {
+        return Select.from(class1).where(Condition.prop(key).eq(value)).list();
+    }
+
+    private void deleteOtherEmailAddressesIfAlreadyPresent(String key, String value) {
+        ForeignOtherEmailAddresses.deleteAll(ForeignOtherEmailAddresses.class, key + "= ?", value);
+    }
+
+    private void deleteEducationsIfAlreadyPresent(String key, String value) {
+        Education.deleteAll(Education.class, key + "= ?", value);
+    }
+
+    private void deleteSpecialitiesIfAlreadyPresent(String key, String value) {
+        ForeignSpecialities.deleteAll(ForeignSpecialities.class, key + "= ?", value);
+    }
+
+    private void deleteProfessionalMembershipsIfAlreadyPresent(String key, String value) {
+        ForeignProfessionalMemberships.deleteAll(ForeignProfessionalMemberships.class, key + "= ?", value);
+    }
+
+    private void deleteAchievementsIfAlreadyExists(String key, String value) {
+        Achievement.deleteAll(Achievement.class, key + "= ?", value);
+    }
+
+    private void deleteDoctorRegistrationDetailIfAlreadyExists(String key, String value) {
+        DoctorRegistrationDetail.deleteAll(DoctorRegistrationDetail.class, key + "= ?", value);
+    }
+
+    private void deleteExperienceDetailIfAlreadyExists(String key, String value) {
+        DoctorExperienceDetail.deleteAll(DoctorExperienceDetail.class, key + "= ?", value);
+    }
+
+    private void deleteDoctorClinicProfile(String key, String value) {
+        DoctorClinicProfile.deleteAll(DoctorClinicProfile.class, key + "= ?", value);
+    }
+
+    private void deleteAppointmentBookingNumbers(String key, String value) {
+        ForeignAppointmentBookingNumber.deleteAll(ForeignAppointmentBookingNumber.class, key + "= ?", value);
+    }
+
+    private void deleteWorkingSchedulesIfAlreadyPresent(String key, String value) {
+        WorkingSchedule.deleteAll(WorkingSchedule.class, key + "= ?", value);
+    }
+
+    private void deleteWorkingHoursIfAlreadyPresent(String key, String value) {
+        WorkingHours.deleteAll(WorkingHours.class, key + "= ?", value);
+    }
+
+    private void deleteReferredByIfAlreadyPresent(String key1, String key2, String value1, String value2) {
+        Reference.deleteAll(Reference.class, key1 + "= ? AND " + key2 + "= ? ", value1, value2);
+    }
+
+    /**
+     * @param locationId : id of clinic
+     * @param doctorId   : accepts blank doctor Id for general clinic schedules
+     *                   and accepts valud doctorId for doctor's clinic schedules
+     * @param class1
+     */
+    private void deleteAllWorkingSchedules(String locationId, String doctorId, Class<?> class1) {
+        for (WeekDayNameType weekDayName :
+                WeekDayNameType.values()) {
+            String customUniqueId = locationId + weekDayName + doctorId;
+            if (class1 == ClinicWorkingSchedule.class)
+                deleteClinicWorkingSchedules(LocalDatabaseUtils.KEY_CUSTOM_UNIQUE_ID, customUniqueId);
+            else if (class1 == DoctorWorkingSchedule.class)
+                deleteDoctorWorkingSchedules(doctorId, locationId);
+//            deleteWorkingHoursIfAlreadyPresent(LocalDatabaseUtils.KEY_FOREIGN_TABLE_ID, customUniqueId);
+
+        }
+    }
+
+    private void deleteClinicWorkingSchedules(String key, String value) {
+        List<ClinicWorkingSchedule> listSchedule = getClinicWorkingSchedules(key, value);
+        if (!Util.isNullOrEmptyList(listSchedule)) {
+            for (ClinicWorkingSchedule workingSchedule :
+                    listSchedule) {
+                List<WorkingHours> listHours = (List<WorkingHours>) getListByKeyValue(WorkingHours.class, LocalDatabaseUtils.KEY_FOREIGN_TABLE_ID, workingSchedule.getCustomUniqueId());
+                if (!Util.isNullOrEmptyList(listHours)) {
+                    WorkingHours.deleteInTx(listHours);
+                }
+            }
+            ClinicWorkingSchedule.deleteInTx(listSchedule);
+        }
+    }
+
+    private void deleteDoctorWorkingSchedules(String doctorId, String locationId) {
+        List<DoctorWorkingSchedule> listSchedule = getWorkingSchedulesForDoctor(doctorId, locationId);
+        if (!Util.isNullOrEmptyList(listSchedule)) {
+            for (DoctorWorkingSchedule workingSchedule :
+                    listSchedule) {
+                List<WorkingHours> listHours = (List<WorkingHours>) getListByKeyValue(WorkingHours.class, LocalDatabaseUtils.KEY_FOREIGN_TABLE_ID, workingSchedule.getCustomUniqueId());
+                if (!Util.isNullOrEmptyList(listHours)) {
+                    WorkingHours.deleteInTx(listHours);
+                }
+            }
+            DoctorWorkingSchedule.deleteInTx(listSchedule);
+        }
+    }
+
+    private void addClinicWorkingSchedules(String key, String value, List<ClinicWorkingSchedule> workingSchedulesList) {
+        try {
+            for (ClinicWorkingSchedule workingSchedule :
+                    workingSchedulesList) {
+                if (key.equals(LocalDatabaseUtils.KEY_FOREIGN_LOCATION_ID))
+                    workingSchedule.setForeignLocationId(value);
+                workingSchedule.setCustomUniqueId(workingSchedule.getForeignLocationId() + workingSchedule.getWorkingDay());
+//delete all working schedules and hours first
+                if (!Util.isNullOrEmptyList(workingSchedule.getWorkingHours()))
+                    addWorkingHoursList(ClinicWorkingSchedule.class.getSimpleName(), workingSchedule.getCustomUniqueId(), workingSchedule.getWorkingHours());
+                workingSchedule.save();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void addWorkingHoursList(String className, String customUniqueId, List<WorkingHours> list) {
+        for (WorkingHours workingHour :
+                list) {
+            addWorkingHour(className, customUniqueId, workingHour);
+        }
+    }
+
+    private void addWorkingHour(String className, String foreignTableId, WorkingHours workingHour) {
+        String customUniqueId = className + foreignTableId + workingHour.getFromTime() + workingHour.getToTime();
+        workingHour.setCustomUniqueId(customUniqueId);
+        workingHour.setForeignTableId(foreignTableId);
+        workingHour.save();
+    }
+
 }

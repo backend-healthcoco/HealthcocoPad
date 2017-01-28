@@ -246,6 +246,7 @@ public class LoginDialogFragment extends HealthCocoDialogFragment implements Vie
     }
 
     private void openHomeActivity() {
+        getDialog().dismiss();
         Intent intent = new Intent(mActivity, HomeActivity.class);
         intent.putExtra(HealthCocoConstants.TAG_IS_FROM_LOGIN_SIGNUP, true);
         startActivity(intent);
