@@ -22,12 +22,48 @@
         <item name="android:windowBackground">@android:color/transparent</item>
         <!--<item name="android:windowAnimationStyle">@style/DialogBottomEnterExitAnimation</item>-->
     </style>
+
     <style name="DialogTopEnterExitAnimation">
         <item name="android:windowEnterAnimation">@anim/slide_in_from_top_dialog</item>
         <item name="android:windowExitAnimation">@anim/slide_out_to_top_dialog</item>
     </style>
+
     <style name="Dialog_Top_No_Border">
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowAnimationStyle">@style/DialogTopEnterExitAnimation</item>
+    </style>
+
+    <style name="ActionBarTitleStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">@dimen/actionbar_title_size</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:fontFamily">sans-serif-light</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextRobotoStyle">
+        <item name="android:textAllCaps">false</item>
+        <item name="android:fontFamily">sans-serif-light</item>
+    </style>
+
+    <style name="TextRobotoStyleThin">
+        <item name="android:textAllCaps">false</item>
+        <item name="android:fontFamily">sans-serif-thin</item>
+    </style>
+
+    <style name="ActionBarButtonTextStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:textSize">@dimen/abc_text_size_subtitle_material_toolbar</item>
+        <!--<item name="android:textSize">@dimen/text_size_actionbar_save_btn</item>-->
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">@drawable/text_selector_white_translucent</item>
+        <item name="android:minHeight">0dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">sans-serif-thin</item>
+        <item name="android:minWidth">0dp</item>
     </style>
 </resources>

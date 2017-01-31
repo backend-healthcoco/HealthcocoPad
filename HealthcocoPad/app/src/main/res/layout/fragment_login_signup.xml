@@ -10,14 +10,13 @@
         android:layout_height="match_parent"
         android:background="@android:color/transparent"
         android:gravity="center"
-        android:orientation="vertical"
-        android:weightSum="1">
+        android:orientation="vertical">
 
         <android.support.v4.view.ViewPager
             android:id="@+id/viewpager"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_weight="0.9"
             android:overScrollMode="never" />
 
         <RelativeLayout
@@ -25,8 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="25dp"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="5dp"
-            android:layout_marginTop="5dp">
+            android:layout_weight="0.02">
 
             <LinearLayout
                 android:id="@+id/viewPagerCountDots"
@@ -44,9 +42,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="0.08"
             android:gravity="center"
-            android:orientation="horizontal"
-            android:padding="10dp">
+            android:orientation="horizontal">
 
             <Button
                 android:id="@+id/bt_join"

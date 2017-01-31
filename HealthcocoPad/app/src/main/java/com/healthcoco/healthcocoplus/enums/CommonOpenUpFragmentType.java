@@ -9,7 +9,7 @@ public enum CommonOpenUpFragmentType {
     LOGIN_SIGN_UP(0),
     CONTINUE_SIGN_UP(0),
     TERMS_OF_SERVICE(R.string.terms_of_service),
-    PRIVACY_POLICY(R.string.privacy_policy), INITIAL_SYNC(0);
+    PRIVACY_POLICY(R.string.privacy_policy), INITIAL_SYNC(0), FEEDBACK(R.string.help_us_to_improve);
 
     private final int titleId;
     CommonOpenUpFragmentType(int titleId) {
@@ -20,3 +20,4 @@ public enum CommonOpenUpFragmentType {
         return titleId;
     }
 }
+

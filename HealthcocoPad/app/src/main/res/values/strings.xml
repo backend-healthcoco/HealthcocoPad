@@ -199,4 +199,15 @@
     <integer name="id_item_confirmed">12</integer>
     <integer name="id_item_cancelled">13</integer>
     <integer name="id_item_pending_new">14</integer>
+
+    <string name="drawer_item_embedded_drawer">Embedded Drawer</string>
+    <string name="item1">Item 1</string>
+    <string name="item2">Item 2</string>
+    <string name="item3">Item3</string>
+    <string name="item4">Item4</string>
+    <string name="item5">Item 5</string>
+    <string name="content_description">Image Icon</string>
+    <string name="no_patients">No Patients</string>
+    <string name="add_prescription">Add Prescription</string>
+
 </resources>

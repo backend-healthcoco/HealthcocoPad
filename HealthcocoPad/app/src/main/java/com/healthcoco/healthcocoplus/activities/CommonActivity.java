@@ -20,6 +20,7 @@ import com.healthcoco.healthcocoplus.enums.ActionbarLeftRightActionType;
 import com.healthcoco.healthcocoplus.enums.ActionbarType;
 import com.healthcoco.healthcocoplus.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocoplus.enums.DefaultSyncServiceType;
+import com.healthcoco.healthcocoplus.fragments.FeedbackFragment;
 import com.healthcoco.healthcocoplus.fragments.InitialSyncFragment;
 import com.healthcoco.healthcocoplus.fragments.LoginSignupFragment;
 import com.healthcoco.healthcocoplus.fragments.WebViewFragments;
@@ -74,6 +75,9 @@ public class CommonActivity extends HealthCocoActivity {
                 break;
             case INITIAL_SYNC:
                 openFragment(ActionbarType.HIDDEN, R.string.sync, new InitialSyncFragment());
+                break;
+            case FEEDBACK:
+                openFragment(ActionbarType.TITLE_SAVE, ActionbarLeftRightActionType.WITH_CROSS, R.string.help_us_to_improve, new FeedbackFragment());
                 break;
         }
     }

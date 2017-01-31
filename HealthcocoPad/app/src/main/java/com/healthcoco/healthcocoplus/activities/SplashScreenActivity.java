@@ -17,11 +17,15 @@ import com.healthcoco.healthcocoplus.HealthCocoActivity;
 import com.healthcoco.healthcocoplus.bean.AppType;
 import com.healthcoco.healthcocoplus.bean.DeviceType;
 import com.healthcoco.healthcocoplus.bean.VersionCheckRequest;
+import com.healthcoco.healthcocoplus.bean.server.LoginResponse;
+import com.healthcoco.healthcocoplus.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocoplus.enums.CommonOpenUpFragmentType;
+import com.healthcoco.healthcocoplus.enums.UserState;
 import com.healthcoco.healthcocoplus.enums.VersionCheckType;
 import com.healthcoco.healthcocoplus.enums.WebServiceType;
 import com.healthcoco.healthcocoplus.services.GsonRequest;
 import com.healthcoco.healthcocoplus.bean.VolleyResponseBean;
+import com.healthcoco.healthcocoplus.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocoplus.services.impl.WebDataServiceImpl;
 import com.healthcoco.healthcocoplus.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocoplus.utilities.LogUtils;
@@ -71,14 +75,14 @@ public class SplashScreenActivity extends HealthCocoActivity implements GsonRequ
 //        if (HealthCocoConstants.isNetworkOnline) {
 //            checkVersion();
 //        } else {
-            handler = new Handler();
-            runnable = new Runnable() {
-                @Override
-                public void run() {
-                    launchNextActivity();
-                }
-            };
-            handler.postDelayed(runnable, SPLASH_TIME);
+        handler = new Handler();
+        runnable = new Runnable() {
+            @Override
+            public void run() {
+                launchNextActivity();
+            }
+        };
+        handler.postDelayed(runnable, SPLASH_TIME);
 //        }
     }
 
@@ -86,6 +90,7 @@ public class SplashScreenActivity extends HealthCocoActivity implements GsonRequ
      * Method to check Version of application.
      */
     private void checkVersion() {
+        saveVersionCode();
         String versionName = Util.getVersionName(this);
         if (!Util.isNullOrBlank(versionName)) {
             String[] parts = versionName.split("\\.");
@@ -101,6 +106,23 @@ public class SplashScreenActivity extends HealthCocoActivity implements GsonRequ
      * Method to Launch next activity
      */
     private void launchNextActivity() {
+        LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
+        if (doctor != null && doctor.getUser() != null && !Util.isNullOrBlank(doctor.getUser().getUniqueId()) && doctor.getUser().getUserState() == UserState.USERSTATECOMPLETE) {
+            openHomeActivity();
+        } else {
+//            initGCM();
+            openLoginSignUpActivity();
+        }
+    }
+
+    private void openHomeActivity() {
+        Intent intent = new Intent(this, HomeActivity.class);
+//        intent.putExtra(MyGcmListenerService.TAG_NOTIFICATION_RESPONSE, notificationResponseData);
+        startActivity(intent);
+        finish();
+    }
+
+    private void openLoginSignUpActivity() {
         Intent nextActivityIntent = new Intent(this, CommonActivity.class);
         nextActivityIntent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.LOGIN_SIGN_UP.ordinal());
         startActivity(nextActivityIntent);
@@ -108,7 +130,7 @@ public class SplashScreenActivity extends HealthCocoActivity implements GsonRequ
     }
 
     private void saveVersionCode() {
-       /* try {
+        try {
             int lastVersionCode = Util.getVersionCodeFromPreferences(this);
             PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
             int currentVersionCode = packageInfo.versionCode;
@@ -118,7 +140,7 @@ public class SplashScreenActivity extends HealthCocoActivity implements GsonRequ
             }
         } catch (Exception e) {
             e.printStackTrace();
-        }*/
+        }
     }
 
     @Override
