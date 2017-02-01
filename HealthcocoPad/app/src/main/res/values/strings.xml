@@ -209,5 +209,14 @@
     <string name="content_description">Image Icon</string>
     <string name="no_patients">No Patients</string>
     <string name="add_prescription">Add Prescription</string>
+    <string name="issue_tracker">Issue Tracker</string>
+    <string name="filter">Filter</string>
+    <string name="all_patients">All Patients</string>
+    <string name="recently_visited">Recently Visited</string>
+    <string name="recently_added">Recently Added</string>
+    <string name="no_groups">No Groups</string>
+    <string name="most_visited">Most Visited</string>
+    <string name="name_mobile_number">Name/Mobile Number</string>
+    <string name="dr">Dr.</string>
 
 </resources>

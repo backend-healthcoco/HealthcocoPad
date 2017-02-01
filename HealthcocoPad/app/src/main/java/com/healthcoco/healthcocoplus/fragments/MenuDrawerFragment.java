@@ -20,12 +20,18 @@ import android.widget.TextView;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocoplus.HealthCocoFragment;
 import com.healthcoco.healthcocoplus.activities.HomeActivity;
+import com.healthcoco.healthcocoplus.bean.server.DoctorClinicProfile;
 import com.healthcoco.healthcocoplus.bean.server.DoctorProfile;
+import com.healthcoco.healthcocoplus.dialogFragment.LoginDialogFragment;
+import com.healthcoco.healthcocoplus.dialogFragment.MenuClinicListDialogFragment;
 import com.healthcoco.healthcocoplus.drawer.MenuListAdapter;
 import com.healthcoco.healthcocoplus.enums.FragmentType;
+import com.healthcoco.healthcocoplus.enums.PatientProfileScreenType;
+import com.healthcoco.healthcocoplus.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocoplus.utilities.Util;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Shreshtha on 28-01-2017.
@@ -53,6 +59,7 @@ public class MenuDrawerFragment extends HealthCocoFragment implements View.OnCli
     private View view;
     private RelativeLayout profile_layout;
     private LinearLayout manage_clinic_layout;
+    private List<DoctorClinicProfile> clinicProfile;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_master, null);
@@ -134,9 +141,10 @@ public class MenuDrawerFragment extends HealthCocoFragment implements View.OnCli
         list.add(FragmentType.CALENDAR);
         list.add(FragmentType.PROFILE);
         list.add(FragmentType.CLINIC_PROFILE);
+        list.add(FragmentType.ISSUE_TRACKER);
         list.add(FragmentType.SYNC);
-        list.add(FragmentType.SETTINGS);
         list.add(FragmentType.HELP_IMPROVE);
+        list.add(FragmentType.SETTINGS);
         menuListAdapter = new MenuListAdapter(mActivity);
         menuListAdapter.setListData(list);
         lvMenuList.setAdapter(menuListAdapter);
@@ -150,14 +158,17 @@ public class MenuDrawerFragment extends HealthCocoFragment implements View.OnCli
                 ((HomeActivity) mActivity).initFragment(FragmentType.PROFILE);
                 break;
             case R.id.tv_clinic_name:
-                Util.showToast(getContext(), "Clinic Name");
+                if (clinicProfile.size() > 1) {
+                    openClinicListDialogFragment();
+                }
                 break;
             case R.id.iv_image:
-                if (doctorProfile != null && !Util.isNullOrBlank(doctorProfile.getImageUrl()))
+                if (doctorProfile != null && !Util.isNullOrBlank(doctorProfile.getImageUrl())) {
                     mActivity.openEnlargedImageDialogFragment(doctorProfile.getImageUrl());
+                }
                 break;
             case R.id.manage_clinic_layout:
-                Util.showToast(getContext(), "Manage clinics");
+                openClinicListDialogFragment();
                 break;
         }
     }
@@ -173,5 +184,36 @@ public class MenuDrawerFragment extends HealthCocoFragment implements View.OnCli
     public void setMenuSelection(FragmentType fragmentType) {
         if (menuListAdapter != null)
             menuListAdapter.setSetSelectedPosition(fragmentType);
+    }
+
+    public void initData(DoctorProfile doctorProfile) {
+        if (doctorProfile != null) {
+            this.doctorProfile = doctorProfile;
+//            DownloadImageFromUrlUtil.loadImageWithInitialAlphabet(mActivity, PatientProfileScreenType.IN_MENU, doctorProfile, progressLoading, ivImage, tvInitialAlphabet);
+            String title = doctorProfile.getTitle(false);
+            if (Util.isNullOrBlank(title))
+                title = getResources().getString(R.string.dr);
+            tvProfileName.setText(title + Util.getValidatedValue(doctorProfile.getFirstName()));
+
+            tvEmailId.setText(Util.getValidatedValue(doctorProfile.getEmailAddress()));
+            tvClinicName.setText(Util.getValidatedValue(doctorProfile.getClinicProfile().get(selectedPosition).getLocationName()));
+            clinicProfile = doctorProfile.getClinicProfile();
+//            notifyClinicListAdapter(doctorProfile.getClinicProfile());
+            if (selectedFragmentType != null && lvMenuList.findViewWithTag(selectedFragmentType) != null) {
+                View viewItem = lvMenuList.findViewWithTag(selectedFragmentType);
+                viewItem.setSelected(true);
+            }
+            lvMenuList.setItemChecked(selectedPosition, true);
+            if (clinicProfile.size() == 1)
+                tvClinicName.setCompoundDrawables(null, null, null, null);
+        }
+//        swipeRefreshLayout.setRefreshing(false);
+    }
+
+    private void openClinicListDialogFragment() {
+        Bundle args = new Bundle();
+        MenuClinicListDialogFragment clinicListDialogFragment = new MenuClinicListDialogFragment(clinicProfile);
+        clinicListDialogFragment.setArguments(args);
+        clinicListDialogFragment.show(mFragmentManager, clinicListDialogFragment.getClass().getSimpleName());
     }
 }
