@@ -218,5 +218,14 @@
     <string name="most_visited">Most Visited</string>
     <string name="name_mobile_number">Name/Mobile Number</string>
     <string name="dr">Dr.</string>
-
+    <string name="error_loading_image">Error Loading Image</string>
+    <string name="contact">Contact</string>
+    <string name="edit_text_icon">&#xf044;</string>
+    <string name="primary_mobile_number">Primary Mobile Number</string>
+    <string name="additional_mobile_number">Additional Mobile Number</string>
+    <string name="primary_email_address">Primary Email Address</string>
+    <string name="alternate_email_address">Alternate Email Address</string>
+    <string name="alternate_mobile_number">Alternate Mobile Number</string>
+    <string name="registration_number">Registartion Number</string>
+    <string name="education">Education</string>
 </resources>

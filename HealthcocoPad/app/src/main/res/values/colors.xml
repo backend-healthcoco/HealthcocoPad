@@ -24,5 +24,6 @@
     <color name="red_error">#F50434</color>
     <color name="blue_translucent">#700077b5</color>
     <color name="grey_darker">#323232</color>
+    <color name="grey_item_border">#C5C5CD</color>
 
 </resources>

@@ -29,6 +29,7 @@ import com.healthcoco.healthcocoplus.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocoplus.services.impl.WebDataServiceImpl;
 import com.healthcoco.healthcocoplus.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocoplus.utilities.LogUtils;
+import com.healthcoco.healthcocoplus.utilities.ScreenDimensions;
 import com.healthcoco.healthcocoplus.utilities.Util;
 
 import io.fabric.sdk.android.Fabric;
@@ -58,12 +59,12 @@ public class SplashScreenActivity extends HealthCocoActivity implements GsonRequ
     }
 
     private void initScreenDimensions() {
-//        Util.printScreenDensity(this);
+        Util.printScreenDensity(this);
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
-//        ScreenDimensions.SCREEN_WIDTH = size.x;
-//        ScreenDimensions.SCREEN_HEIGHT = size.y;
+        ScreenDimensions.SCREEN_WIDTH = size.x;
+        ScreenDimensions.SCREEN_HEIGHT = size.y;
     }
 
     /**

@@ -58,5 +58,7 @@ dependencies {
     compile 'com.google.android.gms:play-services-analytics:10.0.1'
     //required for SHA3 encryption
     compile 'com.madgag.spongycastle:prov:1.54.0.0'
+    //for image loading
+    compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
 }
 apply plugin: 'com.google.gms.google-services'
