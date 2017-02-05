@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
@@ -17,16 +18,27 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.android.volley.Response;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocoplus.HealthCocoFragment;
 import com.healthcoco.healthcocoplus.activities.HomeActivity;
+import com.healthcoco.healthcocoplus.bean.VolleyResponseBean;
 import com.healthcoco.healthcocoplus.bean.server.DoctorClinicProfile;
 import com.healthcoco.healthcocoplus.bean.server.DoctorProfile;
+import com.healthcoco.healthcocoplus.bean.server.LoginResponse;
+import com.healthcoco.healthcocoplus.bean.server.User;
+import com.healthcoco.healthcocoplus.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocoplus.dialogFragment.LoginDialogFragment;
 import com.healthcoco.healthcocoplus.dialogFragment.MenuClinicListDialogFragment;
 import com.healthcoco.healthcocoplus.drawer.MenuListAdapter;
 import com.healthcoco.healthcocoplus.enums.FragmentType;
+import com.healthcoco.healthcocoplus.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocoplus.enums.PatientProfileScreenType;
+import com.healthcoco.healthcocoplus.enums.WebServiceType;
+import com.healthcoco.healthcocoplus.listeners.LocalDoInBackgroundListenerOptimised;
+import com.healthcoco.healthcocoplus.services.GsonRequest;
+import com.healthcoco.healthcocoplus.services.impl.LocalDataServiceImpl;
+import com.healthcoco.healthcocoplus.utilities.DownloadImageFromUrlUtil;
 import com.healthcoco.healthcocoplus.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocoplus.utilities.Util;
 
@@ -37,7 +49,7 @@ import java.util.List;
  * Created by Shreshtha on 28-01-2017.
  */
 
-public class MenuDrawerFragment extends HealthCocoFragment implements View.OnClickListener, AdapterView.OnItemClickListener {
+public class MenuDrawerFragment extends HealthCocoFragment implements View.OnClickListener, AdapterView.OnItemClickListener, GsonRequest.ErrorListener, LocalDoInBackgroundListenerOptimised, Response.Listener<VolleyResponseBean> {
     public static final String INTENT_REFRESH_DOCTOR_PROFILE = "com.healthcoco.healthcocoplus.fragments.REFRESH_DOCTOR_PROFILE";
     public static String SELECTED_LOCATION_ID = "";
 
@@ -60,6 +72,7 @@ public class MenuDrawerFragment extends HealthCocoFragment implements View.OnCli
     private RelativeLayout profile_layout;
     private LinearLayout manage_clinic_layout;
     private List<DoctorClinicProfile> clinicProfile;
+
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_master, null);
@@ -89,9 +102,13 @@ public class MenuDrawerFragment extends HealthCocoFragment implements View.OnCli
     BroadcastReceiver refreshDoctorReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, final Intent intent) {
-//            getDoctorProfile();
+            getDoctorProfile();
         }
     };
+
+    private void getDoctorProfile() {
+        new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_DOCTOR_PROFILE, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -189,16 +206,16 @@ public class MenuDrawerFragment extends HealthCocoFragment implements View.OnCli
     public void initData(DoctorProfile doctorProfile) {
         if (doctorProfile != null) {
             this.doctorProfile = doctorProfile;
-//            DownloadImageFromUrlUtil.loadImageWithInitialAlphabet(mActivity, PatientProfileScreenType.IN_MENU, doctorProfile, progressLoading, ivImage, tvInitialAlphabet);
+            DownloadImageFromUrlUtil.loadImageWithInitialAlphabet(mActivity, PatientProfileScreenType.IN_MENU, doctorProfile, progressLoading, ivImage, tvInitialAlphabet);
             String title = doctorProfile.getTitle(false);
             if (Util.isNullOrBlank(title))
                 title = getResources().getString(R.string.dr);
             tvProfileName.setText(title + Util.getValidatedValue(doctorProfile.getFirstName()));
 
             tvEmailId.setText(Util.getValidatedValue(doctorProfile.getEmailAddress()));
-            tvClinicName.setText(Util.getValidatedValue(doctorProfile.getClinicProfile().get(selectedPosition).getLocationName()));
+//            tvClinicName.setText(Util.getValidatedValue(doctorProfile.getClinicProfile().get(selectedPosition).getLocationName()));
             clinicProfile = doctorProfile.getClinicProfile();
-//            notifyClinicListAdapter(doctorProfile.getClinicProfile());
+            initSelectedLocationId(getSelectedLocationId());
             if (selectedFragmentType != null && lvMenuList.findViewWithTag(selectedFragmentType) != null) {
                 View viewItem = lvMenuList.findViewWithTag(selectedFragmentType);
                 viewItem.setSelected(true);
@@ -210,10 +227,78 @@ public class MenuDrawerFragment extends HealthCocoFragment implements View.OnCli
 //        swipeRefreshLayout.setRefreshing(false);
     }
 
+
+    private String getSelectedLocationId() {
+        LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
+        if (doctor != null && doctor.getUser() != null && !Util.isNullOrBlank(doctor.getUser().getUniqueId())) {
+            User user = doctor.getUser();
+            return user.getForeignLocationId();
+        }
+        return null;
+    }
+
+    private void initSelectedLocationId(String selectedLocationId) {
+        SELECTED_LOCATION_ID = selectedLocationId;
+        if (Util.isNullOrBlank(SELECTED_LOCATION_ID) &&
+                doctorProfile != null && !Util.isNullOrEmptyList(doctorProfile.getClinicProfile())) {
+            SELECTED_LOCATION_ID = doctorProfile.getClinicProfile().get(0).getLocationId();
+        }
+        if (!Util.isNullOrBlank(SELECTED_LOCATION_ID)) {
+            DoctorClinicProfile doctorClinicProfile = LocalDataServiceImpl.getInstance(mApp).getDoctorClinicProfile(doctorProfile.getDoctorId(), SELECTED_LOCATION_ID);
+            if (doctorClinicProfile != null)
+                refreshSelectedDoctorClinicProfileDetails(doctorClinicProfile);
+        }
+    }
+
+    private void refreshSelectedDoctorClinicProfileDetails(DoctorClinicProfile doctorClinicProfile) {
+        SELECTED_LOCATION_ID = doctorClinicProfile.getLocationId();
+        if (Util.isNullOrBlank(SELECTED_LOCATION_ID) &&
+                doctorProfile != null && !Util.isNullOrEmptyList(doctorProfile.getClinicProfile())) {
+            SELECTED_LOCATION_ID = doctorProfile.getClinicProfile().get(0).getLocationId();
+        }
+        if (!Util.isNullOrBlank(SELECTED_LOCATION_ID)) {
+            tvClinicName.setVisibility(View.VISIBLE);
+            DoctorClinicProfile clinicProfile = LocalDataServiceImpl.getInstance(mApp).getDoctorClinicProfile(doctorProfile.getDoctorId(), SELECTED_LOCATION_ID);
+            tvClinicName.setText(clinicProfile.getLocationName());
+            LocalDataServiceImpl.getInstance(mApp).updatedSelectedLocationDetails(doctorProfile.getUserId(), clinicProfile);
+        }
+    }
+
     private void openClinicListDialogFragment() {
         Bundle args = new Bundle();
         MenuClinicListDialogFragment clinicListDialogFragment = new MenuClinicListDialogFragment(clinicProfile);
         clinicListDialogFragment.setArguments(args);
         clinicListDialogFragment.show(mFragmentManager, clinicListDialogFragment.getClass().getSimpleName());
+    }
+
+    @Override
+    public void onResponse(VolleyResponseBean response) {
+        if (response != null && response.getWebServiceType() != null) {
+            switch (response.getWebServiceType()) {
+                case GET_DOCTOR_PROFILE:
+                    if (response.isDataFromLocal()) {
+                        initData((DoctorProfile) response.getData());
+                    }
+                    break;
+            }
+        }
+        mActivity.hideLoading();
+    }
+
+    @Override
+    public VolleyResponseBean doInBackground(VolleyResponseBean response) {
+        VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
+        switch (response.getLocalBackgroundTaskType()) {
+            case GET_DOCTOR_PROFILE:
+                volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getDoctorProfileResponse(WebServiceType.GET_DOCTOR_PROFILE, doctorProfile.getDoctorId(), null, null);
+                break;
+        }
+        volleyResponseBean.setIsFromLocalAfterApiSuccess(response.isFromLocalAfterApiSuccess());
+        return volleyResponseBean;
+    }
+
+    @Override
+    public void onPostExecute(VolleyResponseBean aVoid) {
+
     }
 }

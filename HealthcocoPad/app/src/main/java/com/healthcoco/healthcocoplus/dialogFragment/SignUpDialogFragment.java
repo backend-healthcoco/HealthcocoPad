@@ -190,10 +190,6 @@ public class SignUpDialogFragment extends HealthCocoDialogFragment implements Vi
         WebDataServiceImpl.getInstance(mApp).getSpecialities(Specialities.class, updatedTime, this, this);
     }
 
-    private void openListPopUp(CommonListDialogType popupType, ArrayList<?> list) {
-        commonListDialogFragment = new CommonListDialogFragment(this, popupType, list);
-        commonListDialogFragment.show(mFragmentManager, CommonListDialogFragment.class.getSimpleName());
-    }
 
     private void validateData() {
         ArrayList<View> errorViewList = new ArrayList<>();

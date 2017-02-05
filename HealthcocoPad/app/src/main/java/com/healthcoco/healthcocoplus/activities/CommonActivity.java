@@ -8,7 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebViewFragment;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -19,7 +19,6 @@ import com.healthcoco.healthcocoplus.HealthCocoFragment;
 import com.healthcoco.healthcocoplus.enums.ActionbarLeftRightActionType;
 import com.healthcoco.healthcocoplus.enums.ActionbarType;
 import com.healthcoco.healthcocoplus.enums.CommonOpenUpFragmentType;
-import com.healthcoco.healthcocoplus.enums.DefaultSyncServiceType;
 import com.healthcoco.healthcocoplus.fragments.FeedbackFragment;
 import com.healthcoco.healthcocoplus.fragments.InitialSyncFragment;
 import com.healthcoco.healthcocoplus.fragments.LoginSignupFragment;
@@ -79,6 +78,9 @@ public class CommonActivity extends HealthCocoActivity {
             case FEEDBACK:
                 openFragment(ActionbarType.TITLE_SAVE, ActionbarLeftRightActionType.WITH_CROSS, R.string.help_us_to_improve, new FeedbackFragment());
                 break;
+//            case ADD_EDIT_DOCTOR_PROFILE_DETAILS:
+//                openFragment(ActionbarType.TITLE_SAVE, ActionbarLeftRightActionType.WITH_CROSS, R.string.profile, new AddEditDoctorProfileDetailsFragment());
+//                break;
         }
     }
 
@@ -208,4 +210,6 @@ public class CommonActivity extends HealthCocoActivity {
         } else
             finish();
     }
+
+
 }
