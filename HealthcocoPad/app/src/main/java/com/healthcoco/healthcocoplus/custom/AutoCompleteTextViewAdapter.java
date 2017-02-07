@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocoplus.bean.server.DoctorClinicProfile;
+import com.healthcoco.healthcocoplus.bean.server.DoctorExperience;
 import com.healthcoco.healthcocoplus.enums.AutoCompleteTextViewType;
 import com.healthcoco.healthcocoplus.listeners.AutoCompleteTextViewListener;
 import com.healthcoco.healthcocoplus.utilities.Util;
@@ -90,6 +91,12 @@ public class AutoCompleteTextViewAdapter extends ArrayAdapter<Object> {
                     text = String.valueOf(doctorClinicProfile.getLocationName());
                 }
                 break;
+            case EXPERIENCE_LIST:
+                if (object instanceof DoctorExperience) {
+                    DoctorExperience doctorExperience = (DoctorExperience) object;
+                    text = doctorExperience.getExperience() + " " + doctorExperience.getPeriodValue();
+                }
+                break;
         }
         return text;
     }
@@ -111,7 +118,8 @@ public class AutoCompleteTextViewAdapter extends ArrayAdapter<Object> {
             try {
                 suggestions.clear();
                 if (autoCompleteTextViewType == AutoCompleteTextViewType.DOCTOR_CLINIC
-                        || autoCompleteTextViewType == AutoCompleteTextViewType.DOCTOR_TITLES) {
+                        || autoCompleteTextViewType == AutoCompleteTextViewType.DOCTOR_TITLES
+                        || autoCompleteTextViewType == AutoCompleteTextViewType.EXPERIENCE_LIST) {
 
                     suggestions.addAll(itemsAll);
                 } else if (constraint != null) {

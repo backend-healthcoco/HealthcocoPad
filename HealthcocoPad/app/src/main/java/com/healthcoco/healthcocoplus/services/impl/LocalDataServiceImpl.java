@@ -24,6 +24,7 @@ import com.healthcoco.healthcocoplus.bean.server.ConsultationFee;
 import com.healthcoco.healthcocoplus.bean.server.DOB;
 import com.healthcoco.healthcocoplus.bean.server.Diagnoses;
 import com.healthcoco.healthcocoplus.bean.server.DiagnosisSuggestions;
+import com.healthcoco.healthcocoplus.bean.server.Diagram;
 import com.healthcoco.healthcocoplus.bean.server.Disease;
 import com.healthcoco.healthcocoplus.bean.server.DoctorClinicProfile;
 import com.healthcoco.healthcocoplus.bean.server.DoctorExperience;
@@ -1472,5 +1473,16 @@ public class LocalDataServiceImpl {
 
         LogUtils.LOGD(TAG, "Select Query " + whereCondition);
         SugarRecord.executeQuery(whereCondition);
+    }
+
+    /**
+     * clears all the saved data if there is any change in speciality of doctor
+     */
+    public void clearMasterDataOnSpecialityChange() {
+        ComplaintSuggestions.deleteAll(ComplaintSuggestions.class);
+        ObservationSuggestions.deleteAll(ObservationSuggestions.class);
+        InvestigationSuggestions.deleteAll(InvestigationSuggestions.class);
+        DiagnosisSuggestions.deleteAll(DiagnosisSuggestions.class);
+        Diagram.deleteAll(Diagram.class);
     }
 }

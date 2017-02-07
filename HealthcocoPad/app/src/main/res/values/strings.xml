@@ -309,4 +309,5 @@
     <string name="device_doesnt_support_camera">Device doesn\'t support Camera</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="speciality_already_added">Speciality already Added</string>
 </resources>

@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
@@ -137,7 +138,9 @@ public class AddEditDoctorProfileDetailsFragment extends HealthCocoDialogFragmen
 
     @Override
     public void init() {
-        mActivity.showLoading(false);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
+            mActivity.showLoading(false);
+        }
         initViews();
         initListeners();
         initAutoTvAdapter();
@@ -171,7 +174,6 @@ public class AddEditDoctorProfileDetailsFragment extends HealthCocoDialogFragmen
 
     @Override
     public void initListeners() {
-//        ((HomeActivity) mActivity).initSaveButton(this);
         bt_save.setOnClickListener(this);
         btEditProfileImage.setOnClickListener(this);
         btEditCoverPhoto.setOnClickListener(this);
@@ -190,7 +192,9 @@ public class AddEditDoctorProfileDetailsFragment extends HealthCocoDialogFragmen
                         list, AutoCompleteTextViewType.EXPERIENCE_LIST);
                 autotvExperience.setThreshold(0);
                 autotvExperience.setAdapter(adapter);
-                autotvExperience.setDropDownAnchor(R.id.autotv_experience);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.CUPCAKE) {
+                    autotvExperience.setDropDownAnchor(R.id.autotv_experience);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -244,7 +248,6 @@ public class AddEditDoctorProfileDetailsFragment extends HealthCocoDialogFragmen
         tvSpeciality.setOnClickListener(this);
         btDelete.setOnClickListener(this);
         containerSpecialities.addView(specialityItem);
-//        setupUI(specialityItem);
     }
 
     @Override
@@ -287,10 +290,8 @@ public class AddEditDoctorProfileDetailsFragment extends HealthCocoDialogFragmen
                         doctorProfile.setExperience(doctorProfileResponse.getExperience());
                         LocalDataServiceImpl.getInstance(mApp).addDoctorProfile(doctorProfile);
                     }
-
-//                    ((CommonOpenUpActivity) mActivity).setResult(TAG_RESULT_CODE, new Intent().putExtra(DoctorProfileFragment.TAG_DOCTOR_PROFILE, doctorProfile));
-                    ((CommonActivity) mActivity).setResult(TAG_RESULT_CODE);
-                    ((CommonActivity) mActivity).finish();
+                    getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, getActivity().getIntent());
+                    getDialog().dismiss();
                     break;
             }
         }
@@ -387,7 +388,7 @@ public class AddEditDoctorProfileDetailsFragment extends HealthCocoDialogFragmen
                 if (view instanceof TextView)
                     selectedSpecialityTextView = (TextView) view;
                 if (!Util.isNullOrEmptyList(specialitiesList)) {
-                    openListPopUp(CommonListDialogType.SPECIALITY, specialitiesList);
+                    commonListDialogFragment = openCommonListDialogFragment(this, CommonListDialogType.SPECIALITY, specialitiesList);
                 } else Util.showToast(mActivity, R.string.no_specialisations_found);
                 break;
             case R.id.bt_delete:
@@ -520,7 +521,6 @@ public class AddEditDoctorProfileDetailsFragment extends HealthCocoDialogFragmen
                 String speciality = Util.getValidatedValueOrNull(tvSpeciality);
                 if (!Util.isNullOrBlank(speciality))
                     list.add(speciality);
-
             }
         }
         return list;
@@ -546,6 +546,36 @@ public class AddEditDoctorProfileDetailsFragment extends HealthCocoDialogFragmen
                     break;
             }
         }
+    }
+
+    @Override
+    public void onDialogItemClicked(CommonListDialogType commonListDialogType, Object object) {
+        switch (commonListDialogType) {
+            case SPECIALITY:
+                if (object instanceof Specialities) {
+                    Specialities speciality = (Specialities) object;
+                    if (isSpecialityNotAdded(speciality))
+                        selectedSpecialityTextView.setText(speciality.getSuperSpeciality());
+                    else
+                        Util.showToast(mActivity, R.string.speciality_already_added);
+                }
+                break;
+        }
+        if (commonListDialogFragment != null)
+            commonListDialogFragment.dismiss();
+    }
+
+    private boolean isSpecialityNotAdded(Specialities selecetdSpeciality) {
+        if (containerSpecialities.getChildCount() > 0) {
+            for (int i = 0; i < containerSpecialities.getChildCount(); i++) {
+                LinearLayout specialityItem = (LinearLayout) containerSpecialities.getChildAt(i);
+                TextView tvSpeciality = (TextView) specialityItem.findViewById(R.id.tv_speciality);
+                String speciality = Util.getValidatedValueOrNull(tvSpeciality);
+                if (selecetdSpeciality.getSuperSpeciality().equalsIgnoreCase(speciality))
+                    return false;
+            }
+        }
+        return true;
     }
 
     @Override
@@ -635,10 +665,5 @@ public class AddEditDoctorProfileDetailsFragment extends HealthCocoDialogFragmen
                 }
             }
         }
-    }
-
-    private void refreshHomeScreenTitle(String title) {
-        this.selectedFilterTitle = title;
-        ((HomeActivity) mActivity).setActionbarTitle(title);
     }
 }

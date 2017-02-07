@@ -155,6 +155,7 @@
     <orderEntry type="library" exported="" name="crashlytics-2.6.6" level="project" />
     <orderEntry type="library" exported="" name="beta-1.2.3" level="project" />
     <orderEntry type="library" exported="" name="firebase-analytics-impl-10.0.1" level="project" />
+    <orderEntry type="library" exported="" name="universal-image-loader-1.9.5" level="project" />
     <orderEntry type="library" exported="" name="firebase-common-10.0.1" level="project" />
     <orderEntry type="library" exported="" name="play-services-analytics-impl-10.0.1" level="project" />
     <orderEntry type="library" exported="" name="support-compat-25.1.0" level="project" />
