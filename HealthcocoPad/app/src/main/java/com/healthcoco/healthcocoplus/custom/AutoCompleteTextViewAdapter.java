@@ -14,6 +14,7 @@ import com.healthcoco.healthcocoplus.bean.server.DoctorClinicProfile;
 import com.healthcoco.healthcocoplus.bean.server.DoctorExperience;
 import com.healthcoco.healthcocoplus.enums.AutoCompleteTextViewType;
 import com.healthcoco.healthcocoplus.listeners.AutoCompleteTextViewListener;
+import com.healthcoco.healthcocoplus.utilities.DateTimeUtil;
 import com.healthcoco.healthcocoplus.utilities.Util;
 
 import java.util.ArrayList;
@@ -42,6 +43,18 @@ public class AutoCompleteTextViewAdapter extends ArrayAdapter<Object> {
             suggestions.addAll(itemsAll);
             this.viewResourceId = viewResourceId;
             this.autoCompleteTextViewType = autoCompleteTextViewType;
+        }
+    }
+
+    public AutoCompleteTextViewAdapter(Context context, AutoCompleteTextViewListener autoCompleteTextViewListener, int viewResourceId, List<Object> items, AutoCompleteTextViewType autoCompleteTextViewType) {
+        super(context, viewResourceId, items);
+        if (!Util.isNullOrEmptyList(items)) {
+            this.items = Arrays.asList(items.toArray(new Object[items.size()]));
+            this.itemsAll = Arrays.asList(items.toArray(new Object[items.size()]));
+            this.suggestions = new ArrayList<Object>();
+            this.viewResourceId = viewResourceId;
+            this.autoCompleteTextViewType = autoCompleteTextViewType;
+            this.autoCompleteTextViewListener = autoCompleteTextViewListener;
         }
     }
 
@@ -97,6 +110,13 @@ public class AutoCompleteTextViewAdapter extends ArrayAdapter<Object> {
                     text = doctorExperience.getExperience() + " " + doctorExperience.getPeriodValue();
                 }
                 break;
+            case YEAR_OF_PASSING:
+                if (object instanceof String) {
+                    text = (String) object;
+                    if (text.equalsIgnoreCase(DateTimeUtil.getCurrentFormattedDate(DateTimeUtil.YEAR_FORMAT)) && autoCompleteTextViewListener != null)
+                        autoCompleteTextViewListener.scrollToPosition(position);
+                }
+                break;
         }
         return text;
     }
@@ -118,6 +138,7 @@ public class AutoCompleteTextViewAdapter extends ArrayAdapter<Object> {
             try {
                 suggestions.clear();
                 if (autoCompleteTextViewType == AutoCompleteTextViewType.DOCTOR_CLINIC
+                        || autoCompleteTextViewType == AutoCompleteTextViewType.YEAR_OF_PASSING
                         || autoCompleteTextViewType == AutoCompleteTextViewType.DOCTOR_TITLES
                         || autoCompleteTextViewType == AutoCompleteTextViewType.EXPERIENCE_LIST) {
 

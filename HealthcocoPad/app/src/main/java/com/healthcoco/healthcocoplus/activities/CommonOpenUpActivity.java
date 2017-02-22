@@ -27,7 +27,7 @@ import com.healthcoco.healthcocoplus.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocoplus.utilities.LogUtils;
 import com.healthcoco.healthcocoplus.utilities.Util;
 
-public class CommonActivity extends HealthCocoActivity {
+public class CommonOpenUpActivity extends HealthCocoActivity {
     private Fragment loginSignupFragment;
     private Intent intent;
     private FragmentTransaction transaction;
@@ -79,7 +79,7 @@ public class CommonActivity extends HealthCocoActivity {
                 openFragment(ActionbarType.TITLE_SAVE, ActionbarLeftRightActionType.WITH_CROSS, R.string.help_us_to_improve, new FeedbackFragment());
                 break;
 //            case ADD_EDIT_DOCTOR_PROFILE_DETAILS:
-//                openFragment(ActionbarType.TITLE_SAVE, ActionbarLeftRightActionType.WITH_CROSS, R.string.profile, new AddEditDoctorProfileDetailsFragment());
+//                openFragment(ActionbarType.TITLE_SAVE, ActionbarLeftRightActionType.WITH_CROSS, R.string.profile, new AddEditDoctorProfileDialogFragment());
 //                break;
         }
     }
@@ -153,7 +153,7 @@ public class CommonActivity extends HealthCocoActivity {
             if (!(view instanceof EditText)) {
                 view.setOnTouchListener(new View.OnTouchListener() {
                     public boolean onTouch(View v, MotionEvent event) {
-                        Util.hideKeyboard(CommonActivity.this, view);
+                        Util.hideKeyboard(CommonOpenUpActivity.this, view);
                         return false;
                     }
                 });
@@ -211,5 +211,9 @@ public class CommonActivity extends HealthCocoActivity {
             finish();
     }
 
-
+    public void initSaveButton(View.OnClickListener listener) {
+        Button btSave = (Button) findViewById(R.id.bt_save);
+        if (btSave != null)
+            btSave.setOnClickListener(listener);
+    }
 }

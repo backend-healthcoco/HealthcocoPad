@@ -8,6 +8,8 @@ import com.google.gson.Gson;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocoplus.HealthCocoApplication;
 import com.healthcoco.healthcocoplus.bean.VolleyResponseBean;
+import com.healthcoco.healthcocoplus.bean.request.ProfessionalMembershipRequest;
+import com.healthcoco.healthcocoplus.bean.request.ProfessionalStatementRequest;
 import com.healthcoco.healthcocoplus.bean.server.AccessModule;
 import com.healthcoco.healthcocoplus.bean.server.Achievement;
 import com.healthcoco.healthcocoplus.bean.server.AppointmentSlot;
@@ -53,6 +55,7 @@ import com.healthcoco.healthcocoplus.bean.server.Observation;
 import com.healthcoco.healthcocoplus.bean.server.ObservationSuggestions;
 import com.healthcoco.healthcocoplus.bean.server.Patient;
 import com.healthcoco.healthcocoplus.bean.server.Profession;
+import com.healthcoco.healthcocoplus.bean.server.ProfessionalMembership;
 import com.healthcoco.healthcocoplus.bean.server.Records;
 import com.healthcoco.healthcocoplus.bean.server.Reference;
 import com.healthcoco.healthcocoplus.bean.server.RegisteredPatientDetailsUpdated;
@@ -887,6 +890,11 @@ public class LocalDataServiceImpl {
             addProfessionalMemberships(LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, doctorProfile.getDoctorId(), doctorProfile.getProfessionalMemberships());
         }
 
+        deleteProfessionalStatementIfAlreadyPresent(LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, doctorProfile.getDoctorId());
+        //saving Professional Statement
+        if (!Util.isNullOrBlank(doctorProfile.getProfessionalStatement())) {
+            addProfessionalStatements(LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, doctorProfile.getDoctorId(), doctorProfile.getProfessionalStatement());
+        }
 
         //deleteClinicProfile
         deleteDoctorClinicProfile(LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, doctorProfile.getDoctorId());
@@ -898,6 +906,16 @@ public class LocalDataServiceImpl {
             }
         }
         doctorProfile.save();
+    }
+
+    private void addProfessionalStatements(String keyForeignUniqueId, String doctorId, String professionalStatement) {
+        deleteProfessionalStatementIfAlreadyPresent(LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, doctorId);
+        DoctorProfile doctorProfile = new DoctorProfile();
+        doctorProfile.setProfessionalStatement(professionalStatement);
+    }
+
+    private void deleteProfessionalStatementIfAlreadyPresent(String keyForeignUniqueId, String doctorId) {
+
     }
 
     public void addEducationsList(String doctorId, List<Education> list) {
@@ -913,13 +931,24 @@ public class LocalDataServiceImpl {
         }
     }
 
-    private void addAchievements(String key, String value, List<Achievement> list) {
+    public void addAchievements(String key, String value, List<Achievement> list) {
         for (Achievement achievement :
                 list) {
             if (key.equals(LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID))
                 achievement.setForeignUniqueId(value);
         }
         Achievement.saveInTx(list);
+    }
+
+    public void addAchievements(String value, List<Achievement> list) {
+        deleteAchievementsIfAlreadyExists(LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, value);
+        //saving Registration Details
+        if (!Util.isNullOrEmptyList(list)) {
+            for (Achievement registrationDetail : list) {
+                registrationDetail.setForeignUniqueId(value);
+            }
+            DoctorRegistrationDetail.saveInTx(list);
+        }
     }
 
     public void addRegistrationDetailsList(String value, List<DoctorRegistrationDetail> list) {
@@ -1485,4 +1514,99 @@ public class LocalDataServiceImpl {
         DiagnosisSuggestions.deleteAll(DiagnosisSuggestions.class);
         Diagram.deleteAll(Diagram.class);
     }
+
+    public List<Education> getEducationDetailsList(String doctorId) {
+        try {
+            List<Education> list = (List<Education>) getListByKeyValue(Education.class, LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, doctorId);
+            return list;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public List<Achievement> getAwardsPublicationDetailsList(String doctorId) {
+        try {
+            List<Achievement> list = (List<Achievement>) getListByKeyValue(Achievement.class, LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, doctorId);
+            return list;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public List<DoctorRegistrationDetail> getRegistrationDetailsList(String doctorId) {
+        try {
+            List<DoctorRegistrationDetail> list = (List<DoctorRegistrationDetail>) getListByKeyValue(DoctorRegistrationDetail.class, LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, doctorId);
+            return list;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public List<DoctorExperienceDetail> getExperiencenDetailsList(String doctorId) {
+        try {
+            List<DoctorExperienceDetail> list = (List<DoctorExperienceDetail>) getListByKeyValue(DoctorExperienceDetail.class, LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, doctorId);
+            return list;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public void addExperirnce(String doctorId, List<DoctorExperienceDetail> list) {
+        deleteExperienceDetailIfAlreadyExists(LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, doctorId);
+        //saving Education Details
+        if (!Util.isNullOrEmptyList(list)) {
+            for (DoctorExperienceDetail experienceDetail :
+                    list) {
+                experienceDetail.setForeignUniqueId(doctorId);
+            }
+            DoctorExperienceDetail.saveInTx(list);
+        }
+    }
+
+    public List<String> getProfessionalMembershipsDetailsList(String doctorId) {
+        try {
+            List<String> membershipsStringList = null;
+            List<ForeignProfessionalMemberships> professionMembershipsList = (List<ForeignProfessionalMemberships>) getListByKeyValue(ForeignProfessionalMemberships.class, LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, doctorId);
+            if (!Util.isNullOrEmptyList(professionMembershipsList)) {
+                for (ForeignProfessionalMemberships professionalMembership :
+                        professionMembershipsList) {
+                    if (membershipsStringList == null)
+                        membershipsStringList = new ArrayList<>();
+                    membershipsStringList.add(professionalMembership.getProfessionalMemberships());
+                }
+            }
+            return membershipsStringList;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public void addProfessionalMembership(String doctorId, List<String> list) {
+        deleteProfessionalMembershipsIfAlreadyPresent(LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, doctorId);
+        //saving Education Details
+        for (String value : list) {
+            if (!Util.isNullOrBlank(value)) {
+                ForeignProfessionalMemberships professionalMemberships = new ForeignProfessionalMemberships();
+                professionalMemberships.setForeignUniqueId(value);
+                professionalMemberships.setProfessionalMemberships(value);
+                professionalMemberships.save();
+            }
+        }
+    }
+
+    public String getProfessionalStatement(String doctorId) {
+        try {
+            String list = (String) getObject(DoctorProfile.class, LocalDatabaseUtils.KEY_DOCTOR_ID, doctorId);
+            return list;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }

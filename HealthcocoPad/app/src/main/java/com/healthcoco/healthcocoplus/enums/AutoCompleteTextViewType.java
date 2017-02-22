@@ -5,5 +5,5 @@ package com.healthcoco.healthcocoplus.enums;
  */
 
 public enum AutoCompleteTextViewType {
-    DOCTOR_TITLES, DOCTOR_CLINIC, EXPERIENCE_LIST;
+    DOCTOR_TITLES, DOCTOR_CLINIC, EXPERIENCE_LIST,YEAR_OF_PASSING, APPOINTMENT_SLOT;
 }

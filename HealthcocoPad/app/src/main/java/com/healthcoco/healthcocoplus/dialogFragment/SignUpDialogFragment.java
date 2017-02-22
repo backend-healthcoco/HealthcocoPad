@@ -18,7 +18,7 @@ import android.widget.TextView;
 import com.android.volley.Response;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocoplus.HealthCocoDialogFragment;
-import com.healthcoco.healthcocoplus.activities.CommonActivity;
+import com.healthcoco.healthcocoplus.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocoplus.activities.HomeActivity;
 import com.healthcoco.healthcocoplus.bean.server.Specialities;
 import com.healthcoco.healthcocoplus.custom.AutoCompleteTextViewAdapter;
@@ -247,7 +247,7 @@ public class SignUpDialogFragment extends HealthCocoDialogFragment implements Vi
      * @param requestCode
      */
     private void openCommonOpenUpActivity(CommonOpenUpFragmentType fragmentType, Object intentData, int requestCode) {
-        Intent intent = new Intent(mActivity, CommonActivity.class);
+        Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
         intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, fragmentType.ordinal());
         if (intentData != null) {
             intent.putExtra(HealthCocoConstants.TAG_COMMON_OPENUP_INTENT_DATA, (Serializable) intentData);

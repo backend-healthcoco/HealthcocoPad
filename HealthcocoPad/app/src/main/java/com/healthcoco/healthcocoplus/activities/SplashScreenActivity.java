@@ -124,7 +124,7 @@ public class SplashScreenActivity extends HealthCocoActivity implements GsonRequ
     }
 
     private void openLoginSignUpActivity() {
-        Intent nextActivityIntent = new Intent(this, CommonActivity.class);
+        Intent nextActivityIntent = new Intent(this, CommonOpenUpActivity.class);
         nextActivityIntent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.LOGIN_SIGN_UP.ordinal());
         startActivity(nextActivityIntent);
         finish();

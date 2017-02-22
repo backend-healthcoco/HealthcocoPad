@@ -30,8 +30,6 @@ import android.widget.TextView;
 import com.android.volley.Response;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocoplus.HealthCocoDialogFragment;
-import com.healthcoco.healthcocoplus.activities.CommonActivity;
-import com.healthcoco.healthcocoplus.activities.HomeActivity;
 import com.healthcoco.healthcocoplus.bean.DoctorProfileToSend;
 import com.healthcoco.healthcocoplus.bean.VolleyResponseBean;
 import com.healthcoco.healthcocoplus.bean.server.DoctorExperience;
@@ -41,13 +39,11 @@ import com.healthcoco.healthcocoplus.bean.server.LoginResponse;
 import com.healthcoco.healthcocoplus.bean.server.Specialities;
 import com.healthcoco.healthcocoplus.bean.server.User;
 import com.healthcoco.healthcocoplus.custom.AutoCompleteTextViewAdapter;
-import com.healthcoco.healthcocoplus.custom.DownloadFileFromUrlAsyncTask;
 import com.healthcoco.healthcocoplus.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocoplus.enums.AutoCompleteTextViewType;
 import com.healthcoco.healthcocoplus.enums.CommonListDialogType;
 import com.healthcoco.healthcocoplus.enums.DialogType;
 import com.healthcoco.healthcocoplus.enums.FragmentType;
-import com.healthcoco.healthcocoplus.enums.HealthCocoFileType;
 import com.healthcoco.healthcocoplus.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocoplus.enums.OptionsType;
 import com.healthcoco.healthcocoplus.enums.PatientProfileScreenType;
@@ -78,13 +74,13 @@ import java.util.List;
 /**
  * Created by Shreshtha on 02-02-2017.
  */
-public class AddEditDoctorProfileDetailsFragment extends HealthCocoDialogFragment implements GsonRequest.ErrorListener, DownloadFileFromUrlListener, LocalDoInBackgroundListenerOptimised, Response.Listener<VolleyResponseBean>, View.OnClickListener, AdapterView.OnItemClickListener, CommonOptionsDialogItemClickListener {
+public class AddEditDoctorProfileDialogFragment extends HealthCocoDialogFragment implements GsonRequest.ErrorListener, DownloadFileFromUrlListener, LocalDoInBackgroundListenerOptimised, Response.Listener<VolleyResponseBean>, View.OnClickListener, AdapterView.OnItemClickListener, CommonOptionsDialogItemClickListener {
     private FragmentType profile;
     private TextViewFontAwesome tvCloseDialog;
     private TextViewFontAwesome tvSave;
     private static final String DOCTOR_PROFILE_IMAGE = "DoctorProfileImage";
     private static final String DOCTOR_COVER_IMAGE = "DoctorCoverImage";
-    public static final int TAG_RESULT_CODE = 111;
+    public static final int TAG_RESULT_CODE = 112;
     private LinearLayout btAddSpeciality;
     private ImageView ivDoctorCoverPhoto;
     private ImageView ivProfileImage;
@@ -112,10 +108,10 @@ public class AddEditDoctorProfileDetailsFragment extends HealthCocoDialogFragmen
     private String title;
     private Button bt_save;
 
-    public AddEditDoctorProfileDetailsFragment() {
+    public AddEditDoctorProfileDialogFragment() {
     }
 
-    public AddEditDoctorProfileDetailsFragment(FragmentType profile) {
+    public AddEditDoctorProfileDialogFragment(FragmentType profile) {
         this.profile = profile;
     }
 
@@ -125,7 +121,7 @@ public class AddEditDoctorProfileDetailsFragment extends HealthCocoDialogFragmen
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_add_edit_doctor_profile_details, container, false);
+        view = inflater.inflate(R.layout.dialog_fragment_add_edit_doctor_profile_details, container, false);
         super.onCreateView(inflater, container, savedInstanceState);
         return view;
     }
