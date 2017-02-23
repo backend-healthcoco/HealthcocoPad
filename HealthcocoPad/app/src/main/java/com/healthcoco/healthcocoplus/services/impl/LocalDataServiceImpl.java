@@ -1609,4 +1609,30 @@ public class LocalDataServiceImpl {
         return null;
     }
 
+    public ClinicImage getClinicImage(String uniqueId) {
+        return (ClinicImage) getObject(ClinicImage.class, LocalDatabaseUtils.KEY_CUSTOM_UNIQUE_ID, uniqueId);
+    }
+
+    public List<Role> getRoles(String locationId, String hospitalId) {
+        List<Role> rolesList = Select.from(Role.class).where(Condition.prop(LocalDatabaseUtils.KEY_LOCATION_ID).eq(locationId),
+                Condition.prop(LocalDatabaseUtils.KEY_HOSPITAL_ID).eq(hospitalId)).list();
+        if (!Util.isNullOrEmptyList(rolesList)) {
+            for (Role role :
+                    rolesList) {
+                getRestRoleDetails(role);
+            }
+        }
+        return rolesList;
+    }
+
+    private void getRestRoleDetails(Role role) {
+        role.setAccessModules((List<AccessModule>) getListByKeyValue(AccessModule.class, LocalDatabaseUtils.KEY_FOREIGN_ROLE_ID, role.getUniqueId()));
+        if (!Util.isNullOrEmptyList(role.getAccessModules())) {
+            for (AccessModule accessModule :
+                    role.getAccessModules()) {
+                if (!Util.isNullOrBlank(accessModule.getStringAccessPermissionTypes()))
+                    accessModule.setAccessPermissionTypes(new Gson().fromJson(accessModule.getStringAccessPermissionTypes(), ArrayList.class));
+            }
+        }
+    }
 }

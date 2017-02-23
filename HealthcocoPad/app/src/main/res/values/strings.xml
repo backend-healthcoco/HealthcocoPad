@@ -342,4 +342,11 @@
     <string name="select_slot">Select Slot</string>
     <string name="please_enter_appointment_booking_number">Please enter Appointment Booking Number</string>
     <string name="please_enter_a_valid_appointment_booking_number">Please enter a Valid Appointment Booking Number</string>
+    <string name="clinic_address">Clinic Address</string>
+    <string name="clinic_numbers">Clinic Numbers</string>
+    <string name="website">Website</string>
+    <string name="clinic_email_address">Clinic Email Address</string>
+    <string name="doctors">Doctors</string>
+    <string name="view_all">View All</string>
+    <string name="clinic_logo_updated_successfully">Clinic logo updated successfully</string>
 </resources>

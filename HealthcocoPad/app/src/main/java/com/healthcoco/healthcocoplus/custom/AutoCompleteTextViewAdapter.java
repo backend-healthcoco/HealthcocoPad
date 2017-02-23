@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 
 import com.healthcoco.healthcocopad.R;
+import com.healthcoco.healthcocoplus.bean.server.AppointmentSlot;
 import com.healthcoco.healthcocoplus.bean.server.DoctorClinicProfile;
 import com.healthcoco.healthcocoplus.bean.server.DoctorExperience;
 import com.healthcoco.healthcocoplus.enums.AutoCompleteTextViewType;
@@ -117,6 +118,12 @@ public class AutoCompleteTextViewAdapter extends ArrayAdapter<Object> {
                         autoCompleteTextViewListener.scrollToPosition(position);
                 }
                 break;
+            case APPOINTMENT_SLOT:
+                if (object instanceof AppointmentSlot) {
+                    AppointmentSlot appointmentSlot = (AppointmentSlot) object;
+                    text = Util.getFormattedAppointmentSlot(appointmentSlot);
+                }
+                break;
         }
         return text;
     }
@@ -138,6 +145,7 @@ public class AutoCompleteTextViewAdapter extends ArrayAdapter<Object> {
             try {
                 suggestions.clear();
                 if (autoCompleteTextViewType == AutoCompleteTextViewType.DOCTOR_CLINIC
+                        || autoCompleteTextViewType == AutoCompleteTextViewType.APPOINTMENT_SLOT
                         || autoCompleteTextViewType == AutoCompleteTextViewType.YEAR_OF_PASSING
                         || autoCompleteTextViewType == AutoCompleteTextViewType.DOCTOR_TITLES
                         || autoCompleteTextViewType == AutoCompleteTextViewType.EXPERIENCE_LIST) {
