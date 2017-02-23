@@ -1,0 +1,80 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="initial_screen_logo_size">80dp</dimen>
+    <dimen name="initial_screen_icon_sizes">135dp</dimen>
+    <dimen name="initial_screen_text_logo_margin">30dp</dimen>
+    <dimen name="text_size_initial_screen_title">18sp</dimen>
+    <dimen name="text_size_initial_screen_texts">14sp</dimen>
+
+    <dimen name="login_edit_text_bottom_padding">5dp</dimen>
+    <dimen name="text_size_signup">15dp</dimen>
+    <dimen name="text_size_floating_label">12sp</dimen>
+    <dimen name="radio_btn_stoke_width">0.7dp</dimen>
+    <dimen name="radio_btn_border_ht_wdt">10dp</dimen>
+
+    <dimen name="round_progress_bar_size">30dp</dimen>
+    <dimen name="round_progress_bar_background_shadow">42dp</dimen>
+    <!--forgot password dialog fargment-->
+    <dimen name="text_size_forgot_password_title">20sp</dimen>
+    <dimen name="text_size_forgot_password_please_enter">15sp</dimen>
+    <dimen name="button_size_dialog_forgot_password">15sp</dimen>
+
+    <dimen name="actionbar_title_size">18sp</dimen>
+    <dimen name="text_size_spinner_drop_down">15sp</dimen>
+    <dimen name="edit_text_top_search_size">14sp</dimen>
+    <dimen name="text_size_no_results">15sp</dimen>
+    <dimen name="layout_edit_search_padding">8dp</dimen>
+    <dimen name="edit_text_size_login">15sp</dimen>
+    <dimen name="edit_text_bottom_line_stroke">2dp</dimen>
+    <!--navigation drawer-->
+    <dimen name="tool_bar_top_padding">0dp</dimen>
+    <dimen name="drawer_left_margin">70dp</dimen>
+    <dimen name="text_size_menu_clinic_name">14sp</dimen>
+    <dimen name="initial_alphabet_patient_profile_menu">55dp</dimen>
+    <dimen name="text_size_patients_list_initial_alphabet">20dp</dimen>
+    <dimen name="image_patient_profile_menu">55dp</dimen>
+    <dimen name="text_size_menu_email_address">14dp</dimen>
+    <dimen name="text_size_menu_doctor_name">16dp</dimen>
+    <dimen name="border_profile_images">3dp</dimen>
+    <dimen name="text_size_menu_separator_item">18dp</dimen>
+    <dimen name="text_size_menu_notif_no">15dp</dimen>
+    <dimen name="fab_margin_bottom">30dp</dimen>
+    <dimen name="fab_margin_right">30dp</dimen>
+    <dimen name="image_doctor_in_clinic_profile">40dp</dimen>
+    <dimen name="text_size_initial_alphabet_emr_actionbar">30sp</dimen>
+    <dimen name="text_size_initial_alphabet_patient_profile_menu">15sp</dimen>
+    <dimen name="text_size_doctor_profile_name">14sp</dimen>
+    <dimen name="text_size_doctor_profile_speciality">12sp</dimen>
+    <dimen name="text_size_doctor_profile_tab">14sp</dimen>
+    <dimen name="list_item_clinic_profile_padding">8dp</dimen>
+
+    <dimen name="initial_alphabet_doctor_profile">71dp</dimen>
+    <dimen name="text_size_initial_alphabet_doctor_profile">20sp</dimen>
+    <dimen name="dialog_action_bar_size">50dp</dimen>
+    <dimen name="text_size_doctor_profile_item_header">16sp</dimen>
+    <dimen name="text_size_doctor_profile_item_header_child">15sp</dimen>
+    <dimen name="text_size_fontawesome_edit_icon">15sp</dimen>
+    <dimen name="doctor_profile_layout_padding">10dp</dimen>
+    <dimen name="text_size_clinic_profile_clinic_name">17sp</dimen>
+    <dimen name="map_clinic_profile">100dp</dimen>
+    <dimen name="padding_between_weekday_names">5dp</dimen>
+    <dimen name="text_size_add_edit_clinic_hours_weekday">14sp</dimen>
+    <dimen name="text_size_add_edit_clinic_hours_add_session">15sp</dimen>
+    <dimen name="clinic_profile_common_padding">10dp</dimen>
+    <dimen name="profile_image_doctor_aphabet">71dp</dimen>
+    <dimen name="profile_image_doctor_profile">68dp</dimen>
+    <dimen name="image_patient_profile_bitmap">46dp</dimen>
+
+    <dimen name="dotor_profile_edit_text_bottom_padding">5dp</dimen>
+    <dimen name="dotor_profile_edit_text_top_padding">10dp</dimen>
+    <dimen name="text_size_add_edit_doctor_education_registration_detail_item">15sp</dimen>
+    <dimen name="text_size_add_clinical_note_add_diagram_btn">13dp</dimen>
+    <dimen name="toggle_width">45dp</dimen>
+    <dimen name="toggle_height">30dp</dimen>
+    <dimen name="edit_text_patient_registration_padding">10dp</dimen>
+    <dimen name="clinic_logo_size">68dp</dimen>
+    <dimen name="text_size_clinic_logo">40sp</dimen>
+    <dimen name="bullet_size">10sp</dimen>
+</resources>

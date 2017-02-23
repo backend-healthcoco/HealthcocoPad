@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/padding_between_weekday_names"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.25"
+            android:text="@string/mon"
+            android:textColor="@color/grey_darker"
+            android:textSize="@dimen/text_size_doctor_profile_item_header_child" />
+
+        <LinearLayout
+            android:id="@+id/container_from_to_time_mon"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.75"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_no_from_to_time_found_mon"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.75"
+            android:text="@string/clinic_closed"
+            android:textSize="@dimen/text_size_doctor_profile_item_header_child" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/padding_between_weekday_names"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.25"
+            android:text="@string/tue"
+            android:textColor="@color/grey_darker"
+            android:textSize="@dimen/text_size_doctor_profile_item_header_child" />
+
+        <LinearLayout
+            android:id="@+id/container_from_to_time_tue"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.75"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_no_from_to_time_found_tue"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.75"
+            android:text="@string/clinic_closed"
+            android:textSize="@dimen/text_size_doctor_profile_item_header_child" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/padding_between_weekday_names"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.25"
+            android:text="@string/wed"
+            android:textColor="@color/grey_darker"
+            android:textSize="@dimen/text_size_doctor_profile_item_header_child" />
+
+        <LinearLayout
+            android:id="@+id/container_from_to_time_wed"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.75"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_no_from_to_time_found_wed"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.75"
+            android:text="@string/clinic_closed"
+            android:textSize="@dimen/text_size_doctor_profile_item_header_child" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/padding_between_weekday_names"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.25"
+            android:text="@string/thu"
+            android:textColor="@color/grey_darker"
+            android:textSize="@dimen/text_size_doctor_profile_item_header_child" />
+
+        <LinearLayout
+            android:id="@+id/container_from_to_time_thu"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.75"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_no_from_to_time_found_thu"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.75"
+            android:text="@string/clinic_closed"
+            android:textSize="@dimen/text_size_doctor_profile_item_header_child" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/padding_between_weekday_names"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.25"
+            android:text="@string/fri"
+            android:textColor="@color/grey_darker"
+            android:textSize="@dimen/text_size_doctor_profile_item_header_child" />
+
+        <LinearLayout
+            android:id="@+id/container_from_to_time_fri"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.75"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_no_from_to_time_found_fri"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.75"
+            android:text="@string/clinic_closed"
+            android:textSize="@dimen/text_size_doctor_profile_item_header_child" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/padding_between_weekday_names"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.25"
+            android:text="@string/sat"
+            android:textColor="@color/grey_darker"
+            android:textSize="@dimen/text_size_doctor_profile_item_header_child" />
+
+        <LinearLayout
+            android:id="@+id/container_from_to_time_sat"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.75"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_no_from_to_time_found_sat"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.75"
+            android:text="@string/clinic_closed"
+            android:textSize="@dimen/text_size_doctor_profile_item_header_child" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/padding_between_weekday_names"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.25"
+            android:text="@string/sun"
+            android:textColor="@color/grey_darker"
+            android:textSize="@dimen/text_size_doctor_profile_item_header_child" />
+
+        <LinearLayout
+            android:id="@+id/container_from_to_time_sun"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.75"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_no_from_to_time_found_sun"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.75"
+            android:text="@string/clinic_closed"
+            android:textSize="@dimen/text_size_doctor_profile_item_header_child" />
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:scrollbarStyle="outsideOverlay">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.healthcoco.healthcocoplus.views.TextViewFontAwesome
+                android:id="@+id/clinic_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:gravity="center_vertical"
+                android:padding="10dp"
+                android:text="@string/clinic_icon"
+                android:textColor="@color/blue_action_bar"
+                android:textSize="@dimen/text_size_fontawesome_edit_icon" />
+
+            <com.healthcoco.healthcocoplus.views.CustomAutoCompleteTextView
+                android:id="@+id/autotv_clinic_name"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/clinic_icon"
+                android:background="@android:color/transparent"
+                android:clickable="true"
+                android:drawableRight="@drawable/arrow_down_drug"
+                android:editable="false"
+                android:focusable="false"
+                android:padding="10dp"
+                android:text="Clinic Name"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_clinic_profile_clinic_name" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:padding="@dimen/doctor_profile_layout_padding">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/list_item_clinic_profile_padding"
+                android:layout_weight="1"
+                android:background="@drawable/shape_rounded_corners_item_background"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/textView5"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/address"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_doctor_profile_item_header" />
+
+                    <com.healthcoco.healthcocoplus.views.TextViewFontAwesome
+                        android:id="@+id/bt_edit_address"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_gravity="right"
+                        android:background="@android:color/transparent"
+                        android:gravity="center_vertical"
+                        android:paddingBottom="20dp"
+                        android:paddingLeft="30dp"
+                        android:text="@string/edit_text_icon"
+                        android:textColor="@color/blue_action_bar"
+                        android:textSize="@dimen/text_size_fontawesome_edit_icon"
+                        android:visibility="gone" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tv_address"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/temp_report_description"
+                    android:textSize="@dimen/text_size_doctor_profile_item_header_child" />
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/map_clinic_profile"
+                    android:layout_marginTop="5dp">
+
+                    <LinearLayout
+                        android:id="@+id/container_map_fragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/grey_light_divider"
+                        android:orientation="vertical"></LinearLayout>
+
+                    <View
+                        android:id="@+id/bt_enlarged_map"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@android:color/transparent"
+                        android:clickable="true"
+                        android:orientation="vertical"></View>
+                </FrameLayout>
+            </LinearLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/list_item_clinic_profile_padding"
+                android:layout_marginLeft="@dimen/doctor_profile_layout_padding"
+                android:layout_marginRight="@dimen/doctor_profile_layout_padding"
+                android:layout_weight="1"
+                android:background="@drawable/shape_rounded_corners_item_background"
+                android:padding="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:gravity="start"
+                        android:text="@string/visiting_hours"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_doctor_profile_item_header" />
+
+                    <LinearLayout
+                        android:id="@+id/container_clinc_open_24_7"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="20dp"
+                            android:text="@string/clinic_open"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/text_size_doctor_profile_item_header_child" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/shape_rounded_left_right_green_rectangle"
+                            android:paddingBottom="5dp"
+                            android:paddingLeft="5dp"
+                            android:paddingRight="5dp"
+                            android:paddingTop="5dp"
+                            android:text="@string/text_24_7"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/text_size_doctor_profile_item_header_child" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/container_clinic_hours"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="visible">
+
+                        <include layout="@layout/item_clinic_hours_profile_screen" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <com.healthcoco.healthcocoplus.views.TextViewFontAwesome
+                    android:id="@+id/bt_edit_visiting_hours"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_gravity="right"
+                    android:background="@android:color/transparent"
+                    android:gravity="center_vertical"
+                    android:paddingBottom="20dp"
+                    android:paddingLeft="30dp"
+                    android:text="@string/edit_text_icon"
+                    android:textColor="@color/blue_action_bar"
+                    android:textSize="@dimen/text_size_fontawesome_edit_icon" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/list_item_clinic_profile_padding"
+                android:layout_weight="1"
+                android:background="@drawable/shape_rounded_corners_item_background"
+                android:padding="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textView7"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/appointment_details"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_doctor_profile_item_header" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="@string/consultant_fees"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_doctor_profile_item_header_child" />
+
+                    <TextView
+                        android:id="@+id/tv_consultant_fees"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/no_text_dash"
+                        android:textSize="@dimen/text_size_doctor_profile_item_header_child" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="@string/second_consultant_fees"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_doctor_profile_item_header_child" />
+
+                    <TextView
+                        android:id="@+id/tv_second_consultant_fees"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/no_text_dash"
+                        android:textSize="@dimen/text_size_doctor_profile_item_header_child" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="@string/booking_facility"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_doctor_profile_item_header_child" />
+
+                    <TextView
+                        android:id="@+id/tv_appointment_booking_facility"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/no_text_dash"
+                        android:textSize="@dimen/text_size_doctor_profile_item_header_child" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="@string/booking_mobile_landline_number"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_doctor_profile_item_header_child" />
+
+                    <TextView
+                        android:id="@+id/tv_appointment_number"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/no_text_dash"
+                        android:textSize="@dimen/text_size_doctor_profile_item_header_child" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="@string/appointment_slot"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_doctor_profile_item_header_child" />
+
+                    <TextView
+                        android:id="@+id/tv_appointment_slot"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/no_text_dash"
+                        android:textSize="@dimen/text_size_doctor_profile_item_header_child" />
+
+                </LinearLayout>
+
+                <com.healthcoco.healthcocoplus.views.TextViewFontAwesome
+                    android:id="@+id/bt_edit_appointment_details"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_gravity="right"
+                    android:background="@android:color/transparent"
+                    android:gravity="center_vertical"
+                    android:paddingBottom="20dp"
+                    android:paddingLeft="30dp"
+                    android:text="@string/edit_text_icon"
+                    android:textColor="@color/blue_action_bar"
+                    android:textSize="@dimen/text_size_fontawesome_edit_icon" />
+            </FrameLayout>
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

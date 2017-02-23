@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/list_item_clinic_profile_padding">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="3dp"
+
+            android:background="@drawable/shape_rounded_corners_grey_border_solid_white"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginRight="30dp"
+                android:orientation="vertical">
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:theme="@style/TextLabelLayoutStyle">
+
+                    <EditText
+                        android:id="@+id/edit_registration_id"
+                        style="@style/add_education_registration_details_material_text_view_style"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center|start"
+                        android:focusableInTouchMode="true"
+                        android:hint="@string/registration_id"
+                        android:singleLine="true" />
+                </android.support.design.widget.TextInputLayout>
+
+                <TextView
+                    style="@style/add_education_registration_details_material_label_style"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/medical_council" />
+
+                <TextView
+                    android:id="@+id/tv_medical_council"
+                    style="@style/add_education_registration_details_material_text_view_style"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableRight="@drawable/arrow_down_drug"
+                    android:gravity="center|start"
+                    android:hint="@string/medical_council"
+                    android:singleLine="true" />
+
+                <TextView
+                    android:id="@+id/label_year_of_registration"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="20dp"
+                    android:text="@string/year_of_passing"
+                    android:textColor="@color/grey_light_text"
+                    android:textSize="@dimen/text_size_floating_label" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <com.healthcoco.healthcocoplus.views.CustomAutoCompleteTextView
+                        android:id="@+id/autotv_year_of_registration"
+                        style="@style/add_education_registration_details_material_text_view_style"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawableEnd="@drawable/arrow_down_drug"
+                        android:editable="false"
+                        android:enabled="false"
+                        android:focusable="false"
+                        android:gravity="center|start"
+                        android:hint="@string/select"
+                        android:singleLine="true" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/bt_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|end"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/content_description"
+            android:paddingBottom="50dp"
+            android:paddingLeft="30dp"
+            android:scaleType="fitEnd"
+            android:src="@android:drawable/presence_offline" />
+    </FrameLayout>
+</LinearLayout>

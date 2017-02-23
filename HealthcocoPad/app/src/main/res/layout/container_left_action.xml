@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/container_left_action"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:layout_alignParentLeft="true"
+    android:layout_centerInParent="true"
+    android:gravity="center|start"
+    android:orientation="horizontal"
+    android:paddingLeft="5dp">
+<include layout="@layout/btn_cross"></include>
+</LinearLayout>

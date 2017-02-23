@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center|start"
+    android:orientation="horizontal"
+    android:weightSum="4">
+
+    <TextView
+        android:id="@+id/tv_speciality"
+        style="@style/add_edit_doctor_profile_details_normal_text_view_style"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="2.5"
+        android:drawableEnd="@drawable/arrow_down_drug"
+        android:drawablePadding="5dp"
+        android:drawableRight="@drawable/arrow_down_drug"
+        android:hint="@string/enter_speciality"
+        android:singleLine="true" />
+
+    <com.healthcoco.healthcocoplus.views.TextViewFontAwesome
+        android:id="@+id/bt_delete"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.8"
+        android:text="@string/fa_delete"
+        android:gravity="center"
+        android:textSize="15dp"
+        android:visibility="visible" />
+</LinearLayout>

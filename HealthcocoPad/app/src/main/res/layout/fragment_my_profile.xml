@@ -1,0 +1,470 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:scrollbarStyle="outsideOverlay">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/doctor_profile_layout_padding"
+        android:paddingRight="@dimen/doctor_profile_layout_padding"
+        android:paddingTop="@dimen/doctor_profile_layout_padding">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shape_rounded_corners_item_background"
+                android:padding="@dimen/doctor_profile_layout_padding">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="@dimen/doctor_profile_layout_padding"
+                        android:text="@string/contact"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_doctor_profile_item_header" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/primary_mobile_number"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_doctor_profile_item_header_child" />
+
+                    <TextView
+                        android:id="@+id/tv_personal_mobile_number"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/no_text_dash"
+                        android:textColor="@color/grey_dark_text"
+                        android:textSize="@dimen/text_size_doctor_profile_item_header_child" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/doctor_profile_layout_padding"
+                        android:text="@string/alternate_mobile_number"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_doctor_profile_item_header_child" />
+
+                    <TextView
+                        android:id="@+id/tv_additional_mobile_number"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/no_text_dash"
+                        android:textColor="@color/grey_dark_text"
+                        android:textSize="@dimen/text_size_doctor_profile_item_header_child" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/doctor_profile_layout_padding"
+                        android:text="@string/primary_email_address"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_doctor_profile_item_header_child" />
+
+                    <TextView
+                        android:id="@+id/tv_primary_email"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/no_text_dash"
+                        android:textColor="@color/grey_dark_text"
+                        android:textSize="@dimen/text_size_doctor_profile_item_header_child" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/doctor_profile_layout_padding"
+                        android:text="@string/alternate_email_address"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_doctor_profile_item_header_child" />
+
+                    <TextView
+                        android:id="@+id/tv_secondary_email"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/no_text_dash"
+                        android:textColor="@color/grey_dark_text"
+                        android:textSize="@dimen/text_size_doctor_profile_item_header_child" />
+                </LinearLayout>
+
+                <com.healthcoco.healthcocoplus.views.TextViewFontAwesome
+                    android:id="@+id/bt_edit_contact"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:background="@android:color/transparent"
+                    android:gravity="center_vertical"
+                    android:paddingBottom="20dp"
+                    android:paddingLeft="30dp"
+                    android:text="@string/edit_text_icon"
+                    android:textColor="@color/blue_action_bar"
+                    android:textSize="@dimen/text_size_fontawesome_edit_icon" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/doctor_profile_layout_padding"
+                android:background="@drawable/shape_rounded_corners_item_background"
+                android:padding="@dimen/doctor_profile_layout_padding">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textView3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:maxLines="1"
+                        android:paddingRight="20dp"
+                        android:text="@string/awards_and_publication"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_doctor_profile_item_header" />
+
+                    <TextView
+                        android:id="@+id/tv_no_awards_and_publication"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/no_text_dash"
+                        android:visibility="gone" />
+
+                    <LinearLayout
+                        android:id="@+id/container_awards_and_publication"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <com.healthcoco.healthcocoplus.views.TextViewFontAwesome
+                    android:id="@+id/bt_edit_awards_and_publication"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_gravity="right"
+                    android:background="@android:color/transparent"
+                    android:gravity="center_vertical"
+                    android:paddingBottom="20dp"
+                    android:paddingLeft="30dp"
+                    android:text="@string/edit_text_icon"
+                    android:textColor="@color/blue_action_bar"
+                    android:textSize="@dimen/text_size_fontawesome_edit_icon" />
+            </FrameLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/doctor_profile_layout_padding"
+            android:paddingRight="@dimen/doctor_profile_layout_padding">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shape_rounded_corners_item_background"
+                android:padding="@dimen/doctor_profile_layout_padding">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+
+                    <TextView
+                        android:id="@+id/tv_no_education"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/no_text_dash"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/textView4"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="@dimen/doctor_profile_layout_padding"
+                        android:text="@string/education"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_doctor_profile_item_header" />
+
+                    <LinearLayout
+                        android:id="@+id/container_education_detail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <com.healthcoco.healthcocoplus.views.TextViewFontAwesome
+                    android:id="@+id/bt_edit_education"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:background="@android:color/transparent"
+                    android:gravity="center_vertical"
+                    android:paddingBottom="20dp"
+                    android:paddingLeft="30dp"
+                    android:text="@string/edit_text_icon"
+                    android:textColor="@color/blue_action_bar"
+                    android:textSize="@dimen/text_size_fontawesome_edit_icon" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/doctor_profile_layout_padding"
+                android:background="@drawable/shape_rounded_corners_item_background"
+                android:padding="@dimen/doctor_profile_layout_padding">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="15dp"
+                            android:text="@string/registration_number"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/text_size_doctor_profile_item_header" />
+
+                        <com.healthcoco.healthcocoplus.views.TextViewFontAwesome
+                            android:id="@+id/bt_edit_registration_detail"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_gravity="right"
+                            android:background="@android:color/transparent"
+                            android:gravity="center_vertical"
+                            android:paddingBottom="20dp"
+                            android:paddingLeft="30dp"
+                            android:text="@string/edit_text_icon"
+                            android:textColor="@color/blue_action_bar"
+                            android:textSize="@dimen/text_size_fontawesome_edit_icon" />
+                    </RelativeLayout>
+
+                    <TextView
+                        android:id="@+id/tv_no_registration_detail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/no_text_dash"
+                        android:visibility="gone" />
+
+                    <LinearLayout
+                        android:id="@+id/container_registration_number_detail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                    </LinearLayout>
+                </LinearLayout>
+            </FrameLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shape_rounded_corners_item_background"
+                android:padding="@dimen/doctor_profile_layout_padding">
+
+                <com.healthcoco.healthcocoplus.views.TextViewFontAwesome
+                    android:id="@+id/bt_edit_experience"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:background="@android:color/transparent"
+                    android:gravity="center_vertical"
+                    android:paddingBottom="20dp"
+                    android:paddingLeft="30dp"
+                    android:text="@string/edit_text_icon"
+                    android:textColor="@color/blue_action_bar"
+                    android:textSize="@dimen/text_size_fontawesome_edit_icon" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textView6"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="@dimen/doctor_profile_layout_padding"
+                        android:text="@string/experience"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_doctor_profile_item_header" />
+
+                    <TextView
+                        android:id="@+id/tv_no_experience"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/no_text_dash"
+                        android:visibility="gone" />
+
+                    <LinearLayout
+                        android:id="@+id/container_experience"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="vertical"></LinearLayout>
+                </LinearLayout>
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/doctor_profile_layout_padding"
+                android:background="@drawable/shape_rounded_corners_item_background"
+                android:padding="@dimen/doctor_profile_layout_padding">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="5dp"
+                            android:layout_marginRight="15dp"
+                            android:maxLines="1"
+                            android:text="@string/professional_membership"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/text_size_doctor_profile_item_header" />
+
+                        <com.healthcoco.healthcocoplus.views.TextViewFontAwesome
+                            android:id="@+id/bt_edit_professional_membership"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_gravity="right"
+                            android:layout_marginLeft="20dp"
+                            android:background="@android:color/transparent"
+                            android:gravity="center_vertical"
+                            android:paddingBottom="20dp"
+                            android:paddingLeft="30dp"
+                            android:text="@string/edit_text_icon"
+                            android:textColor="@color/blue_action_bar"
+                            android:textSize="@dimen/text_size_fontawesome_edit_icon" />
+                    </RelativeLayout>
+
+                    <TextView
+                        android:id="@+id/tv_no_professional_membership"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/no_text_dash"
+                        android:visibility="gone" />
+
+                    <LinearLayout
+                        android:id="@+id/container_professional_membership"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                    </LinearLayout>
+                </LinearLayout>
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/doctor_profile_layout_padding"
+                android:background="@drawable/shape_rounded_corners_item_background"
+                android:padding="@dimen/doctor_profile_layout_padding">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textView2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:maxLines="1"
+                        android:paddingBottom="@dimen/doctor_profile_layout_padding"
+                        android:text="@string/professional_statement"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_doctor_profile_item_header" />
+
+                    <TextView
+                        android:id="@+id/tv_no_professional_statement"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/no_text_dash"
+                        android:visibility="visible" />
+
+                    <LinearLayout
+                        android:id="@+id/container_professional_statement"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="vertical"></LinearLayout>
+                </LinearLayout>
+
+                <com.healthcoco.healthcocoplus.views.TextViewFontAwesome
+                    android:id="@+id/bt_edit_professional_statement"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:background="@android:color/transparent"
+                    android:gravity="center_vertical"
+                    android:paddingBottom="20dp"
+                    android:paddingLeft="30dp"
+                    android:text="@string/edit_text_icon"
+                    android:textColor="@color/blue_action_bar"
+                    android:textSize="@dimen/text_size_fontawesome_edit_icon" />
+            </FrameLayout>
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

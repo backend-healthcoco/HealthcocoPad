@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/list_item_clinic_profile_padding">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="3dp"
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="3dp"
+            android:layout_marginTop="3dp"
+            android:background="@drawable/shape_rounded_corners_grey_border_solid_white"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <com.healthcoco.healthcocoplus.views.CustomAutoCompleteTextView
+                    android:id="@+id/autotv_start_year"
+                    style="@style/add_education_registration_details_material_text_view_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawableEnd="@drawable/arrow_down_drug"
+                    android:drawableRight="@drawable/arrow_down_drug"
+                    android:editable="false"
+                    android:enabled="false"
+                    android:focusable="false"
+                    android:gravity="center|start"
+                    android:hint="@string/start_year" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:text="to"
+                    android:textColor="@color/black" />
+
+                <com.healthcoco.healthcocoplus.views.CustomAutoCompleteTextView
+                    android:id="@+id/autotv_end_year"
+                    style="@style/add_education_registration_details_material_text_view_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawableEnd="@drawable/arrow_down_drug"
+                    android:drawableRight="@drawable/arrow_down_drug"
+                    android:editable="false"
+                    android:enabled="false"
+                    android:focusable="false"
+                    android:gravity="center|start"
+                    android:hint="@string/end_year" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:paddingTop="20dp">
+
+                <EditText
+                    android:id="@+id/et_clinic_name"
+                    style="@style/add_education_registration_details_material_text_view_style"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:focusableInTouchMode="false"
+                    android:gravity="center|start"
+                    android:hint="@string/clinic_name" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:text="" />
+
+                <EditText
+                    android:id="@+id/et_city"
+                    style="@style/add_education_registration_details_material_text_view_style"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="1"
+                    android:focusableInTouchMode="false"
+                    android:gravity="center|start"
+                    android:hint="@string/city" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/bt_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|end"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/content_description"
+            android:paddingBottom="50dp"
+            android:paddingLeft="30dp"
+            android:scaleType="fitEnd"
+            android:src="@android:drawable/presence_offline" />
+    </FrameLayout>
+</LinearLayout>

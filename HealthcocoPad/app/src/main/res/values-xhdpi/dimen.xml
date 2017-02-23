@@ -1,0 +1,6 @@
+<resources>
+    <dimen name="initial_screen_icon_sizes">635px</dimen>
+    <dimen name="btn_padding">12dp</dimen>
+    <dimen name="hcc_plus_top_logo_width">534px</dimen>
+    <dimen name="hcc_plus_top_logo_height">67px</dimen>
+</resources>

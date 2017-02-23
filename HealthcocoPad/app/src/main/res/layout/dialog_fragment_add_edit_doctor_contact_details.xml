@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/action_bar_title_save"></include>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:focusableInTouchMode="true"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/TextLabelLayoutStyle">
+
+            <EditText
+                android:id="@+id/edit_primary_mobile_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
+                android:fontFamily="sans-serif"
+                android:hint="@string/primary_mobile_number"
+                android:inputType="number"
+                android:maxLength="@integer/max_mobile_number"
+                android:paddingBottom="@dimen/dotor_profile_edit_text_bottom_padding"
+                android:paddingTop="@dimen/dotor_profile_edit_text_top_padding"
+                android:singleLine="true"
+                android:textColor="@color/black"
+                android:textColorHint="@color/grey_hint_color"
+                android:textSize="@dimen/text_size_doctor_profile_item_header_child" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:theme="@style/TextLabelLayoutStyle">
+
+            <EditText
+                android:id="@+id/edit_alternate_mobile_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
+                android:fontFamily="sans-serif"
+                android:hint="@string/alternate_mobile_number"
+                android:inputType="number"
+                android:maxLength="@integer/max_mobile_number"
+                android:paddingBottom="@dimen/dotor_profile_edit_text_bottom_padding"
+                android:paddingTop="@dimen/dotor_profile_edit_text_top_padding"
+                android:singleLine="true"
+                android:textColor="@color/black"
+                android:textColorHint="@color/grey_hint_color"
+                android:textSize="@dimen/text_size_doctor_profile_item_header_child" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:theme="@style/TextLabelLayoutStyle">
+
+            <EditText
+                android:id="@+id/edit_alternate_email_id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
+                android:fontFamily="sans-serif"
+                android:hint="@string/alternate_email_address"
+                android:inputType="textEmailAddress"
+                android:paddingBottom="@dimen/dotor_profile_edit_text_bottom_padding"
+                android:paddingTop="@dimen/dotor_profile_edit_text_top_padding"
+                android:singleLine="true"
+                android:textColor="@color/black"
+                android:textColorHint="@color/grey_hint_color"
+                android:textSize="@dimen/text_size_doctor_profile_item_header_child" />
+        </android.support.design.widget.TextInputLayout>
+    </LinearLayout>
+</LinearLayout>

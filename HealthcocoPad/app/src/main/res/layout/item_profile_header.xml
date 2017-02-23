@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/item_profile_header"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center|start"
+    android:orientation="horizontal"
+    android:padding="5dp">
+
+    <include layout="@layout/layout_image_patient_profile" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_profile_name"
+            style="@style/TextRobotoStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:text="Dr.Shreyash"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_menu_doctor_name"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_email_id"
+            style="@style/TextRobotoStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:text="abc123@gmail.com"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_menu_email_address"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_clinic_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:drawablePadding="5dp"
+            android:layout_marginTop="10dp"
+            android:drawableRight="@drawable/arrow_menu_down"
+            android:maxLines="1"
+            android:text="Shree Clinic"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_menu_clinic_name" />
+    </LinearLayout>
+
+</LinearLayout>

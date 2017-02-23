@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <include layout="@layout/action_bar_title_save"></include>
+
+    <TextView
+        android:id="@+id/tv_clinic_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/background"
+        android:padding="10dp"
+        android:textColor="@color/grey_dark_text"
+        android:textSize="@dimen/text_size_doctor_profile_item_header_child" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:padding="10dp">
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusableInTouchMode="true"
+                android:theme="@style/TextLabelLayoutStyle">
+
+                <EditText
+                    android:id="@+id/edit_consultant_fee"
+                    style="@style/add_appointment_details_input_edit_text_style"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/rupee_consultant_fees"
+                    android:inputType="number"
+                    android:focusableInTouchMode="true"
+                    android:maxLength="5"
+                    android:maxLines="1" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:theme="@style/TextLabelLayoutStyle">
+
+                <EditText
+                    android:id="@+id/edit_second_consultant_fee"
+                    style="@style/add_appointment_details_input_edit_text_style"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/rupee_second__consultant_fees"
+                    android:inputType="number"
+                    android:maxLength="5"
+                    android:maxLines="1" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:theme="@style/TextLabelLayoutStyle">
+
+                <EditText
+                    android:id="@+id/edit_appointment_number"
+                    style="@style/add_appointment_details_input_edit_text_style"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:hint="@string/booking_mobile_landline_number"
+                    android:inputType="phone"
+                    android:maxLength="@integer/max_mobile_landline_number"
+                    android:maxLines="1" />
+            </android.support.design.widget.TextInputLayout>
+
+            <TextView
+                android:id="@+id/label_appointment_slot"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="20dp"
+                android:text="@string/appointment_slot"
+                android:textColor="@color/grey_light_text"
+                android:textSize="@dimen/text_size_floating_label" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <com.healthcoco.healthcocoplus.views.CustomAutoCompleteTextView
+                    android:id="@+id/autotv_appointment_slot"
+                    style="@style/add_appointment_details_input_edit_text_style"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawableRight="@drawable/arrow_down_drug"
+                    android:editable="false"
+                    android:gravity="center|start"
+                    android:hint="@string/select_slot" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="20dp"
+                android:text="@string/facility_type"
+                android:textColor="@drawable/text_blue_dark_grey_selector"
+                android:textSize="@dimen/text_size_floating_label" />
+
+            <RadioGroup
+                android:id="@+id/rg_facility_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="@dimen/edit_text_patient_registration_padding"
+                android:orientation="horizontal"
+                android:weightSum="4">
+
+                <com.healthcoco.healthcocoplus.views.FontAwesomeRadioButton
+                    android:id="@+id/rb_ibs"
+                    style="@style/add_appointment_details_input_radio_button_style"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/text_check_ibs"
+                    android:textAllCaps="true" />
+
+                <com.healthcoco.healthcocoplus.views.FontAwesomeRadioButton
+                    android:id="@+id/rb_book"
+                    style="@style/add_appointment_details_input_radio_button_style"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:includeFontPadding="false"
+                    android:text="@string/text_check_book"
+                    android:textAllCaps="true" />
+
+                <com.healthcoco.healthcocoplus.views.FontAwesomeRadioButton
+                    android:id="@+id/rb_call"
+                    style="@style/add_appointment_details_input_radio_button_style"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:includeFontPadding="false"
+                    android:text="@string/text_check_call"
+                    android:textAlignment="center"
+                    android:textAllCaps="true" />
+            </RadioGroup>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

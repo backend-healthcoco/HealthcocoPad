@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/parent_edit_search"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/edit_search"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:drawablePadding="10dp"
+            android:drawableStart="@drawable/icon_search_normal"
+            android:hint="@string/search_patient"
+            android:padding="15dp"
+            android:singleLine="true"
+            android:textColorHint="@color/grey_hint_color"
+            android:textSize="@dimen/edit_text_top_search_size"
+            android:drawableLeft="@drawable/icon_search_normal" />
+
+        <ImageButton
+            android:id="@+id/bt_clear"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            android:paddingLeft="30dp"
+            android:paddingRight="10dp"
+            android:src="@drawable/tab_cancel_normal" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/grey_light_divider" />
+
+</LinearLayout>

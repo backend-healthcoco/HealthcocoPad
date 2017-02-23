@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:clickable="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include
+            layout="@layout/layout_edit_search"
+            android:visibility="visible" />
+
+        <LinearLayout
+            android:id="@+id/child_edit_search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/background"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="@dimen/layout_edit_search_padding"
+            android:paddingRight="@dimen/layout_edit_search_padding"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.8"
+                android:background="@color/white"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="4dp">
+
+                <ImageButton
+                    android:id="@+id/bt_clear"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="30dp"
+                    android:src="@drawable/tab_cancel_normal" />
+
+                <EditText
+                    android:id="@+id/edit_search_dropdown"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="15dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
+                    android:drawableEnd="@drawable/arrow_down_drug"
+                    android:drawablePadding="10dp"
+                    android:drawableRight="@drawable/arrow_down_drug"
+                    android:hint="@string/search_patient"
+                    android:inputType="textNoSuggestions|textFilter"
+                    android:padding="10dp"
+                    android:singleLine="true"
+                    android:textColorHint="@color/grey_hint_color"
+                    android:textSize="@dimen/edit_text_top_search_size" />
+
+                <EditText
+                    android:id="@+id/edit_search"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
+                    android:drawablePadding="10dp"
+                    android:hint="@string/search_patient"
+                    android:inputType="textNoSuggestions|textFilter"
+                    android:padding="10dp"
+                    android:singleLine="true"
+                    android:textColorHint="@color/grey_hint_color"
+                    android:textSize="@dimen/edit_text_top_search_size" />
+
+                <TextView
+                    android:id="@+id/bt_search"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="30dp"
+                    android:paddingRight="10dp"
+                    android:text="Search"
+                    android:textColor="@color/blue_primary_dark" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <com.healthcoco.healthcocoplus.views.CustomSwipeRefreshLayout
+            android:id="@+id/swipe_refresh_layout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+                <!--style for this listview's fastScroll is set in its containing fragment(ContactsListFragment)-->
+                <com.healthcoco.healthcocoplus.views.GridViewLoadMore
+                    android:id="@+id/gv_contacts"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:divider="@null"
+                    android:listSelector="@android:color/transparent"
+                    android:visibility="visible" />
+
+                <TextView
+                    android:id="@+id/tv_no_patients"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="@string/no_patients"
+                    android:textStyle="bold" />
+
+                <ProgressBar
+                    android:id="@+id/progress_loading"
+                    style="?android:attr/progressBarStyleSmall"
+                    android:layout_width="@dimen/round_progress_bar_size"
+                    android:layout_height="@dimen/round_progress_bar_size"
+                    android:layout_gravity="center|bottom"
+                    android:progressDrawable="@drawable/progress_loading"
+                    android:visibility="gone" />
+            </FrameLayout>
+        </com.healthcoco.healthcocoplus.views.CustomSwipeRefreshLayout>
+    </LinearLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/bt_add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:layout_marginBottom="@dimen/fab_margin_bottom"
+        android:layout_marginRight="@dimen/fab_margin_right"
+        android:src="@drawable/tab_add_contact"
+        app:layout_anchorGravity="bottom|right|end" />
+
+</android.support.design.widget.CoordinatorLayout>

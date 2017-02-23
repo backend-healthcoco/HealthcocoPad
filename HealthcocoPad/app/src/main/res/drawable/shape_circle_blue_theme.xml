@@ -1,0 +1,11 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <solid android:color="@color/blue_action_bar" />
+
+    <corners
+        android:bottomLeftRadius="@dimen/initial_alphabet_patient_profile_menu"
+        android:bottomRightRadius="@dimen/initial_alphabet_patient_profile_menu"
+        android:topLeftRadius="@dimen/initial_alphabet_patient_profile_menu"
+        android:topRightRadius="@dimen/initial_alphabet_patient_profile_menu" />
+
+</shape>
