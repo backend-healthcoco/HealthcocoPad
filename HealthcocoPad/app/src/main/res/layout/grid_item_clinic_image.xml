@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/item_height_clinic_image"
+        android:layout_marginBottom="10dp"
+        android:layout_marginRight="10dp"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:background="@color/background">
+
+            <ImageView
+                android:id="@+id/iv_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop" />
+
+            <ProgressBar
+                android:id="@+id/progress_loading"
+                style="?android:attr/progressBarStyleSmall"
+                android:layout_width="@dimen/round_progress_bar_size"
+                android:layout_height="@dimen/round_progress_bar_size"
+                android:layout_gravity="center"
+                android:progressDrawable="@drawable/progress_loading"
+                android:visibility="visible" />
+        </FrameLayout>
+
+
+        <ImageButton
+            android:id="@+id/bt_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|end"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/content_description"
+            android:paddingBottom="30dp"
+            android:paddingLeft="30dp"
+            android:scaleType="fitEnd"
+            android:src="@android:drawable/presence_offline" />
+    </FrameLayout>
+</LinearLayout>
