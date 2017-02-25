@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,18 +23,14 @@ import com.healthcoco.healthcocoplus.bean.server.ClinicWorkingSchedule;
 import com.healthcoco.healthcocoplus.bean.server.DoctorClinicProfile;
 import com.healthcoco.healthcocoplus.bean.server.DoctorWorkingSchedule;
 import com.healthcoco.healthcocoplus.bean.server.Location;
-import com.healthcoco.healthcocoplus.bean.server.LoginResponse;
 import com.healthcoco.healthcocoplus.bean.server.User;
 import com.healthcoco.healthcocoplus.bean.server.WorkingHours;
 import com.healthcoco.healthcocoplus.bean.server.WorkingSchedule;
 import com.healthcoco.healthcocoplus.custom.CustomTimePickerDialog;
-import com.healthcoco.healthcocoplus.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocoplus.enums.CommonOpenUpFragmentType;
-import com.healthcoco.healthcocoplus.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocoplus.enums.WebServiceType;
 import com.healthcoco.healthcocoplus.enums.WeekDayNameType;
 import com.healthcoco.healthcocoplus.fragments.MyClinicFragment;
-import com.healthcoco.healthcocoplus.listeners.LocalDoInBackgroundListenerOptimised;
 import com.healthcoco.healthcocoplus.services.GsonRequest;
 import com.healthcoco.healthcocoplus.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocoplus.services.impl.WebDataServiceImpl;
@@ -51,9 +46,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import static com.healthcoco.healthcocoplus.enums.CommonOpenUpFragmentType.ADD_EDIT_CLINIC_HOURS;
-import static com.healthcoco.healthcocoplus.enums.CommonOpenUpFragmentType.ADD_EDIT_EXPERIENCE_DETAIL;
-
 /**
  * Created by Shreshtha on 22-02-2017.
  */
@@ -64,13 +56,14 @@ public class AddEditClinicHoursDialogFragment extends HealthCocoDialogFragment i
     private ToggleButton toggleButton247;
     private List<?> workingScheduleList;
     private List<DoctorWorkingSchedule> doctorWorkingScheduleList;
-    private String uniqueLocationId;
     private User user;
     private CommonOpenUpFragmentType fragmentType;
     private LinearLayout containerToggle247;
     private Object object;
     private TextView tvClinicname;
-    private DoctorClinicProfile clinicProfile;
+    private String clinicName;
+    private Boolean isTwentyFourSevenOpen;
+    private String uniqueId;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -96,19 +89,21 @@ public class AddEditClinicHoursDialogFragment extends HealthCocoDialogFragment i
     }
 
     private void getIntentData() {
-        Intent intent = mActivity.getIntent();
-        uniqueLocationId = intent.getStringExtra(HealthCocoConstants.TAG_UNIQUE_ID);
         int fragmentOrdinal = getArguments().getInt(HealthCocoConstants.TAG_FRAGMENT_NAME);
         fragmentType = CommonOpenUpFragmentType.values()[fragmentOrdinal];
-        clinicProfile = Parcels.unwrap(getArguments().getParcelable(MyClinicFragment.TAG_CLINIC_PROFILE));
-        switch (fragmentType) {
-            case ADD_EDIT_CLINIC_HOURS:
-                containerToggle247.setVisibility(View.VISIBLE);
-                break;
-            case ADD_EDIT_DOCTOR_PROFILE_CLINIC_HOURS:
-                containerToggle247.setVisibility(View.GONE);
-                break;
-        }
+        uniqueId = getArguments().getString(HealthCocoConstants.TAG_UNIQUE_ID);
+        if (!Util.isNullOrBlank(uniqueId))
+            switch (fragmentType) {
+                case ADD_EDIT_CLINIC_HOURS:
+                    containerToggle247.setVisibility(View.VISIBLE);
+                    object = LocalDataServiceImpl.getInstance(mApp).getLocation(uniqueId);
+                    System.out.println("Object " + object);
+                    break;
+                case ADD_EDIT_DOCTOR_PROFILE_CLINIC_HOURS:
+                    containerToggle247.setVisibility(View.GONE);
+                    object = Parcels.unwrap(getArguments().getParcelable(MyClinicFragment.TAG_CLINIC_PROFILE));
+                    break;
+            }
     }
 
     @Override
@@ -116,23 +111,44 @@ public class AddEditClinicHoursDialogFragment extends HealthCocoDialogFragment i
         try {
             switch (fragmentType) {
                 case ADD_EDIT_CLINIC_HOURS:
-                    break;
-                case ADD_EDIT_DOCTOR_PROFILE_CLINIC_HOURS:
-                    containerToggle247.setVisibility(View.GONE);
-                    tvClinicname.setText(Util.getValidatedValue(clinicProfile.getLocationName()));
-                    if (!Util.isNullOrEmptyList(clinicProfile.getWorkingSchedules())) {
-                        for (DoctorWorkingSchedule workingSchedule :
-                                clinicProfile.getWorkingSchedules()) {
-                            WeekDayNameType weekdayType = workingSchedule.getWorkingDay();
-                            if (!Util.isNullOrEmptyList(workingSchedule.getWorkingHours())) {
-                                for (WorkingHours workingHours :
-                                        workingSchedule.getWorkingHours()) {
-                                    addSubItemFromTo(weekdayType, workingHours);
-                                }
-                            }
-                        }
+                    if (object instanceof Location) {
+                        Location location = (Location) object;
+                        clinicName = location.getLocationName();
+                        workingScheduleList = location.getClinicWorkingSchedules();
+                        containerToggle247.setVisibility(View.VISIBLE);
+                        isTwentyFourSevenOpen = location.getTwentyFourSevenOpen();
                     }
                     break;
+                case ADD_EDIT_DOCTOR_PROFILE_CLINIC_HOURS:
+                    if (object instanceof DoctorClinicProfile) {
+                        DoctorClinicProfile clinicProfile = (DoctorClinicProfile) object;
+                        containerToggle247.setVisibility(View.GONE);
+                        clinicName = clinicProfile.getLocationName();
+                        workingScheduleList = clinicProfile.getWorkingSchedules();
+                        containerToggle247.setVisibility(View.GONE);
+                        isTwentyFourSevenOpen = false;
+                    }
+                    break;
+            }
+            tvClinicname.setText(Util.getValidatedValue(clinicName));
+            if (containerToggle247.getVisibility() == View.VISIBLE) {
+                if (isTwentyFourSevenOpen != null)
+                    toggleButton247.setChecked(isTwentyFourSevenOpen);
+            }
+            if (!Util.isNullOrEmptyList(workingScheduleList)) {
+                for (Object object :
+                        workingScheduleList) {
+                    WorkingSchedule workingSchedule = new WorkingSchedule();
+                    ReflectionUtil.copy(workingSchedule, object);
+
+                    WeekDayNameType weekdayType = workingSchedule.getWorkingDay();
+                    if (!Util.isNullOrEmptyList(workingSchedule.getWorkingHours())) {
+                        for (WorkingHours workingHours :
+                                workingSchedule.getWorkingHours()) {
+                            addSubItemFromTo(weekdayType, workingHours);
+                        }
+                    }
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -242,21 +258,27 @@ public class AddEditClinicHoursDialogFragment extends HealthCocoDialogFragment i
     }
 
     private void addUpdateClinicHours() {
+        mActivity.showLoading(false);
         switch (fragmentType) {
             case ADD_EDIT_CLINIC_HOURS:
-                Location location = new Location();
-                location.setClinicWorkingSchedules((ArrayList<ClinicWorkingSchedule>) (ArrayList<?>) getWorkingSchedules());
-                location.setTwentyFourSevenOpen(toggleButton247.isChecked());
-                location.setUniqueId(uniqueLocationId);
-                WebDataServiceImpl.getInstance(mApp).addUpdateCommonMethod(WebServiceType.ADD_UPDATE_CLINIC_HOURS, Location.class, location, this, this);
+                if (object instanceof Location) {
+                    Location location = new Location();
+                    location.setClinicWorkingSchedules((ArrayList<ClinicWorkingSchedule>) (ArrayList<?>) getWorkingSchedules());
+                    location.setTwentyFourSevenOpen(toggleButton247.isChecked());
+                    location.setUniqueId(uniqueId);
+                    WebDataServiceImpl.getInstance(mApp).addUpdateCommonMethod(WebServiceType.ADD_UPDATE_CLINIC_HOURS, Location.class, location, this, this);
+                }
                 break;
             case ADD_EDIT_DOCTOR_PROFILE_CLINIC_HOURS:
-                AddEditLocaleVisitDetailsRequest addEditLocaleVisitDetailsRequest = new AddEditLocaleVisitDetailsRequest();
-                addEditLocaleVisitDetailsRequest.setUniqueId(clinicProfile.getUniqueId());
-                addEditLocaleVisitDetailsRequest.setDoctorId(clinicProfile.getDoctorId());
-                addEditLocaleVisitDetailsRequest.setLocationId(clinicProfile.getLocationId());
-                addEditLocaleVisitDetailsRequest.setWorkingSchedules((ArrayList<DoctorWorkingSchedule>) (ArrayList<?>) getWorkingSchedules());
-                WebDataServiceImpl.getInstance(mApp).addUpdateCommonMethod(WebServiceType.ADD_UPDATE_DOCTOR_CLINIC_HOURS, AddEditLocaleVisitDetailsRequest.class, addEditLocaleVisitDetailsRequest, this, this);
+                if (object instanceof DoctorClinicProfile) {
+                    DoctorClinicProfile clinicProfile = (DoctorClinicProfile) object;
+                    AddEditLocaleVisitDetailsRequest addEditLocaleVisitDetailsRequest = new AddEditLocaleVisitDetailsRequest();
+                    addEditLocaleVisitDetailsRequest.setUniqueId(clinicProfile.getUniqueId());
+                    addEditLocaleVisitDetailsRequest.setDoctorId(clinicProfile.getDoctorId());
+                    addEditLocaleVisitDetailsRequest.setLocationId(clinicProfile.getLocationId());
+                    addEditLocaleVisitDetailsRequest.setWorkingSchedules((ArrayList<DoctorWorkingSchedule>) (ArrayList<?>) getWorkingSchedules());
+                    WebDataServiceImpl.getInstance(mApp).addUpdateCommonMethod(WebServiceType.ADD_UPDATE_DOCTOR_CLINIC_HOURS, AddEditLocaleVisitDetailsRequest.class, addEditLocaleVisitDetailsRequest, this, this);
+                }
                 break;
         }
     }
@@ -397,19 +419,34 @@ public class AddEditClinicHoursDialogFragment extends HealthCocoDialogFragment i
         if (response != null && response.getWebServiceType() != null) {
             LogUtils.LOGD(TAG, "Success " + String.valueOf(response.getWebServiceType()));
             switch (response.getWebServiceType()) {
+                case ADD_UPDATE_CLINIC_HOURS:
                 case ADD_UPDATE_DOCTOR_CLINIC_HOURS:
-                    if (response.getData() instanceof DoctorClinicProfile && object instanceof DoctorClinicProfile) {
-                        DoctorClinicProfile clinicProfileUpdated = (DoctorClinicProfile) response.getData();
-                        DoctorClinicProfile doctorClinicProfile = (DoctorClinicProfile) object;
-                        doctorClinicProfile.setTwentyFourSevenOpen(clinicProfileUpdated.getTwentyFourSevenOpen());
-                        doctorClinicProfile.setWorkingSchedules(clinicProfileUpdated.getWorkingSchedules());
-                        LocalDataServiceImpl.getInstance(mApp).addDoctorClinicProfile(doctorClinicProfile.getForeignUniqueId(), doctorClinicProfile);
+                    if (response.getData() != null) {
+                        switch (fragmentType) {
+                            case ADD_EDIT_CLINIC_HOURS:
+                                if (response.getData() instanceof Location && object instanceof Location) {
+                                    Location locationUpdated = (Location) response.getData();
+                                    Location location = (Location) object;
+                                    location.setTwentyFourSevenOpen(locationUpdated.getTwentyFourSevenOpen());
+                                    location.setClinicWorkingSchedules(locationUpdated.getClinicWorkingSchedules());
+                                    LocalDataServiceImpl.getInstance(mApp).addLocation(location);
+                                }
+                                break;
+                            case ADD_EDIT_DOCTOR_PROFILE_CLINIC_HOURS:
+                                if (response.getData() instanceof AddEditLocaleVisitDetailsRequest && object instanceof DoctorClinicProfile) {
+                                    AddEditLocaleVisitDetailsRequest addEditLocaleVisitDetailsRequest = (AddEditLocaleVisitDetailsRequest) response.getData();
+                                    DoctorClinicProfile doctorClinicProfile = (DoctorClinicProfile) object;
+                                    doctorClinicProfile.setTwentyFourSevenOpen(addEditLocaleVisitDetailsRequest.getTwentyFourSevenOpen());
+                                    doctorClinicProfile.setWorkingSchedules(addEditLocaleVisitDetailsRequest.getWorkingSchedules());
+                                    LocalDataServiceImpl.getInstance(mApp).addDoctorClinicProfile(doctorClinicProfile.getForeignUniqueId(), doctorClinicProfile);
+                                }
+                                break;
+                        }
+                        getTargetFragment().onActivityResult(getTargetRequestCode(), HealthCocoConstants.RESULT_CODE_ADD_EDIT_CLINIC_HOURS, new Intent().putExtra(MyClinicFragment.TAG_CLINIC_PROFILE, Parcels.wrap(object)));
+                        getDialog().dismiss();
+                        mActivity.hideLoading();
                     }
-                    break;
             }
-            getTargetFragment().onActivityResult(getTargetRequestCode(), HealthCocoConstants.RESULT_CODE_ADD_EDIT_CLINIC_HOURS,  new Intent().putExtra(MyClinicFragment.TAG_CLINIC_PROFILE, Parcels.wrap(clinicProfile)));
-            getDialog().dismiss();
-            mActivity.hideLoading();
         }
     }
 }

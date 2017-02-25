@@ -10,7 +10,7 @@ public enum ActionbarLeftRightActionType {
 
     WITH_CROSS(R.layout.btn_cross),
 
-//    WITH_DONE(R.layout.tv_done),
+    WITH_DONE(R.layout.tv_done),
 //    WITH_ADD(R.layout.btn_actionbar_add),
     NO_LEFT_RIGHT_ACTION(0);
 

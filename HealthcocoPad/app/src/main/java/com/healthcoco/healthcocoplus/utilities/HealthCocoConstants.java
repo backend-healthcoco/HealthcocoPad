@@ -19,6 +19,7 @@ public class HealthCocoConstants {
     public static final int REQUEST_CODE_DOCTOR_PROFILE = 146;
     public static final int REQUEST_CODE_CAMERA = 112;
     public static final int REQUEST_CODE_GALLERY = 113;
+    public static final int RESULT_CODE_CLINIC_IMAGE = 114;
     public static int RESULT_CODE_SIGNUP_ALREADY_REGISTERED = 156;
     public static final int REQUEST_CODE_CLINIC_PROFILE = 135;
     public static final int RESULT_CODE_ADD_EDIT_CLINIC_ADDRESS = 136;
@@ -49,4 +50,5 @@ public class HealthCocoConstants {
     public static final String TAG_SELECTED_USER_ID = "selectedPatientId";
 
     public static String SELECTED_PATIENTS_USER_ID = null;
+    public static final String PARAM_TAG_DELETE = "/delete/";
 }

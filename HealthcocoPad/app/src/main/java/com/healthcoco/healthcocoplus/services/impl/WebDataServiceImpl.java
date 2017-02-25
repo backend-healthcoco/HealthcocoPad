@@ -501,4 +501,31 @@ public class WebDataServiceImpl {
             errorListener.onNetworkUnavailable(webServiceType);
         }
     }
+
+    public void deleteCLinicImage(Class<?> class1, int counter, String locationId, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        WebServiceType webServiceType = WebServiceType.DELETE_CLINIC_IMAGE;
+        String url = webServiceType.getUrl()
+                + locationId + "/"
+                + counter + HealthCocoConstants.PARAM_TAG_DELETE;
+        Util.checkNetworkStatus(mApp);
+        if (HealthCocoConstants.isNetworkOnline) {
+            getResponse(webServiceType, class1, url, null, null, responseListener,
+                    errorListener);
+        } else {
+            errorListener.onNetworkUnavailable(webServiceType);
+        }
+    }
+
+    public void addClinicImages(Class<?> class1, ClinicImageToSend imageToSend, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        WebServiceType webServiceType = WebServiceType.ADD_CLINIC_IMAGE;
+        String url = webServiceType.getUrl();
+        Util.checkNetworkStatus(mApp);
+        if (HealthCocoConstants.isNetworkOnline) {
+            getResponse(webServiceType, class1, url, imageToSend, null, responseListener,
+                    errorListener);
+        } else {
+            errorListener.onNetworkUnavailable(webServiceType);
+        }
+    }
+
 }

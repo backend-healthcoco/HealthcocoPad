@@ -1,46 +1,38 @@
 package com.healthcoco.healthcocoplus.fragments;
 
 import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.Response;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.healthcoco.healthcocopad.R;
+import com.healthcoco.healthcocoplus.HealthCocoDialogFragment;
 import com.healthcoco.healthcocoplus.HealthCocoFragment;
 import com.healthcoco.healthcocoplus.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocoplus.adapter.ContactsDetailViewPagerAdapter;
 import com.healthcoco.healthcocoplus.bean.VolleyResponseBean;
 import com.healthcoco.healthcocoplus.bean.request.ClinicImageToSend;
 import com.healthcoco.healthcocoplus.bean.server.ClinicDetailResponse;
-import com.healthcoco.healthcocoplus.bean.server.ClinicDoctorProfile;
 import com.healthcoco.healthcocoplus.bean.server.ClinicImage;
 import com.healthcoco.healthcocoplus.bean.server.ClinicWorkingSchedule;
+import com.healthcoco.healthcocoplus.bean.server.DoctorClinicProfile;
 import com.healthcoco.healthcocoplus.bean.server.FileDetails;
 import com.healthcoco.healthcocoplus.bean.server.Location;
 import com.healthcoco.healthcocoplus.bean.server.LoginResponse;
@@ -49,6 +41,9 @@ import com.healthcoco.healthcocoplus.bean.server.User;
 import com.healthcoco.healthcocoplus.bean.server.WorkingHours;
 import com.healthcoco.healthcocoplus.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocoplus.custom.ScrollViewWithHeader;
+import com.healthcoco.healthcocoplus.dialogFragment.AddEditClinicAddressDialogFragment;
+import com.healthcoco.healthcocoplus.dialogFragment.AddEditClinicContactDialogFragment;
+import com.healthcoco.healthcocoplus.dialogFragment.AddEditClinicHoursDialogFragment;
 import com.healthcoco.healthcocoplus.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocoplus.enums.DialogType;
 import com.healthcoco.healthcocoplus.enums.LocalBackgroundTaskType;
@@ -70,6 +65,8 @@ import com.healthcoco.healthcocoplus.utilities.ScreenDimensions;
 import com.healthcoco.healthcocoplus.utilities.Util;
 import com.healthcoco.healthcocoplus.views.TextViewFontAwesome;
 
+import org.parceler.Parcels;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -80,7 +77,7 @@ public class ClinicalProfileFragment extends HealthCocoFragment
     private ScrollViewWithHeader svContainer;
     private TextView tvClinicname;
     private TextView tvHeader;
-    private RelativeLayout topLayout;
+    private FrameLayout topLayout;
     private TextViewFontAwesome btEditClinicImage;
     private TextViewFontAwesome btEditClinicHours;
     private TextViewFontAwesome btEditClinicAddress;
@@ -114,7 +111,6 @@ public class ClinicalProfileFragment extends HealthCocoFragment
     private ImageView ivLogoImage;
     private FrameLayout parentlogo;
     private ProgressBar progressLoadingLogo;
-    private boolean receiversRegistered;
     private SupportMapFragment mapFragment;
     private GoogleMap googleMap;
     private View btEnlargedMap;
@@ -133,7 +129,6 @@ public class ClinicalProfileFragment extends HealthCocoFragment
         super.onActivityCreated(savedInstanceState);
         init();
     }
-
 
     @Override
     public void init() {
@@ -159,7 +154,7 @@ public class ClinicalProfileFragment extends HealthCocoFragment
         svContainer = (ScrollViewWithHeader) view
                 .findViewById(R.id.sv_container);
         tvHeader = (TextView) view.findViewById(R.id.tv_header);
-        topLayout = (RelativeLayout) view.findViewById(R.id.top_layout);
+        topLayout = (FrameLayout) view.findViewById(R.id.top_layout);
 
         tvClinicname = (TextView) view.findViewById(R.id.tv_clinic_name);
         tvClinicAddress = (TextView) view.findViewById(R.id.tv_address);
@@ -317,7 +312,6 @@ public class ClinicalProfileFragment extends HealthCocoFragment
         WebDataServiceImpl.getInstance(mApp).getClinicDetails(ClinicDetailResponse.class, user.getForeignLocationId(), this, this);
     }
 
-
     private String getClinicNumbers(Location location) {
         String numbers = "";
         if (!Util.isNullOrBlank(location.getClinicNumber()))
@@ -409,15 +403,15 @@ public class ClinicalProfileFragment extends HealthCocoFragment
                 break;
             case R.id.bt_edit_clinic_hours:
                 if (clinicDetailResponse != null)
-                    openCommonOpenUpActivity(CommonOpenUpFragmentType.ADD_EDIT_CLINIC_HOURS, clinicDetailResponse.getUniqueId(), HealthCocoConstants.REQUEST_CODE_CLINIC_PROFILE);
+                    openDialogFragment(HealthCocoConstants.REQUEST_CODE_CLINIC_PROFILE, new AddEditClinicHoursDialogFragment());
                 break;
             case R.id.bt_edit_address:
                 if (clinicDetailResponse != null)
-                    openCommonOpenUpActivity(CommonOpenUpFragmentType.ADD_EDIT_CLINIC_ADDRESS, clinicDetailResponse.getUniqueId(), HealthCocoConstants.REQUEST_CODE_CLINIC_PROFILE);
+                    openDialogFragment(HealthCocoConstants.REQUEST_CODE_CLINIC_PROFILE, new AddEditClinicAddressDialogFragment());
                 break;
             case R.id.bt_edit_contact:
                 if (clinicDetailResponse != null)
-                    openCommonOpenUpActivity(CommonOpenUpFragmentType.ADD_EDIT_CLINIC_CONTACT, clinicDetailResponse.getUniqueId(), HealthCocoConstants.REQUEST_CODE_CLINIC_PROFILE);
+                    openDialogFragment(HealthCocoConstants.REQUEST_CODE_CLINIC_PROFILE, new AddEditClinicContactDialogFragment());
                 break;
             case R.id.bt_add_session:
                 LogUtils.LOGD(TAG, "AddSession Clicked");
@@ -449,6 +443,16 @@ public class ClinicalProfileFragment extends HealthCocoFragment
         startActivityForResult(intent, requestCode);
     }
 
+    private void openDialogFragment(int requestCode, HealthCocoDialogFragment dialogFragment) {
+        Bundle args = new Bundle();
+        String uniqueId = clinicDetailResponse.getUniqueId();
+        args.putString(HealthCocoConstants.TAG_UNIQUE_ID, uniqueId);
+        args.putInt(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.ADD_EDIT_CLINIC_HOURS.ordinal());
+        dialogFragment.setArguments(args);
+        dialogFragment.setTargetFragment(this, requestCode);
+        dialogFragment.show(mFragmentManager, dialogFragment.getClass().getSimpleName());
+    }
+
     private void addSubItemSession() {
 
     }
@@ -477,7 +481,7 @@ public class ClinicalProfileFragment extends HealthCocoFragment
             switch (response.getWebServiceType()) {
                 case FRAGMENT_INITIALISATION:
                     if (user != null) {
-//                        enableEditViews();
+                        enableEditViews();
                         getDataFromLocal();
                         initMapFragment();
                         return;
@@ -585,9 +589,18 @@ public class ClinicalProfileFragment extends HealthCocoFragment
                 e.printStackTrace();
             }
         } else if (requestCode == HealthCocoConstants.REQUEST_CODE_CLINIC_PROFILE) {
-            if (resultCode == HealthCocoConstants.RESULT_CODE_ADD_EDIT_CLINIC_ADDRESS
-                    || resultCode == HealthCocoConstants.RESULT_CODE_ADD_EDIT_CLINIC_CONTACT
-                    || resultCode == HealthCocoConstants.RESULT_CODE_ADD_EDIT_CLINIC_HOURS) {
+            Location location = Parcels.unwrap(data.getParcelableExtra(HealthCocoConstants.TAG_CLINIC_PROFILE));
+            clinicDetailResponse.setLocation(location);
+            switch (resultCode) {
+                case HealthCocoConstants.RESULT_CODE_ADD_EDIT_CLINIC_ADDRESS:
+                    initData(clinicDetailResponse);
+                    break;
+                case HealthCocoConstants.RESULT_CODE_ADD_EDIT_CLINIC_CONTACT:
+                    initData(clinicDetailResponse);
+                    break;
+                case HealthCocoConstants.RESULT_CODE_ADD_EDIT_CLINIC_HOURS:
+                    initData(clinicDetailResponse);
+                    break;
             }
         }
     }
@@ -615,28 +628,9 @@ public class ClinicalProfileFragment extends HealthCocoFragment
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        if (!receiversRegistered) {
-            IntentFilter filter = new IntentFilter();
-            filter.addAction(INTENT_GET_CLINIC_PROFILE_DETAILS);
-            LocalBroadcastManager.getInstance(mActivity).registerReceiver(refreshClinicProfileReceiver, filter);
-            receiversRegistered = true;
-        }
-    }
-
-    @Override
     public void onDestroy() {
         super.onDestroy();
-        LocalBroadcastManager.getInstance(mActivity).unregisterReceiver(refreshClinicProfileReceiver);
     }
-
-    BroadcastReceiver refreshClinicProfileReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, final Intent intent) {
-            getClinicDetails();
-        }
-    };
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {

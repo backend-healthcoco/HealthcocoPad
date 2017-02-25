@@ -2,4 +2,5 @@
 <resources>
     <integer name="max_mobile_number">10</integer>
     <integer name="max_mobile_landline_number">15</integer>
+    <integer name="max_pincode_length">6</integer>
 </resources>

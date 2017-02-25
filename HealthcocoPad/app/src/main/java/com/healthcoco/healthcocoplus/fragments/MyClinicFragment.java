@@ -332,8 +332,9 @@ public class MyClinicFragment extends HealthCocoFragment implements View.OnClick
         Bundle args = new Bundle();
         args.putInt(HealthCocoConstants.TAG_FRAGMENT_NAME, fragmentType.ordinal());
         if (args != null) {
-            args.putParcelable(TAG_CLINIC_PROFILE, Parcels.wrap(selectedClinicProfile));
+            args.putParcelable(HealthCocoConstants.TAG_CLINIC_PROFILE, Parcels.wrap(selectedClinicProfile));
         }
+        args.putString(HealthCocoConstants.TAG_UNIQUE_ID, selectedClinicProfile.getUniqueId());
         dialogFragment.setArguments(args);
         dialogFragment.setTargetFragment(this, requestCode);
         dialogFragment.show(mFragmentManager, dialogFragment.getClass().getSimpleName());
@@ -342,13 +343,13 @@ public class MyClinicFragment extends HealthCocoFragment implements View.OnClick
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == HealthCocoConstants.REQUEST_CODE_MY_CLINIC
-                && data != null && data.hasExtra(TAG_CLINIC_PROFILE)
+                && data != null && data.hasExtra(HealthCocoConstants.TAG_CLINIC_PROFILE)
                 && selectedClinicProfile != null) {
             DoctorClinicProfile profile = Parcels.unwrap(data.getParcelableExtra(HealthCocoConstants.TAG_CLINIC_PROFILE));
             if (resultCode == HealthCocoConstants.RESULT_CODE_ADD_EDIT_CLINIC_HOURS) {
                 selectedClinicProfile = profile;
                 selectedClinicProfile.setWorkingSchedules(profile.getWorkingSchedules());
-                refreshSelectedClinicProfileData(selectedClinicProfile);
+                addWorkingSchedules(selectedClinicProfile.getWorkingSchedules());
             } else if (resultCode == HealthCocoConstants.RESULT_CODE_ADD_EDIT_APPOINTMENT_DETAILS) {
                 selectedClinicProfile = profile;
                 selectedClinicProfile.setConsultationFee(profile.getConsultationFee());

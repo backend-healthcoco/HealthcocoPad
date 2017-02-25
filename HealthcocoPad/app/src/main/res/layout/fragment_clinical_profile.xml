@@ -17,103 +17,113 @@
         android:textSize="@dimen/text_size_doctor_profile_name"
         android:visibility="gone" />
 
-    <RelativeLayout
+    <FrameLayout
         android:id="@+id/top_layout"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:layout_alignParentLeft="true"
-        android:adjustViewBounds="true"
-        android:fillViewport="true">
+        android:layout_height="130dp">
 
-        <android.support.v4.view.ViewPager
-            android:id="@+id/viewpager"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent">
 
-        <com.healthcoco.healthcocoplus.views.TextViewFontAwesome
-            android:id="@+id/bt_edit_clinic_image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_gravity="right"
-            android:background="@android:color/transparent"
-            android:gravity="center_vertical"
-            android:padding="20dp"
-            android:text="@string/edit_text_icon"
-            android:textColor="@color/blue_action_bar"
-            android:textSize="@dimen/text_size_fontawesome_edit_icon" />
+            <android.support.v4.view.ViewPager
+                android:id="@+id/viewpager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:adjustViewBounds="true" />
 
-        <LinearLayout
-            android:id="@+id/container_bullets"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/tv_clinic_name"
-            android:gravity="center"
-            android:orientation="horizontal">
+            <com.healthcoco.healthcocoplus.views.TextViewFontAwesome
+                android:id="@+id/bt_edit_clinic_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_gravity="right"
+                android:layout_marginRight="40dp"
+                android:background="@android:color/transparent"
+                android:gravity="center_vertical"
+                android:padding="20dp"
+                android:text="@string/edit_text_icon"
+                android:textColor="@color/blue_action_bar"
+                android:textSize="@dimen/text_size_fontawesome_edit_icon" />
 
-        </LinearLayout>
+            <LinearLayout
+                android:id="@+id/container_bullets"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/layout_clinic_name"
+                android:gravity="center"
+                android:orientation="horizontal">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_above="@+id/tv_clinic_name"
-            android:layout_marginLeft="10dp"
-            android:gravity="center"
-            android:orientation="vertical">
+            </LinearLayout>
 
-            <FrameLayout
-                android:id="@+id/parent_logo"
-                android:layout_width="@dimen/clinic_logo_size"
-                android:layout_height="@dimen/clinic_logo_size"
-                android:layout_gravity="center">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_above="@+id/layout_clinic_name"
+                android:layout_marginLeft="40dp"
+                android:gravity="center"
+                android:orientation="vertical">
 
-                <com.healthcoco.healthcocoplus.views.TextViewFontAwesome
-                    android:id="@+id/tv_logo_label"
+                <FrameLayout
+                    android:id="@+id/parent_logo"
+                    android:layout_width="@dimen/clinic_logo_size"
+                    android:layout_height="@dimen/clinic_logo_size"
+                    android:layout_gravity="center">
+
+                    <com.healthcoco.healthcocoplus.views.TextViewFontAwesome
+                        android:id="@+id/tv_logo_label"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:background="@drawable/shape_circular_border_grey"
+                        android:gravity="center"
+                        android:text="@string/fa_hospital"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_size_clinic_logo" />
+
+                    <ProgressBar
+                        android:id="@+id/progress_loading"
+                        android:layout_width="@dimen/round_progress_bar_size"
+                        android:layout_height="@dimen/round_progress_bar_size"
+                        android:layout_gravity="center"
+                        android:indeterminateDrawable="@drawable/progress_loading"
+                        android:max="100"
+                        android:progress="50"
+                        android:visibility="gone" />
+
+                    <com.healthcoco.healthcocoplus.custom.CircularImageView
+                        android:id="@+id/iv_logo_image"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:layout_margin="1dp"
+                        android:background="@android:color/transparent"
+                        android:scaleType="centerCrop"
+                        android:visibility="visible" />
+                </FrameLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_clinic_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:background="@color/black_translucent"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/tv_clinic_name"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:background="@drawable/shape_circular_border_grey"
-                    android:gravity="center"
-                    android:text="@string/fa_hospital"
-
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="30dp"
+                    android:clickable="true"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/text_size_clinic_logo" />
+                    android:textSize="@dimen/text_size_doctor_profile_name" />
+            </LinearLayout>
+        </RelativeLayout>
+    </FrameLayout>
 
-                <ProgressBar
-                    android:id="@+id/progress_loading"
-                    android:layout_width="@dimen/round_progress_bar_size"
-                    android:layout_height="@dimen/round_progress_bar_size"
-                    android:layout_gravity="center"
-                    android:indeterminateDrawable="@drawable/progress_loading"
-                    android:max="100"
-                    android:progress="50"
-                    android:visibility="gone" />
-
-                <com.healthcoco.healthcocoplus.custom.CircularImageView
-                    android:id="@+id/iv_logo_image"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:layout_margin="1dp"
-                    android:background="@android:color/transparent"
-                    android:scaleType="centerCrop"
-                    android:visibility="visible" />
-            </FrameLayout>
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/tv_clinic_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:background="@color/black_translucent"
-            android:clickable="true"
-            android:padding="10dp"
-            android:textColor="@color/white"
-            android:textSize="@dimen/text_size_doctor_profile_name" />
-
-    </RelativeLayout>
 
     <com.healthcoco.healthcocoplus.custom.ScrollViewWithHeader
         android:id="@+id/sv_container"
@@ -184,6 +194,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text=""
+                        android:layout_marginTop="10dp"
                         android:textSize="@dimen/text_size_doctor_profile_item_header_child" />
 
                     <FrameLayout
@@ -262,6 +273,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:paddingTop="10dp"
                         android:visibility="gone">
 
                         <TextView
@@ -290,12 +302,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
+                        android:paddingTop="10dp"
                         android:visibility="gone">
 
                         <include layout="@layout/item_clinic_hours_profile_screen" />
                     </LinearLayout>
                 </LinearLayout>
-
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -340,7 +352,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="0.7dp"
                         android:background="@color/grey_light_text"></View>
-
 
                     <LinearLayout
                         android:id="@+id/container_contact"

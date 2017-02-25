@@ -6,7 +6,7 @@ import android.os.Parcelable;
 import com.healthcoco.healthcocoplus.enums.WeekDayNameType;
 import com.orm.SugarRecord;
 import com.orm.dsl.Unique;
-
+@org.parceler.Parcel
 public class WorkingHours extends SugarRecord implements Parcelable {
     private Float fromTime;
     private Float toTime;

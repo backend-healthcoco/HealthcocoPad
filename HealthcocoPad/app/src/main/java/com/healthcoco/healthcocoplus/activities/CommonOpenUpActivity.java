@@ -19,6 +19,7 @@ import com.healthcoco.healthcocoplus.HealthCocoFragment;
 import com.healthcoco.healthcocoplus.enums.ActionbarLeftRightActionType;
 import com.healthcoco.healthcocoplus.enums.ActionbarType;
 import com.healthcoco.healthcocoplus.enums.CommonOpenUpFragmentType;
+import com.healthcoco.healthcocoplus.fragments.AddEditClinicImageFragment;
 import com.healthcoco.healthcocoplus.fragments.FeedbackFragment;
 import com.healthcoco.healthcocoplus.fragments.InitialSyncFragment;
 import com.healthcoco.healthcocoplus.fragments.LoginSignupFragment;
@@ -78,9 +79,9 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
             case FEEDBACK:
                 openFragment(ActionbarType.TITLE_SAVE, ActionbarLeftRightActionType.WITH_CROSS, R.string.help_us_to_improve, new FeedbackFragment());
                 break;
-//            case ADD_EDIT_DOCTOR_PROFILE_DETAILS:
-//                openFragment(ActionbarType.TITLE_SAVE, ActionbarLeftRightActionType.WITH_CROSS, R.string.profile, new AddEditDoctorProfileDialogFragment());
-//                break;
+            case ADD_EDIT_CLINIC_IMAGE:
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionType.WITH_DONE, R.string.clinic_photos, new AddEditClinicImageFragment());
+                break;
         }
     }
 

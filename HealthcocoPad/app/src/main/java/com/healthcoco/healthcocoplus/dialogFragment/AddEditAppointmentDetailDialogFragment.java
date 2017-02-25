@@ -90,7 +90,7 @@ public class AddEditAppointmentDetailDialogFragment extends HealthCocoDialogFrag
         uniqueLocationId = intent.getStringExtra(HealthCocoConstants.TAG_UNIQUE_ID);
         int fragmentOrdinal = getArguments().getInt(HealthCocoConstants.TAG_FRAGMENT_NAME);
         fragmentType = CommonOpenUpFragmentType.values()[fragmentOrdinal];
-        clinicProfile = Parcels.unwrap(getArguments().getParcelable(MyClinicFragment.TAG_CLINIC_PROFILE));
+        clinicProfile = Parcels.unwrap(getArguments().getParcelable(HealthCocoConstants.TAG_CLINIC_PROFILE));
     }
 
     @Override
@@ -295,7 +295,7 @@ public class AddEditAppointmentDetailDialogFragment extends HealthCocoDialogFrag
                         clinicProfile.setRevisitConsultationFee(doctorClinicProfileResponse.getRevisitConsultationFee());
                         LocalDataServiceImpl.getInstance(mApp).addDoctorClinicProfile(doctorClinicProfileResponse.getDoctorId(), clinicProfile);
                     }
-                    getTargetFragment().onActivityResult(getTargetRequestCode(), HealthCocoConstants.RESULT_CODE_ADD_EDIT_APPOINTMENT_DETAILS,  new Intent().putExtra(MyClinicFragment.TAG_CLINIC_PROFILE, Parcels.wrap(clinicProfile)));
+                    getTargetFragment().onActivityResult(getTargetRequestCode(), HealthCocoConstants.RESULT_CODE_ADD_EDIT_APPOINTMENT_DETAILS,  new Intent().putExtra(HealthCocoConstants.TAG_CLINIC_PROFILE, Parcels.wrap(clinicProfile)));
                     getDialog().dismiss();
                     break;
             }

@@ -7,15 +7,16 @@ import com.orm.SugarRecord;
 import com.orm.dsl.Ignore;
 import com.orm.dsl.Unique;
 
+import org.parceler.Parcel;
+
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @author veeraj
  */
-
+@Parcel
 public class Location extends SugarRecord {
-
     @Unique
     private String uniqueId;
 
@@ -303,15 +304,6 @@ public class Location extends SugarRecord {
         String address = "";
         if (!Util.isNullOrBlank(getClinicAddress()))
             address = getClinicAddress();
-//
-//        if (!Util.isNullOrBlank(getCity())) {
-//            address = Util.addCharacterToText(",", address);
-//            address = address + getCity();
-//        }
-//        if (!Util.isNullOrBlank(getState())) {
-//            address = Util.addCharacterToText(",", address);
-//            address = address + getState();
-//        }
 
         if (Util.isNullOrBlank(address))
             return "";

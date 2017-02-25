@@ -62,6 +62,7 @@ public class CommonOptionsDialogFragment extends HealthCocoDialogFragment
     public void initViews() {
         lvList = (ListView) view.findViewById(R.id.lv_options);
         tvTitle = (TextView) view.findViewById(R.id.tv_title);
+        initCancelButton();
     }
 
     @Override

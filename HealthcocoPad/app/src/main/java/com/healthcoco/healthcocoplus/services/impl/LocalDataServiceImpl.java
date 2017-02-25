@@ -594,23 +594,6 @@ public class LocalDataServiceImpl {
 //            List<?> list = null;
 //            list = SugarRecord.findWithQuery(class1, whereCondition);
             List<?> savedDiseaseList = SugarRecord.findWithQuery(class1, whereCondition);
-//            if (discardedValue != null) {
-//                savedDiseaseList = Select.from(Disease.class)
-//                        .where(Condition.prop(LocalDatabaseUtils.KEY_DOCTOR_ID).eq(doctorId),
-//                                Condition.prop(LocalDatabaseUtils.KEY_DISCARDED).eq(discardedValue),
-//                                Condition.prop(LocalDatabaseUtils.KEY_UPDATED_TIME).gt(updatedTime)).list();
-//            } else {
-//                savedDiseaseList = Select.from(Disease.class)
-//                        .where(Condition.prop(LocalDatabaseUtils.KEY_DOCTOR_ID).eq(doctorId),
-//                                Condition.prop(LocalDatabaseUtils.KEY_UPDATED_TIME).gt(updatedTime)).list();
-//            }
-//            if (!Util.isNullOrEmptyList(savedDiseaseList) && !Util.isNullOrEmptyList(diseaseIds)) {
-//                for (Disease disease :
-//                        savedDiseaseList) {
-//                    if (!Util.isNullOrEmptyList(diseaseIds) && diseaseIds.contains(disease.getUniqueId()))
-//                        disease.setIsAssigned(true);
-//                }
-//            }
             volleyResponseBean.setDataList(getObjectsListFromMap(savedDiseaseList));
             if (responseListener != null)
                 responseListener.onResponse(volleyResponseBean);
@@ -620,50 +603,6 @@ public class LocalDataServiceImpl {
         }
         return volleyResponseBean;
     }
-
-//    public VolleyResponseBean getTemplatesListPageWise(WebServiceType webServiceType, String doctorId,
-//                                                       boolean discarded, Long updatedTime, int pageNum,
-//                                                       int maxSize, String searchTerm, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
-//        VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
-//        volleyResponseBean.setWebServiceType(webServiceType);
-//        volleyResponseBean.setDataFromLocal(true);
-//        volleyResponseBean.setUserOnline(HealthCocoConstants.isNetworkOnline);
-//        try {
-//            int discardedValue = LocalDatabaseUtils.BOOLEAN_FALSE_VALUE;
-//            if (discarded)
-//                discardedValue = LocalDatabaseUtils.BOOLEAN_TRUE_VALUE;
-//            //forming where condition query
-//            String whereCondition = "Select * from " + StringUtil.toSQLName(TempTemplate.class.getSimpleName())
-//                    + " where "
-//                    + LocalDatabaseUtils.KEY_DOCTOR_ID + "=\"" + doctorId + "\""
-//                    + " AND "
-//                    + LocalDatabaseUtils.KEY_DISCARDED + "=" + discardedValue;
-//            if (!Util.isNullOrBlank(searchTerm))
-//                whereCondition = whereCondition
-//                        + " AND " + LocalDatabaseUtils.getSearchTermEqualsIgnoreCaseQuery(LocalDatabaseUtils.KEY_NAME, searchTerm);
-//
-//            //specifying order by limit and offset query
-//            String conditionsLimit = " ORDER BY " + LocalDatabaseUtils.KEY_CREATED_TIME + " DESC "
-//                    + " LIMIT " + maxSize
-//                    + " OFFSET " + (pageNum * maxSize);
-//
-//            whereCondition = whereCondition + conditionsLimit;
-//            LogUtils.LOGD(TAG, "Select Query " + whereCondition);
-//            List<TempTemplate> list = SugarRecord.findWithQuery(TempTemplate.class, whereCondition);
-//            if (!Util.isNullOrEmptyList(list))
-//                for (TempTemplate template : list) {
-//                    template.setItems(getDrugItemsList(LocalDatabaseUtils.KEY_FOREIGN_TEMPLATE_ID, template.getUniqueId()));
-//                }
-//            volleyResponseBean.setDataList(getObjectsListFromMap(list));
-//            if (responseListener != null)
-//                responseListener.onResponse(volleyResponseBean);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            showErrorLocal(volleyResponseBean, errorListener);
-//        }
-//        return volleyResponseBean;
-//    }
-
 
     public Long getLatestUpdatedTime(User user, LocalTabelType localTabelType) {
         Long latestUpdatedTime = 0l;
@@ -1634,5 +1573,22 @@ public class LocalDataServiceImpl {
                     accessModule.setAccessPermissionTypes(new Gson().fromJson(accessModule.getStringAccessPermissionTypes(), ArrayList.class));
             }
         }
+    }
+
+    public VolleyResponseBean getCitiesList(WebServiceType webServiceType, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
+        volleyResponseBean.setWebServiceType(webServiceType);
+        volleyResponseBean.setIsFromLocalAfterApiSuccess(true);
+        volleyResponseBean.setUserOnline(HealthCocoConstants.isNetworkOnline);
+        try {
+            List<CityResponse> list = CityResponse.listAll(CityResponse.class);
+            volleyResponseBean.setDataList(getObjectsListFromMap(list));
+            if (responseListener != null)
+                responseListener.onResponse(volleyResponseBean);
+        } catch (Exception e) {
+            e.printStackTrace();
+            showErrorLocal(volleyResponseBean, errorListener);
+        }
+        return volleyResponseBean;
     }
 }

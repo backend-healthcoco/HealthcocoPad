@@ -12,6 +12,7 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Base64;
+import android.util.Patterns;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -148,6 +149,10 @@ public class Util {
 
         //save data
         prefs.edit().putInt(SplashScreenActivity.TAG_VERSION_CODE, versionCode).commit();
+    }
+
+    public static boolean isValidWebsite(String websiteUrl) {
+        return Patterns.WEB_URL.matcher(websiteUrl).matches();
     }
 
     public static void hideKeyboard(Context context, View view) {

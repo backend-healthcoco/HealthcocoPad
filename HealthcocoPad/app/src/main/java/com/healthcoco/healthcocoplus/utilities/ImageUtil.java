@@ -27,6 +27,8 @@ public class ImageUtil {
     private static final String DEFAULT_FOLDER_NAME = "HealthCococMedia";
     public static final int MEDIA_TYPE_IMAGE = 1;
     public static final String DEFAULT_CLINIC_LOGO_NAME = "clinicLogoImage";
+    public static final String DEFAULT_CLINIC_IMAGE_NAME = "clinicImage";
+
     public static String encodeTobase64(Bitmap image) {
         Bitmap immagex = image;
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -177,6 +179,10 @@ public class ImageUtil {
                 length += folderSize(file);
         }
         return length;
+    }
+
+    public static void deleteFileFrom(Uri imageUri) {
+        deleteFileFrom(imageUri.getPath());
     }
 
     public static void deleteFileFrom(String filePath) {

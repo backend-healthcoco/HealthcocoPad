@@ -14,7 +14,9 @@ public enum CommonListDialogType {
     YEAR(R.string.year, R.string.year, false, null, R.string.no_result_found_for_your_search),
     MEDICAL_COUNCIL(R.string.medical_council, R.string.search_medical_council, true, null, R.string.no_result_found_for_search_press_enter),
     DIAGNOSTIC_TESTS(R.string.lab_test, R.string.search_lab_test, false, ActionbarType.ACTION_BAR_DIALOG, R.string.no_tests_found),
-    PROFESSIONAL_MEMBERSHIP(R.string.professional_membership, R.string.search_professional_membership, true, null, R.string.no_result_found_for_search_press_enter);
+    PROFESSIONAL_MEMBERSHIP(R.string.professional_membership, R.string.search_professional_membership, true, null, R.string.no_result_found_for_search_press_enter),
+    CITY(R.string.city, R.string.search_city, false, null, R.string.no_result_found_for_your_search);
+
     private final int noResultFoundTextId;
     private ActionbarType actionbarType;
     private int hintId;

@@ -77,4 +77,5 @@
     <dimen name="clinic_logo_size">68dp</dimen>
     <dimen name="text_size_clinic_logo">40sp</dimen>
     <dimen name="bullet_size">10sp</dimen>
+    <dimen name="item_height_clinic_image">150dp</dimen>
 </resources>

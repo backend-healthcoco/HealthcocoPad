@@ -168,6 +168,16 @@ public abstract class HealthCocoDialogFragment extends DialogFragment implements
         });
     }
 
+    protected void initCancelButton() {
+        LinearLayout containerLeftAction = (LinearLayout) view.findViewById(R.id.container_left_action);
+        containerLeftAction.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
+    }
+
     protected CommonListDialogFragment openCommonListDialogFragment(CommonListDialogItemClickListener listener, CommonListDialogType popupType, List<?> list) {
         CommonListDialogFragment commonListDialogFragment = new CommonListDialogFragment(listener, popupType, list);
         commonListDialogFragment.show(mFragmentManager, CommonListDialogFragment.class.getSimpleName());
