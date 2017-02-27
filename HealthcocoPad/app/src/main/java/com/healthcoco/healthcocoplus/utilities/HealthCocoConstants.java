@@ -16,10 +16,13 @@ public class HealthCocoConstants {
     public static final String TAG_SYNC_SERVICE_TYPE = "syncServiceType";
     public static final String TAG_CLINIC_PROFILE = "clinicProfile";
     public static final String TAG_UNIQUE_ID = "uniqueId";
+    public static final String TAG_NAME_EDIT_TYPE = "nameEditDeleteType";
     public static final int REQUEST_CODE_DOCTOR_PROFILE = 146;
     public static final int REQUEST_CODE_CAMERA = 112;
     public static final int REQUEST_CODE_GALLERY = 113;
     public static final int RESULT_CODE_CLINIC_IMAGE = 114;
+    public static final int REQUEST_CODE_CLINIC_PROFILE_IMAGE = 115;
+    public static final int REQUEST_CODE_MENU_CLINIC_LIST = 116;
     public static int RESULT_CODE_SIGNUP_ALREADY_REGISTERED = 156;
     public static final int REQUEST_CODE_CLINIC_PROFILE = 135;
     public static final int RESULT_CODE_ADD_EDIT_CLINIC_ADDRESS = 136;

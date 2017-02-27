@@ -1,5 +1,6 @@
 package com.healthcoco.healthcocoplus.fragments;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -41,6 +42,8 @@ import com.healthcoco.healthcocoplus.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocoplus.utilities.DownloadImageFromUrlUtil;
 import com.healthcoco.healthcocoplus.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocoplus.utilities.Util;
+
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -94,7 +97,6 @@ public class MenuDrawerFragment extends HealthCocoFragment implements View.OnCli
             IntentFilter filter = new IntentFilter();
             filter.addAction(INTENT_REFRESH_DOCTOR_PROFILE);
             LocalBroadcastManager.getInstance(mActivity).registerReceiver(refreshDoctorReceiver, filter);
-
             receiversRegistered = true;
         }
     }
@@ -268,7 +270,20 @@ public class MenuDrawerFragment extends HealthCocoFragment implements View.OnCli
         Bundle args = new Bundle();
         MenuClinicListDialogFragment clinicListDialogFragment = new MenuClinicListDialogFragment(clinicProfile);
         clinicListDialogFragment.setArguments(args);
+        clinicListDialogFragment.setTargetFragment(this, HealthCocoConstants.REQUEST_CODE_MENU_CLINIC_LIST);
         clinicListDialogFragment.show(mFragmentManager, clinicListDialogFragment.getClass().getSimpleName());
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == HealthCocoConstants.REQUEST_CODE_MENU_CLINIC_LIST) {
+            if (resultCode == Activity.RESULT_OK) {
+                DoctorClinicProfile profile = Parcels.unwrap(data.getParcelableExtra(MenuClinicListDialogFragment.TAG_CLINIC_NAME));
+                refreshSelectedDoctorClinicProfileDetails(profile);
+                openFragment(FragmentType.CONTACTS);
+                ((HomeActivity) mActivity).initFragment(selectedFragmentType);
+            }
+        }
     }
 
     @Override

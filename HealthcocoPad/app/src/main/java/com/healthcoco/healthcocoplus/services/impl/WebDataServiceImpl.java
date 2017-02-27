@@ -528,4 +528,15 @@ public class WebDataServiceImpl {
         }
     }
 
+    public void getUIPermissions(Class<?> class1, String doctorId, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        WebServiceType webServiceType = WebServiceType.GET_PERMISSIONS_FOR_DOCTOR;
+        String url = webServiceType.getUrl() + doctorId;
+        Util.checkNetworkStatus(mApp.getApplicationContext());
+        if (HealthCocoConstants.isNetworkOnline) {
+            getResponse(webServiceType, class1, url, null, null, responseListener,
+                    errorListener);
+        } else {
+            errorListener.onNetworkUnavailable(webServiceType);
+        }
+    }
 }

@@ -17,18 +17,19 @@
             android:layout_height="match_parent"
             android:background="@android:color/transparent"
             android:gravity="center_vertical"
-            android:text="@string/cancel"
             android:minHeight="0dp"
             android:padding="8dp"
+            android:text="@string/cancel"
             android:textAllCaps="false"
-            android:textColor="@color/blue_action_bar" />
+            android:textColor="@color/blue_action_bar"
+            android:textSize="17dp" />
 
         <ImageView
             android:id="@+id/logo"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:src="@drawable/app_icon" />
+            android:src="@drawable/app_logo" />
     </LinearLayout>
 
     <LinearLayout
@@ -92,25 +93,28 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_alignParentBottom="true"
+            android:layout_below="@+id/linear_layout"
+            android:gravity="bottom"
             android:orientation="vertical"
-            android:weightSum="1">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:background="@android:color/transparent"
-                android:minHeight="0dp"
-                android:text="@string/signin_accept_terms_and_conditions"
-                android:textAllCaps="false"
-                android:textColor="@color/grey_dark_text"
-                android:textSize="12dp" />
+            android:padding="@dimen/login_edit_text_bottom_padding">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:layout_marginTop="15dp"
                 android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:minHeight="0dp"
+                    android:text="@string/signin_accept_terms_and_conditions"
+                    android:textAllCaps="false"
+                    android:textColor="@color/grey_dark_text"
+                    android:textSize="15dp" />
 
                 <TextView
                     android:id="@+id/tv_terms_of_service"
@@ -121,7 +125,7 @@
                     android:text="@string/underlined_terms_of_service"
                     android:textAllCaps="false"
                     android:textColor="@color/grey_dark_text"
-                    android:textSize="12dp" />
+                    android:textSize="15dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -131,7 +135,7 @@
                     android:text="@string/and"
                     android:textAllCaps="false"
                     android:textColor="@color/grey_dark_text"
-                    android:textSize="12dp" />
+                    android:textSize="15dp" />
 
                 <TextView
                     android:id="@+id/tv_privacy_policy"
@@ -143,7 +147,7 @@
                     android:text="@string/underlined_privacy_policy"
                     android:textAllCaps="false"
                     android:textColor="@color/grey_dark_text"
-                    android:textSize="12dp" />
+                    android:textSize="15dp" />
             </LinearLayout>
 
             <View
@@ -164,11 +168,11 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.75"
                     android:background="@android:color/transparent"
-                    android:gravity="start"
+                    android:gravity="center|start"
                     android:text="@string/forgot_your_password"
                     android:textAllCaps="false"
                     android:textColor="@color/blue_action_bar"
-                    android:textSize="12dp"></Button>
+                    android:textSize="15sp"></Button>
 
                 <Button
                     android:id="@+id/bt_login"
@@ -182,7 +186,7 @@
                     android:text="@string/sign_in"
                     android:textAllCaps="false"
                     android:textColor="@color/white"
-                    android:textSize="15dp" />
+                    android:textSize="18sp" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

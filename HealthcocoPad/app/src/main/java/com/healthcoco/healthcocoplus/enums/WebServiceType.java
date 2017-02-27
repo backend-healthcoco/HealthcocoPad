@@ -274,7 +274,9 @@ public enum WebServiceType {
 
     ADD_UPDATE_PROFESSIONAL_STATEMENT_DETAIL(Method.POST, "doctorProfile/addEditProfessionalStatement/"),
 
-    GET_PROFESSIONAL_MEMBERSHIP_SOLR(Method.GET, "solr/master/professionalMembership/?");
+    GET_PROFESSIONAL_MEMBERSHIP_SOLR(Method.GET, "solr/master/professionalMembership/?"),
+
+    GET_PERMISSIONS_FOR_DOCTOR(Method.GET, "dynamicUI/getPermissionsForDoctor/");
 
     private int methodType;
     private String url;

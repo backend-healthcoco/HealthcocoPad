@@ -8,5 +8,5 @@
     android:gravity="center|start"
     android:orientation="horizontal"
     android:paddingLeft="5dp">
-<include layout="@layout/btn_cross"></include>
+
 </LinearLayout>

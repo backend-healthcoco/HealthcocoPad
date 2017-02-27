@@ -180,4 +180,8 @@
         <item name="android:checked">false</item>
         <item name="android:button">@android:color/transparent</item>
     </style>
+
+    <style name="ButtonCustomBorderlessStyles" parent="Widget.AppCompat.Button.Borderless">
+        <item name="android:textAllCaps">false</item>
+    </style>
 </resources>

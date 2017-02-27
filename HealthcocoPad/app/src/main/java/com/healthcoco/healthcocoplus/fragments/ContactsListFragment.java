@@ -48,6 +48,7 @@ import java.util.Locale;
 public class ContactsListFragment extends HealthCocoFragment implements LoadMorePageListener, SwipeRefreshLayout.OnRefreshListener, View.OnClickListener, TextWatcher, GsonRequest.ErrorListener, Response.Listener<VolleyResponseBean>, LocalDoInBackgroundListenerOptimised {
     private static final String TAG_RECEIVERS_REGISTERED = "tagReceiversRegistered";
     public static final String TAG_IS_IN_HOME_ACTIVITY = "isInHomeActivity";
+    public static final String INTENT_REFRESH_CONTACTS_LIST_FROM_SERVER = "com.healthcoco.healthcocoplus.fragments.ContactsListFragment.REFRESH_CONTACTS_LIST_FROM_SERVER";
     private boolean receiversRegistered = false;
     private boolean isInHomeActivity = true;
     private User user;

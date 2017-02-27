@@ -1,5 +1,7 @@
 package com.healthcoco.healthcocoplus.dialogFragment;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,13 +14,23 @@ import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocoplus.HealthCocoDialogFragment;
 import com.healthcoco.healthcocoplus.adapter.MenuClinicListAdapter;
 import com.healthcoco.healthcocoplus.bean.server.DoctorClinicProfile;
+import com.healthcoco.healthcocoplus.enums.FragmentType;
+import com.healthcoco.healthcocoplus.fragments.ContactsListFragment;
+import com.healthcoco.healthcocoplus.fragments.MyClinicFragment;
+import com.healthcoco.healthcocoplus.services.impl.LocalDataServiceImpl;
+import com.healthcoco.healthcocoplus.utilities.Util;
+
+import org.parceler.Parcels;
 
 import java.util.List;
+
+import static com.healthcoco.healthcocoplus.fragments.MenuDrawerFragment.SELECTED_LOCATION_ID;
 
 /**
  * Created by Shreshtha on 01-02-2017.
  */
 public class MenuClinicListDialogFragment extends HealthCocoDialogFragment implements AdapterView.OnItemClickListener, View.OnClickListener {
+    public static final String TAG_CLINIC_NAME = "clinicName";
     private List<DoctorClinicProfile> clinicProfile;
     private ListView lvClinics;
     private MenuClinicListAdapter menuClinicListAdapter;
@@ -71,10 +83,13 @@ public class MenuClinicListDialogFragment extends HealthCocoDialogFragment imple
         lvClinics.setAdapter(menuClinicListAdapter);
     }
 
-
     @Override
-    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
+    public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+        DoctorClinicProfile doctorClinicProfile = (DoctorClinicProfile) menuClinicListAdapter.getItem(position);
+        menuClinicListAdapter.notifyDataSetChanged();
+        Util.sendBroadcast(mApp, ContactsListFragment.INTENT_REFRESH_CONTACTS_LIST_FROM_SERVER);
+        getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, new Intent().putExtra(TAG_CLINIC_NAME, Parcels.wrap(doctorClinicProfile)));
+        getDialog().dismiss();
     }
 
     @Override

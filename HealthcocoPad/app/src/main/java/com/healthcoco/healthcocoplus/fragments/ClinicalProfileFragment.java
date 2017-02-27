@@ -399,7 +399,7 @@ public class ClinicalProfileFragment extends HealthCocoFragment
         switch (v.getId()) {
             case R.id.bt_edit_clinic_image:
                 if (clinicDetailResponse != null)
-                    openCommonOpenUpActivity(CommonOpenUpFragmentType.ADD_EDIT_CLINIC_IMAGE, clinicDetailResponse.getUniqueId(), HealthCocoConstants.REQUEST_CODE_CLINIC_PROFILE);
+                    openCommonOpenUpActivity(CommonOpenUpFragmentType.ADD_EDIT_CLINIC_IMAGE, clinicDetailResponse.getUniqueId(), HealthCocoConstants.REQUEST_CODE_CLINIC_PROFILE_IMAGE);
                 break;
             case R.id.bt_edit_clinic_hours:
                 if (clinicDetailResponse != null)
@@ -602,6 +602,8 @@ public class ClinicalProfileFragment extends HealthCocoFragment
                     initData(clinicDetailResponse);
                     break;
             }
+        } else if (requestCode == HealthCocoConstants.REQUEST_CODE_CLINIC_PROFILE_IMAGE) {
+            initViewPagerAdapter();
         }
     }
 

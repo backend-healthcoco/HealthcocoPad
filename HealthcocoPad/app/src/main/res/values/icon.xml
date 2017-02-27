@@ -8,4 +8,8 @@
     <string name="text_check_book">&#xf05d;&#160;Book&#160;</string>
     <string name="text_check_call">&#xf05d;&#160;Call&#160;</string>
     <string name="fa_hospital">&#xf0f8;</string>
+
+    <string name="fa_google_plus">&#xf0d5;</string>
+    <string name="fa_linked_in">&#xf0e1;</string>
+    <string name="fa_twitter">&#xf099;</string>
 </resources>

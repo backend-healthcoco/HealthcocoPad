@@ -81,7 +81,6 @@ public class SignUpDialogFragment extends HealthCocoDialogFragment implements Vi
         getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
         getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         getDialog().setCanceledOnTouchOutside(false);
-        getDialog().getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         view = inflater.inflate(R.layout.dialog_fragment_login, container, false);
         super.onCreateView(inflater, container, savedInstanceState);
         return view;

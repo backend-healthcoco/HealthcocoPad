@@ -407,7 +407,6 @@
                         android:id="@+id/container_professional_membership"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
                         android:orientation="vertical">
 
                     </LinearLayout>
@@ -433,6 +432,7 @@
                         android:layout_height="wrap_content"
                         android:maxLines="1"
                         android:paddingBottom="@dimen/doctor_profile_layout_padding"
+                        android:gravity="start"
                         android:text="@string/professional_statement"
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_size_doctor_profile_item_header" />

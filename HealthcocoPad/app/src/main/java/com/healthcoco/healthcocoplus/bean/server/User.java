@@ -1,5 +1,6 @@
 package com.healthcoco.healthcocoplus.bean.server;
 
+import com.healthcoco.healthcocoplus.bean.UIPermissions;
 import com.healthcoco.healthcocoplus.enums.UserState;
 import com.orm.SugarRecord;
 import com.orm.dsl.Ignore;
@@ -40,6 +41,7 @@ public class User extends SugarRecord {
     protected String foreignLocationId;
     private UserState userState;
     private String colorCode;
+    private UIPermissions uiPermissions;
 
     public String getImageUrl() {
         return imageUrl;
@@ -171,5 +173,13 @@ public class User extends SugarRecord {
 
     public void setPassword(char[] password) {
         this.password = password;
+    }
+
+    public UIPermissions getUiPermissions() {
+        return uiPermissions;
+    }
+
+    public void setUiPermissions(UIPermissions uiPermissions) {
+        this.uiPermissions = uiPermissions;
     }
 }

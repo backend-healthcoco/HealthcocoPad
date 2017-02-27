@@ -507,4 +507,5 @@ public class Util {
         Pattern pattern3 = Pattern.compile(LANDLINE_NUMBER_WITHOUT_DASH);
         return pattern1.matcher(num).matches() || pattern2.matcher(num).matches() || pattern3.matcher(num).matches();
     }
+
 }

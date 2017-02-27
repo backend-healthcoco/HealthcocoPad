@@ -7,6 +7,8 @@ import com.android.volley.Response;
 import com.google.gson.Gson;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocoplus.HealthCocoApplication;
+import com.healthcoco.healthcocoplus.bean.UIPermissions;
+import com.healthcoco.healthcocoplus.bean.UserPermissionsResponse;
 import com.healthcoco.healthcocoplus.bean.VolleyResponseBean;
 import com.healthcoco.healthcocoplus.bean.request.ProfessionalMembershipRequest;
 import com.healthcoco.healthcocoplus.bean.request.ProfessionalStatementRequest;
@@ -1590,5 +1592,16 @@ public class LocalDataServiceImpl {
             showErrorLocal(volleyResponseBean, errorListener);
         }
         return volleyResponseBean;
+    }
+
+    public void addUserUiPermissions(UserPermissionsResponse userPermissionsResponse) {
+        if (userPermissionsResponse.getUiPermissions() != null) {
+            UIPermissions uiPermissions = userPermissionsResponse.getUiPermissions();
+            Gson gson = new Gson();
+            uiPermissions.setClinicalNotesPermissionsString(gson.toJson(uiPermissions.getClinicalNotesPermissions()));
+            uiPermissions.setDoctorId(userPermissionsResponse.getDoctorId());
+            uiPermissions.save();
+        }
+        userPermissionsResponse.save();
     }
 }

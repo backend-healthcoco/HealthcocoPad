@@ -10,7 +10,7 @@ public enum FragmentType {
     CALENDAR(MenuType.SEPARATOR, R.string.calendar, R.drawable.ic_action_calender, ActionbarLeftRightActionTypeDrawables.WITH_ADD),
     MAIL(MenuType.SEPARATOR, R.string.mail, R.drawable.menu_mail_selector, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION),
     ISSUE_TRACKER(MenuType.SEPARATOR, R.string.issue_tracker, R.drawable.ic_action_issue_tracker, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION),
-    SETTINGS(MenuType.SEPARATOR, R.string.settings, R.drawable.ic_action_name, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION),
+    SETTINGS(MenuType.SEPARATOR, R.string.settings, R.drawable.ic_action_setting, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION),
     HELP_IMPROVE(MenuType.SEPARATOR, R.string.help_us_to_improve, R.drawable.ic_action_help, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION),
     SYNC(MenuType.SEPARATOR, R.string.sync, R.drawable.ic_action_sync, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION);
 

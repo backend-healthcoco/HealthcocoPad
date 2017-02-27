@@ -33,6 +33,7 @@ import com.healthcoco.healthcocoplus.bean.server.DrugDosage;
 import com.healthcoco.healthcocoplus.bean.server.DrugDurationUnit;
 import com.healthcoco.healthcocoplus.bean.server.DrugType;
 import com.healthcoco.healthcocoplus.bean.server.InvestigationSuggestions;
+import com.healthcoco.healthcocoplus.bean.server.LoginResponse;
 import com.healthcoco.healthcocoplus.bean.server.ObservationSuggestions;
 import com.healthcoco.healthcocoplus.bean.server.Profession;
 import com.healthcoco.healthcocoplus.bean.server.Reference;
@@ -759,6 +760,33 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
 //            doPrintAboveKitkat(filePath);
 //        } else {
 //            doCloudPrinting(filePath);
+//        }
+    }
+
+    public String getFormattedVersionName() {
+        return String.format(getResources().getString(R.string.app_version_about_us_name),
+                getResources().getString(R.string.app_version_name));
+    }
+
+    public void openLoginSignupActivity() {
+        Intent intentLoginSignUp = new Intent(this, CommonOpenUpActivity.class);
+        intentLoginSignUp.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intentLoginSignUp.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.LOGIN_SIGN_UP.ordinal());
+        startActivity(intentLoginSignUp);
+    }
+
+    public void initGCM() {
+//        if (Util.checkPlayServices(this)) {
+//            LoginResponse doctor = LocalDataServiceImpl.getInstance((HealthCocoApplication) this.getApplicationContext()).getDoctor();
+//            GCMRequest gcmRequest = LocalDataServiceImpl.getInstance(mApp).getGCMRequestData();
+//            if (gcmRequest != null) {
+//                if (doctor != null && doctor.getUser() != null) {
+//                    ArrayList<String> userIdsList = new ArrayList<>();
+//                    userIdsList.add(doctor.getUser().getUniqueId());
+//                    gcmRequest.setUserIds(userIdsList);
+//                }
+//                WebDataServiceImpl.getInstance(mApp).sendGcmRegistrationId(GCMRequest.class, gcmRequest, null, null);
+//            }
 //        }
     }
 }

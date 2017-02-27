@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">HealthcocoPad</string>
     <string name="app_version_name">1.0.0</string>
+    <string name="app_version_about_us_name">v%s(Beta)</string>
     <string name="database_name">healthcoco_pad.db</string>
     <string name="join">Join</string>
     <string name="sign_in">Sign In</string>
@@ -31,7 +32,7 @@
 
     <string name="email">Email</string>
     <string name="password">Password</string>
-    <string name="signin_accept_terms_and_conditions">By Signing in,you agree to HealthcocoPlus\'s</string>
+    <string name="signin_accept_terms_and_conditions">By Signing in, you agree to HealthcocoPlus\'s &#160;</string>
 
     <string name="underlined_terms_of_service"><u>Terms of Service</u></string>
     <string name="and">&#160;and&#160;</string>
@@ -42,8 +43,8 @@
     <string name="full_name">Full Name</string>
     <string name="mobile_number">Mobile Number</string>
     <string name="title_dr">Dr.</string>
-    <string name="male">MALE</string>
-    <string name="female">FEMALE</string>
+    <string name="male">&#160;MALE</string>
+    <string name="female">&#160;FEMALE</string>
 
     <string name="email_address">Email Address</string>
     <string name="city">City</string>
@@ -193,6 +194,7 @@
 
     <string name="confirm">Confirm</string>
     <string name="pending_confirmation">Pending Confirmation</string>
+    '<string name="confirm_sign_out">Are you sure you want to Sign Out?</string>
     <string name="all">All</string>
     <string name="cancelled">Cancelled</string>
     <string name="reschedule">Reschedule</string>
@@ -301,7 +303,20 @@
     <string name="no_result_found_for_search_press_enter">Please press Enter to save the Option you entered</string>
     <string name="no_tests_found">No Tests Found</string>
     <string name="referred_by">Referred By</string>
+    <!--Settings text-->
     <string name="referred_by_settings">Referred By</string>
+    <string name="drug">Drug</string>
+    <string name="about">About</string>
+    <string name="help">Help</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="history_small">History</string>
+    <string name="rate_us">Rate Us</string>
+    <string name="templates">Templates</string>
+    <string name="id_creation">ID creation</string>
+    <string name="print">Print</string>
+    <string name="sms">SMS</string>
+    <string name="billing">Billing</string>
+    <string name="ui_permission">UI Permission</string>
 
     <!--fontawesome text-->
     <string name="clinic_icon">&#xf0f8;</string>
@@ -363,7 +378,30 @@
     <string name="state">State</string>
     <string name="pincode">Pincode</string>
     <string name="country">Country</string>
+    <string name="patient">Patient</string>
+    <string name="search_clinical_notes">Search Clinical Notes</string>
+    <string name="search_history">Search History</string>
+    <string name="search_prescription">Search Prescription</string>
+    <string name="search_template" >Search Template</string>
+    <string name="search_ui_permission">Search UI Permission</string>
+    <string name="search_billing">Search Billing</string>
+    <string name="settings_no_sms">Search No SMS</string>
+    <string name="settings_no_history_added">No History Added</string>
+    <string name="settings_no_patient_added">No Patient  Added</string>
+    <string name="settings_no_prescription">No Prescription Added</string>
+    <string name="no_templates">No Template Added</string>
+    <string name="settings_no_billing">No Billing Added</string>
+    <string name="no_clinical_note">No Clinical Notes Added</string>
+    <string name="settings_no_ui_permission">No UI  Permission Added</string>
+
     <string-array name="array_countries">
         <item>India</item>
     </string-array>
+
+    <string name="text_about_us">We are an innovative health and wellness platform providing the best way for healthcare providers and users to connect and share. We aim to improve the access and quality of healthcare globally.</string>
+    <string name="terms_and_conditions">Terms and Condition</string>
+    <string name="visits">Visits</string>
+    <string name="patient_tab_permission">Patient Tab Permission</string>
+    <string name="prescription_ui_permission_details">Prescription UI  Permission Details</string>
+
 </resources>
