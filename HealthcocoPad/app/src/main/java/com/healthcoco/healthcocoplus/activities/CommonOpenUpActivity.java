@@ -25,11 +25,14 @@ import com.healthcoco.healthcocoplus.fragments.AddEditClinicImageFragment;
 import com.healthcoco.healthcocoplus.fragments.FeedbackFragment;
 import com.healthcoco.healthcocoplus.fragments.InitialSyncFragment;
 import com.healthcoco.healthcocoplus.fragments.LoginSignupFragment;
+import com.healthcoco.healthcocoplus.fragments.PrescriptionUIPermissionFragment;
 import com.healthcoco.healthcocoplus.fragments.SettingUIPermissionsFragment;
 import com.healthcoco.healthcocoplus.fragments.WebViewFragments;
 import com.healthcoco.healthcocoplus.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocoplus.utilities.LogUtils;
 import com.healthcoco.healthcocoplus.utilities.Util;
+
+import static com.healthcoco.healthcocoplus.enums.UIPermissionsItemType.PRESCRIPTION_UI_PERMISSION;
 
 public class CommonOpenUpActivity extends HealthCocoActivity {
     private Fragment loginSignupFragment;
@@ -113,9 +116,8 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
                 openFragment(ActionbarType.TITLE, ActionbarLeftRightActionType.WITH_BACK, ActionbarLeftRightActionType.NO_LEFT_RIGHT_ACTION, R.string.about_us, new AboutUsFragment());
                 break;
             case SETTINGS_UI_PERMISSION_PRESCRIPTION:
-                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionType.WITH_CROSS, ActionbarLeftRightActionType.NO_LEFT_RIGHT_ACTION, R.string.about_us, new AboutUsFragment());
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionType.WITH_CROSS, ActionbarLeftRightActionType.NO_LEFT_RIGHT_ACTION, R.string.prescription_ui_permission_details, new PrescriptionUIPermissionFragment());
                 break;
-
         }
     }
 
