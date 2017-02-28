@@ -27,6 +27,9 @@ public enum DefaultSyncServiceType {
     GET_DIAGNOSIS_SUGGESTIONS(R.string.syncing_diagnosis_suggestions),
     GET_HISTORY(R.string.syncing_history),
     GET_TEMPLATES(R.string.syncing_templates),
+    GET_DOCTORS_UI_PERMISIIONS(R.string.syncing_doctors_ui_Permissions),
+    GET_ALL_UI_PERMISSIONS(R.string.syncing_all_ui_Permissions),
+
     //    GET_EDUCATION_QUALIFICATION(R.string.syncing_education_qualification),
 //    GET_INSTITUTES(R.string.syncing_institutes),
 //    GET_MEDICAL_COUNCIL(R.string.syncing_medical_councils),
@@ -75,6 +78,10 @@ public enum DefaultSyncServiceType {
                 return GET_HISTORY;
             case GET_TEMPLATES_LIST:
                 return GET_TEMPLATES;
+            case GET_ALL_UI_PERMISSIONS:
+                return GET_ALL_UI_PERMISSIONS;
+            case GET_UI_PERMISSIONS_FOR_DOCTOR:
+                return GET_DOCTORS_UI_PERMISIIONS;
         }
         return syncServiceType;
     }

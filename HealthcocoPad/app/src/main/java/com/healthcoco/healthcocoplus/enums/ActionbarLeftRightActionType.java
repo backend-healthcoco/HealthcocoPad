@@ -17,6 +17,8 @@ public enum ActionbarLeftRightActionType {
 
     WITH_DONE(false, AppCompatButton.class, R.string.done, R.layout.actionbar_button),
     WITH_SAVE(false, AppCompatButton.class, R.string.save, R.layout.actionbar_button),
+    WITH_SYNC(false, AppCompatButton.class, R.string.fa_sync, R.layout.actionbar_fontawesome_button),
+
     //    WITH_CONFIRM(false, AppCompatButton.class, R.string.confirm, R.layout.actionbar_button),
 //    WITH_ADD(true, ImageButton.class, R.drawable.actionbar_add_selector, R.layout.actionbar_image_button),
     NO_LEFT_RIGHT_ACTION(false, null, 0, 0);

@@ -37,7 +37,7 @@ import java.util.List;
 /**
  * Created by Shreshtha on 27-02-2017.
  */
-public class SettingUIPermissionsFragment extends HealthCocoFragment implements AdapterView.OnItemClickListener, Response.Listener<VolleyResponseBean>, GsonRequest.ErrorListener, LocalDoInBackgroundListenerOptimised {
+public class SettingUIPermissionsFragment extends HealthCocoFragment implements AdapterView.OnItemClickListener {
     private ListView lvSettingsUIPermission;
     private SettingsUIPermissionListAdapter adapter;
     private List<UIPermissionsItemType> listType;
@@ -62,17 +62,12 @@ public class SettingUIPermissionsFragment extends HealthCocoFragment implements 
         initViews();
         initListeners();
         initAdapters();
-        LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
-        if (doctor != null && doctor.getUser() != null && !Util.isNullOrBlank(doctor.getUser().getUniqueId())) {
-            user = doctor.getUser();
-        }
-        getUIPermissions();
-    }
-
-    private void getUIPermissions() {
-        if (user != null) {
-            WebDataServiceImpl.getInstance(mApp).getUIPermissions(UserPermissionsResponse.class, user.getUniqueId(), this, this);
-        }
+//        LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
+//        if (doctor != null && doctor.getUser() != null && !Util.isNullOrBlank(doctor.getUser().getUniqueId())) {
+//            User user = doctor.getUser();
+//            init();
+//            mActivity.initDefaultData(user);
+//        }
     }
 
     @Override
@@ -83,6 +78,7 @@ public class SettingUIPermissionsFragment extends HealthCocoFragment implements 
     @Override
     public void initListeners() {
         lvSettingsUIPermission.setOnItemClickListener(this);
+        mActivity.initActionbarTitle();
     }
 
     private void initAdapters() {
@@ -101,13 +97,13 @@ public class SettingUIPermissionsFragment extends HealthCocoFragment implements 
                 openCommonOpenUpActivity(CommonOpenUpFragmentType.SETTINGS_UI_PERMISSION_PRESCRIPTION, itemType.ordinal());
                 break;
             case CLINICAL_NOTES:
-//                openCommonOpenUpActivity(CommonOpenUpFragmentType.SETTINGS_CLINICAL_NOTES, itemType.ordinal());
+                openCommonOpenUpActivity(CommonOpenUpFragmentType.SETTINGS_UI_PERMISSION_CLINICAL_NOTES, itemType.ordinal());
                 break;
             case VISITS:
-//                openCommonOpenUpActivity(CommonOpenUpFragmentType.SETTINGS_HISTORY, itemType.ordinal());
+                openCommonOpenUpActivity(CommonOpenUpFragmentType.SETTINGS_UI_PERMISSION_VISITS, itemType.ordinal());
                 break;
             case PATIENT_TAB_PERMISSION:
-//                openCommonOpenUpActivity(CommonOpenUpFragmentType.SETTINGS_PRESCRIPTION, itemType.ordinal());
+                openCommonOpenUpActivity(CommonOpenUpFragmentType.SETTINGS_UI_PERMISSION_PATIENT_TAB, itemType.ordinal());
                 break;
         }
     }
@@ -117,49 +113,5 @@ public class SettingUIPermissionsFragment extends HealthCocoFragment implements 
         intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, fragmentType.ordinal());
         intent.putExtra(HealthCocoConstants.TAG_NAME_EDIT_TYPE, typeOrdinal);
         startActivity(intent);
-    }
-
-    @Override
-    public void onErrorResponse(VolleyResponseBean volleyResponseBean, String errorMessage) {
-
-    }
-
-    @Override
-    public void onNetworkUnavailable(WebServiceType webServiceType) {
-
-    }
-
-    @Override
-    public void onResponse(VolleyResponseBean response) {
-        if (response != null && response.getWebServiceType() != null) {
-            LogUtils.LOGD(TAG, "Success " + response.getWebServiceType());
-            switch (response.getWebServiceType()) {
-                case GET_PERMISSIONS_FOR_DOCTOR:
-                    if (response.getData() != null) {
-                        permissionsResponse = (UserPermissionsResponse) response.getData();
-                        new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_UI_PERMISSIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
-                    }
-                    break;
-            }
-        }
-    }
-
-    @Override
-    public VolleyResponseBean doInBackground(VolleyResponseBean response) {
-        switch (response.getLocalBackgroundTaskType()) {
-            case ADD_UI_PERMISSIONS:
-                if (response.getData() != null)
-                    LocalDataServiceImpl.getInstance(mApp).addUserUiPermissions((UserPermissionsResponse) response.getData());
-                break;
-        }
-        VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
-        volleyResponseBean.setWebServiceType(response.getWebServiceType());
-        volleyResponseBean.setDataFromLocal(true);
-        return volleyResponseBean;
-    }
-
-    @Override
-    public void onPostExecute(VolleyResponseBean aVoid) {
-
     }
 }

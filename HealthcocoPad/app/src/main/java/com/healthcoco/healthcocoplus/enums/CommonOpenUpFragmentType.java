@@ -18,7 +18,11 @@ public enum CommonOpenUpFragmentType {
     ADD_EDIT_PROFESSSIONAL_STATEMENT_DETAIL(R.string.professional_statement), ADD_EDIT_CLINIC_ADDRESS(R.string.address_details), SETTING_UI_PERMISSION(R.string.ui_permission),
     SETTINGS_PATIENT(R.string.patient), SETTINGS_CLINICAL_NOTES(R.string.clinical_notes),
     SETTINGS_HISTORY(R.string.history_small), SETTINGS_PRESCRIPTION(R.string.prescriptions), SETTINGS_TEMPLATE(R.string.templates),
-    SETTINGS_BILLING(R.string.billing), SETTING_SMS(R.string.sms), SETTING_ABOUT_US(R.string.about_us), SETTINGS_UI_PERMISSION_PRESCRIPTION(R.string.prescription_ui_permission_details);
+    SETTINGS_BILLING(R.string.billing), SETTING_SMS(R.string.sms), SETTING_ABOUT_US(R.string.about_us),
+    SETTINGS_UI_PERMISSION_PRESCRIPTION(R.string.prescription_ui_permission_details),
+    SETTINGS_UI_PERMISSION_CLINICAL_NOTES(R.string.clinical_notes_ui_permission_details),
+    SETTINGS_UI_PERMISSION_VISITS(R.string.visits_ui_permission_details),
+    SETTINGS_UI_PERMISSION_PATIENT_TAB(R.string.patient_tab_ui_permission_details);
 
     private final int titleId;
 

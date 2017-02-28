@@ -14,6 +14,7 @@ import com.healthcoco.healthcocoplus.bean.request.ProfessionalMembershipRequest;
 import com.healthcoco.healthcocoplus.bean.request.ProfessionalStatementRequest;
 import com.healthcoco.healthcocoplus.bean.server.AccessModule;
 import com.healthcoco.healthcocoplus.bean.server.Achievement;
+import com.healthcoco.healthcocoplus.bean.server.AllUIPermission;
 import com.healthcoco.healthcocoplus.bean.server.AppointmentSlot;
 import com.healthcoco.healthcocoplus.bean.server.BloodGroup;
 import com.healthcoco.healthcocoplus.bean.server.CalendarEvents;
@@ -1599,13 +1600,31 @@ public class LocalDataServiceImpl {
             UIPermissions uiPermissions = userPermissionsResponse.getUiPermissions();
             Gson gson = new Gson();
             uiPermissions.setClinicalNotesPermissionsString(gson.toJson(uiPermissions.getClinicalNotesPermissions()));
+            uiPermissions.setPatientVisitPermissionsString(gson.toJson(uiPermissions.getPatientVisitPermissions()));
+            uiPermissions.setTabPermissionsString(gson.toJson(uiPermissions.getTabPermissions()));
+            uiPermissions.setPrescriptionPermissionsString(gson.toJson(uiPermissions.getPrescriptionPermissions()));
+            uiPermissions.setProfilePermissionsString(gson.toJson(uiPermissions.getPrescriptionPermissions()));
             uiPermissions.setDoctorId(userPermissionsResponse.getDoctorId());
             uiPermissions.save();
         }
         userPermissionsResponse.save();
     }
 
-//    private UserPermissionsResponse getUserPermissions(String uniqueId) {
-//        return (UserPermissionsResponse) getObject(UserPermissionsResponse.class, LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, uniqueId);
-//    }
+    public UserPermissionsResponse getUserPermissions(String doctorId) {
+        UserPermissionsResponse userPermissionsResponse = Select.from(UserPermissionsResponse.class).where(Condition.prop(LocalDatabaseUtils.KEY_DOCTOR_ID).eq(doctorId)).first();
+        return userPermissionsResponse;
+    }
+
+    public void addALLUiPermissions(AllUIPermission allUIPermission) {
+        AllUIPermission allUIPermission1 = allUIPermission;
+        if (allUIPermission1 != null) {
+            Gson gson = new Gson();
+            allUIPermission1.setTabPermissionsString(gson.toJson(allUIPermission.getTabPermissions()));
+            allUIPermission1.setClinicalNotesPermissionsString(gson.toJson(allUIPermission.getClinicalNotesPermissions()));
+            allUIPermission1.setPatientVisitPermissionsString(gson.toJson(allUIPermission.getPatientVisitPermissions()));
+            allUIPermission1.setPrescriptionPermissionsString(gson.toJson(allUIPermission.getTabPermissions()));
+            allUIPermission1.setProfilePermissionsString(gson.toJson(allUIPermission.getProfilePermissions()));
+            allUIPermission.save();
+        }
+    }
 }

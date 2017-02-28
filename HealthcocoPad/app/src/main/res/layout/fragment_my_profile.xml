@@ -195,14 +195,6 @@
                     android:gravity="center"
                     android:orientation="vertical">
 
-
-                    <TextView
-                        android:id="@+id/tv_no_education"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/no_text_dash"
-                        android:visibility="gone" />
-
                     <TextView
                         android:id="@+id/textView4"
                         android:layout_width="match_parent"
@@ -211,6 +203,13 @@
                         android:text="@string/education"
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_size_doctor_profile_item_header" />
+
+                    <TextView
+                        android:id="@+id/tv_no_education"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/no_text_dash"
+                        android:visibility="gone" />
 
                     <LinearLayout
                         android:id="@+id/container_education_detail"
@@ -430,9 +429,9 @@
                         android:id="@+id/textView2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:gravity="start"
                         android:maxLines="1"
                         android:paddingBottom="@dimen/doctor_profile_layout_padding"
-                        android:gravity="start"
                         android:text="@string/professional_statement"
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_size_doctor_profile_item_header" />

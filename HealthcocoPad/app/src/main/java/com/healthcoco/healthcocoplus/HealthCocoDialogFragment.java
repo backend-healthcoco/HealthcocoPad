@@ -158,7 +158,7 @@ public abstract class HealthCocoDialogFragment extends DialogFragment implements
 
     protected void initSaveCancelButton(View.OnClickListener onClickListener) {
         Button btSave = (Button) view.findViewById(R.id.bt_save);
-        LinearLayout containerLeftAction = (LinearLayout) view.findViewById(R.id.container_left_action);
+        ImageButton containerLeftAction = (ImageButton) view.findViewById(R.id.bt_cross);
         btSave.setOnClickListener(onClickListener);
         containerLeftAction.setOnClickListener(new View.OnClickListener() {
             @Override

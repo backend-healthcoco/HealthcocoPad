@@ -151,9 +151,9 @@
     <string name="syncing_history">Syncing History&#8230;</string>
     <string name="syncing_templates">Syncing Templates&#8230;</string>
     <string name="syncing_calendar_events">Syncing Calendar Events&#8230;</string>
-
     <string name="syncing_medical_councils">Syncing Medical Councils&#8230;</string>
-
+    <string name="syncing_doctors_ui_Permissions">Syncing Doctors UI Permissions</string>
+    <string name="syncing_all_ui_Permissions">Syncing All UI Permission</string>
     <string name="sync_complete">Sync Complete</string>
     <string name="sync">Sync</string>
     <string name="loading">Loading&#8230;</string>
@@ -194,7 +194,8 @@
 
     <string name="confirm">Confirm</string>
     <string name="pending_confirmation">Pending Confirmation</string>
-    '<string name="confirm_sign_out">Are you sure you want to Sign Out?</string>
+    '
+    <string name="confirm_sign_out">Are you sure you want to Sign Out?</string>
     <string name="all">All</string>
     <string name="cancelled">Cancelled</string>
     <string name="reschedule">Reschedule</string>
@@ -382,7 +383,7 @@
     <string name="search_clinical_notes">Search Clinical Notes</string>
     <string name="search_history">Search History</string>
     <string name="search_prescription">Search Prescription</string>
-    <string name="search_template" >Search Template</string>
+    <string name="search_template">Search Template</string>
     <string name="search_ui_permission">Search UI Permission</string>
     <string name="search_billing">Search Billing</string>
     <string name="settings_no_sms">Search No SMS</string>
@@ -403,5 +404,9 @@
     <string name="visits">Visits</string>
     <string name="patient_tab_permission">Patient Tab Permission</string>
     <string name="prescription_ui_permission_details">Prescription UI  Permission Details</string>
+    <string name="clinical_notes_ui_permission_details">Clinical Notes UI  Permission Details</string>
+    <string name="visits_ui_permission_details">Visits UI  Permission Details</string>
+    <string name="patient_tab_ui_permission_details">Patient UI  Permission Details</string>
+
 
 </resources>

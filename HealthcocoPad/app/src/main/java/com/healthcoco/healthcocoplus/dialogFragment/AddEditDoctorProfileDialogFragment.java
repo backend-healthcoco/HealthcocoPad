@@ -103,7 +103,7 @@ public class AddEditDoctorProfileDialogFragment extends HealthCocoDialogFragment
     private RadioGroup radioGroupGender;
     private TextView tvDOB;
     private TextView tvTitle;
-    private LinearLayout containerLeftAction;
+    private ImageButton containerLeftAction;
     private String selectedFilterTitle;
     private String title;
     private Button bt_save;
@@ -163,7 +163,7 @@ public class AddEditDoctorProfileDialogFragment extends HealthCocoDialogFragment
         radioGroupGender = (RadioGroup) view.findViewById(R.id.rg_gender_select);
         tvDOB = (TextView) view.findViewById(R.id.tv_dob);
         tvTitle = (TextView) view.findViewById(R.id.tv_title);
-        containerLeftAction = (LinearLayout) view.findViewById(R.id.container_left_action);
+        containerLeftAction = (ImageButton) view.findViewById(R.id.bt_cross);
         tvTitle.setText(profile.getTitleId());
         bt_save = (Button) view.findViewById(R.id.bt_save);
     }
@@ -176,8 +176,7 @@ public class AddEditDoctorProfileDialogFragment extends HealthCocoDialogFragment
         btAddSpeciality.setOnClickListener(this);
         autotvExperience.setOnItemClickListener(this);
         tvDOB.setOnClickListener(this);
-        containerLeftAction.setOnClickListener(this);
-
+        initSaveCancelButton(this);
     }
 
     private void initAutoTvAdapter() {

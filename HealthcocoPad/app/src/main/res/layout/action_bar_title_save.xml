@@ -5,12 +5,16 @@
     android:background="@color/blue_action_bar"
     android:orientation="horizontal">
 
-    <include
-        layout="@layout/container_left_action"
+    <ImageButton
+        android:id="@+id/bt_cross"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_centerInParent="true" />
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent"
+        android:clickable="false"
+        android:paddingRight="50dp"
+        android:paddingLeft="10dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/close_selector" />
 
     <Button
         android:id="@+id/bt_save"

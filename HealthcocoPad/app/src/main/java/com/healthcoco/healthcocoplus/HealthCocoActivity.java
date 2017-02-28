@@ -14,12 +14,15 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.android.volley.Response;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocoplus.activities.CommonOpenUpActivity;
+import com.healthcoco.healthcocoplus.bean.UserPermissionsResponse;
 import com.healthcoco.healthcocoplus.bean.VolleyResponseBean;
+import com.healthcoco.healthcocoplus.bean.server.AllUIPermission;
 import com.healthcoco.healthcocoplus.bean.server.BloodGroup;
 import com.healthcoco.healthcocoplus.bean.server.CalendarEvents;
 import com.healthcoco.healthcocoplus.bean.server.CityResponse;
@@ -33,7 +36,6 @@ import com.healthcoco.healthcocoplus.bean.server.DrugDosage;
 import com.healthcoco.healthcocoplus.bean.server.DrugDurationUnit;
 import com.healthcoco.healthcocoplus.bean.server.DrugType;
 import com.healthcoco.healthcocoplus.bean.server.InvestigationSuggestions;
-import com.healthcoco.healthcocoplus.bean.server.LoginResponse;
 import com.healthcoco.healthcocoplus.bean.server.ObservationSuggestions;
 import com.healthcoco.healthcocoplus.bean.server.Profession;
 import com.healthcoco.healthcocoplus.bean.server.Reference;
@@ -62,6 +64,7 @@ import com.healthcoco.healthcocoplus.utilities.ImageUtil;
 import com.healthcoco.healthcocoplus.utilities.LogUtils;
 import com.healthcoco.healthcocoplus.utilities.MyExceptionHandler;
 import com.healthcoco.healthcocoplus.utilities.Util;
+import com.healthcoco.healthcocoplus.views.FontAwesomeButton;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -257,6 +260,14 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
                         WebDataServiceImpl.getInstance(mApp).getTemplatesList(TempTemplate.class, user.getUniqueId(), 0l, this, this);
                         defaultWebServicesList.add(syncServiceType);
                         break;
+                    case GET_DOCTORS_UI_PERMISIIONS:
+                        getDoctorsUIPermissions();
+                        defaultWebServicesList.add(syncServiceType);
+                        break;
+                    case GET_ALL_UI_PERMISSIONS:
+                        WebDataServiceImpl.getInstance(mApp).getALLUIPermissions(AllUIPermission.class, user.getUniqueId(), this, this);
+                        defaultWebServicesList.add(syncServiceType);
+                        break;
                     case SYNC_COMPLETE:
                         isInitialLoading = false;
                 }
@@ -264,6 +275,10 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void getDoctorsUIPermissions() {
+        WebDataServiceImpl.getInstance(mApp).getDoctorsUIPermissions(UserPermissionsResponse.class, user.getUniqueId(), this, this);
     }
 
     public void syncGroups(User user) {
@@ -385,8 +400,16 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
                 case GET_TEMPLATES_LIST:
                     if (defaultWebServicesList.contains(DefaultSyncServiceType.getSyncType(webServiceType)))
                         defaultWebServicesList.remove(DefaultSyncServiceType.getSyncType(webServiceType));
-                    updateProgress(DefaultSyncServiceType.SYNC_COMPLETE);
+                    updateProgress(DefaultSyncServiceType.GET_DOCTORS_UI_PERMISIIONS);
                     break;
+                case GET_UI_PERMISSIONS_FOR_DOCTOR:
+                    if (defaultWebServicesList.contains(DefaultSyncServiceType.getSyncType(webServiceType)))
+                        defaultWebServicesList.remove(DefaultSyncServiceType.getSyncType(webServiceType));
+                    updateProgress(DefaultSyncServiceType.GET_ALL_UI_PERMISSIONS);
+                case GET_ALL_UI_PERMISSIONS:
+                    if (defaultWebServicesList.contains(DefaultSyncServiceType.getSyncType(webServiceType)))
+                        defaultWebServicesList.remove(DefaultSyncServiceType.getSyncType(webServiceType));
+                    updateProgress(DefaultSyncServiceType.SYNC_COMPLETE);
 //                case GET_EDUCATION_QUALIFICATION:
 //                    if (defaultWebServicesList.contains(DefaultSyncServiceType.getSyncType(webServiceType)))
 //                        defaultWebServicesList.remove(DefaultSyncServiceType.getSyncType(webServiceType));
@@ -504,7 +527,12 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
                     case GET_TEMPLATES_LIST:
                         new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_TEMPLATES, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
                         break;
-
+                    case GET_UI_PERMISSIONS_FOR_DOCTOR:
+                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_DOCTORS_UI_PERMISSIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                        break;
+                    case GET_ALL_UI_PERMISSIONS:
+                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_ALL_UI_PERMISSIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                        break;
                     default:
                         break;
                 }
@@ -624,7 +652,16 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
             case ADD_TEMPLATES:
 //                if (!Util.isNullOrEmptyList(response.getDataList()))
 //                    LocalDataServiceImpl.getInstance(mApp).addTemplatesList((ArrayList<TempTemplate>) (ArrayList<?>) response.getDataList());
-
+            case ADD_DOCTORS_UI_PERMISSIONS:
+                if (response.getData() != null)
+                    LocalDataServiceImpl.getInstance(mApp).
+                            addUserUiPermissions((UserPermissionsResponse) response.getData());
+                break;
+            case ADD_ALL_UI_PERMISSIONS:
+                if (response.getData() != null)
+                    LocalDataServiceImpl.getInstance(mApp).
+                            addALLUiPermissions((AllUIPermission) response.getData());
+                break;
         }
         VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
         volleyResponseBean.setWebServiceType(response.getWebServiceType());
@@ -788,5 +825,17 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
 //                WebDataServiceImpl.getInstance(mApp).sendGcmRegistrationId(GCMRequest.class, gcmRequest, null, null);
 //            }
 //        }
+    }
+
+    public void initActionbarTitle() {
+        FontAwesomeButton btSync = (FontAwesomeButton) findViewById(R.id.bt_sync);
+        if (btSync != null) {
+            btSync.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+//                    getDoctorsUIPermissions();
+                }
+            });
+        }
     }
 }

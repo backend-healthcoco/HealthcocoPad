@@ -4,11 +4,14 @@ import com.healthcoco.healthcocoplus.enums.ClinicalNotesPermissionType;
 import com.orm.SugarRecord;
 import com.orm.dsl.Ignore;
 
+import org.parceler.Parcel;
+
 import java.util.ArrayList;
 
 /**
  * Created by neha on 01/02/17.
  */
+@Parcel
 public class UIPermissions extends SugarRecord {
     private String doctorId;
     @Ignore
@@ -19,7 +22,7 @@ public class UIPermissions extends SugarRecord {
     private String patientVisitPermissionsString;
 
     @Ignore
-    private ArrayList<ClinicalNotesPermissionType> clinicalNotesPermissions;
+    private ArrayList<String> clinicalNotesPermissions;
     private String clinicalNotesPermissionsString;
     @Ignore
     private ArrayList<String> prescriptionPermissions;
@@ -85,11 +88,11 @@ public class UIPermissions extends SugarRecord {
         this.patientVisitPermissions = patientVisitPermissions;
     }
 
-    public ArrayList<ClinicalNotesPermissionType> getClinicalNotesPermissions() {
+    public ArrayList<String> getClinicalNotesPermissions() {
         return clinicalNotesPermissions;
     }
 
-    public void setClinicalNotesPermissions(ArrayList<ClinicalNotesPermissionType> clinicalNotesPermissions) {
+    public void setClinicalNotesPermissions(ArrayList<String> clinicalNotesPermissions) {
         this.clinicalNotesPermissions = clinicalNotesPermissions;
     }
 

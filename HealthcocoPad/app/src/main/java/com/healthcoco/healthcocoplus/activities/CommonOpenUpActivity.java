@@ -104,7 +104,7 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
 //                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionType.WITH_BACK, R.string.templates, new SettingUIPermissionsFragment());
                 break;
             case SETTING_UI_PERMISSION:
-                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionType.WITH_BACK, ActionbarLeftRightActionType.NO_LEFT_RIGHT_ACTION, R.string.ui_permission, new SettingUIPermissionsFragment());
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionType.WITH_BACK, ActionbarLeftRightActionType.WITH_SYNC, R.string.ui_permission, new SettingUIPermissionsFragment());
                 break;
             case SETTINGS_BILLING:
 //                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionType.WITH_BACK, R.string.billing, new SettingUIPermissionsFragment());
@@ -118,6 +118,15 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
             case SETTINGS_UI_PERMISSION_PRESCRIPTION:
                 openFragment(ActionbarType.TITLE, ActionbarLeftRightActionType.WITH_CROSS, ActionbarLeftRightActionType.WITH_SAVE, R.string.prescription_ui_permission_details, new PrescriptionUIPermissionFragment());
                 break;
+            case SETTINGS_UI_PERMISSION_CLINICAL_NOTES:
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionType.WITH_CROSS, ActionbarLeftRightActionType.WITH_SAVE, R.string.clinical_notes_ui_permission_details, new PrescriptionUIPermissionFragment());
+                break;
+            case SETTINGS_UI_PERMISSION_VISITS:
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionType.WITH_CROSS, ActionbarLeftRightActionType.WITH_SAVE, R.string.visits_ui_permission_details, new PrescriptionUIPermissionFragment());
+                break;
+            case SETTINGS_UI_PERMISSION_PATIENT_TAB:
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionType.WITH_CROSS, ActionbarLeftRightActionType.WITH_SAVE, R.string.patient_tab_ui_permission_details, new PrescriptionUIPermissionFragment());
+                break;
         }
     }
 
@@ -130,7 +139,10 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
     }
 
     private void openFragment(ActionbarType actionbarType, ActionbarLeftRightActionType leftAction, ActionbarLeftRightActionType rightAction, int actionBarTitle, HealthCocoFragment fragment) {
+        Bundle bundle = new Bundle();
         initActionBar(actionbarType, actionBarTitle, leftAction, rightAction);
+        bundle.putInt(HealthCocoConstants.TAG_FRAGMENT_NAME, fragmentType.ordinal());
+        fragment.setArguments(bundle);
         transaction.add(R.id.layout_fragment_common_open_up, fragment, fragment.getClass().getSimpleName());
         transaction.commit();
     }
@@ -248,7 +260,6 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
         } else
             super.onBackPressed();
     }
-
 
     private void finishThisActivity() {
         if (fragmentType != null) {

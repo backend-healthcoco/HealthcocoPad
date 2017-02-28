@@ -205,6 +205,12 @@ public class Util {
         return "";
     }
 
+    public static String getValidatedValueWithoutQuotes(String value) {
+        if (!Util.isNullOrBlank(value))
+            return value.replace("\"", "");
+        return "";
+    }
+
     public static String getValidatedValue(Integer value) {
         if (value != null)
             return String.valueOf(value);
