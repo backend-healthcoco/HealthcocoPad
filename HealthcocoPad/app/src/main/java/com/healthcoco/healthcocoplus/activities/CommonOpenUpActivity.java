@@ -116,7 +116,7 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
                 openFragment(ActionbarType.TITLE, ActionbarLeftRightActionType.WITH_BACK, ActionbarLeftRightActionType.NO_LEFT_RIGHT_ACTION, R.string.about_us, new AboutUsFragment());
                 break;
             case SETTINGS_UI_PERMISSION_PRESCRIPTION:
-                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionType.WITH_CROSS, ActionbarLeftRightActionType.NO_LEFT_RIGHT_ACTION, R.string.prescription_ui_permission_details, new PrescriptionUIPermissionFragment());
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionType.WITH_CROSS, ActionbarLeftRightActionType.WITH_SAVE, R.string.prescription_ui_permission_details, new PrescriptionUIPermissionFragment());
                 break;
         }
     }

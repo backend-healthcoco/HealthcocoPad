@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Button xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/ActionBarButtonTextStyle"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:background="@color/blue_action_bar"
+    android:clickable="false"
+    android:text="@string/save"
+    android:textColor="@drawable/text_selector_white_translucent" />

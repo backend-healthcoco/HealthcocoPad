@@ -1604,4 +1604,8 @@ public class LocalDataServiceImpl {
         }
         userPermissionsResponse.save();
     }
+
+//    private UserPermissionsResponse getUserPermissions(String uniqueId) {
+//        return (UserPermissionsResponse) getObject(UserPermissionsResponse.class, LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, uniqueId);
+//    }
 }

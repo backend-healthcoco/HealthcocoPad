@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="10dp"
+        android:background="@color/white"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableRight="@drawable/img_arrow_setting_normal"
+            android:gravity="center|start"
+            android:minHeight="0dp"
+            android:padding="20dp"
+            android:text="@string/patient"
+            android:textColor="@drawable/text_blue_black_selector"
+            android:textSize="@dimen/text_size_settings_item" />
+
+        <TextView
+            android:id="@+id/tv_version_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center|end"
+            android:layout_marginRight="50dp"
+            android:gravity="center"
+            android:textColor="@color/grey_dark_text"
+            android:textSize="@dimen/text_size_settings_item"
+            android:visibility="gone" />
+    </RelativeLayout>
+</LinearLayout>
