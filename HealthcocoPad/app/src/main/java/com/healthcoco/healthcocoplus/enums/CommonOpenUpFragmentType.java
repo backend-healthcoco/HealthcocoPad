@@ -8,6 +8,8 @@ import com.healthcoco.healthcocopad.R;
 public enum CommonOpenUpFragmentType {
     LOGIN_SIGN_UP(0),
     CONTINUE_SIGN_UP(0),
+    PATIENT_DETAIL(0),
+    CONTACTS_DETAIL(0),
     TERMS_OF_SERVICE(R.string.terms_of_service),
     PRIVACY_POLICY(R.string.privacy_policy), INITIAL_SYNC(0), FEEDBACK(R.string.help_us_to_improve),
     ADD_EDIT_CLINIC_HOURS(R.string.visiting_hours), ADD_EDIT_CLINIC_CONTACT(R.string.clinic_contact), ADD_EDIT_AWARDS_AND_PUBLICATION(R.string.awards_and_publication),
@@ -21,7 +23,8 @@ public enum CommonOpenUpFragmentType {
     SETTINGS_BILLING(R.string.billing), SETTING_SMS(R.string.sms), SETTING_ABOUT_US(R.string.about_us),
     SETTINGS_UI_PERMISSION_PRESCRIPTION(R.string.prescription_ui_permission_details),
     SETTINGS_UI_PERMISSION_CLINICAL_NOTES(R.string.clinical_notes_ui_permission_details),
-    SETTINGS_UI_PERMISSION_VISITS(R.string.visits_ui_permission_details),
+    PATIENT_NUMBER_SEARCH(R.string.patient_mobile_number),
+    SETTINGS_UI_PERMISSION_VISITS(R.string.visits_ui_permission_details), ADD_NEW_PRESCRIPTION(R.string.new_prescription),
     SETTINGS_UI_PERMISSION_PATIENT_TAB(R.string.patient_tab_ui_permission_details);
 
     private final int titleId;

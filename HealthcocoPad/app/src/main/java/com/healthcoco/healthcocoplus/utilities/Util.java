@@ -514,4 +514,10 @@ public class Util {
         return pattern1.matcher(num).matches() || pattern2.matcher(num).matches() || pattern3.matcher(num).matches();
     }
 
+    public static String[] getConvertedStringArray(String uiPermissionString) {
+        String replace = uiPermissionString.replace("[", "");
+        String replace1 = replace.replace("]", "");
+        String[] split = replace1.split(",");
+        return split;
+    }
 }

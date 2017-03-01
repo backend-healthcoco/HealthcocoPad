@@ -316,4 +316,8 @@ public class MenuDrawerFragment extends HealthCocoFragment implements View.OnCli
     public void onPostExecute(VolleyResponseBean aVoid) {
 
     }
+
+    public void refreshMenuItem() {
+        menuListAdapter.notifyDataSetChanged();
+    }
 }

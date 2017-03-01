@@ -1618,6 +1618,11 @@ public class LocalDataServiceImpl {
         return userPermissionsResponse;
     }
 
+    public AllUIPermission getAllUIPermissions() {
+        AllUIPermission allUIPermission = Select.from(AllUIPermission.class).first();
+        return allUIPermission;
+    }
+
     public void addALLUiPermissions(AllUIPermission allUIPermission) {
         AllUIPermission allUIPermission1 = allUIPermission;
         if (allUIPermission1 != null) {
@@ -1750,5 +1755,9 @@ public class LocalDataServiceImpl {
             }
         }
         return groupIdsList;
+    }
+
+    public void clearPatientsList() {
+        RegisteredPatientDetailsUpdated.deleteAll(RegisteredPatientDetailsUpdated.class);
     }
 }

@@ -106,9 +106,14 @@
                     android:id="@+id/gv_contacts"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:columnWidth="5dp"
                     android:divider="@null"
-                    android:numColumns="3"
+                    android:horizontalSpacing="5dp"
                     android:listSelector="@android:color/transparent"
+                    android:numColumns="3"
+                    android:padding="5dp"
+                    android:scrollbarStyle="outsideOverlay"
+                    android:verticalSpacing="5dp"
                     android:visibility="visible" />
 
                 <TextView

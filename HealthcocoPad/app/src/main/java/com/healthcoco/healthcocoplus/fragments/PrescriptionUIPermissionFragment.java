@@ -10,7 +10,7 @@ import android.widget.GridView;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocoplus.HealthCocoFragment;
 import com.healthcoco.healthcocoplus.adapter.UIPermissionItemGridAdapter;
-import com.healthcoco.healthcocoplus.bean.UserPermissionsResponse;
+import com.healthcoco.healthcocoplus.bean.server.AllUIPermission;
 import com.healthcoco.healthcocoplus.bean.server.LoginResponse;
 import com.healthcoco.healthcocoplus.bean.server.User;
 import com.healthcoco.healthcocoplus.enums.CommonOpenUpFragmentType;
@@ -27,7 +27,7 @@ import java.util.List;
  */
 public class PrescriptionUIPermissionFragment extends HealthCocoFragment implements AdapterView.OnItemClickListener {
     private User user;
-    private UserPermissionsResponse userPermissions;
+    private AllUIPermission allUIPermission;
     private GridView gvSettingsUIPermission;
     private List<String> listType;
     private UIPermissionItemGridAdapter adapter;
@@ -62,7 +62,7 @@ public class PrescriptionUIPermissionFragment extends HealthCocoFragment impleme
     }
 
     private void getUIPermissions() {
-        userPermissions = LocalDataServiceImpl.getInstance(mApp).getUserPermissions(user.getUniqueId());
+        allUIPermission = LocalDataServiceImpl.getInstance(mApp).getAllUIPermissions();
     }
 
     @Override
@@ -78,25 +78,19 @@ public class PrescriptionUIPermissionFragment extends HealthCocoFragment impleme
     private void initAdapters() {
         switch (fragmentType) {
             case SETTINGS_UI_PERMISSION_PRESCRIPTION:
-                uiPermissionString = userPermissions.getUiPermissions().getPrescriptionPermissionsString();
+                uiPermissionString = allUIPermission.getPrescriptionPermissionsString();
                 break;
             case SETTINGS_UI_PERMISSION_CLINICAL_NOTES:
-                uiPermissionString = userPermissions.getUiPermissions().getClinicalNotesPermissionsString();
+                uiPermissionString = allUIPermission.getClinicalNotesPermissionsString();
                 break;
             case SETTINGS_UI_PERMISSION_VISITS:
-                uiPermissionString = userPermissions.getUiPermissions().getPatientVisitPermissionsString();
+                uiPermissionString = allUIPermission.getPatientVisitPermissionsString();
                 break;
             case SETTINGS_UI_PERMISSION_PATIENT_TAB:
-                uiPermissionString = userPermissions.getUiPermissions().getTabPermissionsString();
+                uiPermissionString = allUIPermission.getTabPermissionsString();
                 break;
         }
-        String replace = uiPermissionString.replace("[", "");
-        System.out.println(replace);
-        String replace1 = replace.replace("]", "");
-        System.out.println(replace1);
-        List<String> myList = new ArrayList<String>(Arrays.asList(replace1.split(",")));
-        System.out.println(myList.toString());
-        listType = Arrays.asList(replace1.split(","));
+        listType = Arrays.asList(Util.getConvertedStringArray(uiPermissionString));
         adapter = new UIPermissionItemGridAdapter(mActivity);
         gvSettingsUIPermission.setAdapter(adapter);
         adapter.setUIListData(listType);

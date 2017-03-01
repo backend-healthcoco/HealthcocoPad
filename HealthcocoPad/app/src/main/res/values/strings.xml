@@ -194,7 +194,9 @@
 
     <string name="confirm">Confirm</string>
     <string name="pending_confirmation">Pending Confirmation</string>
-    '
+    <string name="confirm_call_number">Call&#160;</string>
+    <string name="no_mobile_number_found">No Mobile Number found for this patient</string>
+
     <string name="confirm_sign_out">Are you sure you want to Sign Out?</string>
     <string name="all">All</string>
     <string name="cancelled">Cancelled</string>
@@ -408,5 +410,6 @@
     <string name="visits_ui_permission_details">Visits UI  Permission Details</string>
     <string name="patient_tab_ui_permission_details">Patient UI  Permission Details</string>
 
-
+    <!-- Prescription -->
+    <string name="new_prescription">New Prescription</string>
 </resources>

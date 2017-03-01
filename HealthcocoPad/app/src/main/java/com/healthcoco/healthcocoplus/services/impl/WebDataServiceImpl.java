@@ -187,9 +187,6 @@ public class WebDataServiceImpl {
             getResponse(Request.Priority.HIGH, WebServiceType.GET_CONTACTS, class1, url, null, null, responseListener, errorListener);
         } else {
             errorListener.onNetworkUnavailable(webServiceType);
-//            errorListener.onErrorResponse(null, mApp.getResources().getString(R.string.user_offline));
-//            LocalDataServiceImpl.getInstance(mApp)
-//                    .getPatientsList(WebServiceType.GET_CONTACTS, doctorId, hospitalId, locationId, responseListener, errorListener);
         }
     }
 

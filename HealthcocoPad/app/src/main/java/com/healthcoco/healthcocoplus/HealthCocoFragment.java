@@ -193,4 +193,14 @@ public abstract class HealthCocoFragment extends Fragment implements GsonRequest
         return "";
     }
 
+    protected void clearSearchEditText() {
+        try {
+            EditText editSearch = (EditText) view.findViewById(R.id.edit_search);
+            if (editSearch != null)
+                editSearch.setText("");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }

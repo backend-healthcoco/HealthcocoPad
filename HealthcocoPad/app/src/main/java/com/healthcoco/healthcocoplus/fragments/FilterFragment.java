@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocoplus.HealthCocoFragment;
 import com.healthcoco.healthcocoplus.activities.HomeActivity;
+import com.healthcoco.healthcocoplus.enums.FilterItemType;
 
 /**
  * Created by Shreshtha on 31-01-2017.
@@ -41,6 +42,24 @@ public class FilterFragment extends HealthCocoFragment {
     private void refreshHomeScreenTitle(String title) {
         this.selectedFilterTitle = title;
         ((HomeActivity) mActivity).setActionbarTitle(title);
+    }
+
+    public void setSelectedItem(FilterItemType filterItemType) {
+//        clearPreviuosFilters(null);
+//        switch (filterItemType) {
+//            case RECENTLY_VISITED:
+//                tvRecentlyVisited.setSelected(true);
+//                break;
+//            case RECENTLY_ADDED:
+//                tvRecentlyAdded.setSelected(true);
+//                break;
+//            case ALL_PATIENTS:
+//                tvAllPatients.setSelected(true);
+//                break;
+//            case MOST_VISITED:
+//                tvMostVisited.setSelected(true);
+//                break;
+//        }
     }
 
     public String getSelectedFilterTitle() {

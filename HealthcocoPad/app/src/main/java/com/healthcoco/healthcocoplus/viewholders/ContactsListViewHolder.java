@@ -38,11 +38,13 @@ public class ContactsListViewHolder implements OnClickListener, ImageLoadedListe
     private ImageButton btCall;
     public TextView tvHeaderView;
     private TextView tvInitialAlphabet;
-    private FrameLayout containerTop;
-    private LinearLayout containerAddToGroup;
-    //    private ContactsListItemHorizontalScrollView scrollViewContactsItems;
+    private LinearLayout containerTop;
     private TextView tvCreatedTime;
-    private LinearLayout containerCallRx;
+    private TextView tvPatientId;
+    private ImageButton btEdit;
+    private ImageButton btQueue;
+    private ImageButton btGroup;
+    private ImageButton btPrescription;
 
     public ContactsListViewHolder(HealthCocoActivity mActivity, ContactsItemOptionsListener optionsListener, int position) {
         this.mActivity = mActivity;
@@ -57,66 +59,59 @@ public class ContactsListViewHolder implements OnClickListener, ImageLoadedListe
 
     public void applyData() {
         LogUtils.LOGD(TAG, "Unique Id " + objData.getUniqueId());
-//        scrollViewContactsItems.fullScroll(HorizontalScrollView.FOCUS_LEFT);
         tvContactName.setText(Util.getValidatedValue(objData.getLocalPatientName()));
         tvContactNumber.setText(Util.getValidatedValue(objData.getMobileNumber()));
-//        DownloadImageFromUrlUtil.loadImageWithInitialAlphabet(mActivity, PatientProfileScreenType.IN_PATIENTS_LIST, objData, null, ivContactProfile, tvInitialAlphabet);
+        tvPatientId.setText(Util.getValidatedValue(objData.getPid()));
+        DownloadImageFromUrlUtil.loadImageWithInitialAlphabet(mActivity, PatientProfileScreenType.IN_PATIENTS_LIST, objData, null, ivContactProfile, tvInitialAlphabet);
     }
-
 
     public View getConvertView() {
         convertView = mActivity.getLayoutInflater().inflate(R.layout.list_item_contacts, null);
-//        tvCreatedTime = (TextView) convertView.findViewById(R.id.tv_created_time);
-//        scrollViewContactsItems = (ContactsListItemHorizontalScrollView) convertView.findViewById(R.id.scrollview_contacts_item);
-//        containerTop = (FrameLayout) convertView.findViewById(R.id.container_top);
-//        containerAddToGroup = (LinearLayout) convertView.findViewById(R.id.container_add_to_group);
-//        containerTop.setLayoutParams(new LinearLayout.LayoutParams(ScreenDimensions.SCREEN_WIDTH, LinearLayout.LayoutParams.MATCH_PARENT));
-//        containerAddToGroup.setLayoutParams(new LinearLayout.LayoutParams(ScreenDimensions.SCREEN_WIDTH / 4, LinearLayout.LayoutParams.MATCH_PARENT));
-//        tvContactName = (TextView) convertView.findViewById(R.id.tv_contact_name);
-//        tvContactNumber = (TextView) convertView.findViewById(R.id.tv_contact_number);
-//        btCall = (ImageButton) convertView.findViewById(R.id.bt_call);
-//        btMail = (ImageButton) convertView.findViewById(R.id.bt_mail);
-//        btAddToGroup = (ImageButton) convertView.findViewById(R.id.bt_add_to_group);
-//        tvHeaderView = (TextView) convertView.findViewById(R.id.header_text);
-//        tvInitialAlphabet = (TextView) convertView.findViewById(R.id.tv_initial_aplhabet);
-//        ivContactProfile = (ImageView) convertView.findViewById(R.id.iv_image);
-//        containerCallRx = (LinearLayout) convertView.findViewById(R.id.container_call_rx);
-//
-//        btAddToGroup.setTag(position);
+        tvContactName = (TextView) convertView.findViewById(R.id.tv_contact_name);
+        tvContactNumber = (TextView) convertView.findViewById(R.id.tv_contact_number);
+        tvPatientId = (TextView) convertView.findViewById(R.id.tv_patient_id);
+        btEdit = (ImageButton) convertView.findViewById(R.id.bt_edit);
+        btQueue = (ImageButton) convertView.findViewById(R.id.bt_queue);
+        btCall = (ImageButton) convertView.findViewById(R.id.bt_call);
+        btGroup = (ImageButton) convertView.findViewById(R.id.bt_call);
+        btPrescription = (ImageButton) convertView.findViewById(R.id.bt_call);
+        tvInitialAlphabet = (TextView) convertView.findViewById(R.id.tv_initial_aplhabet);
+        ivContactProfile = (ImageView) convertView.findViewById(R.id.iv_image);
+        containerTop = (LinearLayout) convertView.findViewById(R.id.container_top);
+
+        btEdit.setOnClickListener(this);
+        btQueue.setOnClickListener(this);
         btCall.setOnClickListener(this);
-        btMail.setOnClickListener(this);
-        btAddToGroup.setOnClickListener(this);
+        btGroup.setOnClickListener(this);
+        btPrescription.setOnClickListener(this);
         containerTop.setOnClickListener(this);
-//        scrollViewContactsItems.setSwipeRefreshLayout(optionsListener.getSwipeRefreshLayout());
 
-        if (!optionsListener.isInHomeActivity()) {
-            containerAddToGroup.setVisibility(View.GONE);
-            containerCallRx.setVisibility(View.GONE);
-        } else {
-            containerAddToGroup.setVisibility(View.VISIBLE);
-            containerCallRx.setVisibility(View.VISIBLE);
-
-        }
         return convertView;
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-//            case R.id.bt_add_to_group:
+            case R.id.bt_edit:
 //                optionsListener.onAddToGroupClicked(objData);
-//                break;
-//            case R.id.bt_call:
+                break;
+            case R.id.bt_queue:
 //                optionsListener.onCallClicked(objData);
-//                break;
-//            case R.id.bt_mail:
+                break;
+            case R.id.bt_call:
+                optionsListener.onCallClicked(objData);
+                break;
+            case R.id.bt_group:
 //                optionsListener.onAddPrescriptionClicked(objData);
-//                break;
-//            case R.id.container_top:
-//                optionsListener.onItemContactDetailClicked(objData);
-//                break;
-//            default:
-//                break;
+                break;
+            case R.id.bt_prescription:
+                optionsListener.onAddPrescriptionClicked(objData);
+                break;
+            case R.id.container_top:
+                optionsListener.onItemContactDetailClicked(objData);
+                break;
+            default:
+                break;
         }
     }
 

@@ -24,6 +24,7 @@
         android:layout_height="@dimen/image_patient_profile_menu"
         android:layout_gravity="center"
         android:scaleType="centerCrop"
+        android:background="@drawable/shape_circle_blue_theme"
         android:visibility="visible"
         app:civ_border_overlay="true"
         app:civ_border_width="@dimen/border_profile_images" />

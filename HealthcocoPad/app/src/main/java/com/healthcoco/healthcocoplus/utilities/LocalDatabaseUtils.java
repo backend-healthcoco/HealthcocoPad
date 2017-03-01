@@ -53,7 +53,7 @@ public class LocalDatabaseUtils {
 
     public static final String KEY_FOREIGN_HOSPITAL_ID = "foreign_hospital_id";
     public static final String KEY_USER_ID = "user_id";
-    public static final String KEY_FOREIGN_PATIENT_ID = "foreign_record_id";
+    public static final String KEY_FOREIGN_PATIENT_ID = "foreign_patient_id";
     public static String KEY_FOREIGN_ROLE_ID = "foreign_role_id";
 
     public static String getSearchTermEqualsIgnoreCaseQuery(String filedName, String value) {

@@ -1,6 +1,8 @@
 package com.healthcoco.healthcocoplus;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -837,5 +839,36 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
                 }
             });
         }
+    }
+
+    public void refreshMenuFragment(User user) {
+//        DoctorProfile doctorProfile = LocalDataServiceImpl.getInstance(mApp).getDoctorProfileResponse(user.getUniqueId());
+//        if (doctorProfile != null)
+//            refreshMenuFragment(doctorProfile);
+    }
+
+    public void showCallConfirmationAlert(final String mobileNo) {
+        final AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
+        alertBuilder.setTitle(R.string.confirm);
+        alertBuilder.setMessage(getResources().getString(
+                R.string.confirm_call_number) + mobileNo);
+        alertBuilder.setCancelable(false);
+        alertBuilder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent callIntent = new Intent(Intent.ACTION_CALL);
+                callIntent.setData(Uri.parse("tel:" + mobileNo));
+                startActivity(callIntent);
+            }
+        });
+        alertBuilder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+        alertBuilder.create();
+        alertBuilder.show();
     }
 }
