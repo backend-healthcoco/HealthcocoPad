@@ -55,6 +55,7 @@ public class HomeActivity extends HealthCocoActivity implements View.OnClickList
     private LinearLayout layoutOtherFragments;
     private boolean receiversRegistered;
     private LinearLayout containerRightActionType;
+    private LinearLayout containerMiddleAction;
     private boolean loadDataOnDrawerClose;
     private User user;
     private SlidingPaneDrawerLayout sliding_pane_layout;
@@ -110,6 +111,7 @@ public class HomeActivity extends HealthCocoActivity implements View.OnClickList
     private void initViews() {
         sliding_pane_layout = (SlidingPaneDrawerLayout) findViewById(R.id.sliding_pane_layout);
         containerRightActionType = (LinearLayout) findViewById(R.id.container_right_action);
+        containerMiddleAction= (LinearLayout) findViewById(R.id.container_middle_action);
         layoutContactsFragment = (LinearLayout) findViewById(R.id.layout_contacts_fragment);
         layoutOtherFragments = (LinearLayout) findViewById(R.id.layout_right_detail);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -157,6 +159,28 @@ public class HomeActivity extends HealthCocoActivity implements View.OnClickList
         }
         setMenuItemSelected(fragmentType);
         initRightAction(fragmentType);
+        initMiddleAction(fragmentType);
+    }
+
+    private void initMiddleAction(FragmentType fragmentType) {
+        ActionbarLeftRightActionTypeDrawables middleActionType = fragmentType.getMiddleActionType();
+        containerMiddleAction.removeAllViews();
+        if (middleActionType != null && middleActionType.getLayoutId() > 0) {
+            containerMiddleAction.setVisibility(View.VISIBLE);
+            View rightView = getLayoutInflater().inflate(middleActionType.getLayoutId(), null);
+            if (rightView != null) {
+                if (middleActionType.isDrawableBackground()) {
+                    ImageButton imageButton = (ImageButton) rightView;
+                    imageButton.setImageResource(middleActionType.getDrawableTitleId());
+                } else {
+                    TextView button = (TextView) rightView;
+                    button.setText(middleActionType.getDrawableTitleId());
+                }
+                containerMiddleAction.addView(rightView);
+            }
+            containerMiddleAction.setTag(middleActionType);
+        } else
+            containerMiddleAction.setVisibility(View.GONE);
     }
 
     private void initRightAction(FragmentType fragmentType) {
@@ -311,9 +335,7 @@ public class HomeActivity extends HealthCocoActivity implements View.OnClickList
                 switch (selectedFramentType) {
                     case CONTACTS:
                         if (contactsFragment != null)
-//                            contactsFragment.notifyAdapter();
                             drawerLayout.openDrawer(GravityCompat.END);
-//                            sliding_pane_layout.openPane();
                         break;
                     case CALENDAR:
                         CalendarFragment calendarFragment = (CalendarFragment) getSupportFragmentManager().findFragmentByTag(CalendarFragment.class.getSimpleName());
@@ -322,8 +344,6 @@ public class HomeActivity extends HealthCocoActivity implements View.OnClickList
                         }
                         break;
                 }
-                break;
-
             default:
                 break;
         }

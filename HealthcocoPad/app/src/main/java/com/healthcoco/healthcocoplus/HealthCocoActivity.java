@@ -17,6 +17,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.Response;
@@ -805,6 +806,11 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
     public String getFormattedVersionName() {
         return String.format(getResources().getString(R.string.app_version_about_us_name),
                 getResources().getString(R.string.app_version_name));
+    }
+
+    public void initChangeViewButton(View.OnClickListener onClickListener) {
+        LinearLayout containerMiddleAction = (LinearLayout) findViewById(R.id.container_middle_action);
+        containerMiddleAction.setOnClickListener(onClickListener);
     }
 
     public void openLoginSignupActivity() {

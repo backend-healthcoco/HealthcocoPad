@@ -82,7 +82,7 @@
     <dimen name="text_size_settings_item">18sp</dimen>
     <dimen name="about_us_social_icon_size">25sp</dimen>
     <dimen name="item_contact_padding">15dp</dimen>
-    <dimen name="text_size_contact_list_name">25sp</dimen>
+    <dimen name="text_size_contact_list_name">22sp</dimen>
     <dimen name="text_size_contact_list_mobile">16sp</dimen>
     <dimen name="image_patient_profile_alphabet">50dp</dimen>
 

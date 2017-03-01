@@ -14,6 +14,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -77,6 +78,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
     //other variables
     private ProgressBar progressLoading;
     private GridViewLoadMore gvContacts;
+    private ListViewLoadMore lvContacts;
     private ContactsListAdapter adapter;
     private TextView tvNoPatients;
     private LinkedHashMap<String, RegisteredPatientDetailsUpdated> patientsListHashMap = new LinkedHashMap<>();
@@ -91,6 +93,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
     private boolean receiversRegistered = false;
     private boolean isInHomeActivity = true;
     private boolean isEditTextSearching;
+    private LinearLayout containerLv;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -198,8 +201,10 @@ public class ContactsListFragment extends HealthCocoFragment implements
     public void initViews() {
         progressLoading = (ProgressBar) view.findViewById(R.id.progress_loading);
         gvContacts = (GridViewLoadMore) view.findViewById(R.id.gv_contacts);
+        lvContacts = (ListViewLoadMore) view.findViewById(R.id.lv_contacts);
+        containerLv= (LinearLayout) view.findViewById(R.id.container_lv);
         tvNoPatients = (TextView) view.findViewById(R.id.tv_no_patients);
-        btAddNewPatient = (FloatingActionButton) view.findViewById(R.id.bt_add);
+        btAddNewPatient = (FloatingActionButton) view.findViewById(R.id.bt_add_patient);
 
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
 //        swipeRefreshLayout.setColorSchemeResources(R.color.blue_action_bar);
@@ -212,15 +217,17 @@ public class ContactsListFragment extends HealthCocoFragment implements
             initEditSearchView(R.string.name_mobile_number, this, false);
 //            btAddNewPatient.setVisibility(View.VISIBLE);
         }
-
     }
 
     @Override
     public void initListeners() {
         gvContacts.setLoadMoreListener(this);
+        lvContacts.setLoadMoreListener(this);
         gvContacts.setSwipeRefreshLayout(swipeRefreshLayout);
+        lvContacts.setSwipeRefreshLayout(swipeRefreshLayout);
         swipeRefreshLayout.setOnRefreshListener(this);
         btAddNewPatient.setOnClickListener(this);
+        mActivity.initChangeViewButton(this);
     }
 
     @Override
@@ -296,7 +303,15 @@ public class ContactsListFragment extends HealthCocoFragment implements
                     adapter.notifyDataSetChanged();
                 }
                 break;
-
+            case R.id.container_middle_action:
+                if (containerLv.getVisibility() == View.GONE) {
+                    gvContacts.setVisibility(View.GONE);
+                    containerLv.setVisibility(View.VISIBLE);
+                } else if (containerLv.getVisibility() == View.VISIBLE) {
+                    gvContacts.setVisibility(View.VISIBLE);
+                    containerLv.setVisibility(View.GONE);
+                }
+                break;
             default:
                 break;
         }
@@ -311,6 +326,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
     private void initAdapter() {
         adapter = new ContactsListAdapter(mActivity, this);
         gvContacts.setAdapter(adapter);
+        lvContacts.setAdapter(adapter);
     }
 
     private void notifyAdapter(List<RegisteredPatientDetailsUpdated> patientsList) {
@@ -523,7 +539,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
         String searchedText = String.valueOf(s).toLowerCase(Locale.ENGLISH).trim();
         if (!lastTextSearched.equalsIgnoreCase(searchedText)) {
             resetListAndPagingAttributes();
-                cancelPreviuosPagingRequests();
+            cancelPreviuosPagingRequests();
             LogUtils.LOGD(TAG, "TextChange afterTextChange");
             getListFromLocal(false, PAGE_NUMBER);
         }

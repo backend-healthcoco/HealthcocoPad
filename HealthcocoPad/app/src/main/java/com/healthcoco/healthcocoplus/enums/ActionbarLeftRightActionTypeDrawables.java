@@ -10,7 +10,7 @@ public enum ActionbarLeftRightActionTypeDrawables {
 //    WITH_BACK(true, ImageButton.class, R.drawable.selector_actionbar_back, R.layout.actionbar_image_button),
     WITH_FILTER(true, ImageButton.class, R.drawable.img_filter_contact_selector, R.layout.actionbar_image_button),
 //
-//    WITH_CROSS(true, ImageButton.class, R.drawable.close_selector, R.layout.actionbar_image_button),
+    WITH_CHAMGE_VIEW(true, ImageButton.class, R.drawable.ic_action_change_view, R.layout.actionbar_image_button),
 //    WITH_HOME(ImageButton.class, R.drawable.img_filter_contact_selector),
 
 //    WITH_DONE(false, AppCompatButton.class, R.string.done, R.layout.actionbar_button),

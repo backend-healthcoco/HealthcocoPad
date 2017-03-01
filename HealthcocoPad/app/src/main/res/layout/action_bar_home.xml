@@ -44,4 +44,16 @@
         android:orientation="horizontal"
         android:paddingLeft="40dp"
         android:paddingRight="10dp"></LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/container_middle_action"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:layout_toLeftOf="@+id/container_right_action"
+        android:clickable="true"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingLeft="40dp"
+        android:paddingRight="10dp"></LinearLayout>
 </RelativeLayout>
