@@ -14,9 +14,9 @@ public class Patient extends SugarRecord {
     private String bloodGroup;
 
     private String profession;
-//    @Ignore
-//    private List<Relations> relations;
-//
+    @Ignore
+    private List<Relations> relations;
+
     private String emailAddress;
 
     private String doctorId;
@@ -36,8 +36,8 @@ public class Patient extends SugarRecord {
     private String insuranceName;
     @Ignore
     private ArrayList<String> notes;
-//    @Ignore
-//    protected List<NotesTable> notesTableList;
+    @Ignore
+    protected List<NotesTable> notesTableList;
 
     public String getPatientId() {
         return patientId;
@@ -63,13 +63,13 @@ public class Patient extends SugarRecord {
         this.profession = profession;
     }
 
-//    public List<Relations> getRelations() {
-//        return relations;
-//    }
+    public List<Relations> getRelations() {
+        return relations;
+    }
 
-//    public void setRelations(List<Relations> relations) {
-//        this.relations = relations;
-//    }
+    public void setRelations(List<Relations> relations) {
+        this.relations = relations;
+    }
 
     public String getEmailAddress() {
         return emailAddress;
@@ -154,18 +154,17 @@ public class Patient extends SugarRecord {
     @Override
     public String toString() {
         return "Patient [patientId=" + patientId + ", bloodGroup=" + bloodGroup + ", profession=" + profession
-                 + ", emailAddress=" + emailAddress + ", doctorId=" + doctorId
+                + ", emailAddress=" + emailAddress + ", doctorId=" + doctorId
                 + ", addressId=" + addressId + ", secMobile=" + secMobile + ", adhaarId=" + adhaarId
                 + ", panCardNumber=" + panCardNumber + ", drivingLicenseId=" + drivingLicenseId + ", insuranceId="
                 + insuranceId + ", insuranceName=" + insuranceName + ", notes=" + notes + "]";
     }
 
-//    public List<NotesTable> getNotesTableList() {
-//        return notesTableList;
-//    }
-//
-//    public void setNotesTableList(List<NotesTable> notesTableList) {
-//        this.notesTableList = notesTableList;
-//    }
+    public List<NotesTable> getNotesTableList() {
+        return notesTableList;
+    }
 
+    public void setNotesTableList(List<NotesTable> notesTableList) {
+        this.notesTableList = notesTableList;
+    }
 }

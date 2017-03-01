@@ -185,4 +185,12 @@ public abstract class HealthCocoFragment extends Fragment implements GsonRequest
         else
             startActivityForResult(intent, requestCode);
     }
+
+    protected String getSearchEditTextValue() {
+        EditText editSearch = (EditText) view.findViewById(R.id.edit_search);
+        if (editSearch != null)
+            return Util.getValidatedValue(String.valueOf(editSearch.getText()));
+        return "";
+    }
+
 }
