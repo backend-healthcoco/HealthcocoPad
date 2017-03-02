@@ -46,6 +46,8 @@ public class HealthCocoConstants {
     public static int RESULT_CODE_SIGNUP_ALREADY_REGISTERED = 123;
     public static final int RESULT_CODE_GROUPS_LIST = 124;
     public static final int RESULT_CODE_SEARCH_NUMBER_RESULTS = 125;
+    public static final int REQUEST_CODE_GROUPS_LIST = 126;
+    public static final int RESULT_CODE_ADD_GROUP = 127;
     public static final String PARAM_SIZE = "&size=";
     public static final String PARAM_SEARCH_TERM = "&searchTerm=";
     public static final String PARAM_PAGE_AND = "&page=";
@@ -58,7 +60,10 @@ public class HealthCocoConstants {
     public static final String PARAM_LOCATION_ID = "&locationId=";
     public static final String PARAM_TAG_VIEW = "/view/?";
     public static final String TAG_SELECTED_USER_ID = "selectedPatientId";
-
     public static String SELECTED_PATIENTS_USER_ID = null;
+
+    public static final String TAG_MOBILE_NUMBER = "mobileNo";
     public static final String PARAM_TAG_DELETE = "/delete/";
+    public static final String TAG_ORDINAL_DIALOG_TYPE = "dialogTypeOrdinal";
+    public static final String TAG_ORDINAL_WEB_SERVICE_TYPE = "webServiceTypeOrdinal";
 }

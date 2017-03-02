@@ -1,5 +1,6 @@
 package com.healthcoco.healthcocoplus;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -213,4 +215,13 @@ public abstract class HealthCocoDialogFragment extends DialogFragment implements
         return null;
     }
 
+    /**
+     * Hides virtual keyboard
+     *
+     * @author nehas
+     */
+    protected void hideKeyboard(View view) {
+        InputMethodManager in = (InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
+        in.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+    }
 }

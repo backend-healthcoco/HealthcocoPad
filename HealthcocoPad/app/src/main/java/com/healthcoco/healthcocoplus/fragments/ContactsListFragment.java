@@ -22,6 +22,7 @@ import com.android.volley.Response;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocoplus.HealthCocoFragment;
 import com.healthcoco.healthcocoplus.activities.CommonOpenUpActivity;
+import com.healthcoco.healthcocoplus.activities.HomeActivity;
 import com.healthcoco.healthcocoplus.adapter.ContactsListAdapter;
 import com.healthcoco.healthcocoplus.bean.VolleyResponseBean;
 import com.healthcoco.healthcocoplus.bean.server.DoctorProfile;
@@ -29,6 +30,7 @@ import com.healthcoco.healthcocoplus.bean.server.LoginResponse;
 import com.healthcoco.healthcocoplus.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocoplus.bean.server.User;
 import com.healthcoco.healthcocoplus.custom.LocalDataBackgroundtaskOptimised;
+import com.healthcoco.healthcocoplus.enums.ChangeViewType;
 import com.healthcoco.healthcocoplus.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocoplus.enums.FilterItemType;
 import com.healthcoco.healthcocoplus.enums.LocalBackgroundTaskType;
@@ -94,6 +96,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
     private boolean isInHomeActivity = true;
     private boolean isEditTextSearching;
     private LinearLayout containerLv;
+    private ChangeViewType changeViewType = null;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -202,7 +205,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
         progressLoading = (ProgressBar) view.findViewById(R.id.progress_loading);
         gvContacts = (GridViewLoadMore) view.findViewById(R.id.gv_contacts);
         lvContacts = (ListViewLoadMore) view.findViewById(R.id.lv_contacts);
-        containerLv= (LinearLayout) view.findViewById(R.id.container_lv);
+        containerLv = (LinearLayout) view.findViewById(R.id.container_lv);
         tvNoPatients = (TextView) view.findViewById(R.id.tv_no_patients);
         btAddNewPatient = (FloatingActionButton) view.findViewById(R.id.bt_add_patient);
 
@@ -305,11 +308,18 @@ public class ContactsListFragment extends HealthCocoFragment implements
                 break;
             case R.id.container_middle_action:
                 if (containerLv.getVisibility() == View.GONE) {
+                    changeViewType = ChangeViewType.LIST_VIEW;
+                    adapter = new ContactsListAdapter(mActivity, this, changeViewType);
+                    lvContacts.setAdapter(adapter);
+                    notifyAdapter(new ArrayList<RegisteredPatientDetailsUpdated>(patientsListHashMap.values()));
                     gvContacts.setVisibility(View.GONE);
                     containerLv.setVisibility(View.VISIBLE);
+                    ((HomeActivity) mActivity).disableFilterButton();
                 } else if (containerLv.getVisibility() == View.VISIBLE) {
                     gvContacts.setVisibility(View.VISIBLE);
                     containerLv.setVisibility(View.GONE);
+                    changeViewType = ChangeViewType.GRID_VIEW;
+                    ((HomeActivity) mActivity).enableFilterButton();
                 }
                 break;
             default:
@@ -324,19 +334,27 @@ public class ContactsListFragment extends HealthCocoFragment implements
     }
 
     private void initAdapter() {
-        adapter = new ContactsListAdapter(mActivity, this);
+        changeViewType = ChangeViewType.GRID_VIEW;
+        adapter = new ContactsListAdapter(mActivity, this, changeViewType);
         gvContacts.setAdapter(adapter);
-        lvContacts.setAdapter(adapter);
     }
 
     private void notifyAdapter(List<RegisteredPatientDetailsUpdated> patientsList) {
         LogUtils.LOGD(TAG, "Success notifyAdapter :" + patientsList.size());
         if (!Util.isNullOrEmptyList(patientsList)) {
-            gvContacts.setVisibility(View.VISIBLE);
             tvNoPatients.setVisibility(View.GONE);
+            if (containerLv.getVisibility() == View.VISIBLE) {
+                gvContacts.setVisibility(View.GONE);
+                changeViewType = ChangeViewType.LIST_VIEW;
+            } else {
+                gvContacts.setVisibility(View.VISIBLE);
+                containerLv.setVisibility(View.GONE);
+                changeViewType = ChangeViewType.GRID_VIEW;
+            }
         } else {
-            gvContacts.setVisibility(View.GONE);
             tvNoPatients.setVisibility(View.VISIBLE);
+            gvContacts.setVisibility(View.GONE);
+            containerLv.setVisibility(View.GONE);
         }
         progressLoading.setVisibility(View.GONE);
         adapter.setListData(patientsList);

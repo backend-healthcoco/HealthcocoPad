@@ -2,15 +2,18 @@ package com.healthcoco.healthcocoplus.adapter;
 
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.BaseAdapter;
 
 import com.healthcoco.healthcocoplus.HealthCocoActivity;
 import com.healthcoco.healthcocoplus.bean.server.RegisteredPatientDetailsUpdated;
-import com.healthcoco.healthcocoplus.fragments.ContactsListFragment;
+import com.healthcoco.healthcocoplus.enums.ChangeViewType;
 import com.healthcoco.healthcocoplus.listeners.ContactsItemOptionsListener;
 import com.healthcoco.healthcocoplus.utilities.LogUtils;
 import com.healthcoco.healthcocoplus.utilities.Util;
+import com.healthcoco.healthcocoplus.viewholders.ContactsGridViewHolder;
 import com.healthcoco.healthcocoplus.viewholders.ContactsListViewHolder;
+import com.healthcoco.healthcocoplus.views.GridViewLoadMore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,12 +26,14 @@ public class ContactsListAdapter extends BaseAdapter {
     private ContactsItemOptionsListener contactsItemOptionsListener;
     private List<RegisteredPatientDetailsUpdated> mContacts;
     private HealthCocoActivity mActivity;
-    private ContactsListViewHolder holder;
+    private ContactsGridViewHolder gridViewHolder;
+    private ContactsListViewHolder listViewHolder;
+    private ChangeViewType changeViewType;
 
-
-    public ContactsListAdapter(HealthCocoActivity mActivity, ContactsItemOptionsListener contactsItemOptionsListener) {
+    public ContactsListAdapter(HealthCocoActivity mActivity, ContactsItemOptionsListener contactsItemOptionsListener, ChangeViewType changeViewType) {
         this.mActivity = mActivity;
         this.contactsItemOptionsListener = contactsItemOptionsListener;
+        this.changeViewType = changeViewType;
     }
 
     public void setListData(final List<RegisteredPatientDetailsUpdated> contacts) {
@@ -67,16 +72,40 @@ public class ContactsListAdapter extends BaseAdapter {
         RegisteredPatientDetailsUpdated patient = (RegisteredPatientDetailsUpdated) getItem(position);
         boolean loadImage;
         if (convertView == null) {
-            holder = new ContactsListViewHolder(mActivity, contactsItemOptionsListener, position);
-            convertView = holder.getConvertView();
-            convertView.setTag(holder);
+            switch (changeViewType) {
+                case GRID_VIEW:
+                    gridViewHolder = new ContactsGridViewHolder(mActivity, contactsItemOptionsListener, position);
+                    convertView = gridViewHolder.getConvertView();
+                    convertView.setTag(gridViewHolder);
+                    break;
+                case LIST_VIEW:
+                    listViewHolder = new ContactsListViewHolder(mActivity, contactsItemOptionsListener, position);
+                    convertView = listViewHolder.getConvertView();
+                    convertView.setTag(listViewHolder);
+                    break;
+            }
             loadImage = true;
         } else {
-            holder = (ContactsListViewHolder) convertView.getTag();
-            loadImage = false;
+            switch (changeViewType) {
+                case GRID_VIEW:
+                    gridViewHolder = (ContactsGridViewHolder) convertView.getTag();
+                    break;
+                case LIST_VIEW:
+                    listViewHolder = (ContactsListViewHolder) convertView.getTag();
+                    break;
+            }
         }
-        holder.setData(patient);
-        holder.applyData();
+        loadImage = false;
+        switch (changeViewType) {
+            case GRID_VIEW:
+                gridViewHolder.setData(patient);
+                gridViewHolder.applyData();
+                break;
+            case LIST_VIEW:
+                listViewHolder.setData(patient);
+                listViewHolder.applyData();
+                break;
+        }
         return convertView;
     }
 }

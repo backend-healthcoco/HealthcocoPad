@@ -77,6 +77,7 @@ import com.healthcoco.healthcocoplus.enums.LocalTabelType;
 import com.healthcoco.healthcocoplus.enums.WebServiceType;
 import com.healthcoco.healthcocoplus.enums.WeekDayNameType;
 import com.healthcoco.healthcocoplus.fragments.ClinicalProfileFragment;
+import com.healthcoco.healthcocoplus.fragments.MenuDrawerFragment;
 import com.healthcoco.healthcocoplus.services.GsonRequest;
 import com.healthcoco.healthcocoplus.utilities.DateTimeUtil;
 import com.healthcoco.healthcocoplus.utilities.HealthCocoConstants;
@@ -1759,5 +1760,15 @@ public class LocalDataServiceImpl {
 
     public void clearPatientsList() {
         RegisteredPatientDetailsUpdated.deleteAll(RegisteredPatientDetailsUpdated.class);
+    }
+    public RegisteredPatientDetailsUpdated getPatient(String selecetdPatientId) {
+        RegisteredPatientDetailsUpdated patient = Select.from(RegisteredPatientDetailsUpdated.class)
+                .where(Condition.prop(LocalDatabaseUtils.KEY_USER_ID).eq(selecetdPatientId),
+                        Condition.prop(LocalDatabaseUtils.KEY_LOCATION_ID).eq(MenuDrawerFragment.SELECTED_LOCATION_ID)).first();
+        if (patient != null) {
+            RegisteredPatientDetailsUpdated patientDetail = getPatientRestDetails(patient);
+            return patientDetail;
+        }
+        return null;
     }
 }

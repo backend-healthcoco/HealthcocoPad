@@ -111,7 +111,7 @@ public class HomeActivity extends HealthCocoActivity implements View.OnClickList
     private void initViews() {
         sliding_pane_layout = (SlidingPaneDrawerLayout) findViewById(R.id.sliding_pane_layout);
         containerRightActionType = (LinearLayout) findViewById(R.id.container_right_action);
-        containerMiddleAction= (LinearLayout) findViewById(R.id.container_middle_action);
+        containerMiddleAction = (LinearLayout) findViewById(R.id.container_middle_action);
         layoutContactsFragment = (LinearLayout) findViewById(R.id.layout_contacts_fragment);
         layoutOtherFragments = (LinearLayout) findViewById(R.id.layout_right_detail);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -294,7 +294,7 @@ public class HomeActivity extends HealthCocoActivity implements View.OnClickList
         menuFragment = new MenuDrawerFragment();
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.add(R.id.fragment_master, menuFragment,menuFragment.getClass().getSimpleName());
+        transaction.add(R.id.fragment_master, menuFragment, menuFragment.getClass().getSimpleName());
         transaction.commitAllowingStateLoss();
     }
 
@@ -348,9 +348,15 @@ public class HomeActivity extends HealthCocoActivity implements View.OnClickList
                 break;
         }
     }
+
     public void closePaneLayout(FragmentType fragmentType) {
         selectedFramentType = fragmentType;
         sliding_pane_layout.closePane();
+    }
+
+    public void disableFilterButton() {
+        containerRightActionType.setFocusable(false);
+        containerRightActionType.setClickable(false);
     }
 
     @Override
@@ -374,5 +380,21 @@ public class HomeActivity extends HealthCocoActivity implements View.OnClickList
             mApp.cancelAllPendingRequests();
             super.onBackPressed();
         }
+    }
+
+    public void enableFilterButton() {
+        containerRightActionType.setFocusable(true);
+        containerRightActionType.setClickable(false);
+    }
+
+    public void closePaneLayout() {
+        sliding_pane_layout.closePane();
+    }
+
+    public void disableRightDrawer(boolean disable) {
+        if (disable)
+            drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_OPEN, GravityCompat.END);
+        else
+            drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, GravityCompat.END);
     }
 }

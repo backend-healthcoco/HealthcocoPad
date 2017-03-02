@@ -1,5 +1,7 @@
 package com.healthcoco.healthcocoplus.activities;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -22,6 +24,7 @@ import com.healthcoco.healthcocoplus.enums.ActionbarType;
 import com.healthcoco.healthcocoplus.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocoplus.fragments.AboutUsFragment;
 import com.healthcoco.healthcocoplus.fragments.AddEditClinicImageFragment;
+import com.healthcoco.healthcocoplus.fragments.AddNewPrescriptionFragment;
 import com.healthcoco.healthcocoplus.fragments.FeedbackFragment;
 import com.healthcoco.healthcocoplus.fragments.InitialSyncFragment;
 import com.healthcoco.healthcocoplus.fragments.LoginSignupFragment;
@@ -126,6 +129,9 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
                 break;
             case SETTINGS_UI_PERMISSION_PATIENT_TAB:
                 openFragment(ActionbarType.TITLE, ActionbarLeftRightActionType.WITH_CROSS, ActionbarLeftRightActionType.WITH_SAVE, R.string.patient_tab_ui_permission_details, new PrescriptionUIPermissionFragment());
+                break;
+            case ADD_NEW_PRESCRIPTION:
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionType.WITH_CROSS, ActionbarLeftRightActionType.WITH_SAVE, R.string.new_prescription, new AddNewPrescriptionFragment());
                 break;
         }
     }
@@ -264,7 +270,7 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
     private void finishThisActivity() {
         if (fragmentType != null) {
             switch (fragmentType) {
-//                case ADD_NEW_PRESCRIPTION:
+                case ADD_NEW_PRESCRIPTION:
 //                case ADD_CLINICAL_NOTE:
 //                case ADD_DRUG_DETAIL:
 //                case ADD_NEW_TEMPLATE:
@@ -272,14 +278,38 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
 //                case PATIENT_REGISTRATION:
 //                case ADD_VISIT:
 //                case BOOK_APPOINTMENT:
-//                    showFinishConfirmationAlert();
-//                    break;
+                    showFinishConfirmationAlert();
+                    break;
                 default:
                     finish();
                     break;
             }
         } else
             finish();
+    }
+
+    private void showFinishConfirmationAlert() {
+        final AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
+        alertBuilder.setTitle(R.string.alert);
+        alertBuilder.setMessage(R.string.your_changes_will_not_be_saved);
+        alertBuilder.setCancelable(false);
+        alertBuilder.setPositiveButton(R.string.leave, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                finish();
+            }
+        });
+        alertBuilder.setNegativeButton(R.string.stay, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        alertBuilder.create();
+        alertBuilder.show();
     }
 
     public void initSaveButton(View.OnClickListener listener) {

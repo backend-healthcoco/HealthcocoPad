@@ -412,4 +412,39 @@
 
     <!-- Prescription -->
     <string name="new_prescription">New Prescription</string>
+
+    <string name="your_changes_will_not_be_saved">Your changes will not be saved.\nAre you sure you want to leave this page ?</string>
+    <string name="alert">Alert</string>
+    <string name="leave">Leave</string>
+    <string name="stay">Stay</string>
+    <string name="new_drug">New Drug</string>
+    <string name="enter_group_name">Enter Group name</string>
+    <string name="please_enter_group_name">Please enter Group Name</string>
+    <string name="please_enter_disease_name">Please enter Disease Name</string>
+    <string name="please_write_note">Please write a Note</string>
+    <string name="enter_name">Enter Name</string>
+    <string name="enter_reference">Enter Reference</string>
+    <string name="enter_email_address">Enter Email Address</string>
+
+    <string name="enter_frequency_dose">Enter Frequency</string>
+    <string name="enter_drug">Enter Drug</string>
+    <string name="enter_direction">Enter Direction</string>
+    <string name="enter_history">Enter History</string>
+    <string name="enter_disease">Enter Disease</string>
+    <string name="please_enter_patient_name">Please enter Patient Name</string>
+    <string name="please_enter_reference">Please enter Reference</string>
+    <string name="please_enter_direction">Please enter Direction</string>
+    <string name="please_enter_frequency">Please enter Frequency</string>
+    <string name="please_enter_history">Please enter History</string>
+    <string name="please_enter_drug">Please enter Drug</string>
+    <string name="please_enter_test_name">Please enter Test Name</string>
+    <string name="please_enter_reffered_by_name">Please enter Referred By Name</string>
+    <string name="please_enter_feedback">Please enter Feedback</string>
+    <string name="enter_patient_mobile_number">Enter Patient Mobile Number</string>
+    <string name="enter_new_patient_name">Enter New Patient Name</string>
+    <string name="patient_name">Patient Name</string>
+    <string name="new_test">New Test</string>
+    <string name="test_name">Test Name</string>
+    <string name="new_note">New Note</string>
+    <string name="write_a_note">Write a Note</string>
 </resources>

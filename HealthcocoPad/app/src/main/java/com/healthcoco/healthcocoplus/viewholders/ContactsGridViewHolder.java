@@ -16,12 +16,11 @@ import com.healthcoco.healthcocoplus.listeners.ContactsItemOptionsListener;
 import com.healthcoco.healthcocoplus.listeners.ImageLoadedListener;
 import com.healthcoco.healthcocoplus.utilities.DownloadImageFromUrlUtil;
 import com.healthcoco.healthcocoplus.utilities.LogUtils;
-import com.healthcoco.healthcocoplus.utilities.ScreenDimensions;
 import com.healthcoco.healthcocoplus.utilities.Util;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
-public class ContactsListViewHolder implements OnClickListener, ImageLoadedListener {
-    private final String TAG = ContactsListViewHolder.class.getSimpleName();
+public class ContactsGridViewHolder implements OnClickListener, ImageLoadedListener {
+    private final String TAG = ContactsGridViewHolder.class.getSimpleName();
     private final ImageLoader imageLoader;
     private HealthCocoActivity mActivity;
     private View convertView;
@@ -34,10 +33,17 @@ public class ContactsListViewHolder implements OnClickListener, ImageLoadedListe
     private ImageView ivContactProfile;
     private ImageButton btMail;
     private ImageButton btCall;
+    public TextView tvHeaderView;
     private TextView tvInitialAlphabet;
     private LinearLayout containerTop;
+    private TextView tvCreatedTime;
+    private TextView tvPatientId;
+    private ImageButton btEdit;
+    private ImageButton btQueue;
+    private ImageButton btGroup;
+    private ImageButton btPrescription;
 
-    public ContactsListViewHolder(HealthCocoActivity mActivity, ContactsItemOptionsListener optionsListener, int position) {
+    public ContactsGridViewHolder(HealthCocoActivity mActivity, ContactsItemOptionsListener optionsListener, int position) {
         this.mActivity = mActivity;
         this.optionsListener = optionsListener;
         this.position = position;
@@ -50,32 +56,32 @@ public class ContactsListViewHolder implements OnClickListener, ImageLoadedListe
 
     public void applyData() {
         LogUtils.LOGD(TAG, "Unique Id " + objData.getUniqueId());
-//        scrollViewContactsItems.fullScroll(HorizontalScrollView.FOCUS_LEFT);
         tvContactName.setText(Util.getValidatedValue(objData.getLocalPatientName()));
         tvContactNumber.setText(Util.getValidatedValue(objData.getMobileNumber()));
+        tvPatientId.setText(Util.getValidatedValue(objData.getPid()));
         DownloadImageFromUrlUtil.loadImageWithInitialAlphabet(mActivity, PatientProfileScreenType.IN_PATIENTS_LIST, objData, null, ivContactProfile, tvInitialAlphabet);
     }
 
     public View getConvertView() {
-        convertView = mActivity.getLayoutInflater().inflate(R.layout.list_item_contacts, null);
-//        scrollViewContactsItems = (ContactsListItemHorizontalScrollView) convertView.findViewById(R.id.scrollview_contacts_item);
-        containerTop = (LinearLayout) convertView.findViewById(R.id.container_top);
-        containerTop.setLayoutParams(new LinearLayout.LayoutParams(ScreenDimensions.SCREEN_WIDTH, LinearLayout.LayoutParams.MATCH_PARENT));
+        convertView = mActivity.getLayoutInflater().inflate(R.layout.grid_item_contacts, null);
         tvContactName = (TextView) convertView.findViewById(R.id.tv_contact_name);
         tvContactNumber = (TextView) convertView.findViewById(R.id.tv_contact_number);
+        tvPatientId = (TextView) convertView.findViewById(R.id.tv_patient_id);
+        btEdit = (ImageButton) convertView.findViewById(R.id.bt_edit);
+        btQueue = (ImageButton) convertView.findViewById(R.id.bt_queue);
         btCall = (ImageButton) convertView.findViewById(R.id.bt_call);
-        btMail = (ImageButton) convertView.findViewById(R.id.bt_mail);
-        btAddToGroup = (ImageButton) convertView.findViewById(R.id.bt_group);
+        btGroup = (ImageButton) convertView.findViewById(R.id.bt_call);
+        btPrescription = (ImageButton) convertView.findViewById(R.id.bt_call);
         tvInitialAlphabet = (TextView) convertView.findViewById(R.id.tv_initial_aplhabet);
         ivContactProfile = (ImageView) convertView.findViewById(R.id.iv_image);
+        containerTop = (LinearLayout) convertView.findViewById(R.id.container_top);
 
-        btAddToGroup.setTag(position);
+        btEdit.setOnClickListener(this);
+        btQueue.setOnClickListener(this);
         btCall.setOnClickListener(this);
-        btMail.setOnClickListener(this);
-        btAddToGroup.setOnClickListener(this);
+        btGroup.setOnClickListener(this);
+        btPrescription.setOnClickListener(this);
         containerTop.setOnClickListener(this);
-//        scrollViewContactsItems.setSwipeRefreshLayout(optionsListener.getSwipeRefreshLayout());
-//        containerTop.setOnTouchListener(new ContactsListScollViewTouchListener(mActivity));
 
         return convertView;
     }
@@ -83,13 +89,19 @@ public class ContactsListViewHolder implements OnClickListener, ImageLoadedListe
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.bt_group:
-                optionsListener.onAddToGroupClicked(objData);
+            case R.id.bt_edit:
+//                optionsListener.onAddToGroupClicked(objData);
+                break;
+            case R.id.bt_queue:
+//                optionsListener.onCallClicked(objData);
                 break;
             case R.id.bt_call:
                 optionsListener.onCallClicked(objData);
                 break;
-            case R.id.bt_mail:
+            case R.id.bt_group:
+//                optionsListener.onAddPrescriptionClicked(objData);
+                break;
+            case R.id.bt_prescription:
                 optionsListener.onAddPrescriptionClicked(objData);
                 break;
             case R.id.container_top:
