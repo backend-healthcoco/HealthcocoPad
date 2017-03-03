@@ -326,6 +326,10 @@ public class Util {
         showAlert(context, "ALERT", msg);
     }
 
+    public static void showAlert(Context context, int msgId) {
+        showAlert(context, "ALERT", context.getResources().getString(msgId));
+    }
+
     public static void showAlert(Context context, int tittle, int msg) {
         AlertDialog.Builder alertBuilder = new AlertDialog.Builder(context);
         alertBuilder.setTitle(tittle);

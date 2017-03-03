@@ -16,6 +16,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.healthcoco.healthcocopad.R;
+import com.healthcoco.healthcocoplus.bean.server.AlreadyRegisteredPatientsResponse;
 import com.healthcoco.healthcocoplus.bean.server.ClinicDoctorProfile;
 import com.healthcoco.healthcocoplus.bean.server.DoctorProfile;
 import com.healthcoco.healthcocoplus.bean.server.RegisteredPatientDetailsUpdated;
@@ -65,11 +66,11 @@ public class DownloadImageFromUrlUtil {
                 url = registeredPatientDetailsDetailsUpdated.getThumbnailUrl();
                 colorCode = registeredPatientDetailsDetailsUpdated.getColorCode();
                 name = registeredPatientDetailsDetailsUpdated.getLocalPatientName();
-//            } else if (object instanceof AlreadyRegisteredPatientsResponse) {
-//                AlreadyRegisteredPatientsResponse alreadyRegisteredPatientsResponse = (AlreadyRegisteredPatientsResponse) object;
-//                url = alreadyRegisteredPatientsResponse.getThumbnailUrl();
-//                colorCode = alreadyRegisteredPatientsResponse.getColorCode();
-//                name = alreadyRegisteredPatientsResponse.getFirstName();
+            } else if (object instanceof AlreadyRegisteredPatientsResponse) {
+                AlreadyRegisteredPatientsResponse alreadyRegisteredPatientsResponse = (AlreadyRegisteredPatientsResponse) object;
+                url = alreadyRegisteredPatientsResponse.getThumbnailUrl();
+                colorCode = alreadyRegisteredPatientsResponse.getColorCode();
+                name = alreadyRegisteredPatientsResponse.getFirstName();
             } else if (object instanceof DoctorProfile) {
                 DoctorProfile doctor = (DoctorProfile) object;
                 url = doctor.getThumbnailUrl();

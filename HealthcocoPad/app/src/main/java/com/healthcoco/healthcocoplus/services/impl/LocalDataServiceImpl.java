@@ -1864,4 +1864,9 @@ public class LocalDataServiceImpl {
         AlreadyRegisteredPatientsResponse.deleteAll(AlreadyRegisteredPatientsResponse.class);
         AlreadyRegisteredPatientsResponse.saveInTx(list);
     }
+
+    public List<AlreadyRegisteredPatientsResponse> getAlreadyRegisteredPatientsList(WebServiceType webServiceType, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        List<AlreadyRegisteredPatientsResponse> list = AlreadyRegisteredPatientsResponse.listAll(AlreadyRegisteredPatientsResponse.class);
+        return list;
+    }
 }

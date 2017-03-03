@@ -13,4 +13,7 @@
     <string name="fa_linked_in">&#xf0e1;</string>
     <string name="fa_twitter">&#xf099;</string>
     <string name="fa_sync">&#xf021;</string>
+    <string name="icon_text_register_new_patient">&#xf055; Register New Patient</string>
+    <string name="fa_globe">&#xf0ac;</string>
+    <string name="fa_clinic">&#xf0ac;</string>
 </resources>

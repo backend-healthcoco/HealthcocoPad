@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <include layout="@layout/action_bar_title_cross"></include>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:gravity="center"
+            android:text="@string/please_enter_patient_mobile_number_to_register"
+            android:textColor="@color/grey_dark_text"
+            android:textSize="18sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:orientation="horizontal">
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@drawable/edit_text_bottom_line_blue"
+                android:gravity="center"
+                android:inputType="phone"
+                android:text="@string/text_91"
+                android:textColor="@color/black"
+                android:textSize="@dimen/texrt_size_patient_mobile_search_number" />
+
+            <EditText
+                android:id="@+id/edit_mobile_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edit_text_bottom_line_blue"
+                android:hint="@string/mobile_number"
+                android:inputType="number"
+                android:maxLength="10"
+                android:padding="10dp"
+                android:textColorHint="@color/grey_hint_color"
+                android:textSize="@dimen/texrt_size_patient_mobile_search_number" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/bt_proceed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/shape_rounded_corners_solid_blue"
+            android:gravity="center"
+            android:minHeight="0dp"
+            android:padding="8dp"
+            android:text="@string/proceed"
+            android:textAllCaps="false"
+            android:textColor="@color/color_selector_white_translucent"
+            android:textSize="18sp" />
+    </LinearLayout>
+</LinearLayout>

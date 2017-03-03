@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -28,6 +29,8 @@ import com.healthcoco.healthcocoplus.fragments.AddNewPrescriptionFragment;
 import com.healthcoco.healthcocoplus.fragments.FeedbackFragment;
 import com.healthcoco.healthcocoplus.fragments.InitialSyncFragment;
 import com.healthcoco.healthcocoplus.fragments.LoginSignupFragment;
+import com.healthcoco.healthcocoplus.fragments.PatientDetailFragmentUpdated;
+import com.healthcoco.healthcocoplus.fragments.PatientRegistrationFragment;
 import com.healthcoco.healthcocoplus.fragments.PrescriptionUIPermissionFragment;
 import com.healthcoco.healthcocoplus.fragments.SettingUIPermissionsFragment;
 import com.healthcoco.healthcocoplus.fragments.WebViewFragments;
@@ -133,7 +136,24 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
             case ADD_NEW_PRESCRIPTION:
                 openFragment(ActionbarType.TITLE, ActionbarLeftRightActionType.WITH_CROSS, ActionbarLeftRightActionType.WITH_SAVE, R.string.new_prescription, new AddNewPrescriptionFragment());
                 break;
+            case PATIENT_REGISTRATION:
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionType.WITH_BACK, ActionbarLeftRightActionType.WITH_SAVE, fragmentType.getTitleId(), new PatientRegistrationFragment());
+                break;
+            case PATIENT_DETAIL:
+                hideSoftKeyboardOnStartUp();
+                openFragment(new PatientDetailFragmentUpdated());
+                break;
         }
+    }
+
+    private void hideSoftKeyboardOnStartUp() {
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+    }
+
+    private void openFragment(HealthCocoFragment fragment) {
+        hideActionBar();
+        transaction.add(R.id.layout_fragment_common_open_up, fragment, fragment.getClass().getSimpleName());
+        transaction.commit();
     }
 
     private void openFragment(ActionbarType actionbarType, HealthCocoFragment fragment) {
@@ -275,7 +295,7 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
 //                case ADD_DRUG_DETAIL:
 //                case ADD_NEW_TEMPLATE:
 //                case ADD_RECORD_DETAIL:
-//                case PATIENT_REGISTRATION:
+                case PATIENT_REGISTRATION:
 //                case ADD_VISIT:
 //                case BOOK_APPOINTMENT:
                     showFinishConfirmationAlert();

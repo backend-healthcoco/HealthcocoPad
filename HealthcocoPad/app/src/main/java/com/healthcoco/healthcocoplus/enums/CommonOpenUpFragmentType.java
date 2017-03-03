@@ -25,7 +25,8 @@ public enum CommonOpenUpFragmentType {
     SETTINGS_UI_PERMISSION_CLINICAL_NOTES(R.string.clinical_notes_ui_permission_details),
     PATIENT_NUMBER_SEARCH(R.string.patient_mobile_number),
     SETTINGS_UI_PERMISSION_VISITS(R.string.visits_ui_permission_details), ADD_NEW_PRESCRIPTION(R.string.new_prescription),
-    SETTINGS_UI_PERMISSION_PATIENT_TAB(R.string.patient_tab_ui_permission_details);
+    SETTINGS_UI_PERMISSION_PATIENT_TAB(R.string.patient_tab_ui_permission_details),
+    PATIENT_REGISTRATION(R.string.new_contact);
 
     private final int titleId;
 

@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public enum HealthCocoFileType {
     ENLARGED_IMAGE("Enlarged Images", ImageUtil.DEFAULT_IMAGE_EXTENSION),
     CLINIC_IMAGE("Clinic Image", ImageUtil.DEFAULT_IMAGE_EXTENSION),
-
+    PATIENT_PROFILE("Patients", ImageUtil.DEFAULT_IMAGE_EXTENSION),
     DOCTOR_COVER_IMAGE("Doctor Cover Image", ImageUtil.DEFAULT_IMAGE_EXTENSION);
 
     private final String folderName;

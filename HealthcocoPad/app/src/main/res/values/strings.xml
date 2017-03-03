@@ -450,4 +450,7 @@
     <string name="proceed">Proceed</string>
     <string name="please_enter_patient_mobile_number_to_register">Please Enter Patient Mobile Number To Register</string>
     <string name="patient_search">Patient Search</string>
+
+    <string name="alert_nine_patients_already_registered">9 Patients already registered on this number</string>
+
 </resources>
