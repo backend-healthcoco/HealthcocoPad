@@ -42,7 +42,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="10dp"
+                        android:maxLines="1"
                         android:text="Name"
+                        android:fontFamily="sans-serif"
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_size_contact_list_name" />
 
@@ -50,6 +52,7 @@
                         android:id="@+id/tv_contact_number"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:maxLines="1"
                         android:text="1234567890"
                         android:textSize="@dimen/text_size_contact_list_mobile" />
                 </LinearLayout>

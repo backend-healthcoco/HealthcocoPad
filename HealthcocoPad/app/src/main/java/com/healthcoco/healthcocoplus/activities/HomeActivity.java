@@ -354,10 +354,6 @@ public class HomeActivity extends HealthCocoActivity implements View.OnClickList
         sliding_pane_layout.closePane();
     }
 
-    public void disableFilterButton() {
-        containerRightActionType.setFocusable(false);
-        containerRightActionType.setClickable(false);
-    }
 
     @Override
     public void onBackPressed() {
@@ -383,12 +379,21 @@ public class HomeActivity extends HealthCocoActivity implements View.OnClickList
     }
 
     public void enableFilterButton() {
-        containerRightActionType.setFocusable(true);
-        containerRightActionType.setClickable(false);
+        containerRightActionType.setEnabled(true);
+    }
+
+    public void disableFilterButton() {
+        containerRightActionType.setEnabled(false);
     }
 
     public void closePaneLayout() {
         sliding_pane_layout.closePane();
+    }
+
+    public void closeDrawer() {
+        if (drawerLayout.isShown()) {
+            drawerLayout.closeDrawers();
+        }
     }
 
     public void disableRightDrawer(boolean disable) {

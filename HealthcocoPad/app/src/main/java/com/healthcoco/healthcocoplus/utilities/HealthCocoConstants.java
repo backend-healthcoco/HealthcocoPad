@@ -48,6 +48,7 @@ public class HealthCocoConstants {
     public static final int RESULT_CODE_SEARCH_NUMBER_RESULTS = 125;
     public static final int REQUEST_CODE_GROUPS_LIST = 126;
     public static final int RESULT_CODE_ADD_GROUP = 127;
+    public static final int RESULT_CODE_REGISTRATION = 128;
     public static final String PARAM_SIZE = "&size=";
     public static final String PARAM_SEARCH_TERM = "&searchTerm=";
     public static final String PARAM_PAGE_AND = "&page=";

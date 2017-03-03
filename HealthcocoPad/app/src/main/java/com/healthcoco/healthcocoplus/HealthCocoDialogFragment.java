@@ -170,6 +170,16 @@ public abstract class HealthCocoDialogFragment extends DialogFragment implements
         });
     }
 
+    protected void initCrossButton() {
+        ImageButton btSave = (ImageButton) view.findViewById(R.id.bt_cross);
+        btSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
+    }
+
     protected void initCancelButton() {
         LinearLayout containerLeftAction = (LinearLayout) view.findViewById(R.id.container_left_action);
         containerLeftAction.setOnClickListener(new View.OnClickListener() {

@@ -447,4 +447,7 @@
     <string name="test_name">Test Name</string>
     <string name="new_note">New Note</string>
     <string name="write_a_note">Write a Note</string>
+    <string name="proceed">Proceed</string>
+    <string name="please_enter_patient_mobile_number_to_register">Please Enter Patient Mobile Number To Register</string>
+    <string name="patient_search">Patient Search</string>
 </resources>

@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
@@ -80,7 +79,6 @@ public class FilterFragment extends HealthCocoFragment implements Response.Liste
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
     }
 
     @Override
@@ -95,13 +93,14 @@ public class FilterFragment extends HealthCocoFragment implements Response.Liste
                 setSelectedItem(FilterItemType.ALL_PATIENTS);
             }
         }
+        getGroupsListFromLocal();
     }
 
     @Override
     public void initViews() {
         lvGroups = (ListViewLoadMore) view.findViewById(R.id.lv_groups);
         tvNoGroups = (TextView) view.findViewById(R.id.tv_no_groups);
-        btAddNewGroup = (ImageButton) view.findViewById(R.id.bt_add);
+        btAddNewGroup = (ImageButton) view.findViewById(R.id.bt_add_to_group);
         tvAllPatients = (TextView) view.findViewById(R.id.tv_all_patients);
         tvRecentlyVisited = (TextView) view.findViewById(R.id.tv_recently_visited);
         tvMostVisited = (TextView) view.findViewById(R.id.tv_most_visited);
@@ -143,10 +142,8 @@ public class FilterFragment extends HealthCocoFragment implements Response.Liste
                     if (response.isDataFromLocal()) {
                         groupsList = (ArrayList<UserGroups>) (ArrayList<?>) response
                                 .getDataList();
-
                         if (!Util.isNullOrEmptyList(groupsList)) {
                             LogUtils.LOGD(TAG, "Success onResponse list Size in page " + groupsList.size());
-
                         }
                         notifyAdapter(groupsList);
                     } else if (!Util.isNullOrEmptyList(response.getDataList())) {
@@ -187,7 +184,7 @@ public class FilterFragment extends HealthCocoFragment implements Response.Liste
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.bt_add:
+            case R.id.bt_add_to_group:
                 openAddUpdateNameDialogFragment(WebServiceType.ADD_NEW_GROUP, AddUpdateNameDialogType.GROUPS, this, user, "", HealthCocoConstants.REQUEST_CODE_GROUPS_LIST);
                 break;
             case R.id.tv_all_patients:
@@ -249,7 +246,6 @@ public class FilterFragment extends HealthCocoFragment implements Response.Liste
         }
     }
 
-
     @Override
     public void onGroupItemClicked(UserGroups group) {
         int selectedGroupPosition = groupsList.indexOf(group);
@@ -261,13 +257,12 @@ public class FilterFragment extends HealthCocoFragment implements Response.Liste
 
     private void senBroadCastToContactsFragment(FilterItemType itemType, Object intentData) {
         try {
-            ((HomeActivity) mActivity).closePaneLayout();
+            ((HomeActivity) mActivity).closeDrawer();
             Intent intent = new Intent();
             switch (itemType) {
                 case GROUP_ITEM:
                     intent.putExtra(HealthCocoConstants.TAG_GROUP_ID, (String) intentData);
                     break;
-
             }
             intent.putExtra(HealthCocoConstants.TAG_ORDINAL, itemType.ordinal());
             intent.setAction(ContactsListFragment.INTENT_FILTER_TYPE);
@@ -295,7 +290,6 @@ public class FilterFragment extends HealthCocoFragment implements Response.Liste
         //Get groupsList
         Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.USER_GROUP);
         WebDataServiceImpl.getInstance(mApp).getGroupsList(WebServiceType.GET_GROUPS, UserGroups.class, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(), latestUpdatedTime, null, this, this);
-
     }
 
     @Override

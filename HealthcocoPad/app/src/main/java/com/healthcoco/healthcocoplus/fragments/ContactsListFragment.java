@@ -12,8 +12,10 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -24,12 +26,17 @@ import com.healthcoco.healthcocoplus.HealthCocoFragment;
 import com.healthcoco.healthcocoplus.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocoplus.activities.HomeActivity;
 import com.healthcoco.healthcocoplus.adapter.ContactsListAdapter;
+import com.healthcoco.healthcocoplus.adapter.FilterGroupListAdapter;
 import com.healthcoco.healthcocoplus.bean.VolleyResponseBean;
 import com.healthcoco.healthcocoplus.bean.server.DoctorProfile;
 import com.healthcoco.healthcocoplus.bean.server.LoginResponse;
 import com.healthcoco.healthcocoplus.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocoplus.bean.server.User;
+import com.healthcoco.healthcocoplus.bean.server.UserGroups;
 import com.healthcoco.healthcocoplus.custom.LocalDataBackgroundtaskOptimised;
+import com.healthcoco.healthcocoplus.dialogFragment.ComparatorUtil;
+import com.healthcoco.healthcocoplus.dialogFragment.PatientNumberSearchDialogFragment;
+import com.healthcoco.healthcocoplus.enums.AddUpdateNameDialogType;
 import com.healthcoco.healthcocoplus.enums.ChangeViewType;
 import com.healthcoco.healthcocoplus.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocoplus.enums.FilterItemType;
@@ -39,6 +46,7 @@ import com.healthcoco.healthcocoplus.enums.WebServiceType;
 import com.healthcoco.healthcocoplus.listeners.ContactsItemOptionsListener;
 import com.healthcoco.healthcocoplus.listeners.LoadMorePageListener;
 import com.healthcoco.healthcocoplus.listeners.LocalDoInBackgroundListenerOptimised;
+import com.healthcoco.healthcocoplus.listeners.OnFilterItemClickListener;
 import com.healthcoco.healthcocoplus.services.GsonRequest;
 import com.healthcoco.healthcocoplus.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocoplus.services.impl.WebDataServiceImpl;
@@ -49,6 +57,7 @@ import com.healthcoco.healthcocoplus.views.GridViewLoadMore;
 import com.healthcoco.healthcocoplus.views.ListViewLoadMore;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -59,7 +68,7 @@ import java.util.Locale;
 public class ContactsListFragment extends HealthCocoFragment implements
         LoadMorePageListener, SwipeRefreshLayout.OnRefreshListener, View.OnClickListener, TextWatcher,
         GsonRequest.ErrorListener, Response.Listener<VolleyResponseBean>, LocalDoInBackgroundListenerOptimised,
-        ContactsItemOptionsListener {
+        ContactsItemOptionsListener, View.OnTouchListener, OnFilterItemClickListener {
     public static final String TAG_IS_IN_HOME_ACTIVITY = "isInHomeActivity";
     //required if contacts list is not in HomeScreen
     public static final String INTENT_FINISH_CONTACTS_LIST_SCREEN = "com.healthcoco.FINISH_CONTACTS_LIST_SCREEN";
@@ -97,6 +106,19 @@ public class ContactsListFragment extends HealthCocoFragment implements
     private boolean isEditTextSearching;
     private LinearLayout containerLv;
     private ChangeViewType changeViewType = null;
+    //For Filter Layout
+    public static final String INTENT_REFRESH_FRAGMENT = "com.healthcoco.FILTER_TYPE";
+    private ArrayList<UserGroups> groupsList;
+    private ListViewLoadMore lvGroups;
+    private ImageButton btAddNewGroup;
+    private TextView tvNoGroups;
+    private FilterGroupListAdapter filterAdapter;
+    private TextView tvAllPatients;
+    private TextView tvRecentlyVisited;
+    private TextView tvMostVisited;
+    private TextView tvRecentlyAdded;
+    private SwipeRefreshLayout swipeRefreshFilterLayout;
+    private String selectedFilterTitle;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -131,7 +153,12 @@ public class ContactsListFragment extends HealthCocoFragment implements
             init();
             syncDoctorProfile();
             getListFromLocal(true, 0);
+            if (user != null && !Util.isNullOrBlank(user.getUniqueId())) {
+                setSelectedItem(FilterItemType.ALL_PATIENTS);
+            }
+            getGroupsListFromLocal();
         }
+
     }
 
     private void syncDoctorProfile() {
@@ -164,8 +191,6 @@ public class ContactsListFragment extends HealthCocoFragment implements
             IntentFilter contactsListServerIntentFilter = new IntentFilter();
             contactsListServerIntentFilter.addAction(INTENT_REFRESH_CONTACTS_LIST_FROM_SERVER);
             LocalBroadcastManager.getInstance(mActivity).registerReceiver(contactsListFromServerReceiver, contactsListServerIntentFilter);
-
-            receiversRegistered = true;
         }
     }
 
@@ -190,6 +215,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
         initViews();
         initListeners();
         initAdapter();
+        initFilterGroupAdapter();
     }
 
     public void getContactsList(boolean showLoading) {
@@ -220,6 +246,17 @@ public class ContactsListFragment extends HealthCocoFragment implements
             initEditSearchView(R.string.name_mobile_number, this, false);
 //            btAddNewPatient.setVisibility(View.VISIBLE);
         }
+
+        //For Filter Layout
+        lvGroups = (ListViewLoadMore) view.findViewById(R.id.lv_groups);
+        tvNoGroups = (TextView) view.findViewById(R.id.tv_no_groups);
+        btAddNewGroup = (ImageButton) view.findViewById(R.id.bt_add_to_group);
+        tvAllPatients = (TextView) view.findViewById(R.id.tv_all_patients);
+        tvRecentlyVisited = (TextView) view.findViewById(R.id.tv_recently_visited);
+        tvMostVisited = (TextView) view.findViewById(R.id.tv_most_visited);
+        tvRecentlyAdded = (TextView) view.findViewById(R.id.tv_recently_added);
+        swipeRefreshFilterLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
+        swipeRefreshFilterLayout.setColorSchemeResources(R.color.blue_action_bar);
     }
 
     @Override
@@ -231,6 +268,21 @@ public class ContactsListFragment extends HealthCocoFragment implements
         swipeRefreshLayout.setOnRefreshListener(this);
         btAddNewPatient.setOnClickListener(this);
         mActivity.initChangeViewButton(this);
+
+        //For Filter Layout
+        swipeRefreshFilterLayout.setOnRefreshListener(this);
+        lvGroups.setSwipeRefreshLayout(swipeRefreshLayout);
+        btAddNewGroup.setOnClickListener(this);
+        tvAllPatients.setOnClickListener(this);
+        tvRecentlyVisited.setOnClickListener(this);
+        tvMostVisited.setOnClickListener(this);
+        tvRecentlyAdded.setOnClickListener(this);
+        lvGroups.setOnTouchListener(this);
+    }
+
+    private void initFilterGroupAdapter() {
+        filterAdapter = new FilterGroupListAdapter(mActivity, this);
+        lvGroups.setAdapter(filterAdapter);
     }
 
     @Override
@@ -298,7 +350,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.bt_add:
+            case R.id.bt_add_patient:
                 if (!isInHomeActivity) {
 //                    openAddUpdateNameDialogFragment(null, AddUpdateNameDialogType.ADD_PATIENT_MOBILE_NUMBER, this, user, "", 0);
                 } else {
@@ -322,15 +374,38 @@ public class ContactsListFragment extends HealthCocoFragment implements
                     ((HomeActivity) mActivity).enableFilterButton();
                 }
                 break;
+            case R.id.bt_add_to_group:
+                openAddUpdateNameDialogFragment(WebServiceType.ADD_NEW_GROUP, AddUpdateNameDialogType.GROUPS, this, user, "", HealthCocoConstants.REQUEST_CODE_GROUPS_LIST);
+                break;
+            case R.id.tv_all_patients:
+                senBroadCastToContactsFragment(FilterItemType.ALL_PATIENTS, null);
+                setSelectedItem(FilterItemType.ALL_PATIENTS);
+                refreshHomeScreenTitle(getResources().getString(R.string.my_patients));
+                break;
+            case R.id.tv_recently_visited:
+                senBroadCastToContactsFragment(FilterItemType.RECENTLY_VISITED, null);
+                setSelectedItem(FilterItemType.RECENTLY_VISITED);
+                refreshHomeScreenTitle(getResources().getString(R.string.recently_visited));
+                break;
+            case R.id.tv_most_visited:
+                senBroadCastToContactsFragment(FilterItemType.MOST_VISITED, null);
+                setSelectedItem(FilterItemType.MOST_VISITED);
+                refreshHomeScreenTitle(getResources().getString(R.string.most_visited));
+                break;
+            case R.id.tv_recently_added:
+                senBroadCastToContactsFragment(FilterItemType.RECENTLY_ADDED, null);
+                setSelectedItem(FilterItemType.RECENTLY_ADDED);
+                refreshHomeScreenTitle(getResources().getString(R.string.recently_added));
+                break;
             default:
                 break;
         }
     }
 
     private void openPatientMobileNumberDialogFragment() {
-        Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
-        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.PATIENT_NUMBER_SEARCH.ordinal());
-        startActivityForResult(intent, HealthCocoConstants.REQUEST_CODE_CONTACTS_LIST);
+        PatientNumberSearchDialogFragment patientNumberSearchDialogFragment = new PatientNumberSearchDialogFragment();
+        patientNumberSearchDialogFragment.setTargetFragment(this, HealthCocoConstants.REQUEST_CODE_CONTACTS_LIST);
+        patientNumberSearchDialogFragment.show(mFragmentManager, patientNumberSearchDialogFragment.getClass().getSimpleName());
     }
 
     private void initAdapter() {
@@ -353,8 +428,11 @@ public class ContactsListFragment extends HealthCocoFragment implements
             }
         } else {
             tvNoPatients.setVisibility(View.VISIBLE);
-            gvContacts.setVisibility(View.GONE);
-            containerLv.setVisibility(View.GONE);
+            if (containerLv.getVisibility() == View.VISIBLE) {
+                containerLv.setVisibility(View.VISIBLE);
+            } else {
+                gvContacts.setVisibility(View.GONE);
+            }
         }
         progressLoading.setVisibility(View.GONE);
         adapter.setListData(patientsList);
@@ -425,6 +503,21 @@ public class ContactsListFragment extends HealthCocoFragment implements
                         return;
                     }
                     break;
+                case GET_GROUPS:
+                    if (response.isDataFromLocal()) {
+                        groupsList = (ArrayList<UserGroups>) (ArrayList<?>) response
+                                .getDataList();
+                        if (!Util.isNullOrEmptyList(groupsList)) {
+                            LogUtils.LOGD(TAG, "Success onResponse list Size in page " + groupsList.size());
+                        }
+                        notifyFilterAdapter(groupsList);
+                    } else if (!Util.isNullOrEmptyList(response.getDataList())) {
+                        new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_GROUPS_LIST, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                        response.setIsFromLocalAfterApiSuccess(true);
+                        return;
+                    }
+                    swipeRefreshFilterLayout.setRefreshing(false);
+                    break;
                 default:
                     break;
             }
@@ -469,58 +562,6 @@ public class ContactsListFragment extends HealthCocoFragment implements
     }
 
     @Override
-    public VolleyResponseBean doInBackground(VolleyResponseBean response) {
-        VolleyResponseBean volleyResponseBean = null;
-        switch (response.getLocalBackgroundTaskType()) {
-            case ADD_DOCTOR_PROFILE:
-                if (response.getData() != null)
-                    LocalDataServiceImpl.getInstance(mApp).
-                            addDoctorProfile((DoctorProfile) response.getData());
-                break;
-            case ADD_PATIENTS:
-                LocalDataServiceImpl.getInstance(mApp).
-                        addPatientsList((ArrayList<RegisteredPatientDetailsUpdated>) (ArrayList<?>) response.getDataList());
-                filterList(filterType);
-                break;
-            case GET_PATIENTS:
-            case SEARCH_PATIENTS:
-//                volleyResponseBean = LocalDataServiceImpl.getInstance(mApp)
-//                        .getPatientsListPageWise(WebServiceType.GET_CONTACTS, user.getUniqueId(),
-//                                user.getForeignHospitalId(), user.getForeignLocationId(),
-//                                 currentPageNumber, MAX_SIZE, null, null);
-                volleyResponseBean = LocalDataServiceImpl.getInstance(mApp)
-                        .getSearchedPatientsListPageWise(WebServiceType.GET_CONTACTS, user.getUniqueId(),
-                                user.getForeignHospitalId(), user.getForeignLocationId(),
-                                currentPageNumber, MAX_SIZE, getSearchEditTextValue(), null, null);
-                break;
-//            case SEARCH_PATIENTS:
-//                volleyResponseBean = LocalDataServiceImpl.getInstance(mApp)
-//                        .getSearchedPatientsListPageWise(WebServiceType.GET_CONTACTS, user.getUniqueId(),
-//                                user.getForeignHospitalId(), user.getForeignLocationId(), currentPageNumber, MAX_SIZE, getSearchEditTextValue(), null, null);
-//            break;
-            case SORT_LIST_BY_GROUP:
-//                volleyResponseBean = LocalDataServiceImpl.getInstance(mApp)
-//                        .getPatientsListWithGroup(WebServiceType.GET_CONTACTS, user.getUniqueId(),
-//                                user.getForeignHospitalId(), user.getForeignLocationId(), selectedGroupId,
-//                                false, currentPageNumber, MAX_SIZE, null, null);
-                break;
-            case SORT_LIST_BY_RECENTLY_ADDED:
-//                volleyResponseBean = LocalDataServiceImpl.getInstance(mApp)
-//                        .getPatientsListByFilterType(WebServiceType.GET_CONTACTS, user.getUniqueId(),
-//                                user.getForeignHospitalId(), user.getForeignLocationId(), filterType,
-//                                false, currentPageNumber, MAX_SIZE, null, null);
-                break;
-            case CLEAR_PATIENTS:
-                LocalDataServiceImpl.getInstance(mApp).clearPatientsList();
-                break;
-        }
-        if (volleyResponseBean == null)
-            volleyResponseBean = new VolleyResponseBean();
-        volleyResponseBean.setIsFromLocalAfterApiSuccess(response.isFromLocalAfterApiSuccess());
-        return volleyResponseBean;
-    }
-
-    @Override
     public void onPostExecute(VolleyResponseBean volleyResponseBean) {
     }
 
@@ -536,6 +577,10 @@ public class ContactsListFragment extends HealthCocoFragment implements
                 filterList(filterType);
             } else if (resultCode == HealthCocoConstants.RESULT_CODE_SEARCH_NUMBER_RESULTS) {
                 mActivity.finish();
+            }
+        } else if (requestCode == HealthCocoConstants.REQUEST_CODE_GROUPS_LIST) {
+            if (resultCode == HealthCocoConstants.RESULT_CODE_ADD_GROUP) {
+                getGroupsListFromLocal();
             }
         }
     }
@@ -567,7 +612,12 @@ public class ContactsListFragment extends HealthCocoFragment implements
     @Override
     public void onRefresh() {
         getContactsList(false);
-//        mActivity.syncGroups(user);
+        LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
+        if (doctor != null)
+            user = doctor.getUser();
+        //Get groupsList
+        Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.USER_GROUP);
+        WebDataServiceImpl.getInstance(mApp).getGroupsList(WebServiceType.GET_GROUPS, UserGroups.class, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(), latestUpdatedTime, null, this, this);
     }
 
     BroadcastReceiver filterReceiver = new BroadcastReceiver() {
@@ -662,7 +712,6 @@ public class ContactsListFragment extends HealthCocoFragment implements
             PAGE_NUMBER++;
             getListFromLocal(false, PAGE_NUMBER);
         }
-
     }
 
     @Override
@@ -716,4 +765,160 @@ public class ContactsListFragment extends HealthCocoFragment implements
     public FilterItemType getSelectedFilterType() {
         return filterType;
     }
+
+    //For Filter Layout
+    public void getGroupsListFromLocal() {
+        notifyFilterAdapter(null);
+        LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
+        if (doctor != null)
+            user = doctor.getUser();
+        LocalDataServiceImpl.getInstance(mApp).getUserGroups(WebServiceType.GET_GROUPS, null, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(), this, this);
+    }
+
+    private void notifyFilterAdapter(ArrayList<UserGroups> list) {
+        if (!Util.isNullOrEmptyList(list)) {
+            Collections.sort(list, ComparatorUtil.groupDateComparator);
+            lvGroups.setVisibility(View.VISIBLE);
+            tvNoGroups.setVisibility(View.GONE);
+            filterAdapter.setListData(list);
+            filterAdapter.notifyDataSetChanged();
+        } else {
+            lvGroups.setVisibility(View.GONE);
+            tvNoGroups.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void refreshHomeScreenTitle(String title) {
+        this.selectedFilterTitle = title;
+        ((HomeActivity) mActivity).setActionbarTitle(title);
+    }
+
+    public void setSelectedItem(FilterItemType filterItemType) {
+        clearPreviuosFilters(null);
+        switch (filterItemType) {
+            case RECENTLY_VISITED:
+                tvRecentlyVisited.setSelected(true);
+                break;
+            case RECENTLY_ADDED:
+                tvRecentlyAdded.setSelected(true);
+                break;
+            case ALL_PATIENTS:
+                tvAllPatients.setSelected(true);
+                break;
+            case MOST_VISITED:
+                tvMostVisited.setSelected(true);
+                break;
+        }
+    }
+
+    private void clearPreviuosFilters(String groupId) {
+        try {
+            tvAllPatients.setSelected(false);
+            tvRecentlyVisited.setSelected(false);
+            tvMostVisited.setSelected(false);
+            tvRecentlyAdded.setSelected(false);
+            filterAdapter.setSelectedGroupId(groupId);
+            filterAdapter.notifyDataSetChanged();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onGroupItemClicked(UserGroups group) {
+        int selectedGroupPosition = groupsList.indexOf(group);
+        LogUtils.LOGD(TAG, "Selected Group Position " + selectedGroupPosition);
+        clearPreviuosFilters(group.getUniqueId());
+        senBroadCastToContactsFragment(FilterItemType.GROUP_ITEM, group.getUniqueId());
+        refreshHomeScreenTitle(group.getName());
+    }
+
+    private void senBroadCastToContactsFragment(FilterItemType itemType, Object intentData) {
+        try {
+            Intent intent = new Intent();
+            switch (itemType) {
+                case GROUP_ITEM:
+                    intent.putExtra(HealthCocoConstants.TAG_GROUP_ID, (String) intentData);
+                    break;
+            }
+            intent.putExtra(HealthCocoConstants.TAG_ORDINAL, itemType.ordinal());
+            intent.setAction(ContactsListFragment.INTENT_FILTER_TYPE);
+            LocalBroadcastManager.getInstance(mApp.getApplicationContext()).sendBroadcast(intent);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                disableDrawer(true);
+                break;
+            case MotionEvent.ACTION_UP:
+                disableDrawer(false);
+                break;
+
+        }
+        return false;
+    }
+
+    private void disableDrawer(boolean disable) {
+        ((HomeActivity) mActivity).disableRightDrawer(disable);
+    }
+
+    @Override
+    public VolleyResponseBean doInBackground(VolleyResponseBean response) {
+        VolleyResponseBean volleyResponseBean = null;
+        switch (response.getLocalBackgroundTaskType()) {
+            case ADD_GROUPS_LIST:
+                LocalDataServiceImpl.getInstance(mApp).addUserGroupsList((ArrayList<UserGroups>) (ArrayList<?>) response
+                        .getDataList());
+            case GET_GROUPS:
+                volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getUserGroups(WebServiceType.GET_GROUPS, null, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(), null, null);
+                break;
+            case ADD_DOCTOR_PROFILE:
+                if (response.getData() != null)
+                    LocalDataServiceImpl.getInstance(mApp).
+                            addDoctorProfile((DoctorProfile) response.getData());
+                break;
+            case ADD_PATIENTS:
+                LocalDataServiceImpl.getInstance(mApp).
+                        addPatientsList((ArrayList<RegisteredPatientDetailsUpdated>) (ArrayList<?>) response.getDataList());
+                filterList(filterType);
+                break;
+            case GET_PATIENTS:
+            case SEARCH_PATIENTS:
+                volleyResponseBean = LocalDataServiceImpl.getInstance(mApp)
+                        .getSearchedPatientsListPageWise(WebServiceType.GET_CONTACTS, user.getUniqueId(),
+                                user.getForeignHospitalId(), user.getForeignLocationId(),
+                                currentPageNumber, MAX_SIZE, getSearchEditTextValue(), null, null);
+                break;
+            case SORT_LIST_BY_GROUP:
+                volleyResponseBean = LocalDataServiceImpl.getInstance(mApp)
+                        .getPatientsListWithGroup(WebServiceType.GET_CONTACTS, user.getUniqueId(),
+                                user.getForeignHospitalId(), user.getForeignLocationId(), selectedGroupId,
+                                false, currentPageNumber, MAX_SIZE, null, null);
+                break;
+            case SORT_LIST_BY_RECENTLY_ADDED:
+                volleyResponseBean = LocalDataServiceImpl.getInstance(mApp)
+                        .getPatientsListByFilterType(WebServiceType.GET_CONTACTS, user.getUniqueId(),
+                                user.getForeignHospitalId(), user.getForeignLocationId(), filterType,
+                                false, currentPageNumber, MAX_SIZE, null, null);
+                break;
+            case CLEAR_PATIENTS:
+                LocalDataServiceImpl.getInstance(mApp).clearPatientsList();
+                break;
+        }
+        if (volleyResponseBean == null)
+            volleyResponseBean = new VolleyResponseBean();
+        volleyResponseBean.setIsFromLocalAfterApiSuccess(response.isFromLocalAfterApiSuccess());
+        return volleyResponseBean;
+    }
+
+    public String getSelectedFilterTitle() {
+        return selectedFilterTitle;
+    }
+
+
 }

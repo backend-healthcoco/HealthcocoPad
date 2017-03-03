@@ -31,7 +31,7 @@ public class LocalDatabaseUtils {
     public static final String KEY_PATIENT_ID = "patient_id";
     public static final String KEY_FOREIGN_PRESCRIPTION_ID = "foreign_prescription_id";
     public static final String KEY_FOREIGN_DURATION_ID = "foreign_duration_id";
-
+    public static final String KEY_FOREIGN_GROUP_ID = "foreign_group_id";
     public static final String KEY_FOREIGN_DRUG_DURATION_UNIT_ID = "foreign_drug_duration_unit";
     public static final String KEY_UNIQUE_ID = "unique_id";
     public static final String KEY_APPOINTMENT_ID = "appointment_id";

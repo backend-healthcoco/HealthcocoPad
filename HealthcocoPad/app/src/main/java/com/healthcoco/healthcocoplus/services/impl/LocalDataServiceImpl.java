@@ -7,6 +7,7 @@ import com.android.volley.Response;
 import com.google.gson.Gson;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocoplus.HealthCocoApplication;
+import com.healthcoco.healthcocoplus.bean.server.AlreadyRegisteredPatientsResponse;
 import com.healthcoco.healthcocoplus.bean.server.AssignedGroupsTable;
 import com.healthcoco.healthcocoplus.bean.server.NotesTable;
 import com.healthcoco.healthcocoplus.bean.server.PatientIdGroupId;
@@ -71,7 +72,9 @@ import com.healthcoco.healthcocoplus.bean.server.User;
 import com.healthcoco.healthcocoplus.bean.server.UserGroups;
 import com.healthcoco.healthcocoplus.bean.server.WorkingHours;
 import com.healthcoco.healthcocoplus.bean.server.WorkingSchedule;
+import com.healthcoco.healthcocoplus.dialogFragment.ComparatorUtil;
 import com.healthcoco.healthcocoplus.enums.BooleanTypeValues;
+import com.healthcoco.healthcocoplus.enums.FilterItemType;
 import com.healthcoco.healthcocoplus.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocoplus.enums.LocalTabelType;
 import com.healthcoco.healthcocoplus.enums.WebServiceType;
@@ -91,6 +94,7 @@ import com.orm.query.Condition;
 import com.orm.query.Select;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -1761,6 +1765,7 @@ public class LocalDataServiceImpl {
     public void clearPatientsList() {
         RegisteredPatientDetailsUpdated.deleteAll(RegisteredPatientDetailsUpdated.class);
     }
+
     public RegisteredPatientDetailsUpdated getPatient(String selecetdPatientId) {
         RegisteredPatientDetailsUpdated patient = Select.from(RegisteredPatientDetailsUpdated.class)
                 .where(Condition.prop(LocalDatabaseUtils.KEY_USER_ID).eq(selecetdPatientId),
@@ -1770,5 +1775,93 @@ public class LocalDataServiceImpl {
             return patientDetail;
         }
         return null;
+    }
+
+    public VolleyResponseBean getPatientsListWithGroup(WebServiceType webServiceType, String doctorId, String hospitalId, String locationId, String groupId,
+                                                       boolean discarded, int pageNum, int maxSize,
+                                                       Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
+        volleyResponseBean.setWebServiceType(webServiceType);
+        volleyResponseBean.setDataFromLocal(true);
+        volleyResponseBean.setUserOnline(HealthCocoConstants.isNetworkOnline);
+        try {
+            //forming where condition query
+            String whereCondition = "Select * from " + StringUtil.toSQLName(PatientIdGroupId.class.getSimpleName())
+                    + " where "
+                    + LocalDatabaseUtils.KEY_FOREIGN_GROUP_ID + "=\"" + groupId + "\"";
+
+            //specifying order by limit and offset query
+            String conditionsLimit = " ORDER BY " + LocalDatabaseUtils.KEY_LOCAL_PATIENT_NAME + " COLLATE NOCASE ASC  "
+                    + " LIMIT " + maxSize
+                    + " OFFSET " + (pageNum * maxSize);
+
+            whereCondition = whereCondition + conditionsLimit;
+            LogUtils.LOGD(TAG, "Select Query " + whereCondition);
+            List<PatientIdGroupId> list = SugarRecord.findWithQuery(PatientIdGroupId.class, whereCondition);
+            List<RegisteredPatientDetailsUpdated> patientsList = new ArrayList<>();
+            if (!Util.isNullOrEmptyList(list)) {
+                for (PatientIdGroupId patientIdGroupId :
+                        list) {
+                    RegisteredPatientDetailsUpdated registeredPatientDetailsUpdated = getPatient(patientIdGroupId.getForeignPatientId());
+                    if (registeredPatientDetailsUpdated != null) {
+                        patientsList.add(registeredPatientDetailsUpdated);
+                    }
+                }
+                if (!Util.isNullOrEmptyList(patientsList))
+                    Collections.sort(patientsList, ComparatorUtil.patientsNameComparator);
+            }
+            volleyResponseBean.setDataList(getObjectsListFromMap(patientsList));
+            if (responseListener != null)
+                responseListener.onResponse(volleyResponseBean);
+        } catch (Exception e) {
+            e.printStackTrace();
+            showErrorLocal(volleyResponseBean, errorListener);
+        }
+        return volleyResponseBean;
+    }
+
+    public VolleyResponseBean getPatientsListByFilterType(WebServiceType webServiceType, String doctorId, String hospitalId, String locationId, FilterItemType filterItemType,
+                                                          boolean discarded, int pageNum, int maxSize,
+                                                          Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
+        volleyResponseBean.setWebServiceType(webServiceType);
+        volleyResponseBean.setDataFromLocal(true);
+        volleyResponseBean.setUserOnline(HealthCocoConstants.isNetworkOnline);
+        try {
+            //forming where condition query
+            String whereCondition = "Select * from " + StringUtil.toSQLName(RegisteredPatientDetailsUpdated.class.getSimpleName())
+                    + " where "
+                    + LocalDatabaseUtils.KEY_DOCTOR_ID + "=\"" + doctorId + "\""
+                    + " AND "
+                    + LocalDatabaseUtils.KEY_HOSPITAL_ID + "=\"" + hospitalId + "\""
+                    + " AND "
+                    + LocalDatabaseUtils.KEY_LOCATION_ID + "=\"" + locationId + "\"";
+            //specifying order by limit and offset query
+            String conditionsLimit = " ORDER BY " + LocalDatabaseUtils.KEY_CREATED_TIME + " DESC "
+                    + " LIMIT " + maxSize
+                    + " OFFSET " + (pageNum * maxSize);
+
+            whereCondition = whereCondition + conditionsLimit;
+            LogUtils.LOGD(TAG, "Select Query " + whereCondition);
+            List<RegisteredPatientDetailsUpdated> list = SugarRecord.findWithQuery(RegisteredPatientDetailsUpdated.class, whereCondition);
+
+            if (!Util.isNullOrEmptyList(list)) {
+                for (RegisteredPatientDetailsUpdated registeredPatientDetailsUpdated : list) {
+                    getPatientRestDetails(registeredPatientDetailsUpdated);
+                }
+            }
+            volleyResponseBean.setDataList(getObjectsListFromMap(list));
+            if (responseListener != null)
+                responseListener.onResponse(volleyResponseBean);
+        } catch (Exception e) {
+            e.printStackTrace();
+            showErrorLocal(volleyResponseBean, errorListener);
+        }
+        return volleyResponseBean;
+    }
+
+    public void addAlreadyRegisteredPatients(ArrayList<AlreadyRegisteredPatientsResponse> list) {
+        AlreadyRegisteredPatientsResponse.deleteAll(AlreadyRegisteredPatientsResponse.class);
+        AlreadyRegisteredPatientsResponse.saveInTx(list);
     }
 }

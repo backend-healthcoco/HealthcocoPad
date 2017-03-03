@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -877,4 +878,14 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
         alertBuilder.create();
         alertBuilder.show();
     }
+
+    /**
+     * Shows the soft keyboard
+     */
+    public void showSoftKeyboard(View view) {
+        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+        view.requestFocus();
+        inputMethodManager.showSoftInput(view, 0);
+    }
+
 }

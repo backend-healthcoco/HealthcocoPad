@@ -177,7 +177,6 @@ public class AddEditAppointmentDetailDialogFragment extends HealthCocoDialogFrag
         }
     }
 
-
     @Override
     public void onClick(View v) {
         Util.checkNetworkStatus(mActivity);

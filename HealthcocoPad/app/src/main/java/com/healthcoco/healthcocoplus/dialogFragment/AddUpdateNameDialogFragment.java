@@ -242,7 +242,7 @@ public class AddUpdateNameDialogFragment extends HealthCocoDialogFragment implem
 
     private void registerPatient(String name) {
         mActivity.showLoading(false);
-//        String mobileNumber = bundle.getString(HealthCocoConstants.TAG_MOBILE_NUMBER);
+        String mobileNumber = bundle.getString(HealthCocoConstants.TAG_MOBILE_NUMBER);
 //        AlreadyRegisteredPatientsResponse alreadyRegisteredPatient = LocalDataServiceImpl.getInstance(mApp).getALreadyRegisteredPatient(uniqueId);
 //        RegisterNewPatientRequest patientDetails = new RegisterNewPatientRequest();
 //        patientDetails.setLocalPatientName(name);

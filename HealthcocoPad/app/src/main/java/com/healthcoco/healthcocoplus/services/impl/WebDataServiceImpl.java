@@ -266,7 +266,6 @@ public class WebDataServiceImpl {
             getResponse(webServiceType, class1, url, null, null, responseListener, errorListener);
         } else {
             LocalDataServiceImpl.getInstance(mApp).getUserGroups(webServiceType, patientsAssignedGroupIdList, doctorId, locationId, hospitalId, responseListener, errorListener);
-
         }
     }
 
@@ -545,6 +544,21 @@ public class WebDataServiceImpl {
                     errorListener);
         } else {
             errorListener.onNetworkUnavailable(webServiceType);
+        }
+    }
+
+    public void getAlreadyRegisteredPatients(Class<?> class1, String mobileNo, String doctorId, String locationId, String hospitalId, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        WebServiceType webServiceType = WebServiceType.SEARCH_PATIENTS;
+        Util.checkNetworkStatus(mApp.getApplicationContext());
+        if (HealthCocoConstants.isNetworkOnline) {
+            String Url = webServiceType.getUrl()
+                    + mobileNo + "/"
+                    + doctorId + "/"
+                    + locationId + "/"
+                    + hospitalId;
+            getResponse(webServiceType, class1, Url, null, null, responseListener, errorListener);
+        } else {
+            errorListener.onErrorResponse(null, mApp.getResources().getString(R.string.user_offline));
         }
     }
 }

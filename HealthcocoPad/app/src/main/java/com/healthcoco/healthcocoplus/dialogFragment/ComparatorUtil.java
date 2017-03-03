@@ -2,6 +2,7 @@ package com.healthcoco.healthcocoplus.dialogFragment;
 
 import android.text.TextUtils;
 
+import com.healthcoco.healthcocoplus.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocoplus.bean.server.Specialities;
 import com.healthcoco.healthcocoplus.bean.server.UserGroups;
 
@@ -37,6 +38,15 @@ public class ComparatorUtil {
                 return date2.compareTo(date1);
             }
             return 0;
+        }
+    };
+    public static Comparator<RegisteredPatientDetailsUpdated> patientsNameComparator = new Comparator<RegisteredPatientDetailsUpdated>() {
+
+        @Override
+        public int compare(RegisteredPatientDetailsUpdated registeredPatientDetailsUpdated1, RegisteredPatientDetailsUpdated registeredPatientDetailsUpdated2) {
+            String patientName1 = TextUtils.isEmpty(registeredPatientDetailsUpdated1.getLocalPatientName()) ? "" : registeredPatientDetailsUpdated1.getLocalPatientName().trim().toUpperCase(Locale.getDefault());
+            String patientName2 = TextUtils.isEmpty(registeredPatientDetailsUpdated2.getLocalPatientName()) ? "" : registeredPatientDetailsUpdated2.getLocalPatientName().trim().toUpperCase(Locale.getDefault());
+            return patientName1.compareTo(patientName2);
         }
     };
 }
