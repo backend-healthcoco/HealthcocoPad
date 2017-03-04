@@ -19,6 +19,9 @@ public class HealthCocoConstants {
     public static final String TAG_NAME_EDIT_TYPE = "nameEditDeleteType";
     public static final String TAG_ORDINAL = "ordinal";
     public static final String TAG_GROUP_ID = "group_id";
+    public static final String TAG_GROUP_IDS_LIST = "groupsIdsList";
+    public static final String TAG_IS_EDIT_PATIENT = "isEditPatient";
+    public static final String TAG_NOTES_LIST = "notesList";
     public static final int REQUEST_CODE_CONTACTS_DETAIL = 100;
     public static final int RESULT_CODE_ADD_PRESCIPTION = 101;
     public static final int REQUEST_CODE_CAMERA = 102;
@@ -49,6 +52,8 @@ public class HealthCocoConstants {
     public static final int REQUEST_CODE_GROUPS_LIST = 126;
     public static final int RESULT_CODE_ADD_GROUP = 127;
     public static final int RESULT_CODE_REGISTRATION = 128;
+    public static final int REQUEST_CODE_REGISTRATION = 129;
+    public static final int RESULT_CODE_NOTES_LIST = 130;
     public static final String PARAM_SIZE = "&size=";
     public static final String PARAM_SEARCH_TERM = "&searchTerm=";
     public static final String PARAM_PAGE_AND = "&page=";

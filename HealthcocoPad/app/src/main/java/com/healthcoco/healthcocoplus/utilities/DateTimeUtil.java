@@ -81,12 +81,14 @@ public class DateTimeUtil {
         calendar.set(0, 0, 0, hour, minute, 00);
         return (String) DateFormat.format(format, calendar.getTime());
     }
+
     public static String getFormattedTime(int hour, int minute) {
         String delegate = "hh:mm aaa";
         Calendar calendar = Calendar.getInstance();
         calendar.set(0, 0, 0, hour, minute, 00);
         return (String) DateFormat.format(delegate, calendar.getTime());
     }
+
     /**
      * Returns a string that describes the number of days
      * between timeOne and timeTwo.
@@ -204,6 +206,7 @@ public class DateTimeUtil {
         return true;
 
     }
+
     /**
      * if fomrattedFrom time is null or blank wil return current calnedar time
      * else
@@ -238,6 +241,7 @@ public class DateTimeUtil {
         }
         return calendar;
     }
+
     public static Float getMinutesFromFormattedTime(String formattedTime) {
         try {
             SimpleDateFormat originalFormat = new SimpleDateFormat("hh:mm aaa");
@@ -261,4 +265,12 @@ public class DateTimeUtil {
         return null;
     }
 
+    public static long getMaxDate(long time) {
+        Calendar maxDate = Calendar.getInstance();
+        maxDate.setTimeInMillis(time);
+        maxDate.set(Calendar.HOUR_OF_DAY, 23);
+        maxDate.set(Calendar.MINUTE, 59);
+        maxDate.set(Calendar.SECOND, 59);
+        return maxDate.getTimeInMillis();
+    }
 }

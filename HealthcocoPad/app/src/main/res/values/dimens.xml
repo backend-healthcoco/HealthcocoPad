@@ -73,7 +73,8 @@
     <dimen name="text_size_add_clinical_note_add_diagram_btn">13dp</dimen>
     <dimen name="toggle_width">45dp</dimen>
     <dimen name="toggle_height">30dp</dimen>
-    <dimen name="edit_text_patient_registration_padding">10dp</dimen>
+    <dimen name="edit_text_patient_registration_padding">15dp</dimen>
+    <dimen name="text_size_registration_title">17sp</dimen>
     <dimen name="clinic_logo_size">68dp</dimen>
     <dimen name="text_size_clinic_logo">40sp</dimen>
     <dimen name="bullet_size">10sp</dimen>
@@ -87,5 +88,7 @@
     <dimen name="image_patient_profile_alphabet">50dp</dimen>
     <dimen name="edit_text_size_dialog">15sp</dimen>
     <dimen name="texrt_size_patient_mobile_search_number">15sp</dimen>
+    <dimen name="image_patient_profile_registration">70dp</dimen>
+    <dimen name="layout_padding_5dp">5dp</dimen>
 
 </resources>

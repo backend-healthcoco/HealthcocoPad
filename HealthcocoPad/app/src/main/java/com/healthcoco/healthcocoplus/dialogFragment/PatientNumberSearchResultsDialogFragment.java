@@ -102,11 +102,13 @@ public class PatientNumberSearchResultsDialogFragment extends HealthCocoDialogFr
     }
 
     public void openRegistrationFragment(String patientUniqueId) {
-        Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
-        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.PATIENT_REGISTRATION.ordinal());
+        Intent intent = new Intent();
         intent.putExtra(HealthCocoConstants.TAG_UNIQUE_ID, patientUniqueId);
         intent.putExtra(HealthCocoConstants.TAG_MOBILE_NUMBER, mobileNumber);
-        startActivityForResult(intent, HealthCocoConstants.REQUEST_CODE_CONTACTS_LIST);
+        intent.putExtra(HealthCocoConstants.TAG_IS_EDIT_PATIENT, true);
+        mActivity.openCommonOpenUpActivity(CommonOpenUpFragmentType.PATIENT_REGISTRATION, intent,
+                HealthCocoConstants.REQUEST_CODE_CONTACTS_DETAIL);
+        closeThisActivity();
     }
 
     @Override
@@ -117,12 +119,22 @@ public class PatientNumberSearchResultsDialogFragment extends HealthCocoDialogFr
                     if (!isFromHomeActivity)
                         openAddNewPatientDialog(AddUpdateNameDialogType.ADD_NEW_PATIENT_NAME, this, "", 0);
                     else
-                        openRegistrationFragment("");
+                        openNewRegistrationFragment("");
                 } else
                     Util.showAlert(mActivity, R.string.alert_nine_patients_already_registered);
                 break;
         }
     }
+
+    private void openNewRegistrationFragment(String patientUniqueId) {
+        Intent intent = new Intent();
+        intent.putExtra(HealthCocoConstants.TAG_UNIQUE_ID, patientUniqueId);
+        intent.putExtra(HealthCocoConstants.TAG_MOBILE_NUMBER, mobileNumber);
+        mActivity.openCommonOpenUpActivity(CommonOpenUpFragmentType.PATIENT_REGISTRATION, intent,
+                HealthCocoConstants.REQUEST_CODE_CONTACTS_DETAIL);
+        closeThisActivity();
+    }
+
 
     protected void openAddNewPatientDialog(AddUpdateNameDialogType dialogType,
                                            Fragment fragment, String uniqueId, int requestCode) {
@@ -158,11 +170,11 @@ public class PatientNumberSearchResultsDialogFragment extends HealthCocoDialogFr
             }
             mActivity.finish();
         } else {
-            if (alreadyRegisteredPatient.getIsPartOfClinic() != null && alreadyRegisteredPatient.getIsPartOfClinic()) {
-                LogUtils.LOGD(TAG, "Open Detail Screen");
-                openPatientDetailScreen(alreadyRegisteredPatient);
-            } else
-                openRegistrationFragment(alreadyRegisteredPatient.getUserId());
+//            if (alreadyRegisteredPatient.getIsPartOfClinic() != null && alreadyRegisteredPatient.getIsPartOfClinic()) {
+//                LogUtils.LOGD(TAG, "Open Detail Screen");
+//                openPatientDetailScreen(alreadyRegisteredPatient);
+//            } else
+            openRegistrationFragment(HealthCocoConstants.SELECTED_PATIENTS_USER_ID);
         }
     }
 

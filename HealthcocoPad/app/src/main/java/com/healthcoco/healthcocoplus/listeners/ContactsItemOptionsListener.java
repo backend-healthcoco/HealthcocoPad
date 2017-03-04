@@ -18,4 +18,6 @@ public interface ContactsItemOptionsListener {
     public SwipeRefreshLayout getSwipeRefreshLayout();
 
     public boolean isInHomeActivity();
+
+    public void onEditClicked(RegisteredPatientDetailsUpdated patientDetailsUpdated);
 }

@@ -224,4 +224,10 @@ public abstract class HealthCocoFragment extends Fragment implements GsonRequest
         addUpdateNameDialogFragment.show(mActivity.getSupportFragmentManager(),
                 addUpdateNameDialogFragment.getClass().getSimpleName());
     }
+
+    protected CommonListDialogFragment openCommonListDialogFragment(CommonListDialogItemClickListener listener, CommonListDialogType popupType, List<?> list) {
+        CommonListDialogFragment commonListDialogFragment = new CommonListDialogFragment(listener, popupType, list);
+        commonListDialogFragment.show(mFragmentManager, CommonListDialogFragment.class.getSimpleName());
+        return commonListDialogFragment;
+    }
 }

@@ -90,7 +90,7 @@ public class ContactsGridViewHolder implements OnClickListener, ImageLoadedListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.bt_edit:
-//                optionsListener.onAddToGroupClicked(objData);
+                optionsListener.onEditClicked(objData);
                 break;
             case R.id.bt_queue:
 //                optionsListener.onCallClicked(objData);

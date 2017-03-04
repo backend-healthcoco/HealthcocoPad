@@ -732,7 +732,7 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
         Intent intent = new Intent(this, CommonOpenUpActivity.class);
         intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, fragmentType.ordinal());
         if (intentData != null) {
-            intent.putExtra(HealthCocoConstants.TAG_COMMON_OPENUP_INTENT_DATA, (Serializable) intentData);
+            intent.putExtras((Intent) intentData);
         }
         if (requestCode == 0)
             startActivity(intent);
@@ -888,4 +888,10 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
         inputMethodManager.showSoftInput(view, 0);
     }
 
+    public void syncContacts(User user) {
+        Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(user, LocalTabelType.REGISTERED_PATIENTS_DETAILS);
+        WebDataServiceImpl.getInstance(mApp).getContactsList(RegisteredPatientDetailsUpdated.class, user.getUniqueId(),
+                user.getForeignHospitalId(), user.getForeignLocationId(), latestUpdatedTime, this, this);
+
+    }
 }

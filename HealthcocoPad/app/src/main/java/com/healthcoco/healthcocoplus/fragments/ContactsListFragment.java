@@ -348,6 +348,16 @@ public class ContactsListFragment extends HealthCocoFragment implements
     }
 
     @Override
+    public void onEditClicked(RegisteredPatientDetailsUpdated patientDetailsUpdated) {
+        Intent intent = new Intent();
+        intent.putExtra(HealthCocoConstants.TAG_UNIQUE_ID, patientDetailsUpdated.getUniqueId());
+        intent.putExtra(HealthCocoConstants.TAG_MOBILE_NUMBER, patientDetailsUpdated.getMobileNumber());
+        intent.putExtra(HealthCocoConstants.TAG_IS_EDIT_PATIENT, true);
+        mActivity.openCommonOpenUpActivity(CommonOpenUpFragmentType.PATIENT_REGISTRATION, intent,
+                HealthCocoConstants.REQUEST_CODE_CONTACTS_DETAIL);
+    }
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.bt_add_patient:

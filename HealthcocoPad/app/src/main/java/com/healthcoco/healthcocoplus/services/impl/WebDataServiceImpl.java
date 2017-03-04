@@ -13,6 +13,7 @@ import com.healthcoco.healthcocoplus.bean.VersionCheckRequest;
 import com.healthcoco.healthcocoplus.bean.request.ClinicImageToSend;
 import com.healthcoco.healthcocoplus.bean.request.ProfessionalMembershipRequest;
 import com.healthcoco.healthcocoplus.bean.request.ProfessionalStatementRequest;
+import com.healthcoco.healthcocoplus.bean.request.RegisterNewPatientRequest;
 import com.healthcoco.healthcocoplus.bean.server.AllUIPermission;
 import com.healthcoco.healthcocoplus.bean.server.DoctorClinicProfile;
 import com.healthcoco.healthcocoplus.bean.server.DoctorProfile;
@@ -28,6 +29,7 @@ import com.healthcoco.healthcocoplus.bean.server.UserGroups;
 import com.healthcoco.healthcocoplus.enums.BooleanTypeValues;
 import com.healthcoco.healthcocoplus.enums.LocalTabelType;
 import com.healthcoco.healthcocoplus.enums.WebServiceType;
+import com.healthcoco.healthcocoplus.fragments.PatientRegistrationFragment;
 import com.healthcoco.healthcocoplus.services.GsonRequest;
 import com.healthcoco.healthcocoplus.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocoplus.utilities.LocalDatabaseUtils;
@@ -561,4 +563,15 @@ public class WebDataServiceImpl {
             errorListener.onErrorResponse(null, mApp.getResources().getString(R.string.user_offline));
         }
     }
+
+    public void registerNewPatient(Class<?> class1, RegisterNewPatientRequest object, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        WebServiceType webServiceType = WebServiceType.REGISTER_PATIENT;
+        getResponse(webServiceType, class1, webServiceType.getUrl(), object, null, responseListener, errorListener);
+    }
+
+    public void updatePatient(Class<?> class1, RegisterNewPatientRequest object, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        WebServiceType webServiceType = WebServiceType.UPDATE_PATIENT;
+        getResponse(webServiceType, class1, webServiceType.getUrl(), object, null, responseListener, errorListener);
+    }
+
 }

@@ -77,6 +77,7 @@ import com.healthcoco.healthcocoplus.enums.BooleanTypeValues;
 import com.healthcoco.healthcocoplus.enums.FilterItemType;
 import com.healthcoco.healthcocoplus.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocoplus.enums.LocalTabelType;
+import com.healthcoco.healthcocoplus.enums.RecordType;
 import com.healthcoco.healthcocoplus.enums.WebServiceType;
 import com.healthcoco.healthcocoplus.enums.WeekDayNameType;
 import com.healthcoco.healthcocoplus.fragments.ClinicalProfileFragment;
@@ -1869,4 +1870,69 @@ public class LocalDataServiceImpl {
         List<AlreadyRegisteredPatientsResponse> list = AlreadyRegisteredPatientsResponse.listAll(AlreadyRegisteredPatientsResponse.class);
         return list;
     }
+
+    public AlreadyRegisteredPatientsResponse getALreadyRegisteredPatient(String uniqueId) {
+        AlreadyRegisteredPatientsResponse patient = Select.from(AlreadyRegisteredPatientsResponse.class)
+                .where(Condition.prop(LocalDatabaseUtils.KEY_USER_ID).eq(uniqueId)).first();
+        return patient;
+    }
+
+    public UserGroups getUserGroup(String groupId) {
+        return Select.from(UserGroups.class)
+                .where(Condition.prop(LocalDatabaseUtils.KEY_UNIQUE_ID).eq(groupId)).first();
+    }
+
+    public VolleyResponseBean getReferenceList(WebServiceType webServiceType, String doctorId, String locationId, String hospitalId, BooleanTypeValues isDiscarded, RecordType recordType, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
+        volleyResponseBean.setWebServiceType(webServiceType);
+        volleyResponseBean.setDataFromLocal(true);
+        volleyResponseBean.setUserOnline(HealthCocoConstants.isNetworkOnline);
+        try {
+            String whereCondition = "";
+            List<Reference> list = null;
+            switch (recordType) {
+                case CUSTOM:
+                    whereCondition = "Select * from " + StringUtil.toSQLName(Reference.class.getSimpleName()) + " where "
+                            + LocalDatabaseUtils.KEY_DOCTOR_ID + "=\"" + doctorId + "\""
+                            + " AND " + LocalDatabaseUtils.KEY_LOCATION_ID + "=\"" + locationId + "\""
+                            + " AND " + LocalDatabaseUtils.KEY_HOSPITAL_ID + "=\"" + hospitalId + "\"";
+                    break;
+                case BOTH:
+                    whereCondition = "Select * from " + StringUtil.toSQLName(Reference.class.getSimpleName()) + " where " +
+                            "(" + LocalDatabaseUtils.KEY_DOCTOR_ID + " is null"
+                            + " OR "
+                            + LocalDatabaseUtils.KEY_DOCTOR_ID + "=\"" + "\""
+                            + " OR "
+                            + LocalDatabaseUtils.KEY_DOCTOR_ID + "=\"" + doctorId + "\""
+                            + ")";
+                    break;
+            }
+            if (!Util.isNullOrBlank(whereCondition)) {
+                whereCondition = whereCondition
+                        + " AND " + "(" + LocalDatabaseUtils.KEY_REFERENCE + " is NOT null"
+                        + " OR "
+                        + LocalDatabaseUtils.KEY_REFERENCE + "!=\"" + "\""
+                        + ")"
+                        + " AND " + LocalDatabaseUtils.KEY_DISCARDED + " =" + isDiscarded.getBooleanIntValue();
+                switch (isDiscarded) {
+                    case TRUE:
+                        volleyResponseBean.setLocalBackgroundTaskType(LocalBackgroundTaskType.GET_REFERENCE_HIDDEN_LIST);
+                        break;
+                    case FALSE:
+                        volleyResponseBean.setLocalBackgroundTaskType(LocalBackgroundTaskType.GET_REFERENCE_ACTIVATED_LIST);
+                        break;
+                }
+            }
+            LogUtils.LOGD(TAG, "Select Query " + whereCondition);
+            list = SugarRecord.findWithQuery(Reference.class, whereCondition);
+            volleyResponseBean.setDataList(getObjectsListFromMap(list));
+            if (responseListener != null)
+                responseListener.onResponse(volleyResponseBean);
+        } catch (Exception e) {
+            e.printStackTrace();
+            showErrorLocal(volleyResponseBean, errorListener);
+        }
+        return volleyResponseBean;
+    }
+
 }

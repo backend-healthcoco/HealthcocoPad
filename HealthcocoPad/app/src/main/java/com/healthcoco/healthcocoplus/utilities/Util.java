@@ -277,7 +277,11 @@ public class Util {
         }
         return null;
     }
-
+    public static String getValidatedValueOrNull(String value) {
+        if (!Util.isNullOrBlank(value))
+            return value.trim();
+        return null;
+    }
     public static String getValidatedValueOrNull(TextView textView) {
         String value = String.valueOf(textView.getText());
         if (!Util.isNullOrBlank(value))
@@ -523,5 +527,15 @@ public class Util {
         String replace1 = replace.replace("]", "");
         String[] split = replace1.split(",");
         return split;
+    }
+    public static boolean isValidAadharId(Context context, String num) {
+        if (num.length() < context.getResources().getInteger(R.integer.max_length_aadharid))
+            return false;
+        return true;
+    }
+
+    public static void showErrorOnEditText(EditText editText) {
+        if (editText != null)
+            editText.setActivated(true);
     }
 }

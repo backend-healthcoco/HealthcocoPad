@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="bullet">&#xf111;</string>
-    <string name="text_check_male">&#xf192;&#160;Male&#160;</string>
-    <string name="text_check_female">&#xf192;&#160;Female&#160;</string>
+    <string name="text_check_male">&#xf05d;&#160;Male&#160;</string>
+    <string name="text_check_female">&#xf05d;&#160;Female&#160;</string>
     <string name="text_91">+91&#160;</string>
     <string name="text_check_ibs">&#xf05d;&#160;Ibs&#160;</string>
     <string name="text_check_book">&#xf05d;&#160;Book&#160;</string>
