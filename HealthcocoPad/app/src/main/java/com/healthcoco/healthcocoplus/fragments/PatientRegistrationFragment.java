@@ -26,7 +26,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,6 +33,7 @@ import com.android.volley.Response;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocoplus.HealthCocoFragment;
 import com.healthcoco.healthcocoplus.activities.CommonOpenUpActivity;
+import com.healthcoco.healthcocoplus.adapter.GroupsGridViewAdapter;
 import com.healthcoco.healthcocoplus.adapter.NotesListViewAdapter;
 import com.healthcoco.healthcocoplus.bean.VolleyResponseBean;
 import com.healthcoco.healthcocoplus.bean.request.RegisterNewPatientRequest;
@@ -50,6 +50,7 @@ import com.healthcoco.healthcocoplus.bean.server.User;
 import com.healthcoco.healthcocoplus.bean.server.UserGroups;
 import com.healthcoco.healthcocoplus.custom.AutoCompleteTextViewAdapter;
 import com.healthcoco.healthcocoplus.custom.LocalDataBackgroundtaskOptimised;
+import com.healthcoco.healthcocoplus.dialogFragment.ComparatorUtil;
 import com.healthcoco.healthcocoplus.enums.AddUpdateNameDialogType;
 import com.healthcoco.healthcocoplus.enums.AutoCompleteTextViewType;
 import com.healthcoco.healthcocoplus.enums.BooleanTypeValues;
@@ -57,10 +58,11 @@ import com.healthcoco.healthcocoplus.enums.CommonListDialogType;
 import com.healthcoco.healthcocoplus.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocoplus.enums.DialogType;
 import com.healthcoco.healthcocoplus.enums.LocalBackgroundTaskType;
+import com.healthcoco.healthcocoplus.enums.LocalTabelType;
 import com.healthcoco.healthcocoplus.enums.OptionsType;
-import com.healthcoco.healthcocoplus.enums.PatientProfileScreenType;
 import com.healthcoco.healthcocoplus.enums.RecordType;
 import com.healthcoco.healthcocoplus.enums.WebServiceType;
+import com.healthcoco.healthcocoplus.listeners.AssignGroupListener;
 import com.healthcoco.healthcocoplus.listeners.CommonListDialogItemClickListener;
 import com.healthcoco.healthcocoplus.listeners.CommonOptionsDialogItemClickListener;
 import com.healthcoco.healthcocoplus.listeners.DownloadFileFromUrlListener;
@@ -81,6 +83,7 @@ import com.healthcoco.healthcocoplus.views.CustomAutoCompleteTextView;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -89,7 +92,7 @@ import java.util.List;
  */
 public class PatientRegistrationFragment extends HealthCocoFragment implements View.OnClickListener, CommonListDialogItemClickListener,
         GsonRequest.ErrorListener, Response.Listener<VolleyResponseBean>, LocalDoInBackgroundListenerOptimised,
-        CommonOptionsDialogItemClickListener, DownloadFileFromUrlListener, NotesItemClickListener {
+        CommonOptionsDialogItemClickListener, DownloadFileFromUrlListener, NotesItemClickListener, AssignGroupListener {
     private ArrayList<Object> BLOOD_GROUPS = new ArrayList<Object>() {{
         add("O-");
         add("O+");
@@ -159,7 +162,10 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
     private GridView gvGroups;
     private ArrayList<String> notesList = new ArrayList<String>();
     private NotesListViewAdapter notesListViewAdapter;
-
+    private GroupsGridViewAdapter groupsListViewAdapter;
+    private ArrayList<String> groupIdsToAssign = new ArrayList<String>();
+    private ArrayList<UserGroups> groupListToAssign = new ArrayList<>();
+    private List<UserGroups> groupsList = new ArrayList<UserGroups>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -185,9 +191,21 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
             initAutoTvAdapter(autotvBloodGroup, AutoCompleteTextViewType.BLOOD_GROUP, BLOOD_GROUPS);
             initAutoTvAdapter(autotvCountry, AutoCompleteTextViewType.COUNTRY, (ArrayList<Object>) (ArrayList<?>) new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.array_countries))));
             initNoteListAdapter();
-            initDefaultData();
             initData();
+            initDefaultData();
+//            initGroupAdapter();
+//            notifyGroupListAdapter(groupsList);
+//            getGroupListFromLocal();
         }
+    }
+
+    private void getGroupListFromLocal() {
+        LocalDataServiceImpl.getInstance(mApp).getUserGroups(WebServiceType.GET_GROUPS, null, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(), this, this);
+    }
+
+    private void initGroupAdapter() {
+        groupsListViewAdapter = new GroupsGridViewAdapter(mActivity, this);
+        gvGroups.setAdapter(groupsListViewAdapter);
     }
 
     @Override
@@ -395,40 +413,6 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
         editAadharId.setText(aadharId);
         editDrivingLicence.setText(drivingLicense);
         editPanCardNumber.setText(panNumber);
-    }
-
-    private String getGroupNames(List<UserGroups> groupsList) {
-        String groupNamesText = "";
-        if (groupIdsList == null)
-            groupIdsList = new ArrayList<>();
-        if (!Util.isNullOrEmptyList(groupsList)) {
-            for (UserGroups group :
-                    groupsList) {
-                int index = groupsList.indexOf(group);
-                if (index == groupsList.size() - 1)
-                    groupNamesText = groupNamesText + group.getName();
-                else
-                    groupNamesText = groupNamesText + group.getName() + SEPARATOR_GROUP_NOTES;
-                groupIdsList.add(group.getUniqueId());
-            }
-        } else
-            groupIdsList.clear();
-        return groupNamesText;
-    }
-
-    private String getNotesNames(List<String> notesList) {
-        String note = "";
-        if (groupIdsList == null)
-            groupIdsList = new ArrayList<>();
-        for (String string :
-                notesList) {
-            int index = notesList.indexOf(string);
-            if (index == notesList.size() - 1)
-                note = string;
-            else
-                note = string + SEPARATOR_GROUP_NOTES;
-        }
-        return note;
     }
 
     private String getNotesName(ArrayList<String> notesList) {
@@ -763,10 +747,42 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
 //                if (openProfessionListScreen)
 //                    onClick(tvProfession);
                 break;
+            case GET_GROUPS:
+                if (response.isDataFromLocal()) {
+                    groupsList = (ArrayList<UserGroups>) (ArrayList<?>) response
+                            .getDataList();
+                    if (!Util.isNullOrEmptyList(groupsList))
+                        LogUtils.LOGD(TAG, "Success onResponse groupsList Size " + groupsList.size() + " isDataFromLocal " + response.isDataFromLocal());
+                    notifyGroupListAdapter(groupsList);
+                    if (!response.isFromLocalAfterApiSuccess() && response.isUserOnline()) {
+                        getGroupsList();
+                        return;
+                    }
+                } else if (!Util.isNullOrEmptyList(response.getDataList())) {
+                    new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_GROUPS_LIST, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                    response.setIsFromLocalAfterApiSuccess(true);
+                    return;
+                }
+                mActivity.hideLoading();
+                break;
         }
 
 //        if (isCityLoaded && isProfessionLoaded && isReferenceLoaded)
         mActivity.hideLoading();
+    }
+
+    private void getGroupsList() {
+        mActivity.showLoading(false);
+        Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.USER_GROUP);
+        WebDataServiceImpl.getInstance(mApp).getGroupsList(WebServiceType.GET_GROUPS, UserGroups.class, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(), latestUpdatedTime, groupIdsToAssign, this, this);
+    }
+
+    private void notifyGroupListAdapter(List<UserGroups> list) {
+        if (!Util.isNullOrEmptyList(list)) {
+            Collections.sort(list, ComparatorUtil.groupDateComparator);
+            groupsListViewAdapter.setListData(list);
+            groupsListViewAdapter.notifyDataSetChanged();
+        }
     }
 
     private void refreshContactsData(RegisteredPatientDetailsUpdated patientDetails) {
@@ -920,6 +936,9 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
             case GET_PROFESSION_LIST:
                 volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getProfessionList(WebServiceType.GET_PROFESSION, null, null);
                 break;
+            case GET_GROUPS:
+                volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getUserGroups(WebServiceType.GET_GROUPS, groupIdsToAssign, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(), null, null);
+                break;
         }
         volleyResponseBean.setIsFromLocalAfterApiSuccess(response.isFromLocalAfterApiSuccess());
         return volleyResponseBean;
@@ -1005,4 +1024,17 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
         alertBuilder.show();
     }
 
+    @Override
+    public void onAssignGroupCheckClicked(boolean isSelected, UserGroups group) {
+        String groupId = group.getUniqueId();
+        if (isSelected) {
+            if (!groupIdsToAssign.contains(groupId)) {
+                groupListToAssign.add(group);
+                groupIdsToAssign.add(groupId);
+            }
+        } else if (groupIdsToAssign.contains(groupId)) {
+            groupIdsToAssign.remove(groupId);
+            groupListToAssign.remove(group);
+        }
+    }
 }

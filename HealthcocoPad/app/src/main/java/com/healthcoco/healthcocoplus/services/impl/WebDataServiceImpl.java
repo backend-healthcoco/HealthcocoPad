@@ -26,6 +26,7 @@ import com.healthcoco.healthcocoplus.bean.server.TempTemplate;
 import com.healthcoco.healthcocoplus.bean.server.User;
 import com.healthcoco.healthcocoplus.bean.VolleyResponseBean;
 import com.healthcoco.healthcocoplus.bean.server.UserGroups;
+import com.healthcoco.healthcocoplus.dialogFragment.AddUpdateNameDialogFragment;
 import com.healthcoco.healthcocoplus.enums.BooleanTypeValues;
 import com.healthcoco.healthcocoplus.enums.LocalTabelType;
 import com.healthcoco.healthcocoplus.enums.WebServiceType;
@@ -574,4 +575,19 @@ public class WebDataServiceImpl {
         getResponse(webServiceType, class1, webServiceType.getUrl(), object, null, responseListener, errorListener);
     }
 
+    public void addUpdateDeleteGroup(WebServiceType webServiceType, Class<?> class1, UserGroups group, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        String url = webServiceType.getUrl();
+        switch (webServiceType) {
+            case ADD_NEW_GROUP:
+                break;
+            case UPDATE_GROUP:
+                url = url + group.getUniqueId() + HealthCocoConstants.PARAM_TAG_UPDATE;
+                break;
+            case DELETE_GROUP:
+                url = url + group.getUniqueId() + HealthCocoConstants.PARAM_TAG_DELETE;
+                break;
+        }
+        getResponse(webServiceType, class1, url, group, null, responseListener,
+                errorListener);
+    }
 }

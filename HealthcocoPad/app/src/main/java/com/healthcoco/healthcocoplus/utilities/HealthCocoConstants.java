@@ -22,6 +22,7 @@ public class HealthCocoConstants {
     public static final String TAG_GROUP_IDS_LIST = "groupsIdsList";
     public static final String TAG_IS_EDIT_PATIENT = "isEditPatient";
     public static final String TAG_NOTES_LIST = "notesList";
+    public static final String PARAM_TAG_UPDATE = "/update/";
     public static final int REQUEST_CODE_CONTACTS_DETAIL = 100;
     public static final int RESULT_CODE_ADD_PRESCIPTION = 101;
     public static final int REQUEST_CODE_CAMERA = 102;

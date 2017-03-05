@@ -138,9 +138,9 @@ public class AddUpdateNameDialogFragment extends HealthCocoDialogFragment implem
         switch (addUpdateDialogType) {
             case GROUPS:
                 if (!Util.isNullOrBlank(uniqueId)) {
-//                    UserGroups group = LocalDataServiceImpl.getInstance(mApp).getUserGroup(uniqueId);
-//                    if (group != null)
-//                        text = Util.getValidatedValue(group.getName());
+                    UserGroups group = LocalDataServiceImpl.getInstance(mApp).getUserGroup(uniqueId);
+                    if (group != null)
+                        text = Util.getValidatedValue(group.getName());
                 }
                 break;
             case EMAIL:
@@ -267,7 +267,8 @@ public class AddUpdateNameDialogFragment extends HealthCocoDialogFragment implem
 
     private void addNote(String name) {
         getTargetFragment().onActivityResult(HealthCocoConstants.REQUEST_CODE_STRINGS_LIST, HealthCocoConstants.RESULT_CODE_ADD_STRING, new Intent().putExtra(HealthCocoConstants.TAG_INTENT_DATA, name));
-        mActivity.hideLoading(); dismiss();
+        mActivity.hideLoading();
+        dismiss();
     }
 
     private void addNewGroup(String groupName) {
@@ -278,11 +279,11 @@ public class AddUpdateNameDialogFragment extends HealthCocoDialogFragment implem
         groupToSend.setLocationId(selectedLocationId);
         if (!Util.isNullOrBlank(uniqueId)) {
             groupToSend.setUniqueId(uniqueId);
-//            WebDataServiceImpl.getInstance(mApp).addUpdateDeleteGroup(WebServiceType.UPDATE_GROUP, UserGroups.class, groupToSend, this, this);
-//        } else
-//            WebDataServiceImpl.getInstance(mApp).addUpdateDeleteGroup(WebServiceType.ADD_NEW_GROUP, UserGroups.class, groupToSend, this, this);
-        }
+            WebDataServiceImpl.getInstance(mApp).addUpdateDeleteGroup(WebServiceType.UPDATE_GROUP, UserGroups.class, groupToSend, this, this);
+        } else
+            WebDataServiceImpl.getInstance(mApp).addUpdateDeleteGroup(WebServiceType.ADD_NEW_GROUP, UserGroups.class, groupToSend, this, this);
     }
+
 
     private void sendEmail(String emailId) {
 //        if (webserviceType != null)
@@ -379,9 +380,9 @@ public class AddUpdateNameDialogFragment extends HealthCocoDialogFragment implem
                 case UPDATE_GROUP:
                     if (response.isValidData(response) && response.getData() instanceof UserGroups) {
                         UserGroups group = (UserGroups) response.getData();
-//                        LocalDataServiceImpl.getInstance(mApp).addUserGroup(group);
+                        LocalDataServiceImpl.getInstance(mApp).addUserGroup(group);
                         getTargetFragment().onActivityResult(HealthCocoConstants.REQUEST_CODE_GROUPS_LIST, HealthCocoConstants.RESULT_CODE_ADD_GROUP, null);
-//                        mActivity.syncGroups(user);
+                        mActivity.syncGroups(user);
                     }
                     break;
                 case SEND_EMAIL_CLINICAL_NOTES:

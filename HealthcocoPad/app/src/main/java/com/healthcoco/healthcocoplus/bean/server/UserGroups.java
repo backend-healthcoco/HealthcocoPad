@@ -4,9 +4,12 @@ package com.healthcoco.healthcocoplus.bean.server;
 import com.orm.SugarRecord;
 import com.orm.dsl.Unique;
 
+import org.parceler.Parcel;
+
 import java.io.Serializable;
 
-public class UserGroups extends SugarRecord implements Serializable {
+@Parcel
+public class UserGroups extends SugarRecord {
     @Unique
     private String uniqueId;
 

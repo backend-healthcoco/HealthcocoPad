@@ -1935,4 +1935,7 @@ public class LocalDataServiceImpl {
         return volleyResponseBean;
     }
 
+    public void addUserGroup(UserGroups userGroup) {
+        userGroup.save();
+    }
 }
