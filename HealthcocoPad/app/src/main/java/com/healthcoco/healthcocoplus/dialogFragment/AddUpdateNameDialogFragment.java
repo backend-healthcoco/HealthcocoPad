@@ -51,8 +51,6 @@ public class AddUpdateNameDialogFragment extends HealthCocoDialogFragment implem
     public static final String TAG_DOCTOR_ID = "doctorId";
     public static final String TAG_LOCATION_ID = "locationId";
     public static final String TAG_HOSPITAL_ID = "hospitalId";
-    private TextView btSave;
-    private TextView btCancel;
     private AutoCompleteTextView editName;
     private AddUpdateNameDialogType addUpdateDialogType;
     private String uniqueId;
@@ -128,9 +126,10 @@ public class AddUpdateNameDialogFragment extends HealthCocoDialogFragment implem
 
     @Override
     public void initListeners() {
-        btSave.setOnClickListener(this);
-        btCancel.setOnClickListener(this);
+//        btSave.setOnClickListener(this);
+//        btCancel.setOnClickListener(this);
         editName.addTextChangedListener(this);
+        initSaveCancelButton(this);
     }
 
     @Override
@@ -179,9 +178,6 @@ public class AddUpdateNameDialogFragment extends HealthCocoDialogFragment implem
                     validateData();
                 else
                     Util.showToast(mActivity, getResources().getString(R.string.user_offline));
-                break;
-            case R.id.bt_cancel:
-                dismiss();
                 break;
         }
     }
@@ -270,8 +266,8 @@ public class AddUpdateNameDialogFragment extends HealthCocoDialogFragment implem
     }
 
     private void addNote(String name) {
-//        getTargetFragment().onActivityResult(HealthCocoConstants.REQUEST_CODE_STRINGS_LIST, HealthCocoConstants.RESULT_CODE_ADD_STRING, new Intent().putExtra(HealthCocoConstants.TAG_INTENT_DATA, name));
-//        dismiss();
+        getTargetFragment().onActivityResult(HealthCocoConstants.REQUEST_CODE_STRINGS_LIST, HealthCocoConstants.RESULT_CODE_ADD_STRING, new Intent().putExtra(HealthCocoConstants.TAG_INTENT_DATA, name));
+        mActivity.hideLoading(); dismiss();
     }
 
     private void addNewGroup(String groupName) {
@@ -481,16 +477,16 @@ public class AddUpdateNameDialogFragment extends HealthCocoDialogFragment implem
 
     @Override
     public void afterTextChanged(Editable s) {
-        String text = String.valueOf(s).toLowerCase(Locale.ENGLISH);
-        if (Util.isNullOrBlank(text))
-            enableSaveButton(false);
-        else
-            enableSaveButton(true);
+//        String text = String.valueOf(s).toLowerCase(Locale.ENGLISH);
+//        if (Util.isNullOrBlank(text))
+//            enableSaveButton(false);
+//        else
+//            enableSaveButton(true);
     }
 
     private void enableSaveButton(boolean isEnabled) {
-        btSave.setClickable(isEnabled);
-        btSave.setEnabled(isEnabled);
+//        btSave.setClickable(isEnabled);
+//        btSave.setEnabled(isEnabled);
     }
 
     @Override

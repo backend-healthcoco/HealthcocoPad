@@ -145,6 +145,7 @@ public class PatientNumberSearchDialogFragment extends HealthCocoDialogFragment 
         PatientNumberSearchResultsDialogFragment patientNumberSearchResultsDialogFragment = new PatientNumberSearchResultsDialogFragment();
         args.putString(HealthCocoConstants.TAG_MOBILE_NUMBER, String.valueOf(editMobileNumber.getText()));
         args.putBoolean(PatientNumberSearchResultsDialogFragment.TAG_IS_FROM_HOME_ACTIVITY, true);
+        patientNumberSearchResultsDialogFragment.setArguments(args);
         patientNumberSearchResultsDialogFragment.setTargetFragment(this, HealthCocoConstants.REQUEST_CODE_CONTACTS_LIST);
         patientNumberSearchResultsDialogFragment.show(mFragmentManager, patientNumberSearchResultsDialogFragment.getClass().getSimpleName());
     }

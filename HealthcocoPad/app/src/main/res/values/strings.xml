@@ -467,4 +467,5 @@
     <string name="no_referred_by_found">No Referred By Found</string>
     <string name="please_enter_valid_aadhar_id">Please enter valid Aadhar ID</string>
     <string name="search_blood_group">Search Blood Group</string>
+    <string name="confirm_delete_note">Are you sure you want to Delete this Note?</string>
 </resources>

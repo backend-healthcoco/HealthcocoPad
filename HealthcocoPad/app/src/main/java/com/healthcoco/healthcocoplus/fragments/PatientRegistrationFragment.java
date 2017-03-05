@@ -1,8 +1,10 @@
 package com.healthcoco.healthcocoplus.fragments;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.ActivityNotFoundException;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -17,9 +19,11 @@ import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
@@ -30,6 +34,7 @@ import com.android.volley.Response;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocoplus.HealthCocoFragment;
 import com.healthcoco.healthcocoplus.activities.CommonOpenUpActivity;
+import com.healthcoco.healthcocoplus.adapter.NotesListViewAdapter;
 import com.healthcoco.healthcocoplus.bean.VolleyResponseBean;
 import com.healthcoco.healthcocoplus.bean.request.RegisterNewPatientRequest;
 import com.healthcoco.healthcocoplus.bean.server.Address;
@@ -45,6 +50,7 @@ import com.healthcoco.healthcocoplus.bean.server.User;
 import com.healthcoco.healthcocoplus.bean.server.UserGroups;
 import com.healthcoco.healthcocoplus.custom.AutoCompleteTextViewAdapter;
 import com.healthcoco.healthcocoplus.custom.LocalDataBackgroundtaskOptimised;
+import com.healthcoco.healthcocoplus.enums.AddUpdateNameDialogType;
 import com.healthcoco.healthcocoplus.enums.AutoCompleteTextViewType;
 import com.healthcoco.healthcocoplus.enums.BooleanTypeValues;
 import com.healthcoco.healthcocoplus.enums.CommonListDialogType;
@@ -59,6 +65,7 @@ import com.healthcoco.healthcocoplus.listeners.CommonListDialogItemClickListener
 import com.healthcoco.healthcocoplus.listeners.CommonOptionsDialogItemClickListener;
 import com.healthcoco.healthcocoplus.listeners.DownloadFileFromUrlListener;
 import com.healthcoco.healthcocoplus.listeners.LocalDoInBackgroundListenerOptimised;
+import com.healthcoco.healthcocoplus.listeners.NotesItemClickListener;
 import com.healthcoco.healthcocoplus.services.GsonRequest;
 import com.healthcoco.healthcocoplus.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocoplus.services.impl.WebDataServiceImpl;
@@ -82,7 +89,7 @@ import java.util.List;
  */
 public class PatientRegistrationFragment extends HealthCocoFragment implements View.OnClickListener, CommonListDialogItemClickListener,
         GsonRequest.ErrorListener, Response.Listener<VolleyResponseBean>, LocalDoInBackgroundListenerOptimised,
-        CommonOptionsDialogItemClickListener, DownloadFileFromUrlListener {
+        CommonOptionsDialogItemClickListener, DownloadFileFromUrlListener, NotesItemClickListener {
     private ArrayList<Object> BLOOD_GROUPS = new ArrayList<Object>() {{
         add("O-");
         add("O+");
@@ -147,6 +154,12 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
     private EditText editAge;
     //    private LinearLayout containerAge;
     private ImageButton btDeleteReferredBy;
+    private TextView btAddNote;
+    private ListView lvNotes;
+    private GridView gvGroups;
+    private ArrayList<String> notesList = new ArrayList<String>();
+    private NotesListViewAdapter notesListViewAdapter;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -171,6 +184,7 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
             initListeners();
             initAutoTvAdapter(autotvBloodGroup, AutoCompleteTextViewType.BLOOD_GROUP, BLOOD_GROUPS);
             initAutoTvAdapter(autotvCountry, AutoCompleteTextViewType.COUNTRY, (ArrayList<Object>) (ArrayList<?>) new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.array_countries))));
+            initNoteListAdapter();
             initDefaultData();
             initData();
         }
@@ -202,6 +216,9 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
         btDeleteReferredBy = (ImageButton) view.findViewById(R.id.bt_delete_referred_by);
         editAge = (EditText) view.findViewById(R.id.edit_age);
 //        containerAge = (LinearLayout) view.findViewById(R.id.container_age);
+        btAddNote = (TextView) view.findViewById(R.id.bt_add_note);
+        lvNotes = (ListView) view.findViewById(R.id.lv_notes);
+        gvGroups = (GridView) view.findViewById(R.id.gv_groups);
     }
 
     @Override
@@ -211,6 +228,8 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
         btContactProfile.setOnClickListener(this);
         btDeleteBloodGroup.setOnClickListener(this);
         btDeleteReferredBy.setOnClickListener(this);
+        btAddNote.setOnClickListener(this);
+
     }
 
     private void initDefaultData() {
@@ -218,6 +237,11 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
         getCitiesList(false);
         getReferenceList(false);
         getProfessionsList(false);
+    }
+
+    private void initNoteListAdapter() {
+        notesListViewAdapter = new NotesListViewAdapter(mActivity, this);
+        lvNotes.setAdapter(notesListViewAdapter);
     }
 
     private void initAutoTvAdapter(AutoCompleteTextView autoCompleteTextView, final AutoCompleteTextViewType autoCompleteTextViewType, ArrayList<Object> list) {
@@ -461,6 +485,9 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
                 break;
             case R.id.bt_delete_referred_by:
                 tvReferredBy.setText("");
+                break;
+            case R.id.bt_add_note:
+                openAddUpdateNameDialogFragment(WebServiceType.LOCAL_STRING_SAVE, AddUpdateNameDialogType.LOCAL_STRING_SAVE, this, null, "", HealthCocoConstants.REQUEST_CODE_STRINGS_LIST);
                 break;
         }
     }
@@ -806,11 +833,27 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
                     }
                 }
                 tvGroup.setText(text);
-            } else if (resultCode == HealthCocoConstants.RESULT_CODE_NOTES_LIST && data != null) {
-                ArrayList<String> notesList = data.getStringArrayListExtra(HealthCocoConstants.TAG_NOTES_LIST);
-                tvNotes.setText(getNotesName(notesList));
+            }
+        } else if (requestCode == HealthCocoConstants.REQUEST_CODE_STRINGS_LIST && data != null) {
+            if (resultCode == HealthCocoConstants.RESULT_CODE_ADD_STRING && data != null) {
+                String note = (String) data.getSerializableExtra(HealthCocoConstants.TAG_INTENT_DATA);
+                if (!Util.isNullOrBlank(note)) {
+                    if (notesList == null)
+                        notesList = new ArrayList<>();
+                    notesList.add(note);
+                    notifyAdapter(notesList);
+                }
+                mActivity.hideLoading();
             }
         }
+    }
+
+    private void notifyAdapter(List<String> list) {
+        if (!Util.isNullOrEmptyList(list)) {
+            lvNotes.setVisibility(View.VISIBLE);
+        }
+        notesListViewAdapter.setListData(list);
+        notesListViewAdapter.notifyDataSetChanged();
     }
 
     private void showImage(String filePath, Bitmap originalBitmap) {
@@ -930,4 +973,36 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
     public void onPreExecute() {
 
     }
+
+    @Override
+    public void onDeleteNotesClicked(String notes) {
+        showConfirmDeleteAlert(notes);
+    }
+
+    private void showConfirmDeleteAlert(final String notes) {
+        final AlertDialog.Builder alertBuilder = new AlertDialog.Builder(mActivity);
+        alertBuilder.setTitle(R.string.confirm);
+        alertBuilder.setMessage(getResources().getString(
+                R.string.confirm_delete_note));
+        alertBuilder.setCancelable(false);
+        alertBuilder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (notesList.contains(notes)) {
+                    notesList.remove(notes);
+                    notifyAdapter(notesList);
+                }
+            }
+        });
+        alertBuilder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+        alertBuilder.create();
+        alertBuilder.show();
+    }
+
 }

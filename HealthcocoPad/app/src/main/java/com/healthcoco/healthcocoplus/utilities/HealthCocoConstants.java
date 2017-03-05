@@ -46,6 +46,7 @@ public class HealthCocoConstants {
     public static final int RESULT_CODE_DOCTOR_EXPERIENCE_DETAIL = 120;
     public static final int RESULT_CODE_DOCTOR_PROFESSIONAL_MEMBERSHIP_DETAIL = 121;
     public static final int RESULT_CODE_DOCTOR_PROFESSIONAL_STATEMENT_DETAIL = 122;
+    public static final String TAG_INTENT_DATA = "intentData";
     public static int RESULT_CODE_SIGNUP_ALREADY_REGISTERED = 123;
     public static final int RESULT_CODE_GROUPS_LIST = 124;
     public static final int RESULT_CODE_SEARCH_NUMBER_RESULTS = 125;
@@ -54,6 +55,8 @@ public class HealthCocoConstants {
     public static final int RESULT_CODE_REGISTRATION = 128;
     public static final int REQUEST_CODE_REGISTRATION = 129;
     public static final int RESULT_CODE_NOTES_LIST = 130;
+    public static final int REQUEST_CODE_STRINGS_LIST = 131;
+    public static final int RESULT_CODE_ADD_STRING = 132;
     public static final String PARAM_SIZE = "&size=";
     public static final String PARAM_SEARCH_TERM = "&searchTerm=";
     public static final String PARAM_PAGE_AND = "&page=";
