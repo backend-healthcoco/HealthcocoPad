@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocoplus.HealthCocoActivity;
+import com.healthcoco.healthcocoplus.HealthCocoViewHolder;
 import com.healthcoco.healthcocoplus.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocoplus.enums.PatientProfileScreenType;
 import com.healthcoco.healthcocoplus.listeners.ContactsItemOptionsListener;
@@ -19,7 +20,7 @@ import com.healthcoco.healthcocoplus.utilities.LogUtils;
 import com.healthcoco.healthcocoplus.utilities.Util;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
-public class ContactsGridViewHolder implements OnClickListener, ImageLoadedListener {
+public class ContactsGridViewHolder extends HealthCocoViewHolder implements OnClickListener, ImageLoadedListener {
     private final String TAG = ContactsGridViewHolder.class.getSimpleName();
     private final ImageLoader imageLoader;
     private HealthCocoActivity mActivity;
@@ -50,10 +51,12 @@ public class ContactsGridViewHolder implements OnClickListener, ImageLoadedListe
         imageLoader = ImageLoader.getInstance();
     }
 
+    @Override
     public void setData(Object data) {
         this.objData = (RegisteredPatientDetailsUpdated) data;
     }
 
+    @Override
     public void applyData() {
         LogUtils.LOGD(TAG, "Unique Id " + objData.getUniqueId());
         tvContactName.setText(Util.getValidatedValue(objData.getLocalPatientName()));
@@ -62,7 +65,8 @@ public class ContactsGridViewHolder implements OnClickListener, ImageLoadedListe
         DownloadImageFromUrlUtil.loadImageWithInitialAlphabet(mActivity, PatientProfileScreenType.IN_PATIENTS_LIST, objData, null, ivContactProfile, tvInitialAlphabet);
     }
 
-    public View getConvertView() {
+    @Override
+    public View getContentView() {
         convertView = mActivity.getLayoutInflater().inflate(R.layout.grid_item_contacts, null);
         tvContactName = (TextView) convertView.findViewById(R.id.tv_contact_name);
         tvContactNumber = (TextView) convertView.findViewById(R.id.tv_contact_number);

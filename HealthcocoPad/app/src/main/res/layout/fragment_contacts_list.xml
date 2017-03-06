@@ -100,87 +100,87 @@
             </LinearLayout>
         </LinearLayout>
 
-        <com.healthcoco.healthcocoplus.views.CustomSwipeRefreshLayout
-            android:id="@+id/swipe_refresh_layout"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-            <RelativeLayout
+            <com.healthcoco.healthcocoplus.views.CustomSwipeRefreshLayout
+                android:id="@+id/swipe_refresh_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
-                <!--style for this gridview's fastScroll is set in its containing fragment(ContactsListFragment)-->
-                <com.healthcoco.healthcocoplus.views.GridViewLoadMore
-                    android:id="@+id/gv_contacts"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:columnWidth="5dp"
-                    android:divider="@null"
-                    android:horizontalSpacing="12dp"
-                    android:listSelector="@android:color/transparent"
-                    android:numColumns="3"
-                    android:overScrollMode="never"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:scrollbarStyle="outsideOverlay"
-                    android:verticalSpacing="12dp"
-                    android:visibility="visible" />
+                android:layout_marginRight="10dp"
+                android:layout_weight="1">
 
-                <LinearLayout
-                    android:id="@+id/container_lv"
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    android:visibility="gone">
+                    android:orientation="vertical">
+                    <!--style for this gridview's fastScroll is set in its containing fragment(ContactsListFragment)-->
+                    <com.healthcoco.healthcocoplus.views.GridViewLoadMore
+                        android:id="@+id/gv_contacts"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:columnWidth="5dp"
+                        android:divider="@null"
+                        android:horizontalSpacing="12dp"
+                        android:listSelector="@android:color/transparent"
+                        android:numColumns="3"
+                        android:overScrollMode="never"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:scrollbarStyle="outsideOverlay"
+                        android:verticalSpacing="12dp"
+                        android:visibility="gone" />
 
                     <!--style for this listview's fastScroll is set in its containing fragment(ContactsListFragment)-->
                     <com.healthcoco.healthcocoplus.views.ListViewLoadMore
                         android:id="@+id/lv_contacts"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_marginRight="10dp"
-                        android:layout_weight="1"
                         android:divider="@null"
                         android:listSelector="@android:color/transparent"
                         android:overScrollMode="never"
                         android:paddingLeft="10dp"
-                        android:paddingRight="10dp" />
+                        android:paddingRight="10dp"
+                        android:visibility="gone" />
 
-                    <LinearLayout
+                    <ProgressBar
+                        android:id="@+id/progress_loading"
+                        style="?android:attr/progressBarStyleSmall"
+                        android:layout_width="@dimen/round_progress_bar_size"
+                        android:layout_height="@dimen/round_progress_bar_size"
+                        android:layout_gravity="center|bottom"
+                        android:progressDrawable="@drawable/progress_loading"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/tv_no_patients"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_weight="1.7"
-                        android:background="@android:color/white">
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:gravity="center"
+                        android:text="@string/no_patients"
+                        android:textStyle="bold" />
+                </RelativeLayout>
+            </com.healthcoco.healthcocoplus.views.CustomSwipeRefreshLayout>
 
-                        <include
-                            layout="@layout/fragment_filter"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent" />
-                    </LinearLayout>
-                </LinearLayout>
+            <LinearLayout
+                android:id="@+id/container_filter_fragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1.7"
+                android:background="@android:color/white"
+                android:visibility="gone">
 
-                <ProgressBar
-                    android:id="@+id/progress_loading"
-                    style="?android:attr/progressBarStyleSmall"
-                    android:layout_width="@dimen/round_progress_bar_size"
-                    android:layout_height="@dimen/round_progress_bar_size"
-                    android:layout_gravity="center|bottom"
-                    android:progressDrawable="@drawable/progress_loading"
-                    android:visibility="gone" />
-
-                <TextView
-                    android:id="@+id/tv_no_patients"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:text="@string/no_patients"
-                    android:textStyle="bold"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true" />
-            </RelativeLayout>
-        </com.healthcoco.healthcocoplus.views.CustomSwipeRefreshLayout>
+                <include
+                    layout="@layout/fragment_filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
+        </LinearLayout>
     </LinearLayout>
 
 </android.support.design.widget.CoordinatorLayout>

@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocoplus.HealthCocoActivity;
+import com.healthcoco.healthcocoplus.HealthCocoViewHolder;
 import com.healthcoco.healthcocoplus.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocoplus.enums.PatientProfileScreenType;
 import com.healthcoco.healthcocoplus.listeners.ContactsItemOptionsListener;
@@ -20,7 +21,7 @@ import com.healthcoco.healthcocoplus.utilities.ScreenDimensions;
 import com.healthcoco.healthcocoplus.utilities.Util;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
-public class ContactsListViewHolder implements OnClickListener, ImageLoadedListener {
+public class ContactsListViewHolder extends HealthCocoViewHolder implements OnClickListener, ImageLoadedListener {
     private final String TAG = ContactsListViewHolder.class.getSimpleName();
     private final ImageLoader imageLoader;
     private HealthCocoActivity mActivity;
@@ -44,10 +45,12 @@ public class ContactsListViewHolder implements OnClickListener, ImageLoadedListe
         imageLoader = ImageLoader.getInstance();
     }
 
+    @Override
     public void setData(Object data) {
         this.objData = (RegisteredPatientDetailsUpdated) data;
     }
 
+    @Override
     public void applyData() {
         LogUtils.LOGD(TAG, "Unique Id " + objData.getUniqueId());
 //        scrollViewContactsItems.fullScroll(HorizontalScrollView.FOCUS_LEFT);
@@ -56,7 +59,8 @@ public class ContactsListViewHolder implements OnClickListener, ImageLoadedListe
         DownloadImageFromUrlUtil.loadImageWithInitialAlphabet(mActivity, PatientProfileScreenType.IN_PATIENTS_LIST, objData, null, ivContactProfile, tvInitialAlphabet);
     }
 
-    public View getConvertView() {
+    @Override
+    public View getContentView() {
         convertView = mActivity.getLayoutInflater().inflate(R.layout.list_item_contacts, null);
 //        scrollViewContactsItems = (ContactsListItemHorizontalScrollView) convertView.findViewById(R.id.scrollview_contacts_item);
         containerTop = (LinearLayout) convertView.findViewById(R.id.container_top);

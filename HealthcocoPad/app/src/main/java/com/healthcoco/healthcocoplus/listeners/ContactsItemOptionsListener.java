@@ -3,6 +3,7 @@ package com.healthcoco.healthcocoplus.listeners;
 import android.support.v4.widget.SwipeRefreshLayout;
 
 import com.healthcoco.healthcocoplus.bean.server.RegisteredPatientDetailsUpdated;
+import com.healthcoco.healthcocoplus.enums.ChangeViewType;
 
 public interface ContactsItemOptionsListener {
     public void onAddToGroupClicked(RegisteredPatientDetailsUpdated selecetdPatient);
@@ -22,4 +23,5 @@ public interface ContactsItemOptionsListener {
     public void onEditClicked(RegisteredPatientDetailsUpdated patientDetailsUpdated);
 
     void onQueueClicked(RegisteredPatientDetailsUpdated objData);
+    public ChangeViewType getChangedViewType();
 }

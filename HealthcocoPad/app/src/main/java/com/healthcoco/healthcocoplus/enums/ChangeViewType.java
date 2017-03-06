@@ -5,5 +5,5 @@ package com.healthcoco.healthcocoplus.enums;
  */
 
 public enum ChangeViewType {
-    LIST_VIEW(), GRID_VIEW();
+    LIST_VIEW, GRID_VIEW;
 }
