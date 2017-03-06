@@ -185,7 +185,7 @@ public class FilterFragment extends HealthCocoFragment implements Response.Liste
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.bt_add_to_group:
-                openAddUpdateNameDialogFragment(WebServiceType.ADD_NEW_GROUP, AddUpdateNameDialogType.GROUPS, this, user, "", HealthCocoConstants.REQUEST_CODE_GROUPS_LIST);
+                mActivity.openAddUpdateNameDialogFragment(WebServiceType.ADD_NEW_GROUP, AddUpdateNameDialogType.GROUPS, this, user, "", HealthCocoConstants.REQUEST_CODE_GROUPS_LIST);
                 break;
             case R.id.tv_all_patients:
                 senBroadCastToContactsFragment(FilterItemType.ALL_PATIENTS, null);

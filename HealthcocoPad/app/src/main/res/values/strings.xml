@@ -470,4 +470,6 @@
     <string name="confirm_delete_note">Are you sure you want to Delete this Note?</string>
     <string name="ok">Ok</string>
     <string name="patient_successfully_added_to_queue">added To Queue successfully</string>
+    <string name="patient_profile">Patient Profile</string>
+    <string name="add_groups">Add Group</string>
 </resources>

@@ -6,15 +6,15 @@ import com.android.volley.Response;
 import com.android.volley.RetryPolicy;
 import com.google.gson.GsonBuilder;
 import com.healthcoco.healthcocopad.R;
-import com.healthcoco.healthcocoplus.HealthCocoActivity;
 import com.healthcoco.healthcocoplus.HealthCocoApplication;
 import com.healthcoco.healthcocoplus.bean.DoctorProfileToSend;
 import com.healthcoco.healthcocoplus.bean.VersionCheckRequest;
+import com.healthcoco.healthcocoplus.bean.VolleyResponseBean;
+import com.healthcoco.healthcocoplus.bean.request.AssignGroupRequest;
 import com.healthcoco.healthcocoplus.bean.request.ClinicImageToSend;
 import com.healthcoco.healthcocoplus.bean.request.ProfessionalMembershipRequest;
 import com.healthcoco.healthcocoplus.bean.request.ProfessionalStatementRequest;
 import com.healthcoco.healthcocoplus.bean.request.RegisterNewPatientRequest;
-import com.healthcoco.healthcocoplus.bean.server.AllUIPermission;
 import com.healthcoco.healthcocoplus.bean.server.DoctorClinicProfile;
 import com.healthcoco.healthcocoplus.bean.server.DoctorProfile;
 import com.healthcoco.healthcocoplus.bean.server.DrugType;
@@ -24,13 +24,10 @@ import com.healthcoco.healthcocoplus.bean.server.Reference;
 import com.healthcoco.healthcocoplus.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocoplus.bean.server.TempTemplate;
 import com.healthcoco.healthcocoplus.bean.server.User;
-import com.healthcoco.healthcocoplus.bean.VolleyResponseBean;
 import com.healthcoco.healthcocoplus.bean.server.UserGroups;
-import com.healthcoco.healthcocoplus.dialogFragment.AddUpdateNameDialogFragment;
 import com.healthcoco.healthcocoplus.enums.BooleanTypeValues;
 import com.healthcoco.healthcocoplus.enums.LocalTabelType;
 import com.healthcoco.healthcocoplus.enums.WebServiceType;
-import com.healthcoco.healthcocoplus.fragments.PatientRegistrationFragment;
 import com.healthcoco.healthcocoplus.services.GsonRequest;
 import com.healthcoco.healthcocoplus.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocoplus.utilities.LocalDatabaseUtils;
@@ -589,5 +586,24 @@ public class WebDataServiceImpl {
         }
         getResponse(webServiceType, class1, url, group, null, responseListener,
                 errorListener);
+    }
+
+    public void addPatientToQueue(WebServiceType webServiceType, Class<?> class1, RegisteredPatientDetailsUpdated object, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        String url = webServiceType.getUrl();
+        if (HealthCocoConstants.isNetworkOnline) {
+            getResponse(webServiceType, class1, url, object, null, responseListener, errorListener);
+        } else {
+            errorListener.onErrorResponse(null, mApp.getResources().getString(R.string.user_offline));
+        }
+    }
+
+    public void assignGroup(Class<AssignGroupRequest> class1, AssignGroupRequest assignGroupRequest, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        WebServiceType webServiceType = WebServiceType.ASSIGN_GROUP;
+        Util.checkNetworkStatus(mApp.getApplicationContext());
+        if (HealthCocoConstants.isNetworkOnline)
+            getResponse(webServiceType, class1, webServiceType.getUrl(), assignGroupRequest, null, responseListener,
+                    errorListener);
+        else
+            errorListener.onNetworkUnavailable(webServiceType);
     }
 }

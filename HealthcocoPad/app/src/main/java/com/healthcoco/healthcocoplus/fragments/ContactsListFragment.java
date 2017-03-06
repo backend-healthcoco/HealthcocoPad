@@ -34,6 +34,7 @@ import com.healthcoco.healthcocoplus.bean.server.RegisteredPatientDetailsUpdated
 import com.healthcoco.healthcocoplus.bean.server.User;
 import com.healthcoco.healthcocoplus.bean.server.UserGroups;
 import com.healthcoco.healthcocoplus.custom.LocalDataBackgroundtaskOptimised;
+import com.healthcoco.healthcocoplus.dialogFragment.AddNewGroupsDialogFragment;
 import com.healthcoco.healthcocoplus.dialogFragment.ComparatorUtil;
 import com.healthcoco.healthcocoplus.dialogFragment.PatientNumberSearchDialogFragment;
 import com.healthcoco.healthcocoplus.enums.AddUpdateNameDialogType;
@@ -287,10 +288,12 @@ public class ContactsListFragment extends HealthCocoFragment implements
 
     @Override
     public void onAddToGroupClicked(RegisteredPatientDetailsUpdated selecetdPatient) {
-        Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
+        Intent intent = new Intent();
         intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.GROUPS.ordinal());
         intent.putExtra(HealthCocoConstants.TAG_SELECTED_USER_ID, selecetdPatient.getUserId());
-        startActivityForResult(intent, HealthCocoConstants.REQUEST_CODE_CONTACTS_LIST);
+        AddNewGroupsDialogFragment addNewGroupsDialogFragment = new AddNewGroupsDialogFragment();
+        addNewGroupsDialogFragment.setTargetFragment(this, HealthCocoConstants.REQUEST_CODE_CONTACTS_LIST);
+        addNewGroupsDialogFragment.show(mFragmentManager, addNewGroupsDialogFragment.getClass().getSimpleName());
         adapter.notifyDataSetChanged();
     }
 
@@ -359,11 +362,8 @@ public class ContactsListFragment extends HealthCocoFragment implements
 
     @Override
     public void onQueueClicked(RegisteredPatientDetailsUpdated selecetdPatient) {
-        mActivity.showLoading(false);
-//        WebDataServiceImpl.getInstance(mApp).addPatientToQueue(WebServiceType.ADD_PATIENT_TO_QUEUE, UserGroups.class, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(), latestUpdatedTime, null, this, this);
-
-        mActivity.showAddedToQueueAlert(selecetdPatient.getFirstName());
-        adapter.notifyDataSetChanged();
+//        mActivity.showLoading(false);
+//        WebDataServiceImpl.getInstance(mApp).addPatientToQueue(WebServiceType.ADD_PATIENT_TO_QUEUE, RegisteredPatientDetailsUpdated.class, selecetdPatient, this, this);
     }
 
     @Override
@@ -376,7 +376,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
         switch (v.getId()) {
             case R.id.bt_add_patient:
                 if (!isInHomeActivity) {
-//                    openAddUpdateNameDialogFragment(null, AddUpdateNameDialogType.ADD_PATIENT_MOBILE_NUMBER, this, user, "", 0);
+                    mActivity.openAddUpdateNameDialogFragment(null, AddUpdateNameDialogType.ADD_PATIENT_MOBILE_NUMBER, this, user, "", 0);
                 } else {
                     openPatientMobileNumberDialogFragment();
                     adapter.notifyDataSetChanged();
@@ -398,7 +398,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
 //                }
                 break;
             case R.id.bt_add_to_group:
-                openAddUpdateNameDialogFragment(WebServiceType.ADD_NEW_GROUP, AddUpdateNameDialogType.GROUPS, this, user, "", HealthCocoConstants.REQUEST_CODE_GROUPS_LIST);
+                mActivity.openAddUpdateNameDialogFragment(WebServiceType.ADD_NEW_GROUP, AddUpdateNameDialogType.GROUPS, this, user, "", HealthCocoConstants.REQUEST_CODE_GROUPS_LIST);
                 break;
             case R.id.tv_all_patients:
                 senBroadCastToContactsFragment(FilterItemType.ALL_PATIENTS, null);
@@ -560,6 +560,13 @@ public class ContactsListFragment extends HealthCocoFragment implements
                         return;
                     }
                     swipeRefreshFilterLayout.setRefreshing(false);
+                    break;
+                case ADD_PATIENT_TO_QUEUE:
+                    if (response.getData() != null && response.getData() instanceof RegisteredPatientDetailsUpdated) {
+                        RegisteredPatientDetailsUpdated selecetdPatient = (RegisteredPatientDetailsUpdated) response.getData();
+                        mActivity.showAddedToQueueAlert(selecetdPatient.getFirstName());
+                        adapter.notifyDataSetChanged();
+                    }
                     break;
                 default:
                     break;
@@ -962,6 +969,4 @@ public class ContactsListFragment extends HealthCocoFragment implements
     public String getSelectedFilterTitle() {
         return selectedFilterTitle;
     }
-
-
 }

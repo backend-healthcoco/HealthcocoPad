@@ -45,7 +45,7 @@ public class GroupListViewHolder extends HealthCocoViewHolder implements Compoun
 
     @Override
     public View getContentView() {
-        View contentView = inflater.inflate(R.layout.item_ui_permisssion, null);
+        View contentView = inflater.inflate(R.layout.grid_item_groups, null);
         tvGroupName = (TextView) contentView.findViewById(R.id.tv_group_name);
         cbGrouped = (CheckBox) contentView.findViewById(R.id.ch_ui_permission);
         cbGrouped.setOnCheckedChangeListener(this);

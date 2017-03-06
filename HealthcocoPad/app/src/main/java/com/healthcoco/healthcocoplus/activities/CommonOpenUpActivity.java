@@ -38,8 +38,6 @@ import com.healthcoco.healthcocoplus.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocoplus.utilities.LogUtils;
 import com.healthcoco.healthcocoplus.utilities.Util;
 
-import static com.healthcoco.healthcocoplus.enums.UIPermissionsItemType.PRESCRIPTION_UI_PERMISSION;
-
 public class CommonOpenUpActivity extends HealthCocoActivity {
     private Fragment loginSignupFragment;
     private Intent intent;
@@ -141,7 +139,7 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
                 break;
             case PATIENT_DETAIL:
                 hideSoftKeyboardOnStartUp();
-                openFragment(new PatientDetailFragmentUpdated());
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionType.WITH_BACK, ActionbarLeftRightActionType.NO_LEFT_RIGHT_ACTION, R.string.patient_profile, new PatientDetailFragmentUpdated());
                 break;
         }
     }
@@ -331,6 +329,7 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
         alertBuilder.create();
         alertBuilder.show();
     }
+
     public void initActionbarRightAction(View.OnClickListener listener) {
         LinearLayout rightAction = (LinearLayout) findViewById(R.id.container_right_action);
         rightAction.setOnClickListener(listener);

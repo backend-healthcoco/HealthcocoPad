@@ -27,7 +27,6 @@ import com.healthcoco.healthcocoplus.bean.server.User;
 import com.healthcoco.healthcocoplus.dialogFragment.AddUpdateNameDialogFragment;
 import com.healthcoco.healthcocoplus.dialogFragment.CommonListDialogFragment;
 import com.healthcoco.healthcocoplus.dialogFragment.CommonOptionsDialogFragment;
-import com.healthcoco.healthcocoplus.dialogFragment.CommonOptionsDialogListFragment;
 import com.healthcoco.healthcocoplus.enums.AddUpdateNameDialogType;
 import com.healthcoco.healthcocoplus.enums.CommonListDialogType;
 import com.healthcoco.healthcocoplus.enums.CommonOpenUpFragmentType;
@@ -206,24 +205,7 @@ public abstract class HealthCocoFragment extends Fragment implements GsonRequest
         }
     }
 
-    protected void openAddUpdateNameDialogFragment(WebServiceType webServiceType, AddUpdateNameDialogType dialogType,
-                                                   Fragment fragment, User user, String uniqueId, int requestCode) {
-        Bundle bundle = new Bundle();
-        bundle.putString(HealthCocoConstants.TAG_UNIQUE_ID, uniqueId);
-        if (webServiceType != null)
-            bundle.putInt(HealthCocoConstants.TAG_ORDINAL_WEB_SERVICE_TYPE, webServiceType.ordinal());
-        bundle.putInt(HealthCocoConstants.TAG_ORDINAL_DIALOG_TYPE, dialogType.ordinal());
-        if (user != null) {
-            bundle.putString(AddUpdateNameDialogFragment.TAG_DOCTOR_ID, user.getUniqueId());
-            bundle.putString(AddUpdateNameDialogFragment.TAG_LOCATION_ID, user.getForeignLocationId());
-            bundle.putString(AddUpdateNameDialogFragment.TAG_HOSPITAL_ID, user.getForeignHospitalId());
-        }
-        AddUpdateNameDialogFragment addUpdateNameDialogFragment = new AddUpdateNameDialogFragment();
-        addUpdateNameDialogFragment.setArguments(bundle);
-        addUpdateNameDialogFragment.setTargetFragment(fragment, requestCode);
-        addUpdateNameDialogFragment.show(mActivity.getSupportFragmentManager(),
-                addUpdateNameDialogFragment.getClass().getSimpleName());
-    }
+
 
     protected CommonListDialogFragment openCommonListDialogFragment(CommonListDialogItemClickListener listener, CommonListDialogType popupType, List<?> list) {
         CommonListDialogFragment commonListDialogFragment = new CommonListDialogFragment(listener, popupType, list);

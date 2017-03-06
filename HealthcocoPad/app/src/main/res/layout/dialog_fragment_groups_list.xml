@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <include layout="@layout/action_bar_title_save"></include>
+
+    <ListView
+        android:id="@+id/lv_groups"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:cacheColorHint="@android:color/transparent"
+        android:clipToPadding="false"
+        android:divider="@color/grey_light_divider"
+        android:dividerHeight="0.5dp"
+        android:listSelector="@android:color/transparent"
+        android:visibility="gone"></ListView>
+
+    <TextView
+        android:id="@+id/tv_no_groups"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="@string/no_groups"
+        android:textSize="@dimen/text_size_no_results"
+        android:textStyle="bold" />
+
+    <com.healthcoco.healthcocoplus.views.FontAwesomeButton
+        android:id="@+id/bt_add"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/selector_btn_blue_grey"
+        android:padding="10dp"
+        android:text="@string/icon_add_new_group"
+        android:textAllCaps="false"
+        android:textColor="@drawable/text_selector_white_translucent"
+        android:textSize="@dimen/text_size_contact_list_mobile" />
+</LinearLayout>

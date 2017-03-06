@@ -12,10 +12,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v4.widget.SlidingPaneLayout;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -100,6 +97,7 @@ public class HomeActivity extends HealthCocoActivity implements View.OnClickList
             }
         }
         initFragments();
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, GravityCompat.END);
     }
 
     private void initListeners() {
@@ -380,6 +378,7 @@ public class HomeActivity extends HealthCocoActivity implements View.OnClickList
 
     public void enableFilterButton() {
         containerRightActionType.setEnabled(true);
+//        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, GravityCompat.END);
     }
 
     public void disableFilterButton() {

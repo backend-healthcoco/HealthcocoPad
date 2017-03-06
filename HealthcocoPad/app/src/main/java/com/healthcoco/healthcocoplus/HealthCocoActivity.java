@@ -11,6 +11,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -48,7 +49,9 @@ import com.healthcoco.healthcocoplus.bean.server.TempTemplate;
 import com.healthcoco.healthcocoplus.bean.server.User;
 import com.healthcoco.healthcocoplus.bean.server.UserGroups;
 import com.healthcoco.healthcocoplus.custom.LocalDataBackgroundtaskOptimised;
+import com.healthcoco.healthcocoplus.dialogFragment.AddUpdateNameDialogFragment;
 import com.healthcoco.healthcocoplus.dialogFragment.EnlargedImageViewDialogFragment;
+import com.healthcoco.healthcocoplus.enums.AddUpdateNameDialogType;
 import com.healthcoco.healthcocoplus.enums.BooleanTypeValues;
 import com.healthcoco.healthcocoplus.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocoplus.enums.DefaultSyncServiceType;
@@ -895,7 +898,8 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
 
     public void showAddedToQueueAlert(String firstName) {
         final AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
-        alertBuilder.setMessage(getResources().getString(R.string.patient) + firstName + getResources().getString(R.string.patient_successfully_added_to_queue));
+        alertBuilder.setMessage(getResources().getString(R.string.patient) + " " +
+                firstName + " " + getResources().getString(R.string.patient_successfully_added_to_queue));
         alertBuilder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
 
             @Override
@@ -905,5 +909,24 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
         });
         alertBuilder.create();
         alertBuilder.show();
+    }
+
+    public void openAddUpdateNameDialogFragment(WebServiceType webServiceType, AddUpdateNameDialogType dialogType,
+                                                Fragment fragment, User user, String uniqueId, int requestCode) {
+        Bundle bundle = new Bundle();
+        bundle.putString(HealthCocoConstants.TAG_UNIQUE_ID, uniqueId);
+        if (webServiceType != null)
+            bundle.putInt(HealthCocoConstants.TAG_ORDINAL_WEB_SERVICE_TYPE, webServiceType.ordinal());
+        bundle.putInt(HealthCocoConstants.TAG_ORDINAL_DIALOG_TYPE, dialogType.ordinal());
+        if (user != null) {
+            bundle.putString(AddUpdateNameDialogFragment.TAG_DOCTOR_ID, user.getUniqueId());
+            bundle.putString(AddUpdateNameDialogFragment.TAG_LOCATION_ID, user.getForeignLocationId());
+            bundle.putString(AddUpdateNameDialogFragment.TAG_HOSPITAL_ID, user.getForeignHospitalId());
+        }
+        AddUpdateNameDialogFragment addUpdateNameDialogFragment = new AddUpdateNameDialogFragment();
+        addUpdateNameDialogFragment.setArguments(bundle);
+        addUpdateNameDialogFragment.setTargetFragment(fragment, requestCode);
+        addUpdateNameDialogFragment.show(getSupportFragmentManager(),
+                addUpdateNameDialogFragment.getClass().getSimpleName());
     }
 }

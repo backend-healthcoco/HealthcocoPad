@@ -16,4 +16,5 @@
     <string name="icon_text_register_new_patient">&#xf055; Register New Patient</string>
     <string name="fa_globe">&#xf0ac;</string>
     <string name="fa_clinic">&#xf0ac;</string>
+    <string name="icon_add_new_group">&#xf067;&#160;Add New Group</string>
 </resources>

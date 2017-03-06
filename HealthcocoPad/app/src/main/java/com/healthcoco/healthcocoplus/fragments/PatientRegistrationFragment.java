@@ -195,12 +195,12 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
             initDefaultData();
             initGroupAdapter();
             notifyGroupListAdapter(groupsList);
-//            getGroupListFromLocal();
+            getGroupListFromLocal();
         }
     }
 
     private void getGroupListFromLocal() {
-        new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_GROUPS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        LocalDataServiceImpl.getInstance(mApp).getUserGroups(WebServiceType.GET_GROUPS, null, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(), this, this);
     }
 
     private void initGroupAdapter() {
@@ -247,7 +247,6 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
         btDeleteBloodGroup.setOnClickListener(this);
         btDeleteReferredBy.setOnClickListener(this);
         btAddNote.setOnClickListener(this);
-
     }
 
     private void initDefaultData() {
@@ -471,7 +470,7 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
                 tvReferredBy.setText("");
                 break;
             case R.id.bt_add_note:
-                openAddUpdateNameDialogFragment(WebServiceType.LOCAL_STRING_SAVE, AddUpdateNameDialogType.LOCAL_STRING_SAVE, this, null, "", HealthCocoConstants.REQUEST_CODE_STRINGS_LIST);
+                mActivity.openAddUpdateNameDialogFragment(WebServiceType.LOCAL_STRING_SAVE, AddUpdateNameDialogType.LOCAL_STRING_SAVE, this, null, "", HealthCocoConstants.REQUEST_CODE_STRINGS_LIST);
                 break;
         }
     }
@@ -719,10 +718,10 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
                     if (!Util.isNullOrEmptyList(groupsList))
                         LogUtils.LOGD(TAG, "Success onResponse groupsList Size " + groupsList.size() + " isDataFromLocal " + response.isDataFromLocal());
                     notifyGroupListAdapter(groupsList);
-                    if (!response.isFromLocalAfterApiSuccess() && response.isUserOnline()) {
-                        getGroupsList();
-                        return;
-                    }
+//                    if (!response.isFromLocalAfterApiSuccess() && response.isUserOnline()) {
+//                        getGroupsList();
+//                        return;
+//                    }
                 } else if (!Util.isNullOrEmptyList(response.getDataList())) {
                     new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_GROUPS_LIST, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
                     response.setIsFromLocalAfterApiSuccess(true);
@@ -900,6 +899,8 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
                 volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getUserGroups(WebServiceType.GET_GROUPS, groupIdsToAssign, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(), null, null);
                 break;
         }
+        if (volleyResponseBean == null)
+            volleyResponseBean = new VolleyResponseBean();
         volleyResponseBean.setIsFromLocalAfterApiSuccess(response.isFromLocalAfterApiSuccess());
         return volleyResponseBean;
     }
