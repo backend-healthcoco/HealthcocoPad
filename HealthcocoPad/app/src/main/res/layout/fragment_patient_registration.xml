@@ -89,7 +89,7 @@
 
                             <TextView
                                 style="@style/registration_textview"
-                                android:layout_width="wrap_content"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:text="Patient Name:" />
@@ -97,7 +97,7 @@
                             <EditText
                                 android:id="@+id/edit_name"
                                 style="@style/registration_edittext"
-                                android:layout_width="wrap_content"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:digits=" abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -113,7 +113,7 @@
 
                             <TextView
                                 style="@style/registration_textview"
-                                android:layout_width="wrap_content"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:maxLines="1"
@@ -122,7 +122,7 @@
                             <TextView
                                 android:id="@+id/tv_mobile_number"
                                 style="@style/registration_edittext"
-                                android:layout_width="wrap_content"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:maxLength="@integer/max_mobile_number"
@@ -145,7 +145,7 @@
                         android:orientation="horizontal">
 
                         <LinearLayout
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:orientation="vertical">
@@ -198,7 +198,7 @@
                         </LinearLayout>
 
                         <LinearLayout
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:orientation="vertical">
@@ -385,7 +385,7 @@
 
                         <TextView
                             style="@style/registration_textview"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="@string/referred_by" />
@@ -393,7 +393,7 @@
                         <TextView
                             android:id="@+id/tv_referred_by"
                             style="@style/registration_edittext"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:drawableRight="@drawable/arrow_down_drug"
@@ -402,7 +402,7 @@
 
                         <ImageButton
                             android:id="@+id/bt_delete_referred_by"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="0.1"
                             android:background="@android:color/transparent"
@@ -418,7 +418,7 @@
 
                         <TextView
                             style="@style/registration_textview"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:inputType="text"
@@ -427,7 +427,7 @@
                         <com.healthcoco.healthcocoplus.views.CustomAutoCompleteTextView
                             android:id="@+id/autotv_country"
                             style="@style/registration_edittext"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:drawableRight="@drawable/arrow_down_drug"
@@ -444,7 +444,7 @@
 
                         <TextView
                             style="@style/registration_textview"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="@string/city" />
@@ -452,9 +452,10 @@
                         <AutoCompleteTextView
                             android:id="@+id/autotv_city"
                             style="@style/registration_edittext"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:gravity="start"
                             android:hint="@string/city"
                             android:inputType="textCapSentences"
                             android:maxLines="1" />
@@ -468,7 +469,7 @@
 
                         <TextView
                             style="@style/registration_textview"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="@string/pincode"
@@ -477,7 +478,7 @@
                         <EditText
                             android:id="@+id/edit_pincode"
                             style="@style/registration_edittext"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:hint="@string/pincode"
@@ -493,7 +494,7 @@
 
                         <TextView
                             style="@style/registration_textview"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="@string/street_address" />
@@ -501,7 +502,7 @@
                         <EditText
                             android:id="@+id/edit_street"
                             style="@style/registration_edittext"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:hint="@string/street_address"
@@ -517,7 +518,7 @@
                         <TextView
                             android:id="@+id/textView10"
                             style="@style/registration_textview"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="@string/locality" />
@@ -525,7 +526,7 @@
                         <EditText
                             android:id="@+id/edit_locality"
                             style="@style/registration_edittext"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:hint="@string/locality"
@@ -540,7 +541,7 @@
 
                         <TextView
                             style="@style/registration_textview"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="@string/aadhar_id" />
@@ -548,7 +549,7 @@
                         <EditText
                             android:id="@+id/edit_aadhar_id"
                             style="@style/registration_edittext"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:hint="@string/aadhar_id"
@@ -564,7 +565,7 @@
 
                         <TextView
                             style="@style/registration_textview"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="@string/pan_number" />
@@ -572,7 +573,7 @@
                         <EditText
                             android:id="@+id/edit_pan_number"
                             style="@style/registration_edittext"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
@@ -587,7 +588,7 @@
 
                         <TextView
                             style="@style/registration_textview"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="@string/driving_license" />
@@ -595,7 +596,7 @@
                         <EditText
                             android:id="@+id/edit_driving_license"
                             style="@style/registration_edittext"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"

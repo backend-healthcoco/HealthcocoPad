@@ -287,11 +287,11 @@ public class ContactsListFragment extends HealthCocoFragment implements
 
     @Override
     public void onAddToGroupClicked(RegisteredPatientDetailsUpdated selecetdPatient) {
-//        Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
-//        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.GROUPS.ordinal());
-//        intent.putExtra(HealthCocoConstants.TAG_SELECTED_USER_ID, selecetdPatient.getUserId());
-//        startActivityForResult(intent, HealthCocoConstants.REQUEST_CODE_CONTACTS_LIST);
-//        adapter.notifyDataSetChanged();
+        Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
+        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.GROUPS.ordinal());
+        intent.putExtra(HealthCocoConstants.TAG_SELECTED_USER_ID, selecetdPatient.getUserId());
+        startActivityForResult(intent, HealthCocoConstants.REQUEST_CODE_CONTACTS_LIST);
+        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -355,6 +355,15 @@ public class ContactsListFragment extends HealthCocoFragment implements
         intent.putExtra(HealthCocoConstants.TAG_IS_EDIT_PATIENT, true);
         mActivity.openCommonOpenUpActivity(CommonOpenUpFragmentType.PATIENT_REGISTRATION, intent,
                 HealthCocoConstants.REQUEST_CODE_CONTACTS_DETAIL);
+    }
+
+    @Override
+    public void onQueueClicked(RegisteredPatientDetailsUpdated selecetdPatient) {
+        mActivity.showLoading(false);
+//        WebDataServiceImpl.getInstance(mApp).addPatientToQueue(WebServiceType.ADD_PATIENT_TO_QUEUE, UserGroups.class, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(), latestUpdatedTime, null, this, this);
+
+        mActivity.showAddedToQueueAlert(selecetdPatient.getFirstName());
+        adapter.notifyDataSetChanged();
     }
 
     @Override

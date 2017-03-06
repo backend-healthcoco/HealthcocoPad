@@ -193,14 +193,14 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
             initNoteListAdapter();
             initData();
             initDefaultData();
-//            initGroupAdapter();
-//            notifyGroupListAdapter(groupsList);
+            initGroupAdapter();
+            notifyGroupListAdapter(groupsList);
 //            getGroupListFromLocal();
         }
     }
 
     private void getGroupListFromLocal() {
-        LocalDataServiceImpl.getInstance(mApp).getUserGroups(WebServiceType.GET_GROUPS, null, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(), this, this);
+        new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_GROUPS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     private void initGroupAdapter() {
@@ -310,6 +310,8 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
         }
         if (!Util.isNullOrBlank(mobileNumber))
             tvMobileNumber.setText(mobileNumber);
+        if (selectedPatient != null && !Util.isNullOrEmptyList(selectedPatient.getGroupIds()))
+            groupIdsToAssign.addAll(selectedPatient.getGroupIds());
     }
 
     private void initPatientDetails(Object patientDetails) {
@@ -319,7 +321,6 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
         String gender = "";
         String birthday = "";
         String emailAddress = "";
-        List<UserGroups> groupsList = null;
         String city = "";
         String locality = "";
         String pincode = "";
@@ -408,8 +409,7 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
 //        } else containerAge.setVisibility(View.VISIBLE);
         editEmail.setText(emailAddress);
 
-//        tvGroup.setText(getGroupNames(groupsList));
-//        tvNotes.setText(getNotesName(notesList));
+        notifyGroupListAdapter(groupsList);
         editAadharId.setText(aadharId);
         editDrivingLicence.setText(drivingLicense);
         editPanCardNumber.setText(panNumber);
@@ -648,18 +648,6 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
             errorMsg = volleyResponseBean.getErrMsg();
         }
         if (volleyResponseBean.getWebServiceType() != null) {
-//            switch (volleyResponseBean.getWebServiceType()) {
-//                case GET_REFERENCE:
-//                    isReferenceLoaded = true;
-//                    break;
-//                case GET_PROFESSION:
-//                    isProfessionLoaded = true;
-//                    break;
-//                case GET_CITIES:
-//                    isCityLoaded = true;
-//                    break;
-//            }
-//            if (isBloodGroupLoaded && isCityLoaded && isProfessionLoaded && isReferenceLoaded)
             mActivity.hideLoading();
             Util.showToast(mActivity, volleyResponseBean.getWebServiceType() + errorMsg);
             return;
@@ -706,10 +694,6 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
                     referenceList = (ArrayList<Reference>) (ArrayList<?>) response
                             .getDataList();
                     LogUtils.LOGD(TAG, "Success onResponse referenceList Size " + referenceList.size() + " isDataFromLocal " + response.isDataFromLocal());
-//                    if (!response.isFromLocalAfterApiSuccess()) {
-//                        mActivity.syncReferenceList(user, this, this);
-//                        return;
-//                    }
                 } else if (!Util.isNullOrEmptyList(response.getDataList())) {
                     new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_REFERENCE, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
                     response.setIsFromLocalAfterApiSuccess(true);
@@ -722,30 +706,11 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
             case GET_CITIES:
                 if (!Util.isNullOrEmptyList(response.getDataList()))
                     initAutoTvAdapter(autotvCity, AutoCompleteTextViewType.CITY, response.getDataList());
-
-//                LogUtils.LOGD(TAG, "Success onResponse citiesList Size " + citiesList.size() + " isDataFromLocal " + response.isDataFromLocal());
-//                if (openCitiesListScreen)
-//                    onClick(tvCity);
                 break;
             case GET_PROFESSION:
                 if (!Util.isNullOrEmptyList(response.getDataList())) {
                     initAutoTvAdapter(autotvProfession, AutoCompleteTextViewType.PROFESSION, response.getDataList());
                 }
-//                if (response.isDataFromLocal()) {
-//                    professionsList = (ArrayList<Profession>) (ArrayList<?>) response
-//                            .getDataList();
-//                    if (!Util.isNullOrEmptyList(professionsList)) {
-//                        LogUtils.LOGD(TAG, "Success onResponse professionsList Size " + professionsList.size() + " isDataFromLocal " + response.isDataFromLocal());
-//                        initAutoTvAdapter(tvProfession, AutoCompleteTextViewType.PROFESSION, (ArrayList<Object>) (ArrayList<?>) professionsList);
-//                    }
-//                } else if (!Util.isNullOrEmptyList(response.getDataList())) {
-//                    new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_PROFESSION, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
-//                    response.setIsFromLocalAfterApiSuccess(true);
-//                    LogUtils.LOGD(TAG, "Success onResponse professionsList Size Total" + professionsList.size() + " isDataFromLocal " + response.isDataFromLocal());
-//                    return;
-//                }
-//                if (openProfessionListScreen)
-//                    onClick(tvProfession);
                 break;
             case GET_GROUPS:
                 if (response.isDataFromLocal()) {
@@ -766,8 +731,6 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
                 mActivity.hideLoading();
                 break;
         }
-
-//        if (isCityLoaded && isProfessionLoaded && isReferenceLoaded)
         mActivity.hideLoading();
     }
 
@@ -794,7 +757,6 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
     private void openPatientDetailScreen(RegisteredPatientDetailsUpdated selecetdPatient) {
         if (selecetdPatient.getPatient() != null && !Util.isNullOrBlank(selecetdPatient.getPatient().getPatientId())) {
             HealthCocoConstants.SELECTED_PATIENTS_USER_ID = selecetdPatient.getUserId();
-//            Util.sendBroadcast(mApp, ContactsListFragment.INTENT_REGISTER_NEW_CONTACT);
             openCommonOpenUpActivity(CommonOpenUpFragmentType.PATIENT_DETAIL, null,
                     HealthCocoConstants.REQUEST_CODE_CONTACTS_DETAIL);
         }
@@ -928,8 +890,6 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
             case GET_REFERENCE_LIST_ALL:
                 volleyResponseBean = LocalDataServiceImpl.getInstance(mApp)
                         .getReferenceList(WebServiceType.GET_REFERENCE, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(), BooleanTypeValues.FALSE, RecordType.BOTH, null, null);
-
-//                volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getReferenceListAll(WebServiceType.GET_REFERENCE, user.getUniqueId(), BooleanTypeValues.FALSE, null, null);
                 break;
             case ADD_PROFESSION:
                 LocalDataServiceImpl.getInstance(mApp).addProfessionsList((ArrayList<Profession>) (ArrayList<?>) response.getDataList());

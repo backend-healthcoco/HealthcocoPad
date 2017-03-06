@@ -83,13 +83,13 @@ public class ContactsListViewHolder implements OnClickListener, ImageLoadedListe
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.bt_group:
-                optionsListener.onAddToGroupClicked(objData);
-                break;
             case R.id.bt_call:
                 optionsListener.onCallClicked(objData);
                 break;
-            case R.id.bt_mail:
+            case R.id.bt_group:
+                optionsListener.onAddToGroupClicked(objData);
+                break;
+            case R.id.bt_prescription:
                 optionsListener.onAddPrescriptionClicked(objData);
                 break;
             case R.id.container_top:

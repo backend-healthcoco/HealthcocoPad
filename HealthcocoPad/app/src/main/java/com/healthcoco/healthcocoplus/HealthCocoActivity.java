@@ -17,7 +17,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -70,7 +69,6 @@ import com.healthcoco.healthcocoplus.utilities.MyExceptionHandler;
 import com.healthcoco.healthcocoplus.utilities.Util;
 import com.healthcoco.healthcocoplus.views.FontAwesomeButton;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -893,5 +891,19 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
         WebDataServiceImpl.getInstance(mApp).getContactsList(RegisteredPatientDetailsUpdated.class, user.getUniqueId(),
                 user.getForeignHospitalId(), user.getForeignLocationId(), latestUpdatedTime, this, this);
 
+    }
+
+    public void showAddedToQueueAlert(String firstName) {
+        final AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
+        alertBuilder.setMessage(getResources().getString(R.string.patient) + firstName + getResources().getString(R.string.patient_successfully_added_to_queue));
+        alertBuilder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        alertBuilder.create();
+        alertBuilder.show();
     }
 }

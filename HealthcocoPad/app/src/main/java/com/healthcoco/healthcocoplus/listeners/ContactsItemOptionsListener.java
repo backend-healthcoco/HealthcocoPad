@@ -20,4 +20,6 @@ public interface ContactsItemOptionsListener {
     public boolean isInHomeActivity();
 
     public void onEditClicked(RegisteredPatientDetailsUpdated patientDetailsUpdated);
+
+    void onQueueClicked(RegisteredPatientDetailsUpdated objData);
 }

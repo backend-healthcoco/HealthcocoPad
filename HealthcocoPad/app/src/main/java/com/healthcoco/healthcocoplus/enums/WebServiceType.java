@@ -280,7 +280,8 @@ public enum WebServiceType {
 
     GET_ALL_UI_PERMISSIONS(Method.GET, "dynamicUI/getAllPermissionsForDoctor/"),
 
-    POST_UI_PERMISSIONS(Method.POST, "dynamicUI/postPermissions/");
+    POST_UI_PERMISSIONS(Method.POST, "dynamicUI/postPermissions/"),
+    ADD_PATIENT_TO_QUEUE(Method.POST, "appointment/queue/add");
 
     private int methodType;
     private String url;

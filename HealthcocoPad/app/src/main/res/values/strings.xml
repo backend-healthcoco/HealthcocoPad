@@ -468,4 +468,6 @@
     <string name="please_enter_valid_aadhar_id">Please enter valid Aadhar ID</string>
     <string name="search_blood_group">Search Blood Group</string>
     <string name="confirm_delete_note">Are you sure you want to Delete this Note?</string>
+    <string name="ok">Ok</string>
+    <string name="patient_successfully_added_to_queue">added To Queue successfully</string>
 </resources>

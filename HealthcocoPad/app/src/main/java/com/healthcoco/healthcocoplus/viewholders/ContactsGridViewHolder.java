@@ -93,13 +93,13 @@ public class ContactsGridViewHolder implements OnClickListener, ImageLoadedListe
                 optionsListener.onEditClicked(objData);
                 break;
             case R.id.bt_queue:
-//                optionsListener.onCallClicked(objData);
+                optionsListener.onQueueClicked(objData);
                 break;
             case R.id.bt_call:
                 optionsListener.onCallClicked(objData);
                 break;
             case R.id.bt_group:
-//                optionsListener.onAddPrescriptionClicked(objData);
+                optionsListener.onAddToGroupClicked(objData);
                 break;
             case R.id.bt_prescription:
                 optionsListener.onAddPrescriptionClicked(objData);
