@@ -677,7 +677,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
                 int filterItemTypeOrdinal = intent.getIntExtra(HealthCocoConstants.TAG_ORDINAL, 0);
                 final FilterItemType itemType = FilterItemType.values()[filterItemTypeOrdinal];
                 if (itemType != null) {
-                    if (itemType == FilterItemType.REFRESH_CONTACTS) {
+                    if (itemType == FilterItemType.REFRESH_CONTACTS ) {
                         getContactsList(true);
                     } else {
                         sortList(intent, itemType);

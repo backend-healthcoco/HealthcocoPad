@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/patient_detail_top_bottom_paddding"
+    android:paddingLeft="@dimen/patient_detail_left_right_paddding"
+    android:paddingRight="@dimen/patient_detail_left_right_paddding"
+    android:paddingTop="@dimen/patient_detail_top_bottom_paddding">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/parent_profile_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginRight="10dp"
+            android:orientation="horizontal"
+            android:padding="20dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center">
+
+                <FrameLayout
+                    android:id="@+id/profile_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|start"
+                    android:background="@android:color/transparent">
+
+                    <TextView
+                        android:id="@+id/tv_initial_aplhabet"
+                        style="@style/TextRobotoStyle"
+                        android:layout_width="@dimen/initial_alphabet_patient_detail"
+                        android:layout_height="@dimen/initial_alphabet_patient_detail"
+                        android:layout_gravity="center"
+                        android:background="@android:color/transparent"
+                        android:gravity="center"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_size_patients_list_initial_alphabet" />
+
+                    <com.healthcoco.healthcocoplus.custom.CircularImageView
+                        android:id="@+id/iv_image"
+                        android:layout_width="@dimen/image_patient_deatail"
+                        android:layout_height="@dimen/image_patient_deatail"
+                        android:layout_gravity="center"
+                        android:background="@drawable/shape_circle_blue_theme"
+                        android:scaleType="centerCrop"
+                        android:visibility="visible"
+                        app:civ_border_overlay="true"
+                        app:civ_border_width="@dimen/border_profile_images" />
+                </FrameLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="20dp"
+                android:gravity="center|start"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_name"
+                    style="@style/TextRobotoStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="jij"
+                    android:textColor="@color/blue_action_bar"
+                    android:textSize="@dimen/text_size_patient_name_deatil_fragment"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_gender_age"
+                    style="@style/TextRobotoStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="P695464613"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_patient_id_deatil_fragment"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

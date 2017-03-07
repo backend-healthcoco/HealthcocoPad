@@ -13,7 +13,6 @@ import android.widget.TextView;
 import com.android.volley.Response;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocoplus.HealthCocoDialogFragment;
-import com.healthcoco.healthcocoplus.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocoplus.adapter.GroupsListViewAdapter;
 import com.healthcoco.healthcocoplus.bean.VolleyResponseBean;
 import com.healthcoco.healthcocoplus.bean.request.AssignGroupRequest;
@@ -155,13 +154,10 @@ public class AddNewGroupsDialogFragment extends HealthCocoDialogFragment impleme
                     assignGroupRequest.setLocationId(user.getForeignLocationId());
                     assignGroupRequest.setHospitalId(user.getForeignHospitalId());
                     WebDataServiceImpl.getInstance(mApp).assignGroup(AssignGroupRequest.class, assignGroupRequest, this, this);
-                } else {
-                    getTargetFragment().onActivityResult(getTargetRequestCode(), HealthCocoConstants.RESULT_CODE_GROUPS_LIST, new Intent().putExtra(HealthCocoConstants.TAG_GROUP_IDS_LIST, groupIdsToAssign));
-                    dismiss();
                 }
-
+                getTargetFragment().onActivityResult(getTargetRequestCode(), HealthCocoConstants.RESULT_CODE_GROUPS_LIST, new Intent().putExtra(HealthCocoConstants.TAG_GROUP_IDS_LIST, groupIdsToAssign));
+                dismiss();
                 break;
-
         }
     }
 
@@ -202,8 +198,8 @@ public class AddNewGroupsDialogFragment extends HealthCocoDialogFragment impleme
             case ASSIGN_GROUP:
                 selectedPatient.setGroups(groupListToAssign);
                 LocalDataServiceImpl.getInstance(mApp).addPatient(selectedPatient);
-                ((CommonOpenUpActivity) mActivity).setResult(HealthCocoConstants.RESULT_CODE_GROUPS_LIST);
-                ((CommonOpenUpActivity) mActivity).finish();
+                getTargetFragment().onActivityResult(getTargetRequestCode(), HealthCocoConstants.RESULT_CODE_GROUPS_LIST, new Intent());
+                dismiss();
                 mActivity.syncContacts(user);
                 break;
             default:

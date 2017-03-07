@@ -8,6 +8,7 @@ import com.healthcoco.healthcocoplus.HealthCocoActivity;
 import com.healthcoco.healthcocoplus.bean.server.UserGroups;
 import com.healthcoco.healthcocoplus.listeners.AssignGroupListener;
 import com.healthcoco.healthcocoplus.utilities.Util;
+import com.healthcoco.healthcocoplus.viewholders.GroupGridViewHolder;
 import com.healthcoco.healthcocoplus.viewholders.GroupListViewHolder;
 
 import java.util.List;
@@ -19,7 +20,7 @@ public class GroupsGridViewAdapter extends BaseAdapter {
     private AssignGroupListener assignGroupListener;
     private List<UserGroups> list;
     private HealthCocoActivity mActivity;
-    private GroupListViewHolder holder;
+    private GroupGridViewHolder holder;
 
     public GroupsGridViewAdapter() {
     }
@@ -49,11 +50,11 @@ public class GroupsGridViewAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            holder = new GroupListViewHolder(mActivity,assignGroupListener);
+            holder = new GroupGridViewHolder(mActivity,assignGroupListener);
             convertView = holder.getContentView();
             convertView.setTag(holder);
         } else
-            holder = (GroupListViewHolder) convertView.getTag();
+            holder = (GroupGridViewHolder) convertView.getTag();
         holder.setData(getItem(position));
         holder.applyData();
         return convertView;

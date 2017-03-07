@@ -2,4 +2,5 @@
     <dimen name="initial_screen_icon_sizes">317px</dimen>
     <dimen name="hcc_plus_top_logo_width">267px</dimen>
     <dimen name="hcc_plus_top_logo_height">34px</dimen>
+    <dimen name="tab_home_image_size">20px</dimen>
 </resources>

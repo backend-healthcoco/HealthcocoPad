@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="5dp">
+
+    <ImageView
+        android:id="@+id/iv_image"
+        android:layout_width="@dimen/tab_home_image_size"
+        android:layout_height="@dimen/tab_home_image_size"
+        android:src="@drawable/selector_ic_apoointment_tab" />
+
+    <TextView
+        android:id="@+id/tv_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingTop="5dp"
+        android:text="TabSubItems"
+        android:textColor="@drawable/text_selector_grey_blue"
+        android:textSize="@dimen/text_size_tab_indicator_home" />
+</LinearLayout>

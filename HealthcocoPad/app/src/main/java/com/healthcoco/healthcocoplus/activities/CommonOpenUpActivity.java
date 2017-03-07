@@ -29,7 +29,7 @@ import com.healthcoco.healthcocoplus.fragments.AddNewPrescriptionFragment;
 import com.healthcoco.healthcocoplus.fragments.FeedbackFragment;
 import com.healthcoco.healthcocoplus.fragments.InitialSyncFragment;
 import com.healthcoco.healthcocoplus.fragments.LoginSignupFragment;
-import com.healthcoco.healthcocoplus.fragments.PatientDetailFragmentUpdated;
+import com.healthcoco.healthcocoplus.fragments.CommonOpenUpPatientDetailFragment;
 import com.healthcoco.healthcocoplus.fragments.PatientRegistrationFragment;
 import com.healthcoco.healthcocoplus.fragments.PrescriptionUIPermissionFragment;
 import com.healthcoco.healthcocoplus.fragments.SettingUIPermissionsFragment;
@@ -139,7 +139,7 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
                 break;
             case PATIENT_DETAIL:
                 hideSoftKeyboardOnStartUp();
-                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionType.WITH_BACK, ActionbarLeftRightActionType.NO_LEFT_RIGHT_ACTION, R.string.patient_profile, new PatientDetailFragmentUpdated());
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionType.WITH_BACK, ActionbarLeftRightActionType.NO_LEFT_RIGHT_ACTION, R.string.patient_profile, new CommonOpenUpPatientDetailFragment());
                 break;
         }
     }

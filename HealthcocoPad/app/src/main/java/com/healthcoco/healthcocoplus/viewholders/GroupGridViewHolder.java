@@ -13,9 +13,9 @@ import com.healthcoco.healthcocoplus.listeners.AssignGroupListener;
 import com.healthcoco.healthcocoplus.utilities.Util;
 
 /**
- * Created by neha on 23/11/15.
+ * Created by Shreshtha on 07-03-2017.
  */
-public class GroupListViewHolder extends HealthCocoViewHolder implements CompoundButton.OnCheckedChangeListener, View.OnClickListener {
+public class GroupGridViewHolder extends HealthCocoViewHolder implements CompoundButton.OnCheckedChangeListener, View.OnClickListener {
 
     private AssignGroupListener assignGroupListener;
     private HealthCocoActivity mActivity;
@@ -23,7 +23,7 @@ public class GroupListViewHolder extends HealthCocoViewHolder implements Compoun
     private TextView tvGroupName;
     private CheckBox cbGrouped;
 
-    public GroupListViewHolder(HealthCocoActivity mActivity, AssignGroupListener assignGroupListener) {
+    public GroupGridViewHolder(HealthCocoActivity mActivity, AssignGroupListener assignGroupListener) {
         super(mActivity);
         this.mActivity = mActivity;
         this.assignGroupListener = assignGroupListener;
@@ -45,9 +45,9 @@ public class GroupListViewHolder extends HealthCocoViewHolder implements Compoun
 
     @Override
     public View getContentView() {
-        View contentView = inflater.inflate(R.layout.list_item_groups, null);
+        View contentView = inflater.inflate(R.layout.grid_item_groups, null);
         tvGroupName = (TextView) contentView.findViewById(R.id.tv_group_name);
-        cbGrouped = (CheckBox) contentView.findViewById(R.id.cb_grouped);
+        cbGrouped = (CheckBox) contentView.findViewById(R.id.ch_ui_permission);
         cbGrouped.setOnCheckedChangeListener(this);
         contentView.setOnClickListener(this);
         return contentView;

@@ -472,4 +472,7 @@
     <string name="patient_successfully_added_to_queue">added To Queue successfully</string>
     <string name="patient_profile">Patient Profile</string>
     <string name="add_groups">Add Group</string>
+    <string name="important">Important</string>
+    <string name="appointment">Appointment</string>
+    <string name="treatment">Treatment</string>
 </resources>

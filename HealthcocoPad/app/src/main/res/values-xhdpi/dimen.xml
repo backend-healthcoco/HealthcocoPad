@@ -3,4 +3,5 @@
     <dimen name="btn_padding">12dp</dimen>
     <dimen name="hcc_plus_top_logo_width">534px</dimen>
     <dimen name="hcc_plus_top_logo_height">67px</dimen>
+    <dimen name="tab_home_image_size">33px</dimen>
 </resources>

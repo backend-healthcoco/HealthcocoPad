@@ -62,5 +62,4 @@ public class GroupsListViewAdapter extends BaseAdapter {
     public void setListData(List<UserGroups> list) {
         this.list = list;
     }
-
 }

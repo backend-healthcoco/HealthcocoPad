@@ -84,7 +84,17 @@ public class Util {
         }
         return null;
     }
-
+    /**
+     * prints screen density as follows :
+     * // return 0.75 if it's LDPI
+     * // return 1.0 if it's MDPI
+     * // return 1.5 if it's HDPI
+     * // return 2.0 if it's XHDPI
+     * // return 3.0 if it's XXHDPI
+     * // return 4.0 if it's XXXHDPI
+     *
+     * @param activity
+     */
     public static void printScreenDensity(Activity activity) {
         try {
             float density = activity.getResources().getDisplayMetrics().density;
