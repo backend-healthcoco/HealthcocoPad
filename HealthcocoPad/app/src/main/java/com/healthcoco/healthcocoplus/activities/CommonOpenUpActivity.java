@@ -20,7 +20,7 @@ import android.widget.TextView;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocoplus.HealthCocoActivity;
 import com.healthcoco.healthcocoplus.HealthCocoFragment;
-import com.healthcoco.healthcocoplus.enums.ActionbarLeftRightActionType;
+import com.healthcoco.healthcocoplus.enums.ActionbarLeftRightActionTypeDrawables;
 import com.healthcoco.healthcocoplus.enums.ActionbarType;
 import com.healthcoco.healthcocoplus.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocoplus.fragments.AboutUsFragment;
@@ -78,68 +78,68 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
             case CONTINUE_SIGN_UP:
                 break;
             case TERMS_OF_SERVICE:
-                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionType.WITH_CROSS, ActionbarLeftRightActionType.NO_LEFT_RIGHT_ACTION, R.string.terms_of_service, new WebViewFragments());
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_CROSS, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, R.string.terms_of_service, new WebViewFragments());
                 break;
             case PRIVACY_POLICY:
-                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionType.WITH_CROSS, ActionbarLeftRightActionType.NO_LEFT_RIGHT_ACTION, R.string.privacy_policy, new WebViewFragments());
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_CROSS, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, R.string.privacy_policy, new WebViewFragments());
                 break;
             case INITIAL_SYNC:
                 openFragment(ActionbarType.HIDDEN, R.string.sync, new InitialSyncFragment());
                 break;
             case FEEDBACK:
-                openFragment(ActionbarType.TITLE_SAVE, ActionbarLeftRightActionType.WITH_CROSS, ActionbarLeftRightActionType.NO_LEFT_RIGHT_ACTION, R.string.help_us_to_improve, new FeedbackFragment());
+                openFragment(ActionbarType.TITLE_SAVE, ActionbarLeftRightActionTypeDrawables.WITH_CROSS, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, R.string.help_us_to_improve, new FeedbackFragment());
                 break;
             case ADD_EDIT_CLINIC_IMAGE:
-                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionType.WITH_DONE, ActionbarLeftRightActionType.NO_LEFT_RIGHT_ACTION, R.string.clinic_photos, new AddEditClinicImageFragment());
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_DONE, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, R.string.clinic_photos, new AddEditClinicImageFragment());
                 break;
             case SETTINGS_PATIENT:
-//                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionType.WITH_BACK, R.string.patient, new SettingUIPermissionsFragment());
+//                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, R.string.patient, new SettingUIPermissionsFragment());
                 break;
             case SETTINGS_CLINICAL_NOTES:
-//                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionType.WITH_BACK, R.string.clinical_notes, new SettingUIPermissionsFragment());
+//                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, R.string.clinical_notes, new SettingUIPermissionsFragment());
                 break;
             case SETTINGS_HISTORY:
-//                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionType.WITH_BACK, R.string.history_small, new SettingUIPermissionsFragment());
+//                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, R.string.history_small, new SettingUIPermissionsFragment());
                 break;
             case SETTINGS_PRESCRIPTION:
-//                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionType.WITH_BACK, R.string.prescriptions, new SettingUIPermissionsFragment());
+//                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, R.string.prescriptions, new SettingUIPermissionsFragment());
                 break;
             case SETTINGS_TEMPLATE:
-//                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionType.WITH_BACK, R.string.templates, new SettingUIPermissionsFragment());
+//                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, R.string.templates, new SettingUIPermissionsFragment());
                 break;
             case SETTING_UI_PERMISSION:
-                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionType.WITH_BACK, ActionbarLeftRightActionType.WITH_SYNC, R.string.ui_permission, new SettingUIPermissionsFragment());
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.WITH_SYNC, R.string.ui_permission, new SettingUIPermissionsFragment());
                 break;
             case SETTINGS_BILLING:
-//                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionType.WITH_BACK, R.string.billing, new SettingUIPermissionsFragment());
+//                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, R.string.billing, new SettingUIPermissionsFragment());
                 break;
             case SETTING_SMS:
-//                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionType.WITH_BACK, R.string.sms, new SettingUIPermissionsFragment());
+//                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, R.string.sms, new SettingUIPermissionsFragment());
                 break;
             case SETTING_ABOUT_US:
-                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionType.WITH_BACK, ActionbarLeftRightActionType.NO_LEFT_RIGHT_ACTION, R.string.about_us, new AboutUsFragment());
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, R.string.about_us, new AboutUsFragment());
                 break;
             case SETTINGS_UI_PERMISSION_PRESCRIPTION:
-                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionType.WITH_CROSS, ActionbarLeftRightActionType.WITH_SAVE, R.string.prescription_ui_permission_details, new PrescriptionUIPermissionFragment());
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_CROSS, ActionbarLeftRightActionTypeDrawables.WITH_SAVE, R.string.prescription_ui_permission_details, new PrescriptionUIPermissionFragment());
                 break;
             case SETTINGS_UI_PERMISSION_CLINICAL_NOTES:
-                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionType.WITH_CROSS, ActionbarLeftRightActionType.WITH_SAVE, R.string.clinical_notes_ui_permission_details, new PrescriptionUIPermissionFragment());
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_CROSS, ActionbarLeftRightActionTypeDrawables.WITH_SAVE, R.string.clinical_notes_ui_permission_details, new PrescriptionUIPermissionFragment());
                 break;
             case SETTINGS_UI_PERMISSION_VISITS:
-                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionType.WITH_CROSS, ActionbarLeftRightActionType.WITH_SAVE, R.string.visits_ui_permission_details, new PrescriptionUIPermissionFragment());
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_CROSS, ActionbarLeftRightActionTypeDrawables.WITH_SAVE, R.string.visits_ui_permission_details, new PrescriptionUIPermissionFragment());
                 break;
             case SETTINGS_UI_PERMISSION_PATIENT_TAB:
-                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionType.WITH_CROSS, ActionbarLeftRightActionType.WITH_SAVE, R.string.patient_tab_ui_permission_details, new PrescriptionUIPermissionFragment());
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_CROSS, ActionbarLeftRightActionTypeDrawables.WITH_SAVE, R.string.patient_tab_ui_permission_details, new PrescriptionUIPermissionFragment());
                 break;
             case ADD_NEW_PRESCRIPTION:
-                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionType.WITH_CROSS, ActionbarLeftRightActionType.WITH_SAVE, R.string.new_prescription, new AddNewPrescriptionFragment());
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_CROSS, ActionbarLeftRightActionTypeDrawables.WITH_SAVE, R.string.new_prescription, new AddNewPrescriptionFragment());
                 break;
             case PATIENT_REGISTRATION:
-                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionType.WITH_BACK, ActionbarLeftRightActionType.WITH_SAVE, fragmentType.getTitleId(), new PatientRegistrationFragment());
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.WITH_SAVE, fragmentType.getTitleId(), new PatientRegistrationFragment());
                 break;
             case PATIENT_DETAIL:
                 hideSoftKeyboardOnStartUp();
-                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionType.WITH_BACK, ActionbarLeftRightActionType.NO_LEFT_RIGHT_ACTION, R.string.patient_profile, new CommonOpenUpPatientDetailFragment());
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, R.string.patient_profile, new CommonOpenUpPatientDetailFragment());
                 break;
         }
     }
@@ -162,7 +162,7 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
         openFragment(actionbarType, null, null, actionBarTitleId, fragment);
     }
 
-    private void openFragment(ActionbarType actionbarType, ActionbarLeftRightActionType leftAction, ActionbarLeftRightActionType rightAction, int actionBarTitle, HealthCocoFragment fragment) {
+    private void openFragment(ActionbarType actionbarType, ActionbarLeftRightActionTypeDrawables leftAction, ActionbarLeftRightActionTypeDrawables rightAction, int actionBarTitle, HealthCocoFragment fragment) {
         Bundle bundle = new Bundle();
         initActionBar(actionbarType, actionBarTitle, leftAction, rightAction);
         bundle.putInt(HealthCocoConstants.TAG_FRAGMENT_NAME, fragmentType.ordinal());
@@ -171,7 +171,7 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
         transaction.commit();
     }
 
-    private void openFragment(ActionbarType actionbarType, CommonOpenUpFragmentType fragmentType, ActionbarLeftRightActionType leftAction, ActionbarLeftRightActionType rightAction, HealthCocoFragment fragment) {
+    private void openFragment(ActionbarType actionbarType, CommonOpenUpFragmentType fragmentType, ActionbarLeftRightActionTypeDrawables leftAction, ActionbarLeftRightActionTypeDrawables rightAction, HealthCocoFragment fragment) {
         initActionBar(actionbarType, fragmentType.getTitleId(), leftAction, rightAction);
         transaction.add(R.id.layout_fragment_common_open_up, fragment, fragment.getClass().getSimpleName());
         transaction.commit();
@@ -187,7 +187,7 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
     }
 
 
-    public void initActionBar(ActionbarType actionbarType, int title, ActionbarLeftRightActionType leftAction, ActionbarLeftRightActionType rightAction) {
+    public void initActionBar(ActionbarType actionbarType, int title, ActionbarLeftRightActionTypeDrawables leftAction, ActionbarLeftRightActionTypeDrawables rightAction) {
         if (actionbarType == ActionbarType.HIDDEN) {
             hideActionBar();
         } else {
@@ -196,7 +196,7 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
             toolbar.setContentInsetsAbsolute(0, 0);
             toolbar.addView(actionbar);
             LinearLayout containerLeftAction = (LinearLayout) actionbar.findViewById(R.id.container_left_action);
-            if (leftAction != null && leftAction != ActionbarLeftRightActionType.NO_LEFT_RIGHT_ACTION) {
+            if (leftAction != null && leftAction != ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION) {
                 containerLeftAction.setVisibility(View.VISIBLE);
                 View leftView = getLayoutInflater().inflate(leftAction.getLayoutId(), null);
                 if (leftView != null) {
@@ -219,7 +219,7 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
                 containerLeftAction.setVisibility(View.GONE);
 
             LinearLayout containerRightAction = (LinearLayout) actionbar.findViewById(R.id.container_right_action);
-            if (rightAction != null && rightAction != ActionbarLeftRightActionType.NO_LEFT_RIGHT_ACTION) {
+            if (rightAction != null && rightAction != ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION) {
                 containerRightAction.setVisibility(View.VISIBLE);
                 View rightView = getLayoutInflater().inflate(rightAction.getLayoutId(), null);
                 if (rightView != null) {

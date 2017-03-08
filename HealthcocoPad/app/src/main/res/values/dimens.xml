@@ -97,5 +97,8 @@
     <dimen name="text_size_patient_name_deatil_fragment">25sp</dimen>
     <dimen name="text_size_patient_id_deatil_fragment">18sp</dimen>
     <dimen name="text_size_tab_indicator_home">12sp</dimen>
+    <dimen name="patient_profile_image_padding">20dp</dimen>
+    <dimen name="text_size_patient_deatil_fragment">20sp</dimen>
+    <dimen name="edit_button_text_size_18sp">18sp</dimen>
 
 </resources>

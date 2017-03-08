@@ -17,4 +17,8 @@
     <string name="fa_globe">&#xf0ac;</string>
     <string name="fa_clinic">&#xf0ac;</string>
     <string name="icon_add_new_group">&#xf067;&#160;Add New Group</string>
+    <string name="fa_edit_text_icon">&#xf040;</string>
+    <string name="fa_groups_icon">&#xf0c0;</string>
+    <string name="fa_patient_icon">&#xf007;</string>
+    <string name="fa_note_icon">&#xf0f6;</string>
 </resources>

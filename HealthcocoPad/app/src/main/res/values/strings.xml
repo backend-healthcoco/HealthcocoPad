@@ -475,4 +475,16 @@
     <string name="important">Important</string>
     <string name="appointment">Appointment</string>
     <string name="treatment">Treatment</string>
+    <string name="past_history">Past History</string>
+    <string name="edit_to_assign_past_history">Edit to assign Past History</string>
+    <string name="family_history">Family History</string>
+    <string name="edit_to_assign_family_history">Edit to assign Family History</string>
+    <string name="personal_history">Personal History</string>
+    <string name="edit_to_assign_personal_history">Edit to assign Personal History</string>
+    <string name="edit_to_assign_groups">Edit to assign Groups</string>
+    <string name="patient_data">Patient Data</string>
+    <string name="edit_to_add_patient_data">Edit to add Patient Data</string>
+    <string name="edit_to_add_notes">Edit to add Notes</string>
+    <string name="drug_allergy">Drug and Allergy</string>
+    <string name="edit_to_assign_drug_allergy">Edit to assign Ongoing Drugs and Allergy</string>
 </resources>

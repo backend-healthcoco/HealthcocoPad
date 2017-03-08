@@ -22,9 +22,9 @@ public enum PatientDetailTabType {
     PATIENT_DETAIL_IMPORTANT(3, R.string.important, R.drawable.selector_ic_important_tab, new PatientImportantDetailFragment()),
     PATIENT_DETAIL_REPORTS(4, R.string.reports, R.drawable.selector_ic_reports_tab, new PatientReportsDetailFragment()),
     PATIENT_DETAIL_PRESCRIPTION(5, R.string.prescriptions, R.drawable.selector_ic_prescription_tab, new PatientPrescriptionDetailFragment()),
-    PATIENT(5, R.string.prescriptions, R.drawable.selector_ic_prescription_tab, new PatientPrescriptionDetailFragment()),
-    PATIENT_DETAIL(5, R.string.prescriptions, R.drawable.selector_ic_prescription_tab, new PatientPrescriptionDetailFragment()),
-    PATIENT_DETAIL_TEMP(5, R.string.prescriptions, R.drawable.selector_ic_prescription_tab, new PatientPrescriptionDetailFragment()),
+    //    PATIENT(5, R.string.prescriptions, R.drawable.selector_ic_prescription_tab, new PatientPrescriptionDetailFragment()),
+//    PATIENT_DETAIL(5, R.string.prescriptions, R.drawable.selector_ic_prescription_tab, new PatientPrescriptionDetailFragment()),
+//    PATIENT_DETAIL_TEMP(5, R.string.prescriptions, R.drawable.selector_ic_prescription_tab, new PatientPrescriptionDetailFragment()),
     PATIENT_DETAIL_APPOINTMENT(6, R.string.appointment, R.drawable.selector_ic_apoointment_tab, new PatientAppointmentDetailFragment()),
     PATIENT_DETAIL_TREATMENT(7, R.string.treatment, R.drawable.selector_ic_treatment_tab, new PatientTreatmentDetailFragment());
 
@@ -36,9 +36,9 @@ public enum PatientDetailTabType {
     public static final int POSITION_PRESCRIPTION_TAB = 5;
     public static final int POSITION_APPOINTMENT_TAB = 6;
     public static final int POSITION_TREATMENT_TAB = 7;
-    public static final int POSITION_PATIENT_DETAIL = 8;
-    public static final int POSITION_PATIENT = 9;
-    public static final int POSITION_PATIENT_TEMP = 10;
+//    public static final int POSITION_PATIENT_DETAIL = 8;
+//    public static final int POSITION_PATIENT = 9;
+//    public static final int POSITION_PATIENT_TEMP = 10;
 
     private final int textId;
     private final int drawableId;
