@@ -5,7 +5,7 @@ import android.os.Parcelable;
 
 import com.healthcoco.healthcocoplus.enums.AchievementType;
 import com.orm.SugarRecord;
-
+@org.parceler.Parcel
 public class Achievement extends SugarRecord implements Parcelable {
     private String achievementName;
 

@@ -606,4 +606,21 @@ public class WebDataServiceImpl {
         else
             errorListener.onNetworkUnavailable(webServiceType);
     }
+
+    public void getPatientProfile(Class<RegisteredPatientDetailsUpdated> class1, String userId, String doctorId,
+                                  String locationId, String hospitalId, Response.Listener<VolleyResponseBean> responseListener,
+                                  GsonRequest.ErrorListener errorListener) {
+        WebServiceType webServiceType = WebServiceType.GET_PATIENT_PROFILE;
+        Util.checkNetworkStatus(mApp.getApplicationContext());
+        if (HealthCocoConstants.isNetworkOnline) {
+            String url = webServiceType.getUrl()
+                    + userId + "?"
+                    + HealthCocoConstants.PARAM_DOCTOR_ID + doctorId
+                    + HealthCocoConstants.PARAM_LOCATION_ID + locationId
+                    + HealthCocoConstants.PARAM_HOSPITAL_ID + hospitalId;
+            getResponse(webServiceType, class1, url, null, null, responseListener, errorListener);
+        } else {
+            errorListener.onErrorResponse(null, mApp.getResources().getString(R.string.user_offline));
+        }
+    }
 }

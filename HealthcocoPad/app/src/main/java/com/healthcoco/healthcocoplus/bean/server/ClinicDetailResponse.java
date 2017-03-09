@@ -4,11 +4,14 @@ import com.orm.SugarRecord;
 import com.orm.dsl.Ignore;
 import com.orm.dsl.Unique;
 
+import org.parceler.Parcel;
+
 import java.util.List;
 
 /**
  * Created by neha on 30/08/16.
  */
+@Parcel
 public class ClinicDetailResponse extends SugarRecord {
     //represents locationId
     @Unique

@@ -10,6 +10,7 @@ import java.io.Serializable;
 /**
  * Created by Shreshtha on 07-02-2017.
  */
+
 public class Diagram extends SugarRecord implements Serializable {
     private String uniqueId;
 

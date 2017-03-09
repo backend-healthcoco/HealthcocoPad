@@ -75,15 +75,13 @@
                     android:layout_weight="1"
                     android:text="jij"
                     android:textColor="@color/blue_action_bar"
-                    android:textSize="@dimen/text_size_patient_name_deatil_fragment"
-                    android:textStyle="bold" />
+                    android:textSize="@dimen/text_size_patient_name_deatil_fragment" />
 
                 <TextView
                     android:id="@+id/tv_patient_id"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:paddingTop="@dimen/patient_profile_image_padding"
                     android:text="P695464613"
                     android:textColor="@color/black"
                     android:textSize="@dimen/text_size_patient_id_deatil_fragment" />
@@ -154,12 +152,12 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:orientation="horizontal"
-                    android:visibility="visible">
+                    android:visibility="gone">
 
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/container_edit_notes"
+                    android:id="@+id/container_edit_past_history"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -227,7 +225,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:orientation="horizontal"
-                    android:visibility="visible">
+                    android:visibility="gone">
 
                 </LinearLayout>
 
@@ -300,7 +298,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:orientation="horizontal"
-                    android:visibility="visible">
+                    android:visibility="gone">
 
                 </LinearLayout>
 
@@ -373,7 +371,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:orientation="horizontal"
-                    android:visibility="visible">
+                    android:visibility="gone">
 
                 </LinearLayout>
 
@@ -446,7 +444,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:orientation="horizontal"
-                    android:visibility="visible">
+                    android:visibility="gone">
 
                 </LinearLayout>
 
@@ -519,7 +517,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:orientation="horizontal"
-                    android:visibility="visible">
+                    android:visibility="gone">
 
                 </LinearLayout>
 
@@ -532,6 +530,7 @@
                     android:visibility="visible">
 
                     <TextView
+                        android:id="@+id/textView12"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/edit_to_add_patient_data"
@@ -593,12 +592,12 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:orientation="horizontal"
-                    android:visibility="visible">
+                    android:visibility="gone">
 
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/container_edit_past_history"
+                    android:id="@+id/container_edit_notes"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -613,7 +612,6 @@
                         android:textSize="18sp" />
                 </LinearLayout>
             </LinearLayout>
-
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

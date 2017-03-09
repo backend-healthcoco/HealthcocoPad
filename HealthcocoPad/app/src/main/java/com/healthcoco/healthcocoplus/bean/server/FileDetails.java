@@ -2,6 +2,9 @@ package com.healthcoco.healthcocoplus.bean.server;
 
 import android.graphics.Bitmap;
 
+import org.parceler.Parcel;
+
+@Parcel
 public class FileDetails {
 
     private String fileEncoded;

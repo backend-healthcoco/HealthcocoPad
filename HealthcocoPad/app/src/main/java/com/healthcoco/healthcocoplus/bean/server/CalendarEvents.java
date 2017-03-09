@@ -8,11 +8,14 @@ import com.orm.SugarRecord;
 import com.orm.dsl.Ignore;
 import com.orm.dsl.Unique;
 
+import org.parceler.Parcel;
+
 import java.util.Calendar;
 
 /**
  * Created by neha on 11/05/16.
  */
+@Parcel
 public class CalendarEvents extends SugarRecord {
     protected static final String TAG = CalendarEvents.class.getSimpleName();
     @Unique

@@ -3,9 +3,12 @@ package com.healthcoco.healthcocoplus.bean.server;
 import com.orm.SugarRecord;
 import com.orm.dsl.Unique;
 
+import org.parceler.Parcel;
+
 /**
  * Created by neha on 16/01/16.
  */
+@Parcel
 public class BloodGroup extends SugarRecord {
     @Unique
     private String uniqueId;

@@ -2,11 +2,14 @@ package com.healthcoco.healthcocoplus.bean.request;
 
 import com.healthcoco.healthcocoplus.bean.server.FileDetails;
 
+import org.parceler.Parcel;
+
 import java.util.ArrayList;
 
 /**
  * Created by neha on 07/02/16.
  */
+@Parcel
 public class ClinicImageToSend {
     private String id;
     private ArrayList<FileDetails> images;

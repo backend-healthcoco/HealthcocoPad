@@ -3,9 +3,12 @@ package com.healthcoco.healthcocoplus.bean.server;
 import com.orm.SugarRecord;
 import com.orm.dsl.Unique;
 
+import org.parceler.Parcel;
+
 /**
  * Created by Shreshtha on 24-01-2017.
  */
+@Parcel
 public class CityResponse extends SugarRecord {
     @Unique
     private String uniqueId;

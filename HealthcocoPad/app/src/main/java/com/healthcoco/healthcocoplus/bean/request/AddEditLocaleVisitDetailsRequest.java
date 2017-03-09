@@ -2,8 +2,10 @@ package com.healthcoco.healthcocoplus.bean.request;
 
 import com.healthcoco.healthcocoplus.bean.server.DoctorWorkingSchedule;
 
-import java.util.List;
+import org.parceler.Parcel;
 
+import java.util.List;
+@Parcel
 public class AddEditLocaleVisitDetailsRequest {
 
     private List<DoctorWorkingSchedule> workingSchedules;

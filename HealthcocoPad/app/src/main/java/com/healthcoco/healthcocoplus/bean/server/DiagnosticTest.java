@@ -3,11 +3,14 @@ package com.healthcoco.healthcocoplus.bean.server;
 import com.orm.SugarRecord;
 import com.orm.dsl.Unique;
 
+import org.parceler.Parcel;
+
 import java.io.Serializable;
 
 /**
  * Created by neha on 13/04/16.
  */
+@Parcel
 public class DiagnosticTest extends SugarRecord implements Serializable {
     @Unique
     private String uniqueId;

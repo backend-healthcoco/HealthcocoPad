@@ -353,7 +353,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
     @Override
     public void onEditClicked(RegisteredPatientDetailsUpdated patientDetailsUpdated) {
         Intent intent = new Intent();
-        intent.putExtra(HealthCocoConstants.TAG_UNIQUE_ID, patientDetailsUpdated.getUniqueId());
+        intent.putExtra(HealthCocoConstants.TAG_UNIQUE_ID, patientDetailsUpdated.getForeignPatientId());
         intent.putExtra(HealthCocoConstants.TAG_MOBILE_NUMBER, patientDetailsUpdated.getMobileNumber());
         intent.putExtra(HealthCocoConstants.TAG_IS_EDIT_PATIENT, true);
         mActivity.openCommonOpenUpActivity(CommonOpenUpFragmentType.PATIENT_REGISTRATION, intent,

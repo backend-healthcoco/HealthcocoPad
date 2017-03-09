@@ -12,6 +12,7 @@ import com.healthcoco.healthcocoplus.HealthCocoFragment;
  * Created by Shreshtha on 07-03-2017.
  */
 public class PatientVisitDetailFragment extends HealthCocoFragment {
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_patient_visit_deatil, container, false);
@@ -24,6 +25,7 @@ public class PatientVisitDetailFragment extends HealthCocoFragment {
         super.onActivityCreated(savedInstanceState);
         init();
     }
+
     @Override
     public void init() {
 

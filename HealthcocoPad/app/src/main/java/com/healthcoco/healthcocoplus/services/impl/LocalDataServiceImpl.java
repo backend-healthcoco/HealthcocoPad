@@ -7,11 +7,6 @@ import com.android.volley.Response;
 import com.google.gson.Gson;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocoplus.HealthCocoApplication;
-import com.healthcoco.healthcocoplus.bean.server.AlreadyRegisteredPatientsResponse;
-import com.healthcoco.healthcocoplus.bean.server.AssignedGroupsTable;
-import com.healthcoco.healthcocoplus.bean.server.NotesTable;
-import com.healthcoco.healthcocoplus.bean.server.PatientIdGroupId;
-import com.healthcoco.healthcocoplus.bean.server.Relations;
 import com.healthcoco.healthcocoplus.bean.UIPermissions;
 import com.healthcoco.healthcocoplus.bean.UserPermissionsResponse;
 import com.healthcoco.healthcocoplus.bean.VolleyResponseBean;
@@ -19,7 +14,9 @@ import com.healthcoco.healthcocoplus.bean.server.AccessModule;
 import com.healthcoco.healthcocoplus.bean.server.Achievement;
 import com.healthcoco.healthcocoplus.bean.server.Address;
 import com.healthcoco.healthcocoplus.bean.server.AllUIPermission;
+import com.healthcoco.healthcocoplus.bean.server.AlreadyRegisteredPatientsResponse;
 import com.healthcoco.healthcocoplus.bean.server.AppointmentSlot;
+import com.healthcoco.healthcocoplus.bean.server.AssignedGroupsTable;
 import com.healthcoco.healthcocoplus.bean.server.BloodGroup;
 import com.healthcoco.healthcocoplus.bean.server.CalendarEvents;
 import com.healthcoco.healthcocoplus.bean.server.CityResponse;
@@ -58,13 +55,17 @@ import com.healthcoco.healthcocoplus.bean.server.InvestigationSuggestions;
 import com.healthcoco.healthcocoplus.bean.server.Location;
 import com.healthcoco.healthcocoplus.bean.server.LocationAndAccessControl;
 import com.healthcoco.healthcocoplus.bean.server.LoginResponse;
+import com.healthcoco.healthcocoplus.bean.server.NotesTable;
 import com.healthcoco.healthcocoplus.bean.server.Observation;
 import com.healthcoco.healthcocoplus.bean.server.ObservationSuggestions;
+import com.healthcoco.healthcocoplus.bean.server.OtpVerification;
 import com.healthcoco.healthcocoplus.bean.server.Patient;
+import com.healthcoco.healthcocoplus.bean.server.PatientIdGroupId;
 import com.healthcoco.healthcocoplus.bean.server.Profession;
 import com.healthcoco.healthcocoplus.bean.server.Records;
 import com.healthcoco.healthcocoplus.bean.server.Reference;
 import com.healthcoco.healthcocoplus.bean.server.RegisteredPatientDetailsUpdated;
+import com.healthcoco.healthcocoplus.bean.server.Relations;
 import com.healthcoco.healthcocoplus.bean.server.Role;
 import com.healthcoco.healthcocoplus.bean.server.Specialities;
 import com.healthcoco.healthcocoplus.bean.server.TempTemplate;
@@ -957,7 +958,6 @@ public class LocalDataServiceImpl {
             clinicProfile.getAppointmentSlot().save();
         }
 
-//                deleteWorkingSchedulesIfAlreadyPresent(LocalDatabaseUtils.KEY_FOREIGN_LOCATION_ID, clinicProfile.getLocationId());
         deleteAllWorkingSchedules(clinicProfile.getLocationId(), doctorId, DoctorWorkingSchedule.class);
         //saving working schedules
         if (!Util.isNullOrEmptyList(clinicProfile.getWorkingSchedules())) {
@@ -997,9 +997,9 @@ public class LocalDataServiceImpl {
                 registeredPatientDetailsUpdated.getDob().save();
             }
             // setting patient's relations
-//            addRelations(patient.getRelations(), patient.getPatientId());
+            addRelations(patient.getRelations(), patient.getPatientId());
 
-//            addNotes(patient.getNotes(), patient.getPatientId());
+            addNotes(patient.getNotes(), patient.getPatientId());
             registeredPatientDetailsUpdated.setForeignPatientId(registeredPatientDetailsUpdated.getPatient().getPatientId());
             registeredPatientDetailsUpdated.getPatient().save();
         }
@@ -1008,20 +1008,119 @@ public class LocalDataServiceImpl {
             registeredPatientDetailsUpdated.getAddress().setUserId(registeredPatientDetailsUpdated.getUserId());
             registeredPatientDetailsUpdated.getAddress().save();
         }
-//        deletePatientIdGroupIdsList(registeredPatientDetailsUpdated.getUserId());
-//        if (!Util.isNullOrEmptyList(registeredPatientDetailsUpdated.getGroups())) {
-//            addPatientIdGroupIdsList(registeredPatientDetailsUpdated, registeredPatientDetailsUpdated.getGroups());
-//        }
-//        deleteReferredByIfAlreadyPresent(LocalDatabaseUtils.KEY_UNIQUE_ID, LocalDatabaseUtils.KEY_IS_FROM_CONTACTS_LIST, registeredPatientDetailsUpdated.getForeignReferredById(), "" + LocalDatabaseUtils.BOOLEAN_TRUE_VALUE);
+        deletePatientIdGroupIdsList(registeredPatientDetailsUpdated.getUserId());
+        if (!Util.isNullOrEmptyList(registeredPatientDetailsUpdated.getGroups())) {
+            addPatientIdGroupIdsList(registeredPatientDetailsUpdated, registeredPatientDetailsUpdated.getGroups());
+        }
+        deleteReferredByIfAlreadyPresent(LocalDatabaseUtils.KEY_UNIQUE_ID, LocalDatabaseUtils.KEY_IS_FROM_CONTACTS_LIST, registeredPatientDetailsUpdated.getForeignReferredById(), "" + LocalDatabaseUtils.BOOLEAN_TRUE_VALUE);
         if (registeredPatientDetailsUpdated.getReferredBy() != null) {
             registeredPatientDetailsUpdated.getReferredBy().setIsFromContactsList(true);
             registeredPatientDetailsUpdated.setForeignReferredById(registeredPatientDetailsUpdated.getReferredBy().getUniqueId());
             registeredPatientDetailsUpdated.getReferredBy().save();
         }
 
-//        formOtpVerificationAndAdd(registeredPatientDetailsUpdated);
+        formOtpVerificationAndAdd(registeredPatientDetailsUpdated);
         registeredPatientDetailsUpdated.setUniqueId(registeredPatientDetailsUpdated.getLocationId() + registeredPatientDetailsUpdated.getUserId());
         registeredPatientDetailsUpdated.save();
+    }
+
+    private void formOtpVerificationAndAdd(RegisteredPatientDetailsUpdated registeredPatientDetailsUpdated) {
+        OtpVerification otpVerification = new OtpVerification();
+        otpVerification.setDoctorId(registeredPatientDetailsUpdated.getDoctorId());
+        otpVerification.setLocationId(registeredPatientDetailsUpdated.getLocationId());
+        otpVerification.setHospitalId(registeredPatientDetailsUpdated.getHospitalId());
+        otpVerification.setPatientId(registeredPatientDetailsUpdated.getUserId());
+        deleteOtpVerificationIfAlreadyExists(registeredPatientDetailsUpdated);
+        addOtpVerification(otpVerification);
+    }
+
+    private void deleteOtpVerificationIfAlreadyExists(RegisteredPatientDetailsUpdated registeredPatientDetailsUpdated) {
+        try {
+            List<OtpVerification> list = Select.from(OtpVerification.class)
+                    .where(Condition.prop(LocalDatabaseUtils.KEY_DOCTOR_ID).eq(registeredPatientDetailsUpdated.getDoctorId()),
+                            Condition.prop(LocalDatabaseUtils.KEY_HOSPITAL_ID).eq(registeredPatientDetailsUpdated.getHospitalId()),
+                            Condition.prop(LocalDatabaseUtils.KEY_LOCATION_ID).eq(registeredPatientDetailsUpdated.getLocationId()),
+                            Condition.prop(LocalDatabaseUtils.KEY_PATIENT_ID).eq(registeredPatientDetailsUpdated.getUserId())).list();
+            OtpVerification.deleteInTx(list);
+        } catch (Exception e) {
+            LogUtils.LOGE(TAG, "deleteOtpVerificationIfAlreadyExists ");
+            e.printStackTrace();
+        }
+
+    }
+
+    public void addOtpVerification(OtpVerification otpVerification) {
+        otpVerification.save();
+    }
+
+    private void deletePatientIdGroupIdsList(String userId) {
+        PatientIdGroupId.deleteAll(PatientIdGroupId.class, LocalDatabaseUtils.KEY_FOREIGN_PATIENT_ID + "= ?", userId);
+    }
+
+    private void addPatientIdGroupIdsList(RegisteredPatientDetailsUpdated patientDetailsUpdated, List<UserGroups> groupsList) {
+        try {
+            ArrayList<AssignedGroupsTable> assignedGroupsList = new ArrayList<AssignedGroupsTable>();
+            for (UserGroups userGroup :
+                    groupsList) {
+                if (!userGroup.getDiscarded()) {
+                    PatientIdGroupId patientIdGroupId = new PatientIdGroupId();
+                    patientIdGroupId.setLocalPatientName(patientDetailsUpdated.getLocalPatientName());
+                    patientIdGroupId.setForeignPatientId(patientDetailsUpdated.getUserId());
+                    patientIdGroupId.setForeignGroupId(userGroup.getUniqueId());
+                    patientIdGroupId.setPatientIdGroupIdUnique(patientDetailsUpdated + userGroup.getUniqueId());
+                    patientIdGroupId.save();
+                    AssignedGroupsTable assignedGroupTable = new AssignedGroupsTable();
+                    ReflectionUtil.copy(assignedGroupTable, userGroup);
+                    assignedGroupTable.setForeignPatientId(patientDetailsUpdated.getUserId());
+                    assignedGroupsList.add(assignedGroupTable);
+                }
+            }
+            addAssignedUserGroupsList(patientDetailsUpdated.getUserId(), assignedGroupsList);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void addAssignedUserGroupsList(String userId, ArrayList<AssignedGroupsTable> assignedGroupsList) {
+        deleteAllAssignedGroupsWithpatientId(userId);
+        AssignedGroupsTable.saveInTx(assignedGroupsList);
+    }
+
+    private void deleteAllAssignedGroupsWithpatientId(String userId) {
+        AssignedGroupsTable.deleteAll(AssignedGroupsTable.class, LocalDatabaseUtils.KEY_FOREIGN_PATIENT_ID + "= ?", userId);
+    }
+
+    private void addNotes(List<String> list, String foreignTableId) {
+        deleteAllNotesWithForeigntableId(foreignTableId);
+        if (!Util.isNullOrEmptyList(list)) {
+            ArrayList<NotesTable> notesTablesList = new ArrayList<>();
+            for (String note :
+                    list) {
+                NotesTable notesTable = new NotesTable();
+                notesTable.setForeignTableId(foreignTableId);
+                notesTable.setNote(note);
+                notesTablesList.add(notesTable);
+            }
+            NotesTable.saveInTx(notesTablesList);
+        }
+    }
+
+    private void deleteAllNotesWithForeigntableId(String foreignTableId) {
+        NotesTable.deleteAll(NotesTable.class, LocalDatabaseUtils.KEY_FOREIGN_TABLE_ID + "= ?", foreignTableId);
+    }
+
+    private void addRelations(List<Relations> list, String patientId) {
+        deleteAllRelationsIsAlreadyExists(LocalDatabaseUtils.KEY_FOREIGN_PATIENT_ID, patientId);
+        if (!Util.isNullOrEmptyList(list)) {
+            for (Relations relation : list) {
+                relation.setForeignPatientId(patientId);
+                relation.save();
+            }
+        }
+    }
+
+    private void deleteAllRelationsIsAlreadyExists(String key, String value) {
+        Relations.deleteAll(Relations.class, key + "= ?", value);
     }
 
     public void addSuggestionsList(WebServiceType webServiceType, LocalTabelType localTabelType, ArrayList<?> list, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {

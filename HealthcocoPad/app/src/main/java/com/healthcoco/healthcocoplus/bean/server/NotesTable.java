@@ -2,9 +2,12 @@ package com.healthcoco.healthcocoplus.bean.server;
 
 import com.orm.SugarRecord;
 
+import org.parceler.Parcel;
+
 /**
  * Created by neha on 22/12/15.
  */
+@Parcel
 public class NotesTable extends SugarRecord {
     private String note;
     private String foreignTableId;

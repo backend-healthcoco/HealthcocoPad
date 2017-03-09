@@ -3,9 +3,12 @@ package com.healthcoco.healthcocoplus.bean.server;
 import com.orm.SugarRecord;
 import com.orm.dsl.Unique;
 
+import org.parceler.Parcel;
+
 /**
  * @author nehas
  */
+@Parcel
 public class Address extends SugarRecord {
     private String country;
 

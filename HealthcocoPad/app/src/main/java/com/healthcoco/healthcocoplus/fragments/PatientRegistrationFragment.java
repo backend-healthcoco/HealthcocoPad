@@ -191,11 +191,11 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
             initAutoTvAdapter(autotvBloodGroup, AutoCompleteTextViewType.BLOOD_GROUP, BLOOD_GROUPS);
             initAutoTvAdapter(autotvCountry, AutoCompleteTextViewType.COUNTRY, (ArrayList<Object>) (ArrayList<?>) new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.array_countries))));
             initNoteListAdapter();
-            initData();
-            initDefaultData();
             initGroupAdapter();
             notifyGroupListAdapter(groupsList);
             getGroupListFromLocal();
+            initData();
+            initDefaultData();
         }
     }
 
@@ -526,7 +526,7 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
     }
 
     private void registerPatient(String name) {
-//        mActivity.showLoading(false);
+        mActivity.showLoading(false);
         RegisterNewPatientRequest patientDetails = new RegisterNewPatientRequest();
         patientDetails.setLocalPatientName(name);
         patientDetails.setMobileNumber(String.valueOf(tvMobileNumber.getText()));
@@ -556,8 +556,8 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
         if (!Util.isNullOrBlank(age))
             patientDetails.setAge(Integer.parseInt(age));
         if (isEditPatient) {
-//            patientDetails.setUserId(selectedPatient.getUserId());
-//            WebDataServiceImpl.getInstance(mApp).updatePatient(RegisteredPatientDetailsUpdated.class, patientDetails, this, this);
+            patientDetails.setUserId(selectedPatient.getUserId());
+            WebDataServiceImpl.getInstance(mApp).updatePatient(RegisteredPatientDetailsUpdated.class, patientDetails, this, this);
 
         } else {
             if (alreadyRegisteredPatient != null)
@@ -743,7 +743,6 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
         if (!Util.isNullOrEmptyList(list)) {
             Collections.sort(list, ComparatorUtil.groupDateComparator);
             groupsListViewAdapter.setListData(list);
-            groupsListViewAdapter.notifyDataSetChanged();
         }
     }
 

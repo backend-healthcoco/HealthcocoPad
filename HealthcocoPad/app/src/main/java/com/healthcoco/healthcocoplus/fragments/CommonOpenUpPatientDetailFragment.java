@@ -41,6 +41,10 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
     private FragmentTransaction transaction;
     private int fragmentOrdinal;
     private Toolbar toolbar;
+    private TextView tvInitialAlphabet;
+    private TextView tvPatientName;
+    private TextView tvGenderAge;
+    private ImageView ivContactProfile;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -195,6 +199,10 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
         tabhost.setup();
         mViewPager = (ViewPager) view.findViewById(R.id.view_pager);
 //        mHorizontalScroll = (HorizontalScrollView) view.findViewById(R.id.h_Scroll_View);
+        tvInitialAlphabet = (TextView) view.findViewById(R.id.tv_initial_aplhabet);
+        tvPatientName = (TextView) view.findViewById(R.id.tv_name);
+        tvGenderAge = (TextView) view.findViewById(R.id.tv_patient_id);
+        ivContactProfile = (ImageView) view.findViewById(R.id.iv_image);
     }
 
     @Override
@@ -270,4 +278,5 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
     public void onClick(View v) {
 
     }
+
 }

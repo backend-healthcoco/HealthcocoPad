@@ -100,5 +100,7 @@
     <dimen name="patient_profile_image_padding">20dp</dimen>
     <dimen name="text_size_patient_deatil_fragment">20sp</dimen>
     <dimen name="edit_button_text_size_18sp">18sp</dimen>
-
+    <dimen name="initial_alphabet_patient_profile_emr_header">50dp</dimen>
+    <dimen name="text_size_initial_alphabet_patient_profile_emr_header">15sp</dimen>
+    <dimen name="text_size_patient_name_visit_fragment">18sp</dimen>
 </resources>

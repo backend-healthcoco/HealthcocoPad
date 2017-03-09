@@ -3,6 +3,9 @@ package com.healthcoco.healthcocoplus.bean.server;
 import com.healthcoco.healthcocoplus.enums.AccessPermissionType;
 import com.orm.SugarRecord;
 
+import org.parceler.Parcel;
+
+@Parcel
 public class AccessPermission extends SugarRecord {
     private AccessPermissionType accessPermissionType;
 

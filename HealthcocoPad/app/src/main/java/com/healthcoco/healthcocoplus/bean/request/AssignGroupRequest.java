@@ -1,10 +1,13 @@
 package com.healthcoco.healthcocoplus.bean.request;
 
+import org.parceler.Parcel;
+
 import java.util.ArrayList;
 
 /**
  * Created by neha on 23/11/15.
  */
+@Parcel
 public class AssignGroupRequest {
     private ArrayList<String> groupIds;
     private String patientId;
