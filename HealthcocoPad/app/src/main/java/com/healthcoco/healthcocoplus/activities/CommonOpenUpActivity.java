@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
@@ -30,6 +31,7 @@ import com.healthcoco.healthcocoplus.fragments.FeedbackFragment;
 import com.healthcoco.healthcocoplus.fragments.InitialSyncFragment;
 import com.healthcoco.healthcocoplus.fragments.LoginSignupFragment;
 import com.healthcoco.healthcocoplus.fragments.CommonOpenUpPatientDetailFragment;
+import com.healthcoco.healthcocoplus.fragments.PatientProfileDetailFragment;
 import com.healthcoco.healthcocoplus.fragments.PatientRegistrationFragment;
 import com.healthcoco.healthcocoplus.fragments.PrescriptionUIPermissionFragment;
 import com.healthcoco.healthcocoplus.fragments.SettingUIPermissionsFragment;
@@ -46,6 +48,7 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
     private int fragmentOrdinal;
     private CommonOpenUpFragmentType fragmentType;
     private WebViewFragments webViewFragments;
+    private LinearLayout patientProfileLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +63,7 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
         initMembers();
         if (fragmentOrdinal != -1)
             initFragment(fragmentOrdinal);
+        patientProfileLayout = (LinearLayout) findViewById(R.id.patient_profile_layout);
     }
 
     private void initMembers() {
@@ -339,5 +343,22 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
         Button btSave = (Button) findViewById(R.id.bt_save);
         if (btSave != null)
             btSave.setOnClickListener(listener);
+    }
+
+    public void initFloatingActionButton(View.OnClickListener listener) {
+        FloatingActionButton floatingActionButton = (FloatingActionButton) findViewById(R.id.bt_add_patient);
+        floatingActionButton.setOnClickListener(listener);
+    }
+
+    public void showPatientDetailLayout() {
+        if (patientProfileLayout.getVisibility() == View.GONE) {
+            patientProfileLayout.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void hidePatientDetailLayout() {
+        if (patientProfileLayout.getVisibility() == View.VISIBLE) {
+            patientProfileLayout.setVisibility(View.GONE);
+        }
     }
 }

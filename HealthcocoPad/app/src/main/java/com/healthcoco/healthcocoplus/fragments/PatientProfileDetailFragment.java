@@ -80,6 +80,7 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
     public void init() {
         initViews();
         initListeners();
+        ((CommonOpenUpActivity) mActivity).initFloatingActionButton(this);
     }
 
     @Override

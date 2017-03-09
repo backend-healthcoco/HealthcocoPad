@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocoplus.HealthCocoFragment;
+import com.healthcoco.healthcocoplus.activities.CommonOpenUpActivity;
 
 /**
  * Created by Shreshtha on 07-03-2017.
@@ -28,7 +29,7 @@ public class PatientVisitDetailFragment extends HealthCocoFragment {
 
     @Override
     public void init() {
-
+//        ((CommonOpenUpActivity) mActivity).showPatientDetailLayout();
     }
 
     @Override

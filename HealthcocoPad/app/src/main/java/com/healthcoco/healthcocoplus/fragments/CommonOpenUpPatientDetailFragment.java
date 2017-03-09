@@ -1,6 +1,7 @@
 package com.healthcoco.healthcocoplus.fragments;
 
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
@@ -45,6 +46,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
     private TextView tvPatientName;
     private TextView tvGenderAge;
     private ImageView ivContactProfile;
+    private LinearLayout patientProfileLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -203,6 +205,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
         tvPatientName = (TextView) view.findViewById(R.id.tv_name);
         tvGenderAge = (TextView) view.findViewById(R.id.tv_patient_id);
         ivContactProfile = (ImageView) view.findViewById(R.id.iv_image);
+
     }
 
     @Override
