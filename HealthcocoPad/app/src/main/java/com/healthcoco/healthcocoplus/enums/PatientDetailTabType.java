@@ -27,6 +27,7 @@ public enum PatientDetailTabType {
 //    PATIENT_DETAIL_TEMP(5, R.string.prescriptions, R.drawable.selector_ic_prescription_tab, new PatientPrescriptionDetailFragment()),
     PATIENT_DETAIL_APPOINTMENT(6, R.string.appointment, R.drawable.selector_ic_apoointment_tab, new PatientAppointmentDetailFragment()),
     PATIENT_DETAIL_TREATMENT(7, R.string.treatment, R.drawable.selector_ic_treatment_tab, new PatientTreatmentDetailFragment());
+//    PATIENT_DETAIL_BILLING(7, R.string.billing, R.drawable.selector_ic_treatment_tab, new PatientTreatmentDetailFragment());
 
     public static final int POSITION_PROFILE_TAB = 0;
     public static final int POSITION_VISIT_TAB = 1;

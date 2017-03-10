@@ -698,7 +698,7 @@
                     <ListView
                         android:id="@+id/lv_notes"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:divider="@color/grey_light_divider"
                         android:dividerHeight="0.5dp"
                         android:listSelector="@android:color/transparent"

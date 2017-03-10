@@ -44,42 +44,22 @@
                     android:id="@+id/patient_profile_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:background="@color/white"
                     android:orientation="horizontal"
                     android:padding="@dimen/layout_padding_5dp"
-                    android:visibility="gone">
+                    android:visibility="visible">
 
-                    <FrameLayout
-                        android:id="@+id/profile_image"
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@android:color/transparent">
+                        android:layout_margin="@dimen/list_item_clinic_profile_padding">
 
-                        <TextView
-                            android:id="@+id/tv_initial_aplhabet"
-                            style="@style/TextRobotoStyle"
-                            android:layout_width="@dimen/initial_alphabet_patient_profile_menu"
-                            android:layout_height="@dimen/initial_alphabet_patient_profile_menu"
-                            android:layout_gravity="center"
-                            android:background="@android:color/transparent"
-                            android:gravity="center"
-                            android:textColor="@color/white"
-                            android:textSize="@dimen/text_size_patients_list_initial_alphabet" />
-
-                        <com.healthcoco.healthcocoplus.custom.CircularImageView
-                            android:id="@+id/iv_image"
-                            android:layout_width="@dimen/image_patient_profile_menu"
-                            android:layout_height="@dimen/image_patient_profile_menu"
-                            android:layout_gravity="center"
-                            android:background="@drawable/shape_circle_blue_theme"
-                            android:scaleType="centerCrop"
-                            android:visibility="visible"
-                            app:civ_border_overlay="true"
-                            app:civ_border_width="@dimen/border_profile_images" />
-                    </FrameLayout>
+                        <include layout="@layout/layout_image_patient_profile" />
+                    </LinearLayout>
 
                     <RelativeLayout
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_alignParentRight="true"
                         android:layout_marginLeft="10dp"

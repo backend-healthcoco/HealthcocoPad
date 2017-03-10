@@ -1,5 +1,6 @@
 package com.healthcoco.healthcocoplus.fragments;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -20,11 +21,23 @@ import android.widget.TextView;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocoplus.HealthCocoFragment;
 import com.healthcoco.healthcocoplus.adapter.CommonViewPagerAdapter;
+import com.healthcoco.healthcocoplus.bean.VolleyResponseBean;
+import com.healthcoco.healthcocoplus.bean.server.LoginResponse;
+import com.healthcoco.healthcocoplus.bean.server.RegisteredPatientDetailsUpdated;
+import com.healthcoco.healthcocoplus.bean.server.User;
 import com.healthcoco.healthcocoplus.custom.DummyTabFactory;
+import com.healthcoco.healthcocoplus.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocoplus.enums.ActionbarLeftRightActionTypeDrawables;
 import com.healthcoco.healthcocoplus.enums.ActionbarType;
 import com.healthcoco.healthcocoplus.enums.CommonOpenUpFragmentType;
+import com.healthcoco.healthcocoplus.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocoplus.enums.PatientDetailTabType;
+import com.healthcoco.healthcocoplus.enums.PatientProfileScreenType;
+import com.healthcoco.healthcocoplus.enums.WebServiceType;
+import com.healthcoco.healthcocoplus.listeners.LocalDoInBackgroundListenerOptimised;
+import com.healthcoco.healthcocoplus.services.impl.LocalDataServiceImpl;
+import com.healthcoco.healthcocoplus.services.impl.WebDataServiceImpl;
+import com.healthcoco.healthcocoplus.utilities.DownloadImageFromUrlUtil;
 import com.healthcoco.healthcocoplus.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocoplus.utilities.Util;
 
@@ -33,7 +46,7 @@ import java.util.ArrayList;
 /**
  * Created by Shreshtha on 03-03-2017.
  */
-public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implements View.OnClickListener, ViewPager.OnPageChangeListener, TabHost.OnTabChangeListener {
+public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implements View.OnClickListener, ViewPager.OnPageChangeListener, TabHost.OnTabChangeListener, LocalDoInBackgroundListenerOptimised {
     private TabHost tabhost;
     private ViewPager mViewPager;
     private ArrayList<Fragment> fragmentsList = new ArrayList<>();
@@ -47,6 +60,9 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
     private TextView tvGenderAge;
     private ImageView ivContactProfile;
     private LinearLayout patientProfileLayout;
+    private RegisteredPatientDetailsUpdated selectedPatient;
+    private User user;
+    private FloatingActionButton floatingActionButton;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -60,6 +76,66 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
         super.onActivityCreated(savedInstanceState);
         init();
         initFragment(fragmentOrdinal);
+        mActivity.showLoading(false);
+        new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_FRAGMENT_INITIALISATION_DATA, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+    @Override
+    public void init() {
+        initViews();
+        initListeners();
+        initTabs();
+        initViewPagerAdapter();
+//        initFragment(CommonOpenUpFragmentType.PATIENT_DETAIL_PROFILE.ordinal());
+        tabhost.setCurrentTab(PatientDetailTabType.PATIENT_DETAIL_PROFILE.getTabPosition());
+    }
+
+    private void initTabs() {
+        fragmentsList.clear();
+        if (mViewPager.getAdapter() != null)
+            mViewPager.getAdapter().notifyDataSetChanged();
+        for (PatientDetailTabType detailTabType :
+                PatientDetailTabType.values()) {
+            tabhost.addTab(getTabSpec(detailTabType, detailTabType.getFragment()));
+        }
+    }
+
+    private TabHost.TabSpec getTabSpec(PatientDetailTabType detailTabType, Fragment fragment) {
+        fragmentsList.add(fragment);
+        View view1 = mActivity.getLayoutInflater().inflate(R.layout.tab_indicator_home, null);
+        ImageView ivIcon = (ImageView) view1.findViewById(R.id.iv_image);
+        TextView tvText = (TextView) view1.findViewById(R.id.tv_text);
+        ivIcon.setImageResource(detailTabType.getDrawableId());
+        tvText.setText(detailTabType.getTextId());
+        return tabhost.newTabSpec(fragment.getClass().getSimpleName()).setIndicator(view1).setContent(new DummyTabFactory(mActivity));
+    }
+
+    @Override
+    public void initViews() {
+        tabhost = (TabHost) view.findViewById(android.R.id.tabhost);
+        tabhost.setup();
+        mViewPager = (ViewPager) view.findViewById(R.id.view_pager);
+//        mHorizontalScroll = (HorizontalScrollView) view.findViewById(R.id.h_Scroll_View);
+        tvInitialAlphabet = (TextView) view.findViewById(R.id.tv_initial_aplhabet);
+        tvPatientName = (TextView) view.findViewById(R.id.tv_name);
+        tvGenderAge = (TextView) view.findViewById(R.id.tv_patient_id);
+        ivContactProfile = (ImageView) view.findViewById(R.id.iv_image);
+        patientProfileLayout = (LinearLayout) view.findViewById(R.id.patient_profile_layout);
+        floatingActionButton = (FloatingActionButton) view.findViewById(R.id.bt_add_patient);
+    }
+
+    @Override
+    public void initListeners() {
+        mViewPager.addOnPageChangeListener(this);
+        tabhost.setOnTabChangedListener(this);
+    }
+
+    private void initViewPagerAdapter() {
+        mViewPager.setOffscreenPageLimit(fragmentsList.size());
+        CommonViewPagerAdapter viewPagerAdapter = new CommonViewPagerAdapter(
+                mActivity.getSupportFragmentManager());
+        viewPagerAdapter.setFragmentsList(fragmentsList);
+        mViewPager.setAdapter(viewPagerAdapter);
     }
 
     private void initFragment(int ordinal) {
@@ -163,64 +239,6 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
         toolbar.setVisibility(View.GONE);
     }
 
-    @Override
-    public void init() {
-        initViews();
-        initListeners();
-        initTabs();
-        initViewPagerAdapter();
-//        initFragment(CommonOpenUpFragmentType.PATIENT_DETAIL_PROFILE.ordinal());
-        tabhost.setCurrentTab(PatientDetailTabType.PATIENT_DETAIL_PROFILE.getTabPosition());
-//        mActivity.showLoading(false);
-//        new LocalDataBackgroundtaskOptimised(mActivity, GET_FRAGMENT_INITIALISATION_DATA, this, this, this).execute();
-    }
-
-    private void initTabs() {
-        fragmentsList.clear();
-        if (mViewPager.getAdapter() != null)
-            mViewPager.getAdapter().notifyDataSetChanged();
-        for (PatientDetailTabType detailTabType :
-                PatientDetailTabType.values()) {
-            tabhost.addTab(getTabSpec(detailTabType, detailTabType.getFragment()));
-        }
-    }
-
-    private TabHost.TabSpec getTabSpec(PatientDetailTabType detailTabType, Fragment fragment) {
-        fragmentsList.add(fragment);
-        View view1 = mActivity.getLayoutInflater().inflate(R.layout.tab_indicator_home, null);
-        ImageView ivIcon = (ImageView) view1.findViewById(R.id.iv_image);
-        TextView tvText = (TextView) view1.findViewById(R.id.tv_text);
-        ivIcon.setImageResource(detailTabType.getDrawableId());
-        tvText.setText(detailTabType.getTextId());
-        return tabhost.newTabSpec(fragment.getClass().getSimpleName()).setIndicator(view1).setContent(new DummyTabFactory(mActivity));
-    }
-
-    @Override
-    public void initViews() {
-        tabhost = (TabHost) view.findViewById(android.R.id.tabhost);
-        tabhost.setup();
-        mViewPager = (ViewPager) view.findViewById(R.id.view_pager);
-//        mHorizontalScroll = (HorizontalScrollView) view.findViewById(R.id.h_Scroll_View);
-        tvInitialAlphabet = (TextView) view.findViewById(R.id.tv_initial_aplhabet);
-        tvPatientName = (TextView) view.findViewById(R.id.tv_name);
-        tvGenderAge = (TextView) view.findViewById(R.id.tv_patient_id);
-        ivContactProfile = (ImageView) view.findViewById(R.id.iv_image);
-
-    }
-
-    @Override
-    public void initListeners() {
-        mViewPager.addOnPageChangeListener(this);
-        tabhost.setOnTabChangedListener(this);
-    }
-
-    private void initViewPagerAdapter() {
-        mViewPager.setOffscreenPageLimit(fragmentsList.size());
-        CommonViewPagerAdapter viewPagerAdapter = new CommonViewPagerAdapter(
-                mActivity.getSupportFragmentManager());
-        viewPagerAdapter.setFragmentsList(fragmentsList);
-        mViewPager.setAdapter(viewPagerAdapter);
-    }
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -252,28 +270,62 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
         switch (tabhost.getCurrentTab()) {
             case PatientDetailTabType.POSITION_PROFILE_TAB:
                 patientDetailTabType = PatientDetailTabType.PATIENT_DETAIL_PROFILE;
+                hidePatientDetailLayout();
+                hideFloatingButton();
                 break;
             case PatientDetailTabType.POSITION_VISIT_TAB:
                 patientDetailTabType = PatientDetailTabType.PATIENT_DETAIL_VISIT;
+                showPatientDetailLayout();
+                showFloatingButton();
                 break;
             case PatientDetailTabType.POSITION_CLINICAL_NOTES_TAB:
                 patientDetailTabType = PatientDetailTabType.PATIENT_DETAIL_CLINICAL_NOTES;
+                showPatientDetailLayout();
+                showFloatingButton();
                 break;
             case PatientDetailTabType.POSITION_IMPORTANT_TAB:
                 patientDetailTabType = PatientDetailTabType.PATIENT_DETAIL_IMPORTANT;
+                showPatientDetailLayout();
+                hideFloatingButton();
                 break;
             case PatientDetailTabType.POSITION_REPORTS_TAB:
                 patientDetailTabType = PatientDetailTabType.PATIENT_DETAIL_REPORTS;
+                showPatientDetailLayout();
+                showFloatingButton();
                 break;
             case PatientDetailTabType.POSITION_PRESCRIPTION_TAB:
                 patientDetailTabType = PatientDetailTabType.PATIENT_DETAIL_PRESCRIPTION;
+                showPatientDetailLayout();
+                showFloatingButton();
                 break;
             case PatientDetailTabType.POSITION_APPOINTMENT_TAB:
                 patientDetailTabType = PatientDetailTabType.PATIENT_DETAIL_APPOINTMENT;
+                showPatientDetailLayout();
+                showFloatingButton();
                 break;
             case PatientDetailTabType.POSITION_TREATMENT_TAB:
                 patientDetailTabType = PatientDetailTabType.PATIENT_DETAIL_TREATMENT;
+                showPatientDetailLayout();
+                showFloatingButton();
                 break;
+        }
+    }
+
+    private void initData() {
+        if (selectedPatient != null) {
+            ivContactProfile.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (!Util.isNullOrBlank(selectedPatient.getImageUrl()))
+                        mActivity.openEnlargedImageDialogFragment(selectedPatient.getImageUrl());
+                }
+            });
+            tvPatientName.setText(selectedPatient.getLocalPatientName());
+            tvGenderAge.setText(selectedPatient.getPid());
+            DownloadImageFromUrlUtil.loadImageWithInitialAlphabet(mActivity, PatientProfileScreenType.IN_PATIENT_DEATIL_SCREEN_EXCEPT_PROFILE, selectedPatient, null, ivContactProfile, tvInitialAlphabet);
+        } else {
+            mActivity.showLoading(false);
+            WebDataServiceImpl.getInstance(mApp).getPatientProfile(RegisteredPatientDetailsUpdated.class, HealthCocoConstants.SELECTED_PATIENTS_USER_ID, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(), this, this);
         }
     }
 
@@ -282,4 +334,82 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
 
     }
 
+    public void showPatientDetailLayout() {
+        if (patientProfileLayout.getVisibility() == View.GONE)
+            patientProfileLayout.setVisibility(View.VISIBLE);
+    }
+
+    public void hidePatientDetailLayout() {
+        if (patientProfileLayout.getVisibility() == View.VISIBLE)
+            patientProfileLayout.setVisibility(View.GONE);
+    }
+
+    public void showFloatingButton() {
+        if (floatingActionButton.getVisibility() == View.GONE)
+            floatingActionButton.setVisibility(View.VISIBLE);
+    }
+
+    public void hideFloatingButton() {
+        if (floatingActionButton.getVisibility() == View.VISIBLE)
+            floatingActionButton.setVisibility(View.GONE);
+    }
+
+
+    @Override
+    public VolleyResponseBean doInBackground(VolleyResponseBean response) {
+        VolleyResponseBean volleyResponseBean = null;
+        switch (response.getLocalBackgroundTaskType()) {
+            case GET_FRAGMENT_INITIALISATION_DATA:
+                volleyResponseBean = new VolleyResponseBean();
+                volleyResponseBean.setWebServiceType(WebServiceType.FRAGMENT_INITIALISATION);
+                selectedPatient = LocalDataServiceImpl.getInstance(mApp).getPatient(HealthCocoConstants.SELECTED_PATIENTS_USER_ID);
+                LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
+                if (doctor != null && doctor.getUser() != null && !Util.isNullOrBlank(doctor.getUser().getUniqueId()) && selectedPatient != null && !Util.isNullOrBlank(selectedPatient.getUserId())) {
+                    user = doctor.getUser();
+                }
+                break;
+        }
+        volleyResponseBean.setIsFromLocalAfterApiSuccess(response.isFromLocalAfterApiSuccess());
+        return volleyResponseBean;
+    }
+
+    @Override
+    public void onPostExecute(VolleyResponseBean aVoid) {
+
+    }
+
+    @Override
+    public void onResponse(VolleyResponseBean response) {
+        super.onResponse(response);
+        if (response != null && response.getWebServiceType() != null) {
+            switch (response.getWebServiceType()) {
+                case FRAGMENT_INITIALISATION:
+                    initData();
+                    break;
+                case GET_PATIENT_PROFILE:
+                    if (response.getData() != null && response.getData() instanceof RegisteredPatientDetailsUpdated) {
+                        selectedPatient = (RegisteredPatientDetailsUpdated) response.getData();
+                        LocalDataServiceImpl.getInstance(mApp).addPatient(selectedPatient);
+                        initData();
+                    }
+                    break;
+            }
+        }
+        mActivity.hideLoading();
+    }
+
+    @Override
+    public void onErrorResponse(VolleyResponseBean volleyResponseBean, String errorMessage) {
+        String errorMsg = errorMessage;
+        if (volleyResponseBean != null && !Util.isNullOrBlank(volleyResponseBean.getErrMsg())) {
+            errorMsg = volleyResponseBean.getErrMsg();
+        }
+        mActivity.hideLoading();
+        Util.showToast(mActivity, errorMsg);
+    }
+
+    @Override
+    public void onNetworkUnavailable(WebServiceType webServiceType) {
+        Util.showToast(mActivity, R.string.user_offline);
+    }
 }

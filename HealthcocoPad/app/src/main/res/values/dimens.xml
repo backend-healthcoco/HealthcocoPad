@@ -103,4 +103,9 @@
     <dimen name="initial_alphabet_patient_profile_emr_header">50dp</dimen>
     <dimen name="text_size_initial_alphabet_patient_profile_emr_header">15sp</dimen>
     <dimen name="text_size_patient_name_visit_fragment">18sp</dimen>
+    <dimen name="initial_alphabet_patient_detail_layout">50dp</dimen>
+    <dimen name="image_patient_detail_layout">50dp</dimen>
+    <dimen name="text_size_patients_list_initial_alphabet_detail_layout">12sp</dimen>
+    <dimen name="image_patient_detail_profile">65dp</dimen>
+    <dimen name="list_item_padding">10dp</dimen>
 </resources>

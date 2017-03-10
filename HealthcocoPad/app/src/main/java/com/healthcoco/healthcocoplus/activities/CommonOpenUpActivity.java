@@ -27,11 +27,10 @@ import com.healthcoco.healthcocoplus.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocoplus.fragments.AboutUsFragment;
 import com.healthcoco.healthcocoplus.fragments.AddEditClinicImageFragment;
 import com.healthcoco.healthcocoplus.fragments.AddNewPrescriptionFragment;
+import com.healthcoco.healthcocoplus.fragments.CommonOpenUpPatientDetailFragment;
 import com.healthcoco.healthcocoplus.fragments.FeedbackFragment;
 import com.healthcoco.healthcocoplus.fragments.InitialSyncFragment;
 import com.healthcoco.healthcocoplus.fragments.LoginSignupFragment;
-import com.healthcoco.healthcocoplus.fragments.CommonOpenUpPatientDetailFragment;
-import com.healthcoco.healthcocoplus.fragments.PatientProfileDetailFragment;
 import com.healthcoco.healthcocoplus.fragments.PatientRegistrationFragment;
 import com.healthcoco.healthcocoplus.fragments.PrescriptionUIPermissionFragment;
 import com.healthcoco.healthcocoplus.fragments.SettingUIPermissionsFragment;
@@ -63,7 +62,6 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
         initMembers();
         if (fragmentOrdinal != -1)
             initFragment(fragmentOrdinal);
-        patientProfileLayout = (LinearLayout) findViewById(R.id.patient_profile_layout);
     }
 
     private void initMembers() {
@@ -348,17 +346,5 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
     public void initFloatingActionButton(View.OnClickListener listener) {
         FloatingActionButton floatingActionButton = (FloatingActionButton) findViewById(R.id.bt_add_patient);
         floatingActionButton.setOnClickListener(listener);
-    }
-
-    public void showPatientDetailLayout() {
-        if (patientProfileLayout.getVisibility() == View.GONE) {
-            patientProfileLayout.setVisibility(View.VISIBLE);
-        }
-    }
-
-    public void hidePatientDetailLayout() {
-        if (patientProfileLayout.getVisibility() == View.VISIBLE) {
-            patientProfileLayout.setVisibility(View.GONE);
-        }
     }
 }

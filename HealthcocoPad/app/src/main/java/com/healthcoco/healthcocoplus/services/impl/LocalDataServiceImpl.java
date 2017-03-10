@@ -1046,7 +1046,6 @@ public class LocalDataServiceImpl {
             LogUtils.LOGE(TAG, "deleteOtpVerificationIfAlreadyExists ");
             e.printStackTrace();
         }
-
     }
 
     public void addOtpVerification(OtpVerification otpVerification) {

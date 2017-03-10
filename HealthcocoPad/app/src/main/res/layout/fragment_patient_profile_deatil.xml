@@ -12,7 +12,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
+        android:background="@drawable/shape_emr_item_background"
         android:orientation="vertical">
 
         <LinearLayout
@@ -94,6 +94,7 @@
         android:layout_height="match_parent"
         android:layout_marginTop="@dimen/patient_detail_top_bottom_paddding"
         android:fillViewport="true"
+        android:overScrollMode="never"
         android:scrollbars="none">
 
         <LinearLayout
@@ -104,7 +105,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
+                android:background="@drawable/shape_emr_item_background"
                 android:orientation="vertical"
                 android:padding="10dp">
 
@@ -177,7 +178,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/patient_detail_top_bottom_paddding"
-                android:background="@color/white"
+                android:background="@drawable/shape_emr_item_background"
                 android:orientation="vertical"
                 android:padding="10dp">
 
@@ -250,7 +251,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/patient_detail_top_bottom_paddding"
-                android:background="@color/white"
+                android:background="@drawable/shape_emr_item_background"
                 android:orientation="vertical"
                 android:padding="10dp">
 
@@ -396,7 +397,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/patient_detail_top_bottom_paddding"
-                android:background="@color/white"
+                android:background="@drawable/shape_emr_item_background"
                 android:orientation="vertical"
                 android:padding="10dp">
 
@@ -410,7 +411,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingRight="@dimen/patient_profile_image_padding"
-                        android:text="@string/fa_groups_icon" />
+                        android:text="@string/fa_groups_icon"
+                        android:textColor="@color/grey_dark_text" />
 
                     <TextView
                         android:layout_width="0dp"
@@ -442,108 +444,17 @@
                     android:id="@+id/container_groups"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    android:visibility="gone">
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/container_edit_groups"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    android:visibility="visible">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/edit_to_assign_groups"
-                        android:textColor="@color/grey_dark_text"
-                        android:textSize="18sp" />
-                </LinearLayout>
+                    android:layout_marginTop="5dp"
+                    android:orientation="vertical"></LinearLayout>
             </LinearLayout>
+
+            <include layout="@layout/item_patient_detail_patient_data" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/patient_detail_top_bottom_paddding"
-                android:background="@color/white"
-                android:orientation="vertical"
-                android:padding="10dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="horizontal">
-
-                    <com.healthcoco.healthcocoplus.views.TextViewFontAwesome
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingRight="@dimen/patient_profile_image_padding"
-                        android:text="@string/fa_patient_icon" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/patient_data"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/text_size_patient_deatil_fragment" />
-
-                    <com.healthcoco.healthcocoplus.views.FontAwesomeButton
-                        android:id="@+id/bt_edit_patient_profile_patient_data"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:background="@android:color/transparent"
-                        android:paddingLeft="@dimen/patient_profile_image_padding"
-                        android:paddingRight="@dimen/patient_profile_image_padding"
-                        android:text="@string/fa_edit_text_icon"
-                        android:textColor="@color/grey_dark_text"
-                        android:textSize="@dimen/edit_button_text_size_18sp" />
-                </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginBottom="5dp"
-                    android:background="@color/grey_light_text" />
-
-                <LinearLayout
-                    android:id="@+id/container_patient_data"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    android:visibility="gone">
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/container_edit_patient_data"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    android:visibility="visible">
-
-                    <TextView
-                        android:id="@+id/textView12"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/edit_to_add_patient_data"
-                        android:textColor="@color/grey_dark_text"
-                        android:textSize="18sp" />
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/patient_detail_top_bottom_paddding"
-                android:background="@color/white"
+                android:background="@drawable/shape_emr_item_background"
                 android:orientation="vertical"
                 android:padding="10dp">
 
@@ -558,7 +469,7 @@
                         android:layout_height="wrap_content"
                         android:paddingRight="@dimen/patient_profile_image_padding"
                         android:text="@string/fa_note_icon"
-                        android:textColor="@color/grey_dark_text" />
+                        android:textColor="@color/black" />
 
                     <TextView
                         android:layout_width="0dp"
@@ -590,27 +501,8 @@
                     android:id="@+id/container_notes"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    android:visibility="gone">
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/container_edit_notes"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    android:visibility="visible">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/edit_to_add_notes"
-                        android:textColor="@color/grey_dark_text"
-                        android:textSize="18sp" />
-                </LinearLayout>
+                    android:layout_marginTop="5dp"
+                    android:orientation="vertical"></LinearLayout>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
