@@ -70,8 +70,8 @@ public class LoginDialogFragment extends HealthCocoDialogFragment implements Vie
     }
 
     private void preFillForm() {
-        editUserName.setText("abhijeet.shukla@healthcoco.com");
-        editPassword.setText("neha1234");
+        editUserName.setText("manishmethani6@gmail.com");
+        editPassword.setText("neha");
     }
 
     @Override

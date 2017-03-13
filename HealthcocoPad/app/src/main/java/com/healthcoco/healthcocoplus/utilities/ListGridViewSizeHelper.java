@@ -60,7 +60,4 @@ public class ListGridViewSizeHelper {
         Log.i("height of listItem:", String.valueOf(totalHeight));
         return totalHeight;
     }
-    public static int getGridViewHieght(){
-       return 0;
-    }
 }

@@ -167,6 +167,8 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
     private ArrayList<String> groupIdsToAssign = new ArrayList<String>();
     private ArrayList<UserGroups> groupListToAssign = new ArrayList<>();
     private List<UserGroups> groupsList = new ArrayList<UserGroups>();
+    private TextView tvNoNotes;
+    private TextView tvNoGroups;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -238,6 +240,8 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
 //        containerAge = (LinearLayout) view.findViewById(R.id.container_age);
         btAddNote = (TextView) view.findViewById(R.id.bt_add_note);
         lvNotes = (ListView) view.findViewById(R.id.lv_notes);
+        tvNoNotes = (TextView) view.findViewById(R.id.tv_no_notes);
+        tvNoGroups = (TextView) view.findViewById(R.id.tv_no_groups);
         gvGroups = (GridView) view.findViewById(R.id.gv_groups);
     }
 
@@ -335,7 +339,7 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
         String panNumber = "";
         String drivingLicense = "";
         String colorCode = "";
-        ArrayList<String> notesList = new ArrayList<>();
+        notesList = new ArrayList<>();
         if (patientDetails instanceof RegisteredPatientDetailsUpdated) {
             RegisteredPatientDetailsUpdated registeredPatientDetailsUpdated = (RegisteredPatientDetailsUpdated) patientDetails;
             imageUrl = Util.getValidatedValue(registeredPatientDetailsUpdated.getImageUrl());
@@ -744,10 +748,15 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
 
     private void notifyNoteListAdapter(ArrayList<String> notesList) {
         if (!Util.isNullOrEmptyList(notesList)) {
-            notesListViewAdapter.setListData(notesList);
-            ListGridViewSizeHelper.getListViewSize(lvNotes);
-//            getNotesName(notesList);
+            lvNotes.setVisibility(View.VISIBLE);
+            tvNoNotes.setVisibility(View.GONE);
+        } else {
+            lvNotes.setVisibility(View.GONE);
+            tvNoNotes.setVisibility(View.VISIBLE);
         }
+        notesListViewAdapter.setListData(notesList);
+        notesListViewAdapter.notifyDataSetChanged();
+        ListGridViewSizeHelper.getListViewSize(lvNotes);
     }
 
     private void refreshContactsData(RegisteredPatientDetailsUpdated patientDetails) {
@@ -821,19 +830,12 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
                     if (notesList == null)
                         notesList = new ArrayList<>();
                     notesList.add(note);
-                    notifyAdapter(notesList);
+                    notifyNoteListAdapter(notesList);
+                    getNotesName(notesList);
                 }
                 mActivity.hideLoading();
             }
         }
-    }
-
-    private void notifyAdapter(List<String> list) {
-        if (!Util.isNullOrEmptyList(list)) {
-            lvNotes.setVisibility(View.VISIBLE);
-        }
-        notesListViewAdapter.setListData(list);
-        notesListViewAdapter.notifyDataSetChanged();
     }
 
     private void showImage(String filePath, Bitmap originalBitmap) {
@@ -976,7 +978,7 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
             public void onClick(DialogInterface dialog, int which) {
                 if (notesList.contains(notes)) {
                     notesList.remove(notes);
-                    notifyAdapter(notesList);
+                    notifyNoteListAdapter(notesList);
                 }
             }
         });

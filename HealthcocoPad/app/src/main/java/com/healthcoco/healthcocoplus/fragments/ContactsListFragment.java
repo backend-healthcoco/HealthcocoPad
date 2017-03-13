@@ -79,7 +79,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
     public static final String INTENT_GET_CONTACT_LIST_LOCAL = "com.healthcoco.CONTACT_LIST_LOCAL";
     public static final String INTENT_REFRESH_CONTACTS_LIST_FROM_SERVER = "com.healthcoco.healthcocoplus.fragments.ContactsListFragment.REFRESH_CONTACTS_LIST_FROM_SERVER";
     //variables need for pagination
-    public static final int MAX_SIZE = 10;
+    public static final int MAX_SIZE = 12;
     private static final String TAG_RECEIVERS_REGISTERED = "tagReceiversRegistered";
     private int PAGE_NUMBER = 0;
     private boolean isEndOfListAchieved;
@@ -159,7 +159,6 @@ public class ContactsListFragment extends HealthCocoFragment implements
             }
             getGroupsListFromLocal();
         }
-
     }
 
     private void syncDoctorProfile() {

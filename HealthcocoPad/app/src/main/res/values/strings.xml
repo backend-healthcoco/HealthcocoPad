@@ -488,4 +488,5 @@
     <string name="drug_allergy">Drug and Allergy</string>
     <string name="edit_to_assign_drug_allergy">Edit to assign Ongoing Drugs and Allergy</string>
     <string name="no_visits_found">No Visits Found</string>
+    <string name="no_notes">No Notes</string>
 </resources>
