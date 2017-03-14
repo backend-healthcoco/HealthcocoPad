@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="horizontal">
+
+    <com.healthcoco.healthcocoplus.views.TextViewFontAwesome
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="5dp"
+        android:text="@string/icon_history"
+        android:textColor="@color/grey_icons"
+        android:textSize="@dimen/icon_history_size"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/tv_disease"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_weight="1"
+        android:drawablePadding="5dp"
+        android:gravity="center|start"
+        android:text="tempText"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_icon_add_remove_item" />
+
+    <CheckBox
+        android:id="@+id/cb_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:button="@drawable/checkbox_check_blue_white_selector"
+        android:checked="false"
+        android:gravity="center"
+        android:minWidth="30dp" />
+</LinearLayout>

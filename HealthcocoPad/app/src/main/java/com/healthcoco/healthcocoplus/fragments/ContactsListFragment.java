@@ -35,7 +35,7 @@ import com.healthcoco.healthcocoplus.bean.server.User;
 import com.healthcoco.healthcocoplus.bean.server.UserGroups;
 import com.healthcoco.healthcocoplus.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocoplus.dialogFragment.AddNewGroupsDialogFragment;
-import com.healthcoco.healthcocoplus.dialogFragment.ComparatorUtil;
+import com.healthcoco.healthcocoplus.utilities.ComparatorUtil;
 import com.healthcoco.healthcocoplus.dialogFragment.PatientNumberSearchDialogFragment;
 import com.healthcoco.healthcocoplus.enums.AddUpdateNameDialogType;
 import com.healthcoco.healthcocoplus.enums.ChangeViewType;
@@ -43,6 +43,7 @@ import com.healthcoco.healthcocoplus.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocoplus.enums.FilterItemType;
 import com.healthcoco.healthcocoplus.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocoplus.enums.LocalTabelType;
+import com.healthcoco.healthcocoplus.enums.PatientDetailTabType;
 import com.healthcoco.healthcocoplus.enums.WebServiceType;
 import com.healthcoco.healthcocoplus.listeners.ContactsItemOptionsListener;
 import com.healthcoco.healthcocoplus.listeners.LoadMorePageListener;
@@ -318,7 +319,8 @@ public class ContactsListFragment extends HealthCocoFragment implements
     public void onAddPrescriptionClicked(RegisteredPatientDetailsUpdated selecetdPatient) {
         HealthCocoConstants.SELECTED_PATIENTS_USER_ID = selecetdPatient.getUserId();
         Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
-        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.ADD_NEW_PRESCRIPTION.ordinal());
+        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.PATIENT_DETAIL.ordinal());
+        intent.putExtra(HealthCocoConstants.TAG_TAB_TYPE, PatientDetailTabType.PATIENT_DETAIL_PRESCRIPTION.ordinal());
         startActivityForResult(intent, HealthCocoConstants.REQUEST_CODE_CONTACTS_LIST);
         adapter.notifyDataSetChanged();
     }
@@ -676,7 +678,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
                 int filterItemTypeOrdinal = intent.getIntExtra(HealthCocoConstants.TAG_ORDINAL, 0);
                 final FilterItemType itemType = FilterItemType.values()[filterItemTypeOrdinal];
                 if (itemType != null) {
-                    if (itemType == FilterItemType.REFRESH_CONTACTS ) {
+                    if (itemType == FilterItemType.REFRESH_CONTACTS) {
                         getContactsList(true);
                     } else {
                         sortList(intent, itemType);

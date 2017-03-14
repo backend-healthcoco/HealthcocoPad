@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocoplus.HealthCocoFragment;
+import com.healthcoco.healthcocoplus.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocoplus.adapter.CommonViewPagerAdapter;
 import com.healthcoco.healthcocoplus.bean.VolleyResponseBean;
 import com.healthcoco.healthcocoplus.bean.server.LoginResponse;
@@ -63,6 +64,8 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
     private RegisteredPatientDetailsUpdated selectedPatient;
     private User user;
     private FloatingActionButton floatingActionButton;
+    private int tabOrdinal;
+    private String selectedFilterTitle;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -75,7 +78,6 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         init();
-        initFragment(fragmentOrdinal);
         mActivity.showLoading(false);
         new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_FRAGMENT_INITIALISATION_DATA, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
@@ -87,7 +89,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
         initTabs();
         initViewPagerAdapter();
 //        initFragment(CommonOpenUpFragmentType.PATIENT_DETAIL_PROFILE.ordinal());
-        tabhost.setCurrentTab(PatientDetailTabType.PATIENT_DETAIL_PROFILE.getTabPosition());
+        initFragment(fragmentOrdinal);
     }
 
     private void initTabs() {
@@ -139,12 +141,17 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
     }
 
     private void initFragment(int ordinal) {
+        tabOrdinal = getArguments().getInt(HealthCocoConstants.TAG_TAB_TYPE);
         fragmentType = CommonOpenUpFragmentType.values()[ordinal];
         switch (fragmentType) {
             case PATIENT_DETAIL_PROFILE:
                 openFragment(ActionbarType.TITLE, R.string.patient_profile, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, new PatientProfileDetailFragment());
                 break;
         }
+        if (tabOrdinal == 5)
+            tabhost.setCurrentTab(PatientDetailTabType.PATIENT_DETAIL_PRESCRIPTION.getTabPosition());
+        else
+            tabhost.setCurrentTab(PatientDetailTabType.PATIENT_DETAIL_PROFILE.getTabPosition());
     }
 
     private void openFragment(ActionbarType actionbarType, int actionBarTitle, ActionbarLeftRightActionTypeDrawables leftAction, ActionbarLeftRightActionTypeDrawables rightAction, HealthCocoFragment fragment) {
@@ -272,43 +279,56 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                 patientDetailTabType = PatientDetailTabType.PATIENT_DETAIL_PROFILE;
                 hidePatientDetailLayout();
                 hideFloatingButton();
+                refreshHomeScreenTitle(getResources().getString(R.string.patient_profile));
                 break;
             case PatientDetailTabType.POSITION_VISIT_TAB:
                 patientDetailTabType = PatientDetailTabType.PATIENT_DETAIL_VISIT;
                 showPatientDetailLayout();
                 showFloatingButton();
+                refreshHomeScreenTitle(getResources().getString(R.string.visits));
                 break;
             case PatientDetailTabType.POSITION_CLINICAL_NOTES_TAB:
                 patientDetailTabType = PatientDetailTabType.PATIENT_DETAIL_CLINICAL_NOTES;
                 showPatientDetailLayout();
                 showFloatingButton();
+                refreshHomeScreenTitle(getResources().getString(R.string.clinical_notes));
                 break;
             case PatientDetailTabType.POSITION_IMPORTANT_TAB:
                 patientDetailTabType = PatientDetailTabType.PATIENT_DETAIL_IMPORTANT;
                 showPatientDetailLayout();
                 hideFloatingButton();
+                refreshHomeScreenTitle(getResources().getString(R.string.important));
                 break;
             case PatientDetailTabType.POSITION_REPORTS_TAB:
                 patientDetailTabType = PatientDetailTabType.PATIENT_DETAIL_REPORTS;
                 showPatientDetailLayout();
                 showFloatingButton();
+                refreshHomeScreenTitle(getResources().getString(R.string.reports));
                 break;
             case PatientDetailTabType.POSITION_PRESCRIPTION_TAB:
                 patientDetailTabType = PatientDetailTabType.PATIENT_DETAIL_PRESCRIPTION;
                 showPatientDetailLayout();
                 showFloatingButton();
+                refreshHomeScreenTitle(getResources().getString(R.string.prescriptions));
                 break;
             case PatientDetailTabType.POSITION_APPOINTMENT_TAB:
                 patientDetailTabType = PatientDetailTabType.PATIENT_DETAIL_APPOINTMENT;
                 showPatientDetailLayout();
                 showFloatingButton();
+                refreshHomeScreenTitle(getResources().getString(R.string.appointment));
                 break;
             case PatientDetailTabType.POSITION_TREATMENT_TAB:
                 patientDetailTabType = PatientDetailTabType.PATIENT_DETAIL_TREATMENT;
                 showPatientDetailLayout();
                 showFloatingButton();
+                refreshHomeScreenTitle(getResources().getString(R.string.treatment));
                 break;
         }
+    }
+
+    private void refreshHomeScreenTitle(String title) {
+        this.selectedFilterTitle = title;
+        ((CommonOpenUpActivity) mActivity).initActionbarTitle(title);
     }
 
     private void initData() {

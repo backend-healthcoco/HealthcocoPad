@@ -49,12 +49,15 @@ import com.healthcoco.healthcocoplus.bean.server.ForeignOtherEmailAddresses;
 import com.healthcoco.healthcocoplus.bean.server.ForeignProfessionalMemberships;
 import com.healthcoco.healthcocoplus.bean.server.ForeignSpecialities;
 import com.healthcoco.healthcocoplus.bean.server.ForieignAdditionalNumbers;
+import com.healthcoco.healthcocoplus.bean.server.HistoryDetailsResponse;
 import com.healthcoco.healthcocoplus.bean.server.Hospital;
 import com.healthcoco.healthcocoplus.bean.server.Investigation;
 import com.healthcoco.healthcocoplus.bean.server.InvestigationSuggestions;
 import com.healthcoco.healthcocoplus.bean.server.Location;
 import com.healthcoco.healthcocoplus.bean.server.LocationAndAccessControl;
 import com.healthcoco.healthcocoplus.bean.server.LoginResponse;
+import com.healthcoco.healthcocoplus.bean.server.MedicalFamilyHistoryDetails;
+import com.healthcoco.healthcocoplus.bean.server.MedicalFamilyHistoryResponse;
 import com.healthcoco.healthcocoplus.bean.server.NotesTable;
 import com.healthcoco.healthcocoplus.bean.server.Observation;
 import com.healthcoco.healthcocoplus.bean.server.ObservationSuggestions;
@@ -73,9 +76,9 @@ import com.healthcoco.healthcocoplus.bean.server.User;
 import com.healthcoco.healthcocoplus.bean.server.UserGroups;
 import com.healthcoco.healthcocoplus.bean.server.WorkingHours;
 import com.healthcoco.healthcocoplus.bean.server.WorkingSchedule;
-import com.healthcoco.healthcocoplus.dialogFragment.ComparatorUtil;
 import com.healthcoco.healthcocoplus.enums.BooleanTypeValues;
 import com.healthcoco.healthcocoplus.enums.FilterItemType;
+import com.healthcoco.healthcocoplus.enums.HistoryFilterType;
 import com.healthcoco.healthcocoplus.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocoplus.enums.LocalTabelType;
 import com.healthcoco.healthcocoplus.enums.RecordType;
@@ -84,6 +87,7 @@ import com.healthcoco.healthcocoplus.enums.WeekDayNameType;
 import com.healthcoco.healthcocoplus.fragments.ClinicalProfileFragment;
 import com.healthcoco.healthcocoplus.fragments.MenuDrawerFragment;
 import com.healthcoco.healthcocoplus.services.GsonRequest;
+import com.healthcoco.healthcocoplus.utilities.ComparatorUtil;
 import com.healthcoco.healthcocoplus.utilities.DateTimeUtil;
 import com.healthcoco.healthcocoplus.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocoplus.utilities.LocalDatabaseUtils;
@@ -119,6 +123,15 @@ public class LocalDataServiceImpl {
         }
         Util.checkNetworkStatus(mApp.getApplicationContext());
         return mInstance;
+    }
+
+    public OtpVerification getOtpVerification(String doctorId, String locationId, String hospitalId, String patientId) {
+        OtpVerification otpVerification = Select.from(OtpVerification.class)
+                .where(Condition.prop(LocalDatabaseUtils.KEY_DOCTOR_ID).eq(doctorId),
+                        Condition.prop(LocalDatabaseUtils.KEY_HOSPITAL_ID).eq(hospitalId),
+                        Condition.prop(LocalDatabaseUtils.KEY_LOCATION_ID).eq(locationId),
+                        Condition.prop(LocalDatabaseUtils.KEY_PATIENT_ID).eq(patientId)).first();
+        return otpVerification;
     }
 
     /**
@@ -274,8 +287,8 @@ public class LocalDataServiceImpl {
     public VolleyResponseBean getSpecialitiesListVolleyResponse(WebServiceType webServiceType, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
         volleyResponseBean.setWebServiceType(webServiceType);
-        volleyResponseBean.setDataFromLocal(true);
-        volleyResponseBean.setUserOnline(HealthCocoConstants.isNetworkOnline);
+        volleyResponseBean.setIsDataFromLocal(true);
+        volleyResponseBean.setIsUserOnline(HealthCocoConstants.isNetworkOnline);
         try {
             List<Specialities> list = getSpecialitiesListObject();
             volleyResponseBean.setDataList(getObjectsListFromMap(list));
@@ -351,8 +364,8 @@ public class LocalDataServiceImpl {
     public void getDosageDurationDirectionList(WebServiceType webServiceType, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
         volleyResponseBean.setWebServiceType(webServiceType);
-        volleyResponseBean.setDataFromLocal(true);
-        volleyResponseBean.setUserOnline(HealthCocoConstants.isNetworkOnline);
+        volleyResponseBean.setIsDataFromLocal(true);
+        volleyResponseBean.setIsUserOnline(HealthCocoConstants.isNetworkOnline);
         try {
             switch (webServiceType) {
                 case GET_DRUG_DOSAGE:
@@ -425,8 +438,8 @@ public class LocalDataServiceImpl {
     public VolleyResponseBean getClinicDetailsResponse(WebServiceType webServiceType, String locationId, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
         volleyResponseBean.setWebServiceType(webServiceType);
-        volleyResponseBean.setUserOnline(HealthCocoConstants.isNetworkOnline);
-        volleyResponseBean.setDataFromLocal(true);
+        volleyResponseBean.setIsUserOnline(HealthCocoConstants.isNetworkOnline);
+        volleyResponseBean.setIsDataFromLocal(true);
         try {
             volleyResponseBean.setData(getClinicResponseDetails(locationId));
             if (responseListener != null)
@@ -499,8 +512,8 @@ public class LocalDataServiceImpl {
     public VolleyResponseBean getDrugTypeListAdResponse(WebServiceType webServiceType, String doctorId, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
         volleyResponseBean.setWebServiceType(webServiceType);
-        volleyResponseBean.setDataFromLocal(true);
-        volleyResponseBean.setUserOnline(HealthCocoConstants.isNetworkOnline);
+        volleyResponseBean.setIsDataFromLocal(true);
+        volleyResponseBean.setIsUserOnline(HealthCocoConstants.isNetworkOnline);
         try {
             volleyResponseBean.setDataList(getObjectsListFromMap(DrugType.listAll(DrugType.class)));
             if (responseListener != null)
@@ -515,8 +528,8 @@ public class LocalDataServiceImpl {
     public VolleyResponseBean getUserGroups(WebServiceType webServiceType, ArrayList<String> patientsAssignedGroupIdList, String doctorId, String locationID, String hospitalId, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
         volleyResponseBean.setWebServiceType(webServiceType);
-        volleyResponseBean.setDataFromLocal(true);
-        volleyResponseBean.setUserOnline(HealthCocoConstants.isNetworkOnline);
+        volleyResponseBean.setIsDataFromLocal(true);
+        volleyResponseBean.setIsUserOnline(HealthCocoConstants.isNetworkOnline);
         try {
             List<UserGroups> savedGroupsList = Select.from(UserGroups.class)
                     .where(Condition.prop(LocalDatabaseUtils.KEY_DOCTOR_ID).eq(doctorId),
@@ -543,8 +556,8 @@ public class LocalDataServiceImpl {
     public VolleyResponseBean getProfessionList(WebServiceType webServiceType, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
         volleyResponseBean.setWebServiceType(webServiceType);
-        volleyResponseBean.setDataFromLocal(true);
-        volleyResponseBean.setUserOnline(HealthCocoConstants.isNetworkOnline);
+        volleyResponseBean.setIsDataFromLocal(true);
+        volleyResponseBean.setIsUserOnline(HealthCocoConstants.isNetworkOnline);
         try {
             List<Profession> list = Profession.listAll(Profession.class);
             volleyResponseBean.setDataList(getObjectsListFromMap(list));
@@ -560,8 +573,8 @@ public class LocalDataServiceImpl {
     public VolleyResponseBean getBloodGroup(WebServiceType webServiceType, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
         volleyResponseBean.setWebServiceType(webServiceType);
-        volleyResponseBean.setDataFromLocal(true);
-        volleyResponseBean.setUserOnline(HealthCocoConstants.isNetworkOnline);
+        volleyResponseBean.setIsDataFromLocal(true);
+        volleyResponseBean.setIsUserOnline(HealthCocoConstants.isNetworkOnline);
         try {
             List<BloodGroup> list = BloodGroup.listAll(BloodGroup.class);
             volleyResponseBean.setDataList(getObjectsListFromMap(list));
@@ -577,8 +590,8 @@ public class LocalDataServiceImpl {
     public VolleyResponseBean getDiseaseList(WebServiceType webServiceType, String doctorId, BooleanTypeValues discarded, ArrayList<String> diseaseIds, long updatedTime, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
         volleyResponseBean.setWebServiceType(webServiceType);
-        volleyResponseBean.setDataFromLocal(true);
-        volleyResponseBean.setUserOnline(HealthCocoConstants.isNetworkOnline);
+        volleyResponseBean.setIsDataFromLocal(true);
+        volleyResponseBean.setIsUserOnline(HealthCocoConstants.isNetworkOnline);
         try {
             String whereCondition = "";
             Class<?> class1 = Disease.class;
@@ -1125,8 +1138,8 @@ public class LocalDataServiceImpl {
     public void addSuggestionsList(WebServiceType webServiceType, LocalTabelType localTabelType, ArrayList<?> list, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
         volleyResponseBean.setWebServiceType(webServiceType);
-        volleyResponseBean.setDataFromLocal(true);
-        volleyResponseBean.setUserOnline(HealthCocoConstants.isNetworkOnline);
+        volleyResponseBean.setIsDataFromLocal(true);
+        volleyResponseBean.setIsUserOnline(HealthCocoConstants.isNetworkOnline);
         try {
             switch (localTabelType) {
                 case COMPLAINT_SUGGESTIONS:
@@ -1259,8 +1272,8 @@ public class LocalDataServiceImpl {
     public VolleyResponseBean getDoctorProfileResponse(WebServiceType webServiceType, String doctorId, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
         volleyResponseBean.setWebServiceType(webServiceType);
-        volleyResponseBean.setDataFromLocal(true);
-        volleyResponseBean.setUserOnline(HealthCocoConstants.isNetworkOnline);
+        volleyResponseBean.setIsDataFromLocal(true);
+        volleyResponseBean.setIsUserOnline(HealthCocoConstants.isNetworkOnline);
         try {
             DoctorProfile doctorProfile = getDoctorProfileObject(doctorId);
             volleyResponseBean.setData(doctorProfile);
@@ -1689,7 +1702,7 @@ public class LocalDataServiceImpl {
         VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
         volleyResponseBean.setWebServiceType(webServiceType);
         volleyResponseBean.setIsFromLocalAfterApiSuccess(true);
-        volleyResponseBean.setUserOnline(HealthCocoConstants.isNetworkOnline);
+        volleyResponseBean.setIsUserOnline(HealthCocoConstants.isNetworkOnline);
         try {
             List<CityResponse> list = CityResponse.listAll(CityResponse.class);
             volleyResponseBean.setDataList(getObjectsListFromMap(list));
@@ -1745,8 +1758,8 @@ public class LocalDataServiceImpl {
                                                               Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
         volleyResponseBean.setWebServiceType(webServiceType);
-        volleyResponseBean.setDataFromLocal(true);
-        volleyResponseBean.setUserOnline(HealthCocoConstants.isNetworkOnline);
+        volleyResponseBean.setIsDataFromLocal(true);
+        volleyResponseBean.setIsUserOnline(HealthCocoConstants.isNetworkOnline);
         try {
             //forming where condition query
             String whereCondition = "Select * from " + StringUtil.toSQLName(RegisteredPatientDetailsUpdated.class.getSimpleName())
@@ -1881,8 +1894,8 @@ public class LocalDataServiceImpl {
                                                        Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
         volleyResponseBean.setWebServiceType(webServiceType);
-        volleyResponseBean.setDataFromLocal(true);
-        volleyResponseBean.setUserOnline(HealthCocoConstants.isNetworkOnline);
+        volleyResponseBean.setIsDataFromLocal(true);
+        volleyResponseBean.setIsUserOnline(HealthCocoConstants.isNetworkOnline);
         try {
             //forming where condition query
             String whereCondition = "Select * from " + StringUtil.toSQLName(PatientIdGroupId.class.getSimpleName())
@@ -1924,8 +1937,8 @@ public class LocalDataServiceImpl {
                                                           Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
         volleyResponseBean.setWebServiceType(webServiceType);
-        volleyResponseBean.setDataFromLocal(true);
-        volleyResponseBean.setUserOnline(HealthCocoConstants.isNetworkOnline);
+        volleyResponseBean.setIsDataFromLocal(true);
+        volleyResponseBean.setIsUserOnline(HealthCocoConstants.isNetworkOnline);
         try {
             //forming where condition query
             String whereCondition = "Select * from " + StringUtil.toSQLName(RegisteredPatientDetailsUpdated.class.getSimpleName())
@@ -1983,8 +1996,8 @@ public class LocalDataServiceImpl {
     public VolleyResponseBean getReferenceList(WebServiceType webServiceType, String doctorId, String locationId, String hospitalId, BooleanTypeValues isDiscarded, RecordType recordType, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
         volleyResponseBean.setWebServiceType(webServiceType);
-        volleyResponseBean.setDataFromLocal(true);
-        volleyResponseBean.setUserOnline(HealthCocoConstants.isNetworkOnline);
+        volleyResponseBean.setIsDataFromLocal(true);
+        volleyResponseBean.setIsUserOnline(HealthCocoConstants.isNetworkOnline);
         try {
             String whereCondition = "";
             List<Reference> list = null;
@@ -2035,5 +2048,126 @@ public class LocalDataServiceImpl {
 
     public void addUserGroup(UserGroups userGroup) {
         userGroup.save();
+    }
+
+    public VolleyResponseBean getHistoryList(WebServiceType webServiceType, BooleanTypeValues discarded, boolean isOtpVerified, String doctorId, String selectedPatientsUserId, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
+        volleyResponseBean.setWebServiceType(webServiceType);
+        volleyResponseBean.setIsDataFromLocal(true);
+        volleyResponseBean.setIsUserOnline(HealthCocoConstants.isNetworkOnline);
+        try {
+            Select<HistoryDetailsResponse> selectQuery = null;
+            if (!isOtpVerified && !Util.isNullOrBlank(doctorId))
+                selectQuery = Select.from(HistoryDetailsResponse.class)
+                        .where(Condition.prop(LocalDatabaseUtils.KEY_PATIENT_ID).eq(selectedPatientsUserId),
+                                Condition.prop(LocalDatabaseUtils.KEY_DOCTOR_ID).eq(doctorId));
+            else selectQuery = Select.from(HistoryDetailsResponse.class)
+                    .where(Condition.prop(LocalDatabaseUtils.KEY_PATIENT_ID).eq(selectedPatientsUserId));
+            List<HistoryDetailsResponse> list = selectQuery.list();
+            List<HistoryDetailsResponse> modifiedList = new ArrayList<>();
+            if (!Util.isNullOrEmptyList(list)) {
+                LogUtils.LOGD(TAG, "HistoryDetailsResponse  list size " + list.size());
+                for (HistoryDetailsResponse history : list) {
+//                    history.setGeneralRecords(getGeneralDataList(discarded, history));
+                    if (!Util.isNullOrEmptyList(history.getGeneralRecords()))
+                        modifiedList.add(history);
+                }
+            }
+            volleyResponseBean.setDataList(getObjectsListFromMap(modifiedList));
+            if (responseListener != null)
+                responseListener.onResponse(volleyResponseBean);
+        } catch (Exception e) {
+            e.printStackTrace();
+            showErrorLocal(volleyResponseBean, errorListener);
+        }
+        return volleyResponseBean;
+    }
+
+    public VolleyResponseBean getMedicalFAmilyHistory(WebServiceType webServiceType, String patientId, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
+        volleyResponseBean.setWebServiceType(webServiceType);
+        volleyResponseBean.setIsDataFromLocal(true);
+        volleyResponseBean.setIsUserOnline(HealthCocoConstants.isNetworkOnline);
+        try {
+            MedicalFamilyHistoryResponse response = Select.from(MedicalFamilyHistoryResponse.class)
+                    .where(Condition.prop(LocalDatabaseUtils.KEY_PATIENT_ID).eq(patientId)).first();
+            if (response != null) {
+                response.setMedicalhistory(getMedicalFamilyHistoryDetails(HistoryFilterType.MEDICAL_HISTORY, response.getUniqueId()));
+                response.setFamilyhistory(getMedicalFamilyHistoryDetails(HistoryFilterType.FAMILY_HISTORY, response.getUniqueId()));
+            }
+            volleyResponseBean.setData(response);
+            if (responseListener != null)
+                responseListener.onResponse(volleyResponseBean);
+        } catch (Exception e) {
+            e.printStackTrace();
+            showErrorLocal(volleyResponseBean, errorListener);
+        }
+        return volleyResponseBean;
+    }
+
+    private List<MedicalFamilyHistoryDetails> getMedicalFamilyHistoryDetails(HistoryFilterType historyFilterType, String responseId) {
+        List<MedicalFamilyHistoryDetails> list = Select.from(MedicalFamilyHistoryDetails.class)
+                .where(Condition.prop(LocalDatabaseUtils.KEY_FOREIGN_MEDICAL_HISTORY_ID).eq(responseId), Condition.prop(LocalDatabaseUtils.KEY_HISTORY_FILTER_TYPE).eq(historyFilterType)).list();
+        return list;
+    }
+
+    public void addMedicalHistory(String patientId, MedicalFamilyHistoryResponse medicalHistoryResponse) {
+        deleteMedicalFamilyHistoryResponse(medicalHistoryResponse);
+        deleteMedicalFamilyHistoryDetails(medicalHistoryResponse.getUniqueId());
+        List<MedicalFamilyHistoryDetails> medicalHistoryList = getMedicalFamilyHistoryDetails(HistoryFilterType.MEDICAL_HISTORY, medicalHistoryResponse.getUniqueId());
+        List<MedicalFamilyHistoryDetails> familyHistoryList = getMedicalFamilyHistoryDetails(HistoryFilterType.FAMILY_HISTORY, medicalHistoryResponse.getUniqueId());
+        if (!Util.isNullOrEmptyList(medicalHistoryResponse.getMedicalhistory()))
+            addMedicalFamilyHistoryDetails(HistoryFilterType.MEDICAL_HISTORY, medicalHistoryResponse.getUniqueId(), medicalHistoryResponse.getMedicalhistory());
+        if (!Util.isNullOrEmptyList(medicalHistoryResponse.getFamilyhistory()))
+            addMedicalFamilyHistoryDetails(HistoryFilterType.FAMILY_HISTORY, medicalHistoryResponse.getUniqueId(), medicalHistoryResponse.getFamilyhistory());
+        medicalHistoryResponse.save();
+    }
+
+    private void deleteMedicalFamilyHistoryResponse(MedicalFamilyHistoryResponse medicalHistoryResponse) {
+        MedicalFamilyHistoryResponse response = Select.from(MedicalFamilyHistoryResponse.class)
+                .where(Condition.prop(LocalDatabaseUtils.KEY_PATIENT_ID).eq(medicalHistoryResponse.getPatientId())).first();
+        if (response != null)
+            response.delete();
+    }
+
+    private void deleteMedicalFamilyHistoryDetails(String responseId) {
+        List<MedicalFamilyHistoryDetails> medicalHistoryList = getMedicalFamilyHistoryDetails(HistoryFilterType.MEDICAL_HISTORY, responseId);
+        if (!Util.isNullOrEmptyList(medicalHistoryList)) {
+            MedicalFamilyHistoryDetails.deleteInTx(medicalHistoryList);
+        }
+        List<MedicalFamilyHistoryDetails> familyHistoryList = getMedicalFamilyHistoryDetails(HistoryFilterType.FAMILY_HISTORY, responseId);
+        if (!Util.isNullOrEmptyList(familyHistoryList)) {
+            MedicalFamilyHistoryDetails.deleteInTx(familyHistoryList);
+        }
+
+    }
+
+    private void addMedicalFamilyHistoryDetails(HistoryFilterType historyFilterType, String responseId, List<MedicalFamilyHistoryDetails> medicalHistoryResponse) {
+        for (MedicalFamilyHistoryDetails details : medicalHistoryResponse) {
+            details.setHistoryFilterType(historyFilterType);
+            details.setForeignMedicalHistoryId(responseId);
+            details.setCustomUniqueId(historyFilterType + details.getUniqueId());
+        }
+        MedicalFamilyHistoryDetails.saveInTx(medicalHistoryResponse);
+    }
+
+    public void addHistoryList(String selectedPatientId, ArrayList<HistoryDetailsResponse> historyList) {
+        try {
+            for (HistoryDetailsResponse history : historyList) {
+//                addHistory(selectedPatientId, history);
+                LogUtils.LOGD(TAG, "HistoryDetailsResponse historyId " + history.getUniqueId());
+
+            }
+        } catch (Exception e) {
+            Log.i(null, "Error in saving in transaction " + e.getMessage());
+        }
+    }
+
+    public void addDiseaseList(ArrayList<Disease> diseaseList) {
+        for (Disease disease : diseaseList) {
+            LogUtils.LOGD(TAG, "Unique ID : " +
+                    disease.getUniqueId() + " Name : " + disease.getDisease() + " Disease : " + disease.getDoctorId());
+        }
+        Disease.saveInTx(diseaseList);
     }
 }

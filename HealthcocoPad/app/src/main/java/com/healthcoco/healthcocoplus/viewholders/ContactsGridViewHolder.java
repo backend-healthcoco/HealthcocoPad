@@ -75,7 +75,7 @@ public class ContactsGridViewHolder extends HealthCocoViewHolder implements OnCl
         btQueue = (ImageButton) convertView.findViewById(R.id.bt_queue);
         btCall = (ImageButton) convertView.findViewById(R.id.bt_call);
         btGroup = (ImageButton) convertView.findViewById(R.id.bt_group);
-        btPrescription = (ImageButton) convertView.findViewById(R.id.bt_call);
+        btPrescription = (ImageButton) convertView.findViewById(R.id.bt_prescription);
         tvInitialAlphabet = (TextView) convertView.findViewById(R.id.tv_initial_aplhabet);
         ivContactProfile = (ImageView) convertView.findViewById(R.id.iv_image);
         containerTop = (LinearLayout) convertView.findViewById(R.id.container_top);

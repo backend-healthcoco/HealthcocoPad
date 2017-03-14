@@ -108,4 +108,6 @@
     <dimen name="text_size_patients_list_initial_alphabet_detail_layout">12sp</dimen>
     <dimen name="image_patient_detail_profile">65dp</dimen>
     <dimen name="list_item_padding">10dp</dimen>
+    <dimen name="text_icon_add_remove_item">13sp</dimen>
+    <dimen name="icon_history_size">20sp</dimen>
 </resources>

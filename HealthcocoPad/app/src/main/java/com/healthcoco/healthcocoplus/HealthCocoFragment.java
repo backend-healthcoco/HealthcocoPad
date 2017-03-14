@@ -23,11 +23,11 @@ import com.google.android.gms.maps.model.LatLng;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocoplus.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocoplus.bean.VolleyResponseBean;
+import com.healthcoco.healthcocoplus.bean.server.OtpVerification;
+import com.healthcoco.healthcocoplus.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocoplus.bean.server.User;
-import com.healthcoco.healthcocoplus.dialogFragment.AddUpdateNameDialogFragment;
 import com.healthcoco.healthcocoplus.dialogFragment.CommonListDialogFragment;
 import com.healthcoco.healthcocoplus.dialogFragment.CommonOptionsDialogFragment;
-import com.healthcoco.healthcocoplus.enums.AddUpdateNameDialogType;
 import com.healthcoco.healthcocoplus.enums.CommonListDialogType;
 import com.healthcoco.healthcocoplus.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocoplus.enums.DialogType;
@@ -35,6 +35,8 @@ import com.healthcoco.healthcocoplus.enums.WebServiceType;
 import com.healthcoco.healthcocoplus.listeners.CommonListDialogItemClickListener;
 import com.healthcoco.healthcocoplus.listeners.CommonOptionsDialogItemClickListener;
 import com.healthcoco.healthcocoplus.services.GsonRequest;
+import com.healthcoco.healthcocoplus.services.impl.LocalDataServiceImpl;
+import com.healthcoco.healthcocoplus.services.impl.WebDataServiceImpl;
 import com.healthcoco.healthcocoplus.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocoplus.utilities.LogUtils;
 import com.healthcoco.healthcocoplus.utilities.Util;
@@ -54,6 +56,10 @@ public abstract class HealthCocoFragment extends Fragment implements GsonRequest
     protected String TAG;
     protected HealthCocoApplication mApp;
     private Tracker mTracker;
+    private boolean isOTPVerified;
+    private User user;
+    private RegisteredPatientDetailsUpdated selectedPatient;
+    private ImageButton btGlobalRecordAccess;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         TAG = getClass().getSimpleName();
@@ -73,6 +79,11 @@ public abstract class HealthCocoFragment extends Fragment implements GsonRequest
             mTracker.setScreenName("Screen Name " + TAG);
             mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         }
+        //GlobalRecordAccess
+//        btGlobalRecordAccess = (ImageButton) view.findViewById(R.id.bt_global_record_access);
+//        if (btGlobalRecordAccess != null)
+//            btGlobalRecordAccess.setVisibility(View.GONE);
+
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
@@ -101,6 +112,20 @@ public abstract class HealthCocoFragment extends Fragment implements GsonRequest
         LinearLayout layoutEditSearch = (LinearLayout) view.findViewById(R.id.parent_edit_search);
         if (setPaddingTop)
             layoutEditSearch.setPadding(layoutEditSearch.getPaddingLeft(), mActivity.getResources().getDimensionPixelOffset(R.dimen.layout_edit_search_padding), layoutEditSearch.getPaddingRight(), layoutEditSearch.getPaddingBottom());
+        final EditText editSearch = (EditText) view.findViewById(R.id.edit_search);
+        editSearch.setHint(hintId);
+        if (textWatcher != null)
+            editSearch.addTextChangedListener(textWatcher);
+        ImageButton btClear = (ImageButton) view.findViewById(R.id.bt_clear);
+        btClear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editSearch.setText("");
+            }
+        });
+    }
+
+    protected void initEditSearchView(int hintId, View.OnClickListener onClickListener, TextWatcher textWatcher) {
         final EditText editSearch = (EditText) view.findViewById(R.id.edit_search);
         editSearch.setHint(hintId);
         if (textWatcher != null)
@@ -206,10 +231,63 @@ public abstract class HealthCocoFragment extends Fragment implements GsonRequest
     }
 
 
-
     protected CommonListDialogFragment openCommonListDialogFragment(CommonListDialogItemClickListener listener, CommonListDialogType popupType, List<?> list) {
         CommonListDialogFragment commonListDialogFragment = new CommonListDialogFragment(listener, popupType, list);
         commonListDialogFragment.show(mFragmentManager, CommonListDialogFragment.class.getSimpleName());
         return commonListDialogFragment;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == HealthCocoConstants.REQUEST_CODE_GLOBAL_RECORDS_ACCESS && resultCode == HealthCocoConstants.RESULT_CODE_GLOBAL_RECORDS_ACCESS) {
+//            openVerificationOTPDialogFragment();
+        } else if (requestCode == HealthCocoConstants.REQUEST_CODE_VERIFY_OTP && resultCode == HealthCocoConstants.RESULT_CODE_VERIFY_OTP) {
+            checkPatientStatus(user, selectedPatient);
+        }
+    }
+
+    public void checkPatientStatus(User user, RegisteredPatientDetailsUpdated selectedPatient) {
+        this.selectedPatient = selectedPatient;
+        this.user = user;
+        btGlobalRecordAccess.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                openGlobalRecordAccessDialogFragment();
+            }
+        });
+        OtpVerification otpVerification = LocalDataServiceImpl.getInstance(mApp).getOtpVerification(selectedPatient.getDoctorId(),
+                selectedPatient.getLocationId(), selectedPatient.getHospitalId(), selectedPatient.getUserId());
+        LogUtils.LOGD(TAG, "Button generate Otp visible");
+        if (otpVerification != null) {
+            isOTPVerified = otpVerification.isPatientOTPVerified();
+            boolean isDataAvailableWithOtherDoctor = otpVerification.isDataAvailableWithOtherDoctor();
+            boolean isPatientOTPVerified = otpVerification.isPatientOTPVerified();
+            if ((isDataAvailableWithOtherDoctor && isPatientOTPVerified)
+                    || (!isDataAvailableWithOtherDoctor && !isPatientOTPVerified)) {
+                Util.checkNetworkStatus(mActivity);
+                if (HealthCocoConstants.isNetworkOnline) {
+                    try {
+                        WebDataServiceImpl.getInstance(mApp).getPatientStatus(OtpVerification.class, selectedPatient.getUserId(), selectedPatient.getDoctorId(),
+                                selectedPatient.getLocationId(), selectedPatient.getHospitalId(), this, this);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    return;
+                }
+            }
+            LogUtils.LOGD(TAG, "Button Global visible");
+        }
+    }
+
+    private void addOtpVerificationData(OtpVerification otpVerification) {
+        otpVerification.setDoctorId(user.getUniqueId());
+        otpVerification.setLocationId(user.getForeignLocationId());
+        otpVerification.setHospitalId(user.getForeignHospitalId());
+        LocalDataServiceImpl.getInstance(mApp).addOtpVerification(otpVerification);
+    }
+
+    protected boolean isOtpVerified() {
+        return isOTPVerified;
     }
 }

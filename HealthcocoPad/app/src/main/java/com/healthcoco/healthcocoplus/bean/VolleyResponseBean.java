@@ -23,7 +23,6 @@ public class VolleyResponseBean {
     protected boolean isFromLocalAfterApiSuccess;
     private LocalBackgroundTaskType localBackgroundTaskType;
     protected boolean isDataFromLocal;
-
     public void setFromLocalAfterApiSuccess(boolean fromLocalAfterApiSuccess) {
         isFromLocalAfterApiSuccess = fromLocalAfterApiSuccess;
     }
@@ -72,7 +71,7 @@ public class VolleyResponseBean {
         return isDataFromLocal;
     }
 
-    public void setDataFromLocal(boolean dataFromLocal) {
+    public void setIsDataFromLocal(boolean dataFromLocal) {
         isDataFromLocal = dataFromLocal;
     }
 
@@ -80,7 +79,7 @@ public class VolleyResponseBean {
         return isUserOnline;
     }
 
-    public void setUserOnline(boolean userOnline) {
+    public void setIsUserOnline(boolean userOnline) {
         isUserOnline = userOnline;
     }
 

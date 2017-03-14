@@ -91,9 +91,6 @@ public class AddEditDoctorEducationDialogFragment extends HealthCocoDialogFragme
 
     @Override
     public void initData() {
-        initSaveCancelButton(this);
-        initActionbarTitle(getResources().getString(R.string.awards_and_publication));
-        btAddMore.setOnClickListener(this);
     }
 
     @Override

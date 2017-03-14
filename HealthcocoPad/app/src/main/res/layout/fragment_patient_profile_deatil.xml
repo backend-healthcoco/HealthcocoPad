@@ -157,21 +157,21 @@
 
                 </LinearLayout>
 
-                <LinearLayout
-                    android:id="@+id/container_edit_past_history"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    android:visibility="visible">
+                <!--<LinearLayout-->
+                    <!--android:id="@+id/container_edit_past_history"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:gravity="center"-->
+                    <!--android:orientation="horizontal"-->
+                    <!--android:visibility="visible">-->
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/edit_to_assign_past_history"
-                        android:textColor="@color/grey_dark_text"
-                        android:textSize="18sp" />
-                </LinearLayout>
+                    <!--<TextView-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:text="@string/edit_to_assign_past_history"-->
+                        <!--android:textColor="@color/grey_dark_text"-->
+                        <!--android:textSize="18sp" />-->
+                <!--</LinearLayout>-->
             </LinearLayout>
 
             <LinearLayout
@@ -230,21 +230,21 @@
 
                 </LinearLayout>
 
-                <LinearLayout
-                    android:id="@+id/container_edit_family_history"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    android:visibility="visible">
+                <!--<LinearLayout-->
+                    <!--android:id="@+id/container_edit_family_history"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:gravity="center"-->
+                    <!--android:orientation="horizontal"-->
+                    <!--android:visibility="visible">-->
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/edit_to_assign_family_history"
-                        android:textColor="@color/grey_dark_text"
-                        android:textSize="18sp" />
-                </LinearLayout>
+                    <!--<TextView-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:text="@string/edit_to_assign_family_history"-->
+                        <!--android:textColor="@color/grey_dark_text"-->
+                        <!--android:textSize="18sp" />-->
+                <!--</LinearLayout>-->
             </LinearLayout>
 
             <LinearLayout

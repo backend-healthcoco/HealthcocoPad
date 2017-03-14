@@ -70,11 +70,27 @@ public class WebDataServiceImpl {
         }
     }
 
+    public void getPatientStatus(Class<?> class1, String patientId, String doctorId, String locationId, String hospitalId,
+                                 Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        WebServiceType webServiceType = WebServiceType.GET_PATIENT_STATUS;
+        Util.checkNetworkStatus(mApp);
+        if (HealthCocoConstants.isNetworkOnline) {
+            String url = webServiceType.getUrl()
+                    + patientId + "/"
+                    + doctorId + "/"
+                    + locationId + "/"
+                    + hospitalId + "/";
+            getResponse(webServiceType, class1, url, null, null, responseListener,
+                    errorListener);
+        } else {
+        }
+    }
+
     private void showUserOffline(WebServiceType webServiceType, Response.Listener<VolleyResponseBean> responseListener) {
         VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
         volleyResponseBean.setWebServiceType(webServiceType);
-        volleyResponseBean.setUserOnline(false);
-        volleyResponseBean.setDataFromLocal(true);
+        volleyResponseBean.setIsUserOnline(false);
+        volleyResponseBean.setIsDataFromLocal(true);
         responseListener.onResponse(volleyResponseBean);
         Util.showToast(mApp.getApplicationContext(), R.string.user_offline);
     }
@@ -621,6 +637,33 @@ public class WebDataServiceImpl {
             getResponse(webServiceType, class1, url, null, null, responseListener, errorListener);
         } else {
             errorListener.onErrorResponse(null, mApp.getResources().getString(R.string.user_offline));
+        }
+    }
+
+    public void getHistoryListUpdatedAPI(Class<?> class1, WebServiceType webServiceType, boolean isOtpVerified, String pateintId, String doctorId, String locationId, String hospitalId, boolean isInHistory, Long updatedTime, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        Util.checkNetworkStatus(mApp.getApplicationContext());
+        if (HealthCocoConstants.isNetworkOnline) {
+            String url = webServiceType.getUrl()
+                    + HealthCocoConstants.PARAM_DISCARDED_TRUE
+                    + HealthCocoConstants.PARAM_PATIENT_ID + pateintId
+                    + HealthCocoConstants.PARAM_DOCTOR_ID + doctorId
+                    + HealthCocoConstants.PARAM_HOSPITAL_ID + hospitalId
+                    + HealthCocoConstants.PARAM_LOCATION_ID + locationId
+                    + HealthCocoConstants.PARAM_IN_HISTORY + isInHistory
+                    + HealthCocoConstants.PARAM_UPDATED_TIME + updatedTime;
+            getResponse(Request.Priority.HIGH, webServiceType, class1, url, null, null, responseListener, errorListener);
+        } else {
+            LocalDataServiceImpl.getInstance(mApp).getHistoryList(WebServiceType.GET_HISTORY_LIST, BooleanTypeValues.FALSE, isOtpVerified, doctorId, HealthCocoConstants.SELECTED_PATIENTS_USER_ID, responseListener, errorListener);
+        }
+    }
+
+    public void getMedicalFamilyHistory(Class<?> class1, WebServiceType webServiceType, String patientId, String doctorId, String locationId, String hospitalId, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        Util.checkNetworkStatus(mApp.getApplicationContext());
+        if (HealthCocoConstants.isNetworkOnline) {
+            String url = webServiceType.getUrl() + patientId + "/" + doctorId + "/" + locationId + "/" + hospitalId;
+            getResponse(Request.Priority.HIGH, webServiceType, class1, url, null, null, responseListener, errorListener);
+        } else {
+            LocalDataServiceImpl.getInstance(mApp).getMedicalFAmilyHistory(WebServiceType.GET_MEDICAL_AND_FAMILY_HISTORY, patientId, responseListener, errorListener);
         }
     }
 }

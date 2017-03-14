@@ -1,7 +1,9 @@
-package com.healthcoco.healthcocoplus.dialogFragment;
+package com.healthcoco.healthcocoplus.utilities;
 
 import android.text.TextUtils;
 
+import com.healthcoco.healthcocoplus.bean.server.Disease;
+import com.healthcoco.healthcocoplus.bean.server.HistoryDetailsResponse;
 import com.healthcoco.healthcocoplus.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocoplus.bean.server.Specialities;
 import com.healthcoco.healthcocoplus.bean.server.UserGroups;
@@ -47,6 +49,32 @@ public class ComparatorUtil {
             String patientName1 = TextUtils.isEmpty(registeredPatientDetailsUpdated1.getLocalPatientName()) ? "" : registeredPatientDetailsUpdated1.getLocalPatientName().trim().toUpperCase(Locale.getDefault());
             String patientName2 = TextUtils.isEmpty(registeredPatientDetailsUpdated2.getLocalPatientName()) ? "" : registeredPatientDetailsUpdated2.getLocalPatientName().trim().toUpperCase(Locale.getDefault());
             return patientName1.compareTo(patientName2);
+        }
+    };
+    public static Comparator<Object> diseaseDateComparator = new Comparator<Object>() {
+
+        @Override
+        public int compare(Object object1, Object object2) {
+            Disease disease1 = ((Disease) object1);
+            Disease disease2 = ((Disease) object2);
+            if (disease1.getCreatedTime() != null && disease2.getCreatedTime() != null) {
+                Date date1 = new Date(disease1.getCreatedTime());
+                Date date2 = new Date(disease2.getCreatedTime());
+                return date2.compareTo(date1);
+            }
+            return 0;
+        }
+    };
+    public static Comparator<HistoryDetailsResponse> historyDateComparator = new Comparator<HistoryDetailsResponse>() {
+
+        @Override
+        public int compare(HistoryDetailsResponse history1, HistoryDetailsResponse history2) {
+            if (history1.getCreatedTime() != null && history2.getCreatedTime() != null) {
+                Date date1 = new Date(history1.getCreatedTime());
+                Date date2 = new Date(history2.getCreatedTime());
+                return date2.compareTo(date1);
+            }
+            return 0;
         }
     };
 }

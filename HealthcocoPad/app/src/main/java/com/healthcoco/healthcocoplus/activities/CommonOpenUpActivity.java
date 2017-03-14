@@ -28,6 +28,7 @@ import com.healthcoco.healthcocoplus.fragments.AboutUsFragment;
 import com.healthcoco.healthcocoplus.fragments.AddEditClinicImageFragment;
 import com.healthcoco.healthcocoplus.fragments.AddNewPrescriptionFragment;
 import com.healthcoco.healthcocoplus.fragments.CommonOpenUpPatientDetailFragment;
+import com.healthcoco.healthcocoplus.fragments.DiseaseListFragment;
 import com.healthcoco.healthcocoplus.fragments.FeedbackFragment;
 import com.healthcoco.healthcocoplus.fragments.InitialSyncFragment;
 import com.healthcoco.healthcocoplus.fragments.LoginSignupFragment;
@@ -48,6 +49,7 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
     private CommonOpenUpFragmentType fragmentType;
     private WebViewFragments webViewFragments;
     private LinearLayout patientProfileLayout;
+    private int tabOrdinal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +61,7 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
     private void init() {
         intent = getIntent();
         fragmentOrdinal = intent.getIntExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, -1);
+        tabOrdinal = intent.getIntExtra(HealthCocoConstants.TAG_TAB_TYPE, -1);
         initMembers();
         if (fragmentOrdinal != -1)
             initFragment(fragmentOrdinal);
@@ -143,6 +146,9 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
                 hideSoftKeyboardOnStartUp();
                 openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, R.string.patient_profile, new CommonOpenUpPatientDetailFragment());
                 break;
+            case HISTORY_DISEASE_LIST:
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_CROSS, ActionbarLeftRightActionTypeDrawables.WITH_SAVE, R.string.past_history, new DiseaseListFragment());
+                break;
         }
     }
 
@@ -168,6 +174,7 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
         Bundle bundle = new Bundle();
         initActionBar(actionbarType, actionBarTitle, leftAction, rightAction);
         bundle.putInt(HealthCocoConstants.TAG_FRAGMENT_NAME, fragmentType.ordinal());
+        bundle.putInt(HealthCocoConstants.TAG_TAB_TYPE, tabOrdinal);
         fragment.setArguments(bundle);
         transaction.add(R.id.layout_fragment_common_open_up, fragment, fragment.getClass().getSimpleName());
         transaction.commit();

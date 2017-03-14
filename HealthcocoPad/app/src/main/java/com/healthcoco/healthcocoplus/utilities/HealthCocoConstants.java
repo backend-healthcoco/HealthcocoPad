@@ -48,6 +48,13 @@ public class HealthCocoConstants {
     public static final int RESULT_CODE_DOCTOR_PROFESSIONAL_MEMBERSHIP_DETAIL = 121;
     public static final int RESULT_CODE_DOCTOR_PROFESSIONAL_STATEMENT_DETAIL = 122;
     public static final String TAG_INTENT_DATA = "intentData";
+    public static final String TAG_TAB_TYPE = "tabType";
+    public static final int REQUEST_CODE_REFERENCE_LIST = 136;
+    public static final int RESULT_CODE_REFERENCE_LIST = 137;
+    public static final int REQUEST_CODE_GLOBAL_RECORDS_ACCESS = 138;
+    public static final int RESULT_CODE_GLOBAL_RECORDS_ACCESS = 139;
+    public static final int REQUEST_CODE_VERIFY_OTP = 140;
+    public static final int RESULT_CODE_VERIFY_OTP = 141;
     public static int RESULT_CODE_SIGNUP_ALREADY_REGISTERED = 123;
     public static final int RESULT_CODE_GROUPS_LIST = 124;
     public static final int RESULT_CODE_SEARCH_NUMBER_RESULTS = 125;
@@ -58,6 +65,9 @@ public class HealthCocoConstants {
     public static final int RESULT_CODE_NOTES_LIST = 130;
     public static final int REQUEST_CODE_STRINGS_LIST = 131;
     public static final int RESULT_CODE_ADD_STRING = 132;
+    public static final int REQUEST_CODE_PATIENT_PROFILE = 133;
+    public static final int REQUEST_CODE_HISTORY_LIST = 134;
+    public static final int RESULT_CODE_DISEASE_LIST = 135;
     public static final String PARAM_SIZE = "&size=";
     public static final String PARAM_SEARCH_TERM = "&searchTerm=";
     public static final String PARAM_PAGE_AND = "&page=";
@@ -76,4 +86,8 @@ public class HealthCocoConstants {
     public static final String PARAM_TAG_DELETE = "/delete/";
     public static final String TAG_ORDINAL_DIALOG_TYPE = "dialogTypeOrdinal";
     public static final String TAG_ORDINAL_WEB_SERVICE_TYPE = "webServiceTypeOrdinal";
+    public static final String TAG_HISTORY_FILTER_TYPE = "historyFilterType";
+    public static final String TAG_DISEASE_IDS_LIST = "diseaseIdsList";
+    public static final String PARAM_PATIENT_ID = "&patientId=";
+    public static final String PARAM_IN_HISTORY = "&inHistory=";
 }

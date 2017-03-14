@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/layout_edit_search" />
+
+    <!--<GridView-->
+    <!--android:id="@+id/lv_disease_list"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="0dp"-->
+    <!--android:layout_weight="1"-->
+    <!--android:background="@color/white"-->
+    <!--android:cacheColorHint="@android:color/transparent"-->
+    <!--android:clipToPadding="false"-->
+    <!--android:divider="@null"-->
+    <!--android:listSelector="@android:color/transparent"-->
+    <!--android:numColumns="3"-->
+    <!--android:overScrollMode="never"-->
+    <!--android:paddingLeft="@dimen/layout_margin"-->
+    <!--android:paddingRight="@dimen/layout_margin"-->
+    <!--android:paddingTop="@dimen/layout_margin"-->
+    <!--android:visibility="gone" />-->
+    <ListView
+        android:id="@+id/lv_disease_list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/white"
+        android:cacheColorHint="@android:color/transparent"
+        android:clipToPadding="false"
+        android:divider="@null"
+        android:listSelector="@android:color/transparent"
+        android:paddingLeft="@dimen/layout_margin"
+        android:paddingRight="@dimen/layout_margin"
+        android:paddingTop="@dimen/layout_margin"
+        android:scrollbarStyle="outsideOverlay"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/tv_no_disease_history_found"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="@string/no_history_found"
+        android:textSize="@dimen/text_size_no_results"
+        android:textStyle="bold" />
+
+    <!--<com.healthcoco.healthcocoplus.views.FontAwesomeButton-->
+    <!--android:id="@+id/bt_add"-->
+    <!--style="?android:attr/borderlessButtonStyle"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:background="@drawable/selector_btn_blue_grey"-->
+    <!--android:padding="10dp"-->
+    <!--android:text="@string/icon_add_new_history"-->
+    <!--android:textAllCaps="false"-->
+    <!--android:textColor="@drawable/text_selector_white_translucent"-->
+    <!--android:textSize="@dimen/text_size_new_prescription_btn" />-->
+
+</LinearLayout>

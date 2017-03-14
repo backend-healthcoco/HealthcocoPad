@@ -25,7 +25,7 @@ import com.healthcoco.healthcocoplus.bean.server.LoginResponse;
 import com.healthcoco.healthcocoplus.bean.server.User;
 import com.healthcoco.healthcocoplus.bean.server.UserGroups;
 import com.healthcoco.healthcocoplus.custom.LocalDataBackgroundtaskOptimised;
-import com.healthcoco.healthcocoplus.dialogFragment.ComparatorUtil;
+import com.healthcoco.healthcocoplus.utilities.ComparatorUtil;
 import com.healthcoco.healthcocoplus.enums.AddUpdateNameDialogType;
 import com.healthcoco.healthcocoplus.enums.FilterItemType;
 import com.healthcoco.healthcocoplus.enums.LocalBackgroundTaskType;

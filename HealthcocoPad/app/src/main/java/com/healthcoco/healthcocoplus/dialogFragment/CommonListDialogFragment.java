@@ -8,9 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -20,6 +17,7 @@ import com.healthcoco.healthcocoplus.adapter.CommonListDialogAdapter;
 import com.healthcoco.healthcocoplus.bean.server.Specialities;
 import com.healthcoco.healthcocoplus.enums.CommonListDialogType;
 import com.healthcoco.healthcocoplus.listeners.CommonListDialogItemClickListener;
+import com.healthcoco.healthcocoplus.utilities.ComparatorUtil;
 import com.healthcoco.healthcocoplus.utilities.Util;
 
 import java.util.ArrayList;

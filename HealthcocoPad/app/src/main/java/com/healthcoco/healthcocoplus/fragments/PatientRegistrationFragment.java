@@ -50,7 +50,7 @@ import com.healthcoco.healthcocoplus.bean.server.User;
 import com.healthcoco.healthcocoplus.bean.server.UserGroups;
 import com.healthcoco.healthcocoplus.custom.AutoCompleteTextViewAdapter;
 import com.healthcoco.healthcocoplus.custom.LocalDataBackgroundtaskOptimised;
-import com.healthcoco.healthcocoplus.dialogFragment.ComparatorUtil;
+import com.healthcoco.healthcocoplus.utilities.ComparatorUtil;
 import com.healthcoco.healthcocoplus.enums.AddUpdateNameDialogType;
 import com.healthcoco.healthcocoplus.enums.AutoCompleteTextViewType;
 import com.healthcoco.healthcocoplus.enums.BooleanTypeValues;
@@ -94,6 +94,7 @@ import java.util.List;
 public class PatientRegistrationFragment extends HealthCocoFragment implements View.OnClickListener, CommonListDialogItemClickListener,
         GsonRequest.ErrorListener, Response.Listener<VolleyResponseBean>, LocalDoInBackgroundListenerOptimised,
         CommonOptionsDialogItemClickListener, DownloadFileFromUrlListener, NotesItemClickListener, AssignGroupListener {
+    public static final String PATIENT_DETAIL_OBJECT = "patientDetailObject";
     private ArrayList<Object> BLOOD_GROUPS = new ArrayList<Object>() {{
         add("O-");
         add("O+");
@@ -979,11 +980,11 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
                 if (notesList.contains(notes)) {
                     notesList.remove(notes);
                     notifyNoteListAdapter(notesList);
+                    getNotesName(notesList);
                 }
             }
         });
         alertBuilder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-
             @Override
             public void onClick(DialogInterface dialog, int which) {
             }

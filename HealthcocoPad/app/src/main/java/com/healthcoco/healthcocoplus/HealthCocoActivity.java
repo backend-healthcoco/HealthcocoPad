@@ -670,7 +670,7 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
         }
         VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
         volleyResponseBean.setWebServiceType(response.getWebServiceType());
-        volleyResponseBean.setDataFromLocal(true);
+        volleyResponseBean.setIsDataFromLocal(true);
         return volleyResponseBean;
     }
 

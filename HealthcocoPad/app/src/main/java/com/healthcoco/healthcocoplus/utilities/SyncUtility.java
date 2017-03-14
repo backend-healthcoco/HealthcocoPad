@@ -10,8 +10,6 @@ import com.healthcoco.healthcocoplus.bean.server.BloodGroup;
 import com.healthcoco.healthcocoplus.bean.server.CalendarEvents;
 import com.healthcoco.healthcocoplus.bean.server.CityResponse;
 import com.healthcoco.healthcocoplus.bean.server.ComplaintSuggestions;
-import com.healthcoco.healthcocoplus.bean.server.Diagram;
-import com.healthcoco.healthcocoplus.bean.server.Disease;
 import com.healthcoco.healthcocoplus.bean.server.DoctorProfile;
 import com.healthcoco.healthcocoplus.bean.server.DrugDirection;
 import com.healthcoco.healthcocoplus.bean.server.DrugDosage;
@@ -22,7 +20,6 @@ import com.healthcoco.healthcocoplus.bean.server.Profession;
 import com.healthcoco.healthcocoplus.bean.server.Reference;
 import com.healthcoco.healthcocoplus.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocoplus.bean.server.Specialities;
-import com.healthcoco.healthcocoplus.bean.server.TempTemplate;
 import com.healthcoco.healthcocoplus.bean.server.User;
 import com.healthcoco.healthcocoplus.bean.server.UserGroups;
 import com.healthcoco.healthcocoplus.custom.LocalDataBackgroundtaskOptimised;
@@ -299,7 +296,7 @@ public class SyncUtility implements Response.Listener<VolleyResponseBean>, GsonR
         }
         VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
         volleyResponseBean.setWebServiceType(response.getWebServiceType());
-        volleyResponseBean.setDataFromLocal(true);
+        volleyResponseBean.setIsDataFromLocal(true);
         return volleyResponseBean;
     }
 
