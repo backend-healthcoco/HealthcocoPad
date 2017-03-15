@@ -6,23 +6,7 @@
 
     <include layout="@layout/layout_edit_search" />
 
-    <!--<GridView-->
-    <!--android:id="@+id/lv_disease_list"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="0dp"-->
-    <!--android:layout_weight="1"-->
-    <!--android:background="@color/white"-->
-    <!--android:cacheColorHint="@android:color/transparent"-->
-    <!--android:clipToPadding="false"-->
-    <!--android:divider="@null"-->
-    <!--android:listSelector="@android:color/transparent"-->
-    <!--android:numColumns="3"-->
-    <!--android:overScrollMode="never"-->
-    <!--android:paddingLeft="@dimen/layout_margin"-->
-    <!--android:paddingRight="@dimen/layout_margin"-->
-    <!--android:paddingTop="@dimen/layout_margin"-->
-    <!--android:visibility="gone" />-->
-    <ListView
+    <GridView
         android:id="@+id/lv_disease_list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -32,11 +16,27 @@
         android:clipToPadding="false"
         android:divider="@null"
         android:listSelector="@android:color/transparent"
+        android:numColumns="3"
+        android:overScrollMode="never"
         android:paddingLeft="@dimen/layout_margin"
         android:paddingRight="@dimen/layout_margin"
         android:paddingTop="@dimen/layout_margin"
-        android:scrollbarStyle="outsideOverlay"
         android:visibility="gone" />
+    <!--<ListView-->
+    <!--android:id="@+id/lv_disease_list"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="0dp"-->
+    <!--android:layout_weight="1"-->
+    <!--android:background="@color/white"-->
+    <!--android:cacheColorHint="@android:color/transparent"-->
+    <!--android:clipToPadding="false"-->
+    <!--android:divider="@null"-->
+    <!--android:listSelector="@android:color/transparent"-->
+    <!--android:paddingLeft="@dimen/layout_margin"-->
+    <!--android:paddingRight="@dimen/layout_margin"-->
+    <!--android:paddingTop="@dimen/layout_margin"-->
+    <!--android:scrollbarStyle="outsideOverlay"-->
+    <!--android:visibility="gone" />-->
 
     <TextView
         android:id="@+id/tv_no_disease_history_found"

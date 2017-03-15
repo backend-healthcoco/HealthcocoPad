@@ -144,7 +144,7 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
                 break;
             case PATIENT_DETAIL:
                 hideSoftKeyboardOnStartUp();
-                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, R.string.patient_profile, new CommonOpenUpPatientDetailFragment());
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.WITH_GLOBAL_ACCESS_BUTTON, R.string.patient_profile, new CommonOpenUpPatientDetailFragment());
                 break;
             case HISTORY_DISEASE_LIST:
                 openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_CROSS, ActionbarLeftRightActionTypeDrawables.WITH_SAVE, R.string.past_history, new DiseaseListFragment());
@@ -344,6 +344,25 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
         rightAction.setOnClickListener(listener);
     }
 
+    public void showRightAction(boolean show) {
+        LinearLayout rightAction = (LinearLayout) findViewById(R.id.container_right_action);
+        if (rightAction != null) {
+            if (!show)
+                rightAction.setVisibility(View.GONE);
+            else
+                rightAction.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void enableRightActionButton(boolean isEnabled) {
+        LinearLayout rightAction = (LinearLayout) findViewById(R.id.container_right_action);
+        if (rightAction != null) {
+            Button rightActionButton = (Button) rightAction.getChildAt(0);
+            if (rightActionButton != null)
+                rightActionButton.setEnabled(isEnabled);
+        }
+    }
+
     public void initSaveButton(View.OnClickListener listener) {
         Button btSave = (Button) findViewById(R.id.bt_save);
         if (btSave != null)
@@ -354,4 +373,6 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
         FloatingActionButton floatingActionButton = (FloatingActionButton) findViewById(R.id.bt_add_patient);
         floatingActionButton.setOnClickListener(listener);
     }
+
+
 }

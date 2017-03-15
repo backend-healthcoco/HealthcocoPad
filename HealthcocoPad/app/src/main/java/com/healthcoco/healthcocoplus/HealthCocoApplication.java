@@ -5,7 +5,6 @@ import android.app.Application;
 import android.support.multidex.MultiDexApplication;
 import android.text.TextUtils;
 
-import com.android.volley.Cache;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
@@ -13,6 +12,8 @@ import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 import com.healthcoco.healthcocopad.R;
+import com.healthcoco.healthcocoplus.services.GsonRequest;
+import com.healthcoco.healthcocoplus.utilities.LogUtils;
 import com.nostra13.universalimageloader.cache.memory.impl.WeakMemoryCache;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -34,6 +35,7 @@ public class HealthCocoApplication extends MultiDexApplication {
     private RequestQueue mRequestQueue;
     private Tracker mTracker;
     private ArrayList<Activity> listLoginSignUpActivity = new ArrayList<>();
+    private ArrayList<Request> requestList = new ArrayList<>();
 
     public RequestQueue getRequestQueue() {
         if (mRequestQueue == null) {
@@ -123,4 +125,11 @@ public class HealthCocoApplication extends MultiDexApplication {
         ImageLoader.getInstance().init(config);
     }
 
+    public void removeVolleyRequest(GsonRequest gsonRequest) {
+        if (requestList.contains(gsonRequest))
+            requestList.remove(gsonRequest);
+        LogUtils.LOGD(TAG, "RequestList size : " + requestList.size() + "Removed : " + gsonRequest.getTag());
+//        if (gcmRefreshListener != null)
+//            gcmRefreshListener.refreshGCM(false);
+    }
 }

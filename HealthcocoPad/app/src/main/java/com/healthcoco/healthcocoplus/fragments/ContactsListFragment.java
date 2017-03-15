@@ -35,7 +35,6 @@ import com.healthcoco.healthcocoplus.bean.server.User;
 import com.healthcoco.healthcocoplus.bean.server.UserGroups;
 import com.healthcoco.healthcocoplus.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocoplus.dialogFragment.AddNewGroupsDialogFragment;
-import com.healthcoco.healthcocoplus.utilities.ComparatorUtil;
 import com.healthcoco.healthcocoplus.dialogFragment.PatientNumberSearchDialogFragment;
 import com.healthcoco.healthcocoplus.enums.AddUpdateNameDialogType;
 import com.healthcoco.healthcocoplus.enums.ChangeViewType;
@@ -52,9 +51,11 @@ import com.healthcoco.healthcocoplus.listeners.OnFilterItemClickListener;
 import com.healthcoco.healthcocoplus.services.GsonRequest;
 import com.healthcoco.healthcocoplus.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocoplus.services.impl.WebDataServiceImpl;
+import com.healthcoco.healthcocoplus.utilities.ComparatorUtil;
 import com.healthcoco.healthcocoplus.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocoplus.utilities.LogUtils;
 import com.healthcoco.healthcocoplus.utilities.Util;
+import com.healthcoco.healthcocoplus.views.FontAwesomeButton;
 import com.healthcoco.healthcocoplus.views.GridViewLoadMore;
 import com.healthcoco.healthcocoplus.views.ListViewLoadMore;
 
@@ -121,6 +122,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
     private TextView tvRecentlyAdded;
     private SwipeRefreshLayout swipeRefreshFilterLayout;
     private String selectedFilterTitle;
+    private FontAwesomeButton btAdvanceSearch;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -235,7 +237,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
         containerFilterFragment = (LinearLayout) view.findViewById(R.id.container_filter_fragment);
         tvNoPatients = (TextView) view.findViewById(R.id.tv_no_patients);
         btAddNewPatient = (FloatingActionButton) view.findViewById(R.id.bt_add_patient);
-
+        btAdvanceSearch = (FontAwesomeButton) view.findViewById(R.id.bt_advance_search);
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
 //        swipeRefreshLayout.setColorSchemeResources(R.color.blue_action_bar);
 
@@ -279,6 +281,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
         tvMostVisited.setOnClickListener(this);
         tvRecentlyAdded.setOnClickListener(this);
         lvGroups.setOnTouchListener(this);
+        btAdvanceSearch.setOnClickListener(this);
     }
 
     private void initFilterGroupAdapter() {
@@ -420,6 +423,8 @@ public class ContactsListFragment extends HealthCocoFragment implements
                 senBroadCastToContactsFragment(FilterItemType.RECENTLY_ADDED, null);
                 setSelectedItem(FilterItemType.RECENTLY_ADDED);
                 refreshHomeScreenTitle(getResources().getString(R.string.recently_added));
+                break;
+            case R.id.bt_advance_search:
                 break;
             default:
                 break;

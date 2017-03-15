@@ -151,26 +151,23 @@
                     android:id="@+id/container_past_history"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    android:visibility="gone">
-
-                </LinearLayout>
+                    android:layout_marginTop="5dp"
+                    android:orientation="vertical"></LinearLayout>
 
                 <!--<LinearLayout-->
-                    <!--android:id="@+id/container_edit_past_history"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:gravity="center"-->
-                    <!--android:orientation="horizontal"-->
-                    <!--android:visibility="visible">-->
+                <!--android:id="@+id/container_edit_past_history"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:gravity="center"-->
+                <!--android:orientation="horizontal"-->
+                <!--android:visibility="visible">-->
 
-                    <!--<TextView-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:text="@string/edit_to_assign_past_history"-->
-                        <!--android:textColor="@color/grey_dark_text"-->
-                        <!--android:textSize="18sp" />-->
+                <!--<TextView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="@string/edit_to_assign_past_history"-->
+                <!--android:textColor="@color/grey_dark_text"-->
+                <!--android:textSize="18sp" />-->
                 <!--</LinearLayout>-->
             </LinearLayout>
 
@@ -224,26 +221,23 @@
                     android:id="@+id/container_family_history"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    android:visibility="gone">
-
-                </LinearLayout>
+                    android:layout_marginTop="5dp"
+                    android:orientation="vertical"></LinearLayout>
 
                 <!--<LinearLayout-->
-                    <!--android:id="@+id/container_edit_family_history"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:gravity="center"-->
-                    <!--android:orientation="horizontal"-->
-                    <!--android:visibility="visible">-->
+                <!--android:id="@+id/container_edit_family_history"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:gravity="center"-->
+                <!--android:orientation="horizontal"-->
+                <!--android:visibility="visible">-->
 
-                    <!--<TextView-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:text="@string/edit_to_assign_family_history"-->
-                        <!--android:textColor="@color/grey_dark_text"-->
-                        <!--android:textSize="18sp" />-->
+                <!--<TextView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="@string/edit_to_assign_family_history"-->
+                <!--android:textColor="@color/grey_dark_text"-->
+                <!--android:textSize="18sp" />-->
                 <!--</LinearLayout>-->
             </LinearLayout>
 

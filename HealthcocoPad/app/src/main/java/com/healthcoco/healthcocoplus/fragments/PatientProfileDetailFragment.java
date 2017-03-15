@@ -1,8 +1,12 @@
 package com.healthcoco.healthcocoplus.fragments;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,12 +54,17 @@ import com.healthcoco.healthcocoplus.views.FontAwesomeButton;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * Created by Shreshtha on 07-03-2017.
  */
-public class PatientProfileDetailFragment extends HealthCocoFragment implements View.OnClickListener, Response.Listener<VolleyResponseBean>, GsonRequest.ErrorListener, LocalDoInBackgroundListenerOptimised {
-
+public class PatientProfileDetailFragment extends HealthCocoFragment implements View.OnClickListener, Response.Listener<VolleyResponseBean>, GsonRequest.ErrorListener, LocalDoInBackgroundListenerOptimised, HistoryDiseaseIdsListener {
+    public static final String INTENT_GET_HISTORY_LIST = "com.healthcoco.HISTORY_LIST";
+    public static final String INTENT_GET_MEDICAL_PERSONAL_FAMILY_LIST = "com.healthcoco.MEDICAL_PERSONAL_FAMILY_HISTORY";
+    public static final String INTENT_GET_HISTORY_LIST_LOCAL = "com.healthcoco.HISTORY_LIST_LOCAL";
+    public static final String INTENT_GET_MEDICAL_PERSONAL_FAMILY_LIST_LOCAL = "com.healthcoco.MEDICAL_PERSONAL_FAMILY_LIST_LOCAL";
+    private boolean receiversRegistered = false;
     private FontAwesomeButton btEditPatientProfilePastHistory;
     private FontAwesomeButton btEditPatientProfileFamilyHistory;
     private FontAwesomeButton btEditPatientProfilePersonalHistory;
@@ -150,8 +159,8 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
         mainLayoutProfile.setVisibility(View.VISIBLE);
         mainContainerGroups.setVisibility(View.GONE);
         mainContainerNotes.setVisibility(View.GONE);
-        mainContainerPastHistory.setVisibility(View.GONE);
-        mainContainerFamilyHistory.setVisibility(View.GONE);
+//        mainContainerPastHistory.setVisibility(View.GONE);
+//        mainContainerFamilyHistory.setVisibility(View.GONE);
     }
 
     private void initData() {
@@ -319,22 +328,51 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
         mainLayoutProfile.setVisibility(View.VISIBLE);
     }
 
-    private void initHistory(MedicalFamilyHistoryResponse medicalHistoryResponse) {
+    private void addMedicalFamilyHistoryInLayout(MedicalFamilyHistoryResponse medicalHistoryResponse) {
+        if (medicalHistoryResponse != null) {
+            if (!Util.isNullOrEmptyList(medicalHistoryResponse.getMedicalhistory()))
+                initPastHistory(medicalHistoryResponse.getMedicalhistory(), this);
+            if (!Util.isNullOrEmptyList(medicalHistoryResponse.getFamilyhistory()))
+                initFamilyHistory(medicalHistoryResponse.getFamilyhistory(), this);
+        }
+    }
+
+    private void initPastHistory(List<MedicalFamilyHistoryDetails> medicalhistory, HistoryDiseaseIdsListener addDiseaseIdsListener) {
         LinearLayout containerGroups = (LinearLayout) mainContainerPastHistory.findViewById(R.id.container_past_history);
         containerGroups.removeAllViews();
-        if (medicalHistoryResponse != null && (!Util.isNullOrEmptyList(medicalHistoryResponse.getMedicalhistory()))) {
-            for (MedicalFamilyHistoryDetails familyHistoryResponse :
-                    medicalHistoryResponse.getMedicalhistory()) {
+        if (!Util.isNullOrEmptyList(medicalhistory)) {
+            for (MedicalFamilyHistoryDetails familyHistoryDetails :
+                    medicalhistory) {
                 TextView tvGroupName = (TextView) mActivity.getLayoutInflater().inflate(R.layout.sub_item_profile_detail_groups_notes_text, null);
-                tvGroupName.setText(familyHistoryResponse.getDisease());
+                tvGroupName.setText(familyHistoryDetails.getDisease());
                 containerGroups.addView(tvGroupName);
+                addDiseaseIdsListener.addDiseaseId(HistoryFilterType.MEDICAL_HISTORY, familyHistoryDetails.getUniqueId());
             }
         } else {
             TextView tvGroupName = (TextView) mActivity.getLayoutInflater().inflate(R.layout.sub_item_profile_detail_groups_notes_text, null);
             tvGroupName.setText(R.string.edit_to_assign_past_history);
             containerGroups.addView(tvGroupName);
         }
-        mainContainerGroups.setVisibility(View.VISIBLE);
+        mainContainerPastHistory.setVisibility(View.VISIBLE);
+    }
+
+    private void initFamilyHistory(List<MedicalFamilyHistoryDetails> familyhistory, HistoryDiseaseIdsListener addDiseaseIdsListener) {
+        LinearLayout containerGroups = (LinearLayout) mainContainerFamilyHistory.findViewById(R.id.container_family_history);
+        containerGroups.removeAllViews();
+        if (!Util.isNullOrEmptyList(familyhistory)) {
+            for (MedicalFamilyHistoryDetails familyHistoryDetails :
+                    familyhistory) {
+                TextView tvGroupName = (TextView) mActivity.getLayoutInflater().inflate(R.layout.sub_item_profile_detail_groups_notes_text, null);
+                tvGroupName.setText(familyHistoryDetails.getDisease());
+                containerGroups.addView(tvGroupName);
+                addDiseaseIdsListener.addDiseaseId(HistoryFilterType.FAMILY_HISTORY, familyHistoryDetails.getUniqueId());
+            }
+        } else {
+            TextView tvGroupName = (TextView) mActivity.getLayoutInflater().inflate(R.layout.sub_item_profile_detail_groups_notes_text, null);
+            tvGroupName.setText(R.string.edit_to_assign_past_history);
+            containerGroups.addView(tvGroupName);
+        }
+        mainContainerFamilyHistory.setVisibility(View.VISIBLE);
     }
 
     private void initGroups() {
@@ -459,6 +497,8 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
                 if (doctor != null && doctor.getUser() != null && !Util.isNullOrBlank(doctor.getUser().getUniqueId()) && selectedPatient != null && !Util.isNullOrBlank(selectedPatient.getUserId())) {
                     user = doctor.getUser();
                 }
+                checkPatientStatus();
+                getListFromLocal(true, isOtpVerified(), user);
                 break;
             case ADD_MEDICAL_HISTORY:
                 LocalDataServiceImpl.getInstance(mApp).addMedicalHistory(HealthCocoConstants.SELECTED_PATIENTS_USER_ID, (MedicalFamilyHistoryResponse) response.getData());
@@ -473,6 +513,10 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
         }
         volleyResponseBean.setIsFromLocalAfterApiSuccess(response.isFromLocalAfterApiSuccess());
         return volleyResponseBean;
+    }
+
+    public void checkPatientStatus() {
+        checkPatientStatus(user, selectedPatient);
     }
 
     @Override
@@ -521,7 +565,6 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
                     if (response.getData() != null && response.getData() instanceof MedicalFamilyHistoryResponse) {
                         medicalHistoryResponse = (MedicalFamilyHistoryResponse) response.getData();
                     }
-                    initHistory(medicalHistoryResponse);
                     addMedicalFamilyHistoryInLayout(medicalHistoryResponse);
                     if (response.isDataFromLocal() && !response.isFromLocalAfterApiSuccess() && response.isUserOnline()) {
                         getMedicalFamilyHistory(false);
@@ -535,10 +578,6 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
             }
         }
         mActivity.hideLoading();
-    }
-
-    private void addMedicalFamilyHistoryInLayout(MedicalFamilyHistoryResponse medicalHistoryResponse) {
-
     }
 
     private void getMedicalFamilyHistoryFromLocal(boolean showLoading) {
@@ -603,5 +642,102 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
     @Override
     public void onNetworkUnavailable(WebServiceType webServiceType) {
         Util.showToast(mActivity, R.string.user_offline);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (!receiversRegistered) {
+            //receiver for history list refresh
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(INTENT_GET_HISTORY_LIST);
+            LocalBroadcastManager.getInstance(mActivity).registerReceiver(historyListReceiver, filter);
+
+            //receiver for history  list refresh from local
+            IntentFilter filter2 = new IntentFilter();
+            filter2.addAction(INTENT_GET_HISTORY_LIST_LOCAL);
+            LocalBroadcastManager.getInstance(mActivity).registerReceiver(historyListLocalReceiver, filter2);
+
+            //receiver for medical/personal family  list refresh
+            IntentFilter filter3 = new IntentFilter();
+            filter3.addAction(INTENT_GET_MEDICAL_PERSONAL_FAMILY_LIST);
+            LocalBroadcastManager.getInstance(mActivity).registerReceiver(medicalPersonalFamilyReceiver, filter3);
+
+            //receiver for medical/personal family  list refresh from local
+            IntentFilter filter4 = new IntentFilter();
+            filter4.addAction(INTENT_GET_MEDICAL_PERSONAL_FAMILY_LIST_LOCAL);
+            LocalBroadcastManager.getInstance(mActivity).registerReceiver(medicalPersonalFamilyLocalReceiver, filter4);
+            receiversRegistered = true;
+        }
+    }
+
+
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        LocalBroadcastManager.getInstance(mActivity).unregisterReceiver(historyListReceiver);
+        LocalBroadcastManager.getInstance(mActivity).unregisterReceiver(medicalPersonalFamilyReceiver);
+        LocalBroadcastManager.getInstance(mActivity).unregisterReceiver(historyListLocalReceiver);
+    }
+
+    BroadcastReceiver historyListReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, final Intent intent) {
+            if (isHistoryLoaded) {
+                isHistoryLoaded = false;
+                getHistoryList(true);
+            }
+        }
+    };
+    BroadcastReceiver medicalPersonalFamilyReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, final Intent intent) {
+            isHistoryLoaded = true;
+            getMedicalFamilyHistory(false);
+        }
+    };
+    BroadcastReceiver historyListLocalReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, final Intent intent) {
+            getListFromLocal(false, isOtpVerified(), user);
+        }
+    };
+    BroadcastReceiver medicalPersonalFamilyLocalReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, final Intent intent) {
+            isHistoryLoaded = true;
+            getMedicalFamilyHistoryFromLocal(false);
+        }
+    };
+
+    public void getListFromLocal(boolean showLoading, boolean isOTPVerified, User user) {
+        if (user != null) {
+            this.user = user;
+            isInitialLoading = showLoading;
+            this.isOtpVerified = isOTPVerified;
+            if (showLoading) {
+                showLoadingOverlay(true);
+            }
+            new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_HISTORY_LIST, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        }
+    }
+
+    @Override
+    public void addDiseaseId(HistoryFilterType historyFilterType, String diseaseId) {
+        switch (historyFilterType) {
+            case MEDICAL_HISTORY:
+                if (!medicalDiseaseIdsList.contains(diseaseId))
+                    medicalDiseaseIdsList.add(diseaseId);
+                break;
+            case FAMILY_HISTORY:
+                if (!familyDiseaseIdsList.contains(diseaseId))
+                    familyDiseaseIdsList.add(diseaseId);
+                break;
+        }
     }
 }

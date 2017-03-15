@@ -10,11 +10,13 @@ import com.healthcoco.healthcocoplus.HealthCocoApplication;
 import com.healthcoco.healthcocoplus.bean.DoctorProfileToSend;
 import com.healthcoco.healthcocoplus.bean.VersionCheckRequest;
 import com.healthcoco.healthcocoplus.bean.VolleyResponseBean;
+import com.healthcoco.healthcocoplus.bean.request.AddMedicalFamilyHistoryRequest;
 import com.healthcoco.healthcocoplus.bean.request.AssignGroupRequest;
 import com.healthcoco.healthcocoplus.bean.request.ClinicImageToSend;
 import com.healthcoco.healthcocoplus.bean.request.ProfessionalMembershipRequest;
 import com.healthcoco.healthcocoplus.bean.request.ProfessionalStatementRequest;
 import com.healthcoco.healthcocoplus.bean.request.RegisterNewPatientRequest;
+import com.healthcoco.healthcocoplus.bean.server.Disease;
 import com.healthcoco.healthcocoplus.bean.server.DoctorClinicProfile;
 import com.healthcoco.healthcocoplus.bean.server.DoctorProfile;
 import com.healthcoco.healthcocoplus.bean.server.DrugType;
@@ -85,7 +87,29 @@ public class WebDataServiceImpl {
         } else {
         }
     }
-
+    public void generateOtp(Class<?> class1, String doctorId, String locationId, String hospitalId, String patientId,
+                            Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        WebServiceType webServiceType = WebServiceType.GENERATE_OTP;
+        String url = webServiceType.getUrl()
+                + doctorId + "/"
+                + locationId + "/"
+                + hospitalId + "/"
+                + patientId + HealthCocoConstants.PARAM_TAG_GENERATE;
+        getResponse(webServiceType, class1, url, null, null, responseListener,
+                errorListener);
+    }
+    public void verifyOtp(Class<?> class1, String doctorId, String locationId, String hospitalId, String patientId, String otpNumber,
+                          Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        WebServiceType webServiceType = WebServiceType.VERIFY_OTP;
+        String url = webServiceType.getUrl()
+                + doctorId + "/"
+                + locationId + "/"
+                + hospitalId + "/"
+                + patientId + "/"
+                + otpNumber + HealthCocoConstants.PARAM_TAG_VERIFY;
+        getResponse(webServiceType, class1, url, null, null, responseListener,
+                errorListener);
+    }
     private void showUserOffline(WebServiceType webServiceType, Response.Listener<VolleyResponseBean> responseListener) {
         VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
         volleyResponseBean.setWebServiceType(webServiceType);
@@ -665,5 +689,14 @@ public class WebDataServiceImpl {
         } else {
             LocalDataServiceImpl.getInstance(mApp).getMedicalFAmilyHistory(WebServiceType.GET_MEDICAL_AND_FAMILY_HISTORY, patientId, responseListener, errorListener);
         }
+    }
+
+    public void addMedicalFamilyHistory(WebServiceType webServiceType, Class<?> class1, AddMedicalFamilyHistoryRequest object, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        getResponse(webServiceType, class1, webServiceType.getUrl(), object, null, responseListener, errorListener);
+    }
+
+    public void addDisease(Class<?> class1, ArrayList<Disease> diseasesList, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        WebServiceType webServiceType = WebServiceType.ADD_DISEASE;
+        getResponse(webServiceType, class1, webServiceType.getUrl(), diseasesList, null, responseListener, errorListener);
     }
 }

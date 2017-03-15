@@ -44,6 +44,8 @@ import com.healthcoco.healthcocoplus.utilities.Util;
 
 import java.util.ArrayList;
 
+import static com.healthcoco.healthcocopad.R.id.container_right_action;
+
 /**
  * Created by Shreshtha on 03-03-2017.
  */
@@ -124,12 +126,14 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
         ivContactProfile = (ImageView) view.findViewById(R.id.iv_image);
         patientProfileLayout = (LinearLayout) view.findViewById(R.id.patient_profile_layout);
         floatingActionButton = (FloatingActionButton) view.findViewById(R.id.bt_add_patient);
+        ((CommonOpenUpActivity) mActivity).showRightAction(false);
     }
 
     @Override
     public void initListeners() {
         mViewPager.addOnPageChangeListener(this);
         tabhost.setOnTabChangedListener(this);
+        ((CommonOpenUpActivity) mActivity).initActionbarRightAction(this);
     }
 
     private void initViewPagerAdapter() {
@@ -194,7 +198,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
             } else
                 containerLeftAction.setVisibility(View.GONE);
 
-            LinearLayout containerRightAction = (LinearLayout) actionbar.findViewById(R.id.container_right_action);
+            LinearLayout containerRightAction = (LinearLayout) actionbar.findViewById(container_right_action);
             if (rightAction != null && rightAction != ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION) {
                 containerRightAction.setVisibility(View.VISIBLE);
                 View rightView = mActivity.getLayoutInflater().inflate(rightAction.getLayoutId(), null);
@@ -351,7 +355,11 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
 
     @Override
     public void onClick(View v) {
-
+        switch (v.getId()) {
+            case container_right_action:
+                openGlobalRecordAccessDialogFragment();
+                break;
+        }
     }
 
     public void showPatientDetailLayout() {

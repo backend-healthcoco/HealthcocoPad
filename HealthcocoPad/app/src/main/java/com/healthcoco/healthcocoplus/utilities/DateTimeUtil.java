@@ -10,6 +10,7 @@ import com.healthcoco.healthcocoplus.dialogFragment.AddEditClinicHoursDialogFrag
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Shreshtha on 24-01-2017.
@@ -272,5 +273,12 @@ public class DateTimeUtil {
         maxDate.set(Calendar.MINUTE, 59);
         maxDate.set(Calendar.SECOND, 59);
         return maxDate.getTimeInMillis();
+    }
+    public static long getDifferenceInSecondsFromCurrent(long receivedTime) {
+        long currentTime = new java.util.Date().getTime();
+        long diffInMs = currentTime - receivedTime;
+
+        long diffInSec = TimeUnit.MILLISECONDS.toSeconds(diffInMs);
+        return diffInSec;
     }
 }

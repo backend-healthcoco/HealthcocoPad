@@ -24,6 +24,7 @@ import com.healthcoco.healthcocoplus.bean.server.ClinicDetailResponse;
 import com.healthcoco.healthcocoplus.bean.server.ClinicDoctorProfile;
 import com.healthcoco.healthcocoplus.bean.server.ClinicImage;
 import com.healthcoco.healthcocoplus.bean.server.ClinicWorkingSchedule;
+import com.healthcoco.healthcocoplus.bean.server.CollegeUniversityInstitute;
 import com.healthcoco.healthcocoplus.bean.server.Complaint;
 import com.healthcoco.healthcocoplus.bean.server.ComplaintSuggestions;
 import com.healthcoco.healthcocoplus.bean.server.ConsultationFee;
@@ -44,11 +45,13 @@ import com.healthcoco.healthcocoplus.bean.server.DrugDosage;
 import com.healthcoco.healthcocoplus.bean.server.DrugDurationUnit;
 import com.healthcoco.healthcocoplus.bean.server.DrugType;
 import com.healthcoco.healthcocoplus.bean.server.Education;
+import com.healthcoco.healthcocoplus.bean.server.EducationQualification;
 import com.healthcoco.healthcocoplus.bean.server.ForeignAppointmentBookingNumber;
 import com.healthcoco.healthcocoplus.bean.server.ForeignOtherEmailAddresses;
 import com.healthcoco.healthcocoplus.bean.server.ForeignProfessionalMemberships;
 import com.healthcoco.healthcocoplus.bean.server.ForeignSpecialities;
 import com.healthcoco.healthcocoplus.bean.server.ForieignAdditionalNumbers;
+import com.healthcoco.healthcocoplus.bean.server.GeneratedOtpTime;
 import com.healthcoco.healthcocoplus.bean.server.HistoryDetailsResponse;
 import com.healthcoco.healthcocoplus.bean.server.Hospital;
 import com.healthcoco.healthcocoplus.bean.server.Investigation;
@@ -56,6 +59,7 @@ import com.healthcoco.healthcocoplus.bean.server.InvestigationSuggestions;
 import com.healthcoco.healthcocoplus.bean.server.Location;
 import com.healthcoco.healthcocoplus.bean.server.LocationAndAccessControl;
 import com.healthcoco.healthcocoplus.bean.server.LoginResponse;
+import com.healthcoco.healthcocoplus.bean.server.MedicalCouncil;
 import com.healthcoco.healthcocoplus.bean.server.MedicalFamilyHistoryDetails;
 import com.healthcoco.healthcocoplus.bean.server.MedicalFamilyHistoryResponse;
 import com.healthcoco.healthcocoplus.bean.server.NotesTable;
@@ -71,6 +75,7 @@ import com.healthcoco.healthcocoplus.bean.server.RegisteredPatientDetailsUpdated
 import com.healthcoco.healthcocoplus.bean.server.Relations;
 import com.healthcoco.healthcocoplus.bean.server.Role;
 import com.healthcoco.healthcocoplus.bean.server.Specialities;
+import com.healthcoco.healthcocoplus.bean.server.SyncAll;
 import com.healthcoco.healthcocoplus.bean.server.TempTemplate;
 import com.healthcoco.healthcocoplus.bean.server.User;
 import com.healthcoco.healthcocoplus.bean.server.UserGroups;
@@ -101,6 +106,7 @@ import com.orm.query.Select;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -123,6 +129,11 @@ public class LocalDataServiceImpl {
         }
         Util.checkNetworkStatus(mApp.getApplicationContext());
         return mInstance;
+    }
+
+    public void addSyncAllObject(SyncAll syncAll) {
+        LogUtils.LOGD(TAG, "SyncAllType add " + syncAll.getSyncAllType());
+        syncAll.save();
     }
 
     public OtpVerification getOtpVerification(String doctorId, String locationId, String hospitalId, String patientId) {
@@ -1133,6 +1144,21 @@ public class LocalDataServiceImpl {
 
     private void deleteAllRelationsIsAlreadyExists(String key, String value) {
         Relations.deleteAll(Relations.class, key + "= ?", value);
+    }
+
+    public void addEducationsList(ArrayList<EducationQualification> list) {
+        EducationQualification.deleteAll(EducationQualification.class);
+        EducationQualification.saveInTx(list);
+    }
+
+    public void addCollegeUniversityInstituteList(ArrayList<CollegeUniversityInstitute> list) {
+        CollegeUniversityInstitute.deleteAll(CollegeUniversityInstitute.class);
+        CollegeUniversityInstitute.saveInTx(list);
+    }
+
+    public void addMedicalCouncilList(ArrayList<MedicalCouncil> list) {
+        MedicalCouncil.deleteAll(MedicalCouncil.class);
+        MedicalCouncil.saveInTx(list);
     }
 
     public void addSuggestionsList(WebServiceType webServiceType, LocalTabelType localTabelType, ArrayList<?> list, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
@@ -2169,5 +2195,21 @@ public class LocalDataServiceImpl {
                     disease.getUniqueId() + " Name : " + disease.getDisease() + " Disease : " + disease.getDoctorId());
         }
         Disease.saveInTx(diseaseList);
+    }
+
+    public long getLastGeneratedOtpTime(String patientId) {
+        GeneratedOtpTime generatedOtpTime = Select.from(GeneratedOtpTime.class)
+                .where(Condition.prop(LocalDatabaseUtils.KEY_PATIENT_ID).eq(patientId)).first();
+        if (generatedOtpTime != null)
+            return generatedOtpTime.getLastGeneratedTime();
+        return 0;
+    }
+
+    public void addUpdateGeneratedOtpTime(String patientId) {
+        GeneratedOtpTime generatedOtpTime = new GeneratedOtpTime();
+        generatedOtpTime.setPatientId(patientId);
+        generatedOtpTime.setLastGeneratedTime(new Date().getTime());
+        generatedOtpTime.save();
+
     }
 }

@@ -269,6 +269,34 @@
     <string name="sun">Sun</string>
     <string name="to">to</string>
 
+    <!--Sync All texts-->
+    <string name="sync_contact">Contact</string>
+    <string name="sync_group">Group</string>
+    <string name="sync_history">History</string>
+    <string name="sync_drug">Drug</string>
+    <string name="sync_frequency">Frequency</string>
+    <string name="sync_direction">Direction</string>
+    <string name="sync_notes_diagram">Notes\'s Diagram</string>
+    <string name="sync_clinical_notes_data">Clinical Notes\'s Data</string>
+    <string name="sync_referred_by">Referred By</string>
+    <string name="sync_drug_type">Drug Type</string>
+    <string name="sync_drug_duration_unit">Drug Duration Unit</string>
+    <string name="sync_ui_permissions">UI Permissions</string>
+
+    <string name="not_synced">Not Synced</string>
+    <!--//OTP messages-->
+    <string name="please_generate_otp_to_get_access_global_records">Please generate One Time Password to get access Global Records</string>
+    <string name="generate_otp_to_access_global_records">Generate OTP to access \n Global Records</string>
+    <string name="alert_global_record_access">Please Generate OTP to get access to Global Records of&#160;</string>
+    <string name="click_generate_otp_to_send_otp">Click "Generate OTP" to send OTP to Patient\'s registered Mobile Number.</string>
+    <string name="otp_success">OTP sent successfully to Patient\'s registered Mobile Number.</string>
+    <string name="otp_sent_to">One Time Password has been sent to&#160;</string>
+    <string name="please_enter_same_to_verify">Please enter same to verify.</string>
+    <string name="enter_otp">Enter OTP</string>
+    <string name="verify">Verify</string>
+    <string name="verification_complete">Verification Complete</string>
+    <string name="regenerate_otp">Regenerate OTP?</string>
+    <string name="generate_otp">Generate OTP</string>
 
     <string name="appointment_details">Appointment Details</string>
     <string name="consultant_fees">Consultant Fees</string>

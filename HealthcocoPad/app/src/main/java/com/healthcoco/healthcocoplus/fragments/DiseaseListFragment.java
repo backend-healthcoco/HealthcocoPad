@@ -8,8 +8,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ListView;
+import android.widget.GridView;
 import android.widget.TextView;
 
 import com.android.volley.Response;
@@ -24,6 +23,7 @@ import com.healthcoco.healthcocoplus.bean.server.LoginResponse;
 import com.healthcoco.healthcocoplus.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocoplus.bean.server.User;
 import com.healthcoco.healthcocoplus.custom.LocalDataBackgroundtaskOptimised;
+import com.healthcoco.healthcocoplus.enums.AddUpdateNameDialogType;
 import com.healthcoco.healthcocoplus.enums.BooleanTypeValues;
 import com.healthcoco.healthcocoplus.enums.HistoryFilterType;
 import com.healthcoco.healthcocoplus.enums.LocalBackgroundTaskType;
@@ -39,6 +39,7 @@ import com.healthcoco.healthcocoplus.utilities.ComparatorUtil;
 import com.healthcoco.healthcocoplus.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocoplus.utilities.LogUtils;
 import com.healthcoco.healthcocoplus.utilities.Util;
+import com.healthcoco.healthcocoplus.views.FontAwesomeButton;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -48,8 +49,8 @@ import java.util.Locale;
  * Created by neha on 11/12/15.
  */
 public class DiseaseListFragment extends HealthCocoFragment implements View.OnClickListener, Response.Listener<VolleyResponseBean>, GsonRequest.ErrorListener, LocalDoInBackgroundListenerOptimised, TextWatcher, MedicalFamilyHistoryItemListener, AddDiseaseListener {
-    //    private GridView lvDiseaseList;
-    private ListView lvDiseaseList;
+    private GridView lvDiseaseList;
+    //    private ListView lvDiseaseList;
     private PersonalFamilyHistoryDiseaseAdapter adapter;
     private ArrayList<Disease> diseaseList;
     private TextView tvNoDiseaseHistory;
@@ -59,7 +60,7 @@ public class DiseaseListFragment extends HealthCocoFragment implements View.OnCl
     private ArrayList<String> diseaseIdsList;
     private HistoryFilterType filterType;
     private User user;
-    private Button btAddNewHistory;
+    private FontAwesomeButton btAddNewHistory;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -87,6 +88,7 @@ public class DiseaseListFragment extends HealthCocoFragment implements View.OnCl
         initViews();
         initListeners();
         initAdapter();
+//        getDiseaseList();
     }
 
     private void getListFromLocal() {
@@ -98,15 +100,14 @@ public class DiseaseListFragment extends HealthCocoFragment implements View.OnCl
         mActivity.showLoading(false);
         Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.DISEASE);
         WebDataServiceImpl.getInstance(mApp).getDiseaseList(Disease.class, user.getUniqueId(), latestUpdatedTime, diseaseIdsList, this, this);
-
     }
 
     @Override
     public void initViews() {
-//        lvDiseaseList = (GridView) view.findViewById(R.id.lv_disease_list);
-        lvDiseaseList = (ListView) view.findViewById(R.id.lv_disease_list);
+        lvDiseaseList = (GridView) view.findViewById(R.id.lv_disease_list);
+//        lvDiseaseList = (ListView) view.findViewById(R.id.lv_disease_list);
         tvNoDiseaseHistory = (TextView) view.findViewById(R.id.tv_no_disease_history_found);
-        btAddNewHistory = (Button) view.findViewById(R.id.bt_advance_search);
+        btAddNewHistory = (FontAwesomeButton) view.findViewById(R.id.bt_advance_search);
         initEditSearchView(R.string.search_history, this, this);
         ((CommonOpenUpActivity) mActivity).initSaveButton(this);
         btAddNewHistory.setText(getResources().getString(R.string.icon_add_new_history));
@@ -115,6 +116,7 @@ public class DiseaseListFragment extends HealthCocoFragment implements View.OnCl
     @Override
     public void initListeners() {
         btAddNewHistory.setOnClickListener(this);
+        ((CommonOpenUpActivity) mActivity).initActionbarRightAction(this);
     }
 
     private void initAdapter() {
@@ -139,10 +141,10 @@ public class DiseaseListFragment extends HealthCocoFragment implements View.OnCl
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.bt_add:
-//                openAddUpdateNameDialogFragment(WebServiceType.ADD_DISEASE, AddUpdateNameDialogType.DISEASE, this, user, "", HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST);
+            case R.id.bt_advance_search:
+                mActivity.openAddUpdateNameDialogFragment(WebServiceType.ADD_DISEASE, AddUpdateNameDialogType.DISEASE, this, user, "", HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST);
                 break;
-            case R.id.bt_save:
+            case R.id.container_right_action:
                 Util.checkNetworkStatus(mActivity);
                 if (HealthCocoConstants.isNetworkOnline) {
                     addMedicalFamilyHistory();
@@ -173,7 +175,7 @@ public class DiseaseListFragment extends HealthCocoFragment implements View.OnCl
                     webServiceType = WebServiceType.ADD_FAMILY_HISTORY;
                     break;
             }
-//            WebDataServiceImpl.getInstance(mApp).addMedicalFamilyHistory(webServiceType, AddMedicalFamilyHistoryRequest.class, addMedicalFamilyHistoryRequest, this, this);
+            WebDataServiceImpl.getInstance(mApp).addMedicalFamilyHistory(webServiceType, AddMedicalFamilyHistoryRequest.class, addMedicalFamilyHistoryRequest, this, this);
         }
     }
 

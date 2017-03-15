@@ -31,6 +31,7 @@ import com.healthcoco.healthcocoplus.bean.server.BloodGroup;
 import com.healthcoco.healthcocoplus.bean.server.CalendarEvents;
 import com.healthcoco.healthcocoplus.bean.server.CityResponse;
 import com.healthcoco.healthcocoplus.bean.server.ClinicDetailResponse;
+import com.healthcoco.healthcocoplus.bean.server.CollegeUniversityInstitute;
 import com.healthcoco.healthcocoplus.bean.server.ComplaintSuggestions;
 import com.healthcoco.healthcocoplus.bean.server.DiagnosisSuggestions;
 import com.healthcoco.healthcocoplus.bean.server.Disease;
@@ -39,7 +40,9 @@ import com.healthcoco.healthcocoplus.bean.server.DrugDirection;
 import com.healthcoco.healthcocoplus.bean.server.DrugDosage;
 import com.healthcoco.healthcocoplus.bean.server.DrugDurationUnit;
 import com.healthcoco.healthcocoplus.bean.server.DrugType;
+import com.healthcoco.healthcocoplus.bean.server.EducationQualification;
 import com.healthcoco.healthcocoplus.bean.server.InvestigationSuggestions;
+import com.healthcoco.healthcocoplus.bean.server.MedicalCouncil;
 import com.healthcoco.healthcocoplus.bean.server.ObservationSuggestions;
 import com.healthcoco.healthcocoplus.bean.server.Profession;
 import com.healthcoco.healthcocoplus.bean.server.Reference;
@@ -395,13 +398,13 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
                 case GET_BLOOD_GROUP:
                     if (defaultWebServicesList.contains(DefaultSyncServiceType.getSyncType(webServiceType)))
                         defaultWebServicesList.remove(DefaultSyncServiceType.getSyncType(webServiceType));
+                    updateProgress(DefaultSyncServiceType.GET_HISTORY);
+                    break;
+                case GET_DISEASE_LIST:
+                    if (defaultWebServicesList.contains(DefaultSyncServiceType.getSyncType(webServiceType)))
+                        defaultWebServicesList.remove(DefaultSyncServiceType.getSyncType(webServiceType));
                     updateProgress(DefaultSyncServiceType.GET_TEMPLATES);
                     break;
-//                case GET_DISEASE_LIST:
-//                    if (defaultWebServicesList.contains(DefaultSyncServiceType.getSyncType(webServiceType)))
-//                        defaultWebServicesList.remove(DefaultSyncServiceType.getSyncType(webServiceType));
-//                    updateProgress(DefaultSyncServiceType.GET_TEMPLATES);
-//                    break;
                 case GET_TEMPLATES_LIST:
                     if (defaultWebServicesList.contains(DefaultSyncServiceType.getSyncType(webServiceType)))
                         defaultWebServicesList.remove(DefaultSyncServiceType.getSyncType(webServiceType));
@@ -415,21 +418,6 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
                     if (defaultWebServicesList.contains(DefaultSyncServiceType.getSyncType(webServiceType)))
                         defaultWebServicesList.remove(DefaultSyncServiceType.getSyncType(webServiceType));
                     updateProgress(DefaultSyncServiceType.SYNC_COMPLETE);
-//                case GET_EDUCATION_QUALIFICATION:
-//                    if (defaultWebServicesList.contains(DefaultSyncServiceType.getSyncType(webServiceType)))
-//                        defaultWebServicesList.remove(DefaultSyncServiceType.getSyncType(webServiceType));
-//                    updateProgress(DefaultSyncServiceType.GET_INSTITUTES);
-//                    break;
-//                case GET_COLLEGE_UNIVERSITY_INSTITUES:
-//                    if (defaultWebServicesList.contains(DefaultSyncServiceType.getSyncType(webServiceType)))
-//                        defaultWebServicesList.remove(DefaultSyncServiceType.getSyncType(webServiceType));
-//                    updateProgress(DefaultSyncServiceType.GET_MEDICAL_COUNCIL);
-//                    break;
-//                case GET_MEDICAL_COUNCILS:
-//                    if (defaultWebServicesList.contains(DefaultSyncServiceType.getSyncType(webServiceType)))
-//                        defaultWebServicesList.remove(DefaultSyncServiceType.getSyncType(webServiceType));
-//                    updateProgress(DefaultSyncServiceType.SYNC_COMPLETE);
-//                    break;
                 default:
                     break;
             }
@@ -613,19 +601,19 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
                 break;
             case ADD_EDUCATION_QUALIFICATION:
                 if (!Util.isNullOrEmptyList(response.getDataList()))
-//                    LocalDataServiceImpl.getInstance(mApp).
-//                            addEducationsList((ArrayList<EducationQualification>) (ArrayList<?>) response.getDataList());
-                    break;
+                    LocalDataServiceImpl.getInstance(mApp).
+                            addEducationsList((ArrayList<EducationQualification>) (ArrayList<?>) response.getDataList());
+                break;
             case ADD_INSTITUTES:
                 if (!Util.isNullOrEmptyList(response.getDataList()))
-//                    LocalDataServiceImpl.getInstance(mApp).
-//                            addCollegeUniversityInstituteList((ArrayList<CollegeUniversityInstitute>) (ArrayList<?>) response.getDataList());
-                    break;
+                    LocalDataServiceImpl.getInstance(mApp).
+                            addCollegeUniversityInstituteList((ArrayList<CollegeUniversityInstitute>) (ArrayList<?>) response.getDataList());
+                break;
             case ADD_MEDICAL_COUNCILS:
                 if (!Util.isNullOrEmptyList(response.getDataList()))
-//                    LocalDataServiceImpl.getInstance(mApp).
-//                            addMedicalCouncilList((ArrayList<MedicalCouncil>) (ArrayList<?>) response.getDataList());
-                    break;
+                    LocalDataServiceImpl.getInstance(mApp).
+                            addMedicalCouncilList((ArrayList<MedicalCouncil>) (ArrayList<?>) response.getDataList());
+                break;
             case ADD_COMPLAINT_SUGGESTIONS:
                 if (!Util.isNullOrEmptyList(response.getDataList()))
                     LocalDataServiceImpl.getInstance(mApp).
@@ -652,8 +640,8 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
                 break;
             case ADD_DISEASE_LIST:
                 if (!Util.isNullOrEmptyList(response.getDataList()))
-//                    LocalDataServiceImpl.getInstance(mApp).addDiseaseList((ArrayList<Disease>) (ArrayList<?>) response.getDataList());
-                    break;
+                    LocalDataServiceImpl.getInstance(mApp).addDiseaseList((ArrayList<Disease>) (ArrayList<?>) response.getDataList());
+                break;
             case ADD_TEMPLATES:
 //                if (!Util.isNullOrEmptyList(response.getDataList()))
 //                    LocalDataServiceImpl.getInstance(mApp).addTemplatesList((ArrayList<TempTemplate>) (ArrayList<?>) response.getDataList());

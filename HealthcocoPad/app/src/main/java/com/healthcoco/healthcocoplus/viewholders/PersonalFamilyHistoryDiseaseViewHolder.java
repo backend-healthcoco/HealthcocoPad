@@ -47,12 +47,12 @@ public class PersonalFamilyHistoryDiseaseViewHolder extends HealthCocoViewHolder
 
     @Override
     public View getContentView() {
-        LinearLayout view = (LinearLayout) inflater.inflate(R.layout.list_item_disease, null);
-        tvDiseaseName = (TextView) view.findViewById(R.id.tv_disease);
-        cbCheckBox = (CheckBox) view.findViewById(R.id.cb_checkbox);
-//        LinearLayout view = (LinearLayout) inflater.inflate(R.layout.item_ui_permisssion, null);
-//        tvDiseaseName = (TextView) view.findViewById(R.id.tv_group_name);
-//        cbCheckBox = (CheckBox) view.findViewById(R.id.ch_ui_permission);
+//        LinearLayout view = (LinearLayout) inflater.inflate(R.layout.list_item_disease, null);
+//        tvDiseaseName = (TextView) view.findViewById(R.id.tv_disease);
+//        cbCheckBox = (CheckBox) view.findViewById(R.id.cb_checkbox);
+        LinearLayout view = (LinearLayout) inflater.inflate(R.layout.item_ui_permisssion, null);
+        tvDiseaseName = (TextView) view.findViewById(R.id.tv_group_name);
+        cbCheckBox = (CheckBox) view.findViewById(R.id.ch_ui_permission);
         cbCheckBox.setOnCheckedChangeListener(this);
         view.setOnClickListener(this);
         return view;

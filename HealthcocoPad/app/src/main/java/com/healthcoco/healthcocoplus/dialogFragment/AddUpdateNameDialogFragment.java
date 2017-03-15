@@ -12,12 +12,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AutoCompleteTextView;
-import android.widget.TextView;
 
 import com.android.volley.Response;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocoplus.HealthCocoDialogFragment;
-import com.healthcoco.healthcocoplus.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocoplus.bean.VolleyResponseBean;
 import com.healthcoco.healthcocoplus.bean.server.DiagnosticTest;
 import com.healthcoco.healthcocoplus.bean.server.Disease;
@@ -30,7 +28,6 @@ import com.healthcoco.healthcocoplus.bean.server.User;
 import com.healthcoco.healthcocoplus.bean.server.UserGroups;
 import com.healthcoco.healthcocoplus.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocoplus.enums.AddUpdateNameDialogType;
-import com.healthcoco.healthcocoplus.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocoplus.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocoplus.enums.WebServiceType;
 import com.healthcoco.healthcocoplus.listeners.LocalDoInBackgroundListenerOptimised;
@@ -42,7 +39,6 @@ import com.healthcoco.healthcocoplus.utilities.LogUtils;
 import com.healthcoco.healthcocoplus.utilities.Util;
 
 import java.util.ArrayList;
-import java.util.Locale;
 
 /**
  * Created by neha on 05/12/15.
@@ -313,7 +309,7 @@ public class AddUpdateNameDialogFragment extends HealthCocoDialogFragment implem
         disease.setHospitalId(selectedHospitalId);
         disease.setLocationId(selectedLocationId);
         diseasesList.add(disease);
-//        WebDataServiceImpl.getInstance(mApp).addDisease(Disease.class, diseasesList, this, this);
+        WebDataServiceImpl.getInstance(mApp).addDisease(Disease.class, diseasesList, this, this);
     }
 
     private void addHistory(String name) {
@@ -397,9 +393,9 @@ public class AddUpdateNameDialogFragment extends HealthCocoDialogFragment implem
                 case ADD_DISEASE:
                     mActivity.hideLoading();
                     if (!Util.isNullOrEmptyList(response.getDataList()) && response.getDataList().get(0) instanceof Disease) {
-//                        LocalDataServiceImpl.getInstance(mApp).addDiseaseList((ArrayList<Disease>) (ArrayList<?>) response.getDataList());
+                        LocalDataServiceImpl.getInstance(mApp).addDiseaseList((ArrayList<Disease>) (ArrayList<?>) response.getDataList());
                     }
-//                    getTargetFragment().onActivityResult(HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, HealthCocoConstants.RESULT_CODE_REFERENCE_LIST, null);
+                    getTargetFragment().onActivityResult(HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, HealthCocoConstants.RESULT_CODE_REFERENCE_LIST, new Intent().putExtra(HealthCocoConstants.TAG_INTENT_DATA, response.getDataList()));
                     break;
                 case ADD_DOSAGE:
                     mActivity.hideLoading();
