@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:background="@color/white"
-    android:gravity="center"
     android:orientation="vertical">
 
-    <include layout="@layout/dialog_title" />
+    <include layout="@layout/action_bar_title_cross"></include>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="10dp">
+        android:padding="20dp">
 
         <TextView
             android:id="@+id/tv_message"
@@ -20,14 +19,16 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="@string/otp_sent_to"
-            android:textColor="@color/black" />
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_dialog_fragment_20sp" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="@string/please_enter_same_to_verify"
-            android:textColor="@color/black" />
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_dialog_fragment_20sp" />
 
         <EditText
             android:id="@+id/edit_otp_number"
@@ -50,7 +51,7 @@
             android:layout_marginTop="10dp"
             android:background="@drawable/btn_blue_border_solid_white_selector"
             android:text="@string/verify"
-            android:textColor="@drawable/text_blue_white_selector" />
+            android:textColor="@drawable/text_blue_selector" />
 
         <Button
             android:id="@+id/bt_regenerate_otp"
@@ -66,6 +67,4 @@
             android:textColor="@drawable/text_blue_normal_grey_light_selected"
             android:textSize="@dimen/text_size_edit_otp_number" />
     </LinearLayout>
-
-
 </LinearLayout>

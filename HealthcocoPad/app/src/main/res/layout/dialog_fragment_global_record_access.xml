@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:background="@color/white"
-    android:gravity="center"
     android:orientation="vertical">
 
-    <include layout="@layout/dialog_title" />
+    <include layout="@layout/action_bar_title_cross"></include>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:orientation="vertical"
-        android:padding="10dp">
+        android:padding="20dp">
 
         <TextView
             android:id="@+id/tv_message"
@@ -20,24 +20,30 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="@string/alert_global_record_access"
-            android:textColor="@color/black" />
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_dialog_fragment_20sp" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="@string/click_generate_otp_to_send_otp"
-            android:textColor="@color/black" />
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_dialog_fragment_20sp" />
 
         <Button
             android:id="@+id/bt_generate_otp"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginLeft="40dp"
             android:layout_marginRight="40dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="20dp"
             android:background="@drawable/btn_blue_border_solid_white_selector"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
             android:text="@string/generate_otp"
+            android:textAllCaps="false"
             android:textColor="@drawable/text_blue_selector" />
     </LinearLayout>
 </LinearLayout>

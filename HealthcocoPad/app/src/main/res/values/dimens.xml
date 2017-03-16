@@ -90,7 +90,7 @@
     <dimen name="texrt_size_patient_mobile_search_number">15sp</dimen>
     <dimen name="image_patient_profile_registration">70dp</dimen>
     <dimen name="layout_padding_5dp">5dp</dimen>
-    <dimen name="patient_detail_top_bottom_paddding">30dp</dimen>
+    <dimen name="patient_detail_top_bottom_paddding">15dp</dimen>
     <dimen name="patient_detail_left_right_paddding">100dp</dimen>
     <dimen name="image_patient_deatail">100dp</dimen>
     <dimen name="initial_alphabet_patient_detail">100dp</dimen>
@@ -112,4 +112,5 @@
     <dimen name="icon_history_size">20sp</dimen>
     <dimen name="dialog_title_size">16sp</dimen>
     <dimen name="text_size_edit_otp_number">15sp</dimen>
+    <dimen name="text_size_dialog_fragment_20sp">17sp</dimen>
 </resources>

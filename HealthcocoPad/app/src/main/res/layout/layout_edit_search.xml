@@ -52,7 +52,7 @@
         android:layout_weight="0.2"
         android:background="@color/blue_primary_dark"
         android:singleLine="true"
-        android:text="Advance Search"
+        android:text="@string/advance_search"
         android:textColor="@color/white" />
 
 </LinearLayout>

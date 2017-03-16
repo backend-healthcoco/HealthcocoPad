@@ -522,4 +522,5 @@
     <string name="bowel_habits">Bowel Habits</string>
     <string name="bladder_habits">Bladder Habits</string>
     <string name="no_history_found">No History Found</string>
+    <string name="advance_search">Advance Search</string>
 </resources>
