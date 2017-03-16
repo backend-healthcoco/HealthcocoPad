@@ -5,6 +5,7 @@ import com.orm.annotation.Ignore;
 import com.orm.annotation.Unique;
 
 import java.util.List;
+
 public class HistoryDetailsResponse extends SugarRecord {
 
     private String uniqueId;
@@ -22,15 +23,50 @@ public class HistoryDetailsResponse extends SugarRecord {
     @Ignore
     private List<GeneralData> generalRecords;
     @Ignore
+    List<MedicalFamilyHistoryDetails> familyhistory;
+    @Ignore
     List<MedicalFamilyHistoryDetails> medicalhistory;
     @Ignore
-    List<MedicalFamilyHistoryDetails> familyhistory;
     private PersonalHistory personalHistory;
+    @Ignore
+    private DrugsAndAllergies drugsAndAllergies;
     @Ignore
     private List<String> specialNotes;
     protected Long updatedTime;
     protected Long createdTime;
     private Boolean discarded;
+
+    public List<MedicalFamilyHistoryDetails> getMedicalhistory() {
+        return medicalhistory;
+    }
+
+    public void setMedicalhistory(List<MedicalFamilyHistoryDetails> medicalhistory) {
+        this.medicalhistory = medicalhistory;
+    }
+
+    public PersonalHistory getPersonalHistory() {
+        return personalHistory;
+    }
+
+    public void setPersonalHistory(PersonalHistory personalHistory) {
+        this.personalHistory = personalHistory;
+    }
+
+    public DrugsAndAllergies getDrugsAndAllergies() {
+        return drugsAndAllergies;
+    }
+
+    public void setDrugsAndAllergies(DrugsAndAllergies drugsAndAllergies) {
+        this.drugsAndAllergies = drugsAndAllergies;
+    }
+
+    public List<MedicalFamilyHistoryDetails> getFamilyhistory() {
+        return familyhistory;
+    }
+
+    public void setFamilyhistory(List<MedicalFamilyHistoryDetails> familyhistory) {
+        this.familyhistory = familyhistory;
+    }
 
     public String getDoctorId() {
         return doctorId;

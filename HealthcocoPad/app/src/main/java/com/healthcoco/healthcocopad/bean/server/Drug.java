@@ -28,6 +28,63 @@ public class Drug extends SugarRecord implements Serializable {
     private Long createdTime;
     private Long updatedTime;
     protected boolean isDrugFromGetDrugsList;
+    @Ignore
+    private DrugDosage dosageTime;
+    @Ignore
+    private DrugDirection direction;
+    private String dosage;
+    @Ignore
+    private Duration duration;
+    private String categories;
+    private int rankingCount;
+
+    public DrugDosage getDosageTime() {
+        return dosageTime;
+    }
+
+    public void setDosageTime(DrugDosage dosageTime) {
+        this.dosageTime = dosageTime;
+    }
+
+    public DrugDirection getDirection() {
+        return direction;
+    }
+
+    public void setDirection(DrugDirection direction) {
+        this.direction = direction;
+    }
+
+    public String getDosage() {
+        return dosage;
+    }
+
+    public void setDosage(String dosage) {
+        this.dosage = dosage;
+    }
+
+    public Duration getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Duration duration) {
+        this.duration = duration;
+    }
+
+    public String getCategories() {
+        return categories;
+    }
+
+    public void setCategories(String categories) {
+        this.categories = categories;
+    }
+
+    public int getRankingCount() {
+        return rankingCount;
+    }
+
+    public void setRankingCount(int rankingCount) {
+        this.rankingCount = rankingCount;
+    }
 
     public String getUniqueId() {
         return uniqueId;

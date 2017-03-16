@@ -15,9 +15,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.Response;
-import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.HealthCocoDialogFragment;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
+import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.Address;
@@ -500,11 +500,6 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
                 checkPatientStatus();
                 getListFromLocal(true, isOtpVerified(), user);
                 break;
-            case ADD_MEDICAL_HISTORY:
-                LocalDataServiceImpl.getInstance(mApp).addMedicalHistory(HealthCocoConstants.SELECTED_PATIENTS_USER_ID, (MedicalFamilyHistoryResponse) response.getData());
-            case GET_MEDICAL_AND_FAMILY_HISTORY:
-                volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getMedicalFAmilyHistory(WebServiceType.GET_MEDICAL_AND_FAMILY_HISTORY, HealthCocoConstants.SELECTED_PATIENTS_USER_ID, null, null);
-                break;
             case ADD_HISTORY_LIST:
                 LocalDataServiceImpl.getInstance(mApp).addHistoryList(HealthCocoConstants.SELECTED_PATIENTS_USER_ID, (ArrayList<HistoryDetailsResponse>) (ArrayList<?>) response.getDataList());
             case GET_HISTORY_LIST:
@@ -556,34 +551,10 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
                         response.setIsFromLocalAfterApiSuccess(true);
                         return;
                     }
-                    if (!isMedicalFamilyHistoryLoaded)
-                        getMedicalFamilyHistoryFromLocal(false);
-                    break;
-                case GET_MEDICAL_AND_FAMILY_HISTORY:
-                    isMedicalFamilyHistoryLoaded = true;
-                    medicalHistoryResponse = new MedicalFamilyHistoryResponse();
-                    if (response.getData() != null && response.getData() instanceof MedicalFamilyHistoryResponse) {
-                        medicalHistoryResponse = (MedicalFamilyHistoryResponse) response.getData();
-                    }
-                    addMedicalFamilyHistoryInLayout(medicalHistoryResponse);
-                    if (response.isDataFromLocal() && !response.isFromLocalAfterApiSuccess() && response.isUserOnline()) {
-                        getMedicalFamilyHistory(false);
-                        return;
-                    } else if (!Util.isNullOrEmptyList(response.getDataList())) {
-                        new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_MEDICAL_HISTORY, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
-                        response.setIsFromLocalAfterApiSuccess(true);
-                        return;
-                    }
                     break;
             }
         }
         mActivity.hideLoading();
-    }
-
-    private void getMedicalFamilyHistoryFromLocal(boolean showLoading) {
-        if (showLoading)
-            showLoadingOverlay(true);
-        new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_MEDICAL_AND_FAMILY_HISTORY, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     private void notifyAdapter(ArrayList<HistoryDetailsResponse> historyList) {
@@ -627,9 +598,6 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
                 case GET_HISTORY_LIST:
                     isHistoryLoaded = true;
                     break;
-                case GET_MEDICAL_AND_FAMILY_HISTORY:
-                    isMedicalFamilyHistoryLoaded = true;
-                    break;
             }
         String errorMsg = errorMessage;
         if (volleyResponseBean != null && !Util.isNullOrBlank(volleyResponseBean.getErrMsg())) {
@@ -658,16 +626,6 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
             filter2.addAction(INTENT_GET_HISTORY_LIST_LOCAL);
             LocalBroadcastManager.getInstance(mActivity).registerReceiver(historyListLocalReceiver, filter2);
 
-            //receiver for medical/personal family  list refresh
-            IntentFilter filter3 = new IntentFilter();
-            filter3.addAction(INTENT_GET_MEDICAL_PERSONAL_FAMILY_LIST);
-            LocalBroadcastManager.getInstance(mActivity).registerReceiver(medicalPersonalFamilyReceiver, filter3);
-
-            //receiver for medical/personal family  list refresh from local
-            IntentFilter filter4 = new IntentFilter();
-            filter4.addAction(INTENT_GET_MEDICAL_PERSONAL_FAMILY_LIST_LOCAL);
-            LocalBroadcastManager.getInstance(mActivity).registerReceiver(medicalPersonalFamilyLocalReceiver, filter4);
-            receiversRegistered = true;
         }
     }
 
@@ -681,7 +639,6 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
     public void onDestroy() {
         super.onDestroy();
         LocalBroadcastManager.getInstance(mActivity).unregisterReceiver(historyListReceiver);
-        LocalBroadcastManager.getInstance(mActivity).unregisterReceiver(medicalPersonalFamilyReceiver);
         LocalBroadcastManager.getInstance(mActivity).unregisterReceiver(historyListLocalReceiver);
     }
 
@@ -694,24 +651,11 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
             }
         }
     };
-    BroadcastReceiver medicalPersonalFamilyReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, final Intent intent) {
-            isHistoryLoaded = true;
-            getMedicalFamilyHistory(false);
-        }
-    };
+
     BroadcastReceiver historyListLocalReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, final Intent intent) {
             getListFromLocal(false, isOtpVerified(), user);
-        }
-    };
-    BroadcastReceiver medicalPersonalFamilyLocalReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, final Intent intent) {
-            isHistoryLoaded = true;
-            getMedicalFamilyHistoryFromLocal(false);
         }
     };
 

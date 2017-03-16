@@ -53,8 +53,8 @@ public enum WebServiceType {
 
 //    GET_HISTORY_LIST(Method.GET, "history/getPatientHistory/"),
 
-    GET_HISTORY_LIST(Method.GET, "history/"),
-
+    GET_DISEASE_HISTORY_LIST(Method.GET, "history/"),
+    GET_HISTORY_LIST(Method.GET, "history/getHistory"),
     GET_GROUPS(Method.GET, "contacts/groups/"),
 
     ASSIGN_GROUP(Method.POST, "contacts/patient/addgroup/"),

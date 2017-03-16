@@ -350,7 +350,7 @@ public abstract class HealthCocoFragment extends Fragment implements GsonRequest
         try {
             listIntentFilters = new ArrayList<String>() {{
                 add(PatientProfileDetailFragment.INTENT_GET_HISTORY_LIST_LOCAL);
-//                add(PatientDetailFragmentUpdated.INTENT_REFRESH_GLOBAL_RECORDS_ACCESS);
+//                add(PatientProfileDetailFragment.INTENT_REFRESH_GLOBAL_RECORDS_ACCESS);
             }};
             for (String intentFilter :
                     listIntentFilters) {

@@ -5,8 +5,8 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.RetryPolicy;
 import com.google.gson.GsonBuilder;
-import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.HealthCocoApplication;
+import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.DoctorProfileToSend;
 import com.healthcoco.healthcocopad.bean.VersionCheckRequest;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
@@ -87,6 +87,7 @@ public class WebDataServiceImpl {
         } else {
         }
     }
+
     public void generateOtp(Class<?> class1, String doctorId, String locationId, String hospitalId, String patientId,
                             Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         WebServiceType webServiceType = WebServiceType.GENERATE_OTP;
@@ -98,6 +99,7 @@ public class WebDataServiceImpl {
         getResponse(webServiceType, class1, url, null, null, responseListener,
                 errorListener);
     }
+
     public void verifyOtp(Class<?> class1, String doctorId, String locationId, String hospitalId, String patientId, String otpNumber,
                           Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         WebServiceType webServiceType = WebServiceType.VERIFY_OTP;
@@ -110,6 +112,7 @@ public class WebDataServiceImpl {
         getResponse(webServiceType, class1, url, null, null, responseListener,
                 errorListener);
     }
+
     private void showUserOffline(WebServiceType webServiceType, Response.Listener<VolleyResponseBean> responseListener) {
         VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
         volleyResponseBean.setWebServiceType(webServiceType);
@@ -668,16 +671,13 @@ public class WebDataServiceImpl {
         Util.checkNetworkStatus(mApp.getApplicationContext());
         if (HealthCocoConstants.isNetworkOnline) {
             String url = webServiceType.getUrl()
-                    + HealthCocoConstants.PARAM_DISCARDED_TRUE
-                    + HealthCocoConstants.PARAM_PATIENT_ID + pateintId
-                    + HealthCocoConstants.PARAM_DOCTOR_ID + doctorId
-                    + HealthCocoConstants.PARAM_HOSPITAL_ID + hospitalId
-                    + HealthCocoConstants.PARAM_LOCATION_ID + locationId
-                    + HealthCocoConstants.PARAM_IN_HISTORY + isInHistory
-                    + HealthCocoConstants.PARAM_UPDATED_TIME + updatedTime;
+                    + "/" + pateintId
+                    + "/" + doctorId
+                    + "/" + locationId
+                    + "/" + hospitalId;
             getResponse(Request.Priority.HIGH, webServiceType, class1, url, null, null, responseListener, errorListener);
         } else {
-            LocalDataServiceImpl.getInstance(mApp).getHistoryList(WebServiceType.GET_HISTORY_LIST, BooleanTypeValues.FALSE, isOtpVerified, doctorId, HealthCocoConstants.SELECTED_PATIENTS_USER_ID, responseListener, errorListener);
+            LocalDataServiceImpl.getInstance(mApp).getHistoryList(WebServiceType.GET_DISEASE_HISTORY_LIST, BooleanTypeValues.FALSE, isOtpVerified, doctorId, HealthCocoConstants.SELECTED_PATIENTS_USER_ID, responseListener, errorListener);
         }
     }
 
