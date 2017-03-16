@@ -45,7 +45,7 @@
                     android:textColor="@color/white"
                     android:textSize="@dimen/text_size_patients_list_initial_alphabet" />
 
-                <com.healthcoco.healthcocoplus.custom.CircularImageView
+                <com.healthcoco.healthcocopad.custom.CircularImageView
                     android:id="@+id/iv_image"
                     android:layout_width="@dimen/profile_image_doctor_profile"
                     android:layout_height="@dimen/profile_image_doctor_profile"
@@ -74,7 +74,7 @@
         android:layout_height="1dp"
         android:background="@color/grey_light_divider" />
 
-    <com.healthcoco.healthcocoplus.custom.CustomScrollView
+    <com.healthcoco.healthcocopad.custom.CustomScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -92,7 +92,7 @@
                 android:gravity="center"
                 android:orientation="horizontal">
 
-                <com.healthcoco.healthcocoplus.views.CustomAutoCompleteTextView
+                <com.healthcoco.healthcocopad.views.CustomAutoCompleteTextView
                     android:id="@+id/tv_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -181,7 +181,7 @@
                     android:visibility="visible"
                     android:weightSum="3">
 
-                    <com.healthcoco.healthcocoplus.views.FontAwesomeRadioButton
+                    <com.healthcoco.healthcocopad.views.FontAwesomeRadioButton
                         android:id="@+id/rb_male"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -194,7 +194,7 @@
                         android:textColor="@drawable/text_light_grey_normal_blue_selected"
                         android:textSize="@dimen/text_size_signup" />
 
-                    <com.healthcoco.healthcocoplus.views.FontAwesomeRadioButton
+                    <com.healthcoco.healthcocopad.views.FontAwesomeRadioButton
                         android:id="@+id/rb_female"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -273,7 +273,7 @@
                     android:paddingRight="10dp"
                     android:paddingTop="5dp">
 
-                    <com.healthcoco.healthcocoplus.views.TextViewFontAwesome
+                    <com.healthcoco.healthcocopad.views.TextViewFontAwesome
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="5dp"
@@ -307,7 +307,7 @@
                 android:orientation="horizontal"
                 android:weightSum="4">
 
-                <com.healthcoco.healthcocoplus.views.CustomAutoCompleteTextView
+                <com.healthcoco.healthcocopad.views.CustomAutoCompleteTextView
                     android:id="@+id/autotv_experience"
                     style="@style/add_edit_doctor_profile_details_material_text_view_style"
                     android:layout_width="0dp"
@@ -321,5 +321,5 @@
                     android:singleLine="true" />
             </LinearLayout>
         </LinearLayout>
-    </com.healthcoco.healthcocoplus.custom.CustomScrollView>
+    </com.healthcoco.healthcocopad.custom.CustomScrollView>
 </LinearLayout>

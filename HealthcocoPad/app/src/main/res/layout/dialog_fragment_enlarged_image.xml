@@ -25,13 +25,13 @@
         android:max="100"
         android:progressDrawable="@drawable/progress_bar_horizontal_loading" />
 
-    <com.healthcoco.healthcocoplus.views.TouchImageView
+    <com.healthcoco.healthcocopad.views.TouchImageView
         android:id="@+id/iv_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:src="@android:color/transparent">
 
-    </com.healthcoco.healthcocoplus.views.TouchImageView>
+    </com.healthcoco.healthcocopad.views.TouchImageView>
 
 </FrameLayout>

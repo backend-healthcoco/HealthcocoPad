@@ -93,7 +93,7 @@
             </LinearLayout>
 
 
-            <com.healthcoco.healthcocoplus.views.TextViewFontAwesome
+            <com.healthcoco.healthcocopad.views.TextViewFontAwesome
                 android:id="@+id/bt_edit"
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"

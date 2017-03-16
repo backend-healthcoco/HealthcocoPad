@@ -7,15 +7,6 @@
     android:background="@color/background"
     android:clickable="true">
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/bt_add_patient"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|right"
-        android:layout_marginBottom="@dimen/fab_margin_bottom"
-        android:layout_marginRight="@dimen/fab_margin_right"
-        android:src="@drawable/tab_add_contact"
-        app:layout_anchorGravity="bottom|right|end" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -55,7 +46,7 @@
                     android:paddingRight="30dp"
                     android:src="@drawable/tab_cancel_normal" />
 
-                <com.healthcoco.healthcocoplus.views.CustomAutoCompleteTextView
+                <com.healthcoco.healthcocopad.views.CustomAutoCompleteTextView
                     android:id="@+id/edit_search_dropdown"
                     style="@style/registration_edittext"
                     android:layout_width="0dp"
@@ -111,7 +102,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <com.healthcoco.healthcocoplus.views.CustomSwipeRefreshLayout
+            <com.healthcoco.healthcocopad.views.CustomSwipeRefreshLayout
                 android:id="@+id/swipe_refresh_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -123,7 +114,7 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical">
                     <!--style for this gridview's fastScroll is set in its containing fragment(ContactsListFragment)-->
-                    <com.healthcoco.healthcocoplus.views.GridViewLoadMore
+                    <com.healthcoco.healthcocopad.views.GridViewLoadMore
                         android:id="@+id/gv_contacts"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -140,7 +131,7 @@
                         android:visibility="gone" />
 
                     <!--style for this listview's fastScroll is set in its containing fragment(ContactsListFragment)-->
-                    <com.healthcoco.healthcocoplus.views.ListViewLoadMore
+                    <com.healthcoco.healthcocopad.views.ListViewLoadMore
                         android:id="@+id/lv_contacts"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
@@ -171,7 +162,7 @@
                         android:text="@string/no_patients"
                         android:textStyle="bold" />
                 </RelativeLayout>
-            </com.healthcoco.healthcocoplus.views.CustomSwipeRefreshLayout>
+            </com.healthcoco.healthcocopad.views.CustomSwipeRefreshLayout>
 
             <LinearLayout
                 android:id="@+id/container_filter_fragment"
@@ -189,4 +180,13 @@
         </LinearLayout>
     </LinearLayout>
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/bt_add_patient"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:layout_marginBottom="@dimen/fab_margin_bottom"
+        android:layout_marginRight="@dimen/fab_margin_right"
+        android:src="@drawable/tab_add_contact"
+        app:layout_anchorGravity="bottom|right|end" />
 </android.support.design.widget.CoordinatorLayout>

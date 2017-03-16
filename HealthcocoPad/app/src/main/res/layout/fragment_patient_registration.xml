@@ -45,7 +45,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center">
 
-                        <com.healthcoco.healthcocoplus.custom.CircularImageView
+                        <com.healthcoco.healthcocopad.custom.CircularImageView
                             android:id="@+id/iv_image_view"
                             android:layout_width="@dimen/image_patient_profile_registration"
                             android:layout_height="@dimen/image_patient_profile_registration"
@@ -215,7 +215,7 @@
                                 android:paddingLeft="@dimen/edit_text_patient_registration_padding"
                                 android:paddingTop="@dimen/edit_text_patient_registration_padding">
 
-                                <com.healthcoco.healthcocoplus.views.FontAwesomeRadioButton
+                                <com.healthcoco.healthcocopad.views.FontAwesomeRadioButton
                                     android:id="@+id/rb_male"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
@@ -228,7 +228,7 @@
                                     android:textColor="@drawable/text_light_grey_normal_blue_selected"
                                     android:textSize="@dimen/text_size_registration_title" />
 
-                                <com.healthcoco.healthcocoplus.views.FontAwesomeRadioButton
+                                <com.healthcoco.healthcocopad.views.FontAwesomeRadioButton
                                     android:id="@+id/rb_female"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
@@ -281,7 +281,7 @@
                                 android:orientation="horizontal">
 
 
-                                <com.healthcoco.healthcocoplus.views.CustomAutoCompleteTextView
+                                <com.healthcoco.healthcocopad.views.CustomAutoCompleteTextView
                                     android:id="@+id/tv_blood_group"
                                     style="@style/registration_edittext"
                                     android:layout_width="wrap_content"
@@ -425,7 +425,7 @@
                             android:inputType="text"
                             android:text="@string/country" />
 
-                        <com.healthcoco.healthcocoplus.views.CustomAutoCompleteTextView
+                        <com.healthcoco.healthcocopad.views.CustomAutoCompleteTextView
                             android:id="@+id/autotv_country"
                             style="@style/registration_edittext"
                             android:layout_width="0dp"

@@ -14,7 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <com.healthcoco.healthcocoplus.views.TextViewFontAwesome
+            <com.healthcoco.healthcocopad.views.TextViewFontAwesome
                 android:id="@+id/clinic_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -25,7 +25,7 @@
                 android:textColor="@color/blue_action_bar"
                 android:textSize="@dimen/text_size_fontawesome_edit_icon" />
 
-            <com.healthcoco.healthcocoplus.views.CustomAutoCompleteTextView
+            <com.healthcoco.healthcocopad.views.CustomAutoCompleteTextView
                 android:id="@+id/autotv_clinic_name"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
@@ -73,7 +73,7 @@
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_size_doctor_profile_item_header" />
 
-                    <com.healthcoco.healthcocoplus.views.TextViewFontAwesome
+                    <com.healthcoco.healthcocopad.views.TextViewFontAwesome
                         android:id="@+id/bt_edit_address"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -183,7 +183,7 @@
                     </LinearLayout>
                 </LinearLayout>
 
-                <com.healthcoco.healthcocoplus.views.TextViewFontAwesome
+                <com.healthcoco.healthcocopad.views.TextViewFontAwesome
                     android:id="@+id/bt_edit_visiting_hours"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -298,7 +298,7 @@
 
                 </LinearLayout>
 
-                <com.healthcoco.healthcocoplus.views.TextViewFontAwesome
+                <com.healthcoco.healthcocopad.views.TextViewFontAwesome
                     android:id="@+id/bt_edit_appointment_details"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

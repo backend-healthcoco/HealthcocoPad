@@ -77,7 +77,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <!--style for this listview's fastScroll is set in its containing fragment(ContactsListFragment)-->
-        <com.healthcoco.healthcocoplus.views.ListViewLoadMore
+        <com.healthcoco.healthcocopad.views.ListViewLoadMore
             android:id="@+id/lv_visits"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"

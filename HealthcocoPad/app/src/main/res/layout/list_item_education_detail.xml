@@ -74,7 +74,7 @@
                     android:orientation="horizontal"
                     android:weightSum="2">
 
-                    <com.healthcoco.healthcocoplus.views.CustomAutoCompleteTextView
+                    <com.healthcoco.healthcocopad.views.CustomAutoCompleteTextView
                         android:id="@+id/autotv_year_of_passing"
                         style="@style/add_education_registration_details_material_text_view_style"
                         android:layout_width="0dp"

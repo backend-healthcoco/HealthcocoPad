@@ -3,7 +3,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
-    <com.healthcoco.healthcocoplus.views.TextViewFontAwesome
+    <com.healthcoco.healthcocopad.views.TextViewFontAwesome
         android:id="@+id/tv_bullet"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

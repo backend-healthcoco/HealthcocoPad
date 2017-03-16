@@ -18,7 +18,7 @@
             android:textColor="@color/grey_dark_text"
             android:textSize="@dimen/text_size_add_edit_clinic_hours_weekday" />
 
-        <com.healthcoco.healthcocoplus.views.TextViewFontAwesome
+        <com.healthcoco.healthcocopad.views.TextViewFontAwesome
             android:id="@+id/bt_add_session"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

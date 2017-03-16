@@ -44,7 +44,7 @@
 
     </LinearLayout>
 
-    <com.healthcoco.healthcocoplus.views.FontAwesomeButton
+    <com.healthcoco.healthcocopad.views.FontAwesomeButton
         android:id="@+id/bt_advance_search"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

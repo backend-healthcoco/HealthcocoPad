@@ -46,7 +46,7 @@
                         android:textColor="@color/white"
                         android:textSize="@dimen/text_size_patients_list_initial_alphabet" />
 
-                    <com.healthcoco.healthcocoplus.custom.CircularImageView
+                    <com.healthcoco.healthcocopad.custom.CircularImageView
                         android:id="@+id/iv_image"
                         android:layout_width="@dimen/image_patient_deatail"
                         android:layout_height="@dimen/image_patient_deatail"
@@ -129,7 +129,7 @@
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_size_patient_deatil_fragment" />
 
-                    <com.healthcoco.healthcocoplus.views.FontAwesomeButton
+                    <com.healthcoco.healthcocopad.views.FontAwesomeButton
                         android:id="@+id/bt_edit_patient_profile_past_history"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
@@ -199,7 +199,7 @@
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_size_patient_deatil_fragment" />
 
-                    <com.healthcoco.healthcocoplus.views.FontAwesomeButton
+                    <com.healthcoco.healthcocopad.views.FontAwesomeButton
                         android:id="@+id/bt_edit_patient_profile_family_history"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
@@ -269,7 +269,7 @@
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_size_patient_deatil_fragment" />
 
-                    <com.healthcoco.healthcocoplus.views.FontAwesomeButton
+                    <com.healthcoco.healthcocopad.views.FontAwesomeButton
                         android:id="@+id/bt_edit_patient_profile_personal_history"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
@@ -342,7 +342,7 @@
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_size_patient_deatil_fragment" />
 
-                    <com.healthcoco.healthcocoplus.views.FontAwesomeButton
+                    <com.healthcoco.healthcocopad.views.FontAwesomeButton
                         android:id="@+id/bt_edit_patient_profile_drug_and_allergy"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
@@ -401,7 +401,7 @@
                     android:gravity="center"
                     android:orientation="horizontal">
 
-                    <com.healthcoco.healthcocoplus.views.TextViewFontAwesome
+                    <com.healthcoco.healthcocopad.views.TextViewFontAwesome
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingRight="@dimen/patient_profile_image_padding"
@@ -416,7 +416,7 @@
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_size_patient_deatil_fragment" />
 
-                    <com.healthcoco.healthcocoplus.views.FontAwesomeButton
+                    <com.healthcoco.healthcocopad.views.FontAwesomeButton
                         android:id="@+id/bt_edit_patient_profile_groups"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
@@ -456,7 +456,7 @@
                     android:gravity="center"
                     android:orientation="horizontal">
 
-                    <com.healthcoco.healthcocoplus.views.TextViewFontAwesome
+                    <com.healthcoco.healthcocopad.views.TextViewFontAwesome
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingRight="@dimen/patient_profile_image_padding"
@@ -471,7 +471,7 @@
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_size_patient_deatil_fragment" />
 
-                    <com.healthcoco.healthcocoplus.views.FontAwesomeButton
+                    <com.healthcoco.healthcocopad.views.FontAwesomeButton
                         android:id="@+id/bt_edit_patient_profile_notes"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"

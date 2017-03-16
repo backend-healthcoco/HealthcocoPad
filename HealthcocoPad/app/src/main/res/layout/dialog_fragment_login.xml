@@ -61,7 +61,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <com.healthcoco.healthcocoplus.views.CustomAutoCompleteTextView
+                    <com.healthcoco.healthcocopad.views.CustomAutoCompleteTextView
                         android:id="@+id/autotv_title"
                         android:layout_width="45dp"
                         android:layout_height="wrap_content"

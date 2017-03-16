@@ -15,7 +15,7 @@
         android:gravity="center"
         android:orientation="horizontal">
 
-        <com.healthcoco.healthcocoplus.views.TextViewFontAwesome
+        <com.healthcoco.healthcocopad.views.TextViewFontAwesome
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingRight="@dimen/patient_profile_image_padding"
@@ -30,7 +30,7 @@
             android:textColor="@color/black"
             android:textSize="@dimen/text_size_patient_deatil_fragment" />
 
-        <com.healthcoco.healthcocoplus.views.FontAwesomeButton
+        <com.healthcoco.healthcocopad.views.FontAwesomeButton
             android:id="@+id/bt_edit_patient_profile_patient_data"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"

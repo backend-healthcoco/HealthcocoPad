@@ -1,0 +1,95 @@
+package com.healthcoco.healthcocopad.utilities;
+
+/**
+ * Created by Shreshtha on 20-01-2017.
+ */
+public class HealthCocoConstants {
+    public static final String NO_NAME_FLAG = "#";
+
+    public static final String PARAM_IS_MOBILE_APP = "&isMobileApp=true";
+    public static final String TAG_IS_FROM_LOGIN_SIGNUP = "isFromLoginSignUp";
+    public static final String TAG_BROADCAST_EXTRA = "broadcastExtra";
+    public static final String TAG_FRAGMENT_NAME = "fragmentName";
+    public static final String TAG_EMAIL_ID = "emailId";
+    public static final String TAG_COMMON_OPENUP_INTENT_DATA = "intentData";
+    public static final String TAG_TOTAL_SYNC_SERVICES = "maxProgressValue";
+    public static final String TAG_SYNC_SERVICE_TYPE = "syncServiceType";
+    public static final String TAG_CLINIC_PROFILE = "clinicProfile";
+    public static final String TAG_UNIQUE_ID = "uniqueId";
+    public static final String TAG_NAME_EDIT_TYPE = "nameEditDeleteType";
+    public static final String TAG_ORDINAL = "ordinal";
+    public static final String TAG_GROUP_ID = "group_id";
+    public static final String TAG_GROUP_IDS_LIST = "groupsIdsList";
+    public static final String TAG_IS_EDIT_PATIENT = "isEditPatient";
+    public static final String TAG_NOTES_LIST = "notesList";
+    public static final String PARAM_TAG_UPDATE = "/update/";
+    public static final String PARAM_TAG_GENERATE = "/generate/";
+    public static final String PARAM_TAG_VERIFY = "/verify/";
+    public static final int REQUEST_CODE_CONTACTS_DETAIL = 100;
+    public static final int RESULT_CODE_ADD_PRESCIPTION = 101;
+    public static final int REQUEST_CODE_CAMERA = 102;
+    public static final int REQUEST_CODE_GALLERY = 103;
+    public static final int RESULT_CODE_CLINIC_IMAGE = 104;
+    public static final int REQUEST_CODE_CLINIC_PROFILE_IMAGE = 105;
+    public static final int REQUEST_CODE_MENU_CLINIC_LIST = 106;
+    public static final int REQUEST_CODE_CONTACTS_LIST = 107;
+    public static final int REQUEST_CODE_DOCTOR_PROFILE = 108;
+    public static final int REQUEST_CODE_CLINIC_PROFILE = 109;
+    public static final int RESULT_CODE_ADD_EDIT_CLINIC_ADDRESS = 110;
+    public static final int RESULT_CODE_ADD_EDIT_CLINIC_HOURS = 111;
+    public static final int RESULT_CODE_ADD_EDIT_CLINIC_CONTACT = 112;
+    public static final int RESULT_CODE_ADD_EDIT_APPOINTMENT_DETAILS = 112;
+    public static final int REQUEST_CODE_MY_PROFILE = 113;
+    public static final int REQUEST_CODE_MY_CLINIC = 114;
+    public static final int RESULT_CODE_REGISTRATION_DETAIL = 115;
+    public static final int RESULT_CODE_DOCTOR_PROFILE_CONTACT_DETAIL = 116;
+    public static final int RESULT_CODE_DOCTOR_AWARDS_PUBLICATION_DETAIL = 117;
+    public static final int RESULT_CODE_DOCTOR_EDUCATION_DETAIL = 118;
+    public static final int RESULT_CODE_DOCTOR_REGISTRATION_DETAIL = 119;
+    public static final int RESULT_CODE_DOCTOR_EXPERIENCE_DETAIL = 120;
+    public static final int RESULT_CODE_DOCTOR_PROFESSIONAL_MEMBERSHIP_DETAIL = 121;
+    public static final int RESULT_CODE_DOCTOR_PROFESSIONAL_STATEMENT_DETAIL = 122;
+    public static final String TAG_INTENT_DATA = "intentData";
+    public static final String TAG_TAB_TYPE = "tabType";
+    public static final int REQUEST_CODE_REFERENCE_LIST = 136;
+    public static final int RESULT_CODE_REFERENCE_LIST = 137;
+    public static final int REQUEST_CODE_GLOBAL_RECORDS_ACCESS = 138;
+    public static final int RESULT_CODE_GLOBAL_RECORDS_ACCESS = 139;
+    public static final int REQUEST_CODE_VERIFY_OTP = 140;
+    public static final int RESULT_CODE_VERIFY_OTP = 141;
+    public static int RESULT_CODE_SIGNUP_ALREADY_REGISTERED = 123;
+    public static final int RESULT_CODE_GROUPS_LIST = 124;
+    public static final int RESULT_CODE_SEARCH_NUMBER_RESULTS = 125;
+    public static final int REQUEST_CODE_GROUPS_LIST = 126;
+    public static final int RESULT_CODE_ADD_GROUP = 127;
+    public static final int RESULT_CODE_REGISTRATION = 128;
+    public static final int REQUEST_CODE_REGISTRATION = 129;
+    public static final int RESULT_CODE_NOTES_LIST = 130;
+    public static final int REQUEST_CODE_STRINGS_LIST = 131;
+    public static final int RESULT_CODE_ADD_STRING = 132;
+    public static final int REQUEST_CODE_PATIENT_PROFILE = 133;
+    public static final int REQUEST_CODE_HISTORY_LIST = 134;
+    public static final int RESULT_CODE_DISEASE_LIST = 135;
+    public static final String PARAM_SIZE = "&size=";
+    public static final String PARAM_SEARCH_TERM = "&searchTerm=";
+    public static final String PARAM_PAGE_AND = "&page=";
+    public static boolean isNetworkOnline;
+    public static final String PARAM_UPDATED_TIME = "&updatedTime=";
+    public static final String PARAM_DISCARDED_AMPERCENT = "&discarded=";
+    public static final String PARAM_DOCTOR_ID = "&doctorId=";
+    public static final String PARAM_DISCARDED_TRUE = "?discarded=true";
+    public static final String PARAM_HOSPITAL_ID = "&hospitalId=";
+    public static final String PARAM_LOCATION_ID = "&locationId=";
+    public static final String PARAM_TAG_VIEW = "/view/?";
+    public static final String TAG_SELECTED_USER_ID = "selectedPatientId";
+    public static String SELECTED_PATIENTS_USER_ID = null;
+
+    public static final String TAG_MOBILE_NUMBER = "mobileNo";
+    public static final String PARAM_TAG_DELETE = "/delete/";
+    public static final String TAG_ORDINAL_DIALOG_TYPE = "dialogTypeOrdinal";
+    public static final String TAG_ORDINAL_WEB_SERVICE_TYPE = "webServiceTypeOrdinal";
+    public static final String TAG_HISTORY_FILTER_TYPE = "historyFilterType";
+    public static final String TAG_DISEASE_IDS_LIST = "diseaseIdsList";
+    public static final String PARAM_PATIENT_ID = "&patientId=";
+    public static final String PARAM_IN_HISTORY = "&inHistory=";
+}

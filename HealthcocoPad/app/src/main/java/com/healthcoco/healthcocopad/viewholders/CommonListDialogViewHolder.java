@@ -1,0 +1,92 @@
+package com.healthcoco.healthcocopad.viewholders;
+
+import android.view.View;
+import android.widget.TextView;
+
+import com.healthcoco.healthcocopad.R;
+import com.healthcoco.healthcocopad.HealthCocoActivity;
+import com.healthcoco.healthcocopad.HealthCocoViewHolder;
+import com.healthcoco.healthcocopad.bean.server.CollegeUniversityInstitute;
+import com.healthcoco.healthcocopad.bean.server.DiagnosticTest;
+import com.healthcoco.healthcocopad.bean.server.EducationQualification;
+import com.healthcoco.healthcocopad.bean.server.MedicalCouncil;
+import com.healthcoco.healthcocopad.bean.server.ProfessionalMembership;
+import com.healthcoco.healthcocopad.bean.server.Reference;
+import com.healthcoco.healthcocopad.bean.server.Specialities;
+import com.healthcoco.healthcocopad.enums.CommonListDialogType;
+import com.healthcoco.healthcocopad.listeners.CommonListDialogItemClickListener;
+
+/**
+ * Created by Shreshtha on 24-01-2017.
+ */
+public class CommonListDialogViewHolder extends HealthCocoViewHolder implements View.OnClickListener {
+    private CommonListDialogType popupType;
+    private CommonListDialogItemClickListener commonListDialogItemClickListener;
+    private HealthCocoActivity mActivity;
+    private Object objData;
+    private TextView tvName;
+    private View contentView;
+
+    public CommonListDialogViewHolder(HealthCocoActivity mActivity, CommonListDialogItemClickListener commonListDialogItemClickListener, CommonListDialogType popupType) {
+        super(mActivity);
+        this.mActivity = mActivity;
+        this.commonListDialogItemClickListener = commonListDialogItemClickListener;
+        this.popupType = popupType;
+    }
+
+    @Override
+    public void setData(Object object) {
+        this.objData = object;
+    }
+
+    @Override
+    public void applyData() {
+        String text = "";
+        switch (popupType) {
+            case SPECIALITY:
+                Specialities specality = (Specialities) objData;
+                text = text + specality.getSuperSpeciality();
+                break;
+            case REFERRED_BY:
+                Reference reference = (Reference) objData;
+                text = reference.getReference();
+                break;
+            case QUALIFICATION:
+                EducationQualification qualification = (EducationQualification) objData;
+                text = qualification.getName();
+                break;
+            case COLLEGE_UNIVERSITY_INSTITUTE:
+                CollegeUniversityInstitute institute = (CollegeUniversityInstitute) objData;
+                text = institute.getName();
+                break;
+            case MEDICAL_COUNCIL:
+                MedicalCouncil medicalCouncil = (MedicalCouncil) objData;
+                text = medicalCouncil.getMedicalCouncil();
+                break;
+            case DIAGNOSTIC_TESTS:
+                if (objData instanceof DiagnosticTest) {
+                    DiagnosticTest diagnosticTest = (DiagnosticTest) objData;
+                    text = diagnosticTest.getTestName();
+                }
+                break;
+            case PROFESSIONAL_MEMBERSHIP:
+                ProfessionalMembership professionalMemberships = (ProfessionalMembership) objData;
+                text = professionalMemberships.getMembership();
+                break;
+        }
+        tvName.setText(text);
+    }
+
+    @Override
+    public View getContentView() {
+        contentView = inflater.inflate(R.layout.list_item_common_list_dialog, null);
+        tvName = (TextView) contentView.findViewById(R.id.tv_name);
+        contentView.setOnClickListener(this);
+        return contentView;
+    }
+
+    @Override
+    public void onClick(View view) {
+        commonListDialogItemClickListener.onDialogItemClicked(popupType, objData);
+    }
+}

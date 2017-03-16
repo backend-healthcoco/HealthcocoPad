@@ -140,7 +140,7 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <com.healthcoco.healthcocoplus.views.ListViewLoadMore
+            <com.healthcoco.healthcocopad.views.ListViewLoadMore
                 android:id="@+id/lv_groups"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -148,7 +148,7 @@
                 android:background="@color/white"
                 android:divider="@color/grey_light_divider"
                 android:dividerHeight="1dp"
-                android:visibility="gone"></com.healthcoco.healthcocoplus.views.ListViewLoadMore>
+                android:visibility="gone"></com.healthcoco.healthcocopad.views.ListViewLoadMore>
 
             <TextView
                 android:id="@+id/tv_no_groups"

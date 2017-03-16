@@ -107,7 +107,7 @@
                 android:textColor="@color/grey_light_text"
                 android:textSize="@dimen/text_size_floating_label" />
 
-            <com.healthcoco.healthcocoplus.views.CustomAutoCompleteTextView
+            <com.healthcoco.healthcocopad.views.CustomAutoCompleteTextView
                 android:id="@+id/autotv_country"
                 style="@style/add_appointment_details_input_edit_text_style"
                 android:layout_width="match_parent"

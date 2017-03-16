@@ -17,17 +17,18 @@
     <!-- Required to show current location -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
     <uses-feature
         android:name="android.hardware.location.gps"
         android:required="false" />
 
     <application
-        android:name="com.healthcoco.healthcocoplus.HealthCocoApplication"
+        android:name=".HealthCocoApplication"
         android:allowBackup="true"
         android:icon="@mipmap/app_logo"
         android:label="@string/app_name"
-        android:supportsRtl="true"
         android:largeHeap="true"
+        android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <meta-data
             android:name="DATABASE"
@@ -37,13 +38,10 @@
             android:value="2" />
         <meta-data
             android:name="QUERY_LOG"
-            android:value="false" />
-        <meta-data
-            android:name="DOMAIN_PACKAGE_NAME"
-            android:value="com.healthcoco.healthcocopad.server" />
+            android:value="true" />
 
         <activity
-            android:name="com.healthcoco.healthcocoplus.activities.SplashScreenActivity"
+            android:name=".activities.SplashScreenActivity"
             android:configChanges="orientation|keyboardHidden|screenSize|uiMode"
             android:screenOrientation="landscape"
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan">
@@ -54,7 +52,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.healthcoco.healthcocoplus.activities.CommonOpenUpActivity"
+            android:name=".activities.CommonOpenUpActivity"
             android:configChanges="orientation|keyboardHidden|screenSize|uiMode"
             android:screenOrientation="landscape"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
@@ -66,13 +64,14 @@
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="@string/api_key_google_map" />
+
         <activity
-            android:name="com.healthcoco.healthcocoplus.activities.HomeActivity"
+            android:name=".activities.HomeActivity"
             android:configChanges="orientation|keyboardHidden|screenSize|uiMode"
             android:screenOrientation="landscape"
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan"></activity>
         <activity
-            android:name="com.healthcoco.healthcocoplus.activities.InitialSyncActivity"
+            android:name=".activities.InitialSyncActivity"
             android:configChanges="orientation|keyboardHidden|screenSize|uiMode"
             android:screenOrientation="landscape"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />

@@ -12,7 +12,7 @@
         android:background="@color/white"
         android:orientation="vertical">
 
-        <com.healthcoco.healthcocoplus.views.FontAwesomeButton
+        <com.healthcoco.healthcocopad.views.FontAwesomeButton
             android:id="@+id/bt_register_new_patient"
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="match_parent"

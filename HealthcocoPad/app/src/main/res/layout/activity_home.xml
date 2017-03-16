@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="horizontal">
 
-    <com.healthcoco.healthcocoplus.views.SlidingPaneDrawerLayout
+    <com.healthcoco.healthcocopad.views.SlidingPaneDrawerLayout
         android:id="@+id/sliding_pane_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -14,14 +14,14 @@
         <!--Master fragment-->
         <fragment
             android:id="@+id/fragment_master"
-            class="com.healthcoco.healthcocoplus.fragments.MenuDrawerFragment"
+            class="com.healthcoco.healthcocopad.fragments.MenuDrawerFragment"
             android:layout_width="300dp"
             android:layout_height="match_parent"></fragment>
 
 
         <!--Detail layout -->
         <FrameLayout
-            class="com.healthcoco.healthcocoplus.activities.HomeActivity"
+            class="com.healthcoco.healthcocopad.activities.HomeActivity"
             android:layout_width="1000dp"
             android:layout_height="match_parent"
             android:layout_marginLeft="@dimen/drawer_left_margin"
@@ -50,7 +50,7 @@
 
             </LinearLayout>
         </FrameLayout>
-    </com.healthcoco.healthcocoplus.views.SlidingPaneDrawerLayout>
+    </com.healthcoco.healthcocopad.views.SlidingPaneDrawerLayout>
 
     <LinearLayout
         android:id="@+id/layout_right_drawer"
