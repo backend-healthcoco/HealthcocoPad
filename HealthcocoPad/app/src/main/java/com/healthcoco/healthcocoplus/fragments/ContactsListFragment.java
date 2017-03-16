@@ -15,6 +15,9 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AutoCompleteTextView;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -33,17 +36,21 @@ import com.healthcoco.healthcocoplus.bean.server.LoginResponse;
 import com.healthcoco.healthcocoplus.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocoplus.bean.server.User;
 import com.healthcoco.healthcocoplus.bean.server.UserGroups;
+import com.healthcoco.healthcocoplus.custom.AutoCompleteTextViewAdapter;
 import com.healthcoco.healthcocoplus.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocoplus.dialogFragment.AddNewGroupsDialogFragment;
 import com.healthcoco.healthcocoplus.dialogFragment.PatientNumberSearchDialogFragment;
 import com.healthcoco.healthcocoplus.enums.AddUpdateNameDialogType;
+import com.healthcoco.healthcocoplus.enums.AutoCompleteTextViewType;
 import com.healthcoco.healthcocoplus.enums.ChangeViewType;
+import com.healthcoco.healthcocoplus.enums.CommonListDialogType;
 import com.healthcoco.healthcocoplus.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocoplus.enums.FilterItemType;
 import com.healthcoco.healthcocoplus.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocoplus.enums.LocalTabelType;
 import com.healthcoco.healthcocoplus.enums.PatientDetailTabType;
 import com.healthcoco.healthcocoplus.enums.WebServiceType;
+import com.healthcoco.healthcocoplus.listeners.CommonListDialogItemClickListener;
 import com.healthcoco.healthcocoplus.listeners.ContactsItemOptionsListener;
 import com.healthcoco.healthcocoplus.listeners.LoadMorePageListener;
 import com.healthcoco.healthcocoplus.listeners.LocalDoInBackgroundListenerOptimised;
@@ -55,6 +62,7 @@ import com.healthcoco.healthcocoplus.utilities.ComparatorUtil;
 import com.healthcoco.healthcocoplus.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocoplus.utilities.LogUtils;
 import com.healthcoco.healthcocoplus.utilities.Util;
+import com.healthcoco.healthcocoplus.views.CustomAutoCompleteTextView;
 import com.healthcoco.healthcocoplus.views.FontAwesomeButton;
 import com.healthcoco.healthcocoplus.views.GridViewLoadMore;
 import com.healthcoco.healthcocoplus.views.ListViewLoadMore;
@@ -70,7 +78,7 @@ import java.util.Locale;
  */
 public class ContactsListFragment extends HealthCocoFragment implements
         LoadMorePageListener, SwipeRefreshLayout.OnRefreshListener, View.OnClickListener, TextWatcher,
-        GsonRequest.ErrorListener, Response.Listener<VolleyResponseBean>, LocalDoInBackgroundListenerOptimised,
+        GsonRequest.ErrorListener, Response.Listener<VolleyResponseBean>, CommonListDialogItemClickListener, LocalDoInBackgroundListenerOptimised,
         ContactsItemOptionsListener, View.OnTouchListener, OnFilterItemClickListener {
     public static final String TAG_IS_IN_HOME_ACTIVITY = "isInHomeActivity";
     //required if contacts list is not in HomeScreen
@@ -123,6 +131,23 @@ public class ContactsListFragment extends HealthCocoFragment implements
     private SwipeRefreshLayout swipeRefreshFilterLayout;
     private String selectedFilterTitle;
     private FontAwesomeButton btAdvanceSearch;
+    private LinearLayout parentEditSearch;
+    private LinearLayout childEditSearch;
+    private ImageButton btCancel;
+    private CustomAutoCompleteTextView editSearchDropdown;
+    private EditText editSearch;
+    private TextView btSearch;
+    private ArrayList<Object> ADVANCED_SEARCH_OPTION = new ArrayList<Object>() {
+        {
+            add("Patient Name");
+            add("Patient Id");
+            add("Mobile Number");
+            add("Email");
+            add("Blood Group");
+            add("Profession");
+            add("Reference");
+        }
+    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -219,6 +244,44 @@ public class ContactsListFragment extends HealthCocoFragment implements
         initListeners();
         initAdapter();
         initFilterGroupAdapter();
+        initAutoTvAdapter(editSearchDropdown, AutoCompleteTextViewType.ADVANCE_SEARCH_OPTION, ADVANCED_SEARCH_OPTION);
+    }
+
+    private void initAutoTvAdapter(AutoCompleteTextView autoCompleteTextView, final AutoCompleteTextViewType autoCompleteTextViewType, ArrayList<Object> list) {
+        try {
+            if (!Util.isNullOrEmptyList(list)) {
+                final AutoCompleteTextViewAdapter adapter = new AutoCompleteTextViewAdapter(mActivity, R.layout.spinner_drop_down_item_grey_background,
+                        list, autoCompleteTextViewType);
+                autoCompleteTextView.setThreshold(1);
+                autoCompleteTextView.setAdapter(adapter);
+                autoCompleteTextView.setDropDownAnchor(autoCompleteTextView.getId());
+                autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        switch (autoCompleteTextViewType) {
+                            case ADVANCE_SEARCH_OPTION:
+                                onDialogItemClicked(CommonListDialogType.ADVANCED_SEARCH_OPTION, adapter.getSelectedObject(position));
+                                break;
+                        }
+                    }
+                });
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onDialogItemClicked(CommonListDialogType commonListDialogType, Object object) {
+        switch (commonListDialogType) {
+            case ADVANCED_SEARCH_OPTION:
+                if (object instanceof String) {
+                    String text = (String) object;
+//                    initEditSearchView(text, this, true);
+//                editSearchDropdown.setText(bloodGroup.getBloodGroup());
+                }
+                break;
+        }
     }
 
     public void getContactsList(boolean showLoading) {
@@ -238,6 +301,12 @@ public class ContactsListFragment extends HealthCocoFragment implements
         tvNoPatients = (TextView) view.findViewById(R.id.tv_no_patients);
         btAddNewPatient = (FloatingActionButton) view.findViewById(R.id.bt_add_patient);
         btAdvanceSearch = (FontAwesomeButton) view.findViewById(R.id.bt_advance_search);
+        parentEditSearch = (LinearLayout) view.findViewById(R.id.parent_edit_search);
+        childEditSearch = (LinearLayout) view.findViewById(R.id.child_edit_search);
+        btCancel = (ImageButton) view.findViewById(R.id.bt_cancel);
+        editSearchDropdown = (CustomAutoCompleteTextView) view.findViewById(R.id.edit_search_dropdown);
+        editSearch = (EditText) view.findViewById(R.id.edit_search);
+        btSearch = (TextView) view.findViewById(R.id.bt_search);
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
 //        swipeRefreshLayout.setColorSchemeResources(R.color.blue_action_bar);
 
@@ -260,6 +329,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
         tvRecentlyAdded = (TextView) view.findViewById(R.id.tv_recently_added);
         swipeRefreshFilterLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
         swipeRefreshFilterLayout.setColorSchemeResources(R.color.blue_action_bar);
+        childEditSearch.setVisibility(View.GONE);
     }
 
     @Override
@@ -282,6 +352,8 @@ public class ContactsListFragment extends HealthCocoFragment implements
         tvRecentlyAdded.setOnClickListener(this);
         lvGroups.setOnTouchListener(this);
         btAdvanceSearch.setOnClickListener(this);
+        btCancel.setOnClickListener(this);
+        btSearch.setOnClickListener(this);
     }
 
     private void initFilterGroupAdapter() {
@@ -425,6 +497,14 @@ public class ContactsListFragment extends HealthCocoFragment implements
                 refreshHomeScreenTitle(getResources().getString(R.string.recently_added));
                 break;
             case R.id.bt_advance_search:
+                parentEditSearch.setVisibility(View.GONE);
+                childEditSearch.setVisibility(View.VISIBLE);
+                break;
+            case R.id.bt_cancel:
+                childEditSearch.setVisibility(View.GONE);
+                parentEditSearch.setVisibility(View.VISIBLE);
+                break;
+            case R.id.bt_search:
                 break;
             default:
                 break;

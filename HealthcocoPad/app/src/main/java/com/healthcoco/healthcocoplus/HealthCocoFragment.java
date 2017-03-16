@@ -129,6 +129,23 @@ public abstract class HealthCocoFragment extends Fragment implements GsonRequest
         });
     }
 
+    protected void initEditSearchView(String hintId, TextWatcher textWatcher, boolean setPaddingTop) {
+        LinearLayout layoutEditSearch = (LinearLayout) view.findViewById(R.id.parent_edit_search);
+        if (setPaddingTop)
+            layoutEditSearch.setPadding(layoutEditSearch.getPaddingLeft(), mActivity.getResources().getDimensionPixelOffset(R.dimen.layout_edit_search_padding), layoutEditSearch.getPaddingRight(), layoutEditSearch.getPaddingBottom());
+        final EditText editSearch = (EditText) view.findViewById(R.id.edit_search);
+        editSearch.setHint(hintId);
+        if (textWatcher != null)
+            editSearch.addTextChangedListener(textWatcher);
+        ImageButton btClear = (ImageButton) view.findViewById(R.id.bt_clear);
+        btClear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editSearch.setText("");
+            }
+        });
+    }
+
     protected void initEditSearchView(int hintId, View.OnClickListener onClickListener, TextWatcher textWatcher) {
         final EditText editSearch = (EditText) view.findViewById(R.id.edit_search);
         editSearch.setHint(hintId);
@@ -229,7 +246,6 @@ public abstract class HealthCocoFragment extends Fragment implements GsonRequest
             e.printStackTrace();
         }
     }
-
 
     protected CommonListDialogFragment openCommonListDialogFragment(CommonListDialogItemClickListener listener, CommonListDialogType popupType, List<?> list) {
         CommonListDialogFragment commonListDialogFragment = new CommonListDialogFragment(listener, popupType, list);

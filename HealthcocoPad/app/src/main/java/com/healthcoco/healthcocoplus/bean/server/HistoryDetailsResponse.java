@@ -24,6 +24,11 @@ public class HistoryDetailsResponse extends SugarRecord {
     @Ignore
     private List<GeneralData> generalRecords;
     @Ignore
+    List<MedicalFamilyHistoryDetails> medicalhistory;
+    @Ignore
+    List<MedicalFamilyHistoryDetails> familyhistory;
+    private PersonalHistory personalHistory;
+    @Ignore
     private List<String> specialNotes;
     protected Long updatedTime;
     protected Long createdTime;

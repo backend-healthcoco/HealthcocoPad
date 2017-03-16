@@ -14,10 +14,11 @@ public class MedicalFamilyHistoryDetails extends SugarRecord {
     private String doctorId;
     private String locationId;
     private String hospitalId;
-    private String discarded;
     private String createdBy;
     private String createdTime;
     private String updatedTime;
+    private String explanation;
+    private Boolean discarded;
     protected String foreignMedicalHistoryId;
     private HistoryFilterType historyFilterType;
     @Unique
@@ -53,14 +54,6 @@ public class MedicalFamilyHistoryDetails extends SugarRecord {
 
     public void setHospitalId(String hospitalId) {
         this.hospitalId = hospitalId;
-    }
-
-    public String getDiscarded() {
-        return discarded;
-    }
-
-    public void setDiscarded(String discarded) {
-        this.discarded = discarded;
     }
 
     public String getDisease() {
@@ -125,5 +118,21 @@ public class MedicalFamilyHistoryDetails extends SugarRecord {
 
     public void setCustomUniqueId(String customUniqueId) {
         this.customUniqueId = customUniqueId;
+    }
+
+    public String getExplanation() {
+        return explanation;
+    }
+
+    public void setExplanation(String explanation) {
+        this.explanation = explanation;
+    }
+
+    public Boolean getDiscarded() {
+        return discarded;
+    }
+
+    public void setDiscarded(Boolean discarded) {
+        this.discarded = discarded;
     }
 }

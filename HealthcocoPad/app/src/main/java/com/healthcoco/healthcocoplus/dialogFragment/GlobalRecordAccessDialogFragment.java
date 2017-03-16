@@ -46,6 +46,7 @@ public class GlobalRecordAccessDialogFragment extends HealthCocoDialogFragment i
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         init();
+        setWidthHeight(0.60, 0.50);
     }
 
     @Override
@@ -68,6 +69,7 @@ public class GlobalRecordAccessDialogFragment extends HealthCocoDialogFragment i
     @Override
     public void initListeners() {
         btGenerateOtp.setOnClickListener(this);
+        initCrossButton();
     }
 
     @Override
@@ -103,9 +105,6 @@ public class GlobalRecordAccessDialogFragment extends HealthCocoDialogFragment i
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.bt_generate_otp:
-//                getTargetFragment().onActivityResult(HealthCocoConstants.REQUEST_CODE_GLOBAL_RECORDS_ACCESS,
-//                        HealthCocoConstants.RESULT_CODE_GLOBAL_RECORDS_ACCESS, null);
-//                dismiss();
                 generateOtp();
                 break;
         }
@@ -120,7 +119,6 @@ public class GlobalRecordAccessDialogFragment extends HealthCocoDialogFragment i
 
     @Override
     public void onErrorResponse(VolleyResponseBean volleyResponseBean, String errorMessage) {
-//        LocalDataServiceImpl.getInstance(mApp).addUpdateGeneratedOtpTime(selectedPatient.getUserId());
         mActivity.hideLoading();
     }
 

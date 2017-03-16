@@ -32,7 +32,6 @@ import com.healthcoco.healthcocoplus.listeners.CommonOptionsDialogItemClickListe
 import com.healthcoco.healthcocoplus.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocoplus.utilities.ScreenDimensions;
 import com.healthcoco.healthcocoplus.utilities.Util;
-import com.healthcoco.healthcocoplus.views.HealthCocoButton;
 
 import java.util.List;
 

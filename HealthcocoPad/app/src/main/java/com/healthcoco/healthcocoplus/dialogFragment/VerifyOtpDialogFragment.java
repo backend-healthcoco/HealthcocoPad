@@ -46,6 +46,7 @@ public class VerifyOtpDialogFragment extends HealthCocoDialogFragment implements
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         init();
+        setWidthHeight(0.60, 0.50);
     }
 
     @Override
@@ -71,6 +72,7 @@ public class VerifyOtpDialogFragment extends HealthCocoDialogFragment implements
     public void initListeners() {
         btVerify.setOnClickListener(this);
         btRegenerateOtp.setOnClickListener(this);
+        initCrossButton();
     }
 
     @Override
@@ -99,8 +101,6 @@ public class VerifyOtpDialogFragment extends HealthCocoDialogFragment implements
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.bt_verify:
-//                getTargetFragment().onActivityResult(HealthCocoConstants.REQUEST_CODE_VERIFY_OTP, HealthCocoConstants.RESULT_CODE_VERIFY_OTP, null);
-//                dismiss();
                 validateData();
                 break;
             case R.id.bt_regenerate_otp:
@@ -167,5 +167,4 @@ public class VerifyOtpDialogFragment extends HealthCocoDialogFragment implements
         }
         mActivity.hideLoading();
     }
-
 }

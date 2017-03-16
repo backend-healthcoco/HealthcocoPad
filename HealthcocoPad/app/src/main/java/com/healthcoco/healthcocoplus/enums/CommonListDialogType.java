@@ -13,6 +13,7 @@ public enum CommonListDialogType {
     REFERRED_BY(R.string.referred_by, R.string.referred_by_settings, true, null, R.string.no_result_found_for_search_press_enter),
     YEAR(R.string.year, R.string.year, false, null, R.string.no_result_found_for_your_search),
     BLOOD_GROUP(R.string.blood_group, R.string.search_blood_group, false, null, R.string.no_result_found_for_your_search),
+    ADVANCED_SEARCH_OPTION(R.string.advance_search, R.string.search_patient, false, null, R.string.no_result_found_for_your_search),
     PROFESSION(R.string.profession, R.string.search_profession, false, null, R.string.no_result_found_for_your_search),
     MEDICAL_COUNCIL(R.string.medical_council, R.string.search_medical_council, true, null, R.string.no_result_found_for_search_press_enter),
     DIAGNOSTIC_TESTS(R.string.lab_test, R.string.search_lab_test, false, ActionbarType.ACTION_BAR_DIALOG, R.string.no_tests_found),

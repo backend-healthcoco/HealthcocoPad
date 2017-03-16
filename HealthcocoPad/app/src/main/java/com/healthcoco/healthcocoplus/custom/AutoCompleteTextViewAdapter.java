@@ -8,7 +8,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.TextView;
 
-
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocoplus.bean.server.AppointmentSlot;
 import com.healthcoco.healthcocoplus.bean.server.CityResponse;
@@ -22,7 +21,6 @@ import com.healthcoco.healthcocoplus.bean.server.ObservationSuggestions;
 import com.healthcoco.healthcocoplus.bean.server.Profession;
 import com.healthcoco.healthcocoplus.bean.server.Role;
 import com.healthcoco.healthcocoplus.enums.AutoCompleteTextViewType;
-import com.healthcoco.healthcocoplus.fragments.BookAppointmentFragment;
 import com.healthcoco.healthcocoplus.listeners.AutoCompleteTextViewListener;
 import com.healthcoco.healthcocoplus.utilities.DateTimeUtil;
 import com.healthcoco.healthcocoplus.utilities.Util;
@@ -155,6 +153,7 @@ public class AutoCompleteTextViewAdapter extends ArrayAdapter<Object> {
             case COUNTRY:
             case DOCTOR_TITLES:
             case BLOOD_GROUP:
+            case ADVANCE_SEARCH_OPTION:
                 if (object instanceof String) {
                     text = (String) object;
                 }
@@ -226,6 +225,7 @@ public class AutoCompleteTextViewAdapter extends ArrayAdapter<Object> {
                         || autoCompleteTextViewType == AutoCompleteTextViewType.NUMBERS
                         || autoCompleteTextViewType == AutoCompleteTextViewType.EXPERIENCE_LIST
                         || autoCompleteTextViewType == AutoCompleteTextViewType.BLOOD_GROUP
+                        || autoCompleteTextViewType == AutoCompleteTextViewType.ADVANCE_SEARCH_OPTION
                         || autoCompleteTextViewType == AutoCompleteTextViewType.DRUG_TYPE
                         || autoCompleteTextViewType == AutoCompleteTextViewType.ROLES
                         || autoCompleteTextViewType == AutoCompleteTextViewType.DOCTOR_TITLES
