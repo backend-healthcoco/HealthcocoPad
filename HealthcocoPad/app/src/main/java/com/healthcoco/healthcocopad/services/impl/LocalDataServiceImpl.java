@@ -4,8 +4,8 @@ import android.util.Log;
 
 import com.android.volley.Response;
 import com.google.gson.Gson;
-import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.HealthCocoApplication;
+import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.UIPermissions;
 import com.healthcoco.healthcocopad.bean.UserPermissionsResponse;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
@@ -17,12 +17,14 @@ import com.healthcoco.healthcocopad.bean.server.AlreadyRegisteredPatientsRespons
 import com.healthcoco.healthcocopad.bean.server.AppointmentSlot;
 import com.healthcoco.healthcocopad.bean.server.AssignedGroupsTable;
 import com.healthcoco.healthcocopad.bean.server.BloodGroup;
+import com.healthcoco.healthcocopad.bean.server.BloodPressure;
 import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
 import com.healthcoco.healthcocopad.bean.server.CityResponse;
 import com.healthcoco.healthcocopad.bean.server.ClinicDetailResponse;
 import com.healthcoco.healthcocopad.bean.server.ClinicDoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.ClinicImage;
 import com.healthcoco.healthcocopad.bean.server.ClinicWorkingSchedule;
+import com.healthcoco.healthcocopad.bean.server.ClinicalNotes;
 import com.healthcoco.healthcocopad.bean.server.CollegeUniversityInstitute;
 import com.healthcoco.healthcocopad.bean.server.Complaint;
 import com.healthcoco.healthcocopad.bean.server.ComplaintSuggestions;
@@ -30,6 +32,8 @@ import com.healthcoco.healthcocopad.bean.server.ConsultationFee;
 import com.healthcoco.healthcocopad.bean.server.DOB;
 import com.healthcoco.healthcocopad.bean.server.Diagnoses;
 import com.healthcoco.healthcocopad.bean.server.DiagnosisSuggestions;
+import com.healthcoco.healthcocopad.bean.server.DiagnosticTest;
+import com.healthcoco.healthcocopad.bean.server.DiagnosticTestsPrescription;
 import com.healthcoco.healthcocopad.bean.server.Diagram;
 import com.healthcoco.healthcocopad.bean.server.Disease;
 import com.healthcoco.healthcocopad.bean.server.DoctorClinicProfile;
@@ -42,31 +46,42 @@ import com.healthcoco.healthcocopad.bean.server.Drug;
 import com.healthcoco.healthcocopad.bean.server.DrugDirection;
 import com.healthcoco.healthcocopad.bean.server.DrugDosage;
 import com.healthcoco.healthcocopad.bean.server.DrugDurationUnit;
+import com.healthcoco.healthcocopad.bean.server.DrugItem;
 import com.healthcoco.healthcocopad.bean.server.DrugType;
+import com.healthcoco.healthcocopad.bean.server.Duration;
 import com.healthcoco.healthcocopad.bean.server.Education;
 import com.healthcoco.healthcocopad.bean.server.EducationQualification;
 import com.healthcoco.healthcocopad.bean.server.ForeignAppointmentBookingNumber;
+import com.healthcoco.healthcocopad.bean.server.ForeignComplaintsTable;
+import com.healthcoco.healthcocopad.bean.server.ForeignDiagnosesTable;
+import com.healthcoco.healthcocopad.bean.server.ForeignInvestigationsTable;
+import com.healthcoco.healthcocopad.bean.server.ForeignObservationsTable;
 import com.healthcoco.healthcocopad.bean.server.ForeignOtherEmailAddresses;
 import com.healthcoco.healthcocopad.bean.server.ForeignProfessionalMemberships;
 import com.healthcoco.healthcocopad.bean.server.ForeignSpecialities;
 import com.healthcoco.healthcocopad.bean.server.ForieignAdditionalNumbers;
+import com.healthcoco.healthcocopad.bean.server.GeneralData;
 import com.healthcoco.healthcocopad.bean.server.GeneratedOtpTime;
 import com.healthcoco.healthcocopad.bean.server.HistoryDetailsResponse;
 import com.healthcoco.healthcocopad.bean.server.Hospital;
 import com.healthcoco.healthcocopad.bean.server.Investigation;
 import com.healthcoco.healthcocopad.bean.server.InvestigationSuggestions;
+import com.healthcoco.healthcocopad.bean.server.LinkedTableDirection;
 import com.healthcoco.healthcocopad.bean.server.Location;
 import com.healthcoco.healthcocopad.bean.server.LocationAndAccessControl;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.MedicalCouncil;
 import com.healthcoco.healthcocopad.bean.server.MedicalFamilyHistoryDetails;
 import com.healthcoco.healthcocopad.bean.server.MedicalFamilyHistoryResponse;
+import com.healthcoco.healthcocopad.bean.server.Notes;
 import com.healthcoco.healthcocopad.bean.server.NotesTable;
 import com.healthcoco.healthcocopad.bean.server.Observation;
 import com.healthcoco.healthcocopad.bean.server.ObservationSuggestions;
 import com.healthcoco.healthcocopad.bean.server.OtpVerification;
 import com.healthcoco.healthcocopad.bean.server.Patient;
 import com.healthcoco.healthcocopad.bean.server.PatientIdGroupId;
+import com.healthcoco.healthcocopad.bean.server.PersonalHistory;
+import com.healthcoco.healthcocopad.bean.server.Prescription;
 import com.healthcoco.healthcocopad.bean.server.Profession;
 import com.healthcoco.healthcocopad.bean.server.Records;
 import com.healthcoco.healthcocopad.bean.server.Reference;
@@ -78,6 +93,7 @@ import com.healthcoco.healthcocopad.bean.server.SyncAll;
 import com.healthcoco.healthcocopad.bean.server.TempTemplate;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.bean.server.UserGroups;
+import com.healthcoco.healthcocopad.bean.server.VitalSigns;
 import com.healthcoco.healthcocopad.bean.server.WorkingHours;
 import com.healthcoco.healthcocopad.bean.server.WorkingSchedule;
 import com.healthcoco.healthcocopad.enums.BooleanTypeValues;
@@ -119,6 +135,10 @@ public class LocalDataServiceImpl {
     private static HealthCocoApplication mApp;
 
     private LocalDataServiceImpl() {
+    }
+
+    private enum FromTableType {
+        ADD_TEMPLATES, ADD_PRESCRIPTION
     }
 
     public static LocalDataServiceImpl getInstance(HealthCocoApplication application) {
@@ -2082,7 +2102,6 @@ public class LocalDataServiceImpl {
             if (!Util.isNullOrEmptyList(list)) {
                 LogUtils.LOGD(TAG, "HistoryDetailsResponse  list size " + list.size());
                 for (HistoryDetailsResponse history : list) {
-//                    history.setGeneralRecords(getGeneralDataList(discarded, history));
                     if (!Util.isNullOrEmptyList(history.getGeneralRecords()))
                         modifiedList.add(history);
                 }
@@ -2168,13 +2187,142 @@ public class LocalDataServiceImpl {
     public void addHistoryList(String selectedPatientId, ArrayList<HistoryDetailsResponse> historyList) {
         try {
             for (HistoryDetailsResponse history : historyList) {
-//                addHistory(selectedPatientId, history);
+                addHistory(selectedPatientId, history);
                 LogUtils.LOGD(TAG, "HistoryDetailsResponse historyId " + history.getUniqueId());
-
             }
         } catch (Exception e) {
             Log.i(null, "Error in saving in transaction " + e.getMessage());
         }
+    }
+
+    private void addHistory(String selectedPatientId, HistoryDetailsResponse history) {
+        if (!Util.isNullOrEmptyList(history.getGeneralRecords())) {
+            GeneralData.deleteAll(GeneralData.class, LocalDatabaseUtils.KEY_FOREIGN_CUSTOM_HISTORY_ID + "= ?", history.getUniqueId());
+
+            for (GeneralData generalData : history.getGeneralRecords()) {
+                boolean discarded = false;
+                String customId = "";
+                Object object = generalData.getData();
+                if (generalData.getDataType() != null && object != null) {
+                    customId = history.getUniqueId() + generalData.getDataType();
+                    if (generalData.getDataType().equals(HistoryFilterType.PRESCRIPTIONS.getData())) {
+                        Prescription prescription = (Prescription) GsonRequest.getObjectFromLinkedTreeMap(Prescription.class, object);
+                        if (prescription != null) {
+                            discarded = prescription.getDiscarded();
+                            customId = customId + prescription.getUniqueId();
+                            if (prescription.getInHistory()) {
+                                generalData.setForeignDataId(prescription.getUniqueId());
+                                prescription.setPatientId(history.getPatientId());
+                                addPrescription(prescription);
+                                LogUtils.LOGD(TAG, "HistoryDetailsResponse add" + HistoryFilterType.PRESCRIPTIONS.getData());
+                                history.setUpdatedTime(prescription.getUpdatedTime());
+                                history.setCreatedTime(prescription.getCreatedTime());
+                            } else {
+                                deleteFromHistoryIfPresent(customId);
+                                return;
+                            }
+                        }
+                    } else if (generalData.getDataType().equals(HistoryFilterType.CLINICALNOTES.getData())) {
+                        ClinicalNotes clinicalNote = (ClinicalNotes) GsonRequest.getObjectFromLinkedTreeMap(ClinicalNotes.class, object);
+                        if (clinicalNote != null) {
+                            discarded = clinicalNote.getDiscarded();
+                            customId = customId + clinicalNote.getUniqueId();
+                            if (clinicalNote.getInHistory()) {
+                                generalData.setForeignDataId(clinicalNote.getUniqueId());
+                                clinicalNote.setPatientId(history.getPatientId());
+                                addClinicalNote(clinicalNote);
+                                LogUtils.LOGD(TAG, "HistoryDetailsResponse add " + HistoryFilterType.CLINICALNOTES.getData());
+                                history.setUpdatedTime(clinicalNote.getUpdatedTime());
+                                history.setCreatedTime(clinicalNote.getCreatedTime());
+                            } else {
+                                deleteFromHistoryIfPresent(customId);
+                                return;
+                            }
+                        }
+                    } else if (generalData.getDataType().equals(HistoryFilterType.REPORTS.getData())) {
+                        Records record = (Records) GsonRequest.getObjectFromLinkedTreeMap(Records.class, object);
+                        if (record != null) {
+                            discarded = record.getDiscarded();
+                            customId = customId + record.getUniqueId();
+                            if (record.getInHistory()) {
+                                generalData.setForeignDataId(record.getUniqueId());
+                                record.setPatientId(history.getPatientId());
+                                addRecord(record);
+                                LogUtils.LOGD(TAG, "HistoryDetailsResponse add " + HistoryFilterType.REPORTS.getData());
+                                history.setUpdatedTime(record.getUpdatedTime());
+                                history.setCreatedTime(record.getCreatedTime());
+                            } else {
+                                deleteFromHistoryIfPresent(customId);
+                                return;
+                            }
+                        }
+                    }
+                    history.setCustomUniqueId(customId);
+                    deleteFromHistoryIfPresent(history.getCustomUniqueId());
+                    generalData.setForeignCustomHistoryId(history.getCustomUniqueId());
+                    generalData.setDiscarded(discarded);
+                    generalData.save();
+                }
+            }
+        }
+        if (!Util.isNullOrEmptyList(history.getMedicalhistory())) {
+            deleteMedicalFamilyHistoryResponse(history.getMedicalhistory());
+            deleteMedicalFamilyHistoryDetails(history.getUniqueId());
+            addMedicalFamilyHistoryDetails(HistoryFilterType.MEDICAL_HISTORY, history.getUniqueId(), history.getMedicalhistory());
+        }
+        if (!Util.isNullOrEmptyList(history.getFamilyhistory())) {
+            deleteMedicalFamilyHistoryResponse(history.getFamilyhistory());
+            deleteMedicalFamilyHistoryDetails(history.getUniqueId());
+            addMedicalFamilyHistoryDetails(HistoryFilterType.FAMILY_HISTORY, history.getUniqueId(), history.getFamilyhistory());
+        }
+        if (!Util.isNullOrEmptyList(history.getPersonalHistory())) {
+            deleteFromHistoryIfPresent(history.getCustomUniqueId());
+            PersonalHistory personalHistory = history.getPersonalHistory();
+            personalHistory.save();
+        }
+        history.save();
+    }
+
+    private void deleteMedicalFamilyHistoryResponse(List<MedicalFamilyHistoryDetails> medicalhistory) {
+
+    }
+
+    public void addPrescription(Prescription prescription) {
+        List<DrugItem> drugItemsList = prescription.getItems();
+        addDrugItemsList(drugItemsList, FromTableType.ADD_PRESCRIPTION, prescription.getUniqueId());
+        addDiagnosticTestsPrescription(prescription.getUniqueId(), prescription.getDiagnosticTests());
+        prescription.save();
+    }
+
+    public void addRecord(Records records) {
+        records.save();
+    }
+
+    public void addClinicalNote(ClinicalNotes clinicalNote) {
+        deleteClinicalNotesAndRelatedData(clinicalNote);
+        if (!Util.isNullOrEmptyList(clinicalNote.getDiagnoses()))
+            addDiagnosisList(clinicalNote.getUniqueId(), clinicalNote.getDiagnoses());
+        if (!Util.isNullOrEmptyList(clinicalNote.getDiagrams()))
+            addDiagramsList(clinicalNote.getUniqueId(), clinicalNote.getDiagrams());
+        if (clinicalNote.getVitalSigns() != null) {
+            addVitalSigns(clinicalNote.getUniqueId(), clinicalNote.getVitalSigns());
+        }
+        clinicalNote.save();
+    }
+
+    private void addVitalSigns(String uniqueId, VitalSigns vitalSigns) {
+        vitalSigns.setForeignTableId(uniqueId);
+        BloodPressure bloodPressure = vitalSigns.getBloodPressure();
+        deleteAllFrom(BloodPressure.class, LocalDatabaseUtils.KEY_FOREIGN_TABLE_ID, vitalSigns.getForeignTableId());
+        if (bloodPressure != null) {
+            bloodPressure.setForeignTableId(vitalSigns.getForeignTableId());
+            bloodPressure.save();
+        }
+        vitalSigns.save();
+    }
+
+    private void deleteFromHistoryIfPresent(String customId) {
+        HistoryDetailsResponse.deleteAll(HistoryDetailsResponse.class, LocalDatabaseUtils.KEY_CUSTOM_UNIQUE_ID + "= ?", customId);
     }
 
     public void addDiseaseList(ArrayList<Disease> diseaseList) {
@@ -2198,6 +2346,139 @@ public class LocalDataServiceImpl {
         generatedOtpTime.setPatientId(patientId);
         generatedOtpTime.setLastGeneratedTime(new Date().getTime());
         generatedOtpTime.save();
-
     }
+
+    private void addDrugItemsList(List<DrugItem> drugItemsList, FromTableType tableType, String prescriptionTemplateId) {
+        String foreignTableKey = null;
+        switch (tableType) {
+            case ADD_PRESCRIPTION:
+                foreignTableKey = LocalDatabaseUtils.KEY_FOREIGN_PRESCRIPTION_ID;
+                break;
+            case ADD_TEMPLATES:
+                foreignTableKey = LocalDatabaseUtils.KEY_FOREIGN_TEMPLATE_ID;
+                break;
+        }
+        //delete rest drugs before saving
+        deletePreviousDrugs(foreignTableKey, prescriptionTemplateId);
+        //        delete directions for that template/prescription id before saving
+        deleteAllFrom(LinkedTableDirection.class, LocalDatabaseUtils.KEY_FOREIGN_TABLE_ID, prescriptionTemplateId);
+        if (!Util.isNullOrEmptyList(drugItemsList)) {
+            for (DrugItem drugItem :
+                    drugItemsList) {
+                //saving duration
+                Duration duration = drugItem.getDuration();
+                if (duration != null && duration.getDurationUnit() != null) {
+                    //saving duration Unit
+                    DrugDurationUnit durationUnit = duration.getDurationUnit();
+                    duration.setForeignDrugDurationUnit(durationUnit.getUniqueId());
+                    durationUnit.save();
+                    duration.setForeignTableId(prescriptionTemplateId);
+                    drugItem.setForeignDurationId(duration.getCustomUniqueId());
+                    duration.save();
+                }
+                if (drugItem.getDrug() != null) {
+                    Drug drug = drugItem.getDrug();
+                    drugItem.setForeignDrugId(drug.getUniqueId());
+                    addDrug(drug, false);
+                }
+//            adding directions
+                if (!Util.isNullOrEmptyList(drugItem.getDirection()) && !Util.isNullOrBlank(foreignTableKey)) {
+                    addLinkedDirectionsList(foreignTableKey, prescriptionTemplateId, drugItem.getForeignDrugId(), drugItem.getDirection());
+                }
+                drugItem.setForeignTableKey(foreignTableKey);
+                drugItem.setForeignTableId(prescriptionTemplateId);
+                drugItem.setCustomUniqueId(drugItem.getForeignTableKey() + drugItem.getForeignTableId() + drugItem.getForeignDrugId());
+                drugItem.save();
+            }
+        }
+    }
+
+    private void deletePreviousDrugs(String foreignTableKey, String foreignTableId) {
+        String query = "Select  * from " + DrugItem.TABLE_NAME
+                + " where " + DrugItem.TABLE_NAME + "." + LocalDatabaseUtils.KEY_FOREIGN_TABLE_KEY + " = " + "\"" + foreignTableKey + "\""
+                + " AND " + DrugItem.TABLE_NAME + "." + LocalDatabaseUtils.KEY_FOREIGN_TABLE_ID + " = " + "\"" + foreignTableId + "\"";
+        List<DrugItem> list = SugarRecord.findWithQuery(DrugItem.class, query);
+        if (!Util.isNullOrEmptyList(list))
+            DrugItem.deleteInTx(list);
+    }
+
+    public void addDrug(Drug drug, boolean isDrugFromGetDrugsListAPI) {
+        if (drug.getDrugType() != null) {
+            if (!Util.isNullOrEmptyList(drug.getGenericNames()))
+                drug.setGenericNamesJsonString(new Gson().toJson(drug.getGenericNames()));
+            drug.setIsDrugFromGetDrugsList(isDrugFromGetDrugsListAPI);
+            drug.setForeignDrugTypeId(drug.getDrugType().getUniqueId());
+            drug.getDrugType().save();
+        }
+        drug.save();
+    }
+
+    private void addLinkedDirectionsList(String foreignTableKey, String foreignTableId, String drugId, List<DrugDirection> directionsList) {
+        for (DrugDirection direction :
+                directionsList) {
+            LinkedTableDirection linkedTableDirection = new LinkedTableDirection(foreignTableId, foreignTableKey, drugId, direction.getUniqueId());
+            linkedTableDirection.save();
+            direction.save();
+        }
+    }
+
+    private void addDiagnosticTestsPrescription(String uniqueId, List<DiagnosticTestsPrescription> list) {
+        deleteAllFrom(DiagnosticTestsPrescription.class, LocalDatabaseUtils.KEY_FOREIGN_TABLE_ID, uniqueId);
+        if (!Util.isNullOrEmptyList(list)) {
+            for (DiagnosticTestsPrescription diagnosticTestsPrescription :
+                    list) {
+                if (diagnosticTestsPrescription.getTest() != null) {
+                    DiagnosticTest test = diagnosticTestsPrescription.getTest();
+                    diagnosticTestsPrescription.setForeignDiagnosticTestId(test.getUniqueId());
+                    test.save();
+                    diagnosticTestsPrescription.setForeignTableId(uniqueId);
+                    diagnosticTestsPrescription.setCustomUniqueId(diagnosticTestsPrescription.getForeignTableId() + diagnosticTestsPrescription.getForeignDiagnosticTestId());
+                    diagnosticTestsPrescription.save();
+                }
+            }
+        }
+    }
+
+    private void deleteClinicalNotesAndRelatedData(ClinicalNotes clinicalNote) {
+        String clinicalNoteId = clinicalNote.getUniqueId();
+        VitalSigns.deleteAll(VitalSigns.class, LocalDatabaseUtils.KEY_FOREIGN_TABLE_ID + "= ?", clinicalNoteId);
+        ClinicalNotes.deleteAll(ClinicalNotes.class, LocalDatabaseUtils.KEY_UNIQUE_ID + "= ?", clinicalNoteId);
+        ForeignComplaintsTable.deleteAll(ForeignComplaintsTable.class, LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID + "= ?", clinicalNoteId);
+        ForeignObservationsTable.deleteAll(ForeignObservationsTable.class, LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID + "= ?", clinicalNoteId);
+        ForeignInvestigationsTable.deleteAll(ForeignInvestigationsTable.class, LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID + "= ?", clinicalNoteId);
+        ForeignDiagnosesTable.deleteAll(ForeignDiagnosesTable.class, LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID + "= ?", clinicalNoteId);
+        Notes.deleteAll(Notes.class, LocalDatabaseUtils.KEY_FOREIGN_CLINICAL_NOTES_ID + "= ?", clinicalNoteId);
+        Diagram.deleteAll(Diagram.class, LocalDatabaseUtils.KEY_FOREIGN_CLINICAL_NOTES_ID + "= ?", clinicalNoteId);
+    }
+
+    public void addDiagnosisList(String clinicalNoteId, List<Diagnoses> list) {
+        try {
+            for (Diagnoses diagnoses : list) {
+                ForeignDiagnosesTable foreignDiagnosesTable = new ForeignDiagnosesTable(clinicalNoteId, diagnoses.getUniqueId());
+                foreignDiagnosesTable.save();
+                diagnoses.save();
+            }
+        } catch (Exception e) {
+            Log.i(TAG, "Error in saving in transaction " + e.getMessage());
+        }
+    }
+
+    public void addDiagramsList(String clinicalNoteId, List<Diagram> list) {
+        try {
+            for (Diagram diagram : list) {
+                diagram.setForeignClinicalNotesId(clinicalNoteId);
+                if (Util.isNullOrBlank(clinicalNoteId))
+                    diagram.setRecordType(RecordType.GLOBAL);
+                addDiagram(diagram);
+            }
+        } catch (Exception e) {
+            Log.i(TAG, "Error in saving in transaction " + e.getMessage());
+        }
+    }
+
+    public void addDiagram(Diagram diagram) {
+        diagram.setCustomUniqueId(diagram.getDoctorId() + diagram.getUniqueId());
+        diagram.save();
+    }
+
 }

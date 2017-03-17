@@ -23,4 +23,7 @@
     <string name="fa_note_icon">&#xf0f6;</string>
     <string name="icon_add_new_history">&#xf067;&#160;Add New History</string>
     <string name="icon_history">&#xf1da;</string>
+
+    <string name="fa_angle_down_thin">&#xf107;</string>
+    <string name="fa_angle_up_thin">&#xf106;</string>
 </resources>

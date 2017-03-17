@@ -6,6 +6,7 @@ import com.orm.annotation.Ignore;
 import com.orm.annotation.Unique;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class Drug extends SugarRecord implements Serializable {
     public static String TABLE_NAME = " " + StringUtil.toSQLName(Drug.class.getSimpleName());
@@ -37,6 +38,25 @@ public class Drug extends SugarRecord implements Serializable {
     private Duration duration;
     private String categories;
     private int rankingCount;
+    @Ignore
+    private List<GenericName> genericNames;
+    private String genericNamesJsonString;
+
+    public List<GenericName> getGenericNames() {
+        return genericNames;
+    }
+
+    public void setGenericNames(List<GenericName> genericNames) {
+        this.genericNames = genericNames;
+    }
+
+    public String getGenericNamesJsonString() {
+        return genericNamesJsonString;
+    }
+
+    public void setGenericNamesJsonString(String genericNamesJsonString) {
+        this.genericNamesJsonString = genericNamesJsonString;
+    }
 
     public DrugDosage getDosageTime() {
         return dosageTime;

@@ -19,10 +19,10 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import com.healthcoco.healthcocopad.HealthCocoApplication;
+import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.SyncAll;
 import com.healthcoco.healthcocopad.enums.SyncAllType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
-import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.fragments.ClinicalProfileFragment;
 import com.healthcoco.healthcocopad.fragments.PatientProfileDetailFragment;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
@@ -196,7 +196,6 @@ public class GsonRequest extends JsonRequest<VolleyResponseBean> {
         }
         if (webServiceType != WebServiceType.SEND_GCM_REGISTRATION_ID && webServiceType != WebServiceType.VERSION_CONTROL_CHECK)
             Util.showToast(mApp.getApplicationContext(), errorMsg);
-
     }
 
     @Override

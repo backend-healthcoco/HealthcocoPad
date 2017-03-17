@@ -518,9 +518,22 @@
     <string name="no_visits_found">No Visits Found</string>
     <string name="no_notes">No Notes</string>
     <string name="diet">Diet</string>
-    <string name="Addictions">Addictions</string>
+    <string name="addictions">Addictions</string>
     <string name="bowel_habits">Bowel Habits</string>
     <string name="bladder_habits">Bladder Habits</string>
     <string name="no_history_found">No History Found</string>
     <string name="advance_search">Advance Search</string>
+
+
+    <string name="bmp">bmp</string>
+    <string name="kg">kg</string>
+    <string name="percentage">%</string>
+    <string name="systolic_down">sys</string>
+    <string name="diastolic_up">diastolic</string>
+    <string name="fahrenheit">\u2109</string>
+    <string name="mm_hg">mm/hg</string>
+    <string name="breaths_per_min">breaths/min</string>
+    <string name="allergy">Allergy</string>
+    <string name="drugs">Drugs</string>
+
 </resources>

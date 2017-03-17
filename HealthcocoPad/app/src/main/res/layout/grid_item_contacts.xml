@@ -40,8 +40,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:fontFamily="sans-serif"
-                    android:text="Name"
                     android:maxLines="1"
+                    android:text="Name"
                     android:textColor="@color/black"
                     android:textSize="@dimen/text_size_contact_list_name" />
 
@@ -50,8 +50,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:text="1234567890"
                     android:maxLines="1"
+                    android:text="1234567890"
                     android:textSize="@dimen/text_size_contact_list_mobile" />
 
                 <TextView
@@ -59,8 +59,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:text="P103456790"
                     android:maxLines="1"
+                    android:text="P103456790"
                     android:textSize="@dimen/text_size_contact_list_mobile" />
             </LinearLayout>
         </LinearLayout>
@@ -115,7 +115,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
-                android:background="@drawable/tab_add_group_contact_list_normal"
+                android:background="@drawable/tab_add_group_contact_list_selector"
                 android:padding="10dp" />
 
             <ImageButton

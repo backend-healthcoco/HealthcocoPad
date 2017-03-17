@@ -5,7 +5,7 @@ package com.healthcoco.healthcocopad.utilities;
  */
 public class LocalDatabaseUtils {
     private static final String TAG = LocalDatabaseUtils.class.getSimpleName();
-
+    public static final String KEY_FOREIGN_CUSTOM_HISTORY_ID = "foreign_custom_history_id";
     public static final String ID = "\"id\"";
     public static final String ID_REPLACED = "\"uniqueId\"";
     public static final String FROM = "\"from\"";
@@ -17,7 +17,9 @@ public class LocalDatabaseUtils {
     public static final String KEY_PRESCRIBED_BY_DOCTOR_ID = "prescribed_by_doctor_id";
     public static final String KEY_PRESCRIBED_BY_LOCATION_ID = "prescribed_by_location_id";
     public static final String KEY_PRESCRIBED_BY_HOSPITAL_ID = "prescribed_by_hospital_id";
-
+    public static final String KEY_FOREIGN_CLINICAL_NOTES_ID = "foreign_clinical_notes_id";
+    public static final String KEY_FOREIGN_TEMPLATE_ID = "foreign_template_id";
+    public static final String KEY_FOREIGN_TABLE_KEY = "foreign_table_key";
     public static final String KEY_IS_FROM_CALENDAR_API = "is_from_calendar_api";
     public static final String KEY_IS_ADDED_ON_SUCCESS = "is_added_on_success";
     public static final String KEY_LOCAL_PATIENT_NAME = "local_patient_name";
