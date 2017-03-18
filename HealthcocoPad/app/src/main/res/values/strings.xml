@@ -535,5 +535,12 @@
     <string name="breaths_per_min">breaths/min</string>
     <string name="allergy">Allergy</string>
     <string name="drugs">Drugs</string>
+    <string name="field_should_not_be_empty">Field should not be empty</string>
+    <string name="allergies">Allergies : </string>
+    <string name="search">Search</string>
+    <string name="drug_list">Drug List : </string>
+    <string name="no_drug_history">No drugs found</string>
+    <string name="search_drug">Search Drug</string>
+    <string name="confirm_remove_drug">Are you sure you want to remove this Drug?</string>
 
 </resources>

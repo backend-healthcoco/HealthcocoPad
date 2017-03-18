@@ -42,7 +42,6 @@ public class AddEditDoctorContactDialogFragment extends HealthCocoDialogFragment
     private DoctorProfile doctorProfile;
     private TextView tvTitle;
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.dialog_fragment_add_edit_doctor_contact_details, container, false);

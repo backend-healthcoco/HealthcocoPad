@@ -4,9 +4,12 @@ import com.healthcoco.healthcocopad.enums.HistoryFilterType;
 import com.orm.SugarRecord;
 import com.orm.annotation.Unique;
 
+import org.parceler.Parcel;
+
 /**
  * Created by neha on 11/12/15.
  */
+@Parcel
 public class MedicalFamilyHistoryDetails extends SugarRecord {
     private String uniqueId;
     private String disease;

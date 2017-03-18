@@ -2,15 +2,56 @@ package com.healthcoco.healthcocopad.bean.server;
 
 import com.orm.SugarRecord;
 
+import org.parceler.Parcel;
+
 /**
  * Created by Shreshtha on 16-03-2017.
  */
-
+@Parcel
 public class PersonalHistory extends SugarRecord {
     private String diet;
     private String addictions;
     private String bowelHabit;
     private String bladderHabit;
+    private String doctorId;
+
+    private String locationId;
+
+    private String hospitalId;
+
+    private String patientId;
+
+    public String getDoctorId() {
+        return doctorId;
+    }
+
+    public void setDoctorId(String doctorId) {
+        this.doctorId = doctorId;
+    }
+
+    public String getLocationId() {
+        return locationId;
+    }
+
+    public void setLocationId(String locationId) {
+        this.locationId = locationId;
+    }
+
+    public String getPatientId() {
+        return patientId;
+    }
+
+    public void setPatientId(String patientId) {
+        this.patientId = patientId;
+    }
+
+    public String getHospitalId() {
+        return hospitalId;
+    }
+
+    public void setHospitalId(String hospitalId) {
+        this.hospitalId = hospitalId;
+    }
 
     public String getDiet() {
         return diet;

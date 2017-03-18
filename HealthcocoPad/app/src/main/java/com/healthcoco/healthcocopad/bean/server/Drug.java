@@ -32,11 +32,11 @@ public class Drug extends SugarRecord implements Serializable {
     @Ignore
     private DrugDosage dosageTime;
     @Ignore
-    private DrugDirection direction;
+    private List<DrugDirection> direction;
     private String dosage;
     @Ignore
     private Duration duration;
-    private String categories;
+    private List<String> categories;
     private int rankingCount;
     @Ignore
     private List<GenericName> genericNames;
@@ -66,11 +66,11 @@ public class Drug extends SugarRecord implements Serializable {
         this.dosageTime = dosageTime;
     }
 
-    public DrugDirection getDirection() {
+    public List<DrugDirection> getDirection() {
         return direction;
     }
 
-    public void setDirection(DrugDirection direction) {
+    public void setDirection(List<DrugDirection> direction) {
         this.direction = direction;
     }
 
@@ -90,11 +90,11 @@ public class Drug extends SugarRecord implements Serializable {
         this.duration = duration;
     }
 
-    public String getCategories() {
+    public List<String> getCategories() {
         return categories;
     }
 
-    public void setCategories(String categories) {
+    public void setCategories(List<String> categories) {
         this.categories = categories;
     }
 

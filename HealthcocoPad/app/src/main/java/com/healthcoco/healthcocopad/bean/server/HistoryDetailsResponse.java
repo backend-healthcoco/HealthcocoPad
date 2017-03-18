@@ -4,8 +4,11 @@ import com.orm.SugarRecord;
 import com.orm.annotation.Ignore;
 import com.orm.annotation.Unique;
 
+import org.parceler.Parcel;
+
 import java.util.List;
 
+@Parcel
 public class HistoryDetailsResponse extends SugarRecord {
 
     private String uniqueId;

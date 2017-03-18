@@ -6,6 +6,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.widget.Toolbar;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +19,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.support.v7.widget.Toolbar;
 
 import com.healthcoco.healthcocopad.bean.server.Specialities;
 import com.healthcoco.healthcocopad.dialogFragment.CommonListDialogFragment;
@@ -112,6 +112,20 @@ public abstract class HealthCocoDialogFragment extends DialogFragment implements
         }
     }
 
+    protected void initEditSearchView(int hintId, View.OnClickListener onClickListener, TextWatcher textWatcher) {
+        final EditText editSearch = (EditText) view.findViewById(R.id.edit_search);
+        editSearch.setHint(hintId);
+        if (textWatcher != null)
+            editSearch.addTextChangedListener(textWatcher);
+        ImageButton btClear = (ImageButton) view.findViewById(R.id.bt_clear);
+        btClear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editSearch.setText("");
+            }
+        });
+    }
+
     protected EditText initEditSearchView(int hintId, TextWatcher textWatcher, boolean setPaddingTop) {
         EditText editText = initEditSearchView(hintId, textWatcher, null, null, setPaddingTop);
         return editText;
@@ -137,6 +151,21 @@ public abstract class HealthCocoDialogFragment extends DialogFragment implements
             }
         });
         return editSearch;
+    }
+
+    protected void requestFocusOnSearchEditText(int viewId) {
+        View editSearch = view.findViewById(viewId);
+        requestFocusOnEditText(editSearch);
+    }
+
+    protected void requestFocusOnEditText(View view) {
+        if (view != null) {
+            Util.setFocusToEditText(mActivity, view);
+            if (view instanceof EditText) {
+                EditText editText = (EditText) view;
+                editText.setSelection(editText.getText().length());
+            }
+        }
     }
 
     @Override
@@ -231,5 +260,15 @@ public abstract class HealthCocoDialogFragment extends DialogFragment implements
     protected void hideKeyboard(View view) {
         InputMethodManager in = (InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
         in.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+    }
+
+    protected void showLoadingOverlay(boolean showLoading) {
+        LinearLayout loadingOverlay = (LinearLayout) view.findViewById(R.id.loading_overlay);
+        if (loadingOverlay != null) {
+            if (showLoading)
+                loadingOverlay.setVisibility(View.VISIBLE);
+            else
+                loadingOverlay.setVisibility(View.GONE);
+        }
     }
 }

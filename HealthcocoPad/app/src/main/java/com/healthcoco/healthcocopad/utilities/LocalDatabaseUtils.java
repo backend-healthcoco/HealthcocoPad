@@ -1,5 +1,13 @@
 package com.healthcoco.healthcocopad.utilities;
 
+import com.orm.SugarRecord;
+import com.orm.annotation.Ignore;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Created by Shreshtha on 21-01-2017.
  */
@@ -63,5 +71,32 @@ public class LocalDatabaseUtils {
 
     public static String getSearchTermEqualsIgnoreCaseQuery(String filedName, String value) {
         return filedName + " LIKE \"%" + value + "%\"" + " COLLATE NOCASE ";
+    }
+    public static String getPrefixedColumnsString(Class<?> class1, boolean isMainClass) {
+        String tableName = " " + StringUtil.toSQLName(class1.getSimpleName());
+        String prefixedClumnNames = " " + tableName + ".[ID],";
+        List<Field> fieldsList = Arrays.asList(class1.getDeclaredFields());
+        for (Field field : fieldsList) {
+            Class<?> fieldClass = field.getType();
+            if (SugarRecord.class.isAssignableFrom(fieldClass)) {
+                prefixedClumnNames = prefixedClumnNames + getPrefixedColumnsString(fieldClass, false);
+            }
+
+            List<Annotation> annotaionsList = Arrays.asList(field.getAnnotations());
+            LogUtils.LOGD("Patient", "Filed : " + field.getName());
+            String columnName = StringUtil.toSQLName(field.getName());
+            boolean isIgnored = false;
+            if (field.isAnnotationPresent(Ignore.class)) {
+                isIgnored = true;
+            }
+            if (!isIgnored && !(java.lang.reflect.Modifier.isStatic(field.getModifiers()))) {
+                prefixedClumnNames = prefixedClumnNames + tableName + ".[" + columnName + "]";
+                prefixedClumnNames = prefixedClumnNames + ",";
+            }
+        }
+        if (prefixedClumnNames.endsWith(",") && isMainClass)
+            prefixedClumnNames = prefixedClumnNames.substring(0, prefixedClumnNames.length() - 1);
+        LogUtils.LOGD(TAG, "Select Query " + prefixedClumnNames);
+        return prefixedClumnNames;
     }
 }

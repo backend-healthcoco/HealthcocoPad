@@ -2481,4 +2481,54 @@ public class LocalDataServiceImpl {
         diagram.save();
     }
 
+    public Duration getDuration(String foreignDurationId) {
+        String query = "Select  " + LocalDatabaseUtils.getPrefixedColumnsString(Duration.class, true)
+                + " from " + Duration.TABLE_NAME
+                + " left outer join " + DrugDurationUnit.TABLE_NAME
+                + " on " + Duration.TABLE_NAME + "." + LocalDatabaseUtils.KEY_FOREIGN_DRUG_DURATION_UNIT_ID + "=" + DrugDurationUnit.TABLE_NAME + "." + LocalDatabaseUtils.KEY_UNIQUE_ID
+                + " where " + Duration.TABLE_NAME + "." + LocalDatabaseUtils.KEY_CUSTOM_UNIQUE_ID + " = " + "\"" + foreignDurationId + "\"";
+        LogUtils.LOGD(TAG, "Select query : " + query);
+        Duration duration = SugarRecord.findObjectWithQuery(Duration.class, query);
+        if (duration != null)
+            duration.setDurationUnit(getDurationUnit(duration.getForeignDrugDurationUnit()));
+        return duration;
+    }
+
+    public DrugDurationUnit getDurationUnit(String uniqueId) {
+        String query = "Select  " + LocalDatabaseUtils.getPrefixedColumnsString(DrugDurationUnit.class, true)
+                + " from " + DrugDurationUnit.TABLE_NAME
+                + " where " + DrugDurationUnit.TABLE_NAME + "." + LocalDatabaseUtils.KEY_UNIQUE_ID + " = " + "\"" + uniqueId + "\"";
+        LogUtils.LOGD(TAG, "Select query : " + query);
+        DrugDurationUnit durationUnit = SugarRecord.findObjectWithQuery(DrugDurationUnit.class, query);
+        return durationUnit;
+    }
+
+    public DrugDirection getDrugDirection(String uniqueId) {
+        return Select.from(DrugDirection.class).where(Condition.prop(LocalDatabaseUtils.KEY_UNIQUE_ID).eq(uniqueId))
+                .first();
+    }
+
+    public Drug getDrug(String drugId) {
+        String query = "Select  * "
+                + " from " + Drug.TABLE_NAME
+                + " where " + Drug.TABLE_NAME + "." + LocalDatabaseUtils.KEY_UNIQUE_ID + " = " + "\"" + drugId + "\"";
+        LogUtils.LOGD(TAG, "Select query : " + query);
+        Drug drug = SugarRecord.findObjectWithQuery(Drug.class, query);
+        if (!Util.isNullOrBlank(drug.getGenericNamesJsonString()))
+            drug.setGenericNames(new Gson().fromJson(drug.getGenericNamesJsonString(), ArrayList.class));
+
+        if (drug != null)
+            drug.setDrugType(getDrugType(drug.getForeignDrugTypeId()));
+        return drug;
+    }
+
+    private DrugType getDrugType(String foreignDrugTypeId) {
+        String query = "Select  " + LocalDatabaseUtils.getPrefixedColumnsString(DrugType.class, true)
+                + " from " + DrugType.TABLE_NAME
+                + " where " + DrugType.TABLE_NAME + "." + LocalDatabaseUtils.KEY_UNIQUE_ID + " = " + "\"" + foreignDrugTypeId + "\"";
+        LogUtils.LOGD(TAG, "Select query : " + query);
+        DrugType drugType = SugarRecord.findObjectWithQuery(DrugType.class, query);
+        return drugType;
+    }
+
 }

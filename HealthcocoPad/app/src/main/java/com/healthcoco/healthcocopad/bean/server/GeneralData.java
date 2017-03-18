@@ -1,10 +1,16 @@
 package com.healthcoco.healthcocopad.bean.server;
 
+import com.healthcoco.healthcocopad.utilities.ObjectParcelConvertor;
 import com.orm.SugarRecord;
 import com.orm.annotation.Ignore;
 
+import org.parceler.Parcel;
+import org.parceler.ParcelPropertyConverter;
+
+@Parcel
 public class GeneralData extends SugarRecord {
     protected String foreignCustomHistoryId;
+    @ParcelPropertyConverter(ObjectParcelConvertor.class)
     @Ignore
     private Object data;
     protected String foreignDataId;

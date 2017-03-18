@@ -2,12 +2,14 @@ package com.healthcoco.healthcocopad.bean.server;
 
 import com.orm.SugarRecord;
 
+import org.parceler.Parcel;
+
 import java.util.List;
 
 /**
  * Created by Shreshtha on 16-03-2017.
  */
-
+@Parcel
 public class DrugsAndAllergies extends SugarRecord {
     List<Drug> drugs;
     private String allergies;

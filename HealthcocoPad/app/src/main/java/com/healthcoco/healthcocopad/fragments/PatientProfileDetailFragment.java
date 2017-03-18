@@ -23,6 +23,7 @@ import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.Address;
 import com.healthcoco.healthcocopad.bean.server.Drug;
 import com.healthcoco.healthcocopad.bean.server.DrugsAndAllergies;
+import com.healthcoco.healthcocopad.bean.server.GenericName;
 import com.healthcoco.healthcocopad.bean.server.HistoryDetailsResponse;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.MedicalFamilyHistoryDetails;
@@ -35,6 +36,7 @@ import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.bean.server.UserGroups;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
+import com.healthcoco.healthcocopad.dialogFragment.AddEditDrugAndAllergyDetailDialogFragment;
 import com.healthcoco.healthcocopad.dialogFragment.AddEditPersonalHistoryDetailDialogFragment;
 import com.healthcoco.healthcocopad.enums.BooleanTypeValues;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
@@ -53,6 +55,8 @@ import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.healthcoco.healthcocopad.views.FontAwesomeButton;
 
+import org.parceler.Parcels;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,6 +68,8 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
     public static final String INTENT_GET_MEDICAL_PERSONAL_FAMILY_LIST = "com.healthcoco.MEDICAL_PERSONAL_FAMILY_HISTORY";
     public static final String INTENT_GET_HISTORY_LIST_LOCAL = "com.healthcoco.HISTORY_LIST_LOCAL";
     public static final String INTENT_GET_MEDICAL_PERSONAL_FAMILY_LIST_LOCAL = "com.healthcoco.MEDICAL_PERSONAL_FAMILY_LIST_LOCAL";
+    public static final String TAG_PERSONAL_HISTORY = "patientHistory";
+    private static final String GENERIC_NAME_SEPARATOR = ", ";
     private boolean receiversRegistered = false;
     private FontAwesomeButton btEditPatientProfilePastHistory;
     private FontAwesomeButton btEditPatientProfileFamilyHistory;
@@ -94,6 +100,7 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
     private boolean isOtpVerified = false;
     private HistoryDiseaseIdsListener addDiseaseIdsListener;
     private MedicalFamilyHistoryResponse medicalHistoryResponse;
+    private HistoryDetailsResponse historyDetailsResponse;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -155,10 +162,6 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
         mainLayoutProfile.setVisibility(View.VISIBLE);
         mainContainerGroups.setVisibility(View.GONE);
         mainContainerNotes.setVisibility(View.GONE);
-//        mainContainerPastHistory.setVisibility(View.GONE);
-//        mainContainerFamilyHistory.setVisibility(View.GONE);
-//        mainContainerPersonalHistory.setVisibility(View.GONE);
-//        mainContainerDrugAndAllergy.setVisibility(View.GONE);
     }
 
     private void initData() {
@@ -340,7 +343,7 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
         LinearLayout containerDiet = (LinearLayout) mainContainerPersonalHistory.findViewById(R.id.container_diet);
         TextView tvAddiction = (TextView) mainContainerPersonalHistory.findViewById(R.id.tv_addictions);
         LinearLayout containerAddiction = (LinearLayout) mainContainerPersonalHistory.findViewById(R.id.container_addiction);
-        TextView tvBowelHabits = (TextView) mainContainerPersonalHistory.findViewById(R.id.tv_bladder_habits);
+        TextView tvBowelHabits = (TextView) mainContainerPersonalHistory.findViewById(R.id.tv_bowel_habits);
         LinearLayout containerBowelHabit = (LinearLayout) mainContainerPersonalHistory.findViewById(R.id.container_bowel_habits);
         TextView tvBladderHabit = (TextView) mainContainerPersonalHistory.findViewById(R.id.tv_bladder_habits);
         LinearLayout containerBladderHabit = (LinearLayout) mainContainerPersonalHistory.findViewById(R.id.container_bladder_habits);
@@ -381,12 +384,15 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
     private void initDrugsAndAllergyHistory(DrugsAndAllergies drugsAndAllergies) {
         TextView tvAllergy = (TextView) mainContainerDrugAndAllergy.findViewById(R.id.tv_allergy);
         LinearLayout containerAllergy = (LinearLayout) mainContainerDrugAndAllergy.findViewById(R.id.container_allergy);
-        TextView tvDrugs = (TextView) mainContainerDrugAndAllergy.findViewById(R.id.tv_drugs);
         LinearLayout containerDrugs = (LinearLayout) mainContainerDrugAndAllergy.findViewById(R.id.container_drugs);
+        LinearLayout containerDrugsDetail = (LinearLayout) mainContainerDrugAndAllergy.findViewById(R.id.container_drugs_detail);
         TextView tvNoData = (TextView) mainContainerDrugAndAllergy.findViewById(R.id.tv_no_data);
+
+        containerDrugsDetail.removeAllViews();
         tvNoData.setVisibility(View.GONE);
         containerAllergy.setVisibility(View.GONE);
         containerDrugs.setVisibility(View.GONE);
+
         if (!Util.isNullOrEmptyList(drugsAndAllergies)) {
             if (!Util.isNullOrBlank(drugsAndAllergies.getAllergies())) {
                 containerAllergy.setVisibility(View.VISIBLE);
@@ -395,7 +401,24 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
             if (!Util.isNullOrEmptyList(drugsAndAllergies.getDrugs())) {
                 containerDrugs.setVisibility(View.VISIBLE);
                 for (Drug drug : drugsAndAllergies.getDrugs()) {
-                    tvDrugs.setText(drug.getDrugName());
+                    String genericNamesFormatted = "";
+                    String type = drug.getDrugType().getType();
+                    String drugName = drug.getDrugName();
+                    drugName = type + " " + drugName;
+                    if (!Util.isNullOrEmptyList(drug.getGenericNames())) {
+                        genericNamesFormatted = " (";
+                        for (GenericName genericName : drug.getGenericNames()) {
+                            int index = drug.getGenericNames().indexOf(genericName);
+                            genericNamesFormatted = genericNamesFormatted + genericName.getName();
+                            if (index != drug.getGenericNames().size() - 1)
+                                genericNamesFormatted = genericNamesFormatted + GENERIC_NAME_SEPARATOR;
+                        }
+                        genericNamesFormatted = genericNamesFormatted + ")";
+                    }
+                    drugName = drugName + genericNamesFormatted;
+                    TextView tvDrugs = (TextView) mActivity.getLayoutInflater().inflate(R.layout.sub_item_profile_detail_groups_notes_text, null);
+                    tvDrugs.setText(drugName);
+                    containerDrugsDetail.addView(tvDrugs);
                 }
             }
         } else {
@@ -477,7 +500,6 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
             tvNote.setText(R.string.edit_to_add_notes);
             containerNotes.addView(tvNote);
         }
-
         mainContainerNotes.setVisibility(View.VISIBLE);
     }
 
@@ -494,6 +516,7 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
                 openDialogFragment(HealthCocoConstants.REQUEST_CODE_PATIENT_PROFILE, new AddEditPersonalHistoryDetailDialogFragment());
                 break;
             case R.id.bt_edit_patient_profile_drug_and_allergy:
+                openDialogFragment(HealthCocoConstants.REQUEST_CODE_PATIENT_PROFILE, new AddEditDrugAndAllergyDetailDialogFragment());
                 break;
             case R.id.bt_edit_patient_profile_groups:
             case R.id.bt_edit_patient_profile_patient_data:
@@ -527,6 +550,9 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
     }
 
     private void openDialogFragment(int requestCode, HealthCocoDialogFragment dialogFragment) {
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(HealthCocoConstants.TAG_PERSONAL_HISTORY, Parcels.wrap(historyDetailsResponse));
+        dialogFragment.setArguments(bundle);
         dialogFragment.setTargetFragment(this, requestCode);
         dialogFragment.show(mFragmentManager, dialogFragment.getClass().getSimpleName());
     }
@@ -546,6 +572,9 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
             if (resultCode == HealthCocoConstants.RESULT_CODE_REGISTRATION) {
                 mActivity.showLoading(false);
                 new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_FRAGMENT_INITIALISATION_DATA, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            } else if (resultCode == HealthCocoConstants.RESULT_CODE_DOCTOR_PERSONAL_HISTORY_DETAIL) {
+                PersonalHistory personalHistory = Parcels.unwrap(data.getParcelableExtra(TAG_PERSONAL_HISTORY));
+                initPersonalHistory(personalHistory);
             }
         }
     }
@@ -601,7 +630,7 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
                     break;
                 case GET_HISTORY_LIST:
                     isHistoryLoaded = true;
-                    HistoryDetailsResponse historyDetailsResponse = new HistoryDetailsResponse();
+                    historyDetailsResponse = new HistoryDetailsResponse();
                     if (response.getData() != null && response.getData() instanceof HistoryDetailsResponse) {
                         historyDetailsResponse = (HistoryDetailsResponse) response.getData();
                     }
@@ -610,8 +639,8 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
                         getHistoryList(true);
                         return;
                     } else if (!Util.isNullOrEmptyList(response.getDataList())) {
-                        new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_HISTORY_LIST, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
-                        response.setIsFromLocalAfterApiSuccess(true);
+//                        new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_HISTORY_LIST, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+//                        response.setIsFromLocalAfterApiSuccess(true);
                         return;
                     }
                     break;

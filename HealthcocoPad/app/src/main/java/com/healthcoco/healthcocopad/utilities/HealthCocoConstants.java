@@ -25,6 +25,7 @@ public class HealthCocoConstants {
     public static final String PARAM_TAG_UPDATE = "/update/";
     public static final String PARAM_TAG_GENERATE = "/generate/";
     public static final String PARAM_TAG_VERIFY = "/verify/";
+    public static final String TAG_PERSONAL_HISTORY = "personalHistory";
     public static final int REQUEST_CODE_CONTACTS_DETAIL = 100;
     public static final int RESULT_CODE_ADD_PRESCIPTION = 101;
     public static final int REQUEST_CODE_CAMERA = 102;
@@ -57,6 +58,7 @@ public class HealthCocoConstants {
     public static final int RESULT_CODE_GLOBAL_RECORDS_ACCESS = 139;
     public static final int REQUEST_CODE_VERIFY_OTP = 140;
     public static final int RESULT_CODE_VERIFY_OTP = 141;
+    public static final int RESULT_CODE_DOCTOR_PERSONAL_HISTORY_DETAIL = 142;
     public static int RESULT_CODE_SIGNUP_ALREADY_REGISTERED = 123;
     public static final int RESULT_CODE_GROUPS_LIST = 124;
     public static final int RESULT_CODE_SEARCH_NUMBER_RESULTS = 125;
@@ -73,6 +75,7 @@ public class HealthCocoConstants {
     public static final String PARAM_SIZE = "&size=";
     public static final String PARAM_SEARCH_TERM = "&searchTerm=";
     public static final String PARAM_PAGE_AND = "&page=";
+    public static final String PARAM_DISCARDED_FALSE = "discarded=false";
     public static boolean isNetworkOnline;
     public static final String PARAM_UPDATED_TIME = "&updatedTime=";
     public static final String PARAM_DISCARDED_AMPERCENT = "&discarded=";

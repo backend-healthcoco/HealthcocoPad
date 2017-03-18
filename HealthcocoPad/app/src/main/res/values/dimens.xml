@@ -113,4 +113,7 @@
     <dimen name="dialog_title_size">16sp</dimen>
     <dimen name="text_size_edit_otp_number">15sp</dimen>
     <dimen name="text_size_dialog_fragment_20sp">17sp</dimen>
+    <dimen name="text_size_select_drug_item">15sp</dimen>
+    <dimen name="text_size_drug_dose_item_drug_name">13sp</dimen>
+    <dimen name="text_size_drug_dose_item_dosage_direction_instruction">13sp</dimen>
 </resources>

@@ -21,6 +21,7 @@ import com.healthcoco.healthcocopad.bean.server.DoctorClinicProfile;
 import com.healthcoco.healthcocopad.bean.server.DoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.DrugType;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
+import com.healthcoco.healthcocopad.bean.server.PersonalHistory;
 import com.healthcoco.healthcocopad.bean.server.Profession;
 import com.healthcoco.healthcocopad.bean.server.Reference;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
@@ -698,5 +699,36 @@ public class WebDataServiceImpl {
     public void addDisease(Class<?> class1, ArrayList<Disease> diseasesList, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         WebServiceType webServiceType = WebServiceType.ADD_DISEASE;
         getResponse(webServiceType, class1, webServiceType.getUrl(), diseasesList, null, responseListener, errorListener);
+    }
+
+    public void addUpdatePersonalHistory(Class<?> class1, PersonalHistory personalHistory, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        WebServiceType webServiceType = WebServiceType.ADD_UPDATE_PERSONAL_HISTORY_DETAIL;
+        String url = webServiceType.getUrl();
+        Util.checkNetworkStatus(mApp);
+        if (HealthCocoConstants.isNetworkOnline) {
+            getResponse(webServiceType, class1, url, personalHistory, null, responseListener, errorListener);
+        } else {
+            errorListener.onNetworkUnavailable(webServiceType);
+        }
+    }
+
+    public void getDrugsListSolr(Class<?> class1, int pageNum, int size, String doctorId, String hospitalId, String locationId, String searchTerm, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        WebServiceType webServiceType = WebServiceType.GET_DRUGS_LIST_SOLR;
+        Util.checkNetworkStatus(mApp.getApplicationContext());
+        if (HealthCocoConstants.isNetworkOnline) {
+            webServiceType = WebServiceType.GET_DRUGS_LIST_SOLR;
+            String url = webServiceType.getUrl()
+                    + HealthCocoConstants.PARAM_DISCARDED_FALSE
+                    + HealthCocoConstants.PARAM_PAGE_AND + pageNum
+                    + HealthCocoConstants.PARAM_SIZE + size
+
+                    + HealthCocoConstants.PARAM_DOCTOR_ID + doctorId
+                    + HealthCocoConstants.PARAM_HOSPITAL_ID + hospitalId
+                    + HealthCocoConstants.PARAM_LOCATION_ID + locationId
+                    + HealthCocoConstants.PARAM_SEARCH_TERM + searchTerm;
+            getResponse(webServiceType, class1, url, null, null, responseListener, errorListener);
+        } else {
+            showUserOffline(webServiceType, responseListener);
+        }
     }
 }
