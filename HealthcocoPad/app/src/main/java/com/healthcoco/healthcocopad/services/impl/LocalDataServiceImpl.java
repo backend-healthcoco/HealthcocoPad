@@ -133,6 +133,7 @@ public class LocalDataServiceImpl {
     private static final String TAG = LocalDataServiceImpl.class.getSimpleName();
     private static LocalDataServiceImpl mInstance;
     private static HealthCocoApplication mApp;
+    private static Gson gson;
 
     private LocalDataServiceImpl() {
     }
@@ -145,9 +146,22 @@ public class LocalDataServiceImpl {
         if (mInstance == null) {
             mInstance = new LocalDataServiceImpl();
             mApp = application;
+            gson = new Gson();
         }
         Util.checkNetworkStatus(mApp.getApplicationContext());
         return mInstance;
+    }
+
+    private String getJsonFromObject(Object object) {
+        if (object != null)
+            return gson.toJson(object);
+        return null;
+    }
+
+    private Object getObjectFromJson(Class<?> class1, String jsonString) {
+        if (!Util.isNullOrBlank(jsonString))
+            return gson.fromJson(jsonString, class1);
+        return null;
     }
 
     public void addSyncAllObject(SyncAll syncAll) {
@@ -177,12 +191,7 @@ public class LocalDataServiceImpl {
             if (!Util.isNullOrBlank(doctor.getUser().getUniqueId())) {
                 doctor.setForeignUserId(doctor.getUser().getUniqueId());
             }
-            // setting DOB
-            if (doctor.getUser().getDob() != null) {
-                doctor.getUser().getDob().setForeignUniqueId(doctor.getUser().getUniqueId());
-                deleteDOBRecordIfAlreadyPresent(LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, doctor.getUser().getUniqueId());
-                doctor.getUser().getDob().save();
-            }
+            doctor.getUser().setDobJsonString(getJsonFromObject(doctor.getUser().getDob()));
 
             if (!Util.isNullOrEmptyList(doctor.getHospitals())) {
                 if (Util.isNullOrBlank(doctor.getUser().getForeignHospitalId()) && Util.isNullOrBlank(doctor.getUser().getForeignLocationId())) {
@@ -261,10 +270,10 @@ public class LocalDataServiceImpl {
             e.printStackTrace();
         }
     }
-
-    private void deleteDOBRecordIfAlreadyPresent(String key, String value) {
-        DOB.deleteAll(DOB.class, key + "= ?", value);
-    }
+//
+//    private void deleteDOBRecordIfAlreadyPresent(String key, String value) {
+//        DOB.deleteAll(DOB.class, key + "= ?", value);
+//    }
 
     private void clearUser() {
         //TODO clear rest of linked tables remaining
@@ -385,8 +394,7 @@ public class LocalDataServiceImpl {
         User user = Select.from(User.class).where(Condition.prop(LocalDatabaseUtils.KEY_UNIQUE_ID).eq(uniqueId))
                 .first();
         if (user != null) {
-//            if (user.getDob() != null) {
-//            }
+            user.setDob((DOB) getObjectFromJson(DOB.class, user.getDobJsonString()));
         }
         return user;
     }
@@ -827,10 +835,7 @@ public class LocalDataServiceImpl {
 
     public void addDoctorProfile(DoctorProfile doctorProfile) {
         // setting DOB
-        if (doctorProfile.getDob() != null) {
-            doctorProfile.getDob().setForeignUniqueId(doctorProfile.getDoctorId());
-            doctorProfile.getDob().save();
-        }
+        doctorProfile.setDobJsonString(getJsonFromObject(doctorProfile.getDob()));
 
         deleteAdditionalNumbersIfAlreadyPresent(LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, doctorProfile.getDoctorId());
         //saving additionalNumbers
@@ -1023,11 +1028,7 @@ public class LocalDataServiceImpl {
         if (registeredPatientDetailsUpdated.getPatient() != null
                 && !Util.isNullOrBlank(registeredPatientDetailsUpdated.getPatient().getPatientId())) {
             Patient patient = registeredPatientDetailsUpdated.getPatient();
-            // setting DOB with patientId
-            if (registeredPatientDetailsUpdated.getDob() != null) {
-                registeredPatientDetailsUpdated.getDob().setForeignUniqueId(patient.getPatientId());
-                registeredPatientDetailsUpdated.getDob().save();
-            }
+            registeredPatientDetailsUpdated.setDobJsonString(getJsonFromObject(registeredPatientDetailsUpdated.getDob()));
             // setting patient's relations
             addRelations(patient.getRelations(), patient.getPatientId());
 
@@ -1323,7 +1324,7 @@ public class LocalDataServiceImpl {
     public DoctorProfile getDoctorProfileObject(String doctorId) {
         DoctorProfile doctorProfile = Select.from(DoctorProfile.class).where(Condition.prop(LocalDatabaseUtils.KEY_DOCTOR_ID).eq(doctorId)).first();
         if (doctorProfile != null) {
-            doctorProfile.setDob((DOB) getObject(DOB.class, LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, doctorProfile.getDoctorId()));
+            doctorProfile.setDob((DOB) getObjectFromJson(DOB.class, doctorProfile.getDobJsonString()));
             doctorProfile.setAdditionalNumbers(getAdditionalNumbersList(LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, doctorProfile.getDoctorId()));
             doctorProfile.setOtherEmailAddresses(getOtherEmailAddresses(LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, doctorProfile.getDoctorId()));
             doctorProfile.setExperience((DoctorExperience) getObject(DoctorExperience.class, LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, doctorProfile.getDoctorId()));
@@ -1837,8 +1838,7 @@ public class LocalDataServiceImpl {
         registeredPatientDetailsUpdated.setAddress(getPatientAddress(registeredPatientDetailsUpdated.getUserId()));
         if (!Util.isNullOrBlank(registeredPatientDetailsUpdated.getForeignPatientId())) {
             // gettiung DOB
-            registeredPatientDetailsUpdated.setDob((DOB) getObject(DOB.class,
-                    LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, registeredPatientDetailsUpdated.getForeignPatientId()));
+            registeredPatientDetailsUpdated.setDob((DOB) getObjectFromJson(DOB.class, registeredPatientDetailsUpdated.getDobJsonString()));
             // getting patient
             registeredPatientDetailsUpdated
                     .setPatient(getPatientDetails(registeredPatientDetailsUpdated.getForeignPatientId()));

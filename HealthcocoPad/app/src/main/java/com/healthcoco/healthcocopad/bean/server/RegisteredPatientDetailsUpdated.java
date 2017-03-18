@@ -28,6 +28,7 @@ public class RegisteredPatientDetailsUpdated extends SugarRecord {
     private String imageUrl;
     @Ignore
     private DOB dob;
+    private String dobJsonString;
     private String userId;
 
     private String userName;
@@ -303,5 +304,13 @@ public class RegisteredPatientDetailsUpdated extends SugarRecord {
 
     public void setUniqueId(String uniqueId) {
         this.uniqueId = uniqueId;
+    }
+
+    public String getDobJsonString() {
+        return dobJsonString;
+    }
+
+    public void setDobJsonString(String dobJsonString) {
+        this.dobJsonString = dobJsonString;
     }
 }

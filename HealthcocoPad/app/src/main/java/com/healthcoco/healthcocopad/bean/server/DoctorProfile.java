@@ -2,7 +2,6 @@ package com.healthcoco.healthcocopad.bean.server;
 
 import android.app.Activity;
 
-
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.orm.SugarRecord;
@@ -34,9 +33,9 @@ public class DoctorProfile extends SugarRecord {
     private String imageUrl;
 
     private String thumbnailUrl;
-
+    @Ignore
     private DOB dob;
-
+    private String dobJsonString;
     private String coverImageUrl;
 
     private String coverThumbnailImageUrl;
@@ -326,5 +325,13 @@ public class DoctorProfile extends SugarRecord {
         } else if (getDashForNull)
             return mActivity.getResources().getString(R.string.no_text_dash);
         return experience;
+    }
+
+    public String getDobJsonString() {
+        return dobJsonString;
+    }
+
+    public void setDobJsonString(String dobJsonString) {
+        this.dobJsonString = dobJsonString;
     }
 }

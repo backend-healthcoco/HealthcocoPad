@@ -26,9 +26,9 @@ public class User extends SugarRecord {
     private String mobileNumber;
 
     private String gender;
-    // getting DOB from database using userId
     @Ignore
     private DOB dob;
+    protected String dobJsonString;
 
     private String secPhoneNumber;
 
@@ -181,5 +181,13 @@ public class User extends SugarRecord {
 
     public void setUiPermissions(UIPermissions uiPermissions) {
         this.uiPermissions = uiPermissions;
+    }
+
+    public String getDobJsonString() {
+        return dobJsonString;
+    }
+
+    public void setDobJsonString(String dobJsonString) {
+        this.dobJsonString = dobJsonString;
     }
 }

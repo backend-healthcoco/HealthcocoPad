@@ -3,6 +3,7 @@ package com.healthcoco.healthcocopad.bean.server;
 import com.healthcoco.healthcocopad.enums.UserState;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.orm.SugarRecord;
+import com.orm.annotation.Ignore;
 import com.orm.annotation.Unique;
 
 import org.parceler.Parcel;
@@ -19,6 +20,7 @@ public class AlreadyRegisteredPatientsResponse extends SugarRecord {
     private String thumbnailUrl;
     private String mobileNumber;
     private String emailAddress;
+    @Ignore
     private DOB dob;
     private String colorCode;
     private String firstName;
