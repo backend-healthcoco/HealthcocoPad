@@ -70,6 +70,7 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
     public static final String INTENT_GET_MEDICAL_PERSONAL_FAMILY_LIST_LOCAL = "com.healthcoco.MEDICAL_PERSONAL_FAMILY_LIST_LOCAL";
     public static final String TAG_PERSONAL_HISTORY = "patientHistory";
     private static final String GENERIC_NAME_SEPARATOR = ", ";
+    public static final String DRUG_AND_ALLERGIES = "drugsAndAllegies";
     private boolean receiversRegistered = false;
     private FontAwesomeButton btEditPatientProfilePastHistory;
     private FontAwesomeButton btEditPatientProfileFamilyHistory;
@@ -575,6 +576,9 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
             } else if (resultCode == HealthCocoConstants.RESULT_CODE_DOCTOR_PERSONAL_HISTORY_DETAIL) {
                 PersonalHistory personalHistory = Parcels.unwrap(data.getParcelableExtra(TAG_PERSONAL_HISTORY));
                 initPersonalHistory(personalHistory);
+            } else if (resultCode == HealthCocoConstants.RESULT_CODE_DRUGS_AND_ALLERGIES_DETAIL) {
+                DrugsAndAllergies drugsAndAllergies = Parcels.unwrap(data.getParcelableExtra(DRUG_AND_ALLERGIES));
+                initDrugsAndAllergyHistory(drugsAndAllergies);
             }
         }
     }

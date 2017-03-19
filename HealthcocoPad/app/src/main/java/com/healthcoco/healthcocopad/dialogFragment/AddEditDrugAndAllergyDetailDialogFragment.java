@@ -2,6 +2,7 @@ package com.healthcoco.healthcocopad.dialogFragment;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
@@ -20,6 +21,7 @@ import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.adapter.SelectDrugListSolrAdapter;
 import com.healthcoco.healthcocopad.adapter.SelectedDrugItemsListAdapter;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
+import com.healthcoco.healthcocopad.bean.request.AddEditDrugsAndAllergiesRequest;
 import com.healthcoco.healthcocopad.bean.server.Drug;
 import com.healthcoco.healthcocopad.bean.server.DrugDirection;
 import com.healthcoco.healthcocopad.bean.server.DrugItem;
@@ -30,11 +32,13 @@ import com.healthcoco.healthcocopad.bean.server.Duration;
 import com.healthcoco.healthcocopad.bean.server.GenericName;
 import com.healthcoco.healthcocopad.bean.server.HistoryDetailsResponse;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
+import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.SelectDrugItemType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
+import com.healthcoco.healthcocopad.fragments.PatientProfileDetailFragment;
 import com.healthcoco.healthcocopad.listeners.LoadMorePageListener;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
 import com.healthcoco.healthcocopad.listeners.SelectDrugItemClickListener;
@@ -80,6 +84,9 @@ public class AddEditDrugAndAllergyDetailDialogFragment extends HealthCocoDialogF
     private boolean isInitialLoading = true;
     private HashMap<String, DrugItem> drugsList = new HashMap<String, DrugItem>();
     private SelectedDrugItemsListAdapter adapter;
+    private ArrayList<String> drugIdList;
+    private DrugItem drugItem;
+    private RegisteredPatientDetailsUpdated selectedPatient;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -98,10 +105,10 @@ public class AddEditDrugAndAllergyDetailDialogFragment extends HealthCocoDialogF
     @Override
     public void init() {
         initViews();
-        getDataFromIntent();
         initListeners();
         initData();
         initAdapters();
+        getDataFromIntent();
         showLoadingOverlay(true);
         new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_FRAGMENT_INITIALISATION_DATA, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
@@ -128,12 +135,20 @@ public class AddEditDrugAndAllergyDetailDialogFragment extends HealthCocoDialogF
                 List<Drug> drugs = drugsAndAllergies.getDrugs();
                 if (!Util.isNullOrEmptyList(drugs)) {
                     if (drugs != null) {
-//                        String key = historyDetailsResponse.getUniqueId();
-//                        if (drugsList.containsKey(key))
-//                            drugsList.remove(key);
-//                        for (Drug drug : drugsAndAllergies.getDrugs())
-//                            drugsList.put(key, drug);
-//                        notifyAdapter(drugsList);
+                        String key = historyDetailsResponse.getUniqueId();
+                        if (drugsList.containsKey(key))
+                            drugsList.remove(key);
+                        drugItem = new DrugItem();
+                        for (Drug drug : drugs) {
+                            drugItem.setDoctorId(drug.getDoctorId());
+                            drugItem.setDrug(drug);
+                            drugItem.setDuration(drug.getDuration());
+                            drugItem.setDirection(drug.getDirection());
+                            drugItem.setDosage(drug.getDosage());
+                            drugItem.setDrugId(drug.getUniqueId());
+                            drugItem.setInstructions(drug.getInstructions());
+                            addDrug(drugItem);
+                        }
                     }
                 }
             }
@@ -199,7 +214,30 @@ public class AddEditDrugAndAllergyDetailDialogFragment extends HealthCocoDialogF
     }
 
     private void validateData() {
+        String allergy = Util.getValidatedValueOrNull(etAllergy);
+        drugIdList = new ArrayList<>();
+        for (DrugItem drugItem : drugsList.values()) {
+            drugIdList.add(drugItem.getDrugId());
+        }
+        addEditDrugsAndAllergies(allergy);
+    }
 
+    private void addEditDrugsAndAllergies(String allergy) {
+        mActivity.showLoading(false);
+        AddEditDrugsAndAllergiesRequest addEditDrugsAndAllergiesRequest = new AddEditDrugsAndAllergiesRequest();
+        addEditDrugsAndAllergiesRequest.setAllergies(allergy);
+        if (Util.isNullOrEmptyList(historyDetailsResponse.getDoctorId())) {
+            historyDetailsResponse.setDoctorId(selectedPatient.getDoctorId());
+            historyDetailsResponse.setHospitalId(selectedPatient.getHospitalId());
+            historyDetailsResponse.setLocationId(selectedPatient.getLocationId());
+            historyDetailsResponse.setPatientId(selectedPatient.getForeignPatientId());
+        }
+        addEditDrugsAndAllergiesRequest.setDoctorId(historyDetailsResponse.getDoctorId());
+        addEditDrugsAndAllergiesRequest.setLocationId(historyDetailsResponse.getLocationId());
+        addEditDrugsAndAllergiesRequest.setHospitalId(historyDetailsResponse.getHospitalId());
+        addEditDrugsAndAllergiesRequest.setPatientId(historyDetailsResponse.getPatientId());
+        addEditDrugsAndAllergiesRequest.setDrugIds(drugIdList);
+        WebDataServiceImpl.getInstance(mApp).addUpdateDrugsAndAllergies(HistoryDetailsResponse.class, addEditDrugsAndAllergiesRequest, this, this);
     }
 
     @Override
@@ -260,6 +298,14 @@ public class AddEditDrugAndAllergyDetailDialogFragment extends HealthCocoDialogF
                     isLoadingFromSearch = false;
                     isInitialLoading = false;
                     break;
+                case ADD_UPDATE_DRUGS_AND_ALLERGIES_DETAIL:
+                    if (response.getData() != null && response.getData() instanceof HistoryDetailsResponse) {
+                        HistoryDetailsResponse historyDetailsResponse = (HistoryDetailsResponse) response.getData();
+                        drugsAndAllergies = historyDetailsResponse.getDrugsAndAllergies();
+                        getTargetFragment().onActivityResult(getTargetRequestCode(), HealthCocoConstants.RESULT_CODE_DRUGS_AND_ALLERGIES_DETAIL, new Intent().putExtra(PatientProfileDetailFragment.DRUG_AND_ALLERGIES, Parcels.wrap(drugsAndAllergies)));
+                        getDialog().dismiss();
+                    }
+                    break;
                 default:
                     break;
             }
@@ -300,6 +346,7 @@ public class AddEditDrugAndAllergyDetailDialogFragment extends HealthCocoDialogF
                 volleyResponseBean = new VolleyResponseBean();
                 volleyResponseBean.setWebServiceType(WebServiceType.FRAGMENT_INITIALISATION);
                 LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
+                selectedPatient = LocalDataServiceImpl.getInstance(mApp).getPatient(HealthCocoConstants.SELECTED_PATIENTS_USER_ID);
                 if (doctor != null && doctor.getUser() != null && !Util.isNullOrBlank(doctor.getUser().getUniqueId())) {
                     user = doctor.getUser();
                 }

@@ -284,7 +284,9 @@ public enum WebServiceType {
 
     ADD_PATIENT_TO_QUEUE(Method.POST, "appointment/queue/add"),
 
-    ADD_UPDATE_PERSONAL_HISTORY_DETAIL(Method.POST, "history/assignPersonalHistory/");
+    ADD_UPDATE_PERSONAL_HISTORY_DETAIL(Method.POST, "history/assignPersonalHistory/"),
+
+    ADD_UPDATE_DRUGS_AND_ALLERGIES_DETAIL(Method.POST, "history/assignDrugsAndAllergies/");
 
     private int methodType;
     private String url;

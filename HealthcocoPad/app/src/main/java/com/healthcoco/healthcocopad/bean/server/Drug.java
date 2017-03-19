@@ -41,6 +41,24 @@ public class Drug extends SugarRecord implements Serializable {
     @Ignore
     private List<GenericName> genericNames;
     private String genericNamesJsonString;
+    private String drugId;
+    private String instructions;
+
+    public String getInstructions() {
+        return instructions;
+    }
+
+    public void setInstructions(String instructions) {
+        this.instructions = instructions;
+    }
+
+    public String getDrugId() {
+        return drugId;
+    }
+
+    public void setDrugId(String drugId) {
+        this.drugId = drugId;
+    }
 
     public List<GenericName> getGenericNames() {
         return genericNames;

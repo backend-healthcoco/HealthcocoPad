@@ -59,6 +59,7 @@ public class HealthCocoConstants {
     public static final int REQUEST_CODE_VERIFY_OTP = 140;
     public static final int RESULT_CODE_VERIFY_OTP = 141;
     public static final int RESULT_CODE_DOCTOR_PERSONAL_HISTORY_DETAIL = 142;
+    public static final int RESULT_CODE_DRUGS_AND_ALLERGIES_DETAIL = 143;
     public static int RESULT_CODE_SIGNUP_ALREADY_REGISTERED = 123;
     public static final int RESULT_CODE_GROUPS_LIST = 124;
     public static final int RESULT_CODE_SEARCH_NUMBER_RESULTS = 125;

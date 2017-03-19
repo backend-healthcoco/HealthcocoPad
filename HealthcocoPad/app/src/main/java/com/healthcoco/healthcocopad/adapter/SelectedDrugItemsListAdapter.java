@@ -7,6 +7,7 @@ import android.widget.BaseAdapter;
 
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.bean.server.DrugItem;
+import com.healthcoco.healthcocopad.bean.server.DrugsAndAllergies;
 import com.healthcoco.healthcocopad.listeners.SelectedDrugsListItemListener;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.healthcoco.healthcocopad.viewholders.SelectedDrugItemsListViewholder;
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 
 public class SelectedDrugItemsListAdapter extends BaseAdapter {
     private ArrayList<DrugItem> list;
+    private DrugsAndAllergies drugsAndAllergies;
     private HealthCocoActivity mActivity;
     private SelectedDrugItemsListViewholder holder;
     private SelectedDrugsListItemListener templateListener;
