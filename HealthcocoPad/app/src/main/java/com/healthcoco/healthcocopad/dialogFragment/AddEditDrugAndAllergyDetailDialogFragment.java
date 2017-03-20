@@ -24,16 +24,12 @@ import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.request.AddEditDrugsAndAllergiesRequest;
 import com.healthcoco.healthcocopad.bean.server.Drug;
 import com.healthcoco.healthcocopad.bean.server.DrugDirection;
-import com.healthcoco.healthcocopad.bean.server.DrugItem;
 import com.healthcoco.healthcocopad.bean.server.DrugType;
 import com.healthcoco.healthcocopad.bean.server.DrugsAndAllergies;
 import com.healthcoco.healthcocopad.bean.server.DrugsListSolrResponse;
 import com.healthcoco.healthcocopad.bean.server.Duration;
 import com.healthcoco.healthcocopad.bean.server.GenericName;
 import com.healthcoco.healthcocopad.bean.server.HistoryDetailsResponse;
-import com.healthcoco.healthcocopad.bean.server.LoginResponse;
-import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
-import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.SelectDrugItemType;
@@ -54,7 +50,7 @@ import com.healthcoco.healthcocopad.views.ListViewLoadMore;
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -64,8 +60,7 @@ import java.util.Locale;
 public class AddEditDrugAndAllergyDetailDialogFragment extends HealthCocoDialogFragment implements View.OnClickListener,
         GsonRequest.ErrorListener, Response.Listener<VolleyResponseBean>, TextWatcher, LocalDoInBackgroundListenerOptimised,
         SelectDrugItemClickListener, LoadMorePageListener, SelectedDrugsListItemListener {
-    private HistoryDetailsResponse historyDetailsResponse;
-    private DrugsAndAllergies drugsAndAllergies;
+    public static final String TAG_DRUGS_AND_ALLERGIES = "drugsAndAllergies";
     private EditText etAllergy;
     private ListView lvDrugs;
     private EditText editSearch;
@@ -73,8 +68,6 @@ public class AddEditDrugAndAllergyDetailDialogFragment extends HealthCocoDialogF
     private int PAGE_NUMBER = 0;
     private ListViewLoadMore lvAllDrugsList;
     private TextView tvNoDrugHistory;
-    private TextView tvHeader;
-    private User user;
     private boolean isEndOfListAchieved = false;
     private List<DrugsListSolrResponse> drugsListSolr = new ArrayList<DrugsListSolrResponse>();
     private SelectDrugListSolrAdapter adapterSolr;
@@ -82,11 +75,9 @@ public class AddEditDrugAndAllergyDetailDialogFragment extends HealthCocoDialogF
     private boolean isLoadingFromSearch;
     private String lastTextSearched;
     private boolean isInitialLoading = true;
-    private HashMap<String, DrugItem> drugsList = new HashMap<String, DrugItem>();
+    private LinkedHashMap<String, Drug> drugsListHashMap = new LinkedHashMap<>();
     private SelectedDrugItemsListAdapter adapter;
-    private ArrayList<String> drugIdList;
-    private DrugItem drugItem;
-    private RegisteredPatientDetailsUpdated selectedPatient;
+    private HistoryDetailsResponse historyDetailsResponse;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -114,42 +105,27 @@ public class AddEditDrugAndAllergyDetailDialogFragment extends HealthCocoDialogF
     }
 
     private void getDrugsList(boolean isInitialLoading, int pageNum, int size, String searchTerm) {
-        if (user != null) {
-            mApp.cancelPendingRequests(String.valueOf(WebServiceType.GET_DRUGS_LIST_SOLR));
-            if (isInitialLoading) {
-                mActivity.showLoading(false);
-                progressLoading.setVisibility(View.GONE);
-            } else
-                progressLoading.setVisibility(View.VISIBLE);
-            WebDataServiceImpl.getInstance(mApp).getDrugsListSolr(DrugsListSolrResponse.class, pageNum, size, user.getUniqueId(), user.getForeignHospitalId(), user.getForeignLocationId(), searchTerm, this, this);
-        }
+        mApp.cancelPendingRequests(String.valueOf(WebServiceType.GET_DRUGS_LIST_SOLR));
+        if (isInitialLoading) {
+            mActivity.showLoading(false);
+            progressLoading.setVisibility(View.GONE);
+        } else
+            progressLoading.setVisibility(View.VISIBLE);
+        WebDataServiceImpl.getInstance(mApp).getDrugsListSolr(DrugsListSolrResponse.class, pageNum, size, historyDetailsResponse.getDoctorId(), historyDetailsResponse.getHospitalId(), historyDetailsResponse.getLocationId(), searchTerm, this, this);
     }
 
     private void getDataFromIntent() {
-        historyDetailsResponse = Parcels.unwrap(getArguments().getParcelable(HealthCocoConstants.TAG_PERSONAL_HISTORY));
-        if (!Util.isNullOrEmptyList(historyDetailsResponse)) {
-            drugsAndAllergies = historyDetailsResponse.getDrugsAndAllergies();
-            if (!Util.isNullOrEmptyList(drugsAndAllergies)) {
-                String allergies = drugsAndAllergies.getAllergies();
-                etAllergy.setText(Util.getValidatedValue(allergies));
+        historyDetailsResponse = Parcels.unwrap(getArguments().getParcelable(TAG_DRUGS_AND_ALLERGIES));
+        if (historyDetailsResponse != null && historyDetailsResponse.getDrugsAndAllergies() != null) {
+            DrugsAndAllergies drugsAndAllergies = historyDetailsResponse.getDrugsAndAllergies();
+            if (drugsAndAllergies != null) {
+                etAllergy.setText(Util.getValidatedValue(drugsAndAllergies.getAllergies()));
                 List<Drug> drugs = drugsAndAllergies.getDrugs();
                 if (!Util.isNullOrEmptyList(drugs)) {
-                    if (drugs != null) {
-                        String key = historyDetailsResponse.getUniqueId();
-                        if (drugsList.containsKey(key))
-                            drugsList.remove(key);
-                        drugItem = new DrugItem();
-                        for (Drug drug : drugs) {
-                            drugItem.setDoctorId(drug.getDoctorId());
-                            drugItem.setDrug(drug);
-                            drugItem.setDuration(drug.getDuration());
-                            drugItem.setDirection(drug.getDirection());
-                            drugItem.setDosage(drug.getDosage());
-                            drugItem.setDrugId(drug.getUniqueId());
-                            drugItem.setInstructions(drug.getInstructions());
-                            addDrug(drugItem);
-                        }
+                    for (Drug drug : drugs) {
+                        drugsListHashMap.put(drug.getUniqueId(), drug);
                     }
+                    notifyAdapter(new ArrayList<Drug>(drugsListHashMap.values()));
                 }
             }
         }
@@ -163,7 +139,6 @@ public class AddEditDrugAndAllergyDetailDialogFragment extends HealthCocoDialogF
         editSearch = (EditText) view.findViewById(R.id.edit_search);
         initEditSearchView(R.string.search_drug, this, this);
         tvNoDrugHistory = (TextView) view.findViewById(R.id.tv_no_drug_history);
-        tvHeader = (TextView) view.findViewById(R.id.tv_header);
         progressLoading = (ProgressBar) view.findViewById(R.id.progress_loading);
 //        requestFocusOnSearchEditText(R.id.edit_search);
     }
@@ -171,6 +146,7 @@ public class AddEditDrugAndAllergyDetailDialogFragment extends HealthCocoDialogF
     private void initAdapters() {
         adapter = new SelectedDrugItemsListAdapter(mActivity, this);
         lvDrugs.setAdapter(adapter);
+
         adapterSolr = new SelectDrugListSolrAdapter(mActivity, this, this);
         lvAllDrugsList.setAdapter(adapterSolr);
     }
@@ -200,6 +176,11 @@ public class AddEditDrugAndAllergyDetailDialogFragment extends HealthCocoDialogF
         adapterSolr.notifyDataSetChanged();
     }
 
+    private void notifyAdapter(ArrayList<Drug> drugsListMap) {
+        adapter.setListData(drugsListMap);
+        adapter.notifyDataSetChanged();
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -215,10 +196,6 @@ public class AddEditDrugAndAllergyDetailDialogFragment extends HealthCocoDialogF
 
     private void validateData() {
         String allergy = Util.getValidatedValueOrNull(etAllergy);
-        drugIdList = new ArrayList<>();
-        for (DrugItem drugItem : drugsList.values()) {
-            drugIdList.add(drugItem.getDrugId());
-        }
         addEditDrugsAndAllergies(allergy);
     }
 
@@ -226,17 +203,11 @@ public class AddEditDrugAndAllergyDetailDialogFragment extends HealthCocoDialogF
         mActivity.showLoading(false);
         AddEditDrugsAndAllergiesRequest addEditDrugsAndAllergiesRequest = new AddEditDrugsAndAllergiesRequest();
         addEditDrugsAndAllergiesRequest.setAllergies(allergy);
-        if (Util.isNullOrEmptyList(historyDetailsResponse.getDoctorId())) {
-            historyDetailsResponse.setDoctorId(selectedPatient.getDoctorId());
-            historyDetailsResponse.setHospitalId(selectedPatient.getHospitalId());
-            historyDetailsResponse.setLocationId(selectedPatient.getLocationId());
-            historyDetailsResponse.setPatientId(selectedPatient.getForeignPatientId());
-        }
         addEditDrugsAndAllergiesRequest.setDoctorId(historyDetailsResponse.getDoctorId());
-        addEditDrugsAndAllergiesRequest.setLocationId(historyDetailsResponse.getLocationId());
         addEditDrugsAndAllergiesRequest.setHospitalId(historyDetailsResponse.getHospitalId());
+        addEditDrugsAndAllergiesRequest.setLocationId(historyDetailsResponse.getLocationId());
         addEditDrugsAndAllergiesRequest.setPatientId(historyDetailsResponse.getPatientId());
-        addEditDrugsAndAllergiesRequest.setDrugIds(drugIdList);
+        addEditDrugsAndAllergiesRequest.setDrugIds(new ArrayList<String>(drugsListHashMap.keySet()));
         WebDataServiceImpl.getInstance(mApp).addUpdateDrugsAndAllergies(HistoryDetailsResponse.class, addEditDrugsAndAllergiesRequest, this, this);
     }
 
@@ -272,10 +243,7 @@ public class AddEditDrugAndAllergyDetailDialogFragment extends HealthCocoDialogF
         if (response != null) {
             switch (response.getWebServiceType()) {
                 case FRAGMENT_INITIALISATION:
-                    if (user != null) {
-                        getDrugsList(true, PAGE_NUMBER, MAX_SIZE, "");
-                        return;
-                    }
+                    getDrugsList(true, PAGE_NUMBER, MAX_SIZE, "");
                     break;
                 case GET_DRUGS_LIST_SOLR:
                     ArrayList<DrugsListSolrResponse> list = (ArrayList<DrugsListSolrResponse>) (ArrayList<?>) response.getDataList();
@@ -301,7 +269,7 @@ public class AddEditDrugAndAllergyDetailDialogFragment extends HealthCocoDialogF
                 case ADD_UPDATE_DRUGS_AND_ALLERGIES_DETAIL:
                     if (response.getData() != null && response.getData() instanceof HistoryDetailsResponse) {
                         HistoryDetailsResponse historyDetailsResponse = (HistoryDetailsResponse) response.getData();
-                        drugsAndAllergies = historyDetailsResponse.getDrugsAndAllergies();
+                        DrugsAndAllergies drugsAndAllergies = historyDetailsResponse.getDrugsAndAllergies();
                         getTargetFragment().onActivityResult(getTargetRequestCode(), HealthCocoConstants.RESULT_CODE_DRUGS_AND_ALLERGIES_DETAIL, new Intent().putExtra(PatientProfileDetailFragment.DRUG_AND_ALLERGIES, Parcels.wrap(drugsAndAllergies)));
                         getDialog().dismiss();
                     }
@@ -345,11 +313,6 @@ public class AddEditDrugAndAllergyDetailDialogFragment extends HealthCocoDialogF
             case GET_FRAGMENT_INITIALISATION_DATA:
                 volleyResponseBean = new VolleyResponseBean();
                 volleyResponseBean.setWebServiceType(WebServiceType.FRAGMENT_INITIALISATION);
-                LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
-                selectedPatient = LocalDataServiceImpl.getInstance(mApp).getPatient(HealthCocoConstants.SELECTED_PATIENTS_USER_ID);
-                if (doctor != null && doctor.getUser() != null && !Util.isNullOrBlank(doctor.getUser().getUniqueId())) {
-                    user = doctor.getUser();
-                }
                 break;
         }
         if (volleyResponseBean == null)
@@ -377,7 +340,7 @@ public class AddEditDrugAndAllergyDetailDialogFragment extends HealthCocoDialogF
     }
 
     public void addSelectedDrug(SelectDrugItemType selectDrugItemType, Object object) {
-        DrugItem selectedDrug = new DrugItem();
+        Drug selectedDrug = new Drug();
         String drugId = "";
         String drugName = "";
         String drugType = "";
@@ -387,6 +350,11 @@ public class AddEditDrugAndAllergyDetailDialogFragment extends HealthCocoDialogF
         String durationtext = "";
         String dosage = "";
         String instructions = "";
+        String drugCode = "";
+        String doctorId = "";
+        String hospitalId = "";
+        String locationId = "";
+        String patientId = "";
         List<GenericName> genericNames = null;
         switch (selectDrugItemType) {
             case ALL_DRUGS:
@@ -395,6 +363,10 @@ public class AddEditDrugAndAllergyDetailDialogFragment extends HealthCocoDialogF
                 drugName = drugsSolr.getDrugName();
                 drugType = drugsSolr.getDrugType();
                 drugTypeId = drugsSolr.getDrugTypeId();
+                drugCode = drugsSolr.getDrugCode();
+                doctorId = drugsSolr.getDoctorId();
+                hospitalId = drugsSolr.getHospitalId();
+                locationId = drugsSolr.getLocationId();
                 if (!Util.isNullOrEmptyList(drugsSolr.getDirection()))
                     directionId = drugsSolr.getDirection().get(0).getUniqueId();
                 if (drugsSolr.getDuration() != null && drugsSolr.getDuration().getDurationUnit() != null) {
@@ -406,18 +378,20 @@ public class AddEditDrugAndAllergyDetailDialogFragment extends HealthCocoDialogF
                 break;
         }
 
-        Drug drug = new Drug();
-        drug.setDrugName(drugName);
-        drug.setUniqueId(drugId);
-        drug.setGenericNames(genericNames);
+        selectedDrug.setDrugName(drugName);
+        selectedDrug.setUniqueId(drugId);
+        selectedDrug.setDoctorId(doctorId);
+        selectedDrug.setHospitalId(hospitalId);
+        selectedDrug.setLocationId(locationId);
+        selectedDrug.setGenericNames(genericNames);
 
         DrugType drugTypeObj = new DrugType();
         drugTypeObj.setUniqueId(drugTypeId);
         drugTypeObj.setType(drugType);
-        drug.setDrugType(drugTypeObj);
+        selectedDrug.setDrugType(drugTypeObj);
 
-        selectedDrug.setDrug(drug);
         selectedDrug.setDrugId(drugId);
+        selectedDrug.setDrugCode(drugCode);
         selectedDrug.setDosage(dosage);
         selectedDrug.setDirection(getDirectionsListFromLocal(directionId));
         selectedDrug.setDuration(getDurationAndUnit(durationtext, durationUnitId));
@@ -427,20 +401,11 @@ public class AddEditDrugAndAllergyDetailDialogFragment extends HealthCocoDialogF
         }
     }
 
-    public void addDrug(DrugItem drug) {
+    public void addDrug(Drug drug) {
         if (drug != null) {
-            String key = drug.getDrug().getUniqueId();
-            if (drugsList.containsKey(key))
-                drugsList.remove(key);
-            drugsList.put(key, drug);
-            notifyAdapter(drugsList);
+            drugsListHashMap.put(drug.getUniqueId(), drug);
+            notifyAdapter(new ArrayList<Drug>(drugsListHashMap.values()));
         }
-    }
-
-    private void notifyAdapter(HashMap<String, DrugItem> drugsListMap) {
-        ArrayList<DrugItem> list = new ArrayList<>(drugsListMap.values());
-        adapter.setListData(list);
-        adapter.notifyDataSetChanged();
     }
 
     /**
@@ -470,11 +435,11 @@ public class AddEditDrugAndAllergyDetailDialogFragment extends HealthCocoDialogF
     }
 
     @Override
-    public void onDeleteItemClicked(DrugItem drug) {
+    public void onDeleteItemClicked(Drug drug) {
         showConfirmationAlert(drug);
     }
 
-    private void showConfirmationAlert(final DrugItem drug) {
+    private void showConfirmationAlert(final Drug drug) {
         final AlertDialog.Builder alertBuilder = new AlertDialog.Builder(mActivity);
         alertBuilder.setTitle(R.string.confirm);
         alertBuilder.setMessage(R.string.confirm_remove_drug);
@@ -484,8 +449,8 @@ public class AddEditDrugAndAllergyDetailDialogFragment extends HealthCocoDialogF
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 try {
-                    drugsList.remove(drug.getDrug().getUniqueId());
-                    notifyAdapter(drugsList);
+                    drugsListHashMap.remove(drug.getDrugId());
+                    notifyAdapter(new ArrayList<Drug>(drugsListHashMap.values()));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -502,6 +467,6 @@ public class AddEditDrugAndAllergyDetailDialogFragment extends HealthCocoDialogF
     }
 
     @Override
-    public void onDrugItemClicked(DrugItem drugItem) {
+    public void onDrugItemClicked(Drug drugItem) {
     }
 }

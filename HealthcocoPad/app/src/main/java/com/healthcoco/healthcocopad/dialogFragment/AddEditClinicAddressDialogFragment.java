@@ -11,10 +11,11 @@ import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 
 import com.android.volley.Response;
-import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.HealthCocoDialogFragment;
+import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.CityResponse;
+import com.healthcoco.healthcocopad.bean.server.ClinicDetailResponse;
 import com.healthcoco.healthcocopad.bean.server.Location;
 import com.healthcoco.healthcocopad.custom.AutoCompleteTextViewAdapter;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
@@ -42,6 +43,7 @@ import java.util.Arrays;
  * Created by Shreshtha on 24-02-2017.
  */
 public class AddEditClinicAddressDialogFragment extends HealthCocoDialogFragment implements CommonListDialogItemClickListener, GsonRequest.ErrorListener, Response.Listener<VolleyResponseBean>, LocalDoInBackgroundListenerOptimised, View.OnClickListener {
+    public static final String TAG_CLINIC_ADDRESS = "ClinicAddress";
     private EditText editClinicName;
     private EditText editAddress;
     private EditText editLocality;
@@ -52,6 +54,7 @@ public class AddEditClinicAddressDialogFragment extends HealthCocoDialogFragment
     private EditText editPincode;
     private AutoCompleteTextView autotvCountry;
     private AutoCompleteTextView autotvCity;
+    private ClinicDetailResponse clinicDetailResponse;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -69,9 +72,8 @@ public class AddEditClinicAddressDialogFragment extends HealthCocoDialogFragment
 
     @Override
     public void init() {
-        String uniqueId = getArguments().getString(HealthCocoConstants.TAG_UNIQUE_ID);
-        if (!Util.isNullOrBlank(uniqueId))
-            clinicDetail = LocalDataServiceImpl.getInstance(mApp).getLocation(uniqueId);
+        clinicDetailResponse = Parcels.unwrap(getArguments().getParcelable(AddEditClinicAddressDialogFragment.TAG_CLINIC_ADDRESS));
+        clinicDetail = clinicDetailResponse.getLocation();
         initViews();
         initListeners();
         initAutoTvAdapter(autotvCountry, AutoCompleteTextViewType.COUNTRY, (ArrayList<Object>) (ArrayList<?>) new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.array_countries))));

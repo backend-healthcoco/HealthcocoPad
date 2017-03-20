@@ -47,6 +47,8 @@ import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.ScreenDimensions;
 import com.healthcoco.healthcocopad.utilities.Util;
 
+import org.parceler.Parcels;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -217,6 +219,45 @@ public abstract class HealthCocoFragment extends Fragment implements GsonRequest
         mDialogFragment.show(this.mFragmentManager, CommonOptionsDialogItemClickListener.class.getSimpleName());
     }
 
+    protected void openDialogFragment(HealthCocoDialogFragment dialogFragment) {
+        openDialogFragment(dialogFragment, null, null, 0, null, null);
+    }
+
+    protected void openDialogFragment(HealthCocoDialogFragment dialogFragment, int requestCode) {
+        openDialogFragment(dialogFragment, null, null, requestCode, null, null);
+    }
+
+    protected void openDialogFragment(HealthCocoDialogFragment dialogFragment, int requestCode, CommonOpenUpFragmentType openUpFragmentType) {
+        openDialogFragment(dialogFragment, null, null, requestCode, openUpFragmentType, null);
+    }
+
+    protected void openDialogFragment(HealthCocoDialogFragment dialogFragment, String intentTag, Object intentData, int requestCode, CommonOpenUpFragmentType openUpFragmentType) {
+        openDialogFragment(dialogFragment, intentTag, intentData, requestCode, openUpFragmentType, null);
+    }
+
+    protected void openDialogFragment(HealthCocoDialogFragment dialogFragment, int requestCode, CommonOpenUpFragmentType openUpFragmentType, String selectedUserId) {
+        openDialogFragment(dialogFragment, null, null, requestCode, openUpFragmentType, selectedUserId);
+    }
+
+    protected void openDialogFragment(HealthCocoDialogFragment dialogFragment, String intentTag, Object intentData, int requestCode) {
+        openDialogFragment(dialogFragment, intentTag, intentData, requestCode, null, null);
+    }
+
+    protected void openDialogFragment(HealthCocoDialogFragment dialogFragment, String intentTag, Object intentData, int requestCode, CommonOpenUpFragmentType openUpFragmentType, String selectedUserId) {
+        Bundle bundle = new Bundle();
+        if (intentData != null)
+            bundle.putParcelable(intentTag, Parcels.wrap(intentData));
+        if (openUpFragmentType != null)
+            bundle.putInt(HealthCocoConstants.TAG_FRAGMENT_NAME, openUpFragmentType.ordinal());
+        if (selectedUserId != null)
+            bundle.putString(HealthCocoConstants.TAG_SELECTED_USER_ID, selectedUserId);
+        dialogFragment.setArguments(bundle);
+
+        if (requestCode > 0)
+            dialogFragment.setTargetFragment(this, requestCode);
+        dialogFragment.show(mFragmentManager, dialogFragment.getClass().getSimpleName());
+    }
+
     protected void openCommonOpenUpActivity(CommonOpenUpFragmentType fragmentType, Object intentData, int requestCode) {
         Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
         intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, fragmentType.ordinal());
@@ -333,16 +374,11 @@ public abstract class HealthCocoFragment extends Fragment implements GsonRequest
     }
 
     public void openGlobalRecordAccessDialogFragment() {
-        GlobalRecordAccessDialogFragment dialogFragment = new GlobalRecordAccessDialogFragment();
-        dialogFragment.setTargetFragment(this, HealthCocoConstants.REQUEST_CODE_GLOBAL_RECORDS_ACCESS);
-        dialogFragment.show(mFragmentManager, dialogFragment.getClass().getSimpleName());
+        openDialogFragment(new GlobalRecordAccessDialogFragment(), HealthCocoConstants.REQUEST_CODE_GLOBAL_RECORDS_ACCESS);
     }
 
     public void openVerificationOTPDialogFragment() {
-        VerifyOtpDialogFragment dialogFragment = new VerifyOtpDialogFragment();
-        dialogFragment.setTargetFragment(this, HealthCocoConstants.REQUEST_CODE_GLOBAL_RECORDS_ACCESS);
-        dialogFragment.show(mFragmentManager,
-                dialogFragment.getClass().getSimpleName());
+        openDialogFragment(new VerifyOtpDialogFragment(), HealthCocoConstants.REQUEST_CODE_GLOBAL_RECORDS_ACCESS);
     }
 
     private void sendBroadcasts() {

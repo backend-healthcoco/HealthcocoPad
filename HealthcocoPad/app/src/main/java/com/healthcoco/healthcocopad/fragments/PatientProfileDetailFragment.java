@@ -15,7 +15,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.Response;
-import com.healthcoco.healthcocopad.HealthCocoDialogFragment;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
@@ -23,7 +22,6 @@ import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.Address;
 import com.healthcoco.healthcocopad.bean.server.Drug;
 import com.healthcoco.healthcocopad.bean.server.DrugsAndAllergies;
-import com.healthcoco.healthcocopad.bean.server.GenericName;
 import com.healthcoco.healthcocopad.bean.server.HistoryDetailsResponse;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.MedicalFamilyHistoryDetails;
@@ -69,7 +67,6 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
     public static final String INTENT_GET_HISTORY_LIST_LOCAL = "com.healthcoco.HISTORY_LIST_LOCAL";
     public static final String INTENT_GET_MEDICAL_PERSONAL_FAMILY_LIST_LOCAL = "com.healthcoco.MEDICAL_PERSONAL_FAMILY_LIST_LOCAL";
     public static final String TAG_PERSONAL_HISTORY = "patientHistory";
-    private static final String GENERIC_NAME_SEPARATOR = ", ";
     public static final String DRUG_AND_ALLERGIES = "drugsAndAllegies";
     private boolean receiversRegistered = false;
     private FontAwesomeButton btEditPatientProfilePastHistory;
@@ -354,7 +351,7 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
         containerAddiction.setVisibility(View.GONE);
         containerBowelHabit.setVisibility(View.GONE);
         containerBladderHabit.setVisibility(View.GONE);
-        if (!Util.isNullOrEmptyList(personalHistory)) {
+        if (personalHistory != null) {
 
             if (!Util.isNullOrBlank(personalHistory.getDiet())) {
                 containerDiet.setVisibility(View.VISIBLE);
@@ -394,7 +391,7 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
         containerAllergy.setVisibility(View.GONE);
         containerDrugs.setVisibility(View.GONE);
 
-        if (!Util.isNullOrEmptyList(drugsAndAllergies)) {
+        if (drugsAndAllergies != null) {
             if (!Util.isNullOrBlank(drugsAndAllergies.getAllergies())) {
                 containerAllergy.setVisibility(View.VISIBLE);
                 tvAllergy.setText(drugsAndAllergies.getAllergies());
@@ -402,23 +399,8 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
             if (!Util.isNullOrEmptyList(drugsAndAllergies.getDrugs())) {
                 containerDrugs.setVisibility(View.VISIBLE);
                 for (Drug drug : drugsAndAllergies.getDrugs()) {
-                    String genericNamesFormatted = "";
-                    String type = drug.getDrugType().getType();
-                    String drugName = drug.getDrugName();
-                    drugName = type + " " + drugName;
-                    if (!Util.isNullOrEmptyList(drug.getGenericNames())) {
-                        genericNamesFormatted = " (";
-                        for (GenericName genericName : drug.getGenericNames()) {
-                            int index = drug.getGenericNames().indexOf(genericName);
-                            genericNamesFormatted = genericNamesFormatted + genericName.getName();
-                            if (index != drug.getGenericNames().size() - 1)
-                                genericNamesFormatted = genericNamesFormatted + GENERIC_NAME_SEPARATOR;
-                        }
-                        genericNamesFormatted = genericNamesFormatted + ")";
-                    }
-                    drugName = drugName + genericNamesFormatted;
                     TextView tvDrugs = (TextView) mActivity.getLayoutInflater().inflate(R.layout.sub_item_profile_detail_groups_notes_text, null);
-                    tvDrugs.setText(drugName);
+                    tvDrugs.setText(drug.getFormattedDrugName());
                     containerDrugsDetail.addView(tvDrugs);
                 }
             }
@@ -514,10 +496,14 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
                 openHisoryFragment(HistoryFilterType.FAMILY_HISTORY);
                 break;
             case R.id.bt_edit_patient_profile_personal_history:
-                openDialogFragment(HealthCocoConstants.REQUEST_CODE_PATIENT_PROFILE, new AddEditPersonalHistoryDetailDialogFragment());
+                HistoryDetailsResponse detailsResponse = getDefaultIdDetails();
+                detailsResponse.setPersonalHistory(historyDetailsResponse.getPersonalHistory());
+                openDialogFragment(new AddEditPersonalHistoryDetailDialogFragment(), AddEditPersonalHistoryDetailDialogFragment.TAG_PERSONAL_HISTORY, detailsResponse, HealthCocoConstants.REQUEST_CODE_PATIENT_PROFILE, null);
                 break;
             case R.id.bt_edit_patient_profile_drug_and_allergy:
-                openDialogFragment(HealthCocoConstants.REQUEST_CODE_PATIENT_PROFILE, new AddEditDrugAndAllergyDetailDialogFragment());
+                HistoryDetailsResponse detailsResponse1 = getDefaultIdDetails();
+                detailsResponse1.setDrugsAndAllergies(historyDetailsResponse.getDrugsAndAllergies());
+                openDialogFragment(new AddEditDrugAndAllergyDetailDialogFragment(), AddEditDrugAndAllergyDetailDialogFragment.TAG_DRUGS_AND_ALLERGIES, detailsResponse1, HealthCocoConstants.REQUEST_CODE_PATIENT_PROFILE, null);
                 break;
             case R.id.bt_edit_patient_profile_groups:
             case R.id.bt_edit_patient_profile_patient_data:
@@ -529,6 +515,15 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
                     onNetworkUnavailable(null);
                 break;
         }
+    }
+
+    private HistoryDetailsResponse getDefaultIdDetails() {
+        HistoryDetailsResponse detailsResponse = new HistoryDetailsResponse();
+        detailsResponse.setDoctorId(selectedPatient.getDoctorId());
+        detailsResponse.setLocationId(selectedPatient.getLocationId());
+        detailsResponse.setHospitalId(selectedPatient.getHospitalId());
+        detailsResponse.setPatientId(selectedPatient.getPatient().getPatientId());
+        return detailsResponse;
     }
 
     public boolean isOtpVerified() {
@@ -547,15 +542,7 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
         }
         intent.putExtra(HealthCocoConstants.TAG_HISTORY_FILTER_TYPE, historyFilterType.ordinal());
         intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.HISTORY_DISEASE_LIST.ordinal());
-        startActivityForResult(intent, HealthCocoConstants.REQUEST_CODE_HISTORY_LIST);
-    }
-
-    private void openDialogFragment(int requestCode, HealthCocoDialogFragment dialogFragment) {
-        Bundle bundle = new Bundle();
-        bundle.putParcelable(HealthCocoConstants.TAG_PERSONAL_HISTORY, Parcels.wrap(historyDetailsResponse));
-        dialogFragment.setArguments(bundle);
-        dialogFragment.setTargetFragment(this, requestCode);
-        dialogFragment.show(mFragmentManager, dialogFragment.getClass().getSimpleName());
+        startActivityForResult(intent, HealthCocoConstants.REQUEST_CODE_PATIENT_PROFILE);
     }
 
     public void openRegistrationFragment(String patientUniqueId) {
@@ -575,10 +562,14 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
                 new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_FRAGMENT_INITIALISATION_DATA, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             } else if (resultCode == HealthCocoConstants.RESULT_CODE_DOCTOR_PERSONAL_HISTORY_DETAIL) {
                 PersonalHistory personalHistory = Parcels.unwrap(data.getParcelableExtra(TAG_PERSONAL_HISTORY));
+                historyDetailsResponse.setPersonalHistory(personalHistory);
                 initPersonalHistory(personalHistory);
             } else if (resultCode == HealthCocoConstants.RESULT_CODE_DRUGS_AND_ALLERGIES_DETAIL) {
                 DrugsAndAllergies drugsAndAllergies = Parcels.unwrap(data.getParcelableExtra(DRUG_AND_ALLERGIES));
+                historyDetailsResponse.setDrugsAndAllergies(drugsAndAllergies);
                 initDrugsAndAllergyHistory(drugsAndAllergies);
+            } else if (resultCode == HealthCocoConstants.RESULT_CODE_DISEASE_LIST) {
+
             }
         }
     }

@@ -2198,6 +2198,8 @@ public class LocalDataServiceImpl {
     private void addHistory(String selectedPatientId, HistoryDetailsResponse history) {
         if (!Util.isNullOrEmptyList(history.getGeneralRecords())) {
             GeneralData.deleteAll(GeneralData.class, LocalDatabaseUtils.KEY_FOREIGN_CUSTOM_HISTORY_ID + "= ?", history.getUniqueId());
+//            DrugsAndAllergies.deleteAll(DrugsAndAllergies.class, LocalDatabaseUtils.KEY_FOREIGN_CUSTOM_HISTORY_ID + "= ?", history.getUniqueId());
+//            PersonalHistory.deleteAll(PersonalHistory.class, LocalDatabaseUtils.KEY_FOREIGN_CUSTOM_HISTORY_ID + "= ?", history.getUniqueId());
 
             for (GeneralData generalData : history.getGeneralRecords()) {
                 boolean discarded = false;
@@ -2275,7 +2277,7 @@ public class LocalDataServiceImpl {
             deleteMedicalFamilyHistoryDetails(history.getUniqueId());
             addMedicalFamilyHistoryDetails(HistoryFilterType.FAMILY_HISTORY, history.getUniqueId(), history.getFamilyhistory());
         }
-        if (!Util.isNullOrEmptyList(history.getPersonalHistory())) {
+        if (history.getPersonalHistory() != null) {
             deleteFromHistoryIfPresent(history.getCustomUniqueId());
             PersonalHistory personalHistory = history.getPersonalHistory();
             personalHistory.save();

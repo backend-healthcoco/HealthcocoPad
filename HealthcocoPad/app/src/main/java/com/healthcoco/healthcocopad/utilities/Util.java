@@ -228,10 +228,6 @@ public class Util {
         return (list == null || list.size() <= 0) ? true : false;
     }
 
-    public static boolean isNullOrEmptyList(Object o) {
-        return (o == null || o.equals("")) ? true : false;
-    }
-
     public static boolean isNullOrEmptyList(HashMap<?, ?> hashMap) {
         return (hashMap == null || hashMap.size() <= 0) ? true : false;
     }

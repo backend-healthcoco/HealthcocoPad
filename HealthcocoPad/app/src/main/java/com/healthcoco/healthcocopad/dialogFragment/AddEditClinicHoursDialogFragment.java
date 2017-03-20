@@ -15,15 +15,15 @@ import android.widget.TimePicker;
 import android.widget.ToggleButton;
 
 import com.android.volley.Response;
-import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.HealthCocoDialogFragment;
+import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.request.AddEditLocaleVisitDetailsRequest;
+import com.healthcoco.healthcocopad.bean.server.ClinicDetailResponse;
 import com.healthcoco.healthcocopad.bean.server.ClinicWorkingSchedule;
 import com.healthcoco.healthcocopad.bean.server.DoctorClinicProfile;
 import com.healthcoco.healthcocopad.bean.server.DoctorWorkingSchedule;
 import com.healthcoco.healthcocopad.bean.server.Location;
-import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.bean.server.WorkingHours;
 import com.healthcoco.healthcocopad.bean.server.WorkingSchedule;
 import com.healthcoco.healthcocopad.custom.CustomTimePickerDialog;
@@ -52,17 +52,18 @@ import java.util.List;
 public class AddEditClinicHoursDialogFragment extends HealthCocoDialogFragment implements View.OnClickListener, GsonRequest.ErrorListener, Response.Listener<VolleyResponseBean> {
     public static final int DEFAULT_TIME_INTERVAL = 15;
     private static final String TIME_FORMAT = "hh:mm aaa";
+    public static final String TAG_CLINIC_HOURS = "clinicHours";
     private LinearLayout containerWeekDays;
     private ToggleButton toggleButton247;
     private List<?> workingScheduleList;
-    private List<DoctorWorkingSchedule> doctorWorkingScheduleList;
-    private User user;
     private CommonOpenUpFragmentType fragmentType;
     private LinearLayout containerToggle247;
     private Object object;
     private TextView tvClinicname;
     private String clinicName;
     private Boolean isTwentyFourSevenOpen;
+    private ClinicDetailResponse clinicDetailResponse;
+    private DoctorClinicProfile doctorClinicProfile;
     private String uniqueId;
 
     @Override
@@ -91,7 +92,11 @@ public class AddEditClinicHoursDialogFragment extends HealthCocoDialogFragment i
     private void getIntentData() {
         int fragmentOrdinal = getArguments().getInt(HealthCocoConstants.TAG_FRAGMENT_NAME);
         fragmentType = CommonOpenUpFragmentType.values()[fragmentOrdinal];
-        uniqueId = getArguments().getString(HealthCocoConstants.TAG_UNIQUE_ID);
+        clinicDetailResponse = Parcels.unwrap(getArguments().getParcelable(AddEditClinicHoursDialogFragment.TAG_CLINIC_HOURS));
+        doctorClinicProfile = Parcels.unwrap(getArguments().getParcelable(HealthCocoConstants.TAG_CLINIC_PROFILE));
+        if (clinicDetailResponse != null)
+            uniqueId = clinicDetailResponse.getUniqueId();
+        else doctorClinicProfile.getUniqueId();
         if (!Util.isNullOrBlank(uniqueId))
             switch (fragmentType) {
                 case ADD_EDIT_CLINIC_HOURS:
@@ -265,7 +270,7 @@ public class AddEditClinicHoursDialogFragment extends HealthCocoDialogFragment i
                     Location location = new Location();
                     location.setClinicWorkingSchedules((ArrayList<ClinicWorkingSchedule>) (ArrayList<?>) getWorkingSchedules());
                     location.setTwentyFourSevenOpen(toggleButton247.isChecked());
-                    location.setUniqueId(uniqueId);
+                    location.setUniqueId(clinicDetailResponse.getUniqueId());
                     WebDataServiceImpl.getInstance(mApp).addUpdateCommonMethod(WebServiceType.ADD_UPDATE_CLINIC_HOURS, Location.class, location, this, this);
                 }
                 break;

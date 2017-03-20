@@ -9,9 +9,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.android.volley.Response;
-import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.HealthCocoDialogFragment;
+import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
+import com.healthcoco.healthcocopad.bean.server.ClinicDetailResponse;
 import com.healthcoco.healthcocopad.bean.server.Location;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.fragments.MyClinicFragment;
@@ -31,12 +32,14 @@ import java.util.ArrayList;
  * Created by Shreshtha on 24-02-2017.
  */
 public class AddEditClinicContactDialogFragment extends HealthCocoDialogFragment implements View.OnClickListener, GsonRequest.ErrorListener, Response.Listener<VolleyResponseBean> {
+    public static final String TAG_CONTACT = "clinicContact";
     private Location clinicDetail;
     private EditText editClinicNumber;
     private EditText editAlternateNumber;
     private EditText editWebsite;
     private EditText editEmailAddress;
     private TextView tvClinicName;
+    private ClinicDetailResponse clinicDetailResponse;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle
@@ -55,9 +58,8 @@ public class AddEditClinicContactDialogFragment extends HealthCocoDialogFragment
 
     @Override
     public void init() {
-        String uniqueId = getArguments().getString(HealthCocoConstants.TAG_UNIQUE_ID);
-        if (!Util.isNullOrBlank(uniqueId))
-            clinicDetail = LocalDataServiceImpl.getInstance(mApp).getLocation(uniqueId);
+        clinicDetailResponse = Parcels.unwrap(getArguments().getParcelable(AddEditClinicContactDialogFragment.TAG_CONTACT));
+        clinicDetail = clinicDetailResponse.getLocation();
         initViews();
         initListeners();
         initData();

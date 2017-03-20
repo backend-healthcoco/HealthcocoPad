@@ -9,9 +9,8 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.healthcoco.healthcocopad.R;
-import com.healthcoco.healthcocopad.HealthCocoDialogFragment;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
+import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.request.ProfessionalMembershipRequest;
 import com.healthcoco.healthcocopad.bean.server.Achievement;
 import com.healthcoco.healthcocopad.bean.server.DoctorExperienceDetail;
@@ -207,7 +206,7 @@ public class MyProfileFragment extends HealthCocoFragment implements View.OnClic
             }
 
             //setting professional statement
-            if (!Util.isNullOrEmptyList(doctorProfile.getProfessionalStatement())) {
+            if (doctorProfile.getProfessionalStatement() != null) {
                 containerProfessionalStatement.setVisibility(View.VISIBLE);
                 tvNoProfessionalStatement.setVisibility(View.GONE);
                 addProfessionalStatementDetailItem(doctorProfile.getProfessionalStatement());
@@ -316,32 +315,27 @@ public class MyProfileFragment extends HealthCocoFragment implements View.OnClic
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.bt_edit_contact:
-                openDialogFragment(HealthCocoConstants.REQUEST_CODE_MY_PROFILE, new AddEditDoctorContactDialogFragment());
+                openDialogFragment(new AddEditDoctorContactDialogFragment(), HealthCocoConstants.REQUEST_CODE_MY_PROFILE);
                 break;
             case R.id.bt_edit_awards_and_publication:
-                openDialogFragment(HealthCocoConstants.REQUEST_CODE_MY_PROFILE, new AddEditDoctorAwardAndPublicationDialogFragment());
+                openDialogFragment(new AddEditDoctorAwardAndPublicationDialogFragment(), HealthCocoConstants.REQUEST_CODE_MY_PROFILE);
                 break;
             case R.id.bt_edit_education:
-                openDialogFragment(HealthCocoConstants.REQUEST_CODE_MY_PROFILE, new AddEditDoctorEducationDialogFragment());
+                openDialogFragment(new AddEditDoctorEducationDialogFragment(), HealthCocoConstants.REQUEST_CODE_MY_PROFILE);
                 break;
             case R.id.bt_edit_registration_detail:
-                openDialogFragment(HealthCocoConstants.REQUEST_CODE_MY_PROFILE, new AddEditDoctorRegistartionDetailDialogFragment());
+                openDialogFragment(new AddEditDoctorRegistartionDetailDialogFragment(), HealthCocoConstants.REQUEST_CODE_MY_PROFILE);
                 break;
             case R.id.bt_edit_experience:
-                openDialogFragment(HealthCocoConstants.REQUEST_CODE_MY_PROFILE, new AddEditDoctorExperienceDialogFragment());
+                openDialogFragment(new AddEditDoctorExperienceDialogFragment(), HealthCocoConstants.REQUEST_CODE_MY_PROFILE);
                 break;
             case R.id.bt_edit_professional_membership:
-                openDialogFragment(HealthCocoConstants.REQUEST_CODE_MY_PROFILE, new AddEditDoctorMembershipDialogFragment());
+                openDialogFragment(new AddEditDoctorMembershipDialogFragment(), HealthCocoConstants.REQUEST_CODE_MY_PROFILE);
                 break;
             case R.id.bt_edit_professional_statement:
-                openDialogFragment(HealthCocoConstants.REQUEST_CODE_MY_PROFILE, new AddEditDoctorStatementDialogFragment());
+                openDialogFragment(new AddEditDoctorStatementDialogFragment(), HealthCocoConstants.REQUEST_CODE_MY_PROFILE);
                 break;
         }
-    }
-
-    private void openDialogFragment(int requestCode, HealthCocoDialogFragment dialogFragment) {
-        dialogFragment.setTargetFragment(this, requestCode);
-        dialogFragment.show(mFragmentManager, dialogFragment.getClass().getSimpleName());
     }
 
     @Override

@@ -24,8 +24,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.android.volley.Response;
-import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
+import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.activities.HomeActivity;
 import com.healthcoco.healthcocopad.adapter.ContactsListAdapter;
@@ -363,12 +363,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
 
     @Override
     public void onAddToGroupClicked(RegisteredPatientDetailsUpdated selecetdPatient) {
-        Intent intent = new Intent();
-        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.GROUPS.ordinal());
-        intent.putExtra(HealthCocoConstants.TAG_SELECTED_USER_ID, selecetdPatient.getUserId());
-        AddNewGroupsDialogFragment addNewGroupsDialogFragment = new AddNewGroupsDialogFragment();
-        addNewGroupsDialogFragment.setTargetFragment(this, HealthCocoConstants.REQUEST_CODE_CONTACTS_LIST);
-        addNewGroupsDialogFragment.show(mFragmentManager, addNewGroupsDialogFragment.getClass().getSimpleName());
+        openDialogFragment(new AddNewGroupsDialogFragment(), HealthCocoConstants.REQUEST_CODE_CONTACTS_LIST, CommonOpenUpFragmentType.GROUPS, selecetdPatient.getUserId());
         adapter.notifyDataSetChanged();
     }
 

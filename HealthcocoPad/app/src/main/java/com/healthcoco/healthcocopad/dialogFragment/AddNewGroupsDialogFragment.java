@@ -86,7 +86,6 @@ public class AddNewGroupsDialogFragment extends HealthCocoDialogFragment impleme
             initAdapter();
             notifyAdapter(groupsList);
             getGrouspListFromLocal();
-//            getGroupsListFromLocal();
         }
     }
 

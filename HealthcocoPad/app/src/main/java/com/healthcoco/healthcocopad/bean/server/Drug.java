@@ -1,6 +1,7 @@
 package com.healthcoco.healthcocopad.bean.server;
 
 import com.healthcoco.healthcocopad.utilities.StringUtil;
+import com.healthcoco.healthcocopad.utilities.Util;
 import com.orm.SugarRecord;
 import com.orm.annotation.Ignore;
 import com.orm.annotation.Unique;
@@ -10,6 +11,7 @@ import java.util.List;
 
 public class Drug extends SugarRecord implements Serializable {
     public static String TABLE_NAME = " " + StringUtil.toSQLName(Drug.class.getSimpleName());
+    private static final String GENERIC_NAME_SEPARATOR = ", ";
     @Unique
     private String uniqueId;
     private String explanation;
@@ -260,5 +262,24 @@ public class Drug extends SugarRecord implements Serializable {
 
     public void setIsDrugFromGetDrugsList(boolean isDrugFromGetDrugsList) {
         this.isDrugFromGetDrugsList = isDrugFromGetDrugsList;
+    }
+
+    public String getFormattedDrugName() {
+        String genericNamesFormatted = "";
+        String type = getDrugType().getType();
+        String drugName =getDrugName();
+        drugName = type + " " + drugName;
+        if (!Util.isNullOrEmptyList(getGenericNames())) {
+            genericNamesFormatted = " (";
+            for (GenericName genericName :getGenericNames()) {
+                int index =getGenericNames().indexOf(genericName);
+                genericNamesFormatted = genericNamesFormatted + genericName.getName();
+                if (index !=getGenericNames().size() - 1)
+                    genericNamesFormatted = genericNamesFormatted + GENERIC_NAME_SEPARATOR;
+            }
+            genericNamesFormatted = genericNamesFormatted + ")";
+        }
+        drugName = drugName + genericNamesFormatted;
+        return drugName;
     }
 }

@@ -20,8 +20,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.Response;
-import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
+import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.activities.HomeActivity;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.DoctorClinicProfile;
@@ -269,11 +269,7 @@ public class MenuDrawerFragment extends HealthCocoFragment implements View.OnCli
     }
 
     private void openClinicListDialogFragment() {
-        Bundle args = new Bundle();
-        MenuClinicListDialogFragment clinicListDialogFragment = new MenuClinicListDialogFragment(clinicProfile);
-        clinicListDialogFragment.setArguments(args);
-        clinicListDialogFragment.setTargetFragment(this, HealthCocoConstants.REQUEST_CODE_MENU_CLINIC_LIST);
-        clinicListDialogFragment.show(mFragmentManager, clinicListDialogFragment.getClass().getSimpleName());
+        openDialogFragment(new MenuClinicListDialogFragment(clinicProfile), HealthCocoConstants.REQUEST_CODE_MENU_CLINIC_LIST);
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

@@ -15,9 +15,8 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.healthcoco.healthcocopad.R;
-import com.healthcoco.healthcocopad.HealthCocoDialogFragment;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
+import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.server.DoctorClinicProfile;
 import com.healthcoco.healthcocopad.bean.server.DoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.DoctorWorkingSchedule;
@@ -28,7 +27,6 @@ import com.healthcoco.healthcocopad.custom.AutoCompleteTextViewAdapter;
 import com.healthcoco.healthcocopad.dialogFragment.AddEditAppointmentDetailDialogFragment;
 import com.healthcoco.healthcocopad.dialogFragment.AddEditClinicHoursDialogFragment;
 import com.healthcoco.healthcocopad.enums.AutoCompleteTextViewType;
-import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.listeners.DoctorProfileListener;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
@@ -316,28 +314,16 @@ public class MyClinicFragment extends HealthCocoFragment implements View.OnClick
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.bt_edit_visiting_hours:
-                openDialogFragment(CommonOpenUpFragmentType.ADD_EDIT_DOCTOR_PROFILE_CLINIC_HOURS, HealthCocoConstants.REQUEST_CODE_MY_CLINIC, new AddEditClinicHoursDialogFragment());
+                openDialogFragment(new AddEditClinicHoursDialogFragment(), HealthCocoConstants.TAG_CLINIC_PROFILE, selectedClinicProfile, HealthCocoConstants.REQUEST_CODE_MY_CLINIC);
                 break;
             case R.id.bt_edit_appointment_details:
-                openDialogFragment(CommonOpenUpFragmentType.ADD_EDIT_DOCTOR_PROFILE_CLINIC_HOURS, HealthCocoConstants.REQUEST_CODE_MY_CLINIC, new AddEditAppointmentDetailDialogFragment());
+                openDialogFragment(new AddEditAppointmentDetailDialogFragment(), HealthCocoConstants.TAG_CLINIC_PROFILE, selectedClinicProfile, HealthCocoConstants.REQUEST_CODE_MY_CLINIC);
                 break;
             case R.id.bt_enlarged_map:
 //                if (selectedClinicProfile != null && !Util.isNullOrBlank(selectedClinicProfile.getUniqueId()))
 //                    openMapViewActivity(CommonOpenUpFragmentType.ENLARGED_MAP_VIEW_FRAGMENT, selectedClinicProfile.getUniqueId(), MapType.DOCTOR_PROFILE_CLINIC, 0);
                 break;
         }
-    }
-
-    private void openDialogFragment(CommonOpenUpFragmentType fragmentType, int requestCode, HealthCocoDialogFragment dialogFragment) {
-        Bundle args = new Bundle();
-        args.putInt(HealthCocoConstants.TAG_FRAGMENT_NAME, fragmentType.ordinal());
-        if (args != null) {
-            args.putParcelable(HealthCocoConstants.TAG_CLINIC_PROFILE, Parcels.wrap(selectedClinicProfile));
-        }
-        args.putString(HealthCocoConstants.TAG_UNIQUE_ID, selectedClinicProfile.getUniqueId());
-        dialogFragment.setArguments(args);
-        dialogFragment.setTargetFragment(this, requestCode);
-        dialogFragment.show(mFragmentManager, dialogFragment.getClass().getSimpleName());
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

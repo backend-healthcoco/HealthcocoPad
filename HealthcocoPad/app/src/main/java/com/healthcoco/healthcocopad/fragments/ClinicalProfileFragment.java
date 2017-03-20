@@ -22,9 +22,8 @@ import com.android.volley.Response;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.healthcoco.healthcocopad.R;
-import com.healthcoco.healthcocopad.HealthCocoDialogFragment;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
+import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.adapter.ContactsDetailViewPagerAdapter;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
@@ -401,16 +400,19 @@ public class ClinicalProfileFragment extends HealthCocoFragment
                     openCommonOpenUpActivity(CommonOpenUpFragmentType.ADD_EDIT_CLINIC_IMAGE, clinicDetailResponse.getUniqueId(), HealthCocoConstants.REQUEST_CODE_CLINIC_PROFILE_IMAGE);
                 break;
             case R.id.bt_edit_clinic_hours:
-                if (clinicDetailResponse != null)
-                    openDialogFragment(HealthCocoConstants.REQUEST_CODE_CLINIC_PROFILE, new AddEditClinicHoursDialogFragment());
+                if (clinicDetailResponse != null) {
+                    openDialogFragment(new AddEditClinicHoursDialogFragment(), AddEditClinicHoursDialogFragment.TAG_CLINIC_HOURS, clinicDetailResponse, HealthCocoConstants.REQUEST_CODE_CLINIC_PROFILE, CommonOpenUpFragmentType.ADD_EDIT_CLINIC_HOURS);
+                }
                 break;
             case R.id.bt_edit_address:
-                if (clinicDetailResponse != null)
-                    openDialogFragment(HealthCocoConstants.REQUEST_CODE_CLINIC_PROFILE, new AddEditClinicAddressDialogFragment());
+                if (clinicDetailResponse != null) {
+                    openDialogFragment(new AddEditClinicAddressDialogFragment(), AddEditClinicAddressDialogFragment.TAG_CLINIC_ADDRESS, clinicDetailResponse, HealthCocoConstants.REQUEST_CODE_CLINIC_PROFILE, CommonOpenUpFragmentType.ADD_EDIT_CLINIC_ADDRESS);
+                }
                 break;
             case R.id.bt_edit_contact:
-                if (clinicDetailResponse != null)
-                    openDialogFragment(HealthCocoConstants.REQUEST_CODE_CLINIC_PROFILE, new AddEditClinicContactDialogFragment());
+                if (clinicDetailResponse != null) {
+                    openDialogFragment(new AddEditClinicContactDialogFragment(), AddEditClinicContactDialogFragment.TAG_CONTACT, clinicDetailResponse, HealthCocoConstants.REQUEST_CODE_CLINIC_PROFILE, CommonOpenUpFragmentType.ADD_EDIT_CLINIC_CONTACT);
+                }
                 break;
             case R.id.bt_add_session:
                 LogUtils.LOGD(TAG, "AddSession Clicked");
@@ -433,6 +435,7 @@ public class ClinicalProfileFragment extends HealthCocoFragment
 //                    openMapViewActivity(CommonOpenUpFragmentType.ENLARGED_MAP_VIEW_FRAGMENT, clinicDetailResponse.getUniqueId(), MapType.CLINIC_PROFILE, 0);
 //                break;
         }
+
     }
 
     private void openCommonOpenUpActivity(CommonOpenUpFragmentType fragmentType, String uniqueId, int requestCode) {
@@ -442,15 +445,15 @@ public class ClinicalProfileFragment extends HealthCocoFragment
         startActivityForResult(intent, requestCode);
     }
 
-    private void openDialogFragment(int requestCode, HealthCocoDialogFragment dialogFragment) {
-        Bundle args = new Bundle();
-        String uniqueId = clinicDetailResponse.getUniqueId();
-        args.putString(HealthCocoConstants.TAG_UNIQUE_ID, uniqueId);
-        args.putInt(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.ADD_EDIT_CLINIC_HOURS.ordinal());
-        dialogFragment.setArguments(args);
-        dialogFragment.setTargetFragment(this, requestCode);
-        dialogFragment.show(mFragmentManager, dialogFragment.getClass().getSimpleName());
-    }
+//    private void openDialogFragment(int requestCode, HealthCocoDialogFragment dialogFragment) {
+//        Bundle args = new Bundle();
+//        String uniqueId = clinicDetailResponse.getUniqueId();
+//        args.putString(HealthCocoConstants.TAG_UNIQUE_ID, uniqueId);
+//        args.putInt(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.ADD_EDIT_CLINIC_HOURS.ordinal());
+//        dialogFragment.setArguments(args);
+//        dialogFragment.setTargetFragment(this, requestCode);
+//        dialogFragment.show(mFragmentManager, dialogFragment.getClass().getSimpleName());
+//    }
 
     private void addSubItemSession() {
 

@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/blue_action_bar"
     android:clickable="false"
-    android:padding="20dp"
+    android:padding="10dp"
     android:text="@string/save"
-    android:textColor="@drawable/text_selector_white_translucent" />
+    android:textColor="@drawable/text_selector_white_translucent"
+    android:textSize="16sp" />

@@ -11,12 +11,12 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.healthcoco.healthcocopad.R;
-import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.HealthCocoActivity;
+import com.healthcoco.healthcocopad.HealthCocoFragment;
+import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.adapter.InitialScreenViewPagerAapter;
-import com.healthcoco.healthcocopad.dialogFragment.SignUpDialogFragment;
 import com.healthcoco.healthcocopad.dialogFragment.LoginDialogFragment;
+import com.healthcoco.healthcocopad.dialogFragment.SignUpDialogFragment;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.InitialScreenType;
 
@@ -117,18 +117,10 @@ public class LoginSignupFragment extends HealthCocoFragment implements View.OnCl
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.bt_sign_in:
-                Bundle args = new Bundle();
-//                args.putInt(HealthCocoConstants.TAG_FRAGMENT_NAME, fragmentType.ordinal());
-                LoginDialogFragment dialogFragment = new LoginDialogFragment();
-                dialogFragment.setArguments(args);
-                dialogFragment.show(mFragmentManager, dialogFragment.getClass().getSimpleName());
+                openDialogFragment(new LoginDialogFragment());
                 break;
             case R.id.bt_join:
-                Bundle bundle = new Bundle();
-//                bundle.putInt(HealthCocoConstants.TAG_FRAGMENT_NAME, fragmentType.ordinal());
-                SignUpDialogFragment signUpDialogFragment = new SignUpDialogFragment();
-                signUpDialogFragment.setArguments(bundle);
-                signUpDialogFragment.show(mFragmentManager, signUpDialogFragment.getClass().getSimpleName());
+                openDialogFragment(new SignUpDialogFragment());
                 break;
         }
     }

@@ -16,10 +16,11 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.android.volley.Response;
-import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.HealthCocoDialogFragment;
+import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.activities.HomeActivity;
+import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.Specialities;
 import com.healthcoco.healthcocopad.custom.AutoCompleteTextViewAdapter;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
@@ -33,7 +34,6 @@ import com.healthcoco.healthcocopad.enums.WebViewType;
 import com.healthcoco.healthcocopad.listeners.CommonListDialogItemClickListener;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
 import com.healthcoco.healthcocopad.services.GsonRequest;
-import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.EditTextTextViewErrorUtil;
@@ -176,9 +176,7 @@ public class SignUpDialogFragment extends HealthCocoDialogFragment implements Vi
 
     private void openLoginDialogFragment() {
         getDialog().dismiss();
-        Bundle args = new Bundle();
         LoginDialogFragment dialogFragment = new LoginDialogFragment();
-        dialogFragment.setArguments(args);
         dialogFragment.show(mFragmentManager, dialogFragment.getClass().getSimpleName());
     }
 

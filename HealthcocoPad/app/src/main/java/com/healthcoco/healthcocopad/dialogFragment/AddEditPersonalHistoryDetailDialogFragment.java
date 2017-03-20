@@ -27,12 +27,13 @@ import org.parceler.Parcels;
  * Created by Shreshtha on 14-03-2017.
  */
 public class AddEditPersonalHistoryDetailDialogFragment extends HealthCocoDialogFragment implements View.OnClickListener, GsonRequest.ErrorListener, Response.Listener<VolleyResponseBean> {
+    public static final String TAG_PERSONAL_HISTORY = "personalHistory";
     private PersonalHistory personalHistory;
-    private HistoryDetailsResponse historyDetailsResponse;
     private EditText editDiet;
     private EditText editAddiction;
     private EditText editBowelHabits;
     private EditText editBladderHabits;
+    private HistoryDetailsResponse historyDetailsResponse;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -57,19 +58,17 @@ public class AddEditPersonalHistoryDetailDialogFragment extends HealthCocoDialog
     }
 
     private void getDataFromIntent() {
-        historyDetailsResponse = Parcels.unwrap(getArguments().getParcelable(HealthCocoConstants.TAG_PERSONAL_HISTORY));
-        if (!Util.isNullOrEmptyList(historyDetailsResponse)) {
+        historyDetailsResponse = Parcels.unwrap(getArguments().getParcelable(TAG_PERSONAL_HISTORY));
+        if (historyDetailsResponse != null && historyDetailsResponse.getPersonalHistory() != null) {
             personalHistory = historyDetailsResponse.getPersonalHistory();
-            if (!Util.isNullOrEmptyList(personalHistory)) {
-                String diet = personalHistory.getDiet();
-                String addictions = personalHistory.getAddictions();
-                String bowelHabit = personalHistory.getBowelHabit();
-                String bladderHabit = personalHistory.getBladderHabit();
-                editDiet.setText(Util.getValidatedValue(diet));
-                editAddiction.setText(Util.getValidatedValue(addictions));
-                editBowelHabits.setText(Util.getValidatedValue(bowelHabit));
-                editBladderHabits.setText(Util.getValidatedValue(bladderHabit));
-            }
+            String diet = personalHistory.getDiet();
+            String addictions = personalHistory.getAddictions();
+            String bowelHabit = personalHistory.getBowelHabit();
+            String bladderHabit = personalHistory.getBladderHabit();
+            editDiet.setText(Util.getValidatedValue(diet));
+            editAddiction.setText(Util.getValidatedValue(addictions));
+            editBowelHabits.setText(Util.getValidatedValue(bowelHabit));
+            editBladderHabits.setText(Util.getValidatedValue(bladderHabit));
         }
     }
 
