@@ -705,10 +705,8 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
             IntentFilter filter2 = new IntentFilter();
             filter2.addAction(INTENT_GET_HISTORY_LIST_LOCAL);
             LocalBroadcastManager.getInstance(mActivity).registerReceiver(historyListLocalReceiver, filter2);
-
         }
     }
-
 
     @Override
     public void onPause() {

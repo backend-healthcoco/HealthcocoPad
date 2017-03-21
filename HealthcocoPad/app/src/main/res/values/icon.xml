@@ -26,4 +26,15 @@
 
     <string name="fa_angle_down_thin">&#xf107;</string>
     <string name="fa_angle_up_thin">&#xf106;</string>
+    <string name="fa_email">&#xf0e0;&#160;Email&#160;</string>
+    <string name="fa_sms">&#xf086;&#160;Sms&#160;</string>
+    <string name="fa_clone">&#xf0c5;&#160;Clone&#160;</string>
+    <string name="fa_edit">&#xf040;&#160;Edit&#160;</string>
+    <string name="fa_important">&#xf067;&#160;Important&#160;</string>
+    <string name="fa_print">&#xf02f;&#160;Print&#160;</string>
+    <string name="fa_save_as_template">&#xf0f6;&#160;Save as Template&#160;</string>
+    <string name="fa_total_rupees">Total&#160;(\u20B9)&#160;</string>
+    <string name="fa_total_discount">Total Discount&#160;:\u20B9</string>
+    <string name="fa_total_cost">Total Cost&#160;:&#160;\u20B9</string>
+    <string name="fa_grand_total_rupees">Grand Total&#160;:&#160;\u20B9</string>
 </resources>

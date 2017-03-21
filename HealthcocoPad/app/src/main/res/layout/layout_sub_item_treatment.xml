@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/parent_treatment_item"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/background"
+        android:orientation="horizontal"
+        android:padding="10dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/treatment_name"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_drug_lable" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/quantity_per_day"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_drug_lable" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/cost"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_drug_lable" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/discount"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_drug_lable" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/status"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_drug_lable" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/fa_total_rupees"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_drug_lable" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/container_treatment_detail_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/tv_treatment_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@color/black_greyish"
+            android:textSize="@dimen/text_size_drug_child_lable" />
+
+        <TextView
+            android:id="@+id/tv_qty_per_day"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@color/black_greyish"
+            android:textSize="@dimen/text_size_drug_child_lable" />
+
+        <TextView
+            android:id="@+id/tv_cost"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@color/black_greyish"
+            android:textSize="@dimen/text_size_drug_child_lable" />
+
+        <TextView
+            android:id="@+id/tv_discount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@color/black_greyish"
+            android:textSize="@dimen/text_size_drug_child_lable" />
+
+        <TextView
+            android:id="@+id/tv_status"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@color/black_greyish"
+            android:textSize="@dimen/text_size_drug_child_lable" />
+
+        <TextView
+            android:id="@+id/tv_total_rupees"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@color/black_greyish"
+            android:textSize="@dimen/text_size_drug_child_lable" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginBottom="@dimen/item_padding"
+        android:layout_marginLeft="@dimen/item_padding"
+        android:layout_marginRight="@dimen/item_padding"
+        android:layout_marginTop="@dimen/item_visits_button_padding_top_bottom_8dp"
+        android:background="@color/background" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/textView12"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@color/black_greyish"
+            android:textSize="@dimen/text_size_drug_child_lable" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/fa_total_cost"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_drug_child_lable" />
+
+        <TextView
+            android:id="@+id/tv_total_cost"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@color/black_greyish"
+            android:textSize="@dimen/text_size_drug_child_lable" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/fa_total_discount"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_drug_child_lable" />
+
+        <TextView
+            android:id="@+id/tv_total_discount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@color/black_greyish"
+            android:textSize="@dimen/text_size_drug_child_lable" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/fa_grand_total_rupees"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_drug_child_lable" />
+
+        <TextView
+            android:id="@+id/tv_grand_total"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@color/black_greyish"
+            android:textSize="@dimen/text_size_drug_child_lable" />
+    </LinearLayout>
+</LinearLayout>

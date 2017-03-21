@@ -116,4 +116,15 @@
     <dimen name="text_size_select_drug_item">15sp</dimen>
     <dimen name="text_size_drug_dose_item_drug_name">13sp</dimen>
     <dimen name="text_size_drug_dose_item_dosage_direction_instruction">13sp</dimen>
+    <dimen name="header_text_size">12sp</dimen>
+    <dimen name="text_size_add_clinical_note_vital_signs_label">17sp</dimen>
+    <dimen name="text_size_add_clinical_note_vital_signs_label_child">13sp</dimen>
+    <dimen name="item_padding">8dp</dimen>
+    <dimen name="text_size_prescription_diagnostic_label">17sp</dimen>
+    <dimen name="text_size_bt_history_edit_sms_email">12sp</dimen>
+    <dimen name="item_visits_button_margin_8dp">8dp</dimen>
+    <dimen name="item_visits_button_padding_left_right_20dp">20dp</dimen>
+    <dimen name="item_visits_button_padding_top_bottom_8dp">8dp</dimen>
+    <dimen name="text_size_drug_lable">17sp</dimen>
+    <dimen name="text_size_drug_child_lable">15sp</dimen>
 </resources>

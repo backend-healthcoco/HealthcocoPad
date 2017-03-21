@@ -266,15 +266,17 @@ public class Drug extends SugarRecord implements Serializable {
 
     public String getFormattedDrugName() {
         String genericNamesFormatted = "";
-        String type = getDrugType().getType();
-        String drugName =getDrugName();
-        drugName = type + " " + drugName;
+        String drugName = getDrugName();
+        if (getDrugType() != null) {
+            String type = getDrugType().getType();
+            drugName = type + " " + drugName;
+        }
         if (!Util.isNullOrEmptyList(getGenericNames())) {
             genericNamesFormatted = " (";
-            for (GenericName genericName :getGenericNames()) {
-                int index =getGenericNames().indexOf(genericName);
+            for (GenericName genericName : getGenericNames()) {
+                int index = getGenericNames().indexOf(genericName);
                 genericNamesFormatted = genericNamesFormatted + genericName.getName();
-                if (index !=getGenericNames().size() - 1)
+                if (index != getGenericNames().size() - 1)
                     genericNamesFormatted = genericNamesFormatted + GENERIC_NAME_SEPARATOR;
             }
             genericNamesFormatted = genericNamesFormatted + ")";

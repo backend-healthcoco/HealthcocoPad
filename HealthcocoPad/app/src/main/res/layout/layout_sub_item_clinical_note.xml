@@ -1,0 +1,820 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+    <LinearLayout
+        android:id="@+id/layout_vital_signs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerInParent="true"
+            android:text="@string/vital_signs"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center|start"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/bt"
+                    android:textColor="@color/grey_dark_text"
+                    android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label" />
+
+                <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+                    android:id="@+id/tv_body_temprature"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dp"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="@string/no_text_dash"
+                    android:textColor="@color/grey_dark_text"
+                    android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label_child" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/faranheit"
+                    android:textColor="@color/grey_dark_text"
+                    android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center|start"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/wt"
+                    android:textColor="@color/grey_dark_text"
+                    android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label" />
+
+                <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+                    android:id="@+id/tv_weight"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dp"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="@string/no_text_dash"
+                    android:textColor="@color/grey_dark_text"
+                    android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label_child" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/kilograms"
+                    android:textColor="@color/grey_dark_text"
+                    android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center|start"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/hr"
+                    android:textColor="@color/grey_dark_text"
+                    android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label" />
+
+                <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+                    android:id="@+id/tv_heart_rate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dp"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="@string/no_text_dash"
+                    android:textColor="@color/grey_dark_text"
+                    android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label_child" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/beats_per_min"
+                    android:textColor="@color/grey_dark_text"
+                    android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:orientation="horizontal"
+            android:weightSum="3">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center|start"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/bp"
+                    android:textColor="@color/grey_dark_text"
+                    android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label" />
+
+                <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+                    android:id="@+id/tv_blood_pressure"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dp"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="@string/no_text_dash"
+                    android:textColor="@color/grey_dark_text"
+                    android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label_child" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/bp_mm_hg"
+                    android:textColor="@color/grey_dark_text"
+                    android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center|start"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/rr"
+                    android:textColor="@color/grey_dark_text"
+                    android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label" />
+
+                <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+                    android:id="@+id/tv_respiratory_rate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dp"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="@string/no_text_dash"
+                    android:textColor="@color/grey_dark_text"
+                    android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label_child" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/breaths_per_min"
+                    android:textColor="@color/grey_dark_text"
+                    android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center|start"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/spo2_colon"
+                    android:textColor="@color/grey_dark_text"
+                    android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label" />
+
+                <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+                    android:id="@+id/tv_spo2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dp"
+                    android:gravity="center"
+                    android:maxLines="1"
+                    android:text="@string/no_text_dash"
+                    android:textColor="@color/grey_dark_text"
+                    android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label_child" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/spo2_percent"
+                    android:textColor="@color/grey_dark_text"
+                    android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_present_complaints"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/present_complaint"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label" />
+
+        <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+            android:id="@+id/tv_text_present_complaints"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center|start"
+            android:lineSpacingExtra="2dp"
+            android:paddingBottom="1dp"
+            android:paddingTop="2dp"
+            android:textAllCaps="false"
+            android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label_child"
+            android:visibility="visible" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_complaints"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/complaints"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label" />
+
+        <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+            android:id="@+id/tv_text_complaints"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center|start"
+            android:lineSpacingExtra="2dp"
+            android:paddingBottom="1dp"
+            android:paddingTop="2dp"
+            android:textAllCaps="false"
+            android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label_child"
+            android:visibility="visible" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_history_of_present_complaints"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/history_of_present_complaints"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label" />
+
+        <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+            android:id="@+id/tv_text_history_of_present_complaints"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center|start"
+            android:lineSpacingExtra="2dp"
+            android:paddingBottom="1dp"
+            android:paddingTop="2dp"
+            android:textAllCaps="false"
+            android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label_child"
+            android:visibility="visible" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_menstrual_history"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/menstrual_history"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label" />
+
+        <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+            android:id="@+id/tv_text_menstrual_history"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center|start"
+            android:lineSpacingExtra="2dp"
+            android:paddingBottom="1dp"
+            android:paddingTop="2dp"
+            android:textAllCaps="false"
+            android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label_child"
+            android:visibility="visible" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_obstetric_history"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/obstetric_history"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label" />
+
+        <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+            android:id="@+id/tv_text_obstetric_history"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center|start"
+            android:lineSpacingExtra="2dp"
+            android:paddingBottom="1dp"
+            android:paddingTop="2dp"
+            android:textAllCaps="false"
+            android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label_child"
+            android:visibility="visible" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_general_examination"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/general_examination"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label" />
+
+        <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+            android:id="@+id/tv_text_general_examination"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center|start"
+            android:lineSpacingExtra="2dp"
+            android:paddingBottom="1dp"
+            android:paddingTop="2dp"
+            android:textAllCaps="false"
+            android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label_child"
+            android:visibility="visible" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_system_examination"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/systemic_examination"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label" />
+
+        <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+            android:id="@+id/tv_text_system_examination"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center|start"
+            android:lineSpacingExtra="2dp"
+            android:paddingBottom="1dp"
+            android:paddingTop="2dp"
+            android:textAllCaps="false"
+            android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label_child"
+            android:visibility="visible" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_observations"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/observations"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label" />
+
+        <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+            android:id="@+id/tv_text_observations"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center|start"
+            android:lineSpacingExtra="2dp"
+            android:paddingTop="2dp"
+            android:textAllCaps="false"
+            android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label_child"
+            android:visibility="visible" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_investigations"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/investigations"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label" />
+
+        <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+            android:id="@+id/tv_text_investigations"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center|start"
+            android:lineSpacingExtra="2dp"
+            android:paddingTop="2dp"
+            android:textAllCaps="false"
+            android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label_child"
+            android:visibility="visible" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_provisional_diagnosis"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/provisional_diagnosis"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label" />
+
+        <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+            android:id="@+id/tv_text_provision_diagnosis"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center|start"
+            android:lineSpacingExtra="2dp"
+            android:paddingBottom="1dp"
+            android:paddingTop="2dp"
+            android:textAllCaps="false"
+            android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label_child"
+            android:visibility="visible" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_diagnosis"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/diagnosis"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label" />
+
+        <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+            android:id="@+id/tv_text_diagnoses"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center|start"
+            android:lineSpacingExtra="2dp"
+            android:paddingTop="2dp"
+            android:textAllCaps="false"
+            android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label_child"
+            android:visibility="visible" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_ecg_details"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/ecg_details"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label" />
+
+        <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+            android:id="@+id/tv_text_ecg_details"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center|start"
+            android:lineSpacingExtra="2dp"
+            android:paddingBottom="1dp"
+            android:paddingTop="2dp"
+            android:textAllCaps="false"
+            android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label_child"
+            android:visibility="visible" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_echo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/echo"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label" />
+
+        <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+            android:id="@+id/tv_text_echo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center|start"
+            android:lineSpacingExtra="2dp"
+            android:paddingBottom="1dp"
+            android:paddingTop="2dp"
+            android:textAllCaps="false"
+            android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label_child"
+            android:visibility="visible" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_xray_details"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/xray_details"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label" />
+
+        <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+            android:id="@+id/tv_text_xray_details"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center|start"
+            android:lineSpacingExtra="2dp"
+            android:paddingBottom="1dp"
+            android:paddingTop="2dp"
+            android:textAllCaps="false"
+            android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label_child"
+            android:visibility="visible" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_holter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/holter"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label" />
+
+        <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+            android:id="@+id/tv_text_holter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center|start"
+            android:lineSpacingExtra="2dp"
+            android:paddingBottom="1dp"
+            android:paddingTop="2dp"
+            android:textAllCaps="false"
+            android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label_child"
+            android:visibility="visible" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_pa"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/pa"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label" />
+
+        <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+            android:id="@+id/tv_text_pa"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center|start"
+            android:lineSpacingExtra="2dp"
+            android:paddingBottom="1dp"
+            android:paddingTop="2dp"
+            android:textAllCaps="false"
+            android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label_child"
+            android:visibility="visible" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_pv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/pv"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label" />
+
+        <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+            android:id="@+id/tv_text_pv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center|start"
+            android:lineSpacingExtra="2dp"
+            android:paddingBottom="1dp"
+            android:paddingTop="2dp"
+            android:textAllCaps="false"
+            android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label_child"
+            android:visibility="visible" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_ps"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/ps"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label" />
+
+        <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+            android:id="@+id/tv_text_ps"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center|start"
+            android:lineSpacingExtra="2dp"
+            android:paddingBottom="1dp"
+            android:paddingTop="2dp"
+            android:textAllCaps="false"
+            android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label_child"
+            android:visibility="visible" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_inidication_of_usg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/indication_of_usg"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label" />
+
+        <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+            android:id="@+id/tv_text_inidication_of_usg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center|start"
+            android:lineSpacingExtra="2dp"
+            android:paddingBottom="1dp"
+            android:paddingTop="2dp"
+            android:textAllCaps="false"
+            android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label_child"
+            android:visibility="visible" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_notes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="3dp"
+            android:text="@string/note"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label" />
+
+        <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+            android:id="@+id/tv_text_notes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center|start"
+            android:lineSpacingExtra="2dp"
+            android:paddingTop="2dp"
+            android:textAllCaps="false"
+            android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label_child"
+            android:visibility="visible" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_diagrams"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="3dp"
+            android:text="@string/diagrams"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label" />
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:paddingBottom="4dp"
+            android:scrollbarSize="3dp"
+            android:scrollbarStyle="outsideOverlay">
+
+            <LinearLayout
+                android:id="@+id/container_diagrams"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+            </LinearLayout>
+        </HorizontalScrollView>
+    </LinearLayout>
+</LinearLayout>

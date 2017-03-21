@@ -7,4 +7,5 @@
     <dimen name="hcc_plus_top_logo_height">100px</dimen>
     <dimen name="tab_home_image_size">50px</dimen>
     <dimen name="tab_global_access_button_size">132px</dimen>
+    <dimen name="visits_icon_with_circle_size">120px</dimen>
 </resources>

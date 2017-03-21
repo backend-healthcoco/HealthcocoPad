@@ -9,6 +9,7 @@ import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.HealthCocoViewHolder;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.server.DoctorClinicProfile;
+import com.healthcoco.healthcocopad.utilities.DownloadImageFromUrlUtil;
 import com.healthcoco.healthcocopad.utilities.Util;
 
 /**
@@ -33,7 +34,7 @@ public class MenuClinicListviewHolder extends HealthCocoViewHolder {
     @Override
     public void applyData() {
         tvName.setText(Util.getValidatedValue(doctorClinicProfile.getLocationName()));
-//        DownloadImageFromUrlUtil.loadImageUsingImageLoader(null, ivClinicImage, doctorClinicProfile.getLogoThumbnailUrl());
+        DownloadImageFromUrlUtil.loadImageUsingImageLoader(null, ivClinicImage, doctorClinicProfile.getLogoThumbnailUrl());
     }
 
     @Override

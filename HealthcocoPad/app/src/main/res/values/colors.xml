@@ -26,4 +26,5 @@
     <color name="grey_darker">#323232</color>
     <color name="grey_item_border">#C5C5CD</color>
     <color name="grey_icons">#9C9C9C</color>
+    <color name="grey_dark_background">#d6d3d3</color>
 </resources>
