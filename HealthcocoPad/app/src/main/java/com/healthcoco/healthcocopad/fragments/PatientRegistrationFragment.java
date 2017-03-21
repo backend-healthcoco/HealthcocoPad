@@ -37,7 +37,7 @@ import com.healthcoco.healthcocopad.adapter.GroupsGridViewAdapter;
 import com.healthcoco.healthcocopad.adapter.NotesListViewAdapter;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.request.RegisterNewPatientRequest;
-import com.healthcoco.healthcocopad.bean.server.Address;
+import com.healthcoco.healthcocopad.bean.Address;
 import com.healthcoco.healthcocopad.bean.server.AlreadyRegisteredPatientsResponse;
 import com.healthcoco.healthcocopad.bean.server.BloodGroup;
 import com.healthcoco.healthcocopad.bean.server.CityResponse;

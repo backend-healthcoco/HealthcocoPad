@@ -23,7 +23,7 @@ import com.healthcoco.healthcocopad.HealthCocoApplication;
 import com.healthcoco.healthcocopad.activities.SplashScreenActivity;
 import com.healthcoco.healthcocopad.bean.server.AppointmentSlot;
 import com.healthcoco.healthcocopad.bean.server.ConsultationFee;
-import com.healthcoco.healthcocopad.bean.server.DOB;
+import com.healthcoco.healthcocopad.bean.DOB;
 import com.healthcoco.healthcocopad.bean.server.DoctorExperience;
 import com.healthcoco.healthcocopad.bean.server.DoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;

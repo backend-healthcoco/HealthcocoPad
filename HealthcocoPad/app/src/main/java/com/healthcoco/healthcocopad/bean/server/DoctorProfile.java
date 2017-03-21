@@ -3,6 +3,7 @@ package com.healthcoco.healthcocopad.bean.server;
 import android.app.Activity;
 
 import com.healthcoco.healthcocopad.R;
+import com.healthcoco.healthcocopad.bean.DOB;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.orm.SugarRecord;
 import com.orm.annotation.Ignore;

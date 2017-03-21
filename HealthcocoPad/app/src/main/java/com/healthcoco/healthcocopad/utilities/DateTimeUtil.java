@@ -4,7 +4,7 @@ import android.text.format.DateFormat;
 import android.text.format.DateUtils;
 
 import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
-import com.healthcoco.healthcocopad.bean.server.DOB;
+import com.healthcoco.healthcocopad.bean.DOB;
 import com.healthcoco.healthcocopad.dialogFragment.AddEditClinicHoursDialogFragment;
 
 import java.sql.Date;

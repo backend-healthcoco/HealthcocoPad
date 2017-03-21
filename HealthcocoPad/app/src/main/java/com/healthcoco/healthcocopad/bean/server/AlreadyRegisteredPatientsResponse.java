@@ -1,5 +1,6 @@
 package com.healthcoco.healthcocopad.bean.server;
 
+import com.healthcoco.healthcocopad.bean.DOB;
 import com.healthcoco.healthcocopad.enums.UserState;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.orm.SugarRecord;

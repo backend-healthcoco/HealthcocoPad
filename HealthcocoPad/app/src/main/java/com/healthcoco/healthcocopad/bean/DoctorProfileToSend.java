@@ -1,6 +1,5 @@
 package com.healthcoco.healthcocopad.bean;
 
-import com.healthcoco.healthcocopad.bean.server.DOB;
 import com.healthcoco.healthcocopad.bean.server.FileDetails;
 
 import java.util.List;

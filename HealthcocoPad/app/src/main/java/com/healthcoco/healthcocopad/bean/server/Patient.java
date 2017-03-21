@@ -8,6 +8,7 @@ import org.parceler.Parcel;
 
 import java.util.ArrayList;
 import java.util.List;
+
 @Parcel
 public class Patient extends SugarRecord {
     @Unique
@@ -38,8 +39,7 @@ public class Patient extends SugarRecord {
     private String insuranceName;
     @Ignore
     private ArrayList<String> notes;
-    @Ignore
-    protected List<NotesTable> notesTableList;
+    protected String notesJsonString;
 
     public String getPatientId() {
         return patientId;
@@ -153,20 +153,11 @@ public class Patient extends SugarRecord {
         this.notes = notes;
     }
 
-    @Override
-    public String toString() {
-        return "Patient [patientId=" + patientId + ", bloodGroup=" + bloodGroup + ", profession=" + profession
-                + ", emailAddress=" + emailAddress + ", doctorId=" + doctorId
-                + ", addressId=" + addressId + ", secMobile=" + secMobile + ", adhaarId=" + adhaarId
-                + ", panCardNumber=" + panCardNumber + ", drivingLicenseId=" + drivingLicenseId + ", insuranceId="
-                + insuranceId + ", insuranceName=" + insuranceName + ", notes=" + notes + "]";
+    public String getNotesJsonString() {
+        return notesJsonString;
     }
 
-    public List<NotesTable> getNotesTableList() {
-        return notesTableList;
-    }
-
-    public void setNotesTableList(List<NotesTable> notesTableList) {
-        this.notesTableList = notesTableList;
+    public void setNotesJsonString(String notesJsonString) {
+        this.notesJsonString = notesJsonString;
     }
 }

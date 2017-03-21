@@ -1,4 +1,4 @@
-package com.healthcoco.healthcocopad.bean.server;
+package com.healthcoco.healthcocopad.bean;
 
 import android.os.Parcel;
 import android.os.Parcelable;

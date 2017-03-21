@@ -19,7 +19,7 @@ import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
-import com.healthcoco.healthcocopad.bean.server.Address;
+import com.healthcoco.healthcocopad.bean.Address;
 import com.healthcoco.healthcocopad.bean.server.Drug;
 import com.healthcoco.healthcocopad.bean.server.DrugsAndAllergies;
 import com.healthcoco.healthcocopad.bean.server.HistoryDetailsResponse;
@@ -471,11 +471,11 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
     private void initNotes() {
         LinearLayout containerNotes = (LinearLayout) mainContainerNotes.findViewById(R.id.container_notes);
         containerNotes.removeAllViews();
-        if (selectedPatient.getPatient() != null && !Util.isNullOrEmptyList(selectedPatient.getPatient().getNotesTableList())) {
-            for (NotesTable note :
-                    selectedPatient.getPatient().getNotesTableList()) {
+        if (selectedPatient.getPatient() != null && !Util.isNullOrEmptyList(selectedPatient.getPatient().getNotes())) {
+            for (String note :
+                    selectedPatient.getPatient().getNotes()) {
                 TextView tvNote = (TextView) mActivity.getLayoutInflater().inflate(R.layout.sub_item_profile_detail_groups_notes_text, null);
-                tvNote.setText(note.getNote());
+                tvNote.setText(note);
                 containerNotes.addView(tvNote);
             }
         } else {

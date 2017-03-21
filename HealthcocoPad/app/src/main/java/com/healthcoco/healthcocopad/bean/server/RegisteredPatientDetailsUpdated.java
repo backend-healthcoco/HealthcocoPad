@@ -2,6 +2,8 @@ package com.healthcoco.healthcocopad.bean.server;
 
 import android.graphics.Bitmap;
 
+import com.healthcoco.healthcocopad.bean.Address;
+import com.healthcoco.healthcocopad.bean.DOB;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.orm.SugarRecord;
@@ -12,6 +14,7 @@ import org.parceler.Parcel;
 
 import java.util.ArrayList;
 import java.util.List;
+
 @Parcel
 public class RegisteredPatientDetailsUpdated extends SugarRecord {
     @Unique
@@ -43,7 +46,7 @@ public class RegisteredPatientDetailsUpdated extends SugarRecord {
 
     @Ignore
     private Address address;
-
+    protected String addressJsonString;
     @Ignore
     private List<UserGroups> groups;
 
@@ -312,5 +315,13 @@ public class RegisteredPatientDetailsUpdated extends SugarRecord {
 
     public void setDobJsonString(String dobJsonString) {
         this.dobJsonString = dobJsonString;
+    }
+
+    public String getAddressJsonString() {
+        return addressJsonString;
+    }
+
+    public void setAddressJsonString(String addressJsonString) {
+        this.addressJsonString = addressJsonString;
     }
 }

@@ -1,6 +1,5 @@
-package com.healthcoco.healthcocopad.bean.server;
+package com.healthcoco.healthcocopad.bean;
 
-import com.orm.SugarRecord;
 import com.orm.annotation.Unique;
 
 import org.parceler.Parcel;
@@ -9,7 +8,7 @@ import org.parceler.Parcel;
  * @author nehas
  */
 @Parcel
-public class Address extends SugarRecord {
+public class Address {
     private String country;
 
     private String city;

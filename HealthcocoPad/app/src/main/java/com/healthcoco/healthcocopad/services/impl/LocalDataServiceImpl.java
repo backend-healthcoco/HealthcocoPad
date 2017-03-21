@@ -4,14 +4,16 @@ import android.util.Log;
 
 import com.android.volley.Response;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.healthcoco.healthcocopad.HealthCocoApplication;
 import com.healthcoco.healthcocopad.R;
+import com.healthcoco.healthcocopad.bean.Address;
+import com.healthcoco.healthcocopad.bean.DOB;
 import com.healthcoco.healthcocopad.bean.UIPermissions;
 import com.healthcoco.healthcocopad.bean.UserPermissionsResponse;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.AccessModule;
 import com.healthcoco.healthcocopad.bean.server.Achievement;
-import com.healthcoco.healthcocopad.bean.server.Address;
 import com.healthcoco.healthcocopad.bean.server.AllUIPermission;
 import com.healthcoco.healthcocopad.bean.server.AlreadyRegisteredPatientsResponse;
 import com.healthcoco.healthcocopad.bean.server.AppointmentSlot;
@@ -29,7 +31,6 @@ import com.healthcoco.healthcocopad.bean.server.CollegeUniversityInstitute;
 import com.healthcoco.healthcocopad.bean.server.Complaint;
 import com.healthcoco.healthcocopad.bean.server.ComplaintSuggestions;
 import com.healthcoco.healthcocopad.bean.server.ConsultationFee;
-import com.healthcoco.healthcocopad.bean.server.DOB;
 import com.healthcoco.healthcocopad.bean.server.Diagnoses;
 import com.healthcoco.healthcocopad.bean.server.DiagnosisSuggestions;
 import com.healthcoco.healthcocopad.bean.server.DiagnosticTest;
@@ -74,7 +75,6 @@ import com.healthcoco.healthcocopad.bean.server.MedicalCouncil;
 import com.healthcoco.healthcocopad.bean.server.MedicalFamilyHistoryDetails;
 import com.healthcoco.healthcocopad.bean.server.MedicalFamilyHistoryResponse;
 import com.healthcoco.healthcocopad.bean.server.Notes;
-import com.healthcoco.healthcocopad.bean.server.NotesTable;
 import com.healthcoco.healthcocopad.bean.server.Observation;
 import com.healthcoco.healthcocopad.bean.server.ObservationSuggestions;
 import com.healthcoco.healthcocopad.bean.server.OtpVerification;
@@ -161,6 +161,13 @@ public class LocalDataServiceImpl {
     private Object getObjectFromJson(Class<?> class1, String jsonString) {
         if (!Util.isNullOrBlank(jsonString))
             return gson.fromJson(jsonString, class1);
+        return null;
+    }
+
+    private ArrayList<Object> getObjectsListFronJson(Class<?> class1, String jsonString) {
+        if (!Util.isNullOrBlank(jsonString))
+            return gson.fromJson(jsonString, new TypeToken<List<Object>>() {
+            }.getType());
         return null;
     }
 
@@ -1027,20 +1034,20 @@ public class LocalDataServiceImpl {
         // setting patient
         if (registeredPatientDetailsUpdated.getPatient() != null
                 && !Util.isNullOrBlank(registeredPatientDetailsUpdated.getPatient().getPatientId())) {
+
             Patient patient = registeredPatientDetailsUpdated.getPatient();
+            //setting DOB
             registeredPatientDetailsUpdated.setDobJsonString(getJsonFromObject(registeredPatientDetailsUpdated.getDob()));
             // setting patient's relations
             addRelations(patient.getRelations(), patient.getPatientId());
 
-            addNotes(patient.getNotes(), patient.getPatientId());
+            patient.setNotesJsonString(getJsonFromObject(patient.getNotes()));
             registeredPatientDetailsUpdated.setForeignPatientId(registeredPatientDetailsUpdated.getPatient().getPatientId());
             registeredPatientDetailsUpdated.getPatient().save();
         }
         // setting address
-        if (registeredPatientDetailsUpdated.getAddress() != null) {
-            registeredPatientDetailsUpdated.getAddress().setUserId(registeredPatientDetailsUpdated.getUserId());
-            registeredPatientDetailsUpdated.getAddress().save();
-        }
+        registeredPatientDetailsUpdated.setAddressJsonString(getJsonFromObject(registeredPatientDetailsUpdated.getAddress()));
+
         deletePatientIdGroupIdsList(registeredPatientDetailsUpdated.getUserId());
         if (!Util.isNullOrEmptyList(registeredPatientDetailsUpdated.getGroups())) {
             addPatientIdGroupIdsList(registeredPatientDetailsUpdated, registeredPatientDetailsUpdated.getGroups());
@@ -1120,25 +1127,6 @@ public class LocalDataServiceImpl {
 
     private void deleteAllAssignedGroupsWithpatientId(String userId) {
         AssignedGroupsTable.deleteAll(AssignedGroupsTable.class, LocalDatabaseUtils.KEY_FOREIGN_PATIENT_ID + "= ?", userId);
-    }
-
-    private void addNotes(List<String> list, String foreignTableId) {
-        deleteAllNotesWithForeigntableId(foreignTableId);
-        if (!Util.isNullOrEmptyList(list)) {
-            ArrayList<NotesTable> notesTablesList = new ArrayList<>();
-            for (String note :
-                    list) {
-                NotesTable notesTable = new NotesTable();
-                notesTable.setForeignTableId(foreignTableId);
-                notesTable.setNote(note);
-                notesTablesList.add(notesTable);
-            }
-            NotesTable.saveInTx(notesTablesList);
-        }
-    }
-
-    private void deleteAllNotesWithForeigntableId(String foreignTableId) {
-        NotesTable.deleteAll(NotesTable.class, LocalDatabaseUtils.KEY_FOREIGN_TABLE_ID + "= ?", foreignTableId);
     }
 
     private void addRelations(List<Relations> list, String patientId) {
@@ -1835,7 +1823,7 @@ public class LocalDataServiceImpl {
 
     private RegisteredPatientDetailsUpdated getPatientRestDetails(RegisteredPatientDetailsUpdated registeredPatientDetailsUpdated) {
         // getting address
-        registeredPatientDetailsUpdated.setAddress(getPatientAddress(registeredPatientDetailsUpdated.getUserId()));
+        registeredPatientDetailsUpdated.setAddress((Address) getObjectFromJson(Address.class, registeredPatientDetailsUpdated.getAddressJsonString()));
         if (!Util.isNullOrBlank(registeredPatientDetailsUpdated.getForeignPatientId())) {
             // gettiung DOB
             registeredPatientDetailsUpdated.setDob((DOB) getObjectFromJson(DOB.class, registeredPatientDetailsUpdated.getDobJsonString()));
@@ -1862,15 +1850,7 @@ public class LocalDataServiceImpl {
         if (patient != null) {
             patient.setRelations((List<Relations>) getListBySelectQuery(Relations.class,
                     LocalDatabaseUtils.KEY_FOREIGN_PATIENT_ID, patientId));
-            patient.setNotesTableList((List<NotesTable>) getListBySelectQuery(NotesTable.class,
-                    LocalDatabaseUtils.KEY_FOREIGN_TABLE_ID, patientId));
-            if (!Util.isNullOrEmptyList(patient.getNotesTableList())) {
-                ArrayList<String> notesTextList = new ArrayList<>();
-                for (NotesTable notesTable : patient.getNotesTableList()) {
-                    notesTextList.add(notesTable.getNote());
-                }
-                patient.setNotes(notesTextList);
-            }
+            patient.setNotes((ArrayList<String>) (Object) getObjectsListFronJson(String.class, patient.getNotesJsonString()));
         }
         return patient;
     }
