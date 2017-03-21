@@ -262,7 +262,7 @@ public class AddUpdateNameDialogFragment extends HealthCocoDialogFragment implem
     }
 
     private void addNote(String name) {
-        getTargetFragment().onActivityResult(HealthCocoConstants.REQUEST_CODE_STRINGS_LIST, HealthCocoConstants.RESULT_CODE_ADD_STRING, new Intent().putExtra(HealthCocoConstants.TAG_INTENT_DATA, name));
+        getTargetFragment().onActivityResult(getTargetRequestCode(), HealthCocoConstants.RESULT_CODE_ADD_STRING, new Intent().putExtra(HealthCocoConstants.TAG_INTENT_DATA, name));
         mActivity.hideLoading();
         dismiss();
     }

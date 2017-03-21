@@ -68,7 +68,7 @@ public class HealthCocoConstants {
     public static final int RESULT_CODE_REGISTRATION = 128;
     public static final int REQUEST_CODE_REGISTRATION = 129;
     public static final int RESULT_CODE_NOTES_LIST = 130;
-    public static final int REQUEST_CODE_STRINGS_LIST = 131;
+    public static final int REQUEST_CODE_ADD_UPDATE_NAME = 131;
     public static final int RESULT_CODE_ADD_STRING = 132;
     public static final int REQUEST_CODE_PATIENT_PROFILE = 133;
     public static final int REQUEST_CODE_HISTORY_LIST = 134;

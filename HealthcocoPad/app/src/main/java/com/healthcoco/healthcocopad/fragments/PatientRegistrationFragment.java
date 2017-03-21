@@ -30,14 +30,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Response;
-import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
+import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.adapter.GroupsGridViewAdapter;
 import com.healthcoco.healthcocopad.adapter.NotesListViewAdapter;
+import com.healthcoco.healthcocopad.bean.Address;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.request.RegisterNewPatientRequest;
-import com.healthcoco.healthcocopad.bean.Address;
 import com.healthcoco.healthcocopad.bean.server.AlreadyRegisteredPatientsResponse;
 import com.healthcoco.healthcocopad.bean.server.BloodGroup;
 import com.healthcoco.healthcocopad.bean.server.CityResponse;
@@ -50,7 +50,6 @@ import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.bean.server.UserGroups;
 import com.healthcoco.healthcocopad.custom.AutoCompleteTextViewAdapter;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
-import com.healthcoco.healthcocopad.utilities.ComparatorUtil;
 import com.healthcoco.healthcocopad.enums.AddUpdateNameDialogType;
 import com.healthcoco.healthcocopad.enums.AutoCompleteTextViewType;
 import com.healthcoco.healthcocopad.enums.BooleanTypeValues;
@@ -72,6 +71,7 @@ import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.BitmapUtil;
+import com.healthcoco.healthcocopad.utilities.ComparatorUtil;
 import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
 import com.healthcoco.healthcocopad.utilities.DownloadImageFromUrlUtil;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
@@ -94,7 +94,6 @@ import java.util.List;
 public class PatientRegistrationFragment extends HealthCocoFragment implements View.OnClickListener, CommonListDialogItemClickListener,
         GsonRequest.ErrorListener, Response.Listener<VolleyResponseBean>, LocalDoInBackgroundListenerOptimised,
         CommonOptionsDialogItemClickListener, DownloadFileFromUrlListener, NotesItemClickListener, AssignGroupListener {
-    public static final String PATIENT_DETAIL_OBJECT = "patientDetailObject";
     private ArrayList<Object> BLOOD_GROUPS = new ArrayList<Object>() {{
         add("O-");
         add("O+");
@@ -122,7 +121,6 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
     private TextView tvBirthDay;
     private EditText editEmail;
     private TextView tvReferredBy;
-    private TextView tvGroup;
     private CustomAutoCompleteTextView autotvBloodGroup;
     private EditText editLocality;
     private EditText editSecondaryMobile;
@@ -132,7 +130,6 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
     private TextView tvMobileNumber;
     private User user;
     private String mobileNumber;
-    private ArrayList<String> groupIdsList;
     private DialogFragment commonListDialog;
     private RegisteredPatientDetailsUpdated selectedPatient;
     private boolean isEditPatient;
@@ -144,8 +141,7 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
     private Uri profileImageUri;
     private int selectedRequestCode;
     private AlreadyRegisteredPatientsResponse alreadyRegisteredPatient;
-    private ArrayList<String> notesListLastAdded;
-    private TextView tvNotes;
+    private ArrayList<String> notesListLastAdded = new ArrayList<>();
     private LinearLayout containerEditName;
     private EditText editAadharId;
     private EditText editDrivingLicence;
@@ -162,7 +158,6 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
     private TextView btAddNote;
     private ListView lvNotes;
     private GridView gvGroups;
-    private ArrayList<String> notesList = new ArrayList<String>();
     private NotesListViewAdapter notesListViewAdapter;
     private GroupsGridViewAdapter groupsListViewAdapter;
     private ArrayList<String> groupIdsToAssign = new ArrayList<String>();
@@ -182,7 +177,6 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         init();
-        ((CommonOpenUpActivity) mActivity).initActionbarRightAction(this);
     }
 
     @Override
@@ -192,16 +186,16 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
             user = doctor.getUser();
             initViews();
             initListeners();
-            initAutoTvAdapter(autotvBloodGroup, AutoCompleteTextViewType.BLOOD_GROUP, BLOOD_GROUPS);
-            initAutoTvAdapter(autotvCountry, AutoCompleteTextViewType.COUNTRY, (ArrayList<Object>) (ArrayList<?>) new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.array_countries))));
-            initNoteListAdapter();
-            initGroupAdapter();
-            notifyGroupListAdapter(groupsList);
-            notifyNoteListAdapter(notesList);
+            initAdapters();
             getGroupListFromLocal();
             initData();
             initDefaultData();
         }
+    }
+
+    private void initAdapters() {
+        initNoteListAdapter();
+        initGroupAdapter();
     }
 
     private void getGroupListFromLocal() {
@@ -248,6 +242,7 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
 
     @Override
     public void initListeners() {
+        ((CommonOpenUpActivity) mActivity).initActionbarRightAction(this);
         tvBirthDay.setOnClickListener(this);
         tvReferredBy.setOnClickListener(this);
         btContactProfile.setOnClickListener(this);
@@ -261,6 +256,8 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
         getCitiesList(false);
         getReferenceList(false);
         getProfessionsList(false);
+        initAutoTvAdapter(autotvBloodGroup, AutoCompleteTextViewType.BLOOD_GROUP, BLOOD_GROUPS);
+        initAutoTvAdapter(autotvCountry, AutoCompleteTextViewType.COUNTRY, (ArrayList<Object>) (ArrayList<?>) new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.array_countries))));
     }
 
     private void initNoteListAdapter() {
@@ -340,7 +337,6 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
         String panNumber = "";
         String drivingLicense = "";
         String colorCode = "";
-        notesList = new ArrayList<>();
         if (patientDetails instanceof RegisteredPatientDetailsUpdated) {
             RegisteredPatientDetailsUpdated registeredPatientDetailsUpdated = (RegisteredPatientDetailsUpdated) patientDetails;
             imageUrl = Util.getValidatedValue(registeredPatientDetailsUpdated.getImageUrl());
@@ -371,7 +367,7 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
                 profession = Util.getValidatedValue(registeredPatientDetailsUpdated.getPatient().getProfession());
                 bloodGroup = Util.getValidatedValue(registeredPatientDetailsUpdated.getPatient().getBloodGroup());
                 secondaryMobile = Util.getValidatedValue(registeredPatientDetailsUpdated.getPatient().getSecMobile());
-                notesList = registeredPatientDetailsUpdated.getPatient().getNotes();
+                notesListLastAdded = registeredPatientDetailsUpdated.getPatient().getNotes();
                 aadharId = registeredPatientDetailsUpdated.getPatient().getAdhaarId();
                 panNumber = registeredPatientDetailsUpdated.getPatient().getPanCardNumber();
                 drivingLicense = registeredPatientDetailsUpdated.getPatient().getDrivingLicenseId();
@@ -416,29 +412,10 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
         editEmail.setText(emailAddress);
 
         notifyGroupListAdapter(groupsList);
-        notifyNoteListAdapter(notesList);
+        notifyNoteListAdapter(notesListLastAdded);
         editAadharId.setText(aadharId);
         editDrivingLicence.setText(drivingLicense);
         editPanCardNumber.setText(panNumber);
-    }
-
-    private String getNotesName(ArrayList<String> notesList) {
-        String notesText = "";
-        if (notesListLastAdded == null)
-            notesListLastAdded = new ArrayList<>();
-        notesListLastAdded.clear();
-        if (!Util.isNullOrEmptyList(notesList)) {
-            for (String note :
-                    notesList) {
-                int index = notesList.indexOf(note);
-                if (index == notesList.size() - 1)
-                    notesText = notesText + note;
-                else
-                    notesText = notesText + note + SEPARATOR_GROUP_NOTES;
-                notesListLastAdded.add(note);
-            }
-        }
-        return notesText;
     }
 
     @Override
@@ -471,7 +448,7 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
                 tvReferredBy.setText("");
                 break;
             case R.id.bt_add_note:
-                mActivity.openAddUpdateNameDialogFragment(WebServiceType.LOCAL_STRING_SAVE, AddUpdateNameDialogType.LOCAL_STRING_SAVE, this, null, "", HealthCocoConstants.REQUEST_CODE_STRINGS_LIST);
+                mActivity.openAddUpdateNameDialogFragment(WebServiceType.LOCAL_STRING_SAVE, AddUpdateNameDialogType.LOCAL_STRING_SAVE, this, null, "", HealthCocoConstants.REQUEST_CODE_REGISTRATION);
                 break;
         }
     }
@@ -804,35 +781,11 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
                 ivImageView.setImageBitmap(thePic);
         } else if (requestCode == HealthCocoConstants.REQUEST_CODE_REGISTRATION) {
             LogUtils.LOGD(TAG, "Contacts List onActivityResult ");
-            if (resultCode == HealthCocoConstants.RESULT_CODE_GROUPS_LIST && data != null) {
-                String text = "";
-                groupIdsList = data.getStringArrayListExtra(HealthCocoConstants.TAG_GROUP_IDS_LIST);
-                if (!Util.isNullOrEmptyList(groupIdsList)) {
-                    ArrayList<UserGroups> groupsList = new ArrayList<UserGroups>();
-                    for (String groupId :
-                            groupIdsList) {
-                        UserGroups group = LocalDataServiceImpl.getInstance(mApp).getUserGroup(groupId);
-                        if (group != null) {
-                            groupsList.add(group);
-                            int index = groupIdsList.indexOf(groupId);
-                            if (index == groupIdsList.size() - 1)
-                                text = text + group.getName();
-                            else
-                                text = text + group.getName() + SEPARATOR_GROUP_NOTES;
-                        }
-                    }
-                }
-                tvGroup.setText(text);
-            }
-        } else if (requestCode == HealthCocoConstants.REQUEST_CODE_STRINGS_LIST && data != null) {
             if (resultCode == HealthCocoConstants.RESULT_CODE_ADD_STRING && data != null) {
                 String note = (String) data.getSerializableExtra(HealthCocoConstants.TAG_INTENT_DATA);
                 if (!Util.isNullOrBlank(note)) {
-                    if (notesList == null)
-                        notesList = new ArrayList<>();
-                    notesList.add(note);
-                    notifyNoteListAdapter(notesList);
-                    getNotesName(notesList);
+                    notesListLastAdded.add(note);
+                    notifyNoteListAdapter(notesListLastAdded);
                 }
                 mActivity.hideLoading();
             }
@@ -977,10 +930,9 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if (notesList.contains(notes)) {
-                    notesList.remove(notes);
-                    notifyNoteListAdapter(notesList);
-                    getNotesName(notesList);
+                if (notesListLastAdded.contains(notes)) {
+                    notesListLastAdded.remove(notes);
+                    notifyNoteListAdapter(notesListLastAdded);
                 }
             }
         });

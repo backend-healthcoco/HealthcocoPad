@@ -102,7 +102,6 @@ public class PatientNumberSearchResultsDialogFragment extends HealthCocoDialogFr
         Intent intent = new Intent();
         intent.putExtra(HealthCocoConstants.TAG_UNIQUE_ID, patientUniqueId);
         intent.putExtra(HealthCocoConstants.TAG_MOBILE_NUMBER, mobileNumber);
-        intent.putExtra(HealthCocoConstants.TAG_IS_EDIT_PATIENT, true);
         mActivity.openCommonOpenUpActivity(CommonOpenUpFragmentType.PATIENT_REGISTRATION, intent,
                 HealthCocoConstants.REQUEST_CODE_CONTACTS_DETAIL);
         closeThisActivity();
