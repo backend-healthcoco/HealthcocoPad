@@ -596,4 +596,5 @@
     <string name="cost">Cost</string>
     <string name="discount">Discount</string>
     <string name="status">Status</string>
+    <string name="discarded">Discarded</string>
 </resources>

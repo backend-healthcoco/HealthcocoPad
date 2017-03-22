@@ -35,7 +35,8 @@ public class LocalDatabaseUtils {
     public static final String KEY_PID = "pid";
     public static final String KEY_EMAIL_ADDRESS = "email_address";
     public static final String KEY_REFERENCE = "reference";
-
+    public static final String KEY_VISIT_ID = "visit_id";
+    public static final String KEY_DRUG_ID = "drug_id";
     public static final String KEY_HOSPITAL_ID = "hospital_id";
     public static final String KEY_LOCATION_ID = "location_id";
     public static final String KEY_PATIENT_ID = "patient_id";
@@ -45,7 +46,7 @@ public class LocalDatabaseUtils {
     public static final String KEY_FOREIGN_DRUG_DURATION_UNIT_ID = "foreign_drug_duration_unit";
     public static final String KEY_UNIQUE_ID = "unique_id";
     public static final String KEY_APPOINTMENT_ID = "appointment_id";
-
+    public static final String KEY_VISITED_TIME = "visited_time";
     public static final String KEY_DISCARDED = "discarded";
 
     public static final int BOOLEAN_FALSE_VALUE = 0;

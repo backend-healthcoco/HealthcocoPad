@@ -127,5 +127,13 @@
     <dimen name="item_visits_button_padding_top_bottom_8dp">8dp</dimen>
     <dimen name="text_size_drug_lable">17sp</dimen>
     <dimen name="text_size_drug_child_lable">15sp</dimen>
+    <dimen name="width_height_clinical_note_item_diagram">120dp</dimen>
+    <dimen name="text_size_clinical_notes_item_diagram_tags">13sp</dimen>
+    <dimen name="padding_between_clinical_item_diagram">10dp</dimen>
+    <dimen name="text_size_add_clinical_note_points">13sp</dimen>
+    <dimen name="clinic_logo_image">70dp</dimen>
+    <dimen name="text_size_initial_alphabet_clinic_list">12sp</dimen>
+    <dimen name="emr_item_margin">8dp</dimen>
+    <dimen name="text_size_discarded">20sp</dimen>
     <dimen name="miimumheight_groups_notes_view_patient_registration">200dp</dimen>
 </resources>

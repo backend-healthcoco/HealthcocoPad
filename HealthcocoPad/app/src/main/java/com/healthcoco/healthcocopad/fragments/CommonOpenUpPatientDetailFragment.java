@@ -18,8 +18,8 @@ import android.widget.LinearLayout;
 import android.widget.TabHost;
 import android.widget.TextView;
 
-import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
+import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.adapter.CommonViewPagerAdapter;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
@@ -439,5 +439,13 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
     @Override
     public void onNetworkUnavailable(WebServiceType webServiceType) {
         Util.showToast(mActivity, R.string.user_offline);
+    }
+
+    public RegisteredPatientDetailsUpdated getSelectedPatient() {
+        return selectedPatient;
+    }
+
+    public User getUser() {
+        return user;
     }
 }

@@ -2,19 +2,52 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="10dp"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:padding="10dp">
 
-    <ImageView
-        android:id="@+id/iv_clinic_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/app_icon" />
+    <FrameLayout
+        android:id="@+id/parent_logo"
+        android:layout_width="@dimen/clinic_logo_size"
+        android:layout_height="@dimen/clinic_logo_size"
+        android:layout_gravity="center">
+
+        <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+            android:id="@+id/tv_logo_label"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:background="@drawable/shape_circular_border_grey"
+            android:gravity="center"
+            android:text="@string/fa_hospital"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_clinic_logo" />
+
+        <ImageView
+            android:id="@+id/iv_clinic_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_margin="1dp"
+            android:background="@android:color/transparent"
+            android:scaleType="centerCrop"
+            android:visibility="visible" />
+
+        <ProgressBar
+            android:id="@+id/progress_loading"
+            android:layout_width="@dimen/round_progress_bar_size"
+            android:layout_height="@dimen/round_progress_bar_size"
+            android:layout_gravity="center"
+            android:indeterminateDrawable="@drawable/progress_loading"
+            android:max="100"
+            android:progress="50"
+            android:visibility="gone" />
+    </FrameLayout>
 
     <TextView
         android:id="@+id/tv_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
         android:padding="10dp"
         android:text="Mathews Clinic"
         android:textColor="@color/black"

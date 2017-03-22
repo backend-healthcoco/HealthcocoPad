@@ -3,8 +3,8 @@ package com.healthcoco.healthcocopad.utilities;
 import android.text.format.DateFormat;
 import android.text.format.DateUtils;
 
-import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
 import com.healthcoco.healthcocopad.bean.DOB;
+import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
 import com.healthcoco.healthcocopad.dialogFragment.AddEditClinicHoursDialogFragment;
 
 import java.sql.Date;
@@ -274,6 +274,7 @@ public class DateTimeUtil {
         maxDate.set(Calendar.SECOND, 59);
         return maxDate.getTimeInMillis();
     }
+
     public static long getDifferenceInSecondsFromCurrent(long receivedTime) {
         long currentTime = new java.util.Date().getTime();
         long diffInMs = currentTime - receivedTime;
@@ -281,4 +282,9 @@ public class DateTimeUtil {
         long diffInSec = TimeUnit.MILLISECONDS.toSeconds(diffInMs);
         return diffInSec;
     }
+
+    public static String getFormatedDate(Long date) {
+        return new SimpleDateFormat("dd/MM/yyyy").format(new Date(date));
+    }
+
 }

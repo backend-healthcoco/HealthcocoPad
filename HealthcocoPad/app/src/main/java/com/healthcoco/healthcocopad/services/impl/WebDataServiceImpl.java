@@ -745,4 +745,20 @@ public class WebDataServiceImpl {
             errorListener.onNetworkUnavailable(webServiceType);
         }
     }
+
+    public void getVisitsList(Class<?> class1, WebServiceType webServiceType, String doctorId, String locationId, String hospitalId, String patientId, Long updatedTime, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        Util.checkNetworkStatus(mApp.getApplicationContext());
+        if (HealthCocoConstants.isNetworkOnline) {
+            String url = webServiceType.getUrl() + doctorId
+                    + "/" + locationId
+                    + "/" + hospitalId
+                    + "/" + patientId
+                    + "?"
+                    + HealthCocoConstants.PARAM_UPDATED_TIME + updatedTime;
+            getResponse(webServiceType, class1, url, null, null, responseListener, errorListener);
+        } else {
+            LocalDataServiceImpl.getInstance(mApp)
+                    .getVisitsList(WebServiceType.GET_PATIENT_VISIT, doctorId, locationId, hospitalId, patientId, responseListener, errorListener);
+        }
+    }
 }

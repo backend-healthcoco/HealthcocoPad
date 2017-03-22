@@ -299,7 +299,12 @@ public class Util {
         }
         return "";
     }
-
+    public static String getValidatedValueOrBlankWithoutTrimming(TextView textView) {
+        String value = String.valueOf(textView.getText());
+        if (!Util.isNullOrBlank(value))
+            return value;
+        return "";
+    }
     public static Integer getValidatedIntegerValue(EditText textView) {
         String validatedValue = getValidatedValueOrNull(textView);
         try {

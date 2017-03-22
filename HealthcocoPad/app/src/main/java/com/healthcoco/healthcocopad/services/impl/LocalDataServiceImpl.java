@@ -93,6 +93,8 @@ import com.healthcoco.healthcocopad.bean.server.SyncAll;
 import com.healthcoco.healthcocopad.bean.server.TempTemplate;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.bean.server.UserGroups;
+import com.healthcoco.healthcocopad.bean.server.VisitDetails;
+import com.healthcoco.healthcocopad.bean.server.VisitedForTypeTable;
 import com.healthcoco.healthcocopad.bean.server.VitalSigns;
 import com.healthcoco.healthcocopad.bean.server.WorkingHours;
 import com.healthcoco.healthcocopad.bean.server.WorkingSchedule;
@@ -102,6 +104,7 @@ import com.healthcoco.healthcocopad.enums.HistoryFilterType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.LocalTabelType;
 import com.healthcoco.healthcocopad.enums.RecordType;
+import com.healthcoco.healthcocopad.enums.VisitedForType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.enums.WeekDayNameType;
 import com.healthcoco.healthcocopad.fragments.ClinicalProfileFragment;
@@ -2467,4 +2470,357 @@ public class LocalDataServiceImpl {
         return drugType;
     }
 
+    public VolleyResponseBean getVisitsList(WebServiceType webServiceType, String doctorId, String locationId, String hospitalId, String patientId, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
+        volleyResponseBean.setWebServiceType(webServiceType);
+        volleyResponseBean.setIsDataFromLocal(true);
+        volleyResponseBean.setIsUserOnline(HealthCocoConstants.isNetworkOnline);
+        try {
+            Select<VisitDetails> selectQuery = Select.from(VisitDetails.class)
+                    .where(Condition.prop(LocalDatabaseUtils.KEY_DOCTOR_ID).eq(doctorId), Condition.prop(LocalDatabaseUtils.KEY_HOSPITAL_ID).eq(hospitalId), Condition.prop(LocalDatabaseUtils.KEY_LOCATION_ID).eq(locationId), Condition.prop(LocalDatabaseUtils.KEY_PATIENT_ID).eq(patientId));
+            List<VisitDetails> list = selectQuery.list();
+            if (!Util.isNullOrEmptyList(list)) {
+                for (VisitDetails details :
+                        list) {
+                    LogUtils.LOGD(TAG, "Visit get details size " + list.size() + " Unique Id : " + details.getUniqueId());
+                    details = getVisitDetailsAndTypes(details);
+                }
+            }
+            volleyResponseBean.setDataList(getObjectsListFromMap(list));
+            if (responseListener != null)
+                responseListener.onResponse(volleyResponseBean);
+        } catch (Exception e) {
+            e.printStackTrace();
+            showErrorLocal(volleyResponseBean, errorListener);
+        }
+        return volleyResponseBean;
+    }
+
+    private VisitDetails getVisitDetailsAndTypes(VisitDetails details) {
+        details.setVisitedFor(getVisitedFor(details.getUniqueId()));
+        List<VisitedForType> visitedForTypesList = details.getVisitedFor();
+        if (!Util.isNullOrEmptyList(visitedForTypesList)) {
+            for (VisitedForType type :
+                    visitedForTypesList) {
+                LogUtils.LOGD(TAG, "Visit get type size " + visitedForTypesList.size() + " Type : " + type);
+                switch (type) {
+                    case PRESCRIPTION:
+                        details.setPrescriptions(getVisitedPrescriptionsList(details.getPatientId(), details.getUniqueId()));
+                        break;
+                    case REPORTS:
+                        details.setRecords(getVisitedRecordsList(details.getPatientId(), details.getUniqueId()));
+                        break;
+                    case CLINICAL_NOTES:
+                        details.setClinicalNotes(getVisitedClinicalNotesList(details.getPatientId(), details.getUniqueId()));
+                        break;
+                }
+            }
+        }
+        return details;
+    }
+
+    private List<ClinicalNotes> getVisitedClinicalNotesList(String patientId, String visitId) {
+        Select<ClinicalNotes> selectQuery = Select.from(ClinicalNotes.class)
+                .where(Condition.prop(LocalDatabaseUtils.KEY_PATIENT_ID).eq(patientId), Condition.prop(LocalDatabaseUtils.KEY_VISIT_ID).eq(visitId));
+        List<ClinicalNotes> list = selectQuery.list();
+        if (!Util.isNullOrEmptyList(list))
+            for (ClinicalNotes clinicalNote : list) {
+                getClinicalNoteDetailsList(clinicalNote);
+            }
+        return list;
+    }
+
+    private List<Records> getVisitedRecordsList(String patientId, String visitId) {
+        Select<Records> selectQuery = Select.from(Records.class)
+                .where(Condition.prop(LocalDatabaseUtils.KEY_PATIENT_ID).eq(patientId), Condition.prop(LocalDatabaseUtils.KEY_VISIT_ID).eq(visitId));
+        return selectQuery.list();
+    }
+
+    private List<Prescription> getVisitedPrescriptionsList(String patientId, String visitId) {
+        Select<Prescription> selectQuery = Select.from(Prescription.class)
+                .where(Condition.prop(LocalDatabaseUtils.KEY_PATIENT_ID).eq(patientId), Condition.prop(LocalDatabaseUtils.KEY_VISIT_ID).eq(visitId));
+        List<Prescription> list = selectQuery.list();
+        if (!Util.isNullOrEmptyList(list))
+            for (Prescription prescription : list) {
+                getPrescriptionDetail(prescription);
+            }
+        return list;
+    }
+
+    private List<VisitedForType> getVisitedFor(String visitId) {
+        List<VisitedForTypeTable> visitForTableList = Select.from(VisitedForTypeTable.class)
+                .where(Condition.prop(LocalDatabaseUtils.KEY_VISIT_ID).eq(visitId)).list();
+        ArrayList<VisitedForType> visitedForTypesList = new ArrayList<>();
+        if (!Util.isNullOrEmptyList(visitForTableList)) {
+            for (VisitedForTypeTable visitedForTypeTable :
+                    visitForTableList) {
+                visitedForTypesList.add(visitedForTypeTable.getVisitedForType());
+            }
+        }
+        return visitedForTypesList;
+    }
+
+    private void getPrescriptionDetail(Prescription prescription) {
+        prescription.setItems(getDrugItemsList(LocalDatabaseUtils.KEY_FOREIGN_PRESCRIPTION_ID, prescription.getUniqueId()));
+        prescription.setDiagnosticTests(getDiagnosticTestPrescriptionsList(prescription.getUniqueId()));
+    }
+
+    private void getClinicalNoteDetailsList(ClinicalNotes clinicalNote) {
+        clinicalNote.setDiagnoses((List<Diagnoses>) getClinicalNotesDataListFromForeignTable(ForeignDiagnosesTable.class, clinicalNote.getUniqueId(), Diagnoses.class));
+        clinicalNote.setDiagrams((List<Diagram>) getListByKeyValue(Diagram.class, LocalDatabaseUtils.KEY_FOREIGN_CLINICAL_NOTES_ID, clinicalNote.getUniqueId()));
+        clinicalNote.setVitalSigns(getVitalSigns(clinicalNote.getUniqueId()));
+    }
+
+    private List<?> getClinicalNotesDataListFromForeignTable(Class<?> foreignTableClass, String foreignUniqueId, Class<?> dataTable) {
+        List<Object> dataTablesList = null;
+        List<?> foreignTablesDataList = getObjectsList(foreignTableClass, LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, foreignUniqueId);
+        if (!Util.isNullOrEmptyList(foreignTablesDataList)) {
+            String key = "";
+            String value = "";
+            dataTablesList = new ArrayList<>();
+            for (Object object :
+                    foreignTablesDataList) {
+                if (object instanceof ForeignComplaintsTable) {
+                    ForeignComplaintsTable foreignComplaintsTable = (ForeignComplaintsTable) object;
+                    key = LocalDatabaseUtils.KEY_UNIQUE_ID;
+                    value = foreignComplaintsTable.getComplaintsId();
+                } else if (object instanceof ForeignObservationsTable) {
+                    ForeignObservationsTable foreignObservationsTable = (ForeignObservationsTable) object;
+                    key = LocalDatabaseUtils.KEY_UNIQUE_ID;
+                    value = foreignObservationsTable.getObservationId();
+                } else if (object instanceof ForeignInvestigationsTable) {
+                    ForeignInvestigationsTable foreignInvestigationsTable = (ForeignInvestigationsTable) object;
+                    key = LocalDatabaseUtils.KEY_UNIQUE_ID;
+                    value = foreignInvestigationsTable.getInvestigationId();
+                } else if (object instanceof ForeignDiagnosesTable) {
+                    ForeignDiagnosesTable foreignDiagnosesTable = (ForeignDiagnosesTable) object;
+                    key = LocalDatabaseUtils.KEY_UNIQUE_ID;
+                    value = foreignDiagnosesTable.getDiagnosesId();
+                }
+                if (!Util.isNullOrBlank(key) && !Util.isNullOrBlank(value))
+                    dataTablesList.add(getObject(dataTable, key, value));
+            }
+
+        }
+        return dataTablesList;
+    }
+
+    private List<DiagnosticTestsPrescription> getDiagnosticTestPrescriptionsList(String foreignTableId) {
+        List<DiagnosticTestsPrescription> list = (List<DiagnosticTestsPrescription>) getObjectsList(DiagnosticTestsPrescription.class, LocalDatabaseUtils.KEY_FOREIGN_TABLE_ID, foreignTableId);
+        if (!Util.isNullOrEmptyList(list)) {
+            for (DiagnosticTestsPrescription diagnosticTestsPrescription : list
+                    ) {
+                DiagnosticTest diagnosticTest = getDiagnosticTest(diagnosticTestsPrescription.getForeignDiagnosticTestId());
+                if (diagnosticTest != null) {
+                    diagnosticTestsPrescription.setTest(diagnosticTest);
+                }
+            }
+        }
+        return list;
+    }
+
+    private List<?> getObjectsList(Class<?> class1, String key, String value) {
+        return Select.from(class1).where(Condition.prop(key).eq(value)).list();
+    }
+
+    private DiagnosticTest getDiagnosticTest(String uniqueId) {
+        return (DiagnosticTest) getObject(DiagnosticTest.class, LocalDatabaseUtils.KEY_UNIQUE_ID, uniqueId);
+    }
+
+    private VitalSigns getVitalSigns(String uniqueId) {
+        String query = "Select  " + LocalDatabaseUtils.getPrefixedColumnsString(VitalSigns.class, true)
+                + " from " + VitalSigns.TABLE_NAME
+                + " left outer join " + BloodPressure.TABLE_NAME
+                + " on " + VitalSigns.TABLE_NAME + "." + LocalDatabaseUtils.KEY_FOREIGN_TABLE_ID + "=" + BloodPressure.TABLE_NAME + "." + LocalDatabaseUtils.KEY_FOREIGN_TABLE_ID
+                + " where " + VitalSigns.TABLE_NAME + "." + LocalDatabaseUtils.KEY_FOREIGN_TABLE_ID + " = " + "\"" + uniqueId + "\"";
+        LogUtils.LOGD(TAG, "Select query : " + query);
+        VitalSigns vitalSigns = SugarRecord.findObjectWithQuery(VitalSigns.class, query);
+        if (vitalSigns != null)
+            vitalSigns.setBloodPressure(getBloodPressure(uniqueId));
+        return vitalSigns;
+    }
+
+    private BloodPressure getBloodPressure(String uniqueId) {
+        String query = "Select  " + LocalDatabaseUtils.getPrefixedColumnsString(BloodPressure.class, true)
+                + " from " + BloodPressure.TABLE_NAME
+                + " where " + BloodPressure.TABLE_NAME + "." + LocalDatabaseUtils.KEY_FOREIGN_TABLE_ID + " = " + "\"" + uniqueId + "\"";
+        LogUtils.LOGD(TAG, "Select query : " + query);
+        return SugarRecord.findObjectWithQuery(BloodPressure.class, query);
+    }
+
+    public ClinicalNotes getClinicalNote(BooleanTypeValues discarded, String clinicalNoteId, String patientId) {
+        Select<ClinicalNotes> selectQuery;
+        if (discarded != null) {
+            selectQuery = Select.from(ClinicalNotes.class)
+                    .where(Condition.prop(LocalDatabaseUtils.KEY_UNIQUE_ID).eq(clinicalNoteId),
+                            Condition.prop(LocalDatabaseUtils.KEY_DISCARDED).eq(discarded.getBooleanIntValue()),
+                            Condition.prop(LocalDatabaseUtils.KEY_PATIENT_ID).eq(patientId));
+        } else
+            selectQuery = Select.from(ClinicalNotes.class)
+                    .where(Condition.prop(LocalDatabaseUtils.KEY_UNIQUE_ID).eq(clinicalNoteId),
+                            Condition.prop(LocalDatabaseUtils.KEY_PATIENT_ID).eq(patientId));
+        ClinicalNotes clinicalNote = selectQuery.first();
+        if (clinicalNote != null) {
+            getClinicalNoteDetailsList(clinicalNote);
+        }
+        return clinicalNote;
+    }
+
+    public List<DrugItem> getDrugItemsList(String foreignKey, String uniqueId) {
+        List<DrugItem> list = new ArrayList<>();
+        String query = "Select  * from " + DrugItem.TABLE_NAME
+                + " where " + DrugItem.TABLE_NAME + "." + LocalDatabaseUtils.KEY_FOREIGN_TABLE_KEY + " = " + "\"" + foreignKey + "\""
+                + " AND " + DrugItem.TABLE_NAME + "." + LocalDatabaseUtils.KEY_FOREIGN_TABLE_ID + " = " + "\"" + uniqueId + "\"";
+        LogUtils.LOGD(TAG, "Select query : " + query);
+        list = SugarRecord.findWithQuery(DrugItem.class, query);
+        if (!Util.isNullOrEmptyList(list)) {
+            for (DrugItem drugItem : list) {
+                drugItem.setDrug(getDrug(drugItem.getForeignDrugId()));
+                drugItem.setDuration(getDuration(drugItem.getForeignDurationId()));
+                drugItem.setDirection(getDirectionsForDrugsList(foreignKey, uniqueId, drugItem.getForeignDrugId()));
+            }
+        }
+        return list;
+    }
+
+    private List<DrugDirection> getDirectionsForDrugsList(String key, String prescriptionTemplateId, String drugId) {
+        List<DrugDirection> list = new ArrayList<>();
+        List<LinkedTableDirection> listLinkedData = new ArrayList<>();
+        String query = "Select  " + LocalDatabaseUtils.getPrefixedColumnsString(LinkedTableDirection.class, true)
+                + " from " + LinkedTableDirection.TABLE_NAME
+                + " where " + LinkedTableDirection.TABLE_NAME + "." + LocalDatabaseUtils.KEY_FOREIGN_TABLE_ID + " = " + "\"" + prescriptionTemplateId + "\""
+                + " AND " + LocalDatabaseUtils.KEY_FOREIGN_TABLE_KEY + "=\"" + key + "\""
+                + " AND " + LocalDatabaseUtils.KEY_DRUG_ID + "=\"" + drugId + "\"";
+        LogUtils.LOGD(TAG, "Select query : " + query);
+        listLinkedData = SugarRecord.findWithQuery(LinkedTableDirection.class, query);
+        if (!Util.isNullOrEmptyList(listLinkedData)) {
+            for (LinkedTableDirection linkedTableDirection : listLinkedData) {
+                DrugDirection direction = getDrugDirection(linkedTableDirection.getDirectionId());
+                if (direction != null)
+                    list.add(direction);
+            }
+        }
+        return list;
+    }
+
+    public void addVisitsList(ArrayList<VisitDetails> visitsList) {
+        for (VisitDetails details :
+                visitsList) {
+            LogUtils.LOGD(TAG, "Visit add detail size " + visitsList.size() + " UniqueId : " + details.getUniqueId());
+            addVisit(details);
+        }
+
+    }
+
+    public void addVisit(VisitDetails details) {
+        try {
+            List<VisitedForType> visitForTypesList = details.getVisitedFor();
+            if (!Util.isNullOrEmptyList(visitForTypesList)) {
+                for (VisitedForType type :
+                        visitForTypesList) {
+                    LogUtils.LOGD(TAG, "Visit add type size : " + visitForTypesList.size() + " Type : " + type);
+                    String customUniqueId = "";
+                    switch (type) {
+                        case PRESCRIPTION:
+                            if (!Util.isNullOrEmptyList(details.getPrescriptions())) {
+                                for (Prescription prescription :
+                                        details.getPrescriptions()) {
+                                    customUniqueId = prescription.getUniqueId();
+                                    addPrescription(prescription);
+                                }
+                            } else
+                                continue;
+                            break;
+                        case REPORTS:
+                            if (!Util.isNullOrEmptyList(details.getRecords())) {
+                                for (Records record :
+                                        details.getRecords()) {
+                                    customUniqueId = record.getUniqueId();
+                                    addRecord(record);
+                                }
+                            } else
+                                continue;
+                            break;
+                        case CLINICAL_NOTES:
+                            if (!Util.isNullOrEmptyList(details.getClinicalNotes())) {
+                                for (ClinicalNotes note :
+                                        details.getClinicalNotes()) {
+                                    customUniqueId = note.getUniqueId();
+                                    note.setPatientId(details.getPatientId());
+                                    addClinicalNote(note);
+                                }
+                            } else
+                                continue;
+                            break;
+                    }
+                    addVisitForTable(details.getUniqueId(), type, customUniqueId);
+                }
+                details.save();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void addVisitForTable(String visitId, VisitedForType type, String customUniqueId) {
+        VisitedForTypeTable visitedForTypeTable = new VisitedForTypeTable();
+        visitedForTypeTable.setVisitedForType(type);
+        visitedForTypeTable.setVisitId(visitId);
+        visitedForTypeTable.setCustomUniqueId(customUniqueId);
+        visitedForTypeTable.save();
+    }
+
+    public VolleyResponseBean getVisitsListPageWise(WebServiceType webServiceType, String doctorId, String locationId, String hospitalId,
+                                                    String patientId, int pageNum, int maxSize,
+                                                    Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
+        volleyResponseBean.setWebServiceType(webServiceType);
+        volleyResponseBean.setIsDataFromLocal(true);
+        volleyResponseBean.setIsUserOnline(HealthCocoConstants.isNetworkOnline);
+        try {
+            //forming where condition query
+            String whereCondition = "Select * from " + StringUtil.toSQLName(VisitDetails.class.getSimpleName())
+                    + " where "
+                    + LocalDatabaseUtils.KEY_DOCTOR_ID + "=\"" + doctorId + "\""
+                    + " AND "
+                    + LocalDatabaseUtils.KEY_LOCATION_ID + "=\"" + locationId + "\""
+                    + " AND "
+                    + LocalDatabaseUtils.KEY_HOSPITAL_ID + "=\"" + hospitalId + "\""
+                    + " AND "
+                    + LocalDatabaseUtils.KEY_PATIENT_ID + "=\"" + patientId + "\"";
+
+            //specifying order by limit and offset query
+            String conditionsLimit = " ORDER BY " + LocalDatabaseUtils.KEY_VISITED_TIME + " DESC "
+                    + " LIMIT " + maxSize
+                    + " OFFSET " + (pageNum * maxSize);
+
+            whereCondition = whereCondition + conditionsLimit;
+            LogUtils.LOGD(TAG, "Select Query " + whereCondition);
+            LogUtils.LOGD(TAG, "Visit  pageNum : " + pageNum);
+            List<VisitDetails> list = SugarRecord.findWithQuery(VisitDetails.class, whereCondition);
+            if (!Util.isNullOrEmptyList(list)) {
+                for (VisitDetails details :
+                        list) {
+                    LogUtils.LOGD(TAG, "Visit get details size " + list.size() + " pageNum : " + pageNum
+                            + " Date : " + DateTimeUtil.getFormatedDate(details.getVisitedTime()));
+                    details = getVisitDetailsAndTypes(details);
+                }
+            }
+            volleyResponseBean.setDataList(getObjectsListFromMap(list));
+            if (responseListener != null)
+                responseListener.onResponse(volleyResponseBean);
+        } catch (Exception e) {
+            e.printStackTrace();
+            showErrorLocal(volleyResponseBean, errorListener);
+        }
+        return volleyResponseBean;
+    }
+
+    public VisitDetails getVisit(String visitId) {
+        VisitDetails visit = Select.from(VisitDetails.class)
+                .where(Condition.prop(LocalDatabaseUtils.KEY_UNIQUE_ID).eq(visitId)).first();
+        if (visit != null)
+            visit = getVisitDetailsAndTypes(visit);
+        return visit;
+    }
 }

@@ -7,6 +7,7 @@ import com.healthcoco.healthcocopad.bean.server.HistoryDetailsResponse;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.Specialities;
 import com.healthcoco.healthcocopad.bean.server.UserGroups;
+import com.healthcoco.healthcocopad.bean.server.VisitDetails;
 
 import java.sql.Date;
 import java.util.Comparator;
@@ -73,6 +74,22 @@ public class ComparatorUtil {
                 Date date1 = new Date(history1.getCreatedTime());
                 Date date2 = new Date(history2.getCreatedTime());
                 return date2.compareTo(date1);
+            }
+            return 0;
+        }
+    };
+    public static Comparator<VisitDetails> visitDateComparator = new Comparator<VisitDetails>() {
+
+        @Override
+        public int compare(VisitDetails visit1, VisitDetails visit2) {
+            try {
+                if (visit1.getVisitedTime() != null && visit2.getVisitedTime() != null) {
+                    Date date1 = new Date(visit1.getVisitedTime());
+                    Date date2 = new Date(visit2.getVisitedTime());
+                    return date2.compareTo(date1);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
             return 0;
         }
