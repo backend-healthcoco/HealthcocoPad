@@ -7,20 +7,20 @@ import android.widget.TextView;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.HealthCocoViewHolder;
-import com.healthcoco.healthcocopad.listeners.NotesItemClickListener;
+import com.healthcoco.healthcocopad.listeners.PatientRegistrationListener;
 
 /**
  * Created by neha on 19/03/16.
  */
 public class NotesListItemViewHolder extends HealthCocoViewHolder implements View.OnClickListener {
 
-    private NotesItemClickListener notesItemClickListener;
+    private PatientRegistrationListener notesItemClickListener;
     private HealthCocoActivity mActivity;
     private String objData;
     private TextView tvNote;
     private ImageButton btDelete;
 
-    public NotesListItemViewHolder(HealthCocoActivity mActivity, NotesItemClickListener notesItemClickListener) {
+    public NotesListItemViewHolder(HealthCocoActivity mActivity, PatientRegistrationListener notesItemClickListener) {
         super(mActivity);
         this.mActivity = mActivity;
         this.notesItemClickListener = notesItemClickListener;

@@ -188,7 +188,6 @@
     <style name="registration_edittext">
         <item name="android:paddingBottom">@dimen/edit_text_patient_registration_padding</item>
         <item name="android:paddingTop">@dimen/edit_text_patient_registration_padding</item>
-        <item name="android:paddingLeft">@dimen/edit_text_patient_registration_padding</item>
         <item name="android:textColor">@color/black</item>
         <item name="android:textSize">@dimen/text_size_registration_title</item>
         <item name="android:gravity">center|start</item>

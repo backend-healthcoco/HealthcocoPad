@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
+    android:minHeight="300dp"
     android:orientation="vertical">
 
     <include layout="@layout/layout_dialog_search" />
@@ -10,17 +11,20 @@
     <ListView
         android:id="@+id/lv_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:clipToPadding="false"
         android:divider="@null"
         android:padding="10dp"
         android:scrollbarStyle="outsideOverlay"
-        android:visibility="visible" />
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/tv_no_result_found"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_gravity="center"
+        android:layout_weight="1"
         android:gravity="center"
         android:text="@string/no_result_found_for_your_search"
         android:textSize="@dimen/text_size_no_results"

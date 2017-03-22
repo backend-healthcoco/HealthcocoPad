@@ -3,13 +3,12 @@ package com.healthcoco.healthcocopad.viewholders;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.TextView;
 
-import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.HealthCocoViewHolder;
+import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.server.UserGroups;
-import com.healthcoco.healthcocopad.listeners.AssignGroupListener;
+import com.healthcoco.healthcocopad.listeners.PatientRegistrationListener;
 import com.healthcoco.healthcocopad.utilities.Util;
 
 /**
@@ -17,13 +16,12 @@ import com.healthcoco.healthcocopad.utilities.Util;
  */
 public class GroupGridViewHolder extends HealthCocoViewHolder implements CompoundButton.OnCheckedChangeListener, View.OnClickListener {
 
-    private AssignGroupListener assignGroupListener;
+    private PatientRegistrationListener assignGroupListener;
     private HealthCocoActivity mActivity;
     private UserGroups objData;
-    private TextView tvGroupName;
     private CheckBox cbGrouped;
 
-    public GroupGridViewHolder(HealthCocoActivity mActivity, AssignGroupListener assignGroupListener) {
+    public GroupGridViewHolder(HealthCocoActivity mActivity, PatientRegistrationListener assignGroupListener) {
         super(mActivity);
         this.mActivity = mActivity;
         this.assignGroupListener = assignGroupListener;
@@ -36,17 +34,13 @@ public class GroupGridViewHolder extends HealthCocoViewHolder implements Compoun
 
     @Override
     public void applyData() {
-        tvGroupName.setText(Util.getValidatedValue(objData.getName()));
-        if (objData.isForeignIsAssignedAnyPatient())
-            cbGrouped.setChecked(true);
-        else
-            cbGrouped.setChecked(false);
+        cbGrouped.setText(Util.getValidatedValue(objData.getName()));
+        cbGrouped.setChecked(assignGroupListener.isGroupAssigned(objData.getUniqueId()));
     }
 
     @Override
     public View getContentView() {
         View contentView = inflater.inflate(R.layout.grid_item_groups, null);
-        tvGroupName = (TextView) contentView.findViewById(R.id.tv_group_name);
         cbGrouped = (CheckBox) contentView.findViewById(R.id.ch_ui_permission);
         cbGrouped.setOnCheckedChangeListener(this);
         contentView.setOnClickListener(this);

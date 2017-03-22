@@ -61,12 +61,11 @@ import com.healthcoco.healthcocopad.enums.LocalTabelType;
 import com.healthcoco.healthcocopad.enums.OptionsType;
 import com.healthcoco.healthcocopad.enums.RecordType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
-import com.healthcoco.healthcocopad.listeners.AssignGroupListener;
 import com.healthcoco.healthcocopad.listeners.CommonListDialogItemClickListener;
 import com.healthcoco.healthcocopad.listeners.CommonOptionsDialogItemClickListener;
 import com.healthcoco.healthcocopad.listeners.DownloadFileFromUrlListener;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
-import com.healthcoco.healthcocopad.listeners.NotesItemClickListener;
+import com.healthcoco.healthcocopad.listeners.PatientRegistrationListener;
 import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
@@ -74,9 +73,9 @@ import com.healthcoco.healthcocopad.utilities.BitmapUtil;
 import com.healthcoco.healthcocopad.utilities.ComparatorUtil;
 import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
 import com.healthcoco.healthcocopad.utilities.DownloadImageFromUrlUtil;
+import com.healthcoco.healthcocopad.utilities.EditTextTextViewErrorUtil;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.ImageUtil;
-import com.healthcoco.healthcocopad.utilities.ListGridViewSizeHelper;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.healthcoco.healthcocopad.views.CustomAutoCompleteTextView;
@@ -93,7 +92,7 @@ import java.util.List;
  */
 public class PatientRegistrationFragment extends HealthCocoFragment implements View.OnClickListener, CommonListDialogItemClickListener,
         GsonRequest.ErrorListener, Response.Listener<VolleyResponseBean>, LocalDoInBackgroundListenerOptimised,
-        CommonOptionsDialogItemClickListener, DownloadFileFromUrlListener, NotesItemClickListener, AssignGroupListener {
+        CommonOptionsDialogItemClickListener, DownloadFileFromUrlListener, PatientRegistrationListener {
     private ArrayList<Object> BLOOD_GROUPS = new ArrayList<Object>() {{
         add("O-");
         add("O+");
@@ -158,11 +157,10 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
     private TextView btAddNote;
     private ListView lvNotes;
     private GridView gvGroups;
+
     private NotesListViewAdapter notesListViewAdapter;
     private GroupsGridViewAdapter groupsListViewAdapter;
     private ArrayList<String> groupIdsToAssign = new ArrayList<String>();
-    private ArrayList<UserGroups> groupListToAssign = new ArrayList<>();
-    private List<UserGroups> groupsList = new ArrayList<UserGroups>();
     private TextView tvNoNotes;
     private TextView tvNoGroups;
 
@@ -313,8 +311,6 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
         }
         if (!Util.isNullOrBlank(mobileNumber))
             tvMobileNumber.setText(mobileNumber);
-        if (selectedPatient != null && !Util.isNullOrEmptyList(selectedPatient.getGroupIds()))
-            groupIdsToAssign.addAll(selectedPatient.getGroupIds());
     }
 
     private void initPatientDetails(Object patientDetails) {
@@ -344,7 +340,7 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
             mobileNumber = Util.getValidatedValue(registeredPatientDetailsUpdated.getMobileNumber());
             gender = Util.getValidatedValue(registeredPatientDetailsUpdated.getGender());
             birthday = Util.getDOB(registeredPatientDetailsUpdated.getDob());
-            groupsList = registeredPatientDetailsUpdated.getGroups();
+            groupIdsToAssign = registeredPatientDetailsUpdated.getGroupIds();
             colorCode = registeredPatientDetailsUpdated.getColorCode();
             selectedReference = registeredPatientDetailsUpdated.getReferredBy();
             if (selectedReference != null)
@@ -411,7 +407,6 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
 //        } else containerAge.setVisibility(View.VISIBLE);
         editEmail.setText(emailAddress);
 
-        notifyGroupListAdapter(groupsList);
         notifyNoteListAdapter(notesListLastAdded);
         editAadharId.setText(aadharId);
         editDrivingLicence.setText(drivingLicense);
@@ -470,18 +465,15 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
         new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_PROFESSION_LIST, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
-    private void clearPreviousAlerts() {
-        editName.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-    }
-
     private void validateData() {
-        clearPreviousAlerts();
+        ArrayList<View> errorViewList = new ArrayList<>();
         String msg = null;
         EditText selectedEditText = null;
         String name = Util.getValidatedValueOrNull(editName);
         String email = Util.getValidatedValueOrNull(editEmail);
         String aadharId = Util.getValidatedValueOrNull(editAadharId);
         String secondaryMobileNumber = Util.getValidatedValueOrNull(editSecondaryMobile);
+        String pincode = Util.getValidatedValueOrNull(editPincode);
         if (Util.isNullOrBlank(name)) {
             selectedEditText = editName;
             msg = getResources().getString(R.string.please_enter_full_name);
@@ -494,12 +486,15 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
         } else if (!Util.isNullOrBlank(aadharId) && !Util.isValidAadharId(mActivity, aadharId)) {
             selectedEditText = editAadharId;
             msg = getResources().getString(R.string.please_enter_valid_aadhar_id);
+        } else if (!Util.isNullOrBlank(pincode) && pincode.length() < mActivity.getResources().getInteger(R.integer.max_pincode_length)) {
+            selectedEditText = editPincode;
+            msg = getResources().getString(R.string.please_enter_valid_pincode);
         }
         if (Util.isNullOrBlank(msg)) {
             registerPatient(name);
         } else {
-            Util.showErrorOnEditText(selectedEditText);
-            Util.showAlert(mActivity, msg);
+            errorViewList.add(selectedEditText);
+            EditTextTextViewErrorUtil.showErrorOnEditText(mActivity, view, errorViewList, msg);
         }
     }
 
@@ -690,7 +685,7 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
                 break;
             case GET_GROUPS:
                 if (response.isDataFromLocal()) {
-                    groupsList = (ArrayList<UserGroups>) (ArrayList<?>) response
+                    ArrayList<UserGroups> groupsList = (ArrayList<UserGroups>) (ArrayList<?>) response
                             .getDataList();
                     if (!Util.isNullOrEmptyList(groupsList))
                         LogUtils.LOGD(TAG, "Success onResponse groupsList Size " + groupsList.size() + " isDataFromLocal " + response.isDataFromLocal());
@@ -719,9 +714,14 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
     private void notifyGroupListAdapter(List<UserGroups> list) {
         if (!Util.isNullOrEmptyList(list)) {
             Collections.sort(list, ComparatorUtil.groupDateComparator);
-            groupsListViewAdapter.setListData(list);
-            ListGridViewSizeHelper.getListViewSize(gvGroups);
+            gvGroups.setVisibility(View.VISIBLE);
+            tvNoGroups.setVisibility(View.GONE);
+        } else {
+            gvGroups.setVisibility(View.GONE);
+            tvNoGroups.setVisibility(View.VISIBLE);
         }
+        groupsListViewAdapter.setListData(list);
+        groupsListViewAdapter.notifyDataSetChanged();
     }
 
     private void notifyNoteListAdapter(ArrayList<String> notesList) {
@@ -734,7 +734,6 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
         }
         notesListViewAdapter.setListData(notesList);
         notesListViewAdapter.notifyDataSetChanged();
-        ListGridViewSizeHelper.getListViewSize(lvNotes);
     }
 
     private void refreshContactsData(RegisteredPatientDetailsUpdated patientDetails) {
@@ -950,12 +949,15 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
         String groupId = group.getUniqueId();
         if (isSelected) {
             if (!groupIdsToAssign.contains(groupId)) {
-                groupListToAssign.add(group);
                 groupIdsToAssign.add(groupId);
             }
         } else if (groupIdsToAssign.contains(groupId)) {
             groupIdsToAssign.remove(groupId);
-            groupListToAssign.remove(group);
         }
+    }
+
+    @Override
+    public boolean isGroupAssigned(String groupId) {
+        return groupIdsToAssign.contains(groupId);
     }
 }

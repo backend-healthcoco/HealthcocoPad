@@ -70,7 +70,6 @@ public class MenuDrawerFragment extends HealthCocoFragment implements View.OnCli
     private FragmentType selectedFragmentType;
     private boolean receiversRegistered;
     private ListView lvClinicsList;
-    private View view;
     private RelativeLayout profile_layout;
     private LinearLayout manage_clinic_layout;
     private List<DoctorClinicProfile> clinicProfile;

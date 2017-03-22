@@ -1,19 +1,24 @@
 package com.healthcoco.healthcocopad;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import com.android.volley.Response;
@@ -42,6 +47,7 @@ import com.healthcoco.healthcocopad.listeners.CommonOptionsDialogItemClickListen
 import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
+import com.healthcoco.healthcocopad.utilities.EditTextTextViewErrorUtil;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.ScreenDimensions;
@@ -76,9 +82,11 @@ public abstract class HealthCocoFragment extends Fragment implements GsonRequest
         mActivity = (HealthCocoActivity) getActivity();
         mApp = (HealthCocoApplication) mActivity.getApplication();
         mFragmentManager = mActivity.getSupportFragmentManager();
-//        view.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-//        view.setFocusable(true);
-//        view.setFocusableInTouchMode(true);
+        view.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        view.setFocusable(true);
+        view.setFocusableInTouchMode(true);
+        view.requestFocus();
+        setupUI(view);
         if (savedInstanceState != null) {
             LogUtils.LOGD(TAG, "onCreateView");
             HealthCocoConstants.SELECTED_PATIENTS_USER_ID = savedInstanceState.getString(HealthCocoConstants.TAG_SELECTED_USER_ID);
@@ -111,6 +119,41 @@ public abstract class HealthCocoFragment extends Fragment implements GsonRequest
             LogUtils.LOGD(TAG, "onSaveInstanceState");
             outState.putString(HealthCocoConstants.TAG_SELECTED_USER_ID, HealthCocoConstants.SELECTED_PATIENTS_USER_ID);
         }
+    }
+
+    protected void setupUI(final View viewToSet) {
+        try {
+            viewToSet.setOnTouchListener(new View.OnTouchListener() {
+                public boolean onTouch(View v, MotionEvent event) {
+                    if (!(viewToSet instanceof EditText) && !(viewToSet instanceof ScrollView) && !(viewToSet instanceof TextInputLayout)
+                            && viewToSet.getParent() != null && !(viewToSet.getParent() instanceof ScrollView))
+                        hideKeyboard(viewToSet);
+                    viewToSet.setActivated(false);
+                    EditTextTextViewErrorUtil.resetFocusToAllEditText(view);
+                    return false;
+                }
+            });
+
+            //If a layout container, iterate over children and seed recursion.
+            if (viewToSet instanceof ViewGroup) {
+                for (int i = 0; i < ((ViewGroup) viewToSet).getChildCount(); i++) {
+                    View innerView = ((ViewGroup) viewToSet).getChildAt(i);
+                    setupUI(innerView);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Hides virtual keyboard
+     *
+     * @author nehas
+     */
+    protected void hideKeyboard(View view) {
+        InputMethodManager in = (InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
+        in.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_IMPLICIT_ONLY);
     }
 
     protected void initEditSearchView(int hintId, TextWatcher textWatcher, boolean setPaddingTop) {

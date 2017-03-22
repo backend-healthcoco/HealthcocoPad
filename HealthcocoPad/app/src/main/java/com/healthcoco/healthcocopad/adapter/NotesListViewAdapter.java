@@ -5,7 +5,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
 import com.healthcoco.healthcocopad.HealthCocoActivity;
-import com.healthcoco.healthcocopad.listeners.NotesItemClickListener;
+import com.healthcoco.healthcocopad.fragments.PatientRegistrationFragment;
+import com.healthcoco.healthcocopad.listeners.PatientRegistrationListener;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.healthcoco.healthcocopad.viewholders.NotesListItemViewHolder;
 
@@ -15,7 +16,7 @@ import java.util.List;
  * Created by neha on 19/03/16.
  */
 public class NotesListViewAdapter extends BaseAdapter {
-    private NotesItemClickListener notesItemClickListener;
+    private PatientRegistrationListener notesItemClickListener;
     private List<String> list;
     private HealthCocoActivity mActivity;
     private NotesListItemViewHolder holder;
@@ -23,7 +24,7 @@ public class NotesListViewAdapter extends BaseAdapter {
     public NotesListViewAdapter() {
     }
 
-    public NotesListViewAdapter(HealthCocoActivity activity, NotesItemClickListener notesItemClickListener) {
+    public NotesListViewAdapter(HealthCocoActivity activity, PatientRegistrationListener notesItemClickListener) {
         this.mActivity = activity;
         this.notesItemClickListener = notesItemClickListener;
     }

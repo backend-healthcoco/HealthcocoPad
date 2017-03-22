@@ -37,4 +37,7 @@
     <string name="fa_total_discount">Total Discount&#160;:\u20B9</string>
     <string name="fa_total_cost">Total Cost&#160;:&#160;\u20B9</string>
     <string name="fa_grand_total_rupees">Grand Total&#160;:&#160;\u20B9</string>
+    <string name="icon_add_note">&#xf067;&#160;Add Note</string>
+
+
 </resources>

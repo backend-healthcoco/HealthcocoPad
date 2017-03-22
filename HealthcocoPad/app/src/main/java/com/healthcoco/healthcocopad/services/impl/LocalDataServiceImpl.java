@@ -312,18 +312,7 @@ public class LocalDataServiceImpl {
     }
 
     public long getLatestUpdatedTime(LocalTabelType localTabelType) {
-        Long latestUpdatedTime = 0l;
-        switch (localTabelType) {
-            case CITIES:
-                List<CityResponse> tempCitiesList = CityResponse.find(CityResponse.class, null, null, null, "updated_time DESC", "1");
-                if (!Util.isNullOrEmptyList(tempCitiesList))
-                    latestUpdatedTime = tempCitiesList.get(0).getUpdatedTime();
-                break;
-        }
-        if (latestUpdatedTime == null)
-            latestUpdatedTime = 0l;
-        LogUtils.LOGD(TAG, "Latest Updated Time for " + localTabelType + " : " + DateTimeUtil.getFormatedDateAndTime(latestUpdatedTime) + " , " + latestUpdatedTime);
-        return latestUpdatedTime;
+        return getLatestUpdatedTime(null, localTabelType);
     }
 
     public void addSpecialities(ArrayList<Specialities> specialitiesResponse) {
@@ -673,157 +662,123 @@ public class LocalDataServiceImpl {
             doctorId = user.getUniqueId();
             locationId = user.getForeignLocationId();
             hospitalId = user.getForeignHospitalId();
-            switch (localTabelType) {
-                case USER_GROUP:
-                    List<UserGroups> tempGroupsList = UserGroups.find(UserGroups.class, null, null, null, "updated_time DESC", "1");
-                    if (!Util.isNullOrEmptyList(tempGroupsList))
-                        latestUpdatedTime = tempGroupsList.get(0).getUpdatedTime();
-                    break;
-                case DISEASE:
-                    List<Disease> tempDiseaseList = Disease.find(Disease.class, null, null, null, "updated_time DESC", "1");
-                    if (!Util.isNullOrEmptyList(tempDiseaseList))
-                        latestUpdatedTime = tempDiseaseList.get(0).getUpdatedTime();
-                    break;
-                case TEMP_DRUG:
-                    List<Drug> drugsList = Drug.find(Drug.class, LocalDatabaseUtils.IS_DRUG_FROM_GET_DRUGS_LIST + "= ?", new String[]{"" + LocalDatabaseUtils.BOOLEAN_TRUE_VALUE}, null, "updated_time DESC", "1");
-                    if (!Util.isNullOrEmptyList(drugsList))
-                        latestUpdatedTime = drugsList.get(0).getUpdatedTime();
-                    break;
-                case RECORDS:
-                    List<Records> tempRecordsList = Records.find(Records.class,
-                            LocalDatabaseUtils.KEY_DOCTOR_ID + "= ? AND " + LocalDatabaseUtils.KEY_PATIENT_ID + "= ?",
-                            new String[]{doctorId, "" + HealthCocoConstants.SELECTED_PATIENTS_USER_ID},
+        }
+        switch (localTabelType) {
+            case CITIES:
+                List<CityResponse> tempCitiesList = CityResponse.find(CityResponse.class, null, null, null, "updated_time DESC", "1");
+                if (!Util.isNullOrEmptyList(tempCitiesList))
+                    latestUpdatedTime = tempCitiesList.get(0).getUpdatedTime();
+                break;
+            case USER_GROUP:
+                List<UserGroups> tempGroupsList = UserGroups.find(UserGroups.class, null, null, null, "updated_time DESC", "1");
+                if (!Util.isNullOrEmptyList(tempGroupsList))
+                    latestUpdatedTime = tempGroupsList.get(0).getUpdatedTime();
+                break;
+            case DISEASE:
+                List<Disease> tempDiseaseList = Disease.find(Disease.class, null, null, null, "updated_time DESC", "1");
+                if (!Util.isNullOrEmptyList(tempDiseaseList))
+                    latestUpdatedTime = tempDiseaseList.get(0).getUpdatedTime();
+                break;
+            case TEMP_DRUG:
+                List<Drug> drugsList = Drug.find(Drug.class, LocalDatabaseUtils.IS_DRUG_FROM_GET_DRUGS_LIST + "= ?", new String[]{"" + LocalDatabaseUtils.BOOLEAN_TRUE_VALUE}, null, "updated_time DESC", "1");
+                if (!Util.isNullOrEmptyList(drugsList))
+                    latestUpdatedTime = drugsList.get(0).getUpdatedTime();
+                break;
+            case RECORDS:
+                List<Records> tempRecordsList = Records.find(Records.class,
+                        LocalDatabaseUtils.KEY_DOCTOR_ID + "= ? AND " + LocalDatabaseUtils.KEY_PATIENT_ID + "= ?",
+                        new String[]{doctorId, "" + HealthCocoConstants.SELECTED_PATIENTS_USER_ID},
+                        null, "updated_time DESC", "1");
+                if (!Util.isNullOrEmptyList(tempRecordsList))
+                    latestUpdatedTime = tempRecordsList.get(0).getUpdatedTime();
+                break;
+            case TEMPLATE:
+                List<TempTemplate> tempTemplatesList = TempTemplate.find(TempTemplate.class, null, null, null, "updated_time DESC", "1");
+                if (!Util.isNullOrEmptyList(tempTemplatesList))
+                    latestUpdatedTime = tempTemplatesList.get(0).getUpdatedTime();
+                break;
+            case REGISTERED_PATIENTS_DETAILS:
+                List<RegisteredPatientDetailsUpdated> tempRegisteredPatientDetailUpdateds = null;
+                if (!Util.isNullOrBlank(doctorId) && !Util.isNullOrBlank(hospitalId) && !Util.isNullOrBlank(locationId)) {
+                    tempRegisteredPatientDetailUpdateds = RegisteredPatientDetailsUpdated.find(RegisteredPatientDetailsUpdated.class, LocalDatabaseUtils.KEY_LOCATION_ID + "= ? AND " + LocalDatabaseUtils.KEY_HOSPITAL_ID + "= ?",
+                            new String[]{locationId, hospitalId},
                             null, "updated_time DESC", "1");
-                    if (!Util.isNullOrEmptyList(tempRecordsList))
-                        latestUpdatedTime = tempRecordsList.get(0).getUpdatedTime();
-                    break;
-                case TEMPLATE:
-                    List<TempTemplate> tempTemplatesList = TempTemplate.find(TempTemplate.class, null, null, null, "updated_time DESC", "1");
-                    if (!Util.isNullOrEmptyList(tempTemplatesList))
-                        latestUpdatedTime = tempTemplatesList.get(0).getUpdatedTime();
-                    break;
-//                case TEMP_PRESCRIPTION:
-//                    List<Prescription> prescriptionList = Prescription.find(Prescription.class,
-//                            LocalDatabaseUtils.KEY_DOCTOR_ID + "= ? AND " + LocalDatabaseUtils.KEY_PATIENT_ID + "= ?",
-//                            new String[]{doctorId, "" + HealthCocoConstants.SELECTED_PATIENTS_USER_ID},
-//                            null, "updated_time DESC", "1");
-//                    if (!Util.isNullOrEmptyList(prescriptionList))
-//                        latestUpdatedTime = prescriptionList.get(0).getUpdatedTime();
-//                    break;
-//                case CLINAL_NOTE:
-//                    List<ClinicalNotes> tempClinicalNotes = ClinicalNotes.find(ClinicalNotes.class,
-//                            LocalDatabaseUtils.KEY_DOCTOR_ID + "= ? AND " + LocalDatabaseUtils.KEY_PATIENT_ID + "= ?",
-//                            new String[]{doctorId, "" + HealthCocoConstants.SELECTED_PATIENTS_USER_ID},
-//                            null, "updated_time DESC", "1");
-//                    if (!Util.isNullOrEmptyList(tempClinicalNotes))
-//                        latestUpdatedTime = tempClinicalNotes.get(0).getUpdatedTime();
-//                    break;
-//                case APPOINTMENT:
-//                    List<CalendarEvents> tempAppointmentsList = CalendarEvents.find(CalendarEvents.class,
-//                            LocalDatabaseUtils.KEY_DOCTOR_ID + "= ? AND " + LocalDatabaseUtils.KEY_PATIENT_ID + "= ? AND " + LocalDatabaseUtils.KEY_IS_ADDED_ON_SUCCESS + "= ?",
-//                            new String[]{doctorId, "" + HealthCocoConstants.SELECTED_PATIENTS_USER_ID, "" + BooleanTypeValues.FALSE.getBooleanIntValue()},
-//                            null, "updated_time DESC", "1");
-//                    if (!Util.isNullOrEmptyList(tempAppointmentsList))
-//                        latestUpdatedTime = tempAppointmentsList.get(0).getUpdatedTime();
-//                    break;
-                case REGISTERED_PATIENTS_DETAILS:
-                    List<RegisteredPatientDetailsUpdated> tempRegisteredPatientDetailUpdateds = null;
-                    if (!Util.isNullOrBlank(doctorId) && !Util.isNullOrBlank(hospitalId) && !Util.isNullOrBlank(locationId)) {
-                        tempRegisteredPatientDetailUpdateds = RegisteredPatientDetailsUpdated.find(RegisteredPatientDetailsUpdated.class, LocalDatabaseUtils.KEY_LOCATION_ID + "= ? AND " + LocalDatabaseUtils.KEY_HOSPITAL_ID + "= ?",
-                                new String[]{locationId, hospitalId},
-                                null, "updated_time DESC", "1");
-                    } else
-                        tempRegisteredPatientDetailUpdateds = RegisteredPatientDetailsUpdated.find(RegisteredPatientDetailsUpdated.class, null, null,
-                                null, "updated_time DESC", "1");
-                    if (!Util.isNullOrEmptyList(tempRegisteredPatientDetailUpdateds))
-                        latestUpdatedTime = tempRegisteredPatientDetailUpdateds.get(0).getUpdatedTime();
-                    break;
-                case COMPLAINT:
-                    List<Complaint> tempComplaintsLists = Complaint.find(Complaint.class, null, null, null, "updated_time DESC", "1");
-                    if (!Util.isNullOrEmptyList(tempComplaintsLists))
-                        latestUpdatedTime = tempComplaintsLists.get(0).getUpdatedTime();
-                    break;
-                case OBSERVATION:
-                    List<Observation> tempObservationList = Observation.find(Observation.class, null, null, null, "updated_time DESC", "1");
-                    if (!Util.isNullOrEmptyList(tempObservationList))
-                        latestUpdatedTime = tempObservationList.get(0).getUpdatedTime();
-                    break;
-                case INVESTIGATION:
-                    List<Investigation> tempInvestigationsList = Investigation.find(Investigation.class, null, null, null, "updated_time DESC", "1");
-                    if (!Util.isNullOrEmptyList(tempInvestigationsList))
-                        latestUpdatedTime = tempInvestigationsList.get(0).getUpdatedTime();
-                    break;
-                case DIAGNOSIS:
-                    List<Diagnoses> tempDiagnosisList = Diagnoses.find(Diagnoses.class, null, null, null, "updated_time DESC", "1");
-                    if (!Util.isNullOrEmptyList(tempDiagnosisList))
-                        latestUpdatedTime = tempDiagnosisList.get(0).getUpdatedTime();
-                    break;
-                case COMPLAINT_SUGGESTIONS:
-                    List<ComplaintSuggestions> tempComplaintSuggestionsLists = ComplaintSuggestions.find(ComplaintSuggestions.class, null, null, null, "updated_time DESC", "1");
-                    if (!Util.isNullOrEmptyList(tempComplaintSuggestionsLists))
-                        latestUpdatedTime = tempComplaintSuggestionsLists.get(0).getUpdatedTime();
-                    break;
-                case OBSERVATION_SUGGESTIONS:
-                    List<ObservationSuggestions> tempObservationSuggestionsList = ObservationSuggestions.find(ObservationSuggestions.class, null, null, null, "updated_time DESC", "1");
-                    if (!Util.isNullOrEmptyList(tempObservationSuggestionsList))
-                        latestUpdatedTime = tempObservationSuggestionsList.get(0).getUpdatedTime();
-                    break;
-                case INVESTIGATION_SUGGESTIONS:
-                    List<InvestigationSuggestions> tempInvestigationSuggestionsList = InvestigationSuggestions.find(InvestigationSuggestions.class, null, null, null, "updated_time DESC", "1");
-                    if (!Util.isNullOrEmptyList(tempInvestigationSuggestionsList))
-                        latestUpdatedTime = tempInvestigationSuggestionsList.get(0).getUpdatedTime();
-                    break;
-                case DIAGNOSIS_SUGGESTIONS:
-                    List<DiagnosisSuggestions> tempDiagnosisSuggestionsList = DiagnosisSuggestions.find(DiagnosisSuggestions.class, null, null, null, "updated_time DESC", "1");
-                    if (!Util.isNullOrEmptyList(tempDiagnosisSuggestionsList))
-                        latestUpdatedTime = tempDiagnosisSuggestionsList.get(0).getUpdatedTime();
-                    break;
-//                case HISTORY_DETAIL_RESPONSE:
-//                    List<HistoryDetailsResponse> tempHistoryList = HistoryDetailsResponse.find(HistoryDetailsResponse.class,
-//                            LocalDatabaseUtils.KEY_DOCTOR_ID + "= ? AND " + LocalDatabaseUtils.KEY_PATIENT_ID + "= ?",
-//                            new String[]{doctorId, "" + HealthCocoConstants.SELECTED_PATIENTS_USER_ID},
-//                            null, "updated_time DESC", "1");
-//                    if (!Util.isNullOrEmptyList(tempHistoryList))
-//                        latestUpdatedTime = tempHistoryList.get(0).getUpdatedTime();
-//                    break;
-//                case VISIT_DETAILS:
-//                    List<VisitDetails> visitDetailsList = VisitDetails.find(VisitDetails.class,
-//                            LocalDatabaseUtils.KEY_DOCTOR_ID + "= ? AND " + LocalDatabaseUtils.KEY_PATIENT_ID + "= ?",
-//                            new String[]{doctorId, "" + HealthCocoConstants.SELECTED_PATIENTS_USER_ID},
-//                            null, "updated_time DESC", "1");
-//                    if (!Util.isNullOrEmptyList(visitDetailsList))
-//                        latestUpdatedTime = visitDetailsList.get(0).getUpdatedTime();
-//                    break;
-                case DRUG_DOSAGE:
-                    List<DrugDosage> doasageList = DrugDosage.find(DrugDosage.class, null, null, null, "updated_time DESC", "1");
-                    if (!Util.isNullOrEmptyList(doasageList))
-                        latestUpdatedTime = doasageList.get(0).getUpdatedTime();
-                    break;
-                case DRUG_DURATION_UNIT:
-                    List<DrugDurationUnit> durationList = DrugDurationUnit.find(DrugDurationUnit.class, null, null, null, "updated_time DESC", "1");
-                    if (!Util.isNullOrEmptyList(durationList))
-                        latestUpdatedTime = durationList.get(0).getUpdatedTime();
-                    break;
-                case DRUG_DIRECTION:
-                    List<DrugDirection> directionList = DrugDirection.find(DrugDirection.class, null, null, null, "updated_time DESC", "1");
-                    if (!Util.isNullOrEmptyList(directionList))
-                        latestUpdatedTime = directionList.get(0).getUpdatedTime();
-                    break;
-                case DRUG_TYPE:
-                    List<DrugType> strengthUnitList = DrugType.find(DrugType.class, null, null, null, "updated_time DESC", "1");
-                    if (!Util.isNullOrEmptyList(strengthUnitList))
-                        latestUpdatedTime = strengthUnitList.get(0).getUpdatedTime();
-                    break;
-                case REFERENCE:
-                    List<Reference> referenceList = Reference.find(Reference.class,
-                            LocalDatabaseUtils.KEY_DOCTOR_ID + "= ? AND " + LocalDatabaseUtils.KEY_IS_FROM_CONTACTS_LIST + "= ?",
-                            new String[]{doctorId, "" + LocalDatabaseUtils.BOOLEAN_FALSE_VALUE},
+                } else
+                    tempRegisteredPatientDetailUpdateds = RegisteredPatientDetailsUpdated.find(RegisteredPatientDetailsUpdated.class, null, null,
                             null, "updated_time DESC", "1");
-                    if (!Util.isNullOrEmptyList(referenceList))
-                        latestUpdatedTime = referenceList.get(0).getUpdatedTime();
-                    break;
-                case PROFESSION:
-                    break;
+                if (!Util.isNullOrEmptyList(tempRegisteredPatientDetailUpdateds))
+                    latestUpdatedTime = tempRegisteredPatientDetailUpdateds.get(0).getUpdatedTime();
+                break;
+            case COMPLAINT:
+                List<Complaint> tempComplaintsLists = Complaint.find(Complaint.class, null, null, null, "updated_time DESC", "1");
+                if (!Util.isNullOrEmptyList(tempComplaintsLists))
+                    latestUpdatedTime = tempComplaintsLists.get(0).getUpdatedTime();
+                break;
+            case OBSERVATION:
+                List<Observation> tempObservationList = Observation.find(Observation.class, null, null, null, "updated_time DESC", "1");
+                if (!Util.isNullOrEmptyList(tempObservationList))
+                    latestUpdatedTime = tempObservationList.get(0).getUpdatedTime();
+                break;
+            case INVESTIGATION:
+                List<Investigation> tempInvestigationsList = Investigation.find(Investigation.class, null, null, null, "updated_time DESC", "1");
+                if (!Util.isNullOrEmptyList(tempInvestigationsList))
+                    latestUpdatedTime = tempInvestigationsList.get(0).getUpdatedTime();
+                break;
+            case DIAGNOSIS:
+                List<Diagnoses> tempDiagnosisList = Diagnoses.find(Diagnoses.class, null, null, null, "updated_time DESC", "1");
+                if (!Util.isNullOrEmptyList(tempDiagnosisList))
+                    latestUpdatedTime = tempDiagnosisList.get(0).getUpdatedTime();
+                break;
+            case COMPLAINT_SUGGESTIONS:
+                List<ComplaintSuggestions> tempComplaintSuggestionsLists = ComplaintSuggestions.find(ComplaintSuggestions.class, null, null, null, "updated_time DESC", "1");
+                if (!Util.isNullOrEmptyList(tempComplaintSuggestionsLists))
+                    latestUpdatedTime = tempComplaintSuggestionsLists.get(0).getUpdatedTime();
+                break;
+            case OBSERVATION_SUGGESTIONS:
+                List<ObservationSuggestions> tempObservationSuggestionsList = ObservationSuggestions.find(ObservationSuggestions.class, null, null, null, "updated_time DESC", "1");
+                if (!Util.isNullOrEmptyList(tempObservationSuggestionsList))
+                    latestUpdatedTime = tempObservationSuggestionsList.get(0).getUpdatedTime();
+                break;
+            case INVESTIGATION_SUGGESTIONS:
+                List<InvestigationSuggestions> tempInvestigationSuggestionsList = InvestigationSuggestions.find(InvestigationSuggestions.class, null, null, null, "updated_time DESC", "1");
+                if (!Util.isNullOrEmptyList(tempInvestigationSuggestionsList))
+                    latestUpdatedTime = tempInvestigationSuggestionsList.get(0).getUpdatedTime();
+                break;
+            case DIAGNOSIS_SUGGESTIONS:
+                List<DiagnosisSuggestions> tempDiagnosisSuggestionsList = DiagnosisSuggestions.find(DiagnosisSuggestions.class, null, null, null, "updated_time DESC", "1");
+                if (!Util.isNullOrEmptyList(tempDiagnosisSuggestionsList))
+                    latestUpdatedTime = tempDiagnosisSuggestionsList.get(0).getUpdatedTime();
+                break;
+            case DRUG_DOSAGE:
+                List<DrugDosage> doasageList = DrugDosage.find(DrugDosage.class, null, null, null, "updated_time DESC", "1");
+                if (!Util.isNullOrEmptyList(doasageList))
+                    latestUpdatedTime = doasageList.get(0).getUpdatedTime();
+                break;
+            case DRUG_DURATION_UNIT:
+                List<DrugDurationUnit> durationList = DrugDurationUnit.find(DrugDurationUnit.class, null, null, null, "updated_time DESC", "1");
+                if (!Util.isNullOrEmptyList(durationList))
+                    latestUpdatedTime = durationList.get(0).getUpdatedTime();
+                break;
+            case DRUG_DIRECTION:
+                List<DrugDirection> directionList = DrugDirection.find(DrugDirection.class, null, null, null, "updated_time DESC", "1");
+                if (!Util.isNullOrEmptyList(directionList))
+                    latestUpdatedTime = directionList.get(0).getUpdatedTime();
+                break;
+            case DRUG_TYPE:
+                List<DrugType> strengthUnitList = DrugType.find(DrugType.class, null, null, null, "updated_time DESC", "1");
+                if (!Util.isNullOrEmptyList(strengthUnitList))
+                    latestUpdatedTime = strengthUnitList.get(0).getUpdatedTime();
+                break;
+            case REFERENCE:
+                List<Reference> referenceList = Reference.find(Reference.class,
+                        LocalDatabaseUtils.KEY_DOCTOR_ID + "= ? AND " + LocalDatabaseUtils.KEY_IS_FROM_CONTACTS_LIST + "= ?",
+                        new String[]{doctorId, "" + LocalDatabaseUtils.BOOLEAN_FALSE_VALUE},
+                        null, "updated_time DESC", "1");
+                if (!Util.isNullOrEmptyList(referenceList))
+                    latestUpdatedTime = referenceList.get(0).getUpdatedTime();
+                break;
+            case PROFESSION:
+                break;
 //                case CALENDAR_EVENTS:
 //                    List<CalendarEvents> tempCalendarEventsList = CalendarEvents.find(CalendarEvents.class,
 //                            LocalDatabaseUtils.KEY_DOCTOR_ID + "= ? AND " + LocalDatabaseUtils.KEY_IS_FROM_CALENDAR_API + "= ? AND " + LocalDatabaseUtils.KEY_IS_ADDED_ON_SUCCESS + "= ?",
@@ -832,7 +787,6 @@ public class LocalDataServiceImpl {
 //                    if (!Util.isNullOrEmptyList(tempCalendarEventsList))
 //                        latestUpdatedTime = tempCalendarEventsList.get(0).getUpdatedTime();
 //                    break;
-            }
         }
         if (latestUpdatedTime == null)
             latestUpdatedTime = 0l;

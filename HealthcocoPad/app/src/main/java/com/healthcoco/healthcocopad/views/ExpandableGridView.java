@@ -1,27 +1,28 @@
-package com.healthcoco.healthcocopad.custom;
+package com.healthcoco.healthcocopad.views;
 
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
-
-import com.healthcoco.healthcocopad.views.ListViewLoadMore;
+import android.widget.GridView;
 
 /**
- * Created by neha on 19/01/16.
+ * Created by neha on 22/03/17.
  */
-public class ExpandableHeightListView extends ListViewLoadMore {
+
+public class ExpandableGridView extends GridView {
 
     boolean expanded = true;
 
-    public ExpandableHeightListView(Context context) {
+    public ExpandableGridView(Context context) {
         super(context);
     }
 
-    public ExpandableHeightListView(Context context, AttributeSet attrs) {
+    public ExpandableGridView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public ExpandableHeightListView(Context context, AttributeSet attrs, int defStyle) {
+    public ExpandableGridView(Context context, AttributeSet attrs,
+                              int defStyle) {
         super(context, attrs, defStyle);
     }
 
@@ -34,9 +35,9 @@ public class ExpandableHeightListView extends ListViewLoadMore {
         // HACK! TAKE THAT ANDROID!
         if (isExpanded()) {
             // Calculate entire height by providing a very large height hint.
-            // But do not use the highest 2 bits of this integer; those are
-            // reserved for the MeasureSpec mode.
-            int expandSpec = MeasureSpec.makeMeasureSpec(Integer.MAX_VALUE >> 2, MeasureSpec.AT_MOST);
+            // View.MEASURED_SIZE_MASK represents the largest height possible.
+            int expandSpec = MeasureSpec.makeMeasureSpec(MEASURED_SIZE_MASK,
+                    MeasureSpec.AT_MOST);
             super.onMeasure(widthMeasureSpec, expandSpec);
 
             ViewGroup.LayoutParams params = getLayoutParams();

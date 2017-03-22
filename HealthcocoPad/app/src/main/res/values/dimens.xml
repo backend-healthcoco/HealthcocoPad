@@ -88,7 +88,7 @@
     <dimen name="image_patient_profile_alphabet">50dp</dimen>
     <dimen name="edit_text_size_dialog">15sp</dimen>
     <dimen name="texrt_size_patient_mobile_search_number">15sp</dimen>
-    <dimen name="image_patient_profile_registration">70dp</dimen>
+    <dimen name="image_patient_profile_registration">100dp</dimen>
     <dimen name="layout_padding_5dp">5dp</dimen>
     <dimen name="patient_detail_top_bottom_paddding">15dp</dimen>
     <dimen name="patient_detail_left_right_paddding">100dp</dimen>
@@ -127,4 +127,5 @@
     <dimen name="item_visits_button_padding_top_bottom_8dp">8dp</dimen>
     <dimen name="text_size_drug_lable">17sp</dimen>
     <dimen name="text_size_drug_child_lable">15sp</dimen>
+    <dimen name="miimumheight_groups_notes_view_patient_registration">200dp</dimen>
 </resources>

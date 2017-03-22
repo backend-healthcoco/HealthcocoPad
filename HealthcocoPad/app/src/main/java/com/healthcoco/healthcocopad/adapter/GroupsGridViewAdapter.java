@@ -6,7 +6,7 @@ import android.widget.BaseAdapter;
 
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.bean.server.UserGroups;
-import com.healthcoco.healthcocopad.listeners.AssignGroupListener;
+import com.healthcoco.healthcocopad.listeners.PatientRegistrationListener;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.healthcoco.healthcocopad.viewholders.GroupGridViewHolder;
 
@@ -16,7 +16,7 @@ import java.util.List;
  * Created by neha on 23/11/15.
  */
 public class GroupsGridViewAdapter extends BaseAdapter {
-    private AssignGroupListener assignGroupListener;
+    private PatientRegistrationListener assignGroupListener;
     private List<UserGroups> list;
     private HealthCocoActivity mActivity;
     private GroupGridViewHolder holder;
@@ -24,7 +24,7 @@ public class GroupsGridViewAdapter extends BaseAdapter {
     public GroupsGridViewAdapter() {
     }
 
-    public GroupsGridViewAdapter(HealthCocoActivity activity, AssignGroupListener assignGroupListener) {
+    public GroupsGridViewAdapter(HealthCocoActivity activity, PatientRegistrationListener assignGroupListener) {
         this.mActivity = activity;
         this.assignGroupListener = assignGroupListener;
     }

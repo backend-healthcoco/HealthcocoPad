@@ -11,9 +11,13 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.HealthCocoDialogFragment;
+import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.adapter.CommonListDialogAdapter;
+import com.healthcoco.healthcocopad.bean.server.CollegeUniversityInstitute;
+import com.healthcoco.healthcocopad.bean.server.EducationQualification;
+import com.healthcoco.healthcocopad.bean.server.MedicalCouncil;
+import com.healthcoco.healthcocopad.bean.server.Reference;
 import com.healthcoco.healthcocopad.bean.server.Specialities;
 import com.healthcoco.healthcocopad.enums.CommonListDialogType;
 import com.healthcoco.healthcocopad.listeners.CommonListDialogItemClickListener;
@@ -30,7 +34,7 @@ import java.util.Locale;
  */
 
 public class CommonListDialogFragment extends HealthCocoDialogFragment implements
-        TextWatcher, View.OnKeyListener, TextView.OnEditorActionListener {
+        TextWatcher, TextView.OnEditorActionListener {
     private List<?> list;
     private CommonListDialogType commonListDialogType;
     private CommonListDialogItemClickListener commonListDialogItemClickListener;
@@ -67,17 +71,16 @@ public class CommonListDialogFragment extends HealthCocoDialogFragment implement
         initListeners();
         initAdapter();
         initData();
+        notifyAdapter(list);
     }
 
     @Override
     public void initViews() {
         listView = (ListView) view.findViewById(R.id.lv_list);
         tvNoResultFound = (TextView) view.findViewById(R.id.tv_no_result_found);
-        if (isBottomOptionsDialog) {
-//            hideEditSearchView();
-        } else if (commonListDialogType.isAddCustomAllowed()) {
-//            getSearchEditText().setImeOptions(EditorInfo.IME_ACTION_DONE);
-//            initEditSearchView(commonListDialogType.getHint(), this, null, this, false);
+        if (commonListDialogType.isAddCustomAllowed()) {
+            getSearchEditText().setImeOptions(EditorInfo.IME_ACTION_DONE);
+            initEditSearchView(commonListDialogType.getHint(), this, null, this, false);
         } else
             initEditSearchView(commonListDialogType.getHint(), this, false);
         tvNoResultFound.setText(commonListDialogType.getNoResultFoundTextId());
@@ -93,9 +96,7 @@ public class CommonListDialogFragment extends HealthCocoDialogFragment implement
     }
 
     private void initAdapter() {
-        sortList(list);
         mAdapter = new CommonListDialogAdapter(mActivity, commonListDialogItemClickListener);
-        mAdapter.setListData(commonListDialogType, list);
         listView.setAdapter(mAdapter);
     }
 
@@ -123,6 +124,13 @@ public class CommonListDialogFragment extends HealthCocoDialogFragment implement
                             case SPECIALITY:
                                 Specialities speciality = (Specialities) object;
                                 if (!Util.isNullOrBlank(speciality.getSuperSpeciality()) && speciality.getSuperSpeciality().toLowerCase(Locale.ENGLISH)
+                                        .contains(search)) {
+                                    tempList.add(object);
+                                }
+                                break;
+                            case REFERRED_BY:
+                                Reference reference = (Reference) object;
+                                if (!Util.isNullOrBlank(reference.getReference()) && reference.getReference().toLowerCase(Locale.ENGLISH)
                                         .contains(search)) {
                                     tempList.add(object);
                                 }
@@ -160,16 +168,33 @@ public class CommonListDialogFragment extends HealthCocoDialogFragment implement
     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
         if (actionId == EditorInfo.IME_ACTION_DONE) {
             Object object = null;
+            switch (commonListDialogType) {
+                case QUALIFICATION:
+                    EducationQualification educationQualification = new EducationQualification();
+                    educationQualification.setName(getSearchEditTextValue());
+                    object = educationQualification;
+                    break;
+                case COLLEGE_UNIVERSITY_INSTITUTE:
+                    CollegeUniversityInstitute collegeUniversityInstitute = new CollegeUniversityInstitute();
+                    collegeUniversityInstitute.setName(getSearchEditTextValue());
+                    object = collegeUniversityInstitute;
+                    break;
+                case MEDICAL_COUNCIL:
+                    MedicalCouncil medicalCouncil = new MedicalCouncil();
+                    medicalCouncil.setMedicalCouncil(getSearchEditTextValue());
+                    object = medicalCouncil;
+                    break;
+                case REFERRED_BY:
+                    Reference reference = new Reference();
+                    reference.setReference(getSearchEditTextValue());
+                    object = reference;
+                    break;
+            }
             if (object != null) {
                 commonListDialogItemClickListener.onDialogItemClicked(commonListDialogType, object);
                 dismiss();
             }
         }
-        return false;
-    }
-
-    @Override
-    public boolean onKey(View view, int i, KeyEvent keyEvent) {
         return false;
     }
 }

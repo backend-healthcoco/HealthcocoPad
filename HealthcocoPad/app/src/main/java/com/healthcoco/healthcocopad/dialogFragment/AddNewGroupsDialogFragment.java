@@ -11,8 +11,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.android.volley.Response;
-import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.HealthCocoDialogFragment;
+import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.adapter.GroupsListViewAdapter;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.request.AssignGroupRequest;
@@ -42,7 +42,8 @@ import java.util.List;
 /**
  * Created by Shreshtha on 06-03-2017.
  */
-public class AddNewGroupsDialogFragment extends HealthCocoDialogFragment implements View.OnClickListener, GsonRequest.ErrorListener, LocalDoInBackgroundListenerOptimised, Response.Listener<VolleyResponseBean>, AssignGroupListener {
+public class AddNewGroupsDialogFragment extends HealthCocoDialogFragment implements View.OnClickListener, GsonRequest.ErrorListener, LocalDoInBackgroundListenerOptimised,
+        Response.Listener<VolleyResponseBean>, AssignGroupListener {
     private ListView lvGroups;
     private Button btAddNewGroup;
     private GroupsListViewAdapter adapter;
