@@ -22,8 +22,6 @@ public class LoginSignUpImageScreenFragment extends HealthCocoFragment {
     private ImageView ivImage;
     private TextView tvMessage;
     private TextView tvTitle;
-    private View view;
-    private HealthCocoActivity mActivity;
     public static final String TAG_ORDINAL = "ordinal";
 
     public LoginSignUpImageScreenFragment() {

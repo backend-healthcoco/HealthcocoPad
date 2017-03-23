@@ -27,7 +27,6 @@ import java.util.ArrayList;
  */
 public class LoginSignupFragment extends HealthCocoFragment implements View.OnClickListener, ViewPager.OnPageChangeListener {
     private static final String TAG_ORDINAL = "ordinal";
-    protected View view;
     private Button btJoin;
     private Button btSignIn;
     private ViewPager viewPager;
@@ -43,7 +42,6 @@ public class LoginSignupFragment extends HealthCocoFragment implements View.OnCl
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_login_signup, container, false);
-        mActivity = (HealthCocoActivity) getActivity();
         super.onCreateView(inflater, container, savedInstanceState);
         return view;
     }
@@ -71,7 +69,7 @@ public class LoginSignupFragment extends HealthCocoFragment implements View.OnCl
             fragmentsList.add(loginSignUpImageScreenFragment);
         }
         viewPager.setOffscreenPageLimit(fragmentsList.size());
-        initialScreenViewPagerAapter = new InitialScreenViewPagerAapter(mActivity.getSupportFragmentManager());
+        initialScreenViewPagerAapter = new InitialScreenViewPagerAapter(mFragmentManager);
         initialScreenViewPagerAapter.setFragmentsList(fragmentsList);
         viewPager.setAdapter(initialScreenViewPagerAapter);
     }

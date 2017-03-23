@@ -102,6 +102,7 @@ public class VisitDetailCombinedViewHolder extends HealthCocoViewHolder implemen
     private VisitDetailCombinedItemListener listItemClickListener;
     private TextView tvCreatedBy;
     private TextView tvVisitDate;
+    private LinearLayout layoutDiscardedTreatment;
 
     public VisitDetailCombinedViewHolder(HealthCocoActivity mActivity, VisitDetailCombinedItemListener listItemClickListener) {
         super(mActivity);
@@ -185,6 +186,7 @@ public class VisitDetailCombinedViewHolder extends HealthCocoViewHolder implemen
 //        layoutDiagrams = (LinearLayout) contentView.findViewById(R.id.layout_diagrams);
         containerDiagrams = (LinearLayout) contentView.findViewById(R.id.container_diagrams);
         layoutDiscardedClinicalNote = (LinearLayout) contentView.findViewById(R.id.layout_discarded_clinical_note);
+        layoutDiscardedTreatment = (LinearLayout) contentView.findViewById(R.id.layout_discarded_treatment);
     }
 
     private void initPrescriptionsView(View contentView) {
@@ -352,7 +354,7 @@ public class VisitDetailCombinedViewHolder extends HealthCocoViewHolder implemen
 //            layoutDiagrams.setVisibility(View.VISIBLE);
             initDiagramsPagerAdapter(clinicalNote.getDiagrams());
         }
-//        checkIsClinicalNoteDiscarded(clinicalNote.getDiscarded());
+        checkIsClinicalNoteDiscarded(clinicalNote.getDiscarded());
 
     }
 
@@ -447,16 +449,22 @@ public class VisitDetailCombinedViewHolder extends HealthCocoViewHolder implemen
     }
 
     private void checkIsPrescriptionDiscarded(boolean isDiscarded) {
-//        if (isDiscarded)
-//            layoutPrescriptionDiscarded.setVisibility(View.VISIBLE);
-//        else layoutPrescriptionDiscarded.setVisibility(View.GONE);
+        if (isDiscarded)
+            layoutPrescriptionDiscarded.setVisibility(View.VISIBLE);
+        else layoutPrescriptionDiscarded.setVisibility(View.GONE);
     }
 
-//    private void checkIsClinicalNoteDiscarded(boolean isDiscarded) {
-//        if (isDiscarded)
-//            layoutDiscardedClinicalNote.setVisibility(View.VISIBLE);
-//        else layoutDiscardedClinicalNote.setVisibility(View.GONE);
-//    }
+    private void checkIsClinicalNoteDiscarded(boolean isDiscarded) {
+        if (isDiscarded)
+            layoutDiscardedClinicalNote.setVisibility(View.VISIBLE);
+        else layoutDiscardedClinicalNote.setVisibility(View.GONE);
+    }
+
+    private void checkIsTreatmentDiscarded(boolean isDiscarded) {
+        if (isDiscarded)
+            layoutDiscardedTreatment.setVisibility(View.VISIBLE);
+        else layoutDiscardedTreatment.setVisibility(View.GONE);
+    }
 
     private void clearAllViews() {
         tvPresentComplaints.setText("");
@@ -479,30 +487,30 @@ public class VisitDetailCombinedViewHolder extends HealthCocoViewHolder implemen
         tvPS.setText("");
         tvIndicationOfUSG.setText("");
         tvNotes.setText("");
-//        containerDiagrams.removeAllViews();
-//
-//        layoutPresentComplaints.setVisibility(View.GONE);
-//        layoutComplaints.setVisibility(View.GONE);
-//        layoutPresentComplaintsHistory.setVisibility(View.GONE);
-//        layoutMenstrualHistory.setVisibility(View.GONE);
-//        layoutObstetricHistory.setVisibility(View.GONE);
-//        layoutGeneralExamination.setVisibility(View.GONE);
-//        layoutSystemExamination.setVisibility(View.GONE);
-//        layoutObservations.setVisibility(View.GONE);
-//        layoutInvestigations.setVisibility(View.GONE);
-//        layoutProvisionalDiagnosis.setVisibility(View.GONE);
-//        layoutDiagnosis.setVisibility(View.GONE);
-//        layoutECGDetails.setVisibility(View.GONE);
-//        layoutEcho.setVisibility(View.GONE);
-//        layoutXrayDetails.setVisibility(View.GONE);
-//        layoutHolter.setVisibility(View.GONE);
-//        layoutPA.setVisibility(View.GONE);
-//        layoutPV.setVisibility(View.GONE);
-//        layoutPS.setVisibility(View.GONE);
-//        layoutInidicationOfUsg.setVisibility(View.GONE);
-//        layoutNotes.setVisibility(View.GONE);
-////        layoutDiagrams.setVisibility(View.GONE);
-//        layoutVitalSigns.setVisibility(View.GONE);
+        containerDiagrams.removeAllViews();
+
+        layoutPresentComplaints.setVisibility(View.GONE);
+        layoutComplaints.setVisibility(View.GONE);
+        layoutPresentComplaintsHistory.setVisibility(View.GONE);
+        layoutMenstrualHistory.setVisibility(View.GONE);
+        layoutObstetricHistory.setVisibility(View.GONE);
+        layoutGeneralExamination.setVisibility(View.GONE);
+        layoutSystemExamination.setVisibility(View.GONE);
+        layoutObservations.setVisibility(View.GONE);
+        layoutInvestigations.setVisibility(View.GONE);
+        layoutProvisionalDiagnosis.setVisibility(View.GONE);
+        layoutDiagnosis.setVisibility(View.GONE);
+        layoutECGDetails.setVisibility(View.GONE);
+        layoutEcho.setVisibility(View.GONE);
+        layoutXrayDetails.setVisibility(View.GONE);
+        layoutHolter.setVisibility(View.GONE);
+        layoutPA.setVisibility(View.GONE);
+        layoutPV.setVisibility(View.GONE);
+        layoutPS.setVisibility(View.GONE);
+        layoutInidicationOfUsg.setVisibility(View.GONE);
+        layoutNotes.setVisibility(View.GONE);
+//        layoutDiagrams.setVisibility(View.GONE);
+        layoutVitalSigns.setVisibility(View.GONE);
     }
 
     private void initClinicalNotesSubViews(ClinicalNotesType clinicalNotesType, List<Object> complaints) {

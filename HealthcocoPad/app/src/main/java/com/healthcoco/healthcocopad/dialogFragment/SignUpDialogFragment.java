@@ -51,7 +51,6 @@ import static com.healthcoco.healthcocopad.enums.WebServiceType.GET_SPECIALITIES
  */
 
 public class SignUpDialogFragment extends HealthCocoDialogFragment implements View.OnClickListener, GsonRequest.ErrorListener, Response.Listener<VolleyResponseBean>, CommonListDialogItemClickListener, LocalDoInBackgroundListenerOptimised {
-    private View view;
     private Button bt_cancel;
     private EditText editName;
     private EditText editMobileNo;

@@ -42,17 +42,14 @@ import java.util.ArrayList;
 public class LoginDialogFragment extends HealthCocoDialogFragment implements View.OnClickListener, GsonRequest.ErrorListener, Response.Listener<VolleyResponseBean> {
     public static final String INTENT_SIGNUP_SUCCESS = "com.healthcoco.healthcocopad.dialogFragment.LoginDialogFragment";
 
-    private View view;
     private EditText editUserName;
     private EditText editPassword;
     private Button btLogin;
     private Button btForgotPassword;
-    private Button btJoinNow;
     private TextView tvTermsOfService;
     private TextView tvPrivacyPolicy;
     private Button bt_cancel;
     private boolean receiversRegistered;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
