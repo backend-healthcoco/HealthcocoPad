@@ -583,7 +583,7 @@
     <string name="beats_per_min">&#160;(beats/min)&#160;</string>
     <string name="faranheit">&#160;(\u2109)&#160;</string>
     <string name="spo2_percent">&#160;(%)&#160;</string>
-    <string name="breaths_per_min">&#160;(breaths/min)&#160;</string>
+    <string name="breaths_per_min">breaths/min</string>
     <string name="edit">Edit</string>
     <string name="advice">Advice&#160;:--&#160;</string>
     <string name="drug_name">Drug Name</string>

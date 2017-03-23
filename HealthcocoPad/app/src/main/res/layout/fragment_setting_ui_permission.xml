@@ -3,7 +3,7 @@
     android:id="@+id/lv_settings_ui_permission"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
+    android:background="@color/grey_background"
     android:cacheColorHint="@android:color/transparent"
     android:clipToPadding="false"
     android:divider="@null"

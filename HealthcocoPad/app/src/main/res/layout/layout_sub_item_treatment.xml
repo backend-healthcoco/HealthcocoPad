@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/parent_treatment_item"
+    android:id="@+id/parent_treatment_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -8,7 +8,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/background"
+        android:background="@color/grey_background"
         android:orientation="horizontal"
         android:padding="10dp">
 
@@ -125,7 +125,7 @@
         android:layout_marginLeft="@dimen/item_padding"
         android:layout_marginRight="@dimen/item_padding"
         android:layout_marginTop="@dimen/item_visits_button_padding_top_bottom_8dp"
-        android:background="@color/background" />
+        android:background="@color/grey_background" />
 
     <LinearLayout
         android:layout_width="match_parent"

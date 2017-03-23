@@ -21,7 +21,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:maxLines="1"
-            android:text="Dr.Shreyash"
             android:textColor="@color/white"
             android:textSize="@dimen/text_size_menu_doctor_name"
             android:textStyle="bold" />
@@ -32,7 +31,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:maxLines="1"
-            android:text="abc123@gmail.com"
             android:textColor="@color/white"
             android:textSize="@dimen/text_size_menu_email_address"
             android:textStyle="bold" />
@@ -47,7 +45,6 @@
             android:drawablePadding="5dp"
             android:drawableRight="@drawable/arrow_menu_down"
             android:maxLines="1"
-            android:text="Shree Clinic"
             android:textColor="@color/white"
             android:textSize="@dimen/text_size_menu_clinic_name" />
     </LinearLayout>

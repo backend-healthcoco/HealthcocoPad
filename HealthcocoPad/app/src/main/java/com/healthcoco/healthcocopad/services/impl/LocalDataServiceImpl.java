@@ -782,6 +782,13 @@ public class LocalDataServiceImpl {
                 break;
             case PROFESSION:
                 break;
+            case VISIT_DETAILS:
+                List<VisitDetails> visitDetailsList = VisitDetails.find(VisitDetails.class,
+                        LocalDatabaseUtils.KEY_DOCTOR_ID + "= ? AND " + LocalDatabaseUtils.KEY_PATIENT_ID + "= ?",
+                        new String[]{doctorId, "" + HealthCocoConstants.SELECTED_PATIENTS_USER_ID},
+                        null, "updated_time DESC", "1");
+                if (!Util.isNullOrEmptyList(visitDetailsList))
+                    latestUpdatedTime = visitDetailsList.get(0).getUpdatedTime();
 //                case CALENDAR_EVENTS:
 //                    List<CalendarEvents> tempCalendarEventsList = CalendarEvents.find(CalendarEvents.class,
 //                            LocalDatabaseUtils.KEY_DOCTOR_ID + "= ? AND " + LocalDatabaseUtils.KEY_IS_FROM_CALENDAR_API + "= ? AND " + LocalDatabaseUtils.KEY_IS_ADDED_ON_SUCCESS + "= ?",
@@ -2709,7 +2716,6 @@ public class LocalDataServiceImpl {
             LogUtils.LOGD(TAG, "Visit add detail size " + visitsList.size() + " UniqueId : " + details.getUniqueId());
             addVisit(details);
         }
-
     }
 
     public void addVisit(VisitDetails details) {

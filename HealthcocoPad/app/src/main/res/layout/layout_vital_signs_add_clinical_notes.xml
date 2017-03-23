@@ -42,7 +42,7 @@
                     android:gravity="center"
                     android:text="@string/bt"
                     android:textColor="@color/grey_dark_text"
-                    android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label" />
+                    android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label_child" />
 
                 <com.healthcoco.healthcocopad.views.TextViewFontAwesome
                     android:id="@+id/tv_body_temprature"
@@ -55,13 +55,6 @@
                     android:textColor="@color/grey_dark_text"
                     android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label_child" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="@string/faranheit"
-                    android:textColor="@color/grey_dark_text"
-                    android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label" />
             </LinearLayout>
 
             <LinearLayout
@@ -77,7 +70,7 @@
                     android:gravity="center"
                     android:text="@string/wt"
                     android:textColor="@color/grey_dark_text"
-                    android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label" />
+                    android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label_child" />
 
                 <com.healthcoco.healthcocopad.views.TextViewFontAwesome
                     android:id="@+id/tv_weight"
@@ -90,13 +83,6 @@
                     android:textColor="@color/grey_dark_text"
                     android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label_child" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="@string/kilograms"
-                    android:textColor="@color/grey_dark_text"
-                    android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label" />
             </LinearLayout>
 
             <LinearLayout
@@ -112,7 +98,7 @@
                     android:gravity="center"
                     android:text="@string/hr"
                     android:textColor="@color/grey_dark_text"
-                    android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label" />
+                    android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label_child" />
 
                 <com.healthcoco.healthcocopad.views.TextViewFontAwesome
                     android:id="@+id/tv_heart_rate"
@@ -125,13 +111,6 @@
                     android:textColor="@color/grey_dark_text"
                     android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label_child" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="@string/beats_per_min"
-                    android:textColor="@color/grey_dark_text"
-                    android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label" />
             </LinearLayout>
         </LinearLayout>
 
@@ -155,7 +134,7 @@
                     android:gravity="center"
                     android:text="@string/bp"
                     android:textColor="@color/grey_dark_text"
-                    android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label" />
+                    android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label_child" />
 
                 <com.healthcoco.healthcocopad.views.TextViewFontAwesome
                     android:id="@+id/tv_blood_pressure"
@@ -168,13 +147,6 @@
                     android:textColor="@color/grey_dark_text"
                     android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label_child" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="@string/bp_mm_hg"
-                    android:textColor="@color/grey_dark_text"
-                    android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label" />
             </LinearLayout>
 
             <LinearLayout
@@ -190,7 +162,7 @@
                     android:gravity="center"
                     android:text="@string/rr"
                     android:textColor="@color/grey_dark_text"
-                    android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label" />
+                    android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label_child" />
 
                 <com.healthcoco.healthcocopad.views.TextViewFontAwesome
                     android:id="@+id/tv_respiratory_rate"
@@ -203,13 +175,6 @@
                     android:textColor="@color/grey_dark_text"
                     android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label_child" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="@string/breaths_per_min"
-                    android:textColor="@color/grey_dark_text"
-                    android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label" />
             </LinearLayout>
 
             <LinearLayout
@@ -225,7 +190,7 @@
                     android:gravity="center"
                     android:text="@string/spo2_colon"
                     android:textColor="@color/grey_dark_text"
-                    android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label" />
+                    android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label_child" />
 
                 <com.healthcoco.healthcocopad.views.TextViewFontAwesome
                     android:id="@+id/tv_spo2"
@@ -238,17 +203,9 @@
                     android:textColor="@color/grey_dark_text"
                     android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label_child" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="@string/spo2_percent"
-                    android:textColor="@color/grey_dark_text"
-                    android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
-
 
     <View
         android:layout_width="match_parent"

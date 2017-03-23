@@ -41,5 +41,5 @@
     <string name="fa_grand_total_rupees">Grand Total&#160;:&#160;\u20B9</string>
     <string name="icon_add_note">&#xf067;&#160;Add Note</string>
 
-
+    <string name="fa_arrow_filled_right">&#xf0da;</string>
 </resources>

@@ -115,18 +115,18 @@
     <dimen name="text_size_dialog_fragment_20sp">17sp</dimen>
     <dimen name="text_size_select_drug_item">15sp</dimen>
     <dimen name="text_size_drug_dose_item_drug_name">13sp</dimen>
-    <dimen name="text_size_drug_dose_item_dosage_direction_instruction">13sp</dimen>
-    <dimen name="header_text_size">12sp</dimen>
-    <dimen name="text_size_add_clinical_note_vital_signs_label">17sp</dimen>
-    <dimen name="text_size_add_clinical_note_vital_signs_label_child">13sp</dimen>
+    <dimen name="text_size_drug_dose_item_dosage_direction_instruction">17sp</dimen>
+    <dimen name="header_text_size">16sp</dimen>
+    <dimen name="text_size_add_clinical_note_vital_signs_label">20sp</dimen>
+    <dimen name="text_size_add_clinical_note_vital_signs_label_child">17sp</dimen>
     <dimen name="item_padding">8dp</dimen>
     <dimen name="text_size_prescription_diagnostic_label">17sp</dimen>
     <dimen name="text_size_bt_history_edit_sms_email">12sp</dimen>
     <dimen name="item_visits_button_margin_8dp">8dp</dimen>
     <dimen name="item_visits_button_padding_left_right_20dp">20dp</dimen>
     <dimen name="item_visits_button_padding_top_bottom_8dp">8dp</dimen>
-    <dimen name="text_size_drug_lable">17sp</dimen>
-    <dimen name="text_size_drug_child_lable">15sp</dimen>
+    <dimen name="text_size_drug_lable">20sp</dimen>
+    <dimen name="text_size_drug_child_lable">17sp</dimen>
     <dimen name="width_height_clinical_note_item_diagram">120dp</dimen>
     <dimen name="text_size_clinical_notes_item_diagram_tags">13sp</dimen>
     <dimen name="padding_between_clinical_item_diagram">10dp</dimen>
@@ -136,4 +136,5 @@
     <dimen name="emr_item_margin">8dp</dimen>
     <dimen name="text_size_discarded">20sp</dimen>
     <dimen name="miimumheight_groups_notes_view_patient_registration">200dp</dimen>
+    <dimen name="text_size_bottom_button">16sp</dimen>
 </resources>

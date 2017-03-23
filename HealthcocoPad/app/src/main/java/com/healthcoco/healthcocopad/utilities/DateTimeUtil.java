@@ -286,5 +286,4 @@ public class DateTimeUtil {
     public static String getFormatedDate(Long date) {
         return new SimpleDateFormat("dd/MM/yyyy").format(new Date(date));
     }
-
 }

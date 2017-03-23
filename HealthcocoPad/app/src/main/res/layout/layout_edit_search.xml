@@ -3,7 +3,7 @@
     android:id="@+id/parent_edit_search"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/background"
+    android:background="@color/grey_background"
     android:gravity="center"
     android:orientation="horizontal"
     android:padding="@dimen/layout_edit_search_padding"

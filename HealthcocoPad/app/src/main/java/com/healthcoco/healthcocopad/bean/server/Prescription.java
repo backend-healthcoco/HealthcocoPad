@@ -33,6 +33,7 @@ public class Prescription extends SugarRecord {
     private Boolean inHistory;
     private String visitId;
     private String uniqueEmrId;
+    private String advice;
 
     public Long getCreatedTime() {
         return createdTime;
@@ -166,6 +167,14 @@ public class Prescription extends SugarRecord {
 
     public void setDiagnosticTests(List<DiagnosticTestsPrescription> diagnosticTests) {
         this.diagnosticTests = diagnosticTests;
+    }
+
+    public String getAdvice() {
+        return advice;
+    }
+
+    public void setAdvice(String advice) {
+        this.advice = advice;
     }
 
     public static List<DiagnosticTest> getDiagnosticTestsList(List<DiagnosticTestsPrescription> list) {

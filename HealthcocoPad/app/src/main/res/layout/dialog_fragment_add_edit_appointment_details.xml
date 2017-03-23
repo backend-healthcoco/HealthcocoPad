@@ -12,7 +12,7 @@
         android:id="@+id/tv_clinic_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/background"
+        android:background="@color/grey_background"
         android:padding="10dp"
         android:textColor="@color/grey_dark_text"
         android:textSize="@dimen/text_size_doctor_profile_item_header_child" />

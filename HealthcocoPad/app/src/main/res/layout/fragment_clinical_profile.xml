@@ -131,7 +131,7 @@
         android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/tv_header"
-        android:background="@color/background"
+        android:background="@color/grey_background"
         android:fillViewport="true">
 
         <LinearLayout
