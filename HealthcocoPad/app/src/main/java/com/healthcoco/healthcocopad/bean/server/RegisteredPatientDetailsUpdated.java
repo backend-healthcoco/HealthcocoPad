@@ -49,8 +49,9 @@ public class RegisteredPatientDetailsUpdated extends SugarRecord {
     protected String addressJsonString;
     @Ignore
     private List<UserGroups> groups;
-
+    @Ignore
     protected ArrayList<String> groupIds;
+    protected String groupIdsJsonString;
 
     private String doctorId;
 
@@ -213,6 +214,8 @@ public class RegisteredPatientDetailsUpdated extends SugarRecord {
     }
 
     public ArrayList<String> getGroupIds() {
+        if (groupIds == null)
+            groupIds = new ArrayList<>();
         return groupIds;
     }
 
@@ -323,5 +326,13 @@ public class RegisteredPatientDetailsUpdated extends SugarRecord {
 
     public void setAddressJsonString(String addressJsonString) {
         this.addressJsonString = addressJsonString;
+    }
+
+    public String getGroupIdsJsonString() {
+        return groupIdsJsonString;
+    }
+
+    public void setGroupIdsJsonString(String groupIdsJsonString) {
+        this.groupIdsJsonString = groupIdsJsonString;
     }
 }

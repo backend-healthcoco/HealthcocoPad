@@ -56,7 +56,6 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
     private CommonOpenUpFragmentType fragmentType;
     //    private HorizontalScrollView mHorizontalScroll;
     private FragmentTransaction transaction;
-    private int fragmentOrdinal;
     private Toolbar toolbar;
     private TextView tvInitialAlphabet;
     private TextView tvPatientName;
@@ -88,10 +87,6 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
     public void init() {
         initViews();
         initListeners();
-        initTabs();
-        initViewPagerAdapter();
-//        initFragment(CommonOpenUpFragmentType.PATIENT_DETAIL_PROFILE.ordinal());
-        initFragment(fragmentOrdinal);
     }
 
     private void initTabs() {
@@ -412,7 +407,11 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
         if (response != null && response.getWebServiceType() != null) {
             switch (response.getWebServiceType()) {
                 case FRAGMENT_INITIALISATION:
-                    initData();
+                    if (selectedPatient != null) {
+                        initTabs();
+                        initViewPagerAdapter();
+                        initData();
+                    }
                     break;
                 case GET_PATIENT_PROFILE:
                     if (response.getData() != null && response.getData() instanceof RegisteredPatientDetailsUpdated) {

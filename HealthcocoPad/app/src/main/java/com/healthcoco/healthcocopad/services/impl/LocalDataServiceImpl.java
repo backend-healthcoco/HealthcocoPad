@@ -79,7 +79,6 @@ import com.healthcoco.healthcocopad.bean.server.Observation;
 import com.healthcoco.healthcocopad.bean.server.ObservationSuggestions;
 import com.healthcoco.healthcocopad.bean.server.OtpVerification;
 import com.healthcoco.healthcocopad.bean.server.Patient;
-import com.healthcoco.healthcocopad.bean.server.PatientIdGroupId;
 import com.healthcoco.healthcocopad.bean.server.PersonalHistory;
 import com.healthcoco.healthcocopad.bean.server.Prescription;
 import com.healthcoco.healthcocopad.bean.server.Profession;
@@ -1012,10 +1011,7 @@ public class LocalDataServiceImpl {
         // setting address
         registeredPatientDetailsUpdated.setAddressJsonString(getJsonFromObject(registeredPatientDetailsUpdated.getAddress()));
 
-        deletePatientIdGroupIdsList(registeredPatientDetailsUpdated.getUserId());
-        if (!Util.isNullOrEmptyList(registeredPatientDetailsUpdated.getGroups())) {
-            addPatientIdGroupIdsList(registeredPatientDetailsUpdated, registeredPatientDetailsUpdated.getGroups());
-        }
+        addGroupsToAssignedGroupsTable(registeredPatientDetailsUpdated, registeredPatientDetailsUpdated.getGroups());
         deleteReferredByIfAlreadyPresent(LocalDatabaseUtils.KEY_UNIQUE_ID, LocalDatabaseUtils.KEY_IS_FROM_CONTACTS_LIST, registeredPatientDetailsUpdated.getForeignReferredById(), "" + LocalDatabaseUtils.BOOLEAN_TRUE_VALUE);
         if (registeredPatientDetailsUpdated.getReferredBy() != null) {
             registeredPatientDetailsUpdated.getReferredBy().setIsFromContactsList(true);
@@ -1056,37 +1052,28 @@ public class LocalDataServiceImpl {
         otpVerification.save();
     }
 
-    private void deletePatientIdGroupIdsList(String userId) {
-        PatientIdGroupId.deleteAll(PatientIdGroupId.class, LocalDatabaseUtils.KEY_FOREIGN_PATIENT_ID + "= ?", userId);
-    }
-
-    private void addPatientIdGroupIdsList(RegisteredPatientDetailsUpdated patientDetailsUpdated, List<UserGroups> groupsList) {
+    private void addGroupsToAssignedGroupsTable(RegisteredPatientDetailsUpdated registeredPatientDetailsUpdated, List<UserGroups> groupsList) {
         try {
-            ArrayList<AssignedGroupsTable> assignedGroupsList = new ArrayList<AssignedGroupsTable>();
-            for (UserGroups userGroup :
-                    groupsList) {
-                if (!userGroup.getDiscarded()) {
-                    PatientIdGroupId patientIdGroupId = new PatientIdGroupId();
-                    patientIdGroupId.setLocalPatientName(patientDetailsUpdated.getLocalPatientName());
-                    patientIdGroupId.setForeignPatientId(patientDetailsUpdated.getUserId());
-                    patientIdGroupId.setForeignGroupId(userGroup.getUniqueId());
-                    patientIdGroupId.setPatientIdGroupIdUnique(patientDetailsUpdated + userGroup.getUniqueId());
-                    patientIdGroupId.save();
-                    AssignedGroupsTable assignedGroupTable = new AssignedGroupsTable();
-                    ReflectionUtil.copy(assignedGroupTable, userGroup);
-                    assignedGroupTable.setForeignPatientId(patientDetailsUpdated.getUserId());
-                    assignedGroupsList.add(assignedGroupTable);
+            deleteAllAssignedGroupsWithpatientId(registeredPatientDetailsUpdated.getUserId());
+            if (!Util.isNullOrEmptyList(groupsList)) {
+                ArrayList<AssignedGroupsTable> assignedGroupsList = new ArrayList<AssignedGroupsTable>();
+                ArrayList<String> groupIdsList = new ArrayList<String>();
+                for (UserGroups userGroup :
+                        groupsList) {
+                    if (!userGroup.getDiscarded()) {
+                        AssignedGroupsTable assignedGroupTable = new AssignedGroupsTable();
+                        ReflectionUtil.copy(assignedGroupTable, userGroup);
+                        assignedGroupTable.setForeignPatientId(registeredPatientDetailsUpdated.getUserId());
+                        assignedGroupsList.add(assignedGroupTable);
+                        groupIdsList.add(userGroup.getUniqueId());
+                    }
                 }
+                registeredPatientDetailsUpdated.setGroupIdsJsonString(getJsonFromObject(groupIdsList));
+                AssignedGroupsTable.saveInTx(assignedGroupsList);
             }
-            addAssignedUserGroupsList(patientDetailsUpdated.getUserId(), assignedGroupsList);
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    private void addAssignedUserGroupsList(String userId, ArrayList<AssignedGroupsTable> assignedGroupsList) {
-        deleteAllAssignedGroupsWithpatientId(userId);
-        AssignedGroupsTable.saveInTx(assignedGroupsList);
     }
 
     private void deleteAllAssignedGroupsWithpatientId(String userId) {
@@ -1794,7 +1781,7 @@ public class LocalDataServiceImpl {
             // getting patient
             registeredPatientDetailsUpdated
                     .setPatient(getPatientDetails(registeredPatientDetailsUpdated.getForeignPatientId()));
-            registeredPatientDetailsUpdated.setGroupIds(getGroupIds(registeredPatientDetailsUpdated.getUserId()));
+            registeredPatientDetailsUpdated.setGroupIds((ArrayList<String>) (Object) getObjectsListFronJson(String.class,registeredPatientDetailsUpdated.getGroupIdsJsonString()));
             if (!Util.isNullOrEmptyList(registeredPatientDetailsUpdated.getGroupIds()))
                 registeredPatientDetailsUpdated.setGroups(getUserGroupsFromAssignedGroups(registeredPatientDetailsUpdated.getGroupIds()));
             if (!Util.isNullOrBlank(registeredPatientDetailsUpdated.getForeignReferredById()))
@@ -1840,17 +1827,6 @@ public class LocalDataServiceImpl {
         return groupsList;
     }
 
-    private ArrayList<String> getGroupIds(String userId) {
-        List<PatientIdGroupId> list = Select.from(PatientIdGroupId.class).where(Condition.prop(LocalDatabaseUtils.KEY_FOREIGN_PATIENT_ID).eq(userId)).list();
-        ArrayList<String> groupIdsList = new ArrayList<String>();
-        if (!Util.isNullOrEmptyList(list)) {
-            for (PatientIdGroupId patientIdGroupId :
-                    list) {
-                groupIdsList.add(patientIdGroupId.getForeignGroupId());
-            }
-        }
-        return groupIdsList;
-    }
 
     public void clearPatientsList() {
         RegisteredPatientDetailsUpdated.deleteAll(RegisteredPatientDetailsUpdated.class);
@@ -1876,23 +1852,24 @@ public class LocalDataServiceImpl {
         volleyResponseBean.setIsUserOnline(HealthCocoConstants.isNetworkOnline);
         try {
             //forming where condition query
-            String whereCondition = "Select * from " + StringUtil.toSQLName(PatientIdGroupId.class.getSimpleName())
+            String whereCondition = "Select * from " + StringUtil.toSQLName(AssignedGroupsTable.class.getSimpleName())
                     + " where "
-                    + LocalDatabaseUtils.KEY_FOREIGN_GROUP_ID + "=\"" + groupId + "\"";
+                    + LocalDatabaseUtils.KEY_UNIQUE_ID + "=\"" + groupId + "\"";
 
             //specifying order by limit and offset query
-            String conditionsLimit = " ORDER BY " + LocalDatabaseUtils.KEY_LOCAL_PATIENT_NAME + " COLLATE NOCASE ASC  "
-                    + " LIMIT " + maxSize
+//            String conditionsLimit = " ORDER BY " + LocalDatabaseUtils.KEY_LOCAL_PATIENT_NAME + " COLLATE NOCASE ASC  "
+//                    + " LIMIT " + maxSize
+//                    + " OFFSET " + (pageNum * maxSize);
+            String conditionsLimit =" LIMIT " + maxSize
                     + " OFFSET " + (pageNum * maxSize);
-
             whereCondition = whereCondition + conditionsLimit;
             LogUtils.LOGD(TAG, "Select Query " + whereCondition);
-            List<PatientIdGroupId> list = SugarRecord.findWithQuery(PatientIdGroupId.class, whereCondition);
+            List<AssignedGroupsTable> list = SugarRecord.findWithQuery(AssignedGroupsTable.class, whereCondition);
             List<RegisteredPatientDetailsUpdated> patientsList = new ArrayList<>();
             if (!Util.isNullOrEmptyList(list)) {
-                for (PatientIdGroupId patientIdGroupId :
+                for (AssignedGroupsTable assignedGroupsTable :
                         list) {
-                    RegisteredPatientDetailsUpdated registeredPatientDetailsUpdated = getPatient(patientIdGroupId.getForeignPatientId());
+                    RegisteredPatientDetailsUpdated registeredPatientDetailsUpdated = getPatient(assignedGroupsTable.getForeignPatientId());
                     if (registeredPatientDetailsUpdated != null) {
                         patientsList.add(registeredPatientDetailsUpdated);
                     }

@@ -958,6 +958,6 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
 
     @Override
     public boolean isGroupAssigned(String groupId) {
-        return groupIdsToAssign.contains(groupId);
+            return groupIdsToAssign.contains(groupId);
     }
 }
