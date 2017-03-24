@@ -42,7 +42,7 @@ import java.util.List;
 /**
  * Created by Shreshtha on 06-03-2017.
  */
-public class AddNewGroupsDialogFragment extends HealthCocoDialogFragment implements View.OnClickListener, GsonRequest.ErrorListener, LocalDoInBackgroundListenerOptimised,
+public class GroupsListDialogFragment extends HealthCocoDialogFragment implements View.OnClickListener, GsonRequest.ErrorListener, LocalDoInBackgroundListenerOptimised,
         Response.Listener<VolleyResponseBean>, AssignGroupListener {
     private ListView lvGroups;
     private Button btAddNewGroup;

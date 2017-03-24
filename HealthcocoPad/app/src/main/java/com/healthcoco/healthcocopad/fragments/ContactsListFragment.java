@@ -38,7 +38,7 @@ import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.bean.server.UserGroups;
 import com.healthcoco.healthcocopad.custom.AutoCompleteTextViewAdapter;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
-import com.healthcoco.healthcocopad.dialogFragment.AddNewGroupsDialogFragment;
+import com.healthcoco.healthcocopad.dialogFragment.GroupsListDialogFragment;
 import com.healthcoco.healthcocopad.dialogFragment.PatientNumberSearchDialogFragment;
 import com.healthcoco.healthcocopad.enums.AddUpdateNameDialogType;
 import com.healthcoco.healthcocopad.enums.AutoCompleteTextViewType;
@@ -101,7 +101,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
     private ProgressBar progressLoading;
     private GridViewLoadMore gvContacts;
     private ListViewLoadMore lvContacts;
-    private ContactsListAdapter adapter;
+    private ContactsListAdapter contactsListAdapter;
     private TextView tvNoPatients;
     private LinkedHashMap<String, RegisteredPatientDetailsUpdated> patientsListHashMap = new LinkedHashMap<>();
     private User user;
@@ -242,8 +242,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
     public void init() {
         initViews();
         initListeners();
-        initAdapter();
-        initFilterGroupAdapter();
+        initAdapters();
         initAutoTvAdapter(editSearchDropdown, AutoCompleteTextViewType.ADVANCE_SEARCH_OPTION, ADVANCED_SEARCH_OPTION);
     }
 
@@ -363,8 +362,8 @@ public class ContactsListFragment extends HealthCocoFragment implements
 
     @Override
     public void onAddToGroupClicked(RegisteredPatientDetailsUpdated selecetdPatient) {
-        openDialogFragment(new AddNewGroupsDialogFragment(), HealthCocoConstants.REQUEST_CODE_CONTACTS_LIST, CommonOpenUpFragmentType.GROUPS, selecetdPatient.getUserId());
-        adapter.notifyDataSetChanged();
+        openDialogFragment(new GroupsListDialogFragment(), HealthCocoConstants.REQUEST_CODE_CONTACTS_LIST, CommonOpenUpFragmentType.GROUPS, selecetdPatient.getUserId());
+        contactsListAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -373,7 +372,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
             mActivity.showCallConfirmationAlert(selecetdPatient.getMobileNumber());
         else
             Util.showToast(mActivity, R.string.no_mobile_number_found);
-        adapter.notifyDataSetChanged();
+        contactsListAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -392,7 +391,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
         intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.PATIENT_DETAIL.ordinal());
         intent.putExtra(HealthCocoConstants.TAG_TAB_TYPE, PatientDetailTabType.PATIENT_DETAIL_PRESCRIPTION.ordinal());
         startActivityForResult(intent, HealthCocoConstants.REQUEST_CODE_CONTACTS_LIST);
-        adapter.notifyDataSetChanged();
+        contactsListAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -402,7 +401,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
             if (isInHomeActivity()) {
                 openCommonOpenUpActivity(CommonOpenUpFragmentType.PATIENT_DETAIL, null,
                         HealthCocoConstants.REQUEST_CODE_CONTACTS_DETAIL);
-                adapter.notifyDataSetChanged();
+                contactsListAdapter.notifyDataSetChanged();
             } else {
 //                Util.sendBroadcast(mApp, BookAppointmentFragment.INTENT_REFRESH_SELECTED_PATIENT);
 //                ((CommonOpenUpActivity) mActivity).setResult(HealthCocoConstants.RESULT_CODE_CONTACTS_LIST);
@@ -450,7 +449,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
                     mActivity.openAddUpdateNameDialogFragment(null, AddUpdateNameDialogType.ADD_PATIENT_MOBILE_NUMBER, this, user, "", 0);
                 } else {
                     openPatientMobileNumberDialogFragment();
-                    adapter.notifyDataSetChanged();
+                    contactsListAdapter.notifyDataSetChanged();
                 }
                 break;
             case R.id.container_middle_action:
@@ -513,8 +512,8 @@ public class ContactsListFragment extends HealthCocoFragment implements
         containerFilterFragment.setVisibility(View.GONE);
         switch (nextViewToChange) {
             case LIST_VIEW:
-//                adapter = new ContactsListAdapter(mActivity, this, changeViewType);
-//                lvContacts.setAdapter(adapter);
+//                contactsListAdapter = new ContactsListAdapter(mActivity, this, changeViewType);
+//                lvContacts.setAdapter(contactsListAdapter);
                 notifyAdapter(new ArrayList<RegisteredPatientDetailsUpdated>(patientsListHashMap.values()));
                 lvContacts.setVisibility(View.VISIBLE);
                 containerFilterFragment.setVisibility(View.VISIBLE);
@@ -533,10 +532,14 @@ public class ContactsListFragment extends HealthCocoFragment implements
         patientNumberSearchDialogFragment.show(mFragmentManager, patientNumberSearchDialogFragment.getClass().getSimpleName());
     }
 
-    private void initAdapter() {
-        adapter = new ContactsListAdapter(mActivity, this);
-        gvContacts.setAdapter(adapter);
-        lvContacts.setAdapter(adapter);
+    private void initAdapters() {
+        initFilterGroupAdapter();
+    initContactsListAdapter();}
+
+    private void initContactsListAdapter() {
+        contactsListAdapter = new ContactsListAdapter(mActivity, this);
+        gvContacts.setAdapter(contactsListAdapter);
+        lvContacts.setAdapter(contactsListAdapter);
     }
 
     private void notifyAdapter(List<RegisteredPatientDetailsUpdated> patientsList) {
@@ -550,8 +553,8 @@ public class ContactsListFragment extends HealthCocoFragment implements
             visibleView.setVisibility(View.GONE);
         }
         progressLoading.setVisibility(View.GONE);
-        adapter.setListData(patientsList);
-        adapter.notifyDataSetChanged();
+        contactsListAdapter.setListData(patientsList);
+        contactsListAdapter.notifyDataSetChanged();
     }
 
     private View getChangedView(ChangeViewType changeViewType) {
@@ -646,7 +649,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
                     if (response.getData() != null && response.getData() instanceof RegisteredPatientDetailsUpdated) {
                         RegisteredPatientDetailsUpdated selecetdPatient = (RegisteredPatientDetailsUpdated) response.getData();
                         mActivity.showAddedToQueueAlert(selecetdPatient.getFirstName());
-                        adapter.notifyDataSetChanged();
+                        contactsListAdapter.notifyDataSetChanged();
                     }
                     break;
                 default:
