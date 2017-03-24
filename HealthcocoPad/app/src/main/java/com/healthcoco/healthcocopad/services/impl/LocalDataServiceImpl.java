@@ -79,6 +79,7 @@ import com.healthcoco.healthcocopad.bean.server.Observation;
 import com.healthcoco.healthcocopad.bean.server.ObservationSuggestions;
 import com.healthcoco.healthcocopad.bean.server.OtpVerification;
 import com.healthcoco.healthcocopad.bean.server.Patient;
+import com.healthcoco.healthcocopad.bean.server.PatientTreatment;
 import com.healthcoco.healthcocopad.bean.server.PersonalHistory;
 import com.healthcoco.healthcocopad.bean.server.Prescription;
 import com.healthcoco.healthcocopad.bean.server.Profession;
@@ -90,6 +91,7 @@ import com.healthcoco.healthcocopad.bean.server.Role;
 import com.healthcoco.healthcocopad.bean.server.Specialities;
 import com.healthcoco.healthcocopad.bean.server.SyncAll;
 import com.healthcoco.healthcocopad.bean.server.TempTemplate;
+import com.healthcoco.healthcocopad.bean.server.Treatments;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.bean.server.UserGroups;
 import com.healthcoco.healthcocopad.bean.server.VisitDetails;
@@ -141,7 +143,7 @@ public class LocalDataServiceImpl {
     }
 
     private enum FromTableType {
-        ADD_TEMPLATES, ADD_PRESCRIPTION
+        ADD_TEMPLATES, ADD_TREATMENT, ADD_PRESCRIPTION
     }
 
     public static LocalDataServiceImpl getInstance(HealthCocoApplication application) {
@@ -1781,7 +1783,7 @@ public class LocalDataServiceImpl {
             // getting patient
             registeredPatientDetailsUpdated
                     .setPatient(getPatientDetails(registeredPatientDetailsUpdated.getForeignPatientId()));
-            registeredPatientDetailsUpdated.setGroupIds((ArrayList<String>) (Object) getObjectsListFronJson(String.class,registeredPatientDetailsUpdated.getGroupIdsJsonString()));
+            registeredPatientDetailsUpdated.setGroupIds((ArrayList<String>) (Object) getObjectsListFronJson(String.class, registeredPatientDetailsUpdated.getGroupIdsJsonString()));
             if (!Util.isNullOrEmptyList(registeredPatientDetailsUpdated.getGroupIds()))
                 registeredPatientDetailsUpdated.setGroups(getUserGroupsFromAssignedGroups(registeredPatientDetailsUpdated.getGroupIds()));
             if (!Util.isNullOrBlank(registeredPatientDetailsUpdated.getForeignReferredById()))
@@ -1860,7 +1862,7 @@ public class LocalDataServiceImpl {
 //            String conditionsLimit = " ORDER BY " + LocalDatabaseUtils.KEY_LOCAL_PATIENT_NAME + " COLLATE NOCASE ASC  "
 //                    + " LIMIT " + maxSize
 //                    + " OFFSET " + (pageNum * maxSize);
-            String conditionsLimit =" LIMIT " + maxSize
+            String conditionsLimit = " LIMIT " + maxSize
                     + " OFFSET " + (pageNum * maxSize);
             whereCondition = whereCondition + conditionsLimit;
             LogUtils.LOGD(TAG, "Select Query " + whereCondition);
@@ -2735,6 +2737,16 @@ public class LocalDataServiceImpl {
                             } else
                                 continue;
                             break;
+                        case TREATMENT:
+                            if (!Util.isNullOrEmptyList(details.getPatientTreatments())) {
+                                for (PatientTreatment patientTreatment :
+                                        details.getPatientTreatments()) {
+                                    customUniqueId = patientTreatment.getUniqueId();
+                                    addTreatment(patientTreatment);
+                                }
+                            } else
+                                continue;
+                            break;
                     }
                     addVisitForTable(details.getUniqueId(), type, customUniqueId);
                 }
@@ -2743,6 +2755,12 @@ public class LocalDataServiceImpl {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void addTreatment(PatientTreatment patientTreatment) {
+        List<Treatments> treatmentsList = patientTreatment.getTreatments();
+//        addTreatmentList(treatmentsList, FromTableType.ADD_TREATMENT, patientTreatment.getUniqueId());
+        patientTreatment.save();
     }
 
     private void addVisitForTable(String visitId, VisitedForType type, String customUniqueId) {

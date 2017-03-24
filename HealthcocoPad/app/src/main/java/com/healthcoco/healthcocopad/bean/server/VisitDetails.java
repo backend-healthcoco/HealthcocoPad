@@ -26,6 +26,8 @@ public class VisitDetails extends SugarRecord {
     @Ignore
     private List<Records> records;
     @Ignore
+    private List<PatientTreatment> patientTreatments;
+    @Ignore
     private List<VisitedForType> visitedFor;
     private Long visitedTime;
     private Long createdTime;
@@ -96,6 +98,14 @@ public class VisitDetails extends SugarRecord {
 
     public void setClinicalNotes(List<ClinicalNotes> clinicalNotes) {
         this.clinicalNotes = clinicalNotes;
+    }
+
+    public List<PatientTreatment> getPatientTreatments() {
+        return patientTreatments;
+    }
+
+    public void setPatientTreatments(List<PatientTreatment> patientTreatments) {
+        this.patientTreatments = patientTreatments;
     }
 
     public List<Records> getRecords() {

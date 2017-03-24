@@ -2,6 +2,7 @@ package com.healthcoco.healthcocopad.viewholders;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -24,6 +25,7 @@ public class PrescribedDrugDoseItemViewholder extends LinearLayout {
     private DrugItem drugItem;
     private TextView tvDirection;
     private TextView tvInstruction;
+    private View divider;
 
     public PrescribedDrugDoseItemViewholder(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -101,4 +103,5 @@ public class PrescribedDrugDoseItemViewholder extends LinearLayout {
             tvInstruction.setText(instruction);
         else tvInstruction.setText(getResources().getString(R.string.no_text_dash));
     }
+
 }

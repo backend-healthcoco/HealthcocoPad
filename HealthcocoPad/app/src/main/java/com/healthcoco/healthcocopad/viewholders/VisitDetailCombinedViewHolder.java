@@ -16,7 +16,10 @@ import com.healthcoco.healthcocopad.bean.server.DiagnosticTest;
 import com.healthcoco.healthcocopad.bean.server.DiagnosticTestsPrescription;
 import com.healthcoco.healthcocopad.bean.server.Diagram;
 import com.healthcoco.healthcocopad.bean.server.DrugItem;
+import com.healthcoco.healthcocopad.bean.server.PatientTreatment;
 import com.healthcoco.healthcocopad.bean.server.Prescription;
+import com.healthcoco.healthcocopad.bean.server.Records;
+import com.healthcoco.healthcocopad.bean.server.Treatments;
 import com.healthcoco.healthcocopad.bean.server.VisitDetails;
 import com.healthcoco.healthcocopad.bean.server.VitalSigns;
 import com.healthcoco.healthcocopad.enums.ClinicalNotesPermissionType;
@@ -109,6 +112,8 @@ public class VisitDetailCombinedViewHolder extends HealthCocoViewHolder implemen
     private LinearLayout parentTreatmentLayout;
     private LinearLayout layoutAdvice;
     private LinearLayout containerParentDrugsList;
+    private LinearLayout containerTreatmentDetailList;
+    private LinearLayout containerPrescription;
 
     public VisitDetailCombinedViewHolder(HealthCocoActivity mActivity, VisitDetailCombinedItemListener listItemClickListener) {
         super(mActivity);
@@ -124,6 +129,7 @@ public class VisitDetailCombinedViewHolder extends HealthCocoViewHolder implemen
     @Override
     public View getContentView() {
         View contentView = inflater.inflate(R.layout.list_item_patient_visits_combined, null);
+        containerPrescription = (LinearLayout) contentView.findViewById(R.id.container_prescription);
         initViews(contentView);
         initListeners();
         return contentView;
@@ -212,11 +218,11 @@ public class VisitDetailCombinedViewHolder extends HealthCocoViewHolder implemen
         parentDiagnosticTests = (LinearLayout) contentView.findViewById(R.id.parent_diagnostic_tests);
         containerDiagnosticTests = (LinearLayout) contentView.findViewById(R.id.container_diagnostic_tests);
         layoutAdvice = (LinearLayout) contentView.findViewById(R.id.layout_parent_advice);
-        layoutAdvice.setVisibility(View.GONE);
     }
 
     private void initTreatmentsView(View contentView) {
         parentTreatmentLayout = (LinearLayout) contentView.findViewById(R.id.parent_treatment_layout);
+        containerTreatmentDetailList = (LinearLayout) contentView.findViewById(R.id.container_treatment_detail_list);
         layoutTreatmentDiscarded = (LinearLayout) contentView.findViewById(R.id.layout_discarded_treatment);
     }
 
@@ -231,31 +237,63 @@ public class VisitDetailCombinedViewHolder extends HealthCocoViewHolder implemen
 
     @Override
     public void applyData() {
+        clearAllViews();
         if (!Util.isNullOrEmptyList(visitDetail.getClinicalNotes())) {
             List<ClinicalNotes> clinicalNotesList = visitDetail.getClinicalNotes();
             applyClinicalNoteData(clinicalNotesList.get(0));
         }
         if (!Util.isNullOrEmptyList(visitDetail.getPrescriptions())) {
             List<Prescription> prescriptionsList = visitDetail.getPrescriptions();
-            applyPrescriptionsData(prescriptionsList.get(0));
+            PrescriptionListItemViewHolder prescriptionListItemViewHolder = new PrescriptionListItemViewHolder(mActivity, listItemClickListener, false);
+            containerPrescription.addView(prescriptionListItemViewHolder.getContentView());
+            prescriptionListItemViewHolder.setData(prescriptionsList.get(0));
+            prescriptionListItemViewHolder.applyData();
+//            applyPrescriptionsData(prescriptionsList.get(0));
         }
+        if (!Util.isNullOrEmptyList(visitDetail.getPatientTreatments())) {
+            List<PatientTreatment> patientTreatmentList = visitDetail.getPatientTreatments();
+            applyTreatmentData(patientTreatmentList.get(0));
+        }
+//        if (!Util.isNullOrEmptyList(visitDetail.getRecords())) {
+//            for (Records record :
+//                    visitDetail.getRecords()) {
+//                ReportsListItemViewHolder reportViewHolder = new ReportsListItemViewHolder(mActivity, this, false);
+//                View convertView = reportViewHolder.getContentView();
+//                reportViewHolder.setData(record);
+//                reportViewHolder.applyData();
+//                containerVisitDetail.addView(convertView);
+//            }
+//        }
         tvVID.setText(mActivity.getResources().getString(R.string.vid) + Util.getValidatedValue(visitDetail.getUniqueEmrId()));
         tvCreatedBy.setText(Util.getValidatedValue(visitDetail.getCreatedBy()));
         tvVisitDate.setText(DateTimeUtil.getFormatedDate(visitDetail.getCreatedTime()));
     }
 
+    private void applyTreatmentData(PatientTreatment patientTreatment) {
+        containerTreatmentDetailList.removeAllViews();
+        if (!Util.isNullOrEmptyList(patientTreatment.getTreatments())) {
+            parentTreatmentLayout.setVisibility(View.VISIBLE);
+            for (Treatments treatments : patientTreatment.getTreatments()) {
+                TreatmentItemViewHolder view = new TreatmentItemViewHolder(mActivity);
+                view.setData(treatments);
+                containerDrugsList.addView(view);
+            }
+        } else parentTreatmentLayout.setVisibility(View.GONE);
+        checkIsTreatmentDiscarded(patientTreatment.getDiscarded());
+        initGrandTotalCost(patientTreatment);
+    }
+
     private void applyPrescriptionsData(Prescription prescription) {
         containerDrugsList.removeAllViews();
         if (!Util.isNullOrEmptyList(prescription.getItems())) {
-            containerDrugsList.setVisibility(View.VISIBLE);
+            containerParentDrugsList.setVisibility(View.VISIBLE);
             for (DrugItem drug : prescription.getItems()) {
-                int index = prescription.getItems().indexOf(drug);
                 PrescribedDrugDoseItemViewholder view = new PrescribedDrugDoseItemViewholder(mActivity);
                 view.setData(drug);
                 containerDrugsList.addView(view);
             }
         } else
-            containerDrugsList.setVisibility(View.GONE);
+            containerParentDrugsList.setVisibility(View.GONE);
 
         checkIsPrescriptionDiscarded(prescription.getDiscarded());
         initDiagnosticTests(prescription);
@@ -263,7 +301,6 @@ public class VisitDetailCombinedViewHolder extends HealthCocoViewHolder implemen
 
     private void applyClinicalNoteData(ClinicalNotes clinicalNote) {
         this.clinicalNote = clinicalNote;
-        clearAllViews();
         VitalSigns vitalSigns = clinicalNote.getVitalSigns();
         if (vitalSigns != null && !vitalSigns.areAllFieldsNull()) {
             layoutVitalSigns.setVisibility(View.VISIBLE);
@@ -435,6 +472,10 @@ public class VisitDetailCombinedViewHolder extends HealthCocoViewHolder implemen
         }
     }
 
+    private void initGrandTotalCost(PatientTreatment patientTreatment) {
+
+    }
+
     private void initDiagnosticTests(Prescription prescription) {
         containerDiagnosticTests.removeAllViews();
         boolean isAdded = false;
@@ -453,18 +494,18 @@ public class VisitDetailCombinedViewHolder extends HealthCocoViewHolder implemen
             }
         }
         if (isAdded) {
-            containerParentDrugsList.setVisibility(View.VISIBLE);
+            parentDiagnosticTests.setVisibility(View.VISIBLE);
         } else {
-            containerParentDrugsList.setVisibility(View.GONE);
+            parentDiagnosticTests.setVisibility(View.GONE);
         }
-        if (prescription.getAdvice() != null) {
+        if (prescription.getAdvice() != null && !prescription.getAdvice().equals("")) {
             LinearLayout containerAdvice = (LinearLayout) layoutAdvice.findViewById(R.id.container_advice);
             containerAdvice.removeAllViews();
             TextView tvAdvice = (TextView) mActivity.getLayoutInflater().inflate(R.layout.sub_item_profile_detail_groups_notes_text, null);
-            tvAdvice.setText(prescription.getAdvice());
+            tvAdvice.setText(Util.getValidatedValue(prescription.getAdvice()));
             containerAdvice.addView(tvAdvice);
             layoutAdvice.setVisibility(View.VISIBLE);
-        }
+        } else layoutAdvice.setVisibility(View.GONE);
     }
 
     private void checkIsPrescriptionDiscarded(boolean isDiscarded) {
@@ -530,7 +571,11 @@ public class VisitDetailCombinedViewHolder extends HealthCocoViewHolder implemen
         layoutNotes.setVisibility(View.GONE);
         layoutDiagrams.setVisibility(View.GONE);
         layoutVitalSigns.setVisibility(View.GONE);
-        containerDrugsList.setVisibility(View.GONE);
+        //Prescription views
+        containerParentDrugsList.setVisibility(View.GONE);
+        parentDiagnosticTests.setVisibility(View.GONE);
+        layoutAdvice.setVisibility(View.GONE);
+        //Treatment views
         parentTreatmentLayout.setVisibility(View.GONE);
     }
 

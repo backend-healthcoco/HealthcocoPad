@@ -137,4 +137,9 @@
     <dimen name="text_size_discarded">20sp</dimen>
     <dimen name="miimumheight_groups_notes_view_patient_registration">200dp</dimen>
     <dimen name="text_size_bottom_button">16sp</dimen>
+    <dimen name="popup_item_padding">10dp</dimen>
+    <dimen name="drawable_text_padding">5dp</dimen>
+    <dimen name="text_size_emr_date">12sp</dimen>
+    <dimen name="padding_margin_prescribed_item_center">8dp</dimen>
+    <dimen name="text_size_prescribed_by_name">13sp</dimen>
 </resources>

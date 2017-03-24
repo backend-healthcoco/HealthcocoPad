@@ -503,7 +503,7 @@
     <string name="add_groups">Add Group</string>
     <string name="important">Important</string>
     <string name="appointment">Appointment</string>
-    <string name="treatment">Treatment</string>
+    <string name="patientTreatment">Treatment</string>
     <string name="past_history">Past History</string>
     <string name="edit_to_assign_past_history">Edit to assign Past History</string>
     <string name="family_history">Family History</string>
@@ -525,6 +525,13 @@
     <string name="no_history_found">No History Found</string>
     <string name="advance_search">Advance Search</string>
 
+    <string name="discard">Discard</string>
+    <string name="approve">Approve</string>
+    <string name="decline">Decline</string>
+    <string name="save_as_template">Save as Template</string>
+    <string name="report_details">Report Details</string>
+    <string name="event">Event</string>
+    <string name="cancel_appointment">Cancel Appointment</string>
 
     <string name="bmp">bmp</string>
     <string name="kg">kg</string>
@@ -597,4 +604,21 @@
     <string name="discount">Discount</string>
     <string name="status">Status</string>
     <string name="discarded">Discarded</string>
+    <string name="treatment">Treatment</string>
+
+    <!--Common EMR texts-->
+    <string name="rx_id">RxId :&#160;</string>
+    <string name="email_caps">EMAIL</string>
+    <string name="prescribed_by">Prescribed by&#160;</string>
+    <string name="global_record">Global Record</string>
+    <!--//prescription confirmation messages-->
+    <string name="confirm_remove_prescription_from_history">Do you want to remove this Prescription from History?</string>
+    <string name="confirm_discard_prescription_title">Are you sure you want to discard this Prescription?</string>
+    <string name="confirm_discard_prescription_message">Patient will be requested to discontinue this Prescription.</string>
+    <string name="confirm_sms_prescription">Are you sure you want to send this Prescription to Mobile number&#160;</string>
+    <string name="mobile_no_not_found">Mobile number not found for Patient&#160;</string>
+    <string name="sms_sent_to">SMS sent to&#160;</string>
+    <!--Success messages-->
+    <string name="added_to_history">Added to Important</string>
+    <string name="removed_from_history">Removed from Important</string>
 </resources>
