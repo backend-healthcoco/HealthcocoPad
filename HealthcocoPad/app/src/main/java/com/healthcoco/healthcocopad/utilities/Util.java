@@ -8,8 +8,10 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.provider.Settings;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Base64;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -17,13 +19,15 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.healthcoco.healthcocopad.R;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.HealthCocoApplication;
+import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.activities.SplashScreenActivity;
+import com.healthcoco.healthcocopad.bean.DOB;
 import com.healthcoco.healthcocopad.bean.server.AppointmentSlot;
 import com.healthcoco.healthcocopad.bean.server.ConsultationFee;
-import com.healthcoco.healthcocopad.bean.DOB;
 import com.healthcoco.healthcocopad.bean.server.DoctorExperience;
 import com.healthcoco.healthcocopad.bean.server.DoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
@@ -47,6 +51,26 @@ import java.util.regex.Pattern;
 public class Util {
     private static Toast visibleToast;
     private static final String TAG = Util.class.getSimpleName();
+    /**
+     * Check the device to make sure it has the Google Play Services APK. If
+     * it doesn't, display a dialog that allows users to download the APK from
+     * the Google Play Store or enable it in the device's system settings.
+     */
+    public static boolean checkPlayServices(Activity activity) {
+        int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
+        int resultCode = apiAvailability.isGooglePlayServicesAvailable(activity);
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (apiAvailability.isUserResolvableError(resultCode)) {
+                apiAvailability.getErrorDialog(activity, resultCode, PLAY_SERVICES_RESOLUTION_REQUEST)
+                        .show();
+            } else {
+                Log.i(TAG, "This device is not supported.");
+            }
+            return false;
+        }
+        return true;
+    }
 
     /**
      * Method to check Network connection of device
@@ -81,6 +105,7 @@ public class Util {
         }
         return null;
     }
+
     /**
      * prints screen density as follows :
      * // return 0.75 if it's LDPI
@@ -280,11 +305,13 @@ public class Util {
         }
         return null;
     }
+
     public static String getValidatedValueOrNull(String value) {
         if (!Util.isNullOrBlank(value))
             return value.trim();
         return null;
     }
+
     public static String getValidatedValueOrNull(TextView textView) {
         String value = String.valueOf(textView.getText());
         if (!Util.isNullOrBlank(value))
@@ -299,12 +326,14 @@ public class Util {
         }
         return "";
     }
+
     public static String getValidatedValueOrBlankWithoutTrimming(TextView textView) {
         String value = String.valueOf(textView.getText());
         if (!Util.isNullOrBlank(value))
             return value;
         return "";
     }
+
     public static Integer getValidatedIntegerValue(EditText textView) {
         String validatedValue = getValidatedValueOrNull(textView);
         try {
@@ -536,6 +565,7 @@ public class Util {
         String[] split = replace1.split(",");
         return split;
     }
+
     public static boolean isValidAadharId(Context context, String num) {
         if (num.length() < context.getResources().getInteger(R.integer.max_length_aadharid))
             return false;
@@ -545,5 +575,11 @@ public class Util {
     public static void showErrorOnEditText(EditText editText) {
         if (editText != null)
             editText.setActivated(true);
+    }
+
+    public static String getDeviceId(Context context) {
+        String deviceId = Settings.Secure.getString(context.getContentResolver(),
+                Settings.Secure.ANDROID_ID);
+        return deviceId;
     }
 }

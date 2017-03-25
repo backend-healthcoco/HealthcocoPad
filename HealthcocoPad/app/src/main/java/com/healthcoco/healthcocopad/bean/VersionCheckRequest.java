@@ -1,5 +1,7 @@
 package com.healthcoco.healthcocopad.bean;
 
+import com.healthcoco.healthcocopad.enums.AppType;
+import com.healthcoco.healthcocopad.enums.DeviceType;
 import com.healthcoco.healthcocopad.utilities.Util;
 
 /**

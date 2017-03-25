@@ -54,8 +54,6 @@ dependencies {
     compile('com.crashlytics.sdk.android:crashlytics:2.6.6@aar') {
         transitive = true;
     }
-    // for google analytics
-    compile 'com.google.android.gms:play-services-analytics:10.0.1'
     //required for SHA3 encryption
     compile 'com.madgag.spongycastle:prov:1.54.0.0'
     //for image loading
@@ -65,5 +63,8 @@ dependencies {
     //required for maps
     compile 'com.google.android.gms:play-services-maps:10.0.1'
     compile 'com.google.android.gms:play-services-location:10.0.1'
+
+    compile 'com.google.firebase:firebase-messaging:10.0.1'
+    compile 'com.google.firebase:firebase-crash:10.0.1'
 }
 apply plugin: 'com.google.gms.google-services'

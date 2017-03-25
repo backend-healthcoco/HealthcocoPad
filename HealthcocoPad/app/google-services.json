@@ -1,35 +1,52 @@
 {
   "project_info": {
-    "project_number": "782645689548",
-    "project_id": "healthcocopad"
+    "project_number": "950712478366",
+    "firebase_url": "https://healthcocopad-ff532.firebaseio.com",
+    "project_id": "healthcocopad-ff532",
+    "storage_bucket": "healthcocopad-ff532.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:782645689548:android:7bec24711baf5040",
+        "mobilesdk_app_id": "1:950712478366:android:7bec24711baf5040",
         "android_client_info": {
           "package_name": "com.healthcoco.healthcocopad"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "950712478366-8bnt75envgjmf7a2jnicfmgvd6lqggp3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.healthcoco.healthcocopad",
+            "certificate_hash": "c37904623d79187eb245e61e26c9caf7e2cf7eb0"
+          }
+        },
+        {
+          "client_id": "950712478366-p0aal0atsna5cj5jp00uutbmtoge66pr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
-          "current_key": "AIzaSyDO5xneLe4f-TRw6At2MiEvpRC_Giius2M"
+          "current_key": "AIzaSyBkwjNeVvhkLt5KtgTdpN_KaCjFrJFPbEU"
         }
       ],
       "services": {
         "analytics_service": {
-          "status": 2,
-          "analytics_property": {
-            "tracking_id": "UA-90618194-1"
-          }
+          "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "950712478366-p0aal0atsna5cj5jp00uutbmtoge66pr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
-          "status": 1
+          "status": 2
         }
       }
     }

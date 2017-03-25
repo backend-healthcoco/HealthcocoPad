@@ -16,8 +16,8 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.android.volley.Response;
-import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
+import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.activities.HomeActivity;
 import com.healthcoco.healthcocopad.adapter.FilterGroupListAdapter;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
@@ -25,7 +25,6 @@ import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.bean.server.UserGroups;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
-import com.healthcoco.healthcocopad.utilities.ComparatorUtil;
 import com.healthcoco.healthcocopad.enums.AddUpdateNameDialogType;
 import com.healthcoco.healthcocopad.enums.FilterItemType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
@@ -36,6 +35,7 @@ import com.healthcoco.healthcocopad.listeners.OnFilterItemClickListener;
 import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
+import com.healthcoco.healthcocopad.utilities.ComparatorUtil;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
@@ -86,14 +86,8 @@ public class FilterFragment extends HealthCocoFragment implements Response.Liste
         initViews();
         initListeners();
         initAdapter();
-        LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
-        if (doctor != null) {
-            user = doctor.getUser();
-            if (user != null && !Util.isNullOrBlank(user.getUniqueId())) {
-                setSelectedItem(FilterItemType.ALL_PATIENTS);
-            }
-        }
-        getGroupsListFromLocal();
+        mActivity.showLoading(false);
+        new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_FRAGMENT_INITIALISATION_DATA, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     @Override
@@ -138,14 +132,25 @@ public class FilterFragment extends HealthCocoFragment implements Response.Liste
     public void onResponse(VolleyResponseBean response) {
         if (response != null && response.getWebServiceType() != null) {
             switch (response.getWebServiceType()) {
+                case FRAGMENT_INITIALISATION:
+                    if (user != null && !Util.isNullOrBlank(user.getUniqueId())
+                            && !Util.isNullOrBlank(user.getForeignHospitalId())
+                            && !Util.isNullOrBlank(user.getForeignLocationId())) {
+                        if (user != null && !Util.isNullOrBlank(user.getUniqueId())) {
+                            getGroupsListFromLocal();
+                            return;
+                        }
+                    }
+                    break;
                 case GET_GROUPS:
                     if (response.isDataFromLocal()) {
                         groupsList = (ArrayList<UserGroups>) (ArrayList<?>) response
                                 .getDataList();
-                        if (!Util.isNullOrEmptyList(groupsList)) {
-                            LogUtils.LOGD(TAG, "Success onResponse list Size in page " + groupsList.size());
-                        }
                         notifyAdapter(groupsList);
+                        if (!response.isFromLocalAfterApiSuccess() && response.isUserOnline()) {
+                            getGroupsListFromServer();
+                            return;
+                        }
                     } else if (!Util.isNullOrEmptyList(response.getDataList())) {
                         new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_GROUPS_LIST, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
                         response.setIsFromLocalAfterApiSuccess(true);
@@ -154,6 +159,7 @@ public class FilterFragment extends HealthCocoFragment implements Response.Liste
                     break;
             }
         }
+
         swipeRefreshLayout.setRefreshing(false);
         mActivity.hideLoading();
     }
@@ -173,12 +179,15 @@ public class FilterFragment extends HealthCocoFragment implements Response.Liste
 
     @Override
     public void onErrorResponse(VolleyResponseBean volleyResponseBean, String errorMessage) {
-
+        swipeRefreshLayout.setRefreshing(false);
+        mActivity.hideLoading();
     }
 
     @Override
     public void onNetworkUnavailable(WebServiceType webServiceType) {
         Util.showToast(mActivity, R.string.user_offline);
+        swipeRefreshLayout.setRefreshing(false);
+        mActivity.hideLoading();
     }
 
     @Override
@@ -284,9 +293,10 @@ public class FilterFragment extends HealthCocoFragment implements Response.Liste
 
     @Override
     public void onRefresh() {
-        LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
-        if (doctor != null)
-            user = doctor.getUser();
+        getGroupsListFromServer();
+    }
+
+    private void getGroupsListFromServer() {
         //Get groupsList
         Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.USER_GROUP);
         WebDataServiceImpl.getInstance(mApp).getGroupsList(WebServiceType.GET_GROUPS, UserGroups.class, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(), latestUpdatedTime, null, this, this);
@@ -339,6 +349,14 @@ public class FilterFragment extends HealthCocoFragment implements Response.Liste
     public VolleyResponseBean doInBackground(VolleyResponseBean response) {
         VolleyResponseBean volleyResponseBean = null;
         switch (response.getLocalBackgroundTaskType()) {
+            case GET_FRAGMENT_INITIALISATION_DATA:
+                volleyResponseBean = new VolleyResponseBean();
+                volleyResponseBean.setWebServiceType(WebServiceType.FRAGMENT_INITIALISATION);
+                LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
+                if (doctor != null && doctor.getUser() != null && !Util.isNullOrBlank(doctor.getUser().getUniqueId())) {
+                    user = doctor.getUser();
+                }
+                break;
             case ADD_GROUPS_LIST:
                 LocalDataServiceImpl.getInstance(mApp).addUserGroupsList((ArrayList<UserGroups>) (ArrayList<?>) response
                         .getDataList());

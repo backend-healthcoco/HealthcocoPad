@@ -61,6 +61,7 @@ import com.healthcoco.healthcocopad.bean.server.ForeignOtherEmailAddresses;
 import com.healthcoco.healthcocopad.bean.server.ForeignProfessionalMemberships;
 import com.healthcoco.healthcocopad.bean.server.ForeignSpecialities;
 import com.healthcoco.healthcocopad.bean.server.ForieignAdditionalNumbers;
+import com.healthcoco.healthcocopad.bean.server.GCMRequest;
 import com.healthcoco.healthcocopad.bean.server.GeneralData;
 import com.healthcoco.healthcocopad.bean.server.GeneratedOtpTime;
 import com.healthcoco.healthcocopad.bean.server.HistoryDetailsResponse;
@@ -2805,5 +2806,19 @@ public class LocalDataServiceImpl {
         if (visit != null)
             visit = getVisitDetailsAndTypes(visit);
         return visit;
+    }
+
+    public void addGCMRequest(GCMRequest gcmRequest) {
+        deleteAllFrom(GCMRequest.class, LocalDatabaseUtils.KEY_DEVICE_ID, gcmRequest.getDeviceId());
+        gcmRequest.setUserIdsJsonString(new Gson().toJson(gcmRequest.getUserIds()));
+        gcmRequest.save();
+    }
+
+    public GCMRequest getGCMRequestData() {
+        GCMRequest gcmRequest = GCMRequest.first(GCMRequest.class);
+        if (gcmRequest != null && !Util.isNullOrBlank(gcmRequest.getUserIdsJsonString())) {
+            gcmRequest.setUserIds(new Gson().fromJson(gcmRequest.getUserIdsJsonString(), ArrayList.class));
+        }
+        return gcmRequest;
     }
 }

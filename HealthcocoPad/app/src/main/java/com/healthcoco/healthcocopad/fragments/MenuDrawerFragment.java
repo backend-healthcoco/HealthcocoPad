@@ -121,8 +121,8 @@ public class MenuDrawerFragment extends HealthCocoFragment implements View.OnCli
         initViews();
         initListeners();
         initMenuListAdapter();
-        openFragment(FragmentType.CONTACTS);
-        ((HomeActivity) mActivity).initContactsFragment();
+//        openFragment(FragmentType.CONTACTS);
+//        ((HomeActivity) mActivity).initContactsFragment();
     }
 
     private void openFragment(FragmentType fragmentType) {

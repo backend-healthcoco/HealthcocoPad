@@ -1,10 +1,14 @@
 package com.healthcoco.healthcocopad.services.impl;
 
+import android.os.Handler;
+import android.os.HandlerThread;
+
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.RetryPolicy;
 import com.google.gson.GsonBuilder;
+import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.HealthCocoApplication;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.DoctorProfileToSend;
@@ -21,7 +25,7 @@ import com.healthcoco.healthcocopad.bean.server.Disease;
 import com.healthcoco.healthcocopad.bean.server.DoctorClinicProfile;
 import com.healthcoco.healthcocopad.bean.server.DoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.DrugType;
-import com.healthcoco.healthcocopad.bean.server.HistoryDetailsResponse;
+import com.healthcoco.healthcocopad.bean.server.GCMRequest;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.PersonalHistory;
 import com.healthcoco.healthcocopad.bean.server.Profession;
@@ -30,10 +34,10 @@ import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.TempTemplate;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.bean.server.UserGroups;
-import com.healthcoco.healthcocopad.dialogFragment.AddEditDrugAndAllergyDetailDialogFragment;
 import com.healthcoco.healthcocopad.enums.BooleanTypeValues;
 import com.healthcoco.healthcocopad.enums.LocalTabelType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
+import com.healthcoco.healthcocopad.listeners.GCMRefreshListener;
 import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.LocalDatabaseUtils;
@@ -48,10 +52,11 @@ import java.util.HashMap;
  * Created by Shreshtha on 20-01-2017.
  */
 
-public class WebDataServiceImpl {
+public class WebDataServiceImpl  implements GCMRefreshListener {
     private static final String TAG = Util.class.getSimpleName();
     private static WebDataServiceImpl mInstance;
     private static HealthCocoApplication mApp;
+    private static Handler mHandler;
 
     private WebDataServiceImpl() {
     }
@@ -60,6 +65,9 @@ public class WebDataServiceImpl {
         if (mInstance == null) {
             mApp = application;
             mInstance = new WebDataServiceImpl();
+            HandlerThread mHandlerThread = new HandlerThread("HandlerThread");
+            mHandlerThread.start();
+            mHandler = new Handler(mHandlerThread.getLooper());
         }
         return mInstance;
     }
@@ -760,5 +768,39 @@ public class WebDataServiceImpl {
             LocalDataServiceImpl.getInstance(mApp)
                     .getVisitsList(WebServiceType.GET_PATIENT_VISIT, doctorId, locationId, hospitalId, patientId, responseListener, errorListener);
         }
+    }
+
+    public void sendGcmRegistrationId(boolean isOnTokenRefresh) {
+        if (!isOnTokenRefresh && !mApp.isEmptyRequestsList()) {
+            LogUtils.LOGD(TAG, " List nonEmpty");
+            mApp.setGcmRegistrationListener(this);
+        } else {
+            LogUtils.LOGD(TAG, " List Empty");
+            refreshGCM(isOnTokenRefresh);
+        }
+    }
+
+    @Override
+    public void refreshGCM(boolean isOnTokenRefresh) {
+        if (isOnTokenRefresh)
+            HealthCocoActivity.GCM_WAIT_TIME = 5000;
+        else
+            HealthCocoActivity.GCM_WAIT_TIME = 2000;
+        LogUtils.LOGD(TAG, "Interval " + HealthCocoActivity.GCM_WAIT_TIME);
+        mHandler.postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                WebServiceType webServiceType = WebServiceType.SEND_GCM_REGISTRATION_ID;
+                GCMRequest gcmRequest = LocalDataServiceImpl.getInstance(mApp).getGCMRequestData();
+                Util.checkNetworkStatus(mApp);
+                if (HealthCocoConstants.isNetworkOnline) {
+                    String url = webServiceType.getUrl();
+                    getResponse(webServiceType, Object.class, url, gcmRequest, null, null,
+                            null);
+                    mApp.setGcmRegistrationListener(null);
+                }
+            }
+        }, HealthCocoActivity.GCM_WAIT_TIME);
     }
 }

@@ -22,8 +22,6 @@ import android.widget.ScrollView;
 import android.widget.Toast;
 
 import com.android.volley.Response;
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.CameraPosition;
@@ -70,7 +68,6 @@ public abstract class HealthCocoFragment extends Fragment implements GsonRequest
     protected FragmentManager mFragmentManager;
     protected String TAG;
     protected HealthCocoApplication mApp;
-    private Tracker mTracker;
     private boolean isOTPVerified;
     private User user;
     private RegisteredPatientDetailsUpdated selectedPatient;
@@ -92,18 +89,12 @@ public abstract class HealthCocoFragment extends Fragment implements GsonRequest
             HealthCocoConstants.SELECTED_PATIENTS_USER_ID = savedInstanceState.getString(HealthCocoConstants.TAG_SELECTED_USER_ID);
             LogUtils.LOGD(TAG, "onCreateView " + HealthCocoConstants.SELECTED_PATIENTS_USER_ID + mActivity);
         }
-        if (mTracker != null) {
-            LogUtils.LOGD(TAG, "Setting screen name: " + TAG);
-            mTracker.setScreenName("Screen Name " + TAG);
-            mTracker.send(new HitBuilders.ScreenViewBuilder().build());
-        }
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mTracker = ((HealthCocoApplication) getActivity().getApplication()).getDefaultTracker();
     }
 
     public abstract void init();

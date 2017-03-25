@@ -40,7 +40,9 @@ import com.healthcoco.healthcocopad.bean.server.DrugDosage;
 import com.healthcoco.healthcocopad.bean.server.DrugDurationUnit;
 import com.healthcoco.healthcocopad.bean.server.DrugType;
 import com.healthcoco.healthcocopad.bean.server.EducationQualification;
+import com.healthcoco.healthcocopad.bean.server.GCMRequest;
 import com.healthcoco.healthcocopad.bean.server.InvestigationSuggestions;
+import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.MedicalCouncil;
 import com.healthcoco.healthcocopad.bean.server.ObservationSuggestions;
 import com.healthcoco.healthcocopad.bean.server.Profession;
@@ -82,6 +84,7 @@ import java.util.ArrayList;
 
 public class HealthCocoActivity extends AppCompatActivity implements GsonRequest.ErrorListener, LocalDoInBackgroundListenerOptimised, Response.Listener<VolleyResponseBean> {
     protected static final String TAG = HealthCocoActivity.class.getSimpleName();
+    public static long GCM_WAIT_TIME = 2000;
     protected HealthCocoApplication mApp;
     private Dialog alertDialog;
     private Handler mHandler;
@@ -182,7 +185,7 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
                                         user.getForeignHospitalId(), user.getForeignLocationId(), latestUpdatedTime, this, this);
                         break;
                     case GET_DOCTOR_PROFILE:
-                        syncDoctorProfileData(user.getUniqueId(), null, null);
+                        WebDataServiceImpl.getInstance(mApp).getDoctorProfile(DoctorProfile.class, user.getUniqueId(), null, null, this, this);
                         defaultWebServicesList.add(syncServiceType);
                         break;
                     case GET_CLINIC_PROFILE:
@@ -292,10 +295,6 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
         //Get groupsList
         Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.USER_GROUP);
         WebDataServiceImpl.getInstance(mApp).getGroupsList(WebServiceType.GET_GROUPS, UserGroups.class, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(), latestUpdatedTime, null, this, this);
-    }
-
-    public void syncDoctorProfileData(String doctorId, String locationId, String hospitalId) {
-        WebDataServiceImpl.getInstance(mApp).getDoctorProfile(DoctorProfile.class, doctorId, locationId, hospitalId, this, this);
     }
 
     private void sendBroadCastToInitialSyncFragment(DefaultSyncServiceType syncServiceType) {
@@ -453,10 +452,7 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
                         new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_PATIENTS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
                         break;
                     case GET_DOCTOR_PROFILE:
-                        if (response.getData() != null && response.getData() instanceof DoctorProfile)
-                            refreshMenuFragment((DoctorProfile) response.getData());
                         new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_DOCTOR_PROFILE, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
-                        hideLoading();
                         return;
                     case GET_CLINIC_PROFILE:
                         if (response.getData() != null && response.getData() instanceof ClinicDetailResponse)
@@ -810,18 +806,19 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
     }
 
     public void initGCM() {
-//        if (Util.checkPlayServices(this)) {
-//            LoginResponse doctor = LocalDataServiceImpl.getInstance((HealthCocoApplication) this.getApplicationContext()).getDoctor();
-//            GCMRequest gcmRequest = LocalDataServiceImpl.getInstance(mApp).getGCMRequestData();
-//            if (gcmRequest != null) {
-//                if (doctor != null && doctor.getUser() != null) {
-//                    ArrayList<String> userIdsList = new ArrayList<>();
-//                    userIdsList.add(doctor.getUser().getUniqueId());
-//                    gcmRequest.setUserIds(userIdsList);
-//                }
-//                WebDataServiceImpl.getInstance(mApp).sendGcmRegistrationId(GCMRequest.class, gcmRequest, null, null);
-//            }
-//        }
+        if (Util.checkPlayServices(this)) {
+            LoginResponse doctor = LocalDataServiceImpl.getInstance((HealthCocoApplication) this.getApplicationContext()).getDoctor();
+            GCMRequest gcmRequest = LocalDataServiceImpl.getInstance(mApp).getGCMRequestData();
+            if (gcmRequest != null) {
+                if (doctor != null && doctor.getUser() != null) {
+                    ArrayList<String> userIdsList = new ArrayList<>();
+                    userIdsList.add(doctor.getUser().getUniqueId());
+                    gcmRequest.setUserIds(userIdsList);
+                    LocalDataServiceImpl.getInstance(mApp).addGCMRequest(gcmRequest);
+                }
+                WebDataServiceImpl.getInstance(mApp).sendGcmRegistrationId(false);
+            }
+        }
     }
 
     public void initActionbarTitle() {

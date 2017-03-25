@@ -170,13 +170,8 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1.7"
                 android:background="@android:color/white"
-                android:visibility="gone">
-
-                <include
-                    layout="@layout/fragment_filter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent" />
-            </LinearLayout>
+                android:orientation="horizontal"
+                android:visibility="gone"></LinearLayout>
         </LinearLayout>
     </LinearLayout>
 

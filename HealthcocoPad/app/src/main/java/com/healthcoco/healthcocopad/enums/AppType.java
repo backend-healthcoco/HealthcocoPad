@@ -1,4 +1,4 @@
-package com.healthcoco.healthcocopad.bean;
+package com.healthcoco.healthcocopad.enums;
 
 /**
  * Created by Shreshtha on 20-01-2017.

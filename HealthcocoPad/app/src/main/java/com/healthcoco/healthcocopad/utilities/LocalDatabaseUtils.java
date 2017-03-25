@@ -68,6 +68,7 @@ public class LocalDatabaseUtils {
     public static String KEY_FOREIGN_ROLE_ID = "foreign_role_id";
     public static final String KEY_FOREIGN_MEDICAL_HISTORY_ID = "foreign_medical_history_id";
     public static final String KEY_HISTORY_FILTER_TYPE = "history_filter_type";
+    public static final String KEY_DEVICE_ID = "device_id";
 
 
     public static String getSearchTermEqualsIgnoreCaseQuery(String filedName, String value) {

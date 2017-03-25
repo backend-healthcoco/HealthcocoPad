@@ -1,7 +1,6 @@
 package com.healthcoco.healthcocopad;
 
 import android.app.Activity;
-import android.app.Application;
 import android.support.multidex.MultiDexApplication;
 import android.text.TextUtils;
 
@@ -9,10 +8,10 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.crashlytics.android.Crashlytics;
-import com.google.android.gms.analytics.GoogleAnalytics;
-import com.google.android.gms.analytics.Tracker;
+import com.healthcoco.healthcocopad.listeners.GCMRefreshListener;
 import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
+import com.healthcoco.healthcocopad.utilities.Util;
 import com.nostra13.universalimageloader.cache.memory.impl.WeakMemoryCache;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -32,9 +31,9 @@ import io.fabric.sdk.android.Fabric;
 public class HealthCocoApplication extends MultiDexApplication {
     private static final String TAG = HealthCocoApplication.class.getSimpleName();
     private RequestQueue mRequestQueue;
-    private Tracker mTracker;
     private ArrayList<Activity> listLoginSignUpActivity = new ArrayList<>();
     private ArrayList<Request> requestList = new ArrayList<>();
+    private GCMRefreshListener gcmRefreshListener;
 
     public RequestQueue getRequestQueue() {
         if (mRequestQueue == null) {
@@ -57,6 +56,8 @@ public class HealthCocoApplication extends MultiDexApplication {
         cancelPendingRequests(tag);
         req.setTag(TextUtils.isEmpty(tag) ? TAG : tag);
         getRequestQueue().add(req);
+        requestList.add(req);
+        LogUtils.LOGD(TAG, "RequestList size : " + requestList.size() + " Added : " + req.getTag());
     }
 
     public void cancelPendingRequests(Object tag) {
@@ -81,20 +82,6 @@ public class HealthCocoApplication extends MultiDexApplication {
         super.onTerminate();
         SugarContext.terminate();
         cancelAllPendingRequests();
-    }
-
-    /**
-     * Gets the default {@link Tracker} for this {@link Application}.
-     *
-     * @return tracker
-     */
-    synchronized public Tracker getDefaultTracker() {
-        if (mTracker == null) {
-            GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
-            // To enable debug logging use: adb shell setprop log.tag.GAv4 DEBUG
-            mTracker = analytics.newTracker(R.xml.global_tracker);
-        }
-        return mTracker;
     }
 
     public void clearLoginSignupActivityStack() {
@@ -128,7 +115,18 @@ public class HealthCocoApplication extends MultiDexApplication {
         if (requestList.contains(gsonRequest))
             requestList.remove(gsonRequest);
         LogUtils.LOGD(TAG, "RequestList size : " + requestList.size() + "Removed : " + gsonRequest.getTag());
-//        if (gcmRefreshListener != null)
-//            gcmRefreshListener.refreshGCM(false);
+        if (gcmRefreshListener != null)
+            gcmRefreshListener.refreshGCM(false);
     }
+
+
+    public boolean isEmptyRequestsList() {
+        LogUtils.LOGD(TAG, "RequestList size : " + requestList.size());
+        return Util.isNullOrEmptyList(requestList);
+    }
+
+    public void setGcmRegistrationListener(GCMRefreshListener gcmRefreshListener) {
+        this.gcmRefreshListener = gcmRefreshListener;
+    }
+
 }

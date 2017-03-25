@@ -36,6 +36,7 @@ import com.healthcoco.healthcocopad.listeners.DownloadFileFromUrlListener;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
 import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
+import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.DownloadImageFromUrlUtil;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.ImageUtil;
@@ -240,7 +241,7 @@ public class DoctorProfileFragment extends HealthCocoFragment implements GsonReq
                             mActivity.refreshMenuFragment(doctorProfile);
                             if (isInitialLoading && response.isUserOnline()) {
                                 isInitialLoading = false;
-                                mActivity.syncDoctorProfileData(user.getUniqueId(), null, null);
+                                WebDataServiceImpl.getInstance(mApp).getDoctorProfile(DoctorProfile.class, user.getUniqueId(), null, null, this, this);
                                 return;
                             }
                         } else {

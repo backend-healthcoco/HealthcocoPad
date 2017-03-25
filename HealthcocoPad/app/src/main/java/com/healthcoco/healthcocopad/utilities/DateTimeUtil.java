@@ -286,4 +286,10 @@ public class DateTimeUtil {
     public static String getFormatedDate(Long date) {
         return new SimpleDateFormat("dd/MM/yyyy").format(new Date(date));
     }
+
+    public static Long getCurrentDateLong() {
+        long currentDateTime = new java.util.Date().getTime();
+        return currentDateTime;
+    }
+
 }

@@ -1,9 +1,9 @@
-package com.healthcoco.healthcocopad.bean;
+package com.healthcoco.healthcocopad.enums;
 
 /**
- * Created by Shreshtha on 20-01-2017.
+ * Created by neha on 14/06/16.
  */
-public enum  DeviceType {
+public enum DeviceType {
     ANDROID("ANDROID"), IOS("IOS"), WINDOWS("WINDOWS");
 
     private final String text;
