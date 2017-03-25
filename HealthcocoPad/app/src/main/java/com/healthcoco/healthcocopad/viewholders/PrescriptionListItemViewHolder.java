@@ -62,6 +62,8 @@ public class PrescriptionListItemViewHolder extends HealthCocoViewHolder impleme
     private TextView tvLabelPrescribedBy;
     private LinearLayout btEdit;
     private LinearLayout btPrint;
+    private LinearLayout layoutAdvice;
+    private LinearLayout containerParentDrugsList;
 
 
     public PrescriptionListItemViewHolder(HealthCocoActivity mActivity,
@@ -97,15 +99,14 @@ public class PrescriptionListItemViewHolder extends HealthCocoViewHolder impleme
             tvPid.setVisibility(View.GONE);
         containerDrugsList.removeAllViews();
         if (!Util.isNullOrEmptyList(prescription.getItems())) {
-            containerDrugsList.setVisibility(View.VISIBLE);
+            containerParentDrugsList.setVisibility(View.VISIBLE);
             for (DrugItem drug : prescription.getItems()) {
-                int index = prescription.getItems().indexOf(drug);
                 PrescribedDrugDoseItemViewholder view = new PrescribedDrugDoseItemViewholder(mActivity);
                 view.setData(drug);
                 containerDrugsList.addView(view);
             }
         } else
-            containerDrugsList.setVisibility(View.GONE);
+            containerParentDrugsList.setVisibility(View.GONE);
 
         checkIsDiscarded(prescription.getDiscarded());
 
@@ -158,6 +159,15 @@ public class PrescriptionListItemViewHolder extends HealthCocoViewHolder impleme
             initOptionsPopupWindow();
             parentDiagnosticTests.setVisibility(View.GONE);
         }
+
+        if (prescription.getAdvice() != null && !prescription.getAdvice().equals("")) {
+            LinearLayout containerAdvice = (LinearLayout) layoutAdvice.findViewById(R.id.container_advice);
+            containerAdvice.removeAllViews();
+            TextView tvAdvice = (TextView) mActivity.getLayoutInflater().inflate(R.layout.sub_item_profile_detail_groups_notes_text, null);
+            tvAdvice.setText(Util.getValidatedValue(prescription.getAdvice()));
+            containerAdvice.addView(tvAdvice);
+            layoutAdvice.setVisibility(View.VISIBLE);
+        } else layoutAdvice.setVisibility(View.GONE);
     }
 
     @Override
@@ -173,6 +183,7 @@ public class PrescriptionListItemViewHolder extends HealthCocoViewHolder impleme
         tvDate = (TextView) contentView.findViewById(R.id.tv_date);
         tvPrescribedBy = (TextView) contentView.findViewById(R.id.tv_prescribed_by);
         containerDrugsList = (LinearLayout) contentView.findViewById(R.id.container_drugs_list);
+        containerParentDrugsList = (LinearLayout) contentView.findViewById(R.id.container_parent_drugs_list);
 
         btHistory = (LinearLayout) contentView.findViewById(R.id.bt_history);
         btSms = (LinearLayout) contentView.findViewById(R.id.bt_sms);
@@ -188,6 +199,7 @@ public class PrescriptionListItemViewHolder extends HealthCocoViewHolder impleme
         containerBottomButtons = (LinearLayout) contentView.findViewById(R.id.container_bottom_buttons);
         tvLabelGlobalRecord = (TextView) contentView.findViewById(R.id.tv_label_global_record);
         tvLabelPrescribedBy = (TextView) contentView.findViewById(R.id.tv_label_prescribed_by);
+        layoutAdvice = (LinearLayout) contentView.findViewById(R.id.layout_parent_advice);
 
         View headerCreatedByVisit = contentView.findViewById(R.id.container_header_created_by_visit);
         View headerCreatedByPrescription = contentView.findViewById(R.id.container_header_created_by_prescription);

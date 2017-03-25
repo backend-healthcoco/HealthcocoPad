@@ -608,6 +608,8 @@
 
     <!--Common EMR texts-->
     <string name="rx_id">RxId :&#160;</string>
+    <string name="rid">RID :&#160;</string>
+    <string name="cnid">CNID :&#160;</string>
     <string name="email_caps">EMAIL</string>
     <string name="prescribed_by">Prescribed by&#160;</string>
     <string name="global_record">Global Record</string>
@@ -621,4 +623,16 @@
     <!--Success messages-->
     <string name="added_to_history">Added to Important</string>
     <string name="removed_from_history">Removed from Important</string>
+    <string name="noted_by">Noted By&#160;</string>
+    <string name="declined">Declined</string>
+    <!--//reports confirmation messages-->
+    <string name="confirm_remove_reports_from_history">Do you want to remove this Report from Important?</string>
+    <string name="confirm_discard_reports_title">Are you sure you want to discard this Report?</string>
+    <string name="confirm_discard_reports_message">This cannot be undone.</string>
+
+    <!-- reports -->
+    <string name="add_image">Add Image</string>
+    <string name="add_file">Add File</string>
+    <string name="uploaded_by">Uploaded by :&#160;</string>
+    <string name="open">OPEN</string>
 </resources>

@@ -121,9 +121,9 @@
     <dimen name="text_size_add_clinical_note_vital_signs_label_child">17sp</dimen>
     <dimen name="item_padding">8dp</dimen>
     <dimen name="text_size_prescription_diagnostic_label">17sp</dimen>
-    <dimen name="text_size_bt_history_edit_sms_email">12sp</dimen>
+    <dimen name="text_size_bt_history_edit_sms_email">15sp</dimen>
     <dimen name="item_visits_button_margin_8dp">8dp</dimen>
-    <dimen name="item_visits_button_padding_left_right_20dp">20dp</dimen>
+    <dimen name="item_visits_button_padding_left_right_20dp">12dp</dimen>
     <dimen name="item_visits_button_padding_top_bottom_8dp">8dp</dimen>
     <dimen name="text_size_drug_lable">20sp</dimen>
     <dimen name="text_size_drug_child_lable">17sp</dimen>
@@ -142,4 +142,12 @@
     <dimen name="text_size_emr_date">12sp</dimen>
     <dimen name="padding_margin_prescribed_item_center">8dp</dimen>
     <dimen name="text_size_prescribed_by_name">13sp</dimen>
+    <dimen name="text_padding_appointment">10dp</dimen>
+    <dimen name="text_size_clinical_notes_noted_by">13sp</dimen>
+
+    <dimen name="report_thumbnail">60dp</dimen>
+    <dimen name="text_size_reports_item_label">15sp</dimen>
+    <dimen name="text_between_padding">5dp</dimen>
+    <dimen name="text_size_reports_item_desc">13sp</dimen>
+    <dimen name="text_size_uploaded_by_name">13sp</dimen>
 </resources>
