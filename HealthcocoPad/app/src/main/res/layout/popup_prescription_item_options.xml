@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shadow_popup_new"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/container_options"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/grey_background"
+                android:minWidth="150dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_discard"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/popup_item_padding"
+                    android:text="@string/discard"
+                    android:textColor="@drawable/text_popup_item_selector" />
+
+                <TextView
+                    android:id="@+id/tv_save_as_template"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/popup_item_padding"
+                    android:text="@string/save_as_template"
+                    android:textColor="@drawable/text_popup_item_selector" />
+
+                <TextView
+                    android:id="@+id/tv_print"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/popup_item_padding"
+                    android:text="@string/print"
+                    android:textColor="@drawable/text_popup_item_selector" />
+
+                <TextView
+                    android:id="@+id/tv_edit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/popup_item_padding"
+                    android:text="@string/edit"
+                    android:textColor="@drawable/text_popup_item_selector" />
+
+                <TextView
+                    android:id="@+id/tv_sms"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/popup_item_padding"
+                    android:text="@string/sms"
+                    android:textColor="@drawable/text_popup_item_selector" />
+
+                <TextView
+                    android:id="@+id/tv_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/popup_item_padding"
+                    android:text="@string/email"
+                    android:textColor="@drawable/text_popup_item_selector" />
+
+                <TextView
+                    android:id="@+id/tv_cancel_appointment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/popup_item_padding"
+                    android:text="@string/cancel_appointment"
+                    android:textColor="@drawable/text_popup_item_selector" />
+
+                <TextView
+                    android:id="@+id/tv_reschedule"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/popup_item_padding"
+                    android:text="@string/reschedule"
+                    android:textAllCaps="false"
+                    android:textColor="@drawable/text_popup_item_selector" />
+
+                <TextView
+                    android:id="@+id/tv_appointment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/popup_item_padding"
+                    android:text="@string/appointment"
+                    android:textAllCaps="false"
+                    android:textColor="@drawable/text_popup_item_selector" />
+
+                <TextView
+                    android:id="@+id/tv_event"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/popup_item_padding"
+                    android:text="@string/event"
+                    android:textAllCaps="false"
+                    android:textColor="@drawable/text_popup_item_selector" />
+
+                <TextView
+                    android:id="@+id/tv_all"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/popup_item_padding"
+                    android:text="@string/all"
+                    android:textAllCaps="false"
+                    android:textColor="@drawable/text_popup_item_selector" />
+
+                <TextView
+                    android:id="@+id/tv_confirmed"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/popup_item_padding"
+                    android:text="@string/confirmed"
+                    android:textAllCaps="false"
+                    android:textColor="@drawable/text_popup_item_selector" />
+
+                <TextView
+                    android:id="@+id/tv_confirm"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/popup_item_padding"
+                    android:text="@string/confirm"
+                    android:textAllCaps="false"
+                    android:textColor="@drawable/text_popup_item_selector" />
+
+                <TextView
+                    android:id="@+id/tv_pending_confirmation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/popup_item_padding"
+                    android:text="@string/pending_confirmation"
+                    android:textAllCaps="false"
+                    android:textColor="@drawable/text_popup_item_selector" />
+
+                <TextView
+                    android:id="@+id/tv_cancelled"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/popup_item_padding"
+                    android:text="@string/cancelled"
+                    android:textAllCaps="false"
+                    android:textColor="@drawable/text_popup_item_selector" />
+
+
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

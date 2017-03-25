@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:id="@+id/container_header_created_by_visit"
     android:background="@drawable/shape_emr_grey_background"
     android:gravity="center"
     android:padding="10dp">

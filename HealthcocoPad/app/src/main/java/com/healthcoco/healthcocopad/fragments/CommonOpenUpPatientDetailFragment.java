@@ -95,7 +95,34 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
             mViewPager.getAdapter().notifyDataSetChanged();
         for (PatientDetailTabType detailTabType :
                 PatientDetailTabType.values()) {
-            tabhost.addTab(getTabSpec(detailTabType, detailTabType.getFragment()));
+            HealthCocoFragment healthcocoFragment = null;
+            switch (detailTabType) {
+                case PATIENT_DETAIL_PROFILE:
+                    healthcocoFragment = new PatientProfileDetailFragment();
+                    break;
+                case PATIENT_DETAIL_VISIT:
+                    healthcocoFragment = new PatientVisitDetailFragment();
+                    break;
+                case PATIENT_DETAIL_CLINICAL_NOTES:
+                    healthcocoFragment = new PatientClinicalNotesDetailFragment();
+                    break;
+                case PATIENT_DETAIL_IMPORTANT:
+                    healthcocoFragment = new PatientImportantDetailFragment();
+                    break;
+                case PATIENT_DETAIL_REPORTS:
+                    healthcocoFragment = new PatientReportsDetailFragment();
+                    break;
+                case PATIENT_DETAIL_PRESCRIPTION:
+                    healthcocoFragment = new PatientPrescriptionDetailFragment();
+                    break;
+                case PATIENT_DETAIL_APPOINTMENT:
+                    healthcocoFragment = new PatientAppointmentDetailFragment();
+                    break;
+                case PATIENT_DETAIL_TREATMENT:
+                    healthcocoFragment = new PatientTreatmentDetailFragment();
+                    break;
+            }
+            tabhost.addTab(getTabSpec(detailTabType, healthcocoFragment));
         }
     }
 
