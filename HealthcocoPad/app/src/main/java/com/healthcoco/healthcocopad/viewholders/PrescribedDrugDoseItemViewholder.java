@@ -103,5 +103,4 @@ public class PrescribedDrugDoseItemViewholder extends LinearLayout {
             tvInstruction.setText(instruction);
         else tvInstruction.setText(getResources().getString(R.string.no_text_dash));
     }
-
 }
