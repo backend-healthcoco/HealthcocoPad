@@ -618,6 +618,7 @@
     <string name="confirm_discard_prescription_title">Are you sure you want to discard this Prescription?</string>
     <string name="confirm_discard_prescription_message">Patient will be requested to discontinue this Prescription.</string>
     <string name="confirm_sms_prescription">Are you sure you want to send this Prescription to Mobile number&#160;</string>
+    <string name="confirm_sms_visit">Are you sure you want to send this Visit\'s Detail to Mobile number&#160;</string>
     <string name="mobile_no_not_found">Mobile number not found for Patient&#160;</string>
     <string name="sms_sent_to">SMS sent to&#160;</string>
     <!--Success messages-->
@@ -635,4 +636,6 @@
     <string name="add_file">Add File</string>
     <string name="uploaded_by">Uploaded by :&#160;</string>
     <string name="open">OPEN</string>
+    <string name="new_template">New Template</string>
+    <string name="template_name">Template Name</string>
 </resources>

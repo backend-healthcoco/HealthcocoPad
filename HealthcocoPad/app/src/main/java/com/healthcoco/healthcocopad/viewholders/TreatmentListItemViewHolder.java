@@ -8,6 +8,7 @@ import android.widget.TextView;
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.HealthCocoViewHolder;
 import com.healthcoco.healthcocopad.R;
+import com.healthcoco.healthcocopad.bean.server.Discount;
 import com.healthcoco.healthcocopad.bean.server.PatientTreatment;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.Treatments;
@@ -93,8 +94,29 @@ public class TreatmentListItemViewHolder extends HealthCocoViewHolder implements
         } else
             containerParentTreatmentsList.setVisibility(View.GONE);
 
-        checkIsDiscarded(patientTreatment.getDiscarded());
+        //set TotalCost
+        double totalCost = patientTreatment.getTotalCost();
+        if (totalCost != 0)
+            tvTotalCost.setText(Util.getIntValue(totalCost));
+        else
+            tvTotalCost.setText(mActivity.getResources().getString(R.string.no_text_dash));
 
+        //set TotalDiscount
+        Discount totalDiscount = patientTreatment.getTotalDiscount();
+        double value = totalDiscount.getValue();
+        if (totalDiscount != null && totalDiscount.getUnit() != null && value != 0)
+            tvTotalDiscount.setText(Util.getIntValue(value));
+        else
+            tvTotalDiscount.setText(mActivity.getResources().getString(R.string.no_text_dash));
+
+        //set TotalGrandTotal
+        double grandTotal = patientTreatment.getGrandTotal();
+        if (grandTotal != 0)
+            tvGrandTotal.setText(Util.getIntValue(grandTotal));
+        else
+            tvGrandTotal.setText(mActivity.getResources().getString(R.string.no_text_dash));
+
+        checkIsDiscarded(patientTreatment.getDiscarded());
     }
 
     @Override

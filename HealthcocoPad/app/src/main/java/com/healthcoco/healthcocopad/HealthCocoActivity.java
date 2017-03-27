@@ -1,15 +1,19 @@
 package com.healthcoco.healthcocopad;
 
+import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.print.PrintManager;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -22,7 +26,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.Response;
+import com.healthcoco.healthcocopad.activities.CloudPrintActivity;
 import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
+import com.healthcoco.healthcocopad.adapter.MyPrintDocumentAdapter;
 import com.healthcoco.healthcocopad.bean.UserPermissionsResponse;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.AllUIPermission;
@@ -76,6 +82,7 @@ import com.healthcoco.healthcocopad.utilities.MyExceptionHandler;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.healthcoco.healthcocopad.views.FontAwesomeButton;
 
+import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -780,12 +787,12 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
 
     public void doPrinting(String filePath) {
 //         filePath = "/storage/emulated/0/HealthCococMedia/Enlarged Images/testpdf1472488361996.pdf";
-        // Make sure we're running on Kitkat or higher to use Android Print Framework
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-//            doPrintAboveKitkat(filePath);
-//        } else {
-//            doCloudPrinting(filePath);
-//        }
+//         Make sure we're running on Kitkat or higher to use Android Print Framework
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            doPrintAboveKitkat(filePath);
+        } else {
+            doCloudPrinting(filePath);
+        }
     }
 
     public String getFormattedVersionName() {
@@ -912,5 +919,19 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
         addUpdateNameDialogFragment.setTargetFragment(fragment, requestCode);
         addUpdateNameDialogFragment.show(getSupportFragmentManager(),
                 addUpdateNameDialogFragment.getClass().getSimpleName());
+    }
+
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    private void doPrintAboveKitkat(String filePath) {
+        PrintManager printManager = (PrintManager) this.getSystemService(Context.PRINT_SERVICE);
+        String jobName = this.getString(R.string.app_name) + " Document";
+        printManager.print(jobName, new MyPrintDocumentAdapter(this, filePath), null);
+    }
+
+    private void doCloudPrinting(String filePath) {
+        Intent printIntent = new Intent(this, CloudPrintActivity.class);
+        printIntent.setDataAndType(Uri.fromFile(new File(filePath)), Util.getMimeTypeOfFile(filePath));
+        printIntent.putExtra(CloudPrintActivity.TAG_TITLE, CloudPrintActivity.DOC_TITLE);
+        startActivity(printIntent);
     }
 }

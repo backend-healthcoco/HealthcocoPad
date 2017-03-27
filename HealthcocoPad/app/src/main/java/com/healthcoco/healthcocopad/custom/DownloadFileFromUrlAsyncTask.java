@@ -130,7 +130,6 @@ public class DownloadFileFromUrlAsyncTask extends AsyncTask<String, String, Stri
             hideProgressCircular();
             progressBarHorizontal.setProgress(Integer.parseInt(progress[0]));
         }
-
     }
 
     /**

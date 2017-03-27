@@ -96,4 +96,6 @@ public class HealthCocoConstants {
     public static final String TAG_DISEASE_IDS_LIST = "diseaseIdsList";
     public static final String PARAM_PATIENT_ID = "&patientId=";
     public static final String PARAM_IN_HISTORY = "&inHistory=";
+    public static final String PARAM_TAG_SMS = "/sms/";
+    public static final String PARAM_TAG_MAIL = "/mail/";
 }

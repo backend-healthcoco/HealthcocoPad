@@ -52,6 +52,7 @@ import com.healthcoco.healthcocopad.bean.server.DrugType;
 import com.healthcoco.healthcocopad.bean.server.Duration;
 import com.healthcoco.healthcocopad.bean.server.Education;
 import com.healthcoco.healthcocopad.bean.server.EducationQualification;
+import com.healthcoco.healthcocopad.bean.server.EmailAddress;
 import com.healthcoco.healthcocopad.bean.server.ForeignAppointmentBookingNumber;
 import com.healthcoco.healthcocopad.bean.server.ForeignComplaintsTable;
 import com.healthcoco.healthcocopad.bean.server.ForeignDiagnosesTable;
@@ -2839,4 +2840,12 @@ public class LocalDataServiceImpl {
         }
         return gcmRequest;
     }
+
+    public void addEmailAddress(String emailAddress, String patientId) {
+        EmailAddress addressObj = new EmailAddress();
+        addressObj.setEmailAddress(emailAddress);
+        addressObj.setPatientId(patientId);
+        addressObj.save();
+    }
+
 }

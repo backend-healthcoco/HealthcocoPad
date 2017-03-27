@@ -38,7 +38,8 @@ public enum CommonOpenUpFragmentType {
     PATIENT_DETAIL_PRESCRIPTION(R.string.prescriptions),
     PATIENT_DETAIL_APPOINTMENT(R.string.appointment),
     PATIENT_DETAIL_TREATMENT(R.string.treatment),
-    HISTORY_DISEASE_LIST(R.string.past_history);
+    HISTORY_DISEASE_LIST(R.string.past_history),
+    ADD_NEW_TEMPLATE(R.string.new_template),;
 
     private final int titleId;
 

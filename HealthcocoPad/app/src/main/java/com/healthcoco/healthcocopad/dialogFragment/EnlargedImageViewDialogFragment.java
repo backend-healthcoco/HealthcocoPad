@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,11 +13,12 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.android.volley.VolleyError;
-import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.HealthCocoDialogFragment;
+import com.healthcoco.healthcocopad.R;
+import com.healthcoco.healthcocopad.custom.DownloadFileFromUrlAsyncTask;
+import com.healthcoco.healthcocopad.enums.HealthCocoFileType;
 import com.healthcoco.healthcocopad.listeners.DownloadFileFromUrlListener;
 import com.healthcoco.healthcocopad.listeners.NetworkImageViewRequestListener;
-import com.healthcoco.healthcocopad.utilities.DownloadImageFromUrlUtil;
 import com.healthcoco.healthcocopad.utilities.ImageUtil;
 import com.healthcoco.healthcocopad.utilities.ScreenDimensions;
 import com.healthcoco.healthcocopad.utilities.Util;
@@ -51,7 +53,7 @@ public class EnlargedImageViewDialogFragment extends HealthCocoDialogFragment im
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-//        ImageUtil.deleteFolderIfSizeExceed();
+        ImageUtil.deleteFolderIfSizeExceed();
         init();
     }
 
@@ -63,9 +65,9 @@ public class EnlargedImageViewDialogFragment extends HealthCocoDialogFragment im
             String imageUrl = bundle.getString(TAG_IMAGE_URL);
             isPrintPdf = bundle.getBoolean(TAG_PRINT_PDF);
             if (!Util.isNullOrBlank(imageUrl))
-                DownloadImageFromUrlUtil.loadImageUsingImageLoader(null, ivImage, imageUrl);
+//                DownloadImageFromUrlUtil.loadImageUsingImageLoader(null, ivImage, imageUrl);
 
-//            new DownloadFileFromUrlAsyncTask(mActivity, this, HealthCocoFileType.ENLARGED_IMAGE, Util.getFileNameFromUrl(imageUrl), progressLoadingCircular, progressLoadingHorizontal).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, imageUrl);
+                new DownloadFileFromUrlAsyncTask(mActivity, this, HealthCocoFileType.ENLARGED_IMAGE, Util.getFileNameFromUrl(imageUrl), progressLoadingCircular, progressLoadingHorizontal).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, imageUrl);
         } else dismiss();
     }
 
@@ -94,7 +96,6 @@ public class EnlargedImageViewDialogFragment extends HealthCocoDialogFragment im
     @Override
     public void onErrorResponse(VolleyError error) {
         dismiss();
-//        Util.showToast(mActivity, getResources().getString(R.string.unable_to_load_image));
     }
 
     @Override
@@ -130,8 +131,5 @@ public class EnlargedImageViewDialogFragment extends HealthCocoDialogFragment im
     @Override
     public void onDestroy() {
         super.onDestroy();
-//        if (isPrintPdf && !Util.isNullOrBlank(filePath)) {
-//            ImageUtil.deleteFileFrom(filePath);
-//        }
     }
 }

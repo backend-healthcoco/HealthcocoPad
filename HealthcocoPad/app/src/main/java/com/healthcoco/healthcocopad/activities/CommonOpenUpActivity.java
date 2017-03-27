@@ -18,15 +18,16 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
+import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.enums.ActionbarLeftRightActionTypeDrawables;
 import com.healthcoco.healthcocopad.enums.ActionbarType;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.fragments.AboutUsFragment;
 import com.healthcoco.healthcocopad.fragments.AddEditClinicImageFragment;
 import com.healthcoco.healthcocopad.fragments.AddNewPrescriptionFragment;
+import com.healthcoco.healthcocopad.fragments.AddNewTemplateFragment;
 import com.healthcoco.healthcocopad.fragments.CommonOpenUpPatientDetailFragment;
 import com.healthcoco.healthcocopad.fragments.DiseaseListFragment;
 import com.healthcoco.healthcocopad.fragments.FeedbackFragment;
@@ -148,6 +149,9 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
                 break;
             case HISTORY_DISEASE_LIST:
                 openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_CROSS, ActionbarLeftRightActionTypeDrawables.WITH_SAVE, R.string.past_history, new DiseaseListFragment());
+                break;
+            case ADD_NEW_TEMPLATE:
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_CROSS, ActionbarLeftRightActionTypeDrawables.WITH_SAVE, R.string.new_template, new AddNewTemplateFragment());
                 break;
         }
     }

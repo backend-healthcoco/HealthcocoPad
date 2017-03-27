@@ -26,6 +26,7 @@ public class ImageUtil {
     public static final String DEFAULT_CLINIC_LOGO_NAME = "clinicLogoImage";
     public static final String DEFAULT_CLINIC_IMAGE_NAME = "clinicImage";
     public static final String DEFAULT_PATIENT_IMAGE_NAME = "patientImage";
+
     public static String encodeTobase64(Bitmap image) {
         Bitmap immagex = image;
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -36,7 +37,6 @@ public class ImageUtil {
 
 
     public static String getPathToSaveFile(HealthCocoFileType healthCocoFileType, String fileName, String extension) {
-//        fileName = fileName + extension;
         File file = new File(getDeafultStorageFolder(), healthCocoFileType.getFolderName());
         if (!file.exists())
             file.mkdirs();
@@ -169,11 +169,14 @@ public class ImageUtil {
 
     public static long folderSize(File directory) {
         long length = 0;
-        for (File file : directory.listFiles()) {
-            if (file.isFile())
-                length += file.length();
-            else
-                length += folderSize(file);
+        File[] directoryFiles = directory.listFiles();
+        if (directoryFiles != null && directoryFiles.length > 0) {
+            for (File file : directoryFiles) {
+                if (file.isFile())
+                    length += file.length();
+                else
+                    length += folderSize(file);
+            }
         }
         return length;
     }

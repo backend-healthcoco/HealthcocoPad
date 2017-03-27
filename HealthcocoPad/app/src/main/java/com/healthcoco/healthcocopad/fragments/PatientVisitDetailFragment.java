@@ -1,7 +1,9 @@
 package com.healthcoco.healthcocopad.fragments;
 
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
@@ -23,8 +25,12 @@ import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.bean.server.VisitDetails;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
+import com.healthcoco.healthcocopad.custom.OptionsPopupWindow;
+import com.healthcoco.healthcocopad.enums.AddUpdateNameDialogType;
+import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.LocalTabelType;
+import com.healthcoco.healthcocopad.enums.OptionsTypePopupWindow;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.LoadMorePageListener;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
@@ -49,10 +55,11 @@ import static com.healthcoco.healthcocopad.enums.WebServiceType.GET_PATIENT_VISI
  * Created by Shreshtha on 07-03-2017.
  */
 public class PatientVisitDetailFragment extends HealthCocoFragment implements Response.Listener<VolleyResponseBean>,
-        GsonRequest.ErrorListener, LocalDoInBackgroundListenerOptimised, VisitDetailCombinedItemListener, LoadMorePageListener {
+        GsonRequest.ErrorListener, LocalDoInBackgroundListenerOptimised, VisitDetailCombinedItemListener, LoadMorePageListener, View.OnClickListener {
     //variables need for pagination
     public static final int MAX_SIZE = 10;
     private static final int REQUEST_CODE_VISITS_LIST = 100;
+    private static final String TAG_VISIT_ID = "visitId";
     private int PAGE_NUMBER = 0;
     private boolean isEndOfListAchieved;
     private int currentPageNumber;
@@ -70,6 +77,7 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
     private ListViewLoadMore lvVisits;
     private PatientDetailVisitAdapter patientsVisitAdapter;
     private boolean isLoading;
+    private OptionsPopupWindow popupWindow;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -134,6 +142,12 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
                 selectedPatient.getUserId(), latestUpdatedTime, this, this);
     }
 
+    private void initOptionsPopupWindow(OptionsTypePopupWindow optionsTypePopupWindow) {
+        popupWindow = new OptionsPopupWindow(mActivity, optionsTypePopupWindow, this);
+        popupWindow.setOutsideTouchable(true);
+        popupWindow.setContentView(popupWindow.getPopupView());
+    }
+
     public void notifyVisitsAdapter(List<VisitDetails> visitsList) {
         containerVisits.setVisibility(View.GONE);
         if (!Util.isNullOrEmptyList(visitsList)) {
@@ -147,6 +161,11 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
         }
         patientsVisitAdapter.setListData(visitsList);
         patientsVisitAdapter.notifyDataSetChanged();
+//        //setting menu options
+//        if (visitsList.getVisitedFor().contains(VisitedForType.PRESCRIPTION))
+//            initOptionsPopupWindow(OptionsTypePopupWindow.VISITS_PRESCRIPTION);
+//        else
+//            initOptionsPopupWindow(OptionsTypePopupWindow.VISITS_OTHERS);
     }
 
     @Override
@@ -194,6 +213,14 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
                     isLoading = false;
                     mActivity.hideLoading();
                     isInitialLoading = false;
+                    break;
+                case GET_VISIT_PDF_URL:
+                    if (response.getData() != null && response.getData() instanceof String) {
+                        mActivity.openEnlargedImageDialogFragment(true, (String) response.getData());
+                    }
+                    break;
+                case SEND_SMS_VISIT:
+                    Util.showToast(mActivity, mActivity.getResources().getString(R.string.sms_sent_to) + selectedPatient.getMobileNumber());
                     break;
                 default:
                     break;
@@ -317,26 +344,94 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
 
     @Override
     public void doPrint(String visitId) {
-
+        Util.checkNetworkStatus(mActivity);
+        if (HealthCocoConstants.isNetworkOnline) {
+            mActivity.showLoading(false);
+            WebDataServiceImpl.getInstance(mApp).getPdfUrl(String.class, WebServiceType.GET_VISIT_PDF_URL, visitId, this, this);
+        } else onNetworkUnavailable(null);
     }
 
     @Override
     public void sendSms(String mobileNumber) {
-
+        showSmsAlert(mobileNumber);
     }
 
     @Override
     public void sendEmail(String emailAddress) {
-
+        checkForEmailAndSend(emailAddress);
     }
 
     @Override
     public void editVisit(String visitId) {
-
     }
 
     @Override
     public void setVisitHeader(View visitHeader) {
+
+    }
+
+    @Override
+    public void saveAsTemplate(String uniqueId) {
+        LogUtils.LOGD(TAG, "save template");
+        Util.checkNetworkStatus(mActivity);
+        if (HealthCocoConstants.isNetworkOnline)
+            openNewTemplatesFragment(uniqueId);
+        else onNetworkUnavailable(null);
+    }
+
+    private void openNewTemplatesFragment(String uniqueId) {
+        openCommonOpenUpActivity(CommonOpenUpFragmentType.ADD_NEW_TEMPLATE, uniqueId, REQUEST_CODE_VISITS_LIST);
+    }
+
+    @Override
+    public void cloneVisit(String uniqueId) {
+
+    }
+
+    private void checkForEmailAndSend(String emailAddress) {
+        Util.checkNetworkStatus(mActivity);
+        if (HealthCocoConstants.isNetworkOnline)
+            mActivity.openAddUpdateNameDialogFragment(WebServiceType.SEND_EMAIL_VISIT, AddUpdateNameDialogType.EMAIL, this, user, emailAddress, REQUEST_CODE_VISITS_LIST);
+        else onNetworkUnavailable(null);
+    }
+
+    private void showSmsAlert(String uniqueId) {
+        if (!Util.isNullOrBlank(selectedPatient.getMobileNumber()))
+            showConfirmationAlert(uniqueId);
+        else
+            Util.showToast(mActivity, mActivity.getResources().getString(R.string.mobile_no_not_found) + selectedPatient.getLocalPatientName());
+    }
+
+    private void showConfirmationAlert(final String uniqueId) {
+        if (popupWindow != null)
+            popupWindow.dismiss();
+        final AlertDialog.Builder alertBuilder = new AlertDialog.Builder(mActivity);
+        alertBuilder.setTitle(R.string.confirm);
+        alertBuilder.setMessage(mActivity.getResources().getString(R.string.confirm_sms_visit) + selectedPatient.getMobileNumber());
+        alertBuilder.setCancelable(false);
+        alertBuilder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                mActivity.showLoading(false);
+                WebDataServiceImpl.getInstance(mApp).sendSms(WebServiceType.SEND_SMS_VISIT, uniqueId,
+                        user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(),
+                        selectedPatient.getMobileNumber(), PatientVisitDetailFragment.this, PatientVisitDetailFragment.this);
+                dialog.dismiss();
+            }
+        });
+        alertBuilder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+        alertBuilder.create();
+        alertBuilder.show();
+    }
+
+    @Override
+    public void onClick(View v) {
 
     }
 }

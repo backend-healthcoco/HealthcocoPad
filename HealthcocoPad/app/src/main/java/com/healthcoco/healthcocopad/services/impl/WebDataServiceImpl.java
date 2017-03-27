@@ -52,7 +52,7 @@ import java.util.HashMap;
  * Created by Shreshtha on 20-01-2017.
  */
 
-public class WebDataServiceImpl  implements GCMRefreshListener {
+public class WebDataServiceImpl implements GCMRefreshListener {
     private static final String TAG = Util.class.getSimpleName();
     private static WebDataServiceImpl mInstance;
     private static HealthCocoApplication mApp;
@@ -802,5 +802,81 @@ public class WebDataServiceImpl  implements GCMRefreshListener {
                 }
             }
         }, HealthCocoActivity.GCM_WAIT_TIME);
+    }
+
+    public void sendEmail(WebServiceType webServiceType, String uniqueId, String doctorId, String locationId, String hospitalId, String emailId, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        String url = webServiceType.getUrl() + uniqueId
+                + "/" + doctorId
+                + "/" + locationId
+                + "/" + hospitalId
+                + "/" + emailId
+                + HealthCocoConstants.PARAM_TAG_MAIL;
+        switch (webServiceType) {
+            case SEND_EMAIL_VISIT:
+                url = webServiceType.getUrl() + uniqueId
+                        + "/" + emailId;
+                break;
+            default:
+
+                break;
+        }
+        getResponse(webServiceType, null, url, null, null, responseListener, errorListener);
+    }
+
+    public void sendSms(WebServiceType webServiceType, String uniqueId, String doctorId, String locationId, String hospitalId, String mobileNumber, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        String url = webServiceType.getUrl() + uniqueId
+                + "/" + doctorId
+                + "/" + locationId
+                + "/" + hospitalId
+                + "/" + mobileNumber
+                + HealthCocoConstants.PARAM_TAG_SMS;
+        getResponse(webServiceType, null, url, null, null, responseListener, errorListener);
+    }
+
+    public void getPdfUrl(Class<?> class1, WebServiceType webServiceType, String uniqueId, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        Util.checkNetworkStatus(mApp);
+        if (HealthCocoConstants.isNetworkOnline) {
+            String url = webServiceType.getUrl() + uniqueId;
+            getResponse(webServiceType, class1, url, null, null, responseListener,
+                    errorListener);
+        } else {
+            showUserOffline(webServiceType, responseListener);
+        }
+    }
+
+    /**
+     * used to hide/Activate drug as well
+     *
+     * @param webServiceType
+     * @param class1
+     * @param object
+     * @param responseListener
+     * @param errorListener
+     */
+    public void addUpdateReference(WebServiceType webServiceType, Class<?> class1, Object object, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        String url = webServiceType.getUrl();
+        Util.checkNetworkStatus(mApp.getApplicationContext());
+        if (HealthCocoConstants.isNetworkOnline) {
+            switch (webServiceType) {
+                case ADD_REFERENCE:
+                    break;
+                case ADD_CUSTOM_HISTORY:
+                    break;
+                case ADD_DOSAGE:
+                    break;
+                case ADD_DIRECTION:
+                    break;
+                case DELETE_REFERENCE:
+                    if (object instanceof Reference) {
+                        Reference reference = (Reference) object;
+                        url = url + reference.getUniqueId() + HealthCocoConstants.PARAM_TAG_DELETE;
+                    }
+                    break;
+
+            }
+            getResponse(webServiceType, class1, url, object, null, responseListener, errorListener);
+        } else {
+            errorListener.onNetworkUnavailable(webServiceType);
+        }
     }
 }

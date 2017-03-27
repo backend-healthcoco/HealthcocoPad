@@ -14,8 +14,8 @@ import android.view.ViewGroup;
 import android.widget.AutoCompleteTextView;
 
 import com.android.volley.Response;
-import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.HealthCocoDialogFragment;
+import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.DiagnosticTest;
 import com.healthcoco.healthcocopad.bean.server.Disease;
@@ -282,8 +282,8 @@ public class AddUpdateNameDialogFragment extends HealthCocoDialogFragment implem
 
 
     private void sendEmail(String emailId) {
-//        if (webserviceType != null)
-//            WebDataServiceImpl.getInstance(mApp).sendEmail(webserviceType, uniqueId, doctorId, selectedLocationId, selectedHospitalId, emailId, this, this);
+        if (webserviceType != null)
+            WebDataServiceImpl.getInstance(mApp).sendEmail(webserviceType, uniqueId, doctorId, selectedLocationId, selectedHospitalId, emailId, this, this);
     }
 
     private void addreference(String referenceName) {
@@ -294,11 +294,9 @@ public class AddUpdateNameDialogFragment extends HealthCocoDialogFragment implem
         body.setLocationId(selectedLocationId);
         if (!Util.isNullOrBlank(uniqueId)) {
             body.setUniqueId(uniqueId);
-//            WebDataServiceImpl.getInstance(mApp).addUpdateReference(WebServiceType.UPDATE_REFERENCE, Reference.class, body, this, this);
-        }
-// else
-//            WebDataServiceImpl.getInstance(mApp).addUpdateReference(WebServiceType.ADD_REFERENCE, Reference.class, body, this, this);
-
+            WebDataServiceImpl.getInstance(mApp).addUpdateReference(WebServiceType.UPDATE_REFERENCE, Reference.class, body, this, this);
+        } else
+            WebDataServiceImpl.getInstance(mApp).addUpdateReference(WebServiceType.ADD_REFERENCE, Reference.class, body, this, this);
     }
 
     private void addDisease(String diseaseName) {
@@ -320,7 +318,7 @@ public class AddUpdateNameDialogFragment extends HealthCocoDialogFragment implem
         disease.setHospitalId(selectedHospitalId);
         disease.setLocationId(selectedLocationId);
         list.add(disease);
-//        WebDataServiceImpl.getInstance(mApp).addUpdateReference(WebServiceType.ADD_CUSTOM_HISTORY, Disease.class, list, this, this);
+        WebDataServiceImpl.getInstance(mApp).addUpdateReference(WebServiceType.ADD_CUSTOM_HISTORY, Disease.class, list, this, this);
     }
 
     private void addDirection(String name) {
@@ -329,7 +327,7 @@ public class AddUpdateNameDialogFragment extends HealthCocoDialogFragment implem
         direction.setDoctorId(doctorId);
         direction.setHospitalId(selectedHospitalId);
         direction.setLocationId(selectedLocationId);
-//        WebDataServiceImpl.getInstance(mApp).addUpdateReference(WebServiceType.ADD_DIRECTION, DrugDirection.class, direction, this, this);
+        WebDataServiceImpl.getInstance(mApp).addUpdateReference(WebServiceType.ADD_DIRECTION, DrugDirection.class, direction, this, this);
     }
 
     private void addDrugDosage(String name) {
@@ -338,7 +336,7 @@ public class AddUpdateNameDialogFragment extends HealthCocoDialogFragment implem
         dosage.setDoctorId(doctorId);
         dosage.setHospitalId(selectedHospitalId);
         dosage.setLocationId(selectedLocationId);
-//        WebDataServiceImpl.getInstance(mApp).addUpdateReference(WebServiceType.ADD_DOSAGE, DrugDosage.class, dosage, this, this);
+        WebDataServiceImpl.getInstance(mApp).addUpdateReference(WebServiceType.ADD_DOSAGE, DrugDosage.class, dosage, this, this);
     }
 
     @Override
@@ -388,8 +386,8 @@ public class AddUpdateNameDialogFragment extends HealthCocoDialogFragment implem
                     mActivity.hideLoading();
                     Util.showToast(mActivity, getResources().getString(R.string.email_sent_to) + String.valueOf(editName.getText()));
                     if (!Util.isNullOrBlank(HealthCocoConstants.SELECTED_PATIENTS_USER_ID))
-//                        LocalDataServiceImpl.getInstance(mApp).addEmailAddress(String.valueOf(editName.getText()), HealthCocoConstants.SELECTED_PATIENTS_USER_ID);
-                        break;
+                        LocalDataServiceImpl.getInstance(mApp).addEmailAddress(String.valueOf(editName.getText()), HealthCocoConstants.SELECTED_PATIENTS_USER_ID);
+                    break;
                 case ADD_DISEASE:
                     mActivity.hideLoading();
                     if (!Util.isNullOrEmptyList(response.getDataList()) && response.getDataList().get(0) instanceof Disease) {

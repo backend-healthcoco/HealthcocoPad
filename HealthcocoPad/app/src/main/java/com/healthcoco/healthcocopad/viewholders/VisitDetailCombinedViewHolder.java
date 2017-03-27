@@ -33,14 +33,10 @@ public class VisitDetailCombinedViewHolder extends HealthCocoViewHolder implemen
     private LinearLayout btClone;
     private LinearLayout btHistory;
     private LinearLayout btSaveAsTemplate;
-    private LinearLayout layoutTreatmentDiscarded;
     private TextView tvVID;
     private VisitDetailCombinedItemListener listItemClickListener;
     private TextView tvCreatedBy;
     private TextView tvVisitDate;
-    private LinearLayout layoutDiscardedTreatment;
-    private LinearLayout parentTreatmentLayout;
-    private LinearLayout containerTreatmentDetailList;
     private LinearLayout containerPrescription;
     private LinearLayout containerClinocalNotes;
     private LinearLayout containerTreatment;
@@ -102,9 +98,6 @@ public class VisitDetailCombinedViewHolder extends HealthCocoViewHolder implemen
 
     private void initTreatmentsView(View contentView) {
         containerTreatment = (LinearLayout) contentView.findViewById(R.id.container_treatments);
-//        parentTreatmentLayout = (LinearLayout) contentView.findViewById(R.id.parent_treatment_layout);
-//        containerTreatmentDetailList = (LinearLayout) contentView.findViewById(R.id.container_treatment_detail_list);
-//        layoutTreatmentDiscarded = (LinearLayout) contentView.findViewById(R.id.layout_discarded_treatment);
     }
 
     private void initListeners() {
@@ -215,50 +208,26 @@ public class VisitDetailCombinedViewHolder extends HealthCocoViewHolder implemen
         btSaveAsTemplate.setVisibility(visibility);
     }
 
-    //    private void applyTreatmentData(PatientTreatment patientTreatment) {
-//        containerTreatmentDetailList.removeAllViews();
-//        if (!Util.isNullOrEmptyList(patientTreatment.getTreatments())) {
-//            parentTreatmentLayout.setVisibility(View.VISIBLE);
-//            for (Treatments treatments : patientTreatment.getTreatments()) {
-//                TreatmentItemViewHolder view = new TreatmentItemViewHolder(mActivity);
-//                view.setData(treatments);
-//                containerDrugsList.addView(view);
-//            }
-//        } else parentTreatmentLayout.setVisibility(View.GONE);
-//        checkIsTreatmentDiscarded(patientTreatment.getDiscarded());
-//        initGrandTotalCost(patientTreatment);
-//    }
-//
-//    private void initGrandTotalCost(PatientTreatment patientTreatment) {
-//
-//    }
-//
-//
-//    private void checkIsTreatmentDiscarded(boolean isDiscarded) {
-//        if (isDiscarded)
-//            layoutDiscardedTreatment.setVisibility(View.VISIBLE);
-//        else layoutDiscardedTreatment.setVisibility(View.GONE);
-//    }
-//
-//
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.bt_sms:
-                listItemClickListener.sendSms("");
+                listItemClickListener.sendSms(visitDetail.getUniqueId());
                 break;
             case R.id.bt_edit:
-                listItemClickListener.editVisit("");
+                listItemClickListener.editVisit(visitDetail.getVisitId());
                 break;
             case R.id.bt_email:
-                listItemClickListener.sendEmail("");
+                listItemClickListener.sendEmail(visitDetail.getUniqueId());
                 break;
             case R.id.bt_print:
                 listItemClickListener.doPrint(visitDetail.getUniqueId());
                 break;
             case R.id.bt_save_as_template:
+                listItemClickListener.saveAsTemplate(visitDetail.getUniqueId());
                 break;
             case R.id.bt_clone:
+                listItemClickListener.cloneVisit(visitDetail.getUniqueId());
                 break;
         }
     }

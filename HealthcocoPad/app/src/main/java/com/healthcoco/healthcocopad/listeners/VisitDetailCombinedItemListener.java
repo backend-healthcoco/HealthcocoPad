@@ -23,4 +23,8 @@ public interface VisitDetailCombinedItemListener {
     public void editVisit(String visitId);
 
     public void setVisitHeader(View visitHeader);
+
+    public void saveAsTemplate(String uniqueId);
+
+    public void cloneVisit(String uniqueId);
 }

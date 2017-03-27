@@ -51,6 +51,7 @@ import java.util.regex.Pattern;
 public class Util {
     private static Toast visibleToast;
     private static final String TAG = Util.class.getSimpleName();
+
     /**
      * Check the device to make sure it has the Google Play Services APK. If
      * it doesn't, display a dialog that allows users to download the APK from
@@ -581,5 +582,52 @@ public class Util {
         String deviceId = Settings.Secure.getString(context.getContentResolver(),
                 Settings.Secure.ANDROID_ID);
         return deviceId;
+    }
+
+    public static String getMimeTypeOfFile(String filePath) {
+        // Check what kind of file you are trying to open, by comparing the url with extensions.
+        // When the if condition is matched, plugin sets the correct intent (mime) type,
+        // so Android knew what application to use to open the file
+        if (filePath.toString().contains(".doc") || filePath.toString().contains(".docx")) {
+            // Word document
+            return "application/msword";
+        } else if (filePath.toString().contains(".pdf")) {
+            // PDF file
+            return "application/pdf";
+        } else if (filePath.toString().contains(".ppt") || filePath.toString().contains(".pptx")) {
+            // Powerpoint file
+            return "application/vnd.ms-powerpoint";
+        } else if (filePath.toString().contains(".xls") || filePath.toString().contains(".xlsx")) {
+            // Excel file
+            return "application/vnd.ms-excel";
+        } else if (filePath.toString().contains(".zip") || filePath.toString().contains(".rar")) {
+            // WAV audio file
+            return "application/x-wav";
+        } else if (filePath.toString().contains(".rtf")) {
+            // RTF file
+            return "application/rtf";
+        } else if (filePath.toString().contains(".wav") || filePath.toString().contains(".mp3")) {
+            // WAV audio file
+            return "audio/x-wav";
+        } else if (filePath.toString().contains(".gif")) {
+            // GIF file
+            return "image/gif";
+        } else if (filePath.toString().contains(".jpg") || filePath.toString().contains(".jpeg") || filePath.toString().contains(".png")) {
+            // JPG file
+            return "image/jpeg";
+        } else if (filePath.toString().contains(".txt")) {
+            // Text file
+            return "text/plain";
+        } else if (filePath.toString().contains(".3gp") || filePath.toString().contains(".mpg") || filePath.toString().contains(".mpeg") || filePath.toString().contains(".mpe") || filePath.toString().contains(".mp4") || filePath.toString().contains(".avi")) {
+            // Video files
+            return "video/*";
+        } else {
+            //if you want you can also define the intent type for any other file
+
+            //additionally use else clause below, to manage other unknown extensions
+            //in this case, Android will show all applications installed on the device
+            //so you can choose which application to use
+            return "*/*";
+        }
     }
 }

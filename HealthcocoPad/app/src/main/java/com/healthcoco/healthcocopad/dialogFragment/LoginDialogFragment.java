@@ -186,13 +186,12 @@ public class LoginDialogFragment extends HealthCocoDialogFragment implements Vie
         WebDataServiceImpl.getInstance(mApp).loginUser(LoginResponse.class, user, this, this);
     }
 
-    @Override
     public void onErrorResponse(VolleyResponseBean volleyResponseBean, String errorMessage) {
         String errorMsg = errorMessage;
         if (volleyResponseBean != null && !Util.isNullOrBlank(volleyResponseBean.getErrMsg())) {
             errorMsg = volleyResponseBean.getErrMsg();
         }
-//        mActivity.hideLoading();
+        mActivity.hideLoading();
         Util.showToast(mActivity, errorMsg);
     }
 
