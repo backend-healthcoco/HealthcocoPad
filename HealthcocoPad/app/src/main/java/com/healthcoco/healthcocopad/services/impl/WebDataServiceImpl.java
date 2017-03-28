@@ -24,6 +24,7 @@ import com.healthcoco.healthcocopad.bean.request.RegisterNewPatientRequest;
 import com.healthcoco.healthcocopad.bean.server.Disease;
 import com.healthcoco.healthcocopad.bean.server.DoctorClinicProfile;
 import com.healthcoco.healthcocopad.bean.server.DoctorProfile;
+import com.healthcoco.healthcocopad.bean.server.Drug;
 import com.healthcoco.healthcocopad.bean.server.DrugType;
 import com.healthcoco.healthcocopad.bean.server.GCMRequest;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
@@ -878,5 +879,11 @@ public class WebDataServiceImpl implements GCMRefreshListener {
         } else {
             errorListener.onNetworkUnavailable(webServiceType);
         }
+    }
+
+    public void addDrug(Class<Drug> class1, Response.Listener<VolleyResponseBean> responseListener,
+                        GsonRequest.ErrorListener errorListener, Drug drug) {
+        getResponse(WebServiceType.ADD_DRUG, class1, WebServiceType.ADD_DRUG.getUrl(), drug, null, responseListener,
+                errorListener);
     }
 }

@@ -2848,4 +2848,74 @@ public class LocalDataServiceImpl {
         addressObj.save();
     }
 
+    public VolleyResponseBean getGlobalIncludedDosageDurationDirectionList(WebServiceType webServiceType, String doctorId, Boolean discarded, long updatedTime, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
+        volleyResponseBean.setWebServiceType(webServiceType);
+        volleyResponseBean.setIsDataFromLocal(true);
+        volleyResponseBean.setIsUserOnline(HealthCocoConstants.isNetworkOnline);
+        Integer discardedValue = null;
+        if (discarded != null) {
+            if (discarded) {
+                discardedValue = LocalDatabaseUtils.BOOLEAN_TRUE_VALUE;
+                volleyResponseBean.setLocalBackgroundTaskType(LocalBackgroundTaskType.GET_DRUG_HIDDEN_LIST);
+            } else {
+                volleyResponseBean.setLocalBackgroundTaskType(LocalBackgroundTaskType.GET_DRUG_ACTIVATED_LIST);
+
+                discardedValue = LocalDatabaseUtils.BOOLEAN_FALSE_VALUE;
+            }
+        }
+
+        try {
+            List<?> list = null;
+            Class<?> class1 = null;
+            String fieldName = "";
+            switch (webServiceType) {
+                case GET_DRUG_DOSAGE:
+                    class1 = DrugDosage.class;
+                    fieldName = LocalDatabaseUtils.KEY_DOSAGE;
+                    break;
+                case GET_DURATION_UNIT:
+                    class1 = DrugDurationUnit.class;
+                    fieldName = LocalDatabaseUtils.KEY_UNIT;
+                    break;
+                case GET_DIRECTION:
+                    class1 = DrugDirection.class;
+                    fieldName = LocalDatabaseUtils.KEY_DIRECTION;
+                    break;
+            }
+            String whereCondition = "Select * from " + StringUtil.toSQLName(class1.getSimpleName()) + " where " +
+                    "(" + LocalDatabaseUtils.KEY_DOCTOR_ID + " is null"
+                    + " OR "
+                    + LocalDatabaseUtils.KEY_DOCTOR_ID + "=\"" + doctorId + "\""
+                    + ")"
+                    + " AND "
+                    + "(" + LocalDatabaseUtils.KEY_DISCARDED + " is null"
+                    + " OR "
+                    + LocalDatabaseUtils.KEY_DISCARDED + "=" + discardedValue
+                    + ")"
+                    + " AND "
+                    + "(" + fieldName + " is NOT null"
+                    + " AND "
+                    + fieldName + "!=" + "\"\""
+                    + ")";
+
+            //specifying order by limit
+            whereCondition = whereCondition + " ORDER BY " + LocalDatabaseUtils.KEY_DOCTOR_ID + " DESC ";
+
+            LogUtils.LOGD(TAG, "Select Query " + whereCondition);
+            list = SugarRecord.findWithQuery(class1, whereCondition);
+            volleyResponseBean.setDataList(getObjectsListFromMap(list));
+            if (responseListener != null)
+                responseListener.onResponse(volleyResponseBean);
+        } catch (
+                Exception e
+                )
+
+        {
+            e.printStackTrace();
+            showErrorLocal(volleyResponseBean, errorListener);
+        }
+
+        return volleyResponseBean;
+    }
 }

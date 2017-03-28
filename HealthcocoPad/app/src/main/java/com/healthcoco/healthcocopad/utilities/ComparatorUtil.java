@@ -2,8 +2,13 @@ package com.healthcoco.healthcocopad.utilities;
 
 import android.text.TextUtils;
 
+import com.healthcoco.healthcocopad.bean.server.CityResponse;
 import com.healthcoco.healthcocopad.bean.server.Disease;
+import com.healthcoco.healthcocopad.bean.server.DrugDirection;
+import com.healthcoco.healthcocopad.bean.server.DrugDosage;
+import com.healthcoco.healthcocopad.bean.server.DrugDurationUnit;
 import com.healthcoco.healthcocopad.bean.server.HistoryDetailsResponse;
+import com.healthcoco.healthcocopad.bean.server.Reference;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.Specialities;
 import com.healthcoco.healthcocopad.bean.server.UserGroups;
@@ -17,7 +22,17 @@ import java.util.Locale;
  * Created by Shreshtha on 24-01-2017.
  */
 public class ComparatorUtil {
+    public static Comparator<Object> cityListComparator = new Comparator<Object>() {
 
+        @Override
+        public int compare(Object object1, Object object2) {
+            CityResponse city1 = (CityResponse) object1;
+            CityResponse city2 = (CityResponse) object2;
+            String cityName1 = TextUtils.isEmpty(city1.getCity()) ? "" : city1.getCity().trim().toUpperCase(Locale.getDefault());
+            String cityName2 = TextUtils.isEmpty(city2.getCity()) ? "" : city2.getCity().trim().toUpperCase(Locale.getDefault());
+            return cityName1.compareTo(cityName2);
+        }
+    };
     public static Comparator<Object> specialityListComparator = new Comparator<Object>() {
 
         @Override
@@ -92,6 +107,59 @@ public class ComparatorUtil {
                 e.printStackTrace();
             }
             return 0;
+        }
+    };
+    public static Comparator<Object> dosageListComparator = new Comparator<Object>() {
+
+        @Override
+        public int compare(Object object1, Object object2) {
+            try {
+                Date date1 = new Date(((DrugDosage) object1).getCreatedTime());
+                Date date2 = new Date(((DrugDosage) object2).getCreatedTime());
+                return date2.compareTo(date1);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return 0;
+        }
+    };
+    public static Comparator<Object> durationUnitListComparator = new Comparator<Object>() {
+
+        @Override
+        public int compare(Object object1, Object object2) {
+            try {
+                Date date1 = new Date(((DrugDurationUnit) object1).getCreatedTime());
+                Date date2 = new Date(((DrugDurationUnit) object2).getCreatedTime());
+                return date2.compareTo(date1);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return 0;
+        }
+    };
+    public static Comparator<Object> directionListComparator = new Comparator<Object>() {
+
+        @Override
+        public int compare(Object object1, Object object2) {
+            try {
+                Date date1 = new Date(((DrugDirection) object1).getCreatedTime());
+                Date date2 = new Date(((DrugDirection) object2).getCreatedTime());
+                return date2.compareTo(date1);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return 0;
+        }
+    };
+    public static Comparator<Object> referrefByNameComparator = new Comparator<Object>() {
+
+        @Override
+        public int compare(Object object1, Object object2) {
+            Reference reference1 = (Reference) object1;
+            Reference reference2 = (Reference) object2;
+            String name1 = TextUtils.isEmpty(reference1.getReference()) ? "" : reference1.getReference().trim().toUpperCase(Locale.getDefault());
+            String name2 = TextUtils.isEmpty(reference2.getReference()) ? "" : reference2.getReference().trim().toUpperCase(Locale.getDefault());
+            return name1.compareTo(name2);
         }
     };
 }

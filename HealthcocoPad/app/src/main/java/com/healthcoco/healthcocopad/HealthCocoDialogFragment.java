@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.Toolbar;
 import android.text.TextWatcher;
@@ -21,11 +22,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.healthcoco.healthcocopad.bean.server.Specialities;
+import com.healthcoco.healthcocopad.dialogFragment.AddUpdateNameDialogFragment;
 import com.healthcoco.healthcocopad.dialogFragment.CommonListDialogFragment;
+import com.healthcoco.healthcocopad.dialogFragment.CommonListDialogFragmentWithTitle;
 import com.healthcoco.healthcocopad.dialogFragment.CommonListSolarDialogFragment;
 import com.healthcoco.healthcocopad.dialogFragment.CommonOptionsDialogListFragment;
+import com.healthcoco.healthcocopad.enums.AddUpdateNameDialogType;
 import com.healthcoco.healthcocopad.enums.CommonListDialogType;
 import com.healthcoco.healthcocopad.enums.DialogType;
+import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.CommonListDialogItemClickListener;
 import com.healthcoco.healthcocopad.listeners.CommonOptionsDialogItemClickListener;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
@@ -270,5 +275,23 @@ public abstract class HealthCocoDialogFragment extends DialogFragment implements
             else
                 loadingOverlay.setVisibility(View.GONE);
         }
+    }
+
+    protected CommonListDialogFragmentWithTitle openCommonListWithTitleDialogFragment(CommonListDialogItemClickListener listener, CommonListDialogType popupType, List<?> list) {
+        CommonListDialogFragmentWithTitle commonListDialogFragmentWithTitle = new CommonListDialogFragmentWithTitle(listener, popupType, list);
+        commonListDialogFragmentWithTitle.show(mFragmentManager, commonListDialogFragmentWithTitle.getClass().getSimpleName());
+        return commonListDialogFragmentWithTitle;
+    }
+
+    protected void openAddUpdateNameDialogFragment(WebServiceType webServiceType, AddUpdateNameDialogType dialogType,
+                                                   Fragment fragment, String uniqueId, int requestCode) {
+        Bundle bundle = new Bundle();
+        bundle.putString(HealthCocoConstants.TAG_UNIQUE_ID, uniqueId);
+        bundle.putInt(HealthCocoConstants.TAG_ORDINAL_DIALOG_TYPE, dialogType.ordinal());
+        AddUpdateNameDialogFragment addUpdateNameDialogFragment = new AddUpdateNameDialogFragment();
+        addUpdateNameDialogFragment.setArguments(bundle);
+        addUpdateNameDialogFragment.setTargetFragment(fragment, requestCode);
+        addUpdateNameDialogFragment.show(mActivity.getSupportFragmentManager(),
+                addUpdateNameDialogFragment.getClass().getSimpleName());
     }
 }

@@ -269,9 +269,11 @@
                         android:paddingLeft="@dimen/item_visits_button_padding_left_right_20dp"
                         android:paddingRight="@dimen/item_visits_button_padding_left_right_20dp"
                         android:paddingTop="3dp"
+                        android:layout_gravity="center"
                         android:text="@string/fa_clone"
                         android:textColor="@drawable/text_selector_grey_blue"
-                        android:textSize="@dimen/text_size_bt_history_edit_sms_email" />
+                        android:textSize="@dimen/text_size_bt_history_edit_sms_email"
+                        android:id="@+id/textViewFontAwesome" />
                 </LinearLayout>
 
                 <LinearLayout

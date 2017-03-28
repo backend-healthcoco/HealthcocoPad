@@ -53,7 +53,6 @@ import com.healthcoco.healthcocopad.utilities.Util;
 
 import org.parceler.Parcels;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -296,7 +295,7 @@ public abstract class HealthCocoFragment extends Fragment implements GsonRequest
         Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
         intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, fragmentType.ordinal());
         if (intentData != null) {
-            intent.putExtra(HealthCocoConstants.TAG_COMMON_OPENUP_INTENT_DATA, (Serializable) intentData);
+            intent.putExtra(HealthCocoConstants.TAG_COMMON_OPENUP_INTENT_DATA, Parcels.wrap(intentData));
         }
         if (requestCode == 0)
             startActivity(intent);

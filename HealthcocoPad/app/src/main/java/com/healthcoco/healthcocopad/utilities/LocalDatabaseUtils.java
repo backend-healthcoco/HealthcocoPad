@@ -48,7 +48,9 @@ public class LocalDatabaseUtils {
     public static final String KEY_APPOINTMENT_ID = "appointment_id";
     public static final String KEY_VISITED_TIME = "visited_time";
     public static final String KEY_DISCARDED = "discarded";
-
+    public static final String KEY_DOSAGE = "dosage";
+    public static final String KEY_UNIT = "unit";
+    public static final String KEY_DIRECTION = "direction";
     public static final int BOOLEAN_FALSE_VALUE = 0;
     public static final int BOOLEAN_TRUE_VALUE = 1;
 

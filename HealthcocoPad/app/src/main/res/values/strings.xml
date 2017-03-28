@@ -638,4 +638,19 @@
     <string name="open">OPEN</string>
     <string name="new_template">New Template</string>
     <string name="template_name">Template Name</string>
+    <string name="enter_template_name">Enter Template Name</string>
+    <string name="favourite_drug_list">Favourite Drug List</string>
+    <string name="all_drug_list">All Drug List</string>
+    <string name="all_drugs">All Drugs</string>
+    <string name="my_drugs">My Drugs</string>
+    <string name="drug_type">Drug Type</string>
+    <string name="please_enter_drug_name">Please Enter Drug Name</string>
+    <string name="success_drug_added">Drug \"%s\" added Successfully</string>
+    <string name="dosage">Dosage</string>
+    <string name="duration_unit">Duration Unit</string>
+    <string name="add_drug">Add Drug</string>
+    <string name="search_direction">Search Direction</string>
+    <string name="search_duration">Search Duration</string>
+    <string name="search_frequency">Search Frequency</string>
+    <string name="no_result_found">No result found</string>
 </resources>

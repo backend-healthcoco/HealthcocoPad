@@ -375,12 +375,12 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
         LogUtils.LOGD(TAG, "save template");
         Util.checkNetworkStatus(mActivity);
         if (HealthCocoConstants.isNetworkOnline)
-            openNewTemplatesFragment(uniqueId);
+            openNewTemplatesFragment();
         else onNetworkUnavailable(null);
     }
 
-    private void openNewTemplatesFragment(String uniqueId) {
-        openCommonOpenUpActivity(CommonOpenUpFragmentType.ADD_NEW_TEMPLATE, uniqueId, REQUEST_CODE_VISITS_LIST);
+    private void openNewTemplatesFragment() {
+        openCommonOpenUpActivity(CommonOpenUpFragmentType.ADD_NEW_TEMPLATE, selectedPatient, REQUEST_CODE_VISITS_LIST);
     }
 
     @Override

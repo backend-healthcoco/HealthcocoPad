@@ -13,88 +13,46 @@
         android:layout_weight="0.6"
         android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:background="@drawable/shape_emr_item_background"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <EditText
-                android:id="@+id/edit_search"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@android:color/transparent"
-                android:drawableLeft="@drawable/icon_search_normal"
-                android:drawablePadding="8dp"
-                android:drawableStart="@drawable/icon_search_normal"
-                android:hint="@string/search"
-                android:inputType="textNoSuggestions|textFilter"
-                android:padding="10dp"
-                android:singleLine="true"
-                android:textColorHint="@color/grey_hint_color"
-                android:textSize="@dimen/edit_text_top_search_size" />
-
-            <ImageButton
-                android:id="@+id/bt_clear"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:background="@android:color/transparent"
-                android:paddingLeft="20dp"
-                android:paddingRight="10dp"
-                android:src="@drawable/tab_cancel_normal" />
-
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/tv_drug_list_lable"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:background="@color/grey_light_divider"
-            android:padding="2dp"
-            android:text="@string/drug_list"
-            android:textColor="@color/black"
-            android:textSize="15sp" />
-
-        <RelativeLayout
+        <TabHost
+            android:id="@android:id/tabhost"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
-            android:background="@color/white">
+            android:layout_weight="1">
 
-            <TextView
-                android:id="@+id/tv_no_drug_history"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="@string/no_drug_history"
-                android:textSize="@dimen/text_size_no_results"
-                android:textStyle="bold"
-                android:visibility="visible" />
+                android:orientation="vertical">
 
-            <com.healthcoco.healthcocopad.views.ListViewLoadMore
-                android:id="@+id/lv_drugs_list"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:divider="@color/grey_light_divider"
-                android:listSelector="@android:color/transparent"
-                android:overScrollMode="never" />
+                <TabWidget
+                    android:id="@android:id/tabs"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="0"
+                    android:orientation="horizontal"
+                    android:showDividers="none" />
 
-            <ProgressBar
-                android:id="@+id/progress_loading"
-                style="?android:attr/progressBarStyleSmall"
-                android:layout_width="@dimen/round_progress_bar_size"
-                android:layout_height="@dimen/round_progress_bar_size"
-                android:layout_alignParentBottom="true"
-                android:layout_centerInParent="true"
-                android:layout_gravity="center|bottom"
-                android:progressDrawable="@drawable/progress_loading"
-                android:visibility="gone" />
-        </RelativeLayout>
+                <FrameLayout
+                    android:id="@android:id/tabcontent"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="0" />
 
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1">
+
+                    <android.support.v4.view.ViewPager
+                        android:id="@+id/viewpager"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/grey_background"
+                        android:overScrollMode="never" />
+                </FrameLayout>
+            </LinearLayout>
+        </TabHost>
     </LinearLayout>
 
     <LinearLayout
@@ -114,8 +72,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_template_normal"
-                android:text="@string/templates"
+                android:layout_marginRight="5dp"
+                android:text="@string/template_name"
                 android:textColor="@color/black"
                 android:textSize="17sp" />
 
@@ -123,11 +81,12 @@
                 android:id="@+id/edit_template_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
+                android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
                 android:drawablePadding="10dp"
-                android:hint="@string/template_name"
+                android:gravity="start"
+                android:hint="@string/enter_template_name"
+                android:maxLines="1"
                 android:padding="10dp"
-                android:singleLine="true"
                 android:textColor="@color/black"
                 android:textColorHint="@color/grey_hint_color"
                 android:textSize="@dimen/edit_text_size" />
@@ -140,7 +99,7 @@
             android:layout_marginBottom="10dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:background="@drawable/shape_emr_grey_background"
+            android:background="@drawable/shape_emr_light_grey_background"
             android:orientation="horizontal"
             android:padding="@dimen/layout_padding_5dp">
 

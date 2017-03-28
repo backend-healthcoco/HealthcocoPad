@@ -22,4 +22,5 @@
         android:text="TabSubItems"
         android:textColor="@drawable/text_selector_grey_blue"
         android:textSize="@dimen/text_size_tab_indicator_home" />
+
 </LinearLayout>
