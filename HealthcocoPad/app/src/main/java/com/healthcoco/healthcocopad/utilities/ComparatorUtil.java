@@ -11,6 +11,7 @@ import com.healthcoco.healthcocopad.bean.server.HistoryDetailsResponse;
 import com.healthcoco.healthcocopad.bean.server.Reference;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.Specialities;
+import com.healthcoco.healthcocopad.bean.server.TempTemplate;
 import com.healthcoco.healthcocopad.bean.server.UserGroups;
 import com.healthcoco.healthcocopad.bean.server.VisitDetails;
 
@@ -160,6 +161,22 @@ public class ComparatorUtil {
             String name1 = TextUtils.isEmpty(reference1.getReference()) ? "" : reference1.getReference().trim().toUpperCase(Locale.getDefault());
             String name2 = TextUtils.isEmpty(reference2.getReference()) ? "" : reference2.getReference().trim().toUpperCase(Locale.getDefault());
             return name1.compareTo(name2);
+        }
+    };
+    public static Comparator<TempTemplate> templateListDateComparator = new Comparator<TempTemplate>() {
+
+        @Override
+        public int compare(TempTemplate tempTemplate1, TempTemplate tempTemplate2) {
+            try {
+                if (tempTemplate1.getCreatedTime() != null && tempTemplate2.getCreatedTime() != null) {
+                    Date date1 = new Date(tempTemplate1.getCreatedTime());
+                    Date date2 = new Date(tempTemplate2.getCreatedTime());
+                    return date2.compareTo(date1);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return 0;
         }
     };
 }

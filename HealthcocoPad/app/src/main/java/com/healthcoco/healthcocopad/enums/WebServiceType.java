@@ -29,7 +29,8 @@ public enum WebServiceType {
 
     GET_DRUG_TYPE(Method.GET, "prescription/DRUGTYPE/BOTH/?"),
 
-    ADD_DRUG(Method.POST, "prescription/drug/add/"),
+    //    ADD_DRUG(Method.POST, "prescription/drug/add/"),
+    ADD_DRUG(Method.POST, "prescription/favouriteDrug/add/"),
 
     GET_DRUGS_LIST(Method.GET, "prescription/DRUG_CUSTOM/BOTH/?discarded=false&doctorId="),
     GET_DRUGS_LIST_CUSTOM(Method.GET, "prescription/DRUGS/CUSTOM/?"),

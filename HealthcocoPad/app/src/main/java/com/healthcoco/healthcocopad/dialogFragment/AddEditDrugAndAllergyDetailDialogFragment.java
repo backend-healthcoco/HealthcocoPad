@@ -66,7 +66,7 @@ public class AddEditDrugAndAllergyDetailDialogFragment extends HealthCocoDialogF
     private EditText editSearch;
     private static final int MAX_SIZE = 25;
     private int PAGE_NUMBER = 0;
-    private ListViewLoadMore lvAllDrugsList;
+    private ListViewLoadMore lvSolarDrugsList;
     private TextView tvNoDrugHistory;
     private boolean isEndOfListAchieved = false;
     private List<DrugsListSolrResponse> drugsListSolr = new ArrayList<DrugsListSolrResponse>();
@@ -134,7 +134,7 @@ public class AddEditDrugAndAllergyDetailDialogFragment extends HealthCocoDialogF
     @Override
     public void initViews() {
         etAllergy = (EditText) view.findViewById(R.id.et_allergy);
-        lvAllDrugsList = (ListViewLoadMore) view.findViewById(R.id.lv_drugs_list);
+        lvSolarDrugsList = (ListViewLoadMore) view.findViewById(R.id.lv_drugs_list);
         lvDrugs = (ListView) view.findViewById(R.id.lv_drugs);
         editSearch = (EditText) view.findViewById(R.id.edit_search);
         initEditSearchView(R.string.search_drug, this, this);
@@ -148,7 +148,7 @@ public class AddEditDrugAndAllergyDetailDialogFragment extends HealthCocoDialogF
         lvDrugs.setAdapter(adapter);
 
         adapterSolr = new SelectDrugListSolrAdapter(mActivity, this, this);
-        lvAllDrugsList.setAdapter(adapterSolr);
+        lvSolarDrugsList.setAdapter(adapterSolr);
     }
 
     @Override
@@ -166,10 +166,10 @@ public class AddEditDrugAndAllergyDetailDialogFragment extends HealthCocoDialogF
         if (!Util.isNullOrEmptyList(list)) {
             LogUtils.LOGD(TAG, "onResponse DrugsList notifyAdapter " + list.size());
 //            Collections.sort(list, ComparatorUtil.dateComparatorDrugsSolrlist);
-            lvAllDrugsList.setVisibility(View.VISIBLE);
+            lvSolarDrugsList.setVisibility(View.VISIBLE);
             tvNoDrugHistory.setVisibility(View.GONE);
         } else {
-            lvAllDrugsList.setVisibility(View.GONE);
+            lvSolarDrugsList.setVisibility(View.GONE);
             tvNoDrugHistory.setVisibility(View.VISIBLE);
         }
         adapterSolr.setListData(list);
@@ -468,5 +468,6 @@ public class AddEditDrugAndAllergyDetailDialogFragment extends HealthCocoDialogF
 
     @Override
     public void onDrugItemClicked(Drug drugItem) {
+
     }
 }

@@ -44,7 +44,8 @@ import java.util.Locale;
  * Created by Shreshtha on 28-03-2017.
  */
 public class DrugListFragment extends HealthCocoFragment implements
-        GsonRequest.ErrorListener, Response.Listener<VolleyResponseBean>, TextWatcher, LocalDoInBackgroundListenerOptimised, LoadMorePageListener, SelectDrugItemClickListener, View.OnClickListener, AddNewDrugListener {
+        GsonRequest.ErrorListener, Response.Listener<VolleyResponseBean>, TextWatcher, LocalDoInBackgroundListenerOptimised,
+        LoadMorePageListener, View.OnClickListener, AddNewDrugListener {
     public static final int MAX_SIZE = 25;
     public static int PAGE_NUMBER = 0;
     private ListViewLoadMore lvAllDrugsList;
@@ -59,6 +60,11 @@ public class DrugListFragment extends HealthCocoFragment implements
     private RegisteredPatientDetailsUpdated selectedPatient;
     private EditText editSearch;
     private ImageButton btAddDrug;
+    private SelectDrugItemClickListener drugItemClickListener;
+
+    public DrugListFragment(SelectDrugItemClickListener drugItemClickListener) {
+        this.drugItemClickListener = drugItemClickListener;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -106,7 +112,7 @@ public class DrugListFragment extends HealthCocoFragment implements
     }
 
     private void initAdapters() {
-        adapterSolr = new SelectDrugListSolrAdapter(mActivity, this, this);
+        adapterSolr = new SelectDrugListSolrAdapter(mActivity, drugItemClickListener, this);
         lvAllDrugsList.setAdapter(adapterSolr);
     }
 
@@ -251,11 +257,6 @@ public class DrugListFragment extends HealthCocoFragment implements
     @Override
     public boolean isEndOfListAchieved() {
         return isEndOfListAchieved;
-    }
-
-    @Override
-    public void ondrugItemClick(SelectDrugItemType drugItemType, Object object) {
-
     }
 
     @Override

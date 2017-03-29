@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center">
+
+    <LinearLayout
+        android:id="@+id/container_template"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/list_margin_templates_list"
+        android:background="@drawable/shape_emr_item_background"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/tv_template_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_template_normal"
+            android:drawablePadding="5dp"
+            android:gravity="center|start"
+            android:text="Template Name"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_templates_list_template_name" />
+
+        <include layout="@layout/divider_horizontal_grey" />
+
+        <LinearLayout
+            android:id="@+id/container_drug_names"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <include layout="@layout/item_drug_name" />
+        </LinearLayout>
+    </LinearLayout>
+</FrameLayout>

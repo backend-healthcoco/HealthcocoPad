@@ -78,7 +78,7 @@
                 android:textSize="17sp" />
 
             <EditText
-                android:id="@+id/edit_template_name"
+                android:id="@+id/et_template_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
@@ -93,7 +93,7 @@
 
         </LinearLayout>
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
@@ -101,15 +101,47 @@
             android:layout_marginRight="10dp"
             android:background="@drawable/shape_emr_light_grey_background"
             android:orientation="horizontal"
-            android:padding="@dimen/layout_padding_5dp">
+            android:padding="10dp">
 
             <TextView
+                android:id="@+id/tv_drugs"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_marginRight="20dp"
+                android:gravity="center"
+                android:padding="5dp"
                 android:text="@string/drugs"
                 android:textColor="@color/black"
                 android:textSize="13sp" />
-        </LinearLayout>
+
+            <EditText
+                android:id="@+id/et_duration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_toRightOf="@+id/tv_drugs"
+                android:background="@drawable/shape_rounded_corners_item_background_dark_grey"
+                android:gravity="center"
+                android:hint="@string/duration"
+                android:maxLines="1"
+                android:maxEms="5"
+                android:padding="5dp"
+                android:textSize="13sp" />
+
+            <!--<com.healthcoco.healthcocopad.views.FontAwesomeButton-->
+            <!--android:id="@+id/bt_header_two_interaction"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:background="@android:color/transparent"-->
+            <!--android:minHeight="0dp"-->
+            <!--android:minWidth="0dp"-->
+            <!--android:padding="5dp"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:text="@string/fa_interaction_checker"-->
+            <!--android:textAllCaps="false"-->
+            <!--android:textColor="@color/orange" />-->
+        </RelativeLayout>
 
         <ListView
             android:id="@+id/lv_templates"

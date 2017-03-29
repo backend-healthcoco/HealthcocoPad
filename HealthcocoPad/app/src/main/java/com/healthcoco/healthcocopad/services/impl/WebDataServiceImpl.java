@@ -14,6 +14,7 @@ import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.DoctorProfileToSend;
 import com.healthcoco.healthcocopad.bean.VersionCheckRequest;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
+import com.healthcoco.healthcocopad.bean.request.AddDrugRequest;
 import com.healthcoco.healthcocopad.bean.request.AddEditDrugsAndAllergiesRequest;
 import com.healthcoco.healthcocopad.bean.request.AddMedicalFamilyHistoryRequest;
 import com.healthcoco.healthcocopad.bean.request.AssignGroupRequest;
@@ -882,7 +883,7 @@ public class WebDataServiceImpl implements GCMRefreshListener {
     }
 
     public void addDrug(Class<Drug> class1, Response.Listener<VolleyResponseBean> responseListener,
-                        GsonRequest.ErrorListener errorListener, Drug drug) {
+                        GsonRequest.ErrorListener errorListener, AddDrugRequest drug) {
         getResponse(WebServiceType.ADD_DRUG, class1, WebServiceType.ADD_DRUG.getUrl(), drug, null, responseListener,
                 errorListener);
     }

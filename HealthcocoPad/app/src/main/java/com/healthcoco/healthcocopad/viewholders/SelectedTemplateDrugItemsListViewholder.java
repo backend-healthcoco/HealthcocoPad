@@ -1,7 +1,6 @@
 package com.healthcoco.healthcocopad.viewholders;
 
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
@@ -12,18 +11,19 @@ import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.server.Drug;
 import com.healthcoco.healthcocopad.listeners.SelectedDrugsListItemListener;
 
-
-public class SelectedDrugItemsListViewholder extends HealthCocoViewHolder implements OnClickListener {
+/**
+ * Created by Shreshtha on 29-03-2017.
+ */
+public class SelectedTemplateDrugItemsListViewholder extends HealthCocoViewHolder implements View.OnClickListener {
 
     private final HealthCocoApplication mApp;
     private HealthCocoActivity mActivity;
-    //    private DrugItem objData;
     private Drug objData;
     private ImageButton btDelete;
     private SelectedDrugsListItemListener templateListener;
     private LinearLayout containerDrugDose;
 
-    public SelectedDrugItemsListViewholder(HealthCocoActivity mActivity, SelectedDrugsListItemListener templateListener) {
+    public SelectedTemplateDrugItemsListViewholder(HealthCocoActivity mActivity, SelectedDrugsListItemListener templateListener) {
         super(mActivity);
         this.mActivity = mActivity;
         this.templateListener = templateListener;
@@ -32,21 +32,21 @@ public class SelectedDrugItemsListViewholder extends HealthCocoViewHolder implem
 
     @Override
     public void setData(Object object) {
-//        this.objData = (DrugItem) object;
         this.objData = (Drug) object;
+
     }
 
     @Override
     public void applyData() {
         containerDrugDose.removeAllViews();
-        DrugDoseItemViewHolder view = new DrugDoseItemViewHolder(mActivity);
+        DrugDoseTemplateItemViewHolder view = new DrugDoseTemplateItemViewHolder(mActivity);
         view.setData(objData);
         containerDrugDose.addView(view);
     }
 
     @Override
     public View getContentView() {
-        LinearLayout view = (LinearLayout) inflater.inflate(R.layout.list_item_selected_drug, null);
+        LinearLayout view = (LinearLayout) inflater.inflate(R.layout.list_item_selected_drug_template, null);
         btDelete = (ImageButton) view.findViewById(R.id.bt_delete);
         containerDrugDose = (LinearLayout) view.findViewById(R.id.container_drug_dose);
         btDelete.setOnClickListener(this);
@@ -65,5 +65,4 @@ public class SelectedDrugItemsListViewholder extends HealthCocoViewHolder implem
                 break;
         }
     }
-
 }

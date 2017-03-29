@@ -14,13 +14,17 @@ import com.android.volley.Response;
 import com.healthcoco.healthcocopad.HealthCocoApplication;
 import com.healthcoco.healthcocopad.HealthCocoDialogFragment;
 import com.healthcoco.healthcocopad.R;
+import com.healthcoco.healthcocopad.adapter.SelectedDrugItemsListAdapter;
+import com.healthcoco.healthcocopad.adapter.SelectedTemplateDrugItemsListAdapter;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
+import com.healthcoco.healthcocopad.bean.request.AddDrugRequest;
 import com.healthcoco.healthcocopad.bean.server.Drug;
 import com.healthcoco.healthcocopad.bean.server.DrugDirection;
 import com.healthcoco.healthcocopad.bean.server.DrugDosage;
 import com.healthcoco.healthcocopad.bean.server.DrugDurationUnit;
 import com.healthcoco.healthcocopad.bean.server.DrugItem;
 import com.healthcoco.healthcocopad.bean.server.DrugType;
+import com.healthcoco.healthcocopad.bean.server.Duration;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.custom.AutoCompleteTextViewAdapter;
@@ -28,7 +32,6 @@ import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocopad.enums.AutoCompleteTextViewType;
 import com.healthcoco.healthcocopad.enums.CommonListDialogType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
-import com.healthcoco.healthcocopad.enums.RequestingFragmentType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.AddNewDrugListener;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
@@ -37,6 +40,7 @@ import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
+import com.healthcoco.healthcocopad.utilities.ReflectionUtil;
 import com.healthcoco.healthcocopad.utilities.Util;
 
 import java.util.ArrayList;
@@ -61,14 +65,11 @@ public class AddNewDrugDialogFragment extends HealthCocoDialogFragment
     private boolean isDurationUnitLoaded;
     private boolean isDirectionLoaded;
     private boolean isFrequencyDosageLoaded;
-    private String selectedDrugId;
-    private RequestingFragmentType requestingFragmentType;
     private CommonListDialogFragmentWithTitle commonListDialog;
     private DrugDurationUnit selectedDurationUnit;
     private DrugDosage selectedDosage;
     private DrugDirection selectedDirection;
     private AddNewDrugListener addNewDrugListener;
-    private LoginResponse doctor;
     private User user;
     private DrugType selectedDrugType;
 
@@ -98,16 +99,15 @@ public class AddNewDrugDialogFragment extends HealthCocoDialogFragment
     public void init() {
         initViews();
         initListeners();
-//            initAutoTvAdapter();
-        initData();
-        initDefaultData();
+        mActivity.showLoading(false);
+        new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_FRAGMENT_INITIALISATION_DATA, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
+
     private void initDefaultData() {
-        getListFromLocal(LocalBackgroundTaskType.GET_FRAGMENT_INITIALISATION_DATA);
-//        getListFromLocal(LocalBackgroundTaskType.GET_FREQUENCY_ACTIVATED_LIST);
-//        getListFromLocal(LocalBackgroundTaskType.GET_DIRECTION_ACTIVATED_LIST);
-//        getListFromLocal(LocalBackgroundTaskType.GET_DURATION_UNIT);
+        getListFromLocal(LocalBackgroundTaskType.GET_FREQUENCY_ACTIVATED_LIST);
+        getListFromLocal(LocalBackgroundTaskType.GET_DIRECTION_ACTIVATED_LIST);
+        getListFromLocal(LocalBackgroundTaskType.GET_DURATION_UNIT);
     }
 
     private void getListFromLocal(LocalBackgroundTaskType localBackgroundTaskType) {
@@ -174,25 +174,58 @@ public class AddNewDrugDialogFragment extends HealthCocoDialogFragment
         }
     }
 
-
     private void validateData() {
         String msg = null;
         String name = String.valueOf(editName.getText());
+        Util.showToast(mActivity, msg);
+        if (selectedDirection != null) {
+            ArrayList<DrugDirection> directionsList = new ArrayList<DrugDirection>();
+            directionsList.add(getDirection(selectedDirection));
+            selectedDrug.setDirection(directionsList);
+        }
+        if (selectedDurationUnit != null) {
+            selectedDrug.setDuration(getDuration(Util.getValidatedValueOrNull(etDuration), selectedDurationUnit));
+        }
+        if (selectedDosage != null) {
+            selectedDrug.setDosage(Util.getValidatedValueOrNull(selectedDosage.getDosage()));
+        }
         if (Util.isNullOrBlank(name))
             msg = getResources().getString(R.string.please_enter_drug_name);
         if (!Util.isNullOrBlank(msg)) {
-            Util.showToast(mActivity, msg);
         } else {
             addDrug(name);
         }
     }
 
+    private DrugDirection getDirection(DrugDirection selectedDirection) {
+        try {
+            DrugDirection direction = new DrugDirection();
+            ReflectionUtil.copy(direction, selectedDirection);
+            direction.setDiscarded(null);
+            return direction;
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        }
+        return selectedDirection;
+    }
+
+    private Duration getDuration(String value, DrugDurationUnit drugDurationUnit) {
+        if (!Util.isNullOrBlank(value) && drugDurationUnit != null && !Util.isNullOrBlank(drugDurationUnit.getUnit())) {
+            Duration duration = new Duration();
+            duration.setDurationUnit(drugDurationUnit);
+            duration.setValue(value);
+            return duration;
+        }
+        return null;
+    }
+
     private void addDrug(String name) {
         mActivity.showLoading(false);
-        Drug drug = new Drug();
-        drug.setDoctorId(user.getUniqueId());
-        drug.setLocationId(user.getForeignLocationId());
-        drug.setHospitalId(user.getForeignHospitalId());
+        AddDrugRequest addDrugRequest = new AddDrugRequest();
+        addDrugRequest.setDoctorId(user.getUniqueId());
+        addDrugRequest.setLocationId(user.getForeignLocationId());
+        addDrugRequest.setHospitalId(user.getForeignHospitalId());
 
         // setting drugtype and its doctor,hospital and location ids
         if (selectedDrugType != null) {
@@ -200,10 +233,15 @@ public class AddNewDrugDialogFragment extends HealthCocoDialogFragment
             drugType.setUniqueId(selectedDrugType.getUniqueId());
             drugType.setType(selectedDrugType.getType());
             drugType.setDoctorId("globalDoctor");
-            drug.setDrugType(drugType);
+            addDrugRequest.setDrugType(drugType);
         }
-        drug.setDrugName(name);
-        WebDataServiceImpl.getInstance((HealthCocoApplication) mActivity.getApplication()).addDrug(Drug.class, this, this, drug);
+        addDrugRequest.setDrugName(name);
+//        addDrugRequest.setDrugId(selectedDrugType.getUniqueId());
+        addDrugRequest.setDosage(selectedDrug.getDosage());
+        addDrugRequest.setDirection(selectedDrug.getDirection());
+        addDrugRequest.setDuration(selectedDrug.getDuration());
+//        WebDataServiceImpl.getInstance((HealthCocoApplication) mActivity.getApplication()).addDrug(Drug.class, this, this, addDrugRequest);
+        WebDataServiceImpl.getInstance((HealthCocoApplication) mActivity.getApplication()).addDrug(Drug.class, this, this, addDrugRequest);
     }
 
     @Override
@@ -247,6 +285,7 @@ public class AddNewDrugDialogFragment extends HealthCocoDialogFragment
                         ArrayList<Object> drugTypeList = (ArrayList<Object>) (ArrayList<?>) response.getDataList();
                         if (!Util.isNullOrEmptyList(drugTypeList))
                             initAutoTvAdapter(drugTypeList);
+                        initDefaultData();
                     }
                     break;
                 case ADD_DRUG:
@@ -356,5 +395,31 @@ public class AddNewDrugDialogFragment extends HealthCocoDialogFragment
     @Override
     public void onPostExecute(VolleyResponseBean aVoid) {
 
+    }
+
+    @Override
+    public void onDialogItemClicked(CommonListDialogType commonListDialogType, Object object) {
+        switch (commonListDialogType) {
+            case DURATION:
+                if (object instanceof DrugDurationUnit) {
+                    selectedDurationUnit = (DrugDurationUnit) object;
+                    tvDrugDurationUnit.setText(selectedDurationUnit.getUnit());
+                }
+                break;
+            case FREQUENCY:
+                if (object instanceof DrugDosage) {
+                    selectedDosage = (DrugDosage) object;
+                    tvFrequency.setText(selectedDosage.getDosage());
+                }
+                break;
+            case DIRECTION:
+                if (object instanceof DrugDirection) {
+                    selectedDirection = (DrugDirection) object;
+                    tvDirection.setText(selectedDirection.getDirection());
+                }
+                break;
+        }
+        if (commonListDialog != null)
+            commonListDialog.dismiss();
     }
 }

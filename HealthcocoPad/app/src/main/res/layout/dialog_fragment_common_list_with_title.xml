@@ -15,7 +15,9 @@
             android:id="@+id/layout_actionbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"></LinearLayout>
+            android:orientation="horizontal">
+
+        </LinearLayout>
 
         <include layout="@layout/layout_dialog_search" />
 

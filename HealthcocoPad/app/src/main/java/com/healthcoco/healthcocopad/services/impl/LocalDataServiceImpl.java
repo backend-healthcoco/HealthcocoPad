@@ -2918,4 +2918,81 @@ public class LocalDataServiceImpl {
 
         return volleyResponseBean;
     }
+
+    public void addTemplatesList(ArrayList<TempTemplate> templatesList) {
+        if (!Util.isNullOrEmptyList(templatesList)) {
+            for (TempTemplate template : templatesList) {
+                addTemplate(template);
+            }
+        }
+    }
+
+    public void addTemplate(TempTemplate template) {
+        if (!Util.isNullOrEmptyList(template.getItems())) {
+            deleteAllFrom(TempTemplate.class, LocalDatabaseUtils.KEY_UNIQUE_ID, template.getUniqueId());
+            addDrugItemsList(template.getItems(), FromTableType.ADD_TEMPLATES, template.getUniqueId());
+            template.save();
+        }
+
+    }
+
+    public void deleteTemplate(String templateId) {
+        deleteAllFrom(TempTemplate.class, LocalDatabaseUtils.KEY_UNIQUE_ID, templateId);
+        //delete rest drugs before saving
+        deletePreviousDrugs(LocalDatabaseUtils.KEY_FOREIGN_TEMPLATE_ID, templateId);
+//        delete directions for that template/prescription id before saving
+        deleteAllFrom(LinkedTableDirection.class, LocalDatabaseUtils.KEY_FOREIGN_TABLE_ID, templateId);
+    }
+
+    public TempTemplate getTemplate(String templateId) {
+        TempTemplate template = Select.from(TempTemplate.class)
+                .where(Condition.prop(LocalDatabaseUtils.KEY_UNIQUE_ID).eq(templateId),
+                        Condition.prop(LocalDatabaseUtils.KEY_DISCARDED).eq(LocalDatabaseUtils.BOOLEAN_FALSE_VALUE)).first();
+        if (template != null)
+            template.setItems(getDrugItemsList(LocalDatabaseUtils.KEY_FOREIGN_TEMPLATE_ID, template.getUniqueId()));
+        return template;
+    }
+
+    public VolleyResponseBean getTemplatesListPageWise(WebServiceType webServiceType, String doctorId,
+                                                       boolean discarded, Long updatedTime, int pageNum,
+                                                       int maxSize, String searchTerm, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
+        volleyResponseBean.setWebServiceType(webServiceType);
+        volleyResponseBean.setIsDataFromLocal(true);
+        volleyResponseBean.setIsUserOnline(HealthCocoConstants.isNetworkOnline);
+        try {
+            int discardedValue = LocalDatabaseUtils.BOOLEAN_FALSE_VALUE;
+            if (discarded)
+                discardedValue = LocalDatabaseUtils.BOOLEAN_TRUE_VALUE;
+            //forming where condition query
+            String whereCondition = "Select * from " + StringUtil.toSQLName(TempTemplate.class.getSimpleName())
+                    + " where "
+                    + LocalDatabaseUtils.KEY_DOCTOR_ID + "=\"" + doctorId + "\""
+                    + " AND "
+                    + LocalDatabaseUtils.KEY_DISCARDED + "=" + discardedValue;
+            if (!Util.isNullOrBlank(searchTerm))
+                whereCondition = whereCondition
+                        + " AND " + LocalDatabaseUtils.getSearchTermEqualsIgnoreCaseQuery(LocalDatabaseUtils.KEY_NAME, searchTerm);
+
+            //specifying order by limit and offset query
+            String conditionsLimit = " ORDER BY " + LocalDatabaseUtils.KEY_CREATED_TIME + " DESC "
+                    + " LIMIT " + maxSize
+                    + " OFFSET " + (pageNum * maxSize);
+
+            whereCondition = whereCondition + conditionsLimit;
+            LogUtils.LOGD(TAG, "Select Query " + whereCondition);
+            List<TempTemplate> list = SugarRecord.findWithQuery(TempTemplate.class, whereCondition);
+            if (!Util.isNullOrEmptyList(list))
+                for (TempTemplate template : list) {
+                    template.setItems(getDrugItemsList(LocalDatabaseUtils.KEY_FOREIGN_TEMPLATE_ID, template.getUniqueId()));
+                }
+            volleyResponseBean.setDataList(getObjectsListFromMap(list));
+            if (responseListener != null)
+                responseListener.onResponse(volleyResponseBean);
+        } catch (Exception e) {
+            e.printStackTrace();
+            showErrorLocal(volleyResponseBean, errorListener);
+        }
+        return volleyResponseBean;
+    }
 }

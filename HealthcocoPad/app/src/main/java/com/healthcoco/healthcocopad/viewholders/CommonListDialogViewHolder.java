@@ -3,11 +3,14 @@ package com.healthcoco.healthcocopad.viewholders;
 import android.view.View;
 import android.widget.TextView;
 
-import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.HealthCocoViewHolder;
+import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.server.CollegeUniversityInstitute;
 import com.healthcoco.healthcocopad.bean.server.DiagnosticTest;
+import com.healthcoco.healthcocopad.bean.server.DrugDirection;
+import com.healthcoco.healthcocopad.bean.server.DrugDosage;
+import com.healthcoco.healthcocopad.bean.server.DrugDurationUnit;
 import com.healthcoco.healthcocopad.bean.server.EducationQualification;
 import com.healthcoco.healthcocopad.bean.server.MedicalCouncil;
 import com.healthcoco.healthcocopad.bean.server.ProfessionalMembership;
@@ -72,6 +75,24 @@ public class CommonListDialogViewHolder extends HealthCocoViewHolder implements 
             case PROFESSIONAL_MEMBERSHIP:
                 ProfessionalMembership professionalMemberships = (ProfessionalMembership) objData;
                 text = professionalMemberships.getMembership();
+                break;
+            case DURATION:
+                if (objData instanceof DrugDurationUnit) {
+                    DrugDurationUnit durationUnit = (DrugDurationUnit) objData;
+                    text = durationUnit.getUnit();
+                }
+                break;
+            case DIRECTION:
+                if (objData instanceof DrugDirection) {
+                    DrugDirection durationUnit = (DrugDirection) objData;
+                    text = durationUnit.getDirection();
+                }
+                break;
+            case FREQUENCY:
+                if (objData instanceof DrugDosage) {
+                    DrugDosage drugDosage = (DrugDosage) objData;
+                    text = drugDosage.getDosage();
+                }
                 break;
         }
         tvName.setText(text);

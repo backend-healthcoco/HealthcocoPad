@@ -92,7 +92,7 @@ public class CommonListDialogFragmentWithTitle extends HealthCocoDialogFragment 
     @Override
     public void onActivityCreated(Bundle arg0) {
         super.onActivityCreated(arg0);
-        setHeight(0.95);
+        setWidthHeight(0.60, 0.80);
         init();
     }
 
@@ -461,10 +461,6 @@ public class CommonListDialogFragmentWithTitle extends HealthCocoDialogFragment 
                         if (!Util.isNullOrEmptyList(list))
                             LogUtils.LOGD(TAG, "Success onResponse receivedDurationList Size " + list.size() + " isDataFromLocal " + response.isDataFromLocal());
                         notifyAdapter(list);
-//                        if (!response.isFromLocalAfterApiSuccess() && response.isUserOnline()) {
-//                            getDataFromServer(true);
-//                            return;
-//                        }
                     } else if (!Util.isNullOrEmptyList(response.getDataList())) {
                         new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_DURATION_UNIT, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
                         response.setIsFromLocalAfterApiSuccess(true);
@@ -477,10 +473,6 @@ public class CommonListDialogFragmentWithTitle extends HealthCocoDialogFragment 
                         if (!Util.isNullOrEmptyList(list))
                             LogUtils.LOGD(TAG, "Success onResponse receivedFrequencyDosageList Size " + list.size() + " isDataFromLocal " + response.isDataFromLocal());
                         notifyAdapter(list);
-//                        if (!response.isFromLocalAfterApiSuccess() && response.isUserOnline()) {
-//                            getDataFromServer(true);
-//                            return;
-//                        }
                     } else if (!Util.isNullOrEmptyList(response.getDataList())) {
                         new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_DRUG_DOSAGE, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
                         response.setIsFromLocalAfterApiSuccess(true);
@@ -493,10 +485,6 @@ public class CommonListDialogFragmentWithTitle extends HealthCocoDialogFragment 
                         if (!Util.isNullOrEmptyList(list))
                             LogUtils.LOGD(TAG, "Success onResponse receivedDirectionsList Size " + list.size() + " isDataFromLocal " + response.isDataFromLocal());
                         notifyAdapter(list);
-//                        if (!response.isFromLocalAfterApiSuccess() && response.isUserOnline()) {
-//                            getDataFromServer(true);
-//                            return;
-//                        }
                     } else if (!Util.isNullOrEmptyList(response.getDataList())) {
                         new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_DIRECTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
                         response.setIsFromLocalAfterApiSuccess(true);

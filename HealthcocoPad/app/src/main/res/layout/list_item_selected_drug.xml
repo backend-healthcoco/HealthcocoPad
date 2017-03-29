@@ -34,5 +34,4 @@
             android:scaleType="fitEnd"
             android:src="@android:drawable/presence_offline" />
     </FrameLayout>
-
 </LinearLayout>

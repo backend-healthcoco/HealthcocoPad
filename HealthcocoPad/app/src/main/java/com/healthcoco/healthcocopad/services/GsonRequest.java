@@ -100,7 +100,6 @@ public class GsonRequest extends JsonRequest<VolleyResponseBean> {
         this.headersAdded.put(DevConfig.buildType.getOAUTH_KEY(), "Basic " + Util.getConvertedBase64Value(DevConfig.buildType.getOAuthValue()));
         this.responseClass = classUser;
         this.errorListener = errorListener;
-
     }
 
     @Override
