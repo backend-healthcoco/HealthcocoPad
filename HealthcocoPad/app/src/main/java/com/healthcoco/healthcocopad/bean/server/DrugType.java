@@ -4,8 +4,10 @@ import com.healthcoco.healthcocopad.utilities.StringUtil;
 import com.orm.SugarRecord;
 import com.orm.annotation.Unique;
 
-import java.io.Serializable;
+import org.parceler.Parcel;
 
+import java.io.Serializable;
+@Parcel
 public class DrugType extends SugarRecord implements Serializable {
     public static String TABLE_NAME = " " + StringUtil.toSQLName(DrugType.class.getSimpleName());
     @Unique

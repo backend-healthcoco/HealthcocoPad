@@ -21,6 +21,7 @@ import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.adapter.PatientDetailVisitAdapter;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
+import com.healthcoco.healthcocopad.bean.server.Prescription;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.bean.server.VisitDetails;
@@ -371,16 +372,17 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
     }
 
     @Override
-    public void saveAsTemplate(String uniqueId) {
+    public void saveAsTemplate(Prescription prescription) {
         LogUtils.LOGD(TAG, "save template");
         Util.checkNetworkStatus(mActivity);
         if (HealthCocoConstants.isNetworkOnline)
-            openNewTemplatesFragment();
+            openNewTemplatesFragment(prescription);
         else onNetworkUnavailable(null);
     }
 
-    private void openNewTemplatesFragment() {
-        openCommonOpenUpActivity(CommonOpenUpFragmentType.ADD_NEW_TEMPLATE, selectedPatient, REQUEST_CODE_VISITS_LIST);
+    private void openNewTemplatesFragment(Prescription prescription) {
+//        openCommonOpenUpActivity(CommonOpenUpFragmentType.ADD_NEW_TEMPLATE, prescription, REQUEST_CODE_VISITS_LIST);
+        openCommonOpenUpActivity(CommonOpenUpFragmentType.ADD_NEW_TEMPLATE, null, REQUEST_CODE_VISITS_LIST);
     }
 
     @Override

@@ -6,9 +6,11 @@ import com.orm.SugarRecord;
 import com.orm.annotation.Ignore;
 import com.orm.annotation.Unique;
 
+import org.parceler.Parcel;
+
 import java.io.Serializable;
 import java.util.List;
-
+@Parcel
 public class Drug extends SugarRecord implements Serializable {
     public static String TABLE_NAME = " " + StringUtil.toSQLName(Drug.class.getSimpleName());
     private static final String GENERIC_NAME_SEPARATOR = ", ";

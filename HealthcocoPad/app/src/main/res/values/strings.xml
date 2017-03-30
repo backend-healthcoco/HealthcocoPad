@@ -654,4 +654,8 @@
     <string name="search_frequency">Search Frequency</string>
     <string name="no_result_found">No result found</string>
     <string name="no_templates_added">No Template Added</string>
+    <string name="write_insruction_text">Write an instruction</string>
+    <string name="please_enter_template_name">Please Enter Template name</string>
+    <string name="please_add_drugs_for_template">Please Add Drugs for template&#160;</string>
+    <string name="success_template_added">Template \"%s\" added Successfully</string>
 </resources>

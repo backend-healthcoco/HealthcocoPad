@@ -24,6 +24,7 @@ import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.request.AddEditDrugsAndAllergiesRequest;
 import com.healthcoco.healthcocopad.bean.server.Drug;
 import com.healthcoco.healthcocopad.bean.server.DrugDirection;
+import com.healthcoco.healthcocopad.bean.server.DrugItem;
 import com.healthcoco.healthcocopad.bean.server.DrugType;
 import com.healthcoco.healthcocopad.bean.server.DrugsAndAllergies;
 import com.healthcoco.healthcocopad.bean.server.DrugsListSolrResponse;
@@ -75,7 +76,7 @@ public class AddEditDrugAndAllergyDetailDialogFragment extends HealthCocoDialogF
     private boolean isLoadingFromSearch;
     private String lastTextSearched;
     private boolean isInitialLoading = true;
-    private LinkedHashMap<String, Drug> drugsListHashMap = new LinkedHashMap<>();
+    private LinkedHashMap<String, DrugItem> drugsListHashMap = new LinkedHashMap<>();
     private SelectedDrugItemsListAdapter adapter;
     private HistoryDetailsResponse historyDetailsResponse;
 
@@ -123,9 +124,11 @@ public class AddEditDrugAndAllergyDetailDialogFragment extends HealthCocoDialogF
                 List<Drug> drugs = drugsAndAllergies.getDrugs();
                 if (!Util.isNullOrEmptyList(drugs)) {
                     for (Drug drug : drugs) {
-                        drugsListHashMap.put(drug.getUniqueId(), drug);
+                        DrugItem drugItem = new DrugItem();
+                        drugItem.setDrug(drug);
+                        drugsListHashMap.put(drug.getUniqueId(), drugItem);
                     }
-                    notifyAdapter(new ArrayList<Drug>(drugsListHashMap.values()));
+                    notifyAdapter(new ArrayList<DrugItem>(drugsListHashMap.values()));
                 }
             }
         }
@@ -176,7 +179,7 @@ public class AddEditDrugAndAllergyDetailDialogFragment extends HealthCocoDialogF
         adapterSolr.notifyDataSetChanged();
     }
 
-    private void notifyAdapter(ArrayList<Drug> drugsListMap) {
+    private void notifyAdapter(ArrayList<DrugItem> drugsListMap) {
         adapter.setListData(drugsListMap);
         adapter.notifyDataSetChanged();
     }
@@ -340,7 +343,7 @@ public class AddEditDrugAndAllergyDetailDialogFragment extends HealthCocoDialogF
     }
 
     public void addSelectedDrug(SelectDrugItemType selectDrugItemType, Object object) {
-        Drug selectedDrug = new Drug();
+        DrugItem selectedDrug = new DrugItem();
         String drugId = "";
         String drugName = "";
         String drugType = "";
@@ -350,11 +353,6 @@ public class AddEditDrugAndAllergyDetailDialogFragment extends HealthCocoDialogF
         String durationtext = "";
         String dosage = "";
         String instructions = "";
-        String drugCode = "";
-        String doctorId = "";
-        String hospitalId = "";
-        String locationId = "";
-        String patientId = "";
         List<GenericName> genericNames = null;
         switch (selectDrugItemType) {
             case ALL_DRUGS:
@@ -363,10 +361,6 @@ public class AddEditDrugAndAllergyDetailDialogFragment extends HealthCocoDialogF
                 drugName = drugsSolr.getDrugName();
                 drugType = drugsSolr.getDrugType();
                 drugTypeId = drugsSolr.getDrugTypeId();
-                drugCode = drugsSolr.getDrugCode();
-                doctorId = drugsSolr.getDoctorId();
-                hospitalId = drugsSolr.getHospitalId();
-                locationId = drugsSolr.getLocationId();
                 if (!Util.isNullOrEmptyList(drugsSolr.getDirection()))
                     directionId = drugsSolr.getDirection().get(0).getUniqueId();
                 if (drugsSolr.getDuration() != null && drugsSolr.getDuration().getDurationUnit() != null) {
@@ -378,20 +372,18 @@ public class AddEditDrugAndAllergyDetailDialogFragment extends HealthCocoDialogF
                 break;
         }
 
-        selectedDrug.setDrugName(drugName);
-        selectedDrug.setUniqueId(drugId);
-        selectedDrug.setDoctorId(doctorId);
-        selectedDrug.setHospitalId(hospitalId);
-        selectedDrug.setLocationId(locationId);
-        selectedDrug.setGenericNames(genericNames);
+        Drug drug = new Drug();
+        drug.setDrugName(drugName);
+        drug.setUniqueId(drugId);
+        drug.setGenericNames(genericNames);
 
         DrugType drugTypeObj = new DrugType();
         drugTypeObj.setUniqueId(drugTypeId);
         drugTypeObj.setType(drugType);
-        selectedDrug.setDrugType(drugTypeObj);
+        drug.setDrugType(drugTypeObj);
 
+        selectedDrug.setDrug(drug);
         selectedDrug.setDrugId(drugId);
-        selectedDrug.setDrugCode(drugCode);
         selectedDrug.setDosage(dosage);
         selectedDrug.setDirection(getDirectionsListFromLocal(directionId));
         selectedDrug.setDuration(getDurationAndUnit(durationtext, durationUnitId));
@@ -401,10 +393,10 @@ public class AddEditDrugAndAllergyDetailDialogFragment extends HealthCocoDialogF
         }
     }
 
-    public void addDrug(Drug drug) {
+    public void addDrug(DrugItem drug) {
         if (drug != null) {
-            drugsListHashMap.put(drug.getUniqueId(), drug);
-            notifyAdapter(new ArrayList<Drug>(drugsListHashMap.values()));
+            drugsListHashMap.put(drug.getDrugId(), drug);
+            notifyAdapter(new ArrayList<DrugItem>(drugsListHashMap.values()));
         }
     }
 
@@ -435,11 +427,11 @@ public class AddEditDrugAndAllergyDetailDialogFragment extends HealthCocoDialogF
     }
 
     @Override
-    public void onDeleteItemClicked(Drug drug) {
+    public void onDeleteItemClicked(DrugItem drug) {
         showConfirmationAlert(drug);
     }
 
-    private void showConfirmationAlert(final Drug drug) {
+    private void showConfirmationAlert(final DrugItem drug) {
         final AlertDialog.Builder alertBuilder = new AlertDialog.Builder(mActivity);
         alertBuilder.setTitle(R.string.confirm);
         alertBuilder.setMessage(R.string.confirm_remove_drug);
@@ -450,7 +442,7 @@ public class AddEditDrugAndAllergyDetailDialogFragment extends HealthCocoDialogF
             public void onClick(DialogInterface dialog, int which) {
                 try {
                     drugsListHashMap.remove(drug.getDrugId());
-                    notifyAdapter(new ArrayList<Drug>(drugsListHashMap.values()));
+                    notifyAdapter(new ArrayList<DrugItem>(drugsListHashMap.values()));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -467,7 +459,7 @@ public class AddEditDrugAndAllergyDetailDialogFragment extends HealthCocoDialogF
     }
 
     @Override
-    public void onDrugItemClicked(Drug drugItem) {
+    public void onDrugItemClicked(DrugItem drugItem) {
 
     }
 }

@@ -119,13 +119,13 @@
                 android:id="@+id/et_duration"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="80dp"
                 android:layout_toRightOf="@+id/tv_drugs"
                 android:background="@drawable/shape_rounded_corners_item_background_dark_grey"
                 android:gravity="center"
                 android:hint="@string/duration"
-                android:maxLines="1"
                 android:maxEms="5"
+                android:maxLines="1"
                 android:padding="5dp"
                 android:textSize="13sp" />
 

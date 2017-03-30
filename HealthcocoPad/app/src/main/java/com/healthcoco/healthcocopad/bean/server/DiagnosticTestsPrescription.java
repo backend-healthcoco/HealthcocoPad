@@ -5,11 +5,14 @@ import com.orm.SugarRecord;
 import com.orm.annotation.Ignore;
 import com.orm.annotation.Unique;
 
+import org.parceler.Parcel;
+
 import java.io.Serializable;
 
 /**
  * Created by neha on 15/04/16.
  */
+@Parcel
 public class DiagnosticTestsPrescription extends SugarRecord implements Serializable {
     public static String TABLE_NAME = " " + StringUtil.toSQLName(DiagnosticTestsPrescription.class.getSimpleName());
     private String foreignTableId;

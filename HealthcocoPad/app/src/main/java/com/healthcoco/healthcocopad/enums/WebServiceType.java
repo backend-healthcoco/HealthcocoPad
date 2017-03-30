@@ -44,7 +44,7 @@ public enum WebServiceType {
     GET_DIRECTION(Method.GET,
             "prescription/DRUGDIRECTION/BOTH/?"),
 
-    ADD_TEMPLATE(Method.POST, "prescription/templateHandheld/add/"),
+    ADD_TEMPLATE(Method.POST, "prescription/template/add/"),
     TEMP_REGISTER_CUSTOMER(Method.POST, "api/v1/user/register"),
 
     GET_TEMPLATES_LIST(Method.GET, "prescription/templates/?"),

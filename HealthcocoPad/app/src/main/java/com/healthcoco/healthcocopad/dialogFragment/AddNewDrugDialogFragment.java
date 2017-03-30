@@ -14,8 +14,6 @@ import com.android.volley.Response;
 import com.healthcoco.healthcocopad.HealthCocoApplication;
 import com.healthcoco.healthcocopad.HealthCocoDialogFragment;
 import com.healthcoco.healthcocopad.R;
-import com.healthcoco.healthcocopad.adapter.SelectedDrugItemsListAdapter;
-import com.healthcoco.healthcocopad.adapter.SelectedTemplateDrugItemsListAdapter;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.request.AddDrugRequest;
 import com.healthcoco.healthcocopad.bean.server.Drug;
@@ -102,7 +100,6 @@ public class AddNewDrugDialogFragment extends HealthCocoDialogFragment
         mActivity.showLoading(false);
         new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_FRAGMENT_INITIALISATION_DATA, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
-
 
     private void initDefaultData() {
         getListFromLocal(LocalBackgroundTaskType.GET_FREQUENCY_ACTIVATED_LIST);

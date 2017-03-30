@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.healthcoco.healthcocopad.HealthCocoApplication;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.server.Drug;
+import com.healthcoco.healthcocopad.bean.server.DrugItem;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.Util;
 
@@ -23,7 +24,7 @@ public class DrugDoseItemViewHolder extends LinearLayout {
 //    private TextView tvDuration;
 //    private TextView tvInstruction;
 //    private DrugItem drugItem;
-    private Drug drugItem;
+    private DrugItem drugItem;
     private View instructionView;
     private PopupWindow instructionsPopupWindow;
 //    private LinearLayout containerDirectionDosageDuration;
@@ -58,15 +59,15 @@ public class DrugDoseItemViewHolder extends LinearLayout {
 //        containerDirectionDosageDuration = (LinearLayout) findViewById(R.id.container_dosage_direction_duration);
     }
 
-    public void setData(Drug item) {
+    public void setData(DrugItem item) {
         this.drugItem = item;
         Drug drug = null;
-        if (drugItem != null) {
-            drug = drugItem;
+        if (drugItem.getDrug() != null) {
+            drug = drugItem.getDrug();
             drugItem.setDrugId(drug.getUniqueId());
         } else if (!Util.isNullOrBlank(drugItem.getDrugId())) {
-            drugItem = LocalDataServiceImpl.getInstance(mApp).getDrug(drugItem.getDrugId());
-//            drugItem.setDrug(drug);
+            drug = LocalDataServiceImpl.getInstance(mApp).getDrug(drugItem.getDrugId());
+            drugItem.setDrug(drug);
         }
         if (drug != null) {
             String drugName = Util.getValidatedValue(drug.getDrugName());

@@ -6,6 +6,7 @@ import android.widget.BaseAdapter;
 
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.bean.server.Drug;
+import com.healthcoco.healthcocopad.bean.server.DrugItem;
 import com.healthcoco.healthcocopad.listeners.SelectedDrugsListItemListener;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.healthcoco.healthcocopad.viewholders.SelectedDrugItemsListViewholder;
@@ -17,7 +18,7 @@ import java.util.ArrayList;
  * Created by Shreshtha on 29-03-2017.
  */
 public class SelectedTemplateDrugItemsListAdapter extends BaseAdapter {
-    private ArrayList<Drug> list;
+    private ArrayList<DrugItem> list;
     private HealthCocoActivity mActivity;
     private SelectedTemplateDrugItemsListViewholder holder;
     private SelectedDrugsListItemListener templateListener;
@@ -60,7 +61,7 @@ public class SelectedTemplateDrugItemsListAdapter extends BaseAdapter {
         return convertView;
     }
 
-    public void setListData(ArrayList<Drug> list) {
+    public void setListData(ArrayList<DrugItem> list) {
         this.list = list;
     }
 }

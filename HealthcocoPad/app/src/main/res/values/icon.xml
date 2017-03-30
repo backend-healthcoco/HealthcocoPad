@@ -44,4 +44,6 @@
     <string name="fa_arrow_filled_right">&#xf0da;</string>
     <string name="rupees">\u20B9</string>
     <string name="fa_interaction_checker">Interaction Checker&#160;&#160;&#160;&#160;&#xf071;</string>
+    <string name="fa_info_text">&#xf05a;</string>
+    <string name="fa_align_text">&#xf039;</string>
 </resources>

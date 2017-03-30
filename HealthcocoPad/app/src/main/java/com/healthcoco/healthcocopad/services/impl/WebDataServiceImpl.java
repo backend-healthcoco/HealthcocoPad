@@ -887,4 +887,9 @@ public class WebDataServiceImpl implements GCMRefreshListener {
         getResponse(WebServiceType.ADD_DRUG, class1, WebServiceType.ADD_DRUG.getUrl(), drug, null, responseListener,
                 errorListener);
     }
+
+    public void addTempLate(Class<TempTemplate> class1, TempTemplate template, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        getResponse(WebServiceType.ADD_TEMPLATE, class1, WebServiceType.ADD_TEMPLATE.getUrl(), template, null, responseListener,
+                errorListener);
+    }
 }

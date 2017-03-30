@@ -224,7 +224,10 @@ public class VisitDetailCombinedViewHolder extends HealthCocoViewHolder implemen
                 listItemClickListener.doPrint(visitDetail.getUniqueId());
                 break;
             case R.id.bt_save_as_template:
-                listItemClickListener.saveAsTemplate(visitDetail.getUniqueId());
+                for (Prescription prescription :
+                        visitDetail.getPrescriptions()) {
+                    listItemClickListener.saveAsTemplate(prescription);
+                }
                 break;
             case R.id.bt_clone:
                 listItemClickListener.cloneVisit(visitDetail.getUniqueId());

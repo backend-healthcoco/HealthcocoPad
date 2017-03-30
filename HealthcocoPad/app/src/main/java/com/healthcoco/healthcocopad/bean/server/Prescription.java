@@ -6,9 +6,11 @@ import com.orm.SugarRecord;
 import com.orm.annotation.Ignore;
 import com.orm.annotation.Unique;
 
+import org.parceler.Parcel;
+
 import java.util.ArrayList;
 import java.util.List;
-
+@Parcel
 public class Prescription extends SugarRecord {
     public static String TABLE_NAME = " " + StringUtil.toSQLName(Prescription.class.getSimpleName());
     @Unique

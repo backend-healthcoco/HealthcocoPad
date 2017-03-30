@@ -199,7 +199,6 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
         if (tvTitle != null) tvTitle.setText(titleId);
     }
 
-
     public void initActionBar(ActionbarType actionbarType, int title, ActionbarLeftRightActionTypeDrawables leftAction, ActionbarLeftRightActionTypeDrawables rightAction) {
         if (actionbarType == ActionbarType.HIDDEN) {
             hideActionBar();
