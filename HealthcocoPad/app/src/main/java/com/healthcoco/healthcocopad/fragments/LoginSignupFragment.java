@@ -16,7 +16,7 @@ import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.adapter.InitialScreenViewPagerAapter;
 import com.healthcoco.healthcocopad.dialogFragment.LoginDialogFragment;
-import com.healthcoco.healthcocopad.dialogFragment.SignUpDialogFragment;
+import com.healthcoco.healthcocopad.dialogFragment.ContactUsDialogFragment;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.InitialScreenType;
 
@@ -27,6 +27,8 @@ import java.util.ArrayList;
  */
 public class LoginSignupFragment extends HealthCocoFragment implements View.OnClickListener, ViewPager.OnPageChangeListener {
     private static final String TAG_ORDINAL = "ordinal";
+    public static boolean IS_FROM_CONTINUE_SIGNUP_SUCCESS = false;
+    public static final String INTENT_SIGNUP_SUCCESS = "com.healthcoco.SIGNUP_SUCCESS";
     private Button btJoin;
     private Button btSignIn;
     private ViewPager viewPager;
@@ -118,7 +120,7 @@ public class LoginSignupFragment extends HealthCocoFragment implements View.OnCl
                 openDialogFragment(new LoginDialogFragment());
                 break;
             case R.id.bt_join:
-                openDialogFragment(new SignUpDialogFragment());
+                openDialogFragment(new ContactUsDialogFragment());
                 break;
         }
     }

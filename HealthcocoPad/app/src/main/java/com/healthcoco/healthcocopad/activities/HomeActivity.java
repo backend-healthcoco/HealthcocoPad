@@ -19,9 +19,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.Response;
+import com.google.gson.Gson;
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
+import com.healthcoco.healthcocopad.HealthcocoFCMListener;
 import com.healthcoco.healthcocopad.R;
+import com.healthcoco.healthcocopad.bean.NotificationResponse;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.DoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
@@ -49,6 +52,7 @@ import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
+import com.healthcoco.healthcocopad.utilities.MyExceptionHandler;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.healthcoco.healthcocopad.views.SlidingPaneDrawerLayout;
 
@@ -84,16 +88,16 @@ public class HomeActivity extends HealthCocoActivity implements View.OnClickList
 
     private void init() {
         Intent intent = getIntent();
-//        String notifficationResponseData = intent.getStringExtra(MyGcmListenerService.TAG_NOTIFICATION_RESPONSE);
-//        if (!Util.isNullOrBlank(notifficationResponseData)) {
-//            openNotificationResponseDataFragment(notifficationResponseData);
-//        }
+        String notifficationResponseData = intent.getStringExtra(HealthcocoFCMListener.TAG_NOTIFICATION_RESPONSE);
+        if (!Util.isNullOrBlank(notifficationResponseData)) {
+            openNotificationResponseDataFragment(notifficationResponseData);
+        }
         initViews();
         initListeners();
         Util.checkNetworkStatus(this);
-//        boolean exitApp = intent.getBooleanExtra(MyExceptionHandler.TAG_EXIT, false);
-//        if (exitApp)
-//            finish();
+        boolean exitApp = intent.getBooleanExtra(MyExceptionHandler.TAG_EXIT, false);
+        if (exitApp)
+            finish();
         if (HealthCocoConstants.isNetworkOnline) {
             mApp.clearLoginSignupActivityStack();
             boolean isFromLoginSignup = intent.getBooleanExtra(HealthCocoConstants.TAG_IS_FROM_LOGIN_SIGNUP, false);
@@ -105,6 +109,14 @@ public class HomeActivity extends HealthCocoActivity implements View.OnClickList
             }
         }
         refreshFragments();
+    }
+
+    private void openNotificationResponseDataFragment(String notificationResponseData) {
+        if (!Util.isNullOrBlank(notificationResponseData)) {
+            NotificationResponse notificationResponse = new Gson().fromJson(notificationResponseData, NotificationResponse.class);
+            if (notificationResponse.getNotificationType() != null)
+                openCommonOpenUpActivity(CommonOpenUpFragmentType.NOTIFICATION_RESPONSE_DATA, HealthcocoFCMListener.TAG_NOTIFICATION_RESPONSE, notificationResponseData, 0);
+        }
     }
 
     private void refreshFragments() {

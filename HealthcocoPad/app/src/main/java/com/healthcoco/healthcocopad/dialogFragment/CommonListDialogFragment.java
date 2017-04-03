@@ -161,6 +161,9 @@ public class CommonListDialogFragment extends HealthCocoDialogFragment implement
             case SPECIALITY:
                 Collections.sort(list, ComparatorUtil.specialityListComparator);
                 break;
+            case REFERRED_BY:
+                Collections.sort(list, ComparatorUtil.referrefByNameComparator);
+                break;
         }
     }
 

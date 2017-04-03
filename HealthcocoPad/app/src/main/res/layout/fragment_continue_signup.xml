@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/app_logo" />
+
+
+        <!--<com.healthcoco.healthcocoplus.views.AppLogoTextView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginLeft="10dp"-->
+        <!--android:text="@string/healthcoco_caps"-->
+        <!--android:textColor="@color/blue_action_bar"-->
+        <!--android:textSize="@dimen/text_size_logo_login_signup_app_name"-->
+        <!--android:textStyle="bold" />-->
+
+        <!--<TextView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="center"-->
+        <!--android:layout_marginLeft="1dp"-->
+        <!--android:fontFamily="sans-serif-light"-->
+        <!--android:text="@string/plus"-->
+        <!--android:textColor="@color/green_logo"-->
+        <!--android:textSize="@dimen/text_size_logo_login_signup_app_name_plus" />-->
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center|top"
+            android:orientation="vertical"
+            android:padding="15dp">
+
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/login_sign_up_edit_text_bottom_padding"
+                android:theme="@style/TextLabelLayoutStyle">
+
+                <EditText
+                    android:id="@+id/edit_clinic_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
+                    android:hint="@string/clinic_name"
+                    android:inputType="textCapSentences"
+                    android:paddingBottom="@dimen/login_edit_text_bottom_padding"
+                    android:paddingTop="@dimen/login_edit_text_bottom_padding"
+                    android:singleLine="true"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/grey_hint_color"
+                    android:textSize="@dimen/text_size_signup" />
+            </android.support.design.widget.TextInputLayout>
+
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/login_sign_up_edit_text_bottom_padding"
+                android:theme="@style/TextLabelLayoutStyle">
+
+                <EditText
+                    android:id="@+id/edit_clinic_address"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
+                    android:hint="@string/clinic_address"
+                    android:inputType="textCapWords"
+                    android:paddingBottom="@dimen/login_edit_text_bottom_padding"
+                    android:paddingTop="@dimen/login_edit_text_bottom_padding"
+                    android:singleLine="true"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/grey_hint_color"
+                    android:textSize="@dimen/text_size_signup" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/login_sign_up_edit_text_bottom_padding"
+                android:theme="@style/TextLabelLayoutStyle">
+
+                <EditText
+                    android:id="@+id/edit_registration_number"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
+                    android:hint="@string/registration_number"
+                    android:paddingBottom="@dimen/login_edit_text_bottom_padding"
+                    android:paddingTop="@dimen/login_edit_text_bottom_padding"
+                    android:singleLine="true"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/grey_hint_color"
+                    android:textSize="@dimen/text_size_signup" />
+            </android.support.design.widget.TextInputLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/login_sign_up_edit_text_bottom_padding"
+                android:text="@string/city"
+                android:textColor="@color/grey_hint_color"
+                android:textSize="@dimen/text_size_floating_label"
+                android:visibility="invisible" />
+
+            <TextView
+                android:id="@+id/edit_city"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
+                android:clickable="true"
+                android:drawableRight="@drawable/arrow_down_drug"
+                android:hint="@string/city"
+                android:paddingBottom="@dimen/login_edit_text_bottom_padding"
+                android:paddingTop="@dimen/login_edit_text_bottom_padding"
+                android:textColor="@color/black"
+                android:textColorHint="@color/grey_hint_color"
+                android:textSize="@dimen/text_size_signup" />
+
+            <com.healthcoco.healthcocopad.views.HealthCocoButton
+                android:id="@+id/bt_join"
+                style="@style/ButtonLoginSignupStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="@string/join"
+                android:textAllCaps="false"
+                android:textSize="@dimen/text_size_btn_login_signup" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

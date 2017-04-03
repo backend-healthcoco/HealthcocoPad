@@ -11,6 +11,7 @@ import com.google.gson.GsonBuilder;
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.HealthCocoApplication;
 import com.healthcoco.healthcocopad.R;
+import com.healthcoco.healthcocopad.bean.DoctorContactUs;
 import com.healthcoco.healthcocopad.bean.DoctorProfileToSend;
 import com.healthcoco.healthcocopad.bean.VersionCheckRequest;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
@@ -19,6 +20,7 @@ import com.healthcoco.healthcocopad.bean.request.AddEditDrugsAndAllergiesRequest
 import com.healthcoco.healthcocopad.bean.request.AddMedicalFamilyHistoryRequest;
 import com.healthcoco.healthcocopad.bean.request.AssignGroupRequest;
 import com.healthcoco.healthcocopad.bean.request.ClinicImageToSend;
+import com.healthcoco.healthcocopad.bean.request.DoctorSignupHandheldContinueRequest;
 import com.healthcoco.healthcocopad.bean.request.ProfessionalMembershipRequest;
 import com.healthcoco.healthcocopad.bean.request.ProfessionalStatementRequest;
 import com.healthcoco.healthcocopad.bean.request.RegisterNewPatientRequest;
@@ -72,6 +74,23 @@ public class WebDataServiceImpl implements GCMRefreshListener {
             mHandler = new Handler(mHandlerThread.getLooper());
         }
         return mInstance;
+    }
+
+    public void sendContactUsRequest(Class<?> class1, DoctorContactUs doctorContactUs, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        WebServiceType webServiceType = WebServiceType.DOCTOR_CONTACT_US;
+        Util.checkNetworkStatus(mApp);
+        if (HealthCocoConstants.isNetworkOnline) {
+            String url = webServiceType.getUrl();
+            getResponse(webServiceType, class1, url, doctorContactUs, null, responseListener,
+                    errorListener);
+        } else {
+            showUserOffline(webServiceType, responseListener);
+        }
+    }
+
+    public void signUpContinueVerification(Class<?> class1, DoctorSignupHandheldContinueRequest object, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        WebServiceType webServiceType = WebServiceType.SIGN_UP_CONTINUE_VERIFICATION;
+        getResponse(webServiceType, class1, webServiceType.getUrl(), object, null, responseListener, errorListener);
     }
 
     public void checkVersion(Class<Integer> class1, VersionCheckRequest versionCheckRequest, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {

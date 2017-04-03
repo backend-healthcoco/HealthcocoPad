@@ -5,7 +5,7 @@ package com.healthcoco.healthcocopad.utilities;
  */
 public class HealthCocoConstants {
     public static final String NO_NAME_FLAG = "#";
-
+    public static final String TAG_DOCTOR_USER_ID = "doctorUserId";
     public static final String PARAM_IS_MOBILE_APP = "&isMobileApp=true";
     public static final String TAG_IS_FROM_LOGIN_SIGNUP = "isFromLoginSignUp";
     public static final String TAG_BROADCAST_EXTRA = "broadcastExtra";
@@ -60,6 +60,7 @@ public class HealthCocoConstants {
     public static final int RESULT_CODE_VERIFY_OTP = 141;
     public static final int RESULT_CODE_DOCTOR_PERSONAL_HISTORY_DETAIL = 142;
     public static final int RESULT_CODE_DRUGS_AND_ALLERGIES_DETAIL = 143;
+    public static final int RESULT_CODE_CONTINUE_SIGNUP = 144;
     public static int RESULT_CODE_SIGNUP_ALREADY_REGISTERED = 123;
     public static final int RESULT_CODE_GROUPS_LIST = 124;
     public static final int RESULT_CODE_SEARCH_NUMBER_RESULTS = 125;

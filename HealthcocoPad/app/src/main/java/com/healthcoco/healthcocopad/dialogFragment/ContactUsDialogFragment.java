@@ -1,14 +1,11 @@
 package com.healthcoco.healthcocopad.dialogFragment;
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,7 +16,7 @@ import com.android.volley.Response;
 import com.healthcoco.healthcocopad.HealthCocoDialogFragment;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
-import com.healthcoco.healthcocopad.activities.HomeActivity;
+import com.healthcoco.healthcocopad.bean.DoctorContactUs;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.Specialities;
 import com.healthcoco.healthcocopad.custom.AutoCompleteTextViewAdapter;
@@ -27,10 +24,12 @@ import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocopad.enums.AutoCompleteTextViewType;
 import com.healthcoco.healthcocopad.enums.CommonListDialogType;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
+import com.healthcoco.healthcocopad.enums.DeviceType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.LocalTabelType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.enums.WebViewType;
+import com.healthcoco.healthcocopad.fragments.LoginSignupFragment;
 import com.healthcoco.healthcocopad.listeners.CommonListDialogItemClickListener;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
 import com.healthcoco.healthcocopad.services.GsonRequest;
@@ -50,7 +49,7 @@ import static com.healthcoco.healthcocopad.enums.WebServiceType.GET_SPECIALITIES
  * Created by Shreshtha on 19-01-2017.
  */
 
-public class SignUpDialogFragment extends HealthCocoDialogFragment implements View.OnClickListener, GsonRequest.ErrorListener, Response.Listener<VolleyResponseBean>, CommonListDialogItemClickListener, LocalDoInBackgroundListenerOptimised {
+public class ContactUsDialogFragment extends HealthCocoDialogFragment implements View.OnClickListener, GsonRequest.ErrorListener, Response.Listener<VolleyResponseBean>, CommonListDialogItemClickListener, LocalDoInBackgroundListenerOptimised {
     private Button bt_cancel;
     private EditText editName;
     private EditText editMobileNo;
@@ -58,7 +57,6 @@ public class SignUpDialogFragment extends HealthCocoDialogFragment implements Vi
     private EditText editCity;
     private TextView tvSpeciality;
     private ArrayList<Specialities> specialitiesResponse;
-    private CommonListDialogFragment commonListDialogFragment;
     private boolean openSpecialitiesScreen;
     private AutoCompleteTextView autoTvTitle;
     private RadioGroup radioGroupGender;
@@ -77,9 +75,6 @@ public class SignUpDialogFragment extends HealthCocoDialogFragment implements Vi
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        getDialog().setCanceledOnTouchOutside(false);
         view = inflater.inflate(R.layout.dialog_fragment_login, container, false);
         super.onCreateView(inflater, container, savedInstanceState);
         return view;
@@ -92,6 +87,7 @@ public class SignUpDialogFragment extends HealthCocoDialogFragment implements Vi
         if (intent != null)
             isFromLoginScreen = intent.getBooleanExtra(TAG_IS_FROM_LOGIN_SCREEN, false);
         init();
+        setWidthHeight(0.60, 0.70);
     }
 
     public void init() {
@@ -186,7 +182,6 @@ public class SignUpDialogFragment extends HealthCocoDialogFragment implements Vi
         WebDataServiceImpl.getInstance(mApp).getSpecialities(Specialities.class, updatedTime, this, this);
     }
 
-
     private void validateData() {
         ArrayList<View> errorViewList = new ArrayList<>();
         String msg = null;
@@ -198,28 +193,28 @@ public class SignUpDialogFragment extends HealthCocoDialogFragment implements Vi
         String city = Util.getValidatedValueOrNull(editCity);
 
         if (Util.isNullOrBlank(name)) {
-            errorViewList.add(editName);
             msg = getResources().getString(R.string.please_enter_name);
+            errorViewList.add(editName);
         } else if (checkedRadioButton == null) {
             msg = getResources().getString(R.string.please_select_gender);
         } else if (Util.isNullOrBlank(mobileNo)) {
-            errorViewList.add(editMobileNo);
             msg = getResources().getString(R.string.please_enter_mobile_no);
-        } else if (!Util.isValidMobileNo(mobileNo)) {
             errorViewList.add(editMobileNo);
+        } else if (!Util.isValidMobileNo(mobileNo)) {
             msg = getResources().getString(R.string.please_enter_valid_mobile_no);
+            errorViewList.add(editMobileNo);
         } else if (Util.isNullOrBlank(emailAddress)) {
-            errorViewList.add(editEmailAddress);
             msg = getResources().getString(R.string.please_enter_email_address);
-        } else if (!Util.isValidEmail(emailAddress)) {
             errorViewList.add(editEmailAddress);
+        } else if (!Util.isValidEmail(emailAddress)) {
             msg = getResources().getString(R.string.please_enter_valid_email_address);
+            errorViewList.add(editEmailAddress);
         } else if (Util.isNullOrBlank(speciality)) {
-            errorViewList.add(tvSpeciality);
             msg = getResources().getString(R.string.please_select_speciality);
+            errorViewList.add(tvSpeciality);
         } else if (Util.isNullOrBlank(city)) {
-            errorViewList.add(editCity);
             msg = getResources().getString(R.string.please_select_city);
+            errorViewList.add(editCity);
         }
 
         if (Util.isNullOrBlank(msg)) {
@@ -229,12 +224,12 @@ public class SignUpDialogFragment extends HealthCocoDialogFragment implements Vi
         }
     }
 
-    private void sendContactUsRequest(String name, String s, String mobileNo, String emailAddress, String speciality, String city) {
+    private void sendContactUsRequest(String name, String gender, String mobileNo, String emailAddress, final String speciality, String city) {
         mActivity.showLoading(false);
-//        DoctorContactUs doctorContactUs = new DoctorContactUs(Util.getValidatedValueOrNull(autoTvTitle), name, gender, mobileNo, emailAddress, new ArrayList<String>() {{
-//            add(speciality);
-//        }}, city);
-//        WebDataServiceImpl.getInstance(mApp).sendContactUsRequest(String.class, doctorContactUs, this, this);
+        DoctorContactUs doctorContactUs = new DoctorContactUs(Util.getValidatedValueOrNull(autoTvTitle), name, gender, mobileNo, emailAddress, new ArrayList<String>() {{
+            add(speciality);
+        }}, city, DeviceType.ANDROID);
+        WebDataServiceImpl.getInstance(mApp).sendContactUsRequest(String.class, doctorContactUs, this, this);
     }
 
     /**
@@ -260,7 +255,7 @@ public class SignUpDialogFragment extends HealthCocoDialogFragment implements Vi
         if (volleyResponseBean != null && !Util.isNullOrBlank(volleyResponseBean.getErrMsg())) {
             errorMsg = volleyResponseBean.getErrMsg();
         }
-//        mActivity.hideLoading();
+        mActivity.hideLoading();
         Util.showToast(mActivity, errorMsg);
     }
 
@@ -295,17 +290,26 @@ public class SignUpDialogFragment extends HealthCocoDialogFragment implements Vi
                     if (openSpecialitiesScreen)
                         onClick(tvSpeciality);
                     break;
+                case DOCTOR_CONTACT_US:
+                    LogUtils.LOGD(TAG, "Success DOCTOR_CONTACT_US");
+                    if (response.getData() != null && response.getData() instanceof String) {
+                        LogUtils.LOGD(TAG, "Success DOCTOR_CONTACT_US send broadcast");
+                        sendBroadcastToOriginScreen((String) response.getData());
+                        ((CommonOpenUpActivity) mActivity).finish();
+                    }
+                    break;
             }
         }
         mActivity.hideLoading();
     }
 
-    private void openHomeActivity() {
-        Intent intent = new Intent(mActivity, HomeActivity.class);
-        intent.putExtra(HealthCocoConstants.TAG_IS_FROM_LOGIN_SIGNUP, true);
-        startActivity(intent);
-        getDialog().dismiss();
-        mActivity.finish();
+    private void sendBroadcastToOriginScreen(String message) {
+        if (isFromLoginScreen)
+            Util.sendBroadcast(mApp, LoginDialogFragment.INTENT_SIGNUP_SUCCESS, message);
+        else {
+            LoginSignupFragment.IS_FROM_CONTINUE_SIGNUP_SUCCESS = true;
+            Util.sendBroadcast(mApp, LoginSignupFragment.INTENT_SIGNUP_SUCCESS, message);
+        }
     }
 
     @Override

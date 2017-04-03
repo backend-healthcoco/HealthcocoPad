@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.Toolbar;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -49,18 +50,23 @@ public abstract class HealthCocoDialogFragment extends DialogFragment implements
     protected HealthCocoActivity mActivity;
     protected FragmentManager mFragmentManager;
     protected HealthCocoApplication mApp;
-    protected boolean isBottomOptionsDialog;
-    private CommonListDialogFragment commonListDialogFragment;
+    protected CommonListDialogFragment commonListDialogFragment;
     private Toolbar toolbar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         getDialog().setCanceledOnTouchOutside(false);
         TAG = getClass().getSimpleName();
         mActivity = (HealthCocoActivity) getActivity();
         mApp = (HealthCocoApplication) mActivity.getApplication();
         mFragmentManager = getFragmentManager();
+        view.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        view.setFocusable(true);
+        view.setFocusableInTouchMode(true);
+        view.requestFocus();
+        setupUI(view);
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
@@ -293,5 +299,28 @@ public abstract class HealthCocoDialogFragment extends DialogFragment implements
         addUpdateNameDialogFragment.setTargetFragment(fragment, requestCode);
         addUpdateNameDialogFragment.show(mActivity.getSupportFragmentManager(),
                 addUpdateNameDialogFragment.getClass().getSimpleName());
+    }
+
+    public void setupUI(final View view) {
+        try {
+            //Set up touch listener for non-text box views to hide keyboard.
+            if (!(view instanceof EditText)) {
+                view.setOnTouchListener(new View.OnTouchListener() {
+                    public boolean onTouch(View v, MotionEvent event) {
+                        hideKeyboard(view);
+                        return false;
+                    }
+                });
+            }
+            //If a layout container, iterate over children and seed recursion.
+            if (view instanceof ViewGroup) {
+                for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
+                    View innerView = ((ViewGroup) view).getChildAt(i);
+                    setupUI(innerView);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

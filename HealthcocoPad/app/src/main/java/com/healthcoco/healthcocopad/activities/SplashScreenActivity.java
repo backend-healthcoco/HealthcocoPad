@@ -12,6 +12,7 @@ import android.view.Display;
 
 import com.android.volley.Response;
 import com.crashlytics.android.Crashlytics;
+import com.healthcoco.healthcocopad.HealthcocoFCMListener;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.enums.AppType;
@@ -43,12 +44,21 @@ public class SplashScreenActivity extends HealthCocoActivity implements GsonRequ
     private Handler handler;
     private static final int SPLASH_TIME = 2000;
     private Runnable runnable;
+    private String notificationResponseData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_splash_screen);
+        Intent intent = getIntent();
+        notificationResponseData = intent.getStringExtra(HealthcocoFCMListener.TAG_NOTIFICATION_RESPONSE);
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        notificationResponseData = intent.getStringExtra(HealthcocoFCMListener.TAG_NOTIFICATION_RESPONSE);
     }
 
     @Override
@@ -111,14 +121,14 @@ public class SplashScreenActivity extends HealthCocoActivity implements GsonRequ
         if (doctor != null && doctor.getUser() != null && !Util.isNullOrBlank(doctor.getUser().getUniqueId()) && doctor.getUser().getUserState() == UserState.USERSTATECOMPLETE) {
             openHomeActivity();
         } else {
-//            initGCM();
+            initGCM();
             openLoginSignUpActivity();
         }
     }
 
     private void openHomeActivity() {
         Intent intent = new Intent(this, HomeActivity.class);
-//        intent.putExtra(MyGcmListenerService.TAG_NOTIFICATION_RESPONSE, notificationResponseData);
+        intent.putExtra(HealthcocoFCMListener.TAG_NOTIFICATION_RESPONSE, notificationResponseData);
         startActivity(intent);
         finish();
     }
@@ -161,13 +171,11 @@ public class SplashScreenActivity extends HealthCocoActivity implements GsonRequ
             switch (response.getWebServiceType()) {
                 case VERSION_CONTROL_CHECK:
                     if (response.getData() != null) {
-//                        initGCM();
                         Integer versionCheckFlag = Util.getIntValue(response.getData());
                         if (versionCheckFlag == VersionCheckType.MAJOR.getVersionFlag() || versionCheckFlag == VersionCheckType.MINOR.getVersionFlag()) {
                             showAlert(VersionCheckType.MAJOR);
                         } else if (versionCheckFlag == VersionCheckType.PATCH.getVersionFlag()) {
                             showAlert(VersionCheckType.PATCH);
-//                            openNextActivity();
                         } else
                             launchNextActivity();
                         break;
@@ -226,5 +234,4 @@ public class SplashScreenActivity extends HealthCocoActivity implements GsonRequ
         if (handler != null && runnable != null)
             handler.removeCallbacks(runnable);
     }
-
 }

@@ -83,6 +83,7 @@ import com.healthcoco.healthcocopad.utilities.Util;
 import com.healthcoco.healthcocopad.views.FontAwesomeButton;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -724,6 +725,18 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
         intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, fragmentType.ordinal());
         if (intentData != null) {
             intent.putExtras((Intent) intentData);
+        }
+        if (requestCode == 0)
+            startActivity(intent);
+        else
+            startActivityForResult(intent, requestCode);
+    }
+
+    public void openCommonOpenUpActivity(CommonOpenUpFragmentType fragmentType, String intentTag, Object intentData, int requestCode) {
+        Intent intent = new Intent(this, CommonOpenUpActivity.class);
+        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, fragmentType.ordinal());
+        if (intentData != null) {
+            intent.putExtra(intentTag, (Serializable) intentData);
         }
         if (requestCode == 0)
             startActivity(intent);

@@ -14,17 +14,17 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.android.volley.Response;
-import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.HealthCocoDialogFragment;
+import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.activities.HomeActivity;
+import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.enums.WebViewType;
 import com.healthcoco.healthcocopad.services.GsonRequest;
-import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.EditTextTextViewErrorUtil;
@@ -63,7 +63,7 @@ public class LoginDialogFragment extends HealthCocoDialogFragment implements Vie
         super.onActivityCreated(savedInstanceState);
         init();
         preFillForm();
-        setWidthHeight(0.60, 0.85);
+        setWidthHeight(0.60, 0.70);
     }
 
     private void preFillForm() {
@@ -112,7 +112,6 @@ public class LoginDialogFragment extends HealthCocoDialogFragment implements Vie
                 if (HealthCocoConstants.isNetworkOnline) {
                     validateData();
                 } else Util.showToast(mActivity, R.string.user_offline);
-//                openHomeActivity();
                 break;
             case R.id.bt_forgot_password:
                 openResetPasswordDialogFragment(Util.getValidatedValue(String.valueOf(editUserName.getText())));
@@ -160,7 +159,7 @@ public class LoginDialogFragment extends HealthCocoDialogFragment implements Vie
             msg = getResources().getString(R.string.please_enter_email_id_And_password_to_login);
             errorViewList.add(editUserName);
             errorViewList.add(editPassword);
-//            editUserName.setError(msg);
+            editUserName.setError(msg);
         } else if (Util.isNullOrBlank(userName)) {
             msg = getResources().getString(R.string.please_enter_email_id_to_login);
             errorViewList.add(editUserName);
@@ -168,8 +167,8 @@ public class LoginDialogFragment extends HealthCocoDialogFragment implements Vie
             msg = getResources().getString(R.string.please_enter_valid_email_address);
             errorViewList.add(editUserName);
         } else if (Util.isNullOrBlank(password)) {
-            errorViewList.add(editPassword);
             msg = getResources().getString(R.string.please_enter_password_to_login);
+            errorViewList.add(editPassword);
         }
         if (Util.isNullOrBlank(msg))
             loginUser(userName, password);
@@ -225,15 +224,15 @@ public class LoginDialogFragment extends HealthCocoDialogFragment implements Vie
         mActivity.hideLoading();
     }
 
-    private void openContinueSignUpFragment(LoginResponse doctor) {
+    private void openContinueSignUpFragment(LoginResponse loginResponse) {
         LogUtils.LOGD(TAG, "Open Continue Signup");
-//        Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
-//        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.CONTINUE_SIGN_UP.ordinal());
-//        intent.putExtra(ContinueSignUpFragment.TAG_IS_FROM_LOGIN_SCREEN, true);
-//        if (loginResponse != null && loginResponse.getUser() != null)
-//            intent.putExtra(HealthCocoConstants.TAG_DOCTOR_USER_ID, loginResponse.getUser().getUniqueId());
-//        startActivity(intent);
-//        ((CommonOpenUpActivity) mActivity).finish();
+        Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
+        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.CONTINUE_SIGN_UP.ordinal());
+        intent.putExtra(ContinueSignUpDialogFragment.TAG_IS_FROM_LOGIN_SCREEN, true);
+        if (loginResponse != null && loginResponse.getUser() != null)
+            intent.putExtra(HealthCocoConstants.TAG_DOCTOR_USER_ID, loginResponse.getUser().getUniqueId());
+        startActivity(intent);
+        getDialog().dismiss();
     }
 
     private void openHomeActivity() {
