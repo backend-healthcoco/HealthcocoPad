@@ -22,6 +22,7 @@ import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.adapter.PatientDetailVisitAdapter;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.Prescription;
+import com.healthcoco.healthcocopad.bean.server.Records;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.bean.server.VisitDetails;
@@ -388,6 +389,12 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
     @Override
     public void cloneVisit(String uniqueId) {
 
+    }
+
+    @Override
+    public void openRecord(Records records) {
+        if (!Util.isNullOrBlank(records.getRecordsUrl()))
+            mActivity.openEnlargedImageDialogFragment(records.getRecordsUrl());
     }
 
     private void checkForEmailAndSend(String emailAddress) {

@@ -232,6 +232,12 @@ public class VisitDetailCombinedViewHolder extends HealthCocoViewHolder implemen
             case R.id.bt_clone:
                 listItemClickListener.cloneVisit(visitDetail.getUniqueId());
                 break;
+            case R.id.bt_open:
+                for (Records records :
+                        visitDetail.getRecords()) {
+                    listItemClickListener.openRecord(records);
+                }
+                break;
         }
     }
 }

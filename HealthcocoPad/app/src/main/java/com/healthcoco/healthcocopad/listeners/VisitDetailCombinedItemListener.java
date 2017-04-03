@@ -3,6 +3,7 @@ package com.healthcoco.healthcocopad.listeners;
 import android.view.View;
 
 import com.healthcoco.healthcocopad.bean.server.Prescription;
+import com.healthcoco.healthcocopad.bean.server.Records;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.User;
 
@@ -28,4 +29,6 @@ public interface VisitDetailCombinedItemListener {
     public void saveAsTemplate(Prescription prescription);
 
     public void cloneVisit(String uniqueId);
+
+    public void openRecord(Records records);
 }

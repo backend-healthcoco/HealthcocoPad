@@ -26,6 +26,8 @@ public class HealthCocoConstants {
     public static final String PARAM_TAG_GENERATE = "/generate/";
     public static final String PARAM_TAG_VERIFY = "/verify/";
     public static final String TAG_PERSONAL_HISTORY = "personalHistory";
+    public static final String PARAM_CHANGE_STATE = "/changeState";
+    public static final String PARAM_TAG_ADD = "/add/";
     public static final int REQUEST_CODE_CONTACTS_DETAIL = 100;
     public static final int RESULT_CODE_ADD_PRESCIPTION = 101;
     public static final int REQUEST_CODE_CAMERA = 102;

@@ -915,6 +915,17 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
         alertBuilder.show();
     }
 
+    public void openAddUpdateNameDialogFragment(WebServiceType webServiceType, AddUpdateNameDialogType dialogType, String uniqueId) {
+        Bundle bundle = new Bundle();
+        bundle.putString(HealthCocoConstants.TAG_UNIQUE_ID, uniqueId);
+        bundle.putInt(HealthCocoConstants.TAG_ORDINAL_DIALOG_TYPE, dialogType.ordinal());
+        bundle.putInt(HealthCocoConstants.TAG_ORDINAL_WEB_SERVICE_TYPE, webServiceType.ordinal());
+        AddUpdateNameDialogFragment addUpdateNameDialogFragment = new AddUpdateNameDialogFragment();
+        addUpdateNameDialogFragment.setArguments(bundle);
+        addUpdateNameDialogFragment.show(getSupportFragmentManager(),
+                addUpdateNameDialogFragment.getClass().getSimpleName());
+    }
+
     public void openAddUpdateNameDialogFragment(WebServiceType webServiceType, AddUpdateNameDialogType dialogType,
                                                 Fragment fragment, User user, String uniqueId, int requestCode) {
         Bundle bundle = new Bundle();

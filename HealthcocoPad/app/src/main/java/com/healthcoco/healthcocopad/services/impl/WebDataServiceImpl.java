@@ -40,6 +40,7 @@ import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.bean.server.UserGroups;
 import com.healthcoco.healthcocopad.enums.BooleanTypeValues;
 import com.healthcoco.healthcocopad.enums.LocalTabelType;
+import com.healthcoco.healthcocopad.enums.RecordState;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.GCMRefreshListener;
 import com.healthcoco.healthcocopad.services.GsonRequest;
@@ -910,5 +911,31 @@ public class WebDataServiceImpl implements GCMRefreshListener {
     public void addTempLate(Class<TempTemplate> class1, TempTemplate template, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         getResponse(WebServiceType.ADD_TEMPLATE, class1, WebServiceType.ADD_TEMPLATE.getUrl(), template, null, responseListener,
                 errorListener);
+    }
+
+    public void changeRecordState(Class<?> class1, String recordId, RecordState recordState, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        WebServiceType webServiceType = WebServiceType.CHANGE_RECORD_STATE;
+        Util.checkNetworkStatus(mApp);
+        if (HealthCocoConstants.isNetworkOnline) {
+            String url = webServiceType.getUrl() + recordId + "/" + recordState + HealthCocoConstants.PARAM_CHANGE_STATE;
+            getResponse(webServiceType, class1, url, null, null, responseListener,
+                    errorListener);
+        } else {
+            showUserOffline(webServiceType, responseListener);
+        }
+    }
+    public void discardRecord(Class<?> class1, String recordId, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        String url = WebServiceType.DISCARD_REPORT.getUrl() + recordId + HealthCocoConstants.PARAM_TAG_DELETE;
+        getResponse(WebServiceType.DISCARD_REPORT, class1, url, null, null, responseListener,
+                errorListener);
+    }
+    public void addToHistory(Class<?> class1, WebServiceType webServiceType, String uniqueId, String patientId, String doctorId, String locationId, String hospitalId, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        String url = webServiceType.getUrl() + uniqueId + "/" + patientId + "/" + doctorId + "/" + locationId + "/" + hospitalId + HealthCocoConstants.PARAM_TAG_ADD;
+        getResponse(webServiceType, class1, url, null, null, responseListener, errorListener);
+    }
+
+    public void removeFromHistory(Class<?> class1, WebServiceType webServiceType, String uniqueId, String patientId, String doctorId, String locationId, String hospitalId, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        String url = webServiceType.getUrl() + uniqueId + "/" + patientId + "/" + doctorId + "/" + locationId + "/" + hospitalId;
+        getResponse(webServiceType, class1, url, null, null, responseListener, errorListener);
     }
 }

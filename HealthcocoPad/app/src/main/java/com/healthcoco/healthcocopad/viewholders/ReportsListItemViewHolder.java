@@ -14,9 +14,11 @@ import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.HealthCocoViewHolder;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
+import com.healthcoco.healthcocopad.bean.server.Prescription;
 import com.healthcoco.healthcocopad.bean.server.Records;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.custom.OptionsPopupWindow;
+import com.healthcoco.healthcocopad.enums.AddUpdateNameDialogType;
 import com.healthcoco.healthcocopad.enums.OptionsTypePopupWindow;
 import com.healthcoco.healthcocopad.enums.RecordState;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
@@ -24,6 +26,8 @@ import com.healthcoco.healthcocopad.listeners.CommonEMRItemClickListener;
 import com.healthcoco.healthcocopad.listeners.ImageLoadedListener;
 import com.healthcoco.healthcocopad.listeners.VisitDetailCombinedItemListener;
 import com.healthcoco.healthcocopad.services.GsonRequest;
+import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
+import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
 import com.healthcoco.healthcocopad.utilities.DownloadImageFromUrlUtil;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
@@ -276,12 +280,11 @@ public class ReportsListItemViewHolder extends HealthCocoViewHolder
                     mActivity.openEnlargedImageDialogFragment(record.getRecordsUrl());
                 break;
             case R.id.bt_email:
-//                commonEmrClickListener.onEmailClicked(record);
                 Util.checkNetworkStatus(mActivity);
                 if (HealthCocoConstants.isNetworkOnline)
-//                    mActivity.openAddUpdateNameDialogFragment(WebServiceType.SEND_EMAIL_REPORTS, AddUpdateNameDialogType.EMAIL, record.getUniqueId());
-//                else onNetworkUnavailable(null);
-                    break;
+                    mActivity.openAddUpdateNameDialogFragment(WebServiceType.SEND_EMAIL_REPORTS, AddUpdateNameDialogType.EMAIL, record.getUniqueId());
+                else onNetworkUnavailable(null);
+                break;
             case R.id.bt_options:
                 popupWindow.showOptionsWindow(v);
                 break;
@@ -299,16 +302,16 @@ public class ReportsListItemViewHolder extends HealthCocoViewHolder
             case R.id.bt_print:
             case R.id.tv_print:
                 LogUtils.LOGD(TAG, "Print");
-//                if (detailCombinedItemListener != null) {
-//                    detailCombinedItemListener.doPrint("");
-//                } else {
-                Util.checkNetworkStatus(mActivity);
-                if (HealthCocoConstants.isNetworkOnline) {
-                    mActivity.openEnlargedImageDialogFragment(true, record.getRecordsUrl());
-//                        mActivity.showLoading(false);
-//                        WebDataServiceImpl.getInstance(mApp).getPdfUrl(String.class, WebServiceType.GET_REPORT_PDF_URL, record.getUniqueId(), this, this);
-                } else onNetworkUnavailable(null);
-//                }
+                if (detailCombinedItemListener != null) {
+                    detailCombinedItemListener.doPrint("");
+                } else {
+                    Util.checkNetworkStatus(mActivity);
+                    if (HealthCocoConstants.isNetworkOnline) {
+                        mActivity.openEnlargedImageDialogFragment(true, record.getRecordsUrl());
+                        mActivity.showLoading(false);
+                        WebDataServiceImpl.getInstance(mApp).getPdfUrl(String.class, WebServiceType.GET_REPORT_PDF_URL, record.getUniqueId(), this, this);
+                    } else onNetworkUnavailable(null);
+                }
                 popupWindow.dismiss();
                 break;
             case R.id.bt_approve:
@@ -329,9 +332,8 @@ public class ReportsListItemViewHolder extends HealthCocoViewHolder
     }
 
     private void changeRecordsState(RecordState recordState) {
-//        mActivity.showLoading(false);
-//        WebDataServiceImpl.getInstance(mApp).changeRecordsStateordState(Records.class, record.getUniqueId(), recordState, this, this);
-
+        mActivity.showLoading(false);
+        WebDataServiceImpl.getInstance(mApp).changeRecordState(Records.class, record.getUniqueId(), recordState, this, this);
     }
 
     private void showConfirmationAlert(final int viewId, String title, String msg) {
@@ -368,22 +370,22 @@ public class ReportsListItemViewHolder extends HealthCocoViewHolder
 
     public void onDiscardedClicked(Object object) {
         Records record = (Records) object;
-//        if (commonEmrClickListener != null)
-//            commonEmrClickListener.showLoading(true);
-//        WebDataServiceImpl.getInstance(mApp).discardRecord(Records.class, record.getUniqueId(), this, this);
+        if (commonEmrClickListener != null)
+            commonEmrClickListener.showLoading(true);
+        WebDataServiceImpl.getInstance(mApp).discardRecord(Records.class, record.getUniqueId(), this, this);
     }
 
     public void onAddRemoveHistoryClicked(Object object) {
-//        Records record = (Records) object;
-//        if (!record.getInHistory()) {
-//            if (commonEmrClickListener != null)
-//                commonEmrClickListener.showLoading(true);
-//            WebDataServiceImpl.getInstance(mApp).addToHistory(Records.class, WebServiceType.ADD_TO_HISTORY_REPORT, record.getUniqueId(), HealthCocoConstants.SELECTED_PATIENTS_USER_ID, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(), this, this);
-//        } else {
-//            if (commonEmrClickListener != null)
-//                commonEmrClickListener.showLoading(true);
-//            WebDataServiceImpl.getInstance(mApp).removeFromHistory(Prescription.class, WebServiceType.REMOVE_HISTORY_REPORT, record.getUniqueId(), HealthCocoConstants.SELECTED_PATIENTS_USER_ID, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(), this, this);
-//        }
+        Records record = (Records) object;
+        if (!record.getInHistory()) {
+            if (commonEmrClickListener != null)
+                commonEmrClickListener.showLoading(true);
+            WebDataServiceImpl.getInstance(mApp).addToHistory(Records.class, WebServiceType.ADD_TO_HISTORY_REPORT, record.getUniqueId(), HealthCocoConstants.SELECTED_PATIENTS_USER_ID, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(), this, this);
+        } else {
+            if (commonEmrClickListener != null)
+                commonEmrClickListener.showLoading(true);
+            WebDataServiceImpl.getInstance(mApp).removeFromHistory(Prescription.class, WebServiceType.REMOVE_HISTORY_REPORT, record.getUniqueId(), HealthCocoConstants.SELECTED_PATIENTS_USER_ID, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(), this, this);
+        }
     }
 
     @Override
