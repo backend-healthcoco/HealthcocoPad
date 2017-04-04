@@ -21,12 +21,14 @@ import com.healthcoco.healthcocopad.bean.server.Prescription;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.custom.OptionsPopupWindow;
+import com.healthcoco.healthcocopad.enums.AddUpdateNameDialogType;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.OptionsTypePopupWindow;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.CommonEMRItemClickListener;
 import com.healthcoco.healthcocopad.listeners.VisitDetailCombinedItemListener;
 import com.healthcoco.healthcocopad.services.GsonRequest;
+import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
@@ -272,9 +274,9 @@ public class PrescriptionListItemViewHolder extends HealthCocoViewHolder impleme
                 if (HealthCocoConstants.isNetworkOnline)
                     if (detailCombinedItemListener != null)
                         detailCombinedItemListener.sendEmail("");
-//                    else
-//                        mActivity.openAddUpdateNameDialogFragment(WebServiceType.SEND_EMAIL_PRESCRIPTION, AddUpdateNameDialogType.EMAIL, prescription.getUniqueId());
-                    else onNetworkUnavailable(null);
+                    else
+                        mActivity.openAddUpdateNameDialogFragment(WebServiceType.SEND_EMAIL_PRESCRIPTION, AddUpdateNameDialogType.EMAIL, prescription.getUniqueId());
+                else onNetworkUnavailable(null);
                 break;
             case R.id.bt_options:
                 popupWindow.showOptionsWindow(v);
@@ -299,7 +301,7 @@ public class PrescriptionListItemViewHolder extends HealthCocoViewHolder impleme
                     Util.checkNetworkStatus(mActivity);
                     if (HealthCocoConstants.isNetworkOnline) {
                         mActivity.showLoading(false);
-//                        WebDataServiceImpl.getInstance(mApp).getPdfUrl(String.class, WebServiceType.GET_PRESCRIPTION_PDF_URL, prescription.getUniqueId(), this, this);
+                        WebDataServiceImpl.getInstance(mApp).getPdfUrl(String.class, WebServiceType.GET_PRESCRIPTION_PDF_URL, prescription.getUniqueId(), this, this);
                     } else onNetworkUnavailable(null);
                 }
                 popupWindow.dismiss();
@@ -429,10 +431,10 @@ public class PrescriptionListItemViewHolder extends HealthCocoViewHolder impleme
                         onAddRemoveHistoryClicked();
                         break;
                     case R.id.bt_sms:
-//                        mActivity.showLoading(false);
-//                        WebDataServiceImpl.getInstance(mApp).sendSms(WebServiceType.SEND_SMS_PRESCRIPTION, prescription.getUniqueId(),
-//                                user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(),
-//                                selectedPatient.getMobileNumber(), PrescriptionListItemViewHolder.this, PrescriptionListItemViewHolder.this);
+                        mActivity.showLoading(false);
+                        WebDataServiceImpl.getInstance(mApp).sendSms(WebServiceType.SEND_SMS_PRESCRIPTION, prescription.getUniqueId(),
+                                user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(),
+                                selectedPatient.getMobileNumber(), PrescriptionListItemViewHolder.this, PrescriptionListItemViewHolder.this);
 
                         break;
                 }

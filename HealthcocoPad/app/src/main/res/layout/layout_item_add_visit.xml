@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/rx_text"
+            android:textColor="@color/black_greyish"
+            android:textSize="@dimen/text_size_add_visit_rx"
+            android:textStyle="bold" />
+
+        <include layout="@layout/sub_item_add_visits_patient" />
+
+        <include layout="@layout/sub_item_add_clinical_note_permission" />
+
+        <include layout="@layout/sub_item_add_prescription" />
+
+        <include layout="@layout/sub_item_add_lab_tests" />
+
+        <include layout="@layout/sub_item_add_diagrams" />
+
+        <include layout="@layout/sub_item_add_advice" />
+    </LinearLayout>
+</ScrollView>

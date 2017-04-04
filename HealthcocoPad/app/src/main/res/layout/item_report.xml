@@ -3,6 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+    <include layout="@layout/layout_discarded" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -292,6 +294,4 @@
         </LinearLayout>
 
     </LinearLayout>
-
-    <include layout="@layout/layout_discarded" />
 </FrameLayout>

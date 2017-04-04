@@ -28,13 +28,16 @@ import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.bean.server.VitalSigns;
 import com.healthcoco.healthcocopad.custom.OptionsPopupWindow;
+import com.healthcoco.healthcocopad.enums.AddUpdateNameDialogType;
 import com.healthcoco.healthcocopad.enums.ClinicalNotesPermissionType;
 import com.healthcoco.healthcocopad.enums.ClinicalNotesType;
+import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.OptionsTypePopupWindow;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.CommonEMRItemClickListener;
 import com.healthcoco.healthcocopad.listeners.VisitDetailCombinedItemListener;
 import com.healthcoco.healthcocopad.services.GsonRequest;
+import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
@@ -586,8 +589,8 @@ public class ClinicalNotesListItemViewHolder extends HealthCocoViewHolder implem
                     Util.checkNetworkStatus(mActivity);
                     if (HealthCocoConstants.isNetworkOnline) {
                         if (clinicalNote.getInHistory() != null && clinicalNote.getInHistory()) {
-//                            int msgId = R.string.confirm_remove_clinical_notes_from_history;
-//                            showConfirmationAlert(v.getId(), null, mActivity.getResources().getString(msgId));
+                            int msgId = R.string.confirm_remove_clinical_notes_from_history;
+                            showConfirmationAlert(v.getId(), null, mActivity.getResources().getString(msgId));
                         } else
                             onAddRemoveHistoryClicked(clinicalNote);
                     } else onNetworkUnavailable(null);
@@ -609,8 +612,8 @@ public class ClinicalNotesListItemViewHolder extends HealthCocoViewHolder implem
                 if (HealthCocoConstants.isNetworkOnline) {
                     if (detailCombinedItemListener != null)
                         detailCombinedItemListener.sendEmail("");
-//                    else
-//                        mActivity.openAddUpdateNameDialogFragment(WebServiceType.SEND_EMAIL_CLINICAL_NOTES, AddUpdateNameDialogType.EMAIL, clinicalNote.getUniqueId());
+                    else
+                        mActivity.openAddUpdateNameDialogFragment(WebServiceType.SEND_EMAIL_CLINICAL_NOTES, AddUpdateNameDialogType.EMAIL, clinicalNote.getUniqueId());
                 } else onNetworkUnavailable(null);
                 break;
             case R.id.bt_options:
@@ -620,9 +623,9 @@ public class ClinicalNotesListItemViewHolder extends HealthCocoViewHolder implem
                 LogUtils.LOGD(TAG, "Discard");
                 Util.checkNetworkStatus(mActivity);
                 if (HealthCocoConstants.isNetworkOnline) {
-//                    int msgId = R.string.confirm_discard_clinical_notes_message;
-//                    int titleId = R.string.confirm_discard_clinical_notes_title;
-//                    showConfirmationAlert(v.getId(), mActivity.getResources().getString(titleId), mActivity.getResources().getString(msgId));
+                    int msgId = R.string.confirm_discard_clinical_notes_message;
+                    int titleId = R.string.confirm_discard_clinical_notes_title;
+                    showConfirmationAlert(v.getId(), mActivity.getResources().getString(titleId), mActivity.getResources().getString(msgId));
                 } else onNetworkUnavailable(null);
                 break;
             case R.id.bt_print:
@@ -634,7 +637,7 @@ public class ClinicalNotesListItemViewHolder extends HealthCocoViewHolder implem
                     Util.checkNetworkStatus(mActivity);
                     if (HealthCocoConstants.isNetworkOnline) {
                         mActivity.showLoading(false);
-//                        WebDataServiceImpl.getInstance(mApp).getPdfUrl(String.class, WebServiceType.GET_CLINICAL_NOTES_PDF_URL, clinicalNote.getUniqueId(), this, this);
+                        WebDataServiceImpl.getInstance(mApp).getPdfUrl(String.class, WebServiceType.GET_CLINICAL_NOTES_PDF_URL, clinicalNote.getUniqueId(), this, this);
                     } else onNetworkUnavailable(null);
                 }
                 popupWindow.dismiss();

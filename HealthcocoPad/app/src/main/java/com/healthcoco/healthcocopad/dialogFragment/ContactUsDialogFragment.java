@@ -87,7 +87,7 @@ public class ContactUsDialogFragment extends HealthCocoDialogFragment implements
         if (intent != null)
             isFromLoginScreen = intent.getBooleanExtra(TAG_IS_FROM_LOGIN_SCREEN, false);
         init();
-        setWidthHeight(0.60, 0.70);
+        setWidthHeight(0.50, 0.65);
     }
 
     public void init() {

@@ -349,18 +349,6 @@
     <string name="billing">Billing</string>
     <string name="ui_permission">UI Permission</string>
 
-    <!--fontawesome text-->
-    <string name="clinic_icon">&#xf0f8;</string>
-    <string name="icon_add_session">&#xf067;&#160;Add Session</string>
-    <string name="colon">&#160;:&#160;</string>
-    <string name="fa_plus">&#xf067;</string>
-    <string name="fa_caret_down">&#xf0d7;</string>
-    <string name="to_with_spaces">&#160;to&#160;</string>
-    <string name="from_with_spaces">&#160;from&#160;</string>
-    <string name="fa_delete">&#xf057;</string>
-    <string name="fa_back_angle_left">&#xf104;</string>
-    <string name="fa_save_text">&#xf00c;&#160;Save</string>
-
     <string name="select_option">Select Option</string>
     <string name="select_image">Select Image</string>
     <string name="select_file">Select File</string>
@@ -470,7 +458,7 @@
     <string name="please_enter_feedback">Please enter Feedback</string>
     <string name="enter_patient_mobile_number">Enter Patient Mobile Number</string>
     <string name="enter_new_patient_name">Enter New Patient Name</string>
-    <string name="patient_name">Patient Name</string>
+    <string name="patient_name">Patient Name:</string>
     <string name="new_test">New Test</string>
     <string name="test_name">Test Name</string>
     <string name="new_note">New Note</string>
@@ -658,4 +646,15 @@
     <string name="please_enter_template_name">Please Enter Template name</string>
     <string name="please_add_drugs_for_template">Please Add Drugs for template&#160;</string>
     <string name="success_template_added">Template \"%s\" added Successfully</string>
+
+    <!--//clinical Notes confirmation messages-->
+    <string name="confirm_remove_clinical_notes_from_history">Do you want to remove this Clinical Note from Important?</string>
+    <string name="confirm_discard_clinical_notes_title">Are you sure you want to discard this Clinical Note?</string>
+    <string name="confirm_discard_clinical_notes_message">This cannot be undone.</string>
+    <string name="rx_text">Rx</string>
+    <string name="date_with_colon">Date:</string>
+    <string name="patient_id">Patient Id:</string>
+    <string name="prescription_rx">Prescription-Rx&#160;:</string>
+    <string name="mobile_no">Mobile No. :</string>
+    <string name="write_advice">Write Advice</string>
 </resources>

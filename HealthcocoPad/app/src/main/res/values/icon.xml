@@ -43,7 +43,22 @@
 
     <string name="fa_arrow_filled_right">&#xf0da;</string>
     <string name="rupees">\u20B9</string>
-    <string name="fa_interaction_checker">Interaction Checker&#160;&#160;&#160;&#160;&#xf071;</string>
+    <string name="fa_interaction_checker">Drug Interaction Checker&#160;&#160;&#160;&#160;&#xf071;</string>
     <string name="fa_info_text">&#xf05a;</string>
     <string name="fa_align_text">&#xf039;</string>
+
+    <!--fontawesome text-->
+    <string name="clinic_icon">&#xf0f8;</string>
+    <string name="icon_add_session">&#xf067;&#160;Add Session</string>
+    <string name="colon">&#160;:&#160;</string>
+    <string name="fa_plus">&#xf067;</string>
+    <string name="fa_caret_down">&#xf0d7;</string>
+    <string name="to_with_spaces">&#160;to&#160;</string>
+    <string name="from_with_spaces">&#160;from&#160;</string>
+    <string name="fa_delete">&#xf057;</string>
+    <string name="fa_back_angle_left">&#xf104;</string>
+    <string name="fa_save_text">&#xf00c;&#160;Save</string>
+    <string name="fa_close">&#xf00d;</string>
+    <string name="fa_save">&#xf0c7;&#160;Save</string>
+    <string name="fa_trash">&#xf014;</string>
 </resources>

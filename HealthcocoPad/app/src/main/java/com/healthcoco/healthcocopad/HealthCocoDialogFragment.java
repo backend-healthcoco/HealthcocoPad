@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -20,6 +21,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.healthcoco.healthcocopad.bean.server.Specialities;
@@ -34,6 +36,7 @@ import com.healthcoco.healthcocopad.enums.DialogType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.CommonListDialogItemClickListener;
 import com.healthcoco.healthcocopad.listeners.CommonOptionsDialogItemClickListener;
+import com.healthcoco.healthcocopad.utilities.EditTextTextViewErrorUtil;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.ScreenDimensions;
 import com.healthcoco.healthcocopad.utilities.Util;
@@ -301,21 +304,23 @@ public abstract class HealthCocoDialogFragment extends DialogFragment implements
                 addUpdateNameDialogFragment.getClass().getSimpleName());
     }
 
-    public void setupUI(final View view) {
+    protected void setupUI(final View viewToSet) {
         try {
-            //Set up touch listener for non-text box views to hide keyboard.
-            if (!(view instanceof EditText)) {
-                view.setOnTouchListener(new View.OnTouchListener() {
-                    public boolean onTouch(View v, MotionEvent event) {
-                        hideKeyboard(view);
-                        return false;
-                    }
-                });
-            }
+            viewToSet.setOnTouchListener(new View.OnTouchListener() {
+                public boolean onTouch(View v, MotionEvent event) {
+                    if (!(viewToSet instanceof EditText) && !(viewToSet instanceof ScrollView) && !(viewToSet instanceof TextInputLayout)
+                            && viewToSet.getParent() != null && !(viewToSet.getParent() instanceof ScrollView))
+                        hideKeyboard(viewToSet);
+                    viewToSet.setActivated(false);
+                    EditTextTextViewErrorUtil.resetFocusToAllEditText(view);
+                    return false;
+                }
+            });
+
             //If a layout container, iterate over children and seed recursion.
-            if (view instanceof ViewGroup) {
-                for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
-                    View innerView = ((ViewGroup) view).getChildAt(i);
+            if (viewToSet instanceof ViewGroup) {
+                for (int i = 0; i < ((ViewGroup) viewToSet).getChildCount(); i++) {
+                    View innerView = ((ViewGroup) viewToSet).getChildAt(i);
                     setupUI(innerView);
                 }
             }

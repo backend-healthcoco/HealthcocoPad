@@ -63,7 +63,7 @@ public class LoginDialogFragment extends HealthCocoDialogFragment implements Vie
         super.onActivityCreated(savedInstanceState);
         init();
         preFillForm();
-        setWidthHeight(0.60, 0.70);
+        setWidthHeight(0.50, 0.65);
     }
 
     private void preFillForm() {

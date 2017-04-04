@@ -5,7 +5,7 @@
     android:background="@color/white"
     android:orientation="vertical">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -14,7 +14,8 @@
         <Button
             android:id="@+id/bt_cancel"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
             android:background="@android:color/transparent"
             android:gravity="center_vertical"
             android:minHeight="0dp"
@@ -22,14 +23,15 @@
             android:text="@string/cancel"
             android:textAllCaps="false"
             android:textColor="@color/blue_action_bar"
-            android:textSize="18dp" />
+            android:textSize="17dp" />
 
         <ImageView
+            android:id="@+id/logo"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
             android:src="@drawable/app_logo" />
-    </LinearLayout>
+    </RelativeLayout>
 
     <ScrollView
         android:id="@+id/scrollview"
