@@ -57,13 +57,11 @@
             android:configChanges="orientation|keyboardHidden|screenSize|uiMode"
             android:screenOrientation="landscape"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
-
-
         <activity
             android:name=".activities.HomeActivity"
             android:configChanges="orientation|keyboardHidden|screenSize|uiMode"
             android:screenOrientation="landscape"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"></activity>
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
         <activity
             android:name=".activities.InitialSyncActivity"
             android:configChanges="orientation|keyboardHidden|screenSize|uiMode"
@@ -88,6 +86,12 @@
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
+
+        <activity
+            android:name=".activities.AddVisitsActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize|uiMode"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"></activity>
     </application>
 
 </manifest>

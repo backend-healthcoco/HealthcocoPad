@@ -163,5 +163,8 @@
     <dimen name="login_sign_up_edit_text_bottom_padding">8dp</dimen>
     <dimen name="text_size_btn_login_signup">18sp</dimen>
     <dimen name="text_size_add_visit_rx">50sp</dimen>
-    <dimen name="text_size_patient_info_item">18sp</dimen>
+    <dimen name="text_size_patient_info_item">15sp</dimen>
+    <dimen name="text_size_add_visits_lable">16sp</dimen>
+    <dimen name="margin_add_vital_signs_layout">10dp</dimen>
+    <dimen name="margin_left_right_add_vital_signs">20dp</dimen>
 </resources>

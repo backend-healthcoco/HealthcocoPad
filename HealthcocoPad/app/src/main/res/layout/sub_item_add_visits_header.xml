@@ -12,7 +12,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp">
+        android:padding="5dp">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -37,14 +37,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="abc"
-                    android:textColor="@color/black_greyish"
+                    android:textColor="@color/grey_dark_text"
                     android:textSize="@dimen/text_size_patient_info_item" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="3dp"
                 android:orientation="horizontal">
 
                 <TextView
@@ -59,7 +59,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="04-04-2017"
-                    android:textColor="@color/black_greyish"
+                    android:textColor="@color/grey_dark_text"
                     android:textSize="@dimen/text_size_patient_info_item" />
             </LinearLayout>
         </LinearLayout>
@@ -80,21 +80,21 @@
                     android:layout_height="wrap_content"
                     android:text="@string/patient_id"
                     android:textColor="@color/black"
-                    android:textSize="18sp" />
+                    android:textSize="@dimen/text_size_patient_info_item" />
 
                 <TextView
                     android:id="@+id/tv_patient_id"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="P855566"
-                    android:textColor="@color/black_greyish"
-                    android:textSize="18sp" />
+                    android:textColor="@color/grey_dark_text"
+                    android:textSize="@dimen/text_size_patient_info_item" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="3dp"
                 android:orientation="horizontal">
 
                 <TextView
@@ -102,21 +102,21 @@
                     android:layout_height="wrap_content"
                     android:text="@string/rx_id"
                     android:textColor="@color/black"
-                    android:textSize="18sp" />
+                    android:textSize="@dimen/text_size_patient_info_item" />
 
                 <TextView
                     android:id="@+id/tv_rx_id"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="04-04-2017"
-                    android:textColor="@color/black_greyish"
-                    android:textSize="18sp" />
+                    android:text="@string/no_text_dash"
+                    android:textColor="@color/grey_dark_text"
+                    android:textSize="@dimen/text_size_patient_info_item" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="3dp"
                 android:orientation="horizontal">
 
                 <TextView
@@ -124,15 +124,15 @@
                     android:layout_height="wrap_content"
                     android:text="@string/mobile_no"
                     android:textColor="@color/black"
-                    android:textSize="18sp" />
+                    android:textSize="@dimen/text_size_patient_info_item" />
 
                 <TextView
                     android:id="@+id/tv_mobile_no"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="89569565656"
-                    android:textColor="@color/black_greyish"
-                    android:textSize="18sp" />
+                    android:textColor="@color/grey_dark_text"
+                    android:textSize="@dimen/text_size_patient_info_item" />
             </LinearLayout>
         </LinearLayout>
 

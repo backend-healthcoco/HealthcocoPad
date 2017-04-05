@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:text="@string/lab_test"
         android:textColor="@color/black"
-        android:textSize="@dimen/text_size_drug_lable" />
+        android:textSize="@dimen/text_size_add_visits_lable" />
 
     <LinearLayout
         android:id="@+id/container_diagnostic_tests"

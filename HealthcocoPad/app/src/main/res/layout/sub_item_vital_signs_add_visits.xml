@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/parent_add_vital_signs"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:clickable="true"
+    android:orientation="horizontal">
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="5dp"
+        android:layout_weight="0.20"
+        android:text="@string/vital_signs"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size_add_visits_lable" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.80"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center|start"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center|start"
+                    android:text="@string/body_temperature"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_add_visits_lable" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/margin_add_vital_signs_layout"
+                    android:background="@drawable/shape_rounded_corners_item_background"
+                    android:inputType="numberDecimal"
+                    android:gravity="center"
+                    android:hint="@string/faranheit"
+                    android:maxLines="1"
+                    android:padding="10dp"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_add_visits_lable" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_left_right_add_vital_signs"
+                android:layout_marginRight="@dimen/margin_left_right_add_vital_signs"
+                android:layout_weight="1"
+                android:gravity="center|start"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center|start"
+                    android:text="@string/weight"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_add_visits_lable" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:inputType="numberDecimal"
+                    android:layout_marginTop="@dimen/margin_add_vital_signs_layout"
+                    android:background="@drawable/shape_rounded_corners_item_background"
+                    android:gravity="center"
+                    android:hint="@string/kilograms"
+                    android:maxLines="1"
+                    android:padding="10dp"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_add_visits_lable" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center|start"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center|start"
+                    android:text="@string/heart_rate"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_add_visits_lable" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/margin_add_vital_signs_layout"
+                    android:background="@drawable/shape_rounded_corners_item_background"
+                    android:inputType="numberDecimal"
+                    android:gravity="center"
+                    android:hint="@string/beats_per_min"
+                    android:maxLines="1"
+                    android:padding="10dp"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_add_visits_lable" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_add_vital_signs_layout"
+            android:orientation="horizontal"
+            android:weightSum="3">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center|start"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center|start"
+                    android:text="@string/blood_pressure"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_add_visits_lable" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_add_vital_signs_layout"
+                    android:layout_gravity="center_horizontal"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <EditText
+                        android:id="@+id/et_systolic"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_weight="1"
+                        android:background="@drawable/shape_rounded_corners_item_background"
+                        android:inputType="numberDecimal"
+                        android:gravity="center"
+                        android:hint="@string/systolic"
+                        android:maxLines="1"
+                        android:padding="10dp"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_add_visits_lable" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:gravity="center"
+                        android:text="@string/forward_slash"
+                        android:textColor="@color/black"
+                        android:textSize="20sp" />
+
+                    <EditText
+                        android:id="@+id/et_diastolic"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_weight="1"
+                        android:inputType="numberDecimal"
+                        android:background="@drawable/shape_rounded_corners_item_background"
+                        android:gravity="center"
+                        android:hint="@string/diastolic"
+                        android:maxLines="1"
+                        android:padding="10dp"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_add_visits_lable" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_left_right_add_vital_signs"
+                android:layout_marginRight="@dimen/margin_left_right_add_vital_signs"
+                android:layout_weight="1"
+                android:gravity="center|start"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center|start"
+                    android:text="@string/respiratory_rate"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_add_visits_lable" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/margin_add_vital_signs_layout"
+                    android:background="@drawable/shape_rounded_corners_item_background"
+                    android:gravity="center"
+                    android:inputType="numberDecimal"
+                    android:hint="@string/breaths_per_min"
+                    android:maxLines="1"
+                    android:padding="10dp"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_add_visits_lable" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center|start"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center|start"
+                    android:text="@string/spo2"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_add_visits_lable" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/margin_add_vital_signs_layout"
+                    android:background="@drawable/shape_rounded_corners_item_background"
+                    android:gravity="center"
+                    android:hint="@string/spo2"
+                    android:inputType="numberDecimal"
+                    android:maxLines="1"
+                    android:padding="10dp"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_add_visits_lable" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

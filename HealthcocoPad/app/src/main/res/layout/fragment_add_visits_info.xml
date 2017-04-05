@@ -30,6 +30,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:padding="10dp"
+                android:textColor="@drawable/text_selector_grey_blue"
                 android:text="@string/fa_close"
                 android:textSize="30sp" />
 
@@ -41,33 +42,43 @@
                 android:orientation="horizontal"
                 android:padding="5dp">
 
-                <ImageView
+                <ImageButton
+                    android:id="@+id/bt_clinical_note"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
                     android:padding="10dp"
                     android:src="@drawable/selector_ic_clinical_notes_tab" />
 
-                <ImageView
+                <ImageButton
+                    android:id="@+id/bt_prescription"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
                     android:padding="10dp"
                     android:src="@drawable/selector_ic_prescription_tab" />
 
-                <ImageView
+                <ImageButton
+                    android:id="@+id/bt_lab_tests"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
                     android:padding="10dp"
                     android:src="@drawable/selector_ic_treatment_tab" />
 
-                <ImageView
+                <ImageButton
+                    android:id="@+id/bt_diagrams"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
                     android:padding="10dp"
                     android:src="@drawable/selector_ic_reports_tab" />
 
-                <ImageView
+                <ImageButton
+                    android:id="@+id/bt_advice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
                     android:padding="10dp"
                     android:src="@drawable/selector_ic_clinical_notes_tab" />
 
@@ -80,15 +91,10 @@
                 android:layout_alignParentRight="true"
                 android:padding="10dp"
                 android:text="@string/fa_save"
-                android:textSize="30sp" />
+                android:textColor="@drawable/text_blue_normal_grey_light_selected"
+                android:textSize="25sp" />
         </RelativeLayout>
     </android.support.v7.widget.Toolbar>
 
-    <FrameLayout
-        android:id="@+id/layout_fragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/white">
-
-    </FrameLayout>
+    <include layout="@layout/layout_item_add_visit" />
 </LinearLayout>

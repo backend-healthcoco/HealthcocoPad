@@ -292,4 +292,10 @@ public class DateTimeUtil {
         return currentDateTime;
     }
 
+    public static String getCurrentDate() {
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        String currentDateTime = sdf.format(c.getTime());
+        return currentDateTime;
+    }
 }

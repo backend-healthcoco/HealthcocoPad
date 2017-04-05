@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/parent_prescription"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -28,7 +29,7 @@
             android:padding="5dp"
             android:text="@string/fa_interaction_checker"
             android:textAllCaps="false"
-            android:textColor="@color/orange" />
+            android:textColor="@drawable/selector_text_drug_interaction_orange_translucent" />
     </LinearLayout>
 
     <LinearLayout
@@ -53,7 +54,7 @@
                 android:layout_weight="1"
                 android:text="@string/drug_name"
                 android:textColor="@color/black"
-                android:textSize="@dimen/text_size_drug_lable" />
+                android:textSize="@dimen/text_size_add_visits_lable" />
 
             <TextView
                 android:layout_width="0dp"
@@ -62,17 +63,16 @@
                 android:gravity="center"
                 android:text="@string/dosage"
                 android:textColor="@color/black"
-                android:textSize="@dimen/text_size_drug_lable" />
+                android:textSize="@dimen/text_size_add_visits_lable" />
 
             <EditText
-                android:layout_width="0dp"
+                android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/shape_rounded_corners_item_background_dark_grey"
+                android:background="@drawable/shape_rounded_corners_item_background"
                 android:gravity="center"
                 android:maxLines="1"
                 android:textColor="@color/black"
-                android:textSize="@dimen/text_size_drug_lable" />
+                android:textSize="@dimen/text_size_add_visits_lable" />
 
             <TextView
                 android:layout_width="0dp"
@@ -81,7 +81,7 @@
                 android:gravity="center"
                 android:text="@string/direction"
                 android:textColor="@color/black"
-                android:textSize="@dimen/text_size_drug_lable" />
+                android:textSize="@dimen/text_size_add_visits_lable" />
         </LinearLayout>
 
         <View

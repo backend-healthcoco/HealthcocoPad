@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/layout_diagrams"
+    android:id="@+id/parent_diagrams"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="10dp"
@@ -14,7 +14,7 @@
         android:layout_weight="0.30"
         android:text="@string/diagrams"
         android:textColor="@color/black"
-        android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label" />
+        android:textSize="@dimen/text_size_add_visits_lable" />
 
     <HorizontalScrollView
         android:layout_width="0dp"

@@ -40,7 +40,9 @@ public enum CommonOpenUpFragmentType {
     PATIENT_DETAIL_TREATMENT(R.string.treatment),
     HISTORY_DISEASE_LIST(R.string.past_history),
     ADD_NEW_TEMPLATE(R.string.new_template),
-    NOTIFICATION_RESPONSE_DATA(R.string.notification_details);
+    NOTIFICATION_RESPONSE_DATA(R.string.notification_details),
+    ADD_VISITS(0),
+    SELECT_DIAGRAM(0);
 
     private final int titleId;
 

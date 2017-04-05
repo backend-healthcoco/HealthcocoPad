@@ -147,7 +147,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
         tvGenderAge = (TextView) view.findViewById(R.id.tv_patient_id);
         ivContactProfile = (ImageView) view.findViewById(R.id.iv_image);
         patientProfileLayout = (LinearLayout) view.findViewById(R.id.patient_profile_layout);
-        floatingActionButton = (FloatingActionButton) view.findViewById(R.id.bt_add_patient);
+        floatingActionButton = (FloatingActionButton) view.findViewById(R.id.fl_bt_add);
         ((CommonOpenUpActivity) mActivity).showRightAction(false);
     }
 
@@ -473,5 +473,9 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
 
     public User getUser() {
         return user;
+    }
+
+    public void initFolatingButtonAction() {
+
     }
 }

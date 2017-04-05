@@ -19,6 +19,8 @@ import android.widget.TextView;
 import com.android.volley.Response;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
+import com.healthcoco.healthcocopad.activities.AddVisitsActivity;
+import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.adapter.PatientDetailVisitAdapter;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.Prescription;
@@ -114,6 +116,7 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
 
     @Override
     public void initListeners() {
+        ((CommonOpenUpActivity) mActivity).initFloatingActionButton(this);
     }
 
     private void initAdapter() {
@@ -441,6 +444,19 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
 
     @Override
     public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.fl_bt_add:
+                openCommonVisistActivity(CommonOpenUpFragmentType.ADD_VISITS, 0);
+                break;
+        }
+    }
 
+    private void openCommonVisistActivity(CommonOpenUpFragmentType fragmentType, int requestCode) {
+        Intent intent = new Intent(mActivity, AddVisitsActivity.class);
+        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, fragmentType.ordinal());
+        if (requestCode == 0)
+            startActivity(intent);
+        else
+            startActivityForResult(intent, requestCode);
     }
 }

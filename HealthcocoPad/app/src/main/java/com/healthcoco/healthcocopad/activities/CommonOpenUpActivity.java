@@ -373,9 +373,7 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
     }
 
     public void initFloatingActionButton(View.OnClickListener listener) {
-        FloatingActionButton floatingActionButton = (FloatingActionButton) findViewById(R.id.bt_add_patient);
+        FloatingActionButton floatingActionButton = (FloatingActionButton) findViewById(R.id.fl_bt_add);
         floatingActionButton.setOnClickListener(listener);
     }
-
-
 }
