@@ -167,4 +167,7 @@
     <dimen name="text_size_add_visits_lable">16sp</dimen>
     <dimen name="margin_add_vital_signs_layout">10dp</dimen>
     <dimen name="margin_left_right_add_vital_signs">20dp</dimen>
+    <dimen name="width_height_diagram_list_item">130dp</dimen>
+    <dimen name="diagram_list_grid_item_spacing">5dp</dimen>
+    <dimen name="diagram_detail_color_pallete_width_height">30dp</dimen>
 </resources>

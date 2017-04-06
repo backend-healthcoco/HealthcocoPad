@@ -28,6 +28,8 @@ public class HealthCocoConstants {
     public static final String TAG_PERSONAL_HISTORY = "personalHistory";
     public static final String PARAM_CHANGE_STATE = "/changeState";
     public static final String PARAM_TAG_ADD = "/add/";
+    public static final String TAG_DIAGRAM_TAG = "diagramTag";
+    public static final String TAG_SELECTED_DIAGRAM = "selectedDiagram";
     public static final int REQUEST_CODE_CONTACTS_DETAIL = 100;
     public static final int RESULT_CODE_ADD_PRESCIPTION = 101;
     public static final int REQUEST_CODE_CAMERA = 102;
@@ -63,6 +65,7 @@ public class HealthCocoConstants {
     public static final int RESULT_CODE_DOCTOR_PERSONAL_HISTORY_DETAIL = 142;
     public static final int RESULT_CODE_DRUGS_AND_ALLERGIES_DETAIL = 143;
     public static final int RESULT_CODE_CONTINUE_SIGNUP = 144;
+    public static final int RESULT_CODE_DIAGRAM_DETAIL = 145;
     public static int RESULT_CODE_SIGNUP_ALREADY_REGISTERED = 123;
     public static final int RESULT_CODE_GROUPS_LIST = 124;
     public static final int RESULT_CODE_SEARCH_NUMBER_RESULTS = 125;

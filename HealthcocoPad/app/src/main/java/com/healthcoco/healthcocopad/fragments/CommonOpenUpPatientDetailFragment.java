@@ -478,4 +478,8 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
     public void initFolatingButtonAction() {
 
     }
+
+    public void initFloatingActionButton(View.OnClickListener listener) {
+        floatingActionButton.setOnClickListener(listener);
+    }
 }

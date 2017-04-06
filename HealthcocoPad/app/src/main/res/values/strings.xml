@@ -196,7 +196,7 @@
     <string name="pending_confirmation">Pending Confirmation</string>
     <string name="confirm_call_number">Call&#160;</string>
     <string name="no_mobile_number_found">No Mobile Number found for this patient</string>
-
+    <string name="confirm_delete_diagram">Are you sure you want to delete this Diagram?</string>
     <string name="confirm_sign_out">Are you sure you want to Sign Out?</string>
     <string name="all">All</string>
     <string name="cancelled">Cancelled</string>
@@ -557,6 +557,7 @@
     <string name="pa">P/A</string>
     <string name="ps">P/S</string>
     <string name="pv">P/V</string>
+
     <string name="diagrams">Diagrams</string>
 
     <string name="created_by">Created By</string>
@@ -669,4 +670,28 @@
     <string name="systolic">Systolic</string>
     <string name="diastolic">Diastolic</string>
     <string name="forward_slash">/</string>
+    <string name="add_visits">Add Visits</string>
+    <string name="no_diagrams_found">No Diagram Found</string>
+    <string name="search_diagram">Search Diagrams</string>
+    <string name="write_vital_signs">Write Vital Signs</string>
+    <string name="write_present_complaint">Write Present Complaint</string>
+    <string name="write_complaints">Write Complaints</string>
+    <string name="write_history_of_present_complaints">Write History of Present Complaint</string>
+    <string name="write_menstrual_history">Write Menstrual History</string>
+    <string name="write_obstetric_history">Write Obstetric History</string>
+    <string name="write_general_examination">Write General Examination</string>
+    <string name="write_systemic_examination">Write Systemic Examination</string>
+    <string name="write_observations">Write Observations</string>
+    <string name="write_investigations">Write Investigations</string>
+    <string name="write_provisional_diagnosis">Write Provisional Diagnosis</string>
+    <string name="write_diagnosis">Write Diagnosis</string>
+    <string name="write_ecg_details">Write ECG Details</string>
+    <string name="write_echo">Write Echo</string>
+    <string name="write_xray_details">Write X-Ray Details</string>
+    <string name="write_holter">Write Holter</string>
+    <string name="write_indication_of_usg">Write Indication of USG</string>
+    <string name="write_note">Write Note</string>
+    <string name="write_pa">Write P/A</string>
+    <string name="write_ps">Write P/S</string>
+    <string name="write_pv">Write P/V</string>
 </resources>

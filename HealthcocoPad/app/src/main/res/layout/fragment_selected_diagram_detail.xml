@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/grey_background">
+
+    <ImageButton
+        android:id="@+id/bt_color"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerInParent="true"
+        android:background="@drawable/app_icon"
+        android:visibility="gone" />
+
+    <ImageButton
+        android:id="@+id/bt_erase"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@id/bt_color"
+        android:background="@drawable/app_logo"
+        android:visibility="gone" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/bt_color">
+
+        <com.healthcoco.healthcocopad.custom.SignatureView
+            android:id="@+id/iv_selected_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </com.healthcoco.healthcocopad.custom.SignatureView>>
+
+        <ProgressBar
+            android:id="@+id/progress_loading"
+            style="?android:attr/progressBarStyleSmall"
+            android:layout_width="@dimen/round_progress_bar_size"
+            android:layout_height="@dimen/round_progress_bar_size"
+            android:layout_gravity="center"
+            android:progressDrawable="@drawable/progress_loading"
+            android:visibility="gone" />
+
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/container_color_pallete"
+        android:layout_width="@dimen/diagram_detail_color_pallete_width_height"
+        android:layout_height="@dimen/diagram_detail_color_pallete_width_height"
+        android:layout_below="@+id/bt_color"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center|top"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+    </LinearLayout>
+
+</RelativeLayout>

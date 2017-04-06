@@ -1,1 +1,1 @@
-include ':app', ':SugarOrm'
+include ':app', ':SugarOrm', ':MyScript_ATK-SingleLineWidget-android-widget', ':MyScript_ATK-IMCommon-android-component', ':MyScript_ATK-Text-android-component', ':MyScript_ATK-Core-android-component'

@@ -26,6 +26,8 @@ public class ImageUtil {
     public static final String DEFAULT_CLINIC_LOGO_NAME = "clinicLogoImage";
     public static final String DEFAULT_CLINIC_IMAGE_NAME = "clinicImage";
     public static final String DEFAULT_PATIENT_IMAGE_NAME = "patientImage";
+    public static byte[] DIAGRAM_SELECTED_BYTE_ARRAY = null;
+    public static final String DEFAULT_IMAGE_NAME = "defaultFileName";
 
     public static String encodeTobase64(Bitmap image) {
         Bitmap immagex = image;

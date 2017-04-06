@@ -398,7 +398,13 @@ public class LocalDataServiceImpl {
         if (user != null) {
             user.setDob((DOB) getObjectFromJson(DOB.class, user.getDobJsonString()));
         }
+        user.setUiPermissions(getUIPermissions(user.getUniqueId()));
         return user;
+    }
+
+    public UIPermissions getUIPermissions(String doctorId) {
+        return Select.from(UIPermissions.class)
+                .where(Condition.prop(LocalDatabaseUtils.KEY_DOCTOR_ID).eq(doctorId)).first();
     }
 
     public void getDosageDurationDirectionList(WebServiceType webServiceType, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
@@ -2987,6 +2993,29 @@ public class LocalDataServiceImpl {
                     template.setItems(getDrugItemsList(LocalDatabaseUtils.KEY_FOREIGN_TEMPLATE_ID, template.getUniqueId()));
                 }
             volleyResponseBean.setDataList(getObjectsListFromMap(list));
+            if (responseListener != null)
+                responseListener.onResponse(volleyResponseBean);
+        } catch (Exception e) {
+            e.printStackTrace();
+            showErrorLocal(volleyResponseBean, errorListener);
+        }
+        return volleyResponseBean;
+    }
+
+    public VolleyResponseBean getGlobalDiagramsList(WebServiceType webServiceType, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
+        volleyResponseBean.setWebServiceType(webServiceType);
+        volleyResponseBean.setIsDataFromLocal(true);
+        volleyResponseBean.setIsUserOnline(HealthCocoConstants.isNetworkOnline);
+        try {
+            String whereCondition = "Select * from " + StringUtil.toSQLName(Diagram.class.getSimpleName()) + " where " +
+                    "(" + LocalDatabaseUtils.KEY_DOCTOR_ID + " is null"
+                    + " OR "
+                    + LocalDatabaseUtils.KEY_DOCTOR_ID + "=\"\""
+                    + ")";
+            LogUtils.LOGD(TAG, "Select Query " + whereCondition);
+            List<Diagram> diagramsList = SugarRecord.findWithQuery(Diagram.class, whereCondition);
+            volleyResponseBean.setDataList(getObjectsListFromMap(diagramsList));
             if (responseListener != null)
                 responseListener.onResponse(volleyResponseBean);
         } catch (Exception e) {

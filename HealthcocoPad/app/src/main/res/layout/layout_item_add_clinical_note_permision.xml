@@ -1,38 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/parent_permissions_items"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingTop="15dp">
 
     <TextView
         android:id="@+id/tv_title"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
+        android:layout_weight="@integer/add_visit_left_item_weight"
         android:paddingTop="10dp"
         android:text="@string/holter"
         android:textColor="@color/black"
-        android:textSize="@dimen/text_size_floating_label"
+        android:textSize="@dimen/text_size_add_visits_lable"
         android:visibility="visible" />
 
     <AutoCompleteTextView
         android:id="@+id/autotv_permission"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="3dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="3dp"
-        android:layout_weight="1"
+        android:layout_weight="@integer/add_visit_right_item_weight"
         android:background="@android:color/transparent"
         android:cursorVisible="true"
         android:gravity="start"
         android:hint="@string/holter"
         android:paddingTop="5dp"
         android:textColorHint="@color/grey_light_text"
-        android:textSize="@dimen/text_size_add_clinical_note_points"></AutoCompleteTextView>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/grey_light_divider" />
+        android:textSize="@dimen/text_size_add_visits_lable"></AutoCompleteTextView>
 </LinearLayout>

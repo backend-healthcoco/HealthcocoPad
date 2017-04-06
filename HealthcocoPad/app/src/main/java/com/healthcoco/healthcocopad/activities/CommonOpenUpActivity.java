@@ -282,7 +282,6 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
         toolbar.setVisibility(View.GONE);
     }
 
-
     @Override
     public void onBackPressed() {
         if (fragmentType != null) {
@@ -370,10 +369,5 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
         Button btSave = (Button) findViewById(R.id.bt_save);
         if (btSave != null)
             btSave.setOnClickListener(listener);
-    }
-
-    public void initFloatingActionButton(View.OnClickListener listener) {
-        FloatingActionButton floatingActionButton = (FloatingActionButton) findViewById(R.id.fl_bt_add);
-        floatingActionButton.setOnClickListener(listener);
     }
 }

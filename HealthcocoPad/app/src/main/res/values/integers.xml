@@ -4,5 +4,7 @@
     <integer name="max_mobile_landline_number">15</integer>
     <integer name="max_pincode_length">6</integer>
     <integer name="max_length_aadharid">12</integer>
+    <integer name="add_visit_left_item_weight">20</integer>
+    <integer name="add_visit_right_item_weight">80</integer>
 
 </resources>

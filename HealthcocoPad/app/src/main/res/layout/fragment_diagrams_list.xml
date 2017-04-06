@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/layout_edit_search_common" />
+
+    <GridView
+        android:id="@+id/gv_diagrams"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:horizontalSpacing="@dimen/diagram_list_grid_item_spacing"
+        android:numColumns="3"
+        android:padding="@dimen/diagram_list_grid_item_spacing"
+        android:scrollbarStyle="outsideOverlay"
+        android:verticalSpacing="@dimen/diagram_list_grid_item_spacing"
+        android:visibility="gone"></GridView>
+
+    <TextView
+        android:id="@+id/tv_no_diagrams"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="@string/no_diagrams_found"
+        android:textSize="@dimen/text_size_no_results"
+        android:textStyle="bold" />
+
+</LinearLayout>

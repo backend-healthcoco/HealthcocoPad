@@ -24,6 +24,7 @@ import com.healthcoco.healthcocopad.bean.request.DoctorSignupHandheldContinueReq
 import com.healthcoco.healthcocopad.bean.request.ProfessionalMembershipRequest;
 import com.healthcoco.healthcocopad.bean.request.ProfessionalStatementRequest;
 import com.healthcoco.healthcocopad.bean.request.RegisterNewPatientRequest;
+import com.healthcoco.healthcocopad.bean.server.Diagram;
 import com.healthcoco.healthcocopad.bean.server.Disease;
 import com.healthcoco.healthcocopad.bean.server.DoctorClinicProfile;
 import com.healthcoco.healthcocopad.bean.server.DoctorProfile;
@@ -938,4 +939,31 @@ public class WebDataServiceImpl implements GCMRefreshListener {
         String url = webServiceType.getUrl() + uniqueId + "/" + patientId + "/" + doctorId + "/" + locationId + "/" + hospitalId;
         getResponse(webServiceType, class1, url, null, null, responseListener, errorListener);
     }
+
+    public void getDiagramsList(Class<?> class1, Long updatedTime, String doctorId, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        WebServiceType webServiceType = WebServiceType.GET_DIAGRAMS_LIST;
+        Util.checkNetworkStatus(mApp.getApplicationContext());
+        if (HealthCocoConstants.isNetworkOnline) {
+            String url = webServiceType.getUrl()
+                    + HealthCocoConstants.PARAM_DISCARDED_TRUE
+                    + HealthCocoConstants.PARAM_DOCTOR_ID + doctorId
+                    + HealthCocoConstants.PARAM_UPDATED_TIME + updatedTime;
+            getResponse(webServiceType, class1, url, null, null, responseListener, errorListener);
+        } else {
+            errorListener.onNetworkUnavailable(webServiceType);
+        }
+    }
+    public void addDiagram(Class<?> class1, Diagram diagram,
+                           Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        WebServiceType webServiceType = WebServiceType.ADD_DIAGRAM;
+        Util.checkNetworkStatus(mApp.getApplicationContext());
+        if (HealthCocoConstants.isNetworkOnline) {
+            String url = webServiceType.getUrl();
+            getResponse(webServiceType, class1, url, diagram, null, responseListener,
+                    errorListener);
+        } else {
+            errorListener.onNetworkUnavailable(webServiceType);
+        }
+    }
+
 }

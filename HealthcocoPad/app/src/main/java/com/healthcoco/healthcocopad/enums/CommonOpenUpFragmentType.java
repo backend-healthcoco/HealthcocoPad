@@ -42,7 +42,8 @@ public enum CommonOpenUpFragmentType {
     ADD_NEW_TEMPLATE(R.string.new_template),
     NOTIFICATION_RESPONSE_DATA(R.string.notification_details),
     ADD_VISITS(0),
-    SELECT_DIAGRAM(0);
+    SELECT_DIAGRAM(0),
+    SELECTED_DIAGRAM_DETAIL(R.string.diagrams);
 
     private final int titleId;
 

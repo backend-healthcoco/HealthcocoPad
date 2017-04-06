@@ -3,41 +3,18 @@
     android:id="@+id/parent_clinical_note"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="10dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="10dp">
 
     <include layout="@layout/sub_item_vital_signs_add_visits" />
 
     <LinearLayout
+        android:id="@+id/parent_permissions_items"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tv_title"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.20"
-            android:paddingTop="10dp"
-            android:text="@string/holter"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_size_add_visits_lable"
-            android:visibility="visible" />
-
-        <AutoCompleteTextView
-            android:id="@+id/autotv_permission"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="3dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="3dp"
-            android:layout_weight="0.80"
-            android:background="@android:color/transparent"
-            android:cursorVisible="true"
-            android:gravity="start"
-            android:hint="@string/holter"
-            android:paddingTop="5dp"
-            android:textColorHint="@color/grey_light_text"
-            android:textSize="@dimen/text_size_add_visits_lable"></AutoCompleteTextView>
+        <include layout="@layout/layout_item_add_clinical_note_permision" />
     </LinearLayout>
 </LinearLayout>

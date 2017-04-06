@@ -20,7 +20,6 @@ import com.android.volley.Response;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.activities.AddVisitsActivity;
-import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.adapter.PatientDetailVisitAdapter;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.Prescription;
@@ -83,6 +82,7 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
     private boolean isLoading;
     private OptionsPopupWindow popupWindow;
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_patient_visit_deatil, container, false);
@@ -116,7 +116,7 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
 
     @Override
     public void initListeners() {
-        ((CommonOpenUpActivity) mActivity).initFloatingActionButton(this);
+
     }
 
     private void initAdapter() {
@@ -129,6 +129,7 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
         if (patientDetailFragmentUpdated != null) {
             selectedPatient = patientDetailFragmentUpdated.getSelectedPatient();
             user = patientDetailFragmentUpdated.getUser();
+            patientDetailFragmentUpdated.initFloatingActionButton(this);
         }
     }
 
