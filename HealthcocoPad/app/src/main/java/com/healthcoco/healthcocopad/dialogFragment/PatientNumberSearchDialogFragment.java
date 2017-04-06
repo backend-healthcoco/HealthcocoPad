@@ -9,8 +9,8 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.android.volley.Response;
-import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.HealthCocoDialogFragment;
+import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.AlreadyRegisteredPatientsResponse;
@@ -101,7 +101,7 @@ public class PatientNumberSearchDialogFragment extends HealthCocoDialogFragment 
 
     private void searchPatients(String mobileNo) {
         mActivity.showLoading(false);
-        WebDataServiceImpl.getInstance(mApp).getAlreadyRegisteredPatients(AlreadyRegisteredPatientsResponse.class, mobileNo, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(), this, this);
+        WebDataServiceImpl.getInstance(mApp).getAlreadyRegisteredPatients(AlreadyRegisteredPatientsResponse.class, mobileNo, user, this, this);
     }
 
 
@@ -146,7 +146,6 @@ public class PatientNumberSearchDialogFragment extends HealthCocoDialogFragment 
         args.putString(HealthCocoConstants.TAG_MOBILE_NUMBER, String.valueOf(editMobileNumber.getText()));
         args.putBoolean(PatientNumberSearchResultsDialogFragment.TAG_IS_FROM_HOME_ACTIVITY, true);
         patientNumberSearchResultsDialogFragment.setArguments(args);
-        patientNumberSearchResultsDialogFragment.setTargetFragment(this, HealthCocoConstants.REQUEST_CODE_CONTACTS_LIST);
         patientNumberSearchResultsDialogFragment.show(mFragmentManager, patientNumberSearchResultsDialogFragment.getClass().getSimpleName());
     }
 
@@ -154,7 +153,7 @@ public class PatientNumberSearchDialogFragment extends HealthCocoDialogFragment 
         Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
         intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.PATIENT_REGISTRATION.ordinal());
         intent.putExtra(HealthCocoConstants.TAG_MOBILE_NUMBER, String.valueOf(editMobileNumber.getText()));
-        startActivityForResult(intent, HealthCocoConstants.REQUEST_CODE_CONTACTS_LIST);
+        startActivity(intent);
     }
 
     @Override

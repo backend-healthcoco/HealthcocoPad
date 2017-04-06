@@ -33,7 +33,7 @@ public class SugarRecord {
 
     protected Long id = null;
 
-    private static SQLiteDatabase getSugarDataBase() {
+    public static SQLiteDatabase getSugarDataBase() {
         return getSugarContext().getSugarDb().getDB();
     }
 

@@ -28,13 +28,11 @@ import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocopad.enums.AddUpdateNameDialogType;
 import com.healthcoco.healthcocopad.enums.FilterItemType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
-import com.healthcoco.healthcocopad.enums.LocalTabelType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
 import com.healthcoco.healthcocopad.listeners.OnFilterItemClickListener;
 import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
-import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.ComparatorUtil;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
@@ -48,7 +46,12 @@ import java.util.Collections;
  * Created by Shreshtha on 31-01-2017.
  */
 public class FilterFragment extends HealthCocoFragment implements Response.Listener<VolleyResponseBean>, GsonRequest.ErrorListener, View.OnClickListener, OnFilterItemClickListener, SwipeRefreshLayout.OnRefreshListener, View.OnTouchListener, LocalDoInBackgroundListenerOptimised {
-    public static final String INTENT_REFRESH_FRAGMENT = "com.healthcoco.FILTER_TYPE";
+    public static final String INTENT_REFRESH_GROUPS_LIST_LOCAL = "com.healthcoco.REFRESH_GROUPS_LIST_LOCAL";
+    public static final String INTENT_FILTER_REFRESH_SELECTED_FILTER_TYPE = "com.healthcoco.healthcocopad.fragments.FilterFragment.REFRESH_SELECTED_FILTER_TYPE";
+
+    public static final String TAG_ORDINAL = "ordinal";
+    public static final String TAG_GROUP_ID = "group_id";
+
     private User user;
     private ArrayList<UserGroups> groupsList;
     private ListViewLoadMore lvGroups;
@@ -62,6 +65,7 @@ public class FilterFragment extends HealthCocoFragment implements Response.Liste
     private SwipeRefreshLayout swipeRefreshLayout;
     private boolean receiversRegistered;
     private String selectedFilterTitle;
+    private String selectedGroupId;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -147,14 +151,6 @@ public class FilterFragment extends HealthCocoFragment implements Response.Liste
                         groupsList = (ArrayList<UserGroups>) (ArrayList<?>) response
                                 .getDataList();
                         notifyAdapter(groupsList);
-                        if (!response.isFromLocalAfterApiSuccess() && response.isUserOnline()) {
-                            getGroupsListFromServer();
-                            return;
-                        }
-                    } else if (!Util.isNullOrEmptyList(response.getDataList())) {
-                        new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_GROUPS_LIST, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
-                        response.setIsFromLocalAfterApiSuccess(true);
-                        return;
                     }
                     break;
             }
@@ -225,7 +221,7 @@ public class FilterFragment extends HealthCocoFragment implements Response.Liste
     }
 
     public void setSelectedItem(FilterItemType filterItemType) {
-        clearPreviuosFilters(null);
+        clearPreviuosFilters();
         switch (filterItemType) {
             case RECENTLY_VISITED:
                 tvRecentlyVisited.setSelected(true);
@@ -233,22 +229,26 @@ public class FilterFragment extends HealthCocoFragment implements Response.Liste
             case RECENTLY_ADDED:
                 tvRecentlyAdded.setSelected(true);
                 break;
+            case SEARCH_PATIENT:
             case ALL_PATIENTS:
                 tvAllPatients.setSelected(true);
                 break;
             case MOST_VISITED:
                 tvMostVisited.setSelected(true);
                 break;
+            case GROUP_ITEM:
+                adapter.setSelectedGroupId(selectedGroupId);
+                adapter.notifyDataSetChanged();
         }
     }
 
-    private void clearPreviuosFilters(String groupId) {
+    private void clearPreviuosFilters() {
         try {
             tvAllPatients.setSelected(false);
             tvRecentlyVisited.setSelected(false);
             tvMostVisited.setSelected(false);
             tvRecentlyAdded.setSelected(false);
-            adapter.setSelectedGroupId(groupId);
+            adapter.setSelectedGroupId(null);
             adapter.notifyDataSetChanged();
         } catch (Exception e) {
             e.printStackTrace();
@@ -259,7 +259,8 @@ public class FilterFragment extends HealthCocoFragment implements Response.Liste
     public void onGroupItemClicked(UserGroups group) {
         int selectedGroupPosition = groupsList.indexOf(group);
         LogUtils.LOGD(TAG, "Selected Group Position " + selectedGroupPosition);
-        clearPreviuosFilters(group.getUniqueId());
+        selectedGroupId = group.getUniqueId();
+        setSelectedItem(FilterItemType.GROUP_ITEM);
         senBroadCastToContactsFragment(FilterItemType.GROUP_ITEM, group.getUniqueId());
         refreshHomeScreenTitle(group.getName());
     }
@@ -282,24 +283,8 @@ public class FilterFragment extends HealthCocoFragment implements Response.Liste
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == HealthCocoConstants.REQUEST_CODE_GROUPS_LIST) {
-            if (resultCode == HealthCocoConstants.RESULT_CODE_ADD_GROUP) {
-                getGroupsListFromLocal();
-            }
-        }
-    }
-
-    @Override
     public void onRefresh() {
-        getGroupsListFromServer();
-    }
-
-    private void getGroupsListFromServer() {
-        //Get groupsList
-        Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.USER_GROUP);
-        WebDataServiceImpl.getInstance(mApp).getGroupsList(WebServiceType.GET_GROUPS, UserGroups.class, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(), latestUpdatedTime, null, this, this);
+        Util.sendBroadcast(mApp, ContactsListFragment.INTENT_REFRESH_GROUPS_LIST_FROM_SERVER);
     }
 
     @Override
@@ -326,8 +311,14 @@ public class FilterFragment extends HealthCocoFragment implements Response.Liste
         if (!receiversRegistered) {
             //receiver for refreshing groups
             IntentFilter filter = new IntentFilter();
-            filter.addAction(INTENT_REFRESH_FRAGMENT);
+            filter.addAction(INTENT_REFRESH_GROUPS_LIST_LOCAL);
             LocalBroadcastManager.getInstance(mActivity).registerReceiver(refreshListner, filter);
+
+            //receiver for refreshing groups
+            IntentFilter filter1 = new IntentFilter();
+            filter1.addAction(INTENT_FILTER_REFRESH_SELECTED_FILTER_TYPE);
+            LocalBroadcastManager.getInstance(mActivity).registerReceiver(refreshSelectedFilterTypeReceiver, filter1);
+            receiversRegistered = true;
             receiversRegistered = true;
         }
     }
@@ -336,12 +327,25 @@ public class FilterFragment extends HealthCocoFragment implements Response.Liste
     public void onDestroy() {
         super.onDestroy();
         LocalBroadcastManager.getInstance(mActivity).unregisterReceiver(refreshListner);
+        LocalBroadcastManager.getInstance(mActivity).unregisterReceiver(refreshSelectedFilterTypeReceiver);
     }
 
     BroadcastReceiver refreshListner = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, final Intent intent) {
             getGroupsListFromLocal();
+        }
+    };
+
+    BroadcastReceiver refreshSelectedFilterTypeReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, final Intent intent) {
+            if (intent != null) {
+                FilterItemType selectedFilterType = FilterItemType.values()[intent.getIntExtra(TAG_ORDINAL, -1)];
+                selectedGroupId = intent.getStringExtra(TAG_GROUP_ID);
+                if (selectedFilterType != null)
+                    setSelectedItem(selectedFilterType);
+            }
         }
     };
 
@@ -357,9 +361,6 @@ public class FilterFragment extends HealthCocoFragment implements Response.Liste
                     user = doctor.getUser();
                 }
                 break;
-            case ADD_GROUPS_LIST:
-                LocalDataServiceImpl.getInstance(mApp).addUserGroupsList((ArrayList<UserGroups>) (ArrayList<?>) response
-                        .getDataList());
             case GET_GROUPS:
                 volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getUserGroups(WebServiceType.GET_GROUPS, null, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(), null, null);
                 break;

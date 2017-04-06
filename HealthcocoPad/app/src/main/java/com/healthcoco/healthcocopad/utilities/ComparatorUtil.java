@@ -179,4 +179,22 @@ public class ComparatorUtil {
             return 0;
         }
     };
+    public static Comparator<Object> updatedTimeComparator = new Comparator<Object>() {
+
+        @Override
+        public int compare(Object object1, Object object2) {
+            try {
+                Long updatedTime1 = 0l;
+                Long updatedTime2 = 0l;
+                if (object1 instanceof UserGroups) {
+                    updatedTime1 = ((UserGroups) object1).getUpdatedTime();
+                    updatedTime2 = ((UserGroups) object2).getUpdatedTime();
+                }
+                return updatedTime1.compareTo(updatedTime2);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return 0;
+        }
+    };
 }

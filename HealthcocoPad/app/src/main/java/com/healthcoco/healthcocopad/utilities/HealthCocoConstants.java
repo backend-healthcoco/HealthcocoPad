@@ -91,6 +91,8 @@ public class HealthCocoConstants {
     public static final String PARAM_HOSPITAL_ID = "&hospitalId=";
     public static final String PARAM_LOCATION_ID = "&locationId=";
     public static final String PARAM_TAG_VIEW = "/view/?";
+    public static final String PARAM_ROLE = "&role=";
+
     public static final String TAG_SELECTED_USER_ID = "selectedPatientId";
     public static String SELECTED_PATIENTS_USER_ID = null;
 

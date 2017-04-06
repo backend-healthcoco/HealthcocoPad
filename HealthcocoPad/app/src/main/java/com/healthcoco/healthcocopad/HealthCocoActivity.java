@@ -168,6 +168,25 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
         }
     }
 
+    /**
+     * Hides the soft keyboard
+     */
+    public void hideSoftKeyboard() {
+        if (getCurrentFocus() != null) {
+            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
+    }
+
+    /**
+     * Shows the soft keyboard
+     */
+    public void showSoftKeyboard(View view) {
+        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+        view.requestFocus();
+        inputMethodManager.showSoftInput(view, 0);
+    }
+
     public void initDefaultData(User user) {
         isInitialLoading = true;
         this.user = user;
@@ -882,15 +901,6 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
         });
         alertBuilder.create();
         alertBuilder.show();
-    }
-
-    /**
-     * Shows the soft keyboard
-     */
-    public void showSoftKeyboard(View view) {
-        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-        view.requestFocus();
-        inputMethodManager.showSoftInput(view, 0);
     }
 
     public void syncContacts(User user) {

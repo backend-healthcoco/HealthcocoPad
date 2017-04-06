@@ -155,11 +155,11 @@ public class MenuDrawerFragment extends HealthCocoFragment implements View.OnCli
     private void initMenuListAdapter() {
         list = new ArrayList<>();
         list.add(FragmentType.CONTACTS);
-        list.add(FragmentType.CALENDAR);
-        list.add(FragmentType.PROFILE);
-        list.add(FragmentType.CLINIC_PROFILE);
-        list.add(FragmentType.ISSUE_TRACKER);
-        list.add(FragmentType.SYNC);
+//        list.add(FragmentType.CALENDAR);
+//        list.add(FragmentType.PROFILE);
+//        list.add(FragmentType.CLINIC_PROFILE);
+//        list.add(FragmentType.ISSUE_TRACKER);
+//        list.add(FragmentType.SYNC);
         list.add(FragmentType.HELP_IMPROVE);
         list.add(FragmentType.SETTINGS);
         menuListAdapter = new MenuListAdapter(mActivity);

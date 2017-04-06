@@ -10,20 +10,21 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 
-import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.HealthCocoDialogFragment;
+import com.healthcoco.healthcocopad.R;
+import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.adapter.PatientNumberSearchAdapter;
 import com.healthcoco.healthcocopad.bean.server.AlreadyRegisteredPatientsResponse;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.enums.AddUpdateNameDialogType;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
+import com.healthcoco.healthcocopad.enums.RoleType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.fragments.BookAppointmentFragment;
 import com.healthcoco.healthcocopad.fragments.ContactsListFragment;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
-import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
 
 import java.util.List;
@@ -70,7 +71,7 @@ public class PatientNumberSearchResultsDialogFragment extends HealthCocoDialogFr
         if (!Util.isNullOrEmptyList(list)) {
             initAdapter();
         } else
-            openRegistrationFragment("");
+            openRegistrationFragment(false, "");
     }
 
     @Override
@@ -98,13 +99,13 @@ public class PatientNumberSearchResultsDialogFragment extends HealthCocoDialogFr
         lvPatients.setAdapter(mAdapter);
     }
 
-    public void openRegistrationFragment(String patientUniqueId) {
-        Intent intent = new Intent();
+    public void openRegistrationFragment(boolean isEdit, String patientUniqueId) {
+        Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
+        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.PATIENT_REGISTRATION.ordinal());
         intent.putExtra(HealthCocoConstants.TAG_UNIQUE_ID, patientUniqueId);
         intent.putExtra(HealthCocoConstants.TAG_MOBILE_NUMBER, mobileNumber);
-        mActivity.openCommonOpenUpActivity(CommonOpenUpFragmentType.PATIENT_REGISTRATION, intent,
-                HealthCocoConstants.REQUEST_CODE_CONTACTS_DETAIL);
-        closeThisActivity();
+        intent.putExtra(HealthCocoConstants.TAG_IS_EDIT_PATIENT, isEdit);
+        startActivityForResult(intent, HealthCocoConstants.REQUEST_CODE_CONTACTS_LIST);
     }
 
     @Override
@@ -115,7 +116,7 @@ public class PatientNumberSearchResultsDialogFragment extends HealthCocoDialogFr
                     if (!isFromHomeActivity)
                         openAddNewPatientDialog(AddUpdateNameDialogType.ADD_NEW_PATIENT_NAME, this, "", 0);
                     else
-                        openRegistrationFragment("");
+                        openRegistrationFragment(false, "");
                 } else
                     Util.showAlert(mActivity, R.string.alert_nine_patients_already_registered);
                 break;
@@ -157,11 +158,17 @@ public class PatientNumberSearchResultsDialogFragment extends HealthCocoDialogFr
             }
             mActivity.finish();
         } else {
+            boolean isEdit = false;
             if (alreadyRegisteredPatient.getIsPartOfClinic() != null && alreadyRegisteredPatient.getIsPartOfClinic()) {
-                LogUtils.LOGD(TAG, "Open Detail Screen");
-                openPatientDetailScreen(alreadyRegisteredPatient);
-            } else
-                openRegistrationFragment(alreadyRegisteredPatient.getUserId());
+                if (!Util.isNullOrEmptyList(user.getRoleTypes()))
+                    if ((user.getRoleTypes().contains(RoleType.CONSULTANT_DOCTOR) && alreadyRegisteredPatient.isPartOfConsultantDoctor())
+                            || !user.getRoleTypes().contains(RoleType.CONSULTANT_DOCTOR)) {
+                        openPatientDetailScreen(alreadyRegisteredPatient);
+                        return;
+                    } else
+                        isEdit = true;
+            }
+            openRegistrationFragment(isEdit, alreadyRegisteredPatient.getUserId());
         }
     }
 
@@ -179,7 +186,6 @@ public class PatientNumberSearchResultsDialogFragment extends HealthCocoDialogFr
 
 
     private void closeThisActivity() {
-        getTargetFragment().onActivityResult(getTargetRequestCode(), HealthCocoConstants.RESULT_CODE_REGISTRATION, getActivity().getIntent());
         getDialog().dismiss();
     }
 }

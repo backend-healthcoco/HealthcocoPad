@@ -91,10 +91,10 @@ public class DrugDoseItemViewHolder extends LinearLayout {
     }
 
 //        if (drugItem.getDuration() != null && drugItem.getDuration().getDurationUnit() != null
-//                && !Util.isNullOrBlank(drugItem.getDuration().getValue())
+//                && !Util.isNullOrBlank(drugItem.getDuration().getValueId())
 //                && !Util.isNullOrBlank(drugItem.getDuration().getDurationUnit().getUnit()))
 //            tvDuration.setText(
-//                    drugItem.getDuration().getValue() + " " + drugItem.getDuration().getDurationUnit().getUnit());
+//                    drugItem.getDuration().getValueId() + " " + drugItem.getDuration().getDurationUnit().getUnit());
 //        else {
 //            tvDuration.setVisibility(View.GONE);
 //            tvDuration.setText("");

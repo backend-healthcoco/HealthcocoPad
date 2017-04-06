@@ -30,6 +30,8 @@ import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocopad.enums.AddUpdateNameDialogType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
+import com.healthcoco.healthcocopad.fragments.ContactsListFragment;
+import com.healthcoco.healthcocopad.fragments.FilterFragment;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
 import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
@@ -373,10 +375,12 @@ public class AddUpdateNameDialogFragment extends HealthCocoDialogFragment implem
                 case ADD_NEW_GROUP:
                 case UPDATE_GROUP:
                     if (response.isValidData(response) && response.getData() instanceof UserGroups) {
+//                        mActivity.syncGroups(user);
                         UserGroups group = (UserGroups) response.getData();
                         LocalDataServiceImpl.getInstance(mApp).addUserGroup(group);
+                        Util.sendBroadcast(mApp, FilterFragment.INTENT_REFRESH_GROUPS_LIST_LOCAL);
+                        Util.sendBroadcast(mApp, ContactsListFragment.INTENT_REFRESH_GROUPS_LIST_FROM_SERVER);
                         getTargetFragment().onActivityResult(HealthCocoConstants.REQUEST_CODE_GROUPS_LIST, HealthCocoConstants.RESULT_CODE_ADD_GROUP, null);
-                        mActivity.syncGroups(user);
                     }
                     break;
                 case SEND_EMAIL_CLINICAL_NOTES:

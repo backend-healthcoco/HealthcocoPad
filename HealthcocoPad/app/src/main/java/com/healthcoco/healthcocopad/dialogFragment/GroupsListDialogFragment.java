@@ -35,8 +35,11 @@ import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
 
+import org.parceler.Parcels;
+
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -44,16 +47,17 @@ import java.util.List;
  */
 public class GroupsListDialogFragment extends HealthCocoDialogFragment implements View.OnClickListener, GsonRequest.ErrorListener, LocalDoInBackgroundListenerOptimised,
         Response.Listener<VolleyResponseBean>, AssignGroupListener {
+    public static final String TAG_SELECTED_PATIENT_ID = "patientId";
+    public static final String TAG_GROUP_IDS_LIST = "groupIdsList";
     private ListView lvGroups;
     private Button btAddNewGroup;
     private GroupsListViewAdapter adapter;
     private TextView tvNoGroups;
-    private List<UserGroups> groupsList = new ArrayList<UserGroups>();
-    private ArrayList<String> groupIdsToAssign = new ArrayList<String>();
-    private ArrayList<UserGroups> groupListToAssign = new ArrayList<>();
+    private HashMap<String, UserGroups> groupListToAssign = new HashMap<>();
 
     private RegisteredPatientDetailsUpdated selectedPatient;
     private User user;
+    private String selectedPatientUserId;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -65,29 +69,21 @@ public class GroupsListDialogFragment extends HealthCocoDialogFragment implement
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        init();
         setWidthHeight(0.50, 0.85);
+        Bundle bundle = getArguments();
+        selectedPatientUserId = Parcels.unwrap(bundle.getParcelable(TAG_SELECTED_PATIENT_ID));
+        if (!Util.isNullOrBlank(selectedPatientUserId)) {
+            init();
+        }
+        mActivity.showLoading(false);
+        new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_FRAGMENT_INITIALISATION_DATA, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     @Override
     public void init() {
-        Intent intent = mActivity.getIntent();
-        String selectedPatientUserId = intent.getStringExtra(HealthCocoConstants.TAG_SELECTED_USER_ID);
-        ArrayList<String> list = (ArrayList<String>) intent.getSerializableExtra(HealthCocoConstants.TAG_GROUP_IDS_LIST);
-        if (!Util.isNullOrEmptyList(list))
-            groupIdsToAssign.addAll(list);
-        selectedPatient = LocalDataServiceImpl.getInstance(mApp).getPatient(selectedPatientUserId);
-        if (selectedPatient != null && !Util.isNullOrEmptyList(selectedPatient.getGroupIds()))
-            groupIdsToAssign.addAll(selectedPatient.getGroupIds());
-        LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
-        if (doctor != null && doctor.getUser() != null && !Util.isNullOrBlank(doctor.getUser().getUniqueId())) {
-            user = doctor.getUser();
-            initViews();
-            initListeners();
-            initAdapter();
-            notifyAdapter(groupsList);
-            getGrouspListFromLocal();
-        }
+        initViews();
+        initListeners();
+        initAdapter();
     }
 
     public void getGrouspListFromLocal() {
@@ -98,7 +94,7 @@ public class GroupsListDialogFragment extends HealthCocoDialogFragment implement
     private void getGroupsList() {
         mActivity.showLoading(false);
         Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.USER_GROUP);
-        WebDataServiceImpl.getInstance(mApp).getGroupsList(WebServiceType.GET_GROUPS, UserGroups.class, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(), latestUpdatedTime, groupIdsToAssign, this, this);
+        WebDataServiceImpl.getInstance(mApp).getGroupsList(WebServiceType.GET_GROUPS, UserGroups.class, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(), latestUpdatedTime, new ArrayList<>(groupListToAssign.keySet()), this, this);
     }
 
     @Override
@@ -148,7 +144,7 @@ public class GroupsListDialogFragment extends HealthCocoDialogFragment implement
                 if (selectedPatient != null) {
                     mActivity.showLoading(false);
                     AssignGroupRequest assignGroupRequest = new AssignGroupRequest();
-                    assignGroupRequest.setGroupIds(groupIdsToAssign);
+                    assignGroupRequest.setGroupIds(new ArrayList<>(groupListToAssign.keySet()));
                     if (selectedPatient != null)
                         assignGroupRequest.setPatientId(selectedPatient.getUserId());
                     assignGroupRequest.setDoctorId(user.getUniqueId());
@@ -156,7 +152,7 @@ public class GroupsListDialogFragment extends HealthCocoDialogFragment implement
                     assignGroupRequest.setHospitalId(user.getForeignHospitalId());
                     WebDataServiceImpl.getInstance(mApp).assignGroup(AssignGroupRequest.class, assignGroupRequest, this, this);
                 }
-                getTargetFragment().onActivityResult(getTargetRequestCode(), HealthCocoConstants.RESULT_CODE_GROUPS_LIST, new Intent().putExtra(HealthCocoConstants.TAG_GROUP_IDS_LIST, groupIdsToAssign));
+                getTargetFragment().onActivityResult(getTargetRequestCode(), HealthCocoConstants.RESULT_CODE_GROUPS_LIST, new Intent().putExtra(HealthCocoConstants.TAG_GROUP_IDS_LIST, new ArrayList<>(groupListToAssign.keySet())));
                 dismiss();
                 break;
         }
@@ -178,9 +174,17 @@ public class GroupsListDialogFragment extends HealthCocoDialogFragment implement
     public void onResponse(VolleyResponseBean response) {
         LogUtils.LOGD(TAG, "Success " + String.valueOf(response.getWebServiceType()));
         switch (response.getWebServiceType()) {
+            case FRAGMENT_INITIALISATION:
+                if (user != null && !Util.isNullOrBlank(user.getUniqueId())
+                        && !Util.isNullOrBlank(user.getForeignHospitalId())
+                        && !Util.isNullOrBlank(user.getForeignLocationId())
+                        && selectedPatient != null) {
+                    formHashMap(selectedPatient.getGroups());
+                    getGrouspListFromLocal();
+                }
             case GET_GROUPS:
                 if (response.isDataFromLocal()) {
-                    groupsList = (ArrayList<UserGroups>) (ArrayList<?>) response
+                    ArrayList<UserGroups> groupsList = (ArrayList<UserGroups>) (ArrayList<?>) response
                             .getDataList();
                     if (!Util.isNullOrEmptyList(groupsList))
                         LogUtils.LOGD(TAG, "Success onResponse groupsList Size " + groupsList.size() + " isDataFromLocal " + response.isDataFromLocal());
@@ -197,7 +201,8 @@ public class GroupsListDialogFragment extends HealthCocoDialogFragment implement
                 mActivity.hideLoading();
                 break;
             case ASSIGN_GROUP:
-                selectedPatient.setGroups(groupListToAssign);
+                selectedPatient.setGroups(new ArrayList<>(groupListToAssign.values()));
+                LogUtils.LOGD(TAG, "groupListToAssign " + new ArrayList<>(groupListToAssign.keySet()).size());
                 LocalDataServiceImpl.getInstance(mApp).addPatient(selectedPatient);
                 getTargetFragment().onActivityResult(getTargetRequestCode(), HealthCocoConstants.RESULT_CODE_GROUPS_LIST, new Intent());
                 dismiss();
@@ -209,18 +214,22 @@ public class GroupsListDialogFragment extends HealthCocoDialogFragment implement
         mActivity.hideLoading();
     }
 
+    private void formHashMap(List<UserGroups> groups) {
+        if (!Util.isNullOrEmptyList(groups))
+            for (UserGroups userGroup :
+                    groups) {
+                groupListToAssign.put(userGroup.getUniqueId(), userGroup);
+            }
+    }
+
 
     @Override
     public void onAssignGroupCheckClicked(boolean isSelected, UserGroups group) {
         String groupId = group.getUniqueId();
         if (isSelected) {
-            if (!groupIdsToAssign.contains(groupId)) {
-                groupListToAssign.add(group);
-                groupIdsToAssign.add(groupId);
-            }
-        } else if (groupIdsToAssign.contains(groupId)) {
-            groupIdsToAssign.remove(groupId);
-            groupListToAssign.remove(group);
+            groupListToAssign.put(groupId, group);
+        } else if (groupListToAssign.containsKey(groupId)) {
+            groupListToAssign.remove(groupId);
         }
     }
 
@@ -228,10 +237,19 @@ public class GroupsListDialogFragment extends HealthCocoDialogFragment implement
     public VolleyResponseBean doInBackground(VolleyResponseBean response) {
         VolleyResponseBean volleyResponseBean = null;
         switch (response.getLocalBackgroundTaskType()) {
+            case GET_FRAGMENT_INITIALISATION_DATA:
+                volleyResponseBean = new VolleyResponseBean();
+                volleyResponseBean.setWebServiceType(WebServiceType.FRAGMENT_INITIALISATION);
+                LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
+                if (doctor != null && doctor.getUser() != null && !Util.isNullOrBlank(doctor.getUser().getUniqueId())) {
+                    user = doctor.getUser();
+                }
+                selectedPatient = LocalDataServiceImpl.getInstance(mApp).getPatient(selectedPatientUserId);
+                break;
             case ADD_GROUPS_LIST:
                 LocalDataServiceImpl.getInstance(mApp).addUserGroupsList((ArrayList<UserGroups>) (ArrayList<?>) response.getDataList());
             case GET_GROUPS:
-                volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getUserGroups(WebServiceType.GET_GROUPS, groupIdsToAssign, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(), null, null);
+                volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getUserGroups(WebServiceType.GET_GROUPS, new ArrayList<>(groupListToAssign.keySet()), user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(), null, null);
                 break;
         }
         volleyResponseBean.setIsFromLocalAfterApiSuccess(response.isFromLocalAfterApiSuccess());

@@ -4,6 +4,7 @@ import com.orm.SugarRecord;
 import com.orm.annotation.Ignore;
 import com.orm.annotation.Unique;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class LocationAndAccessControl extends SugarRecord {
@@ -58,7 +59,7 @@ public class LocationAndAccessControl extends SugarRecord {
 
     private Boolean isLab = false;
     @Ignore
-    private List<Role> roles;
+    private ArrayList<Role> roles;
 
     protected String foreignHospitalId;
     protected String doctorId;
@@ -287,11 +288,11 @@ public class LocationAndAccessControl extends SugarRecord {
         this.isLab = isLab;
     }
 
-    public List<Role> getRoles() {
+    public ArrayList<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(List<Role> roles) {
+    public void setRoles(ArrayList<Role> roles) {
         this.roles = roles;
     }
 

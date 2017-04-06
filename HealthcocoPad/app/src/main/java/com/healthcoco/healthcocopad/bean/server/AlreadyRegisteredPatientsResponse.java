@@ -34,6 +34,7 @@ public class AlreadyRegisteredPatientsResponse extends SugarRecord {
     private String secPhoneNumber;
     protected String imageFilePath;
     private String localPatientName;
+    private boolean isPartOfConsultantDoctor;
 
     public String getUserName() {
         return userName;
@@ -179,5 +180,13 @@ public class AlreadyRegisteredPatientsResponse extends SugarRecord {
 
     public void setLocalPatientName(String localPatientName) {
         this.localPatientName = localPatientName;
+    }
+
+    public boolean isPartOfConsultantDoctor() {
+        return isPartOfConsultantDoctor;
+    }
+
+    public void setPartOfConsultantDoctor(boolean partOfConsultantDoctor) {
+        isPartOfConsultantDoctor = partOfConsultantDoctor;
     }
 }

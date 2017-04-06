@@ -94,8 +94,10 @@ public class DownloadImageFromUrlUtil {
             layoutParamsTextView.gravity = Gravity.CENTER;
             tvInitialAlphabet.setLayoutParams(layoutParamsTextView);
             tvInitialAlphabet.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
-
-            setAlphabetBackground(ivContactProfile.getLayoutParams().width, colorCode, name.charAt(0), tvInitialAlphabet, ivContactProfile);
+            char firstLetter = ' ';
+            if (!Util.isNullOrBlank(name))
+                firstLetter = name.charAt(0);
+            setAlphabetBackground(ivContactProfile.getLayoutParams().width, colorCode, firstLetter, tvInitialAlphabet, ivContactProfile);
             if (ivContactProfile instanceof CircularImageView) {
                 CircularImageView circularImageView = (CircularImageView) ivContactProfile;
                 circularImageView.setBorderColor(Color.parseColor(colorCode));

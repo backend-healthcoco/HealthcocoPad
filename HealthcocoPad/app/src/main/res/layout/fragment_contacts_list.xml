@@ -26,7 +26,7 @@
             android:orientation="horizontal"
             android:padding="@dimen/layout_edit_search_padding"
             android:paddingRight="@dimen/layout_edit_search_padding"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -47,7 +47,7 @@
                     android:src="@drawable/tab_cancel_normal" />
 
                 <com.healthcoco.healthcocopad.views.CustomAutoCompleteTextView
-                    android:id="@+id/edit_search_dropdown"
+                    android:id="@+id/autotv_search_type"
                     style="@style/registration_edittext"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -61,16 +61,15 @@
                     android:drawableRight="@drawable/arrow_down_drug"
                     android:editable="false"
                     android:focusable="false"
+                    android:focusableInTouchMode="false"
                     android:hint="@string/search_patient"
-                    android:inputType="textNoSuggestions|textFilter"
                     android:maxLines="1"
                     android:padding="10dp"
-                    android:singleLine="true"
                     android:textColorHint="@color/grey_hint_color"
                     android:textSize="@dimen/edit_text_top_search_size" />
 
                 <EditText
-                    android:id="@+id/edit_search"
+                    android:id="@+id/edit_advance_search_text"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -78,10 +77,33 @@
                     android:drawablePadding="10dp"
                     android:hint="@string/search_patient"
                     android:inputType="textNoSuggestions|textFilter"
+                    android:maxLines="1"
                     android:padding="10dp"
-                    android:singleLine="true"
                     android:textColorHint="@color/grey_hint_color"
                     android:textSize="@dimen/edit_text_top_search_size" />
+
+                <com.healthcoco.healthcocopad.views.CustomAutoCompleteTextView
+                    android:id="@+id/autotv_advance_search_text"
+                    style="@style/registration_edittext"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
+                    android:clickable="true"
+                    android:drawableEnd="@drawable/arrow_down_drug"
+                    android:drawablePadding="10dp"
+                    android:drawableRight="@drawable/arrow_down_drug"
+                    android:editable="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:hint="@string/search_patient"
+                    android:maxLines="1"
+                    android:padding="10dp"
+                    android:textColorHint="@color/grey_hint_color"
+                    android:textSize="@dimen/edit_text_top_search_size"
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/bt_search"

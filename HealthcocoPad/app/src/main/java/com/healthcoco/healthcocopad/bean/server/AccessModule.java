@@ -22,7 +22,7 @@ public class AccessModule extends SugarRecord {
 
     @Ignore
     private List<AccessPermissionType> accessPermissionTypes;
-    private String stringAccessPermissionTypes;
+    private String accessPermissionTypesJson;
 
     protected String foreignRoleId;
 
@@ -75,11 +75,11 @@ public class AccessModule extends SugarRecord {
         this.accessPermissionTypes = accessPermissionTypes;
     }
 
-    public String getStringAccessPermissionTypes() {
-        return stringAccessPermissionTypes;
+    public String getAccessPermissionTypesJson() {
+        return accessPermissionTypesJson;
     }
 
-    public void setStringAccessPermissionTypes(String stringAccessPermissionTypes) {
-        this.stringAccessPermissionTypes = stringAccessPermissionTypes;
+    public void setAccessPermissionTypesJson(String accessPermissionTypesJson) {
+        this.accessPermissionTypesJson = accessPermissionTypesJson;
     }
 }

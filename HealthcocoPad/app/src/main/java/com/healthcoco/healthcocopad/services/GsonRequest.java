@@ -20,19 +20,24 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import com.healthcoco.healthcocopad.HealthCocoApplication;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
+import com.healthcoco.healthcocopad.bean.server.APILatestUpdatedTimes;
 import com.healthcoco.healthcocopad.bean.server.SyncAll;
+import com.healthcoco.healthcocopad.bean.server.UserGroups;
 import com.healthcoco.healthcocopad.enums.SyncAllType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.fragments.ClinicalProfileFragment;
 import com.healthcoco.healthcocopad.fragments.PatientProfileDetailFragment;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
+import com.healthcoco.healthcocopad.utilities.ComparatorUtil;
 import com.healthcoco.healthcocopad.utilities.DevConfig;
 import com.healthcoco.healthcocopad.utilities.LocalDatabaseUtils;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
+import com.healthcoco.healthcocopad.utilities.StringUtil;
 import com.healthcoco.healthcocopad.utilities.Util;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -227,6 +232,8 @@ public class GsonRequest extends JsonRequest<VolleyResponseBean> {
                             list.add(getObjectFromLinkedTreeMap(responseClass, object));
                         }
                         response.setDataList(list);
+                        if (!Util.isNullOrEmptyList(response.getDataList()))
+                            updateLatestUpdatedTime(webServiceType, response.getDataList());
                     }
                 }
             }
@@ -245,6 +252,25 @@ public class GsonRequest extends JsonRequest<VolleyResponseBean> {
         } catch (Exception e) {
             e.printStackTrace();
             return Response.error(new ParseError(e));
+        }
+    }
+
+    private void updateLatestUpdatedTime(WebServiceType webServiceType, ArrayList<Object> list) {
+        long updatedTime = 0l;
+        String tableName = null;
+        switch (webServiceType) {
+            case GET_GROUPS:
+                ArrayList<UserGroups> groupsList = (ArrayList<UserGroups>) (ArrayList<?>) list;
+                Collections.sort(groupsList, ComparatorUtil.updatedTimeComparator);
+                updatedTime = groupsList.get(groupsList.size() - 1).getUpdatedTime();
+                tableName = UserGroups.class.getSimpleName();
+                break;
+        }
+        if (!Util.isNullOrBlank(tableName)) {
+            APILatestUpdatedTimes apiLatestUpdatedTimes = new APILatestUpdatedTimes();
+            apiLatestUpdatedTimes.setUpdatedTime(updatedTime);
+            apiLatestUpdatedTimes.setTableName(StringUtil.toSQLName(tableName));
+            LocalDataServiceImpl.getInstance(mApp).updateLatestTime(apiLatestUpdatedTimes);
         }
     }
 

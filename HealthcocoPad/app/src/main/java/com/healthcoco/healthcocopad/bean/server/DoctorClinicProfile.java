@@ -8,6 +8,7 @@ import com.orm.SugarRecord;
 import com.orm.annotation.Ignore;
 import com.orm.annotation.Unique;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @org.parceler.Parcel
@@ -59,7 +60,8 @@ public class DoctorClinicProfile extends SugarRecord {
     private Integer noOfReviews;
     private Integer noOfRecommenations;
     private String hospitalId;
-
+    @Ignore
+    private ArrayList<Role> roles;
     public DoctorClinicProfile() {
     }
 
@@ -296,5 +298,13 @@ public class DoctorClinicProfile extends SugarRecord {
 
     public void setHospitalId(String hospitalId) {
         this.hospitalId = hospitalId;
+    }
+
+    public ArrayList<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(ArrayList<Role> roles) {
+        this.roles = roles;
     }
 }

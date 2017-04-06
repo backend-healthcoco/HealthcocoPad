@@ -347,6 +347,7 @@ public class HomeActivity extends HealthCocoActivity implements View.OnClickList
 
     @Override
     public void onClick(View view) {
+        hideSoftKeyboard();
         switch (view.getId()) {
             case R.id.bt_menu:
                 if (sliding_pane_layout.isOpen()) {
@@ -495,4 +496,7 @@ public class HomeActivity extends HealthCocoActivity implements View.OnClickList
         return volleyResponseBean;
     }
 
+    public FilterFragment getFilterFragment() {
+        return filterFragment;
+    }
 }

@@ -10,6 +10,7 @@ public enum WebServiceType {
     FRAGMENT_INITIALISATION(0, null),
     GET_PATIENT_VISIT_DETAIL(0, null),
     LOCAL_STRING_SAVE(0, null),
+    GET_PATIENTS_COUNT(0, ""),
     ADD_PRESCRIPTION(Method.POST, "prescription/prescriptionHandheld/add/"),
 
     GET_PRESCRIPTION(Method.GET, "prescription/"),
@@ -287,7 +288,8 @@ public enum WebServiceType {
 
     ADD_UPDATE_PERSONAL_HISTORY_DETAIL(Method.POST, "history/assignPersonalHistory/"),
 
-    ADD_UPDATE_DRUGS_AND_ALLERGIES_DETAIL(Method.POST, "history/assignDrugsAndAllergies/");
+    ADD_UPDATE_DRUGS_AND_ALLERGIES_DETAIL(Method.POST, "history/assignDrugsAndAllergies/"),
+    GET_HARDCODED_BLOOD_GROUPS(0, "");
 
     private int methodType;
     private String url;

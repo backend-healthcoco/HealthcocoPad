@@ -458,7 +458,8 @@
     <string name="please_enter_feedback">Please enter Feedback</string>
     <string name="enter_patient_mobile_number">Enter Patient Mobile Number</string>
     <string name="enter_new_patient_name">Enter New Patient Name</string>
-    <string name="patient_name">Patient Name:</string>
+    <string name="patient_name">Patient Name</string>
+    <string name="patient_name_with_colon">Patient Name:</string>
     <string name="new_test">New Test</string>
     <string name="test_name">Test Name</string>
     <string name="new_note">New Note</string>
@@ -651,6 +652,17 @@
     <string name="search_duration">Search Duration</string>
     <string name="search_frequency">Search Frequency</string>
     <string name="no_result_found">No result found</string>
+
+    <!--AdvanceSearchOptions Text-->
+    <string name="patient_id">Patient Id</string>
+    <string name="enter_patient_id">Enter Patient Id</string>
+    <string name="enter_patient_name">Enter Patient Name</string>
+    <string name="enter_mobile_number">Enter Mobile Number</string>
+    <string name="enter_email">Enter Email</string>
+    <string name="select_blood_group">Select Blood Group</string>
+    <string name="select_profession">Select Profession</string>
+    <string name="reference">Reference</string>
+    <string name="select_reference">Select Reference</string>
     <string name="no_templates_added">No Template Added</string>
     <string name="write_insruction_text">Write an instruction</string>
     <string name="please_enter_template_name">Please Enter Template name</string>
@@ -663,7 +675,7 @@
     <string name="confirm_discard_clinical_notes_message">This cannot be undone.</string>
     <string name="rx_text">Rx</string>
     <string name="date_with_colon">Date:</string>
-    <string name="patient_id">Patient Id:</string>
+    <string name="patient_id_with_colon">Patient Id:</string>
     <string name="prescription_rx">Prescription-Rx&#160;:</string>
     <string name="mobile_no">Mobile No. :</string>
     <string name="write_advice">Write Advice</string>

@@ -19,7 +19,9 @@ import com.healthcoco.healthcocopad.bean.server.DrugType;
 import com.healthcoco.healthcocopad.bean.server.InvestigationSuggestions;
 import com.healthcoco.healthcocopad.bean.server.ObservationSuggestions;
 import com.healthcoco.healthcocopad.bean.server.Profession;
+import com.healthcoco.healthcocopad.bean.server.Reference;
 import com.healthcoco.healthcocopad.bean.server.Role;
+import com.healthcoco.healthcocopad.enums.AdvanceSearchOptionsType;
 import com.healthcoco.healthcocopad.enums.AutoCompleteTextViewType;
 import com.healthcoco.healthcocopad.listeners.AutoCompleteTextViewListener;
 import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
@@ -40,7 +42,6 @@ public class AutoCompleteTextViewAdapter extends ArrayAdapter<Object> {
     private List<Object> itemsAll = new ArrayList<>();
     private List<Object> suggestions;
     private int viewResourceId;
-    private Context context;
 
     public AutoCompleteTextViewAdapter(Context context, int viewResourceId, List<Object> items, AutoCompleteTextViewType autoCompleteTextViewType) {
         super(context, viewResourceId, items);
@@ -153,7 +154,6 @@ public class AutoCompleteTextViewAdapter extends ArrayAdapter<Object> {
             case COUNTRY:
             case DOCTOR_TITLES:
             case BLOOD_GROUP:
-            case ADVANCE_SEARCH_OPTION:
                 if (object instanceof String) {
                     text = (String) object;
                 }
@@ -162,6 +162,12 @@ public class AutoCompleteTextViewAdapter extends ArrayAdapter<Object> {
                 if (object instanceof Profession) {
                     Profession profession = (Profession) object;
                     text = profession.getProfession();
+                }
+                break;
+            case REFERENCE:
+                if (object instanceof Reference) {
+                    Reference reference = (Reference) object;
+                    text = reference.getReference();
                 }
                 break;
             case AVAILABLE_BOOKED_APPOINTMENTS:
@@ -197,6 +203,13 @@ public class AutoCompleteTextViewAdapter extends ArrayAdapter<Object> {
                 if (object instanceof DoctorClinicProfile) {
                     DoctorClinicProfile doctorClinicProfile = (DoctorClinicProfile) object;
                     text = String.valueOf(doctorClinicProfile.getLocationName());
+                }
+                break;
+            case ADVANCE_SEARCH_OPTION:
+                if (object instanceof AdvanceSearchOptionsType) {
+                    AdvanceSearchOptionsType searchOptionsType = (AdvanceSearchOptionsType) object;
+                    text = getContext().getResources().getString(searchOptionsType.getValueId());
+                    if (view != null) view.setTag(searchOptionsType);
                 }
                 break;
         }

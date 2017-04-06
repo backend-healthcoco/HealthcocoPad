@@ -68,9 +68,41 @@ public class RegisteredPatientDetailsUpdated extends SugarRecord {
     @Ignore
     private Reference referredBy;
     protected String foreignReferredById;
+    protected String referredByJsonString;
 
     private String thumbnailUrl;
     private Boolean discarded;
+    protected String bloodGroup;
+    protected String profession;
+    private String emailAddress;
+    private boolean isPartOfConsultantDoctor;
+    @Ignore
+    private ArrayList<String> consultantDoctorIds;
+    protected String consultantDoctorIdsJsonString;
+
+    public boolean isPartOfConsultantDoctor() {
+        return isPartOfConsultantDoctor;
+    }
+
+    public void setPartOfConsultantDoctor(boolean partOfConsultantDoctor) {
+        isPartOfConsultantDoctor = partOfConsultantDoctor;
+    }
+
+    public ArrayList<String> getConsultantDoctorIds() {
+        return consultantDoctorIds;
+    }
+
+    public void setConsultantDoctorIds(ArrayList<String> consultantDoctorIds) {
+        this.consultantDoctorIds = consultantDoctorIds;
+    }
+
+    public String getConsultantDoctorIdsJsonString() {
+        return consultantDoctorIdsJsonString;
+    }
+
+    public void setConsultantDoctorIdsJsonString(String consultantDoctorIdsJsonString) {
+        this.consultantDoctorIdsJsonString = consultantDoctorIdsJsonString;
+    }
 
     public DOB getDob() {
         return dob;
@@ -334,5 +366,37 @@ public class RegisteredPatientDetailsUpdated extends SugarRecord {
 
     public void setGroupIdsJsonString(String groupIdsJsonString) {
         this.groupIdsJsonString = groupIdsJsonString;
+    }
+
+    public String getBloodGroup() {
+        return bloodGroup;
+    }
+
+    public void setBloodGroup(String bloodGroup) {
+        this.bloodGroup = bloodGroup;
+    }
+
+    public String getProfession() {
+        return profession;
+    }
+
+    public void setProfession(String profession) {
+        this.profession = profession;
+    }
+
+    public String getReferredByJsonString() {
+        return referredByJsonString;
+    }
+
+    public void setReferredByJsonString(String referredByJsonString) {
+        this.referredByJsonString = referredByJsonString;
+    }
+
+    public void setEmailAddress(String emailAddress) {
+        this.emailAddress = emailAddress;
+    }
+
+    public String getEmailAddress() {
+        return emailAddress;
     }
 }

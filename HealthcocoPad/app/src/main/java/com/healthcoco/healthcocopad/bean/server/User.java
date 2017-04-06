@@ -2,10 +2,14 @@ package com.healthcoco.healthcocopad.bean.server;
 
 import com.healthcoco.healthcocopad.bean.DOB;
 import com.healthcoco.healthcocopad.bean.UIPermissions;
+import com.healthcoco.healthcocopad.enums.RoleType;
 import com.healthcoco.healthcocopad.enums.UserState;
 import com.orm.SugarRecord;
 import com.orm.annotation.Ignore;
 import com.orm.annotation.Unique;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Shreshtha on 23-01-2017.
@@ -43,6 +47,26 @@ public class User extends SugarRecord {
     private UserState userState;
     private String colorCode;
     private UIPermissions uiPermissions;
+    @Ignore
+    private List<Role> roles;
+    @Ignore
+    private ArrayList<RoleType> roleTypes;
+
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
+    }
+
+    public ArrayList<RoleType> getRoleTypes() {
+        return roleTypes;
+    }
+
+    public void setRoleTypes(ArrayList<RoleType> roleTypes) {
+        this.roleTypes = roleTypes;
+    }
 
     public String getImageUrl() {
         return imageUrl;

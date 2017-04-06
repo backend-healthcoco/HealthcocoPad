@@ -1,5 +1,6 @@
 package com.healthcoco.healthcocopad.services.impl;
 
+import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
 
 import com.android.volley.Response;
@@ -12,12 +13,12 @@ import com.healthcoco.healthcocopad.bean.DOB;
 import com.healthcoco.healthcocopad.bean.UIPermissions;
 import com.healthcoco.healthcocopad.bean.UserPermissionsResponse;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
+import com.healthcoco.healthcocopad.bean.server.APILatestUpdatedTimes;
 import com.healthcoco.healthcocopad.bean.server.AccessModule;
 import com.healthcoco.healthcocopad.bean.server.Achievement;
 import com.healthcoco.healthcocopad.bean.server.AllUIPermission;
 import com.healthcoco.healthcocopad.bean.server.AlreadyRegisteredPatientsResponse;
 import com.healthcoco.healthcocopad.bean.server.AppointmentSlot;
-import com.healthcoco.healthcocopad.bean.server.AssignedGroupsTable;
 import com.healthcoco.healthcocopad.bean.server.BloodGroup;
 import com.healthcoco.healthcocopad.bean.server.BloodPressure;
 import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
@@ -100,25 +101,25 @@ import com.healthcoco.healthcocopad.bean.server.VisitDetails;
 import com.healthcoco.healthcocopad.bean.server.VisitedForTypeTable;
 import com.healthcoco.healthcocopad.bean.server.VitalSigns;
 import com.healthcoco.healthcocopad.bean.server.WorkingHours;
-import com.healthcoco.healthcocopad.bean.server.WorkingSchedule;
+import com.healthcoco.healthcocopad.enums.AdvanceSearchOptionsType;
 import com.healthcoco.healthcocopad.enums.BooleanTypeValues;
 import com.healthcoco.healthcocopad.enums.FilterItemType;
 import com.healthcoco.healthcocopad.enums.HistoryFilterType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.LocalTabelType;
 import com.healthcoco.healthcocopad.enums.RecordType;
+import com.healthcoco.healthcocopad.enums.RoleType;
 import com.healthcoco.healthcocopad.enums.VisitedForType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.enums.WeekDayNameType;
 import com.healthcoco.healthcocopad.fragments.ClinicalProfileFragment;
 import com.healthcoco.healthcocopad.fragments.MenuDrawerFragment;
+import com.healthcoco.healthcocopad.fragments.PatientRegistrationFragment;
 import com.healthcoco.healthcocopad.services.GsonRequest;
-import com.healthcoco.healthcocopad.utilities.ComparatorUtil;
 import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.LocalDatabaseUtils;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
-import com.healthcoco.healthcocopad.utilities.ReflectionUtil;
 import com.healthcoco.healthcocopad.utilities.StringUtil;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.orm.SugarRecord;
@@ -126,7 +127,6 @@ import com.orm.query.Condition;
 import com.orm.query.Select;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -159,8 +159,12 @@ public class LocalDataServiceImpl {
     }
 
     private String getJsonFromObject(Object object) {
-        if (object != null)
-            return gson.toJson(object);
+        if (object != null) {
+            String json = gson.toJson(object);
+//            if (json.contains("'"))
+//                json = json.replaceAll("'", "''");
+            return json;
+        }
         return null;
     }
 
@@ -235,20 +239,8 @@ public class LocalDataServiceImpl {
                                 locationAndAccessControl.setDoctorId(doctor.getUser().getUniqueId());
                                 addDoctorWorkingSchedules(doctor.getUser().getUniqueId(), LocalDatabaseUtils.KEY_FOREIGN_LOCATION_ID, locationAndAccessControl.getUniqueId(), locationAndAccessControl.getWorkingSchedules());
                             }
-                            if (!Util.isNullOrEmptyList(locationAndAccessControl.getRoles())) {
-                                for (Role role :
-                                        locationAndAccessControl.getRoles()) {
-                                    if (!Util.isNullOrEmptyList(role.getAccessModules())) {
-                                        for (AccessModule accessModule : role.getAccessModules()) {
-                                            if (!Util.isNullOrEmptyList(accessModule.getAccessPermissionTypes()))
-                                                accessModule.setStringAccessPermissionTypes(new Gson().toJson(accessModule.getAccessPermissionTypes()));
-                                            accessModule.setForeignRoleId(role.getUniqueId());
-                                            accessModule.save();
-                                        }
-                                    }
-                                    role.save();
-                                }
-                            }
+                            //saving roles
+                            addRoles(doctor.getUser().getForeignLocationId(), doctor.getUser().getForeignHospitalId(), locationAndAccessControl.getRoles());
                             locationAndAccessControl.save();
                         }
                     }
@@ -315,6 +307,36 @@ public class LocalDataServiceImpl {
                     list) {
 //                addCalendarEventsUpdated(calendarEvents);
             }
+    }
+
+    public VolleyResponseBean getListSize(LocalTabelType tableType, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
+        volleyResponseBean.setWebServiceType(WebServiceType.GET_PATIENTS_COUNT);
+        volleyResponseBean.setIsDataFromLocal(true);
+        volleyResponseBean.setIsUserOnline(HealthCocoConstants.isNetworkOnline);
+        try {
+            switch (tableType) {
+                case REGISTERED_PATIENTS_DETAILS:
+                    LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
+                    if (doctor != null) {
+                        User user = doctor.getUser();
+                        String whereCondition = "SELECT count(*) FROM " + StringUtil.toSQLName(RegisteredPatientDetailsUpdated.class.getSimpleName())
+                                + getWhereConditionForPatientsList(user);
+
+                        LogUtils.LOGD(TAG, "Select Query " + whereCondition);
+                        SQLiteStatement statement = SugarRecord.getSugarDataBase().compileStatement(whereCondition);
+                        long count = statement.simpleQueryForLong();
+                        if (count > 0)
+                            volleyResponseBean.setData("" + count);
+                    }
+                    break;
+            }
+            if (responseListener != null)
+                responseListener.onResponse(volleyResponseBean);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return volleyResponseBean;
     }
 
     public long getLatestUpdatedTime(LocalTabelType localTabelType) {
@@ -396,7 +418,20 @@ public class LocalDataServiceImpl {
         User user = Select.from(User.class).where(Condition.prop(LocalDatabaseUtils.KEY_UNIQUE_ID).eq(uniqueId))
                 .first();
         if (user != null) {
-            user.setDob((DOB) getObjectFromJson(DOB.class, user.getDobJsonString()));
+            if (user.getDob() != null) {
+            }
+            user.setUiPermissions(getUIPermissions(user.getUniqueId()));
+            user.setRoles((ArrayList<Role>) Select.from(Role.class)
+                    .where(Condition.prop(LocalDatabaseUtils.KEY_HOSPITAL_ID).eq(user.getForeignHospitalId()),
+                            Condition.prop(LocalDatabaseUtils.KEY_LOCATION_ID).eq(user.getForeignLocationId())).list());
+            if (!Util.isNullOrEmptyList(user.getRoles())) {
+                ArrayList<RoleType> roleTypes = new ArrayList<>();
+                for (Role role :
+                        user.getRoles()) {
+                    roleTypes.add(role.getRole());
+                }
+                user.setRoleTypes(roleTypes);
+            }
         }
         user.setUiPermissions(getUIPermissions(user.getUniqueId()));
         return user;
@@ -464,10 +499,19 @@ public class LocalDataServiceImpl {
         drugDirection.save();
     }
 
-    public void addUserGroupsList(List<UserGroups> groupsList) {
-        for (UserGroups userGroup : groupsList) {
-            userGroup.save();
+    public VolleyResponseBean addUserGroupsList(List<UserGroups> groupsList) {
+        VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
+        volleyResponseBean.setWebServiceType(WebServiceType.GET_GROUPS);
+        volleyResponseBean.setIsDataFromLocal(true);
+        volleyResponseBean.setIsUserOnline(HealthCocoConstants.isNetworkOnline);
+        try {
+            for (UserGroups userGroup : groupsList) {
+                userGroup.save();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        return volleyResponseBean;
     }
 
     public VolleyResponseBean getClinicDetailsResponse(WebServiceType webServiceType, String locationId, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
@@ -605,6 +649,23 @@ public class LocalDataServiceImpl {
         return volleyResponseBean;
     }
 
+    public VolleyResponseBean getHardcodedBloodGroupsList(Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
+        volleyResponseBean.setWebServiceType(WebServiceType.GET_HARDCODED_BLOOD_GROUPS);
+        volleyResponseBean.setIsDataFromLocal(true);
+        volleyResponseBean.setIsUserOnline(HealthCocoConstants.isNetworkOnline);
+        try {
+            List<Object> list = PatientRegistrationFragment.BLOOD_GROUPS;
+            volleyResponseBean.setDataList(getObjectsListFromMap(list));
+            if (responseListener != null)
+                responseListener.onResponse(volleyResponseBean);
+        } catch (Exception e) {
+            e.printStackTrace();
+            showErrorLocal(volleyResponseBean, errorListener);
+        }
+        return volleyResponseBean;
+    }
+
     public VolleyResponseBean getBloodGroup(WebServiceType webServiceType, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
         volleyResponseBean.setWebServiceType(webServiceType);
@@ -665,6 +726,11 @@ public class LocalDataServiceImpl {
         return volleyResponseBean;
     }
 
+
+    public void updateLatestTime(APILatestUpdatedTimes apiLatestUpdatedTimes) {
+        apiLatestUpdatedTimes.save();
+    }
+
     public Long getLatestUpdatedTime(User user, LocalTabelType localTabelType) {
         Long latestUpdatedTime = 0l;
         String doctorId = "";
@@ -682,9 +748,13 @@ public class LocalDataServiceImpl {
                     latestUpdatedTime = tempCitiesList.get(0).getUpdatedTime();
                 break;
             case USER_GROUP:
-                List<UserGroups> tempGroupsList = UserGroups.find(UserGroups.class, null, null, null, "updated_time DESC", "1");
-                if (!Util.isNullOrEmptyList(tempGroupsList))
-                    latestUpdatedTime = tempGroupsList.get(0).getUpdatedTime();
+                String whereCondition = " SELECT MAX(updated_time) FROM " + StringUtil.toSQLName(APILatestUpdatedTimes.class.getSimpleName())
+                        + " where "
+                        + LocalDatabaseUtils.KEY_TABLE_NAME + "=\"" + localTabelType.getTableName() + "\"" + " COLLATE NOCASE ";
+
+                LogUtils.LOGD(TAG, "Select Query " + whereCondition);
+                SQLiteStatement statement = SugarRecord.getSugarDataBase().compileStatement(whereCondition);
+                latestUpdatedTime = statement.simpleQueryForLong();
                 break;
             case DISEASE:
                 List<Disease> tempDiseaseList = Disease.find(Disease.class, null, null, null, "updated_time DESC", "1");
@@ -783,8 +853,8 @@ public class LocalDataServiceImpl {
                 break;
             case REFERENCE:
                 List<Reference> referenceList = Reference.find(Reference.class,
-                        LocalDatabaseUtils.KEY_DOCTOR_ID + "= ? AND " + LocalDatabaseUtils.KEY_IS_FROM_CONTACTS_LIST + "= ?",
-                        new String[]{doctorId, "" + LocalDatabaseUtils.BOOLEAN_FALSE_VALUE},
+                        LocalDatabaseUtils.KEY_DOCTOR_ID + "= ? ",
+                        new String[]{doctorId},
                         null, "updated_time DESC", "1");
                 if (!Util.isNullOrEmptyList(referenceList))
                     latestUpdatedTime = referenceList.get(0).getUpdatedTime();
@@ -985,8 +1055,39 @@ public class LocalDataServiceImpl {
         if (!Util.isNullOrEmptyList(clinicProfile.getImages())) {
             addClinicImages(LocalDatabaseUtils.KEY_FOREIGN_LOCATION_ID, clinicProfile.getUniqueId(), clinicProfile.getImages());
         }
+        //saving roles
+        addRoles(clinicProfile.getLocationId(), clinicProfile.getHospitalId(), clinicProfile.getRoles());
         clinicProfile.save();
     }
+
+    private void addRoles(String locationId, String hospitalId, ArrayList<Role> roles) {
+        deleteRoles(locationId, hospitalId);
+        if (!Util.isNullOrEmptyList(roles)) {
+            for (Role role :
+                    roles) {
+                if (!Util.isNullOrEmptyList(role.getAccessModules())) {
+                    for (AccessModule accessModule : role.getAccessModules()) {
+                        if (!Util.isNullOrEmptyList(accessModule.getAccessPermissionTypes()))
+                            accessModule.setAccessPermissionTypesJson(new Gson().toJson(accessModule.getAccessPermissionTypes()));
+                        accessModule.setForeignRoleId(role.getUniqueId());
+                        accessModule.save();
+                    }
+                }
+                role.setHospitalId(hospitalId);
+                role.setLocationId(locationId);
+                role.setUniqueId(role.getLocationId() + role.getHospitalId() + role.getUniqueId());
+                role.save();
+            }
+            Role.saveInTx(roles);
+        }
+    }
+
+    private void deleteRoles(String locationId, String hospitalId) {
+        Role.deleteInTx(Role.class,
+                LocalDatabaseUtils.KEY_LOCATION_ID + "= ? AND " + LocalDatabaseUtils.KEY_HOSPITAL_ID + "= ?",
+                new String[]{locationId, hospitalId});
+    }
+
 
     private void addExperienceDetailsList(String key, String value, List<DoctorExperienceDetail> list) {
         for (DoctorExperienceDetail experienceDetail :
@@ -997,10 +1098,19 @@ public class LocalDataServiceImpl {
         DoctorExperienceDetail.saveInTx(list);
     }
 
-    public void addPatientsList(ArrayList<RegisteredPatientDetailsUpdated> patientsList) {
-        for (RegisteredPatientDetailsUpdated registeredPatientDetailsUpdated : patientsList) {
-            addPatient(registeredPatientDetailsUpdated);
+    public VolleyResponseBean addPatientsList(ArrayList<RegisteredPatientDetailsUpdated> patientsList) {
+        VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
+        volleyResponseBean.setWebServiceType(WebServiceType.REGISTER_PATIENT);
+        volleyResponseBean.setIsDataFromLocal(true);
+        volleyResponseBean.setIsUserOnline(HealthCocoConstants.isNetworkOnline);
+        try {
+            for (RegisteredPatientDetailsUpdated registeredPatientDetailsUpdated : patientsList) {
+                addPatient(registeredPatientDetailsUpdated);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        return volleyResponseBean;
     }
 
     public void addPatient(RegisteredPatientDetailsUpdated registeredPatientDetailsUpdated) {
@@ -1009,6 +1119,10 @@ public class LocalDataServiceImpl {
                 && !Util.isNullOrBlank(registeredPatientDetailsUpdated.getPatient().getPatientId())) {
 
             Patient patient = registeredPatientDetailsUpdated.getPatient();
+            registeredPatientDetailsUpdated.setProfession(patient.getProfession());
+            registeredPatientDetailsUpdated.setBloodGroup(patient.getBloodGroup());
+            registeredPatientDetailsUpdated.setEmailAddress(patient.getEmailAddress());
+
             //setting DOB
             registeredPatientDetailsUpdated.setDobJsonString(getJsonFromObject(registeredPatientDetailsUpdated.getDob()));
             // setting patient's relations
@@ -1022,15 +1136,18 @@ public class LocalDataServiceImpl {
         registeredPatientDetailsUpdated.setAddressJsonString(getJsonFromObject(registeredPatientDetailsUpdated.getAddress()));
 
         addGroupsToAssignedGroupsTable(registeredPatientDetailsUpdated, registeredPatientDetailsUpdated.getGroups());
-        deleteReferredByIfAlreadyPresent(LocalDatabaseUtils.KEY_UNIQUE_ID, LocalDatabaseUtils.KEY_IS_FROM_CONTACTS_LIST, registeredPatientDetailsUpdated.getForeignReferredById(), "" + LocalDatabaseUtils.BOOLEAN_TRUE_VALUE);
-        if (registeredPatientDetailsUpdated.getReferredBy() != null) {
-            registeredPatientDetailsUpdated.getReferredBy().setIsFromContactsList(true);
-            registeredPatientDetailsUpdated.setForeignReferredById(registeredPatientDetailsUpdated.getReferredBy().getUniqueId());
-            registeredPatientDetailsUpdated.getReferredBy().save();
-        }
 
+//        deleteReferredByIfAlreadyPresent(LocalDatabaseUtils.KEY_UNIQUE_ID, LocalDatabaseUtils.KEY_IS_FROM_CONTACTS_LIST, registeredPatientDetailsUpdated.getForeignReferredById(), "" + LocalDatabaseUtils.BOOLEAN_TRUE_VALUE);
+//        if (registeredPatientDetailsUpdated.getReferredBy() != null) {
+//            registeredPatientDetailsUpdated.getReferredBy().setIsFromContactsList(true);
+//            registeredPatientDetailsUpdated.setForeignReferredById(registeredPatientDetailsUpdated.getReferredBy().getUniqueId());
+//            registeredPatientDetailsUpdated.getReferredBy().save();
+//        }
+
+        registeredPatientDetailsUpdated.setReferredByJsonString(getJsonFromObject(registeredPatientDetailsUpdated.getReferredBy()));
         formOtpVerificationAndAdd(registeredPatientDetailsUpdated);
         registeredPatientDetailsUpdated.setUniqueId(registeredPatientDetailsUpdated.getLocationId() + registeredPatientDetailsUpdated.getUserId());
+        registeredPatientDetailsUpdated.setConsultantDoctorIdsJsonString(getJsonFromObject(registeredPatientDetailsUpdated.getConsultantDoctorIds()));
         registeredPatientDetailsUpdated.save();
     }
 
@@ -1064,30 +1181,18 @@ public class LocalDataServiceImpl {
 
     private void addGroupsToAssignedGroupsTable(RegisteredPatientDetailsUpdated registeredPatientDetailsUpdated, List<UserGroups> groupsList) {
         try {
-            deleteAllAssignedGroupsWithpatientId(registeredPatientDetailsUpdated.getUserId());
+            ArrayList<String> groupIdsList = new ArrayList<String>();
             if (!Util.isNullOrEmptyList(groupsList)) {
-                ArrayList<AssignedGroupsTable> assignedGroupsList = new ArrayList<AssignedGroupsTable>();
-                ArrayList<String> groupIdsList = new ArrayList<String>();
                 for (UserGroups userGroup :
                         groupsList) {
-                    if (!userGroup.getDiscarded()) {
-                        AssignedGroupsTable assignedGroupTable = new AssignedGroupsTable();
-                        ReflectionUtil.copy(assignedGroupTable, userGroup);
-                        assignedGroupTable.setForeignPatientId(registeredPatientDetailsUpdated.getUserId());
-                        assignedGroupsList.add(assignedGroupTable);
-                        groupIdsList.add(userGroup.getUniqueId());
-                    }
+                    groupIdsList.add(userGroup.getUniqueId());
                 }
-                registeredPatientDetailsUpdated.setGroupIdsJsonString(getJsonFromObject(groupIdsList));
-                AssignedGroupsTable.saveInTx(assignedGroupsList);
+                addUserGroupsList(groupsList);
             }
+            registeredPatientDetailsUpdated.setGroupIdsJsonString(getJsonFromObject(groupIdsList));
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    private void deleteAllAssignedGroupsWithpatientId(String userId) {
-        AssignedGroupsTable.deleteAll(AssignedGroupsTable.class, LocalDatabaseUtils.KEY_FOREIGN_PATIENT_ID + "= ?", userId);
     }
 
     private void addRelations(List<Relations> list, String patientId) {
@@ -1350,15 +1455,22 @@ public class LocalDataServiceImpl {
         if (!Util.isNullOrEmptyList(list)) {
             for (DoctorClinicProfile clinicProfile :
                     list) {
-                clinicProfile.setAppointmentBookingNumber(getAppointmentBookingNumber(LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, clinicProfile.getUniqueId()));
-                clinicProfile.setConsultationFee((ConsultationFee) getObject(ConsultationFee.class, LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, clinicProfile.getUniqueId()));
-                clinicProfile.setRevisitConsultationFee((ConsultationFee) getObject(ConsultationFee.class, LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, clinicProfile.getUniqueId()));
-                clinicProfile.setAppointmentSlot(getAppointmentSlot(clinicProfile.getUniqueId()));
-                clinicProfile.setWorkingSchedules(getWorkingSchedulesForDoctor(doctorId, clinicProfile.getLocationId()));
-                clinicProfile.setImages((List<ClinicImage>) getListByKeyValue(ClinicImage.class, LocalDatabaseUtils.KEY_FOREIGN_LOCATION_ID, clinicProfile.getUniqueId()));
+                getDoctorCLinicProfileRestDetails(clinicProfile);
             }
         }
         return list;
+    }
+
+    private void getDoctorCLinicProfileRestDetails(DoctorClinicProfile clinicProfile) {
+        clinicProfile.setAppointmentBookingNumber(getAppointmentBookingNumber(LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, clinicProfile.getUniqueId()));
+        clinicProfile.setConsultationFee((ConsultationFee) getObject(ConsultationFee.class, LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, clinicProfile.getUniqueId()));
+        clinicProfile.setAppointmentSlot(getAppointmentSlot(clinicProfile.getUniqueId()));
+        clinicProfile.setWorkingSchedules(getWorkingSchedulesForDoctor(clinicProfile.getDoctorId(), clinicProfile.getLocationId()));
+        clinicProfile.setImages((List<ClinicImage>) getListByKeyValue(ClinicImage.class, LocalDatabaseUtils.KEY_FOREIGN_LOCATION_ID, clinicProfile.getUniqueId()));
+        clinicProfile.setRoles((ArrayList<Role>) Select.from(Role.class)
+                .where(Condition.prop(LocalDatabaseUtils.KEY_HOSPITAL_ID).eq(clinicProfile.getHospitalId()),
+                        Condition.prop(LocalDatabaseUtils.KEY_LOCATION_ID).eq(clinicProfile.getLocationId())).list());
+
     }
 
     public DoctorClinicProfile getDoctorClinicProfile(String doctorId, String locationId) {
@@ -1366,12 +1478,7 @@ public class LocalDataServiceImpl {
                 .where(Condition.prop(LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID).eq(doctorId),
                         Condition.prop(LocalDatabaseUtils.KEY_LOCATION_ID).eq(locationId)).first();
         if (clinicProfile != null) {
-            clinicProfile.setAppointmentBookingNumber(getAppointmentBookingNumber(LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, clinicProfile.getUniqueId()));
-            clinicProfile.setConsultationFee((ConsultationFee) getObject(ConsultationFee.class, LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, clinicProfile.getUniqueId()));
-            clinicProfile.setRevisitConsultationFee((ConsultationFee) getObject(ConsultationFee.class, LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, clinicProfile.getUniqueId()));
-            clinicProfile.setAppointmentSlot(getAppointmentSlot(clinicProfile.getUniqueId()));
-            clinicProfile.setWorkingSchedules(getWorkingSchedulesForDoctor(doctorId, clinicProfile.getLocationId()));
-            clinicProfile.setImages((List<ClinicImage>) getListByKeyValue(ClinicImage.class, LocalDatabaseUtils.KEY_FOREIGN_LOCATION_ID, clinicProfile.getUniqueId()));
+            getDoctorCLinicProfileRestDetails(clinicProfile);
         }
         return clinicProfile;
     }
@@ -1447,18 +1554,6 @@ public class LocalDataServiceImpl {
 
     private void deleteAppointmentBookingNumbers(String key, String value) {
         ForeignAppointmentBookingNumber.deleteAll(ForeignAppointmentBookingNumber.class, key + "= ?", value);
-    }
-
-    private void deleteWorkingSchedulesIfAlreadyPresent(String key, String value) {
-        WorkingSchedule.deleteAll(WorkingSchedule.class, key + "= ?", value);
-    }
-
-    private void deleteWorkingHoursIfAlreadyPresent(String key, String value) {
-        WorkingHours.deleteAll(WorkingHours.class, key + "= ?", value);
-    }
-
-    private void deleteReferredByIfAlreadyPresent(String key1, String key2, String value1, String value2) {
-        Reference.deleteAll(Reference.class, key1 + "= ? AND " + key2 + "= ? ", value1, value2);
     }
 
     /**
@@ -1676,8 +1771,8 @@ public class LocalDataServiceImpl {
         if (!Util.isNullOrEmptyList(role.getAccessModules())) {
             for (AccessModule accessModule :
                     role.getAccessModules()) {
-                if (!Util.isNullOrBlank(accessModule.getStringAccessPermissionTypes()))
-                    accessModule.setAccessPermissionTypes(new Gson().fromJson(accessModule.getStringAccessPermissionTypes(), ArrayList.class));
+                if (!Util.isNullOrBlank(accessModule.getAccessPermissionTypesJson()))
+                    accessModule.setAccessPermissionTypes(new Gson().fromJson(accessModule.getAccessPermissionTypesJson(), ArrayList.class));
             }
         }
     }
@@ -1737,8 +1832,8 @@ public class LocalDataServiceImpl {
         }
     }
 
-    public VolleyResponseBean getSearchedPatientsListPageWise(WebServiceType webServiceType, String doctorId, String hospitalId, String locationId,
-                                                              int pageNum, int maxSize, String searchTerm,
+    public VolleyResponseBean getSearchedPatientsListPageWise(WebServiceType webServiceType, User user,
+                                                              int pageNum, int maxSize, FilterItemType filterType, AdvanceSearchOptionsType advanceSearchOptionsType, String searchTerm,
                                                               Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
         volleyResponseBean.setWebServiceType(webServiceType);
@@ -1747,21 +1842,70 @@ public class LocalDataServiceImpl {
         try {
             //forming where condition query
             String whereCondition = "Select * from " + StringUtil.toSQLName(RegisteredPatientDetailsUpdated.class.getSimpleName())
-                    + " where "
-                    + LocalDatabaseUtils.KEY_HOSPITAL_ID + "=\"" + hospitalId + "\""
-                    + " AND "
-                    + LocalDatabaseUtils.KEY_LOCATION_ID + "=\"" + locationId + "\"";
-            if (!Util.isNullOrBlank(searchTerm))
-                whereCondition = whereCondition
-                        + " AND "
-                        + "(" + LocalDatabaseUtils.getSearchTermEqualsIgnoreCaseQuery(LocalDatabaseUtils.KEY_LOCAL_PATIENT_NAME, searchTerm)
-                        + " OR "
-                        + LocalDatabaseUtils.getSearchTermEqualsIgnoreCaseQuery(LocalDatabaseUtils.KEY_MOBILE_NUMBER, searchTerm)
-                        + ")";
+                    + getWhereConditionForPatientsList(user);
+            if (advanceSearchOptionsType != null && !Util.isNullOrBlank(searchTerm)) {
+                switch (advanceSearchOptionsType) {
+                    case GENERAL_SEARCH:
+                        whereCondition = whereCondition
+                                + " AND "
+                                + "(" + LocalDatabaseUtils.getSearchTermEqualsIgnoreCaseQuery(LocalDatabaseUtils.KEY_LOCAL_PATIENT_NAME, searchTerm)
+                                + " OR "
+                                + LocalDatabaseUtils.getSearchTermEqualsIgnoreCaseQuery(LocalDatabaseUtils.KEY_MOBILE_NUMBER, searchTerm)
+                                + ")";
+                        break;
+                    case PATIENT_NAME:
+                        whereCondition = whereCondition
+                                + " AND "
+                                + LocalDatabaseUtils.getSearchTermEqualsIgnoreCaseQuery(LocalDatabaseUtils.KEY_LOCAL_PATIENT_NAME, searchTerm);
+                        break;
+                    case MOBILE_NUMBER:
+                        whereCondition = whereCondition
+                                + " AND "
+                                + LocalDatabaseUtils.getSearchTermEqualsIgnoreCaseQuery(LocalDatabaseUtils.KEY_MOBILE_NUMBER, searchTerm);
+                        break;
+                    case PATIENT_ID:
+                        whereCondition = whereCondition
+                                + " AND "
+                                + LocalDatabaseUtils.getSearchTermEqualsIgnoreCaseQuery(LocalDatabaseUtils.KEY_PID, searchTerm);
+                        break;
+                    case REFERENCE:
+                        whereCondition = whereCondition
+                                + " AND "
+                                + LocalDatabaseUtils.getSearchFromJsonQuery(LocalDatabaseUtils.KEY_REFERRED_BY_JSON_STRING, LocalDatabaseUtils.JSON_KEY_REFERENCE, searchTerm);
+                        break;
+                    case PROFESSION:
+                        whereCondition = whereCondition
+                                + " AND "
+                                + LocalDatabaseUtils.getSearchTermEqualsIgnoreCaseQuery(LocalDatabaseUtils.KEY_PROFESSION, searchTerm);
+                        break;
+                    case BLOOD_GROUP:
+                        whereCondition = whereCondition
+                                + " AND "
+                                + LocalDatabaseUtils.getSearchTermEqualsIgnoreCaseQuery(LocalDatabaseUtils.KEY_BLOOD_GROUP, searchTerm);
+                        break;
+                    case EMAIL:
+                        whereCondition = whereCondition
+                                + " AND "
+                                + LocalDatabaseUtils.getSearchTermEqualsIgnoreCaseQuery(LocalDatabaseUtils.KEY_EMAIL_ADDRESS, searchTerm);
+                        break;
+                    default:
+                        break;
+                }
+            }
             //specifying order by limit and offset query
             String conditionsLimit = " ORDER BY " + LocalDatabaseUtils.KEY_LOCAL_PATIENT_NAME + " COLLATE NOCASE ASC  "
                     + " LIMIT " + maxSize
                     + " OFFSET " + (pageNum * maxSize);
+            if (filterType != null)
+                switch (filterType) {
+                    case RECENTLY_ADDED:
+                        //specifying order by limit and offset query
+                        conditionsLimit = " ORDER BY " + LocalDatabaseUtils.KEY_CREATED_TIME + " DESC "
+                                + " LIMIT " + maxSize
+                                + " OFFSET " + (pageNum * maxSize);
+                        break;
+                }
+
 
             whereCondition = whereCondition + conditionsLimit;
             LogUtils.LOGD(TAG, "Select Query " + whereCondition);
@@ -1782,6 +1926,20 @@ public class LocalDataServiceImpl {
         return volleyResponseBean;
     }
 
+    private String getWhereConditionForPatientsList(User user) {
+        String whereCondition = " where "
+                + LocalDatabaseUtils.KEY_HOSPITAL_ID + "=\"" + user.getForeignHospitalId() + "\""
+                + " AND "
+                + LocalDatabaseUtils.KEY_LOCATION_ID + "=\"" + user.getForeignLocationId() + "\"";
+        if (RoleType.isOnlyConsultant(user.getRoleTypes())) {
+            whereCondition = whereCondition
+                    + " AND " + LocalDatabaseUtils.KEY_IS_PART_OF_CONSULTANT_DOCTOR + "=" + LocalDatabaseUtils.BOOLEAN_TRUE_VALUE
+                    + " AND "
+                    + LocalDatabaseUtils.getSearchTermEqualsIgnoreCaseQuery(LocalDatabaseUtils.KEY_CONSULTANT_DOCTOR_IDS_JSON_STRING, user.getUniqueId());
+        }
+        return whereCondition;
+    }
+
     private RegisteredPatientDetailsUpdated getPatientRestDetails(RegisteredPatientDetailsUpdated registeredPatientDetailsUpdated) {
         // getting address
         registeredPatientDetailsUpdated.setAddress((Address) getObjectFromJson(Address.class, registeredPatientDetailsUpdated.getAddressJsonString()));
@@ -1794,10 +1952,10 @@ public class LocalDataServiceImpl {
             registeredPatientDetailsUpdated.setGroupIds((ArrayList<String>) (Object) getObjectsListFronJson(String.class, registeredPatientDetailsUpdated.getGroupIdsJsonString()));
             if (!Util.isNullOrEmptyList(registeredPatientDetailsUpdated.getGroupIds()))
                 registeredPatientDetailsUpdated.setGroups(getUserGroupsFromAssignedGroups(registeredPatientDetailsUpdated.getGroupIds()));
-            if (!Util.isNullOrBlank(registeredPatientDetailsUpdated.getForeignReferredById()))
-                registeredPatientDetailsUpdated.setReferredBy((Reference) getObject(Reference.class, LocalDatabaseUtils.KEY_UNIQUE_ID, registeredPatientDetailsUpdated.getForeignReferredById()));
-
-
+//            if (!Util.isNullOrBlank(registeredPatientDetailsUpdated.getForeignReferredById()))
+//                registeredPatientDetailsUpdated.setReferredBy((Reference) getObject(Reference.class, LocalDatabaseUtils.KEY_UNIQUE_ID, registeredPatientDetailsUpdated.getForeignReferredById()));
+            registeredPatientDetailsUpdated.setReferredBy((Reference) getObjectFromJson(Reference.class, registeredPatientDetailsUpdated.getReferredByJsonString()));
+            registeredPatientDetailsUpdated.setConsultantDoctorIds((ArrayList<String>) (Object) getObjectsListFronJson(String.class, registeredPatientDetailsUpdated.getConsultantDoctorIdsJsonString()));
         }
         return registeredPatientDetailsUpdated;
     }
@@ -1822,13 +1980,9 @@ public class LocalDataServiceImpl {
             if (!Util.isNullOrEmptyList(groupsIdsList)) {
                 for (String groupId :
                         groupsIdsList) {
-                    AssignedGroupsTable assignedGroupsTable = Select.from(AssignedGroupsTable.class)
-                            .where(Condition.prop(LocalDatabaseUtils.KEY_UNIQUE_ID).eq(groupId)).first();
-                    if (assignedGroupsTable != null) {
-                        UserGroups group = new UserGroups();
-                        ReflectionUtil.copy(group, assignedGroupsTable);
+                    UserGroups group = getUserGroup(groupId);
+                    if (group != null)
                         groupsList.add(group);
-                    }
                 }
             }
         } catch (Exception e) {
@@ -1853,7 +2007,7 @@ public class LocalDataServiceImpl {
         return null;
     }
 
-    public VolleyResponseBean getPatientsListWithGroup(WebServiceType webServiceType, String doctorId, String hospitalId, String locationId, String groupId,
+    public VolleyResponseBean getPatientsListWithGroup(WebServiceType webServiceType, User user, String groupId,
                                                        boolean discarded, int pageNum, int maxSize,
                                                        Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
@@ -1862,62 +2016,17 @@ public class LocalDataServiceImpl {
         volleyResponseBean.setIsUserOnline(HealthCocoConstants.isNetworkOnline);
         try {
             //forming where condition query
-            String whereCondition = "Select * from " + StringUtil.toSQLName(AssignedGroupsTable.class.getSimpleName())
-                    + " where "
-                    + LocalDatabaseUtils.KEY_UNIQUE_ID + "=\"" + groupId + "\"";
-
+            String whereCondition = "Select * from " + StringUtil.toSQLName(RegisteredPatientDetailsUpdated.class.getSimpleName())
+                    + getWhereConditionForPatientsList(user);
+            whereCondition = whereCondition
+                    + " AND "
+                    + LocalDatabaseUtils.getSearchTermEqualsIgnoreCaseQuery(LocalDatabaseUtils.KEY_GROUP_IDS_JSON_STRING, groupId);
             //specifying order by limit and offset query
 //            String conditionsLimit = " ORDER BY " + LocalDatabaseUtils.KEY_LOCAL_PATIENT_NAME + " COLLATE NOCASE ASC  "
 //                    + " LIMIT " + maxSize
 //                    + " OFFSET " + (pageNum * maxSize);
             String conditionsLimit = " LIMIT " + maxSize
                     + " OFFSET " + (pageNum * maxSize);
-            whereCondition = whereCondition + conditionsLimit;
-            LogUtils.LOGD(TAG, "Select Query " + whereCondition);
-            List<AssignedGroupsTable> list = SugarRecord.findWithQuery(AssignedGroupsTable.class, whereCondition);
-            List<RegisteredPatientDetailsUpdated> patientsList = new ArrayList<>();
-            if (!Util.isNullOrEmptyList(list)) {
-                for (AssignedGroupsTable assignedGroupsTable :
-                        list) {
-                    RegisteredPatientDetailsUpdated registeredPatientDetailsUpdated = getPatient(assignedGroupsTable.getForeignPatientId());
-                    if (registeredPatientDetailsUpdated != null) {
-                        patientsList.add(registeredPatientDetailsUpdated);
-                    }
-                }
-                if (!Util.isNullOrEmptyList(patientsList))
-                    Collections.sort(patientsList, ComparatorUtil.patientsNameComparator);
-            }
-            volleyResponseBean.setDataList(getObjectsListFromMap(patientsList));
-            if (responseListener != null)
-                responseListener.onResponse(volleyResponseBean);
-        } catch (Exception e) {
-            e.printStackTrace();
-            showErrorLocal(volleyResponseBean, errorListener);
-        }
-        return volleyResponseBean;
-    }
-
-    public VolleyResponseBean getPatientsListByFilterType(WebServiceType webServiceType, String doctorId, String hospitalId, String locationId, FilterItemType filterItemType,
-                                                          boolean discarded, int pageNum, int maxSize,
-                                                          Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
-        VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
-        volleyResponseBean.setWebServiceType(webServiceType);
-        volleyResponseBean.setIsDataFromLocal(true);
-        volleyResponseBean.setIsUserOnline(HealthCocoConstants.isNetworkOnline);
-        try {
-            //forming where condition query
-            String whereCondition = "Select * from " + StringUtil.toSQLName(RegisteredPatientDetailsUpdated.class.getSimpleName())
-                    + " where "
-                    + LocalDatabaseUtils.KEY_DOCTOR_ID + "=\"" + doctorId + "\""
-                    + " AND "
-                    + LocalDatabaseUtils.KEY_HOSPITAL_ID + "=\"" + hospitalId + "\""
-                    + " AND "
-                    + LocalDatabaseUtils.KEY_LOCATION_ID + "=\"" + locationId + "\"";
-            //specifying order by limit and offset query
-            String conditionsLimit = " ORDER BY " + LocalDatabaseUtils.KEY_CREATED_TIME + " DESC "
-                    + " LIMIT " + maxSize
-                    + " OFFSET " + (pageNum * maxSize);
-
             whereCondition = whereCondition + conditionsLimit;
             LogUtils.LOGD(TAG, "Select Query " + whereCondition);
             List<RegisteredPatientDetailsUpdated> list = SugarRecord.findWithQuery(RegisteredPatientDetailsUpdated.class, whereCondition);

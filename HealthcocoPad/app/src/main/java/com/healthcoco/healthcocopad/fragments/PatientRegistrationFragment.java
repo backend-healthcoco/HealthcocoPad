@@ -93,7 +93,7 @@ import java.util.List;
 public class PatientRegistrationFragment extends HealthCocoFragment implements View.OnClickListener, CommonListDialogItemClickListener,
         GsonRequest.ErrorListener, Response.Listener<VolleyResponseBean>, LocalDoInBackgroundListenerOptimised,
         CommonOptionsDialogItemClickListener, DownloadFileFromUrlListener, PatientRegistrationListener {
-    private ArrayList<Object> BLOOD_GROUPS = new ArrayList<Object>() {{
+    public static ArrayList<Object> BLOOD_GROUPS = new ArrayList<Object>() {{
         add("O-");
         add("O+");
         add("A-");
@@ -958,6 +958,6 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
 
     @Override
     public boolean isGroupAssigned(String groupId) {
-            return groupIdsToAssign.contains(groupId);
+        return groupIdsToAssign.contains(groupId);
     }
 }
