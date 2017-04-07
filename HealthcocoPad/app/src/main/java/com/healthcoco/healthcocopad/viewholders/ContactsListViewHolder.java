@@ -33,7 +33,7 @@ public class ContactsListViewHolder extends HealthCocoViewHolder implements OnCl
     private TextView tvContactName;
     private TextView tvContactNumber;
     private ImageView ivContactProfile;
-    private ImageButton btMail;
+    private ImageButton btPrescription;
     private ImageButton btCall;
     private TextView tvInitialAlphabet;
     private LinearLayout containerTop;
@@ -68,14 +68,14 @@ public class ContactsListViewHolder extends HealthCocoViewHolder implements OnCl
         tvContactName = (TextView) convertView.findViewById(R.id.tv_contact_name);
         tvContactNumber = (TextView) convertView.findViewById(R.id.tv_contact_number);
         btCall = (ImageButton) convertView.findViewById(R.id.bt_call);
-        btMail = (ImageButton) convertView.findViewById(R.id.bt_mail);
+        btPrescription = (ImageButton) convertView.findViewById(R.id.bt_prescription);
         btAddToGroup = (ImageButton) convertView.findViewById(R.id.bt_group);
         tvInitialAlphabet = (TextView) convertView.findViewById(R.id.tv_initial_aplhabet);
         ivContactProfile = (ImageView) convertView.findViewById(R.id.iv_image);
 
         btAddToGroup.setTag(position);
         btCall.setOnClickListener(this);
-        btMail.setOnClickListener(this);
+        btPrescription.setOnClickListener(this);
         btAddToGroup.setOnClickListener(this);
         containerTop.setOnClickListener(this);
 //        scrollViewContactsItems.setSwipeRefreshLayout(optionsListener.getSwipeRefreshLayout());

@@ -3,11 +3,14 @@ package com.healthcoco.healthcocopad.bean;
 import com.healthcoco.healthcocopad.enums.DeviceType;
 import com.healthcoco.healthcocopad.enums.UserState;
 
+import org.parceler.Parcel;
+
 import java.util.ArrayList;
 
 /**
  * Created by neha on 17/07/16.
  */
+@Parcel
 public class DoctorContactUs {
     private String uniqueId;
     private String title;
@@ -22,6 +25,9 @@ public class DoctorContactUs {
     private Boolean isVerified;
     private Boolean toList;
     private DeviceType deviceType;
+
+    public DoctorContactUs() {
+    }
 
     public DoctorContactUs(String title, String firstName, String gender, String mobileNumber, String emailAddress, ArrayList<String> specialities, String city, DeviceType deviceType) {
         this.title = title;

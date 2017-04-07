@@ -96,7 +96,8 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:background="@drawable/tab_queue_contact_list_selector"
-                android:padding="10dp" />
+                android:padding="10dp"
+                android:visibility="gone" />
 
             <ImageButton
                 android:id="@+id/bt_call"
@@ -124,7 +125,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
-                android:background="@drawable/tab_rx_contact_list_selector" />
+                android:background="@drawable/tab_rx_contact_list_selector"
+                android:visibility="gone" />
         </LinearLayout>
     </RelativeLayout>
 </LinearLayout>

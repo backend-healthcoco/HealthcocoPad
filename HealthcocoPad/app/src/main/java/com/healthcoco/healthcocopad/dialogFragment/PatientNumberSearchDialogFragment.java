@@ -30,6 +30,7 @@ import java.util.ArrayList;
  * Created by Shreshtha on 03-03-2017.
  */
 public class PatientNumberSearchDialogFragment extends HealthCocoDialogFragment implements View.OnClickListener, Response.Listener<VolleyResponseBean>, GsonRequest.ErrorListener {
+    private static final int REQUEST_CODE_PATIENT_NUMBER_SERACH = 101;
     private EditText editMobileNumber;
     private Button btProceed;
     private User user;
@@ -159,7 +160,7 @@ public class PatientNumberSearchDialogFragment extends HealthCocoDialogFragment 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == HealthCocoConstants.REQUEST_CODE_CONTACTS_LIST
+        if (requestCode == REQUEST_CODE_PATIENT_NUMBER_SERACH
                 && resultCode == HealthCocoConstants.RESULT_CODE_REGISTRATION) {
             getTargetFragment().onActivityResult(requestCode, resultCode, data);
             dismiss();

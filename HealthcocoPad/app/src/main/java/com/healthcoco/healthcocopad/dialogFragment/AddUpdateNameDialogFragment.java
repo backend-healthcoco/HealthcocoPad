@@ -380,7 +380,7 @@ public class AddUpdateNameDialogFragment extends HealthCocoDialogFragment implem
                         LocalDataServiceImpl.getInstance(mApp).addUserGroup(group);
                         Util.sendBroadcast(mApp, FilterFragment.INTENT_REFRESH_GROUPS_LIST_LOCAL);
                         Util.sendBroadcast(mApp, ContactsListFragment.INTENT_REFRESH_GROUPS_LIST_FROM_SERVER);
-                        getTargetFragment().onActivityResult(HealthCocoConstants.REQUEST_CODE_GROUPS_LIST, HealthCocoConstants.RESULT_CODE_ADD_GROUP, null);
+                        getTargetFragment().onActivityResult(getTargetRequestCode(), HealthCocoConstants.RESULT_CODE_ADD_GROUP, null);
                     }
                     break;
                 case SEND_EMAIL_CLINICAL_NOTES:

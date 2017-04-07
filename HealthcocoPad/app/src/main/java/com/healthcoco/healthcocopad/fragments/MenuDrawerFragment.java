@@ -278,7 +278,7 @@ public class MenuDrawerFragment extends HealthCocoFragment implements View.OnCli
                 DoctorClinicProfile profile = Parcels.unwrap(data.getParcelableExtra(MenuClinicListDialogFragment.TAG_CLINIC_NAME));
                 refreshSelectedDoctorClinicProfileDetails(profile);
                 openFragment(FragmentType.CONTACTS);
-                if (selectedFragmentType == null) {
+                if (selectedFragmentType == null || selectedFragmentType == FragmentType.HELP_IMPROVE) {
                     selectedFragmentType = FragmentType.CONTACTS;
                 }
                 ((HomeActivity) mActivity).initFragment(selectedFragmentType);

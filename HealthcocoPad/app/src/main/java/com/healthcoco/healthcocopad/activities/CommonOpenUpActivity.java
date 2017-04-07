@@ -92,7 +92,7 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
                 openFragment(ActionbarType.HIDDEN, R.string.sync, new InitialSyncFragment());
                 break;
             case FEEDBACK:
-                openFragment(ActionbarType.TITLE_SAVE, ActionbarLeftRightActionTypeDrawables.WITH_CROSS, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, R.string.help_us_to_improve, new FeedbackFragment());
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_CROSS, ActionbarLeftRightActionTypeDrawables.WITH_SEND, R.string.help_us_to_improve, new FeedbackFragment());
                 break;
             case ADD_EDIT_CLINIC_IMAGE:
                 openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_DONE, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, R.string.clinic_photos, new AddEditClinicImageFragment());
@@ -366,11 +366,5 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
             if (rightActionButton != null)
                 rightActionButton.setEnabled(isEnabled);
         }
-    }
-
-    public void initSaveButton(View.OnClickListener listener) {
-        Button btSave = (Button) findViewById(R.id.bt_save);
-        if (btSave != null)
-            btSave.setOnClickListener(listener);
     }
 }

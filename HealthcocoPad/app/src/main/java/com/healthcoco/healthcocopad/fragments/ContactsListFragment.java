@@ -50,6 +50,7 @@ import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.FilterItemType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.LocalTabelType;
+import com.healthcoco.healthcocopad.enums.PatientDetailTabType;
 import com.healthcoco.healthcocopad.enums.RecordType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.ContactsItemOptionsListener;
@@ -97,8 +98,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
     private int PAGE_NUMBER = 0;
     private boolean isEndOfListAchieved;
     private boolean isInitialLoading = true;
-
-
+    private static Integer REQUEST_CODE_CONTACTS_DETAIL = 101;
     //other variables
     private ProgressBar progressLoading;
     private GridViewLoadMore gvContacts;
@@ -343,7 +343,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
         bundle.putParcelable(GroupsListDialogFragment.TAG_SELECTED_PATIENT_ID, Parcels.wrap(selecetdPatient.getUserId()));
         bundle.putParcelable(GroupsListDialogFragment.TAG_GROUP_IDS_LIST, Parcels.wrap(selecetdPatient.getGroupIds()));
         dialogFragment.setArguments(bundle);
-        dialogFragment.setTargetFragment(this, HealthCocoConstants.REQUEST_CODE_CONTACTS_LIST);
+        dialogFragment.setTargetFragment(this, REQUEST_CODE_CONTACTS_DETAIL);
         dialogFragment.show(mFragmentManager, dialogFragment.getClass().getSimpleName());
     }
 
@@ -380,8 +380,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
         if (selecetdPatient.getPatient() != null && !Util.isNullOrBlank(selecetdPatient.getPatient().getPatientId())) {
             HealthCocoConstants.SELECTED_PATIENTS_USER_ID = selecetdPatient.getUserId();
             if (isInHomeActivity()) {
-                openCommonOpenUpActivity(CommonOpenUpFragmentType.PATIENT_DETAIL, null,
-                        HealthCocoConstants.REQUEST_CODE_CONTACTS_DETAIL);
+                openCommonOpenUpActivity(CommonOpenUpFragmentType.PATIENT_DETAIL, null, REQUEST_CODE_CONTACTS_DETAIL);
                 contactsListAdapter.notifyDataSetChanged();
             } else {
 //                Util.sendBroadcast(mApp, BookAppointmentFragment.INTENT_REFRESH_SELECTED_PATIENT);
@@ -408,7 +407,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
         intent.putExtra(HealthCocoConstants.TAG_MOBILE_NUMBER, patientDetailsUpdated.getMobileNumber());
         intent.putExtra(HealthCocoConstants.TAG_IS_EDIT_PATIENT, true);
         mActivity.openCommonOpenUpActivity(CommonOpenUpFragmentType.PATIENT_REGISTRATION, intent,
-                HealthCocoConstants.REQUEST_CODE_CONTACTS_DETAIL);
+                REQUEST_CODE_CONTACTS_DETAIL);
     }
 
     @Override
@@ -450,7 +449,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
 //                }
                 break;
             case R.id.bt_add_to_group:
-                mActivity.openAddUpdateNameDialogFragment(WebServiceType.ADD_NEW_GROUP, AddUpdateNameDialogType.GROUPS, this, user, "", HealthCocoConstants.REQUEST_CODE_GROUPS_LIST);
+                mActivity.openAddUpdateNameDialogFragment(WebServiceType.ADD_NEW_GROUP, AddUpdateNameDialogType.GROUPS, this, user, "", REQUEST_CODE_CONTACTS_DETAIL);
                 break;
             case R.id.bt_advance_search:
                 clearSearchResults();
@@ -503,7 +502,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
 
     private void openPatientMobileNumberDialogFragment() {
         PatientNumberSearchDialogFragment patientNumberSearchDialogFragment = new PatientNumberSearchDialogFragment();
-        patientNumberSearchDialogFragment.setTargetFragment(this, HealthCocoConstants.REQUEST_CODE_CONTACTS_LIST);
+        patientNumberSearchDialogFragment.setTargetFragment(this, REQUEST_CODE_CONTACTS_DETAIL);
         patientNumberSearchDialogFragment.show(mFragmentManager, patientNumberSearchDialogFragment.getClass().getSimpleName());
     }
 
@@ -679,11 +678,10 @@ public class ContactsListFragment extends HealthCocoFragment implements
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == HealthCocoConstants.REQUEST_CODE_CONTACTS_LIST) {
+        if (requestCode == REQUEST_CODE_CONTACTS_DETAIL) {
             LogUtils.LOGD(TAG, "Contacts List onActivityResult ");
             if (resultCode == HealthCocoConstants.RESULT_CODE_ADD_PRESCIPTION) {
-                openCommonOpenUpActivity(CommonOpenUpFragmentType.CONTACTS_DETAIL, null,
-                        HealthCocoConstants.REQUEST_CODE_CONTACTS_LIST);
+                openCommonOpenUpActivity(CommonOpenUpFragmentType.CONTACTS_DETAIL, null, REQUEST_CODE_CONTACTS_DETAIL);
             } else if (resultCode == HealthCocoConstants.RESULT_CODE_GROUPS_LIST) {
                 filterList(filterType);
             } else if (resultCode == HealthCocoConstants.RESULT_CODE_SEARCH_NUMBER_RESULTS) {

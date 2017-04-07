@@ -34,6 +34,7 @@ import java.util.List;
  */
 public class PatientNumberSearchResultsDialogFragment extends HealthCocoDialogFragment implements View.OnClickListener, AdapterView.OnItemClickListener {
     public static final String TAG_IS_FROM_HOME_ACTIVITY = "isFromHomeActivity";
+    private static final int REQUEST_CODE_PATIENT_SEARCH = 101;
     private Button btRegisterNewPatient;
     private ListView lvPatients;
     private PatientNumberSearchAdapter mAdapter;
@@ -105,7 +106,7 @@ public class PatientNumberSearchResultsDialogFragment extends HealthCocoDialogFr
         intent.putExtra(HealthCocoConstants.TAG_UNIQUE_ID, patientUniqueId);
         intent.putExtra(HealthCocoConstants.TAG_MOBILE_NUMBER, mobileNumber);
         intent.putExtra(HealthCocoConstants.TAG_IS_EDIT_PATIENT, isEdit);
-        startActivityForResult(intent, HealthCocoConstants.REQUEST_CODE_CONTACTS_LIST);
+        startActivityForResult(intent, REQUEST_CODE_PATIENT_SEARCH);
     }
 
     @Override
@@ -140,7 +141,7 @@ public class PatientNumberSearchResultsDialogFragment extends HealthCocoDialogFr
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == HealthCocoConstants.REQUEST_CODE_CONTACTS_LIST && resultCode == HealthCocoConstants.RESULT_CODE_REGISTRATION) {
+        if (requestCode == REQUEST_CODE_PATIENT_SEARCH && resultCode == HealthCocoConstants.RESULT_CODE_REGISTRATION) {
             closeThisActivity();
         }
     }
@@ -177,7 +178,7 @@ public class PatientNumberSearchResultsDialogFragment extends HealthCocoDialogFr
         if (HealthCocoConstants.isNetworkOnline) {
             HealthCocoConstants.SELECTED_PATIENTS_USER_ID = alreadyRegisteredPatient.getUserId();
             mActivity.openCommonOpenUpActivity(CommonOpenUpFragmentType.PATIENT_DETAIL, null,
-                    HealthCocoConstants.REQUEST_CODE_CONTACTS_DETAIL);
+                    REQUEST_CODE_PATIENT_SEARCH);
             closeThisActivity();
         } else {
             Util.showToast(mActivity, R.string.user_offline);

@@ -210,7 +210,6 @@ public abstract class HealthCocoFragment extends Fragment implements GsonRequest
         Util.showToast(mActivity, R.string.user_offline);
     }
 
-
     protected void showLoadingOverlay(boolean showLoading) {
         LinearLayout loadingOverlay = (LinearLayout) view.findViewById(R.id.loading_overlay);
         if (loadingOverlay != null) {

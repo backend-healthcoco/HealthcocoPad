@@ -80,6 +80,8 @@ import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.healthcoco.healthcocopad.views.CustomAutoCompleteTextView;
 
+import org.parceler.Parcels;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -93,6 +95,7 @@ import java.util.List;
 public class PatientRegistrationFragment extends HealthCocoFragment implements View.OnClickListener, CommonListDialogItemClickListener,
         GsonRequest.ErrorListener, Response.Listener<VolleyResponseBean>, LocalDoInBackgroundListenerOptimised,
         CommonOptionsDialogItemClickListener, DownloadFileFromUrlListener, PatientRegistrationListener {
+    private static final int REQUEST_CODE_REGISTER_PATIENT = 101;
     public static ArrayList<Object> BLOOD_GROUPS = new ArrayList<Object>() {{
         add("O-");
         add("O+");
@@ -443,7 +446,7 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
                 tvReferredBy.setText("");
                 break;
             case R.id.bt_add_note:
-                mActivity.openAddUpdateNameDialogFragment(WebServiceType.LOCAL_STRING_SAVE, AddUpdateNameDialogType.LOCAL_STRING_SAVE, this, null, "", HealthCocoConstants.REQUEST_CODE_REGISTRATION);
+                mActivity.openAddUpdateNameDialogFragment(WebServiceType.LOCAL_STRING_SAVE, AddUpdateNameDialogType.LOCAL_STRING_SAVE, this, null, "", REQUEST_CODE_REGISTER_PATIENT);
                 break;
         }
     }
@@ -639,10 +642,10 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
             case UPDATE_PATIENT:
                 if (response.isValidData(response) && response.getData() instanceof RegisteredPatientDetailsUpdated) {
                     RegisteredPatientDetailsUpdated patientDetails = (RegisteredPatientDetailsUpdated) response.getData();
-                    refreshContactsData(patientDetails);
+                    LocalDataServiceImpl.getInstance(mApp).addPatient(patientDetails);
                     mActivity.hideLoading();
                     //will directly refresh PatientDetailSCreen on its onActivityResult
-                    mActivity.setResult(HealthCocoConstants.RESULT_CODE_REGISTRATION);
+                    mActivity.setResult(HealthCocoConstants.RESULT_CODE_REGISTRATION, new Intent().putExtra(HealthCocoConstants.TAG_PATIENT_PROFILE, Parcels.wrap(patientDetails)));
                     ((CommonOpenUpActivity) mActivity).finish();
                     return;
                 }
@@ -746,7 +749,7 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
         if (selecetdPatient.getPatient() != null && !Util.isNullOrBlank(selecetdPatient.getPatient().getPatientId())) {
             HealthCocoConstants.SELECTED_PATIENTS_USER_ID = selecetdPatient.getUserId();
             openCommonOpenUpActivity(CommonOpenUpFragmentType.PATIENT_DETAIL, null,
-                    HealthCocoConstants.REQUEST_CODE_CONTACTS_DETAIL);
+                    REQUEST_CODE_REGISTER_PATIENT);
         }
     }
 
@@ -778,11 +781,13 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
             Bitmap thePic = extras.getParcelable("data");
             if (thePic != null)
                 ivImageView.setImageBitmap(thePic);
-        } else if (requestCode == HealthCocoConstants.REQUEST_CODE_REGISTRATION) {
+        } else if (requestCode == REQUEST_CODE_REGISTER_PATIENT) {
             LogUtils.LOGD(TAG, "Contacts List onActivityResult ");
             if (resultCode == HealthCocoConstants.RESULT_CODE_ADD_STRING && data != null) {
                 String note = (String) data.getSerializableExtra(HealthCocoConstants.TAG_INTENT_DATA);
                 if (!Util.isNullOrBlank(note)) {
+                    if (notesListLastAdded == null)
+                        notesListLastAdded = new ArrayList<>();
                     notesListLastAdded.add(note);
                     notifyNoteListAdapter(notesListLastAdded);
                 }

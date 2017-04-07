@@ -21,6 +21,7 @@ import com.healthcoco.healthcocopad.bean.request.AddMedicalFamilyHistoryRequest;
 import com.healthcoco.healthcocopad.bean.request.AssignGroupRequest;
 import com.healthcoco.healthcocopad.bean.request.ClinicImageToSend;
 import com.healthcoco.healthcocopad.bean.request.DoctorSignupHandheldContinueRequest;
+import com.healthcoco.healthcocopad.bean.request.Feedback;
 import com.healthcoco.healthcocopad.bean.request.ProfessionalMembershipRequest;
 import com.healthcoco.healthcocopad.bean.request.ProfessionalStatementRequest;
 import com.healthcoco.healthcocopad.bean.request.RegisterNewPatientRequest;
@@ -959,6 +960,7 @@ public class WebDataServiceImpl implements GCMRefreshListener {
             errorListener.onNetworkUnavailable(webServiceType);
         }
     }
+
     public void addDiagram(Class<?> class1, Diagram diagram,
                            Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         WebServiceType webServiceType = WebServiceType.ADD_DIAGRAM;
@@ -969,6 +971,15 @@ public class WebDataServiceImpl implements GCMRefreshListener {
                     errorListener);
         } else {
             errorListener.onNetworkUnavailable(webServiceType);
+        }
+    }
+
+    public void sendFeedback(Class<?> class1, Feedback feedback, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        Util.checkNetworkStatus(mApp);
+        if (HealthCocoConstants.isNetworkOnline) {
+            WebServiceType webServiceType = WebServiceType.ADD_FEEDBACK;
+            getResponse(webServiceType, class1, webServiceType.getUrl(), feedback, null, responseListener,
+                    errorListener);
         }
     }
 

@@ -2,11 +2,14 @@ package com.healthcoco.healthcocopad.bean;
 
 import com.healthcoco.healthcocopad.bean.server.FileDetails;
 
+import org.parceler.Parcel;
+
 import java.util.List;
 
 /**
  * Created by Shreshtha on 04-02-2017.
  */
+@Parcel
 public class DoctorProfileToSend {
     private String title;
 

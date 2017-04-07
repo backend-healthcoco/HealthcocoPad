@@ -30,14 +30,14 @@ public class HealthCocoConstants {
     public static final String PARAM_TAG_ADD = "/add/";
     public static final String TAG_DIAGRAM_TAG = "diagramTag";
     public static final String TAG_SELECTED_DIAGRAM = "selectedDiagram";
-    public static final int REQUEST_CODE_CONTACTS_DETAIL = 100;
+//    public static final int REQUEST_CODE_CONTACTS_DETAIL = 100;
     public static final int RESULT_CODE_ADD_PRESCIPTION = 101;
     public static final int REQUEST_CODE_CAMERA = 102;
     public static final int REQUEST_CODE_GALLERY = 103;
     public static final int RESULT_CODE_CLINIC_IMAGE = 104;
     public static final int REQUEST_CODE_CLINIC_PROFILE_IMAGE = 105;
     public static final int REQUEST_CODE_MENU_CLINIC_LIST = 106;
-    public static final int REQUEST_CODE_CONTACTS_LIST = 107;
+//    public static final int REQUEST_CODE_CONTACTS_LIST = 107;
     public static final int REQUEST_CODE_DOCTOR_PROFILE = 108;
     public static final int REQUEST_CODE_CLINIC_PROFILE = 109;
     public static final int RESULT_CODE_ADD_EDIT_CLINIC_ADDRESS = 110;
@@ -66,6 +66,7 @@ public class HealthCocoConstants {
     public static final int RESULT_CODE_DRUGS_AND_ALLERGIES_DETAIL = 143;
     public static final int RESULT_CODE_CONTINUE_SIGNUP = 144;
     public static final int RESULT_CODE_DIAGRAM_DETAIL = 145;
+    public static final String TAG_PATIENT_PROFILE = "patientProfile";
     public static int RESULT_CODE_SIGNUP_ALREADY_REGISTERED = 123;
     public static final int RESULT_CODE_GROUPS_LIST = 124;
     public static final int RESULT_CODE_SEARCH_NUMBER_RESULTS = 125;

@@ -67,6 +67,7 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
     public static final String INTENT_GET_MEDICAL_PERSONAL_FAMILY_LIST_LOCAL = "com.healthcoco.MEDICAL_PERSONAL_FAMILY_LIST_LOCAL";
     public static final String TAG_PERSONAL_HISTORY = "patientHistory";
     public static final String DRUG_AND_ALLERGIES = "drugsAndAllegies";
+    private static final int REQUEST_CODE_PATIENT_PROFILE = 111;
     private boolean receiversRegistered = false;
     private FontAwesomeButton btEditPatientProfilePastHistory;
     private FontAwesomeButton btEditPatientProfileFamilyHistory;
@@ -109,6 +110,8 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         init();
+        mActivity.showLoading(false);
+        new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_FRAGMENT_INITIALISATION_DATA, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     @Override
@@ -125,7 +128,6 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
         if (patientDetailFragmentUpdated != null) {
             selectedPatient = patientDetailFragmentUpdated.getSelectedPatientDetails();
             user = patientDetailFragmentUpdated.getUser();
-            patientDetailFragmentUpdated.initFloatingActionButton(this);
         }
     }
 
@@ -168,7 +170,7 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
         mainContainerNotes.setVisibility(View.GONE);
     }
 
-    private void initData() {
+    public void initData() {
         if (selectedPatient != null) {
             ivContactProfile.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -500,12 +502,12 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
             case R.id.bt_edit_patient_profile_personal_history:
                 HistoryDetailsResponse detailsResponse = getDefaultIdDetails();
                 detailsResponse.setPersonalHistory(historyDetailsResponse.getPersonalHistory());
-                openDialogFragment(new AddEditPersonalHistoryDetailDialogFragment(), AddEditPersonalHistoryDetailDialogFragment.TAG_PERSONAL_HISTORY, detailsResponse, HealthCocoConstants.REQUEST_CODE_PATIENT_PROFILE, null);
+                openDialogFragment(new AddEditPersonalHistoryDetailDialogFragment(), AddEditPersonalHistoryDetailDialogFragment.TAG_PERSONAL_HISTORY, detailsResponse, REQUEST_CODE_PATIENT_PROFILE, null);
                 break;
             case R.id.bt_edit_patient_profile_drug_and_allergy:
                 HistoryDetailsResponse detailsResponse1 = getDefaultIdDetails();
                 detailsResponse1.setDrugsAndAllergies(historyDetailsResponse.getDrugsAndAllergies());
-                openDialogFragment(new AddEditDrugAndAllergyDetailDialogFragment(), AddEditDrugAndAllergyDetailDialogFragment.TAG_DRUGS_AND_ALLERGIES, detailsResponse1, HealthCocoConstants.REQUEST_CODE_PATIENT_PROFILE, null);
+                openDialogFragment(new AddEditDrugAndAllergyDetailDialogFragment(), AddEditDrugAndAllergyDetailDialogFragment.TAG_DRUGS_AND_ALLERGIES, detailsResponse1, REQUEST_CODE_PATIENT_PROFILE, null);
                 break;
             case R.id.bt_edit_patient_profile_groups:
             case R.id.bt_edit_patient_profile_patient_data:
@@ -540,7 +542,7 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
         }
         intent.putExtra(HealthCocoConstants.TAG_HISTORY_FILTER_TYPE, historyFilterType.ordinal());
         intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.HISTORY_DISEASE_LIST.ordinal());
-        startActivityForResult(intent, HealthCocoConstants.REQUEST_CODE_PATIENT_PROFILE);
+        startActivityForResult(intent, REQUEST_CODE_PATIENT_PROFILE);
     }
 
     public void openRegistrationFragment(String patientUniqueId) {
@@ -548,16 +550,20 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
         intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.PATIENT_REGISTRATION.ordinal());
         intent.putExtra(HealthCocoConstants.TAG_UNIQUE_ID, patientUniqueId);
         intent.putExtra(HealthCocoConstants.TAG_IS_EDIT_PATIENT, true);
-        startActivityForResult(intent, HealthCocoConstants.REQUEST_CODE_PATIENT_PROFILE);
+        startActivityForResult(intent, REQUEST_CODE_PATIENT_PROFILE);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == HealthCocoConstants.REQUEST_CODE_PATIENT_PROFILE) {
+        if (requestCode == REQUEST_CODE_PATIENT_PROFILE) {
             if (resultCode == HealthCocoConstants.RESULT_CODE_REGISTRATION) {
-                mActivity.showLoading(false);
-                new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_FRAGMENT_INITIALISATION_DATA, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                selectedPatient = Parcels.unwrap(data.getParcelableExtra(HealthCocoConstants.TAG_PATIENT_PROFILE));
+                initGroups();
+                initNotes();
+                initProfileData();
+//                mActivity.showLoading(false);
+//                new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_FRAGMENT_INITIALISATION_DATA, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             } else if (resultCode == HealthCocoConstants.RESULT_CODE_DOCTOR_PERSONAL_HISTORY_DETAIL) {
                 PersonalHistory personalHistory = Parcels.unwrap(data.getParcelableExtra(TAG_PERSONAL_HISTORY));
                 historyDetailsResponse.setPersonalHistory(personalHistory);
@@ -585,7 +591,9 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
                     user = doctor.getUser();
                 }
                 checkPatientStatus();
-                getListFromLocal(true);
+//                getListFromLocal(true);
+                new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_HISTORY_LIST, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
                 break;
             case ADD_HISTORY_LIST:
                 LocalDataServiceImpl.getInstance(mApp).addHistoryList(HealthCocoConstants.SELECTED_PATIENTS_USER_ID, (ArrayList<HistoryDetailsResponse>) (ArrayList<?>) response.getDataList());

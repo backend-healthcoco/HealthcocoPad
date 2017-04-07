@@ -170,4 +170,5 @@
     <dimen name="width_height_diagram_list_item">130dp</dimen>
     <dimen name="diagram_list_grid_item_spacing">5dp</dimen>
     <dimen name="diagram_detail_color_pallete_width_height">30dp</dimen>
+    <dimen name="text_size_feedback">18sp</dimen>
 </resources>

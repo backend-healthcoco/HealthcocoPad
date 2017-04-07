@@ -2,10 +2,15 @@ package com.healthcoco.healthcocopad.bean;
 
 
 import com.healthcoco.healthcocopad.enums.NotificationContentType;
+import com.healthcoco.healthcocopad.utilities.ObjectParcelConvertor;
+
+import org.parceler.Parcel;
+import org.parceler.ParcelPropertyConverter;
 
 /**
  * Created by neha on 03/07/16.
  */
+@Parcel
 public class NotificationResponse {
 
     private String title;
@@ -28,6 +33,7 @@ public class NotificationResponse {
     //represents DoctorId
     private String di;
     private long createdTime;
+    @ParcelPropertyConverter(ObjectParcelConvertor.class)
     private Object data;
 
     public String getTitle() {

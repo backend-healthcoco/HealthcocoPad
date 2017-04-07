@@ -109,7 +109,6 @@ public class DiseaseListFragment extends HealthCocoFragment implements View.OnCl
         tvNoDiseaseHistory = (TextView) view.findViewById(R.id.tv_no_disease_history_found);
         btAddNewHistory = (FontAwesomeButton) view.findViewById(R.id.bt_advance_search);
         initEditSearchView(R.string.search_history, this, this);
-        ((CommonOpenUpActivity) mActivity).initSaveButton(this);
         btAddNewHistory.setText(getResources().getString(R.string.icon_add_new_history));
     }
 
@@ -326,9 +325,9 @@ public class DiseaseListFragment extends HealthCocoFragment implements View.OnCl
                         diseaseList = new ArrayList<>();
                     diseaseList.add(disease);
                     notifyAdapter(diseaseList);
+                    getListFromLocal();
                     return;
                 }
-                getListFromLocal();
             }
         }
     }

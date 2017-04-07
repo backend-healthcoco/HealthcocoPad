@@ -706,4 +706,12 @@
     <string name="write_pa">Write P/A</string>
     <string name="write_ps">Write P/S</string>
     <string name="write_pv">Write P/V</string>
+    <string name="give_us_feedback">Give us Feedback</string>
+    <string name="send">Send</string>
+
+    <string name="model">Model</string>
+    <string name="manufacturer">Manufacturer</string>
+    <string name="version">Version</string>
+    <string name="sdk">SDK</string>
+    <string name="feedback_sent_successfully">Feedback sent Successfully</string>
 </resources>

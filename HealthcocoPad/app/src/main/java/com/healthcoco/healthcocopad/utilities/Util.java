@@ -630,4 +630,28 @@ public class Util {
             return "*/*";
         }
     }
+
+    public static String getFormattedDeviceInfo(Activity mActivity) {
+        String formattedDevice = "";
+        try {
+            String deviceName = android.os.Build.MODEL;
+            if (!isNullOrBlank(deviceName))
+                formattedDevice = formattedDevice + mActivity.getResources().getString(R.string.model) + ":" + deviceName + ",";
+
+            String deviceMan = android.os.Build.MANUFACTURER;
+            if (!isNullOrBlank(deviceMan))
+                formattedDevice = formattedDevice + mActivity.getResources().getString(R.string.manufacturer) + ":" + deviceMan + ",";
+
+            String version = android.os.Build.VERSION.RELEASE;
+            if (!isNullOrBlank(version))
+                formattedDevice = formattedDevice + mActivity.getResources().getString(R.string.version) + ":" + version + ",";
+
+            int sdkInt = android.os.Build.VERSION.SDK_INT;
+            formattedDevice = formattedDevice + mActivity.getResources().getString(R.string.sdk) + ":" + sdkInt + ",";
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return formattedDevice;
+    }
 }

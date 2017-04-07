@@ -1,12 +1,13 @@
 package com.healthcoco.healthcocopad.bean;
 
-import android.os.Parcel;
-import android.os.Parcelable;
 
 import com.orm.SugarRecord;
 import com.orm.annotation.Unique;
 
-public class DOB extends SugarRecord implements Parcelable {
+import org.parceler.Parcel;
+
+@Parcel
+public class DOB extends SugarRecord {
     @Unique
     protected String foreignUniqueId;
     private int days;
@@ -48,38 +49,5 @@ public class DOB extends SugarRecord implements Parcelable {
 
     public void setForeignUniqueId(String foreignUniqueId) {
         this.foreignUniqueId = foreignUniqueId;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(days);
-        dest.writeString(foreignUniqueId);
-        dest.writeInt(months);
-        dest.writeInt(years);
-    }
-
-    // Creator
-    public static final Creator CREATOR = new Creator
-            () {
-        public DOB createFromParcel(Parcel in) {
-            return new DOB(in);
-        }
-
-        public DOB[] newArray(int size) {
-            return new DOB[size];
-        }
-    };
-
-    // "De-parcel object
-    private DOB(Parcel in) {
-        foreignUniqueId = in.readString();
-        days = in.readInt();
-        months = in.readInt();
-        years = in.readInt();
     }
 }
