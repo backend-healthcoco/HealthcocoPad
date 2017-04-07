@@ -1,70 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/main_content"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/grey_background"
-    android:clickable="true">
+    android:orientation="vertical">
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fl_bt_add"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|right"
-        android:layout_marginBottom="@dimen/fab_margin_bottom"
-        android:layout_marginRight="@dimen/fab_margin_right"
-        android:src="@drawable/actionbar_add_me"
-        app:layout_anchorGravity="bottom|right|end" />
-
-    <LinearLayout
+    <com.healthcoco.healthcocopad.views.ListViewLoadMore
+        android:id="@+id/lv_visits"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/grey_background"
-        android:orientation="vertical">
+        android:divider="@android:color/transparent"
+        android:dividerHeight="@dimen/list_item_padding"
+        android:orientation="vertical"
+        android:overScrollMode="never"
+        android:scrollbarStyle="outsideOverlay"
+        android:visibility="gone" />
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:orientation="vertical">
+    <TextView
+        android:id="@+id/tv_no_visits_found"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="@string/no_visits_found"
+        android:textSize="@dimen/text_size_no_results"
+        android:textStyle="bold"
+        android:visibility="visible" />
 
-            <LinearLayout
-                android:id="@+id/container_visits"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"></LinearLayout>
-
-            <com.healthcoco.healthcocopad.views.ListViewLoadMore
-                android:id="@+id/lv_visits"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:divider="@android:color/transparent"
-                android:dividerHeight="@dimen/list_item_padding"
-                android:orientation="vertical"
-                android:overScrollMode="never"
-                android:scrollbarStyle="outsideOverlay"
-                android:visibility="gone" />
-
-            <TextView
-                android:id="@+id/tv_no_visits_found"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="@string/no_visits_found"
-                android:textSize="@dimen/text_size_no_results"
-                android:textStyle="bold"
-                android:visibility="visible" />
-
-            <ProgressBar
-                android:id="@+id/progress_loading"
-                style="?android:attr/progressBarStyleSmall"
-                android:layout_width="@dimen/round_progress_bar_size"
-                android:layout_height="@dimen/round_progress_bar_size"
-                android:layout_gravity="center|bottom"
-                android:progressDrawable="@drawable/progress_loading"
-                android:visibility="gone" />
-        </FrameLayout>
-        <!--<include layout="@layout/list_item_patient_visits"></include>-->
-    </LinearLayout>
-</android.support.design.widget.CoordinatorLayout>
+    <ProgressBar
+        android:id="@+id/progress_loading"
+        style="?android:attr/progressBarStyleSmall"
+        android:layout_width="@dimen/round_progress_bar_size"
+        android:layout_height="@dimen/round_progress_bar_size"
+        android:layout_gravity="center|bottom"
+        android:progressDrawable="@drawable/progress_loading"
+        android:visibility="gone" />
+</FrameLayout>

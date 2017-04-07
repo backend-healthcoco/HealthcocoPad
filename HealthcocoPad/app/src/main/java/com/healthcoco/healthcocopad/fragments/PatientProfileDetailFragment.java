@@ -18,15 +18,14 @@ import com.android.volley.Response;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
-import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.Address;
+import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.Drug;
 import com.healthcoco.healthcocopad.bean.server.DrugsAndAllergies;
 import com.healthcoco.healthcocopad.bean.server.HistoryDetailsResponse;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.MedicalFamilyHistoryDetails;
 import com.healthcoco.healthcocopad.bean.server.MedicalFamilyHistoryResponse;
-import com.healthcoco.healthcocopad.bean.server.NotesTable;
 import com.healthcoco.healthcocopad.bean.server.Patient;
 import com.healthcoco.healthcocopad.bean.server.PersonalHistory;
 import com.healthcoco.healthcocopad.bean.server.Reference;
@@ -95,7 +94,6 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
     private boolean isHistoryLoaded;
     private ArrayList<HistoryDetailsResponse> historyList;
     private boolean isInitialLoading;
-    private boolean isOtpVerified = false;
     private HistoryDiseaseIdsListener addDiseaseIdsListener;
     private MedicalFamilyHistoryResponse medicalHistoryResponse;
     private HistoryDetailsResponse historyDetailsResponse;
@@ -110,8 +108,6 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mActivity.showLoading(false);
-        new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_FRAGMENT_INITIALISATION_DATA, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         init();
     }
 
@@ -120,6 +116,17 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
         initViews();
         initListeners();
         hideAllMainLayouts();
+        getUserAndPatientDetails();
+        initData();
+    }
+
+    private void getUserAndPatientDetails() {
+        CommonOpenUpPatientDetailFragment patientDetailFragmentUpdated = (CommonOpenUpPatientDetailFragment) getFragmentManager().findFragmentByTag(CommonOpenUpPatientDetailFragment.class.getSimpleName());
+        if (patientDetailFragmentUpdated != null) {
+            selectedPatient = patientDetailFragmentUpdated.getSelectedPatientDetails();
+            user = patientDetailFragmentUpdated.getUser();
+            patientDetailFragmentUpdated.initFloatingActionButton(this);
+        }
     }
 
     @Override
@@ -173,14 +180,10 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
             tvPatientName.setText(selectedPatient.getLocalPatientName());
             tvGenderAge.setText(selectedPatient.getPid());
             DownloadImageFromUrlUtil.loadImageWithInitialAlphabet(mActivity, PatientProfileScreenType.IN_PATIENT_DEATIL_PROFILE, selectedPatient, null, ivContactProfile, tvInitialAlphabet);
-        } else {
-            mActivity.showLoading(false);
-            WebDataServiceImpl.getInstance(mApp).getPatientProfile(RegisteredPatientDetailsUpdated.class, HealthCocoConstants.SELECTED_PATIENTS_USER_ID, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(), this, this);
+            initProfileData();
+            initGroups();
+            initNotes();
         }
-        isOtpVerified();
-        initProfileData();
-        initGroups();
-        initNotes();
     }
 
     private void initProfileData() {
@@ -525,10 +528,6 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
         return detailsResponse;
     }
 
-    public boolean isOtpVerified() {
-        return super.isOtpVerified();
-    }
-
     private void openHisoryFragment(HistoryFilterType historyFilterType) {
         Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
         switch (historyFilterType) {
@@ -586,12 +585,12 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
                     user = doctor.getUser();
                 }
                 checkPatientStatus();
-                getListFromLocal(true, isOtpVerified(), user);
+                getListFromLocal(true);
                 break;
             case ADD_HISTORY_LIST:
                 LocalDataServiceImpl.getInstance(mApp).addHistoryList(HealthCocoConstants.SELECTED_PATIENTS_USER_ID, (ArrayList<HistoryDetailsResponse>) (ArrayList<?>) response.getDataList());
             case GET_HISTORY_LIST:
-                volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getHistoryList(WebServiceType.GET_HISTORY_LIST, BooleanTypeValues.FALSE, isOtpVerified, user.getUniqueId(), HealthCocoConstants.SELECTED_PATIENTS_USER_ID, null, null);
+                volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getHistoryList(WebServiceType.GET_HISTORY_LIST, BooleanTypeValues.FALSE, isOtpVerified(), user.getUniqueId(), HealthCocoConstants.SELECTED_PATIENTS_USER_ID, null, null);
                 break;
         }
         volleyResponseBean.setIsFromLocalAfterApiSuccess(response.isFromLocalAfterApiSuccess());
@@ -654,7 +653,7 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
                 if (updatedTime == 0) {
                     isInHistory = true;
                 }
-                WebDataServiceImpl.getInstance(mApp).getHistoryListUpdatedAPI(HistoryDetailsResponse.class, WebServiceType.GET_HISTORY_LIST, isOtpVerified, HealthCocoConstants.SELECTED_PATIENTS_USER_ID, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(),
+                WebDataServiceImpl.getInstance(mApp).getHistoryListUpdatedAPI(HistoryDetailsResponse.class, WebServiceType.GET_HISTORY_LIST, isOtpVerified(), HealthCocoConstants.SELECTED_PATIENTS_USER_ID, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(),
                         isInHistory, updatedTime, this, this);
             }
         } catch (Exception e) {
@@ -732,15 +731,14 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
     BroadcastReceiver historyListLocalReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, final Intent intent) {
-            getListFromLocal(false, isOtpVerified(), user);
+            getListFromLocal(false);
         }
     };
 
-    public void getListFromLocal(boolean showLoading, boolean isOTPVerified, User user) {
+    public void getListFromLocal(boolean showLoading) {
         if (user != null) {
             this.user = user;
             isInitialLoading = showLoading;
-            this.isOtpVerified = isOTPVerified;
             if (showLoading) {
                 showLoadingOverlay(true);
             }

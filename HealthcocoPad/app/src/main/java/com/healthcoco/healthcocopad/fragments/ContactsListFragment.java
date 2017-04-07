@@ -50,7 +50,6 @@ import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.FilterItemType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.LocalTabelType;
-import com.healthcoco.healthcocopad.enums.PatientDetailTabType;
 import com.healthcoco.healthcocopad.enums.RecordType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.ContactsItemOptionsListener;
@@ -368,12 +367,12 @@ public class ContactsListFragment extends HealthCocoFragment implements
 
     @Override
     public void onAddPrescriptionClicked(RegisteredPatientDetailsUpdated selecetdPatient) {
-        HealthCocoConstants.SELECTED_PATIENTS_USER_ID = selecetdPatient.getUserId();
-        Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
-        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.PATIENT_DETAIL.ordinal());
-        intent.putExtra(HealthCocoConstants.TAG_TAB_TYPE, PatientDetailTabType.PATIENT_DETAIL_PRESCRIPTION.ordinal());
-        startActivityForResult(intent, HealthCocoConstants.REQUEST_CODE_CONTACTS_LIST);
-        contactsListAdapter.notifyDataSetChanged();
+//        HealthCocoConstants.SELECTED_PATIENTS_USER_ID = selecetdPatient.getUserId();
+//        Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
+//        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.PATIENT_DETAIL.ordinal());
+//        intent.putExtra(HealthCocoConstants.TAG_TAB_TYPE, PatientDetailTabType.PATIENT_DETAIL_PRESCRIPTION.ordinal());
+//        startActivityForResult(intent, HealthCocoConstants.REQUEST_CODE_CONTACTS_LIST);
+//        contactsListAdapter.notifyDataSetChanged();
     }
 
     @Override

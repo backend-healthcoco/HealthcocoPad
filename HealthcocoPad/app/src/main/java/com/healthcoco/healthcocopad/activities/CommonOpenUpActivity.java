@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
@@ -191,7 +190,11 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
     }
 
     public void initActionbarTitle(int titleId) {
-        initActionbarTitle(getResources().getString(titleId));
+        try {
+            initActionbarTitle(getResources().getString(titleId));
+        } catch (Exception e) {
+            initActionbarTitle(getResources().getString(R.string.app_name));
+        }
     }
 
     public void initActionbarTitle(String titleId) {

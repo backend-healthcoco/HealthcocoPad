@@ -12,7 +12,6 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -65,12 +64,10 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
     private static final String TAG_VISIT_ID = "visitId";
     private int PAGE_NUMBER = 0;
     private boolean isEndOfListAchieved;
-    private int currentPageNumber;
     private boolean isInitialLoading;
 
     //other variables
     public static final String INTENT_GET_VISITS_LIST = "com.healthcoco.VISITS_LIST";
-    private LinearLayout containerVisits;
     private User user;
     private RegisteredPatientDetailsUpdated selectedPatient;
     private TextView tvNoVisits;
@@ -101,13 +98,20 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
         initViews();
         initListeners();
         initAdapter();
-        initData();
-        getListFromLocal();
+        getUserAndPatientDetails();
+    }
+
+    private void getUserAndPatientDetails() {
+        CommonOpenUpPatientDetailFragment patientDetailFragmentUpdated = (CommonOpenUpPatientDetailFragment) getFragmentManager().findFragmentByTag(CommonOpenUpPatientDetailFragment.class.getSimpleName());
+        if (patientDetailFragmentUpdated != null) {
+            selectedPatient = patientDetailFragmentUpdated.getSelectedPatientDetails();
+            user = patientDetailFragmentUpdated.getUser();
+            patientDetailFragmentUpdated.initFloatingActionButton(this);
+        }
     }
 
     @Override
     public void initViews() {
-        containerVisits = (LinearLayout) view.findViewById(R.id.container_visits);
         tvNoVisits = (TextView) view.findViewById(R.id.tv_no_visits_found);
         progressLoading = (ProgressBar) view.findViewById(R.id.progress_loading);
         lvVisits = (ListViewLoadMore) view.findViewById(R.id.lv_visits);
@@ -124,21 +128,12 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
         lvVisits.setAdapter(patientsVisitAdapter);
     }
 
-    private void initData() {
-        CommonOpenUpPatientDetailFragment patientDetailFragmentUpdated = (CommonOpenUpPatientDetailFragment) getFragmentManager().findFragmentByTag(CommonOpenUpPatientDetailFragment.class.getSimpleName());
-        if (patientDetailFragmentUpdated != null) {
-            selectedPatient = patientDetailFragmentUpdated.getSelectedPatient();
-            user = patientDetailFragmentUpdated.getUser();
-            patientDetailFragmentUpdated.initFloatingActionButton(this);
-        }
-    }
-
     public void getListFromLocal() {
         Util.checkNetworkStatus(mActivity);
         if (!HealthCocoConstants.isNetworkOnline)
             onNetworkUnavailable(null);
         resetListAndPagingAttributes();
-        getListFromLocal(true, 0, false);
+        getListFromLocal(true);
     }
 
     public void getVisits(boolean showLoading) {
@@ -155,7 +150,6 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
     }
 
     public void notifyVisitsAdapter(List<VisitDetails> visitsList) {
-        containerVisits.setVisibility(View.GONE);
         if (!Util.isNullOrEmptyList(visitsList)) {
             Collections.sort(visitsList, ComparatorUtil.visitDateComparator);
             LogUtils.LOGD(TAG, "Size " + visitsList.size());
@@ -301,14 +295,12 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
         if (!isEndOfListAchieved && !isLoading) {
             PAGE_NUMBER = PAGE_NUMBER + 1;
             LogUtils.LOGD(TAG, "LoadMore PAGE_NUMBER " + PAGE_NUMBER);
-            getListFromLocal(false, PAGE_NUMBER, false);
+            getListFromLocal(false);
         }
     }
 
     private void resetListAndPagingAttributes() {
-        containerVisits.removeAllViews();
         PAGE_NUMBER = 0;
-        currentPageNumber = 0;
         isEndOfListAchieved = false;
     }
 
@@ -316,14 +308,12 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
         return isEndOfListAchieved;
     }
 
-    private void getListFromLocal(boolean initialLoading, int pageNum, boolean loadingFromSearch) {
+    public void getListFromLocal(boolean initialLoading) {
         this.isInitialLoading = initialLoading;
-        this.currentPageNumber = pageNum;
         isLoading = true;
         if (isInitialLoading) {
             if (isInitialLoading)
                 mActivity.showLoading(false);
-            this.currentPageNumber = 0;
             progressLoading.setVisibility(View.GONE);
         } else
             progressLoading.setVisibility(View.VISIBLE);
