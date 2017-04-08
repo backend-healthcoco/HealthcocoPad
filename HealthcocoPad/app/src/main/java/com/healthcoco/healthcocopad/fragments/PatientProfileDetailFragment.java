@@ -368,11 +368,11 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
                 tvBladderHabit.setText(personalHistory.getBladderHabit());
             }
         } else {
+            tvNoData.setVisibility(View.VISIBLE);
             containerDiet.setVisibility(View.GONE);
             containerAddiction.setVisibility(View.GONE);
             containerBowelHabit.setVisibility(View.GONE);
             containerBladderHabit.setVisibility(View.GONE);
-            tvNoData.setVisibility(View.VISIBLE);
         }
         mainContainerPersonalHistory.setVisibility(View.VISIBLE);
     }

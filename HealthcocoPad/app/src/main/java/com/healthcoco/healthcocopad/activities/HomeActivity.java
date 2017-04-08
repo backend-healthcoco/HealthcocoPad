@@ -72,7 +72,6 @@ public class HomeActivity extends HealthCocoActivity implements View.OnClickList
     private FragmentType selectedFramentType;
     private MenuDrawerFragment menuFragment;
     private ContactsListFragment contactsFragment;
-    private LinearLayout layout_right_drawer;
     private FilterFragment filterFragment;
 
     @Override
@@ -139,7 +138,6 @@ public class HomeActivity extends HealthCocoActivity implements View.OnClickList
         layoutOtherFragments = (LinearLayout) findViewById(R.id.layout_right_detail);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawerLayout.setScrimColor(getResources().getColor(R.color.black_translucent));
-        layout_right_drawer = (LinearLayout) findViewById(R.id.layout_right_drawer);
         btMenu = (ImageButton) findViewById(R.id.bt_menu);
         tvTitle = (TextView) findViewById(R.id.tv_title);
     }

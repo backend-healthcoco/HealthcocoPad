@@ -11,15 +11,15 @@ import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.HealthCocoViewHolder;
 import com.healthcoco.healthcocopad.bean.server.Disease;
 import com.healthcoco.healthcocopad.listeners.MedicalFamilyHistoryItemListener;
+import com.healthcoco.healthcocopad.utilities.Util;
 
 /**
  * Created by neha on 11/12/15.
  */
-public class PersonalFamilyHistoryDiseaseViewHolder extends HealthCocoViewHolder implements CompoundButton.OnCheckedChangeListener, View.OnClickListener {
+public class PersonalFamilyHistoryDiseaseViewHolder extends HealthCocoViewHolder implements
+        CompoundButton.OnCheckedChangeListener, View.OnClickListener {
 
     private MedicalFamilyHistoryItemListener itemListener;
-    private HealthCocoActivity mActivity;
-    private TextView tvDiseaseName;
     private Disease disease;
     private CheckBox cbCheckBox;
 
@@ -42,16 +42,12 @@ public class PersonalFamilyHistoryDiseaseViewHolder extends HealthCocoViewHolder
         } else {
             cbCheckBox.setChecked(false);
         }
-        tvDiseaseName.setText(disease.getDisease());
+        cbCheckBox.setText(Util.getValidatedValue(disease.getDisease()));
     }
 
     @Override
     public View getContentView() {
-//        LinearLayout view = (LinearLayout) inflater.inflate(R.layout.list_item_disease, null);
-//        tvDiseaseName = (TextView) view.findViewById(R.id.tv_disease);
-//        cbCheckBox = (CheckBox) view.findViewById(R.id.cb_checkbox);
-        LinearLayout view = (LinearLayout) inflater.inflate(R.layout.item_ui_permisssion, null);
-        tvDiseaseName = (TextView) view.findViewById(R.id.tv_group_name);
+        LinearLayout view = (LinearLayout) inflater.inflate(R.layout.grid_item_groups, null);
         cbCheckBox = (CheckBox) view.findViewById(R.id.ch_ui_permission);
         cbCheckBox.setOnCheckedChangeListener(this);
         view.setOnClickListener(this);

@@ -17,7 +17,6 @@ import com.healthcoco.healthcocopad.utilities.Util;
 public class GroupGridViewHolder extends HealthCocoViewHolder implements CompoundButton.OnCheckedChangeListener, View.OnClickListener {
 
     private PatientRegistrationListener assignGroupListener;
-    private HealthCocoActivity mActivity;
     private UserGroups objData;
     private CheckBox cbGrouped;
 
@@ -26,6 +25,7 @@ public class GroupGridViewHolder extends HealthCocoViewHolder implements Compoun
         this.mActivity = mActivity;
         this.assignGroupListener = assignGroupListener;
     }
+
 
     @Override
     public void setData(Object object) {

@@ -715,7 +715,6 @@ public class ContactsListFragment extends HealthCocoFragment implements
                         sortList(intent, itemType);
                     }
                 }
-
             }
         }
     };
@@ -735,6 +734,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
                 user = doctor.getUser();
                 resetListAndPagingAttributes();
                 getListFromLocal(true);
+                getGroupsListFromServer();
             }
         }
     };

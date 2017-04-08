@@ -24,9 +24,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
             android:focusable="true"
             android:focusableInTouchMode="true"
+            android:orientation="vertical"
             android:padding="10dp">
 
             <android.support.design.widget.TextInputLayout
@@ -40,9 +40,10 @@
                     style="@style/add_appointment_details_input_edit_text_style"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/rupee_consultant_fees"
-                    android:inputType="number"
+                    android:digits="0123456789"
                     android:focusableInTouchMode="true"
+                    android:hint="@string/rupee_consultant_fees"
+                    android:inputType="phone"
                     android:maxLength="5"
                     android:maxLines="1" />
             </android.support.design.widget.TextInputLayout>
@@ -58,8 +59,9 @@
                     style="@style/add_appointment_details_input_edit_text_style"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:digits="0123456789"
                     android:hint="@string/rupee_second__consultant_fees"
-                    android:inputType="number"
+                    android:inputType="phone"
                     android:maxLength="5"
                     android:maxLines="1" />
             </android.support.design.widget.TextInputLayout>

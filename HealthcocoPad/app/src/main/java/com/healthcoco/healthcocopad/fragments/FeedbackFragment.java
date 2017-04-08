@@ -89,7 +89,6 @@ public class FeedbackFragment extends HealthCocoFragment implements View.OnClick
             sendFeedback(feedback);
         } else
             Util.showToast(mActivity, msg);
-
     }
 
     private void sendFeedback(String feedbackText) {

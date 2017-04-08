@@ -128,8 +128,9 @@
                     style="@style/add_appointment_details_input_edit_text_style"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:digits="0123456789"
                     android:hint="@string/pincode"
-                    android:inputType="number"
+                    android:inputType="phone"
                     android:maxLength="@integer/max_pincode_length"
                     android:singleLine="true" />
             </android.support.design.widget.TextInputLayout>

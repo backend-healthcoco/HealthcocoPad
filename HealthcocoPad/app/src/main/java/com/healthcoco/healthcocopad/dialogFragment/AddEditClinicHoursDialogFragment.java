@@ -449,9 +449,9 @@ public class AddEditClinicHoursDialogFragment extends HealthCocoDialogFragment i
                         }
                         getTargetFragment().onActivityResult(getTargetRequestCode(), HealthCocoConstants.RESULT_CODE_ADD_EDIT_CLINIC_HOURS, new Intent().putExtra(MyClinicFragment.TAG_CLINIC_PROFILE, Parcels.wrap(object)));
                         getDialog().dismiss();
-                        mActivity.hideLoading();
                     }
             }
         }
+        mActivity.hideLoading();
     }
 }

@@ -35,9 +35,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
+            android:digits="0123456789"
             android:gravity="center"
             android:hint="@string/enter_otp"
-            android:inputType="number"
+            android:inputType="phone"
             android:padding="10dp"
             android:singleLine="true"
             android:textSize="@dimen/text_size_edit_otp_number" />

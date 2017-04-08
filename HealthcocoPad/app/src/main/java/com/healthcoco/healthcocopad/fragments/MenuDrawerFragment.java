@@ -69,8 +69,6 @@ public class MenuDrawerFragment extends HealthCocoFragment implements View.OnCli
     private int selectedPosition;
     private FragmentType selectedFragmentType;
     private boolean receiversRegistered;
-    private ListView lvClinicsList;
-    private RelativeLayout profile_layout;
     private LinearLayout manage_clinic_layout;
     private List<DoctorClinicProfile> clinicProfile;
 
@@ -139,7 +137,6 @@ public class MenuDrawerFragment extends HealthCocoFragment implements View.OnCli
         tvInitialAlphabet = (TextView) view.findViewById(R.id.tv_initial_aplhabet);
         itemProfileHeader = (LinearLayout) view.findViewById(R.id.item_profile_header);
         manage_clinic_layout = (LinearLayout) view.findViewById(R.id.manage_clinic_layout);
-        profile_layout = (RelativeLayout) view.findViewById(R.id.profile_layout);
         progressLoading = (ProgressBar) view.findViewById(R.id.progress_loading);
     }
 
@@ -172,7 +169,7 @@ public class MenuDrawerFragment extends HealthCocoFragment implements View.OnCli
         switch (view.getId()) {
             case R.id.item_profile_header:
                 openFragment(FragmentType.PROFILE);
-                ((HomeActivity) mActivity).initFragment(FragmentType.PROFILE);
+//                ((HomeActivity) mActivity).initFragment(FragmentType.PROFILE);
                 break;
             case R.id.tv_clinic_name:
                 if (clinicProfile.size() > 1) {

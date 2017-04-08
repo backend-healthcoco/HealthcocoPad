@@ -10,8 +10,8 @@ import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ListView;
 
-import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.HealthCocoDialogFragment;
+import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.adapter.MenuClinicListAdapter;
 import com.healthcoco.healthcocopad.bean.server.DoctorClinicProfile;
 import com.healthcoco.healthcocopad.fragments.ContactsListFragment;
@@ -91,5 +91,4 @@ public class MenuClinicListDialogFragment extends HealthCocoDialogFragment imple
     public void onClick(View view) {
         getDialog().cancel();
     }
-
 }

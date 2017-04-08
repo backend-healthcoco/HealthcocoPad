@@ -33,7 +33,7 @@ public class SettingsUIPermissionItemViewHolder implements CompoundButton.OnChec
     }
 
     public View getContentView() {
-        LinearLayout view = (LinearLayout) mActivity.getLayoutInflater().inflate(R.layout.item_ui_permisssion, null);
+        LinearLayout view = (LinearLayout) mActivity.getLayoutInflater().inflate(R.layout.grid_item_groups, null);
         chUIPermission = (AppCompatCheckBox) view.findViewById(R.id.ch_ui_permission);
         chUIPermission.setChecked(true);
         chUIPermission.setOnCheckedChangeListener(this);
