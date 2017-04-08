@@ -144,7 +144,7 @@ public class InitialSyncFragment extends HealthCocoFragment {
                     if (syncServiceType == DefaultSyncServiceType.SYNC_COMPLETE) {
 //                        ContactsListFragment tempContactsListFragment = (ContactsListFragment) mFragmentManager.findFragmentByTag(TemplatesListFragment.class.getSimpleName());
 //                        if (tempContactsListFragment != null) {
-//                            tempContactsListFragment.getListFromLocal(true, 0);
+//                            tempContactsListFragment.getHistoryListFromLocal(true, 0);
 //                        } else
                         mActivity.finish();
                         Util.sendBroadcast(mApp, HomeActivity.INTENT_SYNC_SUCCESS);

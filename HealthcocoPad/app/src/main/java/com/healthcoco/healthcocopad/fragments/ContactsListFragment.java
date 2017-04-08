@@ -50,7 +50,6 @@ import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.FilterItemType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.LocalTabelType;
-import com.healthcoco.healthcocopad.enums.PatientDetailTabType;
 import com.healthcoco.healthcocopad.enums.RecordType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.ContactsItemOptionsListener;
@@ -598,6 +597,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
                         new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_PATIENTS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
                         return;
                     }
+                    isEditTextSearching = false;
                     isInitialLoading = false;
                     notifyAdapter(new ArrayList<RegisteredPatientDetailsUpdated>(patientsListHashMap.values()));
                     if (!isOnLoadMore) {
@@ -796,7 +796,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
 
     @Override
     public void loadMore() {
-        if (!isEndOfListAchieved && !isInitialLoading) {
+        if (!isEndOfListAchieved && !isInitialLoading && !isEditTextSearching) {
             isOnLoadMore = true;
             PAGE_NUMBER++;
             getListFromLocal(false);
@@ -810,7 +810,6 @@ public class ContactsListFragment extends HealthCocoFragment implements
 
     public void getListFromLocal(boolean initialLoading) {
         this.isInitialLoading = initialLoading;
-        isEditTextSearching = false;
         if (isInitialLoading) {
             filterType = FilterItemType.ALL_PATIENTS;
             mActivity.showLoading(false);

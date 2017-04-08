@@ -10,6 +10,7 @@ import org.parceler.Parcel;
 
 import java.io.Serializable;
 import java.util.List;
+
 @Parcel
 public class Drug extends SugarRecord implements Serializable {
     public static String TABLE_NAME = " " + StringUtil.toSQLName(Drug.class.getSimpleName());
@@ -32,7 +33,6 @@ public class Drug extends SugarRecord implements Serializable {
     private String drugName;
     private Long createdTime;
     private Long updatedTime;
-    protected boolean isDrugFromGetDrugsList;
     @Ignore
     private DrugDosage dosageTime;
     @Ignore
@@ -45,7 +45,6 @@ public class Drug extends SugarRecord implements Serializable {
     @Ignore
     private List<GenericName> genericNames;
     private String genericNamesJsonString;
-    private String drugId;
     private String instructions;
 
     public String getInstructions() {
@@ -54,14 +53,6 @@ public class Drug extends SugarRecord implements Serializable {
 
     public void setInstructions(String instructions) {
         this.instructions = instructions;
-    }
-
-    public String getDrugId() {
-        return drugId;
-    }
-
-    public void setDrugId(String drugId) {
-        this.drugId = drugId;
     }
 
     public List<GenericName> getGenericNames() {
@@ -256,14 +247,6 @@ public class Drug extends SugarRecord implements Serializable {
 
     public void setCreatedTime(Long createdTime) {
         this.createdTime = createdTime;
-    }
-
-    public boolean isDrugFromGetDrugsList() {
-        return isDrugFromGetDrugsList;
-    }
-
-    public void setIsDrugFromGetDrugsList(boolean isDrugFromGetDrugsList) {
-        this.isDrugFromGetDrugsList = isDrugFromGetDrugsList;
     }
 
     public String getFormattedDrugName() {

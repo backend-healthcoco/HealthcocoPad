@@ -11,6 +11,7 @@ import org.parceler.Parcel;
  */
 @Parcel
 public class MedicalFamilyHistoryDetails extends SugarRecord {
+    @Unique
     private String uniqueId;
     private String disease;
     private String description;
@@ -22,10 +23,7 @@ public class MedicalFamilyHistoryDetails extends SugarRecord {
     private String updatedTime;
     private String explanation;
     private Boolean discarded;
-    protected String foreignMedicalHistoryId;
     private HistoryFilterType historyFilterType;
-    @Unique
-    protected String customUniqueId;
 
     public String getDescription() {
         return description;
@@ -99,28 +97,12 @@ public class MedicalFamilyHistoryDetails extends SugarRecord {
         this.uniqueId = uniqueId;
     }
 
-    public String getForeignMedicalHistoryId() {
-        return foreignMedicalHistoryId;
-    }
-
-    public void setForeignMedicalHistoryId(String foreignMedicalHistoryId) {
-        this.foreignMedicalHistoryId = foreignMedicalHistoryId;
-    }
-
     public HistoryFilterType getHistoryFilterType() {
         return historyFilterType;
     }
 
     public void setHistoryFilterType(HistoryFilterType historyFilterType) {
         this.historyFilterType = historyFilterType;
-    }
-
-    public String getCustomUniqueId() {
-        return customUniqueId;
-    }
-
-    public void setCustomUniqueId(String customUniqueId) {
-        this.customUniqueId = customUniqueId;
     }
 
     public String getExplanation() {

@@ -13,6 +13,7 @@ import com.healthcoco.healthcocopad.HealthCocoApplication;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.DoctorContactUs;
 import com.healthcoco.healthcocopad.bean.DoctorProfileToSend;
+import com.healthcoco.healthcocopad.bean.PersonalHistory;
 import com.healthcoco.healthcocopad.bean.VersionCheckRequest;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.request.AddDrugRequest;
@@ -33,7 +34,6 @@ import com.healthcoco.healthcocopad.bean.server.Drug;
 import com.healthcoco.healthcocopad.bean.server.DrugType;
 import com.healthcoco.healthcocopad.bean.server.GCMRequest;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
-import com.healthcoco.healthcocopad.bean.server.PersonalHistory;
 import com.healthcoco.healthcocopad.bean.server.Profession;
 import com.healthcoco.healthcocopad.bean.server.Reference;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
@@ -717,7 +717,7 @@ public class WebDataServiceImpl implements GCMRefreshListener {
                     + "/" + hospitalId;
             getResponse(Request.Priority.HIGH, webServiceType, class1, url, null, null, responseListener, errorListener);
         } else {
-            LocalDataServiceImpl.getInstance(mApp).getHistoryList(WebServiceType.GET_DISEASE_HISTORY_LIST, BooleanTypeValues.FALSE, isOtpVerified, doctorId, HealthCocoConstants.SELECTED_PATIENTS_USER_ID, responseListener, errorListener);
+            LocalDataServiceImpl.getInstance(mApp).getHistoryDetailResponse(WebServiceType.GET_DISEASE_HISTORY_LIST, BooleanTypeValues.FALSE, isOtpVerified, doctorId, locationId, hospitalId, HealthCocoConstants.SELECTED_PATIENTS_USER_ID, responseListener, errorListener);
         }
     }
 
@@ -727,7 +727,7 @@ public class WebDataServiceImpl implements GCMRefreshListener {
             String url = webServiceType.getUrl() + patientId + "/" + doctorId + "/" + locationId + "/" + hospitalId;
             getResponse(Request.Priority.HIGH, webServiceType, class1, url, null, null, responseListener, errorListener);
         } else {
-            LocalDataServiceImpl.getInstance(mApp).getMedicalFAmilyHistory(WebServiceType.GET_MEDICAL_AND_FAMILY_HISTORY, patientId, responseListener, errorListener);
+//            LocalDataServiceImpl.getInstance(mApp).getMedicalFAmilyHistory(WebServiceType.GET_MEDICAL_AND_FAMILY_HISTORY, patientId, responseListener, errorListener);
         }
     }
 

@@ -128,11 +128,9 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
         lvVisits.setAdapter(patientsVisitAdapter);
     }
 
-    public void getListFromLocal() {
-        Util.checkNetworkStatus(mActivity);
-        if (!HealthCocoConstants.isNetworkOnline)
-            onNetworkUnavailable(null);
-        resetListAndPagingAttributes();
+    public void refreshData(User user, RegisteredPatientDetailsUpdated registeredPatientDetailsUpdated) {
+        this.selectedPatient = registeredPatientDetailsUpdated;
+        this.user = user;
         getListFromLocal(true);
     }
 

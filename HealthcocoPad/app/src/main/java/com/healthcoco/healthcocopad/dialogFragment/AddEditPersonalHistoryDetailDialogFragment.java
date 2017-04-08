@@ -12,7 +12,7 @@ import com.healthcoco.healthcocopad.HealthCocoDialogFragment;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.HistoryDetailsResponse;
-import com.healthcoco.healthcocopad.bean.server.PersonalHistory;
+import com.healthcoco.healthcocopad.bean.PersonalHistory;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.fragments.PatientProfileDetailFragment;
 import com.healthcoco.healthcocopad.services.GsonRequest;

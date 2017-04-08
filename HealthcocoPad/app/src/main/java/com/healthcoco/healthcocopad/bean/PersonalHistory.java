@@ -1,6 +1,4 @@
-package com.healthcoco.healthcocopad.bean.server;
-
-import com.orm.SugarRecord;
+package com.healthcoco.healthcocopad.bean;
 
 import org.parceler.Parcel;
 
@@ -8,7 +6,7 @@ import org.parceler.Parcel;
  * Created by Shreshtha on 16-03-2017.
  */
 @Parcel
-public class PersonalHistory extends SugarRecord {
+public class PersonalHistory {
     private String diet;
     private String addictions;
     private String bowelHabit;

@@ -398,7 +398,7 @@ public class CommonListDialogFragmentWithTitle extends HealthCocoDialogFragment 
     @Override
     public void onRefresh() {
         getDataFromServer(false);
-//        getListFromLocal();
+//        getHistoryListFromLocal();
     }
 
     private void getDataFromServer(boolean showLoading) {

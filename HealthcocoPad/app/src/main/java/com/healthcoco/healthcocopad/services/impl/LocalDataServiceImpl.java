@@ -10,6 +10,7 @@ import com.healthcoco.healthcocopad.HealthCocoApplication;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.Address;
 import com.healthcoco.healthcocopad.bean.DOB;
+import com.healthcoco.healthcocopad.bean.PersonalHistory;
 import com.healthcoco.healthcocopad.bean.UIPermissions;
 import com.healthcoco.healthcocopad.bean.UserPermissionsResponse;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
@@ -50,6 +51,7 @@ import com.healthcoco.healthcocopad.bean.server.DrugDosage;
 import com.healthcoco.healthcocopad.bean.server.DrugDurationUnit;
 import com.healthcoco.healthcocopad.bean.server.DrugItem;
 import com.healthcoco.healthcocopad.bean.server.DrugType;
+import com.healthcoco.healthcocopad.bean.server.DrugsAndAllergies;
 import com.healthcoco.healthcocopad.bean.server.Duration;
 import com.healthcoco.healthcocopad.bean.server.Education;
 import com.healthcoco.healthcocopad.bean.server.EducationQualification;
@@ -64,7 +66,6 @@ import com.healthcoco.healthcocopad.bean.server.ForeignProfessionalMemberships;
 import com.healthcoco.healthcocopad.bean.server.ForeignSpecialities;
 import com.healthcoco.healthcocopad.bean.server.ForieignAdditionalNumbers;
 import com.healthcoco.healthcocopad.bean.server.GCMRequest;
-import com.healthcoco.healthcocopad.bean.server.GeneralData;
 import com.healthcoco.healthcocopad.bean.server.GeneratedOtpTime;
 import com.healthcoco.healthcocopad.bean.server.HistoryDetailsResponse;
 import com.healthcoco.healthcocopad.bean.server.Hospital;
@@ -76,14 +77,12 @@ import com.healthcoco.healthcocopad.bean.server.LocationAndAccessControl;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.MedicalCouncil;
 import com.healthcoco.healthcocopad.bean.server.MedicalFamilyHistoryDetails;
-import com.healthcoco.healthcocopad.bean.server.MedicalFamilyHistoryResponse;
 import com.healthcoco.healthcocopad.bean.server.Notes;
 import com.healthcoco.healthcocopad.bean.server.Observation;
 import com.healthcoco.healthcocopad.bean.server.ObservationSuggestions;
 import com.healthcoco.healthcocopad.bean.server.OtpVerification;
 import com.healthcoco.healthcocopad.bean.server.Patient;
 import com.healthcoco.healthcocopad.bean.server.PatientTreatment;
-import com.healthcoco.healthcocopad.bean.server.PersonalHistory;
 import com.healthcoco.healthcocopad.bean.server.Prescription;
 import com.healthcoco.healthcocopad.bean.server.Profession;
 import com.healthcoco.healthcocopad.bean.server.Records;
@@ -104,7 +103,6 @@ import com.healthcoco.healthcocopad.bean.server.WorkingHours;
 import com.healthcoco.healthcocopad.enums.AdvanceSearchOptionsType;
 import com.healthcoco.healthcocopad.enums.BooleanTypeValues;
 import com.healthcoco.healthcocopad.enums.FilterItemType;
-import com.healthcoco.healthcocopad.enums.HistoryFilterType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.LocalTabelType;
 import com.healthcoco.healthcocopad.enums.RecordType;
@@ -174,7 +172,7 @@ public class LocalDataServiceImpl {
         return null;
     }
 
-    private ArrayList<Object> getObjectsListFronJson(Class<?> class1, String jsonString) {
+    private ArrayList<Object> getObjectsListFronJson(String jsonString) {
         if (!Util.isNullOrBlank(jsonString))
             return gson.fromJson(jsonString, new TypeToken<List<Object>>() {
             }.getType());
@@ -1949,13 +1947,13 @@ public class LocalDataServiceImpl {
             // getting patient
             registeredPatientDetailsUpdated
                     .setPatient(getPatientDetails(registeredPatientDetailsUpdated.getForeignPatientId()));
-            registeredPatientDetailsUpdated.setGroupIds((ArrayList<String>) (Object) getObjectsListFronJson(String.class, registeredPatientDetailsUpdated.getGroupIdsJsonString()));
+            registeredPatientDetailsUpdated.setGroupIds((ArrayList<String>) (Object) getObjectsListFronJson(registeredPatientDetailsUpdated.getGroupIdsJsonString()));
             if (!Util.isNullOrEmptyList(registeredPatientDetailsUpdated.getGroupIds()))
                 registeredPatientDetailsUpdated.setGroups(getUserGroupsFromAssignedGroups(registeredPatientDetailsUpdated.getGroupIds()));
 //            if (!Util.isNullOrBlank(registeredPatientDetailsUpdated.getForeignReferredById()))
 //                registeredPatientDetailsUpdated.setReferredBy((Reference) getObject(Reference.class, LocalDatabaseUtils.KEY_UNIQUE_ID, registeredPatientDetailsUpdated.getForeignReferredById()));
             registeredPatientDetailsUpdated.setReferredBy((Reference) getObjectFromJson(Reference.class, registeredPatientDetailsUpdated.getReferredByJsonString()));
-            registeredPatientDetailsUpdated.setConsultantDoctorIds((ArrayList<String>) (Object) getObjectsListFronJson(String.class, registeredPatientDetailsUpdated.getConsultantDoctorIdsJsonString()));
+            registeredPatientDetailsUpdated.setConsultantDoctorIds((ArrayList<String>) (Object) getObjectsListFronJson(registeredPatientDetailsUpdated.getConsultantDoctorIdsJsonString()));
         }
         return registeredPatientDetailsUpdated;
     }
@@ -1969,7 +1967,7 @@ public class LocalDataServiceImpl {
         if (patient != null) {
             patient.setRelations((List<Relations>) getListBySelectQuery(Relations.class,
                     LocalDatabaseUtils.KEY_FOREIGN_PATIENT_ID, patientId));
-            patient.setNotes((ArrayList<String>) (Object) getObjectsListFronJson(String.class, patient.getNotesJsonString()));
+            patient.setNotes((ArrayList<String>) (Object) getObjectsListFronJson(patient.getNotesJsonString()));
         }
         return patient;
     }
@@ -2124,29 +2122,40 @@ public class LocalDataServiceImpl {
         userGroup.save();
     }
 
-    public VolleyResponseBean getHistoryList(WebServiceType webServiceType, BooleanTypeValues discarded, boolean isOtpVerified, String doctorId, String selectedPatientsUserId, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+    public VolleyResponseBean getHistoryDetailResponse(WebServiceType webServiceType, BooleanTypeValues discarded, boolean isOtpVerified, String doctorId, String locationId, String hospitalId, String selectedPatientsUserId, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
         volleyResponseBean.setWebServiceType(webServiceType);
         volleyResponseBean.setIsDataFromLocal(true);
         volleyResponseBean.setIsUserOnline(HealthCocoConstants.isNetworkOnline);
         try {
-            Select<HistoryDetailsResponse> selectQuery = null;
-            if (!isOtpVerified && !Util.isNullOrBlank(doctorId))
-                selectQuery = Select.from(HistoryDetailsResponse.class)
-                        .where(Condition.prop(LocalDatabaseUtils.KEY_PATIENT_ID).eq(selectedPatientsUserId),
-                                Condition.prop(LocalDatabaseUtils.KEY_DOCTOR_ID).eq(doctorId));
-            else selectQuery = Select.from(HistoryDetailsResponse.class)
-                    .where(Condition.prop(LocalDatabaseUtils.KEY_PATIENT_ID).eq(selectedPatientsUserId));
-            List<HistoryDetailsResponse> list = selectQuery.list();
-            List<HistoryDetailsResponse> modifiedList = new ArrayList<>();
+            //forming where condition query
+            String whereCondition = "Select * from " + StringUtil.toSQLName(HistoryDetailsResponse.class.getSimpleName())
+                    + " where ";
+            if (isOtpVerified)
+                whereCondition = whereCondition
+                        + LocalDatabaseUtils.KEY_PATIENT_ID + "=\"" + selectedPatientsUserId + "\"";
+            else {
+                whereCondition = whereCondition
+                        + LocalDatabaseUtils.KEY_PATIENT_ID + "=\"" + selectedPatientsUserId + "\""
+                        + " AND "
+                        + LocalDatabaseUtils.KEY_LOCATION_ID + "=\"" + locationId + "\""
+                        + " AND "
+                        + LocalDatabaseUtils.KEY_HOSPITAL_ID + "=\"" + hospitalId + "\"";
+            }
+
+            //specifying order by limit and offset query
+            String conditionsLimit = " ORDER BY " + LocalDatabaseUtils.KEY_CREATED_TIME + " DESC "
+                    + " LIMIT 1";
+
+            whereCondition = whereCondition + conditionsLimit;
+            LogUtils.LOGD(TAG, "Select Query " + whereCondition);
+            List<HistoryDetailsResponse> list = SugarRecord.findWithQuery(HistoryDetailsResponse.class, whereCondition);
             if (!Util.isNullOrEmptyList(list)) {
-                LogUtils.LOGD(TAG, "HistoryDetailsResponse  list size " + list.size());
-                for (HistoryDetailsResponse history : list) {
-                    if (!Util.isNullOrEmptyList(history.getGeneralRecords()))
-                        modifiedList.add(history);
-                }
+                HistoryDetailsResponse historyDetailResponse = list.get(0);
+                getHistoryRestDetail(historyDetailResponse);
+                volleyResponseBean.setData(historyDetailResponse);
             }
-            volleyResponseBean.setDataList(getObjectsListFromMap(modifiedList));
+
             if (responseListener != null)
                 responseListener.onResponse(volleyResponseBean);
         } catch (Exception e) {
@@ -2156,177 +2165,118 @@ public class LocalDataServiceImpl {
         return volleyResponseBean;
     }
 
-    public VolleyResponseBean getMedicalFAmilyHistory(WebServiceType webServiceType, String patientId, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
-        VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
-        volleyResponseBean.setWebServiceType(webServiceType);
-        volleyResponseBean.setIsDataFromLocal(true);
-        volleyResponseBean.setIsUserOnline(HealthCocoConstants.isNetworkOnline);
-        try {
-            MedicalFamilyHistoryResponse response = Select.from(MedicalFamilyHistoryResponse.class)
-                    .where(Condition.prop(LocalDatabaseUtils.KEY_PATIENT_ID).eq(patientId)).first();
-            if (response != null) {
-                response.setMedicalhistory(getMedicalFamilyHistoryDetails(HistoryFilterType.MEDICAL_HISTORY, response.getUniqueId()));
-                response.setFamilyhistory(getMedicalFamilyHistoryDetails(HistoryFilterType.FAMILY_HISTORY, response.getUniqueId()));
+    private void getHistoryRestDetail(HistoryDetailsResponse historyDetailsResponse) {
+        ArrayList<String> familyHistoryIdsList = (ArrayList<String>) (Object) getObjectsListFronJson(historyDetailsResponse.getFamilyHistoryIdsJsonString());
+        if (!Util.isNullOrEmptyList(familyHistoryIdsList)) {
+            historyDetailsResponse.setFamilyhistory(getMedicalFamilyHistoryListHavingIds(MedicalFamilyHistoryDetails.class, familyHistoryIdsList));
+        }
+        ArrayList<String> medicalHistoryIdsList = (ArrayList<String>) (Object) getObjectsListFronJson(historyDetailsResponse.getMedicalHistoryIdsJsonString());
+        if (!Util.isNullOrEmptyList(medicalHistoryIdsList)) {
+            historyDetailsResponse.setMedicalhistory(getMedicalFamilyHistoryListHavingIds(MedicalFamilyHistoryDetails.class, medicalHistoryIdsList));
+        }
+        historyDetailsResponse.setPersonalHistory((PersonalHistory) getObjectFromJson(PersonalHistory.class, historyDetailsResponse.getPersonalHistoryJsonString()));
+        historyDetailsResponse.setDrugsAndAllergies(getDrugsAndAllergies(historyDetailsResponse.getPatientId()));
+    }
+
+    private DrugsAndAllergies getDrugsAndAllergies(String patientId) {
+        DrugsAndAllergies drugsAndAllergies = Select.from(DrugsAndAllergies.class)
+                .where(Condition.prop(LocalDatabaseUtils.KEY_PATIENT_ID).eq(patientId)).first();
+        if (drugsAndAllergies != null) {
+            drugsAndAllergies.setDrugs(getDrugsList((ArrayList<String>) (Object) getObjectsListFronJson(drugsAndAllergies.getDrugIdsJsonString())));
+        }
+        return drugsAndAllergies;
+    }
+
+    private List<Drug> getDrugsList(ArrayList<String> drugIdsList) {
+        //forming where condition query
+        String whereCondition = "Select * from " + StringUtil.toSQLName(Drug.class.getSimpleName())
+                + getWhereConditionForKeyWithValues(LocalDatabaseUtils.KEY_UNIQUE_ID, drugIdsList);
+        LogUtils.LOGD(TAG, "Select Query " + whereCondition);
+        List<Drug> drugsList = SugarRecord.findWithQuery(Drug.class, whereCondition);
+        if (!Util.isNullOrEmptyList(drugsList)) {
+            for (Drug drug :
+                    drugsList) {
+                getDrugRestDetails(drug);
             }
-            volleyResponseBean.setData(response);
-            if (responseListener != null)
-                responseListener.onResponse(volleyResponseBean);
-        } catch (Exception e) {
-            e.printStackTrace();
-            showErrorLocal(volleyResponseBean, errorListener);
         }
-        return volleyResponseBean;
+        return drugsList;
     }
 
-    private List<MedicalFamilyHistoryDetails> getMedicalFamilyHistoryDetails(HistoryFilterType historyFilterType, String responseId) {
-        List<MedicalFamilyHistoryDetails> list = Select.from(MedicalFamilyHistoryDetails.class)
-                .where(Condition.prop(LocalDatabaseUtils.KEY_FOREIGN_MEDICAL_HISTORY_ID).eq(responseId), Condition.prop(LocalDatabaseUtils.KEY_HISTORY_FILTER_TYPE).eq(historyFilterType)).list();
-        return list;
+    private List<MedicalFamilyHistoryDetails> getMedicalFamilyHistoryListHavingIds(Class<?> class1, ArrayList<String> idsList) {
+        //forming where condition query
+        String whereCondition = "Select * from " + StringUtil.toSQLName(class1.getSimpleName())
+                + getWhereConditionForKeyWithValues(LocalDatabaseUtils.KEY_UNIQUE_ID, idsList);
+
+        //specifying order by limit and offset query
+        String conditionsLimit = " ORDER BY " + LocalDatabaseUtils.KEY_CREATED_TIME + " DESC ";
+
+        whereCondition = whereCondition + conditionsLimit;
+        LogUtils.LOGD(TAG, "Select Query " + whereCondition);
+        return SugarRecord.findWithQuery(MedicalFamilyHistoryDetails.class, whereCondition);
     }
 
-    public void addMedicalHistory(String patientId, MedicalFamilyHistoryResponse medicalHistoryResponse) {
-        deleteMedicalFamilyHistoryResponse(medicalHistoryResponse);
-        deleteMedicalFamilyHistoryDetails(medicalHistoryResponse.getUniqueId());
-        List<MedicalFamilyHistoryDetails> medicalHistoryList = getMedicalFamilyHistoryDetails(HistoryFilterType.MEDICAL_HISTORY, medicalHistoryResponse.getUniqueId());
-        List<MedicalFamilyHistoryDetails> familyHistoryList = getMedicalFamilyHistoryDetails(HistoryFilterType.FAMILY_HISTORY, medicalHistoryResponse.getUniqueId());
-        if (!Util.isNullOrEmptyList(medicalHistoryResponse.getMedicalhistory()))
-            addMedicalFamilyHistoryDetails(HistoryFilterType.MEDICAL_HISTORY, medicalHistoryResponse.getUniqueId(), medicalHistoryResponse.getMedicalhistory());
-        if (!Util.isNullOrEmptyList(medicalHistoryResponse.getFamilyhistory()))
-            addMedicalFamilyHistoryDetails(HistoryFilterType.FAMILY_HISTORY, medicalHistoryResponse.getUniqueId(), medicalHistoryResponse.getFamilyhistory());
-        medicalHistoryResponse.save();
-    }
+    private String getWhereConditionForKeyWithValues(String columnName, ArrayList<String> valuesList) {
+        String whereCondition = " where " + columnName + " IN (";
+        for (Object value :
+                valuesList) {
+            int index = valuesList.indexOf(value);
+            whereCondition = whereCondition + "\"" + value + "\"";
+            if (index < valuesList.size() - 1)
+                whereCondition = whereCondition + ",";
+            else
+                whereCondition = whereCondition + ")";
 
-    private void deleteMedicalFamilyHistoryResponse(MedicalFamilyHistoryResponse medicalHistoryResponse) {
-        MedicalFamilyHistoryResponse response = Select.from(MedicalFamilyHistoryResponse.class)
-                .where(Condition.prop(LocalDatabaseUtils.KEY_PATIENT_ID).eq(medicalHistoryResponse.getPatientId())).first();
-        if (response != null)
-            response.delete();
-    }
-
-    private void deleteMedicalFamilyHistoryDetails(String responseId) {
-        List<MedicalFamilyHistoryDetails> medicalHistoryList = getMedicalFamilyHistoryDetails(HistoryFilterType.MEDICAL_HISTORY, responseId);
-        if (!Util.isNullOrEmptyList(medicalHistoryList)) {
-            MedicalFamilyHistoryDetails.deleteInTx(medicalHistoryList);
         }
-        List<MedicalFamilyHistoryDetails> familyHistoryList = getMedicalFamilyHistoryDetails(HistoryFilterType.FAMILY_HISTORY, responseId);
-        if (!Util.isNullOrEmptyList(familyHistoryList)) {
-            MedicalFamilyHistoryDetails.deleteInTx(familyHistoryList);
-        }
-
+        return whereCondition;
     }
 
-    private void addMedicalFamilyHistoryDetails(HistoryFilterType historyFilterType, String responseId, List<MedicalFamilyHistoryDetails> medicalHistoryResponse) {
+    private ArrayList<String> addMedicalFamilyHistoryDetails(List<MedicalFamilyHistoryDetails> medicalHistoryResponse) {
+        ArrayList<String> idsList = new ArrayList<>();
         for (MedicalFamilyHistoryDetails details : medicalHistoryResponse) {
-            details.setHistoryFilterType(historyFilterType);
-            details.setForeignMedicalHistoryId(responseId);
-            details.setCustomUniqueId(historyFilterType + details.getUniqueId());
+            idsList.add(details.getUniqueId());
         }
         MedicalFamilyHistoryDetails.saveInTx(medicalHistoryResponse);
+        return idsList;
     }
 
-    public void addHistoryList(String selectedPatientId, ArrayList<HistoryDetailsResponse> historyList) {
-        try {
-            for (HistoryDetailsResponse history : historyList) {
-                addHistory(selectedPatientId, history);
-                LogUtils.LOGD(TAG, "HistoryDetailsResponse historyId " + history.getUniqueId());
-            }
-        } catch (Exception e) {
-            Log.i(null, "Error in saving in transaction " + e.getMessage());
-        }
-    }
-
-    private void addHistory(String selectedPatientId, HistoryDetailsResponse history) {
-        if (!Util.isNullOrEmptyList(history.getGeneralRecords())) {
-            GeneralData.deleteAll(GeneralData.class, LocalDatabaseUtils.KEY_FOREIGN_CUSTOM_HISTORY_ID + "= ?", history.getUniqueId());
-//            DrugsAndAllergies.deleteAll(DrugsAndAllergies.class, LocalDatabaseUtils.KEY_FOREIGN_CUSTOM_HISTORY_ID + "= ?", history.getUniqueId());
-//            PersonalHistory.deleteAll(PersonalHistory.class, LocalDatabaseUtils.KEY_FOREIGN_CUSTOM_HISTORY_ID + "= ?", history.getUniqueId());
-
-            for (GeneralData generalData : history.getGeneralRecords()) {
-                boolean discarded = false;
-                String customId = "";
-                Object object = generalData.getData();
-                if (generalData.getDataType() != null && object != null) {
-                    customId = history.getUniqueId() + generalData.getDataType();
-                    if (generalData.getDataType().equals(HistoryFilterType.PRESCRIPTIONS.getData())) {
-                        Prescription prescription = (Prescription) GsonRequest.getObjectFromLinkedTreeMap(Prescription.class, object);
-                        if (prescription != null) {
-                            discarded = prescription.getDiscarded();
-                            customId = customId + prescription.getUniqueId();
-                            if (prescription.getInHistory()) {
-                                generalData.setForeignDataId(prescription.getUniqueId());
-                                prescription.setPatientId(history.getPatientId());
-                                addPrescription(prescription);
-                                LogUtils.LOGD(TAG, "HistoryDetailsResponse add" + HistoryFilterType.PRESCRIPTIONS.getData());
-                                history.setUpdatedTime(prescription.getUpdatedTime());
-                                history.setCreatedTime(prescription.getCreatedTime());
-                            } else {
-                                deleteFromHistoryIfPresent(customId);
-                                return;
-                            }
-                        }
-                    } else if (generalData.getDataType().equals(HistoryFilterType.CLINICALNOTES.getData())) {
-                        ClinicalNotes clinicalNote = (ClinicalNotes) GsonRequest.getObjectFromLinkedTreeMap(ClinicalNotes.class, object);
-                        if (clinicalNote != null) {
-                            discarded = clinicalNote.getDiscarded();
-                            customId = customId + clinicalNote.getUniqueId();
-                            if (clinicalNote.getInHistory()) {
-                                generalData.setForeignDataId(clinicalNote.getUniqueId());
-                                clinicalNote.setPatientId(history.getPatientId());
-                                addClinicalNote(clinicalNote);
-                                LogUtils.LOGD(TAG, "HistoryDetailsResponse add " + HistoryFilterType.CLINICALNOTES.getData());
-                                history.setUpdatedTime(clinicalNote.getUpdatedTime());
-                                history.setCreatedTime(clinicalNote.getCreatedTime());
-                            } else {
-                                deleteFromHistoryIfPresent(customId);
-                                return;
-                            }
-                        }
-                    } else if (generalData.getDataType().equals(HistoryFilterType.REPORTS.getData())) {
-                        Records record = (Records) GsonRequest.getObjectFromLinkedTreeMap(Records.class, object);
-                        if (record != null) {
-                            discarded = record.getDiscarded();
-                            customId = customId + record.getUniqueId();
-                            if (record.getInHistory()) {
-                                generalData.setForeignDataId(record.getUniqueId());
-                                record.setPatientId(history.getPatientId());
-                                addRecord(record);
-                                LogUtils.LOGD(TAG, "HistoryDetailsResponse add " + HistoryFilterType.REPORTS.getData());
-                                history.setUpdatedTime(record.getUpdatedTime());
-                                history.setCreatedTime(record.getCreatedTime());
-                            } else {
-                                deleteFromHistoryIfPresent(customId);
-                                return;
-                            }
-                        }
-                    }
-                    history.setCustomUniqueId(customId);
-                    deleteFromHistoryIfPresent(history.getCustomUniqueId());
-                    generalData.setForeignCustomHistoryId(history.getCustomUniqueId());
-                    generalData.setDiscarded(discarded);
-                    generalData.save();
-                }
-            }
-        }
+    public void addHistoryDetailResponse(HistoryDetailsResponse history) {
+        history.setCustomUniqueId(history.getPatientId() + history.getLocationId() + history.getHospitalId());
+        //setting medicalHistory list
         if (!Util.isNullOrEmptyList(history.getMedicalhistory())) {
-            deleteMedicalFamilyHistoryResponse(history.getMedicalhistory());
-            deleteMedicalFamilyHistoryDetails(history.getUniqueId());
-            addMedicalFamilyHistoryDetails(HistoryFilterType.MEDICAL_HISTORY, history.getUniqueId(), history.getMedicalhistory());
-        }
+            history.setMedicalHistoryIdsJsonString(getJsonFromObject(addMedicalFamilyHistoryDetails(history.getMedicalhistory())));
+        } else
+            history.setMedicalHistoryIdsJsonString(null);
+
+        //setting FamilyHistory List
         if (!Util.isNullOrEmptyList(history.getFamilyhistory())) {
-            deleteMedicalFamilyHistoryResponse(history.getFamilyhistory());
-            deleteMedicalFamilyHistoryDetails(history.getUniqueId());
-            addMedicalFamilyHistoryDetails(HistoryFilterType.FAMILY_HISTORY, history.getUniqueId(), history.getFamilyhistory());
-        }
-        if (history.getPersonalHistory() != null) {
-            deleteFromHistoryIfPresent(history.getCustomUniqueId());
-            PersonalHistory personalHistory = history.getPersonalHistory();
-            personalHistory.save();
-        }
+            history.setFamilyHistoryIdsJsonString(getJsonFromObject(addMedicalFamilyHistoryDetails(history.getFamilyhistory())));
+        } else
+            history.setMedicalHistoryIdsJsonString(null);
+
+        //setting personal history
+        history.setPersonalHistoryJsonString(getJsonFromObject(history.getPersonalHistory()));
+        //setting drugs and Allergies
+        addDrugsAndAllergies(history.getPatientId(), history.getDrugsAndAllergies());
+        //setting special notes
+        history.setSpecialNotesJsonString(getJsonFromObject(history.getSpecialNotes()));
         history.save();
     }
 
-    private void deleteMedicalFamilyHistoryResponse(List<MedicalFamilyHistoryDetails> medicalhistory) {
-
+    private void addDrugsAndAllergies(String patientId, DrugsAndAllergies drugsAndAllergies) {
+        deleteAllFrom(DrugsAndAllergies.class, LocalDatabaseUtils.KEY_PATIENT_ID, patientId);
+        if (drugsAndAllergies != null) {
+            if (!Util.isNullOrEmptyList(drugsAndAllergies.getDrugs())) {
+                ArrayList<String> drugIdsList = new ArrayList<>();
+                for (Drug drug :
+                        drugsAndAllergies.getDrugs()) {
+                    drugIdsList.add(drug.getUniqueId());
+                    addDrug(drug);
+                }
+                drugsAndAllergies.setDrugIdsJsonString(getJsonFromObject(drugIdsList));
+            }
+            drugsAndAllergies.setPatientId(patientId);
+            drugsAndAllergies.save();
+        }
     }
 
     public void addPrescription(Prescription prescription) {
@@ -2421,7 +2371,7 @@ public class LocalDataServiceImpl {
                 if (drugItem.getDrug() != null) {
                     Drug drug = drugItem.getDrug();
                     drugItem.setForeignDrugId(drug.getUniqueId());
-                    addDrug(drug, false);
+                    addDrug(drug);
                 }
 //            adding directions
                 if (!Util.isNullOrEmptyList(drugItem.getDirection()) && !Util.isNullOrBlank(foreignTableKey)) {
@@ -2444,11 +2394,10 @@ public class LocalDataServiceImpl {
             DrugItem.deleteInTx(list);
     }
 
-    public void addDrug(Drug drug, boolean isDrugFromGetDrugsListAPI) {
+    public void addDrug(Drug drug) {
         if (drug.getDrugType() != null) {
             if (!Util.isNullOrEmptyList(drug.getGenericNames()))
                 drug.setGenericNamesJsonString(new Gson().toJson(drug.getGenericNames()));
-            drug.setIsDrugFromGetDrugsList(isDrugFromGetDrugsListAPI);
             drug.setForeignDrugTypeId(drug.getDrugType().getUniqueId());
             drug.getDrugType().save();
         }
@@ -2556,12 +2505,17 @@ public class LocalDataServiceImpl {
                 + " where " + Drug.TABLE_NAME + "." + LocalDatabaseUtils.KEY_UNIQUE_ID + " = " + "\"" + drugId + "\"";
         LogUtils.LOGD(TAG, "Select query : " + query);
         Drug drug = SugarRecord.findObjectWithQuery(Drug.class, query);
-        if (!Util.isNullOrBlank(drug.getGenericNamesJsonString()))
-            drug.setGenericNames(new Gson().fromJson(drug.getGenericNamesJsonString(), ArrayList.class));
+        if (drug != null)
+            getDrugRestDetails(drug);
+        return drug;
+    }
+
+    private void getDrugRestDetails(Drug drug) {
+//        if (!Util.isNullOrBlank(drug.getGenericNamesJsonString()))
+//            drug.setGenericNames((ArrayList<GenericName>) (Object) getObjectsListFronJson(drug.getGenericNamesJsonString()));
 
         if (drug != null)
             drug.setDrugType(getDrugType(drug.getForeignDrugTypeId()));
-        return drug;
     }
 
     private DrugType getDrugType(String foreignDrugTypeId) {
@@ -2793,7 +2747,7 @@ public class LocalDataServiceImpl {
                 + " from " + LinkedTableDirection.TABLE_NAME
                 + " where " + LinkedTableDirection.TABLE_NAME + "." + LocalDatabaseUtils.KEY_FOREIGN_TABLE_ID + " = " + "\"" + prescriptionTemplateId + "\""
                 + " AND " + LocalDatabaseUtils.KEY_FOREIGN_TABLE_KEY + "=\"" + key + "\""
-                + " AND " + LocalDatabaseUtils.KEY_DRUG_ID + "=\"" + drugId + "\"";
+                + " AND " + LocalDatabaseUtils.KEY_UNIQUE_ID + "=\"" + drugId + "\"";
         LogUtils.LOGD(TAG, "Select query : " + query);
         listLinkedData = SugarRecord.findWithQuery(LinkedTableDirection.class, query);
         if (!Util.isNullOrEmptyList(listLinkedData)) {

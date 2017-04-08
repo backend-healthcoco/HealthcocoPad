@@ -12,8 +12,8 @@ import android.widget.GridView;
 import android.widget.TextView;
 
 import com.android.volley.Response;
-import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
+import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.adapter.PersonalFamilyHistoryDiseaseAdapter;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
@@ -41,6 +41,8 @@ import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.healthcoco.healthcocopad.views.FontAwesomeButton;
 
+import org.parceler.Parcels;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Locale;
@@ -49,6 +51,8 @@ import java.util.Locale;
  * Created by neha on 11/12/15.
  */
 public class DiseaseListFragment extends HealthCocoFragment implements View.OnClickListener, Response.Listener<VolleyResponseBean>, GsonRequest.ErrorListener, LocalDoInBackgroundListenerOptimised, TextWatcher, MedicalFamilyHistoryItemListener, AddDiseaseListener {
+    public static final String TAG_FILTER_TYPE = "filterType";
+    public static final String TAG_DISEASES_LIST = "diseasesList";
     private GridView lvDiseaseList;
     //    private ListView lvDiseaseList;
     private PersonalFamilyHistoryDiseaseAdapter adapter;
@@ -174,7 +178,7 @@ public class DiseaseListFragment extends HealthCocoFragment implements View.OnCl
                     webServiceType = WebServiceType.ADD_FAMILY_HISTORY;
                     break;
             }
-            WebDataServiceImpl.getInstance(mApp).addMedicalFamilyHistory(webServiceType, AddMedicalFamilyHistoryRequest.class, addMedicalFamilyHistoryRequest, this, this);
+            WebDataServiceImpl.getInstance(mApp).addMedicalFamilyHistory(webServiceType, Boolean.class, addMedicalFamilyHistoryRequest, this, this);
         }
     }
 
@@ -198,9 +202,17 @@ public class DiseaseListFragment extends HealthCocoFragment implements View.OnCl
                 break;
             case ADD_MEDICAL_HISTORY:
             case ADD_FAMILY_HISTORY:
-                LogUtils.LOGD(TAG, String.valueOf(response.getWebServiceType()) + " Success");
-                ((CommonOpenUpActivity) mActivity).setResult(HealthCocoConstants.RESULT_CODE_DISEASE_LIST);
-                ((CommonOpenUpActivity) mActivity).finish();
+                if (response.getData() instanceof Boolean) {
+                    boolean isSuccess = (boolean) response.getData();
+                    LogUtils.LOGD(TAG, String.valueOf(response.getWebServiceType()) + isSuccess);
+                    if (isSuccess) {
+                        Intent intent = new Intent();
+                        intent.putExtra(TAG_FILTER_TYPE, filterType.ordinal());
+                        intent.putExtra(TAG_DISEASES_LIST, Parcels.wrap(addDiseasesList));
+                        ((CommonOpenUpActivity) mActivity).setResult(HealthCocoConstants.RESULT_CODE_DISEASE_LIST, intent);
+                        ((CommonOpenUpActivity) mActivity).finish();
+                    }
+                }
                 break;
             default:
                 break;

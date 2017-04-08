@@ -292,7 +292,7 @@ public class AddNewDrugDialogFragment extends HealthCocoDialogFragment
                             Drug drug = (Drug) response.getData();
                             addNewDrugListener.onSaveClicked(drug);
                         } else {
-                            LocalDataServiceImpl.getInstance(mApp).addDrug((Drug) response.getData(), true);
+                            LocalDataServiceImpl.getInstance(mApp).addDrug((Drug) response.getData());
                             getTargetFragment().onActivityResult(HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, HealthCocoConstants.RESULT_CODE_REFERENCE_LIST, null);
                         }
                         dismiss();

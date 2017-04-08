@@ -45,7 +45,6 @@ public class LocalDatabaseUtils {
     public static final String KEY_BLOOD_GROUP = "blood_group";
 
     public static final String KEY_VISIT_ID = "visit_id";
-    public static final String KEY_DRUG_ID = "drug_id";
     public static final String KEY_HOSPITAL_ID = "hospital_id";
     public static final String KEY_LOCATION_ID = "location_id";
     public static final String KEY_PATIENT_ID = "patient_id";
@@ -70,7 +69,7 @@ public class LocalDatabaseUtils {
     public static final String KEY_FOREIGN_LOCATION_ID = "foreign_location_id";
     public static final String KEY_FOREIGN_TABLE_ID = "foreign_table_id";
 
-    public static final String KEY_CREATED_TIME = "unique_id";
+    public static final String KEY_CREATED_TIME = "created_time";
     public static final String KEY_CUSTOM_UNIQUE_ID = "custom_unique_id";
 
     public static final String KEY_FOREIGN_HOSPITAL_ID = "foreign_hospital_id";

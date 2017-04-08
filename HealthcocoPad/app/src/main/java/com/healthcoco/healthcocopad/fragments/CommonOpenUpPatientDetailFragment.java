@@ -74,7 +74,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
     private PatientProfileDetailFragment profileFragment;
     private PatientVisitDetailFragment visitsFragment;
 
-    private boolean isProfileTabClicked = false;
+    private boolean isProfileTabClicked = true;
     private boolean isVisitsTabClicked = false;
 
     @Override
@@ -306,13 +306,13 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
             switch (patientDetailTabType) {
                 case PATIENT_DETAIL_PROFILE:
                     if (!isProfileTabClicked) {
-                        profileFragment.getListFromLocal(true);
+                        profileFragment.refreshData();
                         isProfileTabClicked = true;
                     }
                     break;
                 case PATIENT_DETAIL_VISIT:
                     if (!isVisitsTabClicked) {
-                        visitsFragment.getListFromLocal(true);
+                        visitsFragment.refreshData(user, selectedPatient);
                         isVisitsTabClicked = true;
                     }
                     break;
@@ -390,6 +390,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                         initTabs();
                         initViewPagerAdapter();
                         initData();
+                        checkPatientStatus(user, selectedPatient);
                     }
                     break;
                 case GET_PATIENT_PROFILE:

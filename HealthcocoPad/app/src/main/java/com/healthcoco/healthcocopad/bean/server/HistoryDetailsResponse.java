@@ -1,5 +1,6 @@
 package com.healthcoco.healthcocopad.bean.server;
 
+import com.healthcoco.healthcocopad.bean.PersonalHistory;
 import com.orm.SugarRecord;
 import com.orm.annotation.Ignore;
 import com.orm.annotation.Unique;
@@ -27,14 +28,18 @@ public class HistoryDetailsResponse extends SugarRecord {
     private List<GeneralData> generalRecords;
     @Ignore
     List<MedicalFamilyHistoryDetails> familyhistory;
+    private String familyHistoryIdsJsonString;
     @Ignore
     List<MedicalFamilyHistoryDetails> medicalhistory;
+    private String medicalHistoryIdsJsonString;
     @Ignore
     private PersonalHistory personalHistory;
+    private String personalHistoryJsonString;
     @Ignore
     private DrugsAndAllergies drugsAndAllergies;
     @Ignore
     private List<String> specialNotes;
+    private String specialNotesJsonString;
     protected Long updatedTime;
     protected Long createdTime;
     private Boolean discarded;
@@ -167,5 +172,37 @@ public class HistoryDetailsResponse extends SugarRecord {
 
     public void setDiscarded(Boolean discarded) {
         this.discarded = discarded;
+    }
+
+    public String getFamilyHistoryIdsJsonString() {
+        return familyHistoryIdsJsonString;
+    }
+
+    public void setFamilyHistoryIdsJsonString(String familyHistoryIdsJsonString) {
+        this.familyHistoryIdsJsonString = familyHistoryIdsJsonString;
+    }
+
+    public String getSpecialNotesJsonString() {
+        return specialNotesJsonString;
+    }
+
+    public void setSpecialNotesJsonString(String specialNotesJsonString) {
+        this.specialNotesJsonString = specialNotesJsonString;
+    }
+
+    public String getMedicalHistoryIdsJsonString() {
+        return medicalHistoryIdsJsonString;
+    }
+
+    public void setMedicalHistoryIdsJsonString(String medicalHistoryIdsJsonString) {
+        this.medicalHistoryIdsJsonString = medicalHistoryIdsJsonString;
+    }
+
+    public String getPersonalHistoryJsonString() {
+        return personalHistoryJsonString;
+    }
+
+    public void setPersonalHistoryJsonString(String personalHistoryJsonString) {
+        this.personalHistoryJsonString = personalHistoryJsonString;
     }
 }
