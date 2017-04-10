@@ -1,5 +1,7 @@
 package com.healthcoco.healthcocopad.bean;
 
+import com.healthcoco.healthcocopad.utilities.Util;
+
 import org.parceler.Parcel;
 
 /**
@@ -81,5 +83,14 @@ public class PersonalHistory {
 
     public void setBladderHabit(String bladderHabit) {
         this.bladderHabit = bladderHabit;
+    }
+
+    public boolean areAllFieldsNull() {
+        if ((Util.isNullOrBlank(diet)
+                && Util.isNullOrBlank(addictions)
+                && Util.isNullOrBlank(bowelHabit)
+                && Util.isNullOrBlank(bladderHabit)))
+            return true;
+        return false;
     }
 }

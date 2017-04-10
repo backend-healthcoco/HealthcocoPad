@@ -1,6 +1,7 @@
 package com.healthcoco.healthcocopad.bean.server;
 
 import com.healthcoco.healthcocopad.bean.PersonalHistory;
+import com.healthcoco.healthcocopad.utilities.Util;
 import com.orm.SugarRecord;
 import com.orm.annotation.Ignore;
 import com.orm.annotation.Unique;
@@ -204,5 +205,14 @@ public class HistoryDetailsResponse extends SugarRecord {
 
     public void setPersonalHistoryJsonString(String personalHistoryJsonString) {
         this.personalHistoryJsonString = personalHistoryJsonString;
+    }
+
+    public boolean areAllFieldsNull() {
+        if (personalHistory != null
+                && drugsAndAllergies != null
+                && Util.isNullOrEmptyList(familyhistory)
+                && Util.isNullOrEmptyList(medicalhistory))
+            return true;
+        return false;
     }
 }

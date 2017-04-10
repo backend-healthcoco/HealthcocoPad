@@ -1,5 +1,6 @@
 package com.healthcoco.healthcocopad.fragments;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -10,6 +11,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -18,9 +20,11 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.android.volley.Response;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
+import com.healthcoco.healthcocopad.MyCertificate;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.activities.AddVisitsActivity;
 import com.healthcoco.healthcocopad.bean.UIPermissions;
@@ -37,6 +41,7 @@ import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
+import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
 import com.healthcoco.healthcocopad.utilities.DownloadImageFromUrlUtil;
@@ -44,6 +49,7 @@ import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.ImageUtil;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.healthcoco.healthcocopad.views.TextViewFontAwesome;
+import com.myscript.atk.sltw.SingleLineWidgetApi;
 
 import org.parceler.Parcels;
 
@@ -53,7 +59,8 @@ import java.util.HashMap;
 /**
  * Created by Shreshtha on 05-04-2017.
  */
-public class AddVisitsFragment extends HealthCocoFragment implements View.OnClickListener, LocalDoInBackgroundListenerOptimised {
+public class AddVisitsFragment extends HealthCocoFragment implements View.OnClickListener,
+        Response.Listener<VolleyResponseBean>, GsonRequest.ErrorListener, LocalDoInBackgroundListenerOptimised {
     private static final int REQUEST_CODE_ADD_CLINICAL_NOTES = 100;
     private TextViewFontAwesome btClose;
     private ImageButton btClinicalNote;
@@ -83,6 +90,8 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
     private LinearLayout parentPermissionItems;
     private ClinicalNotes clinicalNotes;
     private VitalSigns selectedVitalSigns;
+    private SingleLineWidgetApi mWidget;
+    private int isCorrectionMode;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -103,6 +112,23 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
     public void init() {
         initViews();
         initListeners();
+        validateCertificate();
+    }
+
+    private void validateCertificate() {
+        if (!mWidget.registerCertificate(MyCertificate.getBytes())) {
+            AlertDialog.Builder dlgAlert = new AlertDialog.Builder(mActivity);
+            dlgAlert.setMessage("Please use a valid certificate.");
+            dlgAlert.setTitle("Invalid certificate");
+            dlgAlert.setCancelable(false);
+            dlgAlert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    //dismiss the dialog
+                }
+            });
+            dlgAlert.create().show();
+            return;
+        }
     }
 
     @Override
@@ -110,11 +136,29 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
         svScrollView = (ScrollView) view.findViewById(R.id.sv_scrollview);
         initToolbarView();
         initHeaderView();
+        setViewToWidget();
         initClinicalNotesView();
         initPrescriptionsView();
         initDiagonsticTestsView();
         initDiagramsViews();
         initAdviceViews();
+    }
+
+    private void setViewToWidget() {
+        mWidget = (SingleLineWidgetApi) view.findViewById(R.id.widget);
+//        mWidget.setBaselinePosition(getResources().getDimension(R.dimen.baseline_position));
+//        mWidget.setWritingAreaBackgroundResource(R.color.blue_translucent);
+        mWidget.setScrollbarResource(R.drawable.sltw_scrollbar_xml);
+        mWidget.setScrollbarMaskResource(R.drawable.sltw_scrollbar_mask);
+        mWidget.setScrollbarBackgroundResource(R.drawable.sltw_scrollbar_background);
+        mWidget.setLeftScrollArrowResource(R.drawable.sltw_arrowleft_xml);
+        mWidget.setRightScrollArrowResource(R.drawable.sltw_arrowright_xml);
+        mWidget.setCursorResource(R.drawable.sltw_text_cursor_holo_light);
+
+//        mWidget.addSearchDir("zip://" + mActivity.getPackageCodePath() + "!/assets/conf");
+//        mWidget.configure("en_US", "cur_text");
+//        mWidget.setText(mTextField.getText().toString());
+        isCorrectionMode = 0;
     }
 
     private void initToolbarView() {
@@ -203,21 +247,21 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
         tvRespiratoryRate.setText(R.string.no_text_dash);
         tvSpO2.setText(R.string.no_text_dash);
 
-        if (vitalSigns != null) {
-            if (!Util.isNullOrBlank(vitalSigns.getPulse()))
-                tvHeartRate.setText(vitalSigns.getFormattedPulse(mActivity, vitalSigns.getPulse()));
-            if (!Util.isNullOrBlank(vitalSigns.getTemperature()))
-                tvBodyTemprature.setText(vitalSigns.getFormattedTemprature(mActivity, vitalSigns.getTemperature()));
-            if (!Util.isNullOrBlank(vitalSigns.getWeight()))
-                tvWeight.setText(vitalSigns.getFormattedWeight(mActivity, vitalSigns.getWeight()));
-            BloodPressure bloodPressure = vitalSigns.getBloodPressure();
+        if (selectedVitalSigns != null) {
+            if (!Util.isNullOrBlank(selectedVitalSigns.getPulse()))
+                tvHeartRate.setText(selectedVitalSigns.getFormattedPulse(mActivity, selectedVitalSigns.getPulse()));
+            if (!Util.isNullOrBlank(selectedVitalSigns.getTemperature()))
+                tvBodyTemprature.setText(selectedVitalSigns.getFormattedTemprature(mActivity, selectedVitalSigns.getTemperature()));
+            if (!Util.isNullOrBlank(selectedVitalSigns.getWeight()))
+                tvWeight.setText(selectedVitalSigns.getFormattedWeight(mActivity, selectedVitalSigns.getWeight()));
+            BloodPressure bloodPressure = selectedVitalSigns.getBloodPressure();
             if (bloodPressure != null && !Util.isNullOrBlank(bloodPressure.getSystolic()) && !Util.isNullOrBlank(bloodPressure.getDiastolic())) {
-                tvBloodPressure.setText(vitalSigns.getFormattedBloodPressureValue(mActivity, bloodPressure));
+                tvBloodPressure.setText(selectedVitalSigns.getFormattedBloodPressureValue(mActivity, bloodPressure));
             }
-            if (!Util.isNullOrBlank(vitalSigns.getBreathing()))
-                tvRespiratoryRate.setText(vitalSigns.getFormattedBreathing(mActivity, vitalSigns.getBreathing()));
-            if (!Util.isNullOrBlank(vitalSigns.getSpo2()))
-                tvSpO2.setText(vitalSigns.getFormattedSpo2(mActivity, vitalSigns.getSpo2()));
+            if (!Util.isNullOrBlank(selectedVitalSigns.getBreathing()))
+                tvRespiratoryRate.setText(selectedVitalSigns.getFormattedBreathing(mActivity, selectedVitalSigns.getBreathing()));
+            if (!Util.isNullOrBlank(selectedVitalSigns.getSpo2()))
+                tvSpO2.setText(selectedVitalSigns.getFormattedSpo2(mActivity, selectedVitalSigns.getSpo2()));
         }
     }
 
@@ -490,7 +534,6 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
                 LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
                 if (doctor != null && doctor.getUser() != null && !Util.isNullOrBlank(doctor.getUser().getUniqueId()) && selectedPatient != null && !Util.isNullOrBlank(selectedPatient.getUserId())) {
                     user = doctor.getUser();
-                    initData();
                 }
                 break;
         }
@@ -503,4 +546,27 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
     public void onPostExecute(VolleyResponseBean volleyResponseBean) {
         mActivity.hideLoading();
     }
+
+    @Override
+    public void onResponse(VolleyResponseBean response) {
+        super.onResponse(response);
+        if (response != null && response.getWebServiceType() != null) {
+            switch (response.getWebServiceType()) {
+                case FRAGMENT_INITIALISATION:
+                    initData();
+                    break;
+            }
+        }
+    }
+
+    @Override
+    public void onErrorResponse(VolleyResponseBean volleyResponseBean, String errorMessage) {
+        mActivity.hideLoading();
+    }
+
+    @Override
+    public void onNetworkUnavailable(WebServiceType webServiceType) {
+        Util.showToast(mActivity, R.string.user_offline);
+    }
+
 }

@@ -58,11 +58,11 @@ import java.util.List;
 /**
  * Created by Shreshtha on 07-03-2017.
  */
-public class PatientProfileDetailFragment extends HealthCocoFragment implements View.OnClickListener, Response.Listener<VolleyResponseBean>, GsonRequest.ErrorListener, LocalDoInBackgroundListenerOptimised, HistoryDiseaseIdsListener {
+public class PatientProfileDetailFragment extends HealthCocoFragment implements View.OnClickListener,
+        Response.Listener<VolleyResponseBean>, GsonRequest.ErrorListener, LocalDoInBackgroundListenerOptimised, HistoryDiseaseIdsListener {
     public static final String INTENT_GET_HISTORY_LIST = "com.healthcoco.HISTORY_LIST";
     public static final String INTENT_GET_MEDICAL_PERSONAL_FAMILY_LIST = "com.healthcoco.MEDICAL_PERSONAL_FAMILY_HISTORY";
     public static final String INTENT_GET_HISTORY_LIST_LOCAL = "com.healthcoco.HISTORY_LIST_LOCAL";
-    public static final String INTENT_GET_MEDICAL_PERSONAL_FAMILY_LIST_LOCAL = "com.healthcoco.MEDICAL_PERSONAL_FAMILY_LIST_LOCAL";
     public static final String TAG_PERSONAL_HISTORY = "patientHistory";
     public static final String DRUG_AND_ALLERGIES = "drugsAndAllegies";
     private static final int REQUEST_CODE_PATIENT_PROFILE = 111;
@@ -89,11 +89,47 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
     private LinearLayout mainLayoutProfile;
     private ArrayList<String> medicalDiseaseIdsList = new ArrayList<String>();
     private ArrayList<String> familyDiseaseIdsList = new ArrayList<String>();
-    private boolean isMedicalFamilyHistoryLoaded;
-    private ArrayList<HistoryDetailsResponse> historyList;
     private boolean isInitialLoading = true;
-    private HistoryDiseaseIdsListener addDiseaseIdsListener;
     private HistoryDetailsResponse historyDetailsResponse;
+    private TextView tvDiet;
+    private LinearLayout containerDiet;
+    private TextView tvAddiction;
+    private LinearLayout containerAddiction;
+    private TextView tvBowelHabits;
+    private LinearLayout containerBowelHabit;
+    private TextView tvBladderHabit;
+    private LinearLayout containerBladderHabit;
+    private TextView tvNoPersonalHistoryData;
+    private LinearLayout containerFamilyHistory;
+    private TextView tvAllergy;
+    private LinearLayout containerAllergy;
+    private LinearLayout containerDrugs;
+    private LinearLayout containerDrugsDetail;
+    private TextView tvNoDrugsAndAllergyData;
+    private LinearLayout containerPastHistory;
+    private TextView tvNoDataText;
+    private LinearLayout containerMobile;
+    private TextView tvBloodGroup;
+    private LinearLayout containerBloodGroup;
+    private TextView tvProfession;
+    private LinearLayout containerProfession;
+    private TextView tvReferredBy;
+    private LinearLayout containerReferredBy;
+    private TextView tvAadharId;
+    private LinearLayout containerAadharId;
+    private TextView tvPamNumber;
+    private LinearLayout containerPanNumber;
+    private TextView tvDrivingLicence;
+    private LinearLayout containerDrivingLicense;
+    private LinearLayout containerSecondaryMobile;
+    private LinearLayout containerEmail;
+    private LinearLayout containerStreetAddress;
+    private LinearLayout containerLocality;
+    private LinearLayout containerCity;
+    private LinearLayout containerCountry;
+    private LinearLayout containerPinCode;
+    private LinearLayout containerGroups;
+    private LinearLayout containerNotes;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -111,8 +147,8 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
     @Override
     public void init() {
         initViews();
-        initListeners();
         hideAllMainLayouts();
+        initListeners();
         getUserAndPatientDetails();
         refreshData();
     }
@@ -136,15 +172,66 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
         btEditPatientProfileNotes = (FontAwesomeButton) view.findViewById(R.id.bt_edit_patient_profile_notes);
         mainContainerPastHistory = (LinearLayout) view.findViewById(R.id.container_past_history);
         mainContainerFamilyHistory = (LinearLayout) view.findViewById(R.id.container_family_history);
+        mainContainerGroups = (LinearLayout) view.findViewById(R.id.container_groups);
         mainContainerPersonalHistory = (LinearLayout) view.findViewById(R.id.container_personal_history);
         mainContainerDrugAndAllergy = (LinearLayout) view.findViewById(R.id.container_drug_and_allergy);
-        mainContainerGroups = (LinearLayout) view.findViewById(R.id.container_groups);
         mainContainerNotes = (LinearLayout) view.findViewById(R.id.container_notes);
+        mainLayoutProfile = (LinearLayout) view.findViewById(R.id.main_layout_profile);
         tvInitialAlphabet = (TextView) view.findViewById(R.id.tv_initial_aplhabet);
         tvPatientName = (TextView) view.findViewById(R.id.tv_name);
         tvGenderAge = (TextView) view.findViewById(R.id.tv_patient_id);
         ivContactProfile = (ImageView) view.findViewById(R.id.iv_image);
-        mainLayoutProfile = (LinearLayout) view.findViewById(R.id.main_layout_profile);
+        //ProfileViews
+        containerMobile = (LinearLayout) mainLayoutProfile.findViewById(R.id.container_mobile);
+        tvBloodGroup = (TextView) mainLayoutProfile.findViewById(R.id.tv_blood_group);
+        containerBloodGroup = (LinearLayout) mainLayoutProfile.findViewById(R.id.container_blood_group);
+        tvProfession = (TextView) mainLayoutProfile.findViewById(R.id.tv_profession);
+        containerProfession = (LinearLayout) mainLayoutProfile.findViewById(R.id.container_profession);
+        tvReferredBy = (TextView) mainLayoutProfile.findViewById(R.id.tv_referred_by);
+        containerReferredBy = (LinearLayout) mainLayoutProfile.findViewById(R.id.container_referred_by);
+        tvAadharId = (TextView) mainLayoutProfile.findViewById(R.id.tv_aadhar_id);
+        containerAadharId = (LinearLayout) mainLayoutProfile.findViewById(R.id.container_aadhar_id);
+        tvPamNumber = (TextView) mainLayoutProfile.findViewById(R.id.tv_pan_number);
+        containerPanNumber = (LinearLayout) mainLayoutProfile.findViewById(R.id.container_pan_number);
+        tvDrivingLicence = (TextView) mainLayoutProfile.findViewById(R.id.tv_driving_license);
+        containerDrivingLicense = (LinearLayout) mainLayoutProfile.findViewById(R.id.container_driving_license);
+        containerSecondaryMobile = (LinearLayout) mainLayoutProfile.findViewById(R.id.container_secondary_mobile);
+        containerEmail = (LinearLayout) mainLayoutProfile.findViewById(R.id.container_email);
+        containerStreetAddress = (LinearLayout) mainLayoutProfile.findViewById(R.id.container_street_address);
+        containerLocality = (LinearLayout) mainLayoutProfile.findViewById(R.id.container_locality);
+        containerCity = (LinearLayout) mainLayoutProfile.findViewById(R.id.container_city);
+        containerCountry = (LinearLayout) mainLayoutProfile.findViewById(R.id.container_country);
+        containerPinCode = (LinearLayout) mainLayoutProfile.findViewById(R.id.container_pin_code);
+
+        containerGroups = (LinearLayout) mainContainerGroups.findViewById(R.id.container_groups);
+
+        containerNotes = (LinearLayout) mainContainerNotes.findViewById(R.id.container_notes);
+        //PersonalHistory Views
+        tvDiet = (TextView) mainContainerPersonalHistory.findViewById(R.id.tv_diet);
+        containerDiet = (LinearLayout) mainContainerPersonalHistory.findViewById(R.id.container_diet);
+        tvAddiction = (TextView) mainContainerPersonalHistory.findViewById(R.id.tv_addictions);
+        containerAddiction = (LinearLayout) mainContainerPersonalHistory.findViewById(R.id.container_addiction);
+        tvBowelHabits = (TextView) mainContainerPersonalHistory.findViewById(R.id.tv_bowel_habits);
+        containerBowelHabit = (LinearLayout) mainContainerPersonalHistory.findViewById(R.id.container_bowel_habits);
+        tvBladderHabit = (TextView) mainContainerPersonalHistory.findViewById(R.id.tv_bladder_habits);
+        containerBladderHabit = (LinearLayout) mainContainerPersonalHistory.findViewById(R.id.container_bladder_habits);
+        tvNoPersonalHistoryData = (TextView) mainContainerPersonalHistory.findViewById(R.id.tv_no_data);
+        //DrugsAndAllergyViews
+        tvAllergy = (TextView) mainContainerDrugAndAllergy.findViewById(R.id.tv_allergy);
+        containerAllergy = (LinearLayout) mainContainerDrugAndAllergy.findViewById(R.id.container_allergy);
+        containerDrugs = (LinearLayout) mainContainerDrugAndAllergy.findViewById(R.id.container_drugs);
+        containerDrugsDetail = (LinearLayout) mainContainerDrugAndAllergy.findViewById(R.id.container_drugs_detail);
+        tvNoDrugsAndAllergyData = (TextView) mainContainerDrugAndAllergy.findViewById(R.id.tv_no_data);
+
+        //PastHistoryViews
+        containerPastHistory = (LinearLayout) mainContainerPastHistory.findViewById(R.id.container_past_history);
+        showNoHistoryText(R.string.edit_to_assign_past_history);
+        containerPastHistory.addView(tvNoDataText);
+
+        //FamilyHistoryViews
+        containerFamilyHistory = (LinearLayout) mainContainerFamilyHistory.findViewById(R.id.container_family_history);
+        showNoHistoryText(R.string.edit_to_assign_family_history);
+        containerFamilyHistory.addView(tvNoDataText);
     }
 
     @Override
@@ -162,6 +249,24 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
         mainLayoutProfile.setVisibility(View.VISIBLE);
         mainContainerGroups.setVisibility(View.GONE);
         mainContainerNotes.setVisibility(View.GONE);
+        //ProfileView
+        containerBloodGroup.setVisibility(View.GONE);
+        containerProfession.setVisibility(View.GONE);
+        containerReferredBy.setVisibility(View.GONE);
+        containerAadharId.setVisibility(View.GONE);
+        containerPanNumber.setVisibility(View.GONE);
+        containerDrivingLicense.setVisibility(View.GONE);
+
+        //PersonalHistory Views
+        tvNoPersonalHistoryData.setVisibility(View.VISIBLE);
+        containerDiet.setVisibility(View.GONE);
+        containerAddiction.setVisibility(View.GONE);
+        containerBowelHabit.setVisibility(View.GONE);
+        containerBladderHabit.setVisibility(View.GONE);
+        //DrugsAndAllergyViews
+        tvNoDrugsAndAllergyData.setVisibility(View.VISIBLE);
+        containerAllergy.setVisibility(View.GONE);
+        containerDrugs.setVisibility(View.GONE);
     }
 
     public void initData() {
@@ -183,39 +288,11 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
     }
 
     private void initProfileData() {
-        LinearLayout containerMobile = (LinearLayout) mainLayoutProfile.findViewById(R.id.container_mobile);
-        TextView tvBloodGroup = (TextView) mainLayoutProfile.findViewById(R.id.tv_blood_group);
-        LinearLayout containerBloodGroup = (LinearLayout) mainLayoutProfile.findViewById(R.id.container_blood_group);
-        TextView tvProfession = (TextView) mainLayoutProfile.findViewById(R.id.tv_profession);
-        LinearLayout containerProfession = (LinearLayout) mainLayoutProfile.findViewById(R.id.container_profession);
-        TextView tvReferredBy = (TextView) mainLayoutProfile.findViewById(R.id.tv_referred_by);
-        LinearLayout containerReferredBy = (LinearLayout) mainLayoutProfile.findViewById(R.id.container_referred_by);
-        TextView tvAadharId = (TextView) mainLayoutProfile.findViewById(R.id.tv_aadhar_id);
-        LinearLayout containerAadharId = (LinearLayout) mainLayoutProfile.findViewById(R.id.container_aadhar_id);
-        TextView tvPamNumber = (TextView) mainLayoutProfile.findViewById(R.id.tv_pan_number);
-        LinearLayout containerPanNumber = (LinearLayout) mainLayoutProfile.findViewById(R.id.container_pan_number);
-        TextView tvDrivingLicence = (TextView) mainLayoutProfile.findViewById(R.id.tv_driving_license);
-        LinearLayout containerDrivingLicense = (LinearLayout) mainLayoutProfile.findViewById(R.id.container_driving_license);
-        LinearLayout containerSecondaryMobile = (LinearLayout) mainLayoutProfile.findViewById(R.id.container_secondary_mobile);
-        LinearLayout containerEmail = (LinearLayout) mainLayoutProfile.findViewById(R.id.container_email);
-        LinearLayout containerStreetAddress = (LinearLayout) mainLayoutProfile.findViewById(R.id.container_street_address);
-        LinearLayout containerLocality = (LinearLayout) mainLayoutProfile.findViewById(R.id.container_locality);
-        LinearLayout containerCity = (LinearLayout) mainLayoutProfile.findViewById(R.id.container_city);
-        LinearLayout containerCountry = (LinearLayout) mainLayoutProfile.findViewById(R.id.container_country);
-        LinearLayout containerPinCode = (LinearLayout) mainLayoutProfile.findViewById(R.id.container_pin_code);
-        boolean isViewVisible = false;
-        containerBloodGroup.setVisibility(View.GONE);
-        containerProfession.setVisibility(View.GONE);
-        containerReferredBy.setVisibility(View.GONE);
-        containerAadharId.setVisibility(View.GONE);
-        containerPanNumber.setVisibility(View.GONE);
-        containerDrivingLicense.setVisibility(View.GONE);
         //initialising mobile data
         if (!Util.isNullOrBlank(selectedPatient.getMobileNumber())) {
             containerMobile.setVisibility(View.VISIBLE);
             TextView tvMobileno = (TextView) containerMobile.findViewById(R.id.tv_mobile);
             tvMobileno.setText(selectedPatient.getMobileNumber());
-            isViewVisible = true;
         } else
             containerMobile.setVisibility(View.GONE);
 
@@ -254,7 +331,6 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
                 containerEmail.setVisibility(View.VISIBLE);
                 TextView tvEmail = (TextView) containerEmail.findViewById(R.id.tv_email);
                 tvEmail.setText(selectedPatient.getPatient().getEmailAddress());
-                isViewVisible = true;
             } else
                 containerEmail.setVisibility(View.GONE);
 
@@ -263,7 +339,6 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
                 containerSecondaryMobile.setVisibility(View.VISIBLE);
                 TextView tvSecondaryMobile = (TextView) containerSecondaryMobile.findViewById(R.id.tv_secondary_mobile);
                 tvSecondaryMobile.setText(patient.getSecMobile());
-                isViewVisible = true;
             } else
                 containerSecondaryMobile.setVisibility(View.GONE);
         }
@@ -277,7 +352,6 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
                 containerStreetAddress.setVisibility(View.VISIBLE);
                 TextView tvStreetAddress = (TextView) containerStreetAddress.findViewById(R.id.tv_street_address);
                 tvStreetAddress.setText(address.getStreetAddress());
-                isViewVisible = true;
             } else
                 containerStreetAddress.setVisibility(View.GONE);
 
@@ -286,7 +360,6 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
                 containerLocality.setVisibility(View.VISIBLE);
                 TextView tvLocality = (TextView) containerLocality.findViewById(R.id.tv_locality);
                 tvLocality.setText(address.getLocality());
-                isViewVisible = true;
             } else
                 containerLocality.setVisibility(View.GONE);
 
@@ -295,7 +368,6 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
                 containerCity.setVisibility(View.VISIBLE);
                 TextView tvCity = (TextView) containerCity.findViewById(R.id.tv_city);
                 tvCity.setText(address.getCity());
-                isViewVisible = true;
             } else
                 containerCity.setVisibility(View.GONE);
 
@@ -304,7 +376,6 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
                 containerCountry.setVisibility(View.VISIBLE);
                 TextView tvCountry = (TextView) containerCountry.findViewById(R.id.tv_country);
                 tvCountry.setText(address.getCountry());
-                isViewVisible = true;
             } else
                 containerCountry.setVisibility(View.GONE);
             //setting country
@@ -312,7 +383,6 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
                 containerPinCode.setVisibility(View.VISIBLE);
                 TextView tvPincode = (TextView) containerPinCode.findViewById(R.id.tv_pin_code);
                 tvPincode.setText(address.getPostalCode());
-                isViewVisible = true;
             } else
                 containerPinCode.setVisibility(View.GONE);
         } else {
@@ -335,21 +405,7 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
     }
 
     private void initPersonalHistory(PersonalHistory personalHistory) {
-        TextView tvDiet = (TextView) mainContainerPersonalHistory.findViewById(R.id.tv_diet);
-        LinearLayout containerDiet = (LinearLayout) mainContainerPersonalHistory.findViewById(R.id.container_diet);
-        TextView tvAddiction = (TextView) mainContainerPersonalHistory.findViewById(R.id.tv_addictions);
-        LinearLayout containerAddiction = (LinearLayout) mainContainerPersonalHistory.findViewById(R.id.container_addiction);
-        TextView tvBowelHabits = (TextView) mainContainerPersonalHistory.findViewById(R.id.tv_bowel_habits);
-        LinearLayout containerBowelHabit = (LinearLayout) mainContainerPersonalHistory.findViewById(R.id.container_bowel_habits);
-        TextView tvBladderHabit = (TextView) mainContainerPersonalHistory.findViewById(R.id.tv_bladder_habits);
-        LinearLayout containerBladderHabit = (LinearLayout) mainContainerPersonalHistory.findViewById(R.id.container_bladder_habits);
-        TextView tvNoData = (TextView) mainContainerPersonalHistory.findViewById(R.id.tv_no_data);
-        tvNoData.setVisibility(View.GONE);
-        containerDiet.setVisibility(View.GONE);
-        containerAddiction.setVisibility(View.GONE);
-        containerBowelHabit.setVisibility(View.GONE);
-        containerBladderHabit.setVisibility(View.GONE);
-        if (personalHistory != null) {
+        if (personalHistory != null && !personalHistory.areAllFieldsNull()) {
 
             if (!Util.isNullOrBlank(personalHistory.getDiet())) {
                 containerDiet.setVisibility(View.VISIBLE);
@@ -367,8 +423,9 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
                 containerBladderHabit.setVisibility(View.VISIBLE);
                 tvBladderHabit.setText(personalHistory.getBladderHabit());
             }
+            tvNoPersonalHistoryData.setVisibility(View.GONE);
         } else {
-            tvNoData.setVisibility(View.VISIBLE);
+            tvNoPersonalHistoryData.setVisibility(View.VISIBLE);
             containerDiet.setVisibility(View.GONE);
             containerAddiction.setVisibility(View.GONE);
             containerBowelHabit.setVisibility(View.GONE);
@@ -378,32 +435,29 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
     }
 
     private void initDrugsAndAllergyHistory(DrugsAndAllergies drugsAndAllergies) {
-        TextView tvAllergy = (TextView) mainContainerDrugAndAllergy.findViewById(R.id.tv_allergy);
-        LinearLayout containerAllergy = (LinearLayout) mainContainerDrugAndAllergy.findViewById(R.id.container_allergy);
-        LinearLayout containerDrugs = (LinearLayout) mainContainerDrugAndAllergy.findViewById(R.id.container_drugs);
-        LinearLayout containerDrugsDetail = (LinearLayout) mainContainerDrugAndAllergy.findViewById(R.id.container_drugs_detail);
-        TextView tvNoData = (TextView) mainContainerDrugAndAllergy.findViewById(R.id.tv_no_data);
-
         containerDrugsDetail.removeAllViews();
-        tvNoData.setVisibility(View.GONE);
-        containerAllergy.setVisibility(View.GONE);
-        containerDrugs.setVisibility(View.GONE);
-
+        tvNoDrugsAndAllergyData.setVisibility(View.VISIBLE);
         if (drugsAndAllergies != null) {
             if (!Util.isNullOrBlank(drugsAndAllergies.getAllergies())) {
                 containerAllergy.setVisibility(View.VISIBLE);
                 tvAllergy.setText(drugsAndAllergies.getAllergies());
+                tvNoDrugsAndAllergyData.setVisibility(View.GONE);
+            } else {
+                containerAllergy.setVisibility(View.GONE);
             }
             if (!Util.isNullOrEmptyList(drugsAndAllergies.getDrugs())) {
                 containerDrugs.setVisibility(View.VISIBLE);
+                tvNoDrugsAndAllergyData.setVisibility(View.GONE);
                 for (Drug drug : drugsAndAllergies.getDrugs()) {
                     TextView tvDrugs = (TextView) mActivity.getLayoutInflater().inflate(R.layout.sub_item_profile_detail_groups_notes_text, null);
                     tvDrugs.setText(drug.getFormattedDrugName());
                     containerDrugsDetail.addView(tvDrugs);
                 }
+            } else {
+                containerDrugs.setVisibility(View.GONE);
             }
         } else {
-            tvNoData.setVisibility(View.VISIBLE);
+            tvNoDrugsAndAllergyData.setVisibility(View.VISIBLE);
             containerAllergy.setVisibility(View.GONE);
             containerDrugs.setVisibility(View.GONE);
         }
@@ -411,7 +465,6 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
     }
 
     private void initPastHistory(List<MedicalFamilyHistoryDetails> medicalhistory, HistoryDiseaseIdsListener addDiseaseIdsListener) {
-        LinearLayout containerPastHistory = (LinearLayout) mainContainerPastHistory.findViewById(R.id.container_past_history);
         containerPastHistory.removeAllViews();
         medicalDiseaseIdsList.clear();
         if (!Util.isNullOrEmptyList(medicalhistory)) {
@@ -423,15 +476,13 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
                 containerPastHistory.addView(tvGroupName);
             }
         } else {
-            TextView tvGroupName = (TextView) mActivity.getLayoutInflater().inflate(R.layout.sub_item_profile_detail_groups_notes_text, null);
-            tvGroupName.setText(R.string.edit_to_assign_past_history);
-            containerPastHistory.addView(tvGroupName);
+            showNoHistoryText(R.string.edit_to_assign_past_history);
+            containerPastHistory.addView(tvNoDataText);
         }
         mainContainerPastHistory.setVisibility(View.VISIBLE);
     }
 
     private void initFamilyHistory(List<MedicalFamilyHistoryDetails> familyhistory, HistoryDiseaseIdsListener addDiseaseIdsListener) {
-        LinearLayout containerFamilyHistory = (LinearLayout) mainContainerFamilyHistory.findViewById(R.id.container_family_history);
         containerFamilyHistory.removeAllViews();
         familyDiseaseIdsList.clear();
         if (!Util.isNullOrEmptyList(familyhistory)) {
@@ -443,15 +494,18 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
                 containerFamilyHistory.addView(tvGroupName);
             }
         } else {
-            TextView tvGroupName = (TextView) mActivity.getLayoutInflater().inflate(R.layout.sub_item_profile_detail_groups_notes_text, null);
-            tvGroupName.setText(R.string.edit_to_assign_past_history);
-            containerFamilyHistory.addView(tvGroupName);
+            showNoHistoryText(R.string.edit_to_assign_family_history);
+            containerFamilyHistory.addView(tvNoDataText);
         }
         mainContainerFamilyHistory.setVisibility(View.VISIBLE);
     }
 
+    private void showNoHistoryText(int textId) {
+        tvNoDataText = (TextView) mActivity.getLayoutInflater().inflate(R.layout.sub_item_profile_detail_groups_notes_text, null);
+        tvNoDataText.setText(textId);
+    }
+
     private void initGroups() {
-        LinearLayout containerGroups = (LinearLayout) mainContainerGroups.findViewById(R.id.container_groups);
         containerGroups.removeAllViews();
         if (!Util.isNullOrEmptyList(selectedPatient.getGroups())) {
             for (UserGroups group :
@@ -461,15 +515,13 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
                 containerGroups.addView(tvGroupName);
             }
         } else {
-            TextView tvGroupName = (TextView) mActivity.getLayoutInflater().inflate(R.layout.sub_item_profile_detail_groups_notes_text, null);
-            tvGroupName.setText(R.string.edit_to_assign_groups);
-            containerGroups.addView(tvGroupName);
+            showNoHistoryText(R.string.edit_to_assign_groups);
+            containerGroups.addView(tvNoDataText);
         }
         mainContainerGroups.setVisibility(View.VISIBLE);
     }
 
     private void initNotes() {
-        LinearLayout containerNotes = (LinearLayout) mainContainerNotes.findViewById(R.id.container_notes);
         containerNotes.removeAllViews();
         if (selectedPatient.getPatient() != null && !Util.isNullOrEmptyList(selectedPatient.getPatient().getNotes())) {
             for (String note :
@@ -479,9 +531,8 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
                 containerNotes.addView(tvNote);
             }
         } else {
-            TextView tvNote = (TextView) mActivity.getLayoutInflater().inflate(R.layout.sub_item_profile_detail_groups_notes_text, null);
-            tvNote.setText(R.string.edit_to_add_notes);
-            containerNotes.addView(tvNote);
+            showNoHistoryText(R.string.edit_to_add_notes);
+            containerNotes.addView(tvNoDataText);
         }
         mainContainerNotes.setVisibility(View.VISIBLE);
     }
@@ -497,12 +548,14 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
                 break;
             case R.id.bt_edit_patient_profile_personal_history:
                 HistoryDetailsResponse detailsResponse = getDefaultIdDetails();
-                detailsResponse.setPersonalHistory(historyDetailsResponse.getPersonalHistory());
+                if (historyDetailsResponse != null)
+                    detailsResponse.setPersonalHistory(historyDetailsResponse.getPersonalHistory());
                 openDialogFragment(new AddEditPersonalHistoryDetailDialogFragment(), AddEditPersonalHistoryDetailDialogFragment.TAG_PERSONAL_HISTORY, detailsResponse, REQUEST_CODE_PATIENT_PROFILE, null);
                 break;
             case R.id.bt_edit_patient_profile_drug_and_allergy:
                 HistoryDetailsResponse detailsResponse1 = getDefaultIdDetails();
-                detailsResponse1.setDrugsAndAllergies(historyDetailsResponse.getDrugsAndAllergies());
+                if (historyDetailsResponse != null)
+                    detailsResponse1.setDrugsAndAllergies(historyDetailsResponse.getDrugsAndAllergies());
                 openDialogFragment(new AddEditDrugAndAllergyDetailDialogFragment(), AddEditDrugAndAllergyDetailDialogFragment.TAG_DRUGS_AND_ALLERGIES, detailsResponse1, REQUEST_CODE_PATIENT_PROFILE, null);
                 break;
             case R.id.bt_edit_patient_profile_groups:
@@ -560,10 +613,12 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
                 initProfileData();
             } else if (resultCode == HealthCocoConstants.RESULT_CODE_DOCTOR_PERSONAL_HISTORY_DETAIL) {
                 PersonalHistory personalHistory = Parcels.unwrap(data.getParcelableExtra(TAG_PERSONAL_HISTORY));
+                historyDetailsResponse = new HistoryDetailsResponse();
                 historyDetailsResponse.setPersonalHistory(personalHistory);
                 initPersonalHistory(personalHistory);
             } else if (resultCode == HealthCocoConstants.RESULT_CODE_DRUGS_AND_ALLERGIES_DETAIL) {
                 DrugsAndAllergies drugsAndAllergies = Parcels.unwrap(data.getParcelableExtra(DRUG_AND_ALLERGIES));
+                historyDetailsResponse = new HistoryDetailsResponse();
                 historyDetailsResponse.setDrugsAndAllergies(drugsAndAllergies);
                 initDrugsAndAllergyHistory(drugsAndAllergies);
             } else if (resultCode == HealthCocoConstants.RESULT_CODE_DISEASE_LIST) {
@@ -734,6 +789,8 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
 
     public void refreshData() {
         initData();
-        new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_HISTORY_LIST, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+//        mActivity.showLoading(false);
+        getHistoryListFromLocal(true);
+//        new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_HISTORY_LIST, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 }

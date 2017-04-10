@@ -3,7 +3,8 @@
     android:id="@+id/sv_scrollview"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:overScrollMode="never">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -30,5 +31,13 @@
         <include layout="@layout/sub_item_add_diagrams" />
 
         <include layout="@layout/sub_item_add_advice" />
+
+        <com.myscript.atk.sltw.SingleLineWidget
+            android:id="@+id/widget"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:layout_marginTop="20dp"
+            android:background="#f0f0f0" />
+
     </LinearLayout>
 </ScrollView>
