@@ -2188,31 +2188,38 @@ public class LocalDataServiceImpl {
     }
 
     private List<Drug> getDrugsList(ArrayList<String> drugIdsList) {
-        //forming where condition query
-        String whereCondition = "Select * from " + StringUtil.toSQLName(Drug.class.getSimpleName())
-                + getWhereConditionForKeyWithValues(LocalDatabaseUtils.KEY_UNIQUE_ID, drugIdsList);
-        LogUtils.LOGD(TAG, "Select Query " + whereCondition);
-        List<Drug> drugsList = SugarRecord.findWithQuery(Drug.class, whereCondition);
-        if (!Util.isNullOrEmptyList(drugsList)) {
-            for (Drug drug :
-                    drugsList) {
-                getDrugRestDetails(drug);
+        if (!Util.isNullOrEmptyList(drugIdsList)) {
+            //forming where condition query
+            String whereCondition = "Select * from " + StringUtil.toSQLName(Drug.class.getSimpleName())
+                    + getWhereConditionForKeyWithValues(LocalDatabaseUtils.KEY_UNIQUE_ID, drugIdsList);
+            LogUtils.LOGD(TAG, "Select Query " + whereCondition);
+            List<Drug> drugsList = SugarRecord.findWithQuery(Drug.class, whereCondition);
+            if (!Util.isNullOrEmptyList(drugsList)) {
+                for (Drug drug :
+                        drugsList) {
+                    getDrugRestDetails(drug);
+                }
+                return drugsList;
             }
         }
-        return drugsList;
+        return null;
+
     }
 
     private List<MedicalFamilyHistoryDetails> getMedicalFamilyHistoryListHavingIds(Class<?> class1, ArrayList<String> idsList) {
-        //forming where condition query
-        String whereCondition = "Select * from " + StringUtil.toSQLName(class1.getSimpleName())
-                + getWhereConditionForKeyWithValues(LocalDatabaseUtils.KEY_UNIQUE_ID, idsList);
+        if (!Util.isNullOrEmptyList(idsList)) {
+            //forming where condition query
+            String whereCondition = "Select * from " + StringUtil.toSQLName(class1.getSimpleName())
+                    + getWhereConditionForKeyWithValues(LocalDatabaseUtils.KEY_UNIQUE_ID, idsList);
 
-        //specifying order by limit and offset query
-        String conditionsLimit = " ORDER BY " + LocalDatabaseUtils.KEY_CREATED_TIME + " DESC ";
+            //specifying order by limit and offset query
+            String conditionsLimit = " ORDER BY " + LocalDatabaseUtils.KEY_CREATED_TIME + " DESC ";
 
-        whereCondition = whereCondition + conditionsLimit;
-        LogUtils.LOGD(TAG, "Select Query " + whereCondition);
-        return SugarRecord.findWithQuery(MedicalFamilyHistoryDetails.class, whereCondition);
+            whereCondition = whereCondition + conditionsLimit;
+            LogUtils.LOGD(TAG, "Select Query " + whereCondition);
+            return SugarRecord.findWithQuery(MedicalFamilyHistoryDetails.class, whereCondition);
+        }
+        return null;
     }
 
     private String getWhereConditionForKeyWithValues(String columnName, ArrayList<String> valuesList) {
