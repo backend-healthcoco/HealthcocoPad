@@ -14,7 +14,7 @@
         android:textColor="@color/black"
         android:textSize="@dimen/text_size_add_visits_lable" />
 
-    <com.healthcoco.healthcocopad.custom.CustomEditText
+    <EditText
         android:id="@+id/et_advice"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

@@ -82,8 +82,9 @@ import com.healthcoco.healthcocopad.utilities.MyExceptionHandler;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.healthcoco.healthcocopad.views.FontAwesomeButton;
 
+import org.parceler.Parcels;
+
 import java.io.File;
-import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -755,7 +756,7 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
         Intent intent = new Intent(this, CommonOpenUpActivity.class);
         intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, fragmentType.ordinal());
         if (intentData != null) {
-            intent.putExtra(intentTag, (Serializable) intentData);
+            intent.putExtra(intentTag, Parcels.wrap(intentData));
         }
         if (requestCode == 0)
             startActivity(intent);
@@ -967,5 +968,15 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
         printIntent.setDataAndType(Uri.fromFile(new File(filePath)), Util.getMimeTypeOfFile(filePath));
         printIntent.putExtra(CloudPrintActivity.TAG_TITLE, CloudPrintActivity.DOC_TITLE);
         startActivity(printIntent);
+    }
+
+    public void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+    }
+
+    public void showKeyboard() {
+        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+        imm.showSoftInput(getCurrentFocus(), InputMethodManager.SHOW_IMPLICIT);
     }
 }

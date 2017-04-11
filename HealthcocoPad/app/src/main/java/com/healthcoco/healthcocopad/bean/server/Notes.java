@@ -3,9 +3,7 @@ package com.healthcoco.healthcocopad.bean.server;
 import com.orm.SugarRecord;
 import com.orm.annotation.Unique;
 
-import java.io.Serializable;
-
-public class Notes extends SugarRecord implements Serializable {
+public class Notes extends SugarRecord {
 
     @Unique
     private String uniqueId;

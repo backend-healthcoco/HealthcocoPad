@@ -40,6 +40,8 @@ import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
 
+import org.parceler.Parcels;
+
 import java.util.ArrayList;
 
 /**
@@ -264,7 +266,7 @@ public class AddUpdateNameDialogFragment extends HealthCocoDialogFragment implem
     }
 
     private void addNote(String name) {
-        getTargetFragment().onActivityResult(getTargetRequestCode(), HealthCocoConstants.RESULT_CODE_ADD_STRING, new Intent().putExtra(HealthCocoConstants.TAG_INTENT_DATA, name));
+        getTargetFragment().onActivityResult(getTargetRequestCode(), HealthCocoConstants.RESULT_CODE_ADD_STRING, new Intent().putExtra(HealthCocoConstants.TAG_INTENT_DATA, Parcels.wrap(name)));
         mActivity.hideLoading();
         dismiss();
     }
@@ -397,35 +399,35 @@ public class AddUpdateNameDialogFragment extends HealthCocoDialogFragment implem
                     if (!Util.isNullOrEmptyList(response.getDataList()) && response.getDataList().get(0) instanceof Disease) {
                         LocalDataServiceImpl.getInstance(mApp).addDiseaseList((ArrayList<Disease>) (ArrayList<?>) response.getDataList());
                     }
-                    getTargetFragment().onActivityResult(HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, HealthCocoConstants.RESULT_CODE_REFERENCE_LIST, new Intent().putExtra(HealthCocoConstants.TAG_INTENT_DATA, response.getDataList()));
+                    getTargetFragment().onActivityResult(getTargetRequestCode(), HealthCocoConstants.RESULT_CODE_REFERENCE_LIST, new Intent().putExtra(HealthCocoConstants.TAG_INTENT_DATA, Parcels.wrap(response.getDataList())));
                     break;
                 case ADD_DOSAGE:
                     mActivity.hideLoading();
                     if (response.getData() != null && response.getData() instanceof DrugDosage) {
                         LocalDataServiceImpl.getInstance(mApp).addDrugDosage((DrugDosage) response.getData());
                     }
-//                    getTargetFragment().onActivityResult(HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, HealthCocoConstants.RESULT_CODE_REFERENCE_LIST, null);
+//                    getTargetFragment().onActivityResult(HealthCocoConstants.REQUEST_CODE_DISEASED_LIST, HealthCocoConstants.RESULT_CODE_REFERENCE_LIST, null);
                     break;
                 case ADD_DIRECTION:
                     mActivity.hideLoading();
                     if (response.getData() != null && response.getData() instanceof DrugDirection) {
                         LocalDataServiceImpl.getInstance(mApp).addDirection((DrugDirection) response.getData());
                     }
-//                    getTargetFragment().onActivityResult(HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, HealthCocoConstants.RESULT_CODE_REFERENCE_LIST, null);
+//                    getTargetFragment().onActivityResult(HealthCocoConstants.REQUEST_CODE_DISEASED_LIST, HealthCocoConstants.RESULT_CODE_REFERENCE_LIST, null);
                     break;
                 case ADD_CUSTOM_HISTORY:
                     mActivity.hideLoading();
                     if (response.getData() != null && response.getData() instanceof Disease) {
 //                        LocalDataServiceImpl.getInstance(mApp).addDisease((Disease) response.getData());
                     }
-//                    getTargetFragment().onActivityResult(HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, HealthCocoConstants.RESULT_CODE_REFERENCE_LIST, null);
+//                    getTargetFragment().onActivityResult(HealthCocoConstants.REQUEST_CODE_DISEASED_LIST, HealthCocoConstants.RESULT_CODE_REFERENCE_LIST, null);
                     break;
                 case ADD_REFERENCE:
                     mActivity.hideLoading();
                     if (response.getData() != null && response.getData() instanceof Reference) {
 //                        LocalDataServiceImpl.getInstance(mApp).addReference((Reference) response.getData());
                     }
-//                    getTargetFragment().onActivityResult(HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, HealthCocoConstants.RESULT_CODE_REFERENCE_LIST, null);
+//                    getTargetFragment().onActivityResult(HealthCocoConstants.REQUEST_CODE_DISEASED_LIST, HealthCocoConstants.RESULT_CODE_REFERENCE_LIST, null);
                     break;
                 case ADD_DIAGNOSTIC_TESTS:
                     //not adding tests in local(Since tests are got from Solar)

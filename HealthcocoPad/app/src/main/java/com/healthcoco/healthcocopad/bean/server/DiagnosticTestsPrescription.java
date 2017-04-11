@@ -7,13 +7,12 @@ import com.orm.annotation.Unique;
 
 import org.parceler.Parcel;
 
-import java.io.Serializable;
 
 /**
  * Created by neha on 15/04/16.
  */
 @Parcel
-public class DiagnosticTestsPrescription extends SugarRecord implements Serializable {
+public class DiagnosticTestsPrescription extends SugarRecord {
     public static String TABLE_NAME = " " + StringUtil.toSQLName(DiagnosticTestsPrescription.class.getSimpleName());
     private String foreignTableId;
     @Ignore

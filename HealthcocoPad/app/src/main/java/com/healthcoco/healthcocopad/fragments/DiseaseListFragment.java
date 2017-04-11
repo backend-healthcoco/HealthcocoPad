@@ -52,6 +52,7 @@ import java.util.Locale;
  */
 public class DiseaseListFragment extends HealthCocoFragment implements View.OnClickListener, Response.Listener<VolleyResponseBean>, GsonRequest.ErrorListener, LocalDoInBackgroundListenerOptimised, TextWatcher, MedicalFamilyHistoryItemListener, AddDiseaseListener {
     public static final String TAG_FILTER_TYPE = "filterType";
+    public static final int REQUEST_CODE_DISEASED_LIST = 136;
     public static final String TAG_DISEASES_LIST = "diseasesList";
     private GridView lvDiseaseList;
     //    private ListView lvDiseaseList;
@@ -145,7 +146,8 @@ public class DiseaseListFragment extends HealthCocoFragment implements View.OnCl
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.bt_advance_search:
-                mActivity.openAddUpdateNameDialogFragment(WebServiceType.ADD_DISEASE, AddUpdateNameDialogType.DISEASE, this, user, "", HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST);
+                mActivity.openAddUpdateNameDialogFragment(WebServiceType.ADD_DISEASE,
+                        AddUpdateNameDialogType.DISEASE, this, user, "", REQUEST_CODE_DISEASED_LIST);
                 break;
             case R.id.container_right_action:
                 Util.checkNetworkStatus(mActivity);
@@ -329,14 +331,14 @@ public class DiseaseListFragment extends HealthCocoFragment implements View.OnCl
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST) {
+        if (requestCode == REQUEST_CODE_DISEASED_LIST) {
             if (resultCode == HealthCocoConstants.RESULT_CODE_REFERENCE_LIST) {
-                if (data != null && data.getData() != null && data.hasExtra(HealthCocoConstants.TAG_INTENT_DATA)) {
-                    Disease disease = (Disease) data.getSerializableExtra(HealthCocoConstants.TAG_INTENT_DATA);
-                    if (diseaseList == null)
-                        diseaseList = new ArrayList<>();
-                    diseaseList.add(disease);
-                    notifyAdapter(diseaseList);
+                if (data != null && data.hasExtra(HealthCocoConstants.TAG_INTENT_DATA)) {
+                    ArrayList<Disease> diseaseList = Parcels.unwrap(data.getParcelableExtra(HealthCocoConstants.TAG_INTENT_DATA));
+                    if (this.diseaseList == null)
+                        this.diseaseList = new ArrayList<>();
+                    this.diseaseList.addAll(diseaseList);
+                    notifyAdapter(this.diseaseList);
                     getListFromLocal();
                     return;
                 }

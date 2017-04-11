@@ -33,9 +33,9 @@ import com.healthcoco.healthcocopad.bean.server.DoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.enums.DoctorExperienceUnit;
 
+import org.parceler.Parcels;
 import org.spongycastle.jcajce.provider.digest.Keccak;
 
-import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -427,7 +427,7 @@ public class Util {
         try {
             Intent intent = new Intent(intentFilter);
             if (extra != null)
-                intent.putExtra(HealthCocoConstants.TAG_BROADCAST_EXTRA, (Serializable) extra);
+                intent.putExtra(HealthCocoConstants.TAG_BROADCAST_EXTRA, Parcels.wrap(extra));
             LocalBroadcastManager.getInstance(mApp.getApplicationContext()).sendBroadcast(intent);
         } catch (Exception e) {
             e.printStackTrace();

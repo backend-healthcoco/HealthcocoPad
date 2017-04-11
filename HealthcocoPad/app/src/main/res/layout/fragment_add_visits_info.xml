@@ -30,8 +30,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:padding="10dp"
-                android:textColor="@drawable/text_selector_grey_blue"
                 android:text="@string/fa_close"
+                android:textColor="@drawable/text_selector_grey_blue"
                 android:textSize="30sp" />
 
             <LinearLayout
@@ -89,6 +89,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
+                android:layout_centerInParent="true"
                 android:padding="10dp"
                 android:text="@string/fa_save"
                 android:textColor="@drawable/text_blue_normal_grey_light_selected"

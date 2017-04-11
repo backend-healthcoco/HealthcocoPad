@@ -36,6 +36,8 @@ import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.healthcoco.healthcocopad.views.DiagramColorPalleteLayout;
 
+import org.parceler.Parcels;
+
 public class SelectedDiagramDetailFragment extends HealthCocoFragment implements OnClickListener,
         DownloadFileFromUrlListener, DiagramCanvasListener, Response.Listener<VolleyResponseBean>, GsonRequest.ErrorListener {
     public static final String SELECTED_DIAGRAM_TAG = "selectedDiagramTag";
@@ -95,7 +97,7 @@ public class SelectedDiagramDetailFragment extends HealthCocoFragment implements
 
     private void initData() {
         Intent intent = mActivity.getIntent();
-        selectedDiagram = (Diagram) intent.getSerializableExtra(HealthCocoConstants.TAG_SELECTED_DIAGRAM);
+        selectedDiagram = Parcels.unwrap(intent.getParcelableExtra(HealthCocoConstants.TAG_SELECTED_DIAGRAM));
         if (selectedDiagram != null && !Util.isNullOrBlank(selectedDiagram.getDiagramUrl())) {
             mActivity.showLoading(false);
             String url = selectedDiagram.getDiagramUrl();

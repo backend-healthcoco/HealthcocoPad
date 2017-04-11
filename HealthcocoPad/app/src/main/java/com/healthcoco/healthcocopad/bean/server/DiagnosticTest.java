@@ -5,13 +5,12 @@ import com.orm.annotation.Unique;
 
 import org.parceler.Parcel;
 
-import java.io.Serializable;
 
 /**
  * Created by neha on 13/04/16.
  */
 @Parcel
-public class DiagnosticTest extends SugarRecord implements Serializable {
+public class DiagnosticTest extends SugarRecord {
     @Unique
     private String uniqueId;
     private String code;

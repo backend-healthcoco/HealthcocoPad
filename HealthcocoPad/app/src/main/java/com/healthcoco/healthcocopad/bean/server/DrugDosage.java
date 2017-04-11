@@ -4,14 +4,11 @@ import com.orm.SugarRecord;
 import com.orm.annotation.Unique;
 
 import org.parceler.Parcel;
-
-import java.io.Serializable;
 @Parcel
-public class DrugDosage extends SugarRecord implements Serializable {
+public class DrugDosage extends SugarRecord {
     /**
      *
      */
-    protected static final long serialVersionUID = 1L;
     @Unique
     private String uniqueId;
 

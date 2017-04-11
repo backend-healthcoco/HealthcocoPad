@@ -36,6 +36,8 @@ import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
 
+import org.parceler.Parcels;
+
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -126,7 +128,7 @@ public class DiagramsListFragment extends HealthCocoFragment implements OnItemCl
         Intent intent = new Intent(mActivity, AddVisitsActivity.class);
         intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.SELECTED_DIAGRAM_DETAIL.ordinal());
         intent.putExtra(HealthCocoConstants.TAG_DIAGRAM_TAG, diagram.getTags());
-        intent.putExtra(HealthCocoConstants.TAG_SELECTED_DIAGRAM, diagram);
+        intent.putExtra(HealthCocoConstants.TAG_SELECTED_DIAGRAM, Parcels.wrap(diagram));
         startActivityForResult(intent, REQUEST_CODE_DIAGRAMS_LIST);
     }
 

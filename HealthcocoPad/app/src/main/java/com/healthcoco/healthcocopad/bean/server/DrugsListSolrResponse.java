@@ -4,13 +4,12 @@ import com.orm.SugarRecord;
 import com.orm.annotation.Ignore;
 import com.orm.annotation.Unique;
 
-import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by neha on 17/12/15.
  */
-public class DrugsListSolrResponse extends SugarRecord implements Serializable {
+public class DrugsListSolrResponse extends SugarRecord  {
     @Unique
     private String uniqueId;
     private String description;

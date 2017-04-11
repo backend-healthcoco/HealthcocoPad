@@ -3,12 +3,13 @@ package com.healthcoco.healthcocopad.bean.server;
 import com.orm.SugarRecord;
 import com.orm.annotation.Unique;
 
-import java.io.Serializable;
+import org.parceler.Parcel;
 
 /**
  * Created by neha on 11/12/15.
  */
-public class Disease extends SugarRecord implements Serializable{
+@Parcel
+public class Disease extends SugarRecord {
     @Unique
     private String uniqueId;
     private String description;

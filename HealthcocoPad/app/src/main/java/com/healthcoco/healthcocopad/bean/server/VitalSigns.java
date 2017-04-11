@@ -10,8 +10,6 @@ import com.orm.annotation.Unique;
 
 import org.parceler.Parcel;
 
-import java.io.Serializable;
-
 /**
  * Created by neha on 14/04/16.
  */

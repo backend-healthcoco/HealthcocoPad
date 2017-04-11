@@ -4,10 +4,9 @@ import com.orm.SugarRecord;
 import com.orm.annotation.Ignore;
 import com.orm.annotation.Unique;
 
-import java.io.Serializable;
 import java.util.List;
 
-public class TempTemplate extends SugarRecord implements Serializable {
+public class TempTemplate extends SugarRecord {
     private String name;
     @Unique
     private String uniqueId;

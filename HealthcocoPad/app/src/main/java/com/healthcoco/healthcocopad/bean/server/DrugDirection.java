@@ -6,9 +6,8 @@ import com.orm.annotation.Unique;
 
 import org.parceler.Parcel;
 
-import java.io.Serializable;
 @Parcel
-public class DrugDirection extends SugarRecord implements Serializable {
+public class DrugDirection extends SugarRecord {
     public static String TABLE_NAME = " " + StringUtil.toSQLName(DrugDirection.class.getSimpleName());
 
     @Unique

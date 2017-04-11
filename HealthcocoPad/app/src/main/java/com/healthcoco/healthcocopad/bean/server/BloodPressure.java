@@ -5,12 +5,13 @@ import com.healthcoco.healthcocopad.utilities.Util;
 import com.orm.SugarRecord;
 import com.orm.annotation.Unique;
 
-import java.io.Serializable;
+import org.parceler.Parcel;
 
 /**
  * Created by neha on 14/04/16.
  */
-public class BloodPressure extends SugarRecord implements Serializable {
+@Parcel
+public class BloodPressure extends SugarRecord  {
     public static String TABLE_NAME = " " + StringUtil.toSQLName(BloodPressure.class.getSimpleName());
     @Unique
     protected String foreignTableId;

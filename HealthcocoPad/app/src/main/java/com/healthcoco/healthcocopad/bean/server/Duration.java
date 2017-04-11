@@ -5,10 +5,8 @@ import com.orm.SugarRecord;
 import com.orm.annotation.Unique;
 
 import org.parceler.Parcel;
-
-import java.io.Serializable;
 @Parcel
-public class Duration extends SugarRecord implements Serializable {
+public class Duration extends SugarRecord {
     public static String TABLE_NAME = " " + StringUtil.toSQLName(Duration.class.getSimpleName());
     private String value;
     private DrugDurationUnit durationUnit;

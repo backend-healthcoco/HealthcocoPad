@@ -5,13 +5,11 @@ import com.orm.annotation.Unique;
 
 import org.parceler.Parcel;
 
-import java.io.Serializable;
-
 /**
  * Created by neha on 04/02/17.
  */
 @Parcel
-public class GenericName extends SugarRecord implements Serializable {
+public class GenericName extends SugarRecord  {
     @Unique
     private String uniqueId;
     private String createdBy;

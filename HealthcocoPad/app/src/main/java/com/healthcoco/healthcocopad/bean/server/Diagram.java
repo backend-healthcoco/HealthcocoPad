@@ -5,13 +5,13 @@ import com.orm.SugarRecord;
 import com.orm.annotation.Ignore;
 import com.orm.annotation.Unique;
 
-import java.io.Serializable;
+import org.parceler.Parcel;
 
 /**
  * Created by Shreshtha on 07-02-2017.
  */
-
-public class Diagram extends SugarRecord implements Serializable {
+@Parcel
+public class Diagram extends SugarRecord{
     private String uniqueId;
 
     protected String foreignClinicalNotesId;
