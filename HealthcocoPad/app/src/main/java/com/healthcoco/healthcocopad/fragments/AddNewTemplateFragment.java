@@ -49,6 +49,8 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import static com.healthcoco.healthcocopad.fragments.TemplateListFragment.TAG_TEMPLATE_ID;
+
 /**
  * Created by Shreshtha on 27-03-2017.
  */
@@ -213,7 +215,7 @@ public class AddNewTemplateFragment extends HealthCocoFragment implements TabHos
 
     private void addTemplate(String templateName) {
         TempTemplate template = new TempTemplate();
-        template.setDoctorId(selectedPatient.getUniqueId());
+        template.setDoctorId(selectedPatient.getDoctorId());
         template.setLocationId(selectedPatient.getLocationId());
         template.setHospitalId(selectedPatient.getHospitalId());
         template.setName(templateName);
@@ -250,7 +252,7 @@ public class AddNewTemplateFragment extends HealthCocoFragment implements TabHos
                 if (response.isValidData(response) && response.getData() instanceof TempTemplate) {
                     TempTemplate template = (TempTemplate) response.getData();
                     LocalDataServiceImpl.getInstance(mApp).addTemplate(template);
-//                    mActivity.setResult(HealthCocoConstants.RESULT_CODE_ADD_NEW_TEMPLATE, new Intent().putExtra(TemplatesListFragment.TAG_TEMPLATE_ID, template.getUniqueId()));
+                    mActivity.setResult(HealthCocoConstants.RESULT_CODE_ADD_NEW_TEMPLATE, new Intent().putExtra(TemplateListFragment.TAG_TEMPLATE_ID, template.getUniqueId()));
                     ((CommonOpenUpActivity) mActivity).finish();
                 }
                 break;

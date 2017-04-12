@@ -516,15 +516,15 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
                     case GET_CALENDAR_EVENTS:
                         new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_CALENDAR_EVENTS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
                         break;
-                    case GET_EDUCATION_QUALIFICATION:
-                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_EDUCATION_QUALIFICATION, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
-                        break;
-                    case GET_COLLEGE_UNIVERSITY_INSTITUES:
-                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_INSTITUTES, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
-                        break;
-                    case GET_MEDICAL_COUNCILS:
-                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_MEDICAL_COUNCILS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
-                        break;
+//                    case GET_EDUCATION_QUALIFICATION:
+//                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_EDUCATION_QUALIFICATION, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+//                        break;
+//                    case GET_COLLEGE_UNIVERSITY_INSTITUES:
+//                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_INSTITUTES, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+//                        break;
+//                    case GET_MEDICAL_COUNCILS:
+//                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_MEDICAL_COUNCILS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+//                        break;
                     case GET_COMPLAINT_SUGGESTIONS:
                         new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_COMPLAINT_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
                         break;
@@ -622,21 +622,21 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
                     LocalDataServiceImpl.getInstance(mApp).
                             addPatientsList((ArrayList<RegisteredPatientDetailsUpdated>) (ArrayList<?>) response.getDataList());
                 break;
-            case ADD_EDUCATION_QUALIFICATION:
-                if (!Util.isNullOrEmptyList(response.getDataList()))
-                    LocalDataServiceImpl.getInstance(mApp).
-                            addEducationsList((ArrayList<EducationQualification>) (ArrayList<?>) response.getDataList());
-                break;
-            case ADD_INSTITUTES:
-                if (!Util.isNullOrEmptyList(response.getDataList()))
-                    LocalDataServiceImpl.getInstance(mApp).
-                            addCollegeUniversityInstituteList((ArrayList<CollegeUniversityInstitute>) (ArrayList<?>) response.getDataList());
-                break;
-            case ADD_MEDICAL_COUNCILS:
-                if (!Util.isNullOrEmptyList(response.getDataList()))
-                    LocalDataServiceImpl.getInstance(mApp).
-                            addMedicalCouncilList((ArrayList<MedicalCouncil>) (ArrayList<?>) response.getDataList());
-                break;
+//            case ADD_EDUCATION_QUALIFICATION:
+//                if (!Util.isNullOrEmptyList(response.getDataList()))
+//                    LocalDataServiceImpl.getInstance(mApp).
+//                            addEducationsList((ArrayList<EducationQualification>) (ArrayList<?>) response.getDataList());
+//                break;
+//            case ADD_INSTITUTES:
+//                if (!Util.isNullOrEmptyList(response.getDataList()))
+//                    LocalDataServiceImpl.getInstance(mApp).
+//                            addCollegeUniversityInstituteList((ArrayList<CollegeUniversityInstitute>) (ArrayList<?>) response.getDataList());
+//                break;
+//            case ADD_MEDICAL_COUNCILS:
+//                if (!Util.isNullOrEmptyList(response.getDataList()))
+//                    LocalDataServiceImpl.getInstance(mApp).
+//                            addMedicalCouncilList((ArrayList<MedicalCouncil>) (ArrayList<?>) response.getDataList());
+//                break;
             case ADD_COMPLAINT_SUGGESTIONS:
                 if (!Util.isNullOrEmptyList(response.getDataList()))
                     LocalDataServiceImpl.getInstance(mApp).
@@ -666,8 +666,8 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
                     LocalDataServiceImpl.getInstance(mApp).addDiseaseList((ArrayList<Disease>) (ArrayList<?>) response.getDataList());
                 break;
             case ADD_TEMPLATES:
-//                if (!Util.isNullOrEmptyList(response.getDataList()))
-//                    LocalDataServiceImpl.getInstance(mApp).addTemplatesList((ArrayList<TempTemplate>) (ArrayList<?>) response.getDataList());
+                if (!Util.isNullOrEmptyList(response.getDataList()))
+                    LocalDataServiceImpl.getInstance(mApp).addTemplatesList((ArrayList<TempTemplate>) (ArrayList<?>) response.getDataList());
             case ADD_DOCTORS_UI_PERMISSIONS:
                 if (response.getData() != null)
                     LocalDataServiceImpl.getInstance(mApp).
@@ -968,15 +968,5 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
         printIntent.setDataAndType(Uri.fromFile(new File(filePath)), Util.getMimeTypeOfFile(filePath));
         printIntent.putExtra(CloudPrintActivity.TAG_TITLE, CloudPrintActivity.DOC_TITLE);
         startActivity(printIntent);
-    }
-
-    public void hideKeyboard() {
-        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-    }
-
-    public void showKeyboard() {
-        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-        imm.showSoftInput(getCurrentFocus(), InputMethodManager.SHOW_IMPLICIT);
     }
 }

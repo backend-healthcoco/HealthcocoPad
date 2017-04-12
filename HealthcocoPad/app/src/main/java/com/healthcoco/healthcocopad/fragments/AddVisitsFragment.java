@@ -11,8 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.AutoCompleteTextView;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -35,11 +34,14 @@ import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.bean.server.VitalSigns;
+import com.healthcoco.healthcocopad.custom.HealthcocoOnSelectionChanged;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
+import com.healthcoco.healthcocopad.custom.MyScriptEditText;
 import com.healthcoco.healthcocopad.enums.ClinicalNotesPermissionType;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
+import com.healthcoco.healthcocopad.listeners.HealthcocoOnSelectionChangedListener;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
 import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
@@ -57,28 +59,12 @@ import org.parceler.Parcels;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import static android.content.Context.INPUT_METHOD_SERVICE;
-
 /**
  * Created by Shreshtha on 05-04-2017.
  */
 public class AddVisitsFragment extends HealthCocoFragment implements View.OnClickListener,
         Response.Listener<VolleyResponseBean>, GsonRequest.ErrorListener, LocalDoInBackgroundListenerOptimised,
-        SingleLineWidgetApi.OnConfiguredListener,
-        SingleLineWidgetApi.OnTextChangedListener,
-        SingleLineWidgetApi.OnSingleTapGestureListener,
-        SingleLineWidgetApi.OnLongPressGestureListener,
-        SingleLineWidgetApi.OnReturnGestureListener,
-        SingleLineWidgetApi.OnEraseGestureListener,
-        SingleLineWidgetApi.OnSelectGestureListener,
-        SingleLineWidgetApi.OnUnderlineGestureListener,
-        SingleLineWidgetApi.OnInsertGestureListener,
-        SingleLineWidgetApi.OnJoinGestureListener,
-        SingleLineWidgetApi.OnOverwriteGestureListener,
-        SingleLineWidgetApi.OnUserScrollBeginListener,
-        SingleLineWidgetApi.OnUserScrollEndListener,
-        SingleLineWidgetApi.OnUserScrollListener,
-        SingleLineWidgetApi.OnPenUpListener {
+        HealthcocoOnSelectionChangedListener {
     private static final int REQUEST_CODE_ADD_CLINICAL_NOTES = 100;
     private TextViewFontAwesome btClose;
     private ImageButton btClinicalNote;
@@ -118,7 +104,10 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
     private TextView tvBloodPressure;
     private LinearLayout layoutItempermission;
     private TextView tvTitle;
-    private AutoCompleteTextView autotvPermission;
+    private MyScriptEditText autotvPermission;
+    private MyScriptEditText etAdvice;
+    private MyScriptEditText editSystolic;
+    private MyScriptEditText editDiastolic;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -138,8 +127,8 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
     @Override
     public void init() {
         initViews();
-        initListeners();
         validateCertificate();
+        initListeners();
     }
 
     private void validateCertificate() {
@@ -161,18 +150,18 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
     @Override
     public void initViews() {
         svScrollView = (ScrollView) view.findViewById(R.id.sv_scrollview);
+        mWidget = (SingleLineWidgetApi) view.findViewById(R.id.widget);
         initToolbarView();
         initHeaderView();
-        setViewToWidget();
         initClinicalNotesView();
         initPrescriptionsView();
         initDiagonsticTestsView();
         initDiagramsViews();
         initAdviceViews();
+        hideKeyboard();
     }
 
     private void setViewToWidget() {
-        mWidget = (SingleLineWidgetApi) view.findViewById(R.id.widget);
 //        mWidget.setBaselinePosition(R.dimen.baseline_position);
 //        mWidget.setWritingAreaBackgroundResource(R.color.blue_translucent);
         mWidget.setScrollbarResource(R.drawable.sltw_scrollbar_xml);
@@ -181,9 +170,9 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
         mWidget.setLeftScrollArrowResource(R.drawable.sltw_arrowleft_xml);
         mWidget.setRightScrollArrowResource(R.drawable.sltw_arrowright_xml);
         mWidget.setCursorResource(R.drawable.sltw_text_cursor_holo_light);
-//        mWidget.addSearchDir("zip://" + mActivity.getPackageCodePath() + "!/assets/conf");
-//        mWidget.configure("en_US", "cur_text");
-//        mWidget.setText(mTextField.getText().toString());
+        mWidget.addSearchDir("zip://" + mActivity.getPackageCodePath() + "!/assets/conf");
+        mWidget.configure("en_US", "cur_text");
+        mWidget.setText(etAdvice.getText().toString());
         isCorrectionMode = 0;
     }
 
@@ -219,7 +208,11 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
         tvSpO2 = (TextView) view.findViewById(R.id.tv_spo2);
         layoutItempermission = (LinearLayout) mActivity.getLayoutInflater().inflate(R.layout.layout_item_add_clinical_note_permision, null);
         tvTitle = (TextView) layoutItempermission.findViewById(R.id.tv_title);
-        autotvPermission = (AutoCompleteTextView) layoutItempermission.findViewById(R.id.autotv_permission);
+
+        autotvPermission = (MyScriptEditText) layoutItempermission.findViewById(R.id.autotv_permission);
+
+        editSystolic = (MyScriptEditText) view.findViewById(R.id.et_systolic);
+        editDiastolic = (MyScriptEditText) view.findViewById(R.id.et_diastolic);
 
         //default UI ettings
         parentPermissionItems.removeAllViews();
@@ -245,6 +238,7 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
 
     private void initAdviceViews() {
         layoutParentAdvice = (LinearLayout) view.findViewById(R.id.layout_parent_advice);
+        etAdvice = (MyScriptEditText) view.findViewById(R.id.et_advice);
         layoutParentAdvice.setVisibility(View.GONE);
     }
 
@@ -257,23 +251,29 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
         btDiagrams.setOnClickListener(this);
         btAdvice.setOnClickListener(this);
         btSave.setOnClickListener(this);
+        initEditTextForWidget(etAdvice);
+        initEditTextForWidget(editSystolic);
+        initEditTextForWidget(editDiastolic);
+    }
 
-        mWidget.setOnConfiguredListener(this);
-        mWidget.setOnTextChangedListener(this);
-        mWidget.setOnReturnGestureListener(this);
-        mWidget.setOnEraseGestureListener(this);
-        mWidget.setOnSelectGestureListener(this);
-        mWidget.setOnUnderlineGestureListener(this);
-        mWidget.setOnInsertGestureListener(this);
-        mWidget.setOnJoinGestureListener(this);
-        mWidget.setOnOverwriteGestureListener(this);
-        mWidget.setOnSingleTapGestureListener(this);
-        mWidget.setOnLongPressGestureListener(this);
-        mWidget.setOnUserScrollBeginListener(this);
-        mWidget.setOnUserScrollEndListener(this);
-        mWidget.setOnUserScrollListener(this);
-        mWidget.setOnPenUpListener(this);
-//        mTextField.setOnSelectionChangedListener(this);
+    private void initEditTextForWidget(MyScriptEditText editText) {
+        mWidget.setOnConfiguredListener(new HealthcocoOnSelectionChanged(editText, this));
+        mWidget.setOnTextChangedListener(new HealthcocoOnSelectionChanged(editText, this));
+        mWidget.setOnReturnGestureListener(new HealthcocoOnSelectionChanged(editText, this));
+        mWidget.setOnEraseGestureListener(new HealthcocoOnSelectionChanged(editText, this));
+        mWidget.setOnSelectGestureListener(new HealthcocoOnSelectionChanged(editText, this));
+        mWidget.setOnUnderlineGestureListener(new HealthcocoOnSelectionChanged(editText, this));
+        mWidget.setOnInsertGestureListener(new HealthcocoOnSelectionChanged(editText, this));
+        mWidget.setOnJoinGestureListener(new HealthcocoOnSelectionChanged(editText, this));
+        mWidget.setOnOverwriteGestureListener(new HealthcocoOnSelectionChanged(editText, this));
+        mWidget.setOnSingleTapGestureListener(new HealthcocoOnSelectionChanged(editText, this));
+        mWidget.setOnLongPressGestureListener(new HealthcocoOnSelectionChanged(editText, this));
+        mWidget.setOnUserScrollBeginListener(new HealthcocoOnSelectionChanged(editText, this));
+        mWidget.setOnUserScrollEndListener(new HealthcocoOnSelectionChanged(editText, this));
+        mWidget.setOnUserScrollListener(new HealthcocoOnSelectionChanged(editText, this));
+        mWidget.setOnPenUpListener(new HealthcocoOnSelectionChanged(editText, this));
+        editText.setOnSelectionChangedListener(new HealthcocoOnSelectionChanged(editText, this));
+        setViewToWidget();
     }
 
     private void initData() {
@@ -287,7 +287,6 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
 
     private void initVitalSigns(VitalSigns vitalSigns) {
         selectedVitalSigns = vitalSigns;
-
         tvHeartRate.setText(R.string.no_text_dash);
         tvBloodPressure.setText(R.string.no_text_dash);
         tvBodyTemprature.setText(R.string.no_text_dash);
@@ -369,6 +368,7 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
     }
 
     private void addPermissionItem(ClinicalNotesPermissionType clinicalNotesPermissionType) {
+        parentPermissionItems.removeAllViews();
         tvTitle.setText(clinicalNotesPermissionType.getTextId());
         autotvPermission.setId(clinicalNotesPermissionType.getAutotvId());
         autotvPermission.setHint(clinicalNotesPermissionType.getHintId());
@@ -620,68 +620,75 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
     // Widget callbacks
 
     @Override
-    public void onConfigured(SingleLineWidgetApi w, boolean success) {
+    public void onConfigured(View view, SingleLineWidgetApi w, boolean success) {
         Log.d(TAG, "Widget configuration " + (success ? "done" : "failed"));
     }
 
     @Override
-    public void onTextChanged(SingleLineWidgetApi w, String text, boolean intermediate) {
+    public void onTextChanged(View view, SingleLineWidgetApi w, String text, boolean intermediate) {
         Log.d(TAG, "Text changed to \"" + text + "\" (" + (intermediate ? "intermediate" : "stable") + ")");
-        // temporarily disable selection changed listener to prevent spurious cursor jumps
-//        mTextField.setOnSelectionChangedListener(null);
-//        mTextField.setTextKeepState(text);
-//        if (isCorrectionMode == 0) {
-//            mTextField.setSelection(text.length());
-//            mTextField.setOnSelectionChangedListener(this);
-//            mWidget.setCursorIndex(mTextField.length());
-//            //to set scrolling position
-//            mWidget.scrollTo(mTextField.length() - 1);
-//        } else {
-//            mTextField.setSelection(mWidget.getCursorIndex());
-//            mTextField.setOnSelectionChangedListener(this);
-//            isCorrectionMode--;
-//        }
+        if (view instanceof EditText) {
+            MyScriptEditText editText = (MyScriptEditText) view;
+            // temporarily disable selection changed listener to prevent spurious cursor jumps
+            editText.setOnSelectionChangedListener(null);
+            editText.setTextKeepState(text);
+            if (isCorrectionMode == 0) {
+                editText.setSelection(text.length());
+                editText.setOnSelectionChangedListener(new HealthcocoOnSelectionChanged(editText, this));
+                mWidget.setCursorIndex(editText.length());
+                //to set scrolling position
+                mWidget.scrollTo(editText.length() - 1);
+            } else {
+                editText.setSelection(mWidget.getCursorIndex());
+                editText.setOnSelectionChangedListener(new HealthcocoOnSelectionChanged(editText, this));
+                isCorrectionMode--;
+            }
+        }
+
     }
 
     @Override
-    public void onReturnGesture(SingleLineWidgetApi w, int index) {
+    public void onReturnGesture(View view, SingleLineWidgetApi w, int index) {
         Log.d(TAG, "Return gesture detected at index " + index);
         mWidget.replaceCharacters(index, index, "\n");
     }
 
     @Override
-    public void onSingleTapGesture(SingleLineWidgetApi w, int index) {
+    public void onSingleTapGesture(View view, SingleLineWidgetApi w, int index) {
         Log.d(TAG, "Single tap gesture detected at index=" + index);
-        mWidget.setCursorIndex(index);
-//        mTextField.setSelection(index);
+        if (view instanceof EditText) {
+            MyScriptEditText editText = (MyScriptEditText) view;
+            mWidget.setCursorIndex(index);
+            editText.setSelection(index);
+        }
     }
 
     @Override
-    public void onLongPressGesture(SingleLineWidgetApi w, int index) {
+    public void onLongPressGesture(View view, SingleLineWidgetApi w, int index) {
         Log.d(TAG, "Long press gesture detected at index=" + index);
         mWidget.setCursorIndex(index);
         isCorrectionMode++;
     }
 
     @Override
-    public void onEraseGesture(SingleLineWidgetApi w, int start, int end) {
+    public void onEraseGesture(View view, SingleLineWidgetApi w, int start, int end) {
         Log.d(TAG, "Erase gesture detected for range [" + start + "-" + end + "]");
         mWidget.setCursorIndex(start);
         isCorrectionMode++;
     }
 
     @Override
-    public void onSelectGesture(SingleLineWidgetApi w, int start, int end) {
+    public void onSelectGesture(View view, SingleLineWidgetApi w, int start, int end) {
         Log.d(TAG, "Select gesture detected for range [" + start + "-" + end + "]");
     }
 
     @Override
-    public void onUnderlineGesture(SingleLineWidgetApi w, int start, int end) {
+    public void onUnderlineGesture(View view, SingleLineWidgetApi w, int start, int end) {
         Log.d(TAG, "Underline gesture detected for range [" + start + "-" + end + "]");
     }
 
     @Override
-    public void onInsertGesture(SingleLineWidgetApi w, int index) {
+    public void onInsertGesture(View view, SingleLineWidgetApi w, int index) {
         Log.d(TAG, "Insert gesture detected at index " + index);
         mWidget.replaceCharacters(index, index, " ");
         mWidget.setCursorIndex(index + 1);
@@ -689,7 +696,7 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
     }
 
     @Override
-    public void onJoinGesture(SingleLineWidgetApi w, int start, int end) {
+    public void onJoinGesture(View view, SingleLineWidgetApi w, int start, int end) {
         Log.d(TAG, "Join gesture detected for range [" + start + "-" + end + "]");
         mWidget.replaceCharacters(start, end, null);
         mWidget.setCursorIndex(start);
@@ -697,35 +704,51 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
     }
 
     @Override
-    public void onOverwriteGesture(SingleLineWidgetApi w, int start, int end) {
+    public void onOverwriteGesture(View view, SingleLineWidgetApi w, int start, int end) {
         Log.d(TAG, "Overwrite gesture detected for range [" + start + "-" + end + "]");
         mWidget.setCursorIndex(end);
         isCorrectionMode++;
     }
 
     @Override
-    public void onUserScrollBegin(SingleLineWidgetApi w) {
+    public void onUserScrollBegin(View view, SingleLineWidgetApi w) {
         Log.d(TAG, "User scroll begin");
     }
 
     @Override
-    public void onUserScrollEnd(SingleLineWidgetApi w) {
+    public void onUserScrollEnd(View view, SingleLineWidgetApi w) {
         Log.d(TAG, "User scroll end");
     }
 
     @Override
-    public void onUserScroll(SingleLineWidgetApi w) {
+    public void onUserScroll(View view, SingleLineWidgetApi w) {
         Log.d(TAG, "User scroll");
-        if (mWidget.moveCursorToVisibleIndex()) {
-            // temporarily disable selection changed listener
-//            mTextField.setOnSelectionChangedListener(null);
-//            mTextField.setSelection(mWidget.getCursorIndex());
-//            mTextField.setOnSelectionChangedListener(this);
+        if (view instanceof EditText) {
+            MyScriptEditText editText = (MyScriptEditText) view;
+            if (mWidget.moveCursorToVisibleIndex()) {
+                // temporarily disable selection changed listener
+                editText.setOnSelectionChangedListener(null);
+                editText.setSelection(mWidget.getCursorIndex());
+                editText.setOnSelectionChangedListener(new HealthcocoOnSelectionChanged(editText, this));
+            }
         }
     }
 
     @Override
-    public void onPenUp(SingleLineWidgetApi singleLineWidgetApi, CaptureInfo captureInfo) {
+    public void onPenUp(View view, SingleLineWidgetApi singleLineWidgetApi, CaptureInfo captureInfo) {
 
+    }
+
+    @Override
+    public void onSelectionChanged(EditText editText, int selStart, int selEnd) {
+        Log.d(TAG, "Selection changed to [" + selStart + "-" + selEnd + "]");
+        if (mWidget.getCursorIndex() != selEnd) {
+            mWidget.setCursorIndex(selEnd);
+            if (selEnd == mWidget.getText().length()) {
+                mWidget.scrollTo(selEnd);
+            } else {
+                mWidget.centerTo(selEnd);
+            }
+        }
     }
 }

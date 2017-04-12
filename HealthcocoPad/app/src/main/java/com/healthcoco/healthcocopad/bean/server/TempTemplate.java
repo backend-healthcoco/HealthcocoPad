@@ -4,8 +4,10 @@ import com.orm.SugarRecord;
 import com.orm.annotation.Ignore;
 import com.orm.annotation.Unique;
 
-import java.util.List;
+import org.parceler.Parcel;
 
+import java.util.List;
+@Parcel
 public class TempTemplate extends SugarRecord {
     private String name;
     @Unique

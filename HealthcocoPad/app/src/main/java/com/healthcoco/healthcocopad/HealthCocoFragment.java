@@ -56,6 +56,8 @@ import org.parceler.Parcels;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.content.Context.INPUT_METHOD_SERVICE;
+
 /**
  * Created by Shreshtha on 18-01-2017.
  */
@@ -142,7 +144,7 @@ public abstract class HealthCocoFragment extends Fragment implements GsonRequest
      * @author nehas
      */
     protected void hideKeyboard(View view) {
-        InputMethodManager in = (InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
+        InputMethodManager in = (InputMethodManager) mActivity.getSystemService(INPUT_METHOD_SERVICE);
         in.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_IMPLICIT_ONLY);
     }
 
@@ -437,5 +439,15 @@ public abstract class HealthCocoFragment extends Fragment implements GsonRequest
         toast.setMargin(0, 0);
         toast.setGravity(Gravity.TOP, 0, 0);
         toast.show();
+    }
+
+    protected void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager) mActivity.getSystemService(INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(mActivity.getCurrentFocus().getWindowToken(), 0);
+    }
+
+    protected void showKeyboard() {
+        InputMethodManager imm = (InputMethodManager) mActivity.getSystemService(INPUT_METHOD_SERVICE);
+        imm.showSoftInput(mActivity.getCurrentFocus(), InputMethodManager.SHOW_IMPLICIT);
     }
 }

@@ -9,6 +9,7 @@ import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,7 +58,9 @@ import static com.healthcoco.healthcocopad.enums.WebServiceType.GET_PATIENT_VISI
  * Created by Shreshtha on 07-03-2017.
  */
 public class PatientVisitDetailFragment extends HealthCocoFragment implements Response.Listener<VolleyResponseBean>,
-        GsonRequest.ErrorListener, LocalDoInBackgroundListenerOptimised, VisitDetailCombinedItemListener, LoadMorePageListener, View.OnClickListener {
+        GsonRequest.ErrorListener, LocalDoInBackgroundListenerOptimised, VisitDetailCombinedItemListener,
+        SwipeRefreshLayout.OnRefreshListener,
+        LoadMorePageListener, View.OnClickListener {
     //variables need for pagination
     public static final int MAX_SIZE = 10;
     private static final int REQUEST_CODE_VISITS_LIST = 100;
@@ -78,7 +81,8 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
     private PatientDetailVisitAdapter patientsVisitAdapter;
     private boolean isLoading;
     private OptionsPopupWindow popupWindow;
-
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private int currentPageNumber;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -115,12 +119,14 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
         tvNoVisits = (TextView) view.findViewById(R.id.tv_no_visits_found);
         progressLoading = (ProgressBar) view.findViewById(R.id.progress_loading);
         lvVisits = (ListViewLoadMore) view.findViewById(R.id.lv_visits);
-//        lvVisits.setExpanded(true);
+        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
     }
 
     @Override
     public void initListeners() {
-
+        lvVisits.setLoadMoreListener(this);
+        lvVisits.setSwipeRefreshLayout(swipeRefreshLayout);
+        swipeRefreshLayout.setOnRefreshListener(this);
     }
 
     private void initAdapter() {
@@ -131,7 +137,7 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
     public void refreshData(User user, RegisteredPatientDetailsUpdated registeredPatientDetailsUpdated) {
         this.selectedPatient = registeredPatientDetailsUpdated;
         this.user = user;
-        getListFromLocal(true);
+        getListFromLocal(true,0);
     }
 
     public void getVisits(boolean showLoading) {
@@ -176,6 +182,7 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
         }
         progressLoading.setVisibility(View.GONE);
         mActivity.hideLoading();
+        swipeRefreshLayout.setRefreshing(false);
         Util.showToast(mActivity, errorMsg);
     }
 
@@ -183,6 +190,7 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
     public void onNetworkUnavailable(WebServiceType webServiceType) {
         Util.showToast(mActivity, R.string.user_offline);
         mActivity.hideLoading();
+        swipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
@@ -226,6 +234,7 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
         }
         progressLoading.setVisibility(View.GONE);
         mActivity.hideLoading();
+        swipeRefreshLayout.setRefreshing(false);
     }
 
     private void formHashMapAndRefresh(ArrayList<VisitDetails> responseList) {
@@ -293,25 +302,29 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
         if (!isEndOfListAchieved && !isLoading) {
             PAGE_NUMBER = PAGE_NUMBER + 1;
             LogUtils.LOGD(TAG, "LoadMore PAGE_NUMBER " + PAGE_NUMBER);
-            getListFromLocal(false);
+            getListFromLocal(false, PAGE_NUMBER);
         }
     }
 
     private void resetListAndPagingAttributes() {
         PAGE_NUMBER = 0;
         isEndOfListAchieved = false;
+        currentPageNumber = 0;
+        lvVisits.resetPreLastPosition(0);
     }
 
     public boolean isEndOfListAchieved() {
         return isEndOfListAchieved;
     }
 
-    public void getListFromLocal(boolean initialLoading) {
+    public void getListFromLocal(boolean initialLoading, int pageNum) {
         this.isInitialLoading = initialLoading;
+        this.currentPageNumber = pageNum;
         isLoading = true;
         if (isInitialLoading) {
             if (isInitialLoading)
                 mActivity.showLoading(false);
+            this.currentPageNumber = 0;
             progressLoading.setVisibility(View.GONE);
         } else
             progressLoading.setVisibility(View.VISIBLE);
@@ -322,8 +335,18 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_VISITS_LIST) {
-
+            if (resultCode == HealthCocoConstants.RESULT_CODE_ADD_VISIT && data != null ){
+//                    && data.hasExtra(VisitDetailFragment.TAG_VISIT_ID)) {
+                refreshListFromLocal();
+                // opens visitDetail screen once visit is added
+//                String visitId = data.getStringExtra(VisitDetailFragment.TAG_VISIT_ID);
+            }
         }
+    }
+
+    private void refreshListFromLocal() {
+        resetListAndPagingAttributes();
+        getListFromLocal(true, 0);
     }
 
     @Override
@@ -374,7 +397,6 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
     }
 
     private void openNewTemplatesFragment(Prescription prescription) {
-//        openCommonOpenUpActivity(CommonOpenUpFragmentType.ADD_NEW_TEMPLATE, prescription, REQUEST_CODE_VISITS_LIST);
         openCommonOpenUpActivity(CommonOpenUpFragmentType.ADD_NEW_TEMPLATE, null, REQUEST_CODE_VISITS_LIST);
     }
 
@@ -447,5 +469,10 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
             startActivity(intent);
         else
             startActivityForResult(intent, requestCode);
+    }
+
+    @Override
+    public void onRefresh() {
+        getVisits(false);
     }
 }
