@@ -10,7 +10,6 @@ import com.healthcoco.healthcocopad.bean.server.VisitDetails;
 import com.healthcoco.healthcocopad.listeners.VisitDetailCombinedItemListener;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
-import com.healthcoco.healthcocopad.viewholders.TempVisitDetaiCombinedViewHolder;
 import com.healthcoco.healthcocopad.viewholders.VisitDetailCombinedViewHolder;
 
 import java.util.List;
@@ -57,11 +56,11 @@ public class PatientDetailVisitAdapter
     public View getView(int position, View convertView, ViewGroup parent) {
         LogUtils.LOGD(TAG, "notifyAdapter size " + position);
         if (convertView == null) {
-            holder = new TempVisitDetaiCombinedViewHolder(mActivity, listItemClickListener);
+            holder = new VisitDetailCombinedViewHolder(mActivity, listItemClickListener);
             convertView = holder.getContentView();
             convertView.setTag(holder);
         } else
-            holder = (TempVisitDetaiCombinedViewHolder) convertView.getTag();
+            holder = (VisitDetailCombinedViewHolder) convertView.getTag();
         holder.setData(getItem(position));
         holder.applyData();
         return convertView;
