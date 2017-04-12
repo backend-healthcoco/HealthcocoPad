@@ -4,12 +4,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
-
 import com.healthcoco.healthcocopad.HealthCocoActivity;
+import com.healthcoco.healthcocopad.HealthCocoViewHolder;
 import com.healthcoco.healthcocopad.bean.server.VisitDetails;
 import com.healthcoco.healthcocopad.listeners.VisitDetailCombinedItemListener;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
+import com.healthcoco.healthcocopad.viewholders.TempVisitDetaiCombinedViewHolder;
 import com.healthcoco.healthcocopad.viewholders.VisitDetailCombinedViewHolder;
 
 import java.util.List;
@@ -23,7 +24,7 @@ public class PatientDetailVisitAdapter
     private VisitDetailCombinedItemListener listItemClickListener;
     private List<VisitDetails> list;
     private HealthCocoActivity mActivity;
-    private VisitDetailCombinedViewHolder holder;
+    private HealthCocoViewHolder holder;
     private VisitDetailCombinedItemListener visitDetailCombinedItemListener;
 
     public PatientDetailVisitAdapter() {
@@ -56,11 +57,11 @@ public class PatientDetailVisitAdapter
     public View getView(int position, View convertView, ViewGroup parent) {
         LogUtils.LOGD(TAG, "notifyAdapter size " + position);
         if (convertView == null) {
-            holder = new VisitDetailCombinedViewHolder(mActivity,listItemClickListener);
+            holder = new TempVisitDetaiCombinedViewHolder(mActivity, listItemClickListener);
             convertView = holder.getContentView();
             convertView.setTag(holder);
         } else
-            holder = (VisitDetailCombinedViewHolder) convertView.getTag();
+            holder = (TempVisitDetaiCombinedViewHolder) convertView.getTag();
         holder.setData(getItem(position));
         holder.applyData();
         return convertView;

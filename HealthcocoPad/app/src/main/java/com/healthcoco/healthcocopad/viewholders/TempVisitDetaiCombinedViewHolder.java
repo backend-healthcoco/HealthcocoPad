@@ -15,15 +15,17 @@ import com.healthcoco.healthcocopad.bean.server.VisitDetails;
 import com.healthcoco.healthcocopad.enums.VisitedForType;
 import com.healthcoco.healthcocopad.listeners.VisitDetailCombinedItemListener;
 import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
+import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by neha on 02/09/16.
+ * Created by neha on 11/04/17.
  */
-public class VisitDetailCombinedViewHolder extends HealthCocoViewHolder implements View.OnClickListener {
+
+public class TempVisitDetaiCombinedViewHolder extends HealthCocoViewHolder implements View.OnClickListener {
 
     private VisitDetails visitDetail;
     private LinearLayout btPrint;
@@ -38,12 +40,12 @@ public class VisitDetailCombinedViewHolder extends HealthCocoViewHolder implemen
     private TextView tvCreatedBy;
     private TextView tvVisitDate;
     private LinearLayout containerPrescription;
-    private LinearLayout containerClinocalNotes;
+    private LinearLayout containerClinicalNotes;
     private LinearLayout containerTreatment;
     private LinearLayout containerReports;
     private LinearLayout btOpen;
 
-    public VisitDetailCombinedViewHolder(HealthCocoActivity mActivity, VisitDetailCombinedItemListener listItemClickListener) {
+    public TempVisitDetaiCombinedViewHolder(HealthCocoActivity mActivity, VisitDetailCombinedItemListener listItemClickListener) {
         super(mActivity);
         this.mActivity = mActivity;
         this.listItemClickListener = listItemClickListener;
@@ -67,6 +69,7 @@ public class VisitDetailCombinedViewHolder extends HealthCocoViewHolder implemen
         initClinicalNotesView(contentView);
         initPrescriptionsView(contentView);
         initTreatmentsView(contentView);
+        initReportsView(contentView);
         initBottomButtonViews(contentView);
     }
 
@@ -88,16 +91,34 @@ public class VisitDetailCombinedViewHolder extends HealthCocoViewHolder implemen
     }
 
     private void initClinicalNotesView(View contentView) {
-        containerClinocalNotes = (LinearLayout) contentView.findViewById(R.id.container_clinical_notes);
-        containerReports = (LinearLayout) contentView.findViewById(R.id.container_reports);
+        LogUtils.LOGD(TAG, "initClinicalViews ");
+        containerClinicalNotes = (LinearLayout) contentView.findViewById(R.id.container_clinical_notes);
+        ClinicalNotesListItemViewHolder clinicalNotesListItemViewHolder = new ClinicalNotesListItemViewHolder(mActivity, listItemClickListener, false);
+        containerClinicalNotes.addView(clinicalNotesListItemViewHolder.getContentView());
+        containerClinicalNotes.setTag(clinicalNotesListItemViewHolder);
     }
 
     private void initPrescriptionsView(View contentView) {
+        LogUtils.LOGD(TAG, "initPrescriptionViews ");
         containerPrescription = (LinearLayout) contentView.findViewById(R.id.container_prescription);
+        PrescriptionListItemViewHolder prescriptionListItemViewHolder = new PrescriptionListItemViewHolder(mActivity, listItemClickListener, false);
+        containerPrescription.addView(prescriptionListItemViewHolder.getContentView());
+        containerPrescription.setTag(prescriptionListItemViewHolder);
+    }
+
+    private void initReportsView(View contentView) {
+        containerReports = (LinearLayout) contentView.findViewById(R.id.container_reports);
+        LogUtils.LOGD(TAG, "initReportsViews ");
+        ReportsListItemViewHolder reportsListItemViewHolder = new ReportsListItemViewHolder(mActivity, listItemClickListener, false);
+        containerReports.addView(reportsListItemViewHolder.getContentView());
+        containerReports.setTag(reportsListItemViewHolder);
     }
 
     private void initTreatmentsView(View contentView) {
         containerTreatment = (LinearLayout) contentView.findViewById(R.id.container_treatments);
+        TreatmentListItemViewHolder treatmentListItemViewHolder = new TreatmentListItemViewHolder(mActivity, listItemClickListener, false);
+        containerTreatment.addView(treatmentListItemViewHolder.getContentView());
+        containerTreatment.setTag(treatmentListItemViewHolder);
     }
 
     private void initListeners() {
@@ -113,50 +134,61 @@ public class VisitDetailCombinedViewHolder extends HealthCocoViewHolder implemen
     @Override
     public void applyData() {
         setVisibilityOfButtons(View.GONE);
-        containerClinocalNotes.removeAllViews();
-        containerPrescription.removeAllViews();
-        containerTreatment.removeAllViews();
-        containerReports.removeAllViews();
+//        containerClinicalNotes.removeAllViews();
+//        containerPrescription.removeAllViews();
+//        containerTreatment.removeAllViews();
+//        containerReports.removeAllViews();
         if (!Util.isNullOrEmptyList(visitDetail.getClinicalNotes())) {
+            containerClinicalNotes.setVisibility(View.VISIBLE);
             setButtonVisible(VisitedForType.CLINICAL_NOTES);
             List<ClinicalNotes> clinicalNotesList = visitDetail.getClinicalNotes();
             for (ClinicalNotes clinicalNotes : clinicalNotesList) {
-                ClinicalNotesListItemViewHolder clinicalNotesListItemViewHolder = new ClinicalNotesListItemViewHolder(mActivity, listItemClickListener, false);
-                containerClinocalNotes.addView(clinicalNotesListItemViewHolder.getContentView());
+                ClinicalNotesListItemViewHolder clinicalNotesListItemViewHolder = (ClinicalNotesListItemViewHolder) containerClinicalNotes.getTag();
+//                ClinicalNotesListItemViewHolder clinicalNotesListItemViewHolder = new ClinicalNotesListItemViewHolder(mActivity, listItemClickListener, false);
+//                containerClinicalNotes.addView(clinicalNotesListItemViewHolder.getContentView());
                 clinicalNotesListItemViewHolder.setData(clinicalNotes);
                 clinicalNotesListItemViewHolder.applyData();
             }
-        }
+        } else
+            containerClinicalNotes.setVisibility(View.GONE);
         if (!Util.isNullOrEmptyList(visitDetail.getPrescriptions())) {
+            containerPrescription.setVisibility(View.VISIBLE);
             setButtonVisible(VisitedForType.PRESCRIPTION);
             List<Prescription> prescriptionsList = visitDetail.getPrescriptions();
             for (Prescription prescription : prescriptionsList) {
-                PrescriptionListItemViewHolder prescriptionListItemViewHolder = new PrescriptionListItemViewHolder(mActivity, listItemClickListener, false);
-                containerPrescription.addView(prescriptionListItemViewHolder.getContentView());
+                PrescriptionListItemViewHolder prescriptionListItemViewHolder = (PrescriptionListItemViewHolder) containerPrescription.getTag();
+//                PrescriptionListItemViewHolder prescriptionListItemViewHolder = new PrescriptionListItemViewHolder(mActivity, listItemClickListener, false);
+//                containerPrescription.addView(prescriptionListItemViewHolder.getContentView());
                 prescriptionListItemViewHolder.setData(prescription);
                 prescriptionListItemViewHolder.applyData();
             }
-        }
+        } else containerPrescription.setVisibility(View.GONE);
         if (!Util.isNullOrEmptyList(visitDetail.getPatientTreatments())) {
+            containerTreatment.setVisibility(View.VISIBLE);
             setButtonVisible(VisitedForType.TREATMENT);
             List<PatientTreatment> patientTreatmentList = visitDetail.getPatientTreatments();
             for (PatientTreatment treatment : patientTreatmentList) {
-                TreatmentListItemViewHolder treatmentListItemViewHolder = new TreatmentListItemViewHolder(mActivity, listItemClickListener, false);
-                containerTreatment.addView(treatmentListItemViewHolder.getContentView());
+                TreatmentListItemViewHolder treatmentListItemViewHolder = (TreatmentListItemViewHolder) containerPrescription.getTag();
+//                TreatmentListItemViewHolder treatmentListItemViewHolder = new TreatmentListItemViewHolder(mActivity, listItemClickListener, false);
+//                containerTreatment.addView(treatmentListItemViewHolder.getContentView());
                 treatmentListItemViewHolder.setData(treatment);
                 treatmentListItemViewHolder.applyData();
             }
-        }
+        } else
+            containerTreatment.setVisibility(View.GONE);
+
         if (!Util.isNullOrEmptyList(visitDetail.getRecords())) {
+            containerReports.setVisibility(View.VISIBLE);
             setButtonVisible(VisitedForType.REPORTS);
             for (Records record : visitDetail.getRecords()) {
-                ReportsListItemViewHolder reportViewHolder = new ReportsListItemViewHolder(mActivity, listItemClickListener, false);
-                View convertView = reportViewHolder.getContentView();
-                reportViewHolder.setData(record);
-                reportViewHolder.applyData();
-                containerReports.addView(convertView);
+                ReportsListItemViewHolder reportsListItemViewHolder = (ReportsListItemViewHolder) containerReports.getTag();
+//                TreatmentListItemViewHolder treatmentListItemViewHolder = new TreatmentListItemViewHolder(mActivity, listItemClickListener, false);
+//                containerTreatment.addView(treatmentListItemViewHolder.getContentView());
+                reportsListItemViewHolder.setData(record);
+                reportsListItemViewHolder.applyData();
             }
-        }
+        } else
+            containerReports.setVisibility(View.GONE);
         tvVID.setText(mActivity.getResources().getString(R.string.vid) + Util.getValidatedValue(visitDetail.getUniqueEmrId()));
         tvCreatedBy.setText(Util.getValidatedValue(visitDetail.getCreatedBy()));
         tvVisitDate.setText(DateTimeUtil.getFormatedDate(visitDetail.getVisitedTime()));

@@ -15,8 +15,10 @@ import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.adapter.SettingsListAdapter;
+import com.healthcoco.healthcocopad.bean.server.GCMRequest;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.SettingsItemType;
+import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.orm.SugarContext;
 
@@ -120,7 +122,6 @@ public class SettingsFragment extends HealthCocoFragment implements AdapterView.
         intent.putExtra(HealthCocoConstants.TAG_NAME_EDIT_TYPE, typeOrdinal);
         startActivity(intent);
     }
-
     private void showConfirmSignOutAlert() {
         final AlertDialog.Builder alertBuilder = new AlertDialog.Builder(mActivity);
         alertBuilder.setTitle(R.string.confirm);
@@ -132,7 +133,6 @@ public class SettingsFragment extends HealthCocoFragment implements AdapterView.
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 clearAndCreateDatabaseStructure();
-                mActivity.initGCM();
             }
         });
         alertBuilder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
@@ -155,8 +155,12 @@ public class SettingsFragment extends HealthCocoFragment implements AdapterView.
 
             @Override
             protected Void doInBackground(Void... params) {
-                mActivity.deleteDatabase(getResources().getString(R.string.database_name));
-                SugarContext.init(mApp);
+//                mActivity.deleteDatabase(getResources().getString(R.string.database_name));
+                GCMRequest gcmRequest = LocalDataServiceImpl.getInstance(mApp).getGCMRequestData();
+                gcmRequest.setUserIdsJsonString(null);
+                gcmRequest.setUserIds(null);
+                LocalDataServiceImpl.getInstance(mApp).addGCMRequest(gcmRequest);
+                LocalDataServiceImpl.getInstance(mApp).clearAllTables(mActivity);
                 mApp.cancelAllPendingRequests();
                 return null;
             }
@@ -164,6 +168,7 @@ public class SettingsFragment extends HealthCocoFragment implements AdapterView.
             @Override
             protected void onPostExecute(Void aVoid) {
                 super.onPostExecute(aVoid);
+                mActivity.initGCM();
                 mActivity.hideLoading();
                 mActivity.openLoginSignupActivity();
             }

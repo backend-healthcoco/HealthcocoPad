@@ -7,8 +7,9 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
-import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
+import com.healthcoco.healthcocopad.R;
+import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.adapter.UIPermissionItemGridAdapter;
 import com.healthcoco.healthcocopad.bean.server.AllUIPermission;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
@@ -24,7 +25,7 @@ import java.util.List;
 /**
  * Created by Shreshtha on 28-02-2017.
  */
-public class PrescriptionUIPermissionFragment extends HealthCocoFragment implements AdapterView.OnItemClickListener {
+public class PrescriptionUIPermissionFragment extends HealthCocoFragment implements AdapterView.OnItemClickListener, View.OnClickListener {
     private User user;
     private AllUIPermission allUIPermission;
     private GridView gvSettingsUIPermission;
@@ -71,6 +72,7 @@ public class PrescriptionUIPermissionFragment extends HealthCocoFragment impleme
 
     @Override
     public void initListeners() {
+        ((CommonOpenUpActivity) mActivity).initActionbarRightAction(this);
         gvSettingsUIPermission.setOnItemClickListener(this);
     }
 
@@ -98,6 +100,19 @@ public class PrescriptionUIPermissionFragment extends HealthCocoFragment impleme
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.container_right_action:
+                switch (fragmentType) {
+                    case SETTINGS_UI_PERMISSION_PRESCRIPTION:
+                        break;
+                }
+                break;
+        }
 
     }
 }

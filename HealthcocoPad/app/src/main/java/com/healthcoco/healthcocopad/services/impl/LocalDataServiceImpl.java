@@ -1,5 +1,6 @@
 package com.healthcoco.healthcocopad.services.impl;
 
+import android.content.Context;
 import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
 
@@ -127,6 +128,8 @@ import com.orm.query.Select;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import static com.orm.util.ReflectionUtil.getDomainClasses;
 
 /**
  * Created by Shreshtha on 23-01-2017.
@@ -3093,5 +3096,20 @@ public class LocalDataServiceImpl {
             showErrorLocal(volleyResponseBean, errorListener);
         }
         return volleyResponseBean;
+    }
+
+    public void clearAllTables(Context context) {
+        try {
+            List<Class> allClasses = getDomainClasses();
+            if (!Util.isNullOrEmptyList(allClasses)) {
+                for (Class class1 :
+                        allClasses) {
+                    if (!class1.equals(GCMRequest.class))
+                        SugarRecord.deleteAll(class1);
+                }
+            }
+        } catch (Exception e) {
+            LogUtils.LOGD(TAG, "Error Package name not found ", e);
+        }
     }
 }

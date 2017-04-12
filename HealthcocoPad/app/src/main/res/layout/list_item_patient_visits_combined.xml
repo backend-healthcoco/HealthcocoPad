@@ -101,7 +101,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/item_visits_button_padding_left_right_20dp"
-            android:baselineAligned="false">
+            android:baselineAligned="false"
+            android:clickable="false">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -110,12 +111,13 @@
                 android:orientation="horizontal">
 
                 <LinearLayout
-                    android:id="@+id/bt_open"
+                    android:id="@+id/bt_open_visit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/item_visits_button_padding_left_right_20dp"
                     android:layout_weight="1"
                     android:background="@drawable/shape_rounded_corners_item_background_dark_grey"
+                    android:clickable="true"
                     android:gravity="center"
                     android:padding="5dp"
                     android:visibility="visible">
@@ -135,12 +137,13 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/bt_history"
+                    android:id="@+id/bt_history_visit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/item_visits_button_padding_left_right_20dp"
                     android:layout_weight="1"
                     android:background="@drawable/shape_rounded_corners_item_background_dark_grey"
+                    android:clickable="true"
                     android:gravity="center"
                     android:padding="5dp">
 
@@ -165,13 +168,14 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/bt_email"
+                    android:id="@+id/bt_email_visit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/item_visits_button_padding_left_right_20dp"
                     android:layout_marginRight="@dimen/item_visits_button_padding_left_right_20dp"
                     android:layout_weight="1"
                     android:background="@drawable/shape_rounded_corners_item_background_dark_grey"
+                    android:clickable="true"
                     android:gravity="center"
                     android:padding="5dp">
 
@@ -190,12 +194,13 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/bt_sms"
+                    android:id="@+id/bt_sms_visit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="@dimen/item_visits_button_padding_left_right_20dp"
                     android:layout_weight="1"
                     android:background="@drawable/shape_rounded_corners_item_background_dark_grey"
+                    android:clickable="true"
                     android:gravity="center"
                     android:padding="5dp">
 
@@ -223,7 +228,7 @@
                 android:orientation="horizontal">
 
                 <LinearLayout
-                    android:id="@+id/bt_save_as_template"
+                    android:id="@+id/bt_save_as_template_visit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="@dimen/item_visits_button_padding_left_right_20dp"
@@ -249,7 +254,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/bt_clone"
+                    android:id="@+id/bt_clone_visit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="@dimen/item_visits_button_padding_left_right_20dp"
@@ -260,8 +265,10 @@
                     android:visibility="visible">
 
                     <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+                        android:id="@+id/textViewFontAwesome"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:layout_marginRight="5dp"
                         android:background="@color/white"
                         android:gravity="center|start"
@@ -269,15 +276,13 @@
                         android:paddingLeft="@dimen/item_visits_button_padding_left_right_20dp"
                         android:paddingRight="@dimen/item_visits_button_padding_left_right_20dp"
                         android:paddingTop="3dp"
-                        android:layout_gravity="center"
                         android:text="@string/fa_clone"
                         android:textColor="@drawable/text_selector_grey_blue"
-                        android:textSize="@dimen/text_size_bt_history_edit_sms_email"
-                        android:id="@+id/textViewFontAwesome" />
+                        android:textSize="@dimen/text_size_bt_history_edit_sms_email" />
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/bt_print"
+                    android:id="@+id/bt_print_visit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="@dimen/item_visits_button_padding_left_right_20dp"
@@ -303,7 +308,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/bt_edit"
+                    android:id="@+id/bt_edit_visit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="@dimen/item_visits_button_padding_left_right_20dp"
