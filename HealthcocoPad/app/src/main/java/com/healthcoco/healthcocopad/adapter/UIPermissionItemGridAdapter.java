@@ -5,6 +5,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
 import com.healthcoco.healthcocopad.HealthCocoActivity;
+import com.healthcoco.healthcocopad.listeners.CommonUiPermissionsListener;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.healthcoco.healthcocopad.viewholders.SettingsUIPermissionItemViewHolder;
 
@@ -14,6 +15,7 @@ import java.util.List;
  * Created by Shreshtha on 28-02-2017.
  */
 public class UIPermissionItemGridAdapter extends BaseAdapter {
+    private CommonUiPermissionsListener commonUiPermissionsListener;
     private HealthCocoActivity mActivity;
     private SettingsUIPermissionItemViewHolder holder;
     private List<String> list;
@@ -21,8 +23,9 @@ public class UIPermissionItemGridAdapter extends BaseAdapter {
     public UIPermissionItemGridAdapter() {
     }
 
-    public UIPermissionItemGridAdapter(HealthCocoActivity activity) {
+    public UIPermissionItemGridAdapter(HealthCocoActivity activity, CommonUiPermissionsListener commonUiPermissionsListener) {
         this.mActivity = activity;
+        this.commonUiPermissionsListener = commonUiPermissionsListener;
     }
 
     @Override
@@ -45,17 +48,17 @@ public class UIPermissionItemGridAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            holder = new SettingsUIPermissionItemViewHolder(mActivity);
+            holder = new SettingsUIPermissionItemViewHolder(mActivity,commonUiPermissionsListener);
             convertView = holder.getContentView();
             convertView.setTag(holder);
         } else
             holder = (SettingsUIPermissionItemViewHolder) convertView.getTag();
         holder.setData(getItem(position));
-        holder.applyData(list.get(position));
+        holder.applyData();
         return convertView;
     }
 
-    public void setUIListData(List<String> list) {
+    public void setListData(List<String> list) {
         this.list = list;
     }
 }

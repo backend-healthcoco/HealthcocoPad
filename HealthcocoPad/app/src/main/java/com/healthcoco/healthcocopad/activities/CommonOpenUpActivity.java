@@ -28,12 +28,12 @@ import com.healthcoco.healthcocopad.fragments.AddEditClinicImageFragment;
 import com.healthcoco.healthcocopad.fragments.AddNewPrescriptionFragment;
 import com.healthcoco.healthcocopad.fragments.AddNewTemplateFragment;
 import com.healthcoco.healthcocopad.fragments.CommonOpenUpPatientDetailFragment;
+import com.healthcoco.healthcocopad.fragments.CommonUiPermissionsFragment;
 import com.healthcoco.healthcocopad.fragments.DiseaseListFragment;
 import com.healthcoco.healthcocopad.fragments.FeedbackFragment;
 import com.healthcoco.healthcocopad.fragments.InitialSyncFragment;
 import com.healthcoco.healthcocopad.fragments.LoginSignupFragment;
 import com.healthcoco.healthcocopad.fragments.PatientRegistrationFragment;
-import com.healthcoco.healthcocopad.fragments.PrescriptionUIPermissionFragment;
 import com.healthcoco.healthcocopad.fragments.SettingUIPermissionsFragment;
 import com.healthcoco.healthcocopad.fragments.WebViewFragments;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
@@ -49,7 +49,6 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
     private CommonOpenUpFragmentType fragmentType;
     private WebViewFragments webViewFragments;
     private LinearLayout patientProfileLayout;
-    private int tabOrdinal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +60,6 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
     private void init() {
         intent = getIntent();
         fragmentOrdinal = intent.getIntExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, -1);
-        tabOrdinal = intent.getIntExtra(HealthCocoConstants.TAG_TAB_TYPE, -1);
         initMembers();
         if (fragmentOrdinal != -1)
             initFragment(fragmentOrdinal);
@@ -125,16 +123,16 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
                 openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, R.string.about_us, new AboutUsFragment());
                 break;
             case SETTINGS_UI_PERMISSION_PRESCRIPTION:
-                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_CROSS, ActionbarLeftRightActionTypeDrawables.WITH_SAVE, R.string.prescription_ui_permission_details, new PrescriptionUIPermissionFragment());
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_CROSS, ActionbarLeftRightActionTypeDrawables.WITH_SAVE, R.string.prescription_ui_permission_details, new CommonUiPermissionsFragment());
                 break;
             case SETTINGS_UI_PERMISSION_CLINICAL_NOTES:
-                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_CROSS, ActionbarLeftRightActionTypeDrawables.WITH_SAVE, R.string.clinical_notes_ui_permission_details, new PrescriptionUIPermissionFragment());
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_CROSS, ActionbarLeftRightActionTypeDrawables.WITH_SAVE, R.string.clinical_notes_ui_permission_details, new CommonUiPermissionsFragment());
                 break;
             case SETTINGS_UI_PERMISSION_VISITS:
-                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_CROSS, ActionbarLeftRightActionTypeDrawables.WITH_SAVE, R.string.visits_ui_permission_details, new PrescriptionUIPermissionFragment());
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_CROSS, ActionbarLeftRightActionTypeDrawables.WITH_SAVE, R.string.visits_ui_permission_details, new CommonUiPermissionsFragment());
                 break;
             case SETTINGS_UI_PERMISSION_PATIENT_TAB:
-                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_CROSS, ActionbarLeftRightActionTypeDrawables.WITH_SAVE, R.string.patient_tab_ui_permission_details, new PrescriptionUIPermissionFragment());
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_CROSS, ActionbarLeftRightActionTypeDrawables.WITH_SAVE, R.string.patient_tab_ui_permission_details, new CommonUiPermissionsFragment());
                 break;
             case ADD_NEW_PRESCRIPTION:
                 openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_CROSS, ActionbarLeftRightActionTypeDrawables.WITH_SAVE, R.string.new_prescription, new AddNewPrescriptionFragment());
@@ -174,11 +172,7 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
     }
 
     private void openFragment(ActionbarType actionbarType, ActionbarLeftRightActionTypeDrawables leftAction, ActionbarLeftRightActionTypeDrawables rightAction, int actionBarTitle, HealthCocoFragment fragment) {
-        Bundle bundle = new Bundle();
         initActionBar(actionbarType, actionBarTitle, leftAction, rightAction);
-        bundle.putInt(HealthCocoConstants.TAG_FRAGMENT_NAME, fragmentType.ordinal());
-        bundle.putInt(HealthCocoConstants.TAG_TAB_TYPE, tabOrdinal);
-        fragment.setArguments(bundle);
         transaction.add(R.id.layout_fragment_common_open_up, fragment, fragment.getClass().getSimpleName());
         transaction.commit();
     }

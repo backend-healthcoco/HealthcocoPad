@@ -5,49 +5,45 @@ import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 
-import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.HealthCocoActivity;
-import com.healthcoco.healthcocopad.HealthCocoApplication;
-import com.healthcoco.healthcocopad.utilities.Util;
+import com.healthcoco.healthcocopad.HealthCocoViewHolder;
+import com.healthcoco.healthcocopad.R;
+import com.healthcoco.healthcocopad.listeners.CommonUiPermissionsListener;
 
 /**
  * Created by Shreshtha on 28-02-2017.
  */
-public class SettingsUIPermissionItemViewHolder implements CompoundButton.OnCheckedChangeListener {
-    private final HealthCocoApplication mApp;
-    private Object list;
-    private HealthCocoActivity mActivity;
+public class SettingsUIPermissionItemViewHolder extends HealthCocoViewHolder implements CompoundButton.OnCheckedChangeListener {
+    private CommonUiPermissionsListener commonUiPermissionsListener;
     private AppCompatCheckBox chUIPermission;
+    private String permission;
 
-    public SettingsUIPermissionItemViewHolder(HealthCocoActivity mActivity) {
-        this.mActivity = mActivity;
-        this.mApp = (HealthCocoApplication) mActivity.getApplication();
+    public SettingsUIPermissionItemViewHolder(HealthCocoActivity mActivity, CommonUiPermissionsListener commonUiPermissionsListener) {
+        super(mActivity);
+        this.commonUiPermissionsListener = commonUiPermissionsListener;
     }
 
     public void setData(Object object) {
-        this.list = object;
+        this.permission = (String) object;
     }
 
-    public void applyData(String position) {
-        chUIPermission.setText(Util.getValidatedValueWithoutQuotes(position));
+    public void applyData() {
+        chUIPermission.setText(permission);
+        chUIPermission.setChecked(commonUiPermissionsListener.isAssigned(permission));
     }
 
     public View getContentView() {
         LinearLayout view = (LinearLayout) mActivity.getLayoutInflater().inflate(R.layout.grid_item_groups, null);
         chUIPermission = (AppCompatCheckBox) view.findViewById(R.id.ch_ui_permission);
-        chUIPermission.setChecked(true);
         chUIPermission.setOnCheckedChangeListener(this);
         return view;
     }
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        if (!isChecked) {
-            CharSequence text = chUIPermission.getText();
-            System.out.println("chUIPermission" + text);
-//            UserPermissionsResponse userPermissionsResponse=new UserPermissionsResponse();
-//            UIPermissions uiPermissions=new UIPermissions();
-//            userPermissionsResponse.setUiPermissions(uiPermissions.);
-        }
+        if(isChecked)
+        commonUiPermissionsListener.assignPermission(permission);
+        else
+            commonUiPermissionsListener.removePermission(permission);
     }
 }

@@ -46,7 +46,7 @@ public class User extends SugarRecord {
     protected String foreignLocationId;
     private UserState userState;
     private String colorCode;
-    private UIPermissions uiPermissions;
+    private AssignedUserUiPermissions uiPermissions;
     @Ignore
     private List<Role> roles;
     @Ignore
@@ -200,11 +200,11 @@ public class User extends SugarRecord {
         this.password = password;
     }
 
-    public UIPermissions getUiPermissions() {
+    public AssignedUserUiPermissions getUiPermissions() {
         return uiPermissions;
     }
 
-    public void setUiPermissions(UIPermissions uiPermissions) {
+    public void setUiPermissions(AssignedUserUiPermissions uiPermissions) {
         this.uiPermissions = uiPermissions;
     }
 

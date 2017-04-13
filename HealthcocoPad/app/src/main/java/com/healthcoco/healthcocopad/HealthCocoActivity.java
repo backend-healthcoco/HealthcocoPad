@@ -29,9 +29,9 @@ import com.android.volley.Response;
 import com.healthcoco.healthcocopad.activities.CloudPrintActivity;
 import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.adapter.MyPrintDocumentAdapter;
+import com.healthcoco.healthcocopad.bean.UIPermissions;
 import com.healthcoco.healthcocopad.bean.UserPermissionsResponse;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
-import com.healthcoco.healthcocopad.bean.server.AllUIPermission;
 import com.healthcoco.healthcocopad.bean.server.BloodGroup;
 import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
 import com.healthcoco.healthcocopad.bean.server.CityResponse;
@@ -80,7 +80,6 @@ import com.healthcoco.healthcocopad.utilities.ImageUtil;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.MyExceptionHandler;
 import com.healthcoco.healthcocopad.utilities.Util;
-import com.healthcoco.healthcocopad.views.FontAwesomeButton;
 
 import org.parceler.Parcels;
 
@@ -303,7 +302,7 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
                         defaultWebServicesList.add(syncServiceType);
                         break;
                     case GET_ALL_UI_PERMISSIONS:
-                        WebDataServiceImpl.getInstance(mApp).getALLUIPermissions(AllUIPermission.class, user.getUniqueId(), this, this);
+                        WebDataServiceImpl.getInstance(mApp).getALLUIPermissions(UIPermissions.class, user.getUniqueId(), this, this);
                         defaultWebServicesList.add(syncServiceType);
                         break;
                     case SYNC_COMPLETE:
@@ -668,16 +667,16 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
             case ADD_TEMPLATES:
 //                if (!Util.isNullOrEmptyList(response.getDataList()))
 //                    LocalDataServiceImpl.getInstance(mApp).addTemplatesList((ArrayList<TempTemplate>) (ArrayList<?>) response.getDataList());
-            case ADD_DOCTORS_UI_PERMISSIONS:
-                if (response.getData() != null)
-                    LocalDataServiceImpl.getInstance(mApp).
-                            addUserUiPermissions((UserPermissionsResponse) response.getData());
-                break;
-            case ADD_ALL_UI_PERMISSIONS:
-                if (response.getData() != null)
-                    LocalDataServiceImpl.getInstance(mApp).
-                            addALLUiPermissions((AllUIPermission) response.getData());
-                break;
+//            case ADD_DOCTORS_UI_PERMISSIONS:
+//                if (response.getData() != null)
+//                    LocalDataServiceImpl.getInstance(mApp).
+//                            addUserUiPermissions((UserPermissionsResponse) response.getData());
+//                break;
+//            case ADD_ALL_UI_PERMISSIONS:
+//                if (response.getData() != null)
+//                    LocalDataServiceImpl.getInstance(mApp).
+//                            addALLUiPermissions((UIPermissions) response.getData());
+//                break;
         }
         VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
         volleyResponseBean.setWebServiceType(response.getWebServiceType());
@@ -858,18 +857,6 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
                 }
                 WebDataServiceImpl.getInstance(mApp).sendGcmRegistrationId(false);
             }
-        }
-    }
-
-    public void initActionbarTitle() {
-        FontAwesomeButton btSync = (FontAwesomeButton) findViewById(R.id.bt_sync);
-        if (btSync != null) {
-            btSync.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-//                    getDoctorsUIPermissions();
-                }
-            });
         }
     }
 

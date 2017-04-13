@@ -29,6 +29,7 @@ import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.activities.AddVisitsActivity;
 import com.healthcoco.healthcocopad.bean.UIPermissions;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
+import com.healthcoco.healthcocopad.bean.server.AssignedUserUiPermissions;
 import com.healthcoco.healthcocopad.bean.server.BloodPressure;
 import com.healthcoco.healthcocopad.bean.server.ClinicalNotes;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
@@ -313,7 +314,7 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
         }
     }
 
-    private void initUiPermissions(UIPermissions uiPermissions) {
+    private void initUiPermissions(AssignedUserUiPermissions uiPermissions) {
         if (uiPermissions != null && !Util.isNullOrBlank(uiPermissions.getClinicalNotesPermissionsString())) {
             Gson gson = new Gson();
             clinicalNotesUiPermissionsList = (ArrayList<ClinicalNotesPermissionType>) gson.fromJson(uiPermissions.getClinicalNotesPermissionsString(), new TypeToken<ArrayList<ClinicalNotesPermissionType>>() {

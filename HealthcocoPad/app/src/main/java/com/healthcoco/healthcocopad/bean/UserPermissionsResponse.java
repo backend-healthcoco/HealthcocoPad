@@ -1,21 +1,16 @@
 package com.healthcoco.healthcocopad.bean;
 
-import com.orm.SugarRecord;
-import com.orm.annotation.Unique;
-
-import org.parceler.Parcel;
+import com.healthcoco.healthcocopad.bean.server.AssignedUserUiPermissions;
 
 /**
  * Created by neha on 01/02/17.
  */
-@Parcel
-public class UserPermissionsResponse extends SugarRecord {
-    @Unique
+public class UserPermissionsResponse {
     private String uniqueId;
     private Long createdTime;
     private Long updatedTime;
     private String createdBy;
-    private UIPermissions uiPermissions;
+    private AssignedUserUiPermissions uiPermissions;
     private String doctorId;
 
     public Long getCreatedTime() {
@@ -50,11 +45,11 @@ public class UserPermissionsResponse extends SugarRecord {
         this.uniqueId = uniqueId;
     }
 
-    public UIPermissions getUiPermissions() {
+    public AssignedUserUiPermissions getUiPermissions() {
         return uiPermissions;
     }
 
-    public void setUiPermissions(UIPermissions uiPermissions) {
+    public void setUiPermissions(AssignedUserUiPermissions uiPermissions) {
         this.uiPermissions = uiPermissions;
     }
 

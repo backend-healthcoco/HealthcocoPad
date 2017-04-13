@@ -25,6 +25,9 @@ import com.orm.SugarContext;
 import java.util.Arrays;
 import java.util.List;
 
+import static android.Manifest.permission_group.SMS;
+import static com.healthcoco.healthcocopad.enums.ClassType.BILLING;
+
 /**
  * Created by Shreshtha on 31-01-2017.
  */
@@ -77,36 +80,36 @@ public class SettingsFragment extends HealthCocoFragment implements AdapterView.
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         SettingsItemType itemType = listType.get(position);
         switch (itemType) {
-            case PATIENT:
-//                openCommonOpenUpActivity(CommonOpenUpFragmentType.SETTINGS_PATIENT, itemType.ordinal());
-                break;
-            case CLINICAL_NOTES:
-//                openCommonOpenUpActivity(CommonOpenUpFragmentType.SETTINGS_CLINICAL_NOTES, itemType.ordinal());
-                break;
-            case HISTORY:
-//                openCommonOpenUpActivity(CommonOpenUpFragmentType.SETTINGS_HISTORY, itemType.ordinal());
-                break;
-            case PRESCRIPTION:
-//                openCommonOpenUpActivity(CommonOpenUpFragmentType.SETTINGS_PRESCRIPTION, itemType.ordinal());
-                break;
-            case TEMPLATE:
-//                openCommonOpenUpActivity(CommonOpenUpFragmentType.SETTINGS_TEMPLATE, itemType.ordinal());
-                break;
+//            case PATIENT:
+////                openCommonOpenUpActivity(CommonOpenUpFragmentType.SETTINGS_PATIENT, itemType.ordinal());
+//                break;
+//            case CLINICAL_NOTES:
+////                openCommonOpenUpActivity(CommonOpenUpFragmentType.SETTINGS_CLINICAL_NOTES, itemType.ordinal());
+//                break;
+//            case HISTORY:
+////                openCommonOpenUpActivity(CommonOpenUpFragmentType.SETTINGS_HISTORY, itemType.ordinal());
+//                break;
+//            case PRESCRIPTION:
+////                openCommonOpenUpActivity(CommonOpenUpFragmentType.SETTINGS_PRESCRIPTION, itemType.ordinal());
+//                break;
+//            case TEMPLATE:
+////                openCommonOpenUpActivity(CommonOpenUpFragmentType.SETTINGS_TEMPLATE, itemType.ordinal());
+//                break;
             case UI_PERMISSION:
                 openCommonOpenUpActivity(CommonOpenUpFragmentType.SETTING_UI_PERMISSION, itemType.ordinal());
                 break;
-            case BILLING:
-//                openCommonOpenUpActivity(CommonOpenUpFragmentType.SETTINGS_BILLING, itemType.ordinal());
-                break;
-            case SMS:
-//                openCommonOpenUpActivity(CommonOpenUpFragmentType.SETTING_SMS, itemType.ordinal());
-                break;
-            case EMAIL:
-                break;
-            case PRINT:
-                break;
-            case ID_CREATION:
-                break;
+//            case BILLING:
+////                openCommonOpenUpActivity(CommonOpenUpFragmentType.SETTINGS_BILLING, itemType.ordinal());
+//                break;
+//            case SMS:
+////                openCommonOpenUpActivity(CommonOpenUpFragmentType.SETTING_SMS, itemType.ordinal());
+//                break;
+//            case EMAIL:
+//                break;
+//            case PRINT:
+//                break;
+//            case ID_CREATION:
+//                break;
             case ABOUT:
                 openCommonOpenUpActivity(CommonOpenUpFragmentType.SETTING_ABOUT_US, itemType.ordinal());
                 break;

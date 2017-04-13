@@ -14,6 +14,7 @@ import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.DoctorContactUs;
 import com.healthcoco.healthcocopad.bean.DoctorProfileToSend;
 import com.healthcoco.healthcocopad.bean.PersonalHistory;
+import com.healthcoco.healthcocopad.bean.UserPermissionsResponse;
 import com.healthcoco.healthcocopad.bean.VersionCheckRequest;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.request.AddDrugRequest;
@@ -26,6 +27,7 @@ import com.healthcoco.healthcocopad.bean.request.Feedback;
 import com.healthcoco.healthcocopad.bean.request.ProfessionalMembershipRequest;
 import com.healthcoco.healthcocopad.bean.request.ProfessionalStatementRequest;
 import com.healthcoco.healthcocopad.bean.request.RegisterNewPatientRequest;
+import com.healthcoco.healthcocopad.bean.request.UserPermissionsRequest;
 import com.healthcoco.healthcocopad.bean.server.Diagram;
 import com.healthcoco.healthcocopad.bean.server.Disease;
 import com.healthcoco.healthcocopad.bean.server.DoctorClinicProfile;
@@ -627,6 +629,18 @@ public class WebDataServiceImpl implements GCMRefreshListener {
         }
     }
 
+    public void getBothUIPermissionsForDoctor(Class<?> class1, String doctorId, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        WebServiceType webServiceType = WebServiceType.GET_BOTH_PERMISSIONS_FOR_DOCTOR;
+        String url = webServiceType.getUrl() + doctorId;
+        Util.checkNetworkStatus(mApp.getApplicationContext());
+        if (HealthCocoConstants.isNetworkOnline) {
+            getResponse(webServiceType, class1, url, null, null, responseListener,
+                    errorListener);
+        } else {
+            errorListener.onNetworkUnavailable(webServiceType);
+        }
+    }
+
     public void getAlreadyRegisteredPatients(Class<?> class1, String mobileNo, User user, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         WebServiceType webServiceType = WebServiceType.SEARCH_PATIENTS;
         Util.checkNetworkStatus(mApp.getApplicationContext());
@@ -983,4 +997,12 @@ public class WebDataServiceImpl implements GCMRefreshListener {
         }
     }
 
+    public void updateUiPermissions(Class<?> class1, UserPermissionsRequest userPermissionsResponse, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        Util.checkNetworkStatus(mApp);
+        if (HealthCocoConstants.isNetworkOnline) {
+            WebServiceType webServiceType = WebServiceType.POST_UI_PERMISSIONS;
+            getResponse(webServiceType, class1, webServiceType.getUrl(), userPermissionsResponse, null, responseListener,
+                    errorListener);
+        }
+    }
 }

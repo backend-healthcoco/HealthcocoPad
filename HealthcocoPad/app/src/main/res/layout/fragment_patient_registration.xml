@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     android:background="@color/grey_background"
     android:fillViewport="true"
+    android:fitsSystemWindows="true"
     android:orientation="vertical"
     android:overScrollMode="never">
 
@@ -559,9 +560,9 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:digits="0123456789"
                             android:hint="@string/aadhar_id"
                             android:inputType="phone"
-                            android:digits="0123456789"
                             android:maxLength="12"
                             android:maxLines="1" />
                     </LinearLayout>

@@ -13,14 +13,15 @@ import com.healthcoco.healthcocopad.bean.Address;
 import com.healthcoco.healthcocopad.bean.DOB;
 import com.healthcoco.healthcocopad.bean.PersonalHistory;
 import com.healthcoco.healthcocopad.bean.UIPermissions;
+import com.healthcoco.healthcocopad.bean.UiPermissionsBoth;
 import com.healthcoco.healthcocopad.bean.UserPermissionsResponse;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.APILatestUpdatedTimes;
 import com.healthcoco.healthcocopad.bean.server.AccessModule;
 import com.healthcoco.healthcocopad.bean.server.Achievement;
-import com.healthcoco.healthcocopad.bean.server.AllUIPermission;
 import com.healthcoco.healthcocopad.bean.server.AlreadyRegisteredPatientsResponse;
 import com.healthcoco.healthcocopad.bean.server.AppointmentSlot;
+import com.healthcoco.healthcocopad.bean.server.AssignedUserUiPermissions;
 import com.healthcoco.healthcocopad.bean.server.BloodGroup;
 import com.healthcoco.healthcocopad.bean.server.BloodPressure;
 import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
@@ -421,7 +422,7 @@ public class LocalDataServiceImpl {
         if (user != null) {
             if (user.getDob() != null) {
             }
-            user.setUiPermissions(getUIPermissions(user.getUniqueId()));
+            user.setUiPermissions(getAssignedUserUiPermissions(user.getUniqueId()));
             user.setRoles((ArrayList<Role>) Select.from(Role.class)
                     .where(Condition.prop(LocalDatabaseUtils.KEY_HOSPITAL_ID).eq(user.getForeignHospitalId()),
                             Condition.prop(LocalDatabaseUtils.KEY_LOCATION_ID).eq(user.getForeignLocationId())).list());
@@ -434,14 +435,25 @@ public class LocalDataServiceImpl {
                 user.setRoleTypes(roleTypes);
             }
         }
-        user.setUiPermissions(getUIPermissions(user.getUniqueId()));
+        user.setUiPermissions(getAssignedUserUiPermissions(user.getUniqueId()));
         return user;
     }
-
-    public UIPermissions getUIPermissions(String doctorId) {
-        return Select.from(UIPermissions.class)
-                .where(Condition.prop(LocalDatabaseUtils.KEY_DOCTOR_ID).eq(doctorId)).first();
-    }
+//
+//    public UserPermissionsResponse getUserUiPermissionsObject(String doctorId) {
+//        UserPermissionsResponse userPermissions = Select.from(UserPermissionsResponse.class)
+//                .where(Condition.prop(LocalDatabaseUtils.KEY_DOCTOR_ID).eq(doctorId)).first();
+//        if (userPermissions != null) {
+//            AssignedUserUiPermissions assignedPermisions = getAssignedUserUiPermissions(userPermissions.getDoctorId());
+//            if (assignedPermisions != null) {
+//                assignedPermisions.setTabPermissions((ArrayList<String>) (Object) getObjectsListFronJson(assignedPermisions.getTabPermissionsString()));
+//                assignedPermisions.setClinicalNotesPermissions((ArrayList<String>) (Object) getObjectsListFronJson(assignedPermisions.getClinicalNotesPermissionsString()));
+//                assignedPermisions.setPrescriptionPermissions((ArrayList<String>) (Object) getObjectsListFronJson(assignedPermisions.getPrescriptionPermissionsString()));
+//                assignedPermisions.setPatientVisitPermissions((ArrayList<String>) (Object) getObjectsListFronJson(assignedPermisions.getPatientVisitPermissionsString()));
+//                assignedPermisions.setProfilePermissions((ArrayList<String>) (Object) getObjectsListFronJson(assignedPermisions.getProfilePermissionsString()));
+//            }
+//        }
+//        return userPermissions;
+//    }
 
     public void getDosageDurationDirectionList(WebServiceType webServiceType, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
@@ -1795,44 +1807,6 @@ public class LocalDataServiceImpl {
         return volleyResponseBean;
     }
 
-    public void addUserUiPermissions(UserPermissionsResponse userPermissionsResponse) {
-        if (userPermissionsResponse.getUiPermissions() != null) {
-            UIPermissions uiPermissions = userPermissionsResponse.getUiPermissions();
-            Gson gson = new Gson();
-            uiPermissions.setClinicalNotesPermissionsString(gson.toJson(uiPermissions.getClinicalNotesPermissions()));
-            uiPermissions.setPatientVisitPermissionsString(gson.toJson(uiPermissions.getPatientVisitPermissions()));
-            uiPermissions.setTabPermissionsString(gson.toJson(uiPermissions.getTabPermissions()));
-            uiPermissions.setPrescriptionPermissionsString(gson.toJson(uiPermissions.getPrescriptionPermissions()));
-            uiPermissions.setProfilePermissionsString(gson.toJson(uiPermissions.getPrescriptionPermissions()));
-            uiPermissions.setDoctorId(userPermissionsResponse.getDoctorId());
-            uiPermissions.save();
-        }
-        userPermissionsResponse.save();
-    }
-
-    public UserPermissionsResponse getUserPermissions(String doctorId) {
-        UserPermissionsResponse userPermissionsResponse = Select.from(UserPermissionsResponse.class).where(Condition.prop(LocalDatabaseUtils.KEY_DOCTOR_ID).eq(doctorId)).first();
-        return userPermissionsResponse;
-    }
-
-    public AllUIPermission getAllUIPermissions() {
-        AllUIPermission allUIPermission = Select.from(AllUIPermission.class).first();
-        return allUIPermission;
-    }
-
-    public void addALLUiPermissions(AllUIPermission allUIPermission) {
-        AllUIPermission allUIPermission1 = allUIPermission;
-        if (allUIPermission1 != null) {
-            Gson gson = new Gson();
-            allUIPermission1.setTabPermissionsString(gson.toJson(allUIPermission.getTabPermissions()));
-            allUIPermission1.setClinicalNotesPermissionsString(gson.toJson(allUIPermission.getClinicalNotesPermissions()));
-            allUIPermission1.setPatientVisitPermissionsString(gson.toJson(allUIPermission.getPatientVisitPermissions()));
-            allUIPermission1.setPrescriptionPermissionsString(gson.toJson(allUIPermission.getTabPermissions()));
-            allUIPermission1.setProfilePermissionsString(gson.toJson(allUIPermission.getProfilePermissions()));
-            allUIPermission.save();
-        }
-    }
-
     public VolleyResponseBean getSearchedPatientsListPageWise(WebServiceType webServiceType, User user,
                                                               int pageNum, int maxSize, FilterItemType filterType, AdvanceSearchOptionsType advanceSearchOptionsType, String searchTerm,
                                                               Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
@@ -3111,5 +3085,88 @@ public class LocalDataServiceImpl {
         } catch (Exception e) {
             LogUtils.LOGD(TAG, "Error Package name not found ", e);
         }
+    }
+
+    public void addBothUserUiPermissions(UiPermissionsBoth uiPermissionsBoth) {
+        if (uiPermissionsBoth != null) {
+            addUiPermissions(uiPermissionsBoth.getDoctorId(), uiPermissionsBoth.getDoctorPermissions());
+            addUiPermissions(uiPermissionsBoth.getDoctorId(), uiPermissionsBoth.getAllPermissions());
+        }
+    }
+
+    public void addUserUiPermissionsResponse(UserPermissionsResponse userPermissionsResponse) {
+        addUiPermissions(userPermissionsResponse.getDoctorId(), userPermissionsResponse.getUiPermissions());
+    }
+
+    public void addUiPermissions(String doctorId, Object object) {
+        if (object instanceof AssignedUserUiPermissions) {
+            AssignedUserUiPermissions assignedUserUiPermissions = (AssignedUserUiPermissions) object;
+            assignedUserUiPermissions.setClinicalNotesPermissionsString(getJsonFromObject(assignedUserUiPermissions.getClinicalNotesPermissions()));
+            assignedUserUiPermissions.setPatientVisitPermissionsString(getJsonFromObject(assignedUserUiPermissions.getPatientVisitPermissions()));
+            assignedUserUiPermissions.setTabPermissionsString(getJsonFromObject(assignedUserUiPermissions.getTabPermissions()));
+            assignedUserUiPermissions.setPrescriptionPermissionsString(getJsonFromObject(assignedUserUiPermissions.getPrescriptionPermissions()));
+            assignedUserUiPermissions.setProfilePermissionsString(getJsonFromObject(assignedUserUiPermissions.getProfilePermissions()));
+            assignedUserUiPermissions.setDoctorId(doctorId);
+            assignedUserUiPermissions.save();
+        } else if (object instanceof UIPermissions) {
+            UIPermissions allUIPermissions = (UIPermissions) object;
+            allUIPermissions.setClinicalNotesPermissionsString(getJsonFromObject(allUIPermissions.getClinicalNotesPermissions()));
+            allUIPermissions.setPatientVisitPermissionsString(getJsonFromObject(allUIPermissions.getPatientVisitPermissions()));
+            allUIPermissions.setTabPermissionsString(getJsonFromObject(allUIPermissions.getTabPermissions()));
+            allUIPermissions.setPrescriptionPermissionsString(getJsonFromObject(allUIPermissions.getPrescriptionPermissions()));
+            allUIPermissions.setProfilePermissionsString(getJsonFromObject(allUIPermissions.getProfilePermissions()));
+            allUIPermissions.setDoctorId(doctorId);
+            allUIPermissions.save();
+        }
+    }
+
+    public VolleyResponseBean getBothUserUiPermissions(WebServiceType webServiceType, String doctorId, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
+        volleyResponseBean.setWebServiceType(webServiceType);
+        volleyResponseBean.setIsDataFromLocal(true);
+        volleyResponseBean.setIsUserOnline(HealthCocoConstants.isNetworkOnline);
+        try {
+            volleyResponseBean.setData(getBothUserUiPermissions(doctorId));
+            if (responseListener != null)
+                responseListener.onResponse(volleyResponseBean);
+        } catch (Exception e) {
+            e.printStackTrace();
+            showErrorLocal(volleyResponseBean, errorListener);
+        }
+        return volleyResponseBean;
+    }
+
+    private UiPermissionsBoth getBothUserUiPermissions(String doctorId) {
+        UiPermissionsBoth uiPermissionsBoth = new UiPermissionsBoth();
+        uiPermissionsBoth.setDoctorPermissions(getAssignedUserUiPermissions(doctorId));
+        uiPermissionsBoth.setAllPermissions(getAllUiPermissions(doctorId));
+        uiPermissionsBoth.setDoctorId(doctorId);
+        return uiPermissionsBoth;
+    }
+
+    private AssignedUserUiPermissions getAssignedUserUiPermissions(String doctorId) {
+        AssignedUserUiPermissions assignedUserUiPermissions = Select.from(AssignedUserUiPermissions.class)
+                .where(Condition.prop(LocalDatabaseUtils.KEY_DOCTOR_ID).eq(doctorId)).first();
+        if (assignedUserUiPermissions != null) {
+            assignedUserUiPermissions.setClinicalNotesPermissions((ArrayList<String>) (Object) getObjectsListFronJson(assignedUserUiPermissions.getClinicalNotesPermissionsString()));
+            assignedUserUiPermissions.setPatientVisitPermissions((ArrayList<String>) (Object) getObjectsListFronJson(assignedUserUiPermissions.getPatientVisitPermissionsString()));
+            assignedUserUiPermissions.setTabPermissions((ArrayList<String>) (Object) getObjectsListFronJson(assignedUserUiPermissions.getTabPermissionsString()));
+            assignedUserUiPermissions.setPrescriptionPermissions((ArrayList<String>) (Object) getObjectsListFronJson(assignedUserUiPermissions.getPrescriptionPermissionsString()));
+            assignedUserUiPermissions.setProfilePermissions((ArrayList<String>) (Object) getObjectsListFronJson(assignedUserUiPermissions.getProfilePermissionsString()));
+        }
+        return assignedUserUiPermissions;
+    }
+
+    private UIPermissions getAllUiPermissions(String doctorId) {
+        UIPermissions uiPermissions = Select.from(UIPermissions.class)
+                .where(Condition.prop(LocalDatabaseUtils.KEY_DOCTOR_ID).eq(doctorId)).first();
+        if (uiPermissions != null) {
+            uiPermissions.setClinicalNotesPermissions((ArrayList<String>) (Object) getObjectsListFronJson(uiPermissions.getClinicalNotesPermissionsString()));
+            uiPermissions.setPatientVisitPermissions((ArrayList<String>) (Object) getObjectsListFronJson(uiPermissions.getPatientVisitPermissionsString()));
+            uiPermissions.setTabPermissions((ArrayList<String>) (Object) getObjectsListFronJson(uiPermissions.getTabPermissionsString()));
+            uiPermissions.setPrescriptionPermissions((ArrayList<String>) (Object) getObjectsListFronJson(uiPermissions.getPrescriptionPermissionsString()));
+            uiPermissions.setProfilePermissions((ArrayList<String>) (Object) getObjectsListFronJson(uiPermissions.getProfilePermissionsString()));
+        }
+        return uiPermissions;
     }
 }

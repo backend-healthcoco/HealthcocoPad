@@ -282,6 +282,8 @@ public enum WebServiceType {
 
     GET_ALL_UI_PERMISSIONS(Method.GET, "dynamicUI/getAllPermissionsForDoctor/"),
 
+    GET_BOTH_PERMISSIONS_FOR_DOCTOR(Method.GET,"dynamicUI/getBothPermissionsForDoctor/"),
+
     POST_UI_PERMISSIONS(Method.POST, "dynamicUI/postPermissions/"),
 
     ADD_PATIENT_TO_QUEUE(Method.POST, "appointment/queue/add"),
