@@ -278,11 +278,7 @@ public enum WebServiceType {
 
     GET_PROFESSIONAL_MEMBERSHIP_SOLR(Method.GET, "solr/master/professionalMembership/?"),
 
-    GET_UI_PERMISSIONS_FOR_DOCTOR(Method.GET, "dynamicUI/getPermissionsForDoctor/"),
-
-    GET_ALL_UI_PERMISSIONS(Method.GET, "dynamicUI/getAllPermissionsForDoctor/"),
-
-    GET_BOTH_PERMISSIONS_FOR_DOCTOR(Method.GET,"dynamicUI/getBothPermissionsForDoctor/"),
+    GET_BOTH_PERMISSIONS_FOR_DOCTOR(Method.GET, "dynamicUI/getBothPermissionsForDoctor/"),
 
     POST_UI_PERMISSIONS(Method.POST, "dynamicUI/postPermissions/"),
 

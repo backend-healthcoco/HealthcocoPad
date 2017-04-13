@@ -152,8 +152,7 @@
     <string name="syncing_templates">Syncing Templates&#8230;</string>
     <string name="syncing_calendar_events">Syncing Calendar Events&#8230;</string>
     <string name="syncing_medical_councils">Syncing Medical Councils&#8230;</string>
-    <string name="syncing_doctors_ui_Permissions">Syncing Doctors UI Permissions</string>
-    <string name="syncing_all_ui_Permissions">Syncing All UI Permission</string>
+    <string name="syncing_ui_Permissions">Syncing UI Permissions</string>
     <string name="sync_complete">Sync Complete</string>
     <string name="sync">Sync</string>
     <string name="loading">Loading&#8230;</string>

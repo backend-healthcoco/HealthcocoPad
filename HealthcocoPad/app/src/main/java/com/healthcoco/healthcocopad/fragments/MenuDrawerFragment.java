@@ -41,8 +41,6 @@ import com.healthcoco.healthcocopad.utilities.DownloadImageFromUrlUtil;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.Util;
 
-import org.parceler.Parcels;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -270,13 +268,9 @@ public class MenuDrawerFragment extends HealthCocoFragment implements View.OnCli
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == HealthCocoConstants.REQUEST_CODE_MENU_CLINIC_LIST) {
             if (resultCode == Activity.RESULT_OK) {
-                DoctorClinicProfile profile = Parcels.unwrap(data.getParcelableExtra(MenuClinicListDialogFragment.TAG_CLINIC_NAME));
-                refreshSelectedDoctorClinicProfileDetails(profile);
+                Util.sendBroadcast(mApp, ContactsListFragment.INTENT_REFRESH_CONTACTS_LIST_FROM_SERVER, true);
                 openFragment(FragmentType.CONTACTS);
-                if (selectedFragmentType == null || selectedFragmentType == FragmentType.HELP_IMPROVE) {
-                    selectedFragmentType = FragmentType.CONTACTS;
-                }
-                ((HomeActivity) mActivity).initFragment(selectedFragmentType);
+                initSelectedLocationId(SELECTED_LOCATION_ID);
             }
         }
     }

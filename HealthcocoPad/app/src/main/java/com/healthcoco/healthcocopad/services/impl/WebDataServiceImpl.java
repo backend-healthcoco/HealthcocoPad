@@ -605,30 +605,6 @@ public class WebDataServiceImpl implements GCMRefreshListener {
         }
     }
 
-    public void getDoctorsUIPermissions(Class<?> class1, String doctorId, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
-        WebServiceType webServiceType = WebServiceType.GET_UI_PERMISSIONS_FOR_DOCTOR;
-        String url = webServiceType.getUrl() + doctorId;
-        Util.checkNetworkStatus(mApp.getApplicationContext());
-        if (HealthCocoConstants.isNetworkOnline) {
-            getResponse(webServiceType, class1, url, null, null, responseListener,
-                    errorListener);
-        } else {
-            errorListener.onNetworkUnavailable(webServiceType);
-        }
-    }
-
-    public void getALLUIPermissions(Class<?> class1, String doctorId, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
-        WebServiceType webServiceType = WebServiceType.GET_ALL_UI_PERMISSIONS;
-        String url = webServiceType.getUrl() + doctorId;
-        Util.checkNetworkStatus(mApp.getApplicationContext());
-        if (HealthCocoConstants.isNetworkOnline) {
-            getResponse(webServiceType, class1, url, null, null, responseListener,
-                    errorListener);
-        } else {
-            errorListener.onNetworkUnavailable(webServiceType);
-        }
-    }
-
     public void getBothUIPermissionsForDoctor(Class<?> class1, String doctorId, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         WebServiceType webServiceType = WebServiceType.GET_BOTH_PERMISSIONS_FOR_DOCTOR;
         String url = webServiceType.getUrl() + doctorId;

@@ -14,12 +14,14 @@ import com.healthcoco.healthcocopad.HealthCocoDialogFragment;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.adapter.MenuClinicListAdapter;
 import com.healthcoco.healthcocopad.bean.server.DoctorClinicProfile;
-import com.healthcoco.healthcocopad.fragments.ContactsListFragment;
+import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.Util;
 
 import org.parceler.Parcels;
 
 import java.util.List;
+
+import static com.healthcoco.healthcocopad.fragments.MenuDrawerFragment.SELECTED_LOCATION_ID;
 
 /**
  * Created by Shreshtha on 01-02-2017.
@@ -30,6 +32,10 @@ public class MenuClinicListDialogFragment extends HealthCocoDialogFragment imple
     private ListView lvClinics;
     private MenuClinicListAdapter menuClinicListAdapter;
     private ImageButton btCancel;
+
+    public MenuClinicListDialogFragment() {
+
+    }
 
     public MenuClinicListDialogFragment(List<DoctorClinicProfile> clinicProfile) {
         this.clinicProfile = clinicProfile;
@@ -81,10 +87,16 @@ public class MenuClinicListDialogFragment extends HealthCocoDialogFragment imple
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
         DoctorClinicProfile doctorClinicProfile = (DoctorClinicProfile) menuClinicListAdapter.getItem(position);
-        menuClinicListAdapter.notifyDataSetChanged();
-        Util.sendBroadcast(mApp, ContactsListFragment.INTENT_REFRESH_CONTACTS_LIST_FROM_SERVER);
-        getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, new Intent().putExtra(TAG_CLINIC_NAME, Parcels.wrap(doctorClinicProfile)));
+        refreshSelectedDoctorClinicProfileDetails(doctorClinicProfile);
+        getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK,null);
         getDialog().dismiss();
+    }
+
+    private void refreshSelectedDoctorClinicProfileDetails(DoctorClinicProfile doctorClinicProfile) {
+        SELECTED_LOCATION_ID = doctorClinicProfile.getLocationId();
+        if (!Util.isNullOrBlank(SELECTED_LOCATION_ID)) {
+            LocalDataServiceImpl.getInstance(mApp).updatedSelectedLocationDetails(doctorClinicProfile.getDoctorId(), doctorClinicProfile);
+        }
     }
 
     @Override

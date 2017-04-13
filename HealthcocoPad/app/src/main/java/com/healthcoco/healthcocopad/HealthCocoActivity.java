@@ -29,7 +29,7 @@ import com.android.volley.Response;
 import com.healthcoco.healthcocopad.activities.CloudPrintActivity;
 import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.adapter.MyPrintDocumentAdapter;
-import com.healthcoco.healthcocopad.bean.UserPermissionsResponse;
+import com.healthcoco.healthcocopad.bean.UiPermissionsBoth;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.BloodGroup;
 import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
@@ -293,14 +293,10 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
                         WebDataServiceImpl.getInstance(mApp).getTemplatesList(TempTemplate.class, user.getUniqueId(), 0l, this, this);
                         defaultWebServicesList.add(syncServiceType);
                         break;
-//                    case GET_DOCTORS_UI_PERMISIIONS:
-//                        getDoctorsUIPermissions();
-//                        defaultWebServicesList.add(syncServiceType);
-//                        break;
-//                    case GET_ALL_UI_PERMISSIONS:
-//                        WebDataServiceImpl.getInstance(mApp).getALLUIPermissions(AllUIPermission.class, user.getUniqueId(), this, this);
-//                        defaultWebServicesList.add(syncServiceType);
-//                        break;
+                    case GET_BOTH_UI_PERMISSIONS:
+                        WebDataServiceImpl.getInstance(mApp).getBothUIPermissionsForDoctor(UiPermissionsBoth.class, user.getUniqueId(), this, this);
+                        defaultWebServicesList.add(syncServiceType);
+                        break;
                     case SYNC_COMPLETE:
                         isInitialLoading = false;
                 }
@@ -308,10 +304,6 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    private void getDoctorsUIPermissions() {
-        WebDataServiceImpl.getInstance(mApp).getDoctorsUIPermissions(UserPermissionsResponse.class, user.getUniqueId(), this, this);
     }
 
     public void syncGroups(User user) {
@@ -429,13 +421,9 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
                 case GET_TEMPLATES_LIST:
                     if (defaultWebServicesList.contains(DefaultSyncServiceType.getSyncType(webServiceType)))
                         defaultWebServicesList.remove(DefaultSyncServiceType.getSyncType(webServiceType));
-                    updateProgress(DefaultSyncServiceType.GET_DOCTORS_UI_PERMISIIONS);
+                    updateProgress(DefaultSyncServiceType.GET_BOTH_UI_PERMISSIONS);
                     break;
-                case GET_UI_PERMISSIONS_FOR_DOCTOR:
-                    if (defaultWebServicesList.contains(DefaultSyncServiceType.getSyncType(webServiceType)))
-                        defaultWebServicesList.remove(DefaultSyncServiceType.getSyncType(webServiceType));
-                    updateProgress(DefaultSyncServiceType.GET_ALL_UI_PERMISSIONS);
-                case GET_ALL_UI_PERMISSIONS:
+                case GET_BOTH_PERMISSIONS_FOR_DOCTOR:
                     if (defaultWebServicesList.contains(DefaultSyncServiceType.getSyncType(webServiceType)))
                         defaultWebServicesList.remove(DefaultSyncServiceType.getSyncType(webServiceType));
                     updateProgress(DefaultSyncServiceType.SYNC_COMPLETE);
@@ -538,11 +526,8 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
                     case GET_TEMPLATES_LIST:
                         new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_TEMPLATES, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
                         break;
-                    case GET_UI_PERMISSIONS_FOR_DOCTOR:
-                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_DOCTORS_UI_PERMISSIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
-                        break;
-                    case GET_ALL_UI_PERMISSIONS:
-                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_ALL_UI_PERMISSIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                    case GET_BOTH_PERMISSIONS_FOR_DOCTOR:
+                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_BOTH_USER_UI_PERMISSIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
                         break;
                     default:
                         break;
@@ -663,11 +648,11 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
             case ADD_TEMPLATES:
                 if (!Util.isNullOrEmptyList(response.getDataList()))
                     LocalDataServiceImpl.getInstance(mApp).addTemplatesList((ArrayList<TempTemplate>) (ArrayList<?>) response.getDataList());
-//            case ADD_DOCTORS_UI_PERMISSIONS:
-//                if (response.getData() != null)
-//                    LocalDataServiceImpl.getInstance(mApp).
-//                            addUserUiPermissions((UserPermissionsResponse) response.getData());
-//                break;
+            case ADD_BOTH_USER_UI_PERMISSIONS:
+                if (response.getData() != null)
+                    LocalDataServiceImpl.getInstance(mApp).
+                            addBothUserUiPermissions((UiPermissionsBoth) response.getData());
+                break;
 //            case ADD_ALL_UI_PERMISSIONS:
 //                if (response.getData() != null)
 //                    LocalDataServiceImpl.getInstance(mApp).

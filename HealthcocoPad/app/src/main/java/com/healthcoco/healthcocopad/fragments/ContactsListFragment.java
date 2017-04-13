@@ -589,10 +589,6 @@ public class ContactsListFragment extends HealthCocoFragment implements
                             return;
                         }
                     } else if (!Util.isNullOrEmptyList(response.getDataList())) {
-                        ArrayList<RegisteredPatientDetailsUpdated> responseList = (ArrayList<RegisteredPatientDetailsUpdated>) (ArrayList<?>) response
-                                .getDataList();
-                        if (responseList.size() <= 10)
-                            formHashMapAndRefresh(responseList);
                         response.setIsFromLocalAfterApiSuccess(true);
                         new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_PATIENTS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
                         return;
@@ -661,6 +657,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
             patientsListHashMap.clear();
         PAGE_NUMBER = 0;
         isEndOfListAchieved = false;
+        isEditTextSearching = false;
         gvContacts.resetPreLastPosition(0);
         notifyAdapter(new ArrayList<RegisteredPatientDetailsUpdated>(patientsListHashMap.values()));
     }
@@ -729,13 +726,14 @@ public class ContactsListFragment extends HealthCocoFragment implements
     BroadcastReceiver contactsListFromServerReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, final Intent intent) {
-//            LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
-//                if (doctor != null && doctor.getUser() != null && !Util.isNullOrBlank(doctor.getUser().getUniqueId())) {
-//                    clearSearchEditText();
-//                    user = doctor.getUser();
+            LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
+            if (doctor != null && doctor.getUser() != null && !Util.isNullOrBlank(doctor.getUser().getUniqueId())) {
+                clearSearchEditText();
+                user = doctor.getUser();
                 resetListAndPagingAttributes();
+                filterType = FilterItemType.ALL_PATIENTS;
                 getListFromLocal(true);
-                getGroupsListFromServer();
+            }
         }
     };
     BroadcastReceiver finishContactsListReceiver = new BroadcastReceiver() {
@@ -896,7 +894,6 @@ public class ContactsListFragment extends HealthCocoFragment implements
             case ADD_PATIENTS:
                 volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).
                         addPatientsList((ArrayList<RegisteredPatientDetailsUpdated>) (ArrayList<?>) response.getDataList());
-                break;
             case GET_PATIENTS:
             case SORT_LIST_BY_RECENTLY_ADDED:
             case SEARCH_PATIENTS:
