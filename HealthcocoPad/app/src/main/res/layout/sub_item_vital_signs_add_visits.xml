@@ -45,15 +45,15 @@
                     android:textColor="@color/black"
                     android:textSize="@dimen/text_size_add_visits_lable" />
 
-                <EditText
+                <com.healthcoco.healthcocopad.custom.MyScriptEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="@dimen/margin_add_vital_signs_layout"
                     android:background="@drawable/shape_rounded_corners_item_background"
-                    android:inputType="numberDecimal"
                     android:gravity="center"
                     android:hint="@string/faranheit"
+                    android:inputType="numberDecimal"
                     android:maxLines="1"
                     android:padding="10dp"
                     android:textColor="@color/black"
@@ -78,15 +78,15 @@
                     android:textColor="@color/black"
                     android:textSize="@dimen/text_size_add_visits_lable" />
 
-                <EditText
+                <com.healthcoco.healthcocopad.custom.MyScriptEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:inputType="numberDecimal"
                     android:layout_marginTop="@dimen/margin_add_vital_signs_layout"
                     android:background="@drawable/shape_rounded_corners_item_background"
                     android:gravity="center"
                     android:hint="@string/kilograms"
+                    android:inputType="numberDecimal"
                     android:maxLines="1"
                     android:padding="10dp"
                     android:textColor="@color/black"
@@ -110,15 +110,15 @@
                     android:textColor="@color/black"
                     android:textSize="@dimen/text_size_add_visits_lable" />
 
-                <EditText
+                <com.healthcoco.healthcocopad.custom.MyScriptEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="@dimen/margin_add_vital_signs_layout"
                     android:background="@drawable/shape_rounded_corners_item_background"
-                    android:inputType="numberDecimal"
                     android:gravity="center"
                     android:hint="@string/beats_per_min"
+                    android:inputType="numberDecimal"
                     android:maxLines="1"
                     android:padding="10dp"
                     android:textColor="@color/black"
@@ -152,21 +152,21 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_add_vital_signs_layout"
                     android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/margin_add_vital_signs_layout"
                     android:gravity="center"
                     android:orientation="horizontal">
 
-                    <EditText
+                    <com.healthcoco.healthcocopad.custom.MyScriptEditText
                         android:id="@+id/et_systolic"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:layout_weight="1"
                         android:background="@drawable/shape_rounded_corners_item_background"
-                        android:inputType="numberDecimal"
                         android:gravity="center"
                         android:hint="@string/systolic"
+                        android:inputType="numberDecimal"
                         android:maxLines="1"
                         android:padding="10dp"
                         android:textColor="@color/black"
@@ -182,16 +182,16 @@
                         android:textColor="@color/black"
                         android:textSize="20sp" />
 
-                    <EditText
+                    <com.healthcoco.healthcocopad.custom.MyScriptEditText
                         android:id="@+id/et_diastolic"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:layout_weight="1"
-                        android:inputType="numberDecimal"
                         android:background="@drawable/shape_rounded_corners_item_background"
                         android:gravity="center"
                         android:hint="@string/diastolic"
+                        android:inputType="numberDecimal"
                         android:maxLines="1"
                         android:padding="10dp"
                         android:textColor="@color/black"
@@ -217,15 +217,15 @@
                     android:textColor="@color/black"
                     android:textSize="@dimen/text_size_add_visits_lable" />
 
-                <EditText
+                <com.healthcoco.healthcocopad.custom.MyScriptEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="@dimen/margin_add_vital_signs_layout"
                     android:background="@drawable/shape_rounded_corners_item_background"
                     android:gravity="center"
-                    android:inputType="numberDecimal"
                     android:hint="@string/breaths_per_min"
+                    android:inputType="numberDecimal"
                     android:maxLines="1"
                     android:padding="10dp"
                     android:textColor="@color/black"
@@ -248,7 +248,7 @@
                     android:textColor="@color/black"
                     android:textSize="@dimen/text_size_add_visits_lable" />
 
-                <EditText
+                <com.healthcoco.healthcocopad.custom.MyScriptEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"

@@ -29,9 +29,9 @@ import com.android.volley.Response;
 import com.healthcoco.healthcocopad.activities.CloudPrintActivity;
 import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.adapter.MyPrintDocumentAdapter;
-import com.healthcoco.healthcocopad.bean.UIPermissions;
 import com.healthcoco.healthcocopad.bean.UserPermissionsResponse;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
+import com.healthcoco.healthcocopad.bean.server.AllUIPermission;
 import com.healthcoco.healthcocopad.bean.server.BloodGroup;
 import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
 import com.healthcoco.healthcocopad.bean.server.CityResponse;
@@ -80,6 +80,7 @@ import com.healthcoco.healthcocopad.utilities.ImageUtil;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.MyExceptionHandler;
 import com.healthcoco.healthcocopad.utilities.Util;
+import com.healthcoco.healthcocopad.views.FontAwesomeButton;
 
 import org.parceler.Parcels;
 
@@ -302,7 +303,7 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
                         defaultWebServicesList.add(syncServiceType);
                         break;
                     case GET_ALL_UI_PERMISSIONS:
-                        WebDataServiceImpl.getInstance(mApp).getALLUIPermissions(UIPermissions.class, user.getUniqueId(), this, this);
+                        WebDataServiceImpl.getInstance(mApp).getALLUIPermissions(AllUIPermission.class, user.getUniqueId(), this, this);
                         defaultWebServicesList.add(syncServiceType);
                         break;
                     case SYNC_COMPLETE:
@@ -515,15 +516,15 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
                     case GET_CALENDAR_EVENTS:
                         new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_CALENDAR_EVENTS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
                         break;
-                    case GET_EDUCATION_QUALIFICATION:
-                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_EDUCATION_QUALIFICATION, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
-                        break;
-                    case GET_COLLEGE_UNIVERSITY_INSTITUES:
-                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_INSTITUTES, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
-                        break;
-                    case GET_MEDICAL_COUNCILS:
-                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_MEDICAL_COUNCILS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
-                        break;
+//                    case GET_EDUCATION_QUALIFICATION:
+//                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_EDUCATION_QUALIFICATION, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+//                        break;
+//                    case GET_COLLEGE_UNIVERSITY_INSTITUES:
+//                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_INSTITUTES, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+//                        break;
+//                    case GET_MEDICAL_COUNCILS:
+//                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_MEDICAL_COUNCILS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+//                        break;
                     case GET_COMPLAINT_SUGGESTIONS:
                         new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_COMPLAINT_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
                         break;
@@ -621,21 +622,21 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
                     LocalDataServiceImpl.getInstance(mApp).
                             addPatientsList((ArrayList<RegisteredPatientDetailsUpdated>) (ArrayList<?>) response.getDataList());
                 break;
-            case ADD_EDUCATION_QUALIFICATION:
-                if (!Util.isNullOrEmptyList(response.getDataList()))
-                    LocalDataServiceImpl.getInstance(mApp).
-                            addEducationsList((ArrayList<EducationQualification>) (ArrayList<?>) response.getDataList());
-                break;
-            case ADD_INSTITUTES:
-                if (!Util.isNullOrEmptyList(response.getDataList()))
-                    LocalDataServiceImpl.getInstance(mApp).
-                            addCollegeUniversityInstituteList((ArrayList<CollegeUniversityInstitute>) (ArrayList<?>) response.getDataList());
-                break;
-            case ADD_MEDICAL_COUNCILS:
-                if (!Util.isNullOrEmptyList(response.getDataList()))
-                    LocalDataServiceImpl.getInstance(mApp).
-                            addMedicalCouncilList((ArrayList<MedicalCouncil>) (ArrayList<?>) response.getDataList());
-                break;
+//            case ADD_EDUCATION_QUALIFICATION:
+//                if (!Util.isNullOrEmptyList(response.getDataList()))
+//                    LocalDataServiceImpl.getInstance(mApp).
+//                            addEducationsList((ArrayList<EducationQualification>) (ArrayList<?>) response.getDataList());
+//                break;
+//            case ADD_INSTITUTES:
+//                if (!Util.isNullOrEmptyList(response.getDataList()))
+//                    LocalDataServiceImpl.getInstance(mApp).
+//                            addCollegeUniversityInstituteList((ArrayList<CollegeUniversityInstitute>) (ArrayList<?>) response.getDataList());
+//                break;
+//            case ADD_MEDICAL_COUNCILS:
+//                if (!Util.isNullOrEmptyList(response.getDataList()))
+//                    LocalDataServiceImpl.getInstance(mApp).
+//                            addMedicalCouncilList((ArrayList<MedicalCouncil>) (ArrayList<?>) response.getDataList());
+//                break;
             case ADD_COMPLAINT_SUGGESTIONS:
                 if (!Util.isNullOrEmptyList(response.getDataList()))
                     LocalDataServiceImpl.getInstance(mApp).
@@ -665,18 +666,18 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
                     LocalDataServiceImpl.getInstance(mApp).addDiseaseList((ArrayList<Disease>) (ArrayList<?>) response.getDataList());
                 break;
             case ADD_TEMPLATES:
-//                if (!Util.isNullOrEmptyList(response.getDataList()))
-//                    LocalDataServiceImpl.getInstance(mApp).addTemplatesList((ArrayList<TempTemplate>) (ArrayList<?>) response.getDataList());
-//            case ADD_DOCTORS_UI_PERMISSIONS:
-//                if (response.getData() != null)
-//                    LocalDataServiceImpl.getInstance(mApp).
-//                            addUserUiPermissions((UserPermissionsResponse) response.getData());
-//                break;
-//            case ADD_ALL_UI_PERMISSIONS:
-//                if (response.getData() != null)
-//                    LocalDataServiceImpl.getInstance(mApp).
-//                            addALLUiPermissions((UIPermissions) response.getData());
-//                break;
+                if (!Util.isNullOrEmptyList(response.getDataList()))
+                    LocalDataServiceImpl.getInstance(mApp).addTemplatesList((ArrayList<TempTemplate>) (ArrayList<?>) response.getDataList());
+            case ADD_DOCTORS_UI_PERMISSIONS:
+                if (response.getData() != null)
+                    LocalDataServiceImpl.getInstance(mApp).
+                            addUserUiPermissions((UserPermissionsResponse) response.getData());
+                break;
+            case ADD_ALL_UI_PERMISSIONS:
+                if (response.getData() != null)
+                    LocalDataServiceImpl.getInstance(mApp).
+                            addALLUiPermissions((AllUIPermission) response.getData());
+                break;
         }
         VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
         volleyResponseBean.setWebServiceType(response.getWebServiceType());
@@ -857,6 +858,18 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
                 }
                 WebDataServiceImpl.getInstance(mApp).sendGcmRegistrationId(false);
             }
+        }
+    }
+
+    public void initActionbarTitle() {
+        FontAwesomeButton btSync = (FontAwesomeButton) findViewById(R.id.bt_sync);
+        if (btSync != null) {
+            btSync.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+//                    getDoctorsUIPermissions();
+                }
+            });
         }
     }
 

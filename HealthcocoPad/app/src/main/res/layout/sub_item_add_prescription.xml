@@ -65,7 +65,7 @@
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size_add_visits_lable" />
 
-            <EditText
+            <com.healthcoco.healthcocopad.custom.MyScriptEditText
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:background="@drawable/shape_rounded_corners_item_background"

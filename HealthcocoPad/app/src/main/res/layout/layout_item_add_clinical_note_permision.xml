@@ -17,7 +17,7 @@
         android:textSize="@dimen/text_size_add_visits_lable"
         android:visibility="visible" />
 
-    <AutoCompleteTextView
+    <com.healthcoco.healthcocopad.custom.MyScriptEditText
         android:id="@+id/autotv_permission"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -31,5 +31,5 @@
         android:hint="@string/holter"
         android:paddingTop="5dp"
         android:textColorHint="@color/grey_light_text"
-        android:textSize="@dimen/text_size_add_visits_lable"></AutoCompleteTextView>
+        android:textSize="@dimen/text_size_add_visits_lable"></com.healthcoco.healthcocopad.custom.MyScriptEditText>
 </LinearLayout>

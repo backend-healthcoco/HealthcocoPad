@@ -7,7 +7,7 @@ import android.text.InputType;
 import android.util.AttributeSet;
 import android.widget.EditText;
 
-public class CustomEditText extends EditText {
+public class MyScriptEditText extends EditText {
 
     private int mLastSelectionStart;
     private int mLastSelectionEnd;
@@ -18,17 +18,17 @@ public class CustomEditText extends EditText {
         public void onSelectionChanged(EditText editText, int selStart, int selEnd);
     }
 
-    public CustomEditText(Context context) {
+    public MyScriptEditText(Context context) {
         super(context);
         init();
     }
 
-    public CustomEditText(Context context, AttributeSet attrs) {
+    public MyScriptEditText(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public CustomEditText(Context context, AttributeSet attrs, int defStyleAttr) {
+    public MyScriptEditText(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
     }
