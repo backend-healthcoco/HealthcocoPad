@@ -11,7 +11,7 @@
     <RelativeLayout
         android:id="@+id/profile_layout"
         android:layout_width="match_parent"
-        android:layout_height="100dp">
+        android:layout_height="120dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -25,21 +25,20 @@
                 android:background="@color/grey_darker"
                 android:gravity="center"
                 android:orientation="vertical"
-                android:paddingRight="8dp"
-                android:paddingLeft="8dp">
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp">
 
                 <include layout="@layout/item_profile_header" />
             </LinearLayout>
 
         </LinearLayout>
-
     </RelativeLayout>
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/profile_layout"
         android:layout_above="@+id/editText"
+        android:layout_below="@+id/profile_layout"
         android:background="@color/white">
 
         <ListView
@@ -55,12 +54,12 @@
         android:id="@+id/editText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/grey_darker"
-        android:orientation="vertical"
-        android:padding="10dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:background="@color/grey_darker"
+        android:orientation="vertical"
+        android:padding="10dp">
 
         <View
             android:layout_width="wrap_content"

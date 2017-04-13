@@ -45,6 +45,7 @@
             android:drawablePadding="5dp"
             android:drawableRight="@drawable/arrow_menu_down"
             android:maxLines="1"
+            android:paddingBottom="10dp"
             android:textColor="@color/white"
             android:textSize="@dimen/text_size_menu_clinic_name" />
     </LinearLayout>

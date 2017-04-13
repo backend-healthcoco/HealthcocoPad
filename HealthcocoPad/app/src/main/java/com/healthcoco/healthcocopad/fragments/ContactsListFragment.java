@@ -662,6 +662,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
         PAGE_NUMBER = 0;
         isEndOfListAchieved = false;
         gvContacts.resetPreLastPosition(0);
+        notifyAdapter(new ArrayList<RegisteredPatientDetailsUpdated>(patientsListHashMap.values()));
     }
 
     private void refreshMenuFragmentContactsCount() {
@@ -728,14 +729,13 @@ public class ContactsListFragment extends HealthCocoFragment implements
     BroadcastReceiver contactsListFromServerReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, final Intent intent) {
-            LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
-            if (doctor != null && doctor.getUser() != null && !Util.isNullOrBlank(doctor.getUser().getUniqueId())) {
-                clearSearchEditText();
-                user = doctor.getUser();
+//            LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
+//                if (doctor != null && doctor.getUser() != null && !Util.isNullOrBlank(doctor.getUser().getUniqueId())) {
+//                    clearSearchEditText();
+//                    user = doctor.getUser();
                 resetListAndPagingAttributes();
                 getListFromLocal(true);
                 getGroupsListFromServer();
-            }
         }
     };
     BroadcastReceiver finishContactsListReceiver = new BroadcastReceiver() {

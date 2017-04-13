@@ -714,4 +714,7 @@
     <string name="version">Version</string>
     <string name="sdk">SDK</string>
     <string name="feedback_sent_successfully">Feedback sent Successfully</string>
+    <string name="space">Space</string>
+    <string name="delete">Del</string>
+    <string name="enter">Enter</string>
 </resources>

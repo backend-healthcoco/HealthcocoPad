@@ -30,4 +30,5 @@
     <color name="grey_dark_background">#d6d3d3</color>
     <color name="orange">#90F77600</color>
     <color name="orange_translucent">#60FF7700</color>
+    <color name="grey_widget_backgroung">#e6e6e6</color>
 </resources>

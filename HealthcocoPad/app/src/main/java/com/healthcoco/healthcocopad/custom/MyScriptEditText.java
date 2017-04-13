@@ -35,7 +35,7 @@ public class MyScriptEditText extends EditText {
 
     private void init() {
         // prevent input method to show up when tapping into the text field
-        setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+//        setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
         setTextIsSelectable(true);
     }
 

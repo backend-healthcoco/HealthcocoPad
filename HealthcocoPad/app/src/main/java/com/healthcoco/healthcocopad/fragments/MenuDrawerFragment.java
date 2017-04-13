@@ -16,7 +16,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.Response;
@@ -69,9 +68,8 @@ public class MenuDrawerFragment extends HealthCocoFragment implements View.OnCli
     private int selectedPosition;
     private FragmentType selectedFragmentType;
     private boolean receiversRegistered;
-    private LinearLayout manage_clinic_layout;
+    private LinearLayout manageClinicLayout;
     private List<DoctorClinicProfile> clinicProfile;
-
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_master, null);
@@ -136,7 +134,7 @@ public class MenuDrawerFragment extends HealthCocoFragment implements View.OnCli
         tvProfileName = (TextView) view.findViewById(R.id.tv_profile_name);
         tvInitialAlphabet = (TextView) view.findViewById(R.id.tv_initial_aplhabet);
         itemProfileHeader = (LinearLayout) view.findViewById(R.id.item_profile_header);
-        manage_clinic_layout = (LinearLayout) view.findViewById(R.id.manage_clinic_layout);
+        manageClinicLayout = (LinearLayout) view.findViewById(R.id.manage_clinic_layout);
         progressLoading = (ProgressBar) view.findViewById(R.id.progress_loading);
     }
 
@@ -145,7 +143,7 @@ public class MenuDrawerFragment extends HealthCocoFragment implements View.OnCli
         ivImage.setOnClickListener(this);
         tvClinicName.setOnClickListener(this);
         itemProfileHeader.setOnClickListener(this);
-        manage_clinic_layout.setOnClickListener(this);
+        manageClinicLayout.setOnClickListener(this);
         lvMenuList.setOnItemClickListener(this);
     }
 

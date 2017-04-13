@@ -26,7 +26,7 @@ public class HealthcocoOnSelectionChanged implements MyScriptEditText.OnSelectio
         SingleLineWidgetApi.OnUserScrollBeginListener,
         SingleLineWidgetApi.OnUserScrollEndListener,
         SingleLineWidgetApi.OnUserScrollListener,
-        SingleLineWidgetApi.OnPenUpListener  {
+        SingleLineWidgetApi.OnPenUpListener {
     private final String TAG = HealthcocoOnSelectionChanged.class.getSimpleName();
 
     private HealthcocoOnSelectionChangedListener onSelectionChangedListener;
@@ -112,6 +112,5 @@ public class HealthcocoOnSelectionChanged implements MyScriptEditText.OnSelectio
 
     public void onSelectionChanged(EditText editText, int selStart, int selEnd) {
         onSelectionChangedListener.onSelectionChanged(editText, selStart, selEnd);
-
     }
 }
