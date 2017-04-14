@@ -63,6 +63,7 @@ import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by Shreshtha on 05-04-2017.
@@ -122,6 +123,7 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
     private TextView tvCandidateOne;
     private TextView tvCandidateTwo;
     private TextView tvCandidateThree;
+    private LinearLayout mCandidateBar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -183,6 +185,7 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
         btDel = (Button) view.findViewById(R.id.bt_del);
         btSpace = (Button) view.findViewById(R.id.bt_space);
         btEnter = (Button) view.findViewById(R.id.bt_enter);
+        mCandidateBar = (LinearLayout) view.findViewById(R.id.candidateBar);
         tvCandidateOne = (TextView) view.findViewById(R.id.tv_candidate_one);
         tvCandidateTwo = (TextView) view.findViewById(R.id.tv_candidate_two);
         tvCandidateThree = (TextView) view.findViewById(R.id.tv_candidate_three);
@@ -282,6 +285,9 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
         btKeyboard.setOnClickListener(this);
         btDel.setOnClickListener(this);
         btSpace.setOnClickListener(this);
+        tvCandidateOne.setOnClickListener(this);
+        tvCandidateTwo.setOnClickListener(this);
+        tvCandidateThree.setOnClickListener(this);
         btEnter.setOnClickListener(this);
         etAdvice.setOnTouchListener(this);
         editBodyTemperature.setOnTouchListener(this);
@@ -523,6 +529,11 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
             case R.id.bt_enter:
                 onEnterClick();
                 break;
+            case R.id.tv_candidate_one:
+            case R.id.tv_candidate_two:
+            case R.id.tv_candidate_three:
+                onCandidateButtonClick(v);
+                break;
         }
     }
 
@@ -717,6 +728,7 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
                 isCorrectionMode--;
             }
         }
+        updateCandidateBar();
     }
 
     @Override
@@ -821,6 +833,7 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
             } else {
                 mWidget.centerTo(selEnd);
             }
+            updateCandidateBar();
         }
     }
 
@@ -888,4 +901,48 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
             isCorrectionMode++;
         }
     }
+
+
+    // update candidates bar
+    private void updateCandidateBar() {
+        int index = mWidget.getCursorIndex() - 1;
+        if (index < 0) {
+            index = 0;
+        }
+
+        CandidateInfo info = mWidget.getWordCandidates(index);
+
+        int start = info.getStart();
+        int end = info.getEnd();
+        List<String> labels = info.getLabels();
+        List<String> completions = info.getCompletions();
+
+        for (int i = 0; i < 3; i++) {
+            Button b = (Button) mCandidateBar.getChildAt(i);
+
+            CandidateTag tag = new CandidateTag();
+            if (i < labels.size()) {
+                tag.start = start;
+                tag.end = end;
+                tag.text = labels.get(i) + completions.get(i);
+            } else {
+                tag = null;
+            }
+
+            b.setTag(tag);
+
+            if (tag != null) {
+                b.setText(tag.text.replace("\n", "\u21B2"));
+            } else {
+                b.setText("");
+            }
+        }
+
+        if (info.isEmpty()) {
+            mWidget.clearSelection();
+        } else {
+            mWidget.selectWord(index);
+        }
+    }
+
 }

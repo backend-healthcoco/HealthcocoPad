@@ -212,7 +212,7 @@ public class VisitDetailCombinedViewHolder extends HealthCocoViewHolder implemen
                         btHistory.setVisibility(View.VISIBLE);
                         break;
                     case R.id.bt_save_as_template_visit:
-                        btSaveAsTemplate.setVisibility(View.VISIBLE);
+                        btSaveAsTemplate.setVisibility(View.GONE);
                         break;
                     case R.id.bt_clone_visit:
                         btClone.setVisibility(View.VISIBLE);
