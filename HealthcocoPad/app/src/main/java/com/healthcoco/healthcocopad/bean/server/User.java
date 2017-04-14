@@ -46,6 +46,7 @@ public class User extends SugarRecord {
     protected String foreignLocationId;
     private UserState userState;
     private String colorCode;
+    @Ignore
     private AssignedUserUiPermissions uiPermissions;
     @Ignore
     private List<Role> roles;

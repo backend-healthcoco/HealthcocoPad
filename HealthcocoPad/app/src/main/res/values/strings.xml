@@ -716,4 +716,9 @@
     <string name="space">Space</string>
     <string name="delete">Del</string>
     <string name="enter">Enter</string>
+
+    <!--visits alert messages-->
+    <string name="alert_blank_visit">Blank visit cannot be created</string>
+    <string name="please_add_systolic_and_diastolic_both">Please add Systolic and Diastolic both</string>
+
 </resources>

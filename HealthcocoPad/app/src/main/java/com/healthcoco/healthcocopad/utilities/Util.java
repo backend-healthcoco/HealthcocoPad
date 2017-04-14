@@ -334,7 +334,12 @@ public class Util {
             return value;
         return "";
     }
-
+    public static String getValidatedValueOrBlankTrimming(TextView textView) {
+        String value = String.valueOf(textView.getText()).trim();
+        if (!Util.isNullOrBlank(value))
+            return value;
+        return "";
+    }
     public static Integer getValidatedIntegerValue(EditText textView) {
         String validatedValue = getValidatedValueOrNull(textView);
         try {

@@ -61,6 +61,7 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
         GsonRequest.ErrorListener, LocalDoInBackgroundListenerOptimised, VisitDetailCombinedItemListener,
         SwipeRefreshLayout.OnRefreshListener,
         LoadMorePageListener, View.OnClickListener {
+    public static final String INTENT_GET_VISITS_LIST_FROM_LOCAL = "com.healthcoco.healthcocopad.fragments.PatientVisitDetailFragment.VISITS_LIST_FROM_LOCAl";
     //variables need for pagination
     public static final int MAX_SIZE = 10;
     private static final int REQUEST_CODE_VISITS_LIST = 100;
@@ -137,7 +138,7 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
     public void refreshData(User user, RegisteredPatientDetailsUpdated registeredPatientDetailsUpdated) {
         this.selectedPatient = registeredPatientDetailsUpdated;
         this.user = user;
-        getListFromLocal(true,0);
+        getListFromLocal(true, 0);
     }
 
     public void getVisits(boolean showLoading) {
@@ -274,6 +275,11 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
             IntentFilter filter = new IntentFilter();
             filter.addAction(INTENT_GET_VISITS_LIST);
             LocalBroadcastManager.getInstance(mActivity).registerReceiver(visitsListReceiver, filter);
+
+            IntentFilter filter1 = new IntentFilter();
+            filter1.addAction(INTENT_GET_VISITS_LIST_FROM_LOCAL);
+            LocalBroadcastManager.getInstance(mActivity).registerReceiver(visitsListLocalReceiver, filter1);
+
             receiversRegistered = true;
         }
     }
@@ -287,6 +293,7 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
     public void onDestroy() {
         super.onDestroy();
         LocalBroadcastManager.getInstance(mActivity).unregisterReceiver(visitsListReceiver);
+        LocalBroadcastManager.getInstance(mActivity).unregisterReceiver(visitsListLocalReceiver);
     }
 
     BroadcastReceiver visitsListReceiver = new BroadcastReceiver() {
@@ -294,6 +301,12 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
         public void onReceive(Context context, final Intent intent) {
             resetListAndPagingAttributes();
             getVisits(false);
+        }
+    };
+    BroadcastReceiver visitsListLocalReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, final Intent intent) {
+            refreshListFromLocal();
         }
     };
 
@@ -335,7 +348,7 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_VISITS_LIST) {
-            if (resultCode == HealthCocoConstants.RESULT_CODE_ADD_VISIT && data != null ){
+            if (resultCode == HealthCocoConstants.RESULT_CODE_ADD_VISIT && data != null) {
 //                    && data.hasExtra(VisitDetailFragment.TAG_VISIT_ID)) {
                 refreshListFromLocal();
                 // opens visitDetail screen once visit is added

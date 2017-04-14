@@ -18,7 +18,7 @@
         android:visibility="visible" />
 
     <com.healthcoco.healthcocopad.custom.MyScriptEditText
-        android:id="@+id/autotv_permission"
+        android:id="@+id/edit_permission_text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="3dp"

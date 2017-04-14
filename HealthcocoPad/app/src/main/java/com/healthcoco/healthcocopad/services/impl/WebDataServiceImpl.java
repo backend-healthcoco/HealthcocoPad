@@ -42,6 +42,7 @@ import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.TempTemplate;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.bean.server.UserGroups;
+import com.healthcoco.healthcocopad.bean.server.VisitDetails;
 import com.healthcoco.healthcocopad.enums.BooleanTypeValues;
 import com.healthcoco.healthcocopad.enums.LocalTabelType;
 import com.healthcoco.healthcocopad.enums.RecordState;
@@ -979,6 +980,17 @@ public class WebDataServiceImpl implements GCMRefreshListener {
             WebServiceType webServiceType = WebServiceType.POST_UI_PERMISSIONS;
             getResponse(webServiceType, class1, webServiceType.getUrl(), userPermissionsResponse, null, responseListener,
                     errorListener);
+        }
+    }
+    public void addVisit(Class<?> class1, VisitDetails visitDetails,
+                         Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        WebServiceType webServiceType = WebServiceType.ADD_VISIT;
+        Util.checkNetworkStatus(mApp);
+        if (HealthCocoConstants.isNetworkOnline) {
+            getResponse(webServiceType, class1, webServiceType.getUrl(), visitDetails, null, responseListener,
+                    errorListener);
+        } else {
+            showUserOffline(webServiceType, responseListener);
         }
     }
 }

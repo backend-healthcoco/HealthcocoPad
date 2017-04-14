@@ -79,6 +79,13 @@ public class VitalSigns extends SugarRecord {
         return bloodPressure;
     }
 
+    public BloodPressure getBloodPressure(String systolic, String diastolic) {
+        BloodPressure bloodPressure = new BloodPressure();
+        bloodPressure.setSystolic(systolic);
+        bloodPressure.setDiastolic(diastolic);
+        return bloodPressure;
+    }
+
     public void setBloodPressure(BloodPressure bloodPressure) {
         this.bloodPressure = bloodPressure;
     }
