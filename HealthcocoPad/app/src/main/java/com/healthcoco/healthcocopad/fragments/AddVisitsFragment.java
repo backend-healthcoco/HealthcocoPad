@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -27,7 +28,6 @@ import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.MyCertificate;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.activities.AddVisitsActivity;
-import com.healthcoco.healthcocopad.bean.UIPermissions;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.AssignedUserUiPermissions;
 import com.healthcoco.healthcocopad.bean.server.BloodPressure;
@@ -115,7 +115,13 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
     private MyScriptEditText editSpo2;
     private MyScriptEditText editWeight;
     private LinearLayout layoutWidget;
-    private ImageButton tvFontAwesomeKeyboard;
+    private ImageButton btKeyboard;
+    private Button btDel;
+    private Button btSpace;
+    private Button btEnter;
+    private TextView tvCandidateOne;
+    private TextView tvCandidateTwo;
+    private TextView tvCandidateThree;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -160,8 +166,7 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
     @Override
     public void initViews() {
         svScrollView = (ScrollView) view.findViewById(R.id.sv_scrollview);
-        mWidget = (SingleLineWidget) view.findViewById(R.id.widget);
-        layoutWidget = (LinearLayout) view.findViewById(R.id.layout_widget);
+        initWidgetViews();
         initToolbarView();
         initHeaderView();
         initClinicalNotesView();
@@ -171,9 +176,21 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
         initAdviceViews();
     }
 
+    private void initWidgetViews() {
+        mWidget = (SingleLineWidget) view.findViewById(R.id.widget);
+        layoutWidget = (LinearLayout) view.findViewById(R.id.layout_widget);
+        btKeyboard = (ImageButton) view.findViewById(R.id.bt_keyboard);
+        btDel = (Button) view.findViewById(R.id.bt_del);
+        btSpace = (Button) view.findViewById(R.id.bt_space);
+        btEnter = (Button) view.findViewById(R.id.bt_enter);
+        tvCandidateOne = (TextView) view.findViewById(R.id.tv_candidate_one);
+        tvCandidateTwo = (TextView) view.findViewById(R.id.tv_candidate_two);
+        tvCandidateThree = (TextView) view.findViewById(R.id.tv_candidate_three);
+    }
+
     private void setViewToWidget() {
         mWidget.setBaselinePosition(getResources().getDimension(R.dimen.baseline_position));
-        mWidget.setWritingAreaBackgroundResource(R.color.grey_widget_backgroung);
+//        mWidget.setWritingAreaBackgroundResource(R.color.grey_widget_backgroung);
         mWidget.setScrollbarResource(R.drawable.sltw_scrollbar_xml);
         mWidget.setScrollbarMaskResource(R.drawable.sltw_scrollbar_mask);
         mWidget.setScrollbarBackgroundResource(R.drawable.sltw_scrollbar_background);
@@ -194,7 +211,6 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
         btLabTests = (ImageButton) view.findViewById(R.id.bt_lab_tests);
         btDiagrams = (ImageButton) view.findViewById(R.id.bt_diagrams);
         btAdvice = (ImageButton) view.findViewById(R.id.bt_advice);
-        tvFontAwesomeKeyboard = (ImageButton) view.findViewById(R.id.bt_keyboard);
         btSave = (TextViewFontAwesome) view.findViewById(R.id.bt_save);
     }
 
@@ -263,7 +279,10 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
         btDiagrams.setOnClickListener(this);
         btAdvice.setOnClickListener(this);
         btSave.setOnClickListener(this);
-        tvFontAwesomeKeyboard.setOnClickListener(this);
+        btKeyboard.setOnClickListener(this);
+        btDel.setOnClickListener(this);
+        btSpace.setOnClickListener(this);
+        btEnter.setOnClickListener(this);
         etAdvice.setOnTouchListener(this);
         editBodyTemperature.setOnTouchListener(this);
         editWeight.setOnTouchListener(this);
@@ -493,7 +512,16 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
                 }
                 break;
             case R.id.bt_keyboard:
-                showHideWidgetAndKeyboardLayout();
+//                showHideWidgetAndKeyboardLayout();
+                break;
+            case R.id.bt_del:
+                onDeleteButtonClick();
+                break;
+            case R.id.bt_space:
+                onSpaceButtonClick();
+                break;
+            case R.id.bt_enter:
+                onEnterClick();
                 break;
         }
     }
@@ -639,6 +667,7 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
                     break;
             }
         }
+        mActivity.hideLoading();
     }
 
     @Override
@@ -819,6 +848,15 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
         int start;
         int end;
         String text;
+    }
+
+    public void onEnterClick() {
+        int index = mWidget.getCursorIndex();
+        boolean replaced = mWidget.replaceCharacters(index, index, "\n");
+        if (replaced) {
+            mWidget.setCursorIndex(index + 1);
+            isCorrectionMode++;
+        }
     }
 
     public void onClearButtonClick() {

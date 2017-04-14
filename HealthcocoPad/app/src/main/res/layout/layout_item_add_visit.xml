@@ -7,6 +7,7 @@
         android:id="@+id/sv_scrollview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_above="@+id/layout_widget"
         android:orientation="vertical"
         android:overScrollMode="never">
 
@@ -41,9 +42,8 @@
     <LinearLayout
         android:id="@+id/layout_widget"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginTop="20dp"
         android:background="@color/grey_widget_backgroung"
         android:orientation="vertical">
 
@@ -110,10 +110,10 @@
             <ImageButton
                 android:id="@+id/bt_keyboard"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:gravity="center"
                 android:background="@null"
+                android:gravity="center_vertical"
                 android:src="@drawable/ic_action_keyboard"
                 android:textColor="@color/black"
                 android:textSize="20sp" />
@@ -123,7 +123,7 @@
         <com.myscript.atk.sltw.SingleLineWidget
             android:id="@+id/widget"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="200dp"
             android:layout_weight="1" />
 
         <LinearLayout
@@ -158,6 +158,5 @@
                 android:textSize="20sp" />
 
         </LinearLayout>
-
     </LinearLayout>
 </RelativeLayout>
