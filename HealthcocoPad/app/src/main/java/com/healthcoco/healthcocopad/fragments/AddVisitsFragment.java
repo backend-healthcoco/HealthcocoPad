@@ -728,7 +728,7 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
                 isCorrectionMode--;
             }
         }
-        updateCandidateBar();
+//        updateCandidateBar();
     }
 
     @Override
@@ -833,7 +833,7 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
             } else {
                 mWidget.centerTo(selEnd);
             }
-            updateCandidateBar();
+//            updateCandidateBar();
         }
     }
 
@@ -918,7 +918,7 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
         List<String> completions = info.getCompletions();
 
         for (int i = 0; i < 3; i++) {
-            Button b = (Button) mCandidateBar.getChildAt(i);
+            TextView textView = (TextView) mCandidateBar.getChildAt(i);
 
             CandidateTag tag = new CandidateTag();
             if (i < labels.size()) {
@@ -928,13 +928,12 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
             } else {
                 tag = null;
             }
-
-            b.setTag(tag);
+            textView.setTag(tag);
 
             if (tag != null) {
-                b.setText(tag.text.replace("\n", "\u21B2"));
+                textView.setText(tag.text.replace("\n", "\u21B2"));
             } else {
-                b.setText("");
+                textView.setText("");
             }
         }
 
