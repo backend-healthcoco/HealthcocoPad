@@ -56,6 +56,7 @@
                     android:hint="@string/faranheit"
                     android:inputType="numberDecimal"
                     android:maxLines="1"
+                    android:nextFocusDown="@+id/edit_weight"
                     android:padding="10dp"
                     android:textColor="@color/black"
                     android:textSize="@dimen/text_size_add_visits_lable" />
@@ -90,6 +91,8 @@
                     android:hint="@string/kilograms"
                     android:inputType="numberDecimal"
                     android:maxLines="1"
+                    android:nextFocusDown="@+id/edit_heart_rate"
+                    android:nextFocusUp="@+id/edit_body_temperature"
                     android:padding="10dp"
                     android:textColor="@color/black"
                     android:textSize="@dimen/text_size_add_visits_lable" />
@@ -121,6 +124,8 @@
                     android:hint="@string/beats_per_min"
                     android:inputType="numberDecimal"
                     android:maxLines="1"
+                    android:nextFocusDown="@+id/edit_systolic"
+                    android:nextFocusUp="@+id/edit_weight"
                     android:padding="10dp"
                     android:textColor="@color/black"
                     android:textSize="@dimen/text_size_add_visits_lable" />
@@ -169,6 +174,8 @@
                         android:hint="@string/systolic"
                         android:inputType="numberDecimal"
                         android:maxLines="1"
+                        android:nextFocusDown="@+id/edit_diastolic"
+                        android:nextFocusUp="@+id/edit_heart_rate"
                         android:padding="10dp"
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_size_add_visits_lable" />
@@ -194,6 +201,8 @@
                         android:hint="@string/diastolic"
                         android:inputType="numberDecimal"
                         android:maxLines="1"
+                        android:nextFocusDown="@+id/edit_resp_rate"
+                        android:nextFocusUp="@+id/edit_systolic"
                         android:padding="10dp"
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_size_add_visits_lable" />
@@ -229,6 +238,8 @@
                     android:hint="@string/breaths_per_min"
                     android:inputType="numberDecimal"
                     android:maxLines="1"
+                    android:nextFocusDown="@+id/edit_spo2"
+                    android:nextFocusUp="@+id/edit_diastolic"
                     android:padding="10dp"
                     android:textColor="@color/black"
                     android:textSize="@dimen/text_size_add_visits_lable" />
@@ -261,6 +272,7 @@
                     android:hint="@string/spo2"
                     android:inputType="numberDecimal"
                     android:maxLines="1"
+                    android:nextFocusUp="@+id/edit_resp_rate"
                     android:padding="10dp"
                     android:textColor="@color/black"
                     android:textSize="@dimen/text_size_add_visits_lable" />

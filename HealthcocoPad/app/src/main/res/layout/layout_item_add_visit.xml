@@ -44,7 +44,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@color/grey_widget_backgroung"
+        android:background="@color/grey_widget_background"
         android:orientation="vertical">
 
         <LinearLayout
@@ -56,62 +56,71 @@
                 android:id="@+id/tv_candidate_one"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
                 android:layout_weight="1"
+                android:background="@color/grey_widget_background_translucent"
                 android:gravity="center"
                 android:maxLines="1"
+                android:padding="5dp"
                 android:textAllCaps="false"
                 android:textColor="@color/blue_action_bar"
                 android:textSize="20sp" />
 
-            <View
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
-                android:background="@color/blue_action_bar" />
+            <!--<View-->
+            <!--android:layout_width="1dp"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_marginBottom="10dp"-->
+            <!--android:layout_marginTop="10dp"-->
+            <!--android:background="@color/blue_action_bar" />-->
 
             <TextView
                 android:id="@+id/tv_candidate_two"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 android:layout_weight="1"
+                android:background="@color/grey_widget_background_translucent"
                 android:gravity="center"
                 android:maxLines="1"
-                android:padding="10dp"
+                android:padding="5dp"
                 android:textAllCaps="false"
                 android:textColor="@color/blue_action_bar"
                 android:textSize="20sp" />
 
-            <View
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
-                android:background="@color/blue_action_bar" />
+            <!--<View-->
+            <!--android:layout_width="1dp"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_marginBottom="10dp"-->
+            <!--android:layout_marginTop="10dp"-->
+            <!--android:background="@color/blue_action_bar" />-->
 
             <TextView
                 android:id="@+id/tv_candidate_three"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
                 android:layout_weight="1"
+                android:background="@color/grey_widget_background_translucent"
                 android:gravity="center"
                 android:maxLines="1"
+                android:padding="5dp"
                 android:textAllCaps="false"
                 android:textColor="@color/blue_action_bar"
                 android:textSize="20sp" />
 
-            <View
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
-                android:background="@color/blue_action_bar" />
+            <!--<View-->
+            <!--android:layout_width="1dp"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_marginBottom="10dp"-->
+            <!--android:layout_marginTop="10dp"-->
+            <!--android:background="@color/blue_action_bar" />-->
 
             <ImageButton
                 android:id="@+id/bt_keyboard"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_weight="0.2"
                 android:background="@null"
                 android:gravity="center_vertical"
                 android:src="@drawable/ic_action_keyboard"
@@ -123,40 +132,69 @@
         <com.myscript.atk.sltw.SingleLineWidget
             android:id="@+id/widget"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_weight="1" />
+            android:layout_height="250dp"
+            android:layout_weight="1">
 
-        <LinearLayout
-            android:id="@+id/buttons"
+            <LinearLayout
+                android:id="@+id/buttons"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:layout_gravity="bottom">
+
+                <Button
+                    android:id="@+id/bt_del"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/delete"
+                    android:textColor="@color/blue_action_bar"
+                    android:textSize="20sp" />
+
+                <Button
+                    android:id="@+id/bt_space"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/space"
+                    android:textColor="@color/blue_action_bar"
+                    android:textSize="20sp" />
+
+                <Button
+                    android:id="@+id/bt_enter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/enter"
+                    android:textColor="@color/blue_action_bar"
+                    android:textSize="20sp" />
+            </LinearLayout>
+
+        </com.myscript.atk.sltw.SingleLineWidget>
+
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true">
 
-            <Button
-                android:id="@+id/bt_del"
+            <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+                android:id="@+id/tv_previous_arrow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/delete"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="20dp"
+                android:text="@string/fa_arrow_left"
                 android:textColor="@color/blue_action_bar"
                 android:textSize="20sp" />
 
-            <Button
-                android:id="@+id/bt_space"
+            <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+                android:id="@+id/tv_next_arrow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/space"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="20dp"
+                android:text="@string/fa_arrow_right"
                 android:textColor="@color/blue_action_bar"
                 android:textSize="20sp" />
+        </RelativeLayout>
 
-            <Button
-                android:id="@+id/bt_enter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/enter"
-                android:textColor="@color/blue_action_bar"
-                android:textSize="20sp" />
-
-        </LinearLayout>
     </LinearLayout>
 </RelativeLayout>

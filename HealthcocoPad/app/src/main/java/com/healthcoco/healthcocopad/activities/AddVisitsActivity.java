@@ -87,7 +87,17 @@ public class AddVisitsActivity extends HealthCocoActivity {
 
     @Override
     public void onBackPressed() {
-        showFinishConfirmationAlert();
+        if (fragmentType != null) {
+            switch (fragmentType) {
+                case ADD_VISITS:
+                    showFinishConfirmationAlert();
+                    return;
+                default:
+                    finish();
+                    break;
+            }
+        } else
+            super.onBackPressed();
     }
 
     public void showFinishConfirmationAlert() {
