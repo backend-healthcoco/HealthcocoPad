@@ -137,35 +137,34 @@
 
             <LinearLayout
                 android:id="@+id/buttons"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:layout_gravity="bottom">
+                android:layout_gravity="bottom|end"
+                android:layout_marginBottom="30dp"
+                android:layout_marginRight="30dp">
 
-                <Button
-                    android:id="@+id/bt_del"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/delete"
-                    android:textColor="@color/blue_action_bar"
-                    android:textSize="20sp" />
-
-                <Button
+                <ImageButton
                     android:id="@+id/bt_space"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/space"
-                    android:textColor="@color/blue_action_bar"
-                    android:textSize="20sp" />
+                    android:layout_width="@dimen/widget_space_icon_size"
+                    android:layout_height="@dimen/widget_space_icon_size"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/selector_ic_space_blue_grey" />
 
-                <Button
+                <ImageButton
+                    android:id="@+id/bt_del"
+                    android:layout_width="@dimen/widget_delete_icon_size"
+                    android:layout_height="@dimen/widget_delete_icon_size"
+                    android:layout_marginLeft="150dp"
+                    android:layout_marginRight="150dp"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/selector_ic_delete_blue_grey" />
+
+                <ImageButton
                     android:id="@+id/bt_enter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/enter"
-                    android:textColor="@color/blue_action_bar"
-                    android:textSize="20sp" />
+                    android:layout_width="@dimen/widget_enter_icon_size"
+                    android:layout_height="@dimen/widget_space_icon_size"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/selector_ic_enter_blue_grey" />
             </LinearLayout>
 
         </com.myscript.atk.sltw.SingleLineWidget>
@@ -181,6 +180,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_marginLeft="20dp"
+                android:paddingBottom="10dp"
                 android:text="@string/fa_arrow_left"
                 android:textColor="@color/blue_action_bar"
                 android:textSize="20sp" />
@@ -191,6 +191,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="20dp"
+                android:paddingBottom="10dp"
                 android:text="@string/fa_arrow_right"
                 android:textColor="@color/blue_action_bar"
                 android:textSize="20sp" />

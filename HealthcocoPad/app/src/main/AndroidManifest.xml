@@ -91,7 +91,7 @@
             android:name=".activities.AddVisitsActivity"
             android:configChanges="orientation|keyboardHidden|screenSize|uiMode"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize"></activity>
+            android:windowSoftInputMode="adjustNothing"></activity>
     </application>
 
 </manifest>

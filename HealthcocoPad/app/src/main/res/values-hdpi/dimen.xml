@@ -8,4 +8,7 @@
     <dimen name="tab_home_image_size">25px</dimen>
     <dimen name="tab_global_access_button_size">35px</dimen>
     <dimen name="visits_icon_with_circle_size">60px</dimen>
+    <dimen name="widget_delete_icon_size">60px</dimen>
+    <dimen name="widget_space_icon_size">60px</dimen>
+    <dimen name="widget_enter_icon_size">60px</dimen>
 </resources>

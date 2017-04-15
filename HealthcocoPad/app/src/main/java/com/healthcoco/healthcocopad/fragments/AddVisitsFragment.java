@@ -13,6 +13,8 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -126,9 +128,9 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
 
     private LinearLayout layoutWidget;
     private ImageButton btKeyboard;
-    private Button btDel;
-    private Button btSpace;
-    private Button btEnter;
+    private ImageButton btDel;
+    private ImageButton btSpace;
+    private ImageButton btEnter;
     private TextView tvCandidateOne;
     private TextView tvCandidateTwo;
     private TextView tvCandidateThree;
@@ -156,10 +158,11 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
         return view;
     }
 
-
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(mActivity.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
         init();
         mActivity.showLoading(false);
         new LocalDataBackgroundtaskOptimised(mActivity, GET_FRAGMENT_INITIALISATION_DATA, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
@@ -205,9 +208,9 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
         mWidget = (SingleLineWidget) view.findViewById(R.id.widget);
         layoutWidget = (LinearLayout) view.findViewById(R.id.layout_widget);
         btKeyboard = (ImageButton) view.findViewById(R.id.bt_keyboard);
-        btDel = (Button) view.findViewById(R.id.bt_del);
-        btSpace = (Button) view.findViewById(R.id.bt_space);
-        btEnter = (Button) view.findViewById(R.id.bt_enter);
+        btDel = (ImageButton) view.findViewById(R.id.bt_del);
+        btSpace = (ImageButton) view.findViewById(R.id.bt_space);
+        btEnter = (ImageButton) view.findViewById(R.id.bt_enter);
         mCandidateBar = (LinearLayout) view.findViewById(R.id.candidateBar);
         tvCandidateOne = (TextView) view.findViewById(R.id.tv_candidate_one);
         tvCandidateTwo = (TextView) view.findViewById(R.id.tv_candidate_two);
@@ -219,7 +222,6 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
 
     private void setViewToWidget() {
         mWidget.setBaselinePosition(getResources().getDimension(R.dimen.baseline_position));
-//        mWidget.setWritingAreaBackgroundResource(R.color.grey_widget_backgroung);
         mWidget.setScrollbarResource(R.drawable.sltw_scrollbar_xml);
         mWidget.setScrollbarMaskResource(R.drawable.sltw_scrollbar_mask);
         mWidget.setScrollbarBackgroundResource(R.drawable.sltw_scrollbar_background);
@@ -551,6 +553,7 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
             autotvPermission.setText(text);
         }
         parentPermissionItems.addView(layoutItemPermission);
+        layoutItemPermission.requestFocus();
 //        editSpo2.setNextFocusDownId(R.id.edit_permission_text);
 //        layoutItemPermission.setNextFocusDownId(R.id.et_advice);
 //        etAdvice.setNextFocusUpId(R.id.edit_permission_text);
@@ -566,6 +569,7 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
                 if (layoutWidget.getVisibility() == View.GONE)
                     layoutWidget.setVisibility(View.VISIBLE);
                 parentClinicalNote.requestFocus();
+                initEditTextForWidget((MyScriptEditText) mActivity.getCurrentFocus());
                 showHideClinicalNotesLayout();
                 break;
             case R.id.bt_prescription:
@@ -615,6 +619,7 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
                     view.findViewById(upId).requestFocus();
                     System.out.println("Back");
                 }
+                initEditTextForWidget((MyScriptEditText) mActivity.getCurrentFocus());
                 break;
             case R.id.tv_next_arrow:
                 int downId = mActivity.getCurrentFocus().getNextFocusDownId();
@@ -622,6 +627,7 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
                     view.findViewById(downId).requestFocus();
                     System.out.println("Next");
                 }
+                initEditTextForWidget((MyScriptEditText) mActivity.getCurrentFocus());
                 break;
             case R.id.bt_save:
                 Util.checkNetworkStatus(mActivity);
@@ -759,7 +765,6 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
         else if (!visibleViews.contains(VisitsUiType.DIAGRAMS))
             visibleViews.add(VisitsUiType.DIAGRAMS);
         parentDiagrams.setVisibility(visibility);
-
     }
 
     @Override
@@ -844,7 +849,10 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
             MyScriptEditText editText = (MyScriptEditText) view;
             // temporarily disable selection changed listener to prevent spurious cursor jumps
             editText.setOnSelectionChangedListener(null);
-            editText.setTextKeepState(text);
+            if (editText.getMaxLines() == 1) {
+                editText.setTextKeepState("");
+            } else
+                editText.setTextKeepState(text);
             if (isCorrectionMode == 0) {
                 editText.setSelection(text.length());
                 editText.setOnSelectionChangedListener(new HealthcocoOnSelectionChanged(editText, this));
@@ -974,6 +982,7 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
             switch (event.getAction()) {
                 case MotionEvent.ACTION_UP:
                     initEditTextForWidget((MyScriptEditText) v);
+                    hideKeyboard();
                     LogUtils.LOGD(TAG, "Action UP");
                     switch (v.getId()) {
                         case R.id.edit_body_temperature:
@@ -992,6 +1001,7 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
                     break;
                 case MotionEvent.ACTION_DOWN:
                     LogUtils.LOGD(TAG, "Action DOWN");
+                    hideKeyboard();
                     break;
             }
         }
@@ -1009,7 +1019,22 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
 
     public void onEnterClick() {
         int index = mWidget.getCursorIndex();
-        boolean replaced = mWidget.replaceCharacters(index, index, "\n");
+        boolean replaced = false;
+        View view = mActivity.getCurrentFocus();
+        switch (view.getId()) {
+            case R.id.edit_body_temperature:
+            case R.id.edit_weight:
+            case R.id.edit_heart_rate:
+            case R.id.edit_systolic:
+            case R.id.edit_diastolic:
+            case R.id.edit_resp_rate:
+            case R.id.edit_spo2:
+//                replaced = mWidget.replaceCharacters(index, index, "");
+                break;
+            default:
+                replaced = mWidget.replaceCharacters(index, index, "\n");
+                break;
+        }
         if (replaced) {
             mWidget.setCursorIndex(index + 1);
             isCorrectionMode++;
@@ -1116,7 +1141,6 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
                     Util.showToast(mActivity, msgId);
                     mActivity.hideLoading();
                 }
-
             }
         }.execute();
     }
