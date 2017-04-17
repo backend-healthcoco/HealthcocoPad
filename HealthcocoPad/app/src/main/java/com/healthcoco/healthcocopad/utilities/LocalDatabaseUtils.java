@@ -78,6 +78,7 @@ public class LocalDatabaseUtils {
     public static final String JSON_KEY_REFERENCE = "reference";
     public static final String KEY_GROUP_IDS_JSON_STRING = "group_ids_json_string";
     public static final String KEY_TABLE_NAME = "table_name";
+
     public static String KEY_FOREIGN_ROLE_ID = "foreign_role_id";
     public static final String KEY_FOREIGN_MEDICAL_HISTORY_ID = "foreign_medical_history_id";
     public static final String KEY_HISTORY_FILTER_TYPE = "history_filter_type";
@@ -85,7 +86,10 @@ public class LocalDatabaseUtils {
     public static final String KEY_IS_PART_OF_CONSULTANT_DOCTOR = "is_part_of_consultant_doctor";
     public static final String KEY_CONSULTANT_DOCTOR_IDS_JSON_STRING = "consultant_doctor_ids_json_string";
 
-
+    public static final String KEY_COMPLAINT = "complaint";
+    public static final String KEY_OBSERVATION = "observation";
+    public static final String KEY_INVESTIGATION = "investigation";
+    public static final String KEY_DIAGNOSIS = "diagnosis";
     public static String getSearchTermEqualsIgnoreCaseQuery(String filedName, String value) {
         return filedName + " LIKE \"%" + value + "%\"" + " COLLATE NOCASE ";
     }

@@ -203,7 +203,6 @@ public class WebDataServiceImpl implements GCMRefreshListener {
                             HashMap<String, String> headers, Response.Listener<VolleyResponseBean> responseListener,
                             GsonRequest.ErrorListener errorListener) {
         try {
-            mApp.cancelAllPendingRequests();
             String body = null;
             if (objBody != null) {
                 body = new GsonBuilder().excludeFieldsWithModifiers(Modifier.PROTECTED, Modifier.PUBLIC).create().toJson(objBody);

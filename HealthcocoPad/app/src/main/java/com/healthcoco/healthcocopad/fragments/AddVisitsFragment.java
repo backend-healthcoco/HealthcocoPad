@@ -1,13 +1,17 @@
 package com.healthcoco.healthcocopad.fragments;
 
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -36,6 +40,7 @@ import com.healthcoco.healthcocopad.bean.request.ClinicalNoteToSend;
 import com.healthcoco.healthcocopad.bean.server.AssignedUserUiPermissions;
 import com.healthcoco.healthcocopad.bean.server.BloodPressure;
 import com.healthcoco.healthcocopad.bean.server.ClinicalNotes;
+import com.healthcoco.healthcocopad.bean.server.DrugsListSolrResponse;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.User;
@@ -47,6 +52,7 @@ import com.healthcoco.healthcocopad.custom.MyScriptEditText;
 import com.healthcoco.healthcocopad.enums.ClinicalNotesPermissionType;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.PrescriptionPermissionType;
+import com.healthcoco.healthcocopad.enums.SuggestionType;
 import com.healthcoco.healthcocopad.enums.VisitsUiType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.HealthcocoOnSelectionChangedListener;
@@ -75,14 +81,15 @@ import java.util.List;
 import static com.healthcoco.healthcocopad.enums.ClinicalNotesPermissionType.PRESENT_COMPLAINT;
 import static com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType.GET_FRAGMENT_INITIALISATION_DATA;
 
-import java.util.List;
-
 /**
  * Created by Shreshtha on 05-04-2017.
  */
 public class AddVisitsFragment extends HealthCocoFragment implements View.OnClickListener,
         Response.Listener<VolleyResponseBean>, GsonRequest.ErrorListener, LocalDoInBackgroundListenerOptimised,
-        HealthcocoOnSelectionChangedListener, View.OnTouchListener {
+        HealthcocoOnSelectionChangedListener, View.OnTouchListener, View.OnFocusChangeListener {
+    public static final String INTENT_ON_SUGGESTION_ITEM_CLICK = "com.healthcoco.healthcocopad.fragments.AddVisitsFragment.ON_SUGGESTION_ITEM_CLICK";
+    public static final String TAG_SELECTED_SUGGESTION_OBJECT = "selectedSuggestionObject";
+
     private static final String CHARACTER_TO_REPLACE_COMMA_WITH_SPACES = " , ";
     private static final String CHARACTER_TO_BE_REPLACED = ",";
     private static final int REQUEST_CODE_ADD_CLINICAL_NOTES = 100;
@@ -150,6 +157,8 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
     private LinearLayout mCandidateBar;
     private TextViewFontAwesome tvPreviousArrow;
     private TextViewFontAwesome tvNextArrow;
+    private LinearLayout containerSuggestionsList;
+    private boolean receiversRegistered;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -173,6 +182,14 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
         initViews();
         validateCertificate();
         initListeners();
+        initSuggestionsFragment();
+    }
+
+    private void initSuggestionsFragment() {
+        AddVisitSuggestionsFragment addVisitSuggestionsFragment = new AddVisitSuggestionsFragment();
+        FragmentTransaction transaction = mFragmentManager.beginTransaction();
+        transaction.add(R.id.container_suggestions_list, addVisitSuggestionsFragment, addVisitSuggestionsFragment.getClass().getSimpleName());
+        transaction.commit();
     }
 
     private void validateCertificate() {
@@ -194,11 +211,12 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
     @Override
     public void initViews() {
         svScrollView = (ScrollView) view.findViewById(R.id.sv_scrollview);
+        containerSuggestionsList = (LinearLayout) view.findViewById(R.id.container_suggestions_list);
+        containerSuggestionsList.setVisibility(View.VISIBLE);
         initWidgetViews();
         initToolbarView();
         initHeaderView();
         initClinicalNotesView();
-        initPrescriptionsView();
         initDiagonsticTestsView();
         initDiagramsViews();
         initAdviceViews();
@@ -242,6 +260,7 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
         btClose = (TextViewFontAwesome) view.findViewById(R.id.bt_close);
         btClinicalNote = (ImageButton) view.findViewById(R.id.bt_clinical_note);
         btPrescription = (ImageButton) view.findViewById(R.id.bt_prescription);
+        btPrescription.setTag(SuggestionType.DRUGS);
         btLabTests = (ImageButton) view.findViewById(R.id.bt_lab_tests);
         btDiagrams = (ImageButton) view.findViewById(R.id.bt_diagrams);
         btAdvice = (ImageButton) view.findViewById(R.id.bt_advice);
@@ -402,7 +421,7 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
                         if (clinicalNotes != null)
                             initVitalSigns(clinicalNotes.getVitalSigns());
                     }
-                    if (clinicalNotesUiPermissionsList.contains(PRESENT_COMPLAINT))
+                    if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.PRESENT_COMPLAINT))
                         addPermissionItem(PRESENT_COMPLAINT);
                     if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.COMPLAINT))
                         addPermissionItem(ClinicalNotesPermissionType.COMPLAINT);
@@ -481,6 +500,7 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
         LinearLayout layoutItemPermission = (LinearLayout) mActivity.getLayoutInflater().inflate(R.layout.layout_item_add_clinical_note_permision, null);
         TextView tvTitle = (TextView) layoutItemPermission.findViewById(R.id.tv_title);
         MyScriptEditText autotvPermission = (MyScriptEditText) layoutItemPermission.findViewById(R.id.edit_permission_text);
+        autotvPermission.setOnFocusChangeListener(this);
         tvTitle.setText(clinicalNotesPermissionType.getTextId());
         autotvPermission.setId(clinicalNotesPermissionType.getAutotvId());
         autotvPermission.setHint(clinicalNotesPermissionType.getHintId());
@@ -573,8 +593,7 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
                 showHideClinicalNotesLayout();
                 break;
             case R.id.bt_prescription:
-                if (layoutWidget.getVisibility() == View.GONE)
-                    layoutWidget.setVisibility(View.VISIBLE);
+                refreshSuggestionsList(v, "");
                 break;
             case R.id.bt_lab_tests:
                 if (layoutWidget.getVisibility() == View.GONE)
@@ -597,7 +616,7 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
                 }
                 break;
             case R.id.bt_keyboard:
-//                showHideWidgetAndKeyboardLayout();
+                showHideWidgetAndKeyboardLayout();
                 break;
             case R.id.bt_del:
                 onDeleteButtonClick();
@@ -759,6 +778,42 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
         }
     }
 
+    private void refreshSuggestionsList(View v, String searchTerm) {
+        SuggestionType suggestionType = null;
+        Object tag = v.getTag();
+        if (tag != null) {
+            if (tag instanceof String) {
+                ClinicalNotesPermissionType permissionType = ClinicalNotesPermissionType.getClinicalNotesPermissionType((String) tag);
+                if (permissionType != null) {
+                    switch (permissionType) {
+                        case COMPLAINT:
+                            suggestionType = SuggestionType.COMPLAINTS;
+                            break;
+                        case OBSERVATION:
+                            suggestionType = SuggestionType.OBSERVATION;
+                            break;
+                        case INVESTIGATIONS:
+                            suggestionType = SuggestionType.INVESTIGATION;
+                            break;
+                        case DIAGNOSIS:
+                            suggestionType = SuggestionType.DIAGNOSIS;
+                            break;
+                    }
+                }
+            } else if (tag instanceof SuggestionType)
+                suggestionType = (SuggestionType) tag;
+        }
+        containerSuggestionsList.setVisibility(View.VISIBLE);
+        try {
+            Intent intent = new Intent(AddVisitSuggestionsFragment.INTENT_LOAD_DATA);
+            intent.putExtra(AddVisitSuggestionsFragment.TAG_SEARCHED_TERM, searchTerm);
+            intent.putExtra(AddVisitSuggestionsFragment.TAG_SUGGESTIONS_TYPE, suggestionType.ordinal());
+            LocalBroadcastManager.getInstance(mApp.getApplicationContext()).sendBroadcast(intent);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private void showHideDiagramsLayout(int visibility) {
         if (visibility == View.GONE)
             visibleViews.remove(VisitsUiType.DIAGRAMS);
@@ -846,6 +901,7 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
     public void onTextChanged(View view, SingleLineWidgetApi w, String text, boolean intermediate) {
         Log.d(TAG, "Text changed to \"" + text + "\" (" + (intermediate ? "intermediate" : "stable") + ")");
         if (view instanceof EditText) {
+            refreshSuggestionsList(view, text);
             MyScriptEditText editText = (MyScriptEditText) view;
             // temporarily disable selection changed listener to prevent spurious cursor jumps
             editText.setOnSelectionChangedListener(null);
@@ -1006,6 +1062,13 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
             }
         }
         return false;
+    }
+
+    @Override
+    public void onFocusChange(View v, boolean hasFocus) {
+        if (hasFocus) {
+            refreshSuggestionsList(v, "");
+        }
     }
 
     //--------------------------------------------------------------------------------
@@ -1364,5 +1427,48 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
         vitalSigns.setBreathing(Util.getValidatedValueOrNull(editRespRate));
         vitalSigns.setSpo2(Util.getValidatedValueOrNull(editSpo2));
         return vitalSigns;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (!receiversRegistered) {
+            LogUtils.LOGD(TAG, "onResume " + receiversRegistered);
+
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(INTENT_ON_SUGGESTION_ITEM_CLICK);
+            LocalBroadcastManager.getInstance(mActivity).registerReceiver(onSuggestionItemClick, filter);
+            receiversRegistered = true;
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        LocalBroadcastManager.getInstance(mActivity).unregisterReceiver(onSuggestionItemClick);
+    }
+
+
+    BroadcastReceiver onSuggestionItemClick = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, final Intent intent) {
+            if (intent != null && intent.hasExtra(AddVisitSuggestionsFragment.TAG_SUGGESTIONS_TYPE) && intent.hasExtra(TAG_SELECTED_SUGGESTION_OBJECT)) {
+                int ordinal = intent.getIntExtra(AddVisitSuggestionsFragment.TAG_SUGGESTIONS_TYPE, -1);
+                SuggestionType suggestionType = SuggestionType.values()[ordinal];
+                Object selectedSuggestionObject = Parcels.unwrap(intent.getParcelableExtra(TAG_SELECTED_SUGGESTION_OBJECT));
+                if (suggestionType != null && selectedSuggestionObject != null) {
+                    handleSelectedSugestionObject(suggestionType, selectedSuggestionObject);
+                }
+            }
+        }
+    };
+
+    private void handleSelectedSugestionObject(SuggestionType suggestionType, Object selectedSuggestionObject) {
+        switch (suggestionType) {
+            case DRUGS:
+                DrugsListSolrResponse drug = (DrugsListSolrResponse) selectedSuggestionObject;
+                LogUtils.LOGD(TAG, "Add selected drug " + drug.getDrugName());
+                break;
+        }
     }
 }

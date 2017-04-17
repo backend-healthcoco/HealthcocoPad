@@ -109,6 +109,7 @@ import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.LocalTabelType;
 import com.healthcoco.healthcocopad.enums.RecordType;
 import com.healthcoco.healthcocopad.enums.RoleType;
+import com.healthcoco.healthcocopad.enums.SuggestionType;
 import com.healthcoco.healthcocopad.enums.VisitedForType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.enums.WeekDayNameType;
@@ -478,10 +479,6 @@ public class LocalDataServiceImpl {
             e.printStackTrace();
             showErrorLocal(volleyResponseBean, errorListener);
         }
-    }
-
-    public ArrayList<Object> getSuggestionsList(Class<?> class1) {
-        return getObjectsListFromMap(Select.from(class1).list());
     }
 
     public void addDrugDosageList(ArrayList<DrugDosage> dosageList) {
@@ -3169,4 +3166,54 @@ public class LocalDataServiceImpl {
         }
         return uiPermissions;
     }
+
+    public VolleyResponseBean getSuggestionsListAsResponse(WebServiceType webServiceType, Class<?> class1, SuggestionType suggestionType, String searchTerm, int pageNum, int maxSize, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
+        volleyResponseBean.setWebServiceType(webServiceType);
+        volleyResponseBean.setIsDataFromLocal(true);
+        volleyResponseBean.setIsUserOnline(HealthCocoConstants.isNetworkOnline);
+        try {
+            volleyResponseBean.setDataList(getSuggestionsList(class1, suggestionType, searchTerm, pageNum, maxSize));
+            if (responseListener != null)
+                responseListener.onResponse(volleyResponseBean);
+        } catch (Exception e) {
+            e.printStackTrace();
+            showErrorLocal(volleyResponseBean, errorListener);
+        }
+        return volleyResponseBean;
+    }
+
+    public ArrayList<Object> getSuggestionsList(Class<?> class1, SuggestionType suggestionType, String searchTerm, int pageNum, int maxSize) {
+        //forming where condition query
+        String whereCondition = "Select * from " + StringUtil.toSQLName(class1.getSimpleName());
+        if (suggestionType != null && !Util.isNullOrBlank(searchTerm)) {
+            String key = "";
+            switch (suggestionType) {
+                case COMPLAINTS:
+                    key = LocalDatabaseUtils.KEY_COMPLAINT;
+                    break;
+                case OBSERVATION:
+                    key = LocalDatabaseUtils.KEY_OBSERVATION;
+                    break;
+                case INVESTIGATION:
+                    key = LocalDatabaseUtils.KEY_INVESTIGATION;
+                    break;
+                case DIAGNOSIS:
+                    key = LocalDatabaseUtils.KEY_DIAGNOSIS;
+                    break;
+                default:
+                    break;
+            }
+            if (!Util.isNullOrBlank(key))
+                whereCondition = whereCondition + " where "
+                        + LocalDatabaseUtils.getSearchTermEqualsIgnoreCaseQuery(key, searchTerm) + " LIMIT " + maxSize
+                        + " OFFSET " + (pageNum * maxSize);
+        }
+
+
+        LogUtils.LOGD(TAG, "Select Query " + whereCondition);
+        ArrayList<Object> list = (ArrayList<Object>) (Object) SugarRecord.findWithQuery(class1, whereCondition);
+        return list;
+    }
+
 }

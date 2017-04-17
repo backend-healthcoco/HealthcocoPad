@@ -19,17 +19,18 @@ import com.healthcoco.healthcocopad.adapter.SelectDrugListSolrAdapter;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.Drug;
 import com.healthcoco.healthcocopad.bean.server.DrugsListSolrResponse;
-import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
+import com.healthcoco.healthcocopad.bean.server.LoginResponse;
+import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocopad.dialogFragment.AddNewDrugDialogFragment;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
-import com.healthcoco.healthcocopad.enums.SelectDrugItemType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.AddNewDrugListener;
 import com.healthcoco.healthcocopad.listeners.LoadMorePageListener;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
 import com.healthcoco.healthcocopad.listeners.SelectDrugItemClickListener;
 import com.healthcoco.healthcocopad.services.GsonRequest;
+import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
@@ -57,10 +58,13 @@ public class DrugListFragment extends HealthCocoFragment implements
     private boolean isLoadingFromSearch;
     private String lastTextSearched;
     private boolean isInitialLoading = true;
-    private RegisteredPatientDetailsUpdated selectedPatient;
     private EditText editSearch;
     private ImageButton btAddDrug;
+    private User user;
     private SelectDrugItemClickListener drugItemClickListener;
+
+    public DrugListFragment() {
+    }
 
     public DrugListFragment(SelectDrugItemClickListener drugItemClickListener) {
         this.drugItemClickListener = drugItemClickListener;
@@ -81,19 +85,11 @@ public class DrugListFragment extends HealthCocoFragment implements
 
     @Override
     public void init() {
-        initData();
         initViews();
         initListeners();
         initAdapters();
         showLoadingOverlay(true);
         new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_FRAGMENT_INITIALISATION_DATA, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-    }
-
-    private void initData() {
-        AddNewTemplateFragment newTemplateFragment = (AddNewTemplateFragment) getFragmentManager().findFragmentByTag(AddNewTemplateFragment.class.getSimpleName());
-        if (newTemplateFragment != null) {
-            selectedPatient = newTemplateFragment.getSelectedPatient();
-        }
     }
 
     @Override
@@ -123,7 +119,7 @@ public class DrugListFragment extends HealthCocoFragment implements
             progressLoading.setVisibility(View.GONE);
         } else
             progressLoading.setVisibility(View.VISIBLE);
-        WebDataServiceImpl.getInstance(mApp).getDrugsListSolr(DrugsListSolrResponse.class, pageNum, size, selectedPatient.getDoctorId(), selectedPatient.getHospitalId(), selectedPatient.getLocationId(), searchTerm, this, this);
+        WebDataServiceImpl.getInstance(mApp).getDrugsListSolr(DrugsListSolrResponse.class, pageNum, size, user.getUniqueId(), user.getForeignHospitalId(), user.getForeignLocationId(), searchTerm, this, this);
     }
 
     private void notifyAdapterSolr(List<DrugsListSolrResponse> list) {
@@ -172,7 +168,8 @@ public class DrugListFragment extends HealthCocoFragment implements
         if (response != null) {
             switch (response.getWebServiceType()) {
                 case FRAGMENT_INITIALISATION:
-                    getDrugsList(true, PAGE_NUMBER, MAX_SIZE, "");
+                    if (user != null)
+                        getDrugsList(true, PAGE_NUMBER, MAX_SIZE, "");
                     break;
                 case GET_DRUGS_LIST_SOLR:
                     ArrayList<DrugsListSolrResponse> list = (ArrayList<DrugsListSolrResponse>) (ArrayList<?>) response.getDataList();
@@ -233,6 +230,10 @@ public class DrugListFragment extends HealthCocoFragment implements
             case GET_FRAGMENT_INITIALISATION_DATA:
                 volleyResponseBean = new VolleyResponseBean();
                 volleyResponseBean.setWebServiceType(WebServiceType.FRAGMENT_INITIALISATION);
+                LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
+                if (doctor != null && doctor.getUser() != null && !Util.isNullOrBlank(doctor.getUser().getUniqueId())) {
+                    user = doctor.getUser();
+                }
                 break;
         }
         if (volleyResponseBean == null)

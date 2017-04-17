@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <ScrollView
         android:id="@+id/sv_scrollview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/layout_widget"
+        android:layout_height="0dp"
+        android:layout_above="@+id/container_widget_suggestions"
+        android:layout_weight="0.40"
         android:orientation="vertical"
         android:overScrollMode="never">
 
@@ -40,162 +42,182 @@
     </ScrollView>
 
     <LinearLayout
-        android:id="@+id/layout_widget"
+        android:id="@+id/container_widget_suggestions"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_alignParentBottom="true"
-        android:background="@color/grey_widget_background"
+        android:layout_weight="0.60"
         android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/candidateBar"
+            android:id="@+id/container_suggestions_list"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="0dp"
+            android:layout_weight="0.50"
+            android:background="@color/grey_light_divider"
+            android:orientation="vertical"
+            android:visibility="visible" />
 
-            <TextView
-                android:id="@+id/tv_candidate_one"
-                android:layout_width="0dp"
+        <LinearLayout
+            android:id="@+id/layout_widget"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.50"
+            android:background="@color/grey_widget_background"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/candidateBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tv_candidate_one"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:background="@color/grey_widget_background_translucent"
+                    android:gravity="center"
+                    android:maxLines="1"
+                    android:padding="5dp"
+                    android:textAllCaps="false"
+                    android:textColor="@color/blue_action_bar"
+                    android:textSize="20sp" />
+
+                <!--<View-->
+                <!--android:layout_width="1dp"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_marginBottom="10dp"-->
+                <!--android:layout_marginTop="10dp"-->
+                <!--android:background="@color/blue_action_bar" />-->
+
+                <TextView
+                    android:id="@+id/tv_candidate_two"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="1"
+                    android:background="@color/grey_widget_background_translucent"
+                    android:gravity="center"
+                    android:maxLines="1"
+                    android:padding="5dp"
+                    android:textAllCaps="false"
+                    android:textColor="@color/blue_action_bar"
+                    android:textSize="20sp" />
+
+                <!--<View-->
+                <!--android:layout_width="1dp"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_marginBottom="10dp"-->
+                <!--android:layout_marginTop="10dp"-->
+                <!--android:background="@color/blue_action_bar" />-->
+
+                <TextView
+                    android:id="@+id/tv_candidate_three"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="1"
+                    android:background="@color/grey_widget_background_translucent"
+                    android:gravity="center"
+                    android:maxLines="1"
+                    android:padding="5dp"
+                    android:textAllCaps="false"
+                    android:textColor="@color/blue_action_bar"
+                    android:textSize="20sp" />
+
+                <!--<View-->
+                <!--android:layout_width="1dp"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_marginBottom="10dp"-->
+                <!--android:layout_marginTop="10dp"-->
+                <!--android:background="@color/blue_action_bar" />-->
+
+                <ImageButton
+                    android:id="@+id/bt_keyboard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.2"
+                    android:background="@null"
+                    android:gravity="center_vertical"
+                    android:src="@drawable/ic_action_keyboard"
+                    android:textColor="@color/black"
+                    android:textSize="20sp" />
+
+            </LinearLayout>
+
+            <com.myscript.atk.sltw.SingleLineWidget
+                android:id="@+id/widget"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:layout_weight="1">
+
+                <LinearLayout
+                    android:id="@+id/buttons"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|end"
+                    android:layout_marginBottom="30dp"
+                    android:layout_marginRight="30dp">
+
+                    <ImageButton
+                        android:id="@+id/bt_space"
+                        android:layout_width="@dimen/widget_space_icon_size"
+                        android:layout_height="@dimen/widget_space_icon_size"
+                        android:background="@android:color/transparent"
+                        android:src="@drawable/selector_ic_space_blue_grey" />
+
+                    <ImageButton
+                        android:id="@+id/bt_del"
+                        android:layout_width="@dimen/widget_delete_icon_size"
+                        android:layout_height="@dimen/widget_delete_icon_size"
+                        android:layout_marginLeft="150dp"
+                        android:layout_marginRight="150dp"
+                        android:background="@android:color/transparent"
+                        android:src="@drawable/selector_ic_delete_blue_grey" />
+
+                    <ImageButton
+                        android:id="@+id/bt_enter"
+                        android:layout_width="@dimen/widget_enter_icon_size"
+                        android:layout_height="@dimen/widget_space_icon_size"
+                        android:background="@android:color/transparent"
+                        android:src="@drawable/selector_ic_enter_blue_grey" />
+                </LinearLayout>
+
+            </com.myscript.atk.sltw.SingleLineWidget>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_weight="1"
-                android:background="@color/grey_widget_background_translucent"
-                android:gravity="center"
-                android:maxLines="1"
-                android:padding="5dp"
-                android:textAllCaps="false"
-                android:textColor="@color/blue_action_bar"
-                android:textSize="20sp" />
+                android:layout_alignParentBottom="true">
 
-            <!--<View-->
-            <!--android:layout_width="1dp"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_marginBottom="10dp"-->
-            <!--android:layout_marginTop="10dp"-->
-            <!--android:background="@color/blue_action_bar" />-->
+                <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+                    android:id="@+id/tv_previous_arrow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginLeft="20dp"
+                    android:paddingBottom="10dp"
+                    android:text="@string/fa_arrow_left"
+                    android:textColor="@color/blue_action_bar"
+                    android:textSize="20sp" />
 
-            <TextView
-                android:id="@+id/tv_candidate_two"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_weight="1"
-                android:background="@color/grey_widget_background_translucent"
-                android:gravity="center"
-                android:maxLines="1"
-                android:padding="5dp"
-                android:textAllCaps="false"
-                android:textColor="@color/blue_action_bar"
-                android:textSize="20sp" />
-
-            <!--<View-->
-            <!--android:layout_width="1dp"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_marginBottom="10dp"-->
-            <!--android:layout_marginTop="10dp"-->
-            <!--android:background="@color/blue_action_bar" />-->
-
-            <TextView
-                android:id="@+id/tv_candidate_three"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
-                android:layout_weight="1"
-                android:background="@color/grey_widget_background_translucent"
-                android:gravity="center"
-                android:maxLines="1"
-                android:padding="5dp"
-                android:textAllCaps="false"
-                android:textColor="@color/blue_action_bar"
-                android:textSize="20sp" />
-
-            <!--<View-->
-            <!--android:layout_width="1dp"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_marginBottom="10dp"-->
-            <!--android:layout_marginTop="10dp"-->
-            <!--android:background="@color/blue_action_bar" />-->
-
-            <ImageButton
-                android:id="@+id/bt_keyboard"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="0.2"
-                android:background="@null"
-                android:gravity="center_vertical"
-                android:src="@drawable/ic_action_keyboard"
-                android:textColor="@color/black"
-                android:textSize="20sp" />
+                <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+                    android:id="@+id/tv_next_arrow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="20dp"
+                    android:paddingBottom="10dp"
+                    android:text="@string/fa_arrow_right"
+                    android:textColor="@color/blue_action_bar"
+                    android:textSize="20sp" />
+            </RelativeLayout>
 
         </LinearLayout>
 
-        <com.myscript.atk.sltw.SingleLineWidget
-            android:id="@+id/widget"
-            android:layout_width="match_parent"
-            android:layout_height="250dp"
-            android:layout_weight="1">
-
-            <LinearLayout
-                android:id="@+id/buttons"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom|end"
-                android:layout_marginBottom="30dp"
-                android:layout_marginRight="30dp">
-
-                <ImageButton
-                    android:id="@+id/bt_space"
-                    android:layout_width="@dimen/widget_space_icon_size"
-                    android:layout_height="@dimen/widget_space_icon_size"
-                    android:background="@android:color/transparent"
-                    android:src="@drawable/selector_ic_space_blue_grey" />
-
-                <ImageButton
-                    android:id="@+id/bt_del"
-                    android:layout_width="@dimen/widget_delete_icon_size"
-                    android:layout_height="@dimen/widget_delete_icon_size"
-                    android:layout_marginLeft="150dp"
-                    android:layout_marginRight="150dp"
-                    android:background="@android:color/transparent"
-                    android:src="@drawable/selector_ic_delete_blue_grey" />
-
-                <ImageButton
-                    android:id="@+id/bt_enter"
-                    android:layout_width="@dimen/widget_enter_icon_size"
-                    android:layout_height="@dimen/widget_space_icon_size"
-                    android:background="@android:color/transparent"
-                    android:src="@drawable/selector_ic_enter_blue_grey" />
-            </LinearLayout>
-
-        </com.myscript.atk.sltw.SingleLineWidget>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true">
-
-            <com.healthcoco.healthcocopad.views.TextViewFontAwesome
-                android:id="@+id/tv_previous_arrow"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_marginLeft="20dp"
-                android:paddingBottom="10dp"
-                android:text="@string/fa_arrow_left"
-                android:textColor="@color/blue_action_bar"
-                android:textSize="20sp" />
-
-            <com.healthcoco.healthcocopad.views.TextViewFontAwesome
-                android:id="@+id/tv_next_arrow"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="20dp"
-                android:paddingBottom="10dp"
-                android:text="@string/fa_arrow_right"
-                android:textColor="@color/blue_action_bar"
-                android:textSize="20sp" />
-        </RelativeLayout>
-
     </LinearLayout>
-</RelativeLayout>
+
+</LinearLayout>

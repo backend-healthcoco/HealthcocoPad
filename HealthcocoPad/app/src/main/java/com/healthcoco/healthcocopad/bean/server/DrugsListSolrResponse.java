@@ -4,12 +4,15 @@ import com.orm.SugarRecord;
 import com.orm.annotation.Ignore;
 import com.orm.annotation.Unique;
 
+import org.parceler.Parcel;
+
 import java.util.List;
 
 /**
  * Created by neha on 17/12/15.
  */
-public class DrugsListSolrResponse extends SugarRecord  {
+@Parcel
+public class DrugsListSolrResponse extends SugarRecord {
     @Unique
     private String uniqueId;
     private String description;
