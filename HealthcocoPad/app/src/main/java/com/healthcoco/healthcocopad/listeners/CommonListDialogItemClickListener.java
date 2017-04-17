@@ -7,5 +7,4 @@ import com.healthcoco.healthcocopad.enums.CommonListDialogType;
  */
 public interface CommonListDialogItemClickListener {
     public void onDialogItemClicked(CommonListDialogType commonListDialogType, Object object);
-
 }

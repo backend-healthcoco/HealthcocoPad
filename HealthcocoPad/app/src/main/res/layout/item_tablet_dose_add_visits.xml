@@ -34,7 +34,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/tv_name"
+                android:id="@+id/tv_drug_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawablePadding="10dp"
@@ -66,7 +66,7 @@
             android:orientation="horizontal">
 
             <EditText
-                android:id="@+id/et_duration"
+                android:id="@+id/edit_duration"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="10dp"
@@ -190,7 +190,7 @@
             android:textSize="25sp" />
 
         <EditText
-            android:id="@+id/et_instruction"
+            android:id="@+id/edit_instruction"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
@@ -205,13 +205,13 @@
             android:textSize="@dimen/text_size_drug_dose_item_dosage_direction_instruction"
             android:visibility="visible" />
 
-        <com.healthcoco.healthcocopad.views.TextViewFontAwesome
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:gravity="center|start"
-            android:text="@string/fa_align_text"
-            android:textColor="@color/grey_light_text"
-            android:textSize="18sp" />
+        <!--<com.healthcoco.healthcocopad.views.TextViewFontAwesome-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_margin="5dp"-->
+            <!--android:gravity="center|start"-->
+            <!--android:text="@string/fa_align_text"-->
+            <!--android:textColor="@color/grey_light_text"-->
+            <!--android:textSize="18sp" />-->
     </LinearLayout>
 </LinearLayout>

@@ -17,13 +17,12 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -35,11 +34,14 @@ import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.MyCertificate;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.activities.AddVisitsActivity;
+import com.healthcoco.healthcocopad.adapter.SelectedPrescriptionDrugItemsListAdapter;
+import com.healthcoco.healthcocopad.adapter.SelectedTemplateDrugItemsListAdapter;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.request.ClinicalNoteToSend;
 import com.healthcoco.healthcocopad.bean.server.AssignedUserUiPermissions;
 import com.healthcoco.healthcocopad.bean.server.BloodPressure;
 import com.healthcoco.healthcocopad.bean.server.ClinicalNotes;
+import com.healthcoco.healthcocopad.bean.server.DrugItem;
 import com.healthcoco.healthcocopad.bean.server.DrugsListSolrResponse;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
@@ -57,6 +59,7 @@ import com.healthcoco.healthcocopad.enums.VisitsUiType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.HealthcocoOnSelectionChangedListener;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
+import com.healthcoco.healthcocopad.listeners.SelectedDrugsListItemListener;
 import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
@@ -75,7 +78,9 @@ import com.myscript.atk.text.CandidateInfo;
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import static com.healthcoco.healthcocopad.enums.ClinicalNotesPermissionType.PRESENT_COMPLAINT;
@@ -86,7 +91,7 @@ import static com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType.GET_FRA
  */
 public class AddVisitsFragment extends HealthCocoFragment implements View.OnClickListener,
         Response.Listener<VolleyResponseBean>, GsonRequest.ErrorListener, LocalDoInBackgroundListenerOptimised,
-        HealthcocoOnSelectionChangedListener, View.OnTouchListener, View.OnFocusChangeListener {
+        HealthcocoOnSelectionChangedListener, View.OnTouchListener, View.OnFocusChangeListener, SelectedDrugsListItemListener {
     public static final String INTENT_ON_SUGGESTION_ITEM_CLICK = "com.healthcoco.healthcocopad.fragments.AddVisitsFragment.ON_SUGGESTION_ITEM_CLICK";
     public static final String TAG_SELECTED_SUGGESTION_OBJECT = "selectedSuggestionObject";
 
@@ -159,6 +164,10 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
     private TextViewFontAwesome tvNextArrow;
     private LinearLayout containerSuggestionsList;
     private boolean receiversRegistered;
+    private LinkedHashMap<String, DrugsListSolrResponse> drugsListHashMap = new LinkedHashMap<>();
+    private LinearLayout parentDrugsItems;
+    private ListView lvPrescriptionItems;
+    private SelectedPrescriptionDrugItemsListAdapter adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -217,6 +226,7 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
         initToolbarView();
         initHeaderView();
         initClinicalNotesView();
+        initPrescriptionsView();
         initDiagonsticTestsView();
         initDiagramsViews();
         initAdviceViews();
@@ -303,7 +313,15 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
 
     private void initPrescriptionsView() {
         parentPrescription = (LinearLayout) view.findViewById(R.id.parent_prescription);
-        parentPrescription.setVisibility(View.GONE);
+        lvPrescriptionItems = (ListView) view.findViewById(R.id.lv_prescription_items);
+//        parentDrugsItems = (LinearLayout) view.findViewById(R.id.parent_drugs_items);
+//        parentPrescription.setVisibility(View.GONE);
+        initAdapterForPrescrptionList();
+    }
+
+    private void initAdapterForPrescrptionList() {
+        adapter = new SelectedPrescriptionDrugItemsListAdapter(mActivity, this);
+        lvPrescriptionItems.setAdapter(adapter);
     }
 
     private void initDiagonsticTestsView() {
@@ -353,6 +371,20 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
     }
 
     private void initEditTextForWidget(MyScriptEditText editText) {
+        switch (editText.getId()) {
+            case R.id.edit_body_temperature:
+            case R.id.edit_weight:
+            case R.id.edit_heart_rate:
+            case R.id.edit_systolic:
+            case R.id.edit_diastolic:
+            case R.id.edit_resp_rate:
+            case R.id.edit_spo2:
+                mWidget.configure("en_US", "cur_number");
+                break;
+            default:
+                mWidget.configure("en_US", "cur_text");
+                break;
+        }
         mWidget.setText(editText.getText().toString());
         mWidget.setOnConfiguredListener(new HealthcocoOnSelectionChanged(editText, this));
         mWidget.setOnTextChangedListener(new HealthcocoOnSelectionChanged(editText, this));
@@ -411,71 +443,132 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
         if (uiPermissions != null) {
             Gson gson = new Gson();
             //initialising clinical notes UI permissions
+            boolean isNullClinicalNotePermissionsList = true;
             if (!Util.isNullOrBlank(uiPermissions.getClinicalNotesPermissionsString())) {
                 List<ClinicalNotesPermissionType> clinicalNotesUiPermissionsList = gson.fromJson(uiPermissions.getClinicalNotesPermissionsString(), new TypeToken<ArrayList<ClinicalNotesPermissionType>>() {
                 }.getType());
-                parentPermissionItems.removeAllViews();
+                clinicalNotesUiPermissionsList.removeAll(Collections.singleton(null));
                 if (!Util.isNullOrEmptyList(clinicalNotesUiPermissionsList)) {
-                    if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.VITAL_SIGNS)) {
-                        parentVitalSigns.setVisibility(View.VISIBLE);
-                        if (clinicalNotes != null)
-                            initVitalSigns(clinicalNotes.getVitalSigns());
-                    }
-                    if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.PRESENT_COMPLAINT))
-                        addPermissionItem(PRESENT_COMPLAINT);
-                    if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.COMPLAINT))
-                        addPermissionItem(ClinicalNotesPermissionType.COMPLAINT);
-                    if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.HISTORY_OF_PRESENT_COMPLAINT))
-                        addPermissionItem(ClinicalNotesPermissionType.HISTORY_OF_PRESENT_COMPLAINT);
-                    if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.MENSTRUAL_HISTORY))
-                        addPermissionItem(ClinicalNotesPermissionType.MENSTRUAL_HISTORY);
-                    if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.OBSTETRIC_HISTORY))
-                        addPermissionItem(ClinicalNotesPermissionType.OBSTETRIC_HISTORY);
-                    if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.GENERAL_EXAMINATION))
-                        addPermissionItem(ClinicalNotesPermissionType.GENERAL_EXAMINATION);
-                    if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.SYSTEMIC_EXAMINATION))
-                        addPermissionItem(ClinicalNotesPermissionType.SYSTEMIC_EXAMINATION);
-                    if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.OBSERVATION))
-                        addPermissionItem(ClinicalNotesPermissionType.OBSERVATION);
-                    if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.INVESTIGATIONS))
-                        addPermissionItem(ClinicalNotesPermissionType.INVESTIGATIONS);
-                    if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.PROVISIONAL_DIAGNOSIS))
-                        addPermissionItem(ClinicalNotesPermissionType.PROVISIONAL_DIAGNOSIS);
-                    if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.DIAGNOSIS))
-                        addPermissionItem(ClinicalNotesPermissionType.DIAGNOSIS);
-                    if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.ECG))
-                        addPermissionItem(ClinicalNotesPermissionType.ECG);
-                    if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.ECHO))
-                        addPermissionItem(ClinicalNotesPermissionType.ECHO);
-                    if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.XRAY))
-                        addPermissionItem(ClinicalNotesPermissionType.XRAY);
-                    if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.HOLTER))
-                        addPermissionItem(ClinicalNotesPermissionType.HOLTER);
-                    if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.NOTES))
-                        addPermissionItem(ClinicalNotesPermissionType.NOTES);
-                    if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.INDICATION_OF_USG))
-                        addPermissionItem(ClinicalNotesPermissionType.INDICATION_OF_USG);
-                    if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.PA))
-                        addPermissionItem(ClinicalNotesPermissionType.PA);
-                    if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.PS))
-                        addPermissionItem(ClinicalNotesPermissionType.PS);
-                    if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.PV))
-                        addPermissionItem(ClinicalNotesPermissionType.PV);
+                    isNullClinicalNotePermissionsList = false;
+                    parentPermissionItems.removeAllViews();
+                    if (!Util.isNullOrEmptyList(clinicalNotesUiPermissionsList)) {
+                        if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.VITAL_SIGNS)) {
+                            parentVitalSigns.setVisibility(View.VISIBLE);
+                            if (clinicalNotes != null)
+                                initVitalSigns(clinicalNotes.getVitalSigns());
+                        }
+                        if (clinicalNotesUiPermissionsList.contains(PRESENT_COMPLAINT))
+                            addPermissionItem(PRESENT_COMPLAINT);
+                        if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.COMPLAINT))
+                            addPermissionItem(ClinicalNotesPermissionType.COMPLAINT);
+                        if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.HISTORY_OF_PRESENT_COMPLAINT))
+                            addPermissionItem(ClinicalNotesPermissionType.HISTORY_OF_PRESENT_COMPLAINT);
+                        if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.MENSTRUAL_HISTORY))
+                            addPermissionItem(ClinicalNotesPermissionType.MENSTRUAL_HISTORY);
+                        if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.OBSTETRIC_HISTORY))
+                            addPermissionItem(ClinicalNotesPermissionType.OBSTETRIC_HISTORY);
+                        if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.GENERAL_EXAMINATION))
+                            addPermissionItem(ClinicalNotesPermissionType.GENERAL_EXAMINATION);
+                        if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.SYSTEMIC_EXAMINATION))
+                            addPermissionItem(ClinicalNotesPermissionType.SYSTEMIC_EXAMINATION);
+                        if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.OBSERVATION))
+                            addPermissionItem(ClinicalNotesPermissionType.OBSERVATION);
+                        if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.INVESTIGATIONS))
+                            addPermissionItem(ClinicalNotesPermissionType.INVESTIGATIONS);
+                        if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.PROVISIONAL_DIAGNOSIS))
+                            addPermissionItem(ClinicalNotesPermissionType.PROVISIONAL_DIAGNOSIS);
+                        if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.DIAGNOSIS))
+                            addPermissionItem(ClinicalNotesPermissionType.DIAGNOSIS);
+                        if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.ECG))
+                            addPermissionItem(ClinicalNotesPermissionType.ECG);
+                        if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.ECHO))
+                            addPermissionItem(ClinicalNotesPermissionType.ECHO);
+                        if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.XRAY))
+                            addPermissionItem(ClinicalNotesPermissionType.XRAY);
+                        if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.HOLTER))
+                            addPermissionItem(ClinicalNotesPermissionType.HOLTER);
+                        if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.NOTES))
+                            addPermissionItem(ClinicalNotesPermissionType.NOTES);
+                        if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.INDICATION_OF_USG))
+                            addPermissionItem(ClinicalNotesPermissionType.INDICATION_OF_USG);
+                        if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.PA))
+                            addPermissionItem(ClinicalNotesPermissionType.PA);
+                        if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.PS))
+                            addPermissionItem(ClinicalNotesPermissionType.PS);
+                        if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.PV))
+                            addPermissionItem(ClinicalNotesPermissionType.PV);
+                        parentPermissionItems.removeAllViews();
+                        if (!Util.isNullOrEmptyList(clinicalNotesUiPermissionsList)) {
+                            if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.VITAL_SIGNS)) {
+                                parentVitalSigns.setVisibility(View.VISIBLE);
+                                if (clinicalNotes != null)
+                                    initVitalSigns(clinicalNotes.getVitalSigns());
+                            }
+                            if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.PRESENT_COMPLAINT))
+                                addPermissionItem(PRESENT_COMPLAINT);
+                            if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.COMPLAINT))
+                                addPermissionItem(ClinicalNotesPermissionType.COMPLAINT);
+                            if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.HISTORY_OF_PRESENT_COMPLAINT))
+                                addPermissionItem(ClinicalNotesPermissionType.HISTORY_OF_PRESENT_COMPLAINT);
+                            if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.MENSTRUAL_HISTORY))
+                                addPermissionItem(ClinicalNotesPermissionType.MENSTRUAL_HISTORY);
+                            if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.OBSTETRIC_HISTORY))
+                                addPermissionItem(ClinicalNotesPermissionType.OBSTETRIC_HISTORY);
+                            if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.GENERAL_EXAMINATION))
+                                addPermissionItem(ClinicalNotesPermissionType.GENERAL_EXAMINATION);
+                            if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.SYSTEMIC_EXAMINATION))
+                                addPermissionItem(ClinicalNotesPermissionType.SYSTEMIC_EXAMINATION);
+                            if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.OBSERVATION))
+                                addPermissionItem(ClinicalNotesPermissionType.OBSERVATION);
+                            if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.INVESTIGATIONS))
+                                addPermissionItem(ClinicalNotesPermissionType.INVESTIGATIONS);
+                            if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.PROVISIONAL_DIAGNOSIS))
+                                addPermissionItem(ClinicalNotesPermissionType.PROVISIONAL_DIAGNOSIS);
+                            if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.DIAGNOSIS))
+                                addPermissionItem(ClinicalNotesPermissionType.DIAGNOSIS);
+                            if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.ECG))
+                                addPermissionItem(ClinicalNotesPermissionType.ECG);
+                            if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.ECHO))
+                                addPermissionItem(ClinicalNotesPermissionType.ECHO);
+                            if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.XRAY))
+                                addPermissionItem(ClinicalNotesPermissionType.XRAY);
+                            if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.HOLTER))
+                                addPermissionItem(ClinicalNotesPermissionType.HOLTER);
+                            if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.NOTES))
+                                addPermissionItem(ClinicalNotesPermissionType.NOTES);
+                            if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.INDICATION_OF_USG))
+                                addPermissionItem(ClinicalNotesPermissionType.INDICATION_OF_USG);
+                            if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.PA))
+                                addPermissionItem(ClinicalNotesPermissionType.PA);
+                            if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.PS))
+                                addPermissionItem(ClinicalNotesPermissionType.PS);
+                            if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.PV))
+                                addPermissionItem(ClinicalNotesPermissionType.PV);
 
-                    //initialising diagrams view visibility
-                    if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.DIAGRAM))
-                        btDiagrams.setVisibility(View.VISIBLE);
-                    else
+                            //initialising diagrams view visibility
+                            if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.DIAGRAM))
+                                btDiagrams.setVisibility(View.VISIBLE);
+                            else
+                                btDiagrams.setVisibility(View.GONE);
+                        }
+                    }
+                    if (isNullClinicalNotePermissionsList) {
                         btDiagrams.setVisibility(View.GONE);
+                    } else {
+                        if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.DIAGRAM) && clinicalNotesUiPermissionsList.size() == 1)
+                            btClinicalNote.setVisibility(View.GONE);
+                        else
+                            btClinicalNote.setVisibility(View.VISIBLE);
+                    }
                 }
-            }
-            //initialising Prescription UI permissions
-            ArrayList<String> prescriptionsPermissions = user.getUiPermissions().getPrescriptionPermissions();
-            for (PrescriptionPermissionType permissionsType : PrescriptionPermissionType.values()) {
-                if (prescriptionsPermissions.contains(String.valueOf(permissionsType))) {
-                    setPrescriptionUiPermissionVisibility(permissionsType, View.VISIBLE);
-                } else {
-                    setPrescriptionUiPermissionVisibility(permissionsType, View.GONE);
+                //initialising Prescription UI permissions
+                ArrayList<String> prescriptionsPermissions = user.getUiPermissions().getPrescriptionPermissions();
+                for (PrescriptionPermissionType permissionsType : PrescriptionPermissionType.values()) {
+                    if (prescriptionsPermissions.contains(String.valueOf(permissionsType))) {
+                        setPrescriptionUiPermissionVisibility(permissionsType, View.VISIBLE);
+                    } else {
+                        setPrescriptionUiPermissionVisibility(permissionsType, View.GONE);
+                    }
                 }
             }
         }
@@ -589,6 +682,7 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
                 if (layoutWidget.getVisibility() == View.GONE)
                     layoutWidget.setVisibility(View.VISIBLE);
                 parentClinicalNote.requestFocus();
+//                if(parentClinicalNote.getFocusedChild()!=null){
                 initEditTextForWidget((MyScriptEditText) mActivity.getCurrentFocus());
                 showHideClinicalNotesLayout();
                 break;
@@ -905,10 +999,7 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
             MyScriptEditText editText = (MyScriptEditText) view;
             // temporarily disable selection changed listener to prevent spurious cursor jumps
             editText.setOnSelectionChangedListener(null);
-            if (editText.getMaxLines() == 1) {
-                editText.setTextKeepState("");
-            } else
-                editText.setTextKeepState(text);
+            editText.setTextKeepState(text);
             if (isCorrectionMode == 0) {
                 editText.setSelection(text.length());
                 editText.setOnSelectionChangedListener(new HealthcocoOnSelectionChanged(editText, this));
@@ -1040,20 +1131,6 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
                     initEditTextForWidget((MyScriptEditText) v);
                     hideKeyboard();
                     LogUtils.LOGD(TAG, "Action UP");
-                    switch (v.getId()) {
-                        case R.id.edit_body_temperature:
-                        case R.id.edit_weight:
-                        case R.id.edit_heart_rate:
-                        case R.id.edit_systolic:
-                        case R.id.edit_diastolic:
-                        case R.id.edit_resp_rate:
-                        case R.id.edit_spo2:
-                            mWidget.configure("en_US", "cur_number");
-                            break;
-                        default:
-                            mWidget.configure("en_US", "cur_text");
-                            break;
-                    }
                     break;
                 case MotionEvent.ACTION_DOWN:
                     LogUtils.LOGD(TAG, "Action DOWN");
@@ -1069,6 +1146,16 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
         if (hasFocus) {
             refreshSuggestionsList(v, "");
         }
+    }
+
+    @Override
+    public void onDeleteItemClicked(DrugItem drug) {
+
+    }
+
+    @Override
+    public void onDrugItemClicked(DrugItem drug) {
+
     }
 
     //--------------------------------------------------------------------------------
@@ -1468,6 +1555,8 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
             case DRUGS:
                 DrugsListSolrResponse drug = (DrugsListSolrResponse) selectedSuggestionObject;
                 LogUtils.LOGD(TAG, "Add selected drug " + drug.getDrugName());
+                drugsListHashMap.put(drug.getUniqueId(), drug);
+//                addDrugsToList(drugsListHashMap);
                 break;
         }
     }
