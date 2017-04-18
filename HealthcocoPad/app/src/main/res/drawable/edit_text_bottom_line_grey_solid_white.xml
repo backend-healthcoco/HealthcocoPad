@@ -3,7 +3,7 @@
 
     <item>
         <shape>
-            <solid android:color="@color/grey_light_divider" />
+            <solid android:color="@color/grey_item_border" />
         </shape>
     </item>
 

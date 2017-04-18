@@ -15,62 +15,68 @@
         android:gravity="center|start"
         android:orientation="horizontal">
 
-        <com.healthcoco.healthcocopad.views.TextViewFontAwesome
-            android:id="@+id/bt_delete"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:padding="5dp"
-            android:text="@string/fa_trash"
-            android:textColor="@color/grey_dark_text"
-            android:textSize="30sp" />
-
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:orientation="vertical">
+            android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/tv_drug_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:drawablePadding="10dp"
-                android:gravity="start"
-                android:paddingBottom="5dp"
-                android:paddingLeft="10dp"
-                android:paddingTop="5dp"
-                android:text="Tablet Crocin(50mg)"
-                android:textColor="@color/black"
-                android:textSize="@dimen/text_size_select_drug_item" />
+            <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+                android:id="@+id/bt_delete"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="5dp"
+                android:text="@string/fa_trash"
+                android:textColor="@color/grey_dark_text"
+                android:textSize="@dimen/text_size_delete_fontawesome_text" />
 
-            <TextView
-                android:id="@+id/tv_generic_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center|start"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:text="Tablet Crocin(50mg)"
-                android:textAllCaps="true"
-                android:textColor="@color/black"
-                android:textSize="13sp" />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_drug_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="10dp"
+                    android:gravity="start"
+                    android:paddingBottom="5dp"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="5dp"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_select_drug_item" />
+
+                <TextView
+                    android:id="@+id/tv_generic_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center|start"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:textAllCaps="true"
+                    android:textColor="@color/black"
+                    android:textSize="13sp" />
+            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginLeft="10dp"
             android:layout_weight="1"
             android:gravity="center"
             android:orientation="vertical">
 
-
             <TextView
                 android:id="@+id/tv_frequency"
-                style="@style/add_edit_doctor_profile_details_material_text_view_style"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
@@ -78,9 +84,9 @@
                 android:drawableRight="@drawable/arrow_down_drug"
                 android:gravity="center|start"
                 android:hint="@string/dosage"
-                android:paddingBottom="10dp"
-                android:paddingTop="10dp"
                 android:maxLines="1"
+                android:paddingBottom="@dimen/padding_item_drug_dosage_top_bottom"
+                android:paddingTop="@dimen/padding_item_drug_dosage_top_bottom"
                 android:textColorHint="@color/grey_light_text"
                 android:textSize="@dimen/text_size_add_new_drug_name" />
 
@@ -96,18 +102,18 @@
             android:layout_weight="1"
             android:orientation="horizontal">
 
-            <EditText
+            <com.healthcoco.healthcocopad.custom.MyScriptEditText
                 android:id="@+id/edit_duration"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="10dp"
-                android:layout_weight="0.50"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="1"
                 android:background="@drawable/edit_text_bottom_line_grey_solid_white"
                 android:hint="@string/duration"
                 android:inputType="textCapSentences"
                 android:maxLines="1"
-                android:paddingBottom="10dp"
-                android:paddingTop="10dp"
+                android:paddingBottom="@dimen/padding_item_drug_dosage_top_bottom"
+                android:paddingTop="@dimen/padding_item_drug_dosage_top_bottom"
                 android:textColor="@color/black"
                 android:textColorHint="@color/grey_light_text"
                 android:textSize="@dimen/text_size_add_new_drug_name" />
@@ -115,14 +121,13 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="10dp"
-                android:layout_weight="0.520"
-                android:gravity="center"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="1"
+                android:gravity="center|start"
                 android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/tv_drug_duration_unit"
-                    style="@style/add_edit_doctor_profile_details_material_text_view_style"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
@@ -130,9 +135,10 @@
                     android:drawableRight="@drawable/arrow_down_drug"
                     android:gravity="center|start"
                     android:hint="@string/duration_unit"
-                    android:paddingBottom="10dp"
-                    android:paddingTop="10dp"
+                    android:maxLines="1"
                     android:singleLine="true"
+                    android:paddingBottom="@dimen/padding_item_drug_dosage_top_bottom"
+                    android:paddingTop="@dimen/padding_item_drug_dosage_top_bottom"
                     android:textColorHint="@color/grey_light_text"
                     android:textSize="@dimen/text_size_add_new_drug_name" />
 
@@ -142,7 +148,6 @@
                     android:background="@color/grey_item_border" />
             </LinearLayout>
         </LinearLayout>
-
 
         <LinearLayout
             android:layout_width="0dp"
@@ -154,7 +159,6 @@
 
             <TextView
                 android:id="@+id/tv_directions"
-                style="@style/add_edit_doctor_profile_details_material_text_view_style"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
@@ -162,9 +166,9 @@
                 android:drawableRight="@drawable/arrow_down_drug"
                 android:gravity="center|start"
                 android:hint="@string/direction"
-                android:paddingBottom="10dp"
-                android:paddingTop="10dp"
-                android:singleLine="true"
+                android:maxLines="1"
+                android:paddingBottom="@dimen/padding_item_drug_dosage_top_bottom"
+                android:paddingTop="@dimen/padding_item_drug_dosage_top_bottom"
                 android:textColorHint="@color/grey_light_text"
                 android:textSize="@dimen/text_size_add_new_drug_name" />
 
@@ -199,8 +203,8 @@
             android:background="@drawable/edit_text_bottom_line_grey_solid_white"
             android:gravity="center|start"
             android:hint="@string/write_insruction_text"
-            android:paddingBottom="10dp"
-            android:paddingTop="10dp"
+            android:paddingBottom="@dimen/padding_item_drug_dosage_top_bottom"
+            android:paddingTop="@dimen/padding_item_drug_dosage_top_bottom"
             android:textColor="@color/black"
             android:textColorHint="@color/grey_light_text"
             android:textSize="@dimen/text_size_drug_dose_item_dosage_direction_instruction"

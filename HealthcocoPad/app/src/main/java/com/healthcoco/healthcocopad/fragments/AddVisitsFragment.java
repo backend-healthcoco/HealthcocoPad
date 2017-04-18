@@ -18,6 +18,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AbsListView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -176,9 +177,9 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
     private LinearLayout containerSuggestionsList;
     private boolean receiversRegistered;
     private LinkedHashMap<String, DrugItem> drugsListHashMap = new LinkedHashMap<>();
-    private LinearLayout parentDrugsItems;
     private ListView lvPrescriptionItems;
     private SelectedPrescriptionDrugItemsListAdapter adapter;
+    private MyScriptEditText editDurationCommon;
     private View selectedViewForSuggestionsList;
     private LinearLayout parentWidgetSuggestions;
     private boolean isOnItemClick;
@@ -345,6 +346,7 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
     private void initPrescriptionsView() {
         parentPrescription = (LinearLayout) view.findViewById(R.id.parent_prescription);
         lvPrescriptionItems = (ListView) view.findViewById(R.id.lv_prescription_items);
+        editDurationCommon = (MyScriptEditText) view.findViewById(R.id.edit_duration_common);
 //        parentDrugsItems = (LinearLayout) view.findViewById(R.id.parent_drugs_items);
         parentPrescription.setVisibility(View.GONE);
         initAdapterForPrescrptionList();
@@ -353,11 +355,16 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
     private void initAdapterForPrescrptionList() {
         adapter = new SelectedPrescriptionDrugItemsListAdapter(mActivity, this);
         lvPrescriptionItems.setAdapter(adapter);
+        lvPrescriptionItems.setTranscriptMode(AbsListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
+        lvPrescriptionItems.setStackFromBottom(true);
     }
 
     private void notifyAdapter(ArrayList<DrugItem> drugsListMap) {
         adapter.setListData(drugsListMap);
         adapter.notifyDataSetChanged();
+        if (drugsListMap != null && drugsListMap.size() > 0) {
+            btAdvice.setVisibility(View.VISIBLE);
+        } else btAdvice.setVisibility(View.GONE);
     }
 
     private void initDiagonsticTestsView() {
@@ -403,6 +410,7 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
         editSpo2.setOnTouchListener(this);
         editDiastolic.setOnTouchListener(this);
         editSystolic.setOnTouchListener(this);
+        editDurationCommon.setOnTouchListener(this);
         btPrescription.setOnFocusChangeListener(this);
         setViewToWidget();
     }
@@ -730,6 +738,10 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
             case R.id.bt_prescription:
                 parentPrescription.setVisibility(View.VISIBLE);
                 onFocusChange(btPrescription, true);
+//                svScrollView.fullScroll(View.FOCUS_DOWN);
+                svScrollView.scrollTo(0, svScrollView.getBottom());
+                editDurationCommon.requestFocus();
+
 //                refreshSuggestionsList(v, "");
 //                layoutWidget.setVisibility(View.VISIBLE);
 //                if (layoutWidget.getVisibility() == View.GONE)
@@ -1775,6 +1787,8 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
         if (drug != null) {
             drugsListHashMap.put(drug.getDrugId(), drug);
             notifyAdapter(new ArrayList<DrugItem>(drugsListHashMap.values()));
+            lvPrescriptionItems.setSelection(adapter.getCount());
+            svScrollView.fullScroll(View.FOCUS_DOWN);
         }
     }
 

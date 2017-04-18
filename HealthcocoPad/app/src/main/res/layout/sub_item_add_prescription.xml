@@ -71,7 +71,7 @@
                 android:layout_weight="1">
 
                 <com.healthcoco.healthcocopad.custom.MyScriptEditText
-                    android:layout_width="100dp"
+                   android:id="@+id/edit_duration_common" android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:background="@drawable/shape_rounded_corners_item_background"
                     android:gravity="center"
@@ -95,20 +95,11 @@
             android:layout_height="1dp"
             android:background="@color/grey_dark_text" />
 
-        <!--<LinearLayout-->
-        <!--android:id="@+id/parent_drugs_items"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:background="@color/white"-->
-        <!--android:orientation="vertical">-->
-
-        <!--</LinearLayout>-->
         <com.healthcoco.healthcocopad.custom.ExpandableHeightListView
             android:id="@+id/lv_prescription_items"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:clipToPadding="false"
             android:divider="@null"
             android:listSelector="@android:color/transparent"
             android:overScrollMode="never"></com.healthcoco.healthcocopad.custom.ExpandableHeightListView>

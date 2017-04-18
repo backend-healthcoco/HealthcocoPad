@@ -27,7 +27,7 @@
     <dimen name="text_size_no_results">15sp</dimen>
     <dimen name="layout_edit_search_padding">8dp</dimen>
     <dimen name="edit_text_size_login">15sp</dimen>
-    <dimen name="edit_text_bottom_line_stroke">2dp</dimen>
+    <dimen name="edit_text_bottom_line_stroke">1dp</dimen>
     <!--navigation drawer-->
     <dimen name="tool_bar_top_padding">0dp</dimen>
     <dimen name="drawer_left_margin">70dp</dimen>
@@ -172,4 +172,6 @@
     <dimen name="diagram_detail_color_pallete_width_height">30dp</dimen>
     <dimen name="text_size_feedback">18sp</dimen>
     <dimen name="baseline_position">120dp</dimen>
+    <dimen name="text_size_delete_fontawesome_text">25sp</dimen>
+    <dimen name="padding_item_drug_dosage_top_bottom">10dp</dimen>
 </resources>

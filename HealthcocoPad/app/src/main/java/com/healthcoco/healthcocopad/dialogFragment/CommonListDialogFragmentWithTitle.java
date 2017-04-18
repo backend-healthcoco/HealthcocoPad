@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -11,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -34,6 +36,7 @@ import com.healthcoco.healthcocopad.bean.server.Specialities;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocopad.enums.ActionbarLeftRightActionTypeDrawables;
+import com.healthcoco.healthcocopad.enums.ActionbarType;
 import com.healthcoco.healthcocopad.enums.AddUpdateNameDialogType;
 import com.healthcoco.healthcocopad.enums.CommonListDialogType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
@@ -72,6 +75,7 @@ public class CommonListDialogFragmentWithTitle extends HealthCocoDialogFragment 
     private SwipeRefreshLayout swipeRefreshLayout;
     private User user;
     private LinearLayout loadingOverlay;
+    private Toolbar toolbar;
 
     public CommonListDialogFragmentWithTitle() {
     }
@@ -113,7 +117,7 @@ public class CommonListDialogFragmentWithTitle extends HealthCocoDialogFragment 
     public void initViews() {
         loadingOverlay = (LinearLayout) view.findViewById(R.id.loading_overlay);
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
-        layoutActionbar = (LinearLayout) view.findViewById(R.id.layout_actionbar);
+        toolbar = (Toolbar) view.findViewById(R.id.toolbar);
         listView = (ListViewLoadMore) view.findViewById(R.id.lv_list);
         tvNoResultFound = (TextView) view.findViewById(R.id.tv_no_result_found);
         if (commonListDialogType.isAddCustomAllowed()) {
@@ -121,7 +125,6 @@ public class CommonListDialogFragmentWithTitle extends HealthCocoDialogFragment 
             initEditSearchView(commonListDialogType.getHint(), this, null, this, false);
         } else
             initEditSearchView(commonListDialogType.getHint(), this, false);
-
     }
 
     private void initDialogTitle() {
@@ -129,40 +132,96 @@ public class CommonListDialogFragmentWithTitle extends HealthCocoDialogFragment 
             switch (commonListDialogType) {
                 case DIRECTION:
                 case FREQUENCY:
-                    initActionbar(ActionbarLeftRightActionTypeDrawables.WITH_ADD);
+                    initActionBar(ActionbarType.TITLE, 0, ActionbarLeftRightActionTypeDrawables.WITH_CROSS, ActionbarLeftRightActionTypeDrawables.WITH_ADD);
                     break;
-
                 case DURATION:
-                    initActionbar(ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION);
+                    initActionBar(ActionbarType.TITLE, 0, ActionbarLeftRightActionTypeDrawables.WITH_CROSS, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION);
                     break;
             }
         }
     }
 
-    private void initActionbar(ActionbarLeftRightActionTypeDrawables actionbarLeftRightActionType) {
-        if (commonListDialogType.getActionBarType() != null) {
-            View actionbar = mActivity.getLayoutInflater().inflate(commonListDialogType.getActionBarType().getActionBarLayoutId(), null);
+    //    private void initActionbar(ActionbarLeftRightActionTypeDrawables actionbarLeftRightActionType) {
+//        if (commonListDialogType.getActionBarType() != null) {
+//            View actionbar = mActivity.getLayoutInflater().inflate(commonListDialogType.getActionBarType().getActionBarLayoutId(), null);
+//            actionbar.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+//            layoutActionbar.addView(actionbar);
+//            //Back,Cross,Done
+//            LinearLayout containerRightAction = (LinearLayout) actionbar.findViewById(R.id.container_right_action);
+//            if (containerRightAction != null) {
+//                if (actionbarLeftRightActionType != ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION) {
+//                    containerRightAction.removeAllViews();
+//                    if (actionbarLeftRightActionType != null) {
+//                        containerRightAction.setVisibility(View.VISIBLE);
+//                        View actionView = mActivity.getLayoutInflater().inflate(actionbarLeftRightActionType.getLayoutId(), null);
+//                        actionView.setClickable(false);
+//                        containerRightAction.addView(actionView);
+//                    }
+//                    containerRightAction.setOnClickListener(this);
+//                } else
+//                    containerRightAction.setVisibility(View.GONE);
+//            }
+//
+//            TextView tvTitle = (TextView) layoutActionbar.findViewById(R.id.tv_title);
+//            tvTitle.setText(commonListDialogType.getTitleId());
+//        }
+//    }
+    public void initActionBar(ActionbarType actionbarType, int title, ActionbarLeftRightActionTypeDrawables leftAction, ActionbarLeftRightActionTypeDrawables rightAction) {
+        if (actionbarType == ActionbarType.HIDDEN) {
+            hideActionBar();
+        } else {
+            View actionbar = mActivity.getLayoutInflater().inflate(actionbarType.getActionBarLayoutId(), null);
             actionbar.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-            layoutActionbar.addView(actionbar);
-            //Back,Cross,Done
-            LinearLayout containerRightAction = (LinearLayout) actionbar.findViewById(R.id.container_right_action);
-            if (containerRightAction != null) {
-                if (actionbarLeftRightActionType != ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION) {
-                    containerRightAction.removeAllViews();
-                    if (actionbarLeftRightActionType != null) {
-                        containerRightAction.setVisibility(View.VISIBLE);
-                        View actionView = mActivity.getLayoutInflater().inflate(actionbarLeftRightActionType.getLayoutId(), null);
-                        actionView.setClickable(false);
-                        containerRightAction.addView(actionView);
+            toolbar.setContentInsetsAbsolute(0, 0);
+            toolbar.addView(actionbar);
+            LinearLayout containerLeftAction = (LinearLayout) actionbar.findViewById(R.id.container_left_action);
+            if (leftAction != null && leftAction != ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION) {
+                containerLeftAction.setVisibility(View.VISIBLE);
+                View leftView = mActivity.getLayoutInflater().inflate(leftAction.getLayoutId(), null);
+                if (leftView != null) {
+                    if (leftAction.isDrawableBackground()) {
+                        ImageButton imageButton = (ImageButton) leftView;
+                        imageButton.setImageResource(leftAction.getDrawableTitleId());
+                    } else {
+                        TextView button = (TextView) leftView;
+                        button.setText(leftAction.getDrawableTitleId());
                     }
-                    containerRightAction.setOnClickListener(this);
-                } else
-                    containerRightAction.setVisibility(View.GONE);
-            }
+                    containerLeftAction.addView(leftView);
+                }
+                containerLeftAction.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        getDialog().dismiss();
+                    }
+                });
+            } else
+                containerLeftAction.setVisibility(View.GONE);
 
-            TextView tvTitle = (TextView) layoutActionbar.findViewById(R.id.tv_title);
+            LinearLayout containerRightAction = (LinearLayout) actionbar.findViewById(R.id.container_right_action);
+            if (rightAction != null && rightAction != ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION) {
+                containerRightAction.setVisibility(View.VISIBLE);
+                View rightView = mActivity.getLayoutInflater().inflate(rightAction.getLayoutId(), null);
+                if (rightView != null) {
+                    if (rightAction.isDrawableBackground()) {
+                        ImageButton imageButton = (ImageButton) rightView;
+                        imageButton.setImageResource(rightAction.getDrawableTitleId());
+                    } else {
+                        TextView button = (TextView) rightView;
+                        button.setText(rightAction.getDrawableTitleId());
+                    }
+                    containerRightAction.addView(rightView);
+                }
+                containerRightAction.setOnClickListener(this);
+            } else {
+                containerRightAction.setVisibility(View.GONE);
+            }
+            TextView tvTitle = (TextView) toolbar.findViewById(R.id.tv_title);
             tvTitle.setText(commonListDialogType.getTitleId());
         }
+    }
+
+    public void hideActionBar() {
+        toolbar.setVisibility(View.GONE);
     }
 
     @Override

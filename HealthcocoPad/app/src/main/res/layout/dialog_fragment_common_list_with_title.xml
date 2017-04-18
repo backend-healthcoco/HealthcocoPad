@@ -12,11 +12,11 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/layout_actionbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
+            <include layout="@layout/toolbar_healthcoco" />
         </LinearLayout>
 
         <include layout="@layout/layout_dialog_search" />

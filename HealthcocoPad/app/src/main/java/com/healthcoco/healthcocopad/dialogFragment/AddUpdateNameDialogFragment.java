@@ -406,14 +406,14 @@ public class AddUpdateNameDialogFragment extends HealthCocoDialogFragment implem
                     if (response.getData() != null && response.getData() instanceof DrugDosage) {
                         LocalDataServiceImpl.getInstance(mApp).addDrugDosage((DrugDosage) response.getData());
                     }
-//                    getTargetFragment().onActivityResult(HealthCocoConstants.REQUEST_CODE_DISEASED_LIST, HealthCocoConstants.RESULT_CODE_REFERENCE_LIST, null);
+                    getTargetFragment().onActivityResult(getTargetRequestCode(), HealthCocoConstants.RESULT_CODE_REFERENCE_LIST, null);
                     break;
                 case ADD_DIRECTION:
                     mActivity.hideLoading();
                     if (response.getData() != null && response.getData() instanceof DrugDirection) {
                         LocalDataServiceImpl.getInstance(mApp).addDirection((DrugDirection) response.getData());
                     }
-//                    getTargetFragment().onActivityResult(HealthCocoConstants.REQUEST_CODE_DISEASED_LIST, HealthCocoConstants.RESULT_CODE_REFERENCE_LIST, null);
+                    getTargetFragment().onActivityResult(getTargetRequestCode(), HealthCocoConstants.RESULT_CODE_REFERENCE_LIST, null);
                     break;
                 case ADD_CUSTOM_HISTORY:
                     mActivity.hideLoading();
