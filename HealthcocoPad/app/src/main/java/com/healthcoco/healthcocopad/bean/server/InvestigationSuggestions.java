@@ -3,9 +3,12 @@ package com.healthcoco.healthcocopad.bean.server;
 import com.orm.SugarRecord;
 import com.orm.annotation.Unique;
 
+import org.parceler.Parcel;
+
 /**
  * Created by Mohit on 01/03/16.
  */
+@Parcel
 public class InvestigationSuggestions extends SugarRecord {
     @Unique
     private String uniqueId;

@@ -35,12 +35,13 @@ import com.healthcoco.healthcocopad.MyCertificate;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.activities.AddVisitsActivity;
 import com.healthcoco.healthcocopad.adapter.SelectedPrescriptionDrugItemsListAdapter;
-import com.healthcoco.healthcocopad.adapter.SelectedTemplateDrugItemsListAdapter;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.request.ClinicalNoteToSend;
 import com.healthcoco.healthcocopad.bean.server.AssignedUserUiPermissions;
 import com.healthcoco.healthcocopad.bean.server.BloodPressure;
 import com.healthcoco.healthcocopad.bean.server.ClinicalNotes;
+import com.healthcoco.healthcocopad.bean.server.ComplaintSuggestions;
+import com.healthcoco.healthcocopad.bean.server.DiagnosisSuggestions;
 import com.healthcoco.healthcocopad.bean.server.Drug;
 import com.healthcoco.healthcocopad.bean.server.DrugDirection;
 import com.healthcoco.healthcocopad.bean.server.DrugItem;
@@ -48,7 +49,9 @@ import com.healthcoco.healthcocopad.bean.server.DrugType;
 import com.healthcoco.healthcocopad.bean.server.DrugsListSolrResponse;
 import com.healthcoco.healthcocopad.bean.server.Duration;
 import com.healthcoco.healthcocopad.bean.server.GenericName;
+import com.healthcoco.healthcocopad.bean.server.InvestigationSuggestions;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
+import com.healthcoco.healthcocopad.bean.server.ObservationSuggestions;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.bean.server.VisitDetails;
@@ -73,6 +76,7 @@ import com.healthcoco.healthcocopad.utilities.DownloadImageFromUrlUtil;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.ImageUtil;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
+import com.healthcoco.healthcocopad.utilities.ScreenDimensions;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.healthcoco.healthcocopad.views.TextViewFontAwesome;
 import com.myscript.atk.core.CaptureInfo;
@@ -87,6 +91,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static com.healthcoco.healthcocopad.enums.ClinicalNotesPermissionType.PRESENT_COMPLAINT;
 import static com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType.GET_FRAGMENT_INITIALISATION_DATA;
@@ -173,6 +179,9 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
     private LinearLayout parentDrugsItems;
     private ListView lvPrescriptionItems;
     private SelectedPrescriptionDrugItemsListAdapter adapter;
+    private View selectedViewForSuggestionsList;
+    private LinearLayout parentWidgetSuggestions;
+    private boolean isOnItemClick;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -226,6 +235,9 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
     public void initViews() {
         svScrollView = (ScrollView) view.findViewById(R.id.sv_scrollview);
         containerSuggestionsList = (LinearLayout) view.findViewById(R.id.container_suggestions_list);
+
+        //initialising parent Widget SUggestions dimensions
+        parentWidgetSuggestions = (LinearLayout) view.findViewById(R.id.parent_widget_suggestions);
         containerSuggestionsList.setVisibility(View.VISIBLE);
         initWidgetViews();
         initToolbarView();
@@ -235,6 +247,21 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
         initDiagonsticTestsView();
         initDiagramsViews();
         initAdviceViews();
+        setHeightOfWigetsAndSuggestions();
+    }
+
+    private void setHeightOfWigetsAndSuggestions() {
+        ViewGroup.LayoutParams layourParams = parentWidgetSuggestions.getLayoutParams();
+        layourParams.height = (int) (ScreenDimensions.SCREEN_WIDTH * 0.60);
+        parentWidgetSuggestions.setLayoutParams(layourParams);
+
+        ViewGroup.LayoutParams layoutParamsSuggestionsList = containerSuggestionsList.getLayoutParams();
+        layoutParamsSuggestionsList.height = parentWidgetSuggestions.getLayoutParams().height / 2;
+        containerSuggestionsList.setLayoutParams(layoutParamsSuggestionsList);
+
+        ViewGroup.LayoutParams layoutParamsWidget = layoutWidget.getLayoutParams();
+        layoutParamsWidget.height = parentWidgetSuggestions.getLayoutParams().height / 2;
+        layoutWidget.setLayoutParams(layoutParamsWidget);
     }
 
     private void initWidgetViews() {
@@ -250,7 +277,6 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
         tvCandidateThree = (TextView) view.findViewById(R.id.tv_candidate_three);
         tvPreviousArrow = (TextViewFontAwesome) view.findViewById(R.id.tv_previous_arrow);
         tvNextArrow = (TextViewFontAwesome) view.findViewById(R.id.tv_next_arrow);
-        layoutWidget.setVisibility(View.GONE);
     }
 
     private void setViewToWidget() {
@@ -377,10 +403,14 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
         editSpo2.setOnTouchListener(this);
         editDiastolic.setOnTouchListener(this);
         editSystolic.setOnTouchListener(this);
+        btPrescription.setOnFocusChangeListener(this);
         setViewToWidget();
     }
 
-    private void initEditTextForWidget(MyScriptEditText editText) {
+    private void initEditTextForWidget(EditText editText, HealthcocoOnSelectionChangedListener onSelectionChangedListener) {
+        HealthcocoOnSelectionChanged onSelectionChangeListener = null;
+        if (onSelectionChangedListener != null)
+            onSelectionChangeListener = new HealthcocoOnSelectionChanged(editText, onSelectionChangedListener);
         switch (editText.getId()) {
             case R.id.edit_body_temperature:
             case R.id.edit_weight:
@@ -396,22 +426,23 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
                 break;
         }
         mWidget.setText(editText.getText().toString());
-        mWidget.setOnConfiguredListener(new HealthcocoOnSelectionChanged(editText, this));
-        mWidget.setOnTextChangedListener(new HealthcocoOnSelectionChanged(editText, this));
-        mWidget.setOnReturnGestureListener(new HealthcocoOnSelectionChanged(editText, this));
-        mWidget.setOnEraseGestureListener(new HealthcocoOnSelectionChanged(editText, this));
-        mWidget.setOnSelectGestureListener(new HealthcocoOnSelectionChanged(editText, this));
-        mWidget.setOnUnderlineGestureListener(new HealthcocoOnSelectionChanged(editText, this));
-        mWidget.setOnInsertGestureListener(new HealthcocoOnSelectionChanged(editText, this));
-        mWidget.setOnJoinGestureListener(new HealthcocoOnSelectionChanged(editText, this));
-        mWidget.setOnOverwriteGestureListener(new HealthcocoOnSelectionChanged(editText, this));
-        mWidget.setOnSingleTapGestureListener(new HealthcocoOnSelectionChanged(editText, this));
-        mWidget.setOnLongPressGestureListener(new HealthcocoOnSelectionChanged(editText, this));
-        mWidget.setOnUserScrollBeginListener(new HealthcocoOnSelectionChanged(editText, this));
-        mWidget.setOnUserScrollEndListener(new HealthcocoOnSelectionChanged(editText, this));
-        mWidget.setOnUserScrollListener(new HealthcocoOnSelectionChanged(editText, this));
-        mWidget.setOnPenUpListener(new HealthcocoOnSelectionChanged(editText, this));
-        editText.setOnSelectionChangedListener(new HealthcocoOnSelectionChanged(editText, this));
+        mWidget.setOnConfiguredListener(onSelectionChangeListener);
+        mWidget.setOnTextChangedListener(onSelectionChangeListener);
+        mWidget.setOnReturnGestureListener(onSelectionChangeListener);
+        mWidget.setOnEraseGestureListener(onSelectionChangeListener);
+        mWidget.setOnSelectGestureListener(onSelectionChangeListener);
+        mWidget.setOnUnderlineGestureListener(onSelectionChangeListener);
+        mWidget.setOnInsertGestureListener(onSelectionChangeListener);
+        mWidget.setOnJoinGestureListener(onSelectionChangeListener);
+        mWidget.setOnOverwriteGestureListener(onSelectionChangeListener);
+        mWidget.setOnSingleTapGestureListener(onSelectionChangeListener);
+        mWidget.setOnLongPressGestureListener(onSelectionChangeListener);
+        mWidget.setOnUserScrollBeginListener(onSelectionChangeListener);
+        mWidget.setOnUserScrollEndListener(onSelectionChangeListener);
+        mWidget.setOnUserScrollListener(onSelectionChangeListener);
+        mWidget.setOnPenUpListener(onSelectionChangeListener);
+        if (editText instanceof MyScriptEditText)
+            ((MyScriptEditText) editText).setOnSelectionChangedListener(onSelectionChangeListener);
     }
 
     private void initData() {
@@ -676,7 +707,6 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
             autotvPermission.setText(text);
         }
         parentPermissionItems.addView(layoutItemPermission);
-        layoutItemPermission.requestFocus();
 //        editSpo2.setNextFocusDownId(R.id.edit_permission_text);
 //        layoutItemPermission.setNextFocusDownId(R.id.et_advice);
 //        etAdvice.setNextFocusUpId(R.id.edit_permission_text);
@@ -689,30 +719,32 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
                 mActivity.onBackPressed();
                 break;
             case R.id.bt_clinical_note:
-                if (layoutWidget.getVisibility() == View.GONE)
-                    layoutWidget.setVisibility(View.VISIBLE);
-                parentClinicalNote.requestFocus();
+//                if (layoutWidget.getVisibility() == View.GONE)
+//                    layoutWidget.setVisibility(View.VISIBLE);
+//                parentClinicalNote.requestFocus();
 //                if(parentClinicalNote.getFocusedChild()!=null){
-                initEditTextForWidget((MyScriptEditText) mActivity.getCurrentFocus());
+//                initEditTextForWidget((MyScriptEditText) mActivity.getCurrentFocus(), this);
+                hideBoth();
                 showHideClinicalNotesLayout();
                 break;
             case R.id.bt_prescription:
-                refreshSuggestionsList(v, "");
-                if (layoutWidget.getVisibility() == View.GONE)
-                    layoutWidget.setVisibility(View.VISIBLE);
-                showHidePrescriptionLayout();
+                parentPrescription.setVisibility(View.VISIBLE);
+                onFocusChange(btPrescription, true);
+//                refreshSuggestionsList(v, "");
+//                layoutWidget.setVisibility(View.VISIBLE);
+//                if (layoutWidget.getVisibility() == View.GONE)
+//                    layoutWidget.setVisibility(View.VISIBLE);
+//                showHidePrescriptionLayout();
                 break;
             case R.id.bt_lab_tests:
-                if (layoutWidget.getVisibility() == View.GONE)
-                    layoutWidget.setVisibility(View.VISIBLE);
+//                if (layoutWidget.getVisibility() == View.GONE)
+//                    layoutWidget.setVisibility(View.VISIBLE);
                 showHideLabTestsLayout();
                 break;
             case R.id.bt_diagrams:
                 openActivity(CommonOpenUpFragmentType.SELECT_DIAGRAM, null, REQUEST_CODE_ADD_CLINICAL_NOTES);
                 break;
             case R.id.bt_advice:
-                if (layoutWidget.getVisibility() == View.GONE)
-                    layoutWidget.setVisibility(View.VISIBLE);
                 showHideAdviceLayout();
                 break;
             case R.id.bt_delete:
@@ -723,7 +755,7 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
                 }
                 break;
             case R.id.bt_keyboard:
-                showHideWidgetAndKeyboardLayout();
+//                showHideWidgetAndKeyboardLayout();
                 break;
             case R.id.bt_del:
                 onDeleteButtonClick();
@@ -745,7 +777,7 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
                     view.findViewById(upId).requestFocus();
                     System.out.println("Back");
                 }
-                initEditTextForWidget((MyScriptEditText) mActivity.getCurrentFocus());
+                initEditTextForWidget((MyScriptEditText) mActivity.getCurrentFocus(), this);
                 break;
             case R.id.tv_next_arrow:
                 int downId = mActivity.getCurrentFocus().getNextFocusDownId();
@@ -753,7 +785,7 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
                     view.findViewById(downId).requestFocus();
                     System.out.println("Next");
                 }
-                initEditTextForWidget((MyScriptEditText) mActivity.getCurrentFocus());
+                initEditTextForWidget((MyScriptEditText) mActivity.getCurrentFocus(), this);
                 break;
             case R.id.bt_save:
                 Util.checkNetworkStatus(mActivity);
@@ -762,6 +794,22 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
                 } else onNetworkUnavailable(null);
                 break;
         }
+    }
+
+    private void showOnlyWidget() {
+        parentWidgetSuggestions.setVisibility(View.VISIBLE);
+        containerSuggestionsList.setVisibility(View.GONE);
+        layoutWidget.setVisibility(View.VISIBLE);
+    }
+
+    private void showWidgetAndSuggestionsBoth() {
+        parentWidgetSuggestions.setVisibility(View.VISIBLE);
+        containerSuggestionsList.setVisibility(View.VISIBLE);
+        layoutWidget.setVisibility(View.VISIBLE);
+    }
+
+    private void hideBoth() {
+        parentWidgetSuggestions.setVisibility(View.GONE);
     }
 
     private void showHidePrescriptionLayout() {
@@ -876,6 +924,7 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
         if (layoutParentAdvice.getVisibility() == View.GONE) {
             layoutParentAdvice.setVisibility(View.VISIBLE);
             visibleViews.add(VisitsUiType.ADVICE);
+            showOnlyWidget();
         } else {
             layoutParentAdvice.setVisibility(View.GONE);
             visibleViews.remove(VisitsUiType.ADVICE);
@@ -888,12 +937,12 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
             parentClinicalNote.setVisibility(View.VISIBLE);
         } else {
             parentClinicalNote.setVisibility(View.GONE);
-//            if (visibleViews.contains(VisitsUiType.CLINICAL_NOTES))
             visibleViews.remove(VisitsUiType.CLINICAL_NOTES);
         }
     }
 
     private void refreshSuggestionsList(View v, String searchTerm) {
+        selectedViewForSuggestionsList = v;
         SuggestionType suggestionType = null;
         Object tag = v.getTag();
         if (tag != null) {
@@ -903,30 +952,62 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
                     switch (permissionType) {
                         case COMPLAINT:
                             suggestionType = SuggestionType.COMPLAINTS;
+                            searchTerm = getLastTextAfterCharacterToBeReplaced(searchTerm);
                             break;
                         case OBSERVATION:
                             suggestionType = SuggestionType.OBSERVATION;
+                            searchTerm = getLastTextAfterCharacterToBeReplaced(searchTerm);
                             break;
                         case INVESTIGATIONS:
                             suggestionType = SuggestionType.INVESTIGATION;
+                            searchTerm = getLastTextAfterCharacterToBeReplaced(searchTerm);
                             break;
                         case DIAGNOSIS:
                             suggestionType = SuggestionType.DIAGNOSIS;
+                            searchTerm = getLastTextAfterCharacterToBeReplaced(searchTerm);
                             break;
                     }
                 }
             } else if (tag instanceof SuggestionType)
                 suggestionType = (SuggestionType) tag;
+            if (suggestionType != null) {
+                containerSuggestionsList.setVisibility(View.VISIBLE);
+                try {
+                    Intent intent = new Intent(AddVisitSuggestionsFragment.INTENT_LOAD_DATA);
+                    intent.putExtra(AddVisitSuggestionsFragment.TAG_SEARCHED_TERM, searchTerm);
+                    intent.putExtra(AddVisitSuggestionsFragment.TAG_SUGGESTIONS_TYPE, suggestionType.ordinal());
+                    LocalBroadcastManager.getInstance(mApp.getApplicationContext()).sendBroadcast(intent);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return;
+            }
         }
-        containerSuggestionsList.setVisibility(View.VISIBLE);
-        try {
-            Intent intent = new Intent(AddVisitSuggestionsFragment.INTENT_LOAD_DATA);
-            intent.putExtra(AddVisitSuggestionsFragment.TAG_SEARCHED_TERM, searchTerm);
-            intent.putExtra(AddVisitSuggestionsFragment.TAG_SUGGESTIONS_TYPE, suggestionType.ordinal());
-            LocalBroadcastManager.getInstance(mApp.getApplicationContext()).sendBroadcast(intent);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        containerSuggestionsList.setVisibility(View.GONE);
+    }
+
+    private String getLastTextAfterCharacterToBeReplaced(String searchTerm) {
+        Pattern p = Pattern.compile(".*" + CHARACTER_TO_BE_REPLACED + "\\s*(.*)");
+        Matcher m = p.matcher(searchTerm.trim());
+
+        if (m.find())
+            return m.group(1);
+        return searchTerm;
+    }
+
+    /**
+     * Gets text before last occurance of CHARACTER_TO_BE_REPLACED in searchedTerm
+     *
+     * @param searchTerm
+     * @return : text Before  last occurance of CHARACTER_TO_BE_REPLACED
+     */
+    private String getTextBeforeLastOccuranceOfCharacter(String searchTerm) {
+        Pattern p = Pattern.compile("\\s*(.*)" + CHARACTER_TO_BE_REPLACED + ".*");
+        Matcher m = p.matcher(searchTerm.trim());
+
+        if (m.find())
+            return m.group(1);
+        return "";
     }
 
     private void showHideDiagramsLayout(int visibility) {
@@ -1014,26 +1095,29 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
 
     @Override
     public void onTextChanged(View view, SingleLineWidgetApi w, String text, boolean intermediate) {
-        Log.d(TAG, "Text changed to \"" + text + "\" (" + (intermediate ? "intermediate" : "stable") + ")");
-        if (view instanceof EditText) {
-            refreshSuggestionsList(view, text);
-            MyScriptEditText editText = (MyScriptEditText) view;
-            // temporarily disable selection changed listener to prevent spurious cursor jumps
-            editText.setOnSelectionChangedListener(null);
-            editText.setTextKeepState(text);
-            if (isCorrectionMode == 0) {
-                editText.setSelection(text.length());
-                editText.setOnSelectionChangedListener(new HealthcocoOnSelectionChanged(editText, this));
-                mWidget.setCursorIndex(editText.length());
-                //to set scrolling position
+        if (!isOnItemClick) {
+            Log.d(TAG, "Text changed to \"" + text + "\" (" + (intermediate ? "intermediate" : "stable") + ")");
+            if (view instanceof EditText) {
+                refreshSuggestionsList(view, text);
+                MyScriptEditText editText = (MyScriptEditText) view;
+                // temporarily disable selection changed listener to prevent spurious cursor jumps
+                editText.setOnSelectionChangedListener(null);
+                editText.setTextKeepState(text);
+                if (isCorrectionMode == 0) {
+                    editText.setSelection(text.length());
+                    editText.setOnSelectionChangedListener(new HealthcocoOnSelectionChanged(editText, this));
+                    mWidget.setCursorIndex(editText.length());
+                    //to set scrolling position
 //                mWidget.scrollTo(editText.length() - 3);
-            } else {
-                editText.setSelection(mWidget.getCursorIndex());
-                editText.setOnSelectionChangedListener(new HealthcocoOnSelectionChanged(editText, this));
-                isCorrectionMode--;
+                } else {
+                    editText.setSelection(mWidget.getCursorIndex());
+                    editText.setOnSelectionChangedListener(new HealthcocoOnSelectionChanged(editText, this));
+                    isCorrectionMode--;
+                }
             }
+            updateCandidateBar();
         }
-        updateCandidateBar();
+        isOnItemClick = false;
     }
 
     @Override
@@ -1146,26 +1230,29 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        if (v instanceof MyScriptEditText) {
-            switch (event.getAction()) {
-                case MotionEvent.ACTION_UP:
-                    initEditTextForWidget((MyScriptEditText) v);
-                    hideKeyboard();
-                    LogUtils.LOGD(TAG, "Action UP");
-                    break;
-                case MotionEvent.ACTION_DOWN:
-                    LogUtils.LOGD(TAG, "Action DOWN");
-                    hideKeyboard();
-                    break;
-            }
-        }
+//        if (v instanceof MyScriptEditText) {
+//            switch (event.getAction()) {
+//                case MotionEvent.ACTION_UP:
+//                    initEditTextForWidget((MyScriptEditText) v, this);
+//                    hideKeyboard();
+//                    LogUtils.LOGD(TAG, "Action UP");
+//                    break;
+//                case MotionEvent.ACTION_DOWN:
+//                    LogUtils.LOGD(TAG, "Action DOWN");
+//                    hideKeyboard();
+//                    break;
+//            }
+//        }
         return false;
     }
 
     @Override
     public void onFocusChange(View v, boolean hasFocus) {
         if (hasFocus) {
+            showOnlyWidget();
             refreshSuggestionsList(v, "");
+            if (v instanceof EditText)
+                initEditTextForWidget((MyScriptEditText) v, this);
         }
     }
 
@@ -1205,7 +1292,6 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
     public void onDrugItemClicked(DrugItem drug) {
 
     }
-
     //--------------------------------------------------------------------------------
     // UI callbacks
 
@@ -1599,6 +1685,7 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
     };
 
     private void handleSelectedSugestionObject(SuggestionType suggestionType, Object selectedSuggestionObject) {
+        String text = "";
         switch (suggestionType) {
             case DRUGS:
                 DrugItem selectedDrug = new DrugItem();
@@ -1645,7 +1732,42 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
                 if (selectedDrug != null) {
                     addDrug(selectedDrug);
                 }
+                return;
+            case COMPLAINTS:
+                if (selectedSuggestionObject instanceof ComplaintSuggestions) {
+                    ComplaintSuggestions complaint = (ComplaintSuggestions) selectedSuggestionObject;
+                    text = complaint.getComplaint() + CHARACTER_TO_REPLACE_COMMA_WITH_SPACES;
+                }
                 break;
+            case OBSERVATION:
+                if (selectedSuggestionObject instanceof ObservationSuggestions) {
+                    ObservationSuggestions observation = (ObservationSuggestions) selectedSuggestionObject;
+                    text = observation.getObservation() + CHARACTER_TO_REPLACE_COMMA_WITH_SPACES;
+                }
+                break;
+            case INVESTIGATION:
+                if (selectedSuggestionObject instanceof InvestigationSuggestions) {
+                    InvestigationSuggestions investigation = (InvestigationSuggestions) selectedSuggestionObject;
+                    text = investigation.getInvestigation() + CHARACTER_TO_REPLACE_COMMA_WITH_SPACES;
+                }
+                break;
+            case DIAGNOSIS:
+                if (selectedSuggestionObject instanceof DiagnosisSuggestions) {
+                    DiagnosisSuggestions diagnosis = (DiagnosisSuggestions) selectedSuggestionObject;
+                    text = diagnosis.getDiagnosis() + CHARACTER_TO_REPLACE_COMMA_WITH_SPACES;
+                }
+                break;
+        }
+
+        if (selectedViewForSuggestionsList != null && selectedViewForSuggestionsList instanceof EditText && !Util.isNullOrBlank(text)) {
+            EditText editText = ((EditText) selectedViewForSuggestionsList);
+            isOnItemClick = true;
+            String textBeforeComma = getTextBeforeLastOccuranceOfCharacter(Util.getValidatedValueOrBlankWithoutTrimming(editText));
+            if (!Util.isNullOrBlank(textBeforeComma))
+                textBeforeComma = textBeforeComma + CHARACTER_TO_REPLACE_COMMA_WITH_SPACES;
+            editText.setText(textBeforeComma + text);
+            editText.setSelection(Util.getValidatedValueOrBlankTrimming(editText).length());
+            mWidget.setText(editText.getText().toString());
         }
     }
 
@@ -1675,5 +1797,14 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
         if (direction != null)
             list.add(direction);
         return list;
+    }
+
+    public boolean hideKeyboardOrWidgetIfVisible() {
+        boolean wasKeyboardOrWidgetVisible = false;
+        if (parentWidgetSuggestions.getVisibility() == View.VISIBLE) {
+            wasKeyboardOrWidgetVisible = true;
+            hideBoth();
+        }
+        return wasKeyboardOrWidgetVisible;
     }
 }

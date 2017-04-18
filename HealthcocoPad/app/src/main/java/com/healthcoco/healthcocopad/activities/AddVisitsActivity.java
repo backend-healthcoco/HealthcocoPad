@@ -89,7 +89,12 @@ public class AddVisitsActivity extends HealthCocoActivity {
         if (fragmentType != null) {
             switch (fragmentType) {
                 case ADD_VISITS:
-                    showFinishConfirmationAlert();
+                    AddVisitsFragment addVisitsFragment = (AddVisitsFragment) getSupportFragmentManager().findFragmentByTag(AddVisitsFragment.class.getSimpleName());
+                    boolean wasKeyboardOrWidgetVisible = false;
+                    if (addVisitsFragment != null)
+                        wasKeyboardOrWidgetVisible = addVisitsFragment.hideKeyboardOrWidgetIfVisible();
+                    if (!wasKeyboardOrWidgetVisible)
+                        showFinishConfirmationAlert();
                     return;
                 default:
                     finish();

@@ -29,7 +29,8 @@
         android:cursorVisible="true"
         android:gravity="start"
         android:hint="@string/holter"
+        android:maxLines="5"
         android:paddingTop="5dp"
         android:textColorHint="@color/grey_light_text"
-        android:textSize="@dimen/text_size_add_visits_lable"></com.healthcoco.healthcocopad.custom.MyScriptEditText>
+        android:textSize="@dimen/text_size_add_visits_lable"/>
 </LinearLayout>

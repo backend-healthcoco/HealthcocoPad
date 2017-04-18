@@ -17,10 +17,8 @@ import com.healthcoco.healthcocopad.bean.server.ObservationSuggestions;
  */
 
 public class AddVisitSuggestionsListViewHolder extends HealthCocoViewHolder {
-    private HealthCocoActivity mActivity;
     private Object objData;
     private TextView tvName;
-    private View contentView;
 
     public AddVisitSuggestionsListViewHolder(HealthCocoActivity mActivity) {
         super(mActivity);
@@ -50,7 +48,7 @@ public class AddVisitSuggestionsListViewHolder extends HealthCocoViewHolder {
 
     @Override
     public View getContentView() {
-        contentView = inflater.inflate(R.layout.list_item_add_visits_sugestions, null);
+        View contentView = inflater.inflate(R.layout.list_item_add_visits_sugestions, null);
         tvName = (TextView) contentView.findViewById(R.id.tv_name);
         return contentView;
     }
