@@ -41,8 +41,13 @@ import com.healthcoco.healthcocopad.bean.request.ClinicalNoteToSend;
 import com.healthcoco.healthcocopad.bean.server.AssignedUserUiPermissions;
 import com.healthcoco.healthcocopad.bean.server.BloodPressure;
 import com.healthcoco.healthcocopad.bean.server.ClinicalNotes;
+import com.healthcoco.healthcocopad.bean.server.Drug;
+import com.healthcoco.healthcocopad.bean.server.DrugDirection;
 import com.healthcoco.healthcocopad.bean.server.DrugItem;
+import com.healthcoco.healthcocopad.bean.server.DrugType;
 import com.healthcoco.healthcocopad.bean.server.DrugsListSolrResponse;
+import com.healthcoco.healthcocopad.bean.server.Duration;
+import com.healthcoco.healthcocopad.bean.server.GenericName;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.User;
@@ -164,7 +169,7 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
     private TextViewFontAwesome tvNextArrow;
     private LinearLayout containerSuggestionsList;
     private boolean receiversRegistered;
-    private LinkedHashMap<String, DrugsListSolrResponse> drugsListHashMap = new LinkedHashMap<>();
+    private LinkedHashMap<String, DrugItem> drugsListHashMap = new LinkedHashMap<>();
     private LinearLayout parentDrugsItems;
     private ListView lvPrescriptionItems;
     private SelectedPrescriptionDrugItemsListAdapter adapter;
@@ -315,13 +320,18 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
         parentPrescription = (LinearLayout) view.findViewById(R.id.parent_prescription);
         lvPrescriptionItems = (ListView) view.findViewById(R.id.lv_prescription_items);
 //        parentDrugsItems = (LinearLayout) view.findViewById(R.id.parent_drugs_items);
-//        parentPrescription.setVisibility(View.GONE);
+        parentPrescription.setVisibility(View.GONE);
         initAdapterForPrescrptionList();
     }
 
     private void initAdapterForPrescrptionList() {
         adapter = new SelectedPrescriptionDrugItemsListAdapter(mActivity, this);
         lvPrescriptionItems.setAdapter(adapter);
+    }
+
+    private void notifyAdapter(ArrayList<DrugItem> drugsListMap) {
+        adapter.setListData(drugsListMap);
+        adapter.notifyDataSetChanged();
     }
 
     private void initDiagonsticTestsView() {
@@ -688,6 +698,9 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
                 break;
             case R.id.bt_prescription:
                 refreshSuggestionsList(v, "");
+                if (layoutWidget.getVisibility() == View.GONE)
+                    layoutWidget.setVisibility(View.VISIBLE);
+                showHidePrescriptionLayout();
                 break;
             case R.id.bt_lab_tests:
                 if (layoutWidget.getVisibility() == View.GONE)
@@ -748,6 +761,14 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
                     validateData();
                 } else onNetworkUnavailable(null);
                 break;
+        }
+    }
+
+    private void showHidePrescriptionLayout() {
+        if (parentPrescription.getVisibility() == View.GONE) {
+            parentPrescription.setVisibility(View.VISIBLE);
+        } else {
+            parentPrescription.setVisibility(View.GONE);
         }
     }
 
@@ -1150,7 +1171,34 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
 
     @Override
     public void onDeleteItemClicked(DrugItem drug) {
+        showConfirmationAlertForDrugs(drug);
+    }
 
+    private void showConfirmationAlertForDrugs(final DrugItem drug) {
+        final AlertDialog.Builder alertBuilder = new AlertDialog.Builder(mActivity);
+        alertBuilder.setTitle(R.string.confirm);
+        alertBuilder.setMessage(R.string.confirm_remove_drug);
+        alertBuilder.setCancelable(false);
+        alertBuilder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                try {
+                    drugsListHashMap.remove(drug.getDrug().getUniqueId());
+                    notifyAdapter(new ArrayList<DrugItem>(drugsListHashMap.values()));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        alertBuilder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+        alertBuilder.create();
+        alertBuilder.show();
     }
 
     @Override
@@ -1553,11 +1601,79 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
     private void handleSelectedSugestionObject(SuggestionType suggestionType, Object selectedSuggestionObject) {
         switch (suggestionType) {
             case DRUGS:
-                DrugsListSolrResponse drug = (DrugsListSolrResponse) selectedSuggestionObject;
-                LogUtils.LOGD(TAG, "Add selected drug " + drug.getDrugName());
-                drugsListHashMap.put(drug.getUniqueId(), drug);
-//                addDrugsToList(drugsListHashMap);
+                DrugItem selectedDrug = new DrugItem();
+                String drugId = "";
+                String drugName = "";
+                String drugType = "";
+                String drugTypeId = "";
+                String directionId = "";
+                String durationUnitId = "";
+                String durationtext = "";
+                String dosage = "";
+                String instructions = "";
+                List<GenericName> genericNames = null;
+                DrugsListSolrResponse drugsSolr = (DrugsListSolrResponse) selectedSuggestionObject;
+                LogUtils.LOGD(TAG, "Add selected drug " + drugsSolr.getDrugName());
+                drugId = drugsSolr.getUniqueId();
+                drugName = drugsSolr.getDrugName();
+                drugType = drugsSolr.getDrugType();
+                drugTypeId = drugsSolr.getDrugTypeId();
+                if (!Util.isNullOrEmptyList(drugsSolr.getDirection()))
+                    directionId = drugsSolr.getDirection().get(0).getUniqueId();
+                if (drugsSolr.getDuration() != null && drugsSolr.getDuration().getDurationUnit() != null) {
+                    durationtext = drugsSolr.getDuration().getValue();
+                    durationUnitId = drugsSolr.getDuration().getDurationUnit().getUniqueId();
+                }
+                dosage = drugsSolr.getDosage();
+                genericNames = drugsSolr.getGenericNames();
+                Drug drug = new Drug();
+                drug.setDrugName(drugName);
+                drug.setUniqueId(drugId);
+                drug.setGenericNames(genericNames);
+
+                DrugType drugTypeObj = new DrugType();
+                drugTypeObj.setUniqueId(drugTypeId);
+                drugTypeObj.setType(drugType);
+                drug.setDrugType(drugTypeObj);
+
+                selectedDrug.setDrug(drug);
+                selectedDrug.setDrugId(drugId);
+                selectedDrug.setDosage(dosage);
+                selectedDrug.setDirection(getDirectionsListFromLocal(directionId));
+                selectedDrug.setDuration(getDurationAndUnit(durationtext, durationUnitId));
+                selectedDrug.setInstructions(instructions);
+                if (selectedDrug != null) {
+                    addDrug(selectedDrug);
+                }
                 break;
         }
+    }
+
+    public void addDrug(DrugItem drug) {
+        if (drug != null) {
+            drugsListHashMap.put(drug.getDrugId(), drug);
+            notifyAdapter(new ArrayList<DrugItem>(drugsListHashMap.values()));
+        }
+    }
+
+    /**
+     * Any change in this method,change should also be done in AddNewPrescription,AddDrugDetailFragment's getDurationAndUnit() method
+     */
+    private Duration getDurationAndUnit(String durationText, String durationUnitId) {
+        Duration duration = new Duration();
+        duration.setValue(durationText);
+        duration.setDurationUnit(LocalDataServiceImpl.getInstance(mApp).getDurationUnit(durationUnitId));
+        return duration;
+    }
+
+    /**
+     * Any change in this method,change should also be done in AddNewPrescription,AddDrugDetailFragment's getDirectionsListFromLocal() method
+     */
+    private List<DrugDirection> getDirectionsListFromLocal(String directionId) {
+        List<DrugDirection> list = new ArrayList<>();
+        DrugDirection direction = LocalDataServiceImpl.getInstance(mApp).getDrugDirection(directionId);
+        if (direction != null)
+            list.add(direction);
+        return list;
     }
 }

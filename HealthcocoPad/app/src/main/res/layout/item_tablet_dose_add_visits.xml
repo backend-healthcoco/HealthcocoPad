@@ -24,8 +24,8 @@
             android:orientation="vertical"
             android:padding="5dp"
             android:text="@string/fa_trash"
-            android:textColor="@color/black_greyish"
-            android:textSize="35sp" />
+            android:textColor="@color/grey_dark_text"
+            android:textSize="30sp" />
 
         <LinearLayout
             android:layout_width="0dp"
@@ -57,6 +57,37 @@
                 android:textAllCaps="true"
                 android:textColor="@color/black"
                 android:textSize="13sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+
+            <TextView
+                android:id="@+id/tv_frequency"
+                style="@style/add_edit_doctor_profile_details_material_text_view_style"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:drawableRight="@drawable/arrow_down_drug"
+                android:gravity="center|start"
+                android:hint="@string/dosage"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp"
+                android:maxLines="1"
+                android:textColorHint="@color/grey_light_text"
+                android:textSize="@dimen/text_size_add_new_drug_name" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/grey_item_border" />
         </LinearLayout>
 
         <LinearLayout
@@ -112,36 +143,6 @@
             </LinearLayout>
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="10dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
-
-
-            <TextView
-                android:id="@+id/tv_frequency"
-                style="@style/add_edit_doctor_profile_details_material_text_view_style"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:background="@android:color/transparent"
-                android:drawableRight="@drawable/arrow_down_drug"
-                android:gravity="center|start"
-                android:hint="@string/dosage"
-                android:paddingBottom="10dp"
-                android:paddingTop="10dp"
-                android:singleLine="true"
-                android:textColorHint="@color/grey_light_text"
-                android:textSize="@dimen/text_size_add_new_drug_name" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:background="@color/grey_item_border" />
-        </LinearLayout>
 
         <LinearLayout
             android:layout_width="0dp"
@@ -206,12 +207,12 @@
             android:visibility="visible" />
 
         <!--<com.healthcoco.healthcocopad.views.TextViewFontAwesome-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_margin="5dp"-->
-            <!--android:gravity="center|start"-->
-            <!--android:text="@string/fa_align_text"-->
-            <!--android:textColor="@color/grey_light_text"-->
-            <!--android:textSize="18sp" />-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_margin="5dp"-->
+        <!--android:gravity="center|start"-->
+        <!--android:text="@string/fa_align_text"-->
+        <!--android:textColor="@color/grey_light_text"-->
+        <!--android:textSize="18sp" />-->
     </LinearLayout>
 </LinearLayout>

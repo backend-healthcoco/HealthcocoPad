@@ -35,6 +35,7 @@ import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
+import com.healthcoco.healthcocopad.views.TextViewFontAwesome;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +49,7 @@ public class SelectedPrescriptionDrugDoseItemsListViewHolder extends HealthCocoV
         GsonRequest.ErrorListener, LocalDoInBackgroundListenerOptimised, Response.Listener<VolleyResponseBean> {
 
     private DrugItem objData;
-    private ImageButton btDelete;
+    private TextViewFontAwesome btDelete;
     private SelectedDrugsListItemListener templateListener;
     private LinearLayout containerDrugDose;
     private static final String GENERIC_NAME_SEPARATOR = ",";
@@ -89,19 +90,58 @@ public class SelectedPrescriptionDrugDoseItemsListViewHolder extends HealthCocoV
 
     @Override
     public void applyData() {
-        containerDrugDose.removeAllViews();
-        DrugDoseTemplateItemViewHolder view = new DrugDoseTemplateItemViewHolder(mActivity);
-        view.setData(objData);
-        containerDrugDose.addView(view);
+        Drug drug = null;
+        if (objData.getDrug() != null) {
+            drug = objData.getDrug();
+            objData.setDrugId(drug.getUniqueId());
+        } else if (!Util.isNullOrBlank(objData.getDrugId())) {
+            drug = LocalDataServiceImpl.getInstance(mApp).getDrug(objData.getDrugId());
+            objData.setDrug(drug);
+        }
+        if (drug != null) {
+            String drugName = Util.getValidatedValue(drug.getDrugName());
+            if (drug.getDrugType() != null && !Util.isNullOrBlank(drug.getDrugType().getType()))
+                drugName = drug.getDrugType().getType() + " " + drugName;
+            tvName.setText(drugName);
+        }
+        String genericNamesFormatted = "";
+        if (!Util.isNullOrEmptyList(drug.getGenericNames())) {
+            for (GenericName genericName : drug.getGenericNames()) {
+                int index = drug.getGenericNames().indexOf(genericName);
+                genericNamesFormatted = genericNamesFormatted + " " + genericName.getName();
+                if (index != drug.getGenericNames().size() - 1)
+                    genericNamesFormatted = genericNamesFormatted + GENERIC_NAME_SEPARATOR;
+            }
+            tvGenericName.setText(genericNamesFormatted);
+        }
+        if (!Util.isNullOrEmptyList(drug.getDirection())) {
+            DrugDirection direction = drug.getDirection().get(0);
+            tvDirections.setText(Util.getValidatedValue((direction.getDirection())));
+        }
+
+        if (!Util.isNullOrBlank(drug.getDosage()))
+            tvFrequency.setText(drug.getDosage());
+
+        if (drug.getDuration() != null && !Util.isNullOrBlank(drug.getDuration().getValue()))
+            etDuration.setText(drug.getDuration().getValue());
+
+        if (drug.getDuration() != null && drug.getDuration().getDurationUnit() != null && !Util.isNullOrBlank(drug.getDuration().getDurationUnit().getUnit()))
+            tvDrugDurationUnit.setText(drug.getDuration().getDurationUnit().getUnit());
+
+        //initialising instructions popup
+        if (!Util.isNullOrBlank(objData.getInstructions())) {
+            etInstruction.setVisibility(View.VISIBLE);
+            etInstruction.setText(Util.getValidatedValue(objData.getInstructions()));
+        }
     }
 
     @Override
     public View getContentView() {
         LinearLayout view = (LinearLayout) inflater.inflate(R.layout.list_item_selected_drug_add_visits, null);
-        btDelete = (ImageButton) view.findViewById(R.id.bt_delete);
+        btDelete = (TextViewFontAwesome) view.findViewById(R.id.bt_delete);
         containerDrugDose = (LinearLayout) view.findViewById(R.id.container_drug_dose);
         etInstruction = (EditText) view.findViewById(R.id.et_instruction);
-        tvName = (TextView) view.findViewById(R.id.tv_name);
+        tvName = (TextView) view.findViewById(R.id.tv_drug_name);
         tvGenericName = (TextView) view.findViewById(R.id.tv_generic_name);
         tvDirections = (TextView) view.findViewById(R.id.tv_directions);
         tvFrequency = (TextView) view.findViewById(R.id.tv_frequency);
