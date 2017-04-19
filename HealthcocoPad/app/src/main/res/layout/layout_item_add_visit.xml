@@ -43,7 +43,7 @@
     <LinearLayout
         android:id="@+id/parent_widget_suggestions"
         android:layout_width="match_parent"
-        android:layout_height="500dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:gravity="bottom"
         android:orientation="vertical"
@@ -52,8 +52,7 @@
         <LinearLayout
             android:id="@+id/container_suggestions_list"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.50"
+            android:layout_height="wrap_content"
             android:background="@color/grey_light_divider"
             android:orientation="vertical"
             android:visibility="visible" />
@@ -61,8 +60,7 @@
         <LinearLayout
             android:id="@+id/layout_widget"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.50"
+            android:layout_height="wrap_content"
             android:background="@color/grey_widget_background"
             android:orientation="vertical">
 
@@ -191,7 +189,8 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true">
+                android:layout_alignParentBottom="true"
+                android:visibility="gone">
 
                 <com.healthcoco.healthcocopad.views.TextViewFontAwesome
                     android:id="@+id/tv_previous_arrow"

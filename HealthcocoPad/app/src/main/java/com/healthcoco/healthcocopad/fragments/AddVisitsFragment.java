@@ -248,20 +248,16 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
         initDiagonsticTestsView();
         initDiagramsViews();
         initAdviceViews();
-        setHeightOfWigetsAndSuggestions();
+        setHeightOfWidgetsAndSuggestions();
     }
 
-    private void setHeightOfWigetsAndSuggestions() {
-        ViewGroup.LayoutParams layourParams = parentWidgetSuggestions.getLayoutParams();
-        layourParams.height = (int) (ScreenDimensions.SCREEN_WIDTH * 0.60);
-        parentWidgetSuggestions.setLayoutParams(layourParams);
-
+    private void setHeightOfWidgetsAndSuggestions() {
         ViewGroup.LayoutParams layoutParamsSuggestionsList = containerSuggestionsList.getLayoutParams();
-        layoutParamsSuggestionsList.height = parentWidgetSuggestions.getLayoutParams().height / 2;
+        layoutParamsSuggestionsList.height = (int) (ScreenDimensions.SCREEN_WIDTH * 0.30);
         containerSuggestionsList.setLayoutParams(layoutParamsSuggestionsList);
 
         ViewGroup.LayoutParams layoutParamsWidget = layoutWidget.getLayoutParams();
-        layoutParamsWidget.height = parentWidgetSuggestions.getLayoutParams().height / 2;
+        layoutParamsWidget.height = (int) (ScreenDimensions.SCREEN_WIDTH * 0.30);
         layoutWidget.setLayoutParams(layoutParamsWidget);
     }
 
@@ -738,9 +734,7 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
             case R.id.bt_prescription:
                 parentPrescription.setVisibility(View.VISIBLE);
                 onFocusChange(btPrescription, true);
-//                svScrollView.fullScroll(View.FOCUS_DOWN);
-                svScrollView.scrollTo(0, svScrollView.getBottom());
-                editDurationCommon.requestFocus();
+                svScrollView.requestChildFocus(parentPrescription, parentPrescription);
 
 //                refreshSuggestionsList(v, "");
 //                layoutWidget.setVisibility(View.VISIBLE);
@@ -1787,8 +1781,7 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
         if (drug != null) {
             drugsListHashMap.put(drug.getDrugId(), drug);
             notifyAdapter(new ArrayList<DrugItem>(drugsListHashMap.values()));
-            lvPrescriptionItems.setSelection(adapter.getCount());
-            svScrollView.fullScroll(View.FOCUS_DOWN);
+            svScrollView.requestChildFocus(lvPrescriptionItems, lvPrescriptionItems);
         }
     }
 

@@ -71,7 +71,8 @@
                 android:layout_weight="1">
 
                 <com.healthcoco.healthcocopad.custom.MyScriptEditText
-                   android:id="@+id/edit_duration_common" android:layout_width="100dp"
+                    android:id="@+id/edit_duration_common"
+                    android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:background="@drawable/shape_rounded_corners_item_background"
                     android:gravity="center"
@@ -102,6 +103,7 @@
             android:layout_weight="1"
             android:divider="@null"
             android:listSelector="@android:color/transparent"
-            android:overScrollMode="never"></com.healthcoco.healthcocopad.custom.ExpandableHeightListView>
+            android:overScrollMode="never"
+            android:stackFromBottom="true"></com.healthcoco.healthcocopad.custom.ExpandableHeightListView>
     </LinearLayout>
 </LinearLayout>
