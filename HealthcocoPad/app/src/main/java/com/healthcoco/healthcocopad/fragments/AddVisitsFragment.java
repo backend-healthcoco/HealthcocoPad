@@ -254,7 +254,6 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
         parentPrescription = (LinearLayout) view.findViewById(R.id.parent_prescription);
         parentPrescription.setVisibility(View.GONE);
 
-
         initWidgetViews();
         initToolbarView();
         initHeaderView();
@@ -705,9 +704,6 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
             autotvPermission.setText(text);
         }
         parentPermissionItems.addView(layoutItemPermission);
-//        editSpo2.setNextFocusDownId(R.id.edit_permission_text);
-//        layoutItemPermission.setNextFocusDownId(R.id.et_advice);
-//        etAdvice.setNextFocusUpId(R.id.edit_permission_text);
     }
 
     @Override
@@ -724,6 +720,7 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
                 if (selectedSuggestionType == null || selectedSuggestionType != SuggestionType.DRUGS) {
                     addVisitSuggestionsFragment.refreshTagOfEditText(SuggestionType.DRUGS);
                 }
+//                svScrollView.requestChildFocus(parentPrescription, parentPrescription);
                 break;
             case R.id.bt_lab_tests:
 //                if (layoutWidget.getVisibility() == View.GONE)
@@ -764,8 +761,8 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
                 int upId = mActivity.getCurrentFocus().getNextFocusUpId();
                 if (upId != View.NO_ID) {
                     view.findViewById(upId).requestFocus();
-                    System.out.println("Back");
                 }
+                System.out.println("Back");
                 initEditTextForWidget((MyScriptEditText) mActivity.getCurrentFocus(), this);
                 break;
             case R.id.tv_next_arrow:
@@ -785,7 +782,7 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
         }
     }
 
-    private void showOnlyWidget() {
+    public void showOnlyWidget() {
         parentWidgetSuggestions.setVisibility(View.VISIBLE);
         containerSuggestionsList.setVisibility(View.GONE);
         layoutWidget.setVisibility(View.VISIBLE);
@@ -1355,7 +1352,6 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
             mWidget.selectWord(index);
         }
     }
-
 
     private void validateData() {
         new AsyncTask<Void, Void, Integer>() {

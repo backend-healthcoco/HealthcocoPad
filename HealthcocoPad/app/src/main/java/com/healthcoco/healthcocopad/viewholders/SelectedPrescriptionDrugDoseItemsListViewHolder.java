@@ -1,11 +1,7 @@
 package com.healthcoco.healthcocopad.viewholders;
 
-import android.content.Context;
-import android.os.AsyncTask;
-import android.util.AttributeSet;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -21,13 +17,12 @@ import com.healthcoco.healthcocopad.bean.server.DrugDosage;
 import com.healthcoco.healthcocopad.bean.server.DrugDurationUnit;
 import com.healthcoco.healthcocopad.bean.server.DrugItem;
 import com.healthcoco.healthcocopad.bean.server.GenericName;
-import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.User;
-import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
+import com.healthcoco.healthcocopad.custom.MyScriptEditText;
 import com.healthcoco.healthcocopad.dialogFragment.CommonListDialogFragmentWithTitle;
 import com.healthcoco.healthcocopad.enums.CommonListDialogType;
-import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
+import com.healthcoco.healthcocopad.fragments.AddVisitsFragment;
 import com.healthcoco.healthcocopad.listeners.CommonListDialogItemClickListener;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
 import com.healthcoco.healthcocopad.listeners.SelectedDrugsListItemListener;
@@ -46,8 +41,9 @@ import java.util.Locale;
  */
 
 public class SelectedPrescriptionDrugDoseItemsListViewHolder extends HealthCocoViewHolder implements View.OnClickListener, CommonListDialogItemClickListener,
-        GsonRequest.ErrorListener, LocalDoInBackgroundListenerOptimised, Response.Listener<VolleyResponseBean> {
+        GsonRequest.ErrorListener, LocalDoInBackgroundListenerOptimised, Response.Listener<VolleyResponseBean>, View.OnFocusChangeListener {
 
+    private final AddVisitsFragment addVisitsFragment;
     private DrugItem objData;
     private TextViewFontAwesome btDelete;
     private SelectedDrugsListItemListener templateListener;
@@ -58,7 +54,7 @@ public class SelectedPrescriptionDrugDoseItemsListViewHolder extends HealthCocoV
     private TextView tvName;
     private TextView tvDirections;
     private TextView tvFrequency;
-    private TextView etDuration;
+    private EditText editDuration;
     private DrugItem drugItem;
     private EditText etInstruction;
     private TextView tvGenericName;
@@ -76,11 +72,12 @@ public class SelectedPrescriptionDrugDoseItemsListViewHolder extends HealthCocoV
     private boolean isFrequencyDosageLoaded;
     private User user;
 
-    public SelectedPrescriptionDrugDoseItemsListViewHolder(HealthCocoActivity mActivity, SelectedDrugsListItemListener templateListener) {
+    public SelectedPrescriptionDrugDoseItemsListViewHolder(HealthCocoActivity mActivity, SelectedDrugsListItemListener templateListener, AddVisitsFragment addVisitsFragment) {
         super(mActivity);
         this.mActivity = mActivity;
         this.templateListener = templateListener;
         this.mApp = ((HealthCocoApplication) mActivity.getApplication());
+        this.addVisitsFragment = addVisitsFragment;
     }
 
     @Override
@@ -123,7 +120,7 @@ public class SelectedPrescriptionDrugDoseItemsListViewHolder extends HealthCocoV
             tvFrequency.setText(drug.getDosage());
 
         if (drug.getDuration() != null && !Util.isNullOrBlank(drug.getDuration().getValue()))
-            etDuration.setText(drug.getDuration().getValue());
+            editDuration.setText(drug.getDuration().getValue());
 
         if (drug.getDuration() != null && drug.getDuration().getDurationUnit() != null && !Util.isNullOrBlank(drug.getDuration().getDurationUnit().getUnit()))
             tvDrugDurationUnit.setText(drug.getDuration().getDurationUnit().getUnit());
@@ -140,13 +137,13 @@ public class SelectedPrescriptionDrugDoseItemsListViewHolder extends HealthCocoV
         LinearLayout view = (LinearLayout) inflater.inflate(R.layout.list_item_selected_drug_add_visits, null);
         btDelete = (TextViewFontAwesome) view.findViewById(R.id.bt_delete);
         containerDrugDose = (LinearLayout) view.findViewById(R.id.container_drug_dose);
-        etInstruction = (EditText) view.findViewById(R.id.et_instruction);
         tvName = (TextView) view.findViewById(R.id.tv_drug_name);
         tvGenericName = (TextView) view.findViewById(R.id.tv_generic_name);
         tvDirections = (TextView) view.findViewById(R.id.tv_directions);
         tvFrequency = (TextView) view.findViewById(R.id.tv_frequency);
         tvDrugDurationUnit = (TextView) view.findViewById(R.id.tv_drug_duration_unit);
-        etDuration = (TextView) view.findViewById(R.id.et_duration);
+        etInstruction = (EditText) view.findViewById(R.id.edit_instruction);
+        editDuration = (EditText) view.findViewById(R.id.edit_duration);
         initListeners();
         return view;
     }
@@ -157,6 +154,8 @@ public class SelectedPrescriptionDrugDoseItemsListViewHolder extends HealthCocoV
         tvDirections.setOnClickListener(this);
         tvFrequency.setOnClickListener(this);
         tvDrugDurationUnit.setOnClickListener(this);
+        editDuration.setOnFocusChangeListener(this);
+        etInstruction.setOnFocusChangeListener(this);
     }
 
     public void setData(DrugItem item) {
@@ -194,7 +193,7 @@ public class SelectedPrescriptionDrugDoseItemsListViewHolder extends HealthCocoV
             tvFrequency.setText(drug.getDosage());
 
         if (drug.getDuration() != null && !Util.isNullOrBlank(drug.getDuration().getValue()))
-            etDuration.setText(drug.getDuration().getValue());
+            editDuration.setText(drug.getDuration().getValue());
 
         if (drug.getDuration() != null && drug.getDuration().getDurationUnit() != null && !Util.isNullOrBlank(drug.getDuration().getDurationUnit().getUnit()))
             tvDrugDurationUnit.setText(drug.getDuration().getDurationUnit().getUnit());
@@ -366,5 +365,15 @@ public class SelectedPrescriptionDrugDoseItemsListViewHolder extends HealthCocoV
     @Override
     public void onPostExecute(VolleyResponseBean aVoid) {
 
+    }
+
+    @Override
+    public void onFocusChange(View v, boolean hasFocus) {
+        if (hasFocus) {
+            if (v instanceof EditText) {
+                addVisitsFragment.initEditTextForWidget((MyScriptEditText) v);
+                addVisitsFragment.showOnlyWidget();
+            }
+        }
     }
 }

@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import com.healthcoco.healthcocopad.HealthCocoFragment;
@@ -17,7 +18,9 @@ import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.adapter.SelectedPrescriptionDrugItemsListAdapter;
 import com.healthcoco.healthcocopad.bean.server.DrugItem;
 import com.healthcoco.healthcocopad.custom.MyScriptEditText;
+import com.healthcoco.healthcocopad.enums.SuggestionType;
 import com.healthcoco.healthcocopad.listeners.SelectedDrugsListItemListener;
+import com.healthcoco.healthcocopad.utilities.Util;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -26,11 +29,12 @@ import java.util.LinkedHashMap;
  * Created by neha on 19/04/17.
  */
 
-public class AddPrescriptionVisitFragment extends HealthCocoFragment implements SelectedDrugsListItemListener {
+public class AddPrescriptionVisitFragment extends HealthCocoFragment implements SelectedDrugsListItemListener, View.OnFocusChangeListener {
     private LinkedHashMap<String, DrugItem> drugsListHashMap = new LinkedHashMap<>();
     private SelectedPrescriptionDrugItemsListAdapter adapter;
     private ListView lvPrescriptionItems;
-    private MyScriptEditText editDurationCommon;
+    private EditText editDurationCommon;
+    private AddVisitsFragment addVisitsFragment;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -60,13 +64,15 @@ public class AddPrescriptionVisitFragment extends HealthCocoFragment implements 
 
     @Override
     public void initListeners() {
-        AddVisitsFragment addVisitsFragment = (AddVisitsFragment) mFragmentManager.findFragmentByTag(AddVisitsFragment.class.getSimpleName());
-        if (addVisitsFragment != null)
+        addVisitsFragment = (AddVisitsFragment) mFragmentManager.findFragmentByTag(AddVisitsFragment.class.getSimpleName());
+        if (addVisitsFragment != null) {
             editDurationCommon.setOnTouchListener(addVisitsFragment.getOnTouchListener());
+        }
+        editDurationCommon.setOnFocusChangeListener(this);
     }
 
     private void initAdapter() {
-        adapter = new SelectedPrescriptionDrugItemsListAdapter(mActivity, this);
+        adapter = new SelectedPrescriptionDrugItemsListAdapter(mActivity, this, addVisitsFragment);
         lvPrescriptionItems.setAdapter(adapter);
         lvPrescriptionItems.setTranscriptMode(AbsListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
         lvPrescriptionItems.setStackFromBottom(true);
@@ -134,7 +140,6 @@ public class AddPrescriptionVisitFragment extends HealthCocoFragment implements 
             drugsListHashMap.put(drug.getDrugId(), drug);
             notifyAdapter(new ArrayList<DrugItem>(drugsListHashMap.values()));
             lvPrescriptionItems.setSelection(adapter.getCount());
-
         }
     }
 
@@ -148,5 +153,15 @@ public class AddPrescriptionVisitFragment extends HealthCocoFragment implements 
         if (lastview == null)
             lastview = view;
         return lastview;
+    }
+
+    @Override
+    public void onFocusChange(View v, boolean hasFocus) {
+        if (hasFocus) {
+            if (v instanceof EditText) {
+                addVisitsFragment.initEditTextForWidget((MyScriptEditText) v);
+                addVisitsFragment.showOnlyWidget();
+            }
+        }
     }
 }

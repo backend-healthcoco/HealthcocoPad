@@ -6,6 +6,8 @@ import android.widget.BaseAdapter;
 
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.bean.server.DrugItem;
+import com.healthcoco.healthcocopad.fragments.AddPrescriptionVisitFragment;
+import com.healthcoco.healthcocopad.fragments.AddVisitsFragment;
 import com.healthcoco.healthcocopad.listeners.SelectedDrugsListItemListener;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.healthcoco.healthcocopad.viewholders.SelectedPrescriptionDrugDoseItemsListViewHolder;
@@ -22,8 +24,12 @@ public class SelectedPrescriptionDrugItemsListAdapter extends BaseAdapter {
     private HealthCocoActivity mActivity;
     private SelectedPrescriptionDrugDoseItemsListViewHolder holder;
     private SelectedDrugsListItemListener templateListener;
+    private AddVisitsFragment addVisitsFragment;
 
-    public SelectedPrescriptionDrugItemsListAdapter() {
+    public SelectedPrescriptionDrugItemsListAdapter(HealthCocoActivity activity, AddPrescriptionVisitFragment templateListener, AddVisitsFragment addVisitsFragment) {
+        this.mActivity = activity;
+        this.templateListener = templateListener;
+        this.addVisitsFragment = addVisitsFragment;
     }
 
     public SelectedPrescriptionDrugItemsListAdapter(HealthCocoActivity activity, SelectedDrugsListItemListener templateListener) {
@@ -51,7 +57,7 @@ public class SelectedPrescriptionDrugItemsListAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            holder = new SelectedPrescriptionDrugDoseItemsListViewHolder(mActivity, templateListener);
+            holder = new SelectedPrescriptionDrugDoseItemsListViewHolder(mActivity, templateListener,addVisitsFragment);
             convertView = holder.getContentView();
             convertView.setTag(holder);
         } else
