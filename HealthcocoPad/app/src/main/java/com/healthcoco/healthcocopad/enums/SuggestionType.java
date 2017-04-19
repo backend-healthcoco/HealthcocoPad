@@ -7,7 +7,7 @@ import com.healthcoco.healthcocopad.R;
  */
 
 public enum SuggestionType {
-    DRUGS(true, R.string.all_drugs),
+    DRUGS(true, R.string.search_drug, R.string.all_drugs),
     COMPLAINTS(false, R.string.complaints),
     OBSERVATION(false, R.string.observations),
     INVESTIGATION(false, R.string.investigations),
@@ -15,9 +15,17 @@ public enum SuggestionType {
 
     private final boolean isFromServerList;
     private final int headerTitleId;
+    private int searchHintId = R.string.search;
 
     SuggestionType(boolean isFromServerList, int headerTitleId) {
         this.isFromServerList = isFromServerList;
+        this.headerTitleId = headerTitleId;
+    }
+
+
+    SuggestionType(boolean isFromServerList, int searchHintId, int headerTitleId) {
+        this.isFromServerList = isFromServerList;
+        this.searchHintId = searchHintId;
         this.headerTitleId = headerTitleId;
     }
 
@@ -29,4 +37,7 @@ public enum SuggestionType {
         return headerTitleId;
     }
 
+    public int getSearchHintId() {
+        return searchHintId;
+    }
 }

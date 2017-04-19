@@ -1,6 +1,5 @@
 package com.healthcoco.healthcocopad;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -165,7 +164,7 @@ public abstract class HealthCocoFragment extends Fragment implements GsonRequest
         });
     }
 
-    protected void initEditSearchView(int hintId, View.OnClickListener onClickListener, TextWatcher textWatcher) {
+    protected EditText initEditSearchView(int hintId, View.OnClickListener onClickListener, TextWatcher textWatcher) {
         final EditText editSearch = (EditText) view.findViewById(R.id.edit_search);
         editSearch.setHint(hintId);
         if (textWatcher != null)
@@ -177,12 +176,18 @@ public abstract class HealthCocoFragment extends Fragment implements GsonRequest
                 editSearch.setText("");
             }
         });
+        return editSearch;
     }
 
-    protected void initEditSearchView(int hintId, TextWatcher textWatcher) {
+    protected EditText initEditSearchView(int hintId) {
+        return initEditSearchView(hintId, null);
+    }
+
+    protected EditText initEditSearchView(int hintId, TextWatcher textWatcher) {
         final EditText editSearch = (EditText) view.findViewById(R.id.edit_search);
         editSearch.setHint(hintId);
-        editSearch.addTextChangedListener(textWatcher);
+        if (textWatcher != null)
+            editSearch.addTextChangedListener(textWatcher);
         ImageButton btClear = (ImageButton) view.findViewById(R.id.bt_clear);
         btClear.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -190,6 +195,7 @@ public abstract class HealthCocoFragment extends Fragment implements GsonRequest
                 editSearch.setText("");
             }
         });
+        return editSearch;
     }
 
     @Override

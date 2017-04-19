@@ -30,7 +30,11 @@
 
             <include layout="@layout/sub_item_add_clinical_note" />
 
-            <include layout="@layout/sub_item_add_prescription" />
+            <LinearLayout
+                android:id="@+id/parent_prescription"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical" />
 
             <include layout="@layout/sub_item_add_lab_tests" />
 

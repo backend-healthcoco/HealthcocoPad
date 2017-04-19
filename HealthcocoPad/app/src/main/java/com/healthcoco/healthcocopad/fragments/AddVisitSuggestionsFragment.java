@@ -7,13 +7,13 @@ import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -41,7 +41,6 @@ import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimis
 import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
-import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.healthcoco.healthcocopad.views.ListViewLoadMore;
@@ -50,7 +49,6 @@ import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import static com.healthcoco.healthcocopad.enums.WebServiceType.FRAGMENT_INITIALISATION;
 
@@ -59,7 +57,7 @@ import static com.healthcoco.healthcocopad.enums.WebServiceType.FRAGMENT_INITIAL
  */
 
 public class AddVisitSuggestionsFragment extends HealthCocoFragment implements
-        GsonRequest.ErrorListener, Response.Listener<VolleyResponseBean>, TextWatcher, LocalDoInBackgroundListenerOptimised,
+        GsonRequest.ErrorListener, Response.Listener<VolleyResponseBean>, LocalDoInBackgroundListenerOptimised,
         LoadMorePageListener, View.OnClickListener, AddNewDrugListener, AdapterView.OnItemClickListener {
     public static final String INTENT_LOAD_DATA = "com.healthcoco.healthcocopad.fragments.AddVisitSuggestionsFragment.LOAD_DATA";
 
@@ -81,6 +79,8 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements
     private SuggestionType suggestionType;
     private TextView tvHeaderTitle;
     private String searchedTerm;
+    private LinearLayout parentEditSearchView;
+    private EditText editTextSearch;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -106,6 +106,7 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements
 
     @Override
     public void initViews() {
+        parentEditSearchView = (LinearLayout) view.findViewById(R.id.parent_edit_search_view);
         tvHeaderTitle = (TextView) view.findViewById(R.id.tv_header_title);
         lvSuggestionsList = (ListViewLoadMore) view.findViewById(R.id.lv_suggestions_list);
         progressLoading = (ProgressBar) view.findViewById(R.id.progress_loading);
@@ -114,6 +115,10 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements
 
     @Override
     public void initListeners() {
+        editTextSearch = initEditSearchView(R.string.search);
+        AddVisitsFragment addVisitsFragment = (AddVisitsFragment) mFragmentManager.findFragmentByTag(AddVisitsFragment.class.getSimpleName());
+        if (addVisitsFragment != null)
+            editTextSearch.setOnFocusChangeListener(addVisitsFragment.getFocusChangeListener());
         btAddNew.setOnClickListener(this);
         lvSuggestionsList.setOnItemClickListener(this);
     }
@@ -132,35 +137,6 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements
         }
         adapterSolr.setListData(list);
         adapterSolr.notifyDataSetChanged();
-    }
-
-    @Override
-    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-    }
-
-    @Override
-    public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-    }
-
-    @Override
-    public void afterTextChanged(Editable s) {
-        String search = String.valueOf(s).toUpperCase(Locale.ENGLISH);
-        if (lastTextSearched == null || !lastTextSearched.equalsIgnoreCase(search)) {
-            //sorting solar drugs list from server
-            Util.checkNetworkStatus(mActivity);
-            if (HealthCocoConstants.isNetworkOnline) {
-                PAGE_NUMBER = 0;
-                isLoadingFromSearch = true;
-                isEndOfListAchieved = false;
-                resetListAndPagingAttributes();
-                LogUtils.LOGD(TAG, "TextChange afterTextChange");
-                refreshData(false);
-            } else
-                Util.showToast(mActivity, R.string.user_offline);
-        }
-        lastTextSearched = search;
     }
 
     @Override
@@ -342,8 +318,27 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements
         }
     };
 
+    //
+//    @Override
+//    public void afterTextChanged(Editable s) {
+//        String search = String.valueOf(s).toUpperCase(Locale.ENGLISH);
+//        if (lastTextSearched == null || !lastTextSearched.equalsIgnoreCase(search)) {
+//            //sorting solar drugs list from server
+//            Util.checkNetworkStatus(mActivity);
+//            if (HealthCocoConstants.isNetworkOnline) {
+//                PAGE_NUMBER = 0;
+//                isLoadingFromSearch = true;
+//                isEndOfListAchieved = false;
+//                resetListAndPagingAttributes();
+//                LogUtils.LOGD(TAG, "TextChange afterTextChange");
+//                refreshData(false);
+//            } else
+//                Util.showToast(mActivity, R.string.user_offline);
+//        }
+//        lastTextSearched = search;
+//    }
     private void refreshData(boolean isInitialLoading) {
-        refreshHeaderTitle(suggestionType.getHeaderTitleId());
+        refreshViewsAndTitle();
         mApp.cancelPendingRequests(String.valueOf(WebServiceType.GET_DRUGS_LIST_SOLR));
         if (isInitialLoading) {
             mActivity.showLoading(false);
@@ -356,15 +351,23 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements
             getListFromLocal();
     }
 
-    private void refreshHeaderTitle(int headerTitleId) {
-        tvHeaderTitle.setText(headerTitleId);
+    private void refreshViewsAndTitle() {
+        tvHeaderTitle.setText(suggestionType.getHeaderTitleId());
+        switch (suggestionType) {
+            case DRUGS:
+                parentEditSearchView.setVisibility(View.VISIBLE);
+                break;
+            default:
+                parentEditSearchView.setVisibility(View.GONE);
+                break;
+        }
     }
 
     public void getSuggestionListFromServer() {
         switch (suggestionType) {
             case DRUGS:
                 WebDataServiceImpl.getInstance(mApp).getDrugsListSolr(DrugsListSolrResponse.class, PAGE_NUMBER, MAX_SIZE, user.getUniqueId(), user.getForeignHospitalId(), user.getForeignLocationId(), getSearchEditTextValue(), this, this);
-
+                break;
         }
     }
 
@@ -394,6 +397,17 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements
         intent.putExtra(TAG_SUGGESTIONS_TYPE, suggestionType.ordinal());
         intent.putExtra(AddVisitsFragment.TAG_SELECTED_SUGGESTION_OBJECT, Parcels.wrap(adapterSolr.getItem(position)));
         LocalBroadcastManager.getInstance(mApp).sendBroadcast(intent);
+    }
+
+    public void refreshTagOfEditText(SuggestionType suggestionType) {
+        editTextSearch = initEditSearchView(suggestionType.getSearchHintId());
+        editTextSearch.setText("");
+        editTextSearch.setTag(suggestionType);
+        Util.requesFocus(editTextSearch);
+    }
+
+    public SuggestionType getSelectedSuggestionType() {
+        return suggestionType;
     }
 }
 
