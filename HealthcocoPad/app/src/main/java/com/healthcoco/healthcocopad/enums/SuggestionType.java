@@ -8,6 +8,7 @@ import com.healthcoco.healthcocopad.R;
 
 public enum SuggestionType {
     DRUGS(true, R.string.search_drug, R.string.all_drugs),
+    LAB_TESTS(true, R.string.search_lab_test, R.string.lab_tests),
     COMPLAINTS(false, R.string.complaints),
     OBSERVATION(false, R.string.observations),
     INVESTIGATION(false, R.string.investigations),

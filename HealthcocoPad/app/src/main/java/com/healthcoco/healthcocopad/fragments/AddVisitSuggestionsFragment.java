@@ -24,6 +24,7 @@ import com.healthcoco.healthcocopad.adapter.AddVisitSuggestionsListAdapter;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.ComplaintSuggestions;
 import com.healthcoco.healthcocopad.bean.server.DiagnosisSuggestions;
+import com.healthcoco.healthcocopad.bean.server.DiagnosticTest;
 import com.healthcoco.healthcocopad.bean.server.Drug;
 import com.healthcoco.healthcocopad.bean.server.DrugsListSolrResponse;
 import com.healthcoco.healthcocopad.bean.server.InvestigationSuggestions;
@@ -153,6 +154,7 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements
                 case GET_INVESTIGATION_SUGGESTIONS:
                 case GET_DIAGNOSIS_SUGGESTIONS:
                 case GET_DRUGS_LIST_SOLR:
+                case GET_DIAGNOSTIC_TESTS_SOLR:
                     responseList = response.getDataList();
                     break;
 
@@ -354,6 +356,7 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements
     private void refreshViewsAndTitle() {
         tvHeaderTitle.setText(suggestionType.getHeaderTitleId());
         switch (suggestionType) {
+            case LAB_TESTS:
             case DRUGS:
                 parentEditSearchView.setVisibility(View.VISIBLE);
                 break;
@@ -367,6 +370,9 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements
         switch (suggestionType) {
             case DRUGS:
                 WebDataServiceImpl.getInstance(mApp).getDrugsListSolr(DrugsListSolrResponse.class, PAGE_NUMBER, MAX_SIZE, user.getUniqueId(), user.getForeignHospitalId(), user.getForeignLocationId(), getSearchEditTextValue(), this, this);
+                break;
+            case LAB_TESTS:
+                WebDataServiceImpl.getInstance(mApp).getDiagnosticTestsFromSolr(DiagnosticTest.class, user.getForeignLocationId(), user.getForeignHospitalId(), PAGE_NUMBER, MAX_SIZE, getSearchEditTextValue(), this, this);
                 break;
         }
     }

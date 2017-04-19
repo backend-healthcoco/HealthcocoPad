@@ -161,6 +161,7 @@
     <string name="profile">Profile</string>
     <string name="clinic_proifle">Clinic Profile</string>
     <string name="lab_test">Lab Test</string>
+    <string name="lab_tests">Lab Tests</string>
     <string name="search_doctors">Search Doctors</string>
     <string name="search_lab_test">Search Lab Test</string>
     <string name="contacts">Contacts</string>
@@ -537,6 +538,8 @@
     <string name="no_drug_history">No drugs found</string>
     <string name="search_drug">Search Drug</string>
     <string name="confirm_remove_drug">Are you sure you want to remove this Drug?</string>
+    <string name="confirm_remove_test">Are you sure you want to remove this Test?</string>
+
     <string name="present_complaint">Present Complaint</string>
     <string name="complaints">Complaints</string>
     <string name="history_of_present_complaints">History of Present Complaint</string>

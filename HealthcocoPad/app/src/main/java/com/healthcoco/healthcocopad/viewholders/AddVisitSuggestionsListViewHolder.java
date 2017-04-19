@@ -8,6 +8,7 @@ import com.healthcoco.healthcocopad.HealthCocoViewHolder;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.server.ComplaintSuggestions;
 import com.healthcoco.healthcocopad.bean.server.DiagnosisSuggestions;
+import com.healthcoco.healthcocopad.bean.server.DiagnosticTest;
 import com.healthcoco.healthcocopad.bean.server.DrugsListSolrResponse;
 import com.healthcoco.healthcocopad.bean.server.InvestigationSuggestions;
 import com.healthcoco.healthcocopad.bean.server.ObservationSuggestions;
@@ -35,6 +36,8 @@ public class AddVisitSuggestionsListViewHolder extends HealthCocoViewHolder {
         String text = "";
         if (objData instanceof DrugsListSolrResponse)
             text = ((DrugsListSolrResponse) objData).getDrugName();
+        else if (objData instanceof DiagnosticTest)
+            text = ((DiagnosticTest) objData).getTestName();
         else if (objData instanceof ComplaintSuggestions)
             text = ((ComplaintSuggestions) objData).getComplaint();
         else if (objData instanceof ObservationSuggestions)

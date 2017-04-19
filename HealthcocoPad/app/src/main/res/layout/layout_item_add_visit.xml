@@ -36,7 +36,11 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical" />
 
-            <include layout="@layout/sub_item_add_lab_tests" />
+            <LinearLayout
+                android:id="@+id/parent_diagnostic_tests"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
 
             <include layout="@layout/sub_item_add_diagrams" />
 

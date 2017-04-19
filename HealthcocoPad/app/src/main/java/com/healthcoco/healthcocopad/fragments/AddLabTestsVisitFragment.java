@@ -15,10 +15,10 @@ import android.widget.ListView;
 
 import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
-import com.healthcoco.healthcocopad.adapter.SelectedPrescriptionDrugItemsListAdapter;
-import com.healthcoco.healthcocopad.bean.server.DrugItem;
+import com.healthcoco.healthcocopad.adapter.DiagnosticTestsListAdapter;
+import com.healthcoco.healthcocopad.bean.server.DiagnosticTest;
 import com.healthcoco.healthcocopad.custom.MyScriptEditText;
-import com.healthcoco.healthcocopad.listeners.SelectedDrugsListItemListener;
+import com.healthcoco.healthcocopad.listeners.DiagnosticTestItemListener;
 import com.healthcoco.healthcocopad.utilities.Util;
 
 import java.util.ArrayList;
@@ -28,16 +28,15 @@ import java.util.LinkedHashMap;
  * Created by neha on 19/04/17.
  */
 
-public class AddPrescriptionVisitFragment extends HealthCocoFragment implements SelectedDrugsListItemListener, View.OnFocusChangeListener {
-    private LinkedHashMap<String, DrugItem> drugsListHashMap = new LinkedHashMap<>();
-    private SelectedPrescriptionDrugItemsListAdapter adapter;
-    private ListView lvPrescriptionItems;
-    private EditText editDurationCommon;
+public class AddLabTestsVisitFragment extends HealthCocoFragment implements View.OnFocusChangeListener, DiagnosticTestItemListener {
+    private LinkedHashMap<String, DiagnosticTest> diagnosticTestsListHashMap = new LinkedHashMap<>();
+    private DiagnosticTestsListAdapter adapter;
+    private ListView lvDiagnoticTests;
     private AddVisitsFragment addVisitsFragment;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_add_prescription_visit, container, false);
+        view = inflater.inflate(R.layout.fragment_lab_tests_add_visits, container, false);
         super.onCreateView(inflater, container, savedInstanceState);
         return view;
     }
@@ -57,38 +56,32 @@ public class AddPrescriptionVisitFragment extends HealthCocoFragment implements 
 
     @Override
     public void initViews() {
-        lvPrescriptionItems = (ListView) view.findViewById(R.id.lv_prescription_items);
-        editDurationCommon = (MyScriptEditText) view.findViewById(R.id.edit_duration_common);
+        lvDiagnoticTests = (ListView) view.findViewById(R.id.lv_diagnostic_tests);
     }
 
     @Override
     public void initListeners() {
-        addVisitsFragment = (AddVisitsFragment) mFragmentManager.findFragmentByTag(AddVisitsFragment.class.getSimpleName());
-        if (addVisitsFragment != null) {
-            editDurationCommon.setOnTouchListener(addVisitsFragment.getOnTouchListener());
-        }
-        editDurationCommon.setOnFocusChangeListener(this);
     }
 
     private void initAdapter() {
-        adapter = new SelectedPrescriptionDrugItemsListAdapter(mActivity, this, addVisitsFragment);
-        lvPrescriptionItems.setAdapter(adapter);
-        lvPrescriptionItems.setTranscriptMode(AbsListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
-        lvPrescriptionItems.setStackFromBottom(true);
+        adapter = new DiagnosticTestsListAdapter(mActivity, this);
+        lvDiagnoticTests.setAdapter(adapter);
+        lvDiagnoticTests.setTranscriptMode(AbsListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
+        lvDiagnoticTests.setStackFromBottom(true);
     }
 
-    private void notifyAdapter(ArrayList<DrugItem> drugsListMap) {
-        if (drugsListMap != null && drugsListMap.size() > 0) {
-            sendBroadcastForAdviceButtonVisibility(true);
-        } else sendBroadcastForAdviceButtonVisibility(false);
-
-        adapter.setListData(drugsListMap);
+    private void notifyAdapter(ArrayList<DiagnosticTest> list) {
+        if (!Util.isNullOrEmptyList(list))
+            sendBroadcastToShowLabTestLayout(true);
+        else
+            sendBroadcastToShowLabTestLayout(false);
+        adapter.setListData(list);
         adapter.notifyDataSetChanged();
     }
 
-    private void sendBroadcastForAdviceButtonVisibility(boolean showVisibility) {
+    private void sendBroadcastToShowLabTestLayout(boolean showVisibility) {
         try {
-            Intent intent = new Intent(AddVisitsFragment.INTENT_ADIVCE_BUTTON_VISIBILITY);
+            Intent intent = new Intent(AddVisitsFragment.INTENT_LAB_TEST_VISIBILITY);
             intent.putExtra(AddVisitsFragment.TAG_VISIBILITY, showVisibility);
             LocalBroadcastManager.getInstance(mApp.getApplicationContext()).sendBroadcast(intent);
         } catch (Exception e) {
@@ -96,23 +89,18 @@ public class AddPrescriptionVisitFragment extends HealthCocoFragment implements 
         }
     }
 
-    @Override
-    public void onDeleteItemClicked(DrugItem drug) {
-        showConfirmationAlertForDrugs(drug);
-    }
-
-    private void showConfirmationAlertForDrugs(final DrugItem drug) {
+    private void showConfirmationAlertForDrugs(final DiagnosticTest drug) {
         final AlertDialog.Builder alertBuilder = new AlertDialog.Builder(mActivity);
         alertBuilder.setTitle(R.string.confirm);
-        alertBuilder.setMessage(R.string.confirm_remove_drug);
+        alertBuilder.setMessage(R.string.confirm_remove_test);
         alertBuilder.setCancelable(false);
         alertBuilder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 try {
-                    drugsListHashMap.remove(drug.getDrug().getUniqueId());
-                    notifyAdapter(new ArrayList<DrugItem>(drugsListHashMap.values()));
+                    diagnosticTestsListHashMap.remove(drug.getUniqueId());
+                    notifyAdapter(new ArrayList<DiagnosticTest>(diagnosticTestsListHashMap.values()));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -128,24 +116,18 @@ public class AddPrescriptionVisitFragment extends HealthCocoFragment implements 
         alertBuilder.show();
     }
 
-
-    @Override
-    public void onDrugItemClicked(DrugItem drug) {
-
-    }
-
-    public void addDrug(DrugItem drug) {
+    public void addDiagnosticTest(DiagnosticTest drug) {
         if (drug != null) {
-            drugsListHashMap.put(drug.getDrugId(), drug);
-            notifyAdapter(new ArrayList<DrugItem>(drugsListHashMap.values()));
-            lvPrescriptionItems.setSelection(adapter.getCount());
+            diagnosticTestsListHashMap.put(drug.getUniqueId(), drug);
+            notifyAdapter(new ArrayList<DiagnosticTest>(diagnosticTestsListHashMap.values()));
+            lvDiagnoticTests.setSelection(adapter.getCount());
         }
     }
 
     public View getLastChildView() {
         View lastview = null;
         try {
-            lastview = lvPrescriptionItems.getChildAt(adapter.getCount() - 1);
+            lastview = lvDiagnoticTests.getChildAt(adapter.getCount() - 1);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -165,6 +147,11 @@ public class AddPrescriptionVisitFragment extends HealthCocoFragment implements 
     }
 
     public boolean isBlankPrescription() {
-        return Util.isNullOrEmptyList(drugsListHashMap);
+        return Util.isNullOrEmptyList(diagnosticTestsListHashMap);
+    }
+
+    @Override
+    public void onDeleteItemClicked(DiagnosticTest diagnosticTest) {
+        showConfirmationAlertForDrugs(diagnosticTest);
     }
 }

@@ -14,7 +14,6 @@ import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.DoctorContactUs;
 import com.healthcoco.healthcocopad.bean.DoctorProfileToSend;
 import com.healthcoco.healthcocopad.bean.PersonalHistory;
-import com.healthcoco.healthcocopad.bean.UserPermissionsResponse;
 import com.healthcoco.healthcocopad.bean.VersionCheckRequest;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.request.AddDrugRequest;
@@ -59,6 +58,8 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import static com.healthcoco.healthcocopad.utilities.Util.checkNetworkStatus;
+
 /**
  * Created by Shreshtha on 20-01-2017.
  */
@@ -85,7 +86,7 @@ public class WebDataServiceImpl implements GCMRefreshListener {
 
     public void sendContactUsRequest(Class<?> class1, DoctorContactUs doctorContactUs, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         WebServiceType webServiceType = WebServiceType.DOCTOR_CONTACT_US;
-        Util.checkNetworkStatus(mApp);
+        checkNetworkStatus(mApp);
         if (HealthCocoConstants.isNetworkOnline) {
             String url = webServiceType.getUrl();
             getResponse(webServiceType, class1, url, doctorContactUs, null, responseListener,
@@ -102,7 +103,7 @@ public class WebDataServiceImpl implements GCMRefreshListener {
 
     public void checkVersion(Class<Integer> class1, VersionCheckRequest versionCheckRequest, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         WebServiceType webServiceType = WebServiceType.VERSION_CONTROL_CHECK;
-        Util.checkNetworkStatus(mApp);
+        checkNetworkStatus(mApp);
         if (HealthCocoConstants.isNetworkOnline) {
             String url = webServiceType.getUrl();
             LogUtils.LOGI(TAG, url);
@@ -115,7 +116,7 @@ public class WebDataServiceImpl implements GCMRefreshListener {
     public void getPatientStatus(Class<?> class1, String patientId, String doctorId, String locationId, String hospitalId,
                                  Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         WebServiceType webServiceType = WebServiceType.GET_PATIENT_STATUS;
-        Util.checkNetworkStatus(mApp);
+        checkNetworkStatus(mApp);
         if (HealthCocoConstants.isNetworkOnline) {
             String url = webServiceType.getUrl()
                     + patientId + "/"
@@ -229,7 +230,7 @@ public class WebDataServiceImpl implements GCMRefreshListener {
     public void loginUser(Class<LoginResponse> class1, User user, Response.Listener<VolleyResponseBean> responseListener,
                           GsonRequest.ErrorListener errorListener) {
         WebServiceType webServiceType = WebServiceType.LOGIN;
-        Util.checkNetworkStatus(mApp.getApplicationContext());
+        checkNetworkStatus(mApp.getApplicationContext());
         if (HealthCocoConstants.isNetworkOnline) {
             String url = webServiceType.getUrl() + HealthCocoConstants.PARAM_IS_MOBILE_APP;
             getResponse(webServiceType, class1, url, user, null, responseListener,
@@ -248,7 +249,7 @@ public class WebDataServiceImpl implements GCMRefreshListener {
      */
     public void addUpdateCommonMethod(WebServiceType webServiceType, Class<?> class1, Object object, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         String url = webServiceType.getUrl();
-        Util.checkNetworkStatus(mApp);
+        checkNetworkStatus(mApp);
         if (HealthCocoConstants.isNetworkOnline) {
             getResponse(webServiceType, class1, url, object, null, responseListener,
                     errorListener);
@@ -261,7 +262,7 @@ public class WebDataServiceImpl implements GCMRefreshListener {
                                 String hospitalId, String locationId, long updatedTime, Response.Listener<VolleyResponseBean> responseListener,
                                 GsonRequest.ErrorListener errorListener) {
         WebServiceType webServiceType = WebServiceType.GET_CONTACTS;
-        Util.checkNetworkStatus(mApp.getApplicationContext());
+        checkNetworkStatus(mApp.getApplicationContext());
         if (HealthCocoConstants.isNetworkOnline) {
             String url = webServiceType.getUrl() + HealthCocoConstants.PARAM_HOSPITAL_ID
                     + hospitalId + HealthCocoConstants.PARAM_LOCATION_ID + locationId
@@ -293,7 +294,7 @@ public class WebDataServiceImpl implements GCMRefreshListener {
                 + HealthCocoConstants.PARAM_DISCARDED_AMPERCENT + isDiscarded
                 + HealthCocoConstants.PARAM_UPDATED_TIME + updatedTime
                 + HealthCocoConstants.PARAM_DOCTOR_ID + doctorId;
-        Util.checkNetworkStatus(mApp.getApplicationContext());
+        checkNetworkStatus(mApp.getApplicationContext());
         if (HealthCocoConstants.isNetworkOnline) {
             getResponse(webServiceType, class1, url, null, null,
                     responseListener, errorListener);
@@ -312,7 +313,7 @@ public class WebDataServiceImpl implements GCMRefreshListener {
     public void getClinicDetails(Class<?> class1, String locationId, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         WebServiceType webServiceType = WebServiceType.GET_CLINIC_PROFILE;
         String url = webServiceType.getUrl() + locationId;
-        Util.checkNetworkStatus(mApp.getApplicationContext());
+        checkNetworkStatus(mApp.getApplicationContext());
         if (HealthCocoConstants.isNetworkOnline) {
             getResponse(webServiceType, class1, url, null, null, responseListener,
                     errorListener);
@@ -324,7 +325,7 @@ public class WebDataServiceImpl implements GCMRefreshListener {
 
     public void getDrugType(WebServiceType webServiceType, Class<DrugType> class1, boolean isDiscarded, String doctorId, Long updatedTime, Response.Listener<VolleyResponseBean> responseListener,
                             GsonRequest.ErrorListener errorListener) {
-        Util.checkNetworkStatus(mApp.getApplicationContext());
+        checkNetworkStatus(mApp.getApplicationContext());
         if (HealthCocoConstants.isNetworkOnline) {
             String url = webServiceType.getUrl()
                     + HealthCocoConstants.PARAM_DISCARDED_AMPERCENT + isDiscarded
@@ -339,7 +340,7 @@ public class WebDataServiceImpl implements GCMRefreshListener {
     }
 
     public void getGroupsList(WebServiceType webServiceType, Class<UserGroups> class1, String doctorId, String locationId, String hospitalId, Long updatedTime, ArrayList<String> patientsAssignedGroupIdList, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
-        Util.checkNetworkStatus(mApp.getApplicationContext());
+        checkNetworkStatus(mApp.getApplicationContext());
         if (HealthCocoConstants.isNetworkOnline) {
             String url = webServiceType.getUrl()
                     + HealthCocoConstants.PARAM_DISCARDED_TRUE
@@ -353,7 +354,7 @@ public class WebDataServiceImpl implements GCMRefreshListener {
 
     public void getProfession(Class<Profession> class1, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         WebServiceType webServiceType = WebServiceType.GET_PROFESSION;
-        Util.checkNetworkStatus(mApp.getApplicationContext());
+        checkNetworkStatus(mApp.getApplicationContext());
         if (HealthCocoConstants.isNetworkOnline) {
             getResponse(webServiceType, class1, webServiceType.getUrl(), null, null, responseListener, errorListener);
         } else {
@@ -363,7 +364,7 @@ public class WebDataServiceImpl implements GCMRefreshListener {
 
     public void getReference(Class<Reference> class1, String doctorId, long updatedTime, BooleanTypeValues isDiscarded, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         WebServiceType webServiceType = WebServiceType.GET_REFERENCE;
-        Util.checkNetworkStatus(mApp.getApplicationContext());
+        checkNetworkStatus(mApp.getApplicationContext());
         if (HealthCocoConstants.isNetworkOnline) {
             String url = webServiceType.getUrl()
                     + HealthCocoConstants.PARAM_DISCARDED_AMPERCENT + isDiscarded.getBooleanFlag()
@@ -383,7 +384,7 @@ public class WebDataServiceImpl implements GCMRefreshListener {
 
     public void getBloodGroup(Class<?> class1, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         WebServiceType webServiceType = WebServiceType.GET_BLOOD_GROUP;
-        Util.checkNetworkStatus(mApp.getApplicationContext());
+        checkNetworkStatus(mApp.getApplicationContext());
         if (HealthCocoConstants.isNetworkOnline) {
             getResponse(webServiceType, class1, webServiceType.getUrl(), null, null, responseListener, errorListener);
         } else {
@@ -393,7 +394,7 @@ public class WebDataServiceImpl implements GCMRefreshListener {
 
     public void getDiseaseList(Class<?> class1, String doctorId, Long updatedTime, ArrayList<String> diseaseIds, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         WebServiceType webServiceType = WebServiceType.GET_DISEASE_LIST;
-        Util.checkNetworkStatus(mApp.getApplicationContext());
+        checkNetworkStatus(mApp.getApplicationContext());
         if (HealthCocoConstants.isNetworkOnline) {
             String url = webServiceType.getUrl()
                     + HealthCocoConstants.PARAM_DISCARDED_TRUE
@@ -408,7 +409,7 @@ public class WebDataServiceImpl implements GCMRefreshListener {
     }
 
     public void getTemplatesList(Class<TempTemplate> class1, String doctorId, long updatedTime, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
-        Util.checkNetworkStatus(mApp.getApplicationContext());
+        checkNetworkStatus(mApp.getApplicationContext());
         if (HealthCocoConstants.isNetworkOnline) {
             WebServiceType webServiceType = WebServiceType.GET_TEMPLATES_LIST;
             String url = webServiceType.getUrl()
@@ -423,7 +424,7 @@ public class WebDataServiceImpl implements GCMRefreshListener {
     }
 
     public void getCities(Class<?> class1, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
-        Util.checkNetworkStatus(mApp.getApplicationContext());
+        checkNetworkStatus(mApp.getApplicationContext());
         if (HealthCocoConstants.isNetworkOnline) {
             long updatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.CITIES);
             WebServiceType webServiceType = WebServiceType.GET_CITIES;
@@ -443,7 +444,7 @@ public class WebDataServiceImpl implements GCMRefreshListener {
             url = url + HealthCocoConstants.PARAM_LOCATION_ID + locationId;
         if (!Util.isNullOrBlank(hospitalId))
             url = url + HealthCocoConstants.PARAM_HOSPITAL_ID + hospitalId;
-        Util.checkNetworkStatus(mApp);
+        checkNetworkStatus(mApp);
         if (HealthCocoConstants.isNetworkOnline) {
             getResponse(Request.Priority.HIGH, webServiceType, class1, url, null, null, responseListener,
                     errorListener);
@@ -456,7 +457,7 @@ public class WebDataServiceImpl implements GCMRefreshListener {
     public void updateDoctorProfile(Class<?> class1, DoctorProfileToSend profile, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         WebServiceType webServiceType = WebServiceType.UPDATE_DOCTOR_PROFILE;
         String url = webServiceType.getUrl();
-        Util.checkNetworkStatus(mApp);
+        checkNetworkStatus(mApp);
         if (HealthCocoConstants.isNetworkOnline) {
             getResponse(webServiceType, class1, url, profile, null, responseListener,
                     errorListener);
@@ -468,7 +469,7 @@ public class WebDataServiceImpl implements GCMRefreshListener {
     public void addUpdateEducation(Class<?> class1, DoctorProfile doctorProfile, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         WebServiceType webServiceType = WebServiceType.ADD_UPDATE_EDUCATION;
         String url = webServiceType.getUrl();
-        Util.checkNetworkStatus(mApp);
+        checkNetworkStatus(mApp);
         if (HealthCocoConstants.isNetworkOnline) {
             getResponse(webServiceType, class1, url, doctorProfile, null, responseListener,
                     errorListener);
@@ -478,7 +479,7 @@ public class WebDataServiceImpl implements GCMRefreshListener {
     }
 
     public void getMasterDataFromSolr(WebServiceType webServiceType, Class<?> class1, String locationId, String hospitalId, int pageNum, int size, String searchTerm, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
-        Util.checkNetworkStatus(mApp.getApplicationContext());
+        checkNetworkStatus(mApp.getApplicationContext());
         String url = webServiceType.getUrl();
         if (HealthCocoConstants.isNetworkOnline) {
             switch (webServiceType) {
@@ -500,7 +501,7 @@ public class WebDataServiceImpl implements GCMRefreshListener {
     public void addUpdateRegistrationDetail(Class<?> class1, DoctorProfile doctorProfile, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         WebServiceType webServiceType = WebServiceType.ADD_UPDATE_REGISTRATION_DETAIL;
         String url = webServiceType.getUrl();
-        Util.checkNetworkStatus(mApp);
+        checkNetworkStatus(mApp);
         if (HealthCocoConstants.isNetworkOnline) {
             getResponse(webServiceType, class1, url, doctorProfile, null, responseListener,
                     errorListener);
@@ -512,7 +513,7 @@ public class WebDataServiceImpl implements GCMRefreshListener {
     public void addUpdateAchievments(Class<?> class1, DoctorProfile doctorProfile, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         WebServiceType webServiceType = WebServiceType.ADD_UPDATE_ACHIEVEMENTS_DETAIL;
         String url = webServiceType.getUrl();
-        Util.checkNetworkStatus(mApp);
+        checkNetworkStatus(mApp);
         if (HealthCocoConstants.isNetworkOnline) {
             getResponse(webServiceType, class1, url, doctorProfile, null, responseListener,
                     errorListener);
@@ -524,7 +525,7 @@ public class WebDataServiceImpl implements GCMRefreshListener {
     public void addUpdateExperirnce(Class<?> class1, DoctorProfile doctorProfile, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         WebServiceType webServiceType = WebServiceType.ADD_UPDATE_EXPERIENCE_DETAIL;
         String url = webServiceType.getUrl();
-        Util.checkNetworkStatus(mApp);
+        checkNetworkStatus(mApp);
         if (HealthCocoConstants.isNetworkOnline) {
             getResponse(webServiceType, class1, url, doctorProfile, null, responseListener,
                     errorListener);
@@ -536,7 +537,7 @@ public class WebDataServiceImpl implements GCMRefreshListener {
     public void addUpdateProfessionalMembership(Class<?> class1, ProfessionalMembershipRequest membershipRequest, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         WebServiceType webServiceType = WebServiceType.ADD_UPDATE_PROFESSIONAL_MEMBERSHIP_DETAIL;
         String url = webServiceType.getUrl();
-        Util.checkNetworkStatus(mApp);
+        checkNetworkStatus(mApp);
         if (HealthCocoConstants.isNetworkOnline) {
             getResponse(webServiceType, class1, url, membershipRequest, null, responseListener, errorListener);
         } else {
@@ -547,7 +548,7 @@ public class WebDataServiceImpl implements GCMRefreshListener {
     public void addUpdateProfessionalStatement(Class<?> class1, ProfessionalStatementRequest statementRequest, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         WebServiceType webServiceType = WebServiceType.ADD_UPDATE_PROFESSIONAL_STATEMENT_DETAIL;
         String url = webServiceType.getUrl();
-        Util.checkNetworkStatus(mApp);
+        checkNetworkStatus(mApp);
         if (HealthCocoConstants.isNetworkOnline) {
             getResponse(webServiceType, class1, url, statementRequest, null, responseListener, errorListener);
         } else {
@@ -558,7 +559,7 @@ public class WebDataServiceImpl implements GCMRefreshListener {
     public void addUpdateGeneralInfo(Class<?> class1, DoctorClinicProfile doctorClinicProfile, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         WebServiceType webServiceType = WebServiceType.ADD_UPDATE_GENERAL_INFO;
         String url = webServiceType.getUrl();
-        Util.checkNetworkStatus(mApp);
+        checkNetworkStatus(mApp);
         if (HealthCocoConstants.isNetworkOnline) {
             getResponse(webServiceType, class1, url, doctorClinicProfile, null, responseListener,
                     errorListener);
@@ -570,7 +571,7 @@ public class WebDataServiceImpl implements GCMRefreshListener {
     public void addClinicLogo(Class<?> class1, ClinicImageToSend imageToSend, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         WebServiceType webServiceType = WebServiceType.ADD_CLINIC_LOGO;
         String url = webServiceType.getUrl();
-        Util.checkNetworkStatus(mApp);
+        checkNetworkStatus(mApp);
         if (HealthCocoConstants.isNetworkOnline) {
             getResponse(webServiceType, class1, url, imageToSend, null, responseListener,
                     errorListener);
@@ -584,7 +585,7 @@ public class WebDataServiceImpl implements GCMRefreshListener {
         String url = webServiceType.getUrl()
                 + locationId + "/"
                 + counter + HealthCocoConstants.PARAM_TAG_DELETE;
-        Util.checkNetworkStatus(mApp);
+        checkNetworkStatus(mApp);
         if (HealthCocoConstants.isNetworkOnline) {
             getResponse(webServiceType, class1, url, null, null, responseListener,
                     errorListener);
@@ -596,7 +597,7 @@ public class WebDataServiceImpl implements GCMRefreshListener {
     public void addClinicImages(Class<?> class1, ClinicImageToSend imageToSend, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         WebServiceType webServiceType = WebServiceType.ADD_CLINIC_IMAGE;
         String url = webServiceType.getUrl();
-        Util.checkNetworkStatus(mApp);
+        checkNetworkStatus(mApp);
         if (HealthCocoConstants.isNetworkOnline) {
             getResponse(webServiceType, class1, url, imageToSend, null, responseListener,
                     errorListener);
@@ -608,7 +609,7 @@ public class WebDataServiceImpl implements GCMRefreshListener {
     public void getBothUIPermissionsForDoctor(Class<?> class1, String doctorId, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         WebServiceType webServiceType = WebServiceType.GET_BOTH_PERMISSIONS_FOR_DOCTOR;
         String url = webServiceType.getUrl() + doctorId;
-        Util.checkNetworkStatus(mApp.getApplicationContext());
+        checkNetworkStatus(mApp.getApplicationContext());
         if (HealthCocoConstants.isNetworkOnline) {
             getResponse(webServiceType, class1, url, null, null, responseListener,
                     errorListener);
@@ -619,7 +620,7 @@ public class WebDataServiceImpl implements GCMRefreshListener {
 
     public void getAlreadyRegisteredPatients(Class<?> class1, String mobileNo, User user, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         WebServiceType webServiceType = WebServiceType.SEARCH_PATIENTS;
-        Util.checkNetworkStatus(mApp.getApplicationContext());
+        checkNetworkStatus(mApp.getApplicationContext());
         String url = webServiceType.getUrl();
         if (HealthCocoConstants.isNetworkOnline) {
             url = url
@@ -672,7 +673,7 @@ public class WebDataServiceImpl implements GCMRefreshListener {
 
     public void assignGroup(Class<AssignGroupRequest> class1, AssignGroupRequest assignGroupRequest, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         WebServiceType webServiceType = WebServiceType.ASSIGN_GROUP;
-        Util.checkNetworkStatus(mApp.getApplicationContext());
+        checkNetworkStatus(mApp.getApplicationContext());
         if (HealthCocoConstants.isNetworkOnline)
             getResponse(webServiceType, class1, webServiceType.getUrl(), assignGroupRequest, null, responseListener,
                     errorListener);
@@ -684,7 +685,7 @@ public class WebDataServiceImpl implements GCMRefreshListener {
                                   String locationId, String hospitalId, Response.Listener<VolleyResponseBean> responseListener,
                                   GsonRequest.ErrorListener errorListener) {
         WebServiceType webServiceType = WebServiceType.GET_PATIENT_PROFILE;
-        Util.checkNetworkStatus(mApp.getApplicationContext());
+        checkNetworkStatus(mApp.getApplicationContext());
         if (HealthCocoConstants.isNetworkOnline) {
             String url = webServiceType.getUrl()
                     + userId + "?"
@@ -698,7 +699,7 @@ public class WebDataServiceImpl implements GCMRefreshListener {
     }
 
     public void getHistoryListUpdatedAPI(Class<?> class1, WebServiceType webServiceType, boolean isOtpVerified, String pateintId, String doctorId, String locationId, String hospitalId, boolean isInHistory, Long updatedTime, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
-        Util.checkNetworkStatus(mApp.getApplicationContext());
+        checkNetworkStatus(mApp.getApplicationContext());
         if (HealthCocoConstants.isNetworkOnline) {
             String url = webServiceType.getUrl()
                     + "/" + pateintId
@@ -712,7 +713,7 @@ public class WebDataServiceImpl implements GCMRefreshListener {
     }
 
     public void getMedicalFamilyHistory(Class<?> class1, WebServiceType webServiceType, String patientId, String doctorId, String locationId, String hospitalId, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
-        Util.checkNetworkStatus(mApp.getApplicationContext());
+        checkNetworkStatus(mApp.getApplicationContext());
         if (HealthCocoConstants.isNetworkOnline) {
             String url = webServiceType.getUrl() + patientId + "/" + doctorId + "/" + locationId + "/" + hospitalId;
             getResponse(Request.Priority.HIGH, webServiceType, class1, url, null, null, responseListener, errorListener);
@@ -733,7 +734,7 @@ public class WebDataServiceImpl implements GCMRefreshListener {
     public void addUpdatePersonalHistory(Class<?> class1, PersonalHistory personalHistory, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         WebServiceType webServiceType = WebServiceType.ADD_UPDATE_PERSONAL_HISTORY_DETAIL;
         String url = webServiceType.getUrl();
-        Util.checkNetworkStatus(mApp);
+        checkNetworkStatus(mApp);
         if (HealthCocoConstants.isNetworkOnline) {
             getResponse(webServiceType, class1, url, personalHistory, null, responseListener, errorListener);
         } else {
@@ -743,7 +744,7 @@ public class WebDataServiceImpl implements GCMRefreshListener {
 
     public void getDrugsListSolr(Class<?> class1, int pageNum, int size, String doctorId, String hospitalId, String locationId, String searchTerm, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         WebServiceType webServiceType = WebServiceType.GET_DRUGS_LIST_SOLR;
-        Util.checkNetworkStatus(mApp.getApplicationContext());
+        checkNetworkStatus(mApp.getApplicationContext());
         if (HealthCocoConstants.isNetworkOnline) {
             webServiceType = WebServiceType.GET_DRUGS_LIST_SOLR;
             String url = webServiceType.getUrl()
@@ -764,7 +765,7 @@ public class WebDataServiceImpl implements GCMRefreshListener {
     public void addUpdateDrugsAndAllergies(Class<?> class1, AddEditDrugsAndAllergiesRequest drugsAndAllergiesRequest, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         WebServiceType webServiceType = WebServiceType.ADD_UPDATE_DRUGS_AND_ALLERGIES_DETAIL;
         String url = webServiceType.getUrl();
-        Util.checkNetworkStatus(mApp);
+        checkNetworkStatus(mApp);
         if (HealthCocoConstants.isNetworkOnline) {
             getResponse(webServiceType, class1, url, drugsAndAllergiesRequest, null, responseListener, errorListener);
         } else {
@@ -773,7 +774,7 @@ public class WebDataServiceImpl implements GCMRefreshListener {
     }
 
     public void getVisitsList(Class<?> class1, WebServiceType webServiceType, String doctorId, String locationId, String hospitalId, String patientId, Long updatedTime, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
-        Util.checkNetworkStatus(mApp.getApplicationContext());
+        checkNetworkStatus(mApp.getApplicationContext());
         if (HealthCocoConstants.isNetworkOnline) {
             String url = webServiceType.getUrl() + doctorId
                     + "/" + locationId
@@ -811,7 +812,7 @@ public class WebDataServiceImpl implements GCMRefreshListener {
             public void run() {
                 WebServiceType webServiceType = WebServiceType.SEND_GCM_REGISTRATION_ID;
                 GCMRequest gcmRequest = LocalDataServiceImpl.getInstance(mApp).getGCMRequestData();
-                Util.checkNetworkStatus(mApp);
+                checkNetworkStatus(mApp);
                 if (HealthCocoConstants.isNetworkOnline) {
                     String url = webServiceType.getUrl();
                     getResponse(webServiceType, Object.class, url, gcmRequest, null, null,
@@ -852,7 +853,7 @@ public class WebDataServiceImpl implements GCMRefreshListener {
     }
 
     public void getPdfUrl(Class<?> class1, WebServiceType webServiceType, String uniqueId, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
-        Util.checkNetworkStatus(mApp);
+        checkNetworkStatus(mApp);
         if (HealthCocoConstants.isNetworkOnline) {
             String url = webServiceType.getUrl() + uniqueId;
             getResponse(webServiceType, class1, url, null, null, responseListener,
@@ -873,7 +874,7 @@ public class WebDataServiceImpl implements GCMRefreshListener {
      */
     public void addUpdateReference(WebServiceType webServiceType, Class<?> class1, Object object, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         String url = webServiceType.getUrl();
-        Util.checkNetworkStatus(mApp.getApplicationContext());
+        checkNetworkStatus(mApp.getApplicationContext());
         if (HealthCocoConstants.isNetworkOnline) {
             switch (webServiceType) {
                 case ADD_REFERENCE:
@@ -911,7 +912,7 @@ public class WebDataServiceImpl implements GCMRefreshListener {
 
     public void changeRecordState(Class<?> class1, String recordId, RecordState recordState, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         WebServiceType webServiceType = WebServiceType.CHANGE_RECORD_STATE;
-        Util.checkNetworkStatus(mApp);
+        checkNetworkStatus(mApp);
         if (HealthCocoConstants.isNetworkOnline) {
             String url = webServiceType.getUrl() + recordId + "/" + recordState + HealthCocoConstants.PARAM_CHANGE_STATE;
             getResponse(webServiceType, class1, url, null, null, responseListener,
@@ -939,7 +940,7 @@ public class WebDataServiceImpl implements GCMRefreshListener {
 
     public void getDiagramsList(Class<?> class1, Long updatedTime, String doctorId, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         WebServiceType webServiceType = WebServiceType.GET_DIAGRAMS_LIST;
-        Util.checkNetworkStatus(mApp.getApplicationContext());
+        checkNetworkStatus(mApp.getApplicationContext());
         if (HealthCocoConstants.isNetworkOnline) {
             String url = webServiceType.getUrl()
                     + HealthCocoConstants.PARAM_DISCARDED_TRUE
@@ -954,7 +955,7 @@ public class WebDataServiceImpl implements GCMRefreshListener {
     public void addDiagram(Class<?> class1, Diagram diagram,
                            Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         WebServiceType webServiceType = WebServiceType.ADD_DIAGRAM;
-        Util.checkNetworkStatus(mApp.getApplicationContext());
+        checkNetworkStatus(mApp.getApplicationContext());
         if (HealthCocoConstants.isNetworkOnline) {
             String url = webServiceType.getUrl();
             getResponse(webServiceType, class1, url, diagram, null, responseListener,
@@ -965,7 +966,7 @@ public class WebDataServiceImpl implements GCMRefreshListener {
     }
 
     public void sendFeedback(Class<?> class1, Feedback feedback, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
-        Util.checkNetworkStatus(mApp);
+        checkNetworkStatus(mApp);
         if (HealthCocoConstants.isNetworkOnline) {
             WebServiceType webServiceType = WebServiceType.ADD_FEEDBACK;
             getResponse(webServiceType, class1, webServiceType.getUrl(), feedback, null, responseListener,
@@ -974,22 +975,39 @@ public class WebDataServiceImpl implements GCMRefreshListener {
     }
 
     public void updateUiPermissions(Class<?> class1, UserPermissionsRequest userPermissionsResponse, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
-        Util.checkNetworkStatus(mApp);
+        checkNetworkStatus(mApp);
         if (HealthCocoConstants.isNetworkOnline) {
             WebServiceType webServiceType = WebServiceType.POST_UI_PERMISSIONS;
             getResponse(webServiceType, class1, webServiceType.getUrl(), userPermissionsResponse, null, responseListener,
                     errorListener);
         }
     }
+
     public void addVisit(Class<?> class1, VisitDetails visitDetails,
                          Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         WebServiceType webServiceType = WebServiceType.ADD_VISIT;
-        Util.checkNetworkStatus(mApp);
+        checkNetworkStatus(mApp);
         if (HealthCocoConstants.isNetworkOnline) {
             getResponse(webServiceType, class1, webServiceType.getUrl(), visitDetails, null, responseListener,
                     errorListener);
         } else {
             showUserOffline(webServiceType, responseListener);
+        }
+    }
+
+    public void getDiagnosticTestsFromSolr(Class<?> class1, String locationId, String hospitalId, int pageNum, int size, String searchTerm, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        WebServiceType webServiceType = WebServiceType.GET_DIAGNOSTIC_TESTS_SOLR;
+        Util.checkNetworkStatus(mApp.getApplicationContext());
+        if (HealthCocoConstants.isNetworkOnline) {
+            String url = webServiceType.getUrl()
+                    + HealthCocoConstants.PARAM_HOSPITAL_ID + hospitalId
+                    + HealthCocoConstants.PARAM_LOCATION_ID + locationId
+                    + HealthCocoConstants.PARAM_PAGE_AND + pageNum
+                    + HealthCocoConstants.PARAM_SIZE + size
+                    + HealthCocoConstants.PARAM_SEARCH_TERM + searchTerm;
+            getResponse(webServiceType, class1, url, null, null, responseListener, errorListener);
+        } else {
+            errorListener.onNetworkUnavailable(webServiceType);
         }
     }
 }

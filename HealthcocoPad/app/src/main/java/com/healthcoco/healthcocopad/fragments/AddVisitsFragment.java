@@ -40,6 +40,7 @@ import com.healthcoco.healthcocopad.bean.server.BloodPressure;
 import com.healthcoco.healthcocopad.bean.server.ClinicalNotes;
 import com.healthcoco.healthcocopad.bean.server.ComplaintSuggestions;
 import com.healthcoco.healthcocopad.bean.server.DiagnosisSuggestions;
+import com.healthcoco.healthcocopad.bean.server.DiagnosticTest;
 import com.healthcoco.healthcocopad.bean.server.Drug;
 import com.healthcoco.healthcocopad.bean.server.DrugDirection;
 import com.healthcoco.healthcocopad.bean.server.DrugItem;
@@ -102,6 +103,8 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
         HealthcocoOnSelectionChangedListener, View.OnTouchListener, View.OnFocusChangeListener {
     public static final String INTENT_ON_SUGGESTION_ITEM_CLICK = "com.healthcoco.healthcocopad.fragments.AddVisitsFragment.ON_SUGGESTION_ITEM_CLICK";
     public static final String INTENT_ADIVCE_BUTTON_VISIBILITY = "com.healthcoco.healthcocopad.fragments.AddVisitsFragment.ADIVCE_BUTTON_VISIBILITY";
+    public static final String INTENT_LAB_TEST_VISIBILITY = "com.healthcoco.healthcocopad.fragments.AddVisitsFragment.LAB_TEST_VISIBILITY";
+
     public static final String TAG_SELECTED_SUGGESTION_OBJECT = "selectedSuggestionObject";
     public static final String TAG_VISIBILITY = "visibility";
     private static final String CHARACTER_TO_REPLACE_COMMA_WITH_SPACES = " , ";
@@ -182,6 +185,7 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
     private AddPrescriptionVisitFragment addPrescriptionVisitFragment;
     private AddVisitSuggestionsFragment addVisitSuggestionsFragment;
     SuggestionType selectedSuggestionType = null;
+    private AddLabTestsVisitFragment addLabTestVisitFragment;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -211,6 +215,14 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
     private void initFragments() {
         initPrescriptionFragment();
         initSuggestionsFragment();
+        initLabTestsFragment();
+    }
+
+    private void initLabTestsFragment() {
+        addLabTestVisitFragment = new AddLabTestsVisitFragment();
+        FragmentTransaction transaction = mFragmentManager.beginTransaction();
+        transaction.add(R.id.parent_diagnostic_tests, addLabTestVisitFragment, addLabTestVisitFragment.getClass().getSimpleName());
+        transaction.commit();
     }
 
     private void initPrescriptionFragment() {
@@ -313,6 +325,7 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
         btPrescription = (ImageButton) view.findViewById(R.id.bt_prescription);
         btPrescription.setTag(SuggestionType.DRUGS);
         btLabTests = (ImageButton) view.findViewById(R.id.bt_lab_tests);
+        btLabTests.setTag(SuggestionType.LAB_TESTS);
         btDiagrams = (ImageButton) view.findViewById(R.id.bt_diagrams);
         btAdvice = (ImageButton) view.findViewById(R.id.bt_advice);
         btSave = (TextViewFontAwesome) view.findViewById(R.id.bt_save);
@@ -723,9 +736,9 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
 //                svScrollView.requestChildFocus(parentPrescription, parentPrescription);
                 break;
             case R.id.bt_lab_tests:
-//                if (layoutWidget.getVisibility() == View.GONE)
-//                    layoutWidget.setVisibility(View.VISIBLE);
-                showHideLabTestsLayout();
+                if (selectedSuggestionType == null || selectedSuggestionType != SuggestionType.LAB_TESTS) {
+                    addVisitSuggestionsFragment.refreshTagOfEditText(SuggestionType.LAB_TESTS);
+                }
                 break;
             case R.id.bt_diagrams:
                 openActivity(CommonOpenUpFragmentType.SELECT_DIAGRAM, null, REQUEST_CODE_ADD_CLINICAL_NOTES);
@@ -796,14 +809,6 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
 
     private void hideBoth() {
         parentWidgetSuggestions.setVisibility(View.GONE);
-    }
-
-    private void showHidePrescriptionLayout() {
-        if (parentPrescription.getVisibility() == View.GONE) {
-            parentPrescription.setVisibility(View.VISIBLE);
-        } else {
-            parentPrescription.setVisibility(View.GONE);
-        }
     }
 
     private void showHideWidgetAndKeyboardLayout() {
@@ -1434,6 +1439,7 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
                     isBlankClinicalNote = isBlankClinicalNote();
                     break;
                 case PRESCRIPTION:
+                    isBlankPrescription = addPrescriptionVisitFragment.isBlankPrescription();
                     break;
                 case LAB_TEST:
                     break;
@@ -1619,6 +1625,11 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
             IntentFilter filter1 = new IntentFilter();
             filter1.addAction(INTENT_ADIVCE_BUTTON_VISIBILITY);
             LocalBroadcastManager.getInstance(mActivity).registerReceiver(adviceButtonVisibilityReceiver, filter1);
+            //receiver to show/hide LabTest Layout based on Tests present
+            IntentFilter filter2 = new IntentFilter();
+            filter2.addAction(INTENT_LAB_TEST_VISIBILITY);
+            LocalBroadcastManager.getInstance(mActivity).registerReceiver(labTestLayoutVisibilityReceiver, filter2);
+
             receiversRegistered = true;
         }
     }
@@ -1628,6 +1639,7 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
         super.onDestroy();
         LocalBroadcastManager.getInstance(mActivity).unregisterReceiver(onSuggestionItemClickReceiver);
         LocalBroadcastManager.getInstance(mActivity).unregisterReceiver(adviceButtonVisibilityReceiver);
+        LocalBroadcastManager.getInstance(mActivity).unregisterReceiver(labTestLayoutVisibilityReceiver);
     }
 
 
@@ -1655,6 +1667,19 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
                 } else {
                     parentPrescription.setVisibility(View.GONE);
                     btAdvice.setVisibility(View.GONE);
+                }
+            }
+        }
+    };
+    BroadcastReceiver labTestLayoutVisibilityReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, final Intent intent) {
+            if (intent != null && intent.hasExtra(TAG_VISIBILITY)) {
+                boolean showVisibility = intent.getBooleanExtra(TAG_VISIBILITY, false);
+                if (showVisibility) {
+                    parentDiagnosticTests.setVisibility(View.VISIBLE);
+                } else {
+                    parentDiagnosticTests.setVisibility(View.GONE);
                 }
             }
         }
@@ -1709,6 +1734,13 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
                     addPrescriptionVisitFragment.addDrug(selectedDrug);
                 }
                 return;
+            case LAB_TESTS:
+                if (selectedSuggestionObject instanceof DiagnosticTest) {
+                    DiagnosticTest diagnosticTest = (DiagnosticTest) selectedSuggestionObject;
+                    addLabTestVisitFragment.addDiagnosticTest(diagnosticTest);
+                    LogUtils.LOGD(TAG, "Selected Test " + diagnosticTest.getTestName());
+                }
+                break;
             case COMPLAINTS:
                 if (selectedSuggestionObject instanceof ComplaintSuggestions) {
                     ComplaintSuggestions complaint = (ComplaintSuggestions) selectedSuggestionObject;

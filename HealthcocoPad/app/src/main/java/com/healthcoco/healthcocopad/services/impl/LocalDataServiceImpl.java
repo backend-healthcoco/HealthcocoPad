@@ -3215,5 +3215,32 @@ public class LocalDataServiceImpl {
         ArrayList<Object> list = (ArrayList<Object>) (Object) SugarRecord.findWithQuery(class1, whereCondition);
         return list;
     }
+    public VolleyResponseBean getMasterData(WebServiceType webServiceType, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
+        volleyResponseBean.setWebServiceType(webServiceType);
+        volleyResponseBean.setIsDataFromLocal(true);
+        volleyResponseBean.setIsUserOnline(HealthCocoConstants.isNetworkOnline);
+        ArrayList<Object> list = null;
+        try {
+            switch (webServiceType) {
+                case GET_EDUCATION_QUALIFICATION:
+                    list = (ArrayList<Object>) (ArrayList<?>) EducationQualification.listAll(EducationQualification.class);
+                    break;
+                case GET_MEDICAL_COUNCILS:
+                    list = (ArrayList<Object>) (ArrayList<?>) MedicalCouncil.listAll(MedicalCouncil.class);
+                    break;
+                case GET_COLLEGE_UNIVERSITY_INSTITUES:
+                    list = (ArrayList<Object>) (ArrayList<?>) CollegeUniversityInstitute.listAll(CollegeUniversityInstitute.class);
+                    break;
+            }
 
+            volleyResponseBean.setDataList(list);
+            if (responseListener != null)
+                responseListener.onResponse(volleyResponseBean);
+        } catch (Exception e) {
+            e.printStackTrace();
+            showErrorLocal(volleyResponseBean, errorListener);
+        }
+        return volleyResponseBean;
+    }
 }
