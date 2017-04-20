@@ -6,5 +6,7 @@
     <integer name="max_length_aadharid">12</integer>
     <integer name="add_visit_left_item_weight">20</integer>
     <integer name="add_visit_right_item_weight">80</integer>
+    <integer name="weight_drug_name">34</integer>
+    <integer name="weight_drugs_items">22</integer>
 
 </resources>

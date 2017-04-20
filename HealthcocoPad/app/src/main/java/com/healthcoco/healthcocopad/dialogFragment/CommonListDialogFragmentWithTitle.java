@@ -51,6 +51,7 @@ import com.healthcoco.healthcocopad.utilities.ComparatorUtil;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
+import com.healthcoco.healthcocopad.views.GridViewLoadMore;
 import com.healthcoco.healthcocopad.views.ListViewLoadMore;
 
 import java.util.ArrayList;
@@ -68,7 +69,7 @@ public class CommonListDialogFragmentWithTitle extends HealthCocoDialogFragment 
     private List<?> list;
     private CommonListDialogType commonListDialogType;
     private CommonListDialogItemClickListener commonListDialogItemClickListener;
-    private ListViewLoadMore listView;
+    private GridViewLoadMore listView;
     private CommonListDialogAdapter mAdapter;
     private TextView tvNoResultFound;
     private LinearLayout layoutActionbar;
@@ -96,7 +97,7 @@ public class CommonListDialogFragmentWithTitle extends HealthCocoDialogFragment 
     @Override
     public void onActivityCreated(Bundle arg0) {
         super.onActivityCreated(arg0);
-        setWidthHeight(0.60, 0.80);
+        setWidthHeight(0.60, 10);
         init();
     }
 
@@ -118,7 +119,7 @@ public class CommonListDialogFragmentWithTitle extends HealthCocoDialogFragment 
         loadingOverlay = (LinearLayout) view.findViewById(R.id.loading_overlay);
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
         toolbar = (Toolbar) view.findViewById(R.id.toolbar);
-        listView = (ListViewLoadMore) view.findViewById(R.id.lv_list);
+        listView = (GridViewLoadMore) view.findViewById(R.id.lv_list);
         tvNoResultFound = (TextView) view.findViewById(R.id.tv_no_result_found);
         if (commonListDialogType.isAddCustomAllowed()) {
             getSearchEditText().setImeActionLabel(getResources().getString(R.string.done), EditorInfo.IME_ACTION_DONE);

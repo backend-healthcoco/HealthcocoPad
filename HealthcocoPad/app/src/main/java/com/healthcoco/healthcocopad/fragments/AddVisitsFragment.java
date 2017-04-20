@@ -112,7 +112,7 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
     private static final String CHARACTER_TO_BE_REPLACED = ",";
     private static final int REQUEST_CODE_ADD_CLINICAL_NOTES = 100;
     private static final float WIDGET_AUTOSCROLL_MARGIN = 150;
-    private static final float WIDGET_TEXT_SIZE = 30;
+    private static final float WIDGET_TEXT_SIZE = 40;
     private static final float WIDGET_INT_WIDTH = 4;
     private static final int WIDGET_TEXT_COLOR = 0xFF0077b5;
 
@@ -187,6 +187,7 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
     private AddVisitSuggestionsFragment addVisitSuggestionsFragment;
     SuggestionType selectedSuggestionType = null;
     private AddLabTestsVisitFragment addLabTestVisitFragment;
+    private boolean mKeyboardStatus = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -198,8 +199,6 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(mActivity.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
         init();
         mActivity.showLoading(false);
         new LocalDataBackgroundtaskOptimised(mActivity, GET_FRAGMENT_INITIALISATION_DATA, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
@@ -745,7 +744,6 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
                 if (selectedSuggestionType == null || selectedSuggestionType != SuggestionType.DRUGS) {
                     addVisitSuggestionsFragment.refreshTagOfEditText(SuggestionType.DRUGS);
                 }
-//                svScrollView.requestChildFocus(parentPrescription, parentPrescription);
                 break;
             case R.id.bt_lab_tests:
                 if (selectedSuggestionType == null || selectedSuggestionType != SuggestionType.LAB_TESTS) {
@@ -767,7 +765,7 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
                 }
                 break;
             case R.id.bt_keyboard:
-//                showHideWidgetAndKeyboardLayout();
+//                showHideKeyboardLayout();
                 break;
             case R.id.bt_del:
                 onDeleteButtonClick();
@@ -824,13 +822,27 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
         parentWidgetSuggestions.setVisibility(View.GONE);
     }
 
-    private void showHideWidgetAndKeyboardLayout() {
-        if (layoutWidget.getVisibility() == View.VISIBLE) {
-            layoutWidget.setVisibility(View.GONE);
+    public void dismissKeyboard() {
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(mActivity.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(0, InputMethodManager.HIDE_IMPLICIT_ONLY);
+        mKeyboardStatus = false;
+    }
+
+    public void showKeyboard() {
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(mActivity.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
+        mKeyboardStatus = true;
+    }
+
+    private boolean isKeyboardActive() {
+        return mKeyboardStatus;
+    }
+
+    private void showHideKeyboardLayout() {
+        if (!isKeyboardActive()) {
             showKeyboard();
         } else {
-            layoutWidget.setVisibility(View.VISIBLE);
-            hideKeyboard();
+            dismissKeyboard();
         }
     }
 
@@ -1771,6 +1783,7 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
                 if (selectedDrug != null && addPrescriptionVisitFragment != null) {
                     addPrescriptionVisitFragment.addDrug(selectedDrug);
                 }
+                svScrollView.requestChildFocus(addPrescriptionVisitFragment.getLastChildView(), addPrescriptionVisitFragment.getLastChildView());
                 return;
             case LAB_TESTS:
                 if (selectedSuggestionObject instanceof DiagnosticTest) {

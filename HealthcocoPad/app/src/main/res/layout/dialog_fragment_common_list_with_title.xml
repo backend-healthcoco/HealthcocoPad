@@ -27,12 +27,14 @@
             android:layout_height="0dp"
             android:layout_weight="1">
 
-            <com.healthcoco.healthcocopad.views.ListViewLoadMore
+            <com.healthcoco.healthcocopad.views.GridViewLoadMore
                 android:id="@+id/lv_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:clipToPadding="false"
                 android:divider="@null"
+                android:numColumns="2"
+                android:overScrollMode="never"
                 android:scrollbarStyle="outsideOverlay"
                 android:visibility="visible" />
 
