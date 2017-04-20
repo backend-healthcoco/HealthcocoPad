@@ -375,6 +375,11 @@ public class AddNewTemplateFragment extends HealthCocoFragment implements TabHos
     }
 
     @Override
+    public AddVisitsFragment getAddVisitFragment() {
+        return null;
+    }
+
+    @Override
     public void onPrescriptionClicked(TempTemplate template) {
 
     }

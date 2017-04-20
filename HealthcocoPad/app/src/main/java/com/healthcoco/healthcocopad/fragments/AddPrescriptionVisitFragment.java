@@ -23,6 +23,7 @@ import com.healthcoco.healthcocopad.utilities.Util;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 /**
  * Created by neha on 19/04/17.
@@ -71,7 +72,7 @@ public class AddPrescriptionVisitFragment extends HealthCocoFragment implements 
     }
 
     private void initAdapter() {
-        adapter = new SelectedPrescriptionDrugItemsListAdapter(mActivity, this, addVisitsFragment);
+        adapter = new SelectedPrescriptionDrugItemsListAdapter(mActivity, this);
         lvPrescriptionItems.setAdapter(adapter);
         lvPrescriptionItems.setTranscriptMode(AbsListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
         lvPrescriptionItems.setStackFromBottom(true);
@@ -134,6 +135,13 @@ public class AddPrescriptionVisitFragment extends HealthCocoFragment implements 
 
     }
 
+    @Override
+    public AddVisitsFragment getAddVisitFragment() {
+        if (addVisitsFragment == null)
+            addVisitsFragment = (AddVisitsFragment) mFragmentManager.findFragmentByTag(AddVisitsFragment.class.getSimpleName());
+        return addVisitsFragment;
+    }
+
     public void addDrug(DrugItem drug) {
         if (drug != null) {
             drugsListHashMap.put(drug.getDrugId(), drug);
@@ -164,7 +172,24 @@ public class AddPrescriptionVisitFragment extends HealthCocoFragment implements 
         }
     }
 
-    public boolean isBlankPrescription() {
+    public boolean isBlankDrugsList() {
         return Util.isNullOrEmptyList(drugsListHashMap);
+    }
+
+    //setting drug to null and drugId to uniqueId for sending on server
+    public List<DrugItem> getModifiedDrugsList() {
+        if (!Util.isNullOrEmptyList(drugsListHashMap)) {
+            List<DrugItem> modifiedList = new ArrayList<DrugItem>(drugsListHashMap.values());
+//        modifiedList.addAll(drugsList);
+            for (DrugItem drugItem :
+                    modifiedList) {
+                if (drugItem.getDrug() != null) {
+                    drugItem.setDrugId(drugItem.getDrug().getUniqueId());
+                    drugItem.setDrug(null);
+                }
+            }
+            return modifiedList;
+        }
+        return null;
     }
 }

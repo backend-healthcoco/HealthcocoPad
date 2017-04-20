@@ -35,6 +35,7 @@ import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.activities.AddVisitsActivity;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.request.ClinicalNoteToSend;
+import com.healthcoco.healthcocopad.bean.request.PrescriptionRequest;
 import com.healthcoco.healthcocopad.bean.server.AssignedUserUiPermissions;
 import com.healthcoco.healthcocopad.bean.server.BloodPressure;
 import com.healthcoco.healthcocopad.bean.server.ClinicalNotes;
@@ -748,6 +749,7 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
                 break;
             case R.id.bt_lab_tests:
                 if (selectedSuggestionType == null || selectedSuggestionType != SuggestionType.LAB_TESTS) {
+                    addVisibileUiType(VisitsUiType.LAB_TEST);
                     addVisitSuggestionsFragment.refreshTagOfEditText(SuggestionType.LAB_TESTS);
                 }
                 break;
@@ -912,34 +914,24 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
         showHideDiagramsLayout(View.VISIBLE);
     }
 
-    private void showHideLabTestsLayout() {
-        if (parentDiagnosticTests.getVisibility() == View.GONE) {
-            parentDiagnosticTests.setVisibility(View.VISIBLE);
-            visibleViews.add(VisitsUiType.LAB_TEST);
-        } else {
-            parentDiagnosticTests.setVisibility(View.GONE);
-            visibleViews.remove(VisitsUiType.LAB_TEST);
-        }
-    }
-
     private void showHideAdviceLayout() {
         if (layoutParentAdvice.getVisibility() == View.GONE) {
             layoutParentAdvice.setVisibility(View.VISIBLE);
-            visibleViews.add(VisitsUiType.ADVICE);
+            addVisibileUiType(VisitsUiType.ADVICE);
             showOnlyWidget();
         } else {
             layoutParentAdvice.setVisibility(View.GONE);
-            visibleViews.remove(VisitsUiType.ADVICE);
+            removeVisibileUiType(VisitsUiType.ADVICE);
         }
     }
 
     private void showHideClinicalNotesLayout() {
         if (parentClinicalNote.getVisibility() == View.GONE) {
-            visibleViews.add(VisitsUiType.CLINICAL_NOTES);
+            addVisibileUiType(VisitsUiType.CLINICAL_NOTES);
             parentClinicalNote.setVisibility(View.VISIBLE);
         } else {
             parentClinicalNote.setVisibility(View.GONE);
-            visibleViews.remove(VisitsUiType.CLINICAL_NOTES);
+            removeVisibileUiType(VisitsUiType.CLINICAL_NOTES);
         }
     }
 
@@ -1017,9 +1009,9 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
 
     private void showHideDiagramsLayout(int visibility) {
         if (visibility == View.GONE)
-            visibleViews.remove(VisitsUiType.DIAGRAMS);
+            removeVisibileUiType(VisitsUiType.DIAGRAMS);
         else if (!visibleViews.contains(VisitsUiType.DIAGRAMS))
-            visibleViews.add(VisitsUiType.DIAGRAMS);
+            addVisibileUiType(VisitsUiType.DIAGRAMS);
         parentDiagrams.setVisibility(visibility);
     }
 
@@ -1322,12 +1314,16 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
     }
 
     public void onDeleteButtonClick() {
-        int index = mWidget.getCursorIndex();
-        CandidateInfo info = mWidget.getCharacterCandidates(mWidget.getCursorIndex() - 1);
-        boolean replaced = mWidget.replaceCharacters(info.getStart(), info.getEnd(), null);
-        if (replaced) {
-            mWidget.setCursorIndex(index - (info.getEnd() - info.getStart()));
-            isCorrectionMode++;
+        try {
+            int index = mWidget.getCursorIndex();
+            CandidateInfo info = mWidget.getCharacterCandidates(mWidget.getCursorIndex() - 1);
+            boolean replaced = mWidget.replaceCharacters(info.getStart(), info.getEnd(), null);
+            if (replaced) {
+                mWidget.setCursorIndex(index - (info.getEnd() - info.getStart()));
+                isCorrectionMode++;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -1437,7 +1433,19 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
         if (!Util.isNullOrBlank(visitId))
             visitDetails.setVisitId(visitId);
         visitDetails.setClinicalNote(getClinicalNoteToSendDetails());
-//            visitDetails.setPrescription(addNewPrescriptionFragment.getPrescriptionRequestDetails());
+        if (!addPrescriptionVisitFragment.isBlankDrugsList() || !addLabTestVisitFragment.isBlankLabTestsList()) {
+            PrescriptionRequest prescription = new PrescriptionRequest();
+            LogUtils.LOGD(TAG, "Selected patient " + selectedPatient.getLocalPatientName());
+            prescription.setPatientId(selectedPatient.getUserId());
+            prescription.setDoctorId(user.getUniqueId());
+            prescription.setLocationId(user.getForeignLocationId());
+            prescription.setHospitalId(user.getForeignHospitalId());
+            if (visibleViews.contains(VisitsUiType.ADVICE))
+                prescription.setAdvice(Util.getValidatedValueOrNull(etAdvice));
+            prescription.setItems(addPrescriptionVisitFragment.getModifiedDrugsList());
+            prescription.setDiagnosticTests(addLabTestVisitFragment.getLabTestsList());
+            visitDetails.setPrescription(prescription);
+        }
         WebDataServiceImpl.getInstance(mApp).addVisit(VisitDetails.class, visitDetails, this, this);
     }
 
@@ -1454,9 +1462,10 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
                     isBlankClinicalNote = isBlankClinicalNote();
                     break;
                 case PRESCRIPTION:
-                    isBlankPrescription = addPrescriptionVisitFragment.isBlankPrescription();
+                    isBlankPrescription = addPrescriptionVisitFragment.isBlankDrugsList();
                     break;
                 case LAB_TEST:
+                    isBlankLabTest = addLabTestVisitFragment.isBlankLabTestsList();
                     break;
                 case DIAGRAMS:
                     isBlankDiagram = Util.isNullOrEmptyList(diagramsList);
@@ -1677,9 +1686,11 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
             if (intent != null && intent.hasExtra(TAG_VISIBILITY)) {
                 boolean showVisibility = intent.getBooleanExtra(TAG_VISIBILITY, false);
                 if (showVisibility) {
+                    addVisibileUiType(VisitsUiType.ADVICE);
                     parentPrescription.setVisibility(View.VISIBLE);
                     btAdvice.setVisibility(View.VISIBLE);
                 } else {
+                    removeVisibileUiType(VisitsUiType.ADVICE);
                     parentPrescription.setVisibility(View.GONE);
                     btAdvice.setVisibility(View.GONE);
                 }
@@ -1692,13 +1703,25 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
             if (intent != null && intent.hasExtra(TAG_VISIBILITY)) {
                 boolean showVisibility = intent.getBooleanExtra(TAG_VISIBILITY, false);
                 if (showVisibility) {
+                    addVisibileUiType(VisitsUiType.LAB_TEST);
                     parentDiagnosticTests.setVisibility(View.VISIBLE);
                 } else {
+                    removeVisibileUiType(VisitsUiType.LAB_TEST);
                     parentDiagnosticTests.setVisibility(View.GONE);
                 }
             }
         }
     };
+
+    private void addVisibileUiType(VisitsUiType visitsUiType) {
+        if (!visibleViews.contains(visitsUiType))
+            visibleViews.add(visitsUiType);
+    }
+
+    private void removeVisibileUiType(VisitsUiType visitsUiType) {
+        if (visibleViews.contains(visitsUiType))
+            visibleViews.remove(visitsUiType);
+    }
 
     private void handleSelectedSugestionObject(SuggestionType suggestionType, Object selectedSuggestionObject) {
         String text = "";

@@ -18,11 +18,9 @@ import com.healthcoco.healthcocopad.bean.server.DrugDurationUnit;
 import com.healthcoco.healthcocopad.bean.server.DrugItem;
 import com.healthcoco.healthcocopad.bean.server.GenericName;
 import com.healthcoco.healthcocopad.bean.server.User;
-import com.healthcoco.healthcocopad.custom.MyScriptEditText;
 import com.healthcoco.healthcocopad.dialogFragment.CommonListDialogFragmentWithTitle;
 import com.healthcoco.healthcocopad.enums.CommonListDialogType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
-import com.healthcoco.healthcocopad.fragments.AddVisitsFragment;
 import com.healthcoco.healthcocopad.listeners.CommonListDialogItemClickListener;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
 import com.healthcoco.healthcocopad.listeners.SelectedDrugsListItemListener;
@@ -41,9 +39,8 @@ import java.util.Locale;
  */
 
 public class SelectedPrescriptionDrugDoseItemsListViewHolder extends HealthCocoViewHolder implements View.OnClickListener, CommonListDialogItemClickListener,
-        GsonRequest.ErrorListener, LocalDoInBackgroundListenerOptimised, Response.Listener<VolleyResponseBean>, View.OnFocusChangeListener {
+        GsonRequest.ErrorListener, LocalDoInBackgroundListenerOptimised, Response.Listener<VolleyResponseBean> {
 
-    private final AddVisitsFragment addVisitsFragment;
     private DrugItem objData;
     private TextViewFontAwesome btDelete;
     private SelectedDrugsListItemListener templateListener;
@@ -72,12 +69,11 @@ public class SelectedPrescriptionDrugDoseItemsListViewHolder extends HealthCocoV
     private boolean isFrequencyDosageLoaded;
     private User user;
 
-    public SelectedPrescriptionDrugDoseItemsListViewHolder(HealthCocoActivity mActivity, SelectedDrugsListItemListener templateListener, AddVisitsFragment addVisitsFragment) {
+    public SelectedPrescriptionDrugDoseItemsListViewHolder(HealthCocoActivity mActivity, SelectedDrugsListItemListener selectedDrugsListItemListener) {
         super(mActivity);
         this.mActivity = mActivity;
-        this.templateListener = templateListener;
+        this.templateListener = selectedDrugsListItemListener;
         this.mApp = ((HealthCocoApplication) mActivity.getApplication());
-        this.addVisitsFragment = addVisitsFragment;
     }
 
     @Override
@@ -154,8 +150,10 @@ public class SelectedPrescriptionDrugDoseItemsListViewHolder extends HealthCocoV
         tvDirections.setOnClickListener(this);
         tvFrequency.setOnClickListener(this);
         tvDrugDurationUnit.setOnClickListener(this);
-        editDuration.setOnFocusChangeListener(this);
-        etInstruction.setOnFocusChangeListener(this);
+        if (templateListener.getAddVisitFragment() != null) {
+            editDuration.setOnFocusChangeListener(templateListener.getAddVisitFragment().getFocusChangeListener());
+            etInstruction.setOnFocusChangeListener(templateListener.getAddVisitFragment().getFocusChangeListener());
+        }
     }
 
     public void setData(DrugItem item) {
@@ -365,15 +363,5 @@ public class SelectedPrescriptionDrugDoseItemsListViewHolder extends HealthCocoV
     @Override
     public void onPostExecute(VolleyResponseBean aVoid) {
 
-    }
-
-    @Override
-    public void onFocusChange(View v, boolean hasFocus) {
-        if (hasFocus) {
-            if (v instanceof EditText) {
-                addVisitsFragment.initEditTextForWidget((MyScriptEditText) v);
-                addVisitsFragment.showOnlyWidget();
-            }
-        }
     }
 }

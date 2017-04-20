@@ -23,6 +23,7 @@ import com.healthcoco.healthcocopad.utilities.Util;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 /**
  * Created by neha on 19/04/17.
@@ -149,5 +150,13 @@ public class AddLabTestsVisitFragment extends HealthCocoFragment implements View
     @Override
     public void onDeleteItemClicked(DiagnosticTest diagnosticTest) {
         showConfirmationAlertForDrugs(diagnosticTest);
+    }
+
+    public boolean isBlankLabTestsList() {
+        return Util.isNullOrEmptyList(diagnosticTestsListHashMap);
+    }
+
+    public List<DiagnosticTest> getLabTestsList() {
+        return new ArrayList<>(diagnosticTestsListHashMap.values());
     }
 }
