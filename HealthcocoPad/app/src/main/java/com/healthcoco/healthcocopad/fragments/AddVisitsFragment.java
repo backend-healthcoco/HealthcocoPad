@@ -111,7 +111,7 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
     private static final String CHARACTER_TO_REPLACE_COMMA_WITH_SPACES = " , ";
     private static final String CHARACTER_TO_BE_REPLACED = ",";
     private static final int REQUEST_CODE_ADD_CLINICAL_NOTES = 100;
-    private static final float WIDGET_AUTOSCROLL_MARGIN = 150;
+    private static final float WIDGET_AUTOSCROLL_MARGIN = 250;
     private static final float WIDGET_TEXT_SIZE = 40;
     private static final float WIDGET_INT_WIDTH = 4;
     private static final int WIDGET_TEXT_COLOR = 0xFF0077b5;
@@ -278,7 +278,7 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
 
     private void setHeightOfWidgetsAndSuggestions() {
         ViewGroup.LayoutParams layoutParamsSuggestionsList = containerSuggestionsList.getLayoutParams();
-        layoutParamsSuggestionsList.height = (int) (ScreenDimensions.SCREEN_WIDTH * 0.30);
+        layoutParamsSuggestionsList.height = (int) (ScreenDimensions.SCREEN_WIDTH * 0.25);
         containerSuggestionsList.setLayoutParams(layoutParamsSuggestionsList);
 
         ViewGroup.LayoutParams layoutParamsWidget = layoutWidget.getLayoutParams();
@@ -1262,6 +1262,7 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
             refreshSuggestionsList(v, "");
             if (v instanceof EditText)
                 initEditTextForWidget((MyScriptEditText) v, this);
+
         }
     }
 

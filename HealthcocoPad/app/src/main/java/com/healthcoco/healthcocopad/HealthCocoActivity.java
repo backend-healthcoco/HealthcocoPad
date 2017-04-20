@@ -263,11 +263,35 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
                                 .getReference(Reference.class, user.getUniqueId(), latestUpdatedTimeReference, BooleanTypeValues.TRUE, this, this);
                         defaultWebServicesList.add(syncServiceType);
                         break;
+//                    case GET_PRESENT_COMPLAINT_SUGGESTIONS:
+//                        getPresentComplaintSuggestions(user);
+//                        defaultWebServicesList.add(syncServiceType);
+//                        break;
                     case GET_COMPLAINT_SUGGESTIONS:
                         getComplaintSuggestions(user);
                         defaultWebServicesList.add(syncServiceType);
                         break;
-                    case GET_OBSERVATION_SUGESTIONS:
+//                    case GET_HISTORY_OF_PRESENT_COMPLAINT_SUGGESTIONS:
+//                        getHistoryOfPresentComplaintSuggestions(user);
+//                        defaultWebServicesList.add(syncServiceType);
+//                        break;
+//                    case GET_MENSTRUAL_HISTORY_SUGGESTIONS:
+//                        getMenstrualHistorySuggestions(user);
+//                        defaultWebServicesList.add(syncServiceType);
+//                        break;
+//                    case GET_OBSTETRIC_HISTORY_SUGGESTIONS:
+//                        getObstetricHistorySuggestions(user);
+//                        defaultWebServicesList.add(syncServiceType);
+//                        break;
+//                    case GET_GENERAL_EXAMINATION_SUGGESTIONS:
+//                        getGeneralExaminationSuggestions(user);
+//                        defaultWebServicesList.add(syncServiceType);
+//                        break;
+//                    case GET_SYSTEMIC_EXAMINATION_SUGGESTIONS:
+//                        getSystemicExaminationSuggestions(user);
+//                        defaultWebServicesList.add(syncServiceType);
+//                        break;
+                    case GET_OBSERVATION_SUGEGSTIONS:
                         getObservationSuggestions(user);
                         defaultWebServicesList.add(syncServiceType);
                         break;
@@ -275,10 +299,18 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
                         getInvestigationSuggestions(user);
                         defaultWebServicesList.add(syncServiceType);
                         break;
+//                    case GET_PROVISIONAL_DIAGNOSIS_SUGGESTIONS:
+//                        getProvisionalDiagnosisSuggestions(user);
+//                        defaultWebServicesList.add(syncServiceType);
+//                        break;
                     case GET_DIAGNOSIS_SUGGESTIONS:
                         getDiagnosisSuggestions(user);
                         defaultWebServicesList.add(syncServiceType);
                         break;
+//                    case GET_NOTES_SUGGESTIONS:
+//                        getNotesSuggestions(user);
+//                        defaultWebServicesList.add(syncServiceType);
+//                        break;
                     case GET_BLOOD_GROUP:
                         WebDataServiceImpl.getInstance(mApp)
                                 .getBloodGroup(BloodGroup.class, this, this);
@@ -304,6 +336,54 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void getPresentComplaintSuggestions(User user) {
+        Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.PRESENT_COMPLAINT_SUGGESTIONS);
+        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(ComplaintSuggestions.class, WebServiceType.GET_PRESENT_COMPLAINT_SUGGESTIONS, user.getUniqueId(),
+                latestUpdatedTime, this, this);
+    }
+
+    private void getHistoryOfPresentComplaintSuggestions(User user) {
+        Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.HISTORY_OF_PRESENT_COMPLAINT_SUGGESTIONS);
+        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(ComplaintSuggestions.class, WebServiceType.GET_HISTORY_OF_PRESENT_COMPLAINT_SUGGESTIONS, user.getUniqueId(),
+                latestUpdatedTime, this, this);
+    }
+
+    private void getMenstrualHistorySuggestions(User user) {
+        Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.MENSTRUAL_HISTORY_SUGGESTIONS);
+        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(ComplaintSuggestions.class, WebServiceType.GET_MENSTRUAL_HISTORY_SUGGESTIONS, user.getUniqueId(),
+                latestUpdatedTime, this, this);
+    }
+
+    private void getObstetricHistorySuggestions(User user) {
+        Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.OBSTETRIC_HISTORY_SUGGESTIONS);
+        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(ComplaintSuggestions.class, WebServiceType.GET_OBSTETRIC_HISTORY_SUGGESTIONS, user.getUniqueId(),
+                latestUpdatedTime, this, this);
+    }
+
+    private void getGeneralExaminationSuggestions(User user) {
+        Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.GENERAL_EXAMINATION_SUGGESTIONS);
+        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(ComplaintSuggestions.class, WebServiceType.GET_COMPLAINT_SUGGESTIONS, user.getUniqueId(),
+                latestUpdatedTime, this, this);
+    }
+
+    private void getSystemicExaminationSuggestions(User user) {
+        Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.SYSTEMIC_EXAMINATION_SUGGESTIONS);
+        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(ComplaintSuggestions.class, WebServiceType.GET_SYSTEMIC_EXAMINATION_SUGGESTIONS, user.getUniqueId(),
+                latestUpdatedTime, this, this);
+    }
+
+    private void getProvisionalDiagnosisSuggestions(User user) {
+        Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.PROVISIONAL_DIAGNOSIS_SUGGESTIONS);
+        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(ComplaintSuggestions.class, WebServiceType.GET_PROVISIONAL_DIAGNOSIS_SUGGESTIONS, user.getUniqueId(),
+                latestUpdatedTime, this, this);
+    }
+
+    private void getNotesSuggestions(User user) {
+        Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.NOTES_SUGGESTIONS);
+        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(ComplaintSuggestions.class, WebServiceType.GET_NOTES_SUGGESTIONS, user.getUniqueId(),
+                latestUpdatedTime, this, this);
     }
 
     public void syncGroups(User user) {
@@ -388,11 +468,41 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
 ////                        defaultWebServicesList.remove(DefaultSyncServiceType.getSyncType(webServiceType));
 ////                    updateProgress(DefaultSyncServiceType.GET_COMPLAINT_SUGGESTIONS);
 ////                    break;
+//                case GET_PRESENT_COMPLAINT_SUGGESTIONS:
+//                    if (defaultWebServicesList.contains(DefaultSyncServiceType.getSyncType(webServiceType)))
+//                        defaultWebServicesList.remove(DefaultSyncServiceType.getSyncType(webServiceType));
+//                    updateProgress(DefaultSyncServiceType.GET_COMPLAINT_SUGGESTIONS);
+//                    break;
                 case GET_COMPLAINT_SUGGESTIONS:
                     if (defaultWebServicesList.contains(DefaultSyncServiceType.getSyncType(webServiceType)))
                         defaultWebServicesList.remove(DefaultSyncServiceType.getSyncType(webServiceType));
-                    updateProgress(DefaultSyncServiceType.GET_OBSERVATION_SUGESTIONS);
+                    updateProgress(DefaultSyncServiceType.GET_OBSERVATION_SUGEGSTIONS);
                     break;
+//                case GET_HISTORY_OF_PRESENT_COMPLAINT_SUGGESTIONS:
+//                    if (defaultWebServicesList.contains(DefaultSyncServiceType.getSyncType(webServiceType)))
+//                        defaultWebServicesList.remove(DefaultSyncServiceType.getSyncType(webServiceType));
+//                    updateProgress(DefaultSyncServiceType.GET_MENSTRUAL_HISTORY_SUGGESTIONS);
+//                    break;
+//                case GET_MENSTRUAL_HISTORY_SUGGESTIONS:
+//                    if (defaultWebServicesList.contains(DefaultSyncServiceType.getSyncType(webServiceType)))
+//                        defaultWebServicesList.remove(DefaultSyncServiceType.getSyncType(webServiceType));
+//                    updateProgress(DefaultSyncServiceType.GET_OBSTETRIC_HISTORY_SUGGESTIONS);
+//                    break;
+//                case GET_OBSTETRIC_HISTORY_SUGGESTIONS:
+//                    if (defaultWebServicesList.contains(DefaultSyncServiceType.getSyncType(webServiceType)))
+//                        defaultWebServicesList.remove(DefaultSyncServiceType.getSyncType(webServiceType));
+//                    updateProgress(DefaultSyncServiceType.GET_GENERAL_EXAMINATION_SUGGESTIONS);
+//                    break;
+//                case GET_GENERAL_EXAMINATION_SUGGESTIONS:
+//                    if (defaultWebServicesList.contains(DefaultSyncServiceType.getSyncType(webServiceType)))
+//                        defaultWebServicesList.remove(DefaultSyncServiceType.getSyncType(webServiceType));
+//                    updateProgress(DefaultSyncServiceType.GET_SYSTEMIC_EXAMINATION_SUGGESTIONS);
+//                    break;
+//                case GET_SYSTEMIC_EXAMINATION_SUGGESTIONS:
+//                    if (defaultWebServicesList.contains(DefaultSyncServiceType.getSyncType(webServiceType)))
+//                        defaultWebServicesList.remove(DefaultSyncServiceType.getSyncType(webServiceType));
+//                    updateProgress(DefaultSyncServiceType.GET_OBSERVATION_SUGEGSTIONS);
+//                    break;
                 case GET_OBSERVATION_SUGGESTIONS:
                     if (defaultWebServicesList.contains(DefaultSyncServiceType.getSyncType(webServiceType)))
                         defaultWebServicesList.remove(DefaultSyncServiceType.getSyncType(webServiceType));
@@ -403,11 +513,21 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
                         defaultWebServicesList.remove(DefaultSyncServiceType.getSyncType(webServiceType));
                     updateProgress(DefaultSyncServiceType.GET_DIAGNOSIS_SUGGESTIONS);
                     break;
+//                case GET_PROVISIONAL_DIAGNOSIS_SUGGESTIONS:
+//                    if (defaultWebServicesList.contains(DefaultSyncServiceType.getSyncType(webServiceType)))
+//                        defaultWebServicesList.remove(DefaultSyncServiceType.getSyncType(webServiceType));
+//                    updateProgress(DefaultSyncServiceType.GET_DIAGNOSIS_SUGGESTIONS);
+//                    break;
                 case GET_DIAGNOSIS_SUGGESTIONS:
                     if (defaultWebServicesList.contains(DefaultSyncServiceType.getSyncType(webServiceType)))
                         defaultWebServicesList.remove(DefaultSyncServiceType.getSyncType(webServiceType));
                     updateProgress(DefaultSyncServiceType.GET_BLOOD_GROUP);
                     break;
+//                case GET_NOTES_SUGGESTIONS:
+//                    if (defaultWebServicesList.contains(DefaultSyncServiceType.getSyncType(webServiceType)))
+//                        defaultWebServicesList.remove(DefaultSyncServiceType.getSyncType(webServiceType));
+//                    updateProgress(DefaultSyncServiceType.GET_BLOOD_GROUP);
+//                    break;
                 case GET_BLOOD_GROUP:
                     if (defaultWebServicesList.contains(DefaultSyncServiceType.getSyncType(webServiceType)))
                         defaultWebServicesList.remove(DefaultSyncServiceType.getSyncType(webServiceType));
@@ -508,8 +628,26 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
 //                    case GET_MEDICAL_COUNCILS:
 //                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_MEDICAL_COUNCILS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
 //                        break;
+                    case GET_PRESENT_COMPLAINT_SUGGESTIONS:
+                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_PRESENT_COMPLAINT_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                        break;
                     case GET_COMPLAINT_SUGGESTIONS:
                         new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_COMPLAINT_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                        break;
+                    case GET_HISTORY_OF_PRESENT_COMPLAINT_SUGGESTIONS:
+                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_HISTORY_OF_PRESENT_COMPLAINT_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                        break;
+                    case GET_MENSTRUAL_HISTORY_SUGGESTIONS:
+                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_MENSTRUAL_HISTORY_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                        break;
+                    case GET_OBSTETRIC_HISTORY_SUGGESTIONS:
+                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_OBSTETRIC_HISTORY_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                        break;
+                    case GET_GENERAL_EXAMINATION_SUGGESTIONS:
+                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_GENERAL_EXAMINATION_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                        break;
+                    case GET_SYSTEMIC_EXAMINATION_SUGGESTIONS:
+                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_SYSTEMIC_EXAMINATION_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
                         break;
                     case GET_OBSERVATION_SUGGESTIONS:
                         new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_OBSERVATION_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
@@ -517,8 +655,14 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
                     case GET_INVESTIGATION_SUGGESTIONS:
                         new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_INVESTIGATION_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
                         break;
+                    case GET_PROVISIONAL_DIAGNOSIS_SUGGESTIONS:
+                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_PROVISIONAL_DIAGNOSIS_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                        break;
                     case GET_DIAGNOSIS_SUGGESTIONS:
                         new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_DIAGNOSIS_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                        break;
+                    case GET_NOTES_SUGGESTIONS:
+                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_NOTES_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
                         break;
                     case GET_DISEASE_LIST:
                         new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_DISEASE_LIST, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
@@ -617,10 +761,46 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
 //                    LocalDataServiceImpl.getInstance(mApp).
 //                            addMedicalCouncilList((ArrayList<MedicalCouncil>) (ArrayList<?>) response.getDataList());
 //                break;
+            case ADD_PRESENT_COMPLAINT_SUGGESTIONS:
+                if (!Util.isNullOrEmptyList(response.getDataList()))
+                    LocalDataServiceImpl.getInstance(mApp).
+                            addSuggestionsList(WebServiceType.GET_PRESENT_COMPLAINT_SUGGESTIONS, LocalTabelType.PRESENT_COMPLAINT_SUGGESTIONS,
+                                    response.getDataList(), null, null);
+                break;
             case ADD_COMPLAINT_SUGGESTIONS:
                 if (!Util.isNullOrEmptyList(response.getDataList()))
                     LocalDataServiceImpl.getInstance(mApp).
                             addSuggestionsList(WebServiceType.GET_COMPLAINT_SUGGESTIONS, LocalTabelType.COMPLAINT_SUGGESTIONS,
+                                    response.getDataList(), null, null);
+                break;
+            case ADD_HISTORY_OF_PRESENT_COMPLAINT_SUGGESTIONS:
+                if (!Util.isNullOrEmptyList(response.getDataList()))
+                    LocalDataServiceImpl.getInstance(mApp).
+                            addSuggestionsList(WebServiceType.GET_HISTORY_OF_PRESENT_COMPLAINT_SUGGESTIONS, LocalTabelType.HISTORY_OF_PRESENT_COMPLAINT_SUGGESTIONS,
+                                    response.getDataList(), null, null);
+                break;
+            case ADD_MENSTRUAL_HISTORY_SUGGESTIONS:
+                if (!Util.isNullOrEmptyList(response.getDataList()))
+                    LocalDataServiceImpl.getInstance(mApp).
+                            addSuggestionsList(WebServiceType.GET_MENSTRUAL_HISTORY_SUGGESTIONS, LocalTabelType.MENSTRUAL_HISTORY_SUGGESTIONS,
+                                    response.getDataList(), null, null);
+                break;
+            case ADD_OBSTETRIC_HISTORY_SUGGESTIONS:
+                if (!Util.isNullOrEmptyList(response.getDataList()))
+                    LocalDataServiceImpl.getInstance(mApp).
+                            addSuggestionsList(WebServiceType.GET_OBSTETRIC_HISTORY_SUGGESTIONS, LocalTabelType.OBSTETRIC_HISTORY_SUGGESTIONS,
+                                    response.getDataList(), null, null);
+                break;
+            case ADD_GENERAL_EXAMINATION_SUGGESTIONS:
+                if (!Util.isNullOrEmptyList(response.getDataList()))
+                    LocalDataServiceImpl.getInstance(mApp).
+                            addSuggestionsList(WebServiceType.GET_GENERAL_EXAMINATION_SUGGESTIONS, LocalTabelType.GENERAL_EXAMINATION_SUGGESTIONS,
+                                    response.getDataList(), null, null);
+                break;
+            case ADD_SYSTEMIC_EXAMINATION_SUGGESTIONS:
+                if (!Util.isNullOrEmptyList(response.getDataList()))
+                    LocalDataServiceImpl.getInstance(mApp).
+                            addSuggestionsList(WebServiceType.GET_SYSTEMIC_EXAMINATION_SUGGESTIONS, LocalTabelType.SYSTEMIC_EXAMINATION_SUGGESTIONS,
                                     response.getDataList(), null, null);
                 break;
             case ADD_OBSERVATION_SUGGESTIONS:
@@ -635,10 +815,22 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
                             addSuggestionsList(WebServiceType.GET_INVESTIGATION_SUGGESTIONS, LocalTabelType.INVESTIGATION_SUGGESTIONS,
                                     response.getDataList(), null, null);
                 break;
+            case ADD_PROVISIONAL_DIAGNOSIS_SUGGESTIONS:
+                if (!Util.isNullOrEmptyList(response.getDataList()))
+                    LocalDataServiceImpl.getInstance(mApp).
+                            addSuggestionsList(WebServiceType.GET_PROVISIONAL_DIAGNOSIS_SUGGESTIONS, LocalTabelType.PROVISIONAL_DIAGNOSIS_SUGGESTIONS,
+                                    response.getDataList(), null, null);
+                break;
             case ADD_DIAGNOSIS_SUGGESTIONS:
                 if (!Util.isNullOrEmptyList(response.getDataList()))
                     LocalDataServiceImpl.getInstance(mApp).
                             addSuggestionsList(WebServiceType.GET_DIAGNOSIS_SUGGESTIONS, LocalTabelType.DIAGNOSIS_SUGGESTIONS,
+                                    response.getDataList(), null, null);
+                break;
+            case ADD_NOTES_SUGGESTIONS:
+                if (!Util.isNullOrEmptyList(response.getDataList()))
+                    LocalDataServiceImpl.getInstance(mApp).
+                            addSuggestionsList(WebServiceType.GET_NOTES_SUGGESTIONS, LocalTabelType.NOTES_SUGGESTIONS,
                                     response.getDataList(), null, null);
                 break;
             case ADD_DISEASE_LIST:

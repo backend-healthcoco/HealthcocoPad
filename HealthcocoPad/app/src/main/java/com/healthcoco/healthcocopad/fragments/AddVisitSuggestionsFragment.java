@@ -196,7 +196,6 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements
         mActivity.hideLoading();
         progressLoading.setVisibility(View.GONE);
         Util.showToast(mActivity, errorMsg);
-
     }
 
     @Override
@@ -273,9 +272,16 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.bt_add_new:
-                AddNewDrugDialogFragment newDrugDialogFragment = new AddNewDrugDialogFragment(this);
-                newDrugDialogFragment.show(mActivity.getSupportFragmentManager(),
-                        newDrugDialogFragment.getClass().getSimpleName());
+                switch (suggestionType) {
+                    case DRUGS:
+                        AddNewDrugDialogFragment newDrugDialogFragment = new AddNewDrugDialogFragment(this);
+                        newDrugDialogFragment.show(mActivity.getSupportFragmentManager(),
+                                newDrugDialogFragment.getClass().getSimpleName());
+                        break;
+                    default:
+
+                        break;
+                }
                 break;
         }
     }

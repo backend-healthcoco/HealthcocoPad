@@ -144,6 +144,14 @@
     <string name="syncing_contacts">Syncing Contacts&#8230;</string>
     <string name="syncing_education_qualification">Syncing Education Qualification&#8230;</string>
     <string name="syncing_institutes">Syncing Institutes&#8230;</string>
+    <string name="syncing_present_complaint_suggestions">Syncing Present Complaint Suggestions&#8230;</string>
+    <string name="syncing_history_of_present_complaint_suggestions">Syncing History Of Present Complaint Suggestions&#8230;</string>
+    <string name="syncing_menstrual_history_suggestions">Syncing Menstrual History Suggestions&#8230;</string>
+    <string name="syncing_obstetric_history_suggestions">Syncing Obstetric History Suggestions&#8230;</string>
+    <string name="syncing_general_examination_suggestions">Syncing General Examination Suggestions&#8230;</string>
+    <string name="syncing_systemic_examination_suggestions">Syncing Systemic Examination Suggestions&#8230;</string>
+    <string name="syncing_provisional_diagnosis_suggestions">Syncing Provisional Diagnosis Suggestions&#8230;</string>
+    <string name="syncing_notes_suggestions">Syncing Notes Suggestions&#8230;</string>
     <string name="syncing_complaint_suggestions">Syncing Complaint Suggestions&#8230;</string>
     <string name="syncing_observation_suggestions">Syncing Observation Suggestions&#8230;</string>
     <string name="syncing_investigation_suggestions">Syncing Investigation Suggestions&#8230;</string>

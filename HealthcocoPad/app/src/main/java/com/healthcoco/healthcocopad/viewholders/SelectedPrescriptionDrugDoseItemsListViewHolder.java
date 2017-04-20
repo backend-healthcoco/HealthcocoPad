@@ -158,53 +158,6 @@ public class SelectedPrescriptionDrugDoseItemsListViewHolder extends HealthCocoV
         }
     }
 
-    public void setData(DrugItem item) {
-        this.drugItem = item;
-        Drug drug = null;
-        if (drugItem.getDrug() != null) {
-            drug = drugItem.getDrug();
-            drugItem.setDrugId(drug.getUniqueId());
-        } else if (!Util.isNullOrBlank(drugItem.getDrugId())) {
-            drug = LocalDataServiceImpl.getInstance(mApp).getDrug(drugItem.getDrugId());
-            drugItem.setDrug(drug);
-        }
-        if (drug != null) {
-            String drugName = Util.getValidatedValue(drug.getDrugName());
-            if (drug.getDrugType() != null && !Util.isNullOrBlank(drug.getDrugType().getType()))
-                drugName = drug.getDrugType().getType() + " " + drugName;
-            tvName.setText(drugName);
-        }
-        String genericNamesFormatted = "";
-        if (!Util.isNullOrEmptyList(drug.getGenericNames())) {
-            for (GenericName genericName : drug.getGenericNames()) {
-                int index = drug.getGenericNames().indexOf(genericName);
-                genericNamesFormatted = genericNamesFormatted + " " + genericName.getName();
-                if (index != drug.getGenericNames().size() - 1)
-                    genericNamesFormatted = genericNamesFormatted + GENERIC_NAME_SEPARATOR;
-            }
-            tvGenericName.setText(genericNamesFormatted);
-        }
-        if (!Util.isNullOrEmptyList(drug.getDirection())) {
-            DrugDirection direction = drug.getDirection().get(0);
-            tvDirections.setText(Util.getValidatedValue((direction.getDirection())));
-        }
-
-        if (!Util.isNullOrBlank(drug.getDosage()))
-            tvFrequency.setText(drug.getDosage());
-
-        if (drug.getDuration() != null && !Util.isNullOrBlank(drug.getDuration().getValue()))
-            editDuration.setText(drug.getDuration().getValue());
-
-        if (drug.getDuration() != null && drug.getDuration().getDurationUnit() != null && !Util.isNullOrBlank(drug.getDuration().getDurationUnit().getUnit()))
-            tvDrugDurationUnit.setText(drug.getDuration().getDurationUnit().getUnit());
-
-        //initialising instructions popup
-        if (!Util.isNullOrBlank(item.getInstructions())) {
-            etInstruction.setVisibility(View.VISIBLE);
-            etInstruction.setText(Util.getValidatedValue(item.getInstructions()));
-        }
-    }
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
