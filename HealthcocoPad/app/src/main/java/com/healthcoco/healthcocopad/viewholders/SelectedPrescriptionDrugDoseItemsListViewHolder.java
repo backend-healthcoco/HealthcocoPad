@@ -16,6 +16,7 @@ import com.healthcoco.healthcocopad.bean.server.DrugDirection;
 import com.healthcoco.healthcocopad.bean.server.DrugDosage;
 import com.healthcoco.healthcocopad.bean.server.DrugDurationUnit;
 import com.healthcoco.healthcocopad.bean.server.DrugItem;
+import com.healthcoco.healthcocopad.bean.server.Duration;
 import com.healthcoco.healthcocopad.bean.server.GenericName;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.dialogFragment.CommonListDialogFragmentWithTitle;
@@ -27,6 +28,7 @@ import com.healthcoco.healthcocopad.listeners.SelectedDrugsListItemListener;
 import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
+import com.healthcoco.healthcocopad.utilities.ReflectionUtil;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.healthcoco.healthcocopad.views.TextViewFontAwesome;
 
@@ -364,4 +366,45 @@ public class SelectedPrescriptionDrugDoseItemsListViewHolder extends HealthCocoV
     public void onPostExecute(VolleyResponseBean aVoid) {
 
     }
+
+    public DrugItem getDrug() {
+        if (selectedDirection != null) {
+            ArrayList<DrugDirection> directionsList = new ArrayList<DrugDirection>();
+            directionsList.add(getDirection(selectedDirection));
+            objData.setDirection(directionsList);
+        }
+        if (selectedDurationUnit != null) {
+            objData.setDuration(getDuration(Util.getValidatedValueOrNull(editDuration), selectedDurationUnit));
+        }
+        if (selectedDosage != null) {
+            objData.setDosage(Util.getValidatedValueOrNull(selectedDosage.getDosage()));
+        }
+        objData.setInstructions(Util.getValidatedValueOrNull(etInstruction));
+
+        return objData;
+    }
+
+    private DrugDirection getDirection(DrugDirection selectedDirection) {
+        try {
+            DrugDirection direction = new DrugDirection();
+            ReflectionUtil.copy(direction, selectedDirection);
+            direction.setDiscarded(null);
+            return direction;
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        }
+        return selectedDirection;
+    }
+
+    private Duration getDuration(String value, DrugDurationUnit drugDurationUnit) {
+        if (!Util.isNullOrBlank(value) && drugDurationUnit != null && !Util.isNullOrBlank(drugDurationUnit.getUnit())) {
+            Duration duration = new Duration();
+            duration.setDurationUnit(drugDurationUnit);
+            duration.setValue(value);
+            return duration;
+        }
+        return null;
+    }
+
 }

@@ -19,7 +19,9 @@ import com.healthcoco.healthcocopad.adapter.SelectedPrescriptionDrugItemsListAda
 import com.healthcoco.healthcocopad.bean.server.DrugItem;
 import com.healthcoco.healthcocopad.custom.MyScriptEditText;
 import com.healthcoco.healthcocopad.listeners.SelectedDrugsListItemListener;
+import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
+import com.healthcoco.healthcocopad.viewholders.SelectedPrescriptionDrugDoseItemsListViewHolder;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -178,6 +180,17 @@ public class AddPrescriptionVisitFragment extends HealthCocoFragment implements 
 
     //setting drug to null and drugId to uniqueId for sending on server
     public List<DrugItem> getModifiedDrugsList() {
+        if (lvPrescriptionItems.getChildCount() > 0) {
+            for (int i = 0; i < lvPrescriptionItems.getChildCount(); i++) {
+                View child = lvPrescriptionItems.getChildAt(i);
+                if (child.getTag() != null && child.getTag() instanceof SelectedPrescriptionDrugDoseItemsListViewHolder) {
+                    SelectedPrescriptionDrugDoseItemsListViewHolder viewHolder = (SelectedPrescriptionDrugDoseItemsListViewHolder) child.getTag();
+                    DrugItem modifiedDrug = viewHolder.getDrug();
+                    LogUtils.LOGD(TAG, "Drug " + modifiedDrug.getDrug().getDrugName());
+                    drugsListHashMap.put(modifiedDrug.getDrugId(), modifiedDrug);
+                }
+            }
+        }
         if (!Util.isNullOrEmptyList(drugsListHashMap)) {
             List<DrugItem> modifiedList = new ArrayList<DrugItem>(drugsListHashMap.values());
 //        modifiedList.addAll(drugsList);

@@ -1382,7 +1382,7 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
     }
 
     private void validateData() {
-        new AsyncTask<Void, Void, Integer>() {
+        new AsyncTask<Void, Void, Object>() {
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
@@ -1390,26 +1390,54 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
             }
 
             @Override
-            protected Integer doInBackground(Void... params) {
+            protected Object doInBackground(Void... params) {
                 int msgId;
                 if (isBlankVisit()) {
                     msgId = R.string.alert_blank_visit;
                 } else msgId = getValidatedUiMsgId();
-
-                return msgId;
+                if (msgId == 0)
+                    return getVisitRequestObjectToSend();
+                else {
+                    return msgId;
+                }
             }
 
             @Override
-            protected void onPostExecute(Integer msgId) {
-                super.onPostExecute(msgId);
-                if (msgId == 0)
-                    addVisit();
-                else {
-                    Util.showToast(mActivity, msgId);
+            protected void onPostExecute(Object object) {
+                super.onPostExecute(object);
+                if (object instanceof VisitDetails)
+                    addVisit((VisitDetails) object);
+                else if (object instanceof Integer) {
+                    Util.showToast(mActivity, (Integer) object);
                     mActivity.hideLoading();
                 }
             }
         }.execute();
+    }
+
+    private VisitDetails getVisitRequestObjectToSend() {
+        VisitDetails visitDetails = new VisitDetails();
+        visitDetails.setDoctorId(user.getUniqueId());
+        visitDetails.setLocationId(user.getForeignLocationId());
+        visitDetails.setHospitalId(user.getForeignHospitalId());
+        visitDetails.setPatientId(HealthCocoConstants.SELECTED_PATIENTS_USER_ID);
+        if (!Util.isNullOrBlank(visitId))
+            visitDetails.setVisitId(visitId);
+        visitDetails.setClinicalNote(getClinicalNoteToSendDetails());
+        if (!addPrescriptionVisitFragment.isBlankDrugsList() || !addLabTestVisitFragment.isBlankLabTestsList()) {
+            PrescriptionRequest prescription = new PrescriptionRequest();
+            LogUtils.LOGD(TAG, "Selected patient " + selectedPatient.getLocalPatientName());
+            prescription.setPatientId(selectedPatient.getUserId());
+            prescription.setDoctorId(user.getUniqueId());
+            prescription.setLocationId(user.getForeignLocationId());
+            prescription.setHospitalId(user.getForeignHospitalId());
+            if (visibleViews.contains(VisitsUiType.ADVICE))
+                prescription.setAdvice(Util.getValidatedValueOrNull(etAdvice));
+            prescription.setItems(addPrescriptionVisitFragment.getModifiedDrugsList());
+            prescription.setDiagnosticTests(addLabTestVisitFragment.getLabTestsList());
+            visitDetails.setPrescription(prescription);
+        }
+        return visitDetails;
     }
 
     private int getValidatedUiMsgId() {
@@ -1436,28 +1464,7 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
         return msgId;
     }
 
-    private void addVisit() {
-        VisitDetails visitDetails = new VisitDetails();
-        visitDetails.setDoctorId(user.getUniqueId());
-        visitDetails.setLocationId(user.getForeignLocationId());
-        visitDetails.setHospitalId(user.getForeignHospitalId());
-        visitDetails.setPatientId(HealthCocoConstants.SELECTED_PATIENTS_USER_ID);
-        if (!Util.isNullOrBlank(visitId))
-            visitDetails.setVisitId(visitId);
-        visitDetails.setClinicalNote(getClinicalNoteToSendDetails());
-        if (!addPrescriptionVisitFragment.isBlankDrugsList() || !addLabTestVisitFragment.isBlankLabTestsList()) {
-            PrescriptionRequest prescription = new PrescriptionRequest();
-            LogUtils.LOGD(TAG, "Selected patient " + selectedPatient.getLocalPatientName());
-            prescription.setPatientId(selectedPatient.getUserId());
-            prescription.setDoctorId(user.getUniqueId());
-            prescription.setLocationId(user.getForeignLocationId());
-            prescription.setHospitalId(user.getForeignHospitalId());
-            if (visibleViews.contains(VisitsUiType.ADVICE))
-                prescription.setAdvice(Util.getValidatedValueOrNull(etAdvice));
-            prescription.setItems(addPrescriptionVisitFragment.getModifiedDrugsList());
-            prescription.setDiagnosticTests(addLabTestVisitFragment.getLabTestsList());
-            visitDetails.setPrescription(prescription);
-        }
+    private void addVisit(VisitDetails visitDetails) {
         WebDataServiceImpl.getInstance(mApp).addVisit(VisitDetails.class, visitDetails, this, this);
     }
 
@@ -1698,11 +1705,11 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
             if (intent != null && intent.hasExtra(TAG_VISIBILITY)) {
                 boolean showVisibility = intent.getBooleanExtra(TAG_VISIBILITY, false);
                 if (showVisibility) {
-                    addVisibileUiType(VisitsUiType.ADVICE);
+                    addVisibileUiType(VisitsUiType.PRESCRIPTION);
                     parentPrescription.setVisibility(View.VISIBLE);
                     btAdvice.setVisibility(View.VISIBLE);
                 } else {
-                    removeVisibileUiType(VisitsUiType.ADVICE);
+                    removeVisibileUiType(VisitsUiType.PRESCRIPTION);
                     parentPrescription.setVisibility(View.GONE);
                     btAdvice.setVisibility(View.GONE);
                 }
