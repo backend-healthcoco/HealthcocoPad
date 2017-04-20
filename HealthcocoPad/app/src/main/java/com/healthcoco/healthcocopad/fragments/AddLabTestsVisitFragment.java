@@ -146,10 +146,6 @@ public class AddLabTestsVisitFragment extends HealthCocoFragment implements View
         }
     }
 
-    public boolean isBlankPrescription() {
-        return Util.isNullOrEmptyList(diagnosticTestsListHashMap);
-    }
-
     @Override
     public void onDeleteItemClicked(DiagnosticTest diagnosticTest) {
         showConfirmationAlertForDrugs(diagnosticTest);

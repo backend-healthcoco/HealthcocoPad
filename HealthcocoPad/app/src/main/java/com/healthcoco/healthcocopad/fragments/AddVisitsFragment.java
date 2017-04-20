@@ -402,13 +402,24 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
         tvPreviousArrow.setOnClickListener(this);
         tvNextArrow.setOnClickListener(this);
         etAdvice.setOnTouchListener(this);
+
+        //initialising vital signs editTexts listeners
         editBodyTemperature.setOnTouchListener(this);
+        editBodyTemperature.setOnFocusChangeListener(this);
         editWeight.setOnTouchListener(this);
+        editWeight.setOnFocusChangeListener(this);
         editHeartRate.setOnTouchListener(this);
+        editHeartRate.setOnFocusChangeListener(this);
         editRespRate.setOnTouchListener(this);
+        editRespRate.setOnFocusChangeListener(this);
         editSpo2.setOnTouchListener(this);
+        editSpo2.setOnFocusChangeListener(this);
         editDiastolic.setOnTouchListener(this);
+        editDiastolic.setOnFocusChangeListener(this);
         editSystolic.setOnTouchListener(this);
+        editSystolic.setOnFocusChangeListener(this);
+
+
         btPrescription.setOnFocusChangeListener(this);
         setViewToWidget();
     }
@@ -956,10 +967,14 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
                             selectedSuggestionType = SuggestionType.DIAGNOSIS;
                             searchTerm = getLastTextAfterCharacterToBeReplaced(searchTerm);
                             break;
+                        default:
+                            selectedSuggestionType = null;
                     }
                 }
             } else if (tag instanceof SuggestionType)
                 selectedSuggestionType = (SuggestionType) tag;
+            else
+                selectedSuggestionType = null;
             if (selectedSuggestionType != null) {
                 containerSuggestionsList.setVisibility(View.VISIBLE);
                 try {
