@@ -1,5 +1,6 @@
 package com.healthcoco.healthcocopad.enums;
 
+import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.server.UserGroups;
 import com.healthcoco.healthcocopad.utilities.StringUtil;
 
@@ -21,7 +22,15 @@ public enum LocalTabelType {
     OBSTETRIC_HISTORY_SUGGESTIONS,
     GENERAL_EXAMINATION_SUGGESTIONS,
     SYSTEMIC_EXAMINATION_SUGGESTIONS,
-    PROVISIONAL_DIAGNOSIS_SUGGESTIONS;
+    PROVISIONAL_DIAGNOSIS_SUGGESTIONS,
+    ECG_DETAILS_SUGGESTIONS,
+    ECHO_SUGGESTIONS,
+    X_RAY_DETAILS_SUGGESTIONS,
+    HOLTER_SUGGESTIONS,
+    PA_SUGGESTIONS,
+    PV_SUGGESTIONS,
+    PS_SUGGESTIONS,
+    INDICATION_OF_USG_SUGGESTIONS;
 
     private String tableName = null;
 
@@ -36,4 +45,4 @@ public enum LocalTabelType {
     public String getTableName() {
         return tableName;
     }
-   }
+}

@@ -78,6 +78,22 @@ public class LocalDatabaseUtils {
     public static final String JSON_KEY_REFERENCE = "reference";
     public static final String KEY_GROUP_IDS_JSON_STRING = "group_ids_json_string";
     public static final String KEY_TABLE_NAME = "table_name";
+    public static final String KEY_PRESENT_COMPLAINT = "presentComplaint";
+    public static final String KEY_HISTORY_OF_PRESENT_COMPLAINT = "historyOfPresentComplaint";
+    public static final String KEY_MENSTRUAL_HISTORY = "menstrualHistory";
+    public static final String KEY_OBSTETRIC_HISTORY = "obstetricHistory";
+    public static final String KEY_GENERAL_EXAMINATION = "generalExamination";
+    public static final String KEY_SYSTEMIC_EXAMINATION = "systemicExamination";
+    public static final String KEY_PROVISIONAL_DIAGNOSIS = "provisionalDiagnosis";
+    public static final String KEY_NOTES = "notes";
+    public static final String KEY_ECG_DETAILS = "ecgDetail";
+    public static final String KEY_ECHO = "echo";
+    public static final String KEY_X_RAY_DETAILS = "xRayDetail";
+    public static final String KEY_HOLTER = "holter";
+    public static final String KEY_PA = "pa";
+    public static final String KEY_PV = "pv";
+    public static final String KEY_PS = "ps";
+    public static final String KEY_INDICATION_OF_USG = "indicationOfUsg";
 
     public static String KEY_FOREIGN_ROLE_ID = "foreign_role_id";
     public static final String KEY_FOREIGN_MEDICAL_HISTORY_ID = "foreign_medical_history_id";
@@ -90,6 +106,7 @@ public class LocalDatabaseUtils {
     public static final String KEY_OBSERVATION = "observation";
     public static final String KEY_INVESTIGATION = "investigation";
     public static final String KEY_DIAGNOSIS = "diagnosis";
+
     public static String getSearchTermEqualsIgnoreCaseQuery(String filedName, String value) {
         return filedName + " LIKE \"%" + value + "%\"" + " COLLATE NOCASE ";
     }

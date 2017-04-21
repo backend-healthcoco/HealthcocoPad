@@ -16,92 +16,7 @@ import com.healthcoco.healthcocopad.bean.UIPermissions;
 import com.healthcoco.healthcocopad.bean.UiPermissionsBoth;
 import com.healthcoco.healthcocopad.bean.UserPermissionsResponse;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
-import com.healthcoco.healthcocopad.bean.server.APILatestUpdatedTimes;
-import com.healthcoco.healthcocopad.bean.server.AccessModule;
-import com.healthcoco.healthcocopad.bean.server.Achievement;
-import com.healthcoco.healthcocopad.bean.server.AlreadyRegisteredPatientsResponse;
-import com.healthcoco.healthcocopad.bean.server.AppointmentSlot;
-import com.healthcoco.healthcocopad.bean.server.AssignedUserUiPermissions;
-import com.healthcoco.healthcocopad.bean.server.BloodGroup;
-import com.healthcoco.healthcocopad.bean.server.BloodPressure;
-import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
-import com.healthcoco.healthcocopad.bean.server.CityResponse;
-import com.healthcoco.healthcocopad.bean.server.ClinicDetailResponse;
-import com.healthcoco.healthcocopad.bean.server.ClinicDoctorProfile;
-import com.healthcoco.healthcocopad.bean.server.ClinicImage;
-import com.healthcoco.healthcocopad.bean.server.ClinicWorkingSchedule;
-import com.healthcoco.healthcocopad.bean.server.ClinicalNotes;
-import com.healthcoco.healthcocopad.bean.server.CollegeUniversityInstitute;
-import com.healthcoco.healthcocopad.bean.server.Complaint;
-import com.healthcoco.healthcocopad.bean.server.ComplaintSuggestions;
-import com.healthcoco.healthcocopad.bean.server.ConsultationFee;
-import com.healthcoco.healthcocopad.bean.server.Diagnoses;
-import com.healthcoco.healthcocopad.bean.server.DiagnosisSuggestions;
-import com.healthcoco.healthcocopad.bean.server.DiagnosticTest;
-import com.healthcoco.healthcocopad.bean.server.DiagnosticTestsPrescription;
-import com.healthcoco.healthcocopad.bean.server.Diagram;
-import com.healthcoco.healthcocopad.bean.server.Disease;
-import com.healthcoco.healthcocopad.bean.server.DoctorClinicProfile;
-import com.healthcoco.healthcocopad.bean.server.DoctorExperience;
-import com.healthcoco.healthcocopad.bean.server.DoctorExperienceDetail;
-import com.healthcoco.healthcocopad.bean.server.DoctorProfile;
-import com.healthcoco.healthcocopad.bean.server.DoctorRegistrationDetail;
-import com.healthcoco.healthcocopad.bean.server.DoctorWorkingSchedule;
-import com.healthcoco.healthcocopad.bean.server.Drug;
-import com.healthcoco.healthcocopad.bean.server.DrugDirection;
-import com.healthcoco.healthcocopad.bean.server.DrugDosage;
-import com.healthcoco.healthcocopad.bean.server.DrugDurationUnit;
-import com.healthcoco.healthcocopad.bean.server.DrugItem;
-import com.healthcoco.healthcocopad.bean.server.DrugType;
-import com.healthcoco.healthcocopad.bean.server.DrugsAndAllergies;
-import com.healthcoco.healthcocopad.bean.server.Duration;
-import com.healthcoco.healthcocopad.bean.server.Education;
-import com.healthcoco.healthcocopad.bean.server.EducationQualification;
-import com.healthcoco.healthcocopad.bean.server.EmailAddress;
-import com.healthcoco.healthcocopad.bean.server.ForeignAppointmentBookingNumber;
-import com.healthcoco.healthcocopad.bean.server.ForeignComplaintsTable;
-import com.healthcoco.healthcocopad.bean.server.ForeignDiagnosesTable;
-import com.healthcoco.healthcocopad.bean.server.ForeignInvestigationsTable;
-import com.healthcoco.healthcocopad.bean.server.ForeignObservationsTable;
-import com.healthcoco.healthcocopad.bean.server.ForeignOtherEmailAddresses;
-import com.healthcoco.healthcocopad.bean.server.ForeignProfessionalMemberships;
-import com.healthcoco.healthcocopad.bean.server.ForeignSpecialities;
-import com.healthcoco.healthcocopad.bean.server.ForieignAdditionalNumbers;
-import com.healthcoco.healthcocopad.bean.server.GCMRequest;
-import com.healthcoco.healthcocopad.bean.server.GeneratedOtpTime;
-import com.healthcoco.healthcocopad.bean.server.HistoryDetailsResponse;
-import com.healthcoco.healthcocopad.bean.server.Hospital;
-import com.healthcoco.healthcocopad.bean.server.Investigation;
-import com.healthcoco.healthcocopad.bean.server.InvestigationSuggestions;
-import com.healthcoco.healthcocopad.bean.server.LinkedTableDirection;
-import com.healthcoco.healthcocopad.bean.server.Location;
-import com.healthcoco.healthcocopad.bean.server.LocationAndAccessControl;
-import com.healthcoco.healthcocopad.bean.server.LoginResponse;
-import com.healthcoco.healthcocopad.bean.server.MedicalCouncil;
-import com.healthcoco.healthcocopad.bean.server.MedicalFamilyHistoryDetails;
-import com.healthcoco.healthcocopad.bean.server.Notes;
-import com.healthcoco.healthcocopad.bean.server.Observation;
-import com.healthcoco.healthcocopad.bean.server.ObservationSuggestions;
-import com.healthcoco.healthcocopad.bean.server.OtpVerification;
-import com.healthcoco.healthcocopad.bean.server.Patient;
-import com.healthcoco.healthcocopad.bean.server.PatientTreatment;
-import com.healthcoco.healthcocopad.bean.server.Prescription;
-import com.healthcoco.healthcocopad.bean.server.Profession;
-import com.healthcoco.healthcocopad.bean.server.Records;
-import com.healthcoco.healthcocopad.bean.server.Reference;
-import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
-import com.healthcoco.healthcocopad.bean.server.Relations;
-import com.healthcoco.healthcocopad.bean.server.Role;
-import com.healthcoco.healthcocopad.bean.server.Specialities;
-import com.healthcoco.healthcocopad.bean.server.SyncAll;
-import com.healthcoco.healthcocopad.bean.server.TempTemplate;
-import com.healthcoco.healthcocopad.bean.server.Treatments;
-import com.healthcoco.healthcocopad.bean.server.User;
-import com.healthcoco.healthcocopad.bean.server.UserGroups;
-import com.healthcoco.healthcocopad.bean.server.VisitDetails;
-import com.healthcoco.healthcocopad.bean.server.VisitedForTypeTable;
-import com.healthcoco.healthcocopad.bean.server.VitalSigns;
-import com.healthcoco.healthcocopad.bean.server.WorkingHours;
+import com.healthcoco.healthcocopad.bean.server.*;
 import com.healthcoco.healthcocopad.enums.AdvanceSearchOptionsType;
 import com.healthcoco.healthcocopad.enums.BooleanTypeValues;
 import com.healthcoco.healthcocopad.enums.FilterItemType;
@@ -114,6 +29,8 @@ import com.healthcoco.healthcocopad.enums.VisitedForType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.enums.WeekDayNameType;
 import com.healthcoco.healthcocopad.fragments.ClinicalProfileFragment;
+import com.healthcoco.healthcocopad.fragments.HistoryPresentComplaintSuggestions;
+import com.healthcoco.healthcocopad.fragments.MenstrualHistorySuggestions;
 import com.healthcoco.healthcocopad.fragments.MenuDrawerFragment;
 import com.healthcoco.healthcocopad.fragments.PatientRegistrationFragment;
 import com.healthcoco.healthcocopad.services.GsonRequest;
@@ -821,10 +738,40 @@ public class LocalDataServiceImpl {
                 if (!Util.isNullOrEmptyList(tempDiagnosisList))
                     latestUpdatedTime = tempDiagnosisList.get(0).getUpdatedTime();
                 break;
+            case PRESENT_COMPLAINT_SUGGESTIONS:
+                List<PresentComplaintSuggestions> tempPresentComplaintSuggestionsList = PresentComplaintSuggestions.find(PresentComplaintSuggestions.class, null, null, null, "updated_time DESC", "1");
+                if (!Util.isNullOrEmptyList(tempPresentComplaintSuggestionsList))
+                    latestUpdatedTime = tempPresentComplaintSuggestionsList.get(0).getUpdatedTime();
+                break;
             case COMPLAINT_SUGGESTIONS:
                 List<ComplaintSuggestions> tempComplaintSuggestionsLists = ComplaintSuggestions.find(ComplaintSuggestions.class, null, null, null, "updated_time DESC", "1");
                 if (!Util.isNullOrEmptyList(tempComplaintSuggestionsLists))
                     latestUpdatedTime = tempComplaintSuggestionsLists.get(0).getUpdatedTime();
+                break;
+            case HISTORY_OF_PRESENT_COMPLAINT_SUGGESTIONS:
+                List<HistoryPresentComplaintSuggestions> historyPresentComplaintSuggestionsList = HistoryPresentComplaintSuggestions.find(HistoryPresentComplaintSuggestions.class, null, null, null, "updated_time DESC", "1");
+                if (!Util.isNullOrEmptyList(historyPresentComplaintSuggestionsList))
+                    latestUpdatedTime = historyPresentComplaintSuggestionsList.get(0).getUpdatedTime();
+                break;
+            case MENSTRUAL_HISTORY_SUGGESTIONS:
+                List<MenstrualHistorySuggestions> menstrualHistorySuggestionsList = MenstrualHistorySuggestions.find(MenstrualHistorySuggestions.class, null, null, null, "updated_time DESC", "1");
+                if (!Util.isNullOrEmptyList(menstrualHistorySuggestionsList))
+                    latestUpdatedTime = menstrualHistorySuggestionsList.get(0).getUpdatedTime();
+                break;
+            case OBSTETRIC_HISTORY_SUGGESTIONS:
+                List<ObstetricHistorySuggestions> obstetricHistorySuggestionsList = ObstetricHistorySuggestions.find(ObstetricHistorySuggestions.class, null, null, null, "updated_time DESC", "1");
+                if (!Util.isNullOrEmptyList(obstetricHistorySuggestionsList))
+                    latestUpdatedTime = obstetricHistorySuggestionsList.get(0).getUpdatedTime();
+                break;
+            case GENERAL_EXAMINATION_SUGGESTIONS:
+                List<GeneralExaminationSuggestions> generalExaminationSuggestionsList = GeneralExaminationSuggestions.find(GeneralExaminationSuggestions.class, null, null, null, "updated_time DESC", "1");
+                if (!Util.isNullOrEmptyList(generalExaminationSuggestionsList))
+                    latestUpdatedTime = generalExaminationSuggestionsList.get(0).getUpdatedTime();
+                break;
+            case SYSTEMIC_EXAMINATION_SUGGESTIONS:
+                List<SystemicExaminationSuggestions> systemicExaminationSuggestionsList = SystemicExaminationSuggestions.find(SystemicExaminationSuggestions.class, null, null, null, "updated_time DESC", "1");
+                if (!Util.isNullOrEmptyList(systemicExaminationSuggestionsList))
+                    latestUpdatedTime = systemicExaminationSuggestionsList.get(0).getUpdatedTime();
                 break;
             case OBSERVATION_SUGGESTIONS:
                 List<ObservationSuggestions> tempObservationSuggestionsList = ObservationSuggestions.find(ObservationSuggestions.class, null, null, null, "updated_time DESC", "1");
@@ -836,10 +783,60 @@ public class LocalDataServiceImpl {
                 if (!Util.isNullOrEmptyList(tempInvestigationSuggestionsList))
                     latestUpdatedTime = tempInvestigationSuggestionsList.get(0).getUpdatedTime();
                 break;
+            case PROVISIONAL_DIAGNOSIS_SUGGESTIONS:
+                List<ProvisionalDiagnosisSuggestions> provisionalDiagnosisSuggestionsList = ProvisionalDiagnosisSuggestions.find(ProvisionalDiagnosisSuggestions.class, null, null, null, "updated_time DESC", "1");
+                if (!Util.isNullOrEmptyList(provisionalDiagnosisSuggestionsList))
+                    latestUpdatedTime = provisionalDiagnosisSuggestionsList.get(0).getUpdatedTime();
+                break;
             case DIAGNOSIS_SUGGESTIONS:
                 List<DiagnosisSuggestions> tempDiagnosisSuggestionsList = DiagnosisSuggestions.find(DiagnosisSuggestions.class, null, null, null, "updated_time DESC", "1");
                 if (!Util.isNullOrEmptyList(tempDiagnosisSuggestionsList))
                     latestUpdatedTime = tempDiagnosisSuggestionsList.get(0).getUpdatedTime();
+                break;
+            case NOTES_SUGGESTIONS:
+                List<NotesSuggestions> notesSuggestionsList = NotesSuggestions.find(NotesSuggestions.class, null, null, null, "updated_time DESC", "1");
+                if (!Util.isNullOrEmptyList(notesSuggestionsList))
+                    latestUpdatedTime = notesSuggestionsList.get(0).getUpdatedTime();
+                break;
+            case ECG_DETAILS_SUGGESTIONS:
+                List<EcgDetailSuggestions> ecgDetailSuggestionsList = EcgDetailSuggestions.find(EcgDetailSuggestions.class, null, null, null, "updated_time DESC", "1");
+                if (!Util.isNullOrEmptyList(ecgDetailSuggestionsList))
+                    latestUpdatedTime = ecgDetailSuggestionsList.get(0).getUpdatedTime();
+                break;
+            case ECHO_SUGGESTIONS:
+                List<EchoSuggestions> echoSuggestionsList = EchoSuggestions.find(EchoSuggestions.class, null, null, null, "updated_time DESC", "1");
+                if (!Util.isNullOrEmptyList(echoSuggestionsList))
+                    latestUpdatedTime = echoSuggestionsList.get(0).getUpdatedTime();
+                break;
+            case X_RAY_DETAILS_SUGGESTIONS:
+                List<XrayDetailSuggestions> xrayDetailSuggestionsList = XrayDetailSuggestions.find(XrayDetailSuggestions.class, null, null, null, "updated_time DESC", "1");
+                if (!Util.isNullOrEmptyList(xrayDetailSuggestionsList))
+                    latestUpdatedTime = xrayDetailSuggestionsList.get(0).getUpdatedTime();
+                break;
+            case HOLTER_SUGGESTIONS:
+                List<HolterSuggestions> holterSuggestionsList = HolterSuggestions.find(HolterSuggestions.class, null, null, null, "updated_time DESC", "1");
+                if (!Util.isNullOrEmptyList(holterSuggestionsList))
+                    latestUpdatedTime = holterSuggestionsList.get(0).getUpdatedTime();
+                break;
+            case PA_SUGGESTIONS:
+                List<PaSuggestions> paSuggestionsList = PaSuggestions.find(PaSuggestions.class, null, null, null, "updated_time DESC", "1");
+                if (!Util.isNullOrEmptyList(paSuggestionsList))
+                    latestUpdatedTime = paSuggestionsList.get(0).getUpdatedTime();
+                break;
+            case PV_SUGGESTIONS:
+                List<PvSuggestions> pvSuggestionsList = PvSuggestions.find(PvSuggestions.class, null, null, null, "updated_time DESC", "1");
+                if (!Util.isNullOrEmptyList(pvSuggestionsList))
+                    latestUpdatedTime = pvSuggestionsList.get(0).getUpdatedTime();
+                break;
+            case PS_SUGGESTIONS:
+                List<PsSuggestions> psSuggestionsList = PsSuggestions.find(PsSuggestions.class, null, null, null, "updated_time DESC", "1");
+                if (!Util.isNullOrEmptyList(psSuggestionsList))
+                    latestUpdatedTime = psSuggestionsList.get(0).getUpdatedTime();
+                break;
+            case INDICATION_OF_USG_SUGGESTIONS:
+                List<IndicationOfUsgSuggestions> indicationOfUsgSuggestionsList = IndicationOfUsgSuggestions.find(IndicationOfUsgSuggestions.class, null, null, null, "updated_time DESC", "1");
+                if (!Util.isNullOrEmptyList(indicationOfUsgSuggestionsList))
+                    latestUpdatedTime = indicationOfUsgSuggestionsList.get(0).getUpdatedTime();
                 break;
             case DRUG_DOSAGE:
                 List<DrugDosage> doasageList = DrugDosage.find(DrugDosage.class, null, null, null, "updated_time DESC", "1");
@@ -1241,9 +1238,33 @@ public class LocalDataServiceImpl {
         volleyResponseBean.setIsUserOnline(HealthCocoConstants.isNetworkOnline);
         try {
             switch (localTabelType) {
+                case PRESENT_COMPLAINT_SUGGESTIONS:
+                    ArrayList<PresentComplaintSuggestions> presentComplaintSuggestionses = (ArrayList<PresentComplaintSuggestions>) (ArrayList<?>) list;
+                    PresentComplaintSuggestions.saveInTx(presentComplaintSuggestionses);
+                    break;
                 case COMPLAINT_SUGGESTIONS:
                     ArrayList<ComplaintSuggestions> complaintSuggestionsList = (ArrayList<ComplaintSuggestions>) (ArrayList<?>) list;
                     ComplaintSuggestions.saveInTx(complaintSuggestionsList);
+                    break;
+                case HISTORY_OF_PRESENT_COMPLAINT_SUGGESTIONS:
+                    ArrayList<HistoryPresentComplaintSuggestions> historyPresentComplaintSuggestionses = (ArrayList<HistoryPresentComplaintSuggestions>) (ArrayList<?>) list;
+                    HistoryPresentComplaintSuggestions.saveInTx(historyPresentComplaintSuggestionses);
+                    break;
+                case MENSTRUAL_HISTORY_SUGGESTIONS:
+                    ArrayList<MenstrualHistorySuggestions> menstrualHistorySuggestionses = (ArrayList<MenstrualHistorySuggestions>) (ArrayList<?>) list;
+                    MenstrualHistorySuggestions.saveInTx(menstrualHistorySuggestionses);
+                    break;
+                case OBSTETRIC_HISTORY_SUGGESTIONS:
+                    ArrayList<ObstetricHistorySuggestions> obstetricHistorySuggestionses = (ArrayList<ObstetricHistorySuggestions>) (ArrayList<?>) list;
+                    ObstetricHistorySuggestions.saveInTx(obstetricHistorySuggestionses);
+                    break;
+                case GENERAL_EXAMINATION_SUGGESTIONS:
+                    ArrayList<GeneralExaminationSuggestions> generalExaminationSuggestionses = (ArrayList<GeneralExaminationSuggestions>) (ArrayList<?>) list;
+                    GeneralExaminationSuggestions.saveInTx(generalExaminationSuggestionses);
+                    break;
+                case SYSTEMIC_EXAMINATION_SUGGESTIONS:
+                    ArrayList<SystemicExaminationSuggestions> systemicExaminationSuggestionses = (ArrayList<SystemicExaminationSuggestions>) (ArrayList<?>) list;
+                    SystemicExaminationSuggestions.saveInTx(systemicExaminationSuggestionses);
                     break;
                 case OBSERVATION_SUGGESTIONS:
                     ArrayList<ObservationSuggestions> observationSuggestionsList = (ArrayList<ObservationSuggestions>) (ArrayList<?>) list;
@@ -1253,9 +1274,49 @@ public class LocalDataServiceImpl {
                     ArrayList<InvestigationSuggestions> investigationSuggestionsList = (ArrayList<InvestigationSuggestions>) (ArrayList<?>) list;
                     InvestigationSuggestions.saveInTx(investigationSuggestionsList);
                     break;
+                case PROVISIONAL_DIAGNOSIS_SUGGESTIONS:
+                    ArrayList<ProvisionalDiagnosisSuggestions> provisionalDiagnosisSuggestionses = (ArrayList<ProvisionalDiagnosisSuggestions>) (ArrayList<?>) list;
+                    ProvisionalDiagnosisSuggestions.saveInTx(provisionalDiagnosisSuggestionses);
+                    break;
                 case DIAGNOSIS_SUGGESTIONS:
                     ArrayList<DiagnosisSuggestions> diagnosisSuggestionsList = (ArrayList<DiagnosisSuggestions>) (ArrayList<?>) list;
                     DiagnosisSuggestions.saveInTx(diagnosisSuggestionsList);
+                    break;
+                case NOTES_SUGGESTIONS:
+                    ArrayList<NotesSuggestions> notesSuggestionses = (ArrayList<NotesSuggestions>) (ArrayList<?>) list;
+                    NotesSuggestions.saveInTx(notesSuggestionses);
+                    break;
+                case ECG_DETAILS_SUGGESTIONS:
+                    ArrayList<EcgDetailSuggestions> ecgDetailSuggestionses = (ArrayList<EcgDetailSuggestions>) (ArrayList<?>) list;
+                    EcgDetailSuggestions.saveInTx(ecgDetailSuggestionses);
+                    break;
+                case ECHO_SUGGESTIONS:
+                    ArrayList<EchoSuggestions> echoSuggestionses = (ArrayList<EchoSuggestions>) (ArrayList<?>) list;
+                    EchoSuggestions.saveInTx(echoSuggestionses);
+                    break;
+                case X_RAY_DETAILS_SUGGESTIONS:
+                    ArrayList<XrayDetailSuggestions> xrayDetailSuggestionses = (ArrayList<XrayDetailSuggestions>) (ArrayList<?>) list;
+                    XrayDetailSuggestions.saveInTx(xrayDetailSuggestionses);
+                    break;
+                case HOLTER_SUGGESTIONS:
+                    ArrayList<HolterSuggestions> holterSuggestionses = (ArrayList<HolterSuggestions>) (ArrayList<?>) list;
+                    HolterSuggestions.saveInTx(holterSuggestionses);
+                    break;
+                case PA_SUGGESTIONS:
+                    ArrayList<PaSuggestions> paSuggestionses = (ArrayList<PaSuggestions>) (ArrayList<?>) list;
+                    PaSuggestions.saveInTx(paSuggestionses);
+                    break;
+                case PV_SUGGESTIONS:
+                    ArrayList<PvSuggestions> pvSuggestionses = (ArrayList<PvSuggestions>) (ArrayList<?>) list;
+                    PvSuggestions.saveInTx(pvSuggestionses);
+                    break;
+                case PS_SUGGESTIONS:
+                    ArrayList<PsSuggestions> psSuggestionses = (ArrayList<PsSuggestions>) (ArrayList<?>) list;
+                    PsSuggestions.saveInTx(psSuggestionses);
+                    break;
+                case INDICATION_OF_USG_SUGGESTIONS:
+                    ArrayList<IndicationOfUsgSuggestions> indicationOfUsgSuggestionses = (ArrayList<IndicationOfUsgSuggestions>) (ArrayList<?>) list;
+                    IndicationOfUsgSuggestions.saveInTx(indicationOfUsgSuggestionses);
                     break;
             }
             volleyResponseBean.setDataList(getObjectsListFromMap(list));
@@ -3189,8 +3250,26 @@ public class LocalDataServiceImpl {
         if (suggestionType != null && !Util.isNullOrBlank(searchTerm)) {
             String key = "";
             switch (suggestionType) {
+                case PRESENT_COMPLAINT:
+                    key = LocalDatabaseUtils.KEY_PRESENT_COMPLAINT;
+                    break;
                 case COMPLAINTS:
                     key = LocalDatabaseUtils.KEY_COMPLAINT;
+                    break;
+                case HISTORY_OF_PRESENT_COMPLAINT:
+                    key = LocalDatabaseUtils.KEY_HISTORY_OF_PRESENT_COMPLAINT;
+                    break;
+                case MENSTRUAL_HISTORY:
+                    key = LocalDatabaseUtils.KEY_MENSTRUAL_HISTORY;
+                    break;
+                case OBSTETRIC_HISTORY:
+                    key = LocalDatabaseUtils.KEY_OBSTETRIC_HISTORY;
+                    break;
+                case GENERAL_EXAMINATION:
+                    key = LocalDatabaseUtils.KEY_GENERAL_EXAMINATION;
+                    break;
+                case SYSTEMIC_EXAMINATION:
+                    key = LocalDatabaseUtils.KEY_SYSTEMIC_EXAMINATION;
                     break;
                 case OBSERVATION:
                     key = LocalDatabaseUtils.KEY_OBSERVATION;
@@ -3198,8 +3277,38 @@ public class LocalDataServiceImpl {
                 case INVESTIGATION:
                     key = LocalDatabaseUtils.KEY_INVESTIGATION;
                     break;
+                case PROVISIONAL_DIAGNOSIS:
+                    key = LocalDatabaseUtils.KEY_PROVISIONAL_DIAGNOSIS;
+                    break;
                 case DIAGNOSIS:
                     key = LocalDatabaseUtils.KEY_DIAGNOSIS;
+                    break;
+                case NOTES:
+                    key = LocalDatabaseUtils.KEY_NOTES;
+                    break;
+                case ECG_DETAILS:
+                    key = LocalDatabaseUtils.KEY_ECG_DETAILS;
+                    break;
+                case ECHO:
+                    key = LocalDatabaseUtils.KEY_ECHO;
+                    break;
+                case X_RAY_DETAILS:
+                    key = LocalDatabaseUtils.KEY_X_RAY_DETAILS;
+                    break;
+                case HOLTER:
+                    key = LocalDatabaseUtils.KEY_HOLTER;
+                    break;
+                case PA:
+                    key = LocalDatabaseUtils.KEY_PA;
+                    break;
+                case PV:
+                    key = LocalDatabaseUtils.KEY_PV;
+                    break;
+                case PS:
+                    key = LocalDatabaseUtils.KEY_PS;
+                    break;
+                case INDICATION_OF_USG:
+                    key = LocalDatabaseUtils.KEY_INDICATION_OF_USG;
                     break;
                 default:
                     break;
@@ -3209,7 +3318,6 @@ public class LocalDataServiceImpl {
                         + LocalDatabaseUtils.getSearchTermEqualsIgnoreCaseQuery(key, searchTerm) + " LIMIT " + maxSize
                         + " OFFSET " + (pageNum * maxSize);
         }
-
 
         LogUtils.LOGD(TAG, "Select Query " + whereCondition);
         ArrayList<Object> list = (ArrayList<Object>) (Object) SugarRecord.findWithQuery(class1, whereCondition);

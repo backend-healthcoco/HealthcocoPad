@@ -151,6 +151,16 @@
     <string name="syncing_general_examination_suggestions">Syncing General Examination Suggestions&#8230;</string>
     <string name="syncing_systemic_examination_suggestions">Syncing Systemic Examination Suggestions&#8230;</string>
     <string name="syncing_provisional_diagnosis_suggestions">Syncing Provisional Diagnosis Suggestions&#8230;</string>
+    <string name="syncing_ecg_details_suggestions">Syncing Ecg Details Suggestions&#8230;</string>
+    <string name="syncing_ecg_suggestions">Syncing Ecg Suggestions&#8230;</string>
+    <string name="syncing_echo_suggestions">Syncing Echo Suggestions&#8230;</string>
+    <string name="syncing_xray_details_suggestions">Syncing Xray Details Suggestions&#8230;</string>
+    <string name="syncing_xray_suggestions">Syncing Xray Suggestions&#8230;</string>
+    <string name="syncing_holter_suggestions">Syncing Holter Suggestions&#8230;</string>
+    <string name="syncing_pa_suggestions">Syncing PA Suggestions&#8230;</string>
+    <string name="syncing_pv_suggestions">Syncing PV Suggestions&#8230;</string>
+    <string name="syncing_ps_suggestions">Syncing PS Suggestions&#8230;</string>
+    <string name="syncing_indication_of_usg_suggestions">Syncing Indication of Usg Suggestions&#8230;</string>
     <string name="syncing_notes_suggestions">Syncing Notes Suggestions&#8230;</string>
     <string name="syncing_complaint_suggestions">Syncing Complaint Suggestions&#8230;</string>
     <string name="syncing_observation_suggestions">Syncing Observation Suggestions&#8230;</string>

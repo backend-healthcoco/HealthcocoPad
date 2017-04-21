@@ -379,7 +379,6 @@ public class WebDataServiceImpl implements GCMRefreshListener {
     public void getClinicalNoteSuggestionsList(Class<?> class1, WebServiceType webServiceType, String doctorId, Long latestUpdatedTime, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         String url = webServiceType.getUrl() + HealthCocoConstants.PARAM_DOCTOR_ID + doctorId + HealthCocoConstants.PARAM_UPDATED_TIME + latestUpdatedTime;
         getResponse(webServiceType, class1, url, null, null, responseListener, errorListener);
-
     }
 
     public void getBloodGroup(Class<?> class1, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {

@@ -119,6 +119,22 @@ public enum WebServiceType {
 
     GET_DIAGNOSIS_SUGGESTIONS(Method.GET, "clinicalNotes/DIAGNOSIS/BOTH/" + HealthCocoConstants.PARAM_DISCARDED_TRUE),
 
+    GET_ECG_SUGGESTIONS(Method.GET, "clinicalNotes/ECG/BOTH/" + HealthCocoConstants.PARAM_DISCARDED_TRUE),
+
+    GET_ECHO_SUGGESTIONS(Method.GET, "clinicalNotes/ECHO/BOTH/" + HealthCocoConstants.PARAM_DISCARDED_TRUE),
+
+    GET_XRAY_SUGGESTIONS(Method.GET, "clinicalNotes/XRAY/BOTH/" + HealthCocoConstants.PARAM_DISCARDED_TRUE),
+
+    GET_HOLTER_SUGGESTIONS(Method.GET, "clinicalNotes/HOLTER/BOTH/" + HealthCocoConstants.PARAM_DISCARDED_TRUE),
+
+    GET_PA_SUGGESTIONS(Method.GET, "clinicalNotes/PA/BOTH/" + HealthCocoConstants.PARAM_DISCARDED_TRUE),
+
+    GET_PS_SUGGESTIONS(Method.GET, "clinicalNotes/PS/BOTH/" + HealthCocoConstants.PARAM_DISCARDED_TRUE),
+
+    GET_PV_SUGGESTIONS(Method.GET, "clinicalNotes/PV/BOTH/" + HealthCocoConstants.PARAM_DISCARDED_TRUE),
+
+    GET_INDICATION_OF_USG_SUGGESTIONS(Method.GET, "clinicalNotes/INDICATION_OF_USG/BOTH/" + HealthCocoConstants.PARAM_DISCARDED_TRUE),
+
     GET_NOTES_SUGGESTIONS(Method.GET, "clinicalNotes/NOTES/BOTH/" + HealthCocoConstants.PARAM_DISCARDED_TRUE),
 
     GET_DISEASE_LIST(Method.GET, "history/diseases/BOTH/"),

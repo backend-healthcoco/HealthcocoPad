@@ -27,10 +27,24 @@ import com.healthcoco.healthcocopad.bean.server.DiagnosisSuggestions;
 import com.healthcoco.healthcocopad.bean.server.DiagnosticTest;
 import com.healthcoco.healthcocopad.bean.server.Drug;
 import com.healthcoco.healthcocopad.bean.server.DrugsListSolrResponse;
+import com.healthcoco.healthcocopad.bean.server.EcgDetailSuggestions;
+import com.healthcoco.healthcocopad.bean.server.EchoSuggestions;
+import com.healthcoco.healthcocopad.bean.server.GeneralExaminationSuggestions;
+import com.healthcoco.healthcocopad.bean.server.HolterSuggestions;
+import com.healthcoco.healthcocopad.bean.server.IndicationOfUsgSuggestions;
 import com.healthcoco.healthcocopad.bean.server.InvestigationSuggestions;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
+import com.healthcoco.healthcocopad.bean.server.NotesSuggestions;
 import com.healthcoco.healthcocopad.bean.server.ObservationSuggestions;
+import com.healthcoco.healthcocopad.bean.server.ObstetricHistorySuggestions;
+import com.healthcoco.healthcocopad.bean.server.PaSuggestions;
+import com.healthcoco.healthcocopad.bean.server.PresentComplaintSuggestions;
+import com.healthcoco.healthcocopad.bean.server.ProvisionalDiagnosisSuggestions;
+import com.healthcoco.healthcocopad.bean.server.PsSuggestions;
+import com.healthcoco.healthcocopad.bean.server.PvSuggestions;
+import com.healthcoco.healthcocopad.bean.server.SystemicExaminationSuggestions;
 import com.healthcoco.healthcocopad.bean.server.User;
+import com.healthcoco.healthcocopad.bean.server.XrayDetailSuggestions;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocopad.dialogFragment.AddNewDrugDialogFragment;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
@@ -52,6 +66,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.healthcoco.healthcocopad.enums.WebServiceType.FRAGMENT_INITIALISATION;
+import static com.healthcoco.healthcocopad.enums.WebServiceType.GET_ECG_SUGGESTIONS;
+import static com.healthcoco.healthcocopad.enums.WebServiceType.GET_ECHO_SUGGESTIONS;
+import static com.healthcoco.healthcocopad.enums.WebServiceType.GET_GENERAL_EXAMINATION_SUGGESTIONS;
+import static com.healthcoco.healthcocopad.enums.WebServiceType.GET_HISTORY_OF_PRESENT_COMPLAINT_SUGGESTIONS;
+import static com.healthcoco.healthcocopad.enums.WebServiceType.GET_HOLTER_SUGGESTIONS;
+import static com.healthcoco.healthcocopad.enums.WebServiceType.GET_INDICATION_OF_USG_SUGGESTIONS;
+import static com.healthcoco.healthcocopad.enums.WebServiceType.GET_MENSTRUAL_HISTORY_SUGGESTIONS;
+import static com.healthcoco.healthcocopad.enums.WebServiceType.GET_OBSTETRIC_HISTORY_SUGGESTIONS;
+import static com.healthcoco.healthcocopad.enums.WebServiceType.GET_PA_SUGGESTIONS;
+import static com.healthcoco.healthcocopad.enums.WebServiceType.GET_PRESENT_COMPLAINT_SUGGESTIONS;
+import static com.healthcoco.healthcocopad.enums.WebServiceType.GET_PROVISIONAL_DIAGNOSIS_SUGGESTIONS;
+import static com.healthcoco.healthcocopad.enums.WebServiceType.GET_PS_SUGGESTIONS;
+import static com.healthcoco.healthcocopad.enums.WebServiceType.GET_PV_SUGGESTIONS;
+import static com.healthcoco.healthcocopad.enums.WebServiceType.GET_SYSTEMIC_EXAMINATION_SUGGESTIONS;
+import static com.healthcoco.healthcocopad.enums.WebServiceType.GET_XRAY_SUGGESTIONS;
 
 /**
  * Created by neha on 15/04/17.
@@ -149,15 +178,30 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements
 //                    if (user != null)
 //                        getSuggestionListFromServer(true, PAGE_NUMBER, MAX_SIZE, "");
                     break;
+                case GET_PRESENT_COMPLAINT_SUGGESTIONS:
                 case GET_COMPLAINT_SUGGESTIONS:
+                case GET_HISTORY_OF_PRESENT_COMPLAINT_SUGGESTIONS:
+                case GET_MENSTRUAL_HISTORY_SUGGESTIONS:
+                case GET_OBSTETRIC_HISTORY_SUGGESTIONS:
+                case GET_GENERAL_EXAMINATION_SUGGESTIONS:
+                case GET_SYSTEMIC_EXAMINATION_SUGGESTIONS:
                 case GET_OBSERVATION_SUGGESTIONS:
                 case GET_INVESTIGATION_SUGGESTIONS:
+                case GET_PROVISIONAL_DIAGNOSIS_SUGGESTIONS:
                 case GET_DIAGNOSIS_SUGGESTIONS:
+                case GET_ECG_SUGGESTIONS:
+                case GET_ECHO_SUGGESTIONS:
+                case GET_XRAY_SUGGESTIONS:
+                case GET_HOLTER_SUGGESTIONS:
+                case GET_PA_SUGGESTIONS:
+                case GET_PV_SUGGESTIONS:
+                case GET_PS_SUGGESTIONS:
+                case GET_INDICATION_OF_USG_SUGGESTIONS:
+                case GET_NOTES_SUGGESTIONS:
                 case GET_DRUGS_LIST_SOLR:
                 case GET_DIAGNOSTIC_TESTS_SOLR:
                     responseList = response.getDataList();
                     break;
-
                 default:
                     break;
             }
@@ -217,6 +261,10 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements
                     user = doctor.getUser();
                 }
                 break;
+            case GET_PRESENT_COMPLAINT_SUGGESTIONS:
+                volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getSuggestionsListAsResponse(WebServiceType.GET_PRESENT_COMPLAINT_SUGGESTIONS,
+                        PresentComplaintSuggestions.class, suggestionType, searchedTerm, PAGE_NUMBER, MAX_SIZE, null, null);
+                break;
             case GET_COMPLAINT_SUGGESTIONS:
                 volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getSuggestionsListAsResponse(WebServiceType.GET_COMPLAINT_SUGGESTIONS,
                         ComplaintSuggestions.class, suggestionType, searchedTerm, PAGE_NUMBER, MAX_SIZE, null, null);
@@ -232,6 +280,66 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements
             case GET_DIAGNOSIS_SUGGESTIONS:
                 volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getSuggestionsListAsResponse(WebServiceType.GET_DIAGNOSIS_SUGGESTIONS,
                         DiagnosisSuggestions.class, suggestionType, searchedTerm, PAGE_NUMBER, MAX_SIZE, null, null);
+                break;
+            case GET_HISTORY_OF_PRESENT_COMPLAINT_SUGGESTIONS:
+                volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getSuggestionsListAsResponse(WebServiceType.GET_HISTORY_OF_PRESENT_COMPLAINT_SUGGESTIONS,
+                        HistoryPresentComplaintSuggestions.class, suggestionType, searchedTerm, PAGE_NUMBER, MAX_SIZE, null, null);
+                break;
+            case GET_MENSTRUAL_HISTORY_SUGGESTIONS:
+                volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getSuggestionsListAsResponse(WebServiceType.GET_MENSTRUAL_HISTORY_SUGGESTIONS,
+                        MenstrualHistorySuggestions.class, suggestionType, searchedTerm, PAGE_NUMBER, MAX_SIZE, null, null);
+                break;
+            case GET_OBSTETRIC_HISTORY_SUGGESTIONS:
+                volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getSuggestionsListAsResponse(WebServiceType.GET_OBSTETRIC_HISTORY_SUGGESTIONS,
+                        ObstetricHistorySuggestions.class, suggestionType, searchedTerm, PAGE_NUMBER, MAX_SIZE, null, null);
+                break;
+            case GET_GENERAL_EXAMINATION_SUGGESTIONS:
+                volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getSuggestionsListAsResponse(WebServiceType.GET_GENERAL_EXAMINATION_SUGGESTIONS,
+                        GeneralExaminationSuggestions.class, suggestionType, searchedTerm, PAGE_NUMBER, MAX_SIZE, null, null);
+                break;
+            case GET_SYSTEMIC_EXAMINATION_SUGGESTIONS:
+                volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getSuggestionsListAsResponse(WebServiceType.GET_SYSTEMIC_EXAMINATION_SUGGESTIONS,
+                        SystemicExaminationSuggestions.class, suggestionType, searchedTerm, PAGE_NUMBER, MAX_SIZE, null, null);
+                break;
+            case GET_PROVISIONAL_DIAGNOSIS_SUGGESTIONS:
+                volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getSuggestionsListAsResponse(WebServiceType.GET_PROVISIONAL_DIAGNOSIS_SUGGESTIONS,
+                        ProvisionalDiagnosisSuggestions.class, suggestionType, searchedTerm, PAGE_NUMBER, MAX_SIZE, null, null);
+                break;
+            case GET_ECG_SUGGESTIONS:
+                volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getSuggestionsListAsResponse(WebServiceType.GET_ECG_SUGGESTIONS,
+                        EcgDetailSuggestions.class, suggestionType, searchedTerm, PAGE_NUMBER, MAX_SIZE, null, null);
+                break;
+            case GET_ECHO_SUGGESTIONS:
+                volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getSuggestionsListAsResponse(WebServiceType.GET_ECHO_SUGGESTIONS,
+                        EchoSuggestions.class, suggestionType, searchedTerm, PAGE_NUMBER, MAX_SIZE, null, null);
+                break;
+            case GET_XRAY_SUGGESTIONS:
+                volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getSuggestionsListAsResponse(WebServiceType.GET_XRAY_SUGGESTIONS,
+                        XrayDetailSuggestions.class, suggestionType, searchedTerm, PAGE_NUMBER, MAX_SIZE, null, null);
+                break;
+            case GET_HOLTER_SUGGESTIONS:
+                volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getSuggestionsListAsResponse(WebServiceType.GET_HOLTER_SUGGESTIONS,
+                        HolterSuggestions.class, suggestionType, searchedTerm, PAGE_NUMBER, MAX_SIZE, null, null);
+                break;
+            case GET_PA_SUGGESTIONS:
+                volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getSuggestionsListAsResponse(WebServiceType.GET_PA_SUGGESTIONS,
+                        PaSuggestions.class, suggestionType, searchedTerm, PAGE_NUMBER, MAX_SIZE, null, null);
+                break;
+            case GET_PV_SUGGESTIONS:
+                volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getSuggestionsListAsResponse(WebServiceType.GET_PV_SUGGESTIONS,
+                        PvSuggestions.class, suggestionType, searchedTerm, PAGE_NUMBER, MAX_SIZE, null, null);
+                break;
+            case GET_PS_SUGGESTIONS:
+                volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getSuggestionsListAsResponse(WebServiceType.GET_PS_SUGGESTIONS,
+                        PsSuggestions.class, suggestionType, searchedTerm, PAGE_NUMBER, MAX_SIZE, null, null);
+                break;
+            case GET_INDICATION_OF_USG_SUGGESTIONS:
+                volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getSuggestionsListAsResponse(WebServiceType.GET_INDICATION_OF_USG_SUGGESTIONS,
+                        IndicationOfUsgSuggestions.class, suggestionType, searchedTerm, PAGE_NUMBER, MAX_SIZE, null, null);
+                break;
+            case GET_NOTES_SUGGESTION:
+                volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getSuggestionsListAsResponse(WebServiceType.GET_NOTES_SUGGESTIONS,
+                        NotesSuggestions.class, suggestionType, searchedTerm, PAGE_NUMBER, MAX_SIZE, null, null);
                 break;
         }
         if (volleyResponseBean == null)
@@ -396,6 +504,54 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements
                 break;
             case DIAGNOSIS:
                 new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_DIAGNOSIS_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                break;
+            case PRESENT_COMPLAINT:
+                new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_PRESENT_COMPLAINT_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                break;
+            case HISTORY_OF_PRESENT_COMPLAINT:
+                new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_HISTORY_OF_PRESENT_COMPLAINT_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                break;
+            case MENSTRUAL_HISTORY:
+                new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_MENSTRUAL_HISTORY_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                break;
+            case OBSTETRIC_HISTORY:
+                new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_OBSTETRIC_HISTORY_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                break;
+            case PROVISIONAL_DIAGNOSIS:
+                new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_PROVISIONAL_DIAGNOSIS_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                break;
+            case GENERAL_EXAMINATION:
+                new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_GENERAL_EXAMINATION_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                break;
+            case SYSTEMIC_EXAMINATION:
+                new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_SYSTEMIC_EXAMINATION_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                break;
+            case NOTES:
+                new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_NOTES_SUGGESTION, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                break;
+            case ECG_DETAILS:
+                new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_ECG_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                break;
+            case ECHO:
+                new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_ECHO_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                break;
+            case X_RAY_DETAILS:
+                new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_XRAY_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                break;
+            case HOLTER:
+                new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_HOLTER_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                break;
+            case PA:
+                new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_PA_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                break;
+            case PS:
+                new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_PS_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                break;
+            case PV:
+                new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_PV_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                break;
+            case INDICATION_OF_USG:
+                new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_INDICATION_OF_USG_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 break;
             default:
                 onResponse(null);

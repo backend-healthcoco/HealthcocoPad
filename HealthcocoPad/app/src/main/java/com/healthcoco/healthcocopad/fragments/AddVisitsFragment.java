@@ -48,14 +48,28 @@ import com.healthcoco.healthcocopad.bean.server.DrugItem;
 import com.healthcoco.healthcocopad.bean.server.DrugType;
 import com.healthcoco.healthcocopad.bean.server.DrugsListSolrResponse;
 import com.healthcoco.healthcocopad.bean.server.Duration;
+import com.healthcoco.healthcocopad.bean.server.EcgDetailSuggestions;
+import com.healthcoco.healthcocopad.bean.server.EchoSuggestions;
+import com.healthcoco.healthcocopad.bean.server.GeneralExaminationSuggestions;
 import com.healthcoco.healthcocopad.bean.server.GenericName;
+import com.healthcoco.healthcocopad.bean.server.HolterSuggestions;
+import com.healthcoco.healthcocopad.bean.server.IndicationOfUsgSuggestions;
 import com.healthcoco.healthcocopad.bean.server.InvestigationSuggestions;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
+import com.healthcoco.healthcocopad.bean.server.NotesSuggestions;
 import com.healthcoco.healthcocopad.bean.server.ObservationSuggestions;
+import com.healthcoco.healthcocopad.bean.server.ObstetricHistorySuggestions;
+import com.healthcoco.healthcocopad.bean.server.PaSuggestions;
+import com.healthcoco.healthcocopad.bean.server.PresentComplaintSuggestions;
+import com.healthcoco.healthcocopad.bean.server.ProvisionalDiagnosisSuggestions;
+import com.healthcoco.healthcocopad.bean.server.PsSuggestions;
+import com.healthcoco.healthcocopad.bean.server.PvSuggestions;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
+import com.healthcoco.healthcocopad.bean.server.SystemicExaminationSuggestions;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.bean.server.VisitDetails;
 import com.healthcoco.healthcocopad.bean.server.VitalSigns;
+import com.healthcoco.healthcocopad.bean.server.XrayDetailSuggestions;
 import com.healthcoco.healthcocopad.custom.HealthcocoOnSelectionChanged;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocopad.custom.MyScriptEditText;
@@ -955,6 +969,10 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
                 ClinicalNotesPermissionType permissionType = ClinicalNotesPermissionType.getClinicalNotesPermissionType((String) tag);
                 if (permissionType != null) {
                     switch (permissionType) {
+                        case PRESENT_COMPLAINT:
+                            selectedSuggestionType = SuggestionType.PRESENT_COMPLAINT;
+                            searchTerm = getLastTextAfterCharacterToBeReplaced(searchTerm);
+                            break;
                         case COMPLAINT:
                             selectedSuggestionType = SuggestionType.COMPLAINTS;
                             searchTerm = getLastTextAfterCharacterToBeReplaced(searchTerm);
@@ -969,6 +987,66 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
                             break;
                         case DIAGNOSIS:
                             selectedSuggestionType = SuggestionType.DIAGNOSIS;
+                            searchTerm = getLastTextAfterCharacterToBeReplaced(searchTerm);
+                            break;
+                        case HISTORY_OF_PRESENT_COMPLAINT:
+                            selectedSuggestionType = SuggestionType.HISTORY_OF_PRESENT_COMPLAINT;
+                            searchTerm = getLastTextAfterCharacterToBeReplaced(searchTerm);
+                            break;
+                        case MENSTRUAL_HISTORY:
+                            selectedSuggestionType = SuggestionType.MENSTRUAL_HISTORY;
+                            searchTerm = getLastTextAfterCharacterToBeReplaced(searchTerm);
+                            break;
+                        case OBSTETRIC_HISTORY:
+                            selectedSuggestionType = SuggestionType.OBSTETRIC_HISTORY;
+                            searchTerm = getLastTextAfterCharacterToBeReplaced(searchTerm);
+                            break;
+                        case GENERAL_EXAMINATION:
+                            selectedSuggestionType = SuggestionType.GENERAL_EXAMINATION;
+                            searchTerm = getLastTextAfterCharacterToBeReplaced(searchTerm);
+                            break;
+                        case SYSTEMIC_EXAMINATION:
+                            selectedSuggestionType = SuggestionType.SYSTEMIC_EXAMINATION;
+                            searchTerm = getLastTextAfterCharacterToBeReplaced(searchTerm);
+                            break;
+                        case PROVISIONAL_DIAGNOSIS:
+                            selectedSuggestionType = SuggestionType.PROVISIONAL_DIAGNOSIS;
+                            searchTerm = getLastTextAfterCharacterToBeReplaced(searchTerm);
+                            break;
+                        case NOTES:
+                            selectedSuggestionType = SuggestionType.NOTES;
+                            searchTerm = getLastTextAfterCharacterToBeReplaced(searchTerm);
+                            break;
+                        case ECG_DETAILS:
+                            selectedSuggestionType = SuggestionType.ECG_DETAILS;
+                            searchTerm = getLastTextAfterCharacterToBeReplaced(searchTerm);
+                            break;
+                        case ECHO:
+                            selectedSuggestionType = SuggestionType.ECHO;
+                            searchTerm = getLastTextAfterCharacterToBeReplaced(searchTerm);
+                            break;
+                        case X_RAY_DETAILS:
+                            selectedSuggestionType = SuggestionType.X_RAY_DETAILS;
+                            searchTerm = getLastTextAfterCharacterToBeReplaced(searchTerm);
+                            break;
+                        case HOLTER:
+                            selectedSuggestionType = SuggestionType.HOLTER;
+                            searchTerm = getLastTextAfterCharacterToBeReplaced(searchTerm);
+                            break;
+                        case PA:
+                            selectedSuggestionType = SuggestionType.PA;
+                            searchTerm = getLastTextAfterCharacterToBeReplaced(searchTerm);
+                            break;
+                        case PV:
+                            selectedSuggestionType = SuggestionType.PV;
+                            searchTerm = getLastTextAfterCharacterToBeReplaced(searchTerm);
+                            break;
+                        case PS:
+                            selectedSuggestionType = SuggestionType.PS;
+                            searchTerm = getLastTextAfterCharacterToBeReplaced(searchTerm);
+                            break;
+                        case INDICATION_OF_USG:
+                            selectedSuggestionType = SuggestionType.INDICATION_OF_USG;
                             searchTerm = getLastTextAfterCharacterToBeReplaced(searchTerm);
                             break;
                         default:
@@ -1800,6 +1878,12 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
                     LogUtils.LOGD(TAG, "Selected Test " + diagnosticTest.getTestName());
                 }
                 break;
+            case PRESENT_COMPLAINT:
+                if (selectedSuggestionObject instanceof PresentComplaintSuggestions) {
+                    PresentComplaintSuggestions complaint = (PresentComplaintSuggestions) selectedSuggestionObject;
+                    text = complaint.getPresentComplaint() + CHARACTER_TO_REPLACE_COMMA_WITH_SPACES;
+                }
+                break;
             case COMPLAINTS:
                 if (selectedSuggestionObject instanceof ComplaintSuggestions) {
                     ComplaintSuggestions complaint = (ComplaintSuggestions) selectedSuggestionObject;
@@ -1822,6 +1906,96 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
                 if (selectedSuggestionObject instanceof DiagnosisSuggestions) {
                     DiagnosisSuggestions diagnosis = (DiagnosisSuggestions) selectedSuggestionObject;
                     text = diagnosis.getDiagnosis() + CHARACTER_TO_REPLACE_COMMA_WITH_SPACES;
+                }
+                break;
+            case HISTORY_OF_PRESENT_COMPLAINT:
+                if (selectedSuggestionObject instanceof HistoryPresentComplaintSuggestions) {
+                    HistoryPresentComplaintSuggestions complaint = (HistoryPresentComplaintSuggestions) selectedSuggestionObject;
+                    text = complaint.getPresentComplaintHistory() + CHARACTER_TO_REPLACE_COMMA_WITH_SPACES;
+                }
+                break;
+            case MENSTRUAL_HISTORY:
+                if (selectedSuggestionObject instanceof MenstrualHistorySuggestions) {
+                    MenstrualHistorySuggestions complaint = (MenstrualHistorySuggestions) selectedSuggestionObject;
+                    text = complaint.getMenstrualHistory() + CHARACTER_TO_REPLACE_COMMA_WITH_SPACES;
+                }
+                break;
+            case OBSTETRIC_HISTORY:
+                if (selectedSuggestionObject instanceof ObstetricHistorySuggestions) {
+                    ObstetricHistorySuggestions complaint = (ObstetricHistorySuggestions) selectedSuggestionObject;
+                    text = complaint.getObstetricHistory() + CHARACTER_TO_REPLACE_COMMA_WITH_SPACES;
+                }
+                break;
+            case GENERAL_EXAMINATION:
+                if (selectedSuggestionObject instanceof GeneralExaminationSuggestions) {
+                    GeneralExaminationSuggestions complaint = (GeneralExaminationSuggestions) selectedSuggestionObject;
+                    text = complaint.getGeneralExam() + CHARACTER_TO_REPLACE_COMMA_WITH_SPACES;
+                }
+                break;
+            case SYSTEMIC_EXAMINATION:
+                if (selectedSuggestionObject instanceof SystemicExaminationSuggestions) {
+                    SystemicExaminationSuggestions complaint = (SystemicExaminationSuggestions) selectedSuggestionObject;
+                    text = complaint.getSystemExam() + CHARACTER_TO_REPLACE_COMMA_WITH_SPACES;
+                }
+                break;
+            case PROVISIONAL_DIAGNOSIS:
+                if (selectedSuggestionObject instanceof ProvisionalDiagnosisSuggestions) {
+                    ProvisionalDiagnosisSuggestions complaint = (ProvisionalDiagnosisSuggestions) selectedSuggestionObject;
+                    text = complaint.getProvisionalDiagnosis() + CHARACTER_TO_REPLACE_COMMA_WITH_SPACES;
+                }
+                break;
+            case NOTES:
+                if (selectedSuggestionObject instanceof NotesSuggestions) {
+                    NotesSuggestions complaint = (NotesSuggestions) selectedSuggestionObject;
+                    text = complaint.getNote() + CHARACTER_TO_REPLACE_COMMA_WITH_SPACES;
+                }
+                break;
+            case ECG_DETAILS:
+                if (selectedSuggestionObject instanceof EcgDetailSuggestions) {
+                    EcgDetailSuggestions complaint = (EcgDetailSuggestions) selectedSuggestionObject;
+                    text = complaint.getEcgDetails() + CHARACTER_TO_REPLACE_COMMA_WITH_SPACES;
+                }
+                break;
+            case ECHO:
+                if (selectedSuggestionObject instanceof EchoSuggestions) {
+                    EchoSuggestions complaint = (EchoSuggestions) selectedSuggestionObject;
+                    text = complaint.getEcho() + CHARACTER_TO_REPLACE_COMMA_WITH_SPACES;
+                }
+                break;
+            case X_RAY_DETAILS:
+                if (selectedSuggestionObject instanceof XrayDetailSuggestions) {
+                    XrayDetailSuggestions complaint = (XrayDetailSuggestions) selectedSuggestionObject;
+                    text = complaint.getxRayDetails() + CHARACTER_TO_REPLACE_COMMA_WITH_SPACES;
+                }
+                break;
+            case HOLTER:
+                if (selectedSuggestionObject instanceof HolterSuggestions) {
+                    HolterSuggestions complaint = (HolterSuggestions) selectedSuggestionObject;
+                    text = complaint.getHolter() + CHARACTER_TO_REPLACE_COMMA_WITH_SPACES;
+                }
+                break;
+            case PA:
+                if (selectedSuggestionObject instanceof PaSuggestions) {
+                    PaSuggestions complaint = (PaSuggestions) selectedSuggestionObject;
+                    text = complaint.getPa() + CHARACTER_TO_REPLACE_COMMA_WITH_SPACES;
+                }
+                break;
+            case PV:
+                if (selectedSuggestionObject instanceof PvSuggestions) {
+                    PvSuggestions complaint = (PvSuggestions) selectedSuggestionObject;
+                    text = complaint.getPv() + CHARACTER_TO_REPLACE_COMMA_WITH_SPACES;
+                }
+                break;
+            case PS:
+                if (selectedSuggestionObject instanceof PsSuggestions) {
+                    PsSuggestions complaint = (PsSuggestions) selectedSuggestionObject;
+                    text = complaint.getPs() + CHARACTER_TO_REPLACE_COMMA_WITH_SPACES;
+                }
+                break;
+            case INDICATION_OF_USG:
+                if (selectedSuggestionObject instanceof IndicationOfUsgSuggestions) {
+                    IndicationOfUsgSuggestions complaint = (IndicationOfUsgSuggestions) selectedSuggestionObject;
+                    text = complaint.getIndicationOfUSG() + CHARACTER_TO_REPLACE_COMMA_WITH_SPACES;
                 }
                 break;
         }
