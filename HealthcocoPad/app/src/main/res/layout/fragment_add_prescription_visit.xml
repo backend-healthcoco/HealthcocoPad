@@ -75,6 +75,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/shape_rounded_corners_item_background"
                     android:gravity="center"
+                    android:hint="Duration"
                     android:maxLines="1"
                     android:textColor="@color/black"
                     android:textSize="@dimen/text_size_add_visits_lable" />

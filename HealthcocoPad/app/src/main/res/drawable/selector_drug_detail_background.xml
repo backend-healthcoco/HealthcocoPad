@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/edit_text_bottom_line_grey_solid_white" android:state_activated="true"></item>
+    <item android:drawable="@drawable/shape_rounded_corners_item_background"></item>
+</selector>

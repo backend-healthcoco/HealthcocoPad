@@ -173,5 +173,5 @@
     <dimen name="text_size_feedback">18sp</dimen>
     <dimen name="baseline_position">150dp</dimen>
     <dimen name="text_size_delete_fontawesome_text">25sp</dimen>
-    <dimen name="padding_item_drug_dosage_top_bottom">8dp</dimen>
+    <dimen name="padding_item_drug_dosage_top_bottom">7dp</dimen>
 </resources>

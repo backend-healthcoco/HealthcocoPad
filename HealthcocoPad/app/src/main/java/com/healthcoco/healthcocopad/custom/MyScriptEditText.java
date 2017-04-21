@@ -7,6 +7,8 @@ import android.text.InputType;
 import android.util.AttributeSet;
 import android.widget.EditText;
 
+import com.healthcoco.healthcocopad.utilities.Util;
+
 public class MyScriptEditText extends EditText {
 
     private int mLastSelectionStart;
@@ -35,8 +37,18 @@ public class MyScriptEditText extends EditText {
 
     private void init() {
         // prevent input method to show up when tapping into the text field
-        setInputType(InputType.TYPE_CLASS_TEXT|InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+        setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
         setTextIsSelectable(true);
+    }
+
+    @Override
+    public void setText(CharSequence text, BufferType type) {
+        super.setText(text, type);
+        String s = String.valueOf(text.toString());
+        if (Util.isNullOrBlank(s))
+            setActivated(false);
+        else
+            setActivated(true);
     }
 
     @Override

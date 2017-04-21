@@ -456,6 +456,8 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
             case R.id.edit_diastolic:
             case R.id.edit_resp_rate:
             case R.id.edit_spo2:
+            case R.id.edit_duration_common:
+            case R.id.edit_duration:
                 mWidget.configure("en_US", "cur_number");
                 break;
             default:
@@ -1575,7 +1577,6 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
                     break;
             }
         }
-
         return isBlankClinicalNote && isBlankPrescription && isBlankAdvice && isBlankDiagram && isBlankLabTest;
     }
 
