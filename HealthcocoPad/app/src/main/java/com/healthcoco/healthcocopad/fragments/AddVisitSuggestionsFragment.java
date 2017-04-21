@@ -133,9 +133,9 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements
     @Override
     public void initListeners() {
         editTextSearch = initEditSearchView(R.string.search);
-        AddVisitsFragment addVisitsFragment = (AddVisitsFragment) mFragmentManager.findFragmentByTag(AddVisitsFragment.class.getSimpleName());
-        if (addVisitsFragment != null)
-            editTextSearch.setOnFocusChangeListener(addVisitsFragment.getFocusChangeListener());
+//        AddVisitsFragment addVisitsFragment = (AddVisitsFragment) mFragmentManager.findFragmentByTag(AddVisitsFragment.class.getSimpleName());
+//        if (addVisitsFragment != null)
+//            editTextSearch.setOnFocusChangeListener(addVisitsFragment.getFocusChangeListener());
         btAddNew.setOnClickListener(this);
         lvSuggestionsList.setOnItemClickListener(this);
     }
@@ -346,7 +346,6 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements
             suggestionsList.clear();
         PAGE_NUMBER = 0;
         isEndOfListAchieved = false;
-        isLoadingFromSearch = false;
         lvSuggestionsList.resetPreLastPosition(0);
         notifyAdapter(suggestionsList);
     }
@@ -415,6 +414,7 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements
                 searchedTerm = intent.getStringExtra(TAG_SEARCHED_TERM);
                 suggestionType = SuggestionType.values()[ordinal];
                 if (suggestionType != null) {
+                    isLoadingFromSearch = true;
                     resetListAndPagingAttributes();
                     refreshData(true);
                 }
@@ -559,11 +559,17 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements
         editTextSearch = initEditSearchView(suggestionType.getSearchHintId());
         editTextSearch.setText("");
         editTextSearch.setTag(suggestionType);
-        Util.requesFocus(editTextSearch);
+        AddVisitsFragment addVisitsFragment = (AddVisitsFragment) mFragmentManager.findFragmentByTag(AddVisitsFragment.class.getSimpleName());
+        if (addVisitsFragment != null)
+            addVisitsFragment.requestFocus(editTextSearch);
+//        Util.requesFocus(editTextSearch);
     }
 
     public SuggestionType getSelectedSuggestionType() {
         return suggestionType;
+    }
+
+    public void removeFocusFromEditSearch() {
     }
 }
 

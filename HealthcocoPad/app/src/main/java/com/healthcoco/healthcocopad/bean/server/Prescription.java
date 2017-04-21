@@ -26,10 +26,10 @@ public class Prescription extends SugarRecord {
     private Long updatedTime;
     @Ignore
     private List<DrugItem> items;
-
     //required to get prescription in Response
     @Ignore
-    private List<DiagnosticTestsPrescription> diagnosticTests;
+    private List<DiagnosticTest> diagnosticTests;
+    private String diagnosticTestsIdsJsonString;
 
     private Boolean discarded;
     private Boolean inHistory;
@@ -163,11 +163,11 @@ public class Prescription extends SugarRecord {
         this.uniqueEmrId = uniqueEmrId;
     }
 
-    public List<DiagnosticTestsPrescription> getDiagnosticTests() {
+    public List<DiagnosticTest> getDiagnosticTests() {
         return diagnosticTests;
     }
 
-    public void setDiagnosticTests(List<DiagnosticTestsPrescription> diagnosticTests) {
+    public void setDiagnosticTests(List<DiagnosticTest> diagnosticTests) {
         this.diagnosticTests = diagnosticTests;
     }
 
@@ -179,17 +179,11 @@ public class Prescription extends SugarRecord {
         this.advice = advice;
     }
 
-    public static List<DiagnosticTest> getDiagnosticTestsList(List<DiagnosticTestsPrescription> list) {
-        ArrayList<DiagnosticTest> diagnosticTestsList = null;
-        if (!Util.isNullOrEmptyList(list)) {
-            for (DiagnosticTestsPrescription diagnosticTestPrescription : list) {
-                if (diagnosticTestPrescription.getTest() != null) {
-                    if (diagnosticTestsList == null)
-                        diagnosticTestsList = new ArrayList<>();
-                    diagnosticTestsList.add(diagnosticTestPrescription.getTest());
-                }
-            }
-        }
-        return diagnosticTestsList;
+    public String getDiagnosticTestsIdsJsonString() {
+        return diagnosticTestsIdsJsonString;
+    }
+
+    public void setDiagnosticTestsIdsJsonString(String diagnosticTestsIdsJsonString) {
+        this.diagnosticTestsIdsJsonString = diagnosticTestsIdsJsonString;
     }
 }

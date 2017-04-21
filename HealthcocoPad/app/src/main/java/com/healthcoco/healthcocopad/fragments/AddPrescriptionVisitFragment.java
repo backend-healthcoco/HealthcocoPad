@@ -146,7 +146,7 @@ public class AddPrescriptionVisitFragment extends HealthCocoFragment implements 
 
     public void addDrug(DrugItem drug) {
         if (drug != null) {
-            drugsListHashMap.put(drug.getDrugId(), drug);
+            drugsListHashMap.put(drug.getDrug().getUniqueId(), drug);
             notifyAdapter(new ArrayList<DrugItem>(drugsListHashMap.values()));
             lvPrescriptionItems.setSelection(adapter.getCount());
         }

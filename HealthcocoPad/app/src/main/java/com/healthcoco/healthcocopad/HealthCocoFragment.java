@@ -294,12 +294,19 @@ public abstract class HealthCocoFragment extends Fragment implements GsonRequest
         dialogFragment.show(mFragmentManager, dialogFragment.getClass().getSimpleName());
     }
 
+    protected void openCommonOpenUpActivity(CommonOpenUpFragmentType fragmentType, String tag, Object intentData) {
+        openCommonOpenUpActivity(fragmentType, tag, intentData, 0);
+    }
+
     protected void openCommonOpenUpActivity(CommonOpenUpFragmentType fragmentType, Object intentData, int requestCode) {
+        openCommonOpenUpActivity(fragmentType, HealthCocoConstants.TAG_COMMON_OPENUP_INTENT_DATA, intentData, requestCode);
+    }
+
+    protected void openCommonOpenUpActivity(CommonOpenUpFragmentType fragmentType, String tag, Object intentData, int requestCode) {
         Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
         intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, fragmentType.ordinal());
-        if (intentData != null) {
-            intent.putExtra(HealthCocoConstants.TAG_COMMON_OPENUP_INTENT_DATA, Parcels.wrap(intentData));
-        }
+        if (!Util.isNullOrBlank(tag) && intentData != null)
+            intent.putExtra(tag, Parcels.wrap(intentData));
         if (requestCode == 0)
             startActivity(intent);
         else

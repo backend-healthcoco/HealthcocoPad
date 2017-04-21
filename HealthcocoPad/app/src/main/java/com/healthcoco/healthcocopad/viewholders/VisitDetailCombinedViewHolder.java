@@ -246,7 +246,7 @@ public class VisitDetailCombinedViewHolder extends HealthCocoViewHolder implemen
                 listItemClickListener.sendSms(visitDetail.getUniqueId());
                 break;
             case R.id.bt_edit_visit:
-                listItemClickListener.editVisit(visitDetail.getVisitId());
+                listItemClickListener.editVisit(visitDetail.getUniqueId());
                 break;
             case R.id.bt_email_visit:
                 listItemClickListener.sendEmail(visitDetail.getUniqueId());

@@ -85,43 +85,46 @@ public class SelectedPrescriptionDrugDoseItemsListViewHolder extends HealthCocoV
 
     @Override
     public void applyData() {
-        Drug drug = null;
+//        Drug drug = null;
+//        if (objData.getDrug() != null) {
+//            drug = objData.getDrug();
+//
+//        } else if (!Util.isNullOrBlank(objData.getDrugId())) {
+//            drug = LocalDataServiceImpl.getInstance(mApp).getDrug(objData.getDrugId());
+//            objData.setDrug(drug);
+//        }
         if (objData.getDrug() != null) {
-            drug = objData.getDrug();
+            Drug drug = objData.getDrug();
             objData.setDrugId(drug.getUniqueId());
-        } else if (!Util.isNullOrBlank(objData.getDrugId())) {
-            drug = LocalDataServiceImpl.getInstance(mApp).getDrug(objData.getDrugId());
-            objData.setDrug(drug);
-        }
-        if (drug != null) {
             String drugName = Util.getValidatedValue(drug.getDrugName());
             if (drug.getDrugType() != null && !Util.isNullOrBlank(drug.getDrugType().getType()))
                 drugName = drug.getDrugType().getType() + " " + drugName;
             tvName.setText(drugName);
-        }
-        String genericNamesFormatted = "";
-        if (!Util.isNullOrEmptyList(drug.getGenericNames())) {
-            for (GenericName genericName : drug.getGenericNames()) {
-                int index = drug.getGenericNames().indexOf(genericName);
-                genericNamesFormatted = genericNamesFormatted + " " + genericName.getName();
-                if (index != drug.getGenericNames().size() - 1)
-                    genericNamesFormatted = genericNamesFormatted + GENERIC_NAME_SEPARATOR;
+            String genericNamesFormatted = "";
+            if (!Util.isNullOrEmptyList(drug.getGenericNames())) {
+                for (GenericName genericName : drug.getGenericNames()) {
+                    int index = drug.getGenericNames().indexOf(genericName);
+                    genericNamesFormatted = genericNamesFormatted + " " + genericName.getName();
+                    if (index != drug.getGenericNames().size() - 1)
+                        genericNamesFormatted = genericNamesFormatted + GENERIC_NAME_SEPARATOR;
+                }
+                tvGenericName.setText(genericNamesFormatted);
             }
         }
-        tvGenericName.setText(genericNamesFormatted);
-        if (!Util.isNullOrEmptyList(drug.getDirection())) {
-            DrugDirection direction = drug.getDirection().get(0);
-            tvDirections.setText(Util.getValidatedValue((direction.getDirection())));
+
+
+        if (!Util.isNullOrEmptyList(objData.getDirection())) {
+            DrugDirection direction = objData.getDirection().get(0);
+            tvDirections.setText(Util.getValidatedValue( Util.getValidatedValue((direction.getDirection()))));
         }
 
-        if (!Util.isNullOrBlank(drug.getDosage()))
-            tvFrequency.setText(drug.getDosage());
+        tvFrequency.setText(Util.getValidatedValue( objData.getDosage()));
 
-        if (drug.getDuration() != null && !Util.isNullOrBlank(drug.getDuration().getValue()))
-            editDuration.setText(drug.getDuration().getValue());
+        if (objData.getDuration() != null)
+            editDuration.setText(Util.getValidatedValue( objData.getDuration().getValue()));
 
-        if (drug.getDuration() != null && drug.getDuration().getDurationUnit() != null && !Util.isNullOrBlank(drug.getDuration().getDurationUnit().getUnit()))
-            tvDrugDurationUnit.setText(drug.getDuration().getDurationUnit().getUnit());
+        if (objData.getDuration() != null && objData.getDuration().getDurationUnit() != null)
+            tvDrugDurationUnit.setText(Util.getValidatedValue( objData.getDuration().getDurationUnit().getUnit()));
 
         //initialising instructions popup
         if (!Util.isNullOrBlank(objData.getInstructions())) {
@@ -153,8 +156,8 @@ public class SelectedPrescriptionDrugDoseItemsListViewHolder extends HealthCocoV
         tvFrequency.setOnClickListener(this);
         tvDrugDurationUnit.setOnClickListener(this);
         if (templateListener.getAddVisitFragment() != null) {
-            editDuration.setOnFocusChangeListener(templateListener.getAddVisitFragment().getFocusChangeListener());
-            etInstruction.setOnFocusChangeListener(templateListener.getAddVisitFragment().getFocusChangeListener());
+            editDuration.setOnTouchListener(templateListener.getAddVisitFragment().getOnTouchListener());
+            etInstruction.setOnTouchListener(templateListener.getAddVisitFragment().getOnTouchListener());
         }
     }
 

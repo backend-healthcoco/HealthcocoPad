@@ -15,7 +15,6 @@ import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.DiagnosticTest;
-import com.healthcoco.healthcocopad.bean.server.DiagnosticTestsPrescription;
 import com.healthcoco.healthcocopad.bean.server.DrugItem;
 import com.healthcoco.healthcocopad.bean.server.Prescription;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
@@ -140,17 +139,14 @@ public class PrescriptionListItemViewHolder extends HealthCocoViewHolder impleme
         containerDiagnosticTests.removeAllViews();
         boolean isAdded = false;
         if (!Util.isNullOrEmptyList(prescription.getDiagnosticTests())) {
-            List<DiagnosticTestsPrescription> testsPrescriptionsList = prescription.getDiagnosticTests();
-            for (DiagnosticTestsPrescription testsPrescription :
+            List<DiagnosticTest> testsPrescriptionsList = prescription.getDiagnosticTests();
+            for (DiagnosticTest diagnosticTest :
                     testsPrescriptionsList) {
-                if (testsPrescription.getTest() != null && !Util.isNullOrBlank(testsPrescription.getTest().getTestName())) {
-                    isAdded = true;
-                    DiagnosticTest diagnosticTest = testsPrescription.getTest();
-                    View itemDiagnosticTest = inflater.inflate(R.layout.item_diagnostic_test_prescription_point, null);
-                    TextView tvTest = (TextView) itemDiagnosticTest.findViewById(R.id.tv_text);
-                    tvTest.setText(Util.getValidatedValue(diagnosticTest.getTestName()));
-                    containerDiagnosticTests.addView(itemDiagnosticTest);
-                }
+                isAdded = true;
+                View itemDiagnosticTest = inflater.inflate(R.layout.item_diagnostic_test_prescription_point, null);
+                TextView tvTest = (TextView) itemDiagnosticTest.findViewById(R.id.tv_text);
+                tvTest.setText(Util.getValidatedValue(diagnosticTest.getTestName()));
+                containerDiagnosticTests.addView(itemDiagnosticTest);
             }
         }
         if (isAdded) {

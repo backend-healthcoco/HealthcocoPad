@@ -47,6 +47,8 @@ import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.healthcoco.healthcocopad.views.ListViewLoadMore;
 
+import org.parceler.Parcels;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -393,6 +395,7 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
 
     @Override
     public void editVisit(String visitId) {
+        openCommonVisistActivity(CommonOpenUpFragmentType.ADD_VISITS, AddVisitsFragment.TAG_VISIT_ID, visitId, 0);
     }
 
     @Override
@@ -470,14 +473,16 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.fl_bt_add:
-                openCommonVisistActivity(CommonOpenUpFragmentType.ADD_VISITS, 0);
+                openCommonVisistActivity(CommonOpenUpFragmentType.ADD_VISITS, null, null, 0);
                 break;
         }
     }
 
-    private void openCommonVisistActivity(CommonOpenUpFragmentType fragmentType, int requestCode) {
+    private void openCommonVisistActivity(CommonOpenUpFragmentType fragmentType, String tag, Object intentData, int requestCode) {
         Intent intent = new Intent(mActivity, AddVisitsActivity.class);
         intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, fragmentType.ordinal());
+        if (!Util.isNullOrBlank(tag) && intentData != null)
+            intent.putExtra(tag, Parcels.wrap(intentData));
         if (requestCode == 0)
             startActivity(intent);
         else

@@ -8,8 +8,9 @@ import com.orm.annotation.Unique;
 import org.parceler.Parcel;
 
 import java.util.List;
+
 @Parcel
-public class DrugItem extends SugarRecord   {
+public class DrugItem extends SugarRecord {
     public static String TABLE_NAME = " " + StringUtil.toSQLName(DrugItem.class.getSimpleName());
 
     protected String foreignTableId;
@@ -19,13 +20,14 @@ public class DrugItem extends SugarRecord   {
     private String drugId;
     @Ignore
     private Duration duration;
+    protected String durationJsonString;
     protected String foreignDurationId;
 
     @Ignore
     private List<DrugDirection> direction;
+    protected String directionJsonString;
     @Ignore
     private Drug drug;
-    protected String foreignDrugId;
     private String doctorId;
     @Unique
     protected String customUniqueId;
@@ -86,14 +88,6 @@ public class DrugItem extends SugarRecord   {
         this.drugId = drugId;
     }
 
-    public String getForeignDrugId() {
-        return foreignDrugId;
-    }
-
-    public void setForeignDrugId(String foreignDrugId) {
-        this.foreignDrugId = foreignDrugId;
-    }
-
     public String getForeignDurationId() {
         return foreignDurationId;
     }
@@ -120,5 +114,21 @@ public class DrugItem extends SugarRecord   {
 
     public void setForeignTableId(String foreignTableId) {
         this.foreignTableId = foreignTableId;
+    }
+
+    public String getDurationJsonString() {
+        return durationJsonString;
+    }
+
+    public void setDurationJsonString(String durationJsonString) {
+        this.durationJsonString = durationJsonString;
+    }
+
+    public String getDirectionJsonString() {
+        return directionJsonString;
+    }
+
+    public void setDirectionJsonString(String directionJsonString) {
+        this.directionJsonString = directionJsonString;
     }
 }

@@ -403,7 +403,7 @@ public class AddNewTemplateFragment extends HealthCocoFragment implements TabHos
         List<DrugItem> items = template.getItems();
         for (DrugItem drugItem :
                 items) {
-            drugsListHashMap.put(drugItem.getForeignDrugId(), drugItem);
+            drugsListHashMap.put(drugItem.getDrugId(), drugItem);
             notifyAdapter(new ArrayList<DrugItem>(drugsListHashMap.values()));
         }
     }

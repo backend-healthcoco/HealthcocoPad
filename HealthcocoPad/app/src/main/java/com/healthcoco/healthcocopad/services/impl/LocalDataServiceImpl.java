@@ -6,7 +6,7 @@ import android.util.Log;
 
 import com.android.volley.Response;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+import com.google.gson.internal.LinkedTreeMap;
 import com.healthcoco.healthcocopad.HealthCocoApplication;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.Address;
@@ -17,6 +17,91 @@ import com.healthcoco.healthcocopad.bean.UiPermissionsBoth;
 import com.healthcoco.healthcocopad.bean.UserPermissionsResponse;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.*;
+import com.healthcoco.healthcocopad.bean.server.APILatestUpdatedTimes;
+import com.healthcoco.healthcocopad.bean.server.AccessModule;
+import com.healthcoco.healthcocopad.bean.server.Achievement;
+import com.healthcoco.healthcocopad.bean.server.AlreadyRegisteredPatientsResponse;
+import com.healthcoco.healthcocopad.bean.server.AppointmentSlot;
+import com.healthcoco.healthcocopad.bean.server.AssignedUserUiPermissions;
+import com.healthcoco.healthcocopad.bean.server.BloodGroup;
+import com.healthcoco.healthcocopad.bean.server.BloodPressure;
+import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
+import com.healthcoco.healthcocopad.bean.server.CityResponse;
+import com.healthcoco.healthcocopad.bean.server.ClinicDetailResponse;
+import com.healthcoco.healthcocopad.bean.server.ClinicDoctorProfile;
+import com.healthcoco.healthcocopad.bean.server.ClinicImage;
+import com.healthcoco.healthcocopad.bean.server.ClinicWorkingSchedule;
+import com.healthcoco.healthcocopad.bean.server.ClinicalNotes;
+import com.healthcoco.healthcocopad.bean.server.CollegeUniversityInstitute;
+import com.healthcoco.healthcocopad.bean.server.Complaint;
+import com.healthcoco.healthcocopad.bean.server.ComplaintSuggestions;
+import com.healthcoco.healthcocopad.bean.server.ConsultationFee;
+import com.healthcoco.healthcocopad.bean.server.Diagnoses;
+import com.healthcoco.healthcocopad.bean.server.DiagnosisSuggestions;
+import com.healthcoco.healthcocopad.bean.server.DiagnosticTest;
+import com.healthcoco.healthcocopad.bean.server.Diagram;
+import com.healthcoco.healthcocopad.bean.server.Disease;
+import com.healthcoco.healthcocopad.bean.server.DoctorClinicProfile;
+import com.healthcoco.healthcocopad.bean.server.DoctorExperience;
+import com.healthcoco.healthcocopad.bean.server.DoctorExperienceDetail;
+import com.healthcoco.healthcocopad.bean.server.DoctorProfile;
+import com.healthcoco.healthcocopad.bean.server.DoctorRegistrationDetail;
+import com.healthcoco.healthcocopad.bean.server.DoctorWorkingSchedule;
+import com.healthcoco.healthcocopad.bean.server.Drug;
+import com.healthcoco.healthcocopad.bean.server.DrugDirection;
+import com.healthcoco.healthcocopad.bean.server.DrugDosage;
+import com.healthcoco.healthcocopad.bean.server.DrugDurationUnit;
+import com.healthcoco.healthcocopad.bean.server.DrugItem;
+import com.healthcoco.healthcocopad.bean.server.DrugType;
+import com.healthcoco.healthcocopad.bean.server.DrugsAndAllergies;
+import com.healthcoco.healthcocopad.bean.server.Duration;
+import com.healthcoco.healthcocopad.bean.server.Education;
+import com.healthcoco.healthcocopad.bean.server.EducationQualification;
+import com.healthcoco.healthcocopad.bean.server.EmailAddress;
+import com.healthcoco.healthcocopad.bean.server.ForeignAppointmentBookingNumber;
+import com.healthcoco.healthcocopad.bean.server.ForeignComplaintsTable;
+import com.healthcoco.healthcocopad.bean.server.ForeignDiagnosesTable;
+import com.healthcoco.healthcocopad.bean.server.ForeignInvestigationsTable;
+import com.healthcoco.healthcocopad.bean.server.ForeignObservationsTable;
+import com.healthcoco.healthcocopad.bean.server.ForeignOtherEmailAddresses;
+import com.healthcoco.healthcocopad.bean.server.ForeignProfessionalMemberships;
+import com.healthcoco.healthcocopad.bean.server.ForeignSpecialities;
+import com.healthcoco.healthcocopad.bean.server.ForieignAdditionalNumbers;
+import com.healthcoco.healthcocopad.bean.server.GCMRequest;
+import com.healthcoco.healthcocopad.bean.server.GeneratedOtpTime;
+import com.healthcoco.healthcocopad.bean.server.HistoryDetailsResponse;
+import com.healthcoco.healthcocopad.bean.server.Hospital;
+import com.healthcoco.healthcocopad.bean.server.Investigation;
+import com.healthcoco.healthcocopad.bean.server.InvestigationSuggestions;
+import com.healthcoco.healthcocopad.bean.server.LinkedTableDirection;
+import com.healthcoco.healthcocopad.bean.server.Location;
+import com.healthcoco.healthcocopad.bean.server.LocationAndAccessControl;
+import com.healthcoco.healthcocopad.bean.server.LoginResponse;
+import com.healthcoco.healthcocopad.bean.server.MedicalCouncil;
+import com.healthcoco.healthcocopad.bean.server.MedicalFamilyHistoryDetails;
+import com.healthcoco.healthcocopad.bean.server.Notes;
+import com.healthcoco.healthcocopad.bean.server.Observation;
+import com.healthcoco.healthcocopad.bean.server.ObservationSuggestions;
+import com.healthcoco.healthcocopad.bean.server.OtpVerification;
+import com.healthcoco.healthcocopad.bean.server.Patient;
+import com.healthcoco.healthcocopad.bean.server.PatientTreatment;
+import com.healthcoco.healthcocopad.bean.server.Prescription;
+import com.healthcoco.healthcocopad.bean.server.Profession;
+import com.healthcoco.healthcocopad.bean.server.Records;
+import com.healthcoco.healthcocopad.bean.server.Reference;
+import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
+import com.healthcoco.healthcocopad.bean.server.Relations;
+import com.healthcoco.healthcocopad.bean.server.Role;
+import com.healthcoco.healthcocopad.bean.server.Specialities;
+import com.healthcoco.healthcocopad.bean.server.SyncAll;
+import com.healthcoco.healthcocopad.bean.server.TempTemplate;
+import com.healthcoco.healthcocopad.bean.server.Treatments;
+import com.healthcoco.healthcocopad.bean.server.User;
+import com.healthcoco.healthcocopad.bean.server.UserGroups;
+import com.healthcoco.healthcocopad.bean.server.VisitDetails;
+import com.healthcoco.healthcocopad.bean.server.VisitedForTypeTable;
+import com.healthcoco.healthcocopad.bean.server.VitalSigns;
+import com.healthcoco.healthcocopad.bean.server.WorkingHours;
 import com.healthcoco.healthcocopad.enums.AdvanceSearchOptionsType;
 import com.healthcoco.healthcocopad.enums.BooleanTypeValues;
 import com.healthcoco.healthcocopad.enums.FilterItemType;
@@ -89,17 +174,58 @@ public class LocalDataServiceImpl {
     }
 
     private Object getObjectFromJson(Class<?> class1, String jsonString) {
-        if (!Util.isNullOrBlank(jsonString))
-            return gson.fromJson(jsonString, class1);
+        if (!Util.isNullOrBlank(jsonString)) {
+            Object parsedObject = gson.fromJson(jsonString, class1);
+            if (parsedObject instanceof LinkedTreeMap)
+                parsedObject = GsonRequest.getObjectFromLinkedTreeMap(class1, parsedObject);
+            return parsedObject;
+        }
         return null;
     }
 
-    private ArrayList<Object> getObjectsListFronJson(String jsonString) {
-        if (!Util.isNullOrBlank(jsonString))
-            return gson.fromJson(jsonString, new TypeToken<List<Object>>() {
-            }.getType());
+    private ArrayList<?> getObjectsListFronJson(String jsonString) {
+        if (!Util.isNullOrBlank(jsonString)) {
+            ArrayList<Object> parsedObjectList = gson.fromJson(jsonString, ArrayList.class);
+            if (!Util.isNullOrEmptyList(parsedObjectList) && parsedObjectList.get(0) instanceof LinkedTreeMap) {
+                ArrayList<Object> list = new ArrayList<Object>();
+                for (Object object : parsedObjectList) {
+                    list.add(GsonRequest.getObjectFromLinkedTreeMap(Object.class, object));
+                }
+                return list;
+            }
+            return parsedObjectList;
+        }
         return null;
     }
+
+    private ArrayList<?> getObjectsListFronJson(Class class1, String jsonString) {
+        if (!Util.isNullOrBlank(jsonString)) {
+            ArrayList<Object> parsedObjectList = gson.fromJson(jsonString, ArrayList.class);
+            if (!Util.isNullOrEmptyList(parsedObjectList) && parsedObjectList.get(0) instanceof LinkedTreeMap) {
+                ArrayList<Object> list = new ArrayList<Object>();
+                for (Object object : parsedObjectList) {
+                    list.add(GsonRequest.getObjectFromLinkedTreeMap(class1, object));
+                }
+                return list;
+            }
+            return parsedObjectList;
+        }
+        return null;
+    }
+
+//    private ArrayList<Object> getObjectsListFronJson(Class<?> class1, String jsonString) {
+//        if (!Util.isNullOrBlank(jsonString)) {
+//            ArrayList<Object> parsedObject = gson.fromJson(jsonString, ArrayList.class);
+//            if (!Util.isNullOrEmptyList(parsedObject)) {
+//                if (parsedObject.get(0) instanceof LinkedTreeMap) {
+//                    JsonArray jsonObject = gson.toJsonTree(parsedObject).getAsJsonArray();
+//                    return gson.fromJson(jsonObject, ArrayList.class);
+//                }
+//                return parsedObject;
+//            }
+//        }
+//        return null;
+//    }
 
     public void addSyncAllObject(SyncAll syncAll) {
         LogUtils.LOGD(TAG, "SyncAllType add " + syncAll.getSyncAllType());
@@ -289,6 +415,15 @@ public class LocalDataServiceImpl {
     }
 
     private ArrayList<Object> getObjectsListFromMap(List<?> list) {
+        if (list != null) {
+            ArrayList<Object> listNew = new ArrayList<Object>();
+            listNew.addAll(list);
+            return listNew;
+        }
+        return null;
+    }
+
+    private ArrayList<Object> getObjectsListFromMap(ArrayList<?> list) {
         if (list != null) {
             ArrayList<Object> listNew = new ArrayList<Object>();
             listNew.addAll(list);
@@ -2324,7 +2459,7 @@ public class LocalDataServiceImpl {
     public void addPrescription(Prescription prescription) {
         List<DrugItem> drugItemsList = prescription.getItems();
         addDrugItemsList(drugItemsList, FromTableType.ADD_PRESCRIPTION, prescription.getUniqueId());
-        addDiagnosticTestsPrescription(prescription.getUniqueId(), prescription.getDiagnosticTests());
+        addDiagnosticTestsPrescription(prescription, prescription.getDiagnosticTests());
         prescription.save();
     }
 
@@ -2399,29 +2534,31 @@ public class LocalDataServiceImpl {
         if (!Util.isNullOrEmptyList(drugItemsList)) {
             for (DrugItem drugItem :
                     drugItemsList) {
-                //saving duration
-                Duration duration = drugItem.getDuration();
-                if (duration != null && duration.getDurationUnit() != null) {
-                    //saving duration Unit
-                    DrugDurationUnit durationUnit = duration.getDurationUnit();
-                    duration.setForeignDrugDurationUnit(durationUnit.getUniqueId());
-                    durationUnit.save();
-                    duration.setForeignTableId(prescriptionTemplateId);
-                    drugItem.setForeignDurationId(duration.getCustomUniqueId());
-                    duration.save();
-                }
+//                //saving duration
+//                Duration duration = drugItem.getDuration();
+//                if (duration != null && duration.getDurationUnit() != null) {
+//                    //saving duration Unit
+//                    DrugDurationUnit durationUnit = duration.getDurationUnit();
+//                    duration.setForeignDrugDurationUnit(durationUnit.getUniqueId());
+//                    durationUnit.save();
+//                    duration.setForeignTableId(prescriptionTemplateId);
+//                    drugItem.setForeignDurationId(duration.getCustomUniqueId());
+//                    duration.save();
+//                }
+                drugItem.setDurationJsonString(getJsonFromObject(drugItem.getDuration()));
+                drugItem.setDirectionJsonString(getJsonFromObject(drugItem.getDirection()));
                 if (drugItem.getDrug() != null) {
                     Drug drug = drugItem.getDrug();
-                    drugItem.setForeignDrugId(drug.getUniqueId());
+                    drugItem.setDrugId(drug.getUniqueId());
                     addDrug(drug);
                 }
-//            adding directions
-                if (!Util.isNullOrEmptyList(drugItem.getDirection()) && !Util.isNullOrBlank(foreignTableKey)) {
-                    addLinkedDirectionsList(foreignTableKey, prescriptionTemplateId, drugItem.getForeignDrugId(), drugItem.getDirection());
-                }
+////            adding directions
+//                if (!Util.isNullOrEmptyList(drugItem.getDirection()) && !Util.isNullOrBlank(foreignTableKey)) {
+//                    addLinkedDirectionsList(foreignTableKey, prescriptionTemplateId, drugItem.getDrugId(), drugItem.getDirection());
+//                }
                 drugItem.setForeignTableKey(foreignTableKey);
                 drugItem.setForeignTableId(prescriptionTemplateId);
-                drugItem.setCustomUniqueId(drugItem.getForeignTableKey() + drugItem.getForeignTableId() + drugItem.getForeignDrugId());
+                drugItem.setCustomUniqueId(drugItem.getForeignTableKey() + drugItem.getForeignTableId() + drugItem.getDrugId());
                 drugItem.save();
             }
         }
@@ -2455,21 +2592,16 @@ public class LocalDataServiceImpl {
         }
     }
 
-    private void addDiagnosticTestsPrescription(String uniqueId, List<DiagnosticTestsPrescription> list) {
-        deleteAllFrom(DiagnosticTestsPrescription.class, LocalDatabaseUtils.KEY_FOREIGN_TABLE_ID, uniqueId);
+    private void addDiagnosticTestsPrescription(Prescription prescription, List<DiagnosticTest> list) {
+        ArrayList<String> diagnosticIdsList = null;
         if (!Util.isNullOrEmptyList(list)) {
-            for (DiagnosticTestsPrescription diagnosticTestsPrescription :
+            diagnosticIdsList = new ArrayList<>();
+            for (DiagnosticTest diagnosticTest :
                     list) {
-                if (diagnosticTestsPrescription.getTest() != null) {
-                    DiagnosticTest test = diagnosticTestsPrescription.getTest();
-                    diagnosticTestsPrescription.setForeignDiagnosticTestId(test.getUniqueId());
-                    test.save();
-                    diagnosticTestsPrescription.setForeignTableId(uniqueId);
-                    diagnosticTestsPrescription.setCustomUniqueId(diagnosticTestsPrescription.getForeignTableId() + diagnosticTestsPrescription.getForeignDiagnosticTestId());
-                    diagnosticTestsPrescription.save();
-                }
+                diagnosticIdsList.add(diagnosticTest.getUniqueId());
             }
         }
+        prescription.setDiagnosticTestsIdsJsonString(getJsonFromObject(diagnosticIdsList));
     }
 
     private void deleteClinicalNotesAndRelatedData(ClinicalNotes clinicalNote) {
@@ -2661,7 +2793,19 @@ public class LocalDataServiceImpl {
 
     private void getPrescriptionDetail(Prescription prescription) {
         prescription.setItems(getDrugItemsList(LocalDatabaseUtils.KEY_FOREIGN_PRESCRIPTION_ID, prescription.getUniqueId()));
-        prescription.setDiagnosticTests(getDiagnosticTestPrescriptionsList(prescription.getUniqueId()));
+        prescription.setDiagnosticTests(getDiagnosticTestsList(LocalDatabaseUtils.KEY_UNIQUE_ID, (ArrayList<String>) (Object) getObjectsListFronJson(prescription.getDiagnosticTestsIdsJsonString())));
+    }
+
+    private List<DiagnosticTest> getDiagnosticTestsList(String key, ArrayList<String> diagnosticIdsList) {
+        List<DiagnosticTest> list = null;
+        if (!Util.isNullOrEmptyList(diagnosticIdsList)) {
+            //forming where condition query
+            String whereCondition = "Select * from " + StringUtil.toSQLName(DiagnosticTest.class.getSimpleName())
+                    + getWhereConditionForKeyWithValues(key, diagnosticIdsList);
+            LogUtils.LOGD(TAG, "Select Query " + whereCondition);
+            list = SugarRecord.findWithQuery(DiagnosticTest.class, whereCondition);
+        }
+        return list;
     }
 
     private void getClinicalNoteDetailsList(ClinicalNotes clinicalNote) {
@@ -2702,20 +2846,6 @@ public class LocalDataServiceImpl {
 
         }
         return dataTablesList;
-    }
-
-    private List<DiagnosticTestsPrescription> getDiagnosticTestPrescriptionsList(String foreignTableId) {
-        List<DiagnosticTestsPrescription> list = (List<DiagnosticTestsPrescription>) getObjectsList(DiagnosticTestsPrescription.class, LocalDatabaseUtils.KEY_FOREIGN_TABLE_ID, foreignTableId);
-        if (!Util.isNullOrEmptyList(list)) {
-            for (DiagnosticTestsPrescription diagnosticTestsPrescription : list
-                    ) {
-                DiagnosticTest diagnosticTest = getDiagnosticTest(diagnosticTestsPrescription.getForeignDiagnosticTestId());
-                if (diagnosticTest != null) {
-                    diagnosticTestsPrescription.setTest(diagnosticTest);
-                }
-            }
-        }
-        return list;
     }
 
     private List<?> getObjectsList(Class<?> class1, String key, String value) {
@@ -2774,9 +2904,9 @@ public class LocalDataServiceImpl {
         list = SugarRecord.findWithQuery(DrugItem.class, query);
         if (!Util.isNullOrEmptyList(list)) {
             for (DrugItem drugItem : list) {
-                drugItem.setDrug(getDrug(drugItem.getForeignDrugId()));
-                drugItem.setDuration(getDuration(drugItem.getForeignDurationId()));
-                drugItem.setDirection(getDirectionsForDrugsList(foreignKey, uniqueId, drugItem.getForeignDrugId()));
+                drugItem.setDrug(getDrug(drugItem.getDrugId()));
+                drugItem.setDuration((Duration) getObjectFromJson(Duration.class, drugItem.getDurationJsonString()));
+                drugItem.setDirection((ArrayList<DrugDirection>) getObjectsListFronJson(DrugDirection.class, drugItem.getDirectionJsonString()));
             }
         }
         return list;
@@ -2921,6 +3051,23 @@ public class LocalDataServiceImpl {
                 }
             }
             volleyResponseBean.setDataList(getObjectsListFromMap(list));
+            if (responseListener != null)
+                responseListener.onResponse(volleyResponseBean);
+        } catch (Exception e) {
+            e.printStackTrace();
+            showErrorLocal(volleyResponseBean, errorListener);
+        }
+        return volleyResponseBean;
+    }
+
+    public VolleyResponseBean getVisitDetailResponse(WebServiceType webServiceType, String selectedVisitId, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
+        volleyResponseBean.setWebServiceType(webServiceType);
+        volleyResponseBean.setIsDataFromLocal(true);
+        volleyResponseBean.setIsUserOnline(HealthCocoConstants.isNetworkOnline);
+        try {
+            VisitDetails visitDetails = getVisit(selectedVisitId);
+            volleyResponseBean.setData(visitDetails);
             if (responseListener != null)
                 responseListener.onResponse(volleyResponseBean);
         } catch (Exception e) {
@@ -3323,6 +3470,7 @@ public class LocalDataServiceImpl {
         ArrayList<Object> list = (ArrayList<Object>) (Object) SugarRecord.findWithQuery(class1, whereCondition);
         return list;
     }
+
     public VolleyResponseBean getMasterData(WebServiceType webServiceType, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
         volleyResponseBean.setWebServiceType(webServiceType);
