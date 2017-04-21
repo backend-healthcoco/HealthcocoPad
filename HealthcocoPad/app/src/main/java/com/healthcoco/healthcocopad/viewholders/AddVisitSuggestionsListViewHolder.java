@@ -26,8 +26,8 @@ import com.healthcoco.healthcocopad.bean.server.PsSuggestions;
 import com.healthcoco.healthcocopad.bean.server.PvSuggestions;
 import com.healthcoco.healthcocopad.bean.server.SystemicExaminationSuggestions;
 import com.healthcoco.healthcocopad.bean.server.XrayDetailSuggestions;
-import com.healthcoco.healthcocopad.fragments.HistoryPresentComplaintSuggestions;
-import com.healthcoco.healthcocopad.fragments.MenstrualHistorySuggestions;
+import com.healthcoco.healthcocopad.bean.server.HistoryPresentComplaintSuggestions;
+import com.healthcoco.healthcocopad.bean.server.MenstrualHistorySuggestions;
 
 /**
  * Created by neha on 15/04/17.

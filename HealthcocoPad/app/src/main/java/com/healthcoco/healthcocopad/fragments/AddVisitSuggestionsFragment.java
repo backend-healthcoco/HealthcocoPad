@@ -30,10 +30,12 @@ import com.healthcoco.healthcocopad.bean.server.DrugsListSolrResponse;
 import com.healthcoco.healthcocopad.bean.server.EcgDetailSuggestions;
 import com.healthcoco.healthcocopad.bean.server.EchoSuggestions;
 import com.healthcoco.healthcocopad.bean.server.GeneralExaminationSuggestions;
+import com.healthcoco.healthcocopad.bean.server.HistoryPresentComplaintSuggestions;
 import com.healthcoco.healthcocopad.bean.server.HolterSuggestions;
 import com.healthcoco.healthcocopad.bean.server.IndicationOfUsgSuggestions;
 import com.healthcoco.healthcocopad.bean.server.InvestigationSuggestions;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
+import com.healthcoco.healthcocopad.bean.server.MenstrualHistorySuggestions;
 import com.healthcoco.healthcocopad.bean.server.NotesSuggestions;
 import com.healthcoco.healthcocopad.bean.server.ObservationSuggestions;
 import com.healthcoco.healthcocopad.bean.server.ObstetricHistorySuggestions;
@@ -66,21 +68,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.healthcoco.healthcocopad.enums.WebServiceType.FRAGMENT_INITIALISATION;
-import static com.healthcoco.healthcocopad.enums.WebServiceType.GET_ECG_SUGGESTIONS;
-import static com.healthcoco.healthcocopad.enums.WebServiceType.GET_ECHO_SUGGESTIONS;
-import static com.healthcoco.healthcocopad.enums.WebServiceType.GET_GENERAL_EXAMINATION_SUGGESTIONS;
-import static com.healthcoco.healthcocopad.enums.WebServiceType.GET_HISTORY_OF_PRESENT_COMPLAINT_SUGGESTIONS;
-import static com.healthcoco.healthcocopad.enums.WebServiceType.GET_HOLTER_SUGGESTIONS;
-import static com.healthcoco.healthcocopad.enums.WebServiceType.GET_INDICATION_OF_USG_SUGGESTIONS;
-import static com.healthcoco.healthcocopad.enums.WebServiceType.GET_MENSTRUAL_HISTORY_SUGGESTIONS;
-import static com.healthcoco.healthcocopad.enums.WebServiceType.GET_OBSTETRIC_HISTORY_SUGGESTIONS;
-import static com.healthcoco.healthcocopad.enums.WebServiceType.GET_PA_SUGGESTIONS;
-import static com.healthcoco.healthcocopad.enums.WebServiceType.GET_PRESENT_COMPLAINT_SUGGESTIONS;
-import static com.healthcoco.healthcocopad.enums.WebServiceType.GET_PROVISIONAL_DIAGNOSIS_SUGGESTIONS;
-import static com.healthcoco.healthcocopad.enums.WebServiceType.GET_PS_SUGGESTIONS;
-import static com.healthcoco.healthcocopad.enums.WebServiceType.GET_PV_SUGGESTIONS;
-import static com.healthcoco.healthcocopad.enums.WebServiceType.GET_SYSTEMIC_EXAMINATION_SUGGESTIONS;
-import static com.healthcoco.healthcocopad.enums.WebServiceType.GET_XRAY_SUGGESTIONS;
 
 /**
  * Created by neha on 15/04/17.

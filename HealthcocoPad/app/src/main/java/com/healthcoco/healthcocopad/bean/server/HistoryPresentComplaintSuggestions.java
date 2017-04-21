@@ -1,4 +1,4 @@
-package com.healthcoco.healthcocopad.fragments;
+package com.healthcoco.healthcocopad.bean.server;
 
 import com.orm.SugarRecord;
 import com.orm.annotation.Unique;
@@ -9,11 +9,11 @@ import org.parceler.Parcel;
  * Created by Shreshtha on 21-04-2017.
  */
 @Parcel
-public class MenstrualHistorySuggestions extends SugarRecord {
+public class HistoryPresentComplaintSuggestions extends SugarRecord{
     @Unique
     private String uniqueId;
 
-    private String menstrualHistory;
+    private String presentComplaintHistory;
 
     private String doctorId;
 
@@ -33,12 +33,12 @@ public class MenstrualHistorySuggestions extends SugarRecord {
         this.uniqueId = uniqueId;
     }
 
-    public String getMenstrualHistory() {
-        return menstrualHistory;
+    public String getPresentComplaintHistory() {
+        return presentComplaintHistory;
     }
 
-    public void setMenstrualHistory(String menstrualHistory) {
-        this.menstrualHistory = menstrualHistory;
+    public void setPresentComplaintHistory(String presentComplaintHistory) {
+        this.presentComplaintHistory = presentComplaintHistory;
     }
 
     public String getDoctorId() {
