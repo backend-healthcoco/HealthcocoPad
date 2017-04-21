@@ -887,7 +887,6 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
     }
 
     public void showOnlyWidget() {
-        addVisitSuggestionsFragment.removeFocusFromEditSearch();
         parentWidgetSuggestions.setVisibility(View.VISIBLE);
         containerSuggestionsList.setVisibility(View.GONE);
         layoutWidget.setVisibility(View.VISIBLE);
@@ -1010,6 +1009,7 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
     private void showHideAdviceLayout() {
         if (layoutParentAdvice.getVisibility() == View.GONE) {
             Util.requesFocus(etAdvice);
+            requestFocus(etAdvice);
             layoutParentAdvice.setVisibility(View.VISIBLE);
             addVisibileUiType(VisitsUiType.ADVICE);
             showOnlyWidget();
