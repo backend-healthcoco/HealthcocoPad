@@ -169,6 +169,7 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements
         adapterSolr.notifyDataSetChanged();
     }
 
+
     @Override
     public void onResponse(VolleyResponseBean response) {
         ArrayList<Object> responseList = null;
