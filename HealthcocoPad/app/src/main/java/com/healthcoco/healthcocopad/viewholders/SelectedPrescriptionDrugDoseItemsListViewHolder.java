@@ -54,14 +54,10 @@ public class SelectedPrescriptionDrugDoseItemsListViewHolder extends HealthCocoV
     private TextView tvDirections;
     private TextView tvFrequency;
     private EditText editDuration;
-    private DrugItem drugItem;
     private EditText etInstruction;
     private TextView tvGenericName;
     private TextView tvDrugDurationUnit;
     private CommonListDialogFragmentWithTitle commonListDialog;
-    private DrugDurationUnit selectedDurationUnit;
-    private DrugDosage selectedDosage;
-    private DrugDirection selectedDirection;
     private ArrayList<DrugDurationUnit> receivedDurationUnitList;
     private ArrayList<DrugDosage> receivedFrequencyDosageList;
     private ArrayList<DrugDirection> receivedDirectionsList;
@@ -115,22 +111,26 @@ public class SelectedPrescriptionDrugDoseItemsListViewHolder extends HealthCocoV
 
         if (!Util.isNullOrEmptyList(objData.getDirection())) {
             DrugDirection direction = objData.getDirection().get(0);
-            tvDirections.setText(Util.getValidatedValue( Util.getValidatedValue((direction.getDirection()))));
-        }
+            tvDirections.setText(Util.getValidatedValue(Util.getValidatedValue((direction.getDirection()))));
+        } else
+            tvDirections.setText("");
 
-        tvFrequency.setText(Util.getValidatedValue( objData.getDosage()));
+        tvFrequency.setText(Util.getValidatedValue(objData.getDosage()));
 
         if (objData.getDuration() != null)
-            editDuration.setText(Util.getValidatedValue( objData.getDuration().getValue()));
+            editDuration.setText(Util.getValidatedValue(objData.getDuration().getValue()));
+        else
+            editDuration.setText("");
 
         if (objData.getDuration() != null && objData.getDuration().getDurationUnit() != null)
-            tvDrugDurationUnit.setText(Util.getValidatedValue( objData.getDuration().getDurationUnit().getUnit()));
-
+            tvDrugDurationUnit.setText(Util.getValidatedValue(objData.getDuration().getDurationUnit().getUnit()));
+        else tvDrugDurationUnit.setText("");
         //initialising instructions popup
         if (!Util.isNullOrBlank(objData.getInstructions())) {
             etInstruction.setVisibility(View.VISIBLE);
             etInstruction.setText(Util.getValidatedValue(objData.getInstructions()));
-        }
+        } else
+            etInstruction.setText("");
     }
 
     @Override
@@ -192,19 +192,29 @@ public class SelectedPrescriptionDrugDoseItemsListViewHolder extends HealthCocoV
         switch (commonListDialogType) {
             case DURATION:
                 if (object instanceof DrugDurationUnit) {
-                    selectedDurationUnit = (DrugDurationUnit) object;
+                    DrugDurationUnit selectedDurationUnit = (DrugDurationUnit) object;
+                    if (selectedDurationUnit != null) {
+                        objData.setDuration(getDuration(Util.getValidatedValueOrNull(editDuration), selectedDurationUnit));
+                    }
                     tvDrugDurationUnit.setText(selectedDurationUnit.getUnit());
                 }
                 break;
             case FREQUENCY:
                 if (object instanceof DrugDosage) {
-                    selectedDosage = (DrugDosage) object;
+                    DrugDosage selectedDosage = (DrugDosage) object;
+                    objData.setDosage(Util.getValidatedValueOrNull(selectedDosage.getDosage()));
                     tvFrequency.setText(selectedDosage.getDosage());
                 }
                 break;
             case DIRECTION:
                 if (object instanceof DrugDirection) {
-                    selectedDirection = (DrugDirection) object;
+                    DrugDirection selectedDirection = (DrugDirection) object;
+                    ArrayList<DrugDirection> directionsList = null;
+                    if (selectedDirection != null) {
+                        directionsList = new ArrayList<DrugDirection>();
+                        directionsList.add(getDirection(selectedDirection));
+                    }
+                    objData.setDirection(directionsList);
                     tvDirections.setText(selectedDirection.getDirection());
                 }
                 break;
@@ -251,7 +261,7 @@ public class SelectedPrescriptionDrugDoseItemsListViewHolder extends HealthCocoV
                 case GET_DURATION_UNIT:
                     if (response.isDataFromLocal()) {
                         receivedDurationUnitList = (ArrayList<DrugDurationUnit>) (ArrayList<?>) response.getDataList();
-                        if (!Util.isNullOrEmptyList(receivedDurationUnitList) && selectedDurationUnit == null) {
+                        if (!Util.isNullOrEmptyList(receivedDurationUnitList) && objData.getDuration().getDurationUnit() == null) {
                             LogUtils.LOGD(TAG, "Success onResponse receivedDurationUnitList Size " + receivedDurationUnitList.size() + " isDataFromLocal " + response.isDataFromLocal());
                             setDefaultAsDays(receivedDurationUnitList);
                         }
@@ -324,19 +334,13 @@ public class SelectedPrescriptionDrugDoseItemsListViewHolder extends HealthCocoV
     }
 
     public DrugItem getDrug() {
-        if (selectedDirection != null) {
-            ArrayList<DrugDirection> directionsList = new ArrayList<DrugDirection>();
-            directionsList.add(getDirection(selectedDirection));
-            objData.setDirection(directionsList);
-        }
-        if (selectedDurationUnit != null) {
-            objData.setDuration(getDuration(Util.getValidatedValueOrNull(editDuration), selectedDurationUnit));
-        }
-        if (selectedDosage != null) {
-            objData.setDosage(Util.getValidatedValueOrNull(selectedDosage.getDosage()));
-        }
+        if (objData.getDuration() != null
+                && objData.getDuration().getDurationUnit() != null
+                && !Util.isNullOrBlank(objData.getDuration().getDurationUnit().getUnit()))
+            objData.setDuration(getDuration(Util.getValidatedValueOrNull(editDuration), objData.getDuration().getDurationUnit()));
+        else
+            objData.setDuration(getDurationForTaggedViews(Util.getValidatedValueOrNull(editDuration)));
         objData.setInstructions(Util.getValidatedValueOrNull(etInstruction));
-
         return objData;
     }
 
@@ -353,8 +357,17 @@ public class SelectedPrescriptionDrugDoseItemsListViewHolder extends HealthCocoV
         return selectedDirection;
     }
 
+    private Duration getDurationForTaggedViews(String value) {
+        if (!Util.isNullOrBlank(value)) {
+            Duration duration = new Duration();
+            duration.setValue(value);
+            return duration;
+        }
+        return null;
+    }
+
     private Duration getDuration(String value, DrugDurationUnit drugDurationUnit) {
-        if (!Util.isNullOrBlank(value) && drugDurationUnit != null && !Util.isNullOrBlank(drugDurationUnit.getUnit())) {
+        if (drugDurationUnit != null && !Util.isNullOrBlank(drugDurationUnit.getUnit())) {
             Duration duration = new Duration();
             duration.setDurationUnit(drugDurationUnit);
             duration.setValue(value);

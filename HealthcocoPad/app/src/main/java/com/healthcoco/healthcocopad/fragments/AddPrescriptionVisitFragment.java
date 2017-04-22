@@ -145,8 +145,9 @@ public class AddPrescriptionVisitFragment extends HealthCocoFragment implements 
     }
 
     public void addDrug(DrugItem drug) {
-        if (drug != null) {
+;        if (drug != null) {
             drugsListHashMap.put(drug.getDrug().getUniqueId(), drug);
+            refreshListViewUpdatedDrugsList();
             notifyAdapter(new ArrayList<DrugItem>(drugsListHashMap.values()));
             lvPrescriptionItems.setSelection(adapter.getCount());
         }
@@ -180,17 +181,7 @@ public class AddPrescriptionVisitFragment extends HealthCocoFragment implements 
 
     //setting drug to null and drugId to uniqueId for sending on server
     public List<DrugItem> getModifiedDrugsList() {
-        if (lvPrescriptionItems.getChildCount() > 0) {
-            for (int i = 0; i < lvPrescriptionItems.getChildCount(); i++) {
-                View child = lvPrescriptionItems.getChildAt(i);
-                if (child.getTag() != null && child.getTag() instanceof SelectedPrescriptionDrugDoseItemsListViewHolder) {
-                    SelectedPrescriptionDrugDoseItemsListViewHolder viewHolder = (SelectedPrescriptionDrugDoseItemsListViewHolder) child.getTag();
-                    DrugItem modifiedDrug = viewHolder.getDrug();
-                    LogUtils.LOGD(TAG, "Drug " + modifiedDrug.getDrug().getDrugName());
-                    drugsListHashMap.put(modifiedDrug.getDrugId(), modifiedDrug);
-                }
-            }
-        }
+        refreshListViewUpdatedDrugsList();
         if (!Util.isNullOrEmptyList(drugsListHashMap)) {
             List<DrugItem> modifiedList = new ArrayList<DrugItem>(drugsListHashMap.values());
 //        modifiedList.addAll(drugsList);
@@ -204,5 +195,19 @@ public class AddPrescriptionVisitFragment extends HealthCocoFragment implements 
             return modifiedList;
         }
         return null;
+    }
+
+    private void refreshListViewUpdatedDrugsList() {
+        if (lvPrescriptionItems.getChildCount() > 0) {
+            for (int i = 0; i < lvPrescriptionItems.getChildCount(); i++) {
+                View child = lvPrescriptionItems.getChildAt(i);
+                if (child.getTag() != null && child.getTag() instanceof SelectedPrescriptionDrugDoseItemsListViewHolder) {
+                    SelectedPrescriptionDrugDoseItemsListViewHolder viewHolder = (SelectedPrescriptionDrugDoseItemsListViewHolder) child.getTag();
+                    DrugItem modifiedDrug = viewHolder.getDrug();
+                    LogUtils.LOGD(TAG, "Drug " + modifiedDrug.getDrug().getDrugName());
+                    drugsListHashMap.put(modifiedDrug.getDrugId(), modifiedDrug);
+                }
+            }
+        }
     }
 }

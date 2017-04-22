@@ -1397,16 +1397,14 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        if (v instanceof MyScriptEditText) {
-            switch (event.getAction()) {
-                case MotionEvent.ACTION_UP:
-                    requestFocus(v);
-                    LogUtils.LOGD(TAG, "Action UP");
-                    break;
-                case MotionEvent.ACTION_DOWN:
-                    LogUtils.LOGD(TAG, "Action DOWN");
-                    break;
-            }
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_UP:
+                requestFocus(v);
+                LogUtils.LOGD(TAG, "Action UP");
+                break;
+            case MotionEvent.ACTION_DOWN:
+                LogUtils.LOGD(TAG, "Action DOWN");
+                break;
         }
         return false;
     }
@@ -1416,6 +1414,8 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
         refreshSuggestionsList(v, "");
         if (v instanceof EditText)
             initEditTextForWidget((MyScriptEditText) v, this);
+        else if (selectedSuggestionType != null)
+            addVisitSuggestionsFragment.refreshTagOfEditText(selectedSuggestionType);
     }
 
     public View.OnTouchListener getOnTouchListener() {
