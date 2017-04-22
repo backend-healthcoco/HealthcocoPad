@@ -53,6 +53,8 @@ public class LocalDatabaseUtils {
     public static final String KEY_FOREIGN_GROUP_ID = "foreign_group_id";
     public static final String KEY_FOREIGN_DRUG_DURATION_UNIT_ID = "foreign_drug_duration_unit";
     public static final String KEY_UNIQUE_ID = "unique_id";
+    public static final String KEY_DIAGNOSTIC_TEST_ID = "diagnostic_test_id";
+
     public static final String KEY_APPOINTMENT_ID = "appointment_id";
     public static final String KEY_VISITED_TIME = "visited_time";
     public static final String KEY_DISCARDED = "discarded";

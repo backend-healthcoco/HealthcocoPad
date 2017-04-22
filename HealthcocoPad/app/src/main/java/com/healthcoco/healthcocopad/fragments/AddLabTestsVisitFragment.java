@@ -90,7 +90,7 @@ public class AddLabTestsVisitFragment extends HealthCocoFragment implements View
         }
     }
 
-    private void showConfirmationAlertForDrugs(final DiagnosticTest drug) {
+    private void showConfirmationAlertForDrugs(final DiagnosticTest diagnosticTest) {
         final AlertDialog.Builder alertBuilder = new AlertDialog.Builder(mActivity);
         alertBuilder.setTitle(R.string.confirm);
         alertBuilder.setMessage(R.string.confirm_remove_test);
@@ -100,7 +100,7 @@ public class AddLabTestsVisitFragment extends HealthCocoFragment implements View
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 try {
-                    diagnosticTestsListHashMap.remove(drug.getUniqueId());
+                    diagnosticTestsListHashMap.remove(diagnosticTest.getUniqueId());
                     notifyAdapter(new ArrayList<DiagnosticTest>(diagnosticTestsListHashMap.values()));
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -117,12 +117,10 @@ public class AddLabTestsVisitFragment extends HealthCocoFragment implements View
         alertBuilder.show();
     }
 
-    public void addDiagnosticTest(DiagnosticTest drug) {
-        if (drug != null) {
-            diagnosticTestsListHashMap.put(drug.getUniqueId(), drug);
-            notifyAdapter(new ArrayList<DiagnosticTest>(diagnosticTestsListHashMap.values()));
-            lvDiagnoticTests.setSelection(adapter.getCount());
-        }
+    public void addDiagnosticTest(DiagnosticTest diagnosticTests) {
+        diagnosticTestsListHashMap.put(diagnosticTests.getUniqueId(), diagnosticTests);
+        notifyAdapter(new ArrayList<DiagnosticTest>(diagnosticTestsListHashMap.values()));
+        lvDiagnoticTests.setSelection(adapter.getCount());
     }
 
     public View getLastChildView() {

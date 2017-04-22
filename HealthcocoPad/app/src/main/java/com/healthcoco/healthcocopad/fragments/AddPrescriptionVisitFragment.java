@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +20,7 @@ import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.adapter.SelectedPrescriptionDrugItemsListAdapter;
 import com.healthcoco.healthcocopad.bean.server.DrugItem;
 import com.healthcoco.healthcocopad.custom.MyScriptEditText;
-import com.healthcoco.healthcocopad.listeners.SelectedDrugsListItemListener;
+import com.healthcoco.healthcocopad.listeners.AddNewPrescriptionListener;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.healthcoco.healthcocopad.viewholders.SelectedPrescriptionDrugDoseItemsListViewHolder;
@@ -31,13 +33,14 @@ import java.util.List;
  * Created by neha on 19/04/17.
  */
 
-public class AddPrescriptionVisitFragment extends HealthCocoFragment implements SelectedDrugsListItemListener, View.OnFocusChangeListener {
+public class AddPrescriptionVisitFragment extends HealthCocoFragment implements AddNewPrescriptionListener, View.OnFocusChangeListener {
     private LinkedHashMap<String, DrugItem> drugsListHashMap = new LinkedHashMap<>();
     private SelectedPrescriptionDrugItemsListAdapter adapter;
     private ListView lvPrescriptionItems;
     private EditText editDurationCommon;
     private AddVisitsFragment addVisitsFragment;
     private SelectedPrescriptionDrugDoseItemsListViewHolder viewHolder;
+    private boolean isDurationSet;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -71,7 +74,8 @@ public class AddPrescriptionVisitFragment extends HealthCocoFragment implements 
         if (addVisitsFragment != null) {
             editDurationCommon.setOnTouchListener(addVisitsFragment.getOnTouchListener());
         }
-        editDurationCommon.setOnFocusChangeListener(this);
+//        editDurationCommon.setOnFocusChangeListener(this);
+//        editDurationCommon.setFilters(new InputFilter[]{filter});
     }
 
     private void initAdapter() {
@@ -139,6 +143,16 @@ public class AddPrescriptionVisitFragment extends HealthCocoFragment implements 
     }
 
     @Override
+    public String getDurationUnit() {
+        return Util.getValidatedValueOrBlankTrimming(editDurationCommon);
+    }
+
+    @Override
+    public boolean isDurationSet() {
+        return isDurationSet;
+    }
+
+    @Override
     public AddVisitsFragment getAddVisitFragment() {
         if (addVisitsFragment == null)
             addVisitsFragment = (AddVisitsFragment) mFragmentManager.findFragmentByTag(AddVisitsFragment.class.getSimpleName());
@@ -146,7 +160,9 @@ public class AddPrescriptionVisitFragment extends HealthCocoFragment implements 
     }
 
     public void addDrug(DrugItem drug) {
-;        if (drug != null) {
+        isDurationSet = false;
+        if (drug != null) {
+            editDurationCommon.setText("");
             drugsListHashMap.put(drug.getDrug().getUniqueId(), drug);
             refreshListViewUpdatedDrugsList();
             notifyAdapter(new ArrayList<DrugItem>(drugsListHashMap.values()));
@@ -199,15 +215,22 @@ public class AddPrescriptionVisitFragment extends HealthCocoFragment implements 
     }
 
     public void modifyDurationUnit(String unit) {
-        if (lvPrescriptionItems.getChildCount() > 0) {
-            for (int i = 0; i < lvPrescriptionItems.getChildCount(); i++) {
-                View child = lvPrescriptionItems.getChildAt(i);
-                if (child.getTag() != null && child.getTag() instanceof SelectedPrescriptionDrugDoseItemsListViewHolder) {
-                    viewHolder = (SelectedPrescriptionDrugDoseItemsListViewHolder) child.getTag();
-                    viewHolder.setDurationUnitToAll(unit);
-                }
-            }
+//        if (Util.isNullOrBlank(unit))
+//            isDurationSet = false;
+//        else
+        if (editDurationCommon.hasFocus()) {
+            isDurationSet = true;
+            adapter.notifyDataSetChanged();
         }
+//        if (lvPrescriptionItems.getChildCount() > 0) {
+//            for (int i = 0; i < lvPrescriptionItems.getChildCount(); i++) {
+//                View child = lvPrescriptionItems.getChildAt(i);
+//                if (child.getTag() != null && child.getTag() instanceof SelectedPrescriptionDrugDoseItemsListViewHolder) {
+//                    viewHolder = (SelectedPrescriptionDrugDoseItemsListViewHolder) child.getTag();
+//                    viewHolder.setDurationUnitToAll(unit);
+//                }
+//            }
+//        }
     }
 
     private void refreshListViewUpdatedDrugsList() {
@@ -223,4 +246,12 @@ public class AddPrescriptionVisitFragment extends HealthCocoFragment implements 
             }
         }
     }
+
+    InputFilter filter = new InputFilter() {
+        public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+            String text = dest.toString() + source.toString();
+            modifyDurationUnit(text);
+            return text;
+        }
+    };
 }

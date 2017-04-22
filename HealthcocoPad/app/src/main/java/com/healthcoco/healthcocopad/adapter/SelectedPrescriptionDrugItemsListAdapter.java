@@ -6,7 +6,7 @@ import android.widget.BaseAdapter;
 
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.bean.server.DrugItem;
-import com.healthcoco.healthcocopad.listeners.SelectedDrugsListItemListener;
+import com.healthcoco.healthcocopad.listeners.AddNewPrescriptionListener;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.healthcoco.healthcocopad.viewholders.SelectedPrescriptionDrugDoseItemsListViewHolder;
 
@@ -20,11 +20,11 @@ public class SelectedPrescriptionDrugItemsListAdapter extends BaseAdapter {
     private ArrayList<DrugItem> list;
     private HealthCocoActivity mActivity;
     private SelectedPrescriptionDrugDoseItemsListViewHolder holder;
-    private SelectedDrugsListItemListener selectedDrugsListItemListener;
+    private AddNewPrescriptionListener addNewPrescriptionListener;
 
-    public SelectedPrescriptionDrugItemsListAdapter(HealthCocoActivity activity, SelectedDrugsListItemListener selectedDrugsListItemListener) {
+    public SelectedPrescriptionDrugItemsListAdapter(HealthCocoActivity activity, AddNewPrescriptionListener addNewPrescriptionListener) {
         this.mActivity = activity;
-        this.selectedDrugsListItemListener = selectedDrugsListItemListener;
+        this.addNewPrescriptionListener = addNewPrescriptionListener;
     }
 
     @Override
@@ -47,7 +47,7 @@ public class SelectedPrescriptionDrugItemsListAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            holder = new SelectedPrescriptionDrugDoseItemsListViewHolder(mActivity, selectedDrugsListItemListener);
+            holder = new SelectedPrescriptionDrugDoseItemsListViewHolder(mActivity, addNewPrescriptionListener);
             convertView = holder.getContentView();
             convertView.setTag(holder);
         } else

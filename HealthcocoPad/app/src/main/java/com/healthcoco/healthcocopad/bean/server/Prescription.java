@@ -1,15 +1,14 @@
 package com.healthcoco.healthcocopad.bean.server;
 
 import com.healthcoco.healthcocopad.utilities.StringUtil;
-import com.healthcoco.healthcocopad.utilities.Util;
 import com.orm.SugarRecord;
 import com.orm.annotation.Ignore;
 import com.orm.annotation.Unique;
 
 import org.parceler.Parcel;
 
-import java.util.ArrayList;
 import java.util.List;
+
 @Parcel
 public class Prescription extends SugarRecord {
     public static String TABLE_NAME = " " + StringUtil.toSQLName(Prescription.class.getSimpleName());
@@ -28,7 +27,7 @@ public class Prescription extends SugarRecord {
     private List<DrugItem> items;
     //required to get prescription in Response
     @Ignore
-    private List<DiagnosticTest> diagnosticTests;
+    private List<DiagnosticTestsPrescription> diagnosticTests;
     private String diagnosticTestsIdsJsonString;
 
     private Boolean discarded;
@@ -163,11 +162,11 @@ public class Prescription extends SugarRecord {
         this.uniqueEmrId = uniqueEmrId;
     }
 
-    public List<DiagnosticTest> getDiagnosticTests() {
+    public List<DiagnosticTestsPrescription> getDiagnosticTests() {
         return diagnosticTests;
     }
 
-    public void setDiagnosticTests(List<DiagnosticTest> diagnosticTests) {
+    public void setDiagnosticTests(List<DiagnosticTestsPrescription> diagnosticTests) {
         this.diagnosticTests = diagnosticTests;
     }
 

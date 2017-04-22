@@ -17,91 +17,6 @@ import com.healthcoco.healthcocopad.bean.UiPermissionsBoth;
 import com.healthcoco.healthcocopad.bean.UserPermissionsResponse;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.*;
-import com.healthcoco.healthcocopad.bean.server.APILatestUpdatedTimes;
-import com.healthcoco.healthcocopad.bean.server.AccessModule;
-import com.healthcoco.healthcocopad.bean.server.Achievement;
-import com.healthcoco.healthcocopad.bean.server.AlreadyRegisteredPatientsResponse;
-import com.healthcoco.healthcocopad.bean.server.AppointmentSlot;
-import com.healthcoco.healthcocopad.bean.server.AssignedUserUiPermissions;
-import com.healthcoco.healthcocopad.bean.server.BloodGroup;
-import com.healthcoco.healthcocopad.bean.server.BloodPressure;
-import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
-import com.healthcoco.healthcocopad.bean.server.CityResponse;
-import com.healthcoco.healthcocopad.bean.server.ClinicDetailResponse;
-import com.healthcoco.healthcocopad.bean.server.ClinicDoctorProfile;
-import com.healthcoco.healthcocopad.bean.server.ClinicImage;
-import com.healthcoco.healthcocopad.bean.server.ClinicWorkingSchedule;
-import com.healthcoco.healthcocopad.bean.server.ClinicalNotes;
-import com.healthcoco.healthcocopad.bean.server.CollegeUniversityInstitute;
-import com.healthcoco.healthcocopad.bean.server.Complaint;
-import com.healthcoco.healthcocopad.bean.server.ComplaintSuggestions;
-import com.healthcoco.healthcocopad.bean.server.ConsultationFee;
-import com.healthcoco.healthcocopad.bean.server.Diagnoses;
-import com.healthcoco.healthcocopad.bean.server.DiagnosisSuggestions;
-import com.healthcoco.healthcocopad.bean.server.DiagnosticTest;
-import com.healthcoco.healthcocopad.bean.server.Diagram;
-import com.healthcoco.healthcocopad.bean.server.Disease;
-import com.healthcoco.healthcocopad.bean.server.DoctorClinicProfile;
-import com.healthcoco.healthcocopad.bean.server.DoctorExperience;
-import com.healthcoco.healthcocopad.bean.server.DoctorExperienceDetail;
-import com.healthcoco.healthcocopad.bean.server.DoctorProfile;
-import com.healthcoco.healthcocopad.bean.server.DoctorRegistrationDetail;
-import com.healthcoco.healthcocopad.bean.server.DoctorWorkingSchedule;
-import com.healthcoco.healthcocopad.bean.server.Drug;
-import com.healthcoco.healthcocopad.bean.server.DrugDirection;
-import com.healthcoco.healthcocopad.bean.server.DrugDosage;
-import com.healthcoco.healthcocopad.bean.server.DrugDurationUnit;
-import com.healthcoco.healthcocopad.bean.server.DrugItem;
-import com.healthcoco.healthcocopad.bean.server.DrugType;
-import com.healthcoco.healthcocopad.bean.server.DrugsAndAllergies;
-import com.healthcoco.healthcocopad.bean.server.Duration;
-import com.healthcoco.healthcocopad.bean.server.Education;
-import com.healthcoco.healthcocopad.bean.server.EducationQualification;
-import com.healthcoco.healthcocopad.bean.server.EmailAddress;
-import com.healthcoco.healthcocopad.bean.server.ForeignAppointmentBookingNumber;
-import com.healthcoco.healthcocopad.bean.server.ForeignComplaintsTable;
-import com.healthcoco.healthcocopad.bean.server.ForeignDiagnosesTable;
-import com.healthcoco.healthcocopad.bean.server.ForeignInvestigationsTable;
-import com.healthcoco.healthcocopad.bean.server.ForeignObservationsTable;
-import com.healthcoco.healthcocopad.bean.server.ForeignOtherEmailAddresses;
-import com.healthcoco.healthcocopad.bean.server.ForeignProfessionalMemberships;
-import com.healthcoco.healthcocopad.bean.server.ForeignSpecialities;
-import com.healthcoco.healthcocopad.bean.server.ForieignAdditionalNumbers;
-import com.healthcoco.healthcocopad.bean.server.GCMRequest;
-import com.healthcoco.healthcocopad.bean.server.GeneratedOtpTime;
-import com.healthcoco.healthcocopad.bean.server.HistoryDetailsResponse;
-import com.healthcoco.healthcocopad.bean.server.Hospital;
-import com.healthcoco.healthcocopad.bean.server.Investigation;
-import com.healthcoco.healthcocopad.bean.server.InvestigationSuggestions;
-import com.healthcoco.healthcocopad.bean.server.LinkedTableDirection;
-import com.healthcoco.healthcocopad.bean.server.Location;
-import com.healthcoco.healthcocopad.bean.server.LocationAndAccessControl;
-import com.healthcoco.healthcocopad.bean.server.LoginResponse;
-import com.healthcoco.healthcocopad.bean.server.MedicalCouncil;
-import com.healthcoco.healthcocopad.bean.server.MedicalFamilyHistoryDetails;
-import com.healthcoco.healthcocopad.bean.server.Notes;
-import com.healthcoco.healthcocopad.bean.server.Observation;
-import com.healthcoco.healthcocopad.bean.server.ObservationSuggestions;
-import com.healthcoco.healthcocopad.bean.server.OtpVerification;
-import com.healthcoco.healthcocopad.bean.server.Patient;
-import com.healthcoco.healthcocopad.bean.server.PatientTreatment;
-import com.healthcoco.healthcocopad.bean.server.Prescription;
-import com.healthcoco.healthcocopad.bean.server.Profession;
-import com.healthcoco.healthcocopad.bean.server.Records;
-import com.healthcoco.healthcocopad.bean.server.Reference;
-import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
-import com.healthcoco.healthcocopad.bean.server.Relations;
-import com.healthcoco.healthcocopad.bean.server.Role;
-import com.healthcoco.healthcocopad.bean.server.Specialities;
-import com.healthcoco.healthcocopad.bean.server.SyncAll;
-import com.healthcoco.healthcocopad.bean.server.TempTemplate;
-import com.healthcoco.healthcocopad.bean.server.Treatments;
-import com.healthcoco.healthcocopad.bean.server.User;
-import com.healthcoco.healthcocopad.bean.server.UserGroups;
-import com.healthcoco.healthcocopad.bean.server.VisitDetails;
-import com.healthcoco.healthcocopad.bean.server.VisitedForTypeTable;
-import com.healthcoco.healthcocopad.bean.server.VitalSigns;
-import com.healthcoco.healthcocopad.bean.server.WorkingHours;
 import com.healthcoco.healthcocopad.enums.AdvanceSearchOptionsType;
 import com.healthcoco.healthcocopad.enums.BooleanTypeValues;
 import com.healthcoco.healthcocopad.enums.FilterItemType;
@@ -114,8 +29,6 @@ import com.healthcoco.healthcocopad.enums.VisitedForType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.enums.WeekDayNameType;
 import com.healthcoco.healthcocopad.fragments.ClinicalProfileFragment;
-import com.healthcoco.healthcocopad.bean.server.HistoryPresentComplaintSuggestions;
-import com.healthcoco.healthcocopad.bean.server.MenstrualHistorySuggestions;
 import com.healthcoco.healthcocopad.fragments.MenuDrawerFragment;
 import com.healthcoco.healthcocopad.fragments.PatientRegistrationFragment;
 import com.healthcoco.healthcocopad.services.GsonRequest;
@@ -2541,7 +2454,7 @@ public class LocalDataServiceImpl {
 //                    DrugDurationUnit durationUnit = duration.getDurationUnit();
 //                    duration.setForeignDrugDurationUnit(durationUnit.getUniqueId());
 //                    durationUnit.save();
-//                    duration.setForeignTableId(prescriptionTemplateId);
+//                    duration.setDiagnosticTestId(prescriptionTemplateId);
 //                    drugItem.setForeignDurationId(duration.getCustomUniqueId());
 //                    duration.save();
 //                }
@@ -2592,14 +2505,23 @@ public class LocalDataServiceImpl {
         }
     }
 
-    private void addDiagnosticTestsPrescription(Prescription prescription, List<DiagnosticTest> list) {
+    private void addDiagnosticTestsPrescription(Prescription prescription, List<DiagnosticTestsPrescription> diagnosticTestsPrescriptionsList) {
         ArrayList<String> diagnosticIdsList = null;
-        if (!Util.isNullOrEmptyList(list)) {
+        ArrayList<DiagnosticTest> diagnosticTestsList = new ArrayList<>();
+        if (!Util.isNullOrEmptyList(diagnosticTestsPrescriptionsList)) {
             diagnosticIdsList = new ArrayList<>();
-            for (DiagnosticTest diagnosticTest :
-                    list) {
-                diagnosticIdsList.add(diagnosticTest.getUniqueId());
+            for (DiagnosticTestsPrescription diagnosticTest :
+                    diagnosticTestsPrescriptionsList) {
+                if (!Util.isNullOrBlank(diagnosticTest.getTest().getUniqueId())) {
+                    diagnosticTest.setDiagnosticTestId(diagnosticTest.getTest().getUniqueId());
+                    diagnosticTest.setDiagnosticTestJsonString(getJsonFromObject(diagnosticTest.getTest()));
+
+                    diagnosticTestsList.add(diagnosticTest.getTest());
+                    diagnosticIdsList.add(diagnosticTest.getDiagnosticTestId());
+                }
             }
+            DiagnosticTest.saveInTx(diagnosticTestsList);
+            DiagnosticTestsPrescription.saveInTx(diagnosticTestsPrescriptionsList);
         }
         prescription.setDiagnosticTestsIdsJsonString(getJsonFromObject(diagnosticIdsList));
     }
@@ -2793,19 +2715,26 @@ public class LocalDataServiceImpl {
 
     private void getPrescriptionDetail(Prescription prescription) {
         prescription.setItems(getDrugItemsList(LocalDatabaseUtils.KEY_FOREIGN_PRESCRIPTION_ID, prescription.getUniqueId()));
-        prescription.setDiagnosticTests(getDiagnosticTestsList(LocalDatabaseUtils.KEY_UNIQUE_ID, (ArrayList<String>) (Object) getObjectsListFronJson(prescription.getDiagnosticTestsIdsJsonString())));
+        prescription.setDiagnosticTests(getDiagnosticTestsList(LocalDatabaseUtils.KEY_DIAGNOSTIC_TEST_ID, (ArrayList<String>) (Object) getObjectsListFronJson(prescription.getDiagnosticTestsIdsJsonString())));
     }
 
-    private List<DiagnosticTest> getDiagnosticTestsList(String key, ArrayList<String> diagnosticIdsList) {
-        List<DiagnosticTest> list = null;
+    private List<DiagnosticTestsPrescription> getDiagnosticTestsList(String key, ArrayList<String> diagnosticIdsList) {
+        List<DiagnosticTestsPrescription> list = null;
         if (!Util.isNullOrEmptyList(diagnosticIdsList)) {
             //forming where condition query
-            String whereCondition = "Select * from " + StringUtil.toSQLName(DiagnosticTest.class.getSimpleName())
+            String whereCondition = "Select * from " + StringUtil.toSQLName(DiagnosticTestsPrescription.class.getSimpleName())
                     + getWhereConditionForKeyWithValues(key, diagnosticIdsList);
             LogUtils.LOGD(TAG, "Select Query " + whereCondition);
-            list = SugarRecord.findWithQuery(DiagnosticTest.class, whereCondition);
+            list = SugarRecord.findWithQuery(DiagnosticTestsPrescription.class, whereCondition);
+            if (!Util.isNullOrEmptyList(list)) {
+                for (DiagnosticTestsPrescription diagnosticTestsPrescription :
+                        list) {
+                    diagnosticTestsPrescription.setTest((DiagnosticTest) getObjectFromJson(DiagnosticTest.class, diagnosticTestsPrescription.getDiagnosticTestJsonString()));
+                }
+                return list;
+            }
         }
-        return list;
+        return null;
     }
 
     private void getClinicalNoteDetailsList(ClinicalNotes clinicalNote) {

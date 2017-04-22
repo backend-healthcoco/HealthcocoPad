@@ -42,6 +42,7 @@ import com.healthcoco.healthcocopad.bean.server.ClinicalNotes;
 import com.healthcoco.healthcocopad.bean.server.ComplaintSuggestions;
 import com.healthcoco.healthcocopad.bean.server.DiagnosisSuggestions;
 import com.healthcoco.healthcocopad.bean.server.DiagnosticTest;
+import com.healthcoco.healthcocopad.bean.server.DiagnosticTestsPrescription;
 import com.healthcoco.healthcocopad.bean.server.Diagram;
 import com.healthcoco.healthcocopad.bean.server.Drug;
 import com.healthcoco.healthcocopad.bean.server.DrugItem;
@@ -538,9 +539,10 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
                                 //initialising DiagnosticTests(LabTests)
                                 if (!Util.isNullOrEmptyList(prescription.getDiagnosticTests())) {
                                     parentDiagnosticTests.setVisibility(View.VISIBLE);
-                                    for (DiagnosticTest diagnosticTest :
+                                    for (DiagnosticTestsPrescription diagnosticTest :
                                             prescription.getDiagnosticTests()) {
-                                        addLabTestVisitFragment.addDiagnosticTest(diagnosticTest);
+                                        if (diagnosticTest.getTest() != null)
+                                            addLabTestVisitFragment.addDiagnosticTest(diagnosticTest.getTest());
                                     }
                                 }
 
@@ -820,6 +822,7 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
                 showHideClinicalNotesLayout();
                 break;
             case R.id.bt_prescription:
+                svScrollView.requestChildFocus(parentPrescription, parentPrescription);
                 if (selectedSuggestionType == null || selectedSuggestionType != SuggestionType.DRUGS) {
                     addVisitSuggestionsFragment.refreshTagOfEditText(SuggestionType.DRUGS);
                 }
@@ -1274,9 +1277,9 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
                     editText.setSelection(text.length());
                     editText.setOnSelectionChangedListener(new HealthcocoOnSelectionChanged(editText, this));
                     mWidget.setCursorIndex(editText.length());
-                    if (view.getId() == R.id.edit_duration_common) {
-                        setDurationUnitToAll(text);
-                    }
+//                    if (!intermediate && view.getId() == R.id.edit_duration_common) {
+//                        setDurationUnitToAll(text);
+//                    }
                     //to set scrolling position
 //                mWidget.scrollTo(editText.length() - 3);
                 } else {

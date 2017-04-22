@@ -22,9 +22,9 @@ import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.dialogFragment.CommonListDialogFragmentWithTitle;
 import com.healthcoco.healthcocopad.enums.CommonListDialogType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
+import com.healthcoco.healthcocopad.listeners.AddNewPrescriptionListener;
 import com.healthcoco.healthcocopad.listeners.CommonListDialogItemClickListener;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
-import com.healthcoco.healthcocopad.listeners.SelectedDrugsListItemListener;
 import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
@@ -45,7 +45,7 @@ public class SelectedPrescriptionDrugDoseItemsListViewHolder extends HealthCocoV
 
     private DrugItem objData;
     private TextViewFontAwesome btDelete;
-    private SelectedDrugsListItemListener templateListener;
+    private AddNewPrescriptionListener addNewPrescriptionListener;
     private LinearLayout containerDrugDose;
     private static final String GENERIC_NAME_SEPARATOR = ",";
     private static final String TAG = "";
@@ -67,10 +67,10 @@ public class SelectedPrescriptionDrugDoseItemsListViewHolder extends HealthCocoV
     private boolean isFrequencyDosageLoaded;
     private User user;
 
-    public SelectedPrescriptionDrugDoseItemsListViewHolder(HealthCocoActivity mActivity, SelectedDrugsListItemListener selectedDrugsListItemListener) {
+    public SelectedPrescriptionDrugDoseItemsListViewHolder(HealthCocoActivity mActivity, AddNewPrescriptionListener addNewPrescriptionListener) {
         super(mActivity);
         this.mActivity = mActivity;
-        this.templateListener = selectedDrugsListItemListener;
+        this.addNewPrescriptionListener = addNewPrescriptionListener;
         this.mApp = ((HealthCocoApplication) mActivity.getApplication());
     }
 
@@ -117,7 +117,11 @@ public class SelectedPrescriptionDrugDoseItemsListViewHolder extends HealthCocoV
 
         tvFrequency.setText(Util.getValidatedValue(objData.getDosage()));
 
-        if (objData.getDuration() != null)
+        //setting durationUnit
+        if (addNewPrescriptionListener.isDurationSet()) {
+            editDuration.setText(addNewPrescriptionListener.getDurationUnit());
+            objData.setDuration(getDurationForTaggedViews(Util.getValidatedValueOrNull(editDuration), getValidatedDurationUnit()));
+        } else if (objData.getDuration() != null)
             editDuration.setText(Util.getValidatedValue(objData.getDuration().getValue()));
         else
             editDuration.setText("");
@@ -131,6 +135,12 @@ public class SelectedPrescriptionDrugDoseItemsListViewHolder extends HealthCocoV
             etInstruction.setText(Util.getValidatedValue(objData.getInstructions()));
         } else
             etInstruction.setText("");
+    }
+
+    private DrugDurationUnit getValidatedDurationUnit() {
+        if (objData.getDuration() != null)
+            return objData.getDuration().getDurationUnit();
+        return null;
     }
 
     @Override
@@ -155,9 +165,9 @@ public class SelectedPrescriptionDrugDoseItemsListViewHolder extends HealthCocoV
         tvDirections.setOnClickListener(this);
         tvFrequency.setOnClickListener(this);
         tvDrugDurationUnit.setOnClickListener(this);
-        if (templateListener.getAddVisitFragment() != null) {
-            editDuration.setOnTouchListener(templateListener.getAddVisitFragment().getOnTouchListener());
-            etInstruction.setOnTouchListener(templateListener.getAddVisitFragment().getOnTouchListener());
+        if (addNewPrescriptionListener.getAddVisitFragment() != null) {
+            editDuration.setOnTouchListener(addNewPrescriptionListener.getAddVisitFragment().getOnTouchListener());
+            etInstruction.setOnTouchListener(addNewPrescriptionListener.getAddVisitFragment().getOnTouchListener());
         }
     }
 
@@ -174,7 +184,7 @@ public class SelectedPrescriptionDrugDoseItemsListViewHolder extends HealthCocoV
                 commonListDialog = openCommonListWithTitleDialogFragment(this, CommonListDialogType.DIRECTION, receivedDirectionsList);
                 break;
             case R.id.bt_delete:
-                templateListener.onDeleteItemClicked(objData);
+                addNewPrescriptionListener.onDeleteItemClicked(objData);
                 break;
             default:
                 break;
@@ -345,7 +355,7 @@ public class SelectedPrescriptionDrugDoseItemsListViewHolder extends HealthCocoV
                 && !Util.isNullOrBlank(objData.getDuration().getDurationUnit().getUnit()))
             objData.setDuration(getDuration(Util.getValidatedValueOrNull(editDuration), objData.getDuration().getDurationUnit()));
         else
-            objData.setDuration(getDurationForTaggedViews(Util.getValidatedValueOrNull(editDuration)));
+            objData.setDuration(getDurationForTaggedViews(Util.getValidatedValueOrNull(editDuration), null));
         objData.setInstructions(Util.getValidatedValueOrNull(etInstruction));
         return objData;
     }
@@ -363,10 +373,11 @@ public class SelectedPrescriptionDrugDoseItemsListViewHolder extends HealthCocoV
         return selectedDirection;
     }
 
-    private Duration getDurationForTaggedViews(String value) {
+    private Duration getDurationForTaggedViews(String value, DrugDurationUnit drugDurationUnit) {
         if (!Util.isNullOrBlank(value)) {
             Duration duration = new Duration();
             duration.setValue(value);
+            duration.setDurationUnit(drugDurationUnit);
             return duration;
         }
         return null;
