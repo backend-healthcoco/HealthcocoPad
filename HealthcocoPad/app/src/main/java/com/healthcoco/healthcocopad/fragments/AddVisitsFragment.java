@@ -828,6 +828,7 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
                 }
                 break;
             case R.id.bt_lab_tests:
+                svScrollView.requestChildFocus(parentDiagnosticTests, parentDiagnosticTests);
                 if (selectedSuggestionType == null || selectedSuggestionType != SuggestionType.LAB_TESTS) {
                     addVisibileUiType(VisitsUiType.LAB_TEST);
                     addVisitSuggestionsFragment.refreshTagOfEditText(SuggestionType.LAB_TESTS);
@@ -1950,13 +1951,23 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
                     });
                     addPrescriptionVisitFragment.addDrug(selectedDrug);
                 }
-
                 return;
             case LAB_TESTS:
                 if (selectedSuggestionObject instanceof DiagnosticTest) {
                     DiagnosticTest diagnosticTest = (DiagnosticTest) selectedSuggestionObject;
-                    addLabTestVisitFragment.addDiagnosticTest(diagnosticTest);
-                    LogUtils.LOGD(TAG, "Selected Test " + diagnosticTest.getTestName());
+                    if (diagnosticTest != null && addLabTestVisitFragment != null) {
+                        svScrollView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+                            @Override
+                            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                                svScrollView.removeOnLayoutChangeListener(this);
+                                Log.d(TAG, "list got updated, do what ever u want");
+                                svScrollView.requestChildFocus(addLabTestVisitFragment.getLastChildView(), addLabTestVisitFragment.getLastChildView());
+
+                            }
+                        });
+                        addLabTestVisitFragment.addDiagnosticTest(diagnosticTest);
+                        LogUtils.LOGD(TAG, "Selected Test " + diagnosticTest.getTestName());
+                    }
                 }
                 break;
             case PRESENT_COMPLAINT:

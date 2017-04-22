@@ -110,7 +110,7 @@ public class InitialSyncFragment extends HealthCocoFragment {
     public int setProgress(int title) {
         int finalProgress = 0;
         try {
-            finalProgress = progressLoading.getProgress() + progressUpdateValue;
+            finalProgress = (int) (progressLoading.getProgress() + progressUpdateValue);
             progressLoading.setProgress(finalProgress);
             tvLoadingTitle.setText(title);
             LogUtils.LOGD(TAG, "Initial Sync finalProgress " + finalProgress);
@@ -122,7 +122,7 @@ public class InitialSyncFragment extends HealthCocoFragment {
     }
 
     public void setProgressUpdateValue(int totalSyncServices) {
-        progressUpdateValue = progressLoading.getMax() / totalSyncServices;
+        progressUpdateValue = Math.round(((float) progressLoading.getMax() / totalSyncServices));
         LogUtils.LOGD(TAG, "Progress Max Value " + progressUpdateValue);
     }
 

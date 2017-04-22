@@ -14,7 +14,7 @@
         android:layout_weight="@integer/add_visit_left_item_weight"
         android:text="@string/diagrams"
         android:textColor="@color/black"
-        android:textSize="@dimen/text_size_add_visits_lable" />
+        android:textSize="@dimen/text_size_visits_item_label" />
 
     <HorizontalScrollView
         android:layout_width="0dp"

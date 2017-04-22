@@ -17,8 +17,7 @@ import java.util.List;
 /**
  * Created by Shreshtha on 07-03-2017.
  */
-public class PatientDetailVisitAdapter
-        extends BaseAdapter {
+public class PatientDetailVisitAdapter extends BaseAdapter {
     private static final String TAG = PatientDetailVisitAdapter.class.getSimpleName();
     private VisitDetailCombinedItemListener listItemClickListener;
     private List<VisitDetails> list;

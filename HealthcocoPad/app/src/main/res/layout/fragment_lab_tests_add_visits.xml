@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:text="@string/lab_test"
         android:textColor="@color/black"
-        android:textSize="@dimen/text_size_add_visits_lable" />
+        android:textSize="@dimen/text_size_visits_item_label" />
 
     <com.healthcoco.healthcocopad.custom.ExpandableHeightListView
         android:id="@+id/lv_diagnostic_tests"

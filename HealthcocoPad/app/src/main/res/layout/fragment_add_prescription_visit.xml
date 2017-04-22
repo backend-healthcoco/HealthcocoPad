@@ -15,7 +15,7 @@
             android:layout_height="wrap_content"
             android:text="@string/prescription_rx"
             android:textColor="@color/black"
-            android:textSize="18sp" />
+            android:textSize="@dimen/text_size_visits_item_label" />
 
         <com.healthcoco.healthcocopad.views.FontAwesomeButton
             android:id="@+id/bt_header_two_interaction"

@@ -12,7 +12,7 @@
         android:layout_weight="@integer/add_visit_left_item_weight"
         android:text="@string/advice"
         android:textColor="@color/black"
-        android:textSize="@dimen/text_size_add_visits_lable" />
+        android:textSize="@dimen/text_size_visits_item_label" />
 
     <com.healthcoco.healthcocopad.custom.MyScriptEditText
         android:id="@+id/et_advice"
