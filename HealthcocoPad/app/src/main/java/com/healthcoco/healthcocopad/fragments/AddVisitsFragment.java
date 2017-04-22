@@ -136,13 +136,13 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
     public static final String TAG_VISIT_ID = "visitId";
 
 
-    private TextViewFontAwesome btClose;
+    private LinearLayout btClose;
     private ImageButton btClinicalNote;
     private ImageButton btPrescription;
     private ImageButton btLabTests;
     private ImageButton btDiagrams;
     private ImageButton btAdvice;
-    private TextViewFontAwesome btSave;
+    private LinearLayout btSave;
     private TextView tvHeaderText;
     private LinearLayout parentClinicalNote;
     private LinearLayout parentPrescription;
@@ -344,7 +344,7 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
     }
 
     private void initToolbarView() {
-        btClose = (TextViewFontAwesome) view.findViewById(R.id.bt_close);
+        btClose = (LinearLayout) view.findViewById(R.id.bt_close);
         btClinicalNote = (ImageButton) view.findViewById(R.id.bt_clinical_note);
         btPrescription = (ImageButton) view.findViewById(R.id.bt_prescription);
         btPrescription.setTag(SuggestionType.DRUGS);
@@ -352,7 +352,7 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
         btLabTests.setTag(SuggestionType.LAB_TESTS);
         btDiagrams = (ImageButton) view.findViewById(R.id.bt_diagrams);
         btAdvice = (ImageButton) view.findViewById(R.id.bt_advice);
-        btSave = (TextViewFontAwesome) view.findViewById(R.id.bt_save);
+        btSave = (LinearLayout) view.findViewById(R.id.bt_save);
     }
 
     private void initHeaderView() {
@@ -1274,6 +1274,9 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
                     editText.setSelection(text.length());
                     editText.setOnSelectionChangedListener(new HealthcocoOnSelectionChanged(editText, this));
                     mWidget.setCursorIndex(editText.length());
+                    if (view.getId() == R.id.edit_duration_common) {
+                        setDurationUnitToAll(text);
+                    }
                     //to set scrolling position
 //                mWidget.scrollTo(editText.length() - 3);
                 } else {
@@ -1285,6 +1288,10 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
             updateCandidateBar();
         }
         isOnItemClick = false;
+    }
+
+    private void setDurationUnitToAll(String unit) {
+        addPrescriptionVisitFragment.modifyDurationUnit(unit);
     }
 
     @Override
@@ -1864,6 +1871,7 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
                     removeVisibileUiType(VisitsUiType.PRESCRIPTION);
                     parentPrescription.setVisibility(View.GONE);
                     btAdvice.setVisibility(View.GONE);
+                    layoutParentAdvice.setVisibility(View.GONE);
                 }
             }
         }

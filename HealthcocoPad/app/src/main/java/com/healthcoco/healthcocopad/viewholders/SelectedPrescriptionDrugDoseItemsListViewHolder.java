@@ -124,7 +124,7 @@ public class SelectedPrescriptionDrugDoseItemsListViewHolder extends HealthCocoV
 
         if (objData.getDuration() != null && objData.getDuration().getDurationUnit() != null)
             tvDrugDurationUnit.setText(Util.getValidatedValue(objData.getDuration().getDurationUnit().getUnit()));
-        else tvDrugDurationUnit.setText("");
+        else tvDrugDurationUnit.setText("day(s)");
         //initialising instructions popup
         if (!Util.isNullOrBlank(objData.getInstructions())) {
             etInstruction.setVisibility(View.VISIBLE);
@@ -331,6 +331,12 @@ public class SelectedPrescriptionDrugDoseItemsListViewHolder extends HealthCocoV
     @Override
     public void onPostExecute(VolleyResponseBean aVoid) {
 
+    }
+
+    public void setDurationUnitToAll(String unit) {
+        if (!Util.isNullOrBlank(unit)) {
+            editDuration.setText(unit);
+        }
     }
 
     public DrugItem getDrug() {

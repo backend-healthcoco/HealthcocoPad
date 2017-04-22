@@ -24,75 +24,106 @@
             android:layout_height="match_parent"
             android:gravity="center">
 
-            <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+            <LinearLayout
                 android:id="@+id/bt_close"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_alignParentLeft="true"
-                android:padding="10dp"
-                android:text="@string/fa_close"
-                android:textColor="@drawable/text_selector_grey_blue"
-                android:textSize="30sp" />
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="@dimen/padding_visits_header_icons">
+
+                <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="@string/fa_close"
+                    android:textColor="@drawable/text_selector_grey_blue"
+                    android:textSize="@dimen/text_size_visits_close_text" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="@string/close"
+                    android:textColor="@drawable/text_selector_grey_blue"
+                    android:textSize="@dimen/text_size_visits_close_text" />
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/margin_left_of_visits_button_layout"
                 android:layout_toRightOf="@+id/bt_close"
                 android:gravity="center|start"
-                android:orientation="horizontal"
-                android:padding="5dp">
+                android:orientation="horizontal">
 
                 <ImageButton
                     android:id="@+id/bt_clinical_note"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/visits_icon_notes"
+                    android:layout_height="@dimen/visits_icon_notes"
                     android:background="@android:color/transparent"
-                    android:padding="10dp"
-                    android:src="@drawable/selector_ic_clinical_notes_tab" />
+                    android:padding="@dimen/padding_visits_header_icons"
+                    android:src="@drawable/ic_clinical_notes_visits" />
 
                 <ImageButton
                     android:id="@+id/bt_prescription"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/visits_icon_drugs"
+                    android:layout_height="@dimen/visits_icon_drugs"
                     android:background="@android:color/transparent"
-                    android:padding="10dp"
-                    android:src="@drawable/selector_ic_prescription_tab" />
+                    android:padding="@dimen/padding_visits_header_icons"
+                    android:src="@drawable/ic_drugs_visits" />
 
                 <ImageButton
                     android:id="@+id/bt_lab_tests"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/visits_icon_test"
+                    android:layout_height="@dimen/visits_icon_test"
                     android:background="@android:color/transparent"
-                    android:padding="10dp"
-                    android:src="@drawable/selector_ic_treatment_tab" />
+                    android:padding="@dimen/padding_visits_header_icons"
+                    android:src="@drawable/ic_lab_test_visits" />
 
                 <ImageButton
                     android:id="@+id/bt_diagrams"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/visits_icon_diagram"
+                    android:layout_height="@dimen/visits_icon_diagram"
                     android:background="@android:color/transparent"
-                    android:padding="10dp"
-                    android:src="@drawable/selector_ic_reports_tab" />
+                    android:padding="@dimen/padding_visits_header_icons"
+                    android:src="@drawable/ic_diagram_visits" />
 
                 <ImageButton
                     android:id="@+id/bt_advice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/visits_icon_advice"
+                    android:layout_height="@dimen/visits_icon_advice"
                     android:background="@android:color/transparent"
-                    android:padding="10dp"
-                    android:src="@drawable/selector_ic_clinical_notes_tab" />
+                    android:padding="@dimen/padding_visits_header_icons"
+                    android:src="@drawable/ic_advice_visit" />
             </LinearLayout>
 
-            <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+            <LinearLayout
                 android:id="@+id/bt_save"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
-                android:layout_centerInParent="true"
-                android:padding="10dp"
-                android:text="@string/fa_save"
-                android:textColor="@drawable/text_blue_normal_grey_light_selected"
-                android:textSize="25sp" />
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="@dimen/padding_visits_header_icons">
+
+                <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/fa_save"
+                    android:textColor="@drawable/text_blue_normal_grey_light_selected"
+                    android:textSize="@dimen/text_size_visits_close_text" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="@string/save"
+                    android:textColor="@drawable/text_blue_normal_grey_light_selected"
+                    android:textSize="@dimen/text_size_visits_close_text" />
+
+            </LinearLayout>
         </RelativeLayout>
     </android.support.v7.widget.Toolbar>
 

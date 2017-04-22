@@ -80,8 +80,8 @@
             android:paddingBottom="@dimen/padding_item_drug_dosage_top_bottom"
             android:paddingLeft="@dimen/padding_item_drug_dosage_top_bottom"
             android:paddingTop="@dimen/padding_item_drug_dosage_top_bottom"
-            android:textColorHint="@color/grey_light_text"
             android:textColor="@color/black"
+            android:textColorHint="@color/grey_light_text"
             android:textSize="@dimen/text_size_add_new_drug_name" />
 
         <LinearLayout
@@ -93,17 +93,17 @@
             <com.healthcoco.healthcocopad.custom.MyScriptEditText
                 android:id="@+id/edit_duration"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:layout_weight="1"
                 android:background="@drawable/selector_drug_detail_background"
                 android:gravity="center"
                 android:hint="@string/duration"
-                android:inputType="textCapSentences"
                 android:maxLines="1"
                 android:paddingBottom="@dimen/padding_item_drug_dosage_top_bottom"
                 android:paddingLeft="@dimen/padding_item_drug_dosage_top_bottom"
                 android:paddingTop="@dimen/padding_item_drug_dosage_top_bottom"
+                android:singleLine="true"
                 android:textColor="@color/black"
                 android:textColorHint="@color/grey_light_text"
                 android:textSize="@dimen/text_size_add_new_drug_name" />
@@ -111,7 +111,7 @@
             <com.healthcoco.healthcocopad.custom.CustomActivatedTextView
                 android:id="@+id/tv_drug_duration_unit"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:layout_weight="1"
                 android:background="@drawable/selector_drug_detail_background"

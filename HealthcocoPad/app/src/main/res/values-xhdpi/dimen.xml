@@ -9,4 +9,11 @@
     <dimen name="widget_delete_icon_size">80px</dimen>
     <dimen name="widget_space_icon_size">80px</dimen>
     <dimen name="widget_enter_icon_size">80px</dimen>
+
+    <dimen name="visits_icon_notes">108px</dimen>
+    <dimen name="visits_icon_drugs">108px</dimen>
+    <dimen name="visits_icon_template">108px</dimen>
+    <dimen name="visits_icon_test">108px</dimen>
+    <dimen name="visits_icon_advice">108px</dimen>
+    <dimen name="visits_icon_diagram">108px</dimen>
 </resources>

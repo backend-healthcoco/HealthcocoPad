@@ -37,6 +37,7 @@ public class AddPrescriptionVisitFragment extends HealthCocoFragment implements 
     private ListView lvPrescriptionItems;
     private EditText editDurationCommon;
     private AddVisitsFragment addVisitsFragment;
+    private SelectedPrescriptionDrugDoseItemsListViewHolder viewHolder;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -195,6 +196,18 @@ public class AddPrescriptionVisitFragment extends HealthCocoFragment implements 
             return modifiedList;
         }
         return null;
+    }
+
+    public void modifyDurationUnit(String unit) {
+        if (lvPrescriptionItems.getChildCount() > 0) {
+            for (int i = 0; i < lvPrescriptionItems.getChildCount(); i++) {
+                View child = lvPrescriptionItems.getChildAt(i);
+                if (child.getTag() != null && child.getTag() instanceof SelectedPrescriptionDrugDoseItemsListViewHolder) {
+                    viewHolder = (SelectedPrescriptionDrugDoseItemsListViewHolder) child.getTag();
+                    viewHolder.setDurationUnitToAll(unit);
+                }
+            }
+        }
     }
 
     private void refreshListViewUpdatedDrugsList() {

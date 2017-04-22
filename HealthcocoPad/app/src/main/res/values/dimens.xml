@@ -174,4 +174,7 @@
     <dimen name="baseline_position">150dp</dimen>
     <dimen name="text_size_delete_fontawesome_text">25sp</dimen>
     <dimen name="padding_item_drug_dosage_top_bottom">7dp</dimen>
+    <dimen name="padding_visits_header_icons">10dp</dimen>
+    <dimen name="text_size_visits_close_text">25dp</dimen>
+    <dimen name="margin_left_of_visits_button_layout">25dp</dimen>
 </resources>

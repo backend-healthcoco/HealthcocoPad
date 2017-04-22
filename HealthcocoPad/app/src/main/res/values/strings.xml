@@ -741,5 +741,6 @@
     <!--visits alert messages-->
     <string name="alert_blank_visit">Blank visit cannot be created</string>
     <string name="please_add_systolic_and_diastolic_both">Please add Systolic and Diastolic both</string>
+    <string name="close">&#160;Close</string>
 
 </resources>
