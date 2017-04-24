@@ -155,6 +155,8 @@ public class AddLabTestsVisitFragment extends HealthCocoFragment implements View
     }
 
     public List<DiagnosticTest> getLabTestsList() {
-        return new ArrayList<>(diagnosticTestsListHashMap.values());
+        if (!Util.isNullOrEmptyList(diagnosticTestsListHashMap))
+            return new ArrayList<>(diagnosticTestsListHashMap.values());
+        return null;
     }
 }

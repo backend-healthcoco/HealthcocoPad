@@ -27,6 +27,8 @@ import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
 
+import org.parceler.Parcels;
+
 public class AddVisitsActivity extends HealthCocoActivity {
 
     private Intent intent;
@@ -224,5 +226,28 @@ public class AddVisitsActivity extends HealthCocoActivity {
     public void initActionbarTitle(String titleId) {
         TextView tvTitle = (TextView) toolbar.findViewById(R.id.tv_title);
         if (tvTitle != null) tvTitle.setText(titleId);
+    }
+
+    public void openCommonOpenUpVisitActivity(CommonOpenUpFragmentType fragmentType, String tag, Object intentData) {
+        openCommonOpenUpVisitActivity(fragmentType, tag, intentData, 0);
+    }
+
+    public void openCommonOpenUpVisitActivity(CommonOpenUpFragmentType fragmentType, int requestCode) {
+        openCommonOpenUpVisitActivity(fragmentType, null, null, requestCode);
+    }
+
+    public void openCommonOpenUpVisitActivity(CommonOpenUpFragmentType fragmentType, Object intentData, int requestCode) {
+        openCommonOpenUpVisitActivity(fragmentType, HealthCocoConstants.TAG_COMMON_OPENUP_INTENT_DATA, intentData, requestCode);
+    }
+
+    public void openCommonOpenUpVisitActivity(CommonOpenUpFragmentType fragmentType, String tag, Object intentData, int requestCode) {
+        Intent intent = new Intent(this, AddVisitsActivity.class);
+        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, fragmentType.ordinal());
+        if (!Util.isNullOrBlank(tag) && intentData != null)
+            intent.putExtra(tag, Parcels.wrap(intentData));
+        if (requestCode == 0)
+            startActivity(intent);
+        else
+            startActivityForResult(intent, requestCode);
     }
 }

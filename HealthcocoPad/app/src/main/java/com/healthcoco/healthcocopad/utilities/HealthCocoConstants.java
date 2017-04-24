@@ -30,14 +30,14 @@ public class HealthCocoConstants {
     public static final String PARAM_TAG_ADD = "/add/";
     public static final String TAG_DIAGRAM_TAG = "diagramTag";
     public static final String TAG_SELECTED_DIAGRAM = "selectedDiagram";
-//    public static final int REQUEST_CODE_CONTACTS_DETAIL = 100;
+    //    public static final int REQUEST_CODE_CONTACTS_DETAIL = 100;
     public static final int RESULT_CODE_ADD_PRESCIPTION = 101;
     public static final int REQUEST_CODE_CAMERA = 102;
     public static final int REQUEST_CODE_GALLERY = 103;
     public static final int RESULT_CODE_CLINIC_IMAGE = 104;
     public static final int REQUEST_CODE_CLINIC_PROFILE_IMAGE = 105;
     public static final int REQUEST_CODE_MENU_CLINIC_LIST = 106;
-//    public static final int REQUEST_CODE_CONTACTS_LIST = 107;
+    //    public static final int REQUEST_CODE_CONTACTS_LIST = 107;
     public static final int REQUEST_CODE_DOCTOR_PROFILE = 108;
     public static final int REQUEST_CODE_CLINIC_PROFILE = 109;
     public static final int RESULT_CODE_ADD_EDIT_CLINIC_ADDRESS = 110;
@@ -82,6 +82,7 @@ public class HealthCocoConstants {
     public static final int REQUEST_CODE_PATIENT_PROFILE = 133;
     public static final int REQUEST_CODE_HISTORY_LIST = 134;
     public static final int RESULT_CODE_DISEASE_LIST = 135;
+    public static final int REQUEST_CODE_ADD_CLINICAL_NOTES = 136;
     public static final String PARAM_SIZE = "&size=";
     public static final String PARAM_SEARCH_TERM = "&searchTerm=";
     public static final String PARAM_PAGE_AND = "&page=";
@@ -109,4 +110,5 @@ public class HealthCocoConstants {
     public static final String PARAM_IN_HISTORY = "&inHistory=";
     public static final String PARAM_TAG_SMS = "/sms/";
     public static final String PARAM_TAG_MAIL = "/mail/";
+
 }

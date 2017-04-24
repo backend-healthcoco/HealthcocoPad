@@ -14,7 +14,6 @@ import com.healthcoco.healthcocopad.bean.DOB;
 import com.healthcoco.healthcocopad.bean.PersonalHistory;
 import com.healthcoco.healthcocopad.bean.UIPermissions;
 import com.healthcoco.healthcocopad.bean.UiPermissionsBoth;
-import com.healthcoco.healthcocopad.bean.UserPermissionsResponse;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.*;
 import com.healthcoco.healthcocopad.enums.AdvanceSearchOptionsType;
@@ -400,8 +399,8 @@ public class LocalDataServiceImpl {
                 }
                 user.setRoleTypes(roleTypes);
             }
+            user.setUiPermissions(getAssignedUserUiPermissions(user.getUniqueId()));
         }
-        user.setUiPermissions(getAssignedUserUiPermissions(user.getUniqueId()));
         return user;
     }
 //
@@ -3226,10 +3225,6 @@ public class LocalDataServiceImpl {
             addUiPermissions(uiPermissionsBoth.getDoctorId(), uiPermissionsBoth.getDoctorPermissions());
             addUiPermissions(uiPermissionsBoth.getDoctorId(), uiPermissionsBoth.getAllPermissions());
         }
-    }
-
-    public void addUserUiPermissionsResponse(UserPermissionsResponse userPermissionsResponse) {
-        addUiPermissions(userPermissionsResponse.getDoctorId(), userPermissionsResponse.getUiPermissions());
     }
 
     public void addUiPermissions(String doctorId, Object object) {

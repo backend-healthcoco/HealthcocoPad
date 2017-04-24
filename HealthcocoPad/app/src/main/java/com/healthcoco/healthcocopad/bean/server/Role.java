@@ -5,8 +5,10 @@ import com.orm.SugarRecord;
 import com.orm.annotation.Ignore;
 import com.orm.annotation.Unique;
 
-import java.util.List;
+import org.parceler.Parcel;
 
+import java.util.List;
+@Parcel
 public class Role extends SugarRecord {
     @Unique
     private String uniqueId;

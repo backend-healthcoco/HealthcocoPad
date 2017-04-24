@@ -28,7 +28,13 @@
 
             <include layout="@layout/sub_item_add_visits_header" />
 
-            <include layout="@layout/sub_item_add_clinical_note" />
+            <LinearLayout
+                android:id="@+id/parent_clinical_note"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="10dp" />
+            <!--<include layout="@layout/sub_item_add_clinical_note" />-->
 
             <LinearLayout
                 android:id="@+id/parent_prescription"

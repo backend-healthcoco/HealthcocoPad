@@ -25,6 +25,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.healthcoco.healthcocopad.activities.AddVisitsActivity;
 import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.OtpVerification;
@@ -62,6 +63,7 @@ import static android.content.Context.INPUT_METHOD_SERVICE;
  */
 
 public abstract class HealthCocoFragment extends Fragment implements GsonRequest.ErrorListener, Response.Listener<VolleyResponseBean> {
+    protected static final String TAG_USER = "user";
     protected static String SHOW_LOADING = "showLoading";
     protected View view;
     protected HealthCocoActivity mActivity;
@@ -462,5 +464,24 @@ public abstract class HealthCocoFragment extends Fragment implements GsonRequest
     protected void showKeyboard() {
         InputMethodManager imm = (InputMethodManager) mActivity.getSystemService(INPUT_METHOD_SERVICE);
         imm.showSoftInput(mActivity.getCurrentFocus(), InputMethodManager.SHOW_IMPLICIT);
+    }
+
+    public void openCommonOpenUpVisitActivity(CommonOpenUpFragmentType fragmentType, int requestCode) {
+        openCommonOpenUpVisitActivity(fragmentType, null, null, requestCode);
+    }
+
+    public void openCommonOpenUpVisitActivity(CommonOpenUpFragmentType fragmentType, Object intentData, int requestCode) {
+        openCommonOpenUpVisitActivity(fragmentType, HealthCocoConstants.TAG_COMMON_OPENUP_INTENT_DATA, intentData, requestCode);
+    }
+
+    public void openCommonOpenUpVisitActivity(CommonOpenUpFragmentType fragmentType, String tag, Object intentData, int requestCode) {
+        Intent intent = new Intent(mActivity, AddVisitsActivity.class);
+        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, fragmentType.ordinal());
+        if (!Util.isNullOrBlank(tag) && intentData != null)
+            intent.putExtra(tag, Parcels.wrap(intentData));
+        if (requestCode == 0)
+            startActivity(intent);
+        else
+            startActivityForResult(intent, requestCode);
     }
 }

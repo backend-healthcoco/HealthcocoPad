@@ -8,13 +8,15 @@ import com.orm.SugarRecord;
 import com.orm.annotation.Ignore;
 import com.orm.annotation.Unique;
 
+import org.parceler.Parcel;
+
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Shreshtha on 23-01-2017.
  */
-
+@Parcel
 public class User extends SugarRecord {
     @Unique
     private String uniqueId;
