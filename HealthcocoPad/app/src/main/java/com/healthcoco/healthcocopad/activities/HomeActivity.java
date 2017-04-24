@@ -403,28 +403,16 @@ public class HomeActivity extends HealthCocoActivity implements View.OnClickList
 
     public void enableFilterButton() {
         containerRightActionType.setEnabled(true);
-//        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, GravityCompat.END);
     }
 
     public void disableFilterButton() {
         containerRightActionType.setEnabled(false);
     }
 
-    public void closePaneLayout() {
-        sliding_pane_layout.closePane();
-    }
-
     public void closeDrawer() {
         if (drawerLayout.isShown()) {
             drawerLayout.closeDrawers();
         }
-    }
-
-    public void disableRightDrawer(boolean disable) {
-        if (disable)
-            drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_OPEN, GravityCompat.END);
-        else
-            drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, GravityCompat.END);
     }
 
     @Override
@@ -451,12 +439,6 @@ public class HomeActivity extends HealthCocoActivity implements View.OnClickList
         }
         hideLoading();
     }
-
-//    private void refreshMenuAndcontactsFragment(DoctorProfile doctorProfile) {
-//        menuFragment.initData(doctorProfile);
-//        if (contactsFragment != null)
-//            contactsFragment.init();
-//    }
 
     @Override
     public void onErrorResponse(VolleyResponseBean volleyResponseBean, String errorMessage) {
@@ -492,9 +474,5 @@ public class HomeActivity extends HealthCocoActivity implements View.OnClickList
         }
         volleyResponseBean.setIsFromLocalAfterApiSuccess(response.isFromLocalAfterApiSuccess());
         return volleyResponseBean;
-    }
-
-    public FilterFragment getFilterFragment() {
-        return filterFragment;
     }
 }

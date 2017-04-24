@@ -118,10 +118,16 @@ public class LoginDialogFragment extends HealthCocoDialogFragment implements Vie
                 openResetPasswordDialogFragment(Util.getValidatedValue(String.valueOf(editUserName.getText())));
                 break;
             case R.id.tv_terms_of_service:
-                openCommonOpenUpActivity(CommonOpenUpFragmentType.TERMS_OF_SERVICE, WebViewType.TERMS_OF_SERVICE.ordinal(), 0);
+                Util.checkNetworkStatus(mActivity);
+                if (HealthCocoConstants.isNetworkOnline) {
+                    openCommonOpenUpActivity(CommonOpenUpFragmentType.TERMS_OF_SERVICE, WebViewType.TERMS_OF_SERVICE.ordinal(), 0);
+                } else Util.showToast(mActivity, R.string.user_offline);
                 break;
             case R.id.tv_privacy_policy:
-                openCommonOpenUpActivity(CommonOpenUpFragmentType.PRIVACY_POLICY, WebViewType.PRIVACY_POLICY.ordinal(), 0);
+                Util.checkNetworkStatus(mActivity);
+                if (HealthCocoConstants.isNetworkOnline) {
+                    openCommonOpenUpActivity(CommonOpenUpFragmentType.PRIVACY_POLICY, WebViewType.PRIVACY_POLICY.ordinal(), 0);
+                } else Util.showToast(mActivity, R.string.user_offline);
                 break;
         }
     }
@@ -248,7 +254,7 @@ public class LoginDialogFragment extends HealthCocoDialogFragment implements Vie
         public void onReceive(Context context, final Intent intent) {
             String msg = getResources().getString(R.string.message_thank_you);
             if (intent != null && intent.hasExtra(HealthCocoConstants.TAG_BROADCAST_EXTRA))
-                msg = intent.getStringExtra(HealthCocoConstants.TAG_BROADCAST_EXTRA);
+                msg = Parcels.unwrap(intent.getParcelableExtra(HealthCocoConstants.TAG_BROADCAST_EXTRA));
             Util.showAlert(mActivity, getResources().getString(R.string.thank_you), msg);
         }
     };

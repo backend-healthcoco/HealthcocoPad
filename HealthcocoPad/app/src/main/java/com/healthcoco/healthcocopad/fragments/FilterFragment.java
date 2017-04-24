@@ -45,7 +45,10 @@ import java.util.Collections;
 /**
  * Created by Shreshtha on 31-01-2017.
  */
-public class FilterFragment extends HealthCocoFragment implements Response.Listener<VolleyResponseBean>, GsonRequest.ErrorListener, View.OnClickListener, OnFilterItemClickListener, SwipeRefreshLayout.OnRefreshListener, View.OnTouchListener, LocalDoInBackgroundListenerOptimised {
+public class FilterFragment extends HealthCocoFragment implements
+        Response.Listener<VolleyResponseBean>, GsonRequest.ErrorListener,
+        View.OnClickListener, OnFilterItemClickListener, SwipeRefreshLayout.OnRefreshListener,
+        LocalDoInBackgroundListenerOptimised {
     public static final String INTENT_REFRESH_GROUPS_LIST_LOCAL = "com.healthcoco.REFRESH_GROUPS_LIST_LOCAL";
     public static final String INTENT_FILTER_REFRESH_SELECTED_FILTER_TYPE = "com.healthcoco.healthcocopad.fragments.FilterFragment.REFRESH_SELECTED_FILTER_TYPE";
 
@@ -116,7 +119,6 @@ public class FilterFragment extends HealthCocoFragment implements Response.Liste
         tvRecentlyVisited.setOnClickListener(this);
         tvMostVisited.setOnClickListener(this);
         tvRecentlyAdded.setOnClickListener(this);
-        lvGroups.setOnTouchListener(this);
     }
 
     private void initAdapter() {
@@ -285,24 +287,6 @@ public class FilterFragment extends HealthCocoFragment implements Response.Liste
     @Override
     public void onRefresh() {
         Util.sendBroadcast(mApp, ContactsListFragment.INTENT_REFRESH_GROUPS_LIST_FROM_SERVER);
-    }
-
-    @Override
-    public boolean onTouch(View v, MotionEvent event) {
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                disableDrawer(true);
-                break;
-            case MotionEvent.ACTION_UP:
-                disableDrawer(false);
-                break;
-
-        }
-        return false;
-    }
-
-    private void disableDrawer(boolean disable) {
-        ((HomeActivity) mActivity).disableRightDrawer(disable);
     }
 
     @Override

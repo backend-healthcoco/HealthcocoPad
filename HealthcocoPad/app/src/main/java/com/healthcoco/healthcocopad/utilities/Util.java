@@ -700,4 +700,9 @@ public class Util {
         }
         getDeepChildOffset(mainParent, parentGroup.getParent(), parentGroup, accumulatedOffset);
     }
+
+    public static String getFormattedStringReplaceBySpace(String text) {
+        text = text.replaceAll("_", " ");
+        return text;
+    }
 }

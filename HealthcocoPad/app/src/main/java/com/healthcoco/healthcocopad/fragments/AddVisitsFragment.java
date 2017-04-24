@@ -503,6 +503,7 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
                         if (!Util.isNullOrEmptyList(visitDetails.getClinicalNotes())) {
                             for (ClinicalNotes clinicalNotes :
                                     visitDetails.getClinicalNotes()) {
+
                                 //initialising diagrams in container
                                 if (!Util.isNullOrEmptyList(clinicalNotes.getDiagrams())) {
                                     containerDiagrams.setVisibility(View.VISIBLE);
@@ -1278,9 +1279,9 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
                     editText.setSelection(text.length());
                     editText.setOnSelectionChangedListener(new HealthcocoOnSelectionChanged(editText, this));
                     mWidget.setCursorIndex(editText.length());
-//                    if (!intermediate && view.getId() == R.id.edit_duration_common) {
-//                        setDurationUnitToAll(text);
-//                    }
+                    if (view.getId() == R.id.edit_duration_common) {
+                        setDurationUnitToAll(text);
+                    }
                     //to set scrolling position
 //                mWidget.scrollTo(editText.length() - 3);
                 } else {

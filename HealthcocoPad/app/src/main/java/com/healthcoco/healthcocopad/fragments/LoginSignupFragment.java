@@ -1,7 +1,12 @@
 package com.healthcoco.healthcocopad.fragments;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -19,6 +24,12 @@ import com.healthcoco.healthcocopad.dialogFragment.LoginDialogFragment;
 import com.healthcoco.healthcocopad.dialogFragment.ContactUsDialogFragment;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.InitialScreenType;
+import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
+import com.healthcoco.healthcocopad.utilities.LogUtils;
+import com.healthcoco.healthcocopad.utilities.Util;
+
+import org.parceler.Parcel;
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 
@@ -32,7 +43,6 @@ public class LoginSignupFragment extends HealthCocoFragment implements View.OnCl
     private Button btJoin;
     private Button btSignIn;
     private ViewPager viewPager;
-    protected HealthCocoActivity mActivity;
     private LinearLayout dotsLayout;
     private int dotsCount;
     private TextView[] dots;
@@ -40,6 +50,7 @@ public class LoginSignupFragment extends HealthCocoFragment implements View.OnCl
     private LoginSignUpImageScreenFragment loginSignUpImageScreenFragment;
     private ArrayList<Fragment> fragmentsList;
     private CommonOpenUpFragmentType fragmentType;
+    private boolean receiversRegistered;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -142,4 +153,33 @@ public class LoginSignupFragment extends HealthCocoFragment implements View.OnCl
     public void onPageScrollStateChanged(int state) {
 
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (!receiversRegistered) {
+            //receiver for signup success
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(INTENT_SIGNUP_SUCCESS);
+            LocalBroadcastManager.getInstance(mActivity).registerReceiver(signUpSuccessReceiver, filter);
+            receiversRegistered = true;
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        LocalBroadcastManager.getInstance(mActivity).unregisterReceiver(signUpSuccessReceiver);
+    }
+
+    BroadcastReceiver signUpSuccessReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, final Intent intent) {
+            LogUtils.LOGD(TAG, "Success DOCTOR_CONTACT_US received broadcast");
+            String msg = getResources().getString(R.string.message_thank_you);
+            if (intent != null && intent.hasExtra(HealthCocoConstants.TAG_BROADCAST_EXTRA))
+                msg = Parcels.unwrap(intent.getParcelableExtra(HealthCocoConstants.TAG_BROADCAST_EXTRA));
+            Util.showAlert(mActivity, getResources().getString(R.string.thank_you), msg);
+        }
+    };
 }

@@ -80,7 +80,7 @@ import java.util.Locale;
 public class ContactsListFragment extends HealthCocoFragment implements
         LoadMorePageListener, SwipeRefreshLayout.OnRefreshListener, View.OnClickListener,
         GsonRequest.ErrorListener, Response.Listener<VolleyResponseBean>, LocalDoInBackgroundListenerOptimised,
-        ContactsItemOptionsListener, View.OnTouchListener, HealthcocoTextWatcherListener {
+        ContactsItemOptionsListener, HealthcocoTextWatcherListener {
     public static final String TAG_IS_IN_HOME_ACTIVITY = "isInHomeActivity";
     //required if contacts list is not in HomeScreen
     public static final String INTENT_FINISH_CONTACTS_LIST_SCREEN = "com.healthcoco.FINISH_CONTACTS_LIST_SCREEN";
@@ -850,24 +850,6 @@ public class ContactsListFragment extends HealthCocoFragment implements
 
     public FilterItemType getSelectedFilterType() {
         return filterType;
-    }
-
-    @Override
-    public boolean onTouch(View v, MotionEvent event) {
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                disableDrawer(true);
-                break;
-            case MotionEvent.ACTION_UP:
-                disableDrawer(false);
-                break;
-
-        }
-        return false;
-    }
-
-    private void disableDrawer(boolean disable) {
-        ((HomeActivity) mActivity).disableRightDrawer(disable);
     }
 
     @Override

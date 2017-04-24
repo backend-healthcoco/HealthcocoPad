@@ -218,19 +218,19 @@ public class AddPrescriptionVisitFragment extends HealthCocoFragment implements 
 //        if (Util.isNullOrBlank(unit))
 //            isDurationSet = false;
 //        else
-        if (editDurationCommon.hasFocus()) {
-            isDurationSet = true;
-            adapter.notifyDataSetChanged();
-        }
-//        if (lvPrescriptionItems.getChildCount() > 0) {
-//            for (int i = 0; i < lvPrescriptionItems.getChildCount(); i++) {
-//                View child = lvPrescriptionItems.getChildAt(i);
-//                if (child.getTag() != null && child.getTag() instanceof SelectedPrescriptionDrugDoseItemsListViewHolder) {
-//                    viewHolder = (SelectedPrescriptionDrugDoseItemsListViewHolder) child.getTag();
-//                    viewHolder.setDurationUnitToAll(unit);
-//                }
-//            }
+//        if (editDurationCommon.hasFocus()) {
+//            isDurationSet = true;
+//            adapter.notifyDataSetChanged();
 //        }
+        if (lvPrescriptionItems.getChildCount() > 0) {
+            for (int i = 0; i < lvPrescriptionItems.getChildCount(); i++) {
+                View child = lvPrescriptionItems.getChildAt(i);
+                if (child.getTag() != null && child.getTag() instanceof SelectedPrescriptionDrugDoseItemsListViewHolder) {
+                    viewHolder = (SelectedPrescriptionDrugDoseItemsListViewHolder) child.getTag();
+                    viewHolder.setDurationUnitToAll(unit);
+                }
+            }
+        }
     }
 
     private void refreshListViewUpdatedDrugsList() {

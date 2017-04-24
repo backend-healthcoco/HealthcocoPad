@@ -41,6 +41,7 @@ import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
 
 import org.parceler.Parcels;
+
 import java.util.ArrayList;
 
 import static com.healthcoco.healthcocopad.enums.WebServiceType.GET_SPECIALITIES;
@@ -159,10 +160,16 @@ public class ContactUsDialogFragment extends HealthCocoDialogFragment implements
                 getDialog().cancel();
                 break;
             case R.id.tv_terms_of_service:
-                openCommonOpenUpActivity(CommonOpenUpFragmentType.TERMS_OF_SERVICE, WebViewType.TERMS_OF_SERVICE.ordinal(), 0);
+                Util.checkNetworkStatus(mActivity);
+                if (HealthCocoConstants.isNetworkOnline) {
+                    openCommonOpenUpActivity(CommonOpenUpFragmentType.TERMS_OF_SERVICE, WebViewType.TERMS_OF_SERVICE.ordinal(), 0);
+                } else Util.showToast(mActivity, R.string.user_offline);
                 break;
             case R.id.tv_privacy_policy:
-                openCommonOpenUpActivity(CommonOpenUpFragmentType.PRIVACY_POLICY, WebViewType.PRIVACY_POLICY.ordinal(), 0);
+                Util.checkNetworkStatus(mActivity);
+                if (HealthCocoConstants.isNetworkOnline) {
+                    openCommonOpenUpActivity(CommonOpenUpFragmentType.PRIVACY_POLICY, WebViewType.PRIVACY_POLICY.ordinal(), 0);
+                } else Util.showToast(mActivity, R.string.user_offline);
                 break;
             default:
                 break;
@@ -295,7 +302,7 @@ public class ContactUsDialogFragment extends HealthCocoDialogFragment implements
                     if (response.getData() != null && response.getData() instanceof String) {
                         LogUtils.LOGD(TAG, "Success DOCTOR_CONTACT_US send broadcast");
                         sendBroadcastToOriginScreen((String) response.getData());
-                        ((CommonOpenUpActivity) mActivity).finish();
+                        getDialog().dismiss();
                     }
                     break;
             }

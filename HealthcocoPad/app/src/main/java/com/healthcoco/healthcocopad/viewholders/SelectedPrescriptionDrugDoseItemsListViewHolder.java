@@ -118,10 +118,11 @@ public class SelectedPrescriptionDrugDoseItemsListViewHolder extends HealthCocoV
         tvFrequency.setText(Util.getValidatedValue(objData.getDosage()));
 
         //setting durationUnit
-        if (addNewPrescriptionListener.isDurationSet()) {
-            editDuration.setText(addNewPrescriptionListener.getDurationUnit());
-            objData.setDuration(getDurationForTaggedViews(Util.getValidatedValueOrNull(editDuration), getValidatedDurationUnit()));
-        } else if (objData.getDuration() != null)
+//        if (addNewPrescriptionListener.isDurationSet()) {
+//            editDuration.setText(addNewPrescriptionListener.getDurationUnit());
+//            objData.setDuration(getDurationForTaggedViews(Util.getValidatedValueOrNull(editDuration), getValidatedDurationUnit()));
+//        } else
+        if (objData.getDuration() != null)
             editDuration.setText(Util.getValidatedValue(objData.getDuration().getValue()));
         else
             editDuration.setText("");
@@ -356,6 +357,7 @@ public class SelectedPrescriptionDrugDoseItemsListViewHolder extends HealthCocoV
             objData.setDuration(getDuration(Util.getValidatedValueOrNull(editDuration), objData.getDuration().getDurationUnit()));
         else
             objData.setDuration(getDurationForTaggedViews(Util.getValidatedValueOrNull(editDuration), null));
+
         objData.setInstructions(Util.getValidatedValueOrNull(etInstruction));
         return objData;
     }
@@ -368,7 +370,6 @@ public class SelectedPrescriptionDrugDoseItemsListViewHolder extends HealthCocoV
             return direction;
         } catch (Exception e) {
             e.printStackTrace();
-
         }
         return selectedDirection;
     }

@@ -1,5 +1,6 @@
 package com.healthcoco.healthcocopad.bean.server;
 
+import com.healthcoco.healthcocopad.utilities.Util;
 import com.orm.SugarRecord;
 import com.orm.annotation.Ignore;
 import com.orm.annotation.Unique;
@@ -384,5 +385,31 @@ public class ClinicalNotes extends SugarRecord {
 
     public void setVitalSigns(VitalSigns vitalSigns) {
         this.vitalSigns = vitalSigns;
+    }
+
+    public boolean areAllFieldsNull() {
+        if (vitalSigns != null
+                && Util.isNullOrBlank(indicationOfUSG)
+                && Util.isNullOrBlank(ps)
+                && Util.isNullOrBlank(pv)
+                && Util.isNullOrBlank(pa)
+                && Util.isNullOrBlank(holter)
+                && Util.isNullOrBlank(echo)
+                && Util.isNullOrBlank(xRayDetails)
+                && Util.isNullOrBlank(ecgDetails)
+                && Util.isNullOrBlank(presentComplaint)
+                && Util.isNullOrBlank(complaint)
+                && Util.isNullOrBlank(presentComplaintHistory)
+                && Util.isNullOrBlank(menstrualHistory)
+                && Util.isNullOrBlank(obstetricHistory)
+                && Util.isNullOrBlank(generalExam)
+                && Util.isNullOrBlank(systemExam)
+                && Util.isNullOrBlank(note)
+                && Util.isNullOrBlank(provisionalDiagnosis)
+                && Util.isNullOrBlank(diagnosis)
+                && Util.isNullOrEmptyList(diagrams)
+                )
+            return true;
+        return false;
     }
 }

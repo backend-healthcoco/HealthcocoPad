@@ -53,11 +53,11 @@
                 android:src="@drawable/arrow_down_drug" />
         </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="@dimen/item_padding"
-            android:background="@color/grey_background" />
+        <!--<View-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="1dp"-->
+        <!--android:layout_marginTop="@dimen/item_padding"-->
+        <!--android:background="@color/grey_background" />-->
 
         <LinearLayout
             android:id="@+id/container_prescribed_by"

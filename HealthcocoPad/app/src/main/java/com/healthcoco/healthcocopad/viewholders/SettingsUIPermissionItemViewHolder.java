@@ -9,6 +9,7 @@ import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.HealthCocoViewHolder;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.listeners.CommonUiPermissionsListener;
+import com.healthcoco.healthcocopad.utilities.Util;
 
 /**
  * Created by Shreshtha on 28-02-2017.
@@ -28,7 +29,7 @@ public class SettingsUIPermissionItemViewHolder extends HealthCocoViewHolder imp
     }
 
     public void applyData() {
-        chUIPermission.setText(permission);
+        chUIPermission.setText(Util.getFormattedStringReplaceBySpace(permission));
         chUIPermission.setChecked(commonUiPermissionsListener.isAssigned(permission));
     }
 
