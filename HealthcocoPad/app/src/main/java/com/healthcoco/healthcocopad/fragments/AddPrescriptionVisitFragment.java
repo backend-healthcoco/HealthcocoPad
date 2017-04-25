@@ -359,10 +359,10 @@ public class AddPrescriptionVisitFragment extends HealthCocoFragment implements 
         }
     }
 
-    public void initUiPermissions(ArrayList<String> clinicalNotesUiPermissionsList) {
-        if (!Util.isNullOrEmptyList(clinicalNotesUiPermissionsList)) {
-            clinicalNotesUiPermissionsList.removeAll(Collections.singleton(null));
-            if (!Util.isNullOrEmptyList(clinicalNotesUiPermissionsList)) {
+    public void initUiPermissions(ArrayList<String> prescriptionUiPermissions) {
+        if (!Util.isNullOrEmptyList(prescriptionUiPermissions)) {
+            prescriptionUiPermissions.removeAll(Collections.singleton(null));
+            if (!Util.isNullOrEmptyList(prescriptionUiPermissions)) {
             }
         }
     }
