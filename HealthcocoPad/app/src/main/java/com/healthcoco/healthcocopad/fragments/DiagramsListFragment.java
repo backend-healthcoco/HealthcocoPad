@@ -144,7 +144,14 @@ public class DiagramsListFragment extends HealthCocoFragment implements OnItemCl
 
     @Override
     public void onErrorResponse(VolleyResponseBean volleyResponseBean, String errorMessage) {
+        String errorMsg = null;
+        if (volleyResponseBean != null && !Util.isNullOrBlank(volleyResponseBean.getErrMsg())) {
+            errorMsg = volleyResponseBean.getErrMsg();
+        } else {
+            errorMsg = getResources().getString(R.string.error);
+        }
         mActivity.hideLoading();
+        Util.showToast(mActivity, errorMsg);
     }
 
     @Override

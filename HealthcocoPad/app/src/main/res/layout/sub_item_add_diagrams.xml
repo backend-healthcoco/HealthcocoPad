@@ -19,8 +19,10 @@
     <HorizontalScrollView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginRight="10dp"
         android:layout_marginTop="3dp"
         android:layout_weight="@integer/add_visit_right_item_weight"
+        android:minHeight="100dp"
         android:paddingBottom="4dp"
         android:scrollbarSize="3dp"
         android:scrollbarStyle="outsideOverlay">
@@ -31,6 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
+            android:paddingRight="10dp"
             android:gravity="center"
             android:orientation="horizontal">
 

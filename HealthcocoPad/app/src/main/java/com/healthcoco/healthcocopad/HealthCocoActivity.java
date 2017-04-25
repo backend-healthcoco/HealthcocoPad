@@ -1366,6 +1366,7 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
             permissionCheck = permissionCheck + permission;
         }
         if ((grantResults.length > 0) && permissionCheck == PackageManager.PERMISSION_GRANTED) {
+
         } else {
             Snackbar.make(findViewById(android.R.id.content), mErrorString.get(requestCode),
                     Snackbar.LENGTH_INDEFINITE).setAction("ENABLE",
@@ -1394,7 +1395,7 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
             permissionCheck = permissionCheck + ContextCompat.checkSelfPermission(this, permission);
 //            shouldShowRequestPermissionRationale = shouldShowRequestPermissionRationale || ActivityCompat.shouldShowRequestPermissionRationale(this, permission);
         }
-        if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+//        if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
 //            if (shouldShowRequestPermissionRationale) {
 //                Snackbar.make(findViewById(android.R.id.content), stringId,
 //                        Snackbar.LENGTH_INDEFINITE).setAction("GRANT",
@@ -1405,10 +1406,10 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
 //                            }
 //                        }).show();
 //            } else {
-                ActivityCompat.requestPermissions(this, requestedPermissions, requestCode);
+        ActivityCompat.requestPermissions(this, requestedPermissions, requestCode);
 //            }
-        } else {
-        }
+//        } else {
+//        }
     }
 
     public interface PermissionGranted {
@@ -1425,5 +1426,4 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
                 android.Manifest.permission.ACCESS_FINE_LOCATION,
         }, R.string.runtime_permissions_txt, REQUEST_PERMISSIONS);
     }
-
 }

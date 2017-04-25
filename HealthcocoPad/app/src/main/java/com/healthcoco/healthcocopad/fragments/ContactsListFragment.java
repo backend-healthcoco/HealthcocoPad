@@ -471,7 +471,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
         hideKeyboard(view);
         editAdvanceSearchText.setTag(null);
         autoTvAdvanceSearchText.setTag(null);
-        resetListAndPagingAttributes();
+//        resetListAndPagingAttributes();
         editSearch.setText("");
         autoTvAdvanceSearchText.setText("");
         autotvSearchType.setText("");
