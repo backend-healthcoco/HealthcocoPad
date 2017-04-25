@@ -98,9 +98,9 @@ public class PrescribedDrugDoseItemViewholder extends LinearLayout {
 
         //set instruction
         String instruction = null;
-        instruction = drugItem.getInstructions();
-        if (!Util.isNullOrBlank(instruction))
+        if (!Util.isNullOrBlank(drugItem.getInstructions())) {
+            instruction = drugItem.getInstructions();
             tvInstruction.setText(instruction);
-        else tvInstruction.setText(getResources().getString(R.string.no_text_dash));
+        } else tvInstruction.setText(getResources().getString(R.string.no_text_dash));
     }
 }

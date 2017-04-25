@@ -61,7 +61,7 @@ public class HomeActivity extends HealthCocoActivity implements View.OnClickList
         LocalDoInBackgroundListenerOptimised, Response.Listener<VolleyResponseBean> {
     public static final String INTENT_SYNC_SUCCESS = "com.healthcoco.INITIAL_SYNC_SUCCESS";
     private static final int MENU_SELECTION_TIME = 500;
-    private static final int REQUEST_PERMISSIONS = 101;
+
     private ImageButton btMenu;
     private TextView tvTitle;
     private DrawerLayout drawerLayout;
@@ -314,17 +314,6 @@ public class HomeActivity extends HealthCocoActivity implements View.OnClickList
         initFilterFragment();
         initContactsFragment();
         requestPermission();
-    }
-
-    private void requestPermission() {
-        requestAppPermissions(new
-                String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.CALL_PHONE,
-                Manifest.permission.PROCESS_OUTGOING_CALLS,
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.ACCESS_FINE_LOCATION,
-        }, R.string.runtime_permissions_txt, REQUEST_PERMISSIONS);
     }
 
     private void initMenuFragment() {

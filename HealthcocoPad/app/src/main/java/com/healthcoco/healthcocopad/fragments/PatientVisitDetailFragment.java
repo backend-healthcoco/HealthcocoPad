@@ -218,6 +218,8 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
                         new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_VISITS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
                         return;
                     }
+                    if (!response.isUserOnline())
+                        onNetworkUnavailable(response.getWebServiceType());
                     progressLoading.setVisibility(View.GONE);
                     isLoading = false;
                     mActivity.hideLoading();

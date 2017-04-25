@@ -61,6 +61,7 @@ public class DiagramsListFragment extends HealthCocoFragment implements OnItemCl
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        mActivity.requestPermission();
         init();
     }
 

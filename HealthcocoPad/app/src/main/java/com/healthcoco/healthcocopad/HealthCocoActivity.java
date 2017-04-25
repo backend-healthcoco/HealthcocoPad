@@ -1,5 +1,6 @@
 package com.healthcoco.healthcocopad;
 
+import android.*;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -120,6 +121,7 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
     private boolean isInitialLoading;
     private User user;
     private SparseIntArray mErrorString;
+    private static final int REQUEST_PERMISSIONS = 101;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -1390,21 +1392,21 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
         boolean shouldShowRequestPermissionRationale = false;
         for (String permission : requestedPermissions) {
             permissionCheck = permissionCheck + ContextCompat.checkSelfPermission(this, permission);
-            shouldShowRequestPermissionRationale = shouldShowRequestPermissionRationale || ActivityCompat.shouldShowRequestPermissionRationale(this, permission);
+//            shouldShowRequestPermissionRationale = shouldShowRequestPermissionRationale || ActivityCompat.shouldShowRequestPermissionRationale(this, permission);
         }
         if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
-            if (shouldShowRequestPermissionRationale) {
-                Snackbar.make(findViewById(android.R.id.content), stringId,
-                        Snackbar.LENGTH_INDEFINITE).setAction("GRANT",
-                        new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                ActivityCompat.requestPermissions(HealthCocoActivity.this, requestedPermissions, requestCode);
-                            }
-                        }).show();
-            } else {
+//            if (shouldShowRequestPermissionRationale) {
+//                Snackbar.make(findViewById(android.R.id.content), stringId,
+//                        Snackbar.LENGTH_INDEFINITE).setAction("GRANT",
+//                        new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View v) {
+//                                ActivityCompat.requestPermissions(HealthCocoActivity.this, requestedPermissions, requestCode);
+//                            }
+//                        }).show();
+//            } else {
                 ActivityCompat.requestPermissions(this, requestedPermissions, requestCode);
-            }
+//            }
         } else {
         }
     }
@@ -1412,4 +1414,16 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
     public interface PermissionGranted {
         void onPermissionsGranted(int requestCode);
     }
+
+    public void requestPermission() {
+        requestAppPermissions(new
+                String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                android.Manifest.permission.CALL_PHONE,
+                android.Manifest.permission.PROCESS_OUTGOING_CALLS,
+                android.Manifest.permission.ACCESS_COARSE_LOCATION,
+                android.Manifest.permission.ACCESS_FINE_LOCATION,
+        }, R.string.runtime_permissions_txt, REQUEST_PERMISSIONS);
+    }
+
 }
