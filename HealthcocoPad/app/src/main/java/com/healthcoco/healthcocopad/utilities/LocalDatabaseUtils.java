@@ -104,6 +104,7 @@ public class LocalDatabaseUtils {
     public static final String KEY_IS_PART_OF_CONSULTANT_DOCTOR = "is_part_of_consultant_doctor";
     public static final String KEY_CONSULTANT_DOCTOR_IDS_JSON_STRING = "consultant_doctor_ids_json_string";
 
+
     public static final String KEY_COMPLAINT = "complaint";
     public static final String KEY_OBSERVATION = "observation";
     public static final String KEY_INVESTIGATION = "investigation";

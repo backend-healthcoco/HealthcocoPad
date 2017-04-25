@@ -61,6 +61,7 @@ public class LocalDataServiceImpl {
     private LocalDataServiceImpl() {
     }
 
+
     private enum FromTableType {
         ADD_TEMPLATES, ADD_TREATMENT, ADD_PRESCRIPTION
     }
@@ -2567,17 +2568,20 @@ public class LocalDataServiceImpl {
         diagram.save();
     }
 
-    public Duration getDuration(String foreignDurationId) {
-        String query = "Select  " + LocalDatabaseUtils.getPrefixedColumnsString(Duration.class, true)
-                + " from " + Duration.TABLE_NAME
-                + " left outer join " + DrugDurationUnit.TABLE_NAME
-                + " on " + Duration.TABLE_NAME + "." + LocalDatabaseUtils.KEY_FOREIGN_DRUG_DURATION_UNIT_ID + "=" + DrugDurationUnit.TABLE_NAME + "." + LocalDatabaseUtils.KEY_UNIQUE_ID
-                + " where " + Duration.TABLE_NAME + "." + LocalDatabaseUtils.KEY_CUSTOM_UNIQUE_ID + " = " + "\"" + foreignDurationId + "\"";
-        LogUtils.LOGD(TAG, "Select query : " + query);
-        Duration duration = SugarRecord.findObjectWithQuery(Duration.class, query);
-        if (duration != null)
-            duration.setDurationUnit(getDurationUnit(duration.getForeignDrugDurationUnit()));
+    public Duration getDefaultDuration() {
+        Duration duration = new Duration();
+        duration.setDurationUnit(getDefaultDurationUnit());
         return duration;
+    }
+
+    private DrugDurationUnit getDefaultDurationUnit() {
+        String query = "Select  " + LocalDatabaseUtils.getPrefixedColumnsString(DrugDurationUnit.class, true)
+                + " from " + DrugDurationUnit.TABLE_NAME
+                + " where "
+                + LocalDatabaseUtils.getSearchTermEqualsIgnoreCaseQuery(LocalDatabaseUtils.KEY_UNIT, "day");
+        LogUtils.LOGD(TAG, "Select query : " + query);
+        DrugDurationUnit durationUnit = SugarRecord.findObjectWithQuery(DrugDurationUnit.class, query);
+        return durationUnit;
     }
 
     public DrugDurationUnit getDurationUnit(String uniqueId) {

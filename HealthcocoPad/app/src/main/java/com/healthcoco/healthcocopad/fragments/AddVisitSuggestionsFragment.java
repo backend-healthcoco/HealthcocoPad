@@ -416,7 +416,7 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements
                 if (suggestionType != null) {
                     isLoadingFromSearch = true;
                     resetListAndPagingAttributes();
-                    refreshData(true);
+                    refreshData(false);
                 }
             }
         }

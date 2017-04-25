@@ -26,6 +26,7 @@ import com.healthcoco.healthcocopad.bean.server.Drug;
 import com.healthcoco.healthcocopad.bean.server.DrugItem;
 import com.healthcoco.healthcocopad.custom.MyScriptEditText;
 import com.healthcoco.healthcocopad.listeners.AddNewPrescriptionListener;
+import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
@@ -178,6 +179,8 @@ public class AddPrescriptionVisitFragment extends HealthCocoFragment implements 
         isDurationSet = false;
         if (drug != null) {
             editDurationCommon.setText("");
+            if (drug.getDuration() == null && !Util.isNullOrBlank(drug.getDuration().getValue()))
+                drug.setDuration(LocalDataServiceImpl.getInstance(mApp).getDefaultDuration());
             drugsListHashMap.put(drug.getDrug().getUniqueId(), drug);
 //            refreshListViewUpdatedDrugsList();
             notifyAdapter(new ArrayList<DrugItem>(drugsListHashMap.values()));

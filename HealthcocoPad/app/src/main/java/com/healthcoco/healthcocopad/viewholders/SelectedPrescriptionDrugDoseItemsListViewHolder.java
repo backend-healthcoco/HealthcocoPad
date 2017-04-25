@@ -129,7 +129,7 @@ public class SelectedPrescriptionDrugDoseItemsListViewHolder extends HealthCocoV
 
         if (objData.getDuration() != null && objData.getDuration().getDurationUnit() != null)
             tvDrugDurationUnit.setText(Util.getValidatedValue(objData.getDuration().getDurationUnit().getUnit()));
-        else tvDrugDurationUnit.setText("day(s)");
+//        else tvDrugDurationUnit.setText("day(s)");
         //initialising instructions popup
         if (!Util.isNullOrBlank(objData.getInstructions())) {
             etInstruction.setVisibility(View.VISIBLE);
