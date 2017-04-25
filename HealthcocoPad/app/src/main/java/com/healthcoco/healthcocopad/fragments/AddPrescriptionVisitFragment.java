@@ -179,7 +179,7 @@ public class AddPrescriptionVisitFragment extends HealthCocoFragment implements 
         isDurationSet = false;
         if (drug != null) {
             editDurationCommon.setText("");
-            if (drug.getDuration() == null && !Util.isNullOrBlank(drug.getDuration().getValue()))
+            if (drug.getDuration() == null || (drug.getDuration() != null && Util.isNullOrBlank(drug.getDuration().getValue())))
                 drug.setDuration(LocalDataServiceImpl.getInstance(mApp).getDefaultDuration());
             drugsListHashMap.put(drug.getDrug().getUniqueId(), drug);
 //            refreshListViewUpdatedDrugsList();
