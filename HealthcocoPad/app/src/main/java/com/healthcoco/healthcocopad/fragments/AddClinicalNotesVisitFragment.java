@@ -162,110 +162,130 @@ public class AddClinicalNotesVisitFragment extends HealthCocoFragment implements
         if (!Util.isNullOrBlank(clinicalNotesUiPermissionJson)) {
             Gson gson = new Gson();
             //initialising clinical notes UI permissions
-            boolean isNullClinicalNotePermissionsList = true;
             if (!Util.isNullOrBlank(clinicalNotesUiPermissionJson)) {
                 clinicalNotesUiPermissionsList = gson.fromJson(clinicalNotesUiPermissionJson, new TypeToken<ArrayList<String>>() {
                 }.getType());
                 clinicalNotesUiPermissionsList.removeAll(Collections.singleton(null));
                 if (!Util.isNullOrEmptyList(clinicalNotesUiPermissionsList)) {
-                    sendBroadcastForClinicalNoteButtonVisibility(true);
-                    isNullClinicalNotePermissionsList = false;
                     parentPermissionItems.removeAllViews();
-                    if (!Util.isNullOrEmptyList(clinicalNotesUiPermissionsList)) {
-                        if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.VITAL_SIGNS.getValue()) || (clinicalNotes != null && clinicalNotes.getVitalSigns() != null)) {
-                            parentVitalSigns.setVisibility(View.VISIBLE);
-                            if (clinicalNotes != null && clinicalNotes.getVitalSigns() != null)
-                                initVitalSigns(clinicalNotes.getVitalSigns());
-                        }
-                        if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.PRESENT_COMPLAINT.getValue())
-                                || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getPresentComplaint())))
-                            addPermissionItem(PRESENT_COMPLAINT);
-                        if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.COMPLAINT.getValue())
-                                || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getComplaint())))
-                            addPermissionItem(ClinicalNotesPermissionType.COMPLAINT);
-                        if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.HISTORY_OF_PRESENT_COMPLAINT.getValue())
-                                || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getPresentComplaintHistory())))
-                            addPermissionItem(ClinicalNotesPermissionType.HISTORY_OF_PRESENT_COMPLAINT);
-                        if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.MENSTRUAL_HISTORY.getValue())
-                                || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getMenstrualHistory())))
-                            addPermissionItem(ClinicalNotesPermissionType.MENSTRUAL_HISTORY);
-                        if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.OBSTETRIC_HISTORY.getValue())
-                                || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getObstetricHistory())))
-                            addPermissionItem(ClinicalNotesPermissionType.OBSTETRIC_HISTORY);
-                        if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.GENERAL_EXAMINATION.getValue())
-                                || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getGeneralExam())))
-                            addPermissionItem(ClinicalNotesPermissionType.GENERAL_EXAMINATION);
-                        if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.SYSTEMIC_EXAMINATION.getValue())
-                                || (clinicalNotes != null && clinicalNotes.getSystemExam() != null))
-                            addPermissionItem(ClinicalNotesPermissionType.SYSTEMIC_EXAMINATION);
-                        if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.OBSERVATION.getValue())
-                                || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getObservation())))
-                            addPermissionItem(ClinicalNotesPermissionType.OBSERVATION);
-                        if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.INVESTIGATIONS.getValue())
-                                || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getInvestigation())))
-                            addPermissionItem(ClinicalNotesPermissionType.INVESTIGATIONS);
-                        if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.PROVISIONAL_DIAGNOSIS.getValue())
-                                || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getProvisionalDiagnosis())))
-                            addPermissionItem(ClinicalNotesPermissionType.PROVISIONAL_DIAGNOSIS);
-                        if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.DIAGNOSIS.getValue())
-                                || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getDiagnosis())))
-                            addPermissionItem(ClinicalNotesPermissionType.DIAGNOSIS);
-                        if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.ECG.getValue())
-                                || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getEcgDetails())))
-                            addPermissionItem(ClinicalNotesPermissionType.ECG);
-                        if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.ECHO.getValue())
-                                || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getEcho())))
-                            addPermissionItem(ClinicalNotesPermissionType.ECHO);
-                        if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.XRAY.getValue())
-                                || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getxRayDetails())))
-                            addPermissionItem(ClinicalNotesPermissionType.XRAY);
-                        if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.HOLTER.getValue())
-                                || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getHolter())))
-                            addPermissionItem(ClinicalNotesPermissionType.HOLTER);
-                        if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.NOTES.getValue())
-                                || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getNote())))
-                            addPermissionItem(ClinicalNotesPermissionType.NOTES);
-                        if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.INDICATION_OF_USG.getValue())
-                                || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getIndicationOfUSG())))
-                            addPermissionItem(ClinicalNotesPermissionType.INDICATION_OF_USG);
-                        if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.PA.getValue())
-                                || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getPa())))
-                            addPermissionItem(ClinicalNotesPermissionType.PA);
-                        if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.PS.getValue())
-                                || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getPs())))
-                            addPermissionItem(ClinicalNotesPermissionType.PS);
-                        if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.PV.getValue())
-                                || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getPv())))
-                            addPermissionItem(ClinicalNotesPermissionType.PV);
-
-                        //initialising diagrams view visibility
-                        if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.DIAGRAM.getValue())
-                                || (clinicalNotes != null && !Util.isNullOrEmptyList(clinicalNotes.getDiagrams()))) {
-                            prePopulateDiagrams();
-//                            sendBroadcastForDiagramButtonVisibility(true);
-                        } else
-                            sendBroadcastForDiagramButtonVisibility(false);
-                    }
-                }
-                if (isNullClinicalNotePermissionsList) {
-                    sendBroadcastForDiagramButtonVisibility(false);
-                    sendBroadcastForClinicalNoteButtonVisibility(false);
-                } else {
-                    if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.DIAGRAM.getValue()) && clinicalNotesUiPermissionsList.size() == 1)
+                    if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.DIAGRAM.getValue()) && clinicalNotesUiPermissionsList.size() == 1) {
                         sendBroadcastForClinicalNoteButtonVisibility(false);
-                    else
+                        initialiseDiagramsView();
+                        return;
+                    } else
                         sendBroadcastForClinicalNoteButtonVisibility(true);
-                }
-            }
 
-        } else {
-            sendBroadcastForClinicalNoteButtonVisibility(false);
+                    if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.VITAL_SIGNS.getValue()) || (clinicalNotes != null && clinicalNotes.getVitalSigns() != null)) {
+                        parentVitalSigns.setVisibility(View.VISIBLE);
+                        if (clinicalNotes != null && clinicalNotes.getVitalSigns() != null)
+                            initVitalSigns(clinicalNotes.getVitalSigns());
+                    }
+                    if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.PRESENT_COMPLAINT.getValue())
+                            || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getPresentComplaint())))
+                        addPermissionItem(PRESENT_COMPLAINT);
+                    if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.COMPLAINT.getValue())
+                            || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getComplaint())))
+                        addPermissionItem(ClinicalNotesPermissionType.COMPLAINT);
+                    if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.HISTORY_OF_PRESENT_COMPLAINT.getValue())
+                            || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getPresentComplaintHistory())))
+                        addPermissionItem(ClinicalNotesPermissionType.HISTORY_OF_PRESENT_COMPLAINT);
+                    if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.MENSTRUAL_HISTORY.getValue())
+                            || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getMenstrualHistory())))
+                        addPermissionItem(ClinicalNotesPermissionType.MENSTRUAL_HISTORY);
+                    if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.OBSTETRIC_HISTORY.getValue())
+                            || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getObstetricHistory())))
+                        addPermissionItem(ClinicalNotesPermissionType.OBSTETRIC_HISTORY);
+                    if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.GENERAL_EXAMINATION.getValue())
+                            || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getGeneralExam())))
+                        addPermissionItem(ClinicalNotesPermissionType.GENERAL_EXAMINATION);
+                    if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.SYSTEMIC_EXAMINATION.getValue())
+                            || (clinicalNotes != null && clinicalNotes.getSystemExam() != null))
+                        addPermissionItem(ClinicalNotesPermissionType.SYSTEMIC_EXAMINATION);
+                    if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.OBSERVATION.getValue())
+                            || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getObservation())))
+                        addPermissionItem(ClinicalNotesPermissionType.OBSERVATION);
+                    if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.INVESTIGATIONS.getValue())
+                            || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getInvestigation())))
+                        addPermissionItem(ClinicalNotesPermissionType.INVESTIGATIONS);
+                    if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.PROVISIONAL_DIAGNOSIS.getValue())
+                            || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getProvisionalDiagnosis())))
+                        addPermissionItem(ClinicalNotesPermissionType.PROVISIONAL_DIAGNOSIS);
+                    if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.DIAGNOSIS.getValue())
+                            || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getDiagnosis())))
+                        addPermissionItem(ClinicalNotesPermissionType.DIAGNOSIS);
+                    if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.ECG.getValue())
+                            || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getEcgDetails())))
+                        addPermissionItem(ClinicalNotesPermissionType.ECG);
+                    if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.ECHO.getValue())
+                            || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getEcho())))
+                        addPermissionItem(ClinicalNotesPermissionType.ECHO);
+                    if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.XRAY.getValue())
+                            || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getxRayDetails())))
+                        addPermissionItem(ClinicalNotesPermissionType.XRAY);
+                    if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.HOLTER.getValue())
+                            || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getHolter())))
+                        addPermissionItem(ClinicalNotesPermissionType.HOLTER);
+                    if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.NOTES.getValue())
+                            || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getNote())))
+                        addPermissionItem(ClinicalNotesPermissionType.NOTES);
+                    if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.INDICATION_OF_USG.getValue())
+                            || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getIndicationOfUSG())))
+                        addPermissionItem(ClinicalNotesPermissionType.INDICATION_OF_USG);
+                    if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.PA.getValue())
+                            || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getPa())))
+                        addPermissionItem(ClinicalNotesPermissionType.PA);
+                    if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.PS.getValue())
+                            || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getPs())))
+                        addPermissionItem(ClinicalNotesPermissionType.PS);
+                    if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.PV.getValue())
+                            || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getPv())))
+                        addPermissionItem(ClinicalNotesPermissionType.PV);
+                    initialiseDiagramsView();
+                }
+                return;
+            }
         }
+        hideClinicalNoteViewsAndButtons();
+    }
+
+    private void hideClinicalNoteViewsAndButtons() {
+        sendBroadcastForClinicalNoteButtonVisibility(false);
+        sendBroadcastForDiagramButtonVisibility(false);
+    }
+
+    private void initialiseDiagramsView() {
+        //initialising diagrams view visibility
+        if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.DIAGRAM.getValue())
+                || (clinicalNotes != null && !Util.isNullOrEmptyList(clinicalNotes.getDiagrams()))) {
+            prePopulateDiagrams();
+            sendBroadcastForDiagramButtonVisibility(true);
+        } else
+            sendBroadcastForDiagramButtonVisibility(false);
     }
 
     private void sendBroadcastForDiagramButtonVisibility(boolean showVisibility) {
         try {
             Intent intent = new Intent(AddVisitsFragment.INTENT_DIAGRAM_BUTTON_VISIBILITY);
+            intent.putExtra(AddVisitsFragment.TAG_VISIBILITY, showVisibility);
+            LocalBroadcastManager.getInstance(mApp.getApplicationContext()).sendBroadcast(intent);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void sendBroadcastForDiagramLayoutVisibility(boolean showVisibility) {
+        try {
+            Intent intent = new Intent(AddVisitsFragment.INTENT_DIAGRAM_LAYOUT_VISIBILITY);
+            intent.putExtra(AddVisitsFragment.TAG_VISIBILITY, showVisibility);
+            LocalBroadcastManager.getInstance(mApp.getApplicationContext()).sendBroadcast(intent);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void sendBroadcastForClinicalNoteLayoutVisibility(boolean showVisibility) {
+        try {
+            Intent intent = new Intent(AddVisitsFragment.INTENT_CLINCIAL_NOTE_LAYOUT_VISIBILITY);
             intent.putExtra(AddVisitsFragment.TAG_VISIBILITY, showVisibility);
             LocalBroadcastManager.getInstance(mApp.getApplicationContext()).sendBroadcast(intent);
         } catch (Exception e) {
@@ -357,7 +377,7 @@ public class AddClinicalNotesVisitFragment extends HealthCocoFragment implements
                     text = clinicalNotes.getPv();
                     break;
             }
-            sendBroadcastForClinicalNoteButtonVisibility(true);
+            sendBroadcastForClinicalNoteLayoutVisibility(true);
             autotvPermission.setText(Util.getValidatedValue(text));
         }
         parentPermissionItems.addView(layoutItemPermission);
@@ -553,7 +573,7 @@ public class AddClinicalNotesVisitFragment extends HealthCocoFragment implements
                 containerDiagrams.removeView(parentView);
                 diagramsList.remove(diagramUniqueId);
                 if (Util.isNullOrEmptyList(diagramsList) && containerDiagrams.getChildCount() <= 0)
-                    Util.sendBroadcast(mApp, AddVisitsFragment.INTENT_DIAGRAM_BUTTON_VISIBILITY);
+                    Util.sendBroadcast(mApp, AddVisitsFragment.INTENT_DIAGRAM_LAYOUT_VISIBILITY);
 
             }
         });
@@ -635,7 +655,7 @@ public class AddClinicalNotesVisitFragment extends HealthCocoFragment implements
             //initialising diagrams in container
             containerDiagrams.removeAllViews();
             if (!Util.isNullOrEmptyList(clinicalNotes.getDiagrams())) {
-                sendBroadcastForDiagramButtonVisibility(true);
+                sendBroadcastForDiagramLayoutVisibility(true);
                 containerDiagrams.setVisibility(View.VISIBLE);
                 for (Diagram diagram :
                         clinicalNotes.getDiagrams()) {
@@ -644,7 +664,7 @@ public class AddClinicalNotesVisitFragment extends HealthCocoFragment implements
                     }
                 }
             } else
-                sendBroadcastForDiagramButtonVisibility(false);
+                sendBroadcastForDiagramLayoutVisibility(false);
         }
     }
 
@@ -661,6 +681,13 @@ public class AddClinicalNotesVisitFragment extends HealthCocoFragment implements
                     if (user != null && !Util.isNullOrBlank(user.getUniqueId())
                             && !Util.isNullOrBlank(user.getForeignHospitalId())
                             && !Util.isNullOrBlank(user.getForeignLocationId()) && user.getUiPermissions() != null) {
+//                        if (isNullClinicalNotePermissionsList) {
+//                            sendBroadcastForDiagramButtonVisibility(false);
+//                            sendBroadcastForClinicalNoteLayoutVisibility(false);
+//                        } else {
+//
+//                        }
+
                         initUiPermissions(user.getUiPermissions().getClinicalNotesPermissionsString());
                     } else {
                         mActivity.hideLoading();

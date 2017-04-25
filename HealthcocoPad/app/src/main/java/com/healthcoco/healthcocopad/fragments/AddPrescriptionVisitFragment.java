@@ -12,20 +12,28 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
 import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.adapter.SelectedPrescriptionDrugItemsListAdapter;
+import com.healthcoco.healthcocopad.bean.DrugInteractions;
+import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
+import com.healthcoco.healthcocopad.bean.request.DrugInteractionRequest;
+import com.healthcoco.healthcocopad.bean.server.Drug;
 import com.healthcoco.healthcocopad.bean.server.DrugItem;
 import com.healthcoco.healthcocopad.custom.MyScriptEditText;
 import com.healthcoco.healthcocopad.listeners.AddNewPrescriptionListener;
+import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.healthcoco.healthcocopad.viewholders.SelectedPrescriptionDrugDoseItemsListViewHolder;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -33,14 +41,17 @@ import java.util.List;
  * Created by neha on 19/04/17.
  */
 
-public class AddPrescriptionVisitFragment extends HealthCocoFragment implements AddNewPrescriptionListener, View.OnFocusChangeListener {
+public class AddPrescriptionVisitFragment extends HealthCocoFragment implements AddNewPrescriptionListener, View.OnFocusChangeListener, View.OnClickListener {
     private LinkedHashMap<String, DrugItem> drugsListHashMap = new LinkedHashMap<>();
+    private HashMap<String, DrugInteractionRequest> drugInteractionRequest = new HashMap<String, DrugInteractionRequest>();
+
     private SelectedPrescriptionDrugItemsListAdapter adapter;
     private ListView lvPrescriptionItems;
     private EditText editDurationCommon;
     private AddVisitsFragment addVisitsFragment;
     private SelectedPrescriptionDrugDoseItemsListViewHolder viewHolder;
     private boolean isDurationSet;
+    private Button btDrugInteraction;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -66,6 +77,7 @@ public class AddPrescriptionVisitFragment extends HealthCocoFragment implements 
     public void initViews() {
         lvPrescriptionItems = (ListView) view.findViewById(R.id.lv_prescription_items);
         editDurationCommon = (MyScriptEditText) view.findViewById(R.id.edit_duration_common);
+        btDrugInteraction = (Button) view.findViewById(R.id.bt_header_two_interaction);
     }
 
     @Override
@@ -74,6 +86,7 @@ public class AddPrescriptionVisitFragment extends HealthCocoFragment implements 
         if (addVisitsFragment != null) {
             editDurationCommon.setOnTouchListener(addVisitsFragment.getOnTouchListener());
         }
+        btDrugInteraction.setOnClickListener(this);
 //        editDurationCommon.setOnFocusChangeListener(this);
 //        editDurationCommon.setFilters(new InputFilter[]{filter});
     }
@@ -119,6 +132,7 @@ public class AddPrescriptionVisitFragment extends HealthCocoFragment implements 
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 try {
+                    drugInteractionRequest.remove(drug.getDrug().getUniqueId());
                     drugsListHashMap.remove(drug.getDrug().getUniqueId());
                     notifyAdapter(new ArrayList<DrugItem>(drugsListHashMap.values()));
                 } catch (Exception e) {
@@ -160,11 +174,12 @@ public class AddPrescriptionVisitFragment extends HealthCocoFragment implements 
     }
 
     public void addDrug(DrugItem drug) {
+        formDrugInteractionsRequestList(drug);
         isDurationSet = false;
         if (drug != null) {
             editDurationCommon.setText("");
             drugsListHashMap.put(drug.getDrug().getUniqueId(), drug);
-            refreshListViewUpdatedDrugsList();
+//            refreshListViewUpdatedDrugsList();
             notifyAdapter(new ArrayList<DrugItem>(drugsListHashMap.values()));
             lvPrescriptionItems.setSelection(adapter.getCount());
         }
@@ -254,4 +269,101 @@ public class AddPrescriptionVisitFragment extends HealthCocoFragment implements 
             return text;
         }
     };
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.bt_header_two_interaction:
+                confirmDrugInteractionsAlert();
+                break;
+        }
+    }
+
+    private void confirmDrugInteractionsAlert() {
+        final AlertDialog.Builder alertBuilder = new AlertDialog.Builder(mActivity);
+        alertBuilder.setTitle(R.string.confirm);
+        alertBuilder.setMessage(getResources().getString(
+                R.string.confirm_drug_interaction));
+        alertBuilder.setCancelable(false);
+        alertBuilder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                getDrugInteractionsResponse();
+            }
+        });
+        alertBuilder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+        alertBuilder.create();
+        alertBuilder.show();
+    }
+
+    @Override
+    public void onResponse(VolleyResponseBean response) {
+        switch (response.getWebServiceType()) {
+            case GET_DRUG_INTERACTIONS:
+                if (!Util.isNullOrEmptyList(response.getDataList()))
+                    showDrugInteractionsAlert((ArrayList<DrugInteractions>) (ArrayList<?>) response.getDataList());
+                else
+                    Util.showAlert(mActivity, R.string.title_no_interactions_found, R.string.msg_no_interactions_found);
+                break;
+            default:
+                break;
+        }
+        mActivity.hideLoading();
+    }
+
+    private void showDrugInteractionsAlert(ArrayList<DrugInteractions> interactionsList) {
+        String formattedString = "";
+        for (DrugInteractions drugInteractions :
+                interactionsList) {
+            formattedString = formattedString + drugInteractions.getText() + "\n";
+        }
+        Util.showAlert(mActivity, formattedString);
+    }
+
+    private void getDrugInteractionsResponse() {
+        mActivity.showLoading(true);
+        WebDataServiceImpl.getInstance(mApp).getDrugsInteractionResponse(DrugInteractions.class, getDrugInteractionRequestsList(), this, this);
+    }
+
+    public ArrayList<DrugInteractionRequest> getDrugInteractionRequestsList() {
+        return new ArrayList<>(drugInteractionRequest.values());
+    }
+
+    private void formDrugInteractionsRequestList(DrugItem object) {
+        try {
+            if (object instanceof DrugItem) {
+                DrugItem drugsListSolar = (DrugItem) object;
+                if (drugsListSolar.getDrug() != null) {
+                    Drug drug = drugsListSolar.getDrug();
+
+                    DrugInteractionRequest drugInteractionRequest = new DrugInteractionRequest();
+                    drugInteractionRequest.setDrugType(drug.getDrugType());
+                    drugInteractionRequest.setDirection(drugsListSolar.getDirection());
+                    drugInteractionRequest.setDuration(drugsListSolar.getDuration());
+                    drugInteractionRequest.setGenericNames(drug.getGenericNames());
+                    drugInteractionRequest.setDosage(drugsListSolar.getDosage());
+                    drugInteractionRequest.setDrugName(drug.getDrugName());
+                    drugInteractionRequest.setDrugCode(drug.getDrugCode());
+                    drugInteractionRequest.setUniqueId(drug.getUniqueId());
+                    this.drugInteractionRequest.put(drugInteractionRequest.getUniqueId(), drugInteractionRequest);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void initUiPermissions(ArrayList<String> clinicalNotesUiPermissionsList) {
+        if (!Util.isNullOrEmptyList(clinicalNotesUiPermissionsList)) {
+            clinicalNotesUiPermissionsList.removeAll(Collections.singleton(null));
+            if (!Util.isNullOrEmptyList(clinicalNotesUiPermissionsList)) {
+            }
+        }
+    }
 }

@@ -557,6 +557,9 @@
     <string name="search_drug">Search Drug</string>
     <string name="confirm_remove_drug">Are you sure you want to remove this Drug?</string>
     <string name="confirm_remove_test">Are you sure you want to remove this Test?</string>
+    <string name="confirm_drug_interaction">Confirm Drug Interaction&#160;</string>
+    <string name="title_no_interactions_found">No Interactions were found between your selected drugs</string>
+    <string name="msg_no_interactions_found">Note: This does not necessarily mean no Interactions exist.</string>
 
     <string name="present_complaint">Present Complaint</string>
     <string name="complaints">Complaints</string>

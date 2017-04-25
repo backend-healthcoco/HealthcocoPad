@@ -107,7 +107,9 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
         HealthcocoOnSelectionChangedListener, View.OnTouchListener {
     public static final String INTENT_ON_SUGGESTION_ITEM_CLICK = "com.healthcoco.healthcocopad.fragments.AddVisitsFragment.ON_SUGGESTION_ITEM_CLICK";
     public static final String INTENT_ADIVCE_BUTTON_VISIBILITY = "com.healthcoco.healthcocopad.fragments.AddVisitsFragment.ADIVCE_BUTTON_VISIBILITY";
+    public static final String INTENT_DIAGRAM_LAYOUT_VISIBILITY = "com.healthcoco.healthcocopad.fragments.AddVisitsFragment.DIAGRAM_LAYOUT_VISIBILITY";
     public static final String INTENT_DIAGRAM_BUTTON_VISIBILITY = "com.healthcoco.healthcocopad.fragments.AddVisitsFragment.DIAGRAM_BUTTON_VISIBILITY";
+    public static final String INTENT_CLINCIAL_NOTE_LAYOUT_VISIBILITY = "com.healthcoco.healthcocopad.fragments.AddVisitsFragment.CLINCIAL_NOTE_LAYOUT_VISIBILITY";
     public static final String INTENT_CLINCIAL_NOTE_BUTTON_VISIBILITY = "com.healthcoco.healthcocopad.fragments.AddVisitsFragment.CLINCIAL_NOTE_BUTTON_VISIBILITY";
 
     public static final String INTENT_LAB_TEST_VISIBILITY = "com.healthcoco.healthcocopad.fragments.AddVisitsFragment.LAB_TEST_VISIBILITY";
@@ -135,7 +137,7 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
     private LinearLayout parentPrescription;
     private LinearLayout parentDiagnosticTests;
     private LinearLayout parentDiagrams;
-    private LinearLayout layoutParentAdvice;
+    private LinearLayout parentAdvice;
     private TextView tvPatientName;
     private TextView tvDate;
     private TextView tvPatientId;
@@ -268,16 +270,21 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
         //initialising parent Widget SUggestions dimensions
         parentWidgetSuggestions = (LinearLayout) view.findViewById(R.id.parent_widget_suggestions);
         containerSuggestionsList.setVisibility(View.VISIBLE);
+        parentClinicalNote = (LinearLayout) view.findViewById(R.id.parent_clinical_note);
         parentPrescription = (LinearLayout) view.findViewById(R.id.parent_prescription);
-        parentPrescription.setVisibility(View.GONE);
+        parentDiagnosticTests = (LinearLayout) view.findViewById(R.id.parent_diagnostic_tests);
+        parentDiagrams = (LinearLayout) view.findViewById(R.id.parent_diagrams);
+        parentAdvice = (LinearLayout) view.findViewById(R.id.layout_parent_advice);
+        etAdvice = (MyScriptEditText) view.findViewById(R.id.et_advice);
 
+        parentClinicalNote.setVisibility(View.GONE);
+        parentPrescription.setVisibility(View.GONE);
+        parentDiagnosticTests.setVisibility(View.GONE);
+        parentDiagrams.setVisibility(View.GONE);
+        parentAdvice.setVisibility(View.GONE);
         initWidgetViews();
         initToolbarView();
         initHeaderView();
-        initClinicalNotesView();
-        initDiagonsticTestsView();
-        initDiagramsViews();
-        initAdviceViews();
         setHeightOfWidgetsAndSuggestions();
     }
 
@@ -333,6 +340,7 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
         btLabTests.setTag(SuggestionType.LAB_TESTS);
         btDiagrams = (ImageButton) view.findViewById(R.id.bt_diagrams);
         btAdvice = (ImageButton) view.findViewById(R.id.bt_advice);
+        btAdvice.setVisibility(View.GONE);
         btSave = (LinearLayout) view.findViewById(R.id.bt_save);
     }
 
@@ -343,28 +351,6 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
         tvPatientId = (TextView) view.findViewById(R.id.tv_patient_id);
         tvRxId = (TextView) view.findViewById(R.id.tv_rx_id);
         tvMobileNo = (TextView) view.findViewById(R.id.tv_mobile_no);
-    }
-
-    private void initClinicalNotesView() {
-        parentClinicalNote = (LinearLayout) view.findViewById(R.id.parent_clinical_note);
-        parentClinicalNote.setVisibility(View.GONE);
-    }
-
-
-    private void initDiagonsticTestsView() {
-        parentDiagnosticTests = (LinearLayout) view.findViewById(R.id.parent_diagnostic_tests);
-        parentDiagnosticTests.setVisibility(View.GONE);
-    }
-
-    private void initDiagramsViews() {
-        parentDiagrams = (LinearLayout) view.findViewById(R.id.parent_diagrams);
-        parentDiagrams.setVisibility(View.GONE);
-    }
-
-    private void initAdviceViews() {
-        layoutParentAdvice = (LinearLayout) view.findViewById(R.id.layout_parent_advice);
-        etAdvice = (MyScriptEditText) view.findViewById(R.id.et_advice);
-        layoutParentAdvice.setVisibility(View.GONE);
     }
 
     @Override
@@ -445,25 +431,10 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
     }
 
     private void initUiPermissions(AssignedUserUiPermissions uiPermissions) {
-        initClinicalNotesUiPerissions();
-        initPrescriptionUiPermissions();
-    }
-
-    private void initClinicalNotesUiPerissions() {
         addClinicalNotesFragment.initUiPermissions(user.getUiPermissions().getClinicalNotesPermissionsString());
+        addPrescriptionVisitFragment.initUiPermissions(user.getUiPermissions().getPrescriptionPermissions());
     }
 
-    private void initPrescriptionUiPermissions() {
-        //initialising Prescription UI permissions
-        ArrayList<String> prescriptionsPermissions = user.getUiPermissions().getPrescriptionPermissions();
-        for (PrescriptionPermissionType permissionsType : PrescriptionPermissionType.values()) {
-            if (prescriptionsPermissions.contains(String.valueOf(permissionsType))) {
-                setPrescriptionUiPermissionVisibility(permissionsType, View.VISIBLE);
-            } else {
-                setPrescriptionUiPermissionVisibility(permissionsType, View.GONE);
-            }
-        }
-    }
 
     private void prePopulateVisitDetails(VisitDetails visitDetails) {
         if (!Util.isNullOrEmptyList(visitDetails.getVisitedFor())) {
@@ -522,9 +493,9 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
 
     private void setPrescriptionUiPermissionVisibility(PrescriptionPermissionType permissionsType, int visibility) {
         switch (permissionsType) {
-            case ADVICE:
-                btAdvice.setVisibility(visibility);
-                break;
+//            case ADVICE:
+//                btAdvice.setVisibility(visibility);
+//                break;
             case LAB:
                 btLabTests.setVisibility(visibility);
                 break;
@@ -658,14 +629,14 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
 
 
     private void showHideAdviceLayout() {
-        if (layoutParentAdvice.getVisibility() == View.GONE) {
+        if (parentAdvice.getVisibility() == View.GONE) {
             Util.requesFocus(etAdvice);
             requestFocus(etAdvice);
-            layoutParentAdvice.setVisibility(View.VISIBLE);
+            parentAdvice.setVisibility(View.VISIBLE);
             addVisibileUiType(VisitsUiType.ADVICE);
             showOnlyWidget();
         } else {
-            layoutParentAdvice.setVisibility(View.GONE);
+            parentAdvice.setVisibility(View.GONE);
             removeVisibileUiType(VisitsUiType.ADVICE);
         }
     }
@@ -1331,13 +1302,23 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
             LocalBroadcastManager.getInstance(mActivity).registerReceiver(labTestLayoutVisibilityReceiver, filter2);
             //receiver to show/hide btDiagrams based on drugs present
             IntentFilter filter3 = new IntentFilter();
-            filter3.addAction(INTENT_DIAGRAM_BUTTON_VISIBILITY);
+            filter3.addAction(INTENT_DIAGRAM_LAYOUT_VISIBILITY);
             LocalBroadcastManager.getInstance(mActivity).registerReceiver(diagramLayoutVisibilityReceiver, filter3);
 
-            //receiver to show/hide btClinicalNotes based on drugs present
+            //receiver to show/hide parentClinicalNOtes based on drugs present
             IntentFilter filter4 = new IntentFilter();
-            filter4.addAction(INTENT_CLINCIAL_NOTE_BUTTON_VISIBILITY);
+            filter4.addAction(INTENT_CLINCIAL_NOTE_LAYOUT_VISIBILITY);
             LocalBroadcastManager.getInstance(mActivity).registerReceiver(clinicalNoteLayoutVisibilityReceiver, filter4);
+
+            //receiver to show/hide btClinicalNotes based on drugs present
+            IntentFilter filter5 = new IntentFilter();
+            filter5.addAction(INTENT_CLINCIAL_NOTE_BUTTON_VISIBILITY);
+            LocalBroadcastManager.getInstance(mActivity).registerReceiver(clinicalNoteButtonVisibilityReceiver, filter5);
+
+            //receiver to show/hide btDiagrams based on drugs present
+            IntentFilter filter6 = new IntentFilter();
+            filter6.addAction(INTENT_CLINCIAL_NOTE_BUTTON_VISIBILITY);
+            LocalBroadcastManager.getInstance(mActivity).registerReceiver(diagramButtonVisibilityReceiver, filter6);
 
             receiversRegistered = true;
         }
@@ -1351,6 +1332,8 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
         LocalBroadcastManager.getInstance(mActivity).unregisterReceiver(labTestLayoutVisibilityReceiver);
         LocalBroadcastManager.getInstance(mActivity).unregisterReceiver(diagramLayoutVisibilityReceiver);
         LocalBroadcastManager.getInstance(mActivity).unregisterReceiver(clinicalNoteLayoutVisibilityReceiver);
+        LocalBroadcastManager.getInstance(mActivity).unregisterReceiver(clinicalNoteButtonVisibilityReceiver);
+        LocalBroadcastManager.getInstance(mActivity).unregisterReceiver(diagramButtonVisibilityReceiver);
     }
 
 
@@ -1380,7 +1363,7 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
                     removeVisibileUiType(VisitsUiType.PRESCRIPTION);
                     parentPrescription.setVisibility(View.GONE);
                     btAdvice.setVisibility(View.GONE);
-                    layoutParentAdvice.setVisibility(View.GONE);
+                    parentAdvice.setVisibility(View.GONE);
                 }
             }
         }
@@ -1400,6 +1383,21 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
             }
         }
     };
+    BroadcastReceiver diagramButtonVisibilityReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, final Intent intent) {
+            if (intent != null && intent.hasExtra(TAG_VISIBILITY)) {
+                boolean showVisibility = intent.getBooleanExtra(TAG_VISIBILITY, false);
+                if (showVisibility) {
+                    addVisibileUiType(VisitsUiType.DIAGRAMS);
+                    btDiagrams.setVisibility(View.VISIBLE);
+                } else {
+                    removeVisibileUiType(VisitsUiType.DIAGRAMS);
+                    btDiagrams.setVisibility(View.GONE);
+                }
+            }
+        }
+    };
     BroadcastReceiver clinicalNoteLayoutVisibilityReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, final Intent intent) {
@@ -1411,6 +1409,21 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
                 } else {
                     removeVisibileUiType(VisitsUiType.CLINICAL_NOTES);
                     parentClinicalNote.setVisibility(View.GONE);
+                }
+            }
+        }
+    };
+    BroadcastReceiver clinicalNoteButtonVisibilityReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, final Intent intent) {
+            if (intent != null && intent.hasExtra(TAG_VISIBILITY)) {
+                boolean showVisibility = intent.getBooleanExtra(TAG_VISIBILITY, false);
+                if (showVisibility) {
+                    addVisibileUiType(VisitsUiType.CLINICAL_NOTES);
+                    btClinicalNote.setVisibility(View.VISIBLE);
+                } else {
+                    removeVisibileUiType(VisitsUiType.CLINICAL_NOTES);
+                    btClinicalNote.setVisibility(View.GONE);
                 }
             }
         }

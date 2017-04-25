@@ -319,6 +319,8 @@ public enum WebServiceType {
     ADD_UPDATE_PERSONAL_HISTORY_DETAIL(Method.POST, "history/assignPersonalHistory/"),
 
     ADD_UPDATE_DRUGS_AND_ALLERGIES_DETAIL(Method.POST, "history/assignDrugsAndAllergies/"),
+    GET_DRUG_INTERACTIONS(Method.POST, "prescription/drugs/interaction"),
+
     GET_HARDCODED_BLOOD_GROUPS(0, "");
 
     private int methodType;

@@ -22,6 +22,7 @@ import com.healthcoco.healthcocopad.bean.request.AddMedicalFamilyHistoryRequest;
 import com.healthcoco.healthcocopad.bean.request.AssignGroupRequest;
 import com.healthcoco.healthcocopad.bean.request.ClinicImageToSend;
 import com.healthcoco.healthcocopad.bean.request.DoctorSignupHandheldContinueRequest;
+import com.healthcoco.healthcocopad.bean.request.DrugInteractionRequest;
 import com.healthcoco.healthcocopad.bean.request.Feedback;
 import com.healthcoco.healthcocopad.bean.request.ProfessionalMembershipRequest;
 import com.healthcoco.healthcocopad.bean.request.ProfessionalStatementRequest;
@@ -1005,6 +1006,18 @@ public class WebDataServiceImpl implements GCMRefreshListener {
                     + HealthCocoConstants.PARAM_SIZE + size
                     + HealthCocoConstants.PARAM_SEARCH_TERM + searchTerm;
             getResponse(webServiceType, class1, url, null, null, responseListener, errorListener);
+        } else {
+            errorListener.onNetworkUnavailable(webServiceType);
+        }
+    }
+
+    public void getDrugsInteractionResponse(Class<?> class1, ArrayList<DrugInteractionRequest> drugsList, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        WebServiceType webServiceType = WebServiceType.GET_DRUG_INTERACTIONS;
+        String url = webServiceType.getUrl();
+        checkNetworkStatus(mApp.getApplicationContext());
+        if (HealthCocoConstants.isNetworkOnline) {
+            getResponse(webServiceType, class1, url, drugsList, null, responseListener,
+                    errorListener);
         } else {
             errorListener.onNetworkUnavailable(webServiceType);
         }
