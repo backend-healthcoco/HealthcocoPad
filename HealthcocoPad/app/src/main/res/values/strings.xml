@@ -747,5 +747,6 @@
     <string name="close">&#160;Close</string>
     <string name="permission_received">Permissions Received.</string>
     <string name="runtime_permissions_txt">Please enable ALL permissions from app settings.</string>
+    <string name="patients">Patients</string>
 
 </resources>

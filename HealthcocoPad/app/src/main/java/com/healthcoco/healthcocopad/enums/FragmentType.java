@@ -4,7 +4,7 @@ package com.healthcoco.healthcocopad.enums;
 import com.healthcoco.healthcocopad.R;
 
 public enum FragmentType {
-    CONTACTS(MenuType.SEPARATOR, R.string.contacts, R.drawable.ic_action_call, ActionbarLeftRightActionTypeDrawables.WITH_FILTER,ActionbarLeftRightActionTypeDrawables.WITH_CHAMGE_VIEW),
+    CONTACTS(MenuType.SEPARATOR, R.string.patients, R.drawable.ic_action_call, ActionbarLeftRightActionTypeDrawables.WITH_FILTER,ActionbarLeftRightActionTypeDrawables.WITH_CHAMGE_VIEW),
     CLINIC_PROFILE(MenuType.SEPARATOR, R.string.clinic_proifle, R.drawable.ic_action_clinic, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION,ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION),
     PROFILE(MenuType.SEPARATOR, R.string.profile, R.drawable.ic_action_profileicon, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION,ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION),
     CALENDAR(MenuType.SEPARATOR, R.string.calendar, R.drawable.ic_action_calender, ActionbarLeftRightActionTypeDrawables.WITH_ADD,ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION),
