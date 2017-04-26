@@ -59,9 +59,9 @@ public class HealthcocoInstanceIDListenerService extends FirebaseInstanceIdServi
     private void sendRegistrationToSerOver(String token) {
         LoginResponse doctor = LocalDataServiceImpl.getInstance((HealthCocoApplication) this.getApplicationContext()).getDoctor();
         GCMRequest gcmRequest = new GCMRequest();
-        gcmRequest.setDeviceId(Util.getDeviceId(this) + AppType.HEALTHCOCO_PLUS);
+        gcmRequest.setDeviceId(Util.getDeviceId(this) + AppType.HEALTHCOCO_PAD);
         gcmRequest.setPushToken(token);
-        gcmRequest.setDeviceType(DeviceType.ANDROID);
+        gcmRequest.setDeviceType(DeviceType.ANDROID_PAD);
         gcmRequest.setRole(RoleType.DOCTOR);
         if (doctor != null && doctor.getUser() != null) {
             ArrayList<String> userIdsList = new ArrayList<>();

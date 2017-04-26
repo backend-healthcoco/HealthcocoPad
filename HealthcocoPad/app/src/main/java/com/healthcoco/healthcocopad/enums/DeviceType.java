@@ -4,7 +4,10 @@ package com.healthcoco.healthcocopad.enums;
  * Created by neha on 14/06/16.
  */
 public enum DeviceType {
-    ANDROID("ANDROID"), IOS("IOS"), WINDOWS("WINDOWS");
+    //    ANDROID("ANDROID"),
+//    IOS("IOS"),
+//    WINDOWS("WINDOWS"),
+    ANDROID_PAD("ANDROID_PAD");
 
     private final String text;
 

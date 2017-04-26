@@ -235,7 +235,7 @@ public class ContactUsDialogFragment extends HealthCocoDialogFragment implements
         mActivity.showLoading(false);
         DoctorContactUs doctorContactUs = new DoctorContactUs(Util.getValidatedValueOrNull(autoTvTitle), name, gender, mobileNo, emailAddress, new ArrayList<String>() {{
             add(speciality);
-        }}, city, DeviceType.ANDROID);
+        }}, city, DeviceType.ANDROID_PAD);
         WebDataServiceImpl.getInstance(mApp).sendContactUsRequest(String.class, doctorContactUs, this, this);
     }
 

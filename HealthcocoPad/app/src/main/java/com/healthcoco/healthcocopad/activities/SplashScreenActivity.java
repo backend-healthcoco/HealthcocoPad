@@ -108,7 +108,7 @@ public class SplashScreenActivity extends HealthCocoActivity implements GsonRequ
             LogUtils.LOGD(TAG, "parts size " + parts.length);
             Util.checkNetworkStatus(this);
             if (HealthCocoConstants.isNetworkOnline) {
-                WebDataServiceImpl.getInstance(mApp).checkVersion(Integer.class, new VersionCheckRequest(AppType.HEALTHCOCO_PLUS, DeviceType.ANDROID, parts), this, this);
+                WebDataServiceImpl.getInstance(mApp).checkVersion(Integer.class, new VersionCheckRequest(AppType.HEALTHCOCO_PAD, DeviceType.ANDROID_PAD, parts), this, this);
             }
         }
     }

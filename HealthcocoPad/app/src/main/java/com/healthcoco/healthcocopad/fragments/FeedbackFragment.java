@@ -99,8 +99,8 @@ public class FeedbackFragment extends HealthCocoFragment implements View.OnClick
         feedback.setHospitalId(user.getForeignHospitalId());
         feedback.setExplanation(feedbackText);
         feedback.setType(FeedbackType.HELP_US);
-        feedback.setDeviceType(DeviceType.IOS);
-        feedback.setAppType(AppType.HEALTHCOCO_PLUS);
+        feedback.setDeviceType(DeviceType.ANDROID_PAD);
+        feedback.setAppType(AppType.HEALTHCOCO_PAD);
         feedback.setDeviceInfo(Util.getFormattedDeviceInfo(mActivity));
         WebDataServiceImpl.getInstance(mApp).sendFeedback(Feedback.class, feedback, this, this);
     }

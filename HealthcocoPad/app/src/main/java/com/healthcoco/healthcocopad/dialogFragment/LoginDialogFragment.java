@@ -27,6 +27,7 @@ import com.healthcoco.healthcocopad.enums.WebViewType;
 import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
+import com.healthcoco.healthcocopad.utilities.DevConfig;
 import com.healthcoco.healthcocopad.utilities.EditTextTextViewErrorUtil;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
@@ -63,7 +64,9 @@ public class LoginDialogFragment extends HealthCocoDialogFragment implements Vie
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         init();
-        preFillForm();
+        if (DevConfig.PRE_FILLED_FORM) {
+            preFillForm();
+        }
         setWidthHeight(0.50, 0.65);
     }
 
