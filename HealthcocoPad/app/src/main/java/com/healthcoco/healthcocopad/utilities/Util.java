@@ -468,14 +468,13 @@ public class Util {
             } else if (object instanceof DoctorProfile) {
                 formattedAge = dob.getDays() + "/" + dob.getMonths() + "/" + dob.getYears();
             }
-
         }
         if (!Util.isNullOrBlank(gender))
-            formattedString = formattedString + gender;
+            formattedString = formattedString + " | " + gender;
         if (!Util.isNullOrBlank(formattedString) && !Util.isNullOrBlank(formattedAge))
-            formattedString = formattedString + " | " + formattedAge;
+            formattedString =  formattedString + " ," + formattedAge;
         else if (Util.isNullOrBlank(formattedString) && !Util.isNullOrBlank(formattedAge))
-            formattedString = formattedString + formattedAge;
+            formattedString = " | " + formattedString + formattedAge;
         return formattedString;
     }
 

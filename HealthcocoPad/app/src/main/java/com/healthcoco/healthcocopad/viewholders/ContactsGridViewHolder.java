@@ -43,6 +43,8 @@ public class ContactsGridViewHolder extends HealthCocoViewHolder implements OnCl
     private ImageButton btQueue;
     private ImageButton btGroup;
     private ImageButton btPrescription;
+    private TextView tvGenderDate;
+    private TextView tvPatientAge;
 
     public ContactsGridViewHolder(HealthCocoActivity mActivity, ContactsItemOptionsListener optionsListener, int position) {
         this.mActivity = mActivity;
@@ -62,6 +64,14 @@ public class ContactsGridViewHolder extends HealthCocoViewHolder implements OnCl
         tvContactName.setText(Util.getValidatedValue(objData.getLocalPatientName()));
         tvContactNumber.setText(Util.getValidatedValue(objData.getMobileNumber()));
         tvPatientId.setText(Util.getValidatedValue(objData.getPid()));
+        String formattedGenderAge = Util.getFormattedGenderAge(objData);
+        if (!Util.isNullOrBlank(formattedGenderAge)) {
+            tvGenderDate.setVisibility(View.VISIBLE);
+            tvGenderDate.setText(formattedGenderAge);
+        } else {
+            tvGenderDate.setVisibility(View.GONE);
+            tvGenderDate.setText("");
+        }
         DownloadImageFromUrlUtil.loadImageWithInitialAlphabet(mActivity, PatientProfileScreenType.IN_PATIENTS_LIST, objData, null, ivContactProfile, tvInitialAlphabet);
     }
 
@@ -71,6 +81,7 @@ public class ContactsGridViewHolder extends HealthCocoViewHolder implements OnCl
         tvContactName = (TextView) convertView.findViewById(R.id.tv_contact_name);
         tvContactNumber = (TextView) convertView.findViewById(R.id.tv_contact_number);
         tvPatientId = (TextView) convertView.findViewById(R.id.tv_patient_id);
+        tvGenderDate = (TextView) convertView.findViewById(R.id.tv_patient_gender);
         btEdit = (ImageButton) convertView.findViewById(R.id.bt_edit);
         btQueue = (ImageButton) convertView.findViewById(R.id.bt_queue);
         btCall = (ImageButton) convertView.findViewById(R.id.bt_call);

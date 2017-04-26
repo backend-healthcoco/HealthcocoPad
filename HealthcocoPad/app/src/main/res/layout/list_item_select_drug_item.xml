@@ -40,7 +40,7 @@
             android:paddingRight="10dp"
             android:text="Tablet Crocin(50mg)"
             android:textAllCaps="true"
-            android:textColor="@color/black"
-            android:textSize="13sp" />
+            android:textColor="@color/black_greyish"
+            android:textSize="12sp" />
     </LinearLayout>
 </LinearLayout>

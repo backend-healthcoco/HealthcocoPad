@@ -18,4 +18,6 @@
     <dimen name="visits_icon_test">162px</dimen>
     <dimen name="visits_icon_advice">162px</dimen>
     <dimen name="visits_icon_diagram">162px</dimen>
+    <dimen name="image_width_manage_clinic">117px</dimen>
+    <dimen name="image_height_manage_clinic">84px</dimen>
 </resources>

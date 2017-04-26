@@ -84,7 +84,7 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
     private User user;
     private TextView tvInitialAlphabet;
     private TextView tvPatientName;
-    private TextView tvGenderAge;
+    private TextView tvPatientId;
     private ImageView ivContactProfile;
     private LinearLayout mainLayoutProfile;
     private ArrayList<String> medicalDiseaseIdsList = new ArrayList<String>();
@@ -130,6 +130,7 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
     private LinearLayout containerPinCode;
     private LinearLayout containerGroups;
     private LinearLayout containerNotes;
+    private TextView tvGenderDate;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -179,7 +180,8 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
         mainLayoutProfile = (LinearLayout) view.findViewById(R.id.main_layout_profile);
         tvInitialAlphabet = (TextView) view.findViewById(R.id.tv_initial_aplhabet);
         tvPatientName = (TextView) view.findViewById(R.id.tv_name);
-        tvGenderAge = (TextView) view.findViewById(R.id.tv_patient_id);
+        tvPatientId = (TextView) view.findViewById(R.id.tv_patient_id);
+        tvGenderDate = (TextView) view.findViewById(R.id.tv_patient_gender);
         ivContactProfile = (ImageView) view.findViewById(R.id.iv_image);
         //ProfileViews
         containerMobile = (LinearLayout) mainLayoutProfile.findViewById(R.id.container_mobile);
@@ -279,7 +281,15 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
                 }
             });
             tvPatientName.setText(selectedPatient.getLocalPatientName());
-            tvGenderAge.setText(selectedPatient.getPid());
+            tvPatientId.setText(selectedPatient.getPid());
+            String formattedGenderAge = Util.getFormattedGenderAge(selectedPatient);
+            if (!Util.isNullOrBlank(formattedGenderAge)) {
+                tvGenderDate.setVisibility(View.VISIBLE);
+                tvGenderDate.setText(formattedGenderAge);
+            } else {
+                tvGenderDate.setVisibility(View.GONE);
+                tvGenderDate.setText("");
+            }
             DownloadImageFromUrlUtil.loadImageWithInitialAlphabet(mActivity, PatientProfileScreenType.IN_PATIENT_DEATIL_PROFILE, selectedPatient, null, ivContactProfile, tvInitialAlphabet);
             initProfileData();
             initGroups();

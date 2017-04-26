@@ -75,16 +75,17 @@
 
             <ImageView
                 android:id="@+id/iv_menu_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:background="@drawable/ic_action_clinic" />
+                android:layout_width="@dimen/image_width_manage_clinic"
+                android:layout_height="@dimen/image_height_manage_clinic"
+                android:layout_gravity="center_vertical"
+                android:background="@drawable/ic_action_manage_clinic" />
 
             <TextView
                 android:id="@+id/tv_menu_item_name"
                 style="@style/TextRobotoStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="5dp"
                 android:layout_weight="1"

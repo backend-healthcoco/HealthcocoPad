@@ -76,6 +76,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
 
     private boolean isProfileTabClicked = true;
     private boolean isVisitsTabClicked = false;
+    private TextView tvGenderDate;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -107,6 +108,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
         tvInitialAlphabet = (TextView) view.findViewById(R.id.tv_initial_aplhabet);
         tvPatientName = (TextView) view.findViewById(R.id.tv_name);
         tvPatientId = (TextView) view.findViewById(R.id.tv_patient_id);
+        tvGenderDate = (TextView) view.findViewById(R.id.tv_patient_gender);
         ivContactProfile = (ImageView) view.findViewById(R.id.iv_image);
         patientProfileLayout = (LinearLayout) view.findViewById(R.id.patient_profile_layout);
         floatingActionButton = (FloatingActionButton) view.findViewById(R.id.fl_bt_add);
@@ -332,6 +334,14 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
             });
             tvPatientName.setText(selectedPatient.getLocalPatientName());
             tvPatientId.setText(selectedPatient.getPid());
+            String formattedGenderAge = Util.getFormattedGenderAge(selectedPatient);
+            if (!Util.isNullOrBlank(formattedGenderAge)) {
+                tvGenderDate.setVisibility(View.VISIBLE);
+                tvGenderDate.setText(formattedGenderAge);
+            } else {
+                tvGenderDate.setVisibility(View.GONE);
+                tvGenderDate.setText("");
+            }
             DownloadImageFromUrlUtil.loadImageWithInitialAlphabet(mActivity, PatientProfileScreenType.IN_PATIENT_DEATIL_SCREEN_EXCEPT_PROFILE, selectedPatient, null, ivContactProfile, tvInitialAlphabet);
         } else {
             mActivity.showLoading(false);
