@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
@@ -200,7 +201,9 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
         Intent intent = mActivity.getIntent();
         if (intent != null) {
             visitId = Parcels.unwrap(intent.getParcelableExtra(TAG_VISIT_ID));
-            isFromClone = Parcels.unwrap(intent.getParcelableExtra(TAG_IS_FROM_CLONE));
+            Parcelable isFromCloneParcelable = intent.getParcelableExtra(TAG_IS_FROM_CLONE);
+            if (isFromCloneParcelable != null)
+                isFromClone = Parcels.unwrap(isFromCloneParcelable);
         }
         init();
         mActivity.showLoading(false);
