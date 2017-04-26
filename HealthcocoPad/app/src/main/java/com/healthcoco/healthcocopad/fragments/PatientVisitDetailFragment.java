@@ -419,8 +419,12 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
     }
 
     @Override
-    public void cloneVisit(String uniqueId) {
-
+    public void cloneVisit(String visitId) {
+        Intent intent = new Intent(mActivity, AddVisitsActivity.class);
+        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.ADD_VISITS.ordinal());
+        intent.putExtra(AddVisitsFragment.TAG_IS_FROM_CLONE, Parcels.wrap(true));
+        intent.putExtra(AddVisitsFragment.TAG_VISIT_ID, Parcels.wrap(visitId));
+        startActivity(intent);
     }
 
     @Override

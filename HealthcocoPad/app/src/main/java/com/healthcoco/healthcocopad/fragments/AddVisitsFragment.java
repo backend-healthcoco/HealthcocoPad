@@ -123,6 +123,7 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
     private static final float WIDGET_INT_WIDTH = 4;
     private static final int WIDGET_TEXT_COLOR = 0xFF0077b5;
     public static final String TAG_VISIT_ID = "visitId";
+    public static final String TAG_IS_FROM_CLONE = "isFromClone";
 
 
     private LinearLayout btClose;
@@ -184,6 +185,7 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
     private AddLabTestsVisitFragment addLabTestVisitFragment;
     private boolean mKeyboardStatus = false;
     private AddClinicalNotesVisitFragment addClinicalNotesFragment;
+    private boolean isFromClone;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -196,8 +198,10 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Intent intent = mActivity.getIntent();
-        if (intent != null)
+        if (intent != null) {
             visitId = Parcels.unwrap(intent.getParcelableExtra(TAG_VISIT_ID));
+            isFromClone = Parcels.unwrap(intent.getParcelableExtra(TAG_IS_FROM_CLONE));
+        }
         init();
         mActivity.showLoading(false);
         new LocalDataBackgroundtaskOptimised(mActivity, GET_FRAGMENT_INITIALISATION_DATA, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
@@ -447,7 +451,8 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
                                     visitDetails.getClinicalNotes()) {
                                 parentClinicalNote.setVisibility(View.VISIBLE);
                                 addClinicalNotesFragment.refreshData(clinicalNotes);
-                                clinicalNoteId = clinicalNotes.getUniqueId();
+                                if (!isFromClone)
+                                    clinicalNoteId = clinicalNotes.getUniqueId();
                             }
                         }
                         parentClinicalNote.setVisibility(View.GONE);
@@ -480,8 +485,8 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
                                             addLabTestVisitFragment.addDiagnosticTest(diagnosticTest.getTest());
                                     }
                                 }
-
-                                prescriptionId = prescription.getUniqueId();
+                                if (!isFromClone)
+                                    prescriptionId = prescription.getUniqueId();
                             }
                         } else parentPrescription.setVisibility(View.GONE);
                         break;
@@ -1199,7 +1204,7 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
         visitDetails.setLocationId(user.getForeignLocationId());
         visitDetails.setHospitalId(user.getForeignHospitalId());
         visitDetails.setPatientId(HealthCocoConstants.SELECTED_PATIENTS_USER_ID);
-        if (!Util.isNullOrBlank(visitId))
+        if (!Util.isNullOrBlank(visitId) && !isFromClone)
             visitDetails.setVisitId(visitId);
         if (visibleViews.contains(VisitsUiType.CLINICAL_NOTES) || visibleViews.contains(VisitsUiType.DIAGRAMS))
             visitDetails.setClinicalNote(addClinicalNotesFragment.getClinicalNoteToSendDetails());
