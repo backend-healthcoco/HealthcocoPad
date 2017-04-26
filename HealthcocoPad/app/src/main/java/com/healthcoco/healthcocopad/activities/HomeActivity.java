@@ -1,6 +1,5 @@
 package com.healthcoco.healthcocopad.activities;
 
-import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -171,7 +170,7 @@ public class HomeActivity extends HealthCocoActivity implements View.OnClickList
                 break;
             case HELP_IMPROVE:
                 openCommonOpenUpActivity(CommonOpenUpFragmentType.FEEDBACK, null, 0);
-                break;
+                return;
             default:
                 break;
         }

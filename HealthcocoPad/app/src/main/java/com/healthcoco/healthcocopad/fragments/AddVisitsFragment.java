@@ -1389,10 +1389,10 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
             if (intent != null && intent.hasExtra(TAG_VISIBILITY)) {
                 boolean showVisibility = intent.getBooleanExtra(TAG_VISIBILITY, false);
                 if (showVisibility) {
-                    addVisibileUiType(VisitsUiType.DIAGRAMS);
+//                    addVisibileUiType(VisitsUiType.DIAGRAMS);
                     btDiagrams.setVisibility(View.VISIBLE);
                 } else {
-                    removeVisibileUiType(VisitsUiType.DIAGRAMS);
+//                    removeVisibileUiType(VisitsUiType.DIAGRAMS);
                     btDiagrams.setVisibility(View.GONE);
                 }
             }
@@ -1419,10 +1419,10 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
             if (intent != null && intent.hasExtra(TAG_VISIBILITY)) {
                 boolean showVisibility = intent.getBooleanExtra(TAG_VISIBILITY, false);
                 if (showVisibility) {
-                    addVisibileUiType(VisitsUiType.CLINICAL_NOTES);
+//                    addVisibileUiType(VisitsUiType.CLINICAL_NOTES);
                     btClinicalNote.setVisibility(View.VISIBLE);
                 } else {
-                    removeVisibileUiType(VisitsUiType.CLINICAL_NOTES);
+//                    removeVisibileUiType(VisitsUiType.CLINICAL_NOTES);
                     btClinicalNote.setVisibility(View.GONE);
                 }
             }
