@@ -121,7 +121,7 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
     private boolean isInitialLoading;
     private User user;
     private SparseIntArray mErrorString;
-    private static final int REQUEST_PERMISSIONS = 101;
+    public static final int REQUEST_PERMISSIONS = 101;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

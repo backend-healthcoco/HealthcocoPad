@@ -1,11 +1,16 @@
 package com.healthcoco.healthcocopad.dialogFragment;
 
 import android.app.Dialog;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +27,8 @@ import com.healthcoco.healthcocopad.listeners.NetworkImageViewRequestListener;
 import com.healthcoco.healthcocopad.utilities.ImageUtil;
 import com.healthcoco.healthcocopad.utilities.ScreenDimensions;
 import com.healthcoco.healthcocopad.utilities.Util;
+
+import static com.healthcoco.healthcocopad.HealthCocoActivity.REQUEST_PERMISSIONS;
 
 public class EnlargedImageViewDialogFragment extends HealthCocoDialogFragment implements NetworkImageViewRequestListener, DownloadFileFromUrlListener {
     public static final String TAG_PRINT_PDF = "printPdf";
@@ -51,14 +58,50 @@ public class EnlargedImageViewDialogFragment extends HealthCocoDialogFragment im
     }
 
     @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        int permissionCheck = PackageManager.PERMISSION_GRANTED;
+        for (int permission : grantResults) {
+            permissionCheck = permissionCheck + permission;
+        }
+        if ((grantResults.length > 0) && permissionCheck == PackageManager.PERMISSION_GRANTED) {
+            init();
+        } else {
+            dismiss();
+        }
+    }
+
+    public void requestPermission() {
+        requestAppPermissions(new
+                String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+        }, R.string.runtime_permissions_txt, REQUEST_PERMISSIONS);
+    }
+
+    public void requestAppPermissions(final String[] requestedPermissions,
+                                      final int stringId, final int requestCode) {
+        int permissionCheck = PackageManager.PERMISSION_GRANTED;
+        for (String permission : requestedPermissions) {
+            permissionCheck = permissionCheck + ContextCompat.checkSelfPermission(mActivity, permission);
+        }
+        ActivityCompat.requestPermissions(mActivity, requestedPermissions, requestCode);
+    }
+
+    @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        ImageUtil.deleteFolderIfSizeExceed();
-        init();
+        // Check if we're running on Android 5.0 or higher
+        if (Build.VERSION.SDK_INT >= 23) {
+            requestPermission();
+        } else {
+            init();
+        }
+
     }
 
     @Override
     public void init() {
+        ImageUtil.deleteFolderIfSizeExceed();
         initViews();
         Bundle bundle = getArguments();
         if (bundle != null) {
