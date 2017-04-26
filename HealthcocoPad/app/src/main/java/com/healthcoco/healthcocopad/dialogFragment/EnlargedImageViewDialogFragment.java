@@ -6,10 +6,8 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,7 +35,6 @@ public class EnlargedImageViewDialogFragment extends HealthCocoDialogFragment im
     private ImageView ivImage;
     private ProgressBar progressLoadingCircular;
     private boolean isPrintPdf;
-    private String filePath;
 
     @Override
     public void onStart() {
@@ -82,20 +79,20 @@ public class EnlargedImageViewDialogFragment extends HealthCocoDialogFragment im
                                       final int stringId, final int requestCode) {
         int permissionCheck = PackageManager.PERMISSION_GRANTED;
         for (String permission : requestedPermissions) {
-            permissionCheck = permissionCheck + ContextCompat.checkSelfPermission(mActivity, permission);
+            permissionCheck = permissionCheck + ContextCompat.checkSelfPermission(getContext(), permission);
         }
-        ActivityCompat.requestPermissions(mActivity, requestedPermissions, requestCode);
+        requestPermissions(requestedPermissions, requestCode);
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        // Check if we're running on Android 5.0 or higher
-        if (Build.VERSION.SDK_INT >= 23) {
-            requestPermission();
-        } else {
-            init();
-        }
+//        // Check if we're running on Android 5.0 or higher
+//        if (Build.VERSION.SDK_INT >= 23) {
+        requestPermission();
+//        } else {
+//            init();
+//        }
 
     }
 
@@ -145,7 +142,6 @@ public class EnlargedImageViewDialogFragment extends HealthCocoDialogFragment im
     public void onPostExecute(String filePath) {
         if (!Util.isNullOrBlank(filePath)) {
             try {
-                this.filePath = filePath;
                 Bitmap bitmap = ImageUtil.getDecodedBitmapFromPath(filePath, ScreenDimensions.SCREEN_WIDTH, ScreenDimensions.SCREEN_HEIGHT);
                 if (bitmap != null) {
                     ivImage.setVisibility(View.VISIBLE);
