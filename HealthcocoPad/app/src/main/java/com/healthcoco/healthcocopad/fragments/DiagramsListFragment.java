@@ -1,8 +1,11 @@
 package com.healthcoco.healthcocopad.fragments;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -41,6 +44,8 @@ import org.parceler.Parcels;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import static com.healthcoco.healthcocopad.activities.HomeActivity.REQUEST_PERMISSIONS;
+
 public class DiagramsListFragment extends HealthCocoFragment implements OnItemClickListener,
         LocalDoInBackgroundListenerOptimised, DiagramsGridItemListener,
         Response.Listener<VolleyResponseBean>, GsonRequest.ErrorListener, TextWatcher {
@@ -61,8 +66,37 @@ public class DiagramsListFragment extends HealthCocoFragment implements OnItemCl
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mActivity.requestPermission();
-        init();
+        requestPermission();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        int permissionCheck = PackageManager.PERMISSION_GRANTED;
+        for (int permission : grantResults) {
+            permissionCheck = permissionCheck + permission;
+        }
+        if ((grantResults.length > 0) && permissionCheck == PackageManager.PERMISSION_GRANTED) {
+            init();
+        } else {
+            ((AddVisitsActivity) mActivity).finish();
+        }
+    }
+
+    public void requestPermission() {
+        requestAppPermissions(new
+                String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+        }, REQUEST_PERMISSIONS);
+    }
+
+    public void requestAppPermissions(final String[] requestedPermissions,
+                                      final int requestCode) {
+        int permissionCheck = PackageManager.PERMISSION_GRANTED;
+        for (String permission : requestedPermissions) {
+            permissionCheck = permissionCheck + ContextCompat.checkSelfPermission(getContext(), permission);
+        }
+        requestPermissions(requestedPermissions, requestCode);
     }
 
     @Override

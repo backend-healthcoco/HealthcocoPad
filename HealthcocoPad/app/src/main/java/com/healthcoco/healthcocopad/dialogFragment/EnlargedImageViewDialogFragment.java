@@ -26,7 +26,7 @@ import com.healthcoco.healthcocopad.utilities.ImageUtil;
 import com.healthcoco.healthcocopad.utilities.ScreenDimensions;
 import com.healthcoco.healthcocopad.utilities.Util;
 
-import static com.healthcoco.healthcocopad.HealthCocoActivity.REQUEST_PERMISSIONS;
+import static com.healthcoco.healthcocopad.activities.HomeActivity.REQUEST_PERMISSIONS;
 
 public class EnlargedImageViewDialogFragment extends HealthCocoDialogFragment implements NetworkImageViewRequestListener, DownloadFileFromUrlListener {
     public static final String TAG_PRINT_PDF = "printPdf";
@@ -64,7 +64,7 @@ public class EnlargedImageViewDialogFragment extends HealthCocoDialogFragment im
         if ((grantResults.length > 0) && permissionCheck == PackageManager.PERMISSION_GRANTED) {
             init();
         } else {
-            dismiss();
+            getDialog().dismiss();
         }
     }
 
@@ -72,11 +72,11 @@ public class EnlargedImageViewDialogFragment extends HealthCocoDialogFragment im
         requestAppPermissions(new
                 String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE,
                 android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
-        }, R.string.runtime_permissions_txt, REQUEST_PERMISSIONS);
+        }, REQUEST_PERMISSIONS);
     }
 
     public void requestAppPermissions(final String[] requestedPermissions,
-                                      final int stringId, final int requestCode) {
+                                      final int requestCode) {
         int permissionCheck = PackageManager.PERMISSION_GRANTED;
         for (String permission : requestedPermissions) {
             permissionCheck = permissionCheck + ContextCompat.checkSelfPermission(getContext(), permission);
@@ -87,13 +87,7 @@ public class EnlargedImageViewDialogFragment extends HealthCocoDialogFragment im
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-//        // Check if we're running on Android 5.0 or higher
-//        if (Build.VERSION.SDK_INT >= 23) {
         requestPermission();
-//        } else {
-//            init();
-//        }
-
     }
 
     @Override

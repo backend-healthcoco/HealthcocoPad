@@ -132,7 +132,7 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements
 
     @Override
     public void initListeners() {
-        editTextSearch = initEditSearchView(R.string.search);
+        editTextSearch = initEditSearchView(R.string.search, this);
 //        AddVisitsFragment addVisitsFragment = (AddVisitsFragment) mFragmentManager.findFragmentByTag(AddVisitsFragment.class.getSimpleName());
 //        if (addVisitsFragment != null)
 //            editTextSearch.setOnFocusChangeListener(addVisitsFragment.getFocusChangeListener());
@@ -155,7 +155,6 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements
         adapterSolr.setListData(list);
         adapterSolr.notifyDataSetChanged();
     }
-
 
     @Override
     public void onResponse(VolleyResponseBean response) {
@@ -373,10 +372,16 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements
                         newDrugDialogFragment.show(mActivity.getSupportFragmentManager(),
                                 newDrugDialogFragment.getClass().getSimpleName());
                         break;
-                    default:
 
+                    default:
                         break;
                 }
+                break;
+            case R.id.bt_clear:
+                AddVisitsFragment addVisitsFragment = (AddVisitsFragment) mFragmentManager.findFragmentByTag(AddVisitsFragment.class.getSimpleName());
+                if (addVisitsFragment != null)
+                    addVisitsFragment.onClearButtonClick();
+//                clearSearchEditText();
                 break;
         }
     }
@@ -556,7 +561,7 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements
     }
 
     public void refreshTagOfEditText(SuggestionType suggestionType) {
-        editTextSearch = initEditSearchView(suggestionType.getSearchHintId());
+        editTextSearch = initEditSearchView(suggestionType.getSearchHintId(), this);
         editTextSearch.setText("");
         editTextSearch.setTag(suggestionType);
         AddVisitsFragment addVisitsFragment = (AddVisitsFragment) mFragmentManager.findFragmentByTag(AddVisitsFragment.class.getSimpleName());

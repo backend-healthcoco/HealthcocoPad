@@ -120,14 +120,11 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
     private ArrayList<DefaultSyncServiceType> defaultWebServicesList = new ArrayList<>();
     private boolean isInitialLoading;
     private User user;
-    private SparseIntArray mErrorString;
-    public static final int REQUEST_PERMISSIONS = 101;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mApp = (HealthCocoApplication) getApplication();
-        mErrorString = new SparseIntArray();
         Thread.setDefaultUncaughtExceptionHandler(new MyExceptionHandler(this));
     }
 
@@ -1356,74 +1353,5 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
     public void showKeyboard() {
         InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
         imm.showSoftInput(getCurrentFocus(), InputMethodManager.SHOW_IMPLICIT);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        int permissionCheck = PackageManager.PERMISSION_GRANTED;
-        for (int permission : grantResults) {
-            permissionCheck = permissionCheck + permission;
-        }
-        if ((grantResults.length > 0) && permissionCheck == PackageManager.PERMISSION_GRANTED) {
-
-        } else {
-            Snackbar.make(findViewById(android.R.id.content), mErrorString.get(requestCode),
-                    Snackbar.LENGTH_INDEFINITE).setAction("ENABLE",
-                    new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent = new Intent();
-                            intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                            intent.addCategory(Intent.CATEGORY_DEFAULT);
-                            intent.setData(Uri.parse("package:" + getPackageName()));
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-                            startActivity(intent);
-                        }
-                    }).show();
-        }
-    }
-
-    public void requestAppPermissions(final String[] requestedPermissions,
-                                      final int stringId, final int requestCode) {
-        mErrorString.put(requestCode, stringId);
-        int permissionCheck = PackageManager.PERMISSION_GRANTED;
-        boolean shouldShowRequestPermissionRationale = false;
-        for (String permission : requestedPermissions) {
-            permissionCheck = permissionCheck + ContextCompat.checkSelfPermission(this, permission);
-//            shouldShowRequestPermissionRationale = shouldShowRequestPermissionRationale || ActivityCompat.shouldShowRequestPermissionRationale(this, permission);
-        }
-//        if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
-//            if (shouldShowRequestPermissionRationale) {
-//                Snackbar.make(findViewById(android.R.id.content), stringId,
-//                        Snackbar.LENGTH_INDEFINITE).setAction("GRANT",
-//                        new View.OnClickListener() {
-//                            @Override
-//                            public void onClick(View v) {
-//                                ActivityCompat.requestPermissions(HealthCocoActivity.this, requestedPermissions, requestCode);
-//                            }
-//                        }).show();
-//            } else {
-        ActivityCompat.requestPermissions(this, requestedPermissions, requestCode);
-//            }
-//        } else {
-//        }
-    }
-
-    public interface PermissionGranted {
-        void onPermissionsGranted(int requestCode);
-    }
-
-    public void requestPermission() {
-        requestAppPermissions(new
-                String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE,
-                android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                android.Manifest.permission.CALL_PHONE,
-                android.Manifest.permission.PROCESS_OUTGOING_CALLS,
-                android.Manifest.permission.ACCESS_COARSE_LOCATION,
-                android.Manifest.permission.ACCESS_FINE_LOCATION,
-        }, R.string.runtime_permissions_txt, REQUEST_PERMISSIONS);
     }
 }

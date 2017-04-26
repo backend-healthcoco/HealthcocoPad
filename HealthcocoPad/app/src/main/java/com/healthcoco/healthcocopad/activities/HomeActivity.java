@@ -4,12 +4,18 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -75,6 +81,7 @@ public class HomeActivity extends HealthCocoActivity implements View.OnClickList
     private MenuDrawerFragment menuFragment;
     private ContactsListFragment contactsFragment;
     private FilterFragment filterFragment;
+    public static final int REQUEST_PERMISSIONS = 101;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -479,8 +486,50 @@ public class HomeActivity extends HealthCocoActivity implements View.OnClickList
         return volleyResponseBean;
     }
 
-//    @Override
-//    public void onPermissionsGranted(int requestCode) {
-//        Util.showToast(this, R.string.permission_received);
-//
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        int permissionCheck = PackageManager.PERMISSION_GRANTED;
+        for (int permission : grantResults) {
+            permissionCheck = permissionCheck + permission;
+        }
+        if ((grantResults.length > 0) && permissionCheck == PackageManager.PERMISSION_GRANTED) {
+
+        } else {
+            Snackbar.make(findViewById(android.R.id.content), R.string.runtime_permissions_txt,
+                    Snackbar.LENGTH_INDEFINITE).setAction("ENABLE",
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent();
+                            intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                            intent.addCategory(Intent.CATEGORY_DEFAULT);
+                            intent.setData(Uri.parse("package:" + getPackageName()));
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+                            startActivity(intent);
+                        }
+                    }).show();
+        }
+    }
+
+    public void requestAppPermissions(final String[] requestedPermissions, final int requestCode) {
+        int permissionCheck = PackageManager.PERMISSION_GRANTED;
+        for (String permission : requestedPermissions) {
+            permissionCheck = permissionCheck + ContextCompat.checkSelfPermission(this, permission);
+        }
+        ActivityCompat.requestPermissions(this, requestedPermissions, requestCode);
+    }
+
+    public void requestPermission() {
+        requestAppPermissions(new
+                String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                android.Manifest.permission.CALL_PHONE,
+                android.Manifest.permission.PROCESS_OUTGOING_CALLS,
+                android.Manifest.permission.ACCESS_COARSE_LOCATION,
+                android.Manifest.permission.ACCESS_FINE_LOCATION,
+        }, REQUEST_PERMISSIONS);
+    }
 }

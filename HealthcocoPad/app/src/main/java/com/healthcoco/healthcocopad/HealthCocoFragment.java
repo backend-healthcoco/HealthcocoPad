@@ -182,7 +182,15 @@ public abstract class HealthCocoFragment extends Fragment implements GsonRequest
     }
 
     protected EditText initEditSearchView(int hintId) {
-        return initEditSearchView(hintId, null);
+        return initEditSearchView(hintId, null, null);
+    }
+
+    protected EditText initEditSearchView(int hintId, View.OnClickListener onClickListener) {
+        final EditText editSearch = (EditText) view.findViewById(R.id.edit_search);
+        editSearch.setHint(hintId);
+        ImageButton btClear = (ImageButton) view.findViewById(R.id.bt_clear);
+        btClear.setOnClickListener(onClickListener);
+        return editSearch;
     }
 
     protected EditText initEditSearchView(int hintId, TextWatcher textWatcher) {
