@@ -1,6 +1,7 @@
 package com.healthcoco.healthcocopad.dialogFragment;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,9 +14,16 @@ import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.HistoryDetailsResponse;
 import com.healthcoco.healthcocopad.bean.PersonalHistory;
+import com.healthcoco.healthcocopad.bean.server.LoginResponse;
+import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
+import com.healthcoco.healthcocopad.bean.server.User;
+import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
+import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.fragments.PatientProfileDetailFragment;
+import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
 import com.healthcoco.healthcocopad.services.GsonRequest;
+import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
@@ -26,7 +34,7 @@ import org.parceler.Parcels;
 /**
  * Created by Shreshtha on 14-03-2017.
  */
-public class AddEditPersonalHistoryDetailDialogFragment extends HealthCocoDialogFragment implements View.OnClickListener, GsonRequest.ErrorListener, Response.Listener<VolleyResponseBean> {
+public class AddEditPersonalHistoryDetailDialogFragment extends HealthCocoDialogFragment implements View.OnClickListener, GsonRequest.ErrorListener, Response.Listener<VolleyResponseBean>, LocalDoInBackgroundListenerOptimised {
     public static final String TAG_PERSONAL_HISTORY = "personalHistory";
     private PersonalHistory personalHistory;
     private EditText editDiet;
@@ -34,6 +42,8 @@ public class AddEditPersonalHistoryDetailDialogFragment extends HealthCocoDialog
     private EditText editBowelHabits;
     private EditText editBladderHabits;
     private HistoryDetailsResponse historyDetailsResponse;
+    private RegisteredPatientDetailsUpdated selectedPatient;
+    private User user;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -47,6 +57,8 @@ public class AddEditPersonalHistoryDetailDialogFragment extends HealthCocoDialog
         super.onActivityCreated(savedInstanceState);
         setWidthHeight(0.50, 0.75);
         init();
+        showLoadingOverlay(true);
+        new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_FRAGMENT_INITIALISATION_DATA, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     @Override
@@ -123,10 +135,10 @@ public class AddEditPersonalHistoryDetailDialogFragment extends HealthCocoDialog
         personalHistory.setAddictions(addiction);
         personalHistory.setBowelHabit(bowelHabit);
         personalHistory.setBladderHabit(bladderHabit);
-        personalHistory.setDoctorId(historyDetailsResponse.getDoctorId());
-        personalHistory.setLocationId(historyDetailsResponse.getLocationId());
-        personalHistory.setPatientId(historyDetailsResponse.getPatientId());
-        personalHistory.setHospitalId(historyDetailsResponse.getHospitalId());
+        personalHistory.setDoctorId(user.getUniqueId());
+        personalHistory.setLocationId(user.getForeignLocationId());
+        personalHistory.setPatientId(selectedPatient.getUserId());
+        personalHistory.setHospitalId(user.getForeignHospitalId());
         WebDataServiceImpl.getInstance(mApp).addUpdatePersonalHistory(HistoryDetailsResponse.class, personalHistory, this, this);
     }
 
@@ -165,5 +177,30 @@ public class AddEditPersonalHistoryDetailDialogFragment extends HealthCocoDialog
     public void onNetworkUnavailable(WebServiceType webServiceType) {
         Util.showToast(mActivity, R.string.user_offline);
         mActivity.hideLoading();
+    }
+
+    @Override
+    public VolleyResponseBean doInBackground(VolleyResponseBean response) {
+        VolleyResponseBean volleyResponseBean = null;
+        switch (response.getLocalBackgroundTaskType()) {
+            case GET_FRAGMENT_INITIALISATION_DATA:
+                volleyResponseBean = new VolleyResponseBean();
+                volleyResponseBean.setWebServiceType(WebServiceType.FRAGMENT_INITIALISATION);
+                selectedPatient = LocalDataServiceImpl.getInstance(mApp).getPatient(HealthCocoConstants.SELECTED_PATIENTS_USER_ID);
+                LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
+                if (doctor != null && doctor.getUser() != null && !Util.isNullOrBlank(doctor.getUser().getUniqueId()) && selectedPatient != null && !Util.isNullOrBlank(selectedPatient.getUserId())) {
+                    user = doctor.getUser();
+                }
+                break;
+        }
+        if (volleyResponseBean == null)
+            volleyResponseBean = new VolleyResponseBean();
+        volleyResponseBean.setIsFromLocalAfterApiSuccess(response.isFromLocalAfterApiSuccess());
+        return volleyResponseBean;
+    }
+
+    @Override
+    public void onPostExecute(VolleyResponseBean aVoid) {
+
     }
 }

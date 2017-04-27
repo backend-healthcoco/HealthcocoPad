@@ -31,6 +31,9 @@ import com.healthcoco.healthcocopad.bean.server.DrugsListSolrResponse;
 import com.healthcoco.healthcocopad.bean.server.Duration;
 import com.healthcoco.healthcocopad.bean.server.GenericName;
 import com.healthcoco.healthcocopad.bean.server.HistoryDetailsResponse;
+import com.healthcoco.healthcocopad.bean.server.LoginResponse;
+import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
+import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.SelectDrugItemType;
@@ -80,6 +83,8 @@ public class AddEditDrugAndAllergyDetailDialogFragment extends HealthCocoDialogF
     private LinkedHashMap<String, DrugItem> drugsListHashMap = new LinkedHashMap<>();
     private SelectedDrugItemsListAdapter adapter;
     private HistoryDetailsResponse historyDetailsResponse;
+    private RegisteredPatientDetailsUpdated selectedPatient;
+    private User user;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -91,8 +96,10 @@ public class AddEditDrugAndAllergyDetailDialogFragment extends HealthCocoDialogF
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        setWidthHeight(0.70, 0.85);
+        setWidthHeight(0.90, 0.85);
         init();
+        showLoadingOverlay(true);
+        new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_FRAGMENT_INITIALISATION_DATA, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     @Override
@@ -102,8 +109,6 @@ public class AddEditDrugAndAllergyDetailDialogFragment extends HealthCocoDialogF
         initData();
         initAdapters();
         getDataFromIntent();
-        showLoadingOverlay(true);
-        new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_FRAGMENT_INITIALISATION_DATA, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     private void getDrugsList(boolean isInitialLoading, int pageNum, int size, String searchTerm) {
@@ -207,10 +212,10 @@ public class AddEditDrugAndAllergyDetailDialogFragment extends HealthCocoDialogF
         mActivity.showLoading(false);
         AddEditDrugsAndAllergiesRequest addEditDrugsAndAllergiesRequest = new AddEditDrugsAndAllergiesRequest();
         addEditDrugsAndAllergiesRequest.setAllergies(allergy);
-        addEditDrugsAndAllergiesRequest.setDoctorId(historyDetailsResponse.getDoctorId());
-        addEditDrugsAndAllergiesRequest.setHospitalId(historyDetailsResponse.getHospitalId());
-        addEditDrugsAndAllergiesRequest.setLocationId(historyDetailsResponse.getLocationId());
-        addEditDrugsAndAllergiesRequest.setPatientId(historyDetailsResponse.getPatientId());
+        addEditDrugsAndAllergiesRequest.setDoctorId(user.getUniqueId());
+        addEditDrugsAndAllergiesRequest.setHospitalId(user.getForeignHospitalId());
+        addEditDrugsAndAllergiesRequest.setLocationId(user.getForeignLocationId());
+        addEditDrugsAndAllergiesRequest.setPatientId(selectedPatient.getUserId());
         addEditDrugsAndAllergiesRequest.setDrugIds(new ArrayList<String>(drugsListHashMap.keySet()));
         WebDataServiceImpl.getInstance(mApp).addUpdateDrugsAndAllergies(HistoryDetailsResponse.class, addEditDrugsAndAllergiesRequest, this, this);
     }
@@ -317,6 +322,11 @@ public class AddEditDrugAndAllergyDetailDialogFragment extends HealthCocoDialogF
             case GET_FRAGMENT_INITIALISATION_DATA:
                 volleyResponseBean = new VolleyResponseBean();
                 volleyResponseBean.setWebServiceType(WebServiceType.FRAGMENT_INITIALISATION);
+                selectedPatient = LocalDataServiceImpl.getInstance(mApp).getPatient(HealthCocoConstants.SELECTED_PATIENTS_USER_ID);
+                LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
+                if (doctor != null && doctor.getUser() != null && !Util.isNullOrBlank(doctor.getUser().getUniqueId()) && selectedPatient != null && !Util.isNullOrBlank(selectedPatient.getUserId())) {
+                    user = doctor.getUser();
+                }
                 break;
         }
         if (volleyResponseBean == null)

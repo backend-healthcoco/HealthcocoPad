@@ -32,7 +32,9 @@
                 style="?android:attr/progressBarStyleSmall"
                 android:layout_width="@dimen/round_progress_bar_size"
                 android:layout_height="@dimen/round_progress_bar_size"
-                android:layout_gravity="center|bottom"
+                android:layout_alignParentBottom="true"
+                android:layout_centerInParent="true"
+                android:gravity="center_horizontal"
                 android:progressDrawable="@drawable/progress_loading"
                 android:visibility="gone" />
 

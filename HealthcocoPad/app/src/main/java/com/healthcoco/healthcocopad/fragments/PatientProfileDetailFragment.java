@@ -557,16 +557,10 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
                 openHisoryFragment(HistoryFilterType.FAMILY_HISTORY);
                 break;
             case R.id.bt_edit_patient_profile_personal_history:
-                HistoryDetailsResponse detailsResponse = getDefaultIdDetails();
-                if (historyDetailsResponse != null)
-                    detailsResponse.setPersonalHistory(historyDetailsResponse.getPersonalHistory());
-                openDialogFragment(new AddEditPersonalHistoryDetailDialogFragment(), AddEditPersonalHistoryDetailDialogFragment.TAG_PERSONAL_HISTORY, detailsResponse, REQUEST_CODE_PATIENT_PROFILE, null);
+                openDialogFragment(new AddEditPersonalHistoryDetailDialogFragment(), AddEditPersonalHistoryDetailDialogFragment.TAG_PERSONAL_HISTORY, historyDetailsResponse, REQUEST_CODE_PATIENT_PROFILE, null);
                 break;
             case R.id.bt_edit_patient_profile_drug_and_allergy:
-                HistoryDetailsResponse detailsResponse1 = getDefaultIdDetails();
-                if (historyDetailsResponse != null)
-                    detailsResponse1.setDrugsAndAllergies(historyDetailsResponse.getDrugsAndAllergies());
-                openDialogFragment(new AddEditDrugAndAllergyDetailDialogFragment(), AddEditDrugAndAllergyDetailDialogFragment.TAG_DRUGS_AND_ALLERGIES, detailsResponse1, REQUEST_CODE_PATIENT_PROFILE, null);
+                openDialogFragment(new AddEditDrugAndAllergyDetailDialogFragment(), AddEditDrugAndAllergyDetailDialogFragment.TAG_DRUGS_AND_ALLERGIES, historyDetailsResponse, REQUEST_CODE_PATIENT_PROFILE, null);
                 break;
             case R.id.bt_edit_patient_profile_groups:
             case R.id.bt_edit_patient_profile_patient_data:
@@ -578,15 +572,6 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
                     onNetworkUnavailable(null);
                 break;
         }
-    }
-
-    private HistoryDetailsResponse getDefaultIdDetails() {
-        HistoryDetailsResponse detailsResponse = new HistoryDetailsResponse();
-        detailsResponse.setDoctorId(selectedPatient.getDoctorId());
-        detailsResponse.setLocationId(selectedPatient.getLocationId());
-        detailsResponse.setHospitalId(selectedPatient.getHospitalId());
-        detailsResponse.setPatientId(selectedPatient.getPatient().getPatientId());
-        return detailsResponse;
     }
 
     private void openHisoryFragment(HistoryFilterType historyFilterType) {
@@ -634,16 +619,6 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
             } else if (resultCode == HealthCocoConstants.RESULT_CODE_DISEASE_LIST) {
                 if (data != null && data.hasExtra(DiseaseListFragment.TAG_FILTER_TYPE) && data.hasExtra(DiseaseListFragment.TAG_DISEASES_LIST)) {
                     getHistoryListFromServer(true);
-//                    int ordinal = data.getIntExtra(DiseaseListFragment.TAG_FILTER_TYPE, -1);
-//                    HistoryFilterType filterType = HistoryFilterType.values()[ordinal];
-//                    if(filterType!=null){
-//                        switch (filterType){
-//                            case MEDICAL_HISTORY:
-//                                break;
-//                            case FAMILY_HISTORY:
-//                                break;
-//                        }
-//                    }
                 }
             }
         }
@@ -799,8 +774,6 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
 
     public void refreshData() {
         initData();
-//        mActivity.showLoading(false);
         getHistoryListFromLocal(true);
-//        new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_HISTORY_LIST, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 }

@@ -1506,6 +1506,7 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
                         }
                     });
                     addPrescriptionVisitFragment.addDrug(selectedDrug);
+                    mWidget.clear();
                 }
                 return;
             case LAB_TESTS:
@@ -1525,6 +1526,7 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
                         LogUtils.LOGD(TAG, "Selected Test " + diagnosticTest.getTestName());
                     }
                 }
+                mWidget.clear();
                 break;
             case PRESENT_COMPLAINT:
                 if (selectedSuggestionObject instanceof PresentComplaintSuggestions) {
