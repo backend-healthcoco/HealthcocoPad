@@ -104,8 +104,8 @@ public class SelectedPrescriptionDrugDoseItemsListViewHolder extends HealthCocoV
                     if (index != drug.getGenericNames().size() - 1)
                         genericNamesFormatted = genericNamesFormatted + GENERIC_NAME_SEPARATOR;
                 }
-                tvGenericName.setText(genericNamesFormatted);
             }
+            tvGenericName.setText(genericNamesFormatted);
         }
 
 
