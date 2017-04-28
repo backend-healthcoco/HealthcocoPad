@@ -31,7 +31,6 @@ import com.healthcoco.healthcocopad.custom.OptionsPopupWindow;
 import com.healthcoco.healthcocopad.enums.AddUpdateNameDialogType;
 import com.healthcoco.healthcocopad.enums.ClinicalNotesPermissionType;
 import com.healthcoco.healthcocopad.enums.ClinicalNotesType;
-import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.OptionsTypePopupWindow;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.CommonEMRItemClickListener;
@@ -423,7 +422,7 @@ public class ClinicalNotesListItemViewHolder extends HealthCocoViewHolder implem
 
         btOptions = (ImageButton) contentView.findViewById(R.id.bt_options);
         tvNotedBy = (TextView) contentView.findViewById(R.id.tv_noted_by);
-        containerBottomButtons = (LinearLayout) contentView.findViewById(R.id.container_bottom_buttons);
+        containerBottomButtons = (LinearLayout) contentView.findViewById(R.id.container_bottom_buttons_clinical_note);
         tvLabelGlobalRecord = (TextView) contentView.findViewById(R.id.tv_label_global_record);
         tvLabelNotedBy = (TextView) contentView.findViewById(R.id.tv_label_created_by);
 

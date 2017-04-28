@@ -26,7 +26,6 @@ import com.healthcoco.healthcocopad.listeners.CommonEMRItemClickListener;
 import com.healthcoco.healthcocopad.listeners.ImageLoadedListener;
 import com.healthcoco.healthcocopad.listeners.VisitDetailCombinedItemListener;
 import com.healthcoco.healthcocopad.services.GsonRequest;
-import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
 import com.healthcoco.healthcocopad.utilities.DownloadImageFromUrlUtil;
@@ -211,7 +210,7 @@ public class ReportsListItemViewHolder extends HealthCocoViewHolder
         btOptions = (ImageButton) contentView.findViewById(R.id.bt_options);
         layoutDiscarded = (LinearLayout) contentView.findViewById(R.id.layout_discarded);
         tvDiscarded = (TextView) contentView.findViewById(R.id.tv_discarded);
-        containerBottomButtons = (LinearLayout) contentView.findViewById(R.id.container_bottom_buttons);
+        containerBottomButtons = (LinearLayout) contentView.findViewById(R.id.container_bottom_buttons_report);
         tvLabelGlobalRecord = (TextView) contentView.findViewById(R.id.tv_label_global_record);
         tvLabelUploadedBy = (TextView) contentView.findViewById(R.id.tv_label_uploaded_by);
 

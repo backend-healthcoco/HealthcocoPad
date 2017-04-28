@@ -145,7 +145,7 @@ public class TreatmentListItemViewHolder extends HealthCocoViewHolder implements
         btOptions = (ImageButton) contentView.findViewById(R.id.bt_options);
         layoutDiscarded = (LinearLayout) contentView.findViewById(R.id.layout_discarded);
         tvPid = (TextView) contentView.findViewById(R.id.tv_pid);
-        containerBottomButtons = (LinearLayout) contentView.findViewById(R.id.container_bottom_buttons);
+        containerBottomButtons = (LinearLayout) contentView.findViewById(R.id.container_bottom_buttons_treatment);
         tvLabelGlobalRecord = (TextView) contentView.findViewById(R.id.tv_label_global_record);
         tvLabelPrescribedBy = (TextView) contentView.findViewById(R.id.tv_label_prescribed_by);
 

@@ -43,6 +43,7 @@ public class VisitDetailCombinedViewHolder extends HealthCocoViewHolder implemen
     private LinearLayout containerTreatment;
     private LinearLayout containerReports;
     private LinearLayout btOpen;
+    private LinearLayout containerBottomButtons;
 
     public VisitDetailCombinedViewHolder(HealthCocoActivity mActivity, VisitDetailCombinedItemListener listItemClickListener) {
         super(mActivity);
@@ -87,6 +88,7 @@ public class VisitDetailCombinedViewHolder extends HealthCocoViewHolder implemen
         btClone = (LinearLayout) contentView.findViewById(R.id.bt_clone_visit);
         btHistory = (LinearLayout) contentView.findViewById(R.id.bt_history_visit);
         btSaveAsTemplate = (LinearLayout) contentView.findViewById(R.id.bt_save_as_template_visit);
+        containerBottomButtons = (LinearLayout) contentView.findViewById(R.id.container_bottom_buttons_combined);
     }
 
     private void initClinicalNotesView(View contentView) {
@@ -133,21 +135,16 @@ public class VisitDetailCombinedViewHolder extends HealthCocoViewHolder implemen
     @Override
     public void applyData() {
         setVisibilityOfButtons(View.GONE);
-//        containerClinicalNotes.removeAllViews();
-//        containerPrescription.removeAllViews();
-//        containerTreatment.removeAllViews();
-//        containerReports.removeAllViews();
         if (!Util.isNullOrEmptyList(visitDetail.getClinicalNotes())) {
             containerClinicalNotes.setVisibility(View.VISIBLE);
             setButtonVisible(VisitedForType.CLINICAL_NOTES);
             List<ClinicalNotes> clinicalNotesList = visitDetail.getClinicalNotes();
             for (ClinicalNotes clinicalNotes : clinicalNotesList) {
                 ClinicalNotesListItemViewHolder clinicalNotesListItemViewHolder = (ClinicalNotesListItemViewHolder) containerClinicalNotes.getTag();
-//                ClinicalNotesListItemViewHolder clinicalNotesListItemViewHolder = new ClinicalNotesListItemViewHolder(mActivity, listItemClickListener, false);
-//                containerClinicalNotes.addView(clinicalNotesListItemViewHolder.getContentView());
                 clinicalNotesListItemViewHolder.setData(clinicalNotes);
                 clinicalNotesListItemViewHolder.applyData();
             }
+            checkIsDiscarded(clinicalNotesList.get(0).getDiscarded());
         } else
             containerClinicalNotes.setVisibility(View.GONE);
         if (!Util.isNullOrEmptyList(visitDetail.getPrescriptions())) {
@@ -156,11 +153,10 @@ public class VisitDetailCombinedViewHolder extends HealthCocoViewHolder implemen
             List<Prescription> prescriptionsList = visitDetail.getPrescriptions();
             for (Prescription prescription : prescriptionsList) {
                 PrescriptionListItemViewHolder prescriptionListItemViewHolder = (PrescriptionListItemViewHolder) containerPrescription.getTag();
-//                PrescriptionListItemViewHolder prescriptionListItemViewHolder = new PrescriptionListItemViewHolder(mActivity, listItemClickListener, false);
-//                containerPrescription.addView(prescriptionListItemViewHolder.getContentView());
                 prescriptionListItemViewHolder.setData(prescription);
                 prescriptionListItemViewHolder.applyData();
             }
+            checkIsDiscarded(prescriptionsList.get(0).getDiscarded());
         } else containerPrescription.setVisibility(View.GONE);
         if (!Util.isNullOrEmptyList(visitDetail.getPatientTreatments())) {
             containerTreatment.setVisibility(View.VISIBLE);
@@ -168,29 +164,34 @@ public class VisitDetailCombinedViewHolder extends HealthCocoViewHolder implemen
             List<PatientTreatment> patientTreatmentList = visitDetail.getPatientTreatments();
             for (PatientTreatment treatment : patientTreatmentList) {
                 TreatmentListItemViewHolder treatmentListItemViewHolder = (TreatmentListItemViewHolder) containerPrescription.getTag();
-//                TreatmentListItemViewHolder treatmentListItemViewHolder = new TreatmentListItemViewHolder(mActivity, listItemClickListener, false);
-//                containerTreatment.addView(treatmentListItemViewHolder.getContentView());
                 treatmentListItemViewHolder.setData(treatment);
                 treatmentListItemViewHolder.applyData();
             }
+            checkIsDiscarded(patientTreatmentList.get(0).getDiscarded());
         } else
             containerTreatment.setVisibility(View.GONE);
 
         if (!Util.isNullOrEmptyList(visitDetail.getRecords())) {
             containerReports.setVisibility(View.VISIBLE);
             setButtonVisible(VisitedForType.REPORTS);
-            for (Records record : visitDetail.getRecords()) {
+            List<Records> recordsList = visitDetail.getRecords();
+            for (Records record : recordsList) {
                 ReportsListItemViewHolder reportsListItemViewHolder = (ReportsListItemViewHolder) containerReports.getTag();
-//                TreatmentListItemViewHolder treatmentListItemViewHolder = new TreatmentListItemViewHolder(mActivity, listItemClickListener, false);
-//                containerTreatment.addView(treatmentListItemViewHolder.getContentView());
                 reportsListItemViewHolder.setData(record);
                 reportsListItemViewHolder.applyData();
             }
+            checkIsDiscarded(recordsList.get(0).getDiscarded());
         } else
             containerReports.setVisibility(View.GONE);
         tvVID.setText(mActivity.getResources().getString(R.string.vid) + Util.getValidatedValue(visitDetail.getUniqueEmrId()));
         tvCreatedBy.setText(Util.getValidatedValue(visitDetail.getCreatedBy()));
         tvVisitDate.setText(DateTimeUtil.getFormatedDate(visitDetail.getVisitedTime()));
+    }
+
+    private void checkIsDiscarded(Boolean isDiscarded) {
+        if (isDiscarded != null && isDiscarded)
+            containerBottomButtons.setVisibility(View.GONE);
+        else containerBottomButtons.setVisibility(View.VISIBLE);
     }
 
     private void setButtonVisible(VisitedForType visitedForType) {

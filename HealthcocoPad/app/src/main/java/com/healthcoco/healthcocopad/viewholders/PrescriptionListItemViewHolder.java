@@ -196,7 +196,7 @@ public class PrescriptionListItemViewHolder extends HealthCocoViewHolder impleme
         tvPid = (TextView) contentView.findViewById(R.id.tv_pid);
         parentDiagnosticTests = (LinearLayout) contentView.findViewById(R.id.parent_diagnostic_tests);
         containerDiagnosticTests = (LinearLayout) contentView.findViewById(R.id.container_diagnostic_tests);
-        containerBottomButtons = (LinearLayout) contentView.findViewById(R.id.container_bottom_buttons);
+        containerBottomButtons = (LinearLayout) contentView.findViewById(R.id.container_bottom_buttons_prescription);
         tvLabelGlobalRecord = (TextView) contentView.findViewById(R.id.tv_label_global_record);
         tvLabelPrescribedBy = (TextView) contentView.findViewById(R.id.tv_label_prescribed_by);
         layoutAdvice = (LinearLayout) contentView.findViewById(R.id.layout_parent_advice);

@@ -142,7 +142,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/container_bottom_buttons"
+            android:id="@+id/container_bottom_buttons_report"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:baselineAligned="false"
