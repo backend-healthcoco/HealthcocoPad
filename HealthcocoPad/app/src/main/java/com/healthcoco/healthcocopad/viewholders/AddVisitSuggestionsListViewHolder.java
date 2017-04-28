@@ -13,6 +13,7 @@ import com.healthcoco.healthcocopad.bean.server.DrugsListSolrResponse;
 import com.healthcoco.healthcocopad.bean.server.EcgDetailSuggestions;
 import com.healthcoco.healthcocopad.bean.server.EchoSuggestions;
 import com.healthcoco.healthcocopad.bean.server.GeneralExaminationSuggestions;
+import com.healthcoco.healthcocopad.bean.server.GenericName;
 import com.healthcoco.healthcocopad.bean.server.HolterSuggestions;
 import com.healthcoco.healthcocopad.bean.server.IndicationOfUsgSuggestions;
 import com.healthcoco.healthcocopad.bean.server.InvestigationSuggestions;
@@ -28,6 +29,7 @@ import com.healthcoco.healthcocopad.bean.server.SystemicExaminationSuggestions;
 import com.healthcoco.healthcocopad.bean.server.XrayDetailSuggestions;
 import com.healthcoco.healthcocopad.bean.server.HistoryPresentComplaintSuggestions;
 import com.healthcoco.healthcocopad.bean.server.MenstrualHistorySuggestions;
+import com.healthcoco.healthcocopad.utilities.Util;
 
 /**
  * Created by neha on 15/04/17.
@@ -36,6 +38,8 @@ import com.healthcoco.healthcocopad.bean.server.MenstrualHistorySuggestions;
 public class AddVisitSuggestionsListViewHolder extends HealthCocoViewHolder {
     private Object objData;
     private TextView tvName;
+    private TextView tvGenericName;
+    private static final String GENERIC_NAME_SEPARATOR = ",";
 
     public AddVisitSuggestionsListViewHolder(HealthCocoActivity mActivity) {
         super(mActivity);
@@ -95,12 +99,26 @@ public class AddVisitSuggestionsListViewHolder extends HealthCocoViewHolder {
         else if (objData instanceof HolterSuggestions)
             text = ((HolterSuggestions) objData).getHolter();
         tvName.setText(text);
+        if (objData instanceof DrugsListSolrResponse) {
+            String genericNamesFormatted = "";
+            if (!Util.isNullOrEmptyList(((DrugsListSolrResponse) objData).getGenericNames())) {
+                for (GenericName genericName : ((DrugsListSolrResponse) objData).getGenericNames()) {
+                    int index = ((DrugsListSolrResponse) objData).getGenericNames().indexOf(genericName);
+                    genericNamesFormatted = genericNamesFormatted + " " + genericName.getName();
+                    if (index != ((DrugsListSolrResponse) objData).getGenericNames().size() - 1)
+                        genericNamesFormatted = genericNamesFormatted + GENERIC_NAME_SEPARATOR;
+                }
+            }
+            tvGenericName.setText(genericNamesFormatted);
+            tvGenericName.setVisibility(View.VISIBLE);
+        } else tvGenericName.setVisibility(View.GONE);
     }
 
     @Override
     public View getContentView() {
         View contentView = inflater.inflate(R.layout.list_item_add_visits_sugestions, null);
         tvName = (TextView) contentView.findViewById(R.id.tv_name);
+        tvGenericName = (TextView) contentView.findViewById(R.id.tv_generic_name);
         return contentView;
     }
 }

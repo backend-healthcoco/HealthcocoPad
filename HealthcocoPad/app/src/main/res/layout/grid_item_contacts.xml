@@ -62,11 +62,10 @@
 
                     <TextView
                         android:id="@+id/tv_patient_gender"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:maxLines="1"
-                        android:text="P103456790"
                         android:textSize="@dimen/text_size_contact_list_mobile" />
                 </LinearLayout>
 

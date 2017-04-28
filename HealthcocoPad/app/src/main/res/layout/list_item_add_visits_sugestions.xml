@@ -2,14 +2,25 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="10dp">
 
     <TextView
         android:id="@+id/tv_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
         android:text=""
         android:textColor="@color/black"
         android:textSize="@dimen/text_size_templates_list_drug_name" />
+
+    <TextView
+        android:id="@+id/tv_generic_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center|start"
+        android:maxLines="1"
+        android:paddingTop="5dp"
+        android:textAllCaps="true"
+        android:textColor="@color/grey_dark_text"
+        android:textSize="@dimen/text_size_drugs_generic_name" />
 </LinearLayout>

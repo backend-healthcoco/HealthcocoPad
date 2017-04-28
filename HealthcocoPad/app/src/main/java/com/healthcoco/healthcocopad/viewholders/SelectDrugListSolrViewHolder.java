@@ -52,8 +52,8 @@ public class SelectDrugListSolrViewHolder extends HealthCocoViewHolder implement
                 if (index != objData.getGenericNames().size() - 1)
                     genericNamesFormatted = genericNamesFormatted + GENERIC_NAME_SEPARATOR;
             }
-            tvGenericName.setText(genericNamesFormatted);
         }
+        tvGenericName.setText(genericNamesFormatted);
     }
 
     @Override

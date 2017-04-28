@@ -118,7 +118,7 @@ public class AddEditDrugAndAllergyDetailDialogFragment extends HealthCocoDialogF
             progressLoading.setVisibility(View.GONE);
         } else
             progressLoading.setVisibility(View.VISIBLE);
-        WebDataServiceImpl.getInstance(mApp).getDrugsListSolr(DrugsListSolrResponse.class, pageNum, size, historyDetailsResponse.getDoctorId(), historyDetailsResponse.getHospitalId(), historyDetailsResponse.getLocationId(), searchTerm, this, this);
+        WebDataServiceImpl.getInstance(mApp).getDrugsListSolr(DrugsListSolrResponse.class, pageNum, size, user.getUniqueId(), user.getForeignHospitalId(), user.getForeignLocationId(), searchTerm, this, this);
     }
 
     private void getDataFromIntent() {

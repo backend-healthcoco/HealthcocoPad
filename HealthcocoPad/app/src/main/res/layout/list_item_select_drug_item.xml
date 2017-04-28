@@ -24,10 +24,8 @@
             android:layout_height="wrap_content"
             android:drawablePadding="10dp"
             android:gravity="center|start"
-            android:paddingBottom="5dp"
             android:paddingLeft="10dp"
             android:paddingTop="5dp"
-            android:text="Tablet Crocin(50mg)"
             android:textColor="@color/black"
             android:textSize="@dimen/text_size_select_drug_item" />
 
@@ -37,10 +35,9 @@
             android:layout_height="wrap_content"
             android:gravity="center|start"
             android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:text="Tablet Crocin(50mg)"
+            android:paddingTop="5dp"
             android:textAllCaps="true"
-            android:textColor="@color/black_greyish"
-            android:textSize="12sp" />
+            android:textColor="@color/grey_dark_text"
+            android:textSize="@dimen/text_size_drugs_generic_name" />
     </LinearLayout>
 </LinearLayout>

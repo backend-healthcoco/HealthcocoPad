@@ -178,4 +178,5 @@
     <dimen name="text_size_visits_close_text">25dp</dimen>
     <dimen name="margin_left_of_visits_button_layout">25dp</dimen>
     <dimen name="text_size_visits_item_label">18sp</dimen>
+    <dimen name="text_size_drugs_generic_name">12sp</dimen>
 </resources>

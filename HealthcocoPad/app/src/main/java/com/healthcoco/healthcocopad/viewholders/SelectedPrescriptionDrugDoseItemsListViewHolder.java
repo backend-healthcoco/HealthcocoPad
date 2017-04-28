@@ -81,14 +81,6 @@ public class SelectedPrescriptionDrugDoseItemsListViewHolder extends HealthCocoV
 
     @Override
     public void applyData() {
-//        Drug drug = null;
-//        if (objData.getDrug() != null) {
-//            drug = objData.getDrug();
-//
-//        } else if (!Util.isNullOrBlank(objData.getDrugId())) {
-//            drug = LocalDataServiceImpl.getInstance(mApp).getDrug(objData.getDrugId());
-//            objData.setDrug(drug);
-//        }
         if (objData.getDrug() != null) {
             Drug drug = objData.getDrug();
             objData.setDrugId(drug.getUniqueId());
@@ -117,11 +109,6 @@ public class SelectedPrescriptionDrugDoseItemsListViewHolder extends HealthCocoV
 
         tvFrequency.setText(Util.getValidatedValue(objData.getDosage()));
 
-        //setting durationUnit
-//        if (addNewPrescriptionListener.isDurationSet()) {
-//            editDuration.setText(addNewPrescriptionListener.getDurationUnit());
-//            objData.setDuration(getDurationForTaggedViews(Util.getValidatedValueOrNull(editDuration), getValidatedDurationUnit()));
-//        } else
         if (objData.getDuration() != null)
             editDuration.setText(Util.getValidatedValue(objData.getDuration().getValue()));
         else
@@ -129,19 +116,12 @@ public class SelectedPrescriptionDrugDoseItemsListViewHolder extends HealthCocoV
 
         if (objData.getDuration() != null && objData.getDuration().getDurationUnit() != null)
             tvDrugDurationUnit.setText(Util.getValidatedValue(objData.getDuration().getDurationUnit().getUnit()));
-//        else tvDrugDurationUnit.setText("day(s)");
-        //initialising instructions popup
+
         if (!Util.isNullOrBlank(objData.getInstructions())) {
             etInstruction.setVisibility(View.VISIBLE);
             etInstruction.setText(Util.getValidatedValue(objData.getInstructions()));
         } else
             etInstruction.setText("");
-    }
-
-    private DrugDurationUnit getValidatedDurationUnit() {
-        if (objData.getDuration() != null)
-            return objData.getDuration().getDurationUnit();
-        return null;
     }
 
     @Override

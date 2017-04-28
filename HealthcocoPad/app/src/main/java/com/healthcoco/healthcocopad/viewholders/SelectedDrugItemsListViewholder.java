@@ -33,7 +33,6 @@ public class SelectedDrugItemsListViewholder extends HealthCocoViewHolder implem
 
     @Override
     public void setData(Object object) {
-//        this.objData = (DrugItem) object;
         this.objData = (DrugItem) object;
     }
 
@@ -66,5 +65,4 @@ public class SelectedDrugItemsListViewholder extends HealthCocoViewHolder implem
                 break;
         }
     }
-
 }
