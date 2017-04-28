@@ -15,7 +15,6 @@ import android.widget.TextView;
 import com.android.volley.Response;
 import com.healthcoco.healthcocopad.HealthCocoDialogFragment;
 import com.healthcoco.healthcocopad.R;
-import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.bean.DoctorContactUs;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.Specialities;
@@ -30,6 +29,7 @@ import com.healthcoco.healthcocopad.enums.LocalTabelType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.enums.WebViewType;
 import com.healthcoco.healthcocopad.fragments.LoginSignupFragment;
+import com.healthcoco.healthcocopad.fragments.WebViewFragments;
 import com.healthcoco.healthcocopad.listeners.CommonListDialogItemClickListener;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
 import com.healthcoco.healthcocopad.services.GsonRequest;
@@ -39,8 +39,6 @@ import com.healthcoco.healthcocopad.utilities.EditTextTextViewErrorUtil;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
-
-import org.parceler.Parcels;
 
 import java.util.ArrayList;
 
@@ -76,7 +74,7 @@ public class ContactUsDialogFragment extends HealthCocoDialogFragment implements
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.dialog_fragment_login, container, false);
+        view = inflater.inflate(R.layout.dialog_fragment_contact_us, container, false);
         super.onCreateView(inflater, container, savedInstanceState);
         return view;
     }
@@ -162,13 +160,13 @@ public class ContactUsDialogFragment extends HealthCocoDialogFragment implements
             case R.id.tv_terms_of_service:
                 Util.checkNetworkStatus(mActivity);
                 if (HealthCocoConstants.isNetworkOnline) {
-                    openCommonOpenUpActivity(CommonOpenUpFragmentType.TERMS_OF_SERVICE, WebViewType.TERMS_OF_SERVICE.ordinal(), 0);
+                    openCommonOpenUpActivity(CommonOpenUpFragmentType.TERMS_OF_SERVICE, WebViewFragments.TAG_WEB_VIEW_TYPE, WebViewType.TERMS_OF_SERVICE.ordinal(), 0);
                 } else Util.showToast(mActivity, R.string.user_offline);
                 break;
             case R.id.tv_privacy_policy:
                 Util.checkNetworkStatus(mActivity);
                 if (HealthCocoConstants.isNetworkOnline) {
-                    openCommonOpenUpActivity(CommonOpenUpFragmentType.PRIVACY_POLICY, WebViewType.PRIVACY_POLICY.ordinal(), 0);
+                    openCommonOpenUpActivity(CommonOpenUpFragmentType.PRIVACY_POLICY, WebViewFragments.TAG_WEB_VIEW_TYPE, WebViewType.PRIVACY_POLICY.ordinal(), 0);
                 } else Util.showToast(mActivity, R.string.user_offline);
                 break;
             default:
@@ -237,23 +235,6 @@ public class ContactUsDialogFragment extends HealthCocoDialogFragment implements
             add(speciality);
         }}, city, DeviceType.ANDROID_PAD);
         WebDataServiceImpl.getInstance(mApp).sendContactUsRequest(String.class, doctorContactUs, this, this);
-    }
-
-    /**
-     * @param fragmentType
-     * @param intentData
-     * @param requestCode
-     */
-    private void openCommonOpenUpActivity(CommonOpenUpFragmentType fragmentType, Object intentData, int requestCode) {
-        Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
-        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, fragmentType.ordinal());
-        if (intentData != null) {
-            intent.putExtra(HealthCocoConstants.TAG_COMMON_OPENUP_INTENT_DATA, Parcels.wrap(intentData));
-        }
-        if (requestCode == 0)
-            startActivity(intent);
-        else
-            startActivityForResult(intent, requestCode);
     }
 
     @Override

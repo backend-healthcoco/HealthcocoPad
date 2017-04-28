@@ -67,7 +67,7 @@ public class HealthcocoFCMListener extends FirebaseMessagingService {
             NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
                     this).setSmallIcon(getNotificationIcon())
                     .setLargeIcon(BitmapFactory.decodeResource(getResources(),
-                            R.drawable.app_icon))
+                            R.drawable.app_logo))
                     .setColor(getResources().getColor(R.color.blue_action_bar))
                     .setContentTitle(title)
                     .setContentText(text).setStyle(new NotificationCompat.BigTextStyle().bigText(text));

@@ -17,11 +17,14 @@ import com.healthcoco.healthcocopad.enums.WebViewType;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.Util;
 
+import org.parceler.Parcels;
+
 /**
  * Created by Shreshtha on 23-01-2017.
  */
 
 public class WebViewFragments extends HealthCocoFragment {
+    public static final String TAG_WEB_VIEW_TYPE = "webViewType";
     private WebViewType webViewType;
     private WebView webView;
     private ProgressBar progressLoading;
@@ -46,7 +49,7 @@ public class WebViewFragments extends HealthCocoFragment {
     @Override
     public void init() {
         Intent intent = mActivity.getIntent();
-        int ordinal = intent.getIntExtra(HealthCocoConstants.TAG_COMMON_OPENUP_INTENT_DATA, 0);
+        int ordinal = Parcels.unwrap(intent.getParcelableExtra(TAG_WEB_VIEW_TYPE));
         webViewType = WebViewType.values()[ordinal];
         if (webViewType != null) {
             initViews();

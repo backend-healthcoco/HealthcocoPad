@@ -7,6 +7,7 @@ import android.widget.BaseAdapter;
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.bean.server.DoctorClinicProfile;
 import com.healthcoco.healthcocopad.fragments.MenuDrawerFragment;
+import com.healthcoco.healthcocopad.listeners.SelectedClinicListener;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.healthcoco.healthcocopad.viewholders.MenuClinicListviewHolder;
 
@@ -16,14 +17,15 @@ import java.util.List;
  * Created by Shreshtha on 01-02-2017.
  */
 public class MenuClinicListAdapter extends BaseAdapter {
+    private SelectedClinicListener selectedClinicListener;
     private List<DoctorClinicProfile> list;
     private HealthCocoActivity mActivity;
     private MenuClinicListviewHolder holder;
-    private int selectedPosition;
 
-    public MenuClinicListAdapter(HealthCocoActivity mActivity, List<DoctorClinicProfile> clinicProfile) {
+    public MenuClinicListAdapter(HealthCocoActivity mActivity, List<DoctorClinicProfile> clinicProfile,SelectedClinicListener selectedClinicListener) {
         this.mActivity = mActivity;
         this.list = clinicProfile;
+        this.selectedClinicListener = selectedClinicListener;
     }
 
     @Override
@@ -47,7 +49,7 @@ public class MenuClinicListAdapter extends BaseAdapter {
     public View getView(final int position, View convertView, final ViewGroup parent) {
         DoctorClinicProfile doctorClinicProfile = (DoctorClinicProfile) getItem(position);
         if (convertView == null) {
-            holder = new MenuClinicListviewHolder(mActivity);
+            holder = new MenuClinicListviewHolder(mActivity,selectedClinicListener);
             convertView = holder.getContentView();
             convertView.setTag(holder);
         } else

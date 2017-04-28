@@ -14,6 +14,7 @@ import com.healthcoco.healthcocopad.HealthCocoDialogFragment;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.adapter.MenuClinicListAdapter;
 import com.healthcoco.healthcocopad.bean.server.DoctorClinicProfile;
+import com.healthcoco.healthcocopad.listeners.SelectedClinicListener;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.Util;
 
@@ -26,7 +27,7 @@ import static com.healthcoco.healthcocopad.fragments.MenuDrawerFragment.SELECTED
 /**
  * Created by Shreshtha on 01-02-2017.
  */
-public class MenuClinicListDialogFragment extends HealthCocoDialogFragment implements AdapterView.OnItemClickListener, View.OnClickListener {
+public class MenuClinicListDialogFragment extends HealthCocoDialogFragment implements View.OnClickListener, SelectedClinicListener {
     public static final String TAG_CLINIC_NAME = "clinicName";
     private List<DoctorClinicProfile> clinicProfile;
     private ListView lvClinics;
@@ -70,7 +71,6 @@ public class MenuClinicListDialogFragment extends HealthCocoDialogFragment imple
 
     @Override
     public void initListeners() {
-        lvClinics.setOnItemClickListener(this);
         btCancel.setOnClickListener(this);
     }
 
@@ -80,16 +80,8 @@ public class MenuClinicListDialogFragment extends HealthCocoDialogFragment imple
     }
 
     private void initClinicListAdapter() {
-        menuClinicListAdapter = new MenuClinicListAdapter(mActivity, clinicProfile);
+        menuClinicListAdapter = new MenuClinicListAdapter(mActivity, clinicProfile,this);
         lvClinics.setAdapter(menuClinicListAdapter);
-    }
-
-    @Override
-    public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-        DoctorClinicProfile doctorClinicProfile = (DoctorClinicProfile) menuClinicListAdapter.getItem(position);
-        refreshSelectedDoctorClinicProfileDetails(doctorClinicProfile);
-        getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK,null);
-        getDialog().dismiss();
     }
 
     private void refreshSelectedDoctorClinicProfileDetails(DoctorClinicProfile doctorClinicProfile) {
@@ -102,5 +94,12 @@ public class MenuClinicListDialogFragment extends HealthCocoDialogFragment imple
     @Override
     public void onClick(View view) {
         getDialog().cancel();
+    }
+
+    @Override
+    public void onSelectedClinicCheckClicked(DoctorClinicProfile doctorClinicProfile) {
+        refreshSelectedDoctorClinicProfileDetails(doctorClinicProfile);
+        getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK,null);
+        getDialog().dismiss();
     }
 }

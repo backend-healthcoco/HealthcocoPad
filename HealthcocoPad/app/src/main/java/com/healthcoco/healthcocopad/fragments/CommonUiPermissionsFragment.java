@@ -104,10 +104,10 @@ public class CommonUiPermissionsFragment extends HealthCocoFragment implements A
                     list = uiPermissionsBoth.getAllPermissions().getPatientVisitPermissions();
                     assignedPermissionsList = uiPermissionsBoth.getDoctorPermissions().getPatientVisitPermissions();
                     break;
-                case SETTINGS_UI_PERMISSION_PATIENT_TAB:
-                    list = uiPermissionsBoth.getAllPermissions().getTabPermissions();
-                    assignedPermissionsList = uiPermissionsBoth.getDoctorPermissions().getTabPermissions();
-                    break;
+//                case SETTINGS_UI_PERMISSION_PATIENT_TAB:
+//                    list = uiPermissionsBoth.getAllPermissions().getTabPermissions();
+//                    assignedPermissionsList = uiPermissionsBoth.getDoctorPermissions().getTabPermissions();
+//                    break;
             }
             notifyAdapter(list);
         }

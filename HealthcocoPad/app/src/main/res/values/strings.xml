@@ -32,7 +32,7 @@
 
     <string name="email">Email</string>
     <string name="password">Password</string>
-    <string name="signin_accept_terms_and_conditions">By Signing in, you agree to HealthcocoPlus\'s &#160;</string>
+    <string name="signin_accept_terms_and_conditions">By Signing in, you agree to HealthcocoPad\'s &#160;</string>
 
     <string name="underlined_terms_of_service"><u>Terms of Service</u></string>
     <string name="and">&#160;and&#160;</string>

@@ -45,11 +45,21 @@
 
     <TextView
         android:id="@+id/tv_name"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:padding="10dp"
+        android:layout_weight="1"
         android:text="Mathews Clinic"
         android:textColor="@color/black"
         android:textSize="@dimen/text_size_menu_separator_item" />
+
+    <CheckBox
+        android:id="@+id/cb_grouped"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:button="@drawable/checkbox_check_blue_white_selector"
+        android:checked="false"
+        android:layout_gravity="center_vertical"
+        android:minWidth="30dp" />
 </LinearLayout>

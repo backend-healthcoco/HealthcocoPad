@@ -8,8 +8,8 @@ import com.healthcoco.healthcocopad.R;
 public enum UIPermissionsItemType {
     PRESCRIPTION_UI_PERMISSION(R.string.prescriptions),
     CLINICAL_NOTES(R.string.clinical_notes),
-    VISITS(R.string.visits),
-    PATIENT_TAB_PERMISSION(R.string.patient_tab_permission);
+    VISITS(R.string.visits);
+//    PATIENT_TAB_PERMISSION(R.string.patient_tab_permission);
 
     private final int titleId;
 

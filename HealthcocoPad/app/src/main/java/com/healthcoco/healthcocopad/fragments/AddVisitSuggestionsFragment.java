@@ -133,9 +133,6 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements
     @Override
     public void initListeners() {
         editTextSearch = initEditSearchView(R.string.search, this);
-//        AddVisitsFragment addVisitsFragment = (AddVisitsFragment) mFragmentManager.findFragmentByTag(AddVisitsFragment.class.getSimpleName());
-//        if (addVisitsFragment != null)
-//            editTextSearch.setOnFocusChangeListener(addVisitsFragment.getFocusChangeListener());
         btAddNew.setOnClickListener(this);
         lvSuggestionsList.setOnItemClickListener(this);
     }
@@ -162,8 +159,6 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements
         if (response != null) {
             switch (response.getWebServiceType()) {
                 case FRAGMENT_INITIALISATION:
-//                    if (user != null)
-//                        getSuggestionListFromServer(true, PAGE_NUMBER, MAX_SIZE, "");
                     break;
                 case GET_PRESENT_COMPLAINT_SUGGESTIONS:
                 case GET_COMPLAINT_SUGGESTIONS:
@@ -568,10 +563,6 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements
         if (addVisitsFragment != null)
             addVisitsFragment.requestFocus(editTextSearch);
         Util.requesFocus(editTextSearch);
-    }
-
-    public SuggestionType getSelectedSuggestionType() {
-        return suggestionType;
     }
 }
 

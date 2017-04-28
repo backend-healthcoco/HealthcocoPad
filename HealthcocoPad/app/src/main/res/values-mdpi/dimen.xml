@@ -1,7 +1,7 @@
 <resources>
     <dimen name="initial_screen_icon_sizes">317px</dimen>
-    <dimen name="hcc_plus_top_logo_width">267px</dimen>
-    <dimen name="hcc_plus_top_logo_height">34px</dimen>
+    <dimen name="hcc_pad_top_logo_width">26px</dimen>
+    <dimen name="hcc_pad_top_logo_height">42px</dimen>
     <dimen name="tab_home_image_size">20px</dimen>
     <dimen name="tab_global_access_button_size">45px</dimen>
     <dimen name="visits_icon_with_circle_size">50px</dimen>

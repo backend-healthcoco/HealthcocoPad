@@ -62,6 +62,17 @@ public class DoctorClinicProfile extends SugarRecord {
     private String hospitalId;
     @Ignore
     private ArrayList<Role> roles;
+    @Ignore
+    protected boolean foreignIsClinicSelected;
+
+    public boolean isForeignIsClinicSelected() {
+        return foreignIsClinicSelected;
+    }
+
+    public void setForeignIsClinicSelected(boolean foreignIsClinicSelected) {
+        this.foreignIsClinicSelected = foreignIsClinicSelected;
+    }
+
     public DoctorClinicProfile() {
     }
 

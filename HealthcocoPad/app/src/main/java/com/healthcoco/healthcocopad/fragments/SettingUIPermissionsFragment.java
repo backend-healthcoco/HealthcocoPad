@@ -135,9 +135,9 @@ public class SettingUIPermissionsFragment extends HealthCocoFragment implements 
             case VISITS:
                 openCommonOpenUpActivity(SETTINGS_UI_PERMISSION_VISITS, itemType.ordinal());
                 break;
-            case PATIENT_TAB_PERMISSION:
-                openCommonOpenUpActivity(CommonOpenUpFragmentType.SETTINGS_UI_PERMISSION_PATIENT_TAB, itemType.ordinal());
-                break;
+//            case PATIENT_TAB_PERMISSION:
+//                openCommonOpenUpActivity(CommonOpenUpFragmentType.SETTINGS_UI_PERMISSION_PATIENT_TAB, itemType.ordinal());
+//                break;
         }
     }
 

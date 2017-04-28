@@ -9,7 +9,7 @@
     <dimen name="text_size_initial_screen_texts">20sp</dimen>
 
     <dimen name="login_edit_text_bottom_padding">5dp</dimen>
-    <dimen name="text_size_signup">15dp</dimen>
+    <dimen name="text_size_signup">15sp</dimen>
     <dimen name="text_size_floating_label">18sp</dimen>
     <dimen name="radio_btn_stoke_width">0.7dp</dimen>
     <dimen name="radio_btn_border_ht_wdt">10dp</dimen>
@@ -179,4 +179,5 @@
     <dimen name="margin_left_of_visits_button_layout">25dp</dimen>
     <dimen name="text_size_visits_item_label">18sp</dimen>
     <dimen name="text_size_drugs_generic_name">12sp</dimen>
+    <dimen name="text_size_terms_and_privacy_policy">14sp</dimen>
 </resources>

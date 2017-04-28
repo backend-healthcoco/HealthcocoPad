@@ -1,6 +1,7 @@
 package com.healthcoco.healthcocopad;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -24,6 +25,7 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.bean.server.Specialities;
 import com.healthcoco.healthcocopad.dialogFragment.AddUpdateNameDialogFragment;
 import com.healthcoco.healthcocopad.dialogFragment.CommonListDialogFragment;
@@ -32,6 +34,7 @@ import com.healthcoco.healthcocopad.dialogFragment.CommonListSolarDialogFragment
 import com.healthcoco.healthcocopad.dialogFragment.CommonOptionsDialogListFragment;
 import com.healthcoco.healthcocopad.enums.AddUpdateNameDialogType;
 import com.healthcoco.healthcocopad.enums.CommonListDialogType;
+import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.DialogType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.CommonListDialogItemClickListener;
@@ -40,6 +43,8 @@ import com.healthcoco.healthcocopad.utilities.EditTextTextViewErrorUtil;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.ScreenDimensions;
 import com.healthcoco.healthcocopad.utilities.Util;
+
+import org.parceler.Parcels;
 
 import java.util.List;
 
@@ -327,5 +332,21 @@ public abstract class HealthCocoDialogFragment extends DialogFragment implements
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * @param fragmentType
+     * @param intentData
+     * @param requestCode
+     */
+    protected void openCommonOpenUpActivity(CommonOpenUpFragmentType fragmentType, String tag, Object intentData, int requestCode) {
+        Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
+        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, fragmentType.ordinal());
+        if (!Util.isNullOrBlank(tag) && intentData != null)
+            intent.putExtra(tag, Parcels.wrap(intentData));
+        if (requestCode == 0)
+            startActivity(intent);
+        else
+            startActivityForResult(intent, requestCode);
     }
 }

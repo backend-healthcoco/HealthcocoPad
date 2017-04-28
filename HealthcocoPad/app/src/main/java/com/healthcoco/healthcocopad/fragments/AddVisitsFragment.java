@@ -1659,6 +1659,7 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
             editText.setText(textBeforeComma + text);
             editText.setSelection(Util.getValidatedValueOrBlankTrimming(editText).length());
             mWidget.setText(editText.getText().toString());
+            mWidget.setCursorIndex(editText.length());
         }
     }
 

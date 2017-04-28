@@ -24,6 +24,7 @@ import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.enums.WebViewType;
+import com.healthcoco.healthcocopad.fragments.WebViewFragments;
 import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
@@ -55,7 +56,7 @@ public class LoginDialogFragment extends HealthCocoDialogFragment implements Vie
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.dialog_fragment_sign_in, container, false);
+        view = inflater.inflate(R.layout.dialog_fragment_login, container, false);
         super.onCreateView(inflater, container, savedInstanceState);
         return view;
     }
@@ -123,33 +124,16 @@ public class LoginDialogFragment extends HealthCocoDialogFragment implements Vie
             case R.id.tv_terms_of_service:
                 Util.checkNetworkStatus(mActivity);
                 if (HealthCocoConstants.isNetworkOnline) {
-                    openCommonOpenUpActivity(CommonOpenUpFragmentType.TERMS_OF_SERVICE, WebViewType.TERMS_OF_SERVICE.ordinal(), 0);
+                    openCommonOpenUpActivity(CommonOpenUpFragmentType.TERMS_OF_SERVICE, WebViewFragments.TAG_WEB_VIEW_TYPE, WebViewType.TERMS_OF_SERVICE.ordinal(), 0);
                 } else Util.showToast(mActivity, R.string.user_offline);
                 break;
             case R.id.tv_privacy_policy:
                 Util.checkNetworkStatus(mActivity);
                 if (HealthCocoConstants.isNetworkOnline) {
-                    openCommonOpenUpActivity(CommonOpenUpFragmentType.PRIVACY_POLICY, WebViewType.PRIVACY_POLICY.ordinal(), 0);
+                    openCommonOpenUpActivity(CommonOpenUpFragmentType.PRIVACY_POLICY, WebViewFragments.TAG_WEB_VIEW_TYPE, WebViewType.PRIVACY_POLICY.ordinal(), 0);
                 } else Util.showToast(mActivity, R.string.user_offline);
                 break;
         }
-    }
-
-    /**
-     * @param fragmentType
-     * @param intentData
-     * @param requestCode
-     */
-    private void openCommonOpenUpActivity(CommonOpenUpFragmentType fragmentType, Object intentData, int requestCode) {
-        Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
-        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, fragmentType.ordinal());
-        if (intentData != null) {
-            intent.putExtra(HealthCocoConstants.TAG_COMMON_OPENUP_INTENT_DATA, Parcels.wrap(intentData));
-        }
-        if (requestCode == 0)
-            startActivity(intent);
-        else
-            startActivityForResult(intent, requestCode);
     }
 
     private void openResetPasswordDialogFragment(String emailAddress) {
