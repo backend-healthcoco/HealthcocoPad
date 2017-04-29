@@ -476,6 +476,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
         autoTvAdvanceSearchText.setText("");
         autotvSearchType.setText("");
         editAdvanceSearchText.setText("");
+        editAdvanceSearchText.setHint("");
     }
 
     private void changeView(ChangeViewType nextViewToChange) {

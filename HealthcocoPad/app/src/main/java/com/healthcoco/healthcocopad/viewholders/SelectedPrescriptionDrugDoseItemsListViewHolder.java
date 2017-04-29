@@ -96,10 +96,11 @@ public class SelectedPrescriptionDrugDoseItemsListViewHolder extends HealthCocoV
                     if (index != drug.getGenericNames().size() - 1)
                         genericNamesFormatted = genericNamesFormatted + GENERIC_NAME_SEPARATOR;
                 }
-            }
-            tvGenericName.setText(genericNamesFormatted);
+                tvGenericName.setText(genericNamesFormatted);
+                tvGenericName.setVisibility(View.VISIBLE);
+            } else
+                tvGenericName.setVisibility(View.GONE);
         }
-
 
         if (!Util.isNullOrEmptyList(objData.getDirection())) {
             DrugDirection direction = objData.getDirection().get(0);

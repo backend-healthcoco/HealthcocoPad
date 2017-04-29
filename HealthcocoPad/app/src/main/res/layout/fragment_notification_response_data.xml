@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/grey_background"
+    android:orientation="vertical">
+
+    <ListView
+        android:id="@+id/lv_notification_response_data"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="1dp"
+        android:paddingLeft="@dimen/emr_item_margin"
+        android:paddingRight="@dimen/emr_item_margin"
+        android:paddingTop="@dimen/emr_item_margin"
+        android:scrollbarStyle="outsideOverlay"
+        android:visibility="visible" />
+
+</LinearLayout>

@@ -748,5 +748,7 @@
     <string name="permission_received">Permissions Received.</string>
     <string name="runtime_permissions_txt">Please enable ALL permissions from app settings.</string>
     <string name="patients">Patients</string>
+    <string name="select_search_type">Select Search Type</string>
+    <string name="manage_clinic_profile">Manage Clinic\'s Profile</string>
 
 </resources>

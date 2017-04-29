@@ -18,7 +18,6 @@
         android:background="@drawable/edit_text_bottom_line_grey_blue_solid_background_selector"
         android:hint="@string/enter_group_name"
         android:padding="10dp"
-        android:singleLine="true"
         android:textSize="@dimen/edit_text_size_dialog" />
 
     <View

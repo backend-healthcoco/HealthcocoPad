@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="3dp"
-        android:gravity="center|start"
+        android:gravity="bottom"
         android:orientation="horizontal">
 
         <LinearLayout
@@ -43,9 +43,9 @@
                     android:id="@+id/tv_drug_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:gravity="start"
                     android:maxLines="1"
-                    android:layout_weight="1"
                     android:paddingBottom="5dp"
                     android:paddingLeft="10dp"
                     android:paddingTop="5dp"
@@ -71,11 +71,12 @@
             android:id="@+id/tv_frequency"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="5dp"
             android:layout_weight="@integer/weight_drugs_items"
             android:background="@drawable/selector_drug_detail_background"
-            android:gravity="center|start"
+            android:gravity="center"
             android:hint="@string/dosage"
-            android:maxLines="1"
             android:paddingBottom="@dimen/padding_item_drug_dosage_top_bottom"
             android:paddingLeft="@dimen/padding_item_drug_dosage_top_bottom"
             android:paddingTop="@dimen/padding_item_drug_dosage_top_bottom"
@@ -85,14 +86,15 @@
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="@integer/weight_drugs_items"
             android:orientation="horizontal">
 
             <com.healthcoco.healthcocopad.custom.MyScriptEditText
                 android:id="@+id/edit_duration"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_marginLeft="5dp"
                 android:layout_weight="1"
                 android:background="@drawable/selector_drug_detail_background"
@@ -109,13 +111,13 @@
 
             <com.healthcoco.healthcocopad.custom.CustomActivatedTextView
                 android:id="@+id/tv_drug_duration_unit"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_marginLeft="5dp"
-                android:layout_weight="1"
                 android:background="@drawable/selector_drug_detail_background"
-                android:gravity="center|start"
-                android:hint="@string/duration_unit"
+                android:gravity="center"
+                android:hint="@string/duration"
                 android:maxLines="1"
                 android:paddingBottom="@dimen/padding_item_drug_dosage_top_bottom"
                 android:paddingLeft="@dimen/padding_item_drug_dosage_top_bottom"
@@ -130,10 +132,11 @@
             android:id="@+id/tv_directions"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginLeft="5dp"
             android:layout_weight="@integer/weight_drugs_items"
             android:background="@drawable/selector_drug_detail_background"
-            android:gravity="center|start"
+            android:gravity="center"
             android:hint="@string/direction"
             android:paddingBottom="@dimen/padding_item_drug_dosage_top_bottom"
             android:paddingLeft="@dimen/padding_item_drug_dosage_top_bottom"

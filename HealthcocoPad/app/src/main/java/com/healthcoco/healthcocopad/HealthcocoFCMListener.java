@@ -97,6 +97,6 @@ public class HealthcocoFCMListener extends FirebaseMessagingService {
     private int getNotificationIcon() {
 //        boolean useWhiteIcon = (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP);
 //        return useWhiteIcon ? R.drawable.img_info_normal : R.drawable.ic_launcher;
-        return R.drawable.arrow_down_drug;
+        return R.drawable.app_icon;
     }
 }

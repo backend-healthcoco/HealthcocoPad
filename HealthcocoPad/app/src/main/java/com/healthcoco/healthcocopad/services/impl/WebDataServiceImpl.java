@@ -13,6 +13,7 @@ import com.healthcoco.healthcocopad.HealthCocoApplication;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.DoctorContactUs;
 import com.healthcoco.healthcocopad.bean.DoctorProfileToSend;
+import com.healthcoco.healthcocopad.bean.NotificationResponse;
 import com.healthcoco.healthcocopad.bean.PersonalHistory;
 import com.healthcoco.healthcocopad.bean.VersionCheckRequest;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
@@ -37,6 +38,7 @@ import com.healthcoco.healthcocopad.bean.server.DrugType;
 import com.healthcoco.healthcocopad.bean.server.GCMRequest;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.Profession;
+import com.healthcoco.healthcocopad.bean.server.Records;
 import com.healthcoco.healthcocopad.bean.server.Reference;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.TempTemplate;
@@ -1020,6 +1022,25 @@ public class WebDataServiceImpl implements GCMRefreshListener {
                     errorListener);
         } else {
             errorListener.onNetworkUnavailable(webServiceType);
+        }
+    }
+
+    public void getNotificationResponseDataDetail(NotificationResponse notificationResponse, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        WebServiceType webServiceType = notificationResponse.getNotificationType().getWebServiceType();
+        checkNetworkStatus(mApp);
+        if (HealthCocoConstants.isNetworkOnline) {
+            String url = webServiceType.getUrl();
+            Class class1 = Object.class;
+            switch (notificationResponse.getNotificationType()) {
+                case REPORTS:
+                    class1 = Records.class;
+                    url = url + notificationResponse.getRi() + HealthCocoConstants.PARAM_TAG_VIEW;
+                    break;
+            }
+            getResponse(webServiceType, class1, url, null, null, responseListener,
+                    errorListener);
+        } else {
+            showUserOffline(webServiceType, responseListener);
         }
     }
 }

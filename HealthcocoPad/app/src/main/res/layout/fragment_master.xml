@@ -90,7 +90,7 @@
                 android:layout_marginRight="5dp"
                 android:layout_weight="1"
                 android:singleLine="true"
-                android:text="Manage Clinic's Profile"
+                android:text="@string/manage_clinic_profile"
                 android:textColor="@color/white"
                 android:textSize="@dimen/text_size_menu_separator_item"
                 android:textStyle="bold" />

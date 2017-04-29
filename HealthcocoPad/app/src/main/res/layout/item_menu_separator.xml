@@ -24,23 +24,23 @@
             style="@style/TextRobotoStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="30dp"
             android:layout_marginRight="5dp"
             android:layout_weight="1"
-            android:text="Manage Clinic's Profile"
             android:singleLine="true"
             android:textColor="@color/white"
             android:textSize="@dimen/text_size_menu_separator_item"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/tv_notif_no"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="5dp"
-            android:text="100+"
-            android:textColor="@color/white"
-            android:textSize="@dimen/text_size_menu_notif_no" />
+        android:id="@+id/tv_notif_no"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="5dp"
+        android:text="100+"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_size_menu_notif_no" />
 
     </LinearLayout>
 </LinearLayout>

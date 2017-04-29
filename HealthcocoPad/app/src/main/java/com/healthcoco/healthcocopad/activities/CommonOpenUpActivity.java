@@ -33,6 +33,7 @@ import com.healthcoco.healthcocopad.fragments.DiseaseListFragment;
 import com.healthcoco.healthcocopad.fragments.FeedbackFragment;
 import com.healthcoco.healthcocopad.fragments.InitialSyncFragment;
 import com.healthcoco.healthcocopad.fragments.LoginSignupFragment;
+import com.healthcoco.healthcocopad.fragments.NotificationResponseDataFragment;
 import com.healthcoco.healthcocopad.fragments.PatientRegistrationFragment;
 import com.healthcoco.healthcocopad.fragments.SettingUIPermissionsFragment;
 import com.healthcoco.healthcocopad.fragments.WebViewFragments;
@@ -149,6 +150,9 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
                 break;
             case ADD_NEW_TEMPLATE:
                 openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_CROSS, ActionbarLeftRightActionTypeDrawables.WITH_SAVE, R.string.new_template, new AddNewTemplateFragment());
+                break;
+            case NOTIFICATION_RESPONSE_DATA:
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, fragmentType.getTitleId(), new NotificationResponseDataFragment());
                 break;
         }
     }
