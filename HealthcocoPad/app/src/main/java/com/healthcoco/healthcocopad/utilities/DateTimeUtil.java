@@ -34,6 +34,10 @@ public class DateTimeUtil {
         return null;
     }
 
+    public static String getFormattedDateTime(String format, long date) {
+        return new SimpleDateFormat(format).format(new Date(date));
+    }
+
     /**
      * @param timeInDayMonthYearFormat : String date in format "dd/MM/yyyy"
      * @return

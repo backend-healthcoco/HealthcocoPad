@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <include layout="@layout/header_appointment_calendar_list" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/list_item_padding"
+            android:layout_marginLeft="@dimen/emr_item_margin"
+            android:layout_marginRight="@dimen/emr_item_margin"
+            android:background="@drawable/shape_emr_item_background"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="@dimen/item_padding">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/drawable_text_padding"
+                    android:drawableStart="@drawable/tab_cal_date_normal_item"
+                    android:gravity="center|start"
+                    android:text="@string/aid"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_emr_date"
+                    android:drawableLeft="@drawable/tab_cal_date_normal_item" />
+
+                <TextView
+                    android:id="@+id/tv_aid"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawablePadding="@dimen/drawable_text_padding"
+                    android:gravity="center|start"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_emr_date" />
+
+                <TextView
+                    android:id="@+id/tv_appointment_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:gravity="center|start"
+                    android:text="@string/cancelled"
+                    android:textAllCaps="false"
+                    android:textColor="@drawable/text_blue_translucent_selector"
+                    android:textSize="@dimen/text_size_emr_date" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="@dimen/layout_margin"
+                android:layout_marginTop="@dimen/item_padding"
+                android:background="@color/grey_background" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center|start"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.25"
+                    android:background="@color/grey_light_divider"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="5dp">
+
+                    <TextView
+                        android:id="@+id/tv_from_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="05:00 AM"
+                        android:textColor="@color/blue_action_bar"
+                        android:textSize="@dimen/text_size_emr_date" />
+
+                    <TextView
+                        android:id="@+id/tv_to_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="07:30 AM"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_emr_date" />
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.75"
+                    android:orientation="vertical"
+                    android:paddingStart="10dp"
+                    android:paddingLeft="10dp">
+
+                    <TextView
+                        android:id="@+id/tv_doctor_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Neha Santani"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_emr_date" />
+
+                    <TextView
+                        android:id="@+id/tv_number"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="9766640300"
+                        android:textColor="@color/grey_dark_text"
+                        android:textSize="@dimen/text_size_emr_date" />
+
+                    <TextView
+                        android:id="@+id/tv_note"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="Note"
+                        android:textColor="@color/grey_dark_text"
+                        android:textSize="@dimen/text_size_emr_date"
+                        android:visibility="gone" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_buttons"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="visible">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginBottom="@dimen/item_padding"
+                    android:layout_marginTop="@dimen/layout_margin"
+                    android:background="@color/grey_background" />
+
+                <LinearLayout
+                    android:id="@+id/container_bottom_options"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:baselineAligned="false"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:id="@+id/bt_reschedule"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:visibility="gone"
+                        android:padding="5dp">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="5dp"
+                            android:background="@drawable/emr_item_reload_selector" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="5dp"
+                            android:background="@color/white"
+                            android:gravity="center|start"
+                            android:text="@string/reschedule"
+                            android:textAllCaps="true"
+                            android:textColor="@drawable/text_selector_grey_blue"
+                            android:textSize="@dimen/text_size_bt_history_edit_sms_email"
+                            android:layout_marginRight="5dp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/bt_confirm"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:padding="5dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@color/white"
+                            android:drawablePadding="5dp"
+                            android:drawableStart="@drawable/emr_item_check_selector"
+                            android:gravity="center|start"
+                            android:text="@string/confirm"
+                            android:textAllCaps="true"
+                            android:textColor="@drawable/text_selector_grey_blue"
+                            android:textSize="@dimen/text_size_bt_history_edit_sms_email"
+                            android:drawableLeft="@drawable/emr_item_check_selector" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/bt_remind"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:padding="5dp"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@color/white"
+                            android:drawablePadding="5dp"
+                            android:drawableStart="@drawable/emr_item_bell_selector"
+                            android:gravity="center|start"
+                            android:text="@string/remind"
+                            android:textAllCaps="true"
+                            android:textColor="@drawable/text_selector_grey_blue"
+                            android:textSize="@dimen/text_size_bt_history_edit_sms_email"
+                            android:drawableLeft="@drawable/emr_item_bell_selector" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/bt_cancel"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:padding="5dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@color/white"
+                            android:drawablePadding="5dp"
+                            android:drawableStart="@drawable/emr_item_cancel_selector"
+                            android:gravity="center|start"
+                            android:text="@string/cancel"
+                            android:textAllCaps="true"
+                            android:textColor="@drawable/text_selector_grey_blue"
+                            android:textSize="@dimen/text_size_bt_history_edit_sms_email"
+                            android:drawableLeft="@drawable/emr_item_cancel_selector" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_discarded"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/list_item_padding"
+            android:layout_marginLeft="@dimen/emr_item_margin"
+            android:layout_marginRight="@dimen/emr_item_margin"
+            android:background="@drawable/shape_rounded_corners_rect_discarded"
+            android:clickable="true"
+            android:orientation="horizontal"
+            android:padding="20dp"
+            android:visibility="visible">
+
+            <TextView
+                android:id="@+id/tv_discarded"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:gravity="center|end"
+                android:text="@string/discarded"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_discarded"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+    </FrameLayout>
+</LinearLayout>
+

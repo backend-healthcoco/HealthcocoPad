@@ -14,8 +14,9 @@ import com.healthcoco.healthcocopad.HealthcocoFCMListener;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.adapter.NotificationResponseDataAdapter;
-import com.healthcoco.healthcocopad.bean.NotificationResponse;
+import com.healthcoco.healthcocopad.bean.server.NotificationResponse;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
+import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.Records;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
@@ -29,6 +30,8 @@ import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimis
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.Util;
+
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 
@@ -54,7 +57,7 @@ public class NotificationResponseDataFragment extends HealthCocoFragment impleme
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Intent intent = mActivity.getIntent();
-        String notificationResponseData = intent.getStringExtra(HealthcocoFCMListener.TAG_NOTIFICATION_RESPONSE);
+        String notificationResponseData = Parcels.unwrap(intent.getParcelableExtra(HealthcocoFCMListener.TAG_NOTIFICATION_RESPONSE));
         if (!Util.isNullOrBlank(notificationResponseData))
             notificationResponse = new Gson().fromJson(notificationResponseData, NotificationResponse.class);
         if (notificationResponse != null) init();
@@ -156,6 +159,13 @@ public class NotificationResponseDataFragment extends HealthCocoFragment impleme
                     }
                     notifyAdapter(response.getData());
                     break;
+                case GET_APPOINTMENT_BY_APPOINTMENT_ID:
+                    if (response.getData() != null && response.getData() instanceof CalendarEvents) {
+                        CalendarEvents record = (CalendarEvents) response.getData();
+                        notificationResponse.setData(record);
+                    }
+                    notifyAdapter(response.getData());
+                    break;
                 default:
                     break;
             }
@@ -169,6 +179,12 @@ public class NotificationResponseDataFragment extends HealthCocoFragment impleme
                 case REPORTS:
                     //break n finish the activity if id is null
                     if (Util.isNullOrBlank(notificationResponse.getRi()))
+                        break;
+                    WebDataServiceImpl.getInstance(mApp).getNotificationResponseDataDetail(notificationResponse, this, this);
+                    return;
+                case APPOINTMENT:
+                    //break n finish the activity if id is null
+                    if (Util.isNullOrBlank(notificationResponse.getAi()))
                         break;
                     WebDataServiceImpl.getInstance(mApp).getNotificationResponseDataDetail(notificationResponse, this, this);
                     return;

@@ -14,7 +14,7 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.google.gson.Gson;
 import com.healthcoco.healthcocopad.activities.SplashScreenActivity;
-import com.healthcoco.healthcocopad.bean.NotificationResponse;
+import com.healthcoco.healthcocopad.bean.server.NotificationResponse;
 import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;

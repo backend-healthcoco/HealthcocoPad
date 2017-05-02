@@ -21,6 +21,8 @@ public enum WebServiceType {
 
     GET_RECORD_BY_RECORD_ID(Method.GET, "records/"),
 
+    GET_APPOINTMENT_BY_APPOINTMENT_ID(Method.GET, "appointment/"),
+
     GET_CONTACTS(Method.GET,
             "contacts/handheld/?discarded=true"),
 

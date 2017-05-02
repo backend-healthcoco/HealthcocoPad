@@ -19,6 +19,7 @@
     <color name="grey_light_divider">#EDEDED</color>
     <color name="white_translucent_forgot_password">#F2ffffff</color>
     <color name="green_logo">#30CA70</color>
+    <color name="green_translucent">#8030CA70</color>
     <color name="login_sign_in_bt">#412533</color>
     <color name="grey_background">#f2f2f2</color>
     <color name="grey_dark_bg">#e4e0e0</color>
@@ -32,4 +33,5 @@
     <color name="orange_translucent">#60FF7700</color>
     <color name="grey_widget_background">#e6e6e6</color>
     <color name="grey_widget_background_translucent">#d9d9d9</color>
+    <color name="grey_header">#F0F0F0</color>
 </resources>

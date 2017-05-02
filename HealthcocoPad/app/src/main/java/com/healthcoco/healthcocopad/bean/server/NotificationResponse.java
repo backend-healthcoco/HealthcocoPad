@@ -1,4 +1,4 @@
-package com.healthcoco.healthcocopad.bean;
+package com.healthcoco.healthcocopad.bean.server;
 
 
 import com.healthcoco.healthcocopad.enums.NotificationContentType;
@@ -32,6 +32,10 @@ public class NotificationResponse {
 
     //represents DoctorId
     private String di;
+
+    //represents AppointmentId
+    private String ai;
+
     private long createdTime;
     @ParcelPropertyConverter(ObjectParcelConvertor.class)
     private Object data;
@@ -114,5 +118,13 @@ public class NotificationResponse {
 
     public void setData(Object data) {
         this.data = data;
+    }
+
+    public String getAi() {
+        return ai;
+    }
+
+    public void setAi(String ai) {
+        this.ai = ai;
     }
 }

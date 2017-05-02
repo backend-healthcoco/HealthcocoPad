@@ -6,10 +6,12 @@ import android.widget.BaseAdapter;
 
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.HealthCocoViewHolder;
-import com.healthcoco.healthcocopad.bean.NotificationResponse;
+import com.healthcoco.healthcocopad.bean.server.NotificationResponse;
+import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
 import com.healthcoco.healthcocopad.bean.server.Records;
 import com.healthcoco.healthcocopad.listeners.CommonEMRItemClickListener;
 import com.healthcoco.healthcocopad.utilities.Util;
+import com.healthcoco.healthcocopad.viewholders.AppointmentsListViewholder;
 import com.healthcoco.healthcocopad.viewholders.ReportsListItemViewHolder;
 
 import java.util.List;
@@ -57,6 +59,13 @@ public class NotificationResponseDataAdapter extends BaseAdapter {
                 holder = new ReportsListItemViewHolder(mActivity, listItemClickListener, true);
                 convertView = holder.getContentView();
                 holder.setData(record);
+                holder.applyData();
+                break;
+            case APPOINTMENT:
+                CalendarEvents calendarEvents = (CalendarEvents) notificationResponse.getData();
+                holder = new AppointmentsListViewholder(mActivity);
+                convertView = holder.getContentView();
+                holder.setData(calendarEvents);
                 holder.applyData();
                 break;
         }

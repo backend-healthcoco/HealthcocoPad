@@ -13,7 +13,8 @@ import com.healthcoco.healthcocopad.HealthCocoApplication;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.DoctorContactUs;
 import com.healthcoco.healthcocopad.bean.DoctorProfileToSend;
-import com.healthcoco.healthcocopad.bean.NotificationResponse;
+import com.healthcoco.healthcocopad.bean.request.AppointmentRequest;
+import com.healthcoco.healthcocopad.bean.server.NotificationResponse;
 import com.healthcoco.healthcocopad.bean.PersonalHistory;
 import com.healthcoco.healthcocopad.bean.VersionCheckRequest;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
@@ -29,6 +30,7 @@ import com.healthcoco.healthcocopad.bean.request.ProfessionalMembershipRequest;
 import com.healthcoco.healthcocopad.bean.request.ProfessionalStatementRequest;
 import com.healthcoco.healthcocopad.bean.request.RegisterNewPatientRequest;
 import com.healthcoco.healthcocopad.bean.request.UserPermissionsRequest;
+import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
 import com.healthcoco.healthcocopad.bean.server.Diagram;
 import com.healthcoco.healthcocopad.bean.server.Disease;
 import com.healthcoco.healthcocopad.bean.server.DoctorClinicProfile;
@@ -1036,7 +1038,36 @@ public class WebDataServiceImpl implements GCMRefreshListener {
                     class1 = Records.class;
                     url = url + notificationResponse.getRi() + HealthCocoConstants.PARAM_TAG_VIEW;
                     break;
+                case APPOINTMENT:
+                    class1 = CalendarEvents.class;
+                    url = url + notificationResponse.getAi() + HealthCocoConstants.PARAM_TAG_VIEW;
+                    break;
             }
+            getResponse(webServiceType, class1, url, null, null, responseListener,
+                    errorListener);
+        } else {
+            showUserOffline(webServiceType, responseListener);
+        }
+    }
+
+    public void addAppointment(Class<?> class1, AppointmentRequest appointment,
+                               Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        WebServiceType webServiceType = WebServiceType.ADD_APPOINTMENT;
+        checkNetworkStatus(mApp);
+        if (HealthCocoConstants.isNetworkOnline) {
+            String url = webServiceType.getUrl();
+            getResponse(webServiceType, class1, url, appointment, null, responseListener,
+                    errorListener);
+        } else {
+            showUserOffline(webServiceType, responseListener);
+        }
+    }
+
+    public void sendReminder(Class<Boolean> class1, String appointmentId, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        WebServiceType webServiceType = WebServiceType.SEND_REMINDER;
+        checkNetworkStatus(mApp);
+        if (HealthCocoConstants.isNetworkOnline) {
+            String url = webServiceType.getUrl() + appointmentId;
             getResponse(webServiceType, class1, url, null, null, responseListener,
                     errorListener);
         } else {
