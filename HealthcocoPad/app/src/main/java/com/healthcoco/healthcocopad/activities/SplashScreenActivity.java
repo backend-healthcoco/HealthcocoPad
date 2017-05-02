@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.graphics.Point;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Process;
@@ -83,18 +84,18 @@ public class SplashScreenActivity extends HealthCocoActivity implements GsonRequ
      */
     private void init() {
         Util.checkNetworkStatus(this);
-//        if (HealthCocoConstants.isNetworkOnline) {
-//            checkVersion();
-//        } else {
-        handler = new Handler();
-        runnable = new Runnable() {
-            @Override
-            public void run() {
-                launchNextActivity();
-            }
-        };
-        handler.postDelayed(runnable, SPLASH_TIME);
-//        }
+        if (HealthCocoConstants.isNetworkOnline) {
+            checkVersion();
+        } else {
+            handler = new Handler();
+            runnable = new Runnable() {
+                @Override
+                public void run() {
+                    launchNextActivity();
+                }
+            };
+            handler.postDelayed(runnable, SPLASH_TIME);
+        }
     }
 
     /**
@@ -220,12 +221,12 @@ public class SplashScreenActivity extends HealthCocoActivity implements GsonRequ
 
     private void openPlayStore() {
         final String appPackageName = getPackageName(); // getPackageName() from Context or Activity object
-//        try {
-//            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
-//        } catch (android.content.ActivityNotFoundException anfe) {
-//            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + appPackageName)));
-//        }
-        launchNextActivity();
+        try {
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+        } catch (android.content.ActivityNotFoundException anfe) {
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + appPackageName)));
+        }
+//        launchNextActivity();
     }
 
     @Override

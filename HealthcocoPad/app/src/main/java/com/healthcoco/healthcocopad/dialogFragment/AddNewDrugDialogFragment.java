@@ -90,7 +90,7 @@ public class AddNewDrugDialogFragment extends HealthCocoDialogFragment
     public void onActivityCreated(Bundle arg0) {
         super.onActivityCreated(arg0);
         init();
-        setWidthHeight(0.60, 0.60);
+        setWidthHeight(0.55, 0.60);
     }
 
     @Override

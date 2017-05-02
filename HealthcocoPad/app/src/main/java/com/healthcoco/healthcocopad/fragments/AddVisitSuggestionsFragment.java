@@ -367,7 +367,6 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements
                         newDrugDialogFragment.show(mActivity.getSupportFragmentManager(),
                                 newDrugDialogFragment.getClass().getSimpleName());
                         break;
-
                     default:
                         break;
                 }
@@ -459,11 +458,16 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements
         tvHeaderTitle.setText(suggestionType.getHeaderTitleId());
         switch (suggestionType) {
             case LAB_TESTS:
+                parentEditSearchView.setVisibility(View.VISIBLE);
+                btAddNew.setVisibility(View.GONE);
+                break;
             case DRUGS:
                 parentEditSearchView.setVisibility(View.VISIBLE);
+                btAddNew.setVisibility(View.VISIBLE);
                 break;
             default:
                 parentEditSearchView.setVisibility(View.GONE);
+                btAddNew.setVisibility(View.GONE);
                 break;
         }
     }
