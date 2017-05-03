@@ -64,4 +64,9 @@
     <string name="fa_keyboard">&#xf11c;</string>
     <string name="fa_arrow_left">&#xf060;</string>
     <string name="fa_arrow_right">&#xf061;</string>
+    <string name="fa_bell_hollow">&#xf0a2;</string>
+    <string name="notify_doctor_via">&#xf0a2; Notify Doctor Via</string>
+    <string name="notify_patient_via">&#xf0a2; Notify Patient Via</string>
+    <string name="text_check_in_square_sms">&#xf046;&#160;SMS&#160;</string>
+    <string name="text_check_in_sqaure_email">&#xf046;&#160;Email&#160;</string>
 </resources>

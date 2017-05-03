@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/item_drop_down"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:gravity="center"
+    android:orientation="horizontal">
+
+    <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+        android:id="@+id/tv_bullet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:gravity="center|start"
+        android:paddingLeft="10dp"
+        android:text="@string/bullet"
+        android:textColor="@drawable/text_enabled_disabled_green_red_selector"
+        android:textSize="@dimen/text_size_spinner_drop_down" />
+
+    <TextView
+        android:id="@+id/tv_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center|start"
+        android:padding="10dp"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size_spinner_drop_down" />
+</LinearLayout>

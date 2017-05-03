@@ -44,9 +44,10 @@ public enum CommonOpenUpFragmentType {
     NOTIFICATION_RESPONSE_DATA(R.string.notification_details),
     ADD_VISITS(0),
     SELECT_DIAGRAM(R.string.diagrams),
-    SELECTED_DIAGRAM_DETAIL(0);
+    SELECTED_DIAGRAM_DETAIL(0), BOOK_APPOINTMENT(R.string.book),CONTACTS_LIST(R.string.my_patients),;
 
     private final int titleId;
+
 
     CommonOpenUpFragmentType(int titleId) {
         this.titleId = titleId;

@@ -27,6 +27,7 @@ import com.healthcoco.healthcocopad.enums.SuggestionType;
 import com.healthcoco.healthcocopad.enums.VisitedForType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.enums.WeekDayNameType;
+import com.healthcoco.healthcocopad.fragments.CalendarFragment;
 import com.healthcoco.healthcocopad.fragments.ClinicalProfileFragment;
 import com.healthcoco.healthcocopad.fragments.MenuDrawerFragment;
 import com.healthcoco.healthcocopad.fragments.PatientRegistrationFragment;
@@ -3426,5 +3427,142 @@ public class LocalDataServiceImpl {
             showErrorLocal(volleyResponseBean, errorListener);
         }
         return volleyResponseBean;
+    }
+
+    private void deleteWorkingHoursIfAlreadyPresent(String key, String value) {
+        WorkingHours.deleteAll(WorkingHours.class, key + "= ?", value);
+    }
+
+    public void addAppointmentsList(ArrayList<CalendarEvents> list) {
+        if (!Util.isNullOrEmptyList(list))
+            for (CalendarEvents appointment :
+                    list) {
+                addAppointment(appointment);
+            }
+    }
+
+    public void addAppointment(CalendarEvents appointment) {
+        deleteWorkingHoursIfAlreadyPresent(LocalDatabaseUtils.KEY_FOREIGN_TABLE_ID, appointment.getUniqueId());
+        if (appointment.getTime() != null) {
+            addWorkingHour(CalendarEvents.class.getSimpleName(), appointment.getUniqueId(), appointment.getTime());
+        }
+        if (appointment.getPatient() != null) {
+            appointment.setPatientId(appointment.getPatient().getUserId());
+        }
+        appointment.save();
+    }
+
+    public VolleyResponseBean getAppointmentsListResponsePageWise(WebServiceType webServiceType, boolean isOtpVerified, String doctorId, String hospitalId, String locationId,
+                                                                  String selectedPatientId, int pageNum, int maxSize,
+                                                                  Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
+        volleyResponseBean.setWebServiceType(webServiceType);
+        volleyResponseBean.setIsDataFromLocal(true);
+        volleyResponseBean.setIsUserOnline(HealthCocoConstants.isNetworkOnline);
+        try {
+            List<CalendarEvents> list = getAppointmentsListPageWise(isOtpVerified, doctorId, locationId, hospitalId, pageNum, maxSize, selectedPatientId);
+            volleyResponseBean.setDataList(getObjectsListFromMap(list));
+            if (responseListener != null)
+                responseListener.onResponse(volleyResponseBean);
+        } catch (Exception e) {
+            e.printStackTrace();
+            showErrorLocal(volleyResponseBean, errorListener);
+        }
+        return volleyResponseBean;
+    }
+
+    private List<CalendarEvents> getAppointmentsListPageWise(boolean isOtpVerified, String doctorId, String locationId, String hospitalId, int pageNum, int maxSize, String selectedPatientId) {
+
+        String whereCondition = "Select * from " + StringUtil.toSQLName(CalendarEvents.class.getSimpleName())
+                + " where "
+                + LocalDatabaseUtils.KEY_PATIENT_ID + "=\"" + selectedPatientId + "\"";
+        whereCondition = whereCondition + " AND "
+                + LocalDatabaseUtils.KEY_DOCTOR_ID + "=\"" + doctorId + "\""
+                + " AND "
+                + LocalDatabaseUtils.KEY_HOSPITAL_ID + "=\"" + hospitalId + "\""
+                + " AND "
+                + LocalDatabaseUtils.KEY_LOCATION_ID + "=\"" + locationId + "\"";
+        String conditionsLimit = " ORDER BY " + LocalDatabaseUtils.KEY_FROM_DATE + " DESC "
+                + " LIMIT " + maxSize
+                + " OFFSET " + (pageNum * maxSize);
+
+        whereCondition = whereCondition + conditionsLimit;
+        LogUtils.LOGD(TAG, "Select Query " + whereCondition);
+        List<CalendarEvents> list = SugarRecord.findWithQuery(CalendarEvents.class, whereCondition);
+        if (!Util.isNullOrEmptyList(list)) {
+            for (CalendarEvents appointment : list) {
+                if (!Util.isNullOrBlank(appointment.getPatientId()))
+                    getAppointDetail(appointment);
+            }
+            return list;
+        }
+        return null;
+    }
+
+    private void getAppointDetail(CalendarEvents appointment) {
+        appointment.setTime((WorkingHours) getObject(WorkingHours.class, LocalDatabaseUtils.KEY_FOREIGN_TABLE_ID, appointment.getUniqueId()));
+        appointment.setPatient(getPatientCard(appointment.getPatientId()));
+    }
+
+    private PatientCard getPatientCard(String patientId) {
+        Select<PatientCard> selectQuery = Select.from(PatientCard.class)
+                .where(Condition.prop(LocalDatabaseUtils.KEY_USER_ID).eq(patientId));
+        PatientCard patientCard = selectQuery.first();
+        if (patientCard != null)
+            patientCard.setUser(Select.from(User.class)
+                    .where(Condition.prop(LocalDatabaseUtils.KEY_UNIQUE_ID).eq(patientId)).first());
+        return patientCard;
+    }
+
+    public CalendarEvents getAppointment(String appointmentId) {
+        Select<CalendarEvents> selectQuery;
+        selectQuery = Select.from(CalendarEvents.class)
+                .where(Condition.prop(LocalDatabaseUtils.KEY_APPOINTMENT_ID).eq(appointmentId));
+        CalendarEvents calendarEvents = selectQuery.first();
+        if (calendarEvents != null) {
+            getAppointDetail(calendarEvents);
+        }
+        return calendarEvents;
+    }
+
+    public void addCalendarEventsUpdated(CalendarEvents calendarEvents) {
+        calendarEvents.setIsFromCalendarAPI(true);
+        if (calendarEvents.getFromDate() != null)
+            calendarEvents.setFromDateFormattedMillis(DateTimeUtil.getLongFromFormattedDayMonthYearFormatString(CalendarFragment.MONTH_FORMAT_FOR_THIS_SCREEN,
+                    DateTimeUtil.getFormattedDateTime(CalendarFragment.MONTH_FORMAT_FOR_THIS_SCREEN, calendarEvents.getFromDate())));
+        if (calendarEvents.getToDate() != null)
+            calendarEvents.setToDateFormattedMillis(DateTimeUtil.getLongFromFormattedDayMonthYearFormatString(CalendarFragment.MONTH_FORMAT_FOR_THIS_SCREEN,
+                    DateTimeUtil.getFormattedDateTime(CalendarFragment.MONTH_FORMAT_FOR_THIS_SCREEN, calendarEvents.getToDate())));
+        if (calendarEvents.getFromDate() != null && calendarEvents.getToDate() != null && !(calendarEvents.getFromDate().equals(calendarEvents.getToDate()))) {
+            addMultipledayEvent(calendarEvents);
+        }
+
+        deleteWorkingHoursIfAlreadyPresent(LocalDatabaseUtils.KEY_FOREIGN_TABLE_ID, calendarEvents.getUniqueId());
+        if (calendarEvents.getTime() != null) {
+            addWorkingHour(CalendarEvents.class.getSimpleName(), calendarEvents.getUniqueId(), calendarEvents.getTime());
+        }
+        if (calendarEvents.getPatient() != null) {
+            calendarEvents.setPatientId(calendarEvents.getPatient().getUserId());
+            addPatientCard(calendarEvents.getPatient());
+        }
+        calendarEvents.save();
+    }
+
+    private void addPatientCard(PatientCard patient) {
+        if (patient != null && patient.getUser() != null) {
+            patient.getUser().save();
+            patient.save();
+        }
+    }
+
+    private void addMultipledayEvent(CalendarEvents calendarEvents) {
+        List<Long> formattedDatesBetween = DateTimeUtil.getFormattedDatesBetween(calendarEvents.getFromDate(), calendarEvents.getToDate());
+        if (!Util.isNullOrEmptyList(formattedDatesBetween))
+            for (Long fromDate :
+                    formattedDatesBetween) {
+                MultipleDayEventTable multipleDayEventTable = new MultipleDayEventTable(calendarEvents.getAppointmentId(), fromDate, calendarEvents.getToDate());
+                multipleDayEventTable.save();
+            }
+
     }
 }

@@ -2,14 +2,18 @@ package com.healthcoco.healthcocopad.utilities;
 
 import android.text.format.DateFormat;
 import android.text.format.DateUtils;
+import android.widget.TextView;
 
 import com.healthcoco.healthcocopad.bean.DOB;
 import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
 import com.healthcoco.healthcocopad.dialogFragment.AddEditClinicHoursDialogFragment;
+import com.healthcoco.healthcocopad.fragments.CalendarFragment;
 
 import java.sql.Date;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -19,6 +23,8 @@ public class DateTimeUtil {
     protected static final String TAG = CalendarEvents.class.getSimpleName();
     private static final String DATE_FORMAT_DAY_MONTH_YEAR_SLASH = "dd/MM/yyyy";
     public static final String YEAR_FORMAT = "yyyy";
+    public static final String DATE_FORMAT_WEEKDAY_DAY_MONTH_AS_TEXT_YEAR_DASH = "EEE, MMM dd,yyyy";
+    public static final String DATE_TIME_FORMAT_WEEKDAY_DAY_MONTH_AS_TEXT_YEAR_DASH = "EEE, MMM dd,yyyy hh:mm aaa";
 
     /**
      * in YY format for year
@@ -146,6 +152,24 @@ public class DateTimeUtil {
             delta *= -1;
             return "";
         }
+    }
+
+    public static Calendar setCalendarDefaultvalue(String format, Calendar calendar, TextView textView) {
+        Calendar cal = Calendar.getInstance();
+        String displayedDate = Util.getValidatedValueOrNull(textView);
+        //will set the time if displayedDate is no null
+        //or elsewill return the current date in Calendar object
+        if (!Util.isNullOrBlank(displayedDate)) {
+            long timeInMillis = 0;
+            try {
+                SimpleDateFormat sdf = new SimpleDateFormat(format);
+                timeInMillis = sdf.parse(displayedDate).getTime();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            cal.setTime(new Date(timeInMillis));
+        }
+        return cal;
     }
 
     public static Calendar setCalendarDefaultvalue(Calendar calendar, String timeInDayMonthYearFormat) {
@@ -302,4 +326,56 @@ public class DateTimeUtil {
         String currentDateTime = sdf.format(c.getTime());
         return currentDateTime;
     }
+
+    public static List<Long> getFormattedDatesBetween(Long fromMilli, Long toMilli) {
+        List<Long> dates = new ArrayList<>();
+        Date fromDate = new Date(fromMilli);
+        Date toDate = new Date(toMilli);
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(fromDate);
+        LogUtils.LOGD(TAG, "getConvertedLong foratted dates cal.getTime().getTime() " + getFormattedDateTime(DATE_TIME_FORMAT_WEEKDAY_DAY_MONTH_AS_TEXT_YEAR_DASH, cal.getTime().getTime()));
+        LogUtils.LOGD(TAG, "getConvertedLong foratted dates toMilli " + getFormattedDateTime(DATE_TIME_FORMAT_WEEKDAY_DAY_MONTH_AS_TEXT_YEAR_DASH, toMilli));
+        LogUtils.LOGD(TAG, "getConvertedLong foratted dates fromMilli " + getFormattedDateTime(DATE_TIME_FORMAT_WEEKDAY_DAY_MONTH_AS_TEXT_YEAR_DASH, fromMilli));
+
+        long diff = Math.abs(toMilli - fromMilli);
+        int totalNumberOfDaysBetween = (int) TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+        LogUtils.LOGD(TAG, "getConvertedLong totalNumberOfDaysBetween " + totalNumberOfDaysBetween);
+        LogUtils.LOGD(TAG, "getConvertedLong Days: " + totalNumberOfDaysBetween);
+        while ((cal.getTime().before(toDate) || cal.getTime().equals(toDate)) && totalNumberOfDaysBetween > 0 && totalNumberOfDaysBetween < CalendarFragment.MAX_NUMBER_OF_EVENTS) {
+            LogUtils.LOGD(TAG, "getConvertedLong Date between " + cal.getTime().getTime() + " Formatted value " + getFormattedDateTime(DATE_TIME_FORMAT_WEEKDAY_DAY_MONTH_AS_TEXT_YEAR_DASH, cal.getTime().getTime()));
+            dates.add(cal.getTime().getTime());
+            cal.add(Calendar.DATE, 1);
+        }
+        return dates;
+    }
+
+    public static Float getMinutesFromFormattedDateime(String format, String formattedTime) {
+        try {
+            SimpleDateFormat originalFormat = new SimpleDateFormat(format);
+            try {
+                float totalMinutes = 0;
+                java.util.Date date = originalFormat.parse(formattedTime);
+                System.out.println("Old Format :   " + originalFormat.format(date));
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(date);
+                int hours = calendar.get(Calendar.HOUR_OF_DAY);
+                int minutes = calendar.get(Calendar.MINUTE);
+                int seconds = calendar.get(Calendar.SECOND);
+                totalMinutes = (hours * 60) + minutes + (seconds / 60);
+                return totalMinutes;
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static String getFormattedTime(String format, int year, int monthOfYear, int dayOfMonth, int hour, int minute, int seconds) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, monthOfYear, dayOfMonth, hour, minute, seconds);
+        return (String) DateFormat.format(format, calendar.getTime());
+    }
+
 }

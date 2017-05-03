@@ -173,7 +173,7 @@ public class AutoCompleteTextViewAdapter extends ArrayAdapter<Object> {
             case AVAILABLE_BOOKED_APPOINTMENTS:
 //                if (object instanceof AvailableTimeSlots) {
 //                    AvailableTimeSlots availableTimeSlots = (AvailableTimeSlots) object;
-//                    text = DateTimeUtil.convertFormattedDate(DateTimeUtil.TIME_FORMAT_24_HOUR, BookAppointmentFragment.TIME_SLOT_FORMAT_USED_IN_THIS_SCREEN, availableTimeSlots.getTime());
+//                    text = DateTimeUtil.convertFormattedDate(DateTimeUtil.TIME_FORMAT_24_HOUR, BookAppointmentDialogFragment.TIME_SLOT_FORMAT_USED_IN_THIS_SCREEN, availableTimeSlots.getTime());
 //                    if (view != null)
 //                        if (availableTimeSlots.getIsAvailable() != null && availableTimeSlots.getIsAvailable()) {
 //                            Util.enableAllChildViews(view, true);

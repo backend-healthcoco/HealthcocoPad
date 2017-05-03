@@ -2,15 +2,21 @@ package com.healthcoco.healthcocopad.bean.server;
 
 import com.healthcoco.healthcocopad.enums.AppointmentStatusType;
 import com.healthcoco.healthcocopad.enums.AppointmentType;
+import com.healthcoco.healthcocopad.fragments.PatientAppointmentDetailFragment;
+import com.healthcoco.healthcocopad.skscustomclasses.CustomListData;
 import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
+import com.healthcoco.healthcocopad.utilities.Util;
 import com.orm.SugarRecord;
 import com.orm.annotation.Ignore;
 import com.orm.annotation.Unique;
 
 import org.parceler.Parcel;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 /**
  * Created by neha on 11/05/16.
@@ -45,12 +51,12 @@ public class CalendarEvents extends SugarRecord {
     private String subject;
     private Boolean isFeedbackAvailable;
     private Boolean isRescheduled;
-//    @Ignore
-//    private PatientCard patient;
+    @Ignore
+    private PatientCard patient;
     private String patientId;
     private Boolean isFromCalendarAPI;
 
-//    protected static LinkedHashMap<String, CustomListData> customListDataHashMap = new LinkedHashMap<>();
+    protected static LinkedHashMap<String, CustomListData> customListDataHashMap = new LinkedHashMap<>();
     protected Boolean isSelected;
     protected Boolean isStartDate;
     protected Boolean isEndDate;
@@ -286,20 +292,6 @@ public class CalendarEvents extends SugarRecord {
     }
 
     public Long getFromDate() {
-//        try {
-//            Calendar calendarFromDate = Calendar.getInstance();
-//            calendarFromDate.setTimeInMillis(fromDate);
-//
-//            Calendar FromTime = Calendar.getInstance();
-//            FromTime.setTimeInMillis(DateTimeUtil.getFormattedTime(time.getFromTime()));
-//
-//            calendarFromDate.set(Calendar.HOUR_OF_DAY, calendarFromDate.get(Calendar.HOUR_OF_DAY));
-//            calendarFromDate.set(Calendar.MINUTE, calendarFromDate.get(Calendar.MINUTE));
-//            calendarFromDate.set(Calendar.SECOND, calendarFromDate.get(Calendar.SECOND));
-//            return calendarFromDate.getTimeInMillis();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
         return fromDate;
     }
 
@@ -371,13 +363,13 @@ public class CalendarEvents extends SugarRecord {
         this.isRescheduled = isRescheduled;
     }
 
-//    public PatientCard getPatient() {
-//        return patient;
-//    }
-//
-//    public void setPatient(PatientCard patient) {
-//        this.patient = patient;
-//    }
+    public PatientCard getPatient() {
+        return patient;
+    }
+
+    public void setPatient(PatientCard patient) {
+        this.patient = patient;
+    }
 
     public String getPatientId() {
         return patientId;
@@ -386,178 +378,6 @@ public class CalendarEvents extends SugarRecord {
     public void setPatientId(String patientId) {
         this.patientId = patientId;
     }
-
-//    public static ArrayList<CustomListData> getSectionedDataListCalendar(long selectedTimeMillis, List<CalendarEvents> list) {
-//        customListDataHashMap = new LinkedHashMap<>();
-//        LogUtils.LOGD(TAG, "getSectionedDataListCalendar  loading Start");
-//        for (CalendarEvents calendarEvents :
-//                list) {
-//            if (CalendarFragment.asyncTask != null && !CalendarFragment.asyncTask.isCancelled()) {
-//                String formattedFromDayHeader = DateTimeUtil.getFormattedDateTime(CalendarFragment.DATE_FORMAT_FOR_HEADER_IN_THIS_SCREEN, calendarEvents.getFromDate());
-//                String formattedToDayHeader = DateTimeUtil.getFormattedDateTime(CalendarFragment.DATE_FORMAT_FOR_HEADER_IN_THIS_SCREEN, calendarEvents.getToDate());
-////                if (calendarEvents.getFromDate() != null && calendarEvents.getToDate() != null && !(calendarEvents.getFromDate().equals(calendarEvents.getToDate()))) {
-////                    List<String> formattedDatesBetween = getFormattedDatesBetween(CalendarFragment.DATE_FORMAT_FOR_HEADER_IN_THIS_SCREEN,
-////                            DateTimeUtil.getConvertedLong(CalendarFragment.MONTH_FORMAT_FOR_THIS_SCREEN, selectedTimeMillis),
-////                            CalendarFragment.MONTH_FORMAT_FOR_THIS_SCREEN,
-////                            calendarEvents.getFromDate(), calendarEvents.getToDate());
-////
-////                    if (!Util.isNullOrEmptyList(formattedDatesBetween)) {
-////                        LogUtils.LOGD(TAG, "formattedDatesBetween size " + formattedDatesBetween.size());
-////                        for (String date :
-////                                formattedDatesBetween) {
-////                            if (CalendarFragment.asyncTask != null && !CalendarFragment.asyncTask.isCancelled()) {
-////                                try {
-////                                    CalendarEvents updatedCalendarEvent = new CalendarEvents();
-////                                    ReflectionUtil.copy(updatedCalendarEvent, calendarEvents);
-////                                    LogUtils.LOGD(TAG, "formattedDatesBetween date " + date + " ID " + updatedCalendarEvent.getAppointmentId());
-////                                    String formattedHeaderNew = date;
-////                                    updatedCalendarEvent.setFromDate(DateTimeUtil.getLongFromFormattedDayMonthYearFormatString(CalendarFragment.DATE_FORMAT_FOR_HEADER_IN_THIS_SCREEN, formattedHeaderNew));
-////                                    updatedCalendarEvent.setToDate(DateTimeUtil.getLongFromFormattedDayMonthYearFormatString(CalendarFragment.DATE_FORMAT_FOR_HEADER_IN_THIS_SCREEN, formattedHeaderNew));
-////
-////                                    String formattedFromDate = DateTimeUtil.getFormattedDateTime(CalendarFragment.DATE_FORMAT_FOR_HEADER_IN_THIS_SCREEN, updatedCalendarEvent.getFromDate());
-////                                    if (formattedFromDate.equals(formattedFromDayHeader)) {
-////                                        updatedCalendarEvent.setIsStartDate(true);
-////                                        calendarEvents.setIsStartDate(true);
-////                                    } else
-////                                        updatedCalendarEvent.setIsStartDate(false);
-////                                    if (formattedToDayHeader.equals(formattedHeaderNew)) {
-////                                        updatedCalendarEvent.setIsEndDate(true);
-////                                        calendarEvents.setIsEndDate(true);
-////                                    } else
-////                                        updatedCalendarEvent.setIsEndDate(false);
-////                                    if (!updatedCalendarEvent.getIsStartDate() && !updatedCalendarEvent.getIsEndDate())
-////                                        updatedCalendarEvent.setIsAllDayEvent(true);
-////                                    formCustomListDataHashMap(formattedHeaderNew, updatedCalendarEvent);
-////                                } catch (Exception e) {
-////                                    e.printStackTrace();
-////                                }
-////                            } else {
-////                                break;
-////                            }
-////                        }
-////
-////                    }
-////                }
-//                // false :  if the selected month is June and fromdate is May, true : otherwise
-//                if (DateTimeUtil.getFormattedDateTime(CalendarFragment.MONTH_FORMAT_FOR_THIS_SCREEN, selectedTimeMillis)
-//                        .equals(DateTimeUtil.getFormattedDateTime(CalendarFragment.MONTH_FORMAT_FOR_THIS_SCREEN, calendarEvents.getFromDate())))
-//                    formCustomListDataHashMap(formattedFromDayHeader, calendarEvents);
-//            } else {
-//                break;
-//            }
-//        }
-//        LogUtils.LOGD(TAG, "getSectionedDataListCalendar  loading Complete");
-//        String selectedFormattedDate = DateTimeUtil.getFormattedDateTime(CalendarFragment.DATE_FORMAT_FOR_HEADER_IN_THIS_SCREEN, selectedTimeMillis);
-//        if (selectedFormattedDate != null
-//                && (selectedFormattedDate.equals(DateTimeUtil.getCurrentFormattedDate(CalendarFragment.DATE_FORMAT_FOR_HEADER_IN_THIS_SCREEN)))
-//                && customListDataHashMap.get(selectedFormattedDate) != null) {
-//            CalendarFragment.isSelectedPositionSet = false;
-//            CustomListData customListData = customListDataHashMap.get(selectedFormattedDate);
-//            LinkedHashMap<String, Object> hashMap = customListData.getHeaderDataListHashMap();
-//            LinkedHashMap<String, Object> hashMapUpdated = new LinkedHashMap<>();
-//            if (!Util.isNullOrEmptyList(hashMap)) {
-//                for (Object o :
-//                        hashMap.values()) {
-//                    if (o instanceof CalendarEvents) {
-//                        try {
-//                            CalendarEvents calendarEvents = new CalendarEvents();
-//                            ReflectionUtil.copy(calendarEvents, (CalendarEvents) o);
-//                            String formattedHeader = DateTimeUtil.getFormattedDateTime(CalendarFragment.DATE_FORMAT_FOR_HEADER_IN_THIS_SCREEN, calendarEvents.getFromDate());
-//                            LogUtils.LOGD(TAG, "iSSelected date " + formattedHeader);
-//                            calendarEvents.setIsSelected(true);
-//                            hashMapUpdated.put(calendarEvents.getUniqueId(), calendarEvents);
-//                        } catch (Exception e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                }
-//                customListData.setHeaderDataListHashMap(hashMapUpdated);
-//                customListDataHashMap.put(selectedFormattedDate, customListData);
-//            }
-//        }
-//        return new ArrayList<>(customListDataHashMap.values());
-//    }
-
-//    private static void formCustomListDataHashMap(String formattedHeader, CalendarEvents events) {
-//        try {
-//            CalendarEvents calendarEvents = new CalendarEvents();
-//            ReflectionUtil.copy(calendarEvents, events);
-//            CustomListData customListData = new CustomListData();
-//            LinkedHashMap<String, Object> headersListHashMap = null;
-//            if (customListDataHashMap.get(formattedHeader) != null) {
-//                customListData = customListDataHashMap.get(formattedHeader);
-//                headersListHashMap = customListData.getHeaderDataListHashMap();
-//            }
-//
-//            if (headersListHashMap == null)
-//                headersListHashMap = new LinkedHashMap<>();
-//            headersListHashMap.put(calendarEvents.getUniqueId(), (Object) calendarEvents);
-//            customListData.setHeader(formattedHeader);
-//            customListData.setHeaderDataListHashMap(headersListHashMap);
-//            customListDataHashMap.put(formattedHeader, customListData);
-//
-////            sorting calendarItems inside hashmap
-//            if (!Util.isNullOrEmptyList(headersListHashMap))
-//                Collections.sort(Arrays.asList(headersListHashMap.values()), ComparatorUtil.calendarEventsFromDateComparator);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
-
-//    public static List<String> getFormattedDatesBetween(String headerFormat, long selectedTimeMillis, String selectedTimeFormat, Long fromMilli, Long toMilli) {
-//        List<String> dates = new ArrayList<>();
-//        Date fromDate = new Date(fromMilli);
-//        Date toDate = new Date(toMilli);
-//        Date selectedDate = new Date(selectedTimeMillis);
-//        Calendar cal = Calendar.getInstance();
-//        cal.setTime(fromDate);
-//        while (cal.getTime().before(toDate) || cal.getTime().equals(toDate)) {
-//            Date calDatInSelectedDateFormat = getFormattedDate(selectedTimeFormat, cal.getTime().getTime());
-//            if (calDatInSelectedDateFormat.equals(selectedDate)) {
-//                dates.add(DateTimeUtil.getFormattedDateTime(headerFormat, cal.getTime().getTime()));
-//            }
-//            cal.add(Calendar.DATE, 1);
-//        }
-//        return dates;
-//    }
-
-//    private static Date getFormattedDate(String format, Long fromMilli) {
-//        try {
-//            return new Date(DateTimeUtil.getLongFromFormattedDayMonthYearFormatString(format, DateTimeUtil.getFormattedDateTime(format, fromMilli)));
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        return null;
-//    }
-
-//    public static ArrayList<CustomListData> getSectionedDataAppointment(List<CalendarEvents> list) {
-//        ArrayList<CustomListData> sksListData = new ArrayList<CustomListData>();
-//        String currentHeader = "";
-//        List<CalendarEvents> headerDataList = null;
-//        CustomListData currentCustomListData = null;
-//        if (!Util.isNullOrEmptyList(list)) {
-//            for (CalendarEvents appointment : list) {
-//                String formattedCreatedTime = DateTimeUtil.getFormattedDateTime(AppointmentFragment.DATE_FORMAT_USED_IN_THIS_SCREEN, appointment.getFromDate());
-//                if (!currentHeader.equalsIgnoreCase(formattedCreatedTime)) {
-//                    if (currentCustomListData != null && headerDataList != null) {
-//                        currentCustomListData.setHeaderDataList(headerDataList);
-//                        sksListData.add(currentCustomListData);
-//                    }
-//                    currentCustomListData = new CustomListData();
-//                    headerDataList = new ArrayList<CalendarEvents>();
-//                    currentHeader = formattedCreatedTime;
-//                    currentCustomListData.setHeader("" + currentHeader);
-//                    headerDataList.add(appointment);
-//                } else
-//                    headerDataList.add(appointment);
-//            }
-//            if (currentCustomListData != null) {
-//                currentCustomListData.setHeaderDataList(headerDataList);
-//                sksListData.add(currentCustomListData);
-//            }
-//        }
-//        return sksListData;
-//    }
 
     public Boolean getIsFromCalendarAPI() {
         if (isFromCalendarAPI == null)
@@ -592,5 +412,34 @@ public class CalendarEvents extends SugarRecord {
                 DateTimeUtil.getHoursFromMinutes(Math.round(time.getFromTime())), DateTimeUtil.getMinutes(Math.round(time.getFromTime())));
         LogUtils.LOGD(TAG, "TimeInMillis " + calendar.getTimeInMillis());
         return calendar.getTimeInMillis();
+    }
+
+    public static ArrayList<CustomListData> getSectionedDataAppointment(List<CalendarEvents> list) {
+        ArrayList<CustomListData> sksListData = new ArrayList<CustomListData>();
+        String currentHeader = "";
+        List<CalendarEvents> headerDataList = null;
+        CustomListData currentCustomListData = null;
+        if (!Util.isNullOrEmptyList(list)) {
+            for (CalendarEvents appointment : list) {
+                String formattedCreatedTime = DateTimeUtil.getFormattedDateTime(PatientAppointmentDetailFragment.DATE_FORMAT_USED_IN_THIS_SCREEN, appointment.getFromDate());
+                if (!currentHeader.equalsIgnoreCase(formattedCreatedTime)) {
+                    if (currentCustomListData != null && headerDataList != null) {
+                        currentCustomListData.setHeaderDataList(headerDataList);
+                        sksListData.add(currentCustomListData);
+                    }
+                    currentCustomListData = new CustomListData();
+                    headerDataList = new ArrayList<CalendarEvents>();
+                    currentHeader = formattedCreatedTime;
+                    currentCustomListData.setHeader("" + currentHeader);
+                    headerDataList.add(appointment);
+                } else
+                    headerDataList.add(appointment);
+            }
+            if (currentCustomListData != null) {
+                currentCustomListData.setHeaderDataList(headerDataList);
+                sksListData.add(currentCustomListData);
+            }
+        }
+        return sksListData;
     }
 }

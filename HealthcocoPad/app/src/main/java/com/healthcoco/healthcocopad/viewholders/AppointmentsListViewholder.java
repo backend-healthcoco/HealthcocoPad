@@ -2,7 +2,6 @@ package com.healthcoco.healthcocopad.viewholders;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -11,18 +10,15 @@ import com.android.volley.Response;
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.HealthCocoViewHolder;
 import com.healthcoco.healthcocopad.R;
-import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.request.AppointmentRequest;
 import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
 import com.healthcoco.healthcocopad.bean.server.WorkingHours;
 import com.healthcoco.healthcocopad.enums.AppointmentStatusType;
-import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.CreatedByType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
-import com.healthcoco.healthcocopad.fragments.BookAppointmentFragment;
+import com.healthcoco.healthcocopad.fragments.PatientAppointmentDetailFragment;
 import com.healthcoco.healthcocopad.services.GsonRequest;
-import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
@@ -92,16 +88,15 @@ public class AppointmentsListViewholder extends HealthCocoViewHolder implements
                     break;
             }
         }
+        tvDate.setText(DateTimeUtil.getFormattedDateTime(PatientAppointmentDetailFragment.DATE_FORMAT_USED_IN_THIS_SCREEN, appointment.getFromDate()));
         if (appointment.getTime() != null && appointment.getTime().getFromTime() != null && appointment.getTime().getToTime() != null) {
             WorkingHours workingHours = appointment.getTime();
             tvFromTime.setText(DateTimeUtil.getFormattedTime(0, Math.round(workingHours.getFromTime())));
             tvToTime.setText(DateTimeUtil.getFormattedTime(0, Math.round(workingHours.getToTime())));
             if (appointment.getLongDateTime(appointment.getFromDate(), appointment.getTime()) < DateTimeUtil.getCurrentDateLong()) {
                 containerBottomOptions.setVisibility(View.GONE);
-                tvAppointmentStatus.setVisibility(View.GONE);
             } else {
                 containerBottomOptions.setVisibility(View.VISIBLE);
-                tvAppointmentStatus.setVisibility(View.VISIBLE);
             }
         }
         tvDoctorName.setText(Util.getValidatedValue(appointment.getDoctorName()));
@@ -127,6 +122,7 @@ public class AppointmentsListViewholder extends HealthCocoViewHolder implements
         tvAppointmentID = (TextView) view.findViewById(R.id.tv_aid);
         tvFromTime = (TextView) view.findViewById(R.id.tv_from_time);
         tvToTime = (TextView) view.findViewById(R.id.tv_to_time);
+        tvDate = (TextView) view.findViewById(R.id.tv_date);
         tvDoctorName = (TextView) view.findViewById(R.id.tv_doctor_name);
         tvMobileNumber = (TextView) view.findViewById(R.id.tv_number);
         tvNote = (TextView) view.findViewById(R.id.tv_note);
@@ -207,7 +203,7 @@ public class AppointmentsListViewholder extends HealthCocoViewHolder implements
 //        Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
 //        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.BOOK_APPOINTMENT.ordinal());
 //        intent.putExtra(HealthCocoConstants.TAG_UNIQUE_ID, appointment.getAppointmentId());
-//        intent.putExtra(BookAppointmentFragment.TAG_FROM_SCREEN_TYPE, BookAppointmentFromScreenType.APPOINTMENTS_LIST_RESCHEDULE.ordinal());
+//        intent.putExtra(BookAppointmentDialogFragment.TAG_FROM_SCREEN_TYPE, BookAppointmentFromScreenType.APPOINTMENTS_LIST_RESCHEDULE.ordinal());
 //        mActivity.startActivityForResult(intent, HealthCocoConstants.REQUEST_CODE_APPOINTMENTS_LIST);
     }
 

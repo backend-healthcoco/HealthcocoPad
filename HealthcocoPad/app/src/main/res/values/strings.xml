@@ -223,6 +223,7 @@
     <string name="years">Years</string>
     <string name="year">Year</string>
     <string name="no_text_dash">--</string>
+    <string name="text_dash">-</string>
     <integer name="id_item_all">11</integer>
     <integer name="id_item_confirmed">12</integer>
     <integer name="id_item_cancelled">13</integer>
@@ -261,8 +262,8 @@
     <string name="professional_membership">Professional Membership</string>
     <string name="professional_statement">Professional Statement</string>
     <string name="address">Address</string>
-    <string name="notify_doctor_via">Notify Doctor Via</string>
-    <string name="notify_patient_via">Notify Patient Via</string>
+
+
     <string name="address_details">Address Details</string>
     <string name="clinic_contact">Clinic Contact</string>
     <string name="clinic_photos">Clinic Photos</string>
@@ -756,4 +757,19 @@
     <string name="confirm_cancel_appointment">Are you sure you want to cancel Appointment?</string>
     <string name="are_you_sure_confirm_appointment">Confirm Appointment&#160;</string>
     <string name="reminder_sent">Reminder to Patient has been sent Successfully</string>
+    <string name="no_appointment_found">No Appointment Found</string>
+    <string name="appointment_created">Appointment Created</string>
+    <string name="please_select_patient_or_add_new">Please select Patient or add New Patient</string>
+    <string name="please_enter_valid_mobile_no_or_select_existing_patient">Please enter valid Mobile Number or Select existing Patient</string>
+    <string name="please_enter_patient_name_or_select_existing_patient">Please enter Patient Name or Select existing Patient</string>
+    <string name="please_select_time_slot">Please select Time Slot</string>
+    <string name="please_select_date">Please select Date</string>
+    <string name="selected_time_slot_is_not_available">Selected Time Slot is not Available</string>
+    <string name="no_slots_available">No Slots Available</string>
+    <string name="select_patient">Select Patient</string>
+    <string name="add_new_patient">Add New Patient</string>
+    <string name="pick_time_slot">Pick Time Slot</string>
+    <string name="date">Date</string>
+    <string name="time">Time</string>
+    <string name="select_time_slot">Select Time Slot</string>
 </resources>

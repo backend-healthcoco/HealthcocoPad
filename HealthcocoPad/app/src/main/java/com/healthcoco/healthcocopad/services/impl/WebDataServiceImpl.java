@@ -1074,4 +1074,59 @@ public class WebDataServiceImpl implements GCMRefreshListener {
             showUserOffline(webServiceType, responseListener);
         }
     }
+
+    public void getEmrListGeneralMethod(Class<?> class1, WebServiceType webServiceType, boolean isOtpVerified, boolean discarded, String doctorId, String locationId, String hospitalId, String patientId, long updatedTime,
+                                        Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        checkNetworkStatus(mApp.getApplicationContext());
+        if (HealthCocoConstants.isNetworkOnline) {
+            String url = webServiceType.getUrl()
+                    + patientId + "?"
+                    + HealthCocoConstants.PARAM_DISCARDED_AMPERCENT + discarded
+                    + HealthCocoConstants.PARAM_UPDATED_TIME + updatedTime;
+            switch (webServiceType) {
+                case GET_APPOINTMENT:
+                    url = webServiceType.getUrl() + "?"
+                            + HealthCocoConstants.PARAM_PATIENT_ID + patientId
+                            + HealthCocoConstants.PARAM_DOCTOR_ID + doctorId
+                            + HealthCocoConstants.PARAM_LOCATION_ID + locationId
+                            + HealthCocoConstants.PARAM_HOSPITAL_ID + hospitalId
+                            + HealthCocoConstants.PARAM_DISCARDED_AMPERCENT + discarded
+                            + HealthCocoConstants.PARAM_UPDATED_TIME + updatedTime;
+                    break;
+                case GET_REPORTS_UPDATED:
+//                    url = url + HealthCocoConstants.PARAM_IS_DOCTOR_APP_TRUE;
+                    break;
+            }
+            getResponse(Request.Priority.IMMEDIATE, webServiceType, class1, url, null, null, responseListener,
+                    errorListener);
+        } else {
+            errorListener.onNetworkUnavailable(webServiceType);
+            switch (webServiceType) {
+                case GET_CLINICAL_NOTES:
+//                    LocalDataServiceImpl.getInstance(mApp).getClinicalNotesList(WebServiceType.GET_CLINICAL_NOTES, isOtpVerified, doctorId, locationId, hospitalId, patientId, responseListener, errorListener);
+                    break;
+                case GET_REPORTS_UPDATED:
+//                    LocalDataServiceImpl.getInstance(mApp).getRecordsList(WebServiceType.GET_REPORTS_UPDATED, isOtpVerified, doctorId, locationId, hospitalId, patientId, responseListener, errorListener);
+                    break;
+                case GET_PRESCRIPTION:
+//                    LocalDataServiceImpl.getInstance(mApp).getPrescriptionsListResponse(webServiceType, isOtpVerified, doctorId, locationId, hospitalId, patientId, responseListener, errorListener);
+                    break;
+            }
+        }
+    }
+
+    public void getAppointmentSlotsDetails(Class<?> class1, String doctorId, String locationId, String hospitalId, long date,
+                                           Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        WebServiceType webServiceType = WebServiceType.GET_APPOINTMENT_TIME_SLOTS;
+        checkNetworkStatus(mApp);
+        if (HealthCocoConstants.isNetworkOnline) {
+            String url = webServiceType.getUrl()
+                    + doctorId + "/"
+                    + locationId + "/"
+                    + date + "/";
+            getResponse(webServiceType, class1, url, null, null, responseListener,
+                    errorListener);
+        } else {
+        }
+    }
 }

@@ -69,6 +69,7 @@ public class HealthCocoConstants {
     public static final String TAG_PATIENT_PROFILE = "patientProfile";
     public static final int RESULT_CODE_ADD_NEW_TEMPLATE = 146;
     public static final int RESULT_CODE_ADD_VISIT = 147;
+    public static final String TAG_SELECTED_DATE_TIME_IN_MILLIS = "selectedTimeInMillis";
     public static int RESULT_CODE_SIGNUP_ALREADY_REGISTERED = 123;
     public static final int RESULT_CODE_GROUPS_LIST = 124;
     public static final int RESULT_CODE_SEARCH_NUMBER_RESULTS = 125;

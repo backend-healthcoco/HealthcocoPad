@@ -21,7 +21,6 @@ import com.healthcoco.healthcocopad.enums.AddUpdateNameDialogType;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.RoleType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
-import com.healthcoco.healthcocopad.fragments.BookAppointmentFragment;
 import com.healthcoco.healthcocopad.fragments.ContactsListFragment;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
@@ -152,7 +151,7 @@ public class PatientNumberSearchResultsDialogFragment extends HealthCocoDialogFr
         if (!isFromHomeActivity) {
             if (alreadyRegisteredPatient.getIsPartOfClinic() != null && alreadyRegisteredPatient.getIsPartOfClinic()) {
                 HealthCocoConstants.SELECTED_PATIENTS_USER_ID = alreadyRegisteredPatient.getUserId();
-                Util.sendBroadcast(mApp, BookAppointmentFragment.INTENT_REFRESH_SELECTED_PATIENT);
+                Util.sendBroadcast(mApp, BookAppointmentDialogFragment.INTENT_REFRESH_SELECTED_PATIENT);
                 Util.sendBroadcast(mApp, ContactsListFragment.INTENT_FINISH_CONTACTS_LIST_SCREEN);
             } else {
                 openAddNewPatientDialog(AddUpdateNameDialogType.ADD_NEW_PATIENT_NAME, this, "", 0);

@@ -382,7 +382,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
                 openCommonOpenUpActivity(CommonOpenUpFragmentType.PATIENT_DETAIL, null, REQUEST_CODE_CONTACTS_DETAIL);
                 contactsListAdapter.notifyDataSetChanged();
             } else {
-//                Util.sendBroadcast(mApp, BookAppointmentFragment.INTENT_REFRESH_SELECTED_PATIENT);
+//                Util.sendBroadcast(mApp, BookAppointmentDialogFragment.INTENT_REFRESH_SELECTED_PATIENT);
 //                ((CommonOpenUpActivity) mActivity).setResult(HealthCocoConstants.RESULT_CODE_CONTACTS_LIST);
                 ((CommonOpenUpActivity) mActivity).finish();
             }

@@ -2,6 +2,7 @@ package com.healthcoco.healthcocopad.utilities;
 
 import android.text.TextUtils;
 
+import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
 import com.healthcoco.healthcocopad.bean.server.CityResponse;
 import com.healthcoco.healthcocopad.bean.server.Disease;
 import com.healthcoco.healthcocopad.bean.server.DrugDirection;
@@ -18,6 +19,7 @@ import com.healthcoco.healthcocopad.bean.server.VisitDetails;
 import java.sql.Date;
 import java.util.Comparator;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Shreshtha on 24-01-2017.
@@ -191,6 +193,48 @@ public class ComparatorUtil {
                     updatedTime2 = ((UserGroups) object2).getUpdatedTime();
                 }
                 return updatedTime1.compareTo(updatedTime2);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return 0;
+        }
+    };
+    public static Comparator<Object> calendarEventsFromToTimeComparator = new Comparator<Object>() {
+
+        @Override
+        public int compare(Object object1, Object object2) {
+            try {
+                CalendarEvents calendarEvents1 = (CalendarEvents) object1;
+                CalendarEvents calendarEvents2 = (CalendarEvents) object2;
+                Float timeFrom1 = 0f;
+                Float timeFrom2 = 0f;
+                if (calendarEvents1.getTime() != null && calendarEvents1.getTime().getFromTime() != null) {
+                    timeFrom1 = calendarEvents1.getTime().getFromTime();
+                }
+                if (calendarEvents2.getTime() != null && calendarEvents2.getTime().getFromTime() != null) {
+                    timeFrom2 = calendarEvents2.getTime().getFromTime();
+                }
+                long timeInMillis1 = TimeUnit.MINUTES.toMillis(Math.round(timeFrom1));
+                long timeInMillis2 = TimeUnit.MINUTES.toMillis(Math.round(timeFrom2));
+                Date date1 = new Date(timeInMillis1);
+                Date date2 = new Date(timeInMillis2);
+                return date1.compareTo(date2);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return 0;
+        }
+    };
+    public static Comparator<Object> appointmentFromDateComparator = new Comparator<Object>() {
+
+        @Override
+        public int compare(Object object1, Object object2) {
+            try {
+                CalendarEvents appointment1 = (CalendarEvents) object1;
+                CalendarEvents appointment2 = (CalendarEvents) object2;
+                Date date1 = new Date(appointment1.getFromDate());
+                Date date2 = new Date(appointment2.getFromDate());
+                return date2.compareTo(date1);
             } catch (Exception e) {
                 e.printStackTrace();
             }

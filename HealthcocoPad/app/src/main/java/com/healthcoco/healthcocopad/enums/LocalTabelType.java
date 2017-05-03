@@ -30,7 +30,7 @@ public enum LocalTabelType {
     PA_SUGGESTIONS,
     PV_SUGGESTIONS,
     PS_SUGGESTIONS,
-    INDICATION_OF_USG_SUGGESTIONS;
+    INDICATION_OF_USG_SUGGESTIONS, APPOINTMENT;
 
     private String tableName = null;
 

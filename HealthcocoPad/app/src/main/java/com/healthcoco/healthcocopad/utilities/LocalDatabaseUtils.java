@@ -64,7 +64,7 @@ public class LocalDatabaseUtils {
     public static final int BOOLEAN_FALSE_VALUE = 0;
     public static final int BOOLEAN_TRUE_VALUE = 1;
     public static final String KEY_NAME = "name";
-
+    public static final String KEY_FROM_DATE = "from_date";
     public static final String KEY_UPDATED_TIME = "updated_time";
     public static final String IS_DRUG_FROM_GET_DRUGS_LIST = "is_drug_from_get_drugs_list";
 

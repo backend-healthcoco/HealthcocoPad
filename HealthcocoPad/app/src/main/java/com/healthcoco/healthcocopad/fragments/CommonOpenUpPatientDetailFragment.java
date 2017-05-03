@@ -53,6 +53,7 @@ import static com.healthcoco.healthcocopad.R.id.container_right_action;
  */
 public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implements View.OnClickListener, ViewPager.OnPageChangeListener, TabHost.OnTabChangeListener,
         LocalDoInBackgroundListenerOptimised, CommonOpenUpPatientDetailListener {
+    public static final String INTENT_REFRESH_PATIENT_PROFILE = "com.healthcoco.REFRESH_PATIENT_PROFILE";
     private TabHost tabhost;
     private ViewPager mViewPager;
     private ArrayList<Fragment> fragmentsList = new ArrayList<>();
@@ -73,9 +74,11 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
     //flags to refresh fragment when clicked for the first time
     private PatientProfileDetailFragment profileFragment;
     private PatientVisitDetailFragment visitsFragment;
+    private PatientAppointmentDetailFragment appointmentFragment;
 
     private boolean isProfileTabClicked = true;
     private boolean isVisitsTabClicked = false;
+    private boolean isAppointmentTabClicked = false;
     private TextView tvGenderDate;
 
     @Override
@@ -150,9 +153,10 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
 //                case PATIENT_DETAIL_PRESCRIPTION:
 //                    healthcocoFragment = new PatientPrescriptionDetailFragment();
 //                    break;
-//                case PATIENT_DETAIL_APPOINTMENT:
-//                    healthcocoFragment = new PatientAppointmentDetailFragment();
-//                    break;
+                case PATIENT_DETAIL_APPOINTMENT:
+                    appointmentFragment = new PatientAppointmentDetailFragment();
+                    healthcocoFragment = appointmentFragment;
+                    break;
 //                case PATIENT_DETAIL_TREATMENT:
 //                    healthcocoFragment = new PatientTreatmentDetailFragment();
 //                    break;
@@ -316,6 +320,11 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                     if (!isVisitsTabClicked) {
                         visitsFragment.refreshData(user, selectedPatient);
                         isVisitsTabClicked = true;
+                    }
+                case PATIENT_DETAIL_APPOINTMENT:
+                    if (!isAppointmentTabClicked) {
+                        appointmentFragment.refreshData(user, selectedPatient);
+                        isAppointmentTabClicked = true;
                     }
                     break;
             }

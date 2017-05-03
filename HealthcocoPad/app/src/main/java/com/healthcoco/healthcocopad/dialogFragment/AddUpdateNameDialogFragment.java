@@ -453,7 +453,7 @@ public class AddUpdateNameDialogFragment extends HealthCocoDialogFragment implem
                         LogUtils.LOGD(TAG, "REGISTER_PATIENT SYNC_COMPLETE" + patientDetails.getLocalPatientName());
                         LocalDataServiceImpl.getInstance(mApp).addPatient(patientDetails);
                         HealthCocoConstants.SELECTED_PATIENTS_USER_ID = patientDetails.getUserId();
-//                        Util.sendBroadcast(mApp, BookAppointmentFragment.INTENT_REFRESH_SELECTED_PATIENT);
+//                        Util.sendBroadcast(mApp, BookAppointmentDialogFragment.INTENT_REFRESH_SELECTED_PATIENT);
                         mActivity.hideLoading();
                         mActivity.finish();
                     }

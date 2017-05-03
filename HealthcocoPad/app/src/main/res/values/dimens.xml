@@ -139,7 +139,7 @@
     <dimen name="text_size_bottom_button">16sp</dimen>
     <dimen name="popup_item_padding">10dp</dimen>
     <dimen name="drawable_text_padding">5dp</dimen>
-    <dimen name="text_size_emr_date">12sp</dimen>
+    <dimen name="text_size_emr_date">15sp</dimen>
     <dimen name="padding_margin_prescribed_item_center">8dp</dimen>
     <dimen name="text_size_prescribed_by_name">13sp</dimen>
     <dimen name="text_padding_appointment">10dp</dimen>
@@ -180,4 +180,7 @@
     <dimen name="text_size_visits_item_label">18sp</dimen>
     <dimen name="text_size_drugs_generic_name">12sp</dimen>
     <dimen name="text_size_terms_and_privacy_policy">14sp</dimen>
+    <dimen name="text_size_new_prescription_patient_name">15sp</dimen>
+    <dimen name="text_size_new_prescription_gender_age">12sp</dimen>
+    <dimen name="text_size_report_detail_title_description">15sp</dimen>
 </resources>
