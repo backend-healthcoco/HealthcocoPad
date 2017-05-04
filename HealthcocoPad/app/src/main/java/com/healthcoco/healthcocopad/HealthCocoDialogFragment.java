@@ -21,11 +21,14 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
+import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.Specialities;
 import com.healthcoco.healthcocopad.dialogFragment.AddUpdateNameDialogFragment;
 import com.healthcoco.healthcocopad.dialogFragment.CommonListDialogFragment;
@@ -36,9 +39,11 @@ import com.healthcoco.healthcocopad.enums.AddUpdateNameDialogType;
 import com.healthcoco.healthcocopad.enums.CommonListDialogType;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.DialogType;
+import com.healthcoco.healthcocopad.enums.PatientProfileScreenType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.CommonListDialogItemClickListener;
 import com.healthcoco.healthcocopad.listeners.CommonOptionsDialogItemClickListener;
+import com.healthcoco.healthcocopad.utilities.DownloadImageFromUrlUtil;
 import com.healthcoco.healthcocopad.utilities.EditTextTextViewErrorUtil;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.ScreenDimensions;
@@ -348,5 +353,46 @@ public abstract class HealthCocoDialogFragment extends DialogFragment implements
             startActivity(intent);
         else
             startActivityForResult(intent, requestCode);
+    }
+
+    protected void initActionPatientDetailActionBar(final PatientProfileScreenType patientProfileScreenType, View parent, final RegisteredPatientDetailsUpdated selectedPatient) {
+        if (selectedPatient != null) {
+            TextView tvInitialAlphabet = (TextView) parent.findViewById(R.id.tv_initial_aplhabet);
+            TextView tvPatientName = (TextView) parent.findViewById(R.id.tv_name);
+            TextView tvMobile = (TextView) parent.findViewById(R.id.tv_mobile);
+
+            ProgressBar progressLoading = (ProgressBar) parent.findViewById(R.id.progress_loading);
+
+            ImageView ivContactProfile = (ImageView) parent.findViewById(R.id.iv_image);
+            ivContactProfile.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (!Util.isNullOrBlank(selectedPatient.getImageUrl()))
+                        mActivity.openEnlargedImageDialogFragment(selectedPatient.getImageUrl());
+                }
+            });
+
+            ImageButton btBack = (ImageButton) parent.findViewById(R.id.bt_back);
+            if (btBack != null) {
+                btBack.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        try {
+                            if (patientProfileScreenType == PatientProfileScreenType.IN_ADD_VISIT_HEADER) {
+//                                ((CommonOpenUpActivity) mActivity).finish();
+                                getDialog().dismiss();
+                                return;
+                            }
+                        } catch (Exception e) {
+
+                        }
+                        mActivity.finish();
+                    }
+                });
+            }
+            tvPatientName.setText(selectedPatient.getLocalPatientName());
+            tvMobile.setText(selectedPatient.getMobileNumber());
+            DownloadImageFromUrlUtil.loadImageWithInitialAlphabet(mActivity, patientProfileScreenType, selectedPatient, progressLoading, ivContactProfile, tvInitialAlphabet);
+        }
     }
 }

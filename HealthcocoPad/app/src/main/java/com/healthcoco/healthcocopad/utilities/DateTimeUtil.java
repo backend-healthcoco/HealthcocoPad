@@ -25,6 +25,7 @@ public class DateTimeUtil {
     public static final String YEAR_FORMAT = "yyyy";
     public static final String DATE_FORMAT_WEEKDAY_DAY_MONTH_AS_TEXT_YEAR_DASH = "EEE, MMM dd,yyyy";
     public static final String DATE_TIME_FORMAT_WEEKDAY_DAY_MONTH_AS_TEXT_YEAR_DASH = "EEE, MMM dd,yyyy hh:mm aaa";
+    public static final String TIME_FORMAT_24_HOUR = "H:mm";
 
     /**
      * in YY format for year
@@ -378,4 +379,14 @@ public class DateTimeUtil {
         return (String) DateFormat.format(format, calendar.getTime());
     }
 
+    public static String convertFormattedDate(String currentFormat, String newFormat, String displayedDate) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat(currentFormat);
+            long timeInMilliseconds = sdf.parse(displayedDate).getTime();
+            return new SimpleDateFormat(newFormat).format(new Date(timeInMilliseconds));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return displayedDate;
+    }
 }

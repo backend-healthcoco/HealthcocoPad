@@ -2,6 +2,7 @@ package com.healthcoco.healthcocopad.viewholders;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -14,7 +15,9 @@ import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.request.AppointmentRequest;
 import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
 import com.healthcoco.healthcocopad.bean.server.WorkingHours;
+import com.healthcoco.healthcocopad.dialogFragment.BookAppointmentDialogFragment;
 import com.healthcoco.healthcocopad.enums.AppointmentStatusType;
+import com.healthcoco.healthcocopad.enums.BookAppointmentFromScreenType;
 import com.healthcoco.healthcocopad.enums.CreatedByType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.fragments.PatientAppointmentDetailFragment;
@@ -24,6 +27,8 @@ import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
+
+import org.parceler.Parcels;
 
 /**
  * Created by neha on 05/05/16.
@@ -200,11 +205,13 @@ public class AppointmentsListViewholder extends HealthCocoViewHolder implements
     }
 
     private void openAddAppointmentScreen() {
-//        Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
-//        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.BOOK_APPOINTMENT.ordinal());
-//        intent.putExtra(HealthCocoConstants.TAG_UNIQUE_ID, appointment.getAppointmentId());
-//        intent.putExtra(BookAppointmentDialogFragment.TAG_FROM_SCREEN_TYPE, BookAppointmentFromScreenType.APPOINTMENTS_LIST_RESCHEDULE.ordinal());
-//        mActivity.startActivityForResult(intent, HealthCocoConstants.REQUEST_CODE_APPOINTMENTS_LIST);
+        BookAppointmentDialogFragment dialogFragment = new BookAppointmentDialogFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString(HealthCocoConstants.TAG_UNIQUE_ID, appointment.getAppointmentId());
+        bundle.putParcelable(BookAppointmentDialogFragment.TAG_FROM_SCREEN_TYPE, Parcels.wrap(BookAppointmentFromScreenType.APPOINTMENTS_LIST_ADD_NEW.ordinal()));
+        dialogFragment.setArguments(bundle);
+        dialogFragment.setTargetFragment(dialogFragment, PatientAppointmentDetailFragment.REQUEST_CODE_APPOINTMENTS_LIST);
+        dialogFragment.show(mActivity.getSupportFragmentManager(), dialogFragment.getClass().getSimpleName());
     }
 
     private void cancelAppointment() {

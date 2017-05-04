@@ -47,14 +47,14 @@ import java.util.HashMap;
 /**
  * Created by Shreshtha on 07-03-2017.
  */
-public class PatientAppointmentDetailFragment extends HealthCocoFragment implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener, LocalDoInBackgroundListenerOptimised,
+public class PatientAppointmentDetailFragment extends HealthCocoFragment implements SwipeRefreshLayout.OnRefreshListener, LocalDoInBackgroundListenerOptimised,
         Response.Listener<VolleyResponseBean>, GsonRequest.ErrorListener, LoadMorePageListener {
     public static final String DATE_FORMAT_USED_IN_THIS_SCREEN = "dd MMM yyyy";
     public static final String INTENT_GET_APPOINTMENT_LIST_LOCAL = "com.healthcoco.APPOINTMENT_LIST_LOCAL";
 
     //variables need for pagination
     public static final int MAX_SIZE = 10;
-    private static final int REQUEST_CODE_APPOINTMENTS_LIST = 111;
+    public static final int REQUEST_CODE_APPOINTMENTS_LIST = 111;
     private int PAGE_NUMBER = 0;
     private boolean isEndOfListAchieved;
     private boolean isInitialLoading;
@@ -106,23 +106,7 @@ public class PatientAppointmentDetailFragment extends HealthCocoFragment impleme
     public void init() {
         initViews();
         initListeners();
-        initSKSCustomListView();
         initAdapter();
-        initSKSCustomListView();
-        getUserAndPatientDetails();
-    }
-
-    private void getUserAndPatientDetails() {
-        CommonOpenUpPatientDetailFragment patientDetailFragmentUpdated = (CommonOpenUpPatientDetailFragment) getFragmentManager().findFragmentByTag(CommonOpenUpPatientDetailFragment.class.getSimpleName());
-        if (patientDetailFragmentUpdated != null) {
-            selectedPatient = patientDetailFragmentUpdated.getSelectedPatientDetails();
-            user = patientDetailFragmentUpdated.getUser();
-            patientDetailFragmentUpdated.initFloatingActionButton(this);
-        }
-    }
-
-    private void initSKSCustomListView() {
-//        lvAppointment.setPinnedHeaderView(LayoutInflater.from(mActivity).inflate(R.layout.header_appointment_calendar_list, lvAppointment, false));
     }
 
     @Override
@@ -168,12 +152,9 @@ public class PatientAppointmentDetailFragment extends HealthCocoFragment impleme
     private void getListFromLocal(boolean initialLoading) {
         this.isInitialLoading = initialLoading;
         showLoadingOverlay(isInitialLoading);
-//        this.currentPageNumber = pageNum;
-//        isLoading = true;
         if (isInitialLoading) {
             if (isInitialLoading)
                 mActivity.showLoading(false);
-//            this.currentPageNumber = 0;
             progressLoading.setVisibility(View.GONE);
         } else
             progressLoading.setVisibility(View.VISIBLE);
@@ -194,21 +175,10 @@ public class PatientAppointmentDetailFragment extends HealthCocoFragment impleme
             showLoadingOverlay(false);
         Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(user, LocalTabelType.APPOINTMENT);
         WebDataServiceImpl.getInstance(mApp).getEmrListGeneralMethod(CalendarEvents.class, WebServiceType.GET_APPOINTMENT, isOTPVerified, true, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(),
-                HealthCocoConstants.SELECTED_PATIENTS_USER_ID, latestUpdatedTime, this, this);
+                selectedPatient.getUserId(), latestUpdatedTime, this, this);
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.fl_bt_add:
-//                openAddNewAppointmentScreen();
-                break;
-            default:
-                break;
-        }
-    }
-
-    private void openAddNewAppointmentScreen() {
+    public void openAddNewAppointmentScreen() {
         openDialogFragment(new BookAppointmentDialogFragment(), BookAppointmentDialogFragment.TAG_FROM_SCREEN_TYPE,
                 BookAppointmentFromScreenType.APPOINTMENTS_LIST_ADD_NEW.ordinal(), REQUEST_CODE_APPOINTMENTS_LIST);
     }

@@ -47,6 +47,7 @@ import com.healthcoco.healthcocopad.utilities.Util;
 import java.util.ArrayList;
 
 import static com.healthcoco.healthcocopad.R.id.container_right_action;
+import static com.healthcoco.healthcocopad.R.id.fl_bt_add;
 
 /**
  * Created by Shreshtha on 03-03-2017.
@@ -68,7 +69,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
     private LinearLayout patientProfileLayout;
     private RegisteredPatientDetailsUpdated selectedPatient;
     private User user;
-    private FloatingActionButton floatingActionButton;
+    public FloatingActionButton floatingActionButton;
     private int tabOrdinal;
 
     //flags to refresh fragment when clicked for the first time
@@ -122,6 +123,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
     public void initListeners() {
         mViewPager.addOnPageChangeListener(this);
         tabhost.setOnTabChangedListener(this);
+        floatingActionButton.setOnClickListener(this);
         ((CommonOpenUpActivity) mActivity).initActionbarRightAction(this);
     }
 
@@ -364,6 +366,18 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
             case container_right_action:
                 openGlobalRecordAccessDialogFragment();
                 break;
+            case fl_bt_add:
+                int ordinal = Integer.parseInt(tabhost.getCurrentTabTag());
+                PatientDetailTabType patientDetailTabType = PatientDetailTabType.values()[ordinal];
+                switch (patientDetailTabType) {
+                    case PATIENT_DETAIL_VISIT:
+                        visitsFragment.openAddVisitFragment();
+                        break;
+                    case PATIENT_DETAIL_APPOINTMENT:
+                        appointmentFragment.openAddNewAppointmentScreen();
+                        break;
+                }
+                break;
         }
     }
 
@@ -374,7 +388,6 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
     public void setFloatingButtonVisibility(int visibility) {
         floatingActionButton.setVisibility(visibility);
     }
-
 
     @Override
     public VolleyResponseBean doInBackground(VolleyResponseBean response) {
@@ -449,7 +462,4 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
         return selectedPatient;
     }
 
-    public void initFloatingActionButton(View.OnClickListener listener) {
-        floatingActionButton.setOnClickListener(listener);
-    }
 }

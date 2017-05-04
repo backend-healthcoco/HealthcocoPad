@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.server.AppointmentSlot;
+import com.healthcoco.healthcocopad.bean.server.AvailableTimeSlots;
 import com.healthcoco.healthcocopad.bean.server.CityResponse;
 import com.healthcoco.healthcocopad.bean.server.ComplaintSuggestions;
 import com.healthcoco.healthcocopad.bean.server.DiagnosisSuggestions;
@@ -21,6 +22,7 @@ import com.healthcoco.healthcocopad.bean.server.ObservationSuggestions;
 import com.healthcoco.healthcocopad.bean.server.Profession;
 import com.healthcoco.healthcocopad.bean.server.Reference;
 import com.healthcoco.healthcocopad.bean.server.Role;
+import com.healthcoco.healthcocopad.dialogFragment.BookAppointmentDialogFragment;
 import com.healthcoco.healthcocopad.enums.AdvanceSearchOptionsType;
 import com.healthcoco.healthcocopad.enums.AutoCompleteTextViewType;
 import com.healthcoco.healthcocopad.listeners.AutoCompleteTextViewListener;
@@ -171,15 +173,15 @@ public class AutoCompleteTextViewAdapter extends ArrayAdapter<Object> {
                 }
                 break;
             case AVAILABLE_BOOKED_APPOINTMENTS:
-//                if (object instanceof AvailableTimeSlots) {
-//                    AvailableTimeSlots availableTimeSlots = (AvailableTimeSlots) object;
-//                    text = DateTimeUtil.convertFormattedDate(DateTimeUtil.TIME_FORMAT_24_HOUR, BookAppointmentDialogFragment.TIME_SLOT_FORMAT_USED_IN_THIS_SCREEN, availableTimeSlots.getTime());
-//                    if (view != null)
-//                        if (availableTimeSlots.getIsAvailable() != null && availableTimeSlots.getIsAvailable()) {
-//                            Util.enableAllChildViews(view, true);
-//                        } else
-//                            Util.enableAllChildViews(view, false);
-//                }
+                if (object instanceof AvailableTimeSlots) {
+                    AvailableTimeSlots availableTimeSlots = (AvailableTimeSlots) object;
+                    text = DateTimeUtil.convertFormattedDate(DateTimeUtil.TIME_FORMAT_24_HOUR, BookAppointmentDialogFragment.TIME_SLOT_FORMAT_USED_IN_THIS_SCREEN, availableTimeSlots.getTime());
+                    if (view != null)
+                        if (availableTimeSlots.getIsAvailable() != null && availableTimeSlots.getIsAvailable()) {
+                            Util.enableAllChildViews(view, true);
+                        } else
+                            Util.enableAllChildViews(view, false);
+                }
                 break;
             case DRUG_TYPE:
                 if (object instanceof DrugType) {

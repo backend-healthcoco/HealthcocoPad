@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -472,7 +473,7 @@ public class Util {
         if (!Util.isNullOrBlank(gender))
             formattedString = formattedString + " | " + gender;
         if (!Util.isNullOrBlank(formattedString) && !Util.isNullOrBlank(formattedAge))
-            formattedString =  formattedString + " ," + formattedAge;
+            formattedString = formattedString + " ," + formattedAge;
         else if (Util.isNullOrBlank(formattedString) && !Util.isNullOrBlank(formattedAge))
             formattedString = " | " + formattedString + formattedAge;
         return formattedString;
@@ -703,5 +704,17 @@ public class Util {
     public static String getFormattedStringReplaceBySpace(String text) {
         text = text.replaceAll("_", " ");
         return text;
+    }
+
+    public static void enableAllChildViews(View view, boolean isEnabled) {
+        if (view instanceof LinearLayout) {
+            LinearLayout layout = (LinearLayout) view;
+            layout.setEnabled(isEnabled);
+            if (layout.getChildCount() > 0) {
+                for (int i = 0; i < layout.getChildCount(); i++) {
+                    layout.getChildAt(i).setEnabled(isEnabled);
+                }
+            }
+        }
     }
 }

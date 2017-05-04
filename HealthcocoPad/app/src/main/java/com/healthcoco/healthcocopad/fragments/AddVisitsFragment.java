@@ -442,7 +442,6 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
         addPrescriptionVisitFragment.initUiPermissions(user.getUiPermissions().getPrescriptionPermissions());
     }
 
-
     private void prePopulateVisitDetails(VisitDetails visitDetails) {
         if (!Util.isNullOrEmptyList(visitDetails.getVisitedFor())) {
             for (VisitedForType visitedForType :

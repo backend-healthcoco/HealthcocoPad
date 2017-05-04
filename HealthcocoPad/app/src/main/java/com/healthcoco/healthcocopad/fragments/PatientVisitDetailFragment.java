@@ -105,7 +105,6 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
         initViews();
         initListeners();
         initAdapter();
-        getUserAndPatientDetails();
     }
 
     private void getUserAndPatientDetails() {
@@ -113,7 +112,6 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
         if (patientDetailFragmentUpdated != null) {
             selectedPatient = patientDetailFragmentUpdated.getSelectedPatientDetails();
             user = patientDetailFragmentUpdated.getUser();
-            patientDetailFragmentUpdated.initFloatingActionButton(this);
         }
     }
 
@@ -475,15 +473,6 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
         alertBuilder.show();
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.fl_bt_add:
-                openCommonVisistActivity(CommonOpenUpFragmentType.ADD_VISITS, null, null, 0);
-                break;
-        }
-    }
-
     private void openCommonVisistActivity(CommonOpenUpFragmentType fragmentType, String tag, Object intentData, int requestCode) {
         Intent intent = new Intent(mActivity, AddVisitsActivity.class);
         intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, fragmentType.ordinal());
@@ -498,5 +487,14 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
     @Override
     public void onRefresh() {
         getVisits(false);
+    }
+
+    public void openAddVisitFragment() {
+        openCommonVisistActivity(CommonOpenUpFragmentType.ADD_VISITS, null, null, 0);
+    }
+
+    @Override
+    public void onClick(View v) {
+
     }
 }

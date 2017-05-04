@@ -32,6 +32,8 @@ import com.healthcoco.healthcocopad.bean.server.AlreadyRegisteredPatientsRespons
 import com.healthcoco.healthcocopad.bean.server.AppointmentTimeSlotDetails;
 import com.healthcoco.healthcocopad.bean.server.AvailableTimeSlots;
 import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
+import com.healthcoco.healthcocopad.bean.server.DoctorClinicProfile;
+import com.healthcoco.healthcocopad.bean.server.DoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.User;
@@ -64,6 +66,8 @@ import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.healthcoco.healthcocopad.views.CustomAutoCompleteTextView;
+
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -111,6 +115,8 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
     private AutoCompleteTextView autotvPatientName;
     private LinearLayout loadingExistingPatientsList;
     private LinearLayout parentAddSelectPatient;
+    private TextView tvClinicName;
+    private DoctorClinicProfile doctorClinicProfile;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -141,18 +147,19 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Intent intent = mActivity.getIntent();
-        int ordinal = intent.getIntExtra(TAG_FROM_SCREEN_TYPE, 0);
-        appointmentId = intent.getStringExtra(HealthCocoConstants.TAG_UNIQUE_ID);
+        Bundle bundle = getArguments();
+        int ordinal = Parcels.unwrap(bundle.getParcelable(TAG_FROM_SCREEN_TYPE));
+        appointmentId = bundle.getString(HealthCocoConstants.TAG_UNIQUE_ID);
         bookAppointmentFromScreenType = BookAppointmentFromScreenType.values()[ordinal];
         if (bookAppointmentFromScreenType != null)
             init();
+        setWidthHeight(0.70, 0.90);
+        showLoadingOverlay(true);
+        new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_FRAGMENT_INITIALISATION_DATA, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     @Override
     public void init() {
-        showLoadingOverlay(true);
-        new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_FRAGMENT_INITIALISATION_DATA, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         initViews();
         initListeners();
         initAutoTvAdapter(autotvSelectedTimeSlot, AutoCompleteTextViewType.AVAILABLE_BOOKED_APPOINTMENTS, null);
@@ -179,12 +186,14 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
         containerDetailsAddNewPatient = (FrameLayout) view.findViewById(R.id.container_details_add_new_patient);
         loadingExistingPatientsList = (LinearLayout) view.findViewById(R.id.loading_existing_patients_list);
         parentAddSelectPatient = (LinearLayout) view.findViewById(R.id.parent_add_select_patient);
+        tvClinicName = (TextView) view.findViewById(R.id.tv_clinic_name);
         refreshSelectedDate(DateTimeUtil.getCurrentDateLong());
     }
 
     @Override
     public void initListeners() {
-        ((CommonOpenUpActivity) mActivity).initActionbarRightAction(this);
+        initSaveCancelButton(this);
+        initActionbarTitle(getResources().getString(R.string.new_appointment));
         tvSelectedDate.setOnClickListener(this);
         tvSelectedDate.addTextChangedListener(new HealthcocoTextWatcher(tvSelectedDate, this));
         btSelectPatient.setOnClickListener(this);
@@ -222,6 +231,7 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
     }
 
     public void initData() {
+        tvClinicName.setText(doctorClinicProfile.getLocationName());
         autotvSelectedTimeSlot.setText("");
         if (appointmentTimeSlotDetails != null) {
             if (appointmentTimeSlotDetails.getAppointmentSlot() != null) {
@@ -242,7 +252,7 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
         }
         if (containerPatientProfileHeader.getVisibility() == View.VISIBLE && selectedPatient != null) {
             HealthCocoConstants.SELECTED_PATIENTS_USER_ID = selectedPatient.getUserId();
-//            initActionPatientDetailActionBar(PatientProfileScreenType.IN_EMR_HEADER, view, selectedPatient);
+            initActionPatientDetailActionBar(PatientProfileScreenType.IN_EMR_HEADER, view, selectedPatient);
         }
     }
 
@@ -412,7 +422,7 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
                 if (doctor != null && doctor.getUser() != null) {
                     user = doctor.getUser();
                     selectedPatient = LocalDataServiceImpl.getInstance(mApp).getPatient(HealthCocoConstants.SELECTED_PATIENTS_USER_ID);
-
+                    doctorClinicProfile = LocalDataServiceImpl.getInstance(mApp).getDoctorClinicProfile(user.getUniqueId(), user.getForeignLocationId());
                     if (!Util.isNullOrBlank(appointmentId))
                         selectedAppointment = LocalDataServiceImpl.getInstance(mApp).getAppointment(appointmentId);
                 }
@@ -439,7 +449,7 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
             case R.id.bt_select_patient:
                 openContactsListScreen();
                 break;
-            case R.id.container_right_action:
+            case R.id.bt_save:
                 if (user != null) {
                     Util.checkNetworkStatus(mActivity);
                     if (HealthCocoConstants.isNetworkOnline) {
