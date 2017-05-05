@@ -186,4 +186,7 @@
     <dimen name="text_size_new_prescription_gender_age">12sp</dimen>
     <dimen name="text_size_report_detail_title_description">18sp</dimen>
     <dimen name="text_size_book_appointment_dialog_fragment">18sp</dimen>
+    <dimen name="grid_item_book_appointment_time_slots">15dp</dimen>
+    <dimen name="bullet_size_item_time_slot">12sp</dimen>
+
 </resources>

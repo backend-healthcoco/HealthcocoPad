@@ -2,6 +2,6 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:drawable="@drawable/shape_rounded_corners_light_grey_border_solid_lighter_grey" android:state_pressed="true" />
-    <item android:drawable="@drawable/shape_rounded_corners_grey_border_solid_lighter_grey" android:state_selected="true" />
-    <item android:drawable="@drawable/shape_rounded_corners_grey_border_solid_lighter_grey"></item>
+    <item android:drawable="@drawable/shape_rounded_corners_grey_border_solid_maroon" android:state_selected="true" />
+    <item android:drawable="@drawable/shape_rounded_corners_grey_border_solid_maroon"></item>
 </selector>

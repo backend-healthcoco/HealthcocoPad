@@ -49,7 +49,7 @@ public class PatientNumberSearchDialogFragment extends HealthCocoDialogFragment 
         if (doctor != null && doctor.getUser() != null && !Util.isNullOrBlank(doctor.getUser().getUniqueId())) {
             user = doctor.getUser();
             init();
-            setWidthHeight(0.50, 0.35);
+            setWidthHeight(0.50, 0.60);
         }
     }
 

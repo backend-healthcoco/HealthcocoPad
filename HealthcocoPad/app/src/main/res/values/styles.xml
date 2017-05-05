@@ -10,9 +10,7 @@
     <!--LoginSignup button styles-->
     <style name="ButtonLoginSignupStyle" parent="Widget.AppCompat.Button.Borderless">
         <item name="android:textAllCaps">true</item>
-        <item name="android:background">
-            @drawable/shape_rounded_corners_grey_border_solid_lighter_grey
-        </item>
+        <item name="android:background">@drawable/shape_rounded_corners_grey_border_solid_maroon</item>
         <item name="android:textColor">@drawable/text_white_normal_translucent_selected</item>
         <item name="android:minHeight">0dp</item>
         <item name="android:padding">@dimen/btn_padding</item>

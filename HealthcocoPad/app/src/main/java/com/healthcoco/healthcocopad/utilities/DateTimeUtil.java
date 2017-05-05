@@ -389,4 +389,23 @@ public class DateTimeUtil {
         }
         return displayedDate;
     }
+
+    public static long getNextDate(long date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(date);
+        calendar.add(Calendar.DATE, 1);
+        return calendar.getTimeInMillis();
+    }
+
+    public static long getPreviousDate(long date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(date);
+        calendar.add(Calendar.DATE, -1);
+        return calendar.getTimeInMillis();
+    }
+    public static boolean isCurrentDateSelected(String format, String selectedTime) {
+        if (getFormattedDateTime(format, getCurrentDateLong()).equalsIgnoreCase(selectedTime))
+            return true;
+        return false;
+    }
 }

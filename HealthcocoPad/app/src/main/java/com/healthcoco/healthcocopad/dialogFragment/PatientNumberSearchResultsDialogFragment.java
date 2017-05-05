@@ -60,7 +60,7 @@ public class PatientNumberSearchResultsDialogFragment extends HealthCocoDialogFr
             user = doctor.getUser();
             list = LocalDataServiceImpl.getInstance(mApp).getAlreadyRegisteredPatientsList(WebServiceType.SEARCH_PATIENTS, null, null);
             init();
-            setWidthHeight(0.50, 0.50);
+            setWidthHeight(0.50, 0.70);
         }
     }
 

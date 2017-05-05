@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/item_drop_down"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:gravity="center"
+    android:orientation="horizontal">
+
+    <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+        android:id="@+id/tv_bullet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="3dp"
+        android:background="@color/white"
+        android:gravity="center|start"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"
+        android:text="@string/bullet"
+        android:textColor="@drawable/text_enabled_disabled_green_red_selector"
+        android:textSize="@dimen/bullet_size_item_time_slot" />
+
+    <com.healthcoco.healthcocopad.custom.AutoFitTextView
+        android:id="@+id/tv_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center|start"
+        android:padding="5dp"
+        android:singleLine="true"
+        android:textColor="@color/grey_dark_text"
+        android:textSize="12sp" />
+</LinearLayout>
