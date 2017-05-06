@@ -13,14 +13,13 @@ import com.healthcoco.healthcocopad.HealthCocoApplication;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.DoctorContactUs;
 import com.healthcoco.healthcocopad.bean.DoctorProfileToSend;
-import com.healthcoco.healthcocopad.bean.request.AppointmentRequest;
-import com.healthcoco.healthcocopad.bean.server.NotificationResponse;
 import com.healthcoco.healthcocopad.bean.PersonalHistory;
 import com.healthcoco.healthcocopad.bean.VersionCheckRequest;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.request.AddDrugRequest;
 import com.healthcoco.healthcocopad.bean.request.AddEditDrugsAndAllergiesRequest;
 import com.healthcoco.healthcocopad.bean.request.AddMedicalFamilyHistoryRequest;
+import com.healthcoco.healthcocopad.bean.request.AppointmentRequest;
 import com.healthcoco.healthcocopad.bean.request.AssignGroupRequest;
 import com.healthcoco.healthcocopad.bean.request.ClinicImageToSend;
 import com.healthcoco.healthcocopad.bean.request.DoctorSignupHandheldContinueRequest;
@@ -39,6 +38,7 @@ import com.healthcoco.healthcocopad.bean.server.Drug;
 import com.healthcoco.healthcocopad.bean.server.DrugType;
 import com.healthcoco.healthcocopad.bean.server.GCMRequest;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
+import com.healthcoco.healthcocopad.bean.server.NotificationResponse;
 import com.healthcoco.healthcocopad.bean.server.Profession;
 import com.healthcoco.healthcocopad.bean.server.Records;
 import com.healthcoco.healthcocopad.bean.server.Reference;
@@ -1015,9 +1015,10 @@ public class WebDataServiceImpl implements GCMRefreshListener {
         }
     }
 
-    public void getDrugsInteractionResponse(Class<?> class1, ArrayList<DrugInteractionRequest> drugsList, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+    public void getDrugsInteractionResponse(Class<?> class1, String patientId, ArrayList<DrugInteractionRequest> drugsList, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         WebServiceType webServiceType = WebServiceType.GET_DRUG_INTERACTIONS;
-        String url = webServiceType.getUrl();
+        String url = webServiceType.getUrl()
+                + HealthCocoConstants.PARAM_PATIENT_ID + patientId;
         checkNetworkStatus(mApp.getApplicationContext());
         if (HealthCocoConstants.isNetworkOnline) {
             getResponse(webServiceType, class1, url, drugsList, null, responseListener,

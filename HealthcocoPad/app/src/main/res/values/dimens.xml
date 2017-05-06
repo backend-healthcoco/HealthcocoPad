@@ -5,8 +5,8 @@
     <dimen name="initial_screen_logo_size">80dp</dimen>
     <dimen name="initial_screen_icon_sizes">135dp</dimen>
     <dimen name="initial_screen_text_logo_margin">30dp</dimen>
-    <dimen name="text_size_initial_screen_title">25sp</dimen>
-    <dimen name="text_size_initial_screen_texts">20sp</dimen>
+    <dimen name="text_size_initial_screen_title">28sp</dimen>
+    <dimen name="text_size_initial_screen_texts">22sp</dimen>
 
     <dimen name="login_edit_text_bottom_padding">5dp</dimen>
     <dimen name="text_size_signup">15sp</dimen>
@@ -123,7 +123,7 @@
     <dimen name="text_size_add_clinical_note_vital_signs_label_child">17sp</dimen>
     <dimen name="item_padding">8dp</dimen>
     <dimen name="text_size_prescription_diagnostic_label">17sp</dimen>
-    <dimen name="text_size_bt_history_edit_sms_email">15sp</dimen>
+    <dimen name="text_size_bt_history_edit_sms_email">17sp</dimen>
     <dimen name="item_visits_button_margin_8dp">8dp</dimen>
     <dimen name="item_visits_button_padding_left_right_20dp">12dp</dimen>
     <dimen name="item_visits_button_padding_top_bottom_8dp">8dp</dimen>
@@ -141,7 +141,7 @@
     <dimen name="text_size_bottom_button">16sp</dimen>
     <dimen name="popup_item_padding">10dp</dimen>
     <dimen name="drawable_text_padding">5dp</dimen>
-    <dimen name="text_size_emr_date">15sp</dimen>
+    <dimen name="text_size_emr_date">17sp</dimen>
     <dimen name="padding_margin_prescribed_item_center">8dp</dimen>
     <dimen name="text_size_prescribed_by_name">13sp</dimen>
     <dimen name="text_padding_appointment">10dp</dimen>

@@ -28,6 +28,7 @@ import com.healthcoco.healthcocopad.custom.MyScriptEditText;
 import com.healthcoco.healthcocopad.listeners.AddNewPrescriptionListener;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
+import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.healthcoco.healthcocopad.viewholders.SelectedPrescriptionDrugDoseItemsListViewHolder;
@@ -331,7 +332,7 @@ public class AddPrescriptionVisitFragment extends HealthCocoFragment implements 
 
     private void getDrugInteractionsResponse() {
         mActivity.showLoading(true);
-        WebDataServiceImpl.getInstance(mApp).getDrugsInteractionResponse(DrugInteractions.class, getDrugInteractionRequestsList(), this, this);
+        WebDataServiceImpl.getInstance(mApp).getDrugsInteractionResponse(DrugInteractions.class, HealthCocoConstants.SELECTED_PATIENTS_USER_ID, getDrugInteractionRequestsList(), this, this);
     }
 
     public ArrayList<DrugInteractionRequest> getDrugInteractionRequestsList() {

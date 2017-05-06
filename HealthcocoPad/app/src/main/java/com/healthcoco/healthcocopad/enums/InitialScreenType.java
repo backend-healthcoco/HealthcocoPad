@@ -11,7 +11,7 @@ public enum InitialScreenType {
     HCC_PROFILE(R.drawable.front_icon_profile, R.string.title_hcc_profile, R.string.text_hcc_profile, R.dimen.initial_screen_icon_sizes),
     HCC_TWENTY_FOUR_SEVEN(R.drawable.front_icon_twenty_four_seven, R.string.title_hcc_twenty_four_seven, R.string.text_hcc_twenty_four_seven, R.dimen.initial_screen_icon_sizes),
     HCC_CONNECT(R.drawable.front_icon_connection, R.string.title_hcc_conn, R.string.text_hcc_conn, R.dimen.initial_screen_icon_sizes),
-    HCC_SYNC(R.drawable.front_icon_connection, R.string.title_hcc_sync, R.string.text_hcc_sync, R.dimen.initial_screen_icon_sizes);
+    HCC_SYNC(R.drawable.front_icon_sync, R.string.title_hcc_sync, R.string.text_hcc_sync, R.dimen.initial_screen_icon_sizes);
 
     private final int messageId;
     private final int drawableId;

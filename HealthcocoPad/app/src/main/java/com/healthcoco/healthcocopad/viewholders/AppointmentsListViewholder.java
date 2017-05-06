@@ -120,7 +120,6 @@ public class AppointmentsListViewholder extends HealthCocoViewHolder implements
             tvNote.setVisibility(View.GONE);
     }
 
-
     @Override
     public View getContentView() {
         View view = (View) inflater.inflate(R.layout.list_item_appointment, null);

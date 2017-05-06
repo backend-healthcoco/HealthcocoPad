@@ -134,8 +134,8 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
     private ImageButton btPreviousDateHeader;
     private ImageButton btNextDateHeader;
     private TextView tvSelectedDateHeader;
-    private TextView tvSelectedTimeSlot;
-    private TextView tvSelectedTimeSlotHeader;
+//    private TextView tvSelectedTimeSlot;
+//    private TextView tvSelectedTimeSlotHeader;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -216,13 +216,13 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
         gvTimeSlots = (ExpandableGridView) view.findViewById(R.id.gv_time_Slots);
 
         tvSelectedDate = (TextView) view.findViewById(R.id.tv_selected_date);
-        tvSelectedTimeSlot = (TextView) view.findViewById(R.id.tv_selected_time_slot);
+//        tvSelectedTimeSlot = (TextView) view.findViewById(R.id.tv_selected_time_slot);
         btPreviousDate = (ImageButton) view.findViewById(R.id.bt_previuos_date);
         btNextDate = (ImageButton) view.findViewById(R.id.bt_next_date);
         header = (RelativeLayout) view.findViewById(R.id.header);
         headerOne = (RelativeLayout) view.findViewById(R.id.header_one);
         tvSelectedDateHeader = (TextView) view.findViewById(R.id.tv_selected_date_header);
-        tvSelectedTimeSlotHeader = (TextView) view.findViewById(R.id.tv_selected_time_slot_header);
+//        tvSelectedTimeSlotHeader = (TextView) view.findViewById(R.id.tv_selected_time_slot_header);
         btPreviousDateHeader = (ImageButton) view.findViewById(R.id.bt_previuos_date_header);
         btNextDateHeader = (ImageButton) view.findViewById(R.id.bt_next_date_header);
         tvClinicClosed = (TextView) view.findViewById(R.id.tv_clinic_closed);
@@ -270,7 +270,6 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
 
     private void refreshSelectedDate(long date) {
         tvSelectedDate.setText(DateTimeUtil.getFormattedDateTime(DATE_FORMAT_USED_IN_THIS_SCREEN, date));
-//        tvSelectedTimeSlot.setText("(" + DateTimeUtil.getFormattedTime(0, Math.round(selectedAppointment.getTime().getFromTime())) + ")");
     }
 
     private void initPatientProfile() {
@@ -338,6 +337,7 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
                     if (user != null && !Util.isNullOrBlank(user.getUniqueId())) {
                         header.setVisibility(View.GONE);
                         tvSelectedDate.setText(DateTimeUtil.getCurrentFormattedDate(DATE_FORMAT_USED_IN_THIS_SCREEN));
+                        initData();
                         initSelectedAppointment();
                         initPatientProfile();
                         return;
@@ -347,7 +347,6 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
                     if (response.getData() != null && response.getData() instanceof AppointmentTimeSlotDetails) {
                         appointmentTimeSlotDetails = (AppointmentTimeSlotDetails) response.getData();
                         refreshAppointmentSlotDetails(appointmentTimeSlotDetails);
-                        initData();
                     }
                     break;
                 case ADD_APPOINTMENT:
@@ -441,7 +440,6 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
     private void initSelectedAppointment() {
         if (selectedAppointment != null) {
             tvSelectedDate.setText(DateTimeUtil.getFormattedDateTime(DATE_FORMAT_USED_IN_THIS_SCREEN, selectedAppointment.getFromDate()));
-//            tvSelectedTimeSlot.setText("(" + DateTimeUtil.getFormattedTime(0, Math.round(selectedAppointment.getTime().getFromTime())) + ")");
             editNote.setText(Util.getValidatedValue(selectedAppointment.getExplanation()));
         }
     }
@@ -529,14 +527,12 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
                 long nextDateTimeInMillis = DateTimeUtil.getNextDate(DateTimeUtil.getLongFromFormattedDayMonthYearFormatString(DATE_FORMAT_USED_IN_THIS_SCREEN,
                         Util.getValidatedValueOrNull(tvSelectedDate)));
                 tvSelectedDate.setText(DateTimeUtil.getFormattedDateTime(DATE_FORMAT_USED_IN_THIS_SCREEN, nextDateTimeInMillis));
-//                tvSelectedTimeSlot.setText("(" + DateTimeUtil.getFormattedTime(0, Math.round(selectedAppointment.getTime().getFromTime())) + ")");
                 break;
             case R.id.bt_previuos_date_header:
             case R.id.bt_previuos_date:
                 long previousDateTimeInMillis = DateTimeUtil.getPreviousDate(DateTimeUtil.getLongFromFormattedDayMonthYearFormatString(DATE_FORMAT_USED_IN_THIS_SCREEN,
                         Util.getValidatedValueOrNull(tvSelectedDate)));
                 tvSelectedDate.setText(DateTimeUtil.getFormattedDateTime(DATE_FORMAT_USED_IN_THIS_SCREEN, previousDateTimeInMillis));
-//                tvSelectedTimeSlot.setText("(" + DateTimeUtil.getFormattedTime(0, Math.round(selectedAppointment.getTime().getFromTime())) + ")");
                 break;
         }
     }
@@ -652,7 +648,6 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
             selectedTimeSlot = availableTimeSlots;
             adapter.setSelected(position);
             adapter.notifyDataSetChanged();
-//            tvSelectedDate.setText(DateTimeUtil.getCurrentFormattedDate(DATE_FORMAT_USED_IN_THIS_SCREEN) + "( " + selectedTimeSlot.getTime() + " )");
         }
     }
 

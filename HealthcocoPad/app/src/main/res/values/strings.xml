@@ -222,7 +222,7 @@
     <string name="confirmed">Confirmed</string>
     <string name="years">Years</string>
     <string name="year">Year</string>
-    <string name="no_text_dash">--</string>
+    <string name="no_text_dash">&#8211;</string>
     <string name="text_dash">-</string>
     <integer name="id_item_all">11</integer>
     <integer name="id_item_confirmed">12</integer>
@@ -588,11 +588,11 @@
     <string name="created_by">Created By</string>
     <string name="vid"> | VID : </string>
     <string name="vital_signs">Vital Signs</string>
-    <string name="hr">Heart Rate&#160;:--&#160;</string>
-    <string name="bt">Body Temperature&#160;:--&#160;</string>
-    <string name="wt">Weight&#160;:--&#160;</string>
-    <string name="bp">Blood Pressure&#160;:--&#160;</string>
-    <string name="rr">Respiratory Rate&#160;:--&#160;</string>
+    <string name="hr">Heart Rate&#160;:&#160;</string>
+    <string name="bt">Body Temperature&#160;:&#160;</string>
+    <string name="wt">Weight&#160;:&#160;</string>
+    <string name="bp">Blood Pressure&#160;:&#160;</string>
+    <string name="rr">Respiratory Rate&#160;:&#160;</string>
     <!--<string name="hr">HR&#160;:&#45;&#45;&#160;</string>-->
     <!--<string name="bt">BT&#160;:&#45;&#45;&#160;</string>-->
     <!--<string name="wt">WT&#160;:&#45;&#45;&#160;</string>-->
@@ -607,7 +607,7 @@
     <string name="spo2">SpO2&#160;(%)&#160;</string>
 
 
-    <string name="spo2_colon">SpO2&#160;:--&#160;</string>
+    <string name="spo2_colon">SpO2&#160;:&#160;</string>
     <string name="kilograms">&#160;(Kilograms)&#160;</string>
     <string name="bp_mm_hg">&#160;(mm/Hg)&#160;</string>
     <string name="beats_per_min">&#160;(beats/min)&#160;</string>
@@ -615,7 +615,7 @@
     <string name="spo2_percent">&#160;(%)&#160;</string>
     <string name="breaths_per_min">breaths/min</string>
     <string name="edit">Edit</string>
-    <string name="advice">Advice&#160;:--&#160;</string>
+    <string name="advice">Advice&#160;:&#160;</string>
     <string name="drug_name">Drug Name</string>
     <string name="frequency">Frequency</string>
     <string name="duration">Duration</string>

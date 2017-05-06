@@ -49,7 +49,7 @@ public class PatientNumberSearchDialogFragment extends HealthCocoDialogFragment 
         if (doctor != null && doctor.getUser() != null && !Util.isNullOrBlank(doctor.getUser().getUniqueId())) {
             user = doctor.getUser();
             init();
-            setWidthHeight(0.50, 0.60);
+            setWidthHeight(0.50, 0.52);
         }
     }
 
@@ -118,6 +118,7 @@ public class PatientNumberSearchDialogFragment extends HealthCocoDialogFragment 
 
     @Override
     public void onNetworkUnavailable(WebServiceType webServiceType) {
+        mActivity.hideLoading();
         Util.showToast(mActivity, R.string.user_offline);
     }
 

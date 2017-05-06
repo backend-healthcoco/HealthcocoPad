@@ -614,7 +614,7 @@ public class AddClinicalNotesVisitFragment extends HealthCocoFragment implements
         diagramsList.put(diagramUniqueId, diagramUniqueId);
         containerDiagrams.addView(frameLayout);
 //        svScrollView.fullScroll(ScrollView.FOCUS_UP);
-        sendBroadcastForDiagramButtonVisibility(true);
+        sendBroadcastForDiagramLayoutVisibility(true);
     }
 
     @Override
