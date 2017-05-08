@@ -188,5 +188,6 @@
     <dimen name="text_size_book_appointment_dialog_fragment">18sp</dimen>
     <dimen name="grid_item_book_appointment_time_slots">15dp</dimen>
     <dimen name="bullet_size_item_time_slot">12sp</dimen>
+    <dimen name="spacing_suggestion_list_vist_fragment">1dp</dimen>
 
 </resources>

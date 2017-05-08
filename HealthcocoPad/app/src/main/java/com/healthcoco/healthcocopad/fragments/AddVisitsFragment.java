@@ -118,7 +118,6 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
     public static final String TAG_SELECTED_SUGGESTION_OBJECT = "selectedSuggestionObject";
     public static final String TAG_VISIBILITY = "visibility";
 
-    private static final int REQUEST_CODE_ADD_CLINICAL_NOTES = 100;
     private static final float WIDGET_AUTOSCROLL_MARGIN = 250;
     private static final float WIDGET_TEXT_SIZE = 40;
     private static final float WIDGET_INT_WIDTH = 4;
@@ -297,11 +296,11 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
 
     private void setHeightOfWidgetsAndSuggestions() {
         ViewGroup.LayoutParams layoutParamsSuggestionsList = containerSuggestionsList.getLayoutParams();
-        layoutParamsSuggestionsList.height = (int) (ScreenDimensions.SCREEN_WIDTH * 0.30);
+        layoutParamsSuggestionsList.height = (int) (ScreenDimensions.SCREEN_WIDTH * 0.25);
         containerSuggestionsList.setLayoutParams(layoutParamsSuggestionsList);
 
         ViewGroup.LayoutParams layoutParamsWidget = layoutWidget.getLayoutParams();
-        layoutParamsWidget.height = (int) (ScreenDimensions.SCREEN_WIDTH * 0.30);
+        layoutParamsWidget.height = (int) (ScreenDimensions.SCREEN_WIDTH * 0.25);
         layoutWidget.setLayoutParams(layoutParamsWidget);
     }
 
@@ -321,7 +320,7 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
     }
 
     private void setViewToWidget() {
-        mWidget.setBaselinePosition(getResources().getDimension(R.dimen.baseline_position));
+        mWidget.setBaselinePosition((float) (ScreenDimensions.SCREEN_WIDTH * 0.10));
         mWidget.setScrollbarResource(R.drawable.sltw_scrollbar_xml);
         mWidget.setScrollbarMaskResource(R.drawable.sltw_scrollbar_mask);
         mWidget.setScrollbarBackgroundResource(R.drawable.sltw_scrollbar_background);

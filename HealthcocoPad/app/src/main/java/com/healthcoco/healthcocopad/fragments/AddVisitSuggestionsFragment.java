@@ -60,6 +60,7 @@ import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
+import com.healthcoco.healthcocopad.views.GridViewLoadMore;
 import com.healthcoco.healthcocopad.views.ListViewLoadMore;
 
 import org.parceler.Parcels;
@@ -82,7 +83,7 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements
     public static final String TAG_SUGGESTIONS_TYPE = "suggestionType";
     public static final String TAG_SEARCHED_TERM = "searchedTerm";
     public static int PAGE_NUMBER = 0;
-    private ListViewLoadMore lvSuggestionsList;
+    private GridViewLoadMore gvSuggestionsList;
     private boolean isEndOfListAchieved = false;
     private List<Object> suggestionsList = new ArrayList<>();
     private AddVisitSuggestionsListAdapter adapterSolr;
@@ -125,7 +126,7 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements
     public void initViews() {
         parentEditSearchView = (LinearLayout) view.findViewById(R.id.parent_edit_search_view);
         tvHeaderTitle = (TextView) view.findViewById(R.id.tv_header_title);
-        lvSuggestionsList = (ListViewLoadMore) view.findViewById(R.id.lv_suggestions_list);
+        gvSuggestionsList = (GridViewLoadMore) view.findViewById(R.id.lv_suggestions_list);
         progressLoading = (ProgressBar) view.findViewById(R.id.progress_loading);
         btAddNew = (ImageButton) view.findViewById(R.id.bt_add_new);
     }
@@ -134,20 +135,20 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements
     public void initListeners() {
         editTextSearch = initEditSearchView(R.string.search, this);
         btAddNew.setOnClickListener(this);
-        lvSuggestionsList.setOnItemClickListener(this);
+        gvSuggestionsList.setOnItemClickListener(this);
     }
 
     private void initAdapters() {
         adapterSolr = new AddVisitSuggestionsListAdapter(mActivity);
-        lvSuggestionsList.setAdapter(adapterSolr);
+        gvSuggestionsList.setAdapter(adapterSolr);
     }
 
     private void notifyAdapter(List<Object> list) {
         if (!Util.isNullOrEmptyList(list)) {
             LogUtils.LOGD(TAG, "onResponse DrugsList notifyAdapter " + list.size());
-            lvSuggestionsList.setVisibility(View.VISIBLE);
+            gvSuggestionsList.setVisibility(View.VISIBLE);
         } else {
-            lvSuggestionsList.setVisibility(View.GONE);
+            gvSuggestionsList.setVisibility(View.GONE);
         }
         adapterSolr.setListData(list);
         adapterSolr.notifyDataSetChanged();
@@ -340,7 +341,7 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements
             suggestionsList.clear();
         PAGE_NUMBER = 0;
         isEndOfListAchieved = false;
-        lvSuggestionsList.resetPreLastPosition(0);
+        gvSuggestionsList.resetPreLastPosition(0);
         notifyAdapter(suggestionsList);
     }
 

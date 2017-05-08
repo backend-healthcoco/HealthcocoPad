@@ -8,9 +8,9 @@
         android:id="@+id/parent_edit_search_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
         android:background="@drawable/shape_emr_item_background"
         android:gravity="center"
         android:orientation="horizontal">
@@ -74,15 +74,21 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:background="@color/white">
+        android:background="@color/grey_background">
 
-        <com.healthcoco.healthcocopad.views.ListViewLoadMore
+        <com.healthcoco.healthcocopad.views.GridViewLoadMore
             android:id="@+id/lv_suggestions_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:divider="@color/grey_light_divider"
+            android:clipToPadding="false"
+            android:columnWidth="5dp"
+            android:divider="@null"
+            android:horizontalSpacing="1dp"
             android:listSelector="@android:color/transparent"
-            android:overScrollMode="never" />
+            android:numColumns="2"
+            android:overScrollMode="never"
+            android:scrollbarStyle="outsideOverlay"
+            android:verticalSpacing="1dp" />
 
         <ProgressBar
             android:id="@+id/progress_loading"
