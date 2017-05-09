@@ -775,4 +775,5 @@
     <string name="new_appointment">New Appointment</string>
     <string name="patient_details">Patient Details</string>
     <string name="patient_detail">Patient Details</string>
+    <string name="no_lab_test">No Lab Test Found</string>
 </resources>

@@ -390,7 +390,20 @@ public class GsonRequest extends JsonRequest<VolleyResponseBean> {
      * @param object    : object that is to be converted
      */
     public static Object getObjectFromLinkedTreeMap(Class<?> classType, Object object) {
+        return getObjectFromLinkedTreeMap(gson, classType, object);
+    }
+
+    /**
+     * converting a linked map object to the specified class object
+     *
+     * @param gson      : Gson Object
+     * @param classType : response class
+     * @param object    : object that is to be converted
+     */
+    public static Object getObjectFromLinkedTreeMap(Gson gson, Class<?> classType, Object object) {
         try {
+            if (gson == null)
+                gson = new Gson();
             String dataJson = gson.toJson(object, Map.class);
             if (!TextUtils.isEmpty(dataJson)) {
                 return gson.fromJson(dataJson, classType);

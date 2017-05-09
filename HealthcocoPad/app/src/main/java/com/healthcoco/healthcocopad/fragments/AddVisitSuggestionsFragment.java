@@ -99,6 +99,7 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements
     private String searchedTerm;
     private LinearLayout parentEditSearchView;
     private EditText editTextSearch;
+    private TextView tvNoDrugs;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -129,6 +130,7 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements
         gvSuggestionsList = (GridViewLoadMore) view.findViewById(R.id.lv_suggestions_list);
         progressLoading = (ProgressBar) view.findViewById(R.id.progress_loading);
         btAddNew = (ImageButton) view.findViewById(R.id.bt_add_new);
+        tvNoDrugs = (TextView) view.findViewById(R.id.tv_no_drugs);
     }
 
     @Override
@@ -147,8 +149,10 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements
         if (!Util.isNullOrEmptyList(list)) {
             LogUtils.LOGD(TAG, "onResponse DrugsList notifyAdapter " + list.size());
             gvSuggestionsList.setVisibility(View.VISIBLE);
+            tvNoDrugs.setVisibility(View.GONE);
         } else {
             gvSuggestionsList.setVisibility(View.GONE);
+            tvNoDrugs.setVisibility(View.VISIBLE);
         }
         adapterSolr.setListData(list);
         adapterSolr.notifyDataSetChanged();
@@ -461,14 +465,17 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements
             case LAB_TESTS:
                 parentEditSearchView.setVisibility(View.VISIBLE);
                 btAddNew.setVisibility(View.GONE);
+                tvNoDrugs.setText(R.string.no_lab_test);
                 break;
             case DRUGS:
                 parentEditSearchView.setVisibility(View.VISIBLE);
                 btAddNew.setVisibility(View.VISIBLE);
+                tvNoDrugs.setText(R.string.no_drug_history);
                 break;
             default:
                 parentEditSearchView.setVisibility(View.GONE);
                 btAddNew.setVisibility(View.GONE);
+                tvNoDrugs.setText("");
                 break;
         }
     }

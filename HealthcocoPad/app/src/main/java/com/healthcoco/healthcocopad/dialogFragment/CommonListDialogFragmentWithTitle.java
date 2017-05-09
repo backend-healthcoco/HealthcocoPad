@@ -97,7 +97,7 @@ public class CommonListDialogFragmentWithTitle extends HealthCocoDialogFragment 
     @Override
     public void onActivityCreated(Bundle arg0) {
         super.onActivityCreated(arg0);
-        setWidthHeight(0.60, 10);
+//        setWidthHeight(0.80, 0.60);
         init();
     }
 

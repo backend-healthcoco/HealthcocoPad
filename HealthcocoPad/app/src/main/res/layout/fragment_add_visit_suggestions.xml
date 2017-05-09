@@ -76,6 +76,15 @@
         android:layout_weight="1"
         android:background="@color/grey_background">
 
+        <TextView
+            android:id="@+id/tv_no_drugs"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textSize="@dimen/text_size_no_results"
+            android:textStyle="bold"
+            android:visibility="gone" />
+
         <com.healthcoco.healthcocopad.views.GridViewLoadMore
             android:id="@+id/lv_suggestions_list"
             android:layout_width="match_parent"
