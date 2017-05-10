@@ -14,9 +14,8 @@
         <ImageView
             android:id="@+id/iv_doctor_cover_photo"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:adjustViewBounds="true"
-            android:background="@drawable/bg_doctor_img"
             android:scaleType="centerCrop" />
 
         <LinearLayout
@@ -66,7 +65,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="10dp"
-            android:background="@drawable/img_report_normal" />
+            android:background="@drawable/bg_cam_img" />
     </FrameLayout>
 
     <View
@@ -81,9 +80,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
             android:focusable="true"
             android:focusableInTouchMode="true"
+            android:orientation="vertical"
             android:padding="10dp">
 
             <LinearLayout
@@ -119,8 +118,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:digits=" abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-                        android:hint="@string/full_name"
                         android:focusableInTouchMode="true"
+                        android:hint="@string/full_name"
                         android:inputType="textPersonName|textNoSuggestions|textCapWords"
                         android:singleLine="true" />
                 </android.support.design.widget.TextInputLayout>
@@ -138,39 +137,6 @@
                 android:gravity="center|start"
                 android:orientation="horizontal">
 
-                <!--<RadioGroup-->
-                    <!--android:id="@+id/rg_gender_select"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_gravity="center"-->
-                    <!--android:orientation="horizontal"-->
-                    <!--android:paddingTop="10dp">-->
-
-                    <!--<com.healthcoco.healthcocoplus.views.FontAwesomeRadioButton-->
-                        <!--android:id="@+id/rb_male"-->
-                        <!--android:layout_width="0dp"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_weight="0.5"-->
-                        <!--android:button="@android:color/transparent"-->
-                        <!--android:paddingLeft="1dp"-->
-                        <!--android:tag="@string/male"-->
-                        <!--android:text="@string/text_check_male"-->
-                        <!--android:textColor="@drawable/text_light_grey_normal_blue_selected"-->
-                        <!--android:textSize="@dimen/text_size_doctor_profile_item_header_child" />-->
-
-                    <!--<RadioButton-->
-                        <!--android:id="@+id/rb_female"-->
-                        <!--android:layout_width="0dp"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_weight="0.5"-->
-                        <!--android:button="@android:color/transparent"-->
-                        <!--android:checked="false"-->
-                        <!--android:paddingLeft="1dp"-->
-                        <!--android:tag="@string/female"-->
-                        <!--android:text="@string/text_check_female"-->
-                        <!--android:textColor="@drawable/text_light_grey_normal_blue_selected"-->
-                        <!--android:textSize="@dimen/text_size_doctor_profile_item_header_child" />-->
-                <!--</RadioGroup>-->
                 <RadioGroup
                     android:id="@+id/rg_gender_select"
                     android:layout_width="match_parent"
@@ -186,11 +152,12 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:button="@drawable/radiobutton_blue_color"
+                        android:background="@android:color/transparent"
+                        android:button="@android:color/transparent"
                         android:checked="false"
                         android:paddingLeft="1dp"
-                        android:text="@string/rb_male"
                         android:tag="@string/male"
+                        android:text="@string/text_check_male"
                         android:textColor="@drawable/text_light_grey_normal_blue_selected"
                         android:textSize="@dimen/text_size_signup" />
 
@@ -199,10 +166,12 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:button="@drawable/radiobutton_blue_color"
+                        android:background="@android:color/transparent"
+                        android:button="@android:color/transparent"
                         android:checked="false"
-                        android:text="@string/rb_female"
+                        android:paddingLeft="1dp"
                         android:tag="@string/female"
+                        android:text="@string/text_check_female"
                         android:textColor="@drawable/text_light_grey_normal_blue_selected"
                         android:textSize="@dimen/text_size_signup" />
                 </RadioGroup>

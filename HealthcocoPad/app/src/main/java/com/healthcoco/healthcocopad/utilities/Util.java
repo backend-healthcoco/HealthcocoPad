@@ -470,12 +470,21 @@ public class Util {
                 formattedAge = dob.getDays() + "/" + dob.getMonths() + "/" + dob.getYears();
             }
         }
-        if (!Util.isNullOrBlank(gender))
-            formattedString = formattedString + " | " + gender;
-        if (!Util.isNullOrBlank(formattedString) && !Util.isNullOrBlank(formattedAge))
-            formattedString = formattedString + " ," + formattedAge;
-        else if (Util.isNullOrBlank(formattedString) && !Util.isNullOrBlank(formattedAge))
-            formattedString = " | " + formattedString + formattedAge;
+        if ((object instanceof DoctorProfile)) {
+            if (!Util.isNullOrBlank(gender))
+                formattedString = formattedString + gender;
+            if (!Util.isNullOrBlank(formattedString) && !Util.isNullOrBlank(formattedAge))
+                formattedString = formattedString + " | " + formattedAge;
+            else if (Util.isNullOrBlank(formattedString) && !Util.isNullOrBlank(formattedAge))
+                formattedString = formattedString + formattedAge;
+        } else {
+            if (!Util.isNullOrBlank(gender))
+                formattedString = formattedString + " | " + gender;
+            if (!Util.isNullOrBlank(formattedString) && !Util.isNullOrBlank(formattedAge))
+                formattedString = formattedString + " ," + formattedAge;
+            else if (Util.isNullOrBlank(formattedString) && !Util.isNullOrBlank(formattedAge))
+                formattedString = " | " + formattedString + formattedAge;
+        }
         return formattedString;
     }
 

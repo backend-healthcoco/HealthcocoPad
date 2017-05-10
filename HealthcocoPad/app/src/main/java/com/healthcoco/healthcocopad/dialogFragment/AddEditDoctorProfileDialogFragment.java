@@ -130,6 +130,7 @@ public class AddEditDoctorProfileDialogFragment extends HealthCocoDialogFragment
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         init();
+        setWidthHeight(0.70, 0.70);
     }
 
     @Override
@@ -155,9 +156,8 @@ public class AddEditDoctorProfileDialogFragment extends HealthCocoDialogFragment
         containerSpecialities = (LinearLayout) view.findViewById(R.id.container_specialities);
         btAddSpeciality = (LinearLayout) view.findViewById(R.id.bt_add_speciality);
         autotvExperience = (AutoCompleteTextView) view.findViewById(R.id.autotv_experience);
-        //init top layout height
-        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams((int)
-                (ScreenDimensions.SCREEN_WIDTH * 0.50), (int) ((ScreenDimensions.SCREEN_HEIGHT) * 0.20));
+//        //init top layout height
+        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams((int) (ScreenDimensions.SCREEN_WIDTH * 0.70), (int) (ScreenDimensions.SCREEN_HEIGHT * 0.20));
         ivDoctorCoverPhoto.setLayoutParams(layoutParams);
 
         radioGroupGender = (RadioGroup) view.findViewById(R.id.rg_gender_select);

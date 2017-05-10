@@ -29,6 +29,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
+                    android:paddingBottom="100dp"
                     android:paddingLeft="@dimen/list_item_clinic_profile_padding"
                     android:paddingRight="@dimen/list_item_clinic_profile_padding"
                     android:paddingTop="@dimen/list_item_clinic_profile_padding" />

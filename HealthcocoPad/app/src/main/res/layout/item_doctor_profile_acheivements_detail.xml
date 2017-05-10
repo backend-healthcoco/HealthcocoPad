@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingBottom="10dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,7 +15,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:maxLines="1"
             android:text="@string/awards_and_publication"
             android:textColor="@color/black"
             android:textSize="@dimen/text_size_doctor_profile_item_header_child" />
@@ -39,8 +39,8 @@
             android:id="@+id/tv_awards_and_publication_year"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/year"
             android:layout_weight="1"
+            android:text="@string/year"
             android:textColor="@color/black"
             android:textSize="@dimen/text_size_doctor_profile_item_header_child" />
 

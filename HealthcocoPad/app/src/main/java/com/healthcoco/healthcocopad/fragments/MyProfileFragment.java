@@ -36,6 +36,7 @@ import java.util.List;
  */
 public class MyProfileFragment extends HealthCocoFragment implements View.OnClickListener {
     private static final String CHARACTER_BETWEEN_EDUCATION_AND_REGISTRATION_DETAILS = " ; ";
+    public static final int REQUEST_CODE_MY_PROFILE = 113;
     public static final String TAG_DOCTOR_PROFILE = "doctor_profile";
     private DoctorProfileListener doctorProfileListener;
 
@@ -315,25 +316,25 @@ public class MyProfileFragment extends HealthCocoFragment implements View.OnClic
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.bt_edit_contact:
-                openDialogFragment(new AddEditDoctorContactDialogFragment(), HealthCocoConstants.REQUEST_CODE_MY_PROFILE);
+                openDialogFragment(new AddEditDoctorContactDialogFragment(), REQUEST_CODE_MY_PROFILE);
                 break;
             case R.id.bt_edit_awards_and_publication:
-                openDialogFragment(new AddEditDoctorAwardAndPublicationDialogFragment(), HealthCocoConstants.REQUEST_CODE_MY_PROFILE);
+                openDialogFragment(new AddEditDoctorAwardAndPublicationDialogFragment(), REQUEST_CODE_MY_PROFILE);
                 break;
             case R.id.bt_edit_education:
-                openDialogFragment(new AddEditDoctorEducationDialogFragment(), HealthCocoConstants.REQUEST_CODE_MY_PROFILE);
+                openDialogFragment(new AddEditDoctorEducationDialogFragment(), REQUEST_CODE_MY_PROFILE);
                 break;
             case R.id.bt_edit_registration_detail:
-                openDialogFragment(new AddEditDoctorRegistartionDetailDialogFragment(), HealthCocoConstants.REQUEST_CODE_MY_PROFILE);
+                openDialogFragment(new AddEditDoctorRegistartionDetailDialogFragment(), REQUEST_CODE_MY_PROFILE);
                 break;
             case R.id.bt_edit_experience:
-                openDialogFragment(new AddEditDoctorExperienceDialogFragment(), HealthCocoConstants.REQUEST_CODE_MY_PROFILE);
+                openDialogFragment(new AddEditDoctorExperienceDialogFragment(), REQUEST_CODE_MY_PROFILE);
                 break;
             case R.id.bt_edit_professional_membership:
-                openDialogFragment(new AddEditDoctorMembershipDialogFragment(), HealthCocoConstants.REQUEST_CODE_MY_PROFILE);
+                openDialogFragment(new AddEditDoctorMembershipDialogFragment(), REQUEST_CODE_MY_PROFILE);
                 break;
             case R.id.bt_edit_professional_statement:
-                openDialogFragment(new AddEditDoctorStatementDialogFragment(), HealthCocoConstants.REQUEST_CODE_MY_PROFILE);
+                openDialogFragment(new AddEditDoctorStatementDialogFragment(), REQUEST_CODE_MY_PROFILE);
                 break;
         }
     }
@@ -341,7 +342,7 @@ public class MyProfileFragment extends HealthCocoFragment implements View.OnClic
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == HealthCocoConstants.REQUEST_CODE_MY_PROFILE
+        if (requestCode == REQUEST_CODE_MY_PROFILE
                 && data != null && data.hasExtra(TAG_DOCTOR_PROFILE)
                 && doctorProfile != null) {
             DoctorProfile profile = data.getParcelableExtra(TAG_DOCTOR_PROFILE);
@@ -355,7 +356,7 @@ public class MyProfileFragment extends HealthCocoFragment implements View.OnClic
                 doctorProfile.setProfessionalMemberships(profile.getProfessionalMemberships());
                 initData(doctorProfile);
             }
-        } else if (requestCode == HealthCocoConstants.REQUEST_CODE_MY_PROFILE && doctorProfile != null) {
+        } else if (requestCode == REQUEST_CODE_MY_PROFILE && doctorProfile != null) {
             if (resultCode == Activity.RESULT_OK) {
                 doctorProfileListener.onRefresh();
             }

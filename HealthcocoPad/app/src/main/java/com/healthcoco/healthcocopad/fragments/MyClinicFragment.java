@@ -27,6 +27,7 @@ import com.healthcoco.healthcocopad.custom.AutoCompleteTextViewAdapter;
 import com.healthcoco.healthcocopad.dialogFragment.AddEditAppointmentDetailDialogFragment;
 import com.healthcoco.healthcocopad.dialogFragment.AddEditClinicHoursDialogFragment;
 import com.healthcoco.healthcocopad.enums.AutoCompleteTextViewType;
+import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.listeners.DoctorProfileListener;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
@@ -46,6 +47,7 @@ public class MyClinicFragment extends HealthCocoFragment implements View.OnClick
 
     public static final String TIME_FORMAT_CLINIC_HOURS = "hh:mm  aaa";
     public static final String TAG_CLINIC_PROFILE = "clinicProfile";
+    public static final int REQUEST_CODE_MY_CLINIC = 114;
     private DoctorProfileListener doctorProfileListener;
     private AutoCompleteTextView autotvClinicName;
     private TextView tvAddress;
@@ -314,10 +316,10 @@ public class MyClinicFragment extends HealthCocoFragment implements View.OnClick
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.bt_edit_visiting_hours:
-                openDialogFragment(new AddEditClinicHoursDialogFragment(), HealthCocoConstants.TAG_CLINIC_PROFILE, selectedClinicProfile, HealthCocoConstants.REQUEST_CODE_MY_CLINIC);
+                openDialogFragment(new AddEditClinicHoursDialogFragment(), HealthCocoConstants.TAG_CLINIC_PROFILE, selectedClinicProfile, REQUEST_CODE_MY_CLINIC, CommonOpenUpFragmentType.ADD_EDIT_DOCTOR_PROFILE_CLINIC_HOURS);
                 break;
             case R.id.bt_edit_appointment_details:
-                openDialogFragment(new AddEditAppointmentDetailDialogFragment(), HealthCocoConstants.TAG_CLINIC_PROFILE, selectedClinicProfile, HealthCocoConstants.REQUEST_CODE_MY_CLINIC);
+                openDialogFragment(new AddEditAppointmentDetailDialogFragment(), HealthCocoConstants.TAG_CLINIC_PROFILE, selectedClinicProfile, REQUEST_CODE_MY_CLINIC, CommonOpenUpFragmentType.ADD_EDIT_DOCTOR_APPOINTMENT_DETAIL);
                 break;
             case R.id.bt_enlarged_map:
 //                if (selectedClinicProfile != null && !Util.isNullOrBlank(selectedClinicProfile.getUniqueId()))
@@ -328,7 +330,7 @@ public class MyClinicFragment extends HealthCocoFragment implements View.OnClick
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == HealthCocoConstants.REQUEST_CODE_MY_CLINIC
+        if (requestCode == REQUEST_CODE_MY_CLINIC
                 && data != null && data.hasExtra(HealthCocoConstants.TAG_CLINIC_PROFILE)
                 && selectedClinicProfile != null) {
             DoctorClinicProfile profile = Parcels.unwrap(data.getParcelableExtra(HealthCocoConstants.TAG_CLINIC_PROFILE));

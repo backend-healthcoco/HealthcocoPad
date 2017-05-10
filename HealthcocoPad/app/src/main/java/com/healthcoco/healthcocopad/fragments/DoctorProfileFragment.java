@@ -26,10 +26,13 @@ import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.DoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.User;
+import com.healthcoco.healthcocopad.custom.DownloadFileFromUrlAsyncTask;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocopad.dialogFragment.AddEditDoctorProfileDialogFragment;
 import com.healthcoco.healthcocopad.enums.FragmentType;
+import com.healthcoco.healthcocopad.enums.HealthCocoFileType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
+import com.healthcoco.healthcocopad.enums.PatientProfileScreenType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.DoctorProfileListener;
 import com.healthcoco.healthcocopad.listeners.DownloadFileFromUrlListener;
@@ -71,7 +74,7 @@ public class DoctorProfileFragment extends HealthCocoFragment implements GsonReq
     private TextView tvName;
     private TextViewFontAwesome btEdit;
     private ImageView ivDoctorCoverPhoto;
-    private ImageView ivImage;
+    private ImageView ivProfileImage;
     private FrameLayout containerTop;
     private TextView tvSpecialities;
     private TextView tvInitialAlphabet;
@@ -109,7 +112,10 @@ public class DoctorProfileFragment extends HealthCocoFragment implements GsonReq
     public void initViews() {
         tvName = (TextView) view.findViewById(R.id.tv_name);
         ivDoctorCoverPhoto = (ImageView) view.findViewById(R.id.iv_doctor_cover_photo);
-        ivImage = (ImageView) view.findViewById(R.id.iv_image);
+        //init top layout height
+//        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams((int) (ScreenDimensions.SCREEN_WIDTH * 0.30), (int) (ScreenDimensions.SCREEN_HEIGHT));
+//        ivDoctorCoverPhoto.setLayoutParams(layoutParams);
+        ivProfileImage = (ImageView) view.findViewById(R.id.iv_image);
         btEdit = (TextViewFontAwesome) view.findViewById(R.id.bt_edit);
         viewPager = (ViewPager) view.findViewById(R.id.viewpager);
         tabMyProfile = (TextView) view.findViewById(R.id.tab_my_profile);
@@ -127,7 +133,7 @@ public class DoctorProfileFragment extends HealthCocoFragment implements GsonReq
         tabMyProfile.setOnClickListener(this);
         tabMyClinic.setOnClickListener(this);
         viewPager.addOnPageChangeListener(this);
-        ivImage.setOnClickListener(this);
+        ivProfileImage.setOnClickListener(this);
     }
 
     private void initViewPager() {
@@ -172,7 +178,7 @@ public class DoctorProfileFragment extends HealthCocoFragment implements GsonReq
         bundle.putString(HealthCocoConstants.TAG_UNIQUE_ID, uniqueId);
         AddEditDoctorProfileDialogFragment editDoctorProfileDetailsFragment = new AddEditDoctorProfileDialogFragment(profile);
         editDoctorProfileDetailsFragment.setArguments(bundle);
-        editDoctorProfileDetailsFragment.setTargetFragment(this,TAG_RESULT_CODE);
+        editDoctorProfileDetailsFragment.setTargetFragment(this, TAG_RESULT_CODE);
         editDoctorProfileDetailsFragment.show(mFragmentManager, editDoctorProfileDetailsFragment.getClass().getSimpleName());
     }
 
@@ -256,9 +262,14 @@ public class DoctorProfileFragment extends HealthCocoFragment implements GsonReq
 
     private void loadImages() {
         if (doctorProfile != null) {
-            DownloadImageFromUrlUtil.loadImageUsingImageLoader(null, ivImage, doctorProfile.getThumbnailUrl());
-
-            DownloadImageFromUrlUtil.loadImageUsingImageLoader(null, ivDoctorCoverPhoto, doctorProfile.getCoverImageUrl());
+            //loadng profile image and cover image
+            DownloadImageFromUrlUtil.loadImageWithInitialAlphabet(mActivity, PatientProfileScreenType.IN_DOCTOR_PROFILE, doctorProfile, null, ivProfileImage, tvInitialAlphabet);
+            if (!Util.isNullOrBlank(doctorProfile.getCoverImageUrl())) {
+                doctorProfile.setCoverImagePath(ImageUtil.getPathToSaveFile(HealthCocoFileType.DOCTOR_COVER_IMAGE, Util.getFileNameFromUrl(doctorProfile.getCoverImageUrl()), Util.getFileExtension(doctorProfile.getCoverImageUrl())));
+                new DownloadFileFromUrlAsyncTask(mActivity, this, HealthCocoFileType.DOCTOR_COVER_IMAGE, Util.getFileNameFromUrl(doctorProfile.getCoverImageUrl()), null, null).execute(doctorProfile.getCoverImageUrl());
+            } else {
+                ivDoctorCoverPhoto.setBackgroundResource(R.drawable.bg_doctor_img);
+            }
         }
     }
 
@@ -343,12 +354,12 @@ public class DoctorProfileFragment extends HealthCocoFragment implements GsonReq
     public void onPostExecute(String filePath) {
         if (!Util.isNullOrBlank(filePath)) {
             if (!Util.isNullOrBlank(doctorProfile.getProfileImagePath()) && doctorProfile.getProfileImagePath().equalsIgnoreCase(filePath)) {
-                int width = ivImage.getLayoutParams().width;
+                int width = ivProfileImage.getLayoutParams().width;
                 LogUtils.LOGD(TAG, "Image SIze " + width);
                 Bitmap bitmap = ImageUtil.getDecodedBitmapFromPath(filePath, width, width);
                 if (bitmap != null) {
-                    ivImage.setImageBitmap(bitmap);
-                    ivImage.setVisibility(View.VISIBLE);
+                    ivProfileImage.setImageBitmap(bitmap);
+                    ivProfileImage.setVisibility(View.VISIBLE);
                 }
             } else if (!Util.isNullOrBlank(doctorProfile.getCoverImagePath()) && doctorProfile.getCoverImagePath().equalsIgnoreCase(filePath)) {
                 int width = ScreenDimensions.SCREEN_WIDTH;

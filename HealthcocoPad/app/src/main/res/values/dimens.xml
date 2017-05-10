@@ -45,16 +45,16 @@
     <dimen name="image_doctor_in_clinic_profile">40dp</dimen>
     <dimen name="text_size_initial_alphabet_emr_actionbar">30sp</dimen>
     <dimen name="text_size_initial_alphabet_patient_profile_menu">15sp</dimen>
-    <dimen name="text_size_doctor_profile_name">14sp</dimen>
-    <dimen name="text_size_doctor_profile_speciality">12sp</dimen>
-    <dimen name="text_size_doctor_profile_tab">14sp</dimen>
+    <dimen name="text_size_doctor_profile_name">18sp</dimen>
+    <dimen name="text_size_doctor_profile_speciality">16sp</dimen>
+    <dimen name="text_size_doctor_profile_tab">18sp</dimen>
     <dimen name="list_item_clinic_profile_padding">8dp</dimen>
 
-    <dimen name="initial_alphabet_doctor_profile">71dp</dimen>
+    <dimen name="initial_alphabet_doctor_profile">120dp</dimen>
     <dimen name="text_size_initial_alphabet_doctor_profile">20sp</dimen>
     <dimen name="dialog_action_bar_size">50dp</dimen>
-    <dimen name="text_size_doctor_profile_item_header">16sp</dimen>
-    <dimen name="text_size_doctor_profile_item_header_child">15sp</dimen>
+    <dimen name="text_size_doctor_profile_item_header">18sp</dimen>
+    <dimen name="text_size_doctor_profile_item_header_child">16sp</dimen>
     <dimen name="text_size_fontawesome_edit_icon">15sp</dimen>
     <dimen name="text_size_fontawesome_edit_icon_book_appointment">20sp</dimen>
     <dimen name="doctor_profile_layout_padding">10dp</dimen>

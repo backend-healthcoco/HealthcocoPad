@@ -44,8 +44,6 @@ public class HealthCocoConstants {
     public static final int RESULT_CODE_ADD_EDIT_CLINIC_HOURS = 111;
     public static final int RESULT_CODE_ADD_EDIT_CLINIC_CONTACT = 112;
     public static final int RESULT_CODE_ADD_EDIT_APPOINTMENT_DETAILS = 112;
-    public static final int REQUEST_CODE_MY_PROFILE = 113;
-    public static final int REQUEST_CODE_MY_CLINIC = 114;
     public static final int RESULT_CODE_REGISTRATION_DETAIL = 115;
     public static final int RESULT_CODE_DOCTOR_PROFILE_CONTACT_DETAIL = 116;
     public static final int RESULT_CODE_DOCTOR_AWARDS_PUBLICATION_DETAIL = 117;

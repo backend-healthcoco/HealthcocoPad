@@ -96,7 +96,7 @@ public class AddEditClinicHoursDialogFragment extends HealthCocoDialogFragment i
         doctorClinicProfile = Parcels.unwrap(getArguments().getParcelable(HealthCocoConstants.TAG_CLINIC_PROFILE));
         if (clinicDetailResponse != null)
             uniqueId = clinicDetailResponse.getUniqueId();
-        else doctorClinicProfile.getUniqueId();
+        else uniqueId = doctorClinicProfile.getUniqueId();
         if (!Util.isNullOrBlank(uniqueId))
             switch (fragmentType) {
                 case ADD_EDIT_CLINIC_HOURS:
@@ -291,7 +291,6 @@ public class AddEditClinicHoursDialogFragment extends HealthCocoDialogFragment i
     private List<?> getWorkingSchedules() {
         ArrayList<WorkingSchedule> scheduleList = new ArrayList<>();
         for (WeekDayNameType weekdayType :
-
                 WeekDayNameType.values()) {
 
             LinearLayout containerSubItemFromTo = (LinearLayout) view.findViewWithTag(weekdayType);

@@ -149,8 +149,8 @@ public class MenuDrawerFragment extends HealthCocoFragment implements View.OnCli
         list = new ArrayList<>();
         list.add(FragmentType.CONTACTS);
 //        list.add(FragmentType.CALENDAR);
-//        list.add(FragmentType.PROFILE);
-//        list.add(FragmentType.CLINIC_PROFILE);
+        list.add(FragmentType.PROFILE);
+        list.add(FragmentType.CLINIC_PROFILE);
 //        list.add(FragmentType.ISSUE_TRACKER);
 //        list.add(FragmentType.SYNC);
         list.add(FragmentType.HELP_IMPROVE);
@@ -165,7 +165,7 @@ public class MenuDrawerFragment extends HealthCocoFragment implements View.OnCli
         switch (view.getId()) {
             case R.id.item_profile_header:
                 openFragment(FragmentType.PROFILE);
-//                ((HomeActivity) mActivity).initFragment(FragmentType.PROFILE);
+                ((HomeActivity) mActivity).initFragment(FragmentType.PROFILE);
                 break;
             case R.id.tv_clinic_name:
                 if (clinicProfile.size() > 1) {
