@@ -9,6 +9,7 @@ import com.healthcoco.healthcocopad.HealthCocoViewHolder;
 import com.healthcoco.healthcocopad.bean.server.NotificationResponse;
 import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
 import com.healthcoco.healthcocopad.bean.server.Records;
+import com.healthcoco.healthcocopad.enums.BookAppointmentFromScreenType;
 import com.healthcoco.healthcocopad.listeners.CommonEMRItemClickListener;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.healthcoco.healthcocopad.viewholders.AppointmentsListViewholder;
@@ -63,7 +64,7 @@ public class NotificationResponseDataAdapter extends BaseAdapter {
                 break;
             case APPOINTMENT:
                 CalendarEvents calendarEvents = (CalendarEvents) notificationResponse.getData();
-                holder = new AppointmentsListViewholder(mActivity);
+                holder = new AppointmentsListViewholder(mActivity, BookAppointmentFromScreenType.NOTIFICATION_APPOINTMENTS_LIST_RESCHEDULE);
                 convertView = holder.getContentView();
                 holder.setData(calendarEvents);
                 holder.applyData();

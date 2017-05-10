@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
+import com.healthcoco.healthcocopad.enums.BookAppointmentFromScreenType;
 import com.healthcoco.healthcocopad.skscustomclasses.CustomListData;
 import com.healthcoco.healthcocopad.skscustomclasses.CustomListDataFormatter;
 import com.healthcoco.healthcocopad.skscustomclasses.SKSCustomListAdapter;
@@ -69,7 +70,7 @@ public class AppointmentsListAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            holder = new AppointmentsListViewholder(mActivity);
+            holder = new AppointmentsListViewholder(mActivity, BookAppointmentFromScreenType.APPOINTMENTS_LIST_RESCHEDULE);
             convertView = holder.getContentView();
             convertView.setTag(holder);
         } else

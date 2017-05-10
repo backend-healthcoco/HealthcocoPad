@@ -55,10 +55,12 @@ public class AppointmentsListViewholder extends HealthCocoViewHolder implements
     private LinearLayout btRemind;
     private LinearLayout containerBottomOptions;
     private TextView tvNote;
+    private BookAppointmentFromScreenType screenType;
 
-    public AppointmentsListViewholder(HealthCocoActivity mActivity) {
+    public AppointmentsListViewholder(HealthCocoActivity mActivity, BookAppointmentFromScreenType screenType) {
         super(mActivity);
         this.mActivity = mActivity;
+        this.screenType = screenType;
     }
 
     @Override
@@ -207,7 +209,7 @@ public class AppointmentsListViewholder extends HealthCocoViewHolder implements
         BookAppointmentDialogFragment dialogFragment = new BookAppointmentDialogFragment();
         Bundle bundle = new Bundle();
         bundle.putString(HealthCocoConstants.TAG_UNIQUE_ID, appointment.getAppointmentId());
-        bundle.putParcelable(BookAppointmentDialogFragment.TAG_FROM_SCREEN_TYPE, Parcels.wrap(BookAppointmentFromScreenType.APPOINTMENTS_LIST_RESCHEDULE.ordinal()));
+        bundle.putParcelable(BookAppointmentDialogFragment.TAG_FROM_SCREEN_TYPE, Parcels.wrap(screenType.ordinal()));
         dialogFragment.setArguments(bundle);
         dialogFragment.setTargetFragment(dialogFragment, PatientAppointmentDetailFragment.REQUEST_CODE_APPOINTMENTS_LIST);
         dialogFragment.show(mActivity.getSupportFragmentManager(), dialogFragment.getClass().getSimpleName());
@@ -263,7 +265,6 @@ public class AppointmentsListViewholder extends HealthCocoViewHolder implements
         Util.showToast(mActivity, R.string.user_offline);
         mActivity.hideLoading();
     }
-
 
     @Override
     public void onResponse(VolleyResponseBean response) {

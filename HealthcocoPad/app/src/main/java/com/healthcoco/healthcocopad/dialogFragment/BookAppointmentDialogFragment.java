@@ -26,7 +26,6 @@ import android.widget.TextView;
 import com.android.volley.Response;
 import com.healthcoco.healthcocopad.HealthCocoDialogFragment;
 import com.healthcoco.healthcocopad.R;
-import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.adapter.AppointmentSlotAdapter;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.request.AppointmentRequest;
@@ -36,18 +35,15 @@ import com.healthcoco.healthcocopad.bean.server.AppointmentTimeSlotDetails;
 import com.healthcoco.healthcocopad.bean.server.AvailableTimeSlots;
 import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
 import com.healthcoco.healthcocopad.bean.server.DoctorClinicProfile;
-import com.healthcoco.healthcocopad.bean.server.DoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.bean.server.WorkingHours;
-import com.healthcoco.healthcocopad.custom.AutoCompleteTextViewAdapter;
 import com.healthcoco.healthcocopad.custom.ExistingPatientAutoCompleteAdapter;
 import com.healthcoco.healthcocopad.custom.HealthcocoTextWatcher;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocopad.custom.ScrollViewWithRelativeLayoutHeader;
 import com.healthcoco.healthcocopad.enums.AppointmentStatusType;
-import com.healthcoco.healthcocopad.enums.AutoCompleteTextViewType;
 import com.healthcoco.healthcocopad.enums.BookAppointmentFromScreenType;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.CreatedByType;
@@ -57,6 +53,7 @@ import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.fragments.CalendarFragment;
 import com.healthcoco.healthcocopad.fragments.CommonOpenUpPatientDetailFragment;
 import com.healthcoco.healthcocopad.fragments.ContactsListFragment;
+import com.healthcoco.healthcocopad.fragments.NotificationResponseDataFragment;
 import com.healthcoco.healthcocopad.fragments.PatientAppointmentDetailFragment;
 import com.healthcoco.healthcocopad.listeners.AutoCompleteTextViewListener;
 import com.healthcoco.healthcocopad.listeners.HealthcocoTextWatcherListener;
@@ -70,7 +67,6 @@ import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
 import com.healthcoco.healthcocopad.utilities.ScreenDimensions;
 import com.healthcoco.healthcocopad.utilities.Util;
-import com.healthcoco.healthcocopad.views.CustomAutoCompleteTextView;
 import com.healthcoco.healthcocopad.views.ExpandableGridView;
 
 import org.parceler.Parcels;
@@ -79,7 +75,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Shreshtha on 03-03-2017.
@@ -445,10 +440,18 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
     }
 
     private void sendBroadcasts(String aptId) {
-        Intent intent = new Intent(PatientAppointmentDetailFragment.INTENT_GET_APPOINTMENT_LIST_LOCAL);
+        Intent intent = new Intent();
+        switch (bookAppointmentFromScreenType) {
+            case APPOINTMENTS_LIST_RESCHEDULE:
+                intent.setAction(PatientAppointmentDetailFragment.INTENT_GET_APPOINTMENT_LIST_LOCAL);
+                break;
+            case NOTIFICATION_APPOINTMENTS_LIST_RESCHEDULE:
+                intent.setAction(NotificationResponseDataFragment.INTENT_GET_NOTIFICATION_APPOINTMENT_LIST_LOCAL);
+                break;
+        }
         intent.putExtra(TAG_APPOINTMENT_ID, aptId);
-        LocalBroadcastManager.getInstance(mApp.getApplicationContext()).sendBroadcast(intent);
-
+        if (intent != null && intent.getAction() != null)
+            LocalBroadcastManager.getInstance(mApp.getApplicationContext()).sendBroadcast(intent);
         sendBroadcastToCalendarFragment();
     }
 
@@ -613,6 +616,7 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
         switch (bookAppointmentFromScreenType) {
             case CALENDAR_LIST_RESCHEDULE:
             case APPOINTMENTS_LIST_RESCHEDULE:
+            case NOTIFICATION_APPOINTMENTS_LIST_RESCHEDULE:
                 appointment.setState(AppointmentStatusType.RESCHEDULE);
                 break;
             default:

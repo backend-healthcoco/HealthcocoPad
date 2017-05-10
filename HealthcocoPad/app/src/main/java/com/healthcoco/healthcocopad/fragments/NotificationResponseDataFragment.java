@@ -1,8 +1,12 @@
 package com.healthcoco.healthcocopad.fragments;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,10 +45,12 @@ import java.util.ArrayList;
 
 public class NotificationResponseDataFragment extends HealthCocoFragment implements
         CommonEMRItemClickListener, LocalDoInBackgroundListenerOptimised {
+    public static final String INTENT_GET_NOTIFICATION_APPOINTMENT_LIST_LOCAL = "com.healthcoco.NOTIFICATION_APPOINTMENT_LIST_LOCAL";
     private ListView lvNotificationResponseData;
     private NotificationResponse notificationResponse;
     private User user;
     private NotificationResponseDataAdapter adapter;
+    private boolean receiversRegistered;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -186,6 +192,7 @@ public class NotificationResponseDataFragment extends HealthCocoFragment impleme
                     //break n finish the activity if id is null
                     if (Util.isNullOrBlank(notificationResponse.getAi()))
                         break;
+                    mActivity.showLoading(false);
                     WebDataServiceImpl.getInstance(mApp).getNotificationResponseDataDetail(notificationResponse, this, this);
                     return;
             }
@@ -221,5 +228,28 @@ public class NotificationResponseDataFragment extends HealthCocoFragment impleme
     public void onDestroy() {
         super.onDestroy();
         Util.sendBroadcast(mApp, ContactsListFragment.INTENT_GET_CONTACT_LIST_LOCAL);
+        LocalBroadcastManager.getInstance(mActivity).unregisterReceiver(appointmentListReceiverLocal);
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (!receiversRegistered) {
+            //receiver for appointment list refresh
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(INTENT_GET_NOTIFICATION_APPOINTMENT_LIST_LOCAL);
+            LocalBroadcastManager.getInstance(mActivity).registerReceiver(appointmentListReceiverLocal, filter);
+            receiversRegistered = true;
+        }
+    }
+
+    BroadcastReceiver appointmentListReceiverLocal = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, final Intent intent) {
+            if (intent != null) {
+                getData();
+                return;
+            }
+        }
+    };
 }
