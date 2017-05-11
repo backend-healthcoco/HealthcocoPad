@@ -153,6 +153,7 @@
             android:layout_height="match_parent"
             android:background="@color/grey_background"
             android:paddingBottom="5dp"
+            android:overScrollMode="never"
             android:paddingLeft="@dimen/list_item_clinic_profile_padding"
             android:paddingRight="@dimen/list_item_clinic_profile_padding" />
 

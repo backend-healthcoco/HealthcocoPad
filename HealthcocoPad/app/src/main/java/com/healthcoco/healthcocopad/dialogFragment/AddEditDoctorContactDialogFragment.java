@@ -52,7 +52,7 @@ public class AddEditDoctorContactDialogFragment extends HealthCocoDialogFragment
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        setWidthHeight(0.50,0.75);
+        setWidthHeight(0.50, 0.80);
         init();
     }
 

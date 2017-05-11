@@ -27,6 +27,7 @@ import com.healthcoco.healthcocopad.enums.SyncAllType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.fragments.ClinicalProfileFragment;
 import com.healthcoco.healthcocopad.fragments.PatientProfileDetailFragment;
+import com.healthcoco.healthcocopad.fragments.PatientVisitDetailFragment;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.ComparatorUtil;
 import com.healthcoco.healthcocopad.utilities.DevConfig;
@@ -278,13 +279,11 @@ public class GsonRequest extends JsonRequest<VolleyResponseBean> {
         try {
             Intent intent = new Intent();
             switch (webServiceType) {
-//                case UPDATE_PRESCRIPTION:
-//                case UPDATE_CLINICAL_NOTE:
                 case ADD_PRESCRIPTION:
                 case ADD_RECORD:
                 case ADD_CLINICAL_NOTES:
                 case ADD_VISIT:
-//                    intent.setAction(PatientDetailVisitFragment.INTENT_GET_VISITS_LIST);
+                    intent.setAction(PatientVisitDetailFragment.INTENT_GET_VISITS_LIST);
                     break;
 
                 case ADD_UPDATE_CLINIC_ADDRESS:

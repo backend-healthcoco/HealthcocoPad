@@ -35,6 +35,8 @@ import com.healthcoco.healthcocopad.utilities.ImageUtil;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
 
+import org.parceler.Parcels;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,7 +68,7 @@ public class AddEditClinicImageFragment extends HealthCocoFragment implements Ad
     @Override
     public void init() {
         Intent intent = mActivity.getIntent();
-        String uniqueId = intent.getStringExtra(HealthCocoConstants.TAG_UNIQUE_ID);
+        String uniqueId = Parcels.unwrap(intent.getParcelableExtra(HealthCocoConstants.TAG_UNIQUE_ID));
         if (!Util.isNullOrBlank(uniqueId))
             clinicDetail = LocalDataServiceImpl.getInstance(mApp).getLocation(uniqueId);
         initViews();

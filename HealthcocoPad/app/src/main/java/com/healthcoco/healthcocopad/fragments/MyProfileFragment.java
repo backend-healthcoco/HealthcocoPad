@@ -67,7 +67,6 @@ public class MyProfileFragment extends HealthCocoFragment implements View.OnClic
     private TextViewFontAwesome btEditProfessionalMembership;
     private TextViewFontAwesome btEditProfessionalStatement;
     private DoctorProfile doctorProfile;
-    private ProfessionalMembershipRequest membershipRequest;
 
     public MyProfileFragment() {
     }
@@ -346,7 +345,6 @@ public class MyProfileFragment extends HealthCocoFragment implements View.OnClic
                 && data != null && data.hasExtra(TAG_DOCTOR_PROFILE)
                 && doctorProfile != null) {
             DoctorProfile profile = data.getParcelableExtra(TAG_DOCTOR_PROFILE);
-//            doctorProfileListener.onRefresh();
             if (resultCode == HealthCocoConstants.RESULT_CODE_DOCTOR_PROFESSIONAL_STATEMENT_DETAIL) {
                 doctorProfile = profile;
                 doctorProfile.setProfessionalStatement(profile.getProfessionalStatement());

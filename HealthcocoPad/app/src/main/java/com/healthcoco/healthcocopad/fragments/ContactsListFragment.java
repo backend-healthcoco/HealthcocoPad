@@ -889,12 +889,6 @@ public class ContactsListFragment extends HealthCocoFragment implements
                         .getPatientsListWithGroup(WebServiceType.GET_CONTACTS, user, selectedGroupId,
                                 false, PAGE_NUMBER, MAX_SIZE, null, null);
                 break;
-//            case SORT_LIST_BY_RECENTLY_ADDED:
-//                volleyResponseBean = LocalDataServiceImpl.getInstance(mApp)
-//                        .getPatientsListByFilterType(WebServiceType.GET_CONTACTS, user.getUniqueId(),
-//                                user.getForeignHospitalId(), user.getForeignLocationId(), filterType,
-//                                false, currentPageNumber, MAX_SIZE, null, null);
-//            break;
             case CLEAR_PATIENTS:
                 LocalDataServiceImpl.getInstance(mApp).clearPatientsList();
                 break;

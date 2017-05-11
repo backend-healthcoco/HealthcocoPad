@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/grey_background"
+    android:overScrollMode="never"
     android:scrollbarStyle="outsideOverlay">
 
     <LinearLayout
@@ -242,14 +243,16 @@
                         android:layout_marginTop="10dp"
                         android:text="@string/second_consultant_fees"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/text_size_doctor_profile_item_header_child" />
+                        android:textSize="@dimen/text_size_doctor_profile_item_header_child"
+                        android:visibility="gone" />
 
                     <TextView
                         android:id="@+id/tv_second_consultant_fees"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/no_text_dash"
-                        android:textSize="@dimen/text_size_doctor_profile_item_header_child" />
+                        android:textSize="@dimen/text_size_doctor_profile_item_header_child"
+                        android:visibility="gone" />
 
                     <TextView
                         android:layout_width="match_parent"

@@ -46,7 +46,6 @@ import java.util.List;
 public class MyClinicFragment extends HealthCocoFragment implements View.OnClickListener, OnMapReadyCallback {
 
     public static final String TIME_FORMAT_CLINIC_HOURS = "hh:mm  aaa";
-    public static final String TAG_CLINIC_PROFILE = "clinicProfile";
     public static final int REQUEST_CODE_MY_CLINIC = 114;
     private DoctorProfileListener doctorProfileListener;
     private AutoCompleteTextView autotvClinicName;
@@ -258,7 +257,6 @@ public class MyClinicFragment extends HealthCocoFragment implements View.OnClick
     public void refreshMapLocation() {
         if (googleMap == null && mapFragment != null)
             mapFragment.getMapAsync(this);
-
     }
 
     private void addWorkingSchedules(List<DoctorWorkingSchedule> list) {
@@ -322,9 +320,9 @@ public class MyClinicFragment extends HealthCocoFragment implements View.OnClick
                 openDialogFragment(new AddEditAppointmentDetailDialogFragment(), HealthCocoConstants.TAG_CLINIC_PROFILE, selectedClinicProfile, REQUEST_CODE_MY_CLINIC, CommonOpenUpFragmentType.ADD_EDIT_DOCTOR_APPOINTMENT_DETAIL);
                 break;
             case R.id.bt_enlarged_map:
-//                if (selectedClinicProfile != null && !Util.isNullOrBlank(selectedClinicProfile.getUniqueId()))
+                if (selectedClinicProfile != null && !Util.isNullOrBlank(selectedClinicProfile.getUniqueId()))
 //                    openMapViewActivity(CommonOpenUpFragmentType.ENLARGED_MAP_VIEW_FRAGMENT, selectedClinicProfile.getUniqueId(), MapType.DOCTOR_PROFILE_CLINIC, 0);
-                break;
+                    break;
         }
     }
 

@@ -96,7 +96,7 @@ public class AddEditDrugAndAllergyDetailDialogFragment extends HealthCocoDialogF
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        setWidthHeight(0.90, 0.85);
+        setWidthHeight(0.50, 0.80);
         init();
         showLoadingOverlay(true);
         new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_FRAGMENT_INITIALISATION_DATA, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);

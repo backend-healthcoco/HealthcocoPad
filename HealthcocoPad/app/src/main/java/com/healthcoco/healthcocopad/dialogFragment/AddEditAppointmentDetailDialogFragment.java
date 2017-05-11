@@ -47,7 +47,6 @@ public class AddEditAppointmentDetailDialogFragment extends HealthCocoDialogFrag
     private EditText editAppointmentNumber;
     private EditText editConsultantFee;
     private EditText editSecondConsultantFee;
-    private User user;
     private DoctorClinicProfile clinicProfile;
     private AppointmentSlot seletecdAppointmentSlot;
     private AutoCompleteTextView autoTvAppointmentSlot;
@@ -71,7 +70,7 @@ public class AddEditAppointmentDetailDialogFragment extends HealthCocoDialogFrag
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         init();
-        setWidthHeight(0.50, 0.75);
+        setWidthHeight(0.50, 0.80);
     }
 
     @Override
@@ -235,7 +234,8 @@ public class AddEditAppointmentDetailDialogFragment extends HealthCocoDialogFrag
             consultationFee.setAmount(revisitConsulatntFee);
             return consultationFee;
         }
-        return null;    }
+        return null;
+    }
 
     private ConsultationFee getConsultantFee() {
         Integer consulatntFee = Util.getValidatedIntegerValue(editConsultantFee);
@@ -293,7 +293,7 @@ public class AddEditAppointmentDetailDialogFragment extends HealthCocoDialogFrag
                         clinicProfile.setRevisitConsultationFee(doctorClinicProfileResponse.getRevisitConsultationFee());
                         LocalDataServiceImpl.getInstance(mApp).addDoctorClinicProfile(doctorClinicProfileResponse.getDoctorId(), clinicProfile);
                     }
-                    getTargetFragment().onActivityResult(getTargetRequestCode(), HealthCocoConstants.RESULT_CODE_ADD_EDIT_APPOINTMENT_DETAILS,  new Intent().putExtra(HealthCocoConstants.TAG_CLINIC_PROFILE, Parcels.wrap(clinicProfile)));
+                    getTargetFragment().onActivityResult(getTargetRequestCode(), HealthCocoConstants.RESULT_CODE_ADD_EDIT_APPOINTMENT_DETAILS, new Intent().putExtra(HealthCocoConstants.TAG_CLINIC_PROFILE, Parcels.wrap(clinicProfile)));
                     getDialog().dismiss();
                     break;
             }

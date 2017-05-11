@@ -39,11 +39,13 @@ import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.Specialities;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.custom.AutoCompleteTextViewAdapter;
+import com.healthcoco.healthcocopad.custom.DownloadFileFromUrlAsyncTask;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocopad.enums.AutoCompleteTextViewType;
 import com.healthcoco.healthcocopad.enums.CommonListDialogType;
 import com.healthcoco.healthcocopad.enums.DialogType;
 import com.healthcoco.healthcocopad.enums.FragmentType;
+import com.healthcoco.healthcocopad.enums.HealthCocoFileType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.OptionsType;
 import com.healthcoco.healthcocopad.enums.PatientProfileScreenType;
@@ -130,7 +132,7 @@ public class AddEditDoctorProfileDialogFragment extends HealthCocoDialogFragment
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         init();
-        setWidthHeight(0.70, 0.70);
+        setWidthHeight(0.50, 0.80);
     }
 
     @Override
@@ -156,7 +158,7 @@ public class AddEditDoctorProfileDialogFragment extends HealthCocoDialogFragment
         containerSpecialities = (LinearLayout) view.findViewById(R.id.container_specialities);
         btAddSpeciality = (LinearLayout) view.findViewById(R.id.bt_add_speciality);
         autotvExperience = (AutoCompleteTextView) view.findViewById(R.id.autotv_experience);
-//        //init top layout height
+        //init top layout height
         FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams((int) (ScreenDimensions.SCREEN_WIDTH * 0.70), (int) (ScreenDimensions.SCREEN_HEIGHT * 0.20));
         ivDoctorCoverPhoto.setLayoutParams(layoutParams);
 
@@ -295,16 +297,15 @@ public class AddEditDoctorProfileDialogFragment extends HealthCocoDialogFragment
 
     private void loadImages() {
         if (doctorProfile != null) {
-            //loadng profile image and cover image
-            DownloadImageFromUrlUtil.loadImageUsingImageLoader(null, ivDoctorCoverPhoto, doctorProfile.getCoverImageUrl());
+            //loading profile image and cover image
+            DownloadImageFromUrlUtil.loadImageWithInitialAlphabet(mActivity, PatientProfileScreenType.IN_ADD_EDIT_DOCTOR_PROFILE, doctorProfile, null, ivProfileImage, tvInitialAlphabet);
 
-            DownloadImageFromUrlUtil.loadImageWithInitialAlphabet(mActivity, PatientProfileScreenType.IN_DOCTOR_PROFILE, doctorProfile, null, ivProfileImage, tvInitialAlphabet);
-//            if (!Util.isNullOrBlank(doctorProfile.getCoverImageUrl())) {
-//                doctorProfile.setCoverImagePath(ImageUtil.getPathToSaveFile(HealthCocoFileType.DOCTOR_COVER_IMAGE, Util.getFileNameFromUrl(doctorProfile.getCoverImageUrl()), Util.getFileExtension(doctorProfile.getCoverImageUrl())));
-//                new DownloadFileFromUrlAsyncTask(mActivity, this, HealthCocoFileType.DOCTOR_COVER_IMAGE, Util.getFileNameFromUrl(doctorProfile.getCoverImageUrl()), null, null).execute(doctorProfile.getCoverImageUrl());
-//            } else {
-//                ivDoctorCoverPhoto.setBackgroundResource(R.drawable.bg_doctor_img);
-//            }
+            if (!Util.isNullOrBlank(doctorProfile.getCoverImageUrl())) {
+                doctorProfile.setCoverImagePath(ImageUtil.getPathToSaveFile(HealthCocoFileType.DOCTOR_COVER_IMAGE, Util.getFileNameFromUrl(doctorProfile.getCoverImageUrl()), Util.getFileExtension(doctorProfile.getCoverImageUrl())));
+                new DownloadFileFromUrlAsyncTask(mActivity, this, HealthCocoFileType.DOCTOR_COVER_IMAGE, Util.getFileNameFromUrl(doctorProfile.getCoverImageUrl()), null, null).execute(doctorProfile.getCoverImageUrl());
+            } else {
+                ivDoctorCoverPhoto.setBackgroundResource(R.drawable.bg_doctor_img);
+            }
         }
     }
 

@@ -1,13 +1,17 @@
 package com.healthcoco.healthcocopad.fragments;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +26,8 @@ import com.android.volley.Response;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
@@ -68,10 +74,12 @@ import org.parceler.Parcels;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class ClinicalProfileFragment extends HealthCocoFragment
         implements View.OnClickListener, Response.Listener<VolleyResponseBean>, GsonRequest.ErrorListener, LocalDoInBackgroundListenerOptimised, ViewPager.OnPageChangeListener, CommonOptionsDialogItemClickListener, OnMapReadyCallback {
     public static final String INTENT_GET_CLINIC_PROFILE_DETAILS = "com.healthcoco.REFRESH_CLINIC_PROFILE";
     public static final int MAX_DOCTORS_LIST_COUNT = 3;
+    public static final int REQUEST_CODE_CLINIC_PROFILE_IMAGE = 105;
     private ScrollViewWithHeader svContainer;
     private TextView tvClinicname;
     private TextView tvHeader;
@@ -114,6 +122,7 @@ public class ClinicalProfileFragment extends HealthCocoFragment
     private View btEnlargedMap;
     private List<Role> rolesList;
     private boolean isEditEnabled;
+    private boolean receiversRegistered;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -130,6 +139,7 @@ public class ClinicalProfileFragment extends HealthCocoFragment
 
     @Override
     public void init() {
+        mActivity.showLoading(false);
         new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_FRAGMENT_INITIALISATION_DATA, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         initViews();
         initListeners();
@@ -145,7 +155,6 @@ public class ClinicalProfileFragment extends HealthCocoFragment
         mActivity.showLoading(false);
         new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_LOCATION, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
-
 
     @Override
     public void initViews() {
@@ -216,8 +225,9 @@ public class ClinicalProfileFragment extends HealthCocoFragment
         svContainer.build();
 
         //init top layout height
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ScreenDimensions.SCREEN_WIDTH, (int) (ScreenDimensions.SCREEN_HEIGHT * 0.30));
-        topLayout.setLayoutParams(layoutParams);
+        ViewGroup.LayoutParams layoutParamsWidget = topLayout.getLayoutParams();
+        layoutParamsWidget.height = (int) (ScreenDimensions.SCREEN_HEIGHT * 0.30);
+        topLayout.setLayoutParams(layoutParamsWidget);
     }
 
     private void initData(ClinicDetailResponse clinicDetailResponse) {
@@ -397,21 +407,21 @@ public class ClinicalProfileFragment extends HealthCocoFragment
         switch (v.getId()) {
             case R.id.bt_edit_clinic_image:
                 if (clinicDetailResponse != null)
-                    openCommonOpenUpActivity(CommonOpenUpFragmentType.ADD_EDIT_CLINIC_IMAGE, clinicDetailResponse.getUniqueId(), HealthCocoConstants.REQUEST_CODE_CLINIC_PROFILE_IMAGE);
+                    mActivity.openCommonOpenUpActivity(CommonOpenUpFragmentType.ADD_EDIT_CLINIC_IMAGE, HealthCocoConstants.TAG_UNIQUE_ID, clinicDetailResponse.getUniqueId(), 0);
                 break;
             case R.id.bt_edit_clinic_hours:
                 if (clinicDetailResponse != null) {
-                    openDialogFragment(new AddEditClinicHoursDialogFragment(), AddEditClinicHoursDialogFragment.TAG_CLINIC_HOURS, clinicDetailResponse, HealthCocoConstants.REQUEST_CODE_CLINIC_PROFILE, CommonOpenUpFragmentType.ADD_EDIT_CLINIC_HOURS);
+                    openDialogFragment(new AddEditClinicHoursDialogFragment(), AddEditClinicHoursDialogFragment.TAG_CLINIC_HOURS, clinicDetailResponse, REQUEST_CODE_CLINIC_PROFILE_IMAGE, CommonOpenUpFragmentType.ADD_EDIT_CLINIC_HOURS);
                 }
                 break;
             case R.id.bt_edit_address:
                 if (clinicDetailResponse != null) {
-                    openDialogFragment(new AddEditClinicAddressDialogFragment(), AddEditClinicAddressDialogFragment.TAG_CLINIC_ADDRESS, clinicDetailResponse, HealthCocoConstants.REQUEST_CODE_CLINIC_PROFILE, CommonOpenUpFragmentType.ADD_EDIT_CLINIC_ADDRESS);
+                    openDialogFragment(new AddEditClinicAddressDialogFragment(), AddEditClinicAddressDialogFragment.TAG_CLINIC_ADDRESS, clinicDetailResponse, REQUEST_CODE_CLINIC_PROFILE_IMAGE, CommonOpenUpFragmentType.ADD_EDIT_CLINIC_ADDRESS);
                 }
                 break;
             case R.id.bt_edit_contact:
                 if (clinicDetailResponse != null) {
-                    openDialogFragment(new AddEditClinicContactDialogFragment(), AddEditClinicContactDialogFragment.TAG_CONTACT, clinicDetailResponse, HealthCocoConstants.REQUEST_CODE_CLINIC_PROFILE, CommonOpenUpFragmentType.ADD_EDIT_CLINIC_CONTACT);
+                    openDialogFragment(new AddEditClinicContactDialogFragment(), AddEditClinicContactDialogFragment.TAG_CONTACT, clinicDetailResponse, REQUEST_CODE_CLINIC_PROFILE_IMAGE, CommonOpenUpFragmentType.ADD_EDIT_CLINIC_CONTACT);
                 }
                 break;
             case R.id.bt_add_session:
@@ -431,29 +441,11 @@ public class ClinicalProfileFragment extends HealthCocoFragment
                 }
                 break;
             case R.id.bt_enlarged_map:
-//                if (clinicDetailResponse != null && !Util.isNullOrBlank(clinicDetailResponse.getUniqueId()))
+                if (clinicDetailResponse != null && !Util.isNullOrBlank(clinicDetailResponse.getUniqueId()))
 //                    openMapViewActivity(CommonOpenUpFragmentType.ENLARGED_MAP_VIEW_FRAGMENT, clinicDetailResponse.getUniqueId(), MapType.CLINIC_PROFILE, 0);
-//                break;
+                    break;
         }
-
     }
-
-    private void openCommonOpenUpActivity(CommonOpenUpFragmentType fragmentType, String uniqueId, int requestCode) {
-        Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
-        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, fragmentType.ordinal());
-        intent.putExtra(HealthCocoConstants.TAG_UNIQUE_ID, uniqueId);
-        startActivityForResult(intent, requestCode);
-    }
-
-//    private void openDialogFragment(int requestCode, HealthCocoDialogFragment dialogFragment) {
-//        Bundle args = new Bundle();
-//        String uniqueId = clinicDetailResponse.getUniqueId();
-//        args.putString(HealthCocoConstants.TAG_UNIQUE_ID, uniqueId);
-//        args.putInt(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.ADD_EDIT_CLINIC_HOURS.ordinal());
-//        dialogFragment.setArguments(args);
-//        dialogFragment.setTargetFragment(this, requestCode);
-//        dialogFragment.show(mFragmentManager, dialogFragment.getClass().getSimpleName());
-//    }
 
     private void addSubItemSession() {
 
@@ -590,7 +582,7 @@ public class ClinicalProfileFragment extends HealthCocoFragment
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        } else if (requestCode == HealthCocoConstants.REQUEST_CODE_CLINIC_PROFILE) {
+        } else if (requestCode == REQUEST_CODE_CLINIC_PROFILE_IMAGE) {
             Location location = Parcels.unwrap(data.getParcelableExtra(HealthCocoConstants.TAG_CLINIC_PROFILE));
             clinicDetailResponse.setLocation(location);
             switch (resultCode) {
@@ -604,7 +596,6 @@ public class ClinicalProfileFragment extends HealthCocoFragment
                     initData(clinicDetailResponse);
                     break;
             }
-        } else if (requestCode == HealthCocoConstants.REQUEST_CODE_CLINIC_PROFILE_IMAGE) {
             initViewPagerAdapter();
         }
     }
@@ -629,11 +620,6 @@ public class ClinicalProfileFragment extends HealthCocoFragment
         fileDetails.setFileName(ImageUtil.DEFAULT_CLINIC_LOGO_NAME);
         fileDetails.setBitmap(bitmap);
         return fileDetails;
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
     }
 
     @Override
@@ -674,6 +660,44 @@ public class ClinicalProfileFragment extends HealthCocoFragment
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-
+        if (clinicDetailResponse != null && clinicDetailResponse.getLocation() != null) {
+            Location location = clinicDetailResponse.getLocation();
+            if (googleMap != null && location.getLatitude() != null && location.getLongitude() != null) {
+                // create marker
+                MarkerOptions marker = new MarkerOptions().position(new LatLng(location.getLatitude(), location.getLongitude())).title(location.getLocationName());
+                // adding marker
+                googleMap.addMarker(marker);
+                moveCamerToLatLong(googleMap, location.getLatitude(), location.getLongitude());
+                googleMap.getUiSettings().setAllGesturesEnabled(false);
+            }
+        }
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (!receiversRegistered) {
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(INTENT_GET_CLINIC_PROFILE_DETAILS);
+            LocalBroadcastManager.getInstance(mActivity).registerReceiver(refreshClinicProfileReceiver, filter);
+            receiversRegistered = true;
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        LocalBroadcastManager.getInstance(mActivity).unregisterReceiver(refreshClinicProfileReceiver);
+    }
+
+    BroadcastReceiver refreshClinicProfileReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, final Intent intent) {
+            LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
+            if (doctor != null && doctor.getUser() != null && !Util.isNullOrBlank(doctor.getUser().getUniqueId())) {
+                user = doctor.getUser();
+                getClinicDetails();
+            }
+        }
+    };
 }

@@ -67,7 +67,7 @@ public class AddEditClinicAddressDialogFragment extends HealthCocoDialogFragment
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         init();
-        setWidthHeight(0.50, 0.85);
+        setWidthHeight(0.50, 0.80);
     }
 
     @Override
@@ -189,7 +189,7 @@ public class AddEditClinicAddressDialogFragment extends HealthCocoDialogFragment
                     clinicDetail.setCountry(resposneObject.getCountry());
                     clinicDetail.setPostalCode(resposneObject.getPostalCode());
                     LocalDataServiceImpl.getInstance(mApp).addLocation(clinicDetail);
-                    getTargetFragment().onActivityResult(getTargetRequestCode(), HealthCocoConstants.RESULT_CODE_ADD_EDIT_CLINIC_ADDRESS, new Intent().putExtra(MyClinicFragment.TAG_CLINIC_PROFILE, Parcels.wrap(clinicDetail)));
+                    getTargetFragment().onActivityResult(getTargetRequestCode(), HealthCocoConstants.RESULT_CODE_ADD_EDIT_CLINIC_ADDRESS, new Intent().putExtra(HealthCocoConstants.TAG_CLINIC_PROFILE, Parcels.wrap(clinicDetail)));
                     getDialog().dismiss();
                 }
                 break;

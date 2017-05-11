@@ -7,6 +7,7 @@ import com.healthcoco.healthcocopad.R;
  */
 public enum PatientProfileScreenType {
     IN_DOCTOR_PROFILE(R.dimen.initial_alphabet_doctor_profile, R.dimen.text_size_initial_alphabet_doctor_profile),
+    IN_ADD_EDIT_DOCTOR_PROFILE(R.dimen.initial_alphabet_add_edit_doctor_profile, R.dimen.text_size_initial_alphabet_add_edit_doctor_profile),
     IN_PATIENTS_LIST(R.dimen.image_patient_profile_alphabet, R.dimen.text_size_initial_alphabet_patient_profile_menu),
     IN_PATIENT_REGISTRATION(R.dimen.image_patient_profile_alphabet, R.dimen.text_size_initial_alphabet_patient_profile_menu),
     IN_ADD_VISIT_HEADER(R.dimen.initial_alphabet_patient_profile_emr_header, R.dimen.text_size_initial_alphabet_patient_profile_emr_header),
@@ -14,7 +15,7 @@ public enum PatientProfileScreenType {
     IN_PATIENT_DEATIL_SCREEN_EXCEPT_PROFILE(R.dimen.image_patient_detail_layout, R.dimen.text_size_patients_list_initial_alphabet_detail_layout),
     IN_PATIENT_DEATIL_PROFILE(R.dimen.image_patient_detail_profile, R.dimen.text_size_initial_alphabet_patient_profile_menu),
     IN_MENU(R.dimen.image_patient_profile_menu, R.dimen.text_size_initial_alphabet_patient_profile_menu),
-    IN_CLINIC_LIST(R.dimen.clinic_logo_image, R.dimen.text_size_initial_alphabet_clinic_list), ;
+    IN_CLINIC_LIST(R.dimen.clinic_logo_image, R.dimen.text_size_initial_alphabet_clinic_list),;
     private final int imageSize;
     private final int initialAlphabetTextSize;
 

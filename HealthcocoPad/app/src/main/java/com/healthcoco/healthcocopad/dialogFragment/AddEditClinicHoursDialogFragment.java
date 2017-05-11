@@ -77,7 +77,7 @@ public class AddEditClinicHoursDialogFragment extends HealthCocoDialogFragment i
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         init();
-        setWidthHeight(0.50, 0.75);
+        setWidthHeight(0.50, 0.80);
     }
 
     @Override
@@ -106,7 +106,7 @@ public class AddEditClinicHoursDialogFragment extends HealthCocoDialogFragment i
                     break;
                 case ADD_EDIT_DOCTOR_PROFILE_CLINIC_HOURS:
                     containerToggle247.setVisibility(View.GONE);
-                    object = Parcels.unwrap(getArguments().getParcelable(MyClinicFragment.TAG_CLINIC_PROFILE));
+                    object = Parcels.unwrap(getArguments().getParcelable(HealthCocoConstants.TAG_CLINIC_PROFILE));
                     break;
             }
     }
@@ -446,7 +446,7 @@ public class AddEditClinicHoursDialogFragment extends HealthCocoDialogFragment i
                                 }
                                 break;
                         }
-                        getTargetFragment().onActivityResult(getTargetRequestCode(), HealthCocoConstants.RESULT_CODE_ADD_EDIT_CLINIC_HOURS, new Intent().putExtra(MyClinicFragment.TAG_CLINIC_PROFILE, Parcels.wrap(object)));
+                        getTargetFragment().onActivityResult(getTargetRequestCode(), HealthCocoConstants.RESULT_CODE_ADD_EDIT_CLINIC_HOURS, new Intent().putExtra(HealthCocoConstants.TAG_CLINIC_PROFILE, Parcels.wrap(object)));
                         getDialog().dismiss();
                     }
             }

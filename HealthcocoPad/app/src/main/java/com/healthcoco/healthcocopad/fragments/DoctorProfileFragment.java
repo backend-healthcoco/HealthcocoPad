@@ -60,7 +60,7 @@ public class DoctorProfileFragment extends HealthCocoFragment implements GsonReq
         ViewPager.OnPageChangeListener, DoctorProfileListener, DownloadFileFromUrlListener {
     public static final String INTENT_GET_DOCTOR_PROFILE_DETAILS = "DoctorProfileFragment.DOCTOR_PROFILE_DETAILS";
     public static final String INTENT_GET_DOCTOR_PROFILE_DETAILS_LOCAL = "DoctorProfileFragment.DOCTOR_PROFILE_DETAILS_LOCAL";
-    public static final String TAG_DOCTOR_PROFILE = "doctorProfile";
+    public static final int REQUEST_CODE_DOCTOR_PROFILE = 111;
 
     private TextView tabMyProfile;
     private TextView tabMyClinic;
@@ -75,14 +75,12 @@ public class DoctorProfileFragment extends HealthCocoFragment implements GsonReq
     private TextViewFontAwesome btEdit;
     private ImageView ivDoctorCoverPhoto;
     private ImageView ivProfileImage;
-    private FrameLayout containerTop;
     private TextView tvSpecialities;
     private TextView tvInitialAlphabet;
     private TextView tvExperience;
     private TextView tvGenderDate;
     private boolean receiversRegistered;
     private boolean isInitialLoading = true;
-    public static final int TAG_RESULT_CODE = 111;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -103,24 +101,18 @@ public class DoctorProfileFragment extends HealthCocoFragment implements GsonReq
         initViews();
         initListeners();
         mActivity.showLoading(false);
-        new LocalDataBackgroundtaskOptimised
-                (mActivity, LocalBackgroundTaskType.GET_FRAGMENT_INITIALISATION_DATA, DoctorProfileFragment.this,
-                        DoctorProfileFragment.this, DoctorProfileFragment.this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_FRAGMENT_INITIALISATION_DATA, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     @Override
     public void initViews() {
         tvName = (TextView) view.findViewById(R.id.tv_name);
         ivDoctorCoverPhoto = (ImageView) view.findViewById(R.id.iv_doctor_cover_photo);
-        //init top layout height
-//        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams((int) (ScreenDimensions.SCREEN_WIDTH * 0.30), (int) (ScreenDimensions.SCREEN_HEIGHT));
-//        ivDoctorCoverPhoto.setLayoutParams(layoutParams);
         ivProfileImage = (ImageView) view.findViewById(R.id.iv_image);
         btEdit = (TextViewFontAwesome) view.findViewById(R.id.bt_edit);
         viewPager = (ViewPager) view.findViewById(R.id.viewpager);
         tabMyProfile = (TextView) view.findViewById(R.id.tab_my_profile);
         tabMyClinic = (TextView) view.findViewById(R.id.tab_my_clinic);
-        containerTop = (FrameLayout) view.findViewById(R.id.container_top);
         tvExperience = (TextView) view.findViewById(R.id.tv_experience);
         tvGenderDate = (TextView) view.findViewById(R.id.tv_gender_date);
         tvSpecialities = (TextView) view.findViewById(R.id.tv_specialities);
@@ -158,7 +150,7 @@ public class DoctorProfileFragment extends HealthCocoFragment implements GsonReq
                 break;
             case R.id.tab_my_clinic:
                 if (!isClickedOnce) {
-//                    myClinicFragment.refreshMapLocation();
+                    myClinicFragment.refreshMapLocation();
                     isClickedOnce = true;
                 }
                 viewPager.setCurrentItem(1);
@@ -178,7 +170,7 @@ public class DoctorProfileFragment extends HealthCocoFragment implements GsonReq
         bundle.putString(HealthCocoConstants.TAG_UNIQUE_ID, uniqueId);
         AddEditDoctorProfileDialogFragment editDoctorProfileDetailsFragment = new AddEditDoctorProfileDialogFragment(profile);
         editDoctorProfileDetailsFragment.setArguments(bundle);
-        editDoctorProfileDetailsFragment.setTargetFragment(this, TAG_RESULT_CODE);
+        editDoctorProfileDetailsFragment.setTargetFragment(this, REQUEST_CODE_DOCTOR_PROFILE);
         editDoctorProfileDetailsFragment.show(mFragmentManager, editDoctorProfileDetailsFragment.getClass().getSimpleName());
     }
 
@@ -208,7 +200,10 @@ public class DoctorProfileFragment extends HealthCocoFragment implements GsonReq
     }
 
     private void getDoctorProfileFromLocal() {
-        new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_DOCTOR_PROFILE, DoctorProfileFragment.this, DoctorProfileFragment.this, DoctorProfileFragment.this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        mActivity.showLoading(false);
+        new LocalDataBackgroundtaskOptimised
+                (mActivity, LocalBackgroundTaskType.GET_DOCTOR_PROFILE, this,
+                        this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     @Override
@@ -416,19 +411,22 @@ public class DoctorProfileFragment extends HealthCocoFragment implements GsonReq
     BroadcastReceiver refreshDoctorProfileDetailsLocalReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, final Intent intent) {
-            getDoctorProfileFromLocal();
+            LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
+            if (doctor != null && doctor.getUser() != null && !Util.isNullOrBlank(doctor.getUser().getUniqueId())) {
+                user = doctor.getUser();
+                getDoctorProfileFromLocal();
+            }
         }
     };
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == TAG_RESULT_CODE) {
+        if (requestCode == REQUEST_CODE_DOCTOR_PROFILE) {
             if (resultCode == Activity.RESULT_OK) {
                 new SyncUtility(mApp, mActivity, user, null).updateMasterTableOnSpecialityChange();
-                getDoctorProfileFromLocal();
+                onRefresh();
             }
-            onRefresh();
         }
     }
 

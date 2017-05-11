@@ -1128,15 +1128,7 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
     }
 
     public void openCommonOpenUpActivity(CommonOpenUpFragmentType fragmentType, Object intentData, int requestCode) {
-        Intent intent = new Intent(this, CommonOpenUpActivity.class);
-        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, fragmentType.ordinal());
-        if (intentData != null) {
-            intent.putExtras((Intent) intentData);
-        }
-        if (requestCode == 0)
-            startActivity(intent);
-        else
-            startActivityForResult(intent, requestCode);
+        openCommonOpenUpActivity(fragmentType, null, intentData, requestCode);
     }
 
     public void openCommonOpenUpActivity(CommonOpenUpFragmentType fragmentType, String intentTag, Object intentData, int requestCode) {
