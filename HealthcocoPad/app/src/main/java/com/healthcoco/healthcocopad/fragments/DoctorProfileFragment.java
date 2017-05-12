@@ -14,13 +14,12 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.Response;
-import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
+import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.adapter.ContactsDetailViewPagerAdapter;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.DoctorProfile;
@@ -29,6 +28,7 @@ import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.custom.DownloadFileFromUrlAsyncTask;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocopad.dialogFragment.AddEditDoctorProfileDialogFragment;
+import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.FragmentType;
 import com.healthcoco.healthcocopad.enums.HealthCocoFileType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
@@ -41,7 +41,6 @@ import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.DownloadImageFromUrlUtil;
-import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.ImageUtil;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.ScreenDimensions;
@@ -156,22 +155,13 @@ public class DoctorProfileFragment extends HealthCocoFragment implements GsonReq
                 viewPager.setCurrentItem(1);
                 break;
             case R.id.bt_edit:
-                openDialogFragment(user.getUniqueId(), FragmentType.PROFILE);
+                openDialogFragment(new AddEditDoctorProfileDialogFragment(FragmentType.PROFILE), REQUEST_CODE_DOCTOR_PROFILE, CommonOpenUpFragmentType.ADD_EDIT_DOCTOR_PROFILE_DETAILS, user.getUniqueId());
                 break;
             case R.id.iv_image:
                 if (doctorProfile != null && !Util.isNullOrBlank(doctorProfile.getImageUrl()))
                     mActivity.openEnlargedImageDialogFragment(doctorProfile.getImageUrl());
                 break;
         }
-    }
-
-    protected void openDialogFragment(String uniqueId, FragmentType profile) {
-        Bundle bundle = new Bundle();
-        bundle.putString(HealthCocoConstants.TAG_UNIQUE_ID, uniqueId);
-        AddEditDoctorProfileDialogFragment editDoctorProfileDetailsFragment = new AddEditDoctorProfileDialogFragment(profile);
-        editDoctorProfileDetailsFragment.setArguments(bundle);
-        editDoctorProfileDetailsFragment.setTargetFragment(this, REQUEST_CODE_DOCTOR_PROFILE);
-        editDoctorProfileDetailsFragment.show(mFragmentManager, editDoctorProfileDetailsFragment.getClass().getSimpleName());
     }
 
     @Override
@@ -411,11 +401,7 @@ public class DoctorProfileFragment extends HealthCocoFragment implements GsonReq
     BroadcastReceiver refreshDoctorProfileDetailsLocalReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, final Intent intent) {
-            LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
-            if (doctor != null && doctor.getUser() != null && !Util.isNullOrBlank(doctor.getUser().getUniqueId())) {
-                user = doctor.getUser();
-                getDoctorProfileFromLocal();
-            }
+            getDoctorProfileFromLocal();
         }
     };
 

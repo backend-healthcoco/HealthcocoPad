@@ -91,7 +91,7 @@ public class LocalDataServiceImpl {
         if (!Util.isNullOrBlank(jsonString)) {
             Object parsedObject = gson.fromJson(jsonString, class1);
             if (parsedObject instanceof LinkedTreeMap)
-                parsedObject = GsonRequest.getObjectFromLinkedTreeMap(gson,class1, parsedObject);
+                parsedObject = GsonRequest.getObjectFromLinkedTreeMap(gson, class1, parsedObject);
             return parsedObject;
         }
         return null;
@@ -103,7 +103,7 @@ public class LocalDataServiceImpl {
             if (!Util.isNullOrEmptyList(parsedObjectList) && parsedObjectList.get(0) instanceof LinkedTreeMap) {
                 ArrayList<Object> list = new ArrayList<Object>();
                 for (Object object : parsedObjectList) {
-                    list.add(GsonRequest.getObjectFromLinkedTreeMap(gson,Object.class, object));
+                    list.add(GsonRequest.getObjectFromLinkedTreeMap(gson, Object.class, object));
                 }
                 return list;
             }
@@ -118,7 +118,7 @@ public class LocalDataServiceImpl {
             if (!Util.isNullOrEmptyList(parsedObjectList) && parsedObjectList.get(0) instanceof LinkedTreeMap) {
                 ArrayList<Object> list = new ArrayList<Object>();
                 for (Object object : parsedObjectList) {
-                    list.add(GsonRequest.getObjectFromLinkedTreeMap(gson,class1, object));
+                    list.add(GsonRequest.getObjectFromLinkedTreeMap(gson, class1, object));
                 }
                 return list;
             }
@@ -3563,6 +3563,21 @@ public class LocalDataServiceImpl {
                 MultipleDayEventTable multipleDayEventTable = new MultipleDayEventTable(calendarEvents.getAppointmentId(), fromDate, calendarEvents.getToDate());
                 multipleDayEventTable.save();
             }
+    }
 
+    public VolleyResponseBean getLocationResponse(WebServiceType webServiceType, String locationId, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
+        volleyResponseBean.setWebServiceType(webServiceType);
+        volleyResponseBean.setIsUserOnline(HealthCocoConstants.isNetworkOnline);
+        volleyResponseBean.setIsDataFromLocal(true);
+        try {
+            volleyResponseBean.setData(getLocation(locationId));
+            if (responseListener != null)
+                responseListener.onResponse(volleyResponseBean);
+        } catch (Exception e) {
+            e.printStackTrace();
+            showErrorLocal(volleyResponseBean, errorListener);
+        }
+        return volleyResponseBean;
     }
 }

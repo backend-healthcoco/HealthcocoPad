@@ -30,7 +30,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
-import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.adapter.ContactsDetailViewPagerAdapter;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.request.ClinicImageToSend;
@@ -51,6 +50,7 @@ import com.healthcoco.healthcocopad.dialogFragment.AddEditClinicHoursDialogFragm
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.DialogType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
+import com.healthcoco.healthcocopad.enums.MapType;
 import com.healthcoco.healthcocopad.enums.OptionsType;
 import com.healthcoco.healthcocopad.enums.RoleType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
@@ -442,7 +442,7 @@ public class ClinicalProfileFragment extends HealthCocoFragment
                 break;
             case R.id.bt_enlarged_map:
                 if (clinicDetailResponse != null && !Util.isNullOrBlank(clinicDetailResponse.getUniqueId()))
-//                    openMapViewActivity(CommonOpenUpFragmentType.ENLARGED_MAP_VIEW_FRAGMENT, clinicDetailResponse.getUniqueId(), MapType.CLINIC_PROFILE, 0);
+                    openMapViewActivity(CommonOpenUpFragmentType.ENLARGED_MAP_VIEW_FRAGMENT, clinicDetailResponse.getUniqueId(), MapType.CLINIC_PROFILE, 0);
                     break;
         }
     }

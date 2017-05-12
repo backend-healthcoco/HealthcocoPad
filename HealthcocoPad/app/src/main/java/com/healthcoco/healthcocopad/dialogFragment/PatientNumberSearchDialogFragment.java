@@ -133,13 +133,20 @@ public class PatientNumberSearchDialogFragment extends HealthCocoDialogFragment 
                         LocalDataServiceImpl.getInstance(mApp).addAlreadyRegisteredPatients(list);
                         openPatientNumberSearchResultsFragment();
                     } else {
-                        openRegistrationFragment();
+                        openRegistrationFragment(String.valueOf(editMobileNumber.getText()));
                     }
                     break;
             }
         }
         mActivity.hideLoading();
         getDialog().dismiss();
+    }
+
+    private void openRegistrationFragment(String mobileNumber) {
+        Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
+        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.PATIENT_REGISTRATION.ordinal());
+        intent.putExtra(HealthCocoConstants.TAG_MOBILE_NUMBER, mobileNumber);
+        startActivityForResult(intent, REQUEST_CODE_PATIENT_NUMBER_SERACH);
     }
 
     private void openPatientNumberSearchResultsFragment() {
@@ -151,12 +158,12 @@ public class PatientNumberSearchDialogFragment extends HealthCocoDialogFragment 
         patientNumberSearchResultsDialogFragment.show(mFragmentManager, patientNumberSearchResultsDialogFragment.getClass().getSimpleName());
     }
 
-    public void openRegistrationFragment() {
-        Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
-        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.PATIENT_REGISTRATION.ordinal());
-        intent.putExtra(HealthCocoConstants.TAG_MOBILE_NUMBER, String.valueOf(editMobileNumber.getText()));
-        startActivity(intent);
-    }
+//    public void openRegistrationFragment() {
+//        Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
+//        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.PATIENT_REGISTRATION.ordinal());
+//        intent.putExtra(HealthCocoConstants.TAG_MOBILE_NUMBER, String.valueOf(editMobileNumber.getText()));
+//        startActivity(intent);
+//    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

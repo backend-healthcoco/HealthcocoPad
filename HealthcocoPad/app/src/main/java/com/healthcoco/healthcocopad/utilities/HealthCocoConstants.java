@@ -28,10 +28,14 @@ public class HealthCocoConstants {
     public static final String PARAM_TAG_ADD = "/add/";
     public static final String TAG_DIAGRAM_TAG = "diagramTag";
     public static final String TAG_SELECTED_DIAGRAM = "selectedDiagram";
-    public static final int RESULT_CODE_ADD_PRESCIPTION = 101;
+    public static final String TAG_MAP_TYPE = "mapType";
+
+    public static final String TAG_INTENT_DATA = "intentData";
+    public static final String TAG_PATIENT_PROFILE = "patientProfile";
+    public static final String TAG_SELECTED_DATE_TIME_IN_MILLIS = "selectedTimeInMillis";
+
     public static final int REQUEST_CODE_CAMERA = 102;
     public static final int REQUEST_CODE_GALLERY = 103;
-
     public static final int REQUEST_CODE_MENU_CLINIC_LIST = 106;
     public static final int RESULT_CODE_ADD_EDIT_CLINIC_ADDRESS = 110;
     public static final int RESULT_CODE_ADD_EDIT_CLINIC_HOURS = 111;
@@ -39,7 +43,6 @@ public class HealthCocoConstants {
     public static final int RESULT_CODE_ADD_EDIT_APPOINTMENT_DETAILS = 112;
     public static final int RESULT_CODE_DOCTOR_PROFESSIONAL_MEMBERSHIP_DETAIL = 121;
     public static final int RESULT_CODE_DOCTOR_PROFESSIONAL_STATEMENT_DETAIL = 122;
-    public static final String TAG_INTENT_DATA = "intentData";
     public static final int REQUEST_CODE_REFERENCE_LIST = 136;
     public static final int RESULT_CODE_REFERENCE_LIST = 137;
     public static final int REQUEST_CODE_GLOBAL_RECORDS_ACCESS = 138;
@@ -50,10 +53,8 @@ public class HealthCocoConstants {
     public static final int RESULT_CODE_DRUGS_AND_ALLERGIES_DETAIL = 143;
     public static final int RESULT_CODE_CONTINUE_SIGNUP = 144;
     public static final int RESULT_CODE_DIAGRAM_DETAIL = 145;
-    public static final String TAG_PATIENT_PROFILE = "patientProfile";
     public static final int RESULT_CODE_ADD_NEW_TEMPLATE = 146;
     public static final int RESULT_CODE_ADD_VISIT = 147;
-    public static final String TAG_SELECTED_DATE_TIME_IN_MILLIS = "selectedTimeInMillis";
     public static final int RESULT_CODE_GROUPS_LIST = 124;
     public static final int RESULT_CODE_SEARCH_NUMBER_RESULTS = 125;
     public static final int REQUEST_CODE_GROUPS_LIST = 126;
@@ -66,6 +67,7 @@ public class HealthCocoConstants {
     public static final String PARAM_SEARCH_TERM = "&searchTerm=";
     public static final String PARAM_PAGE_AND = "&page=";
     public static final String PARAM_DISCARDED_FALSE = "discarded=false";
+    public static final int RESULT_CODE_BOOK_APPOINTMENT = 148;
     public static boolean isNetworkOnline;
     public static final String PARAM_UPDATED_TIME = "&updatedTime=";
     public static final String PARAM_DISCARDED_AMPERCENT = "&discarded=";

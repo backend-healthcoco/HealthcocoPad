@@ -11,7 +11,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -131,7 +130,6 @@ public class ContactsListFragment extends HealthCocoFragment implements
     private AdvanceSearchOptionsType selectedSearchType;
     private List<Profession> professionsList;
     private List<Reference> referenceList;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -401,12 +399,12 @@ public class ContactsListFragment extends HealthCocoFragment implements
 
     @Override
     public void onEditClicked(RegisteredPatientDetailsUpdated patientDetailsUpdated) {
-        Intent intent = new Intent();
-        intent.putExtra(HealthCocoConstants.TAG_UNIQUE_ID, patientDetailsUpdated.getForeignPatientId());
-        intent.putExtra(HealthCocoConstants.TAG_MOBILE_NUMBER, patientDetailsUpdated.getMobileNumber());
-        intent.putExtra(HealthCocoConstants.TAG_IS_EDIT_PATIENT, true);
-        mActivity.openCommonOpenUpActivity(CommonOpenUpFragmentType.PATIENT_REGISTRATION, intent,
-                REQUEST_CODE_CONTACTS_DETAIL);
+        openRegistrationFragment(patientDetailsUpdated.getForeignPatientId(), REQUEST_CODE_CONTACTS_DETAIL, true);
+//        Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
+//        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.PATIENT_REGISTRATION.ordinal());
+//        intent.putExtra(HealthCocoConstants.TAG_UNIQUE_ID, );
+//        intent.putExtra(HealthCocoConstants.TAG_IS_EDIT_PATIENT, true);
+//        startActivityForResult(intent, REQUEST_CODE_CONTACTS_DETAIL);
     }
 
     @Override
@@ -679,8 +677,8 @@ public class ContactsListFragment extends HealthCocoFragment implements
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_CONTACTS_DETAIL) {
             LogUtils.LOGD(TAG, "Contacts List onActivityResult ");
-            if (resultCode == HealthCocoConstants.RESULT_CODE_ADD_PRESCIPTION) {
-                openCommonOpenUpActivity(CommonOpenUpFragmentType.CONTACTS_DETAIL, null, REQUEST_CODE_CONTACTS_DETAIL);
+            if (resultCode == HealthCocoConstants.RESULT_CODE_REGISTRATION) {
+                getListFromLocal(false);
             } else if (resultCode == HealthCocoConstants.RESULT_CODE_GROUPS_LIST) {
                 filterList(filterType);
             } else if (resultCode == HealthCocoConstants.RESULT_CODE_SEARCH_NUMBER_RESULTS) {

@@ -567,7 +567,7 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
             case R.id.bt_edit_patient_profile_notes:
                 Util.checkNetworkStatus(mActivity);
                 if (HealthCocoConstants.isNetworkOnline)
-                    openRegistrationFragment(HealthCocoConstants.SELECTED_PATIENTS_USER_ID);
+                   openRegistrationFragment(HealthCocoConstants.SELECTED_PATIENTS_USER_ID,REQUEST_CODE_PATIENT_PROFILE,true);
                 else
                     onNetworkUnavailable(null);
                 break;
@@ -589,13 +589,6 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
         startActivityForResult(intent, REQUEST_CODE_PATIENT_PROFILE);
     }
 
-    public void openRegistrationFragment(String patientUniqueId) {
-        Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
-        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.PATIENT_REGISTRATION.ordinal());
-        intent.putExtra(HealthCocoConstants.TAG_UNIQUE_ID, patientUniqueId);
-        intent.putExtra(HealthCocoConstants.TAG_IS_EDIT_PATIENT, true);
-        startActivityForResult(intent, REQUEST_CODE_PATIENT_PROFILE);
-    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

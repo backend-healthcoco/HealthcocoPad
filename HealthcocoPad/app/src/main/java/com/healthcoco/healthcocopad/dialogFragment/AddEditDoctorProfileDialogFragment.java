@@ -78,11 +78,8 @@ import java.util.List;
  */
 public class AddEditDoctorProfileDialogFragment extends HealthCocoDialogFragment implements GsonRequest.ErrorListener, DownloadFileFromUrlListener, LocalDoInBackgroundListenerOptimised, Response.Listener<VolleyResponseBean>, View.OnClickListener, AdapterView.OnItemClickListener, CommonOptionsDialogItemClickListener {
     private FragmentType profile;
-    private TextViewFontAwesome tvCloseDialog;
-    private TextViewFontAwesome tvSave;
     private static final String DOCTOR_PROFILE_IMAGE = "DoctorProfileImage";
     private static final String DOCTOR_COVER_IMAGE = "DoctorCoverImage";
-    public static final int TAG_RESULT_CODE = 112;
     private LinearLayout btAddSpeciality;
     private ImageView ivDoctorCoverPhoto;
     private ImageView ivProfileImage;
@@ -105,9 +102,6 @@ public class AddEditDoctorProfileDialogFragment extends HealthCocoDialogFragment
     private RadioGroup radioGroupGender;
     private TextView tvDOB;
     private TextView tvTitle;
-    private ImageButton containerLeftAction;
-    private String selectedFilterTitle;
-    private String title;
     private Button bt_save;
 
     public AddEditDoctorProfileDialogFragment() {
@@ -132,17 +126,15 @@ public class AddEditDoctorProfileDialogFragment extends HealthCocoDialogFragment
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         init();
-        setWidthHeight(0.50, 0.80);
+        setWidthHeight(0.70, 0.90);
     }
 
     @Override
     public void init() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
-            mActivity.showLoading(false);
-        }
         initViews();
         initListeners();
         initAutoTvAdapter();
+        mActivity.showLoading(false);
         new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_FRAGMENT_INITIALISATION_DATA, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
@@ -165,7 +157,6 @@ public class AddEditDoctorProfileDialogFragment extends HealthCocoDialogFragment
         radioGroupGender = (RadioGroup) view.findViewById(R.id.rg_gender_select);
         tvDOB = (TextView) view.findViewById(R.id.tv_dob);
         tvTitle = (TextView) view.findViewById(R.id.tv_title);
-        containerLeftAction = (ImageButton) view.findViewById(R.id.bt_cross);
         tvTitle.setText(profile.getTitleId());
         bt_save = (Button) view.findViewById(R.id.bt_save);
     }
@@ -218,7 +209,6 @@ public class AddEditDoctorProfileDialogFragment extends HealthCocoDialogFragment
                 addSpecialityItem(null);
             }
             if (doctorProfile.getExperience() != null) {
-
                 selectedDoctorExperinece = doctorProfile.getExperience();
                 String formattedExperineceText = selectedDoctorExperinece.getFormattedExperience();
                 try {
@@ -230,7 +220,6 @@ public class AddEditDoctorProfileDialogFragment extends HealthCocoDialogFragment
                 }
                 formattedExperineceText = formattedExperineceText + " " + getResources().getString(R.string.experience);
                 autotvExperience.setText(formattedExperineceText);
-
             }
         }
     }
@@ -622,7 +611,6 @@ public class AddEditDoctorProfileDialogFragment extends HealthCocoDialogFragment
                     break;
             }
         }
-
     }
 
     private FileDetails getFileDetails(String fileName, Bitmap bitmap) {
@@ -632,34 +620,5 @@ public class AddEditDoctorProfileDialogFragment extends HealthCocoDialogFragment
         fileDetails.setFileName(fileName);
         fileDetails.setBitmap(bitmap);
         return fileDetails;
-    }
-
-    class BitmapWorkerTask extends AsyncTask<Bitmap, Void, Bitmap> {
-        WeakReference<ImageView> ivImageReference;
-        String filePath = "";
-
-        public BitmapWorkerTask(ImageView imageView, String path) {
-            // Use a WeakReference to ensure the ImageView can be garbage collected
-            ivImageReference = new WeakReference<ImageView>(imageView);
-        }
-
-        // Decode image in background.
-        @Override
-        protected Bitmap doInBackground(Bitmap... params) {
-            if (params != null)
-                return ImageUtil.getRotatedBitmapIfRequiredFromPath(filePath, params[0]);
-            return null;
-        }
-
-        // Once complete, see if ImageView is still around and set bitmap.
-        @Override
-        protected void onPostExecute(Bitmap bitmap) {
-            if (ivImageReference != null && bitmap != null) {
-                final ImageView imageView = ivImageReference.get();
-                if (imageView != null) {
-                    imageView.setImageBitmap(bitmap);
-                }
-            }
-        }
     }
 }

@@ -1346,4 +1346,5 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
         InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
         imm.showSoftInput(getCurrentFocus(), InputMethodManager.SHOW_IMPLICIT);
     }
+
 }

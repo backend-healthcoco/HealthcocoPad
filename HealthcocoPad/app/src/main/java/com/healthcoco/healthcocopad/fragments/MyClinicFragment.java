@@ -1,7 +1,11 @@
 package com.healthcoco.healthcocopad.fragments;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +32,7 @@ import com.healthcoco.healthcocopad.dialogFragment.AddEditAppointmentDetailDialo
 import com.healthcoco.healthcocopad.dialogFragment.AddEditClinicHoursDialogFragment;
 import com.healthcoco.healthcocopad.enums.AutoCompleteTextViewType;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
+import com.healthcoco.healthcocopad.enums.MapType;
 import com.healthcoco.healthcocopad.listeners.DoctorProfileListener;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
@@ -47,6 +52,7 @@ public class MyClinicFragment extends HealthCocoFragment implements View.OnClick
 
     public static final String TIME_FORMAT_CLINIC_HOURS = "hh:mm  aaa";
     public static final int REQUEST_CODE_MY_CLINIC = 114;
+    public static final String INTENT_GET_DOCTOR_CLINIC_PROFILE = "com.healthcoco.REFRESH_DOCTOR_CLINIC_PROFILE";
     private DoctorProfileListener doctorProfileListener;
     private AutoCompleteTextView autotvClinicName;
     private TextView tvAddress;
@@ -78,6 +84,7 @@ public class MyClinicFragment extends HealthCocoFragment implements View.OnClick
     private SupportMapFragment mapFragment;
     private GoogleMap googleMap;
     private View btEnlargedMap;
+    private boolean receiversRegistered;
 
     public MyClinicFragment(DoctorProfileListener doctorProfileListener) {
         this.doctorProfileListener = doctorProfileListener;
@@ -209,7 +216,6 @@ public class MyClinicFragment extends HealthCocoFragment implements View.OnClick
                                     refreshSelectedClinicProfileData((DoctorClinicProfile) object);
                                 break;
                         }
-
                     }
                 });
             }
@@ -321,8 +327,8 @@ public class MyClinicFragment extends HealthCocoFragment implements View.OnClick
                 break;
             case R.id.bt_enlarged_map:
                 if (selectedClinicProfile != null && !Util.isNullOrBlank(selectedClinicProfile.getUniqueId()))
-//                    openMapViewActivity(CommonOpenUpFragmentType.ENLARGED_MAP_VIEW_FRAGMENT, selectedClinicProfile.getUniqueId(), MapType.DOCTOR_PROFILE_CLINIC, 0);
-                    break;
+                    openMapViewActivity(CommonOpenUpFragmentType.ENLARGED_MAP_VIEW_FRAGMENT, selectedClinicProfile.getUniqueId(), MapType.DOCTOR_PROFILE_CLINIC, 0);
+                break;
         }
     }
 
@@ -359,4 +365,35 @@ public class MyClinicFragment extends HealthCocoFragment implements View.OnClick
             googleMap.getUiSettings().setAllGesturesEnabled(false);
         }
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (!receiversRegistered) {
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(INTENT_GET_DOCTOR_CLINIC_PROFILE);
+            LocalBroadcastManager.getInstance(mActivity).registerReceiver(refreshDoctorClinicProfileReceiver, filter);
+            receiversRegistered = true;
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        LocalBroadcastManager.getInstance(mActivity).unregisterReceiver(refreshDoctorClinicProfileReceiver);
+    }
+
+    BroadcastReceiver refreshDoctorClinicProfileReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, final Intent intent) {
+            LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
+            if (doctor != null && doctor.getUser() != null && !Util.isNullOrBlank(doctor.getUser().getUniqueId())) {
+                user = doctor.getUser();
+                DoctorClinicProfile doctorClinicProfile = LocalDataServiceImpl.getInstance(mApp).
+                        getDoctorClinicProfile(user.getUniqueId(), user.getForeignLocationId());
+                if (doctorClinicProfile != null)
+                    refreshSelectedClinicProfileData(doctorClinicProfile);
+            }
+        }
+    };
 }

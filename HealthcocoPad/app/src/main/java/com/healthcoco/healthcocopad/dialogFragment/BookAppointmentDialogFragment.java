@@ -1,5 +1,6 @@
 package com.healthcoco.healthcocopad.dialogFragment;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -355,6 +356,7 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
                             LocalDataServiceImpl.getInstance(mApp).addAppointment(calendarEvents);
                         Util.showToast(mActivity, R.string.appointment_created);
                         sendBroadcasts(calendarEvents.getAppointmentId());
+//                        getTargetFragment().onActivityResult(getTargetRequestCode(), HealthCocoConstants.RESULT_CODE_BOOK_APPOINTMENT, null);
                         getDialog().dismiss();
                     }
                     break;
@@ -450,7 +452,7 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
                 break;
         }
         intent.putExtra(TAG_APPOINTMENT_ID, aptId);
-        if (intent != null && intent.getAction() != null)
+//        if (intent != null && intent.getAction() != null)
             LocalBroadcastManager.getInstance(mApp.getApplicationContext()).sendBroadcast(intent);
         sendBroadcastToCalendarFragment();
     }

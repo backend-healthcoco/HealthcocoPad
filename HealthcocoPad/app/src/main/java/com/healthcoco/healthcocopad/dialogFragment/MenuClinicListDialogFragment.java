@@ -80,7 +80,7 @@ public class MenuClinicListDialogFragment extends HealthCocoDialogFragment imple
     }
 
     private void initClinicListAdapter() {
-        menuClinicListAdapter = new MenuClinicListAdapter(mActivity, clinicProfile,this);
+        menuClinicListAdapter = new MenuClinicListAdapter(mActivity, clinicProfile, this);
         lvClinics.setAdapter(menuClinicListAdapter);
     }
 
@@ -99,7 +99,7 @@ public class MenuClinicListDialogFragment extends HealthCocoDialogFragment imple
     @Override
     public void onSelectedClinicCheckClicked(DoctorClinicProfile doctorClinicProfile) {
         refreshSelectedDoctorClinicProfileDetails(doctorClinicProfile);
-        getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK,null);
+        getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, null);
         getDialog().dismiss();
     }
 }

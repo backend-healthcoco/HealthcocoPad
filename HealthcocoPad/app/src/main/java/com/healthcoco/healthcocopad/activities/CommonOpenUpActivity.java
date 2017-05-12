@@ -30,6 +30,7 @@ import com.healthcoco.healthcocopad.fragments.AddNewTemplateFragment;
 import com.healthcoco.healthcocopad.fragments.CommonOpenUpPatientDetailFragment;
 import com.healthcoco.healthcocopad.fragments.CommonUiPermissionsFragment;
 import com.healthcoco.healthcocopad.fragments.DiseaseListFragment;
+import com.healthcoco.healthcocopad.fragments.EnlargedMapViewFragment;
 import com.healthcoco.healthcocopad.fragments.FeedbackFragment;
 import com.healthcoco.healthcocopad.fragments.InitialSyncFragment;
 import com.healthcoco.healthcocopad.fragments.LoginSignupFragment;
@@ -153,6 +154,9 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
                 break;
             case NOTIFICATION_RESPONSE_DATA:
                 openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, fragmentType.getTitleId(), new NotificationResponseDataFragment());
+                break;
+            case ENLARGED_MAP_VIEW_FRAGMENT:
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_CROSS, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, R.string.location, new EnlargedMapViewFragment());
                 break;
         }
     }

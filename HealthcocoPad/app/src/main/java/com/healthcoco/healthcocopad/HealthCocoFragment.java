@@ -38,6 +38,7 @@ import com.healthcoco.healthcocopad.dialogFragment.VerifyOtpDialogFragment;
 import com.healthcoco.healthcocopad.enums.CommonListDialogType;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.DialogType;
+import com.healthcoco.healthcocopad.enums.MapType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.fragments.PatientProfileDetailFragment;
 import com.healthcoco.healthcocopad.listeners.CommonListDialogItemClickListener;
@@ -491,5 +492,27 @@ public abstract class HealthCocoFragment extends Fragment implements GsonRequest
             startActivity(intent);
         else
             startActivityForResult(intent, requestCode);
+    }
+
+    protected void openMapViewActivity(CommonOpenUpFragmentType fragmentType, String uniqueId, MapType mapType, int requestCode) {
+        Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
+        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, fragmentType.ordinal());
+        intent.putExtra(HealthCocoConstants.TAG_UNIQUE_ID, uniqueId);
+        intent.putExtra(HealthCocoConstants.TAG_MAP_TYPE, mapType.ordinal());
+        startActivityForResult(intent, requestCode);
+    }
+
+    protected void openRegistrationFragment(String patientId, int requestCode, boolean isEditPatient) {
+        openRegistrationFragment(patientId, null, requestCode, isEditPatient);
+    }
+
+    protected void openRegistrationFragment(String patientUniqueId, String mobileNumber, int requestCode, boolean isEditPatient) {
+        Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
+        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.PATIENT_REGISTRATION.ordinal());
+        intent.putExtra(HealthCocoConstants.TAG_UNIQUE_ID, patientUniqueId);
+        intent.putExtra(HealthCocoConstants.TAG_IS_EDIT_PATIENT, isEditPatient);
+        intent.putExtra(HealthCocoConstants.TAG_MOBILE_NUMBER, mobileNumber);
+
+        startActivityForResult(intent, requestCode);
     }
 }
