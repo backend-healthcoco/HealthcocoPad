@@ -112,7 +112,7 @@ public abstract class HealthCocoDialogFragment extends DialogFragment implements
         int height = ScreenDimensions.SCREEN_HEIGHT;
         width = (int) (width * widthWeight);
         height = (int) (height * heightWeight);
-        getDialog().getWindow().setLayout(width, height);
+        getDialog().getWindow().setLayout(height, width);
     }
 
     public abstract void init();

@@ -51,6 +51,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="@integer/weight_drug_name"
+                android:gravity="center"
                 android:text="@string/drug_name"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size_add_visits_lable" />
@@ -59,7 +60,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="@integer/weight_drugs_items"
-                android:gravity="center|start"
+                android:gravity="center"
                 android:text="@string/dosage"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size_add_visits_lable" />
@@ -85,7 +86,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="@integer/weight_drugs_items"
-                android:gravity="center|start"
+                android:gravity="center"
                 android:text="@string/direction"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size_add_visits_lable" />

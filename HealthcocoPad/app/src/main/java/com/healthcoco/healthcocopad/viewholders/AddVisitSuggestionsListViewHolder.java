@@ -1,6 +1,7 @@
 package com.healthcoco.healthcocopad.viewholders;
 
 import android.view.View;
+import android.widget.GridView;
 import android.widget.TextView;
 
 import com.healthcoco.healthcocopad.HealthCocoActivity;
@@ -119,6 +120,7 @@ public class AddVisitSuggestionsListViewHolder extends HealthCocoViewHolder {
         View contentView = inflater.inflate(R.layout.list_item_add_visits_sugestions, null);
         tvName = (TextView) contentView.findViewById(R.id.tv_name);
         tvGenericName = (TextView) contentView.findViewById(R.id.tv_generic_name);
+        contentView.setLayoutParams(new GridView.LayoutParams(GridView.AUTO_FIT, GridView.AUTO_FIT));
         return contentView;
     }
 }

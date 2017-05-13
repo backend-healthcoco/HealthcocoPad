@@ -90,7 +90,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
-            android:columnWidth="5dp"
             android:divider="@null"
             android:horizontalSpacing="1dp"
             android:listSelector="@android:color/transparent"
