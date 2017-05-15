@@ -25,6 +25,7 @@ import com.healthcoco.healthcocopad.enums.ActionbarType;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.fragments.AboutUsFragment;
 import com.healthcoco.healthcocopad.fragments.AddEditClinicImageFragment;
+import com.healthcoco.healthcocopad.fragments.AddEditNormalVisitsFragment;
 import com.healthcoco.healthcocopad.fragments.AddNewPrescriptionFragment;
 import com.healthcoco.healthcocopad.fragments.AddNewTemplateFragment;
 import com.healthcoco.healthcocopad.fragments.CommonOpenUpPatientDetailFragment;
@@ -157,6 +158,9 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
                 break;
             case ENLARGED_MAP_VIEW_FRAGMENT:
                 openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_CROSS, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, R.string.location, new EnlargedMapViewFragment());
+                break;
+            case ADD_VISITS:
+                openFragment(ActionbarType.HIDDEN, 0,new AddEditNormalVisitsFragment());
                 break;
         }
     }
@@ -301,7 +305,7 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
             super.onBackPressed();
     }
 
-    private void finishThisActivity() {
+    public void finishThisActivity() {
         if (fragmentType != null) {
             switch (fragmentType) {
                 case ADD_NEW_PRESCRIPTION:
@@ -367,6 +371,27 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
             Button rightActionButton = (Button) rightAction.getChildAt(0);
             if (rightActionButton != null)
                 rightActionButton.setEnabled(isEnabled);
+        }
+    }
+    public void initRightActionView(ActionbarLeftRightActionTypeDrawables rightAction, View actionbar) {
+        LinearLayout containerRightAction = (LinearLayout) actionbar.findViewById(R.id.container_right_action);
+        if (containerRightAction != null) {
+            if (rightAction != null && rightAction != ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION) {
+                containerRightAction.setVisibility(View.VISIBLE);
+                View rightView = getLayoutInflater().inflate(rightAction.getLayoutId(), null);
+                if (rightView != null) {
+                    if (rightAction.isDrawableBackground()) {
+                        ImageButton imageButton = (ImageButton) rightView;
+                        imageButton.setImageResource(rightAction.getDrawableTitleId());
+                    } else {
+                        TextView button = (TextView) rightView;
+                        button.setText(rightAction.getDrawableTitleId());
+                    }
+                    containerRightAction.addView(rightView);
+                }
+            } else {
+                containerRightAction.setVisibility(View.GONE);
+            }
         }
     }
 }

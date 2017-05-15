@@ -18,6 +18,7 @@
         android:textSize="17sp" />
 
     <View
+        android:id="@+id/divider"
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:background="@drawable/tab_indicator_bottom_line" />

@@ -50,7 +50,7 @@ public class AddPrescriptionVisitFragment extends HealthCocoFragment implements 
     private SelectedPrescriptionDrugItemsListAdapter adapter;
     private ListView lvPrescriptionItems;
     private EditText editDurationCommon;
-    private AddVisitsFragment addVisitsFragment;
+    private MyScriptAddVisitsFragment myScriptAddVisitsFragment;
     private SelectedPrescriptionDrugDoseItemsListViewHolder viewHolder;
     private boolean isDurationSet;
     private Button btDrugInteraction;
@@ -84,9 +84,9 @@ public class AddPrescriptionVisitFragment extends HealthCocoFragment implements 
 
     @Override
     public void initListeners() {
-        addVisitsFragment = (AddVisitsFragment) mFragmentManager.findFragmentByTag(AddVisitsFragment.class.getSimpleName());
-        if (addVisitsFragment != null) {
-            editDurationCommon.setOnTouchListener(addVisitsFragment.getOnTouchListener());
+        myScriptAddVisitsFragment = (MyScriptAddVisitsFragment) mFragmentManager.findFragmentByTag(MyScriptAddVisitsFragment.class.getSimpleName());
+        if (myScriptAddVisitsFragment != null) {
+            editDurationCommon.setOnTouchListener(myScriptAddVisitsFragment.getOnTouchListener());
         }
         btDrugInteraction.setOnClickListener(this);
 //        editDurationCommon.setOnFocusChangeListener(this);
@@ -111,8 +111,8 @@ public class AddPrescriptionVisitFragment extends HealthCocoFragment implements 
 
     private void sendBroadcastForAdviceButtonVisibility(boolean showVisibility) {
         try {
-            Intent intent = new Intent(AddVisitsFragment.INTENT_ADIVCE_BUTTON_VISIBILITY);
-            intent.putExtra(AddVisitsFragment.TAG_VISIBILITY, showVisibility);
+            Intent intent = new Intent(MyScriptAddVisitsFragment.INTENT_ADIVCE_BUTTON_VISIBILITY);
+            intent.putExtra(MyScriptAddVisitsFragment.TAG_VISIBILITY, showVisibility);
             LocalBroadcastManager.getInstance(mApp.getApplicationContext()).sendBroadcast(intent);
         } catch (Exception e) {
             e.printStackTrace();
@@ -169,10 +169,10 @@ public class AddPrescriptionVisitFragment extends HealthCocoFragment implements 
     }
 
     @Override
-    public AddVisitsFragment getAddVisitFragment() {
-        if (addVisitsFragment == null)
-            addVisitsFragment = (AddVisitsFragment) mFragmentManager.findFragmentByTag(AddVisitsFragment.class.getSimpleName());
-        return addVisitsFragment;
+    public MyScriptAddVisitsFragment getAddVisitFragment() {
+        if (myScriptAddVisitsFragment == null)
+            myScriptAddVisitsFragment = (MyScriptAddVisitsFragment) mFragmentManager.findFragmentByTag(MyScriptAddVisitsFragment.class.getSimpleName());
+        return myScriptAddVisitsFragment;
     }
 
     public void addDrug(DrugItem drug) {
@@ -205,8 +205,8 @@ public class AddPrescriptionVisitFragment extends HealthCocoFragment implements 
     public void onFocusChange(View v, boolean hasFocus) {
         if (hasFocus) {
             if (v instanceof EditText) {
-                addVisitsFragment.initEditTextForWidget((MyScriptEditText) v);
-                addVisitsFragment.showOnlyWidget();
+                myScriptAddVisitsFragment.initEditTextForWidget((MyScriptEditText) v);
+                myScriptAddVisitsFragment.showOnlyWidget();
             }
         }
     }

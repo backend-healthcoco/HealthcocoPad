@@ -191,5 +191,6 @@
     <dimen name="grid_item_book_appointment_time_slots">15dp</dimen>
     <dimen name="bullet_size_item_time_slot">12sp</dimen>
     <dimen name="spacing_suggestion_list_vist_fragment">1dp</dimen>
-
+    <dimen name="actionbar_patient_name_size">16sp</dimen>
+    <dimen name="actionbar_patient_gender_age_size">14sp</dimen>
 </resources>

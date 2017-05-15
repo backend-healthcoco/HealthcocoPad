@@ -144,7 +144,6 @@ public class ObscuredSharedPreferences implements SharedPreferences {
         return new Editor();
     }
 
-
     @Override
     public Map<String, ?> getAll() {
         throw new UnsupportedOperationException(); // left as an exercise to the reader

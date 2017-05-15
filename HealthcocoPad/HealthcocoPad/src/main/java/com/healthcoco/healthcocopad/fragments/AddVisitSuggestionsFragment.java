@@ -61,7 +61,6 @@ import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.healthcoco.healthcocopad.views.GridViewLoadMore;
-import com.healthcoco.healthcocopad.views.ListViewLoadMore;
 
 import org.parceler.Parcels;
 
@@ -377,9 +376,9 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements
                 }
                 break;
             case R.id.bt_clear:
-                AddVisitsFragment addVisitsFragment = (AddVisitsFragment) mFragmentManager.findFragmentByTag(AddVisitsFragment.class.getSimpleName());
-                if (addVisitsFragment != null)
-                    addVisitsFragment.onClearButtonClick();
+                MyScriptAddVisitsFragment myScriptAddVisitsFragment = (MyScriptAddVisitsFragment) mFragmentManager.findFragmentByTag(MyScriptAddVisitsFragment.class.getSimpleName());
+                if (myScriptAddVisitsFragment != null)
+                    myScriptAddVisitsFragment.onClearButtonClick();
 //                clearSearchEditText();
                 break;
         }
@@ -561,9 +560,9 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Intent intent = new Intent(AddVisitsFragment.INTENT_ON_SUGGESTION_ITEM_CLICK);
+        Intent intent = new Intent(MyScriptAddVisitsFragment.INTENT_ON_SUGGESTION_ITEM_CLICK);
         intent.putExtra(TAG_SUGGESTIONS_TYPE, suggestionType.ordinal());
-        intent.putExtra(AddVisitsFragment.TAG_SELECTED_SUGGESTION_OBJECT, Parcels.wrap(adapterSolr.getItem(position)));
+        intent.putExtra(MyScriptAddVisitsFragment.TAG_SELECTED_SUGGESTION_OBJECT, Parcels.wrap(adapterSolr.getItem(position)));
         LocalBroadcastManager.getInstance(mApp).sendBroadcast(intent);
     }
 
@@ -571,9 +570,9 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements
         editTextSearch = initEditSearchView(suggestionType.getSearchHintId(), this);
         editTextSearch.setText("");
         editTextSearch.setTag(suggestionType);
-        AddVisitsFragment addVisitsFragment = (AddVisitsFragment) mFragmentManager.findFragmentByTag(AddVisitsFragment.class.getSimpleName());
-        if (addVisitsFragment != null)
-            addVisitsFragment.requestFocus(editTextSearch);
+        MyScriptAddVisitsFragment myScriptAddVisitsFragment = (MyScriptAddVisitsFragment) mFragmentManager.findFragmentByTag(MyScriptAddVisitsFragment.class.getSimpleName());
+        if (myScriptAddVisitsFragment != null)
+            myScriptAddVisitsFragment.requestFocus(editTextSearch);
         Util.requesFocus(editTextSearch);
     }
 }

@@ -31,6 +31,7 @@
                 android:layout_gravity="bottom|right"
                 android:layout_marginBottom="@dimen/fab_margin_bottom"
                 android:layout_marginRight="@dimen/fab_margin_right"
+                android:scaleType="center"
                 android:src="@drawable/actionbar_add_me"
                 app:layout_anchorGravity="bottom|right|end" />
 

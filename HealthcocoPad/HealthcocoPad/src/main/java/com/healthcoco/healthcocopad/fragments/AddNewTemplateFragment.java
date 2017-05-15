@@ -54,8 +54,6 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import static com.healthcoco.healthcocopad.fragments.TemplateListFragment.TAG_TEMPLATE_ID;
-
 /**
  * Created by Shreshtha on 27-03-2017.
  */
@@ -379,7 +377,7 @@ public class AddNewTemplateFragment extends HealthCocoFragment implements TabHos
     }
 
     @Override
-    public AddVisitsFragment getAddVisitFragment() {
+    public MyScriptAddVisitsFragment getAddVisitFragment() {
         return null;
     }
 

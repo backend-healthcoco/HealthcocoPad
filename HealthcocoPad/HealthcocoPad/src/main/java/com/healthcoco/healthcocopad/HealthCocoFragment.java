@@ -16,8 +16,11 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.ScrollView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Response;
@@ -39,6 +42,7 @@ import com.healthcoco.healthcocopad.enums.CommonListDialogType;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.DialogType;
 import com.healthcoco.healthcocopad.enums.MapType;
+import com.healthcoco.healthcocopad.enums.PatientProfileScreenType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.fragments.PatientProfileDetailFragment;
 import com.healthcoco.healthcocopad.listeners.CommonListDialogItemClickListener;
@@ -46,6 +50,7 @@ import com.healthcoco.healthcocopad.listeners.CommonOptionsDialogItemClickListen
 import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
+import com.healthcoco.healthcocopad.utilities.DownloadImageFromUrlUtil;
 import com.healthcoco.healthcocopad.utilities.EditTextTextViewErrorUtil;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
@@ -514,5 +519,51 @@ public abstract class HealthCocoFragment extends Fragment implements GsonRequest
         intent.putExtra(HealthCocoConstants.TAG_MOBILE_NUMBER, mobileNumber);
 
         startActivityForResult(intent, requestCode);
+    }
+
+    protected void initActionPatientDetailActionBar(final PatientProfileScreenType patientProfileScreenType, View parent, final RegisteredPatientDetailsUpdated selectedPatient) {
+        if (selectedPatient != null) {
+            TextView tvInitialAlphabet = (TextView) parent.findViewById(R.id.tv_initial_aplhabet);
+            TextView tvPatientName = (TextView) parent.findViewById(R.id.tv_name);
+            TextView tvGenderAge = (TextView) parent.findViewById(R.id.tv_gender_age);
+
+            ProgressBar progressLoading = (ProgressBar) parent.findViewById(R.id.progress_loading);
+
+            ImageView ivContactProfile = (ImageView) parent.findViewById(R.id.iv_image);
+            ivContactProfile.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (!Util.isNullOrBlank(selectedPatient.getImageUrl()))
+                        mActivity.openEnlargedImageDialogFragment(selectedPatient.getImageUrl());
+                }
+            });
+
+            ImageButton btBack = (ImageButton) parent.findViewById(R.id.bt_back);
+            if (btBack != null) {
+                btBack.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        try {
+                            if (patientProfileScreenType == PatientProfileScreenType.IN_ADD_VISIT_HEADER) {
+                                ((CommonOpenUpActivity) mActivity).finishThisActivity();
+                                return;
+                            }
+                        } catch (Exception e) {
+
+                        }
+                        mActivity.finish();
+                    }
+                });
+            }
+            tvPatientName.setText(selectedPatient.getLocalPatientName());
+
+            String formattedGenderAge = Util.getFormattedGenderAge(selectedPatient);
+            if (!Util.isNullOrBlank(formattedGenderAge)) {
+                tvGenderAge.setVisibility(View.VISIBLE);
+                tvGenderAge.setText(formattedGenderAge);
+            } else
+                tvGenderAge.setVisibility(View.GONE);
+            DownloadImageFromUrlUtil.loadImageWithInitialAlphabet(mActivity, patientProfileScreenType, selectedPatient, progressLoading, ivContactProfile, tvInitialAlphabet);
+        }
     }
 }

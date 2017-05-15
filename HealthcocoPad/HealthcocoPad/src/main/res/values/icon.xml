@@ -69,4 +69,5 @@
     <string name="notify_patient_via">&#xf0a2; Notify Patient Via</string>
     <string name="text_check_in_square_sms">&#xf046;&#160;SMS&#160;</string>
     <string name="text_check_in_sqaure_email">&#xf046;&#160;Email&#160;</string>
+    <string name="fa_exchange">&#xf0ec;</string>
 </resources>

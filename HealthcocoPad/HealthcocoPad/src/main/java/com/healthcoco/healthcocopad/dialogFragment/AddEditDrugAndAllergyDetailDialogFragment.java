@@ -38,7 +38,7 @@ import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.SelectDrugItemType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
-import com.healthcoco.healthcocopad.fragments.AddVisitsFragment;
+import com.healthcoco.healthcocopad.fragments.MyScriptAddVisitsFragment;
 import com.healthcoco.healthcocopad.fragments.PatientProfileDetailFragment;
 import com.healthcoco.healthcocopad.listeners.LoadMorePageListener;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
@@ -475,7 +475,7 @@ public class AddEditDrugAndAllergyDetailDialogFragment extends HealthCocoDialogF
     }
 
     @Override
-    public AddVisitsFragment getAddVisitFragment() {
+    public MyScriptAddVisitsFragment getAddVisitFragment() {
         return null;
     }
 }

@@ -21,7 +21,7 @@ import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.enums.ActionbarLeftRightActionTypeDrawables;
 import com.healthcoco.healthcocopad.enums.ActionbarType;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
-import com.healthcoco.healthcocopad.fragments.AddVisitsFragment;
+import com.healthcoco.healthcocopad.fragments.MyScriptAddVisitsFragment;
 import com.healthcoco.healthcocopad.fragments.DiagramsListFragment;
 import com.healthcoco.healthcocopad.fragments.SelectedDiagramDetailFragment;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
@@ -64,7 +64,7 @@ public class AddVisitsActivity extends HealthCocoActivity {
         fragmentType = CommonOpenUpFragmentType.values()[ordinal];
         switch (fragmentType) {
             case ADD_VISITS:
-                openFragment(ActionbarType.HIDDEN, R.string.add_visits, new AddVisitsFragment());
+                openFragment(ActionbarType.HIDDEN, R.string.add_visits, new MyScriptAddVisitsFragment());
                 break;
             case SELECT_DIAGRAM:
                 openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, fragmentType.getTitleId(), new DiagramsListFragment());
@@ -93,10 +93,10 @@ public class AddVisitsActivity extends HealthCocoActivity {
         if (fragmentType != null) {
             switch (fragmentType) {
                 case ADD_VISITS:
-                    AddVisitsFragment addVisitsFragment = (AddVisitsFragment) getSupportFragmentManager().findFragmentByTag(AddVisitsFragment.class.getSimpleName());
+                    MyScriptAddVisitsFragment myScriptAddVisitsFragment = (MyScriptAddVisitsFragment) getSupportFragmentManager().findFragmentByTag(MyScriptAddVisitsFragment.class.getSimpleName());
                     boolean wasKeyboardOrWidgetVisible = false;
-                    if (addVisitsFragment != null)
-                        wasKeyboardOrWidgetVisible = addVisitsFragment.hideKeyboardOrWidgetIfVisible();
+                    if (myScriptAddVisitsFragment != null)
+                        wasKeyboardOrWidgetVisible = myScriptAddVisitsFragment.hideKeyboardOrWidgetIfVisible();
                     if (!wasKeyboardOrWidgetVisible)
                         showFinishConfirmationAlert();
                     return;

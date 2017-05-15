@@ -74,7 +74,7 @@ public class AddClinicalNotesVisitFragment extends HealthCocoFragment implements
     private MyScriptEditText editWeight;
     private MyScriptEditText editHeartRate;
     private ClinicalNotes clinicalNotes;
-    private AddVisitsFragment addVisitsFragment;
+    private MyScriptAddVisitsFragment myScriptAddVisitsFragment;
     private ArrayList<String> clinicalNotesUiPermissionsList;
     private HashMap<String, String> diagramsList = new HashMap<>();
     private LinearLayout containerDiagrams;
@@ -102,7 +102,7 @@ public class AddClinicalNotesVisitFragment extends HealthCocoFragment implements
 
     @Override
     public void init() {
-        addVisitsFragment = (AddVisitsFragment) mFragmentManager.findFragmentByTag(AddVisitsFragment.class.getSimpleName());
+        myScriptAddVisitsFragment = (MyScriptAddVisitsFragment) mFragmentManager.findFragmentByTag(MyScriptAddVisitsFragment.class.getSimpleName());
         initViews();
         initListeners();
     }
@@ -120,17 +120,17 @@ public class AddClinicalNotesVisitFragment extends HealthCocoFragment implements
         editSpo2 = (MyScriptEditText) view.findViewById(R.id.edit_spo2);
         editWeight = (MyScriptEditText) view.findViewById(R.id.edit_weight);
         containerDiagrams = (LinearLayout) view.findViewById(R.id.container_diagrams);
-        if (containerDiagrams == null && addVisitsFragment != null)
-            containerDiagrams = addVisitsFragment.getDiagramContainer();
+        if (containerDiagrams == null && myScriptAddVisitsFragment != null)
+            containerDiagrams = myScriptAddVisitsFragment.getDiagramContainer();
         //default UI ettings
         parentVitalSigns.setVisibility(View.GONE);
     }
 
     @Override
     public void initListeners() {
-        if (addVisitsFragment != null) {
+        if (myScriptAddVisitsFragment != null) {
             //initialising vital signs editTexts listeners
-            View.OnTouchListener touchListener = addVisitsFragment.getOnTouchListener();
+            View.OnTouchListener touchListener = myScriptAddVisitsFragment.getOnTouchListener();
             editBodyTemperature.setOnTouchListener(touchListener);
             editWeight.setOnTouchListener(touchListener);
             editHeartRate.setOnTouchListener(touchListener);
@@ -265,8 +265,8 @@ public class AddClinicalNotesVisitFragment extends HealthCocoFragment implements
 
     private void sendBroadcastForDiagramButtonVisibility(boolean showVisibility) {
         try {
-            Intent intent = new Intent(AddVisitsFragment.INTENT_DIAGRAM_BUTTON_VISIBILITY);
-            intent.putExtra(AddVisitsFragment.TAG_VISIBILITY, showVisibility);
+            Intent intent = new Intent(MyScriptAddVisitsFragment.INTENT_DIAGRAM_BUTTON_VISIBILITY);
+            intent.putExtra(MyScriptAddVisitsFragment.TAG_VISIBILITY, showVisibility);
             LocalBroadcastManager.getInstance(mApp.getApplicationContext()).sendBroadcast(intent);
         } catch (Exception e) {
             e.printStackTrace();
@@ -275,8 +275,8 @@ public class AddClinicalNotesVisitFragment extends HealthCocoFragment implements
 
     private void sendBroadcastForDiagramLayoutVisibility(boolean showVisibility) {
         try {
-            Intent intent = new Intent(AddVisitsFragment.INTENT_DIAGRAM_LAYOUT_VISIBILITY);
-            intent.putExtra(AddVisitsFragment.TAG_VISIBILITY, showVisibility);
+            Intent intent = new Intent(MyScriptAddVisitsFragment.INTENT_DIAGRAM_LAYOUT_VISIBILITY);
+            intent.putExtra(MyScriptAddVisitsFragment.TAG_VISIBILITY, showVisibility);
             LocalBroadcastManager.getInstance(mApp.getApplicationContext()).sendBroadcast(intent);
         } catch (Exception e) {
             e.printStackTrace();
@@ -285,8 +285,8 @@ public class AddClinicalNotesVisitFragment extends HealthCocoFragment implements
 
     private void sendBroadcastForClinicalNoteLayoutVisibility(boolean showVisibility) {
         try {
-            Intent intent = new Intent(AddVisitsFragment.INTENT_CLINCIAL_NOTE_LAYOUT_VISIBILITY);
-            intent.putExtra(AddVisitsFragment.TAG_VISIBILITY, showVisibility);
+            Intent intent = new Intent(MyScriptAddVisitsFragment.INTENT_CLINCIAL_NOTE_LAYOUT_VISIBILITY);
+            intent.putExtra(MyScriptAddVisitsFragment.TAG_VISIBILITY, showVisibility);
             LocalBroadcastManager.getInstance(mApp.getApplicationContext()).sendBroadcast(intent);
         } catch (Exception e) {
             e.printStackTrace();
@@ -295,8 +295,8 @@ public class AddClinicalNotesVisitFragment extends HealthCocoFragment implements
 
     private void sendBroadcastForClinicalNoteButtonVisibility(boolean showVisibility) {
         try {
-            Intent intent = new Intent(AddVisitsFragment.INTENT_CLINCIAL_NOTE_BUTTON_VISIBILITY);
-            intent.putExtra(AddVisitsFragment.TAG_VISIBILITY, showVisibility);
+            Intent intent = new Intent(MyScriptAddVisitsFragment.INTENT_CLINCIAL_NOTE_BUTTON_VISIBILITY);
+            intent.putExtra(MyScriptAddVisitsFragment.TAG_VISIBILITY, showVisibility);
             LocalBroadcastManager.getInstance(mApp.getApplicationContext()).sendBroadcast(intent);
         } catch (Exception e) {
             e.printStackTrace();
@@ -312,7 +312,7 @@ public class AddClinicalNotesVisitFragment extends HealthCocoFragment implements
         autotvPermission.setId(clinicalNotesPermissionType.getAutotvId());
         autotvPermission.setHint(clinicalNotesPermissionType.getHintId());
         autotvPermission.setTag(String.valueOf(clinicalNotesPermissionType));
-        autotvPermission.setOnTouchListener(addVisitsFragment.getOnTouchListener());
+        autotvPermission.setOnTouchListener(myScriptAddVisitsFragment.getOnTouchListener());
         String text = "";
         if (clinicalNotes != null) {
             switch (clinicalNotesPermissionType) {
@@ -433,7 +433,7 @@ public class AddClinicalNotesVisitFragment extends HealthCocoFragment implements
         clinicalNoteToSend.setLocationId(user.getForeignLocationId());
         clinicalNoteToSend.setHospitalId(user.getForeignHospitalId());
         clinicalNoteToSend.setPatientId(HealthCocoConstants.SELECTED_PATIENTS_USER_ID);
-        if (addVisitsFragment.isClinicalNoteViewVisible()) {
+        if (myScriptAddVisitsFragment.isClinicalNoteViewVisible()) {
             clinicalNoteToSend.setVitalSigns(getVitalSigns());
             for (String permission :
                     user.getUiPermissions().getClinicalNotesPermissions()) {
@@ -506,7 +506,7 @@ public class AddClinicalNotesVisitFragment extends HealthCocoFragment implements
         }
 
 //        clinicalNotes.setDiagnoses(diagnosesListToSend);
-        if (addVisitsFragment.isDiagramViewVisible() && !Util.isNullOrEmptyList(diagramsList)) {
+        if (myScriptAddVisitsFragment.isDiagramViewVisible() && !Util.isNullOrEmptyList(diagramsList)) {
             ArrayList<String> diagramIdsList = new ArrayList<String>();
             diagramIdsList.addAll(diagramsList.keySet());
             clinicalNoteToSend.setDiagrams(diagramIdsList);
@@ -573,7 +573,7 @@ public class AddClinicalNotesVisitFragment extends HealthCocoFragment implements
                 containerDiagrams.removeView(parentView);
                 diagramsList.remove(diagramUniqueId);
                 if (Util.isNullOrEmptyList(diagramsList) && containerDiagrams.getChildCount() <= 0)
-                    Util.sendBroadcast(mApp, AddVisitsFragment.INTENT_DIAGRAM_LAYOUT_VISIBILITY);
+                    Util.sendBroadcast(mApp, MyScriptAddVisitsFragment.INTENT_DIAGRAM_LAYOUT_VISIBILITY);
 
             }
         });

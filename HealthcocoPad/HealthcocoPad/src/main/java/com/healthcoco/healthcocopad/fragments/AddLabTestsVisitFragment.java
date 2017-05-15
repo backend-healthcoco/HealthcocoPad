@@ -33,7 +33,7 @@ public class AddLabTestsVisitFragment extends HealthCocoFragment implements View
     private LinkedHashMap<String, DiagnosticTest> diagnosticTestsListHashMap = new LinkedHashMap<>();
     private DiagnosticTestsListAdapter adapter;
     private ListView lvDiagnoticTests;
-    private AddVisitsFragment addVisitsFragment;
+    private MyScriptAddVisitsFragment myScriptAddVisitsFragment;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -82,8 +82,8 @@ public class AddLabTestsVisitFragment extends HealthCocoFragment implements View
 
     private void sendBroadcastToShowLabTestLayout(boolean showVisibility) {
         try {
-            Intent intent = new Intent(AddVisitsFragment.INTENT_LAB_TEST_VISIBILITY);
-            intent.putExtra(AddVisitsFragment.TAG_VISIBILITY, showVisibility);
+            Intent intent = new Intent(MyScriptAddVisitsFragment.INTENT_LAB_TEST_VISIBILITY);
+            intent.putExtra(MyScriptAddVisitsFragment.TAG_VISIBILITY, showVisibility);
             LocalBroadcastManager.getInstance(mApp.getApplicationContext()).sendBroadcast(intent);
         } catch (Exception e) {
             e.printStackTrace();
@@ -139,8 +139,8 @@ public class AddLabTestsVisitFragment extends HealthCocoFragment implements View
     public void onFocusChange(View v, boolean hasFocus) {
         if (hasFocus) {
             if (v instanceof EditText) {
-                addVisitsFragment.initEditTextForWidget((MyScriptEditText) v);
-                addVisitsFragment.showOnlyWidget();
+                myScriptAddVisitsFragment.initEditTextForWidget((MyScriptEditText) v);
+                myScriptAddVisitsFragment.showOnlyWidget();
             }
         }
     }

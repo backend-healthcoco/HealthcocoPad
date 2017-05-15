@@ -37,6 +37,7 @@ import com.healthcoco.healthcocopad.bean.server.DoctorExperience;
 import com.healthcoco.healthcocopad.bean.server.DoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.enums.DoctorExperienceUnit;
+import com.healthcoco.healthcocopad.fragments.PatientVisitDetailFragment;
 
 import org.parceler.Parcels;
 import org.spongycastle.jcajce.provider.digest.Keccak;
@@ -727,4 +728,19 @@ public class Util {
         }
     }
 
+    public static String getVisitToggleStateFromPreferences(Context context) {
+        ObscuredSharedPreferences prefs = ObscuredSharedPreferences.getPrefs(context,
+                context.getResources().getString(R.string.app_name), Context.MODE_PRIVATE);
+        //retrieve data
+        String toggleState = prefs.getString(PatientVisitDetailFragment.TAG_TOGGLE_STATE, null);
+        return toggleState;
+    }
+
+    public static void addVisitToggleStateInPreference(Context context, String tagToggleState) {
+        ObscuredSharedPreferences prefs = ObscuredSharedPreferences.getPrefs(context,
+                context.getResources().getString(R.string.app_name), Context.MODE_PRIVATE);
+
+        //save data
+        prefs.edit().putString(PatientVisitDetailFragment.TAG_TOGGLE_STATE, tagToggleState).commit();
+    }
 }

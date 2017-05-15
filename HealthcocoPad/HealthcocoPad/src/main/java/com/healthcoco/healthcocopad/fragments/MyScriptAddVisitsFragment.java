@@ -9,6 +9,7 @@ import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
@@ -67,6 +68,7 @@ import com.healthcoco.healthcocopad.custom.HealthcocoOnSelectionChanged;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocopad.custom.MyScriptEditText;
 import com.healthcoco.healthcocopad.enums.ClinicalNotesPermissionType;
+import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.PrescriptionPermissionType;
 import com.healthcoco.healthcocopad.enums.SuggestionType;
 import com.healthcoco.healthcocopad.enums.VisitedForType;
@@ -103,17 +105,17 @@ import static com.healthcoco.healthcocopad.fragments.AddVisitSuggestionsFragment
 /**
  * Created by Shreshtha on 05-04-2017.
  */
-public class AddVisitsFragment extends HealthCocoFragment implements View.OnClickListener,
+public class MyScriptAddVisitsFragment extends HealthCocoFragment implements View.OnClickListener,
         Response.Listener<VolleyResponseBean>, GsonRequest.ErrorListener, LocalDoInBackgroundListenerOptimised,
         HealthcocoOnSelectionChangedListener, View.OnTouchListener {
-    public static final String INTENT_ON_SUGGESTION_ITEM_CLICK = "com.healthcoco.healthcocopad.fragments.AddVisitsFragment.ON_SUGGESTION_ITEM_CLICK";
-    public static final String INTENT_ADIVCE_BUTTON_VISIBILITY = "com.healthcoco.healthcocopad.fragments.AddVisitsFragment.ADIVCE_BUTTON_VISIBILITY";
-    public static final String INTENT_DIAGRAM_LAYOUT_VISIBILITY = "com.healthcoco.healthcocopad.fragments.AddVisitsFragment.DIAGRAM_LAYOUT_VISIBILITY";
-    public static final String INTENT_DIAGRAM_BUTTON_VISIBILITY = "com.healthcoco.healthcocopad.fragments.AddVisitsFragment.DIAGRAM_BUTTON_VISIBILITY";
-    public static final String INTENT_CLINCIAL_NOTE_LAYOUT_VISIBILITY = "com.healthcoco.healthcocopad.fragments.AddVisitsFragment.CLINCIAL_NOTE_LAYOUT_VISIBILITY";
-    public static final String INTENT_CLINCIAL_NOTE_BUTTON_VISIBILITY = "com.healthcoco.healthcocopad.fragments.AddVisitsFragment.CLINCIAL_NOTE_BUTTON_VISIBILITY";
+    public static final String INTENT_ON_SUGGESTION_ITEM_CLICK = "com.healthcoco.healthcocopad.fragments.MyScriptAddVisitsFragment.ON_SUGGESTION_ITEM_CLICK";
+    public static final String INTENT_ADIVCE_BUTTON_VISIBILITY = "com.healthcoco.healthcocopad.fragments.MyScriptAddVisitsFragment.ADIVCE_BUTTON_VISIBILITY";
+    public static final String INTENT_DIAGRAM_LAYOUT_VISIBILITY = "com.healthcoco.healthcocopad.fragments.MyScriptAddVisitsFragment.DIAGRAM_LAYOUT_VISIBILITY";
+    public static final String INTENT_DIAGRAM_BUTTON_VISIBILITY = "com.healthcoco.healthcocopad.fragments.MyScriptAddVisitsFragment.DIAGRAM_BUTTON_VISIBILITY";
+    public static final String INTENT_CLINCIAL_NOTE_LAYOUT_VISIBILITY = "com.healthcoco.healthcocopad.fragments.MyScriptAddVisitsFragment.CLINCIAL_NOTE_LAYOUT_VISIBILITY";
+    public static final String INTENT_CLINCIAL_NOTE_BUTTON_VISIBILITY = "com.healthcoco.healthcocopad.fragments.MyScriptAddVisitsFragment.CLINCIAL_NOTE_BUTTON_VISIBILITY";
 
-    public static final String INTENT_LAB_TEST_VISIBILITY = "com.healthcoco.healthcocopad.fragments.AddVisitsFragment.LAB_TEST_VISIBILITY";
+    public static final String INTENT_LAB_TEST_VISIBILITY = "com.healthcoco.healthcocopad.fragments.MyScriptAddVisitsFragment.LAB_TEST_VISIBILITY";
 
     public static final String TAG_SELECTED_SUGGESTION_OBJECT = "selectedSuggestionObject";
     public static final String TAG_VISIBILITY = "visibility";
@@ -186,6 +188,7 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
     private boolean mKeyboardStatus = false;
     private AddClinicalNotesVisitFragment addClinicalNotesFragment;
     private boolean isFromClone;
+    private FloatingActionButton flBtSwap;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -282,6 +285,7 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
         parentDiagrams = (LinearLayout) view.findViewById(R.id.parent_diagrams);
         parentAdvice = (LinearLayout) view.findViewById(R.id.layout_parent_advice);
         etAdvice = (MyScriptEditText) view.findViewById(R.id.et_advice);
+        flBtSwap = (FloatingActionButton) view.findViewById(R.id.fl_bt_swap);
 
         parentClinicalNote.setVisibility(View.GONE);
         parentPrescription.setVisibility(View.GONE);
@@ -378,6 +382,7 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
         tvPreviousArrow.setOnClickListener(this);
         tvNextArrow.setOnClickListener(this);
         etAdvice.setOnTouchListener(this);
+        flBtSwap.setOnClickListener(this);
 
         btPrescription.setOnTouchListener(this);
         setViewToWidget();
@@ -582,6 +587,11 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
                 if (HealthCocoConstants.isNetworkOnline) {
                     validateData();
                 } else onNetworkUnavailable(null);
+                break;
+            case R.id.fl_bt_swap:
+                openCommonOpenUpActivity(CommonOpenUpFragmentType.ADD_VISITS, null, null, 0);
+                Util.addVisitToggleStateInPreference(mActivity, PatientVisitDetailFragment.MYSCRIPT_VISIT_TOGGLE_STATE);
+                mActivity.finish();
                 break;
         }
     }
@@ -1360,7 +1370,7 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
         @Override
         public void onReceive(Context context, final Intent intent) {
             if (intent != null && intent.hasExtra(TAG_VISIBILITY)) {
-                Util.enableAllChildViews(btSave,true);
+                Util.enableAllChildViews(btSave, true);
                 boolean showVisibility = intent.getBooleanExtra(TAG_VISIBILITY, false);
                 if (showVisibility) {
                     addVisibileUiType(VisitsUiType.PRESCRIPTION);
@@ -1368,7 +1378,7 @@ public class AddVisitsFragment extends HealthCocoFragment implements View.OnClic
                     btAdvice.setVisibility(View.VISIBLE);
                 } else {
                     if (!Util.isNullOrBlank(prescriptionId))
-                       Util.enableAllChildViews(btSave,false);
+                        Util.enableAllChildViews(btSave, false);
                     removeVisibileUiType(VisitsUiType.PRESCRIPTION);
                     parentPrescription.setVisibility(View.GONE);
                     btAdvice.setVisibility(View.GONE);
