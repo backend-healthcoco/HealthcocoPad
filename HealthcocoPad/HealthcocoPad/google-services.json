@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "950712478366-nc04m97ss8j556gjs6vcjhsq3npj5rn5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.healthcoco.healthcocopad",
+            "certificate_hash": "662613658c6e47d8b0b2980252bc552c26178eac"
+          }
+        },
+        {
           "client_id": "950712478366-dcsabd3irji6essniopl743qrdj8f07b.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
