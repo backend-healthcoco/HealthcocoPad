@@ -6,7 +6,7 @@ package com.healthcoco.healthcocopad.utilities;
 public enum BuildType {
     DEV("http://52.66.106.88/dpdocter/api/v1/", "healthcoco@16:1GWLF9ORMK9B8QFV", true, true),
     QA("https://app.healthcoco.com/dpdocter/api/v1/", "healthcoco@16:1GWLF9ORMK9B8QFV", false, true),
-    PROD("https://api.healthcoco.com/dpdocter/api/v1/", "hlthco@48#$:03USULTRS0MR7362P9F5", true, true);
+    PROD("https://api.healthcoco.com/dpdocter/api/v1/", "hlthco@48#$:03USULTRS0MR7362P9F5", false, false);
 
     private final String OAUTH_KEY = "Authorization";
     private final boolean loggingEnabled;
