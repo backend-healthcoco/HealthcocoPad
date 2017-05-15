@@ -1,0 +1,779 @@
+<resources>
+    <string name="app_name">Healthcoco Pad</string>
+    <string name="app_version_name">1.0.0</string>
+    <string name="app_version_about_us_name">v%s(Beta)</string>
+    <string name="database_name">healthcoco_pad.db</string>
+    <string name="join">Join</string>
+    <string name="sign_in">Sign In</string>
+    <string name="get_started">Get Started</string>
+
+    <string name="title_hcc_twenty_four_seven">Day or Night \n your clinic is always open</string>
+    <string name="text_hcc_twenty_four_seven">Too many patients waiting for their turn- Find your clinic always open 24x7</string>
+
+    <string name="title_hcc_conn">Connect.Access.Share</string>
+    <string name="text_hcc_conn">View entire patient medical data and history, with patient\'s consent</string>
+
+    <string name="title_hcc_records">Anywhere. Anytime. Across Devices.</string>
+    <string name="text_hcc_records">Safely store all patients records and access them anytime, from anywhere, and on multiple devices</string>
+
+    <string name="title_hcc_profile">Build your Profile &amp; Reach out to the Healthcare Community</string>
+    <string name="text_hcc_profile">Improve your online presence by creating a public profile and managing your clinic profile</string>
+
+    <string name="title_hcc_sync">Everything is in sync</string>
+    <string name="text_hcc_sync">Whatever you do on one device is reflected everywhere, you can always pick up wherever you left off. </string>
+
+    <string name="title_hcc_prescription">Go Paperless with Digital Rx</string>
+    <string name="text_hcc_rx">Top class Rx templates readily available to prescribe your patients in no time</string>
+
+    <!--Sign up screen -->
+    <string name="forgot_your_password">Forgot Your Password&#160;?</string>
+    <string name="to_reset_password">To reset password, Please enter Email associated with your account.</string>
+    <string name="already_have_an_account">Already have an Account&#160;?&#160;Sign in</string>
+
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="signin_accept_terms_and_conditions">By Signing in, you agree to Healthcoco Pad\'s &#160;</string>
+
+    <string name="underlined_terms_of_service"><u>Terms of Service</u></string>
+    <string name="and">&#160;and&#160;</string>
+    <string name="underlined_privacy_policy"><u>Privacy Policy</u></string>
+    <string name="cancel">Cancel</string>
+
+    <!--Sign Up Dialog Fragment-->
+    <string name="full_name">Full Name</string>
+    <string name="mobile_number">Mobile Number</string>
+    <string name="title_dr">Dr.</string>
+    <string name="male">MALE</string>
+    <string name="female">FEMALE</string>
+
+    <string name="email_address">Email Address</string>
+    <string name="city">City</string>
+    <string name="select_city">Select City</string>
+    <string name="select_speciality">Select Speciality</string>
+    <string name="speciality">Speciality</string>
+    <string name="user_offline">User is Offline</string>
+    //versoin check
+    <string name="title_update_available">Update Available</string>
+    <string name="message_update_available">A new version of Healthcoco Pad is available. Please update.</string>
+    <string name="message_force_update">In Order to Continue, you must update Healthcoco Pad now. This should only take a few moments.</string>
+    <string name="update">Update</string>
+    <string name="later">Later</string>
+
+    <!-- Login form ater Messages-->
+    <!-- Alert Messages -->
+    <string name="please_enter_email_id_And_password_to_login">Please Enter Email ID and Password to Login</string>
+    <string name="please_enter_email_id_to_login">Please Enter Email ID to Login</string>
+    <string name="please_enter_password_to_login">Please Enter Password to Login</string>
+    <string name="please_enter_username">Please Enter Username</string>
+    <string name="please_enter_password">Please Enter Password</string>
+    <string name="password_minimum_eight_characters">Password should be of Minimum 8 Characters</string>
+    <string name="please_confirm_password">Please Confirm Password</string>
+    <string name="please_enter_email_address">Please enter Email Address</string>
+    <string name="please_enter_valid_email_address">Please enter a valid Email Address</string>
+    <string name="please_enter_valid_clinic_no">Please enter valid Clinic Number</string>
+    <string name="please_enter_valid_alternate_clinic_no">Please enter valid Alternate Clinic Number</string>
+    <string name="please_enter_valid_website_url">Please enter a valid Website URL</string>
+
+    <string name="userstate_verified">User Verified</string>
+    <string name="userstate_not_verified">Pending Email Verification</string>
+    <string name="userstate_not_activated">Pending Healthcoco Verification</string>
+    <string name="userstate_incomplete">Pending Signup</string>
+    <string name="userstate_complete_active">Active</string>
+
+    <string name="verification">Verification</string>
+    <string name="title_please_verify">Please Verify</string>
+    <string name="alert_verify">Verification email has been sent to your registered email address.\nPlease check your Inbox/Spam folder.</string>
+
+    <string name="title_activation">Activation</string>
+    <string name="alert_activation">Your Activation is under process.\nWe will contact you shortly to get you started with Healthcoco Pad.</string>
+    <string name="message_thank_you">Thank You for Contacting us.Our Team will contact you shortly.</string>
+    <string name="thank_you">Thank You</string>
+    <string name="loading_taking_time">Please wait&#8230;</string>
+    <string name="save">Save</string>
+    <string name="error">Error</string>
+    <string name="email_sent_to">Email sent to&#160;</string>
+    <string name="reset">Reset</string>
+
+    <string name="terms_of_service">Terms of Service</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="sign_up">Sign Up</string>
+
+    <string name="page_no_loaded">Something went wrong while loading Page</string>
+
+
+    <!--Sign Up page-->
+    <string name="enter_birthdate">Enter Birthdate</string>
+    <string name="passwords_dont_match">Password does not match the Confirm Password.</string>
+    <string name="please_enter_clinic_name">Please enter Clinic Name</string>
+    <string name="please_enter_speciality">Please enter Speciality</string>
+    <string name="please_select_speciality">Please select Speciality</string>
+    <string name="please_select_city">Please select City</string>
+    <string name="please_enter_otp">Please Enter OTP</string>
+    <string name="please_enter_city">Please enter City</string>
+    <string name="please_enter_address">Please enter Address</string>
+    <string name="please_enter_registration_number">Please enter Registration Number</string>
+    <string name="please_select_role">Please select Role</string>
+    <string name="please_enter_name">Please enter Name</string>
+    <string name="please_select_gender">Please select Gender</string>
+    <string name="please_enter_full_name">Please enter Full Name</string>
+    <string name="please_enter_valid_mobile_no">Please enter valid Mobile Number</string>
+    <string name="please_enter_valid_alternate_mobile_no">Please enter valid Alternate Mobile Number</string>
+    <string name="please_enter_mobile_no">Please enter Mobile Number</string>
+
+    <string name="search_city">Search City</string>
+    <string name="search_speciality">Search Speciality</string>
+    <string name="no_result_found_for_your_search">No result found for your Search</string>
+    <string name="search_patient">Search Patient</string>
+
+    <!--error messages-->
+    <string name="error_local_data">Something went wrong while getting data from local</string>
+
+    <!--Syncing String-->
+    <string name="syncing_doctor_profile">Syncing Doctor Profile&#8230;</string>
+    <string name="syncing_clinic_profile">Syncing Clinic Profile&#8230;</string>
+    <string name="syncing_groups">Syncing Groups&#8230;</string>
+    <string name="syncing_drug_dosage">Syncing Drug Dosage&#8230;</string>
+    <string name="syncing_duration_unit">Syncing Duration Unit&#8230;</string>
+    <string name="syncing_direction">Syncing Direction&#8230;</string>
+    <string name="syncing_drug_type">Syncing Drug Type&#8230;</string>
+    <string name="syncing_cities">Syncing Cities&#8230;</string>
+    <string name="syncing_specialities">Syncing Specialities&#8230;</string>
+    <string name="syncing_profession">Syncing Profession&#8230;</string>
+    <string name="syncing_reffered_by">Syncing Referred By&#8230;</string>
+    <string name="syncing_blood_groups">Syncing Bloud Groups&#8230;</string>
+    <string name="syncing_contacts">Syncing Contacts&#8230;</string>
+    <string name="syncing_education_qualification">Syncing Education Qualification&#8230;</string>
+    <string name="syncing_institutes">Syncing Institutes&#8230;</string>
+    <string name="syncing_present_complaint_suggestions">Syncing Present Complaint Suggestions&#8230;</string>
+    <string name="syncing_history_of_present_complaint_suggestions">Syncing History Of Present Complaint Suggestions&#8230;</string>
+    <string name="syncing_menstrual_history_suggestions">Syncing Menstrual History Suggestions&#8230;</string>
+    <string name="syncing_obstetric_history_suggestions">Syncing Obstetric History Suggestions&#8230;</string>
+    <string name="syncing_general_examination_suggestions">Syncing General Examination Suggestions&#8230;</string>
+    <string name="syncing_systemic_examination_suggestions">Syncing Systemic Examination Suggestions&#8230;</string>
+    <string name="syncing_provisional_diagnosis_suggestions">Syncing Provisional Diagnosis Suggestions&#8230;</string>
+    <string name="syncing_ecg_details_suggestions">Syncing Ecg Details Suggestions&#8230;</string>
+    <string name="syncing_ecg_suggestions">Syncing Ecg Suggestions&#8230;</string>
+    <string name="syncing_echo_suggestions">Syncing Echo Suggestions&#8230;</string>
+    <string name="syncing_xray_details_suggestions">Syncing Xray Details Suggestions&#8230;</string>
+    <string name="syncing_xray_suggestions">Syncing Xray Suggestions&#8230;</string>
+    <string name="syncing_holter_suggestions">Syncing Holter Suggestions&#8230;</string>
+    <string name="syncing_pa_suggestions">Syncing PA Suggestions&#8230;</string>
+    <string name="syncing_pv_suggestions">Syncing PV Suggestions&#8230;</string>
+    <string name="syncing_ps_suggestions">Syncing PS Suggestions&#8230;</string>
+    <string name="syncing_indication_of_usg_suggestions">Syncing Indication of Usg Suggestions&#8230;</string>
+    <string name="syncing_notes_suggestions">Syncing Notes Suggestions&#8230;</string>
+    <string name="syncing_complaint_suggestions">Syncing Complaint Suggestions&#8230;</string>
+    <string name="syncing_observation_suggestions">Syncing Observation Suggestions&#8230;</string>
+    <string name="syncing_investigation_suggestions">Syncing Investigation Suggestions&#8230;</string>
+    <string name="syncing_diagnosis_suggestions">Syncing Diagnosis Suggestions&#8230;</string>
+    <string name="syncing_history">Syncing History&#8230;</string>
+    <string name="syncing_templates">Syncing Templates&#8230;</string>
+    <string name="syncing_calendar_events">Syncing Calendar Events&#8230;</string>
+    <string name="syncing_medical_councils">Syncing Medical Councils&#8230;</string>
+    <string name="syncing_ui_Permissions">Syncing UI Permissions</string>
+    <string name="sync_complete">Sync Complete</string>
+    <string name="sync">Sync</string>
+    <string name="loading">Loading&#8230;</string>
+
+    <!--Actionbar titles-->
+    <string name="profile">Profile</string>
+    <string name="clinic_proifle">Clinic Profile</string>
+    <string name="lab_test">Lab Test</string>
+    <string name="lab_tests">Lab Tests</string>
+    <string name="search_doctors">Search Doctors</string>
+    <string name="search_lab_test">Search Lab Test</string>
+    <string name="contacts">Contacts</string>
+    <string name="my_patients">My Patients</string>
+    <string name="notification_details">Notification Details</string>
+    <string name="calendar">Calendar</string>
+    <string name="mail">Mail</string>
+    <string name="settings">Settings</string>
+    <string name="new_group">New Group</string>
+    <string name="new_direction">New Direction</string>
+    <string name="new_disease">New Disease</string>
+    <string name="help_us_to_improve">Help Us to Improve</string>
+    <string name="new_frequency">New Frequency</string>
+    <string name="new_history">New History</string>
+    <string name="visit_detail">Visit Detail</string>
+    <string name="new_contact">New Contact</string>
+    <string name="patient_mobile_number">Patient Mobile Number</string>
+    <string name="groups">Groups</string>
+    <string name="searched_patients">Searched Patients</string>
+    <string name="new_reference">New Reference</string>
+    <string name="about_us">About Us</string>
+    <string name="my_profile">My Profile</string>
+    <string name="my_clinic">My Clinic</string>
+    <string name="registration_details">Registration Details</string>
+    <string name="global_record_access">Global Record Access</string>
+    <string name="location">Location</string>
+    <string name="reports">Reports</string>
+    <string name="prescriptions">Prescriptions</string>
+    <string name="clinical_notes">Clinical Notes</string>
+
+    <string name="confirm">Confirm</string>
+    <string name="pending_confirmation">Pending Confirmation</string>
+    <string name="confirm_call_number">Call&#160;</string>
+    <string name="no_mobile_number_found">No Mobile Number found for this patient</string>
+    <string name="confirm_delete_diagram">Are you sure you want to delete this Diagram?</string>
+    <string name="confirm_sign_out">Are you sure you want to Sign Out?</string>
+    <string name="all">All</string>
+    <string name="cancelled">Cancelled</string>
+    <string name="reschedule">Reschedule</string>
+    <string name="confirmed">Confirmed</string>
+    <string name="years">Years</string>
+    <string name="year">Year</string>
+    <string name="no_text_dash">&#8211;</string>
+    <string name="text_dash">-</string>
+    <integer name="id_item_all">11</integer>
+    <integer name="id_item_confirmed">12</integer>
+    <integer name="id_item_cancelled">13</integer>
+    <integer name="id_item_pending_new">14</integer>
+
+    <string name="drawer_item_embedded_drawer">Embedded Drawer</string>
+    <string name="item1">Item 1</string>
+    <string name="item2">Item 2</string>
+    <string name="item3">Item3</string>
+    <string name="item4">Item4</string>
+    <string name="item5">Item 5</string>
+    <string name="content_description">Image Icon</string>
+    <string name="no_patients">No Patients</string>
+    <string name="add_prescription">Add Prescription</string>
+    <string name="issue_tracker">Issue Tracker</string>
+    <string name="filter">Filter</string>
+    <string name="all_patients">All Patients</string>
+    <string name="recently_visited">Recently Visited</string>
+    <string name="recently_added">Recently Added</string>
+    <string name="no_groups">No Groups</string>
+    <string name="most_visited">Most Visited</string>
+    <string name="name_mobile_number">Name/Mobile Number</string>
+    <string name="dr">Dr.</string>
+    <string name="error_loading_image">Error Loading Image</string>
+    <string name="contact">Contact</string>
+    <string name="edit_text_icon">&#xf040;</string>
+    <string name="primary_mobile_number">Primary Mobile Number</string>
+    <string name="additional_mobile_number">Additional Mobile Number</string>
+    <string name="primary_email_address">Primary Email Address</string>
+    <string name="alternate_email_address">Alternate Email Address</string>
+    <string name="alternate_mobile_number">Alternate Mobile Number</string>
+    <string name="registration_number">Registartion Number</string>
+    <string name="awards_and_publication">Awards and Publications</string>
+    <string name="education">Education</string>
+    <string name="experience">Experience</string>
+    <string name="professional_membership">Professional Membership</string>
+    <string name="professional_statement">Professional Statement</string>
+    <string name="address">Address</string>
+
+
+    <string name="address_details">Address Details</string>
+    <string name="clinic_contact">Clinic Contact</string>
+    <string name="clinic_photos">Clinic Photos</string>
+    <string name="clinic_hours">Clinic Hours</string>
+    <string name="temp_report_description">It is a long established fact that a reader will be distracted by the readable content of a while looking at its content</string>
+    <string name="visiting_hours">Visitors Hour</string>
+    <string name="clinic_open">Clinic Open</string>
+    <string name="text_24_7">24&#160;X&#160;7</string>
+    <string name="monday">Monday</string>
+    <string name="tuesday">Tuesday</string>
+    <string name="wednesday">Wednesday</string>
+    <string name="thursday">Thursday</string>
+    <string name="friday">Friday</string>
+    <string name="saturday">Saturday</string>
+    <string name="sunday">Sunday</string>
+    <string name="mon">Mon</string>
+    <string name="tue">Tue</string>
+    <string name="wed">Wed</string>
+    <string name="thu">Thu</string>
+    <string name="fri">Fri</string>
+    <string name="sat">Sat</string>
+    <string name="sun">Sun</string>
+    <string name="to">to</string>
+
+    <!--Sync All texts-->
+    <string name="sync_contact">Contact</string>
+    <string name="sync_group">Group</string>
+    <string name="sync_history">History</string>
+    <string name="sync_drug">Drug</string>
+    <string name="sync_frequency">Frequency</string>
+    <string name="sync_direction">Direction</string>
+    <string name="sync_notes_diagram">Notes\'s Diagram</string>
+    <string name="sync_clinical_notes_data">Clinical Notes\'s Data</string>
+    <string name="sync_referred_by">Referred By</string>
+    <string name="sync_drug_type">Drug Type</string>
+    <string name="sync_drug_duration_unit">Drug Duration Unit</string>
+    <string name="sync_ui_permissions">UI Permissions</string>
+
+    <string name="not_synced">Not Synced</string>
+    <!--//OTP messages-->
+    <string name="please_generate_otp_to_get_access_global_records">Please generate One Time Password to get access Global Records</string>
+    <string name="generate_otp_to_access_global_records">Generate OTP to access \n Global Records</string>
+    <string name="alert_global_record_access">Please Generate OTP to get access to Global Records of&#160;</string>
+    <string name="click_generate_otp_to_send_otp">Click "Generate OTP" to send OTP to Patient\'s registered Mobile Number.</string>
+    <string name="otp_success">OTP sent successfully to Patient\'s registered Mobile Number.</string>
+    <string name="otp_sent_to">One Time Password has been sent to&#160;</string>
+    <string name="please_enter_same_to_verify">Please enter same to verify.</string>
+    <string name="enter_otp">Enter OTP</string>
+    <string name="verify">Verify</string>
+    <string name="verification_complete">Verification Complete</string>
+    <string name="regenerate_otp">Regenerate OTP?</string>
+    <string name="generate_otp">Generate OTP</string>
+
+    <string name="appointment_details">Appointment Details</string>
+    <string name="consultant_fees">Consultant Fees</string>
+    <string name="second_consultant_fees">Second Consultant Fees</string>
+    <string name="rupee_consultant_fees">\u20B9 Consultant Fees</string>
+    <string name="rupee_second__consultant_fees">\u20B9 Second Consultant Fees</string>
+    <string name="booking_facility">Booking Facility</string>
+    <string name="booking_mobile_landline_number">Booking Mobile/Landline Number</string>
+    <string name="appointment_slot">Appointment Slot</string>
+    <string name="facility_type">Facility Type</string>
+    <string name="ibs">IBS</string>
+    <string name="book">Book</string>
+    <string name="call">Call</string>
+
+    <string name="notes">Notes</string>
+    <string name="contact_details">Contact Detail</string>
+    <string name="organization">Organization</string>
+
+    <string name="gender">Gender</string>
+    <string name="birthday">Birthday</string>
+    <string name="select">Select</string>
+
+    <string name="enter_speciality">Enter Speciality</string>
+    <string name="add">Add</string>
+    <string name="qualification">Qualification</string>
+    <string name="college_university">College/University</string>
+    <string name="year_of_passing">Year of Passing</string>
+    <string name="registration_id">Registration Id</string>
+    <string name="medical_council">Medical Council</string>
+    <string name="year_of_registration">Year of Registration</string>
+    <string name="all_fields_are_mandatory">All fields are Mandatory</string>
+    <string name="search_qualification">Search Qualification</string>
+    <string name="search_college_university_institute">Search College/University/Institute</string>
+    <string name="search_medical_council">Search Medical Council</string>
+    <string name="no_result_found_for_search_press_enter">Please press Enter to save the Option you entered</string>
+    <string name="no_tests_found">No Tests Found</string>
+    <string name="referred_by">Referred By</string>
+    <!--Settings text-->
+    <string name="referred_by_settings">Referred By</string>
+    <string name="drug">Drug</string>
+    <string name="about">About</string>
+    <string name="help">Help</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="history_small">History</string>
+    <string name="rate_us">Rate Us</string>
+    <string name="templates">Templates</string>
+    <string name="id_creation">ID creation</string>
+    <string name="print">Print</string>
+    <string name="sms">SMS</string>
+    <string name="billing">Billing</string>
+    <string name="ui_permission">UI Permission</string>
+
+    <string name="select_option">Select Option</string>
+    <string name="select_image">Select Image</string>
+    <string name="select_file">Select File</string>
+    <string name="camera">Camera</string>
+    <string name="gallery">Gallery</string>
+    <string name="preview">Preview</string>
+    <string name="no_specialisations_found">No Speciality Found</string>
+
+    <string name="this_cannot_be_undone">This cannot be Undone.</string>
+    <string name="do_you_want_to_delete_this_item">Do you want to delete this Item?</string>
+    <string name="confirm_delete_this_image">Do you want to delete this Image?</string>
+    <string name="clinic_image_uploaded_successfully">Clinic image uploaded successfully</string>
+    <string name="device_doesnt_support_camera">Device doesn\'t support Camera</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="speciality_already_added">Speciality already Added</string>
+    <string name="rb_male">&#160;Male</string>
+    <string name="rb_female">&#160;Female</string>
+    <string name="clinic_name">Clinic Name</string>
+    <string name="start_year">Start Year</string>
+    <string name="end_year">End Year</string>
+    <string name="search_professional_membership">Search Professsional Membership</string>
+    <string name="clinic_closed">Clinic Closed</string>
+    <string name="clinic_open_24_7">Clinic Open 24&#160;X&#160;7</string>
+    <string name="confirm_delete_this_session">Do you want to delete this Session?</string>
+    <string name="time_difference_should_15_minutes">Time difference should be of Minimum 15 minutes</string>
+    <string name="time_to_should_be_greater_than_from">Time to should be greater than Time from</string>
+    <string name="please_select_from_time">Please select from Time first</string>
+    <string name="please_fill_timing">Please fill timing first</string>
+    <string name="select_slot">Select Slot</string>
+    <string name="please_enter_appointment_booking_number">Please enter Appointment Booking Number</string>
+    <string name="please_enter_a_valid_appointment_booking_number">Please enter a Valid Appointment Booking Number</string>
+    <string name="clinic_address">Clinic Address</string>
+    <string name="clinic_numbers">Clinic Numbers</string>
+    <string name="website">Website</string>
+    <string name="clinic_email_address">Clinic Email Address</string>
+    <string name="doctors">Doctors</string>
+    <string name="view_all">View All</string>
+    <string name="clinic_logo_updated_successfully">Clinic logo updated successfully</string>
+    <string name="done">Done</string>
+    <string name="clinic_number">Clinic Number</string>
+    <string name="alternate_clinic_number">Alternate Clinic Number</string>
+    <string name="street_address">Street Address</string>
+    <string name="landmark">Landmark</string>
+    <string name="locality">Locality</string>
+    <string name="state">State</string>
+    <string name="pincode">Pincode</string>
+    <string name="country">Country</string>
+    <string name="patient">Patient</string>
+    <string name="search_clinical_notes">Search Clinical Notes</string>
+    <string name="search_history">Search History</string>
+    <string name="search_prescription">Search Prescription</string>
+    <string name="search_template">Search Template</string>
+    <string name="search_ui_permission">Search UI Permission</string>
+    <string name="search_billing">Search Billing</string>
+    <string name="settings_no_sms">Search No SMS</string>
+    <string name="settings_no_history_added">No History Added</string>
+    <string name="settings_no_patient_added">No Patient  Added</string>
+    <string name="settings_no_prescription">No Prescription Added</string>
+    <string name="no_templates">No Template Added</string>
+    <string name="settings_no_billing">No Billing Added</string>
+    <string name="no_clinical_note">No Clinical Notes Added</string>
+    <string name="settings_no_ui_permission">No UI  Permission Added</string>
+
+    <string-array name="array_countries">
+        <item>India</item>
+    </string-array>
+
+    <string name="text_about_us">We are an innovative health and wellness platform providing the best way for healthcare providers and users to connect and share. We aim to improve the access and quality of healthcare globally.</string>
+    <string name="terms_and_conditions">Terms and Condition</string>
+    <string name="visits">Visits</string>
+    <string name="patient_tab_permission">Patient Tab Permission</string>
+    <string name="prescription_ui_permission_details">Prescription UI  Permission Details</string>
+    <string name="clinical_notes_ui_permission_details">Clinical Notes UI  Permission Details</string>
+    <string name="visits_ui_permission_details">Visits UI  Permission Details</string>
+    <string name="patient_tab_ui_permission_details">Patient UI  Permission Details</string>
+
+    <!-- Prescription -->
+    <string name="new_prescription">New Prescription</string>
+
+    <string name="your_changes_will_not_be_saved">Your changes will not be saved.\nAre you sure you want to leave this page ?</string>
+    <string name="alert">Alert</string>
+    <string name="leave">Leave</string>
+    <string name="stay">Stay</string>
+    <string name="new_drug">New Drug</string>
+    <string name="enter_group_name">Enter Group name</string>
+    <string name="please_enter_group_name">Please enter Group Name</string>
+    <string name="please_enter_disease_name">Please enter Disease Name</string>
+    <string name="please_write_note">Please write a Note</string>
+    <string name="enter_name">Enter Name</string>
+    <string name="enter_reference">Enter Reference</string>
+    <string name="enter_email_address">Enter Email Address</string>
+
+    <string name="enter_frequency_dose">Enter Frequency</string>
+    <string name="enter_drug">Enter Drug</string>
+    <string name="enter_direction">Enter Direction</string>
+    <string name="enter_history">Enter History</string>
+    <string name="enter_disease">Enter Disease</string>
+    <string name="please_enter_patient_name">Please enter Patient Name</string>
+    <string name="please_enter_reference">Please enter Reference</string>
+    <string name="please_enter_direction">Please enter Direction</string>
+    <string name="please_enter_frequency">Please enter Frequency</string>
+    <string name="please_enter_history">Please enter History</string>
+    <string name="please_enter_drug">Please enter Drug</string>
+    <string name="please_enter_test_name">Please enter Test Name</string>
+    <string name="please_enter_reffered_by_name">Please enter Referred By Name</string>
+    <string name="please_enter_feedback">Please enter Feedback</string>
+    <string name="enter_patient_mobile_number">Enter Patient Mobile Number</string>
+    <string name="enter_new_patient_name">Enter New Patient Name</string>
+    <string name="patient_name">Patient Name</string>
+    <string name="patient_name_with_colon">Patient Name&#160;:&#160;</string>
+    <string name="new_test">New Test</string>
+    <string name="test_name">Test Name</string>
+    <string name="new_note">New Note</string>
+    <string name="write_a_note">Write a Note</string>
+    <string name="proceed">Proceed</string>
+    <string name="please_enter_patient_mobile_number_to_register">Please Enter Patient Mobile Number To Register</string>
+    <string name="patient_search">Patient Search</string>
+
+    <string name="alert_nine_patients_already_registered">9 Patients already registered on this number</string>
+    <string name="age">Age</string>
+    <string name="or">or</string>
+    <string name="blood_group">Blood Group</string>
+    <string name="profession">Profession</string>
+    <string name="email_small">Email</string>
+    <string name="secondary_mobile_number">Seconday Mobile Number</string>
+    <string name="driving_license">Driving Licence</string>
+    <string name="pan_number">Pan Number</string>
+    <string name="aadhar_id">Aadhar Id</string>
+    <string name="basic_info">Basic Info</string>
+    <string name="date_of_birth">Date of Birth</string>
+    <string name="search_profession">Search Profession</string>
+    <string name="no_referred_by_found">No Referred By Found</string>
+    <string name="please_enter_valid_aadhar_id">Please enter valid Aadhar ID</string>
+    <string name="please_enter_valid_pincode">Please enter a valid Pincode</string>
+    <string name="search_blood_group">Search Blood Group</string>
+    <string name="confirm_delete_note">Are you sure you want to Delete this Note?</string>
+    <string name="ok">Ok</string>
+    <string name="patient_successfully_added_to_queue">added To Queue successfully</string>
+    <string name="patient_profile">Patient Profile</string>
+    <string name="add_groups">Add Group</string>
+    <string name="important">Important</string>
+    <string name="appointment">Appointment</string>
+    <string name="patientTreatment">Treatment</string>
+    <string name="past_history">Past History</string>
+    <string name="edit_to_assign_past_history">Edit to assign Past History</string>
+    <string name="family_history">Family History</string>
+    <string name="edit_to_assign_family_history">Edit to assign Family History</string>
+    <string name="personal_history">Personal History</string>
+    <string name="edit_to_assign_personal_history">Edit to assign Personal History</string>
+    <string name="edit_to_assign_groups">Edit to assign Groups</string>
+    <string name="patient_data">Patient Data</string>
+    <string name="edit_to_add_patient_data">Edit to add Patient Data</string>
+    <string name="edit_to_add_notes">Edit to add Notes</string>
+    <string name="drug_allergy">Drug and Allergy</string>
+    <string name="edit_to_assign_drug_allergy">Edit to assign Ongoing Drugs and Allergy</string>
+    <string name="no_visits_found">No Visits Found</string>
+    <string name="no_notes">No Notes</string>
+    <string name="diet">Diet</string>
+    <string name="addictions">Addictions</string>
+    <string name="bowel_habits">Bowel Habits</string>
+    <string name="bladder_habits">Bladder Habits</string>
+    <string name="no_history_found">No History Found</string>
+    <string name="advance_search">Advance Search</string>
+
+    <string name="discard">Discard</string>
+    <string name="approve">Approve</string>
+    <string name="decline">Decline</string>
+    <string name="save_as_template">Save as Template</string>
+    <string name="report_details">Report Details</string>
+    <string name="event">Event</string>
+    <string name="cancel_appointment">Cancel Appointment</string>
+
+    <string name="bmp">bmp</string>
+    <string name="kg">kg</string>
+    <string name="percentage">%</string>
+    <string name="systolic_down">sys</string>
+    <string name="diastolic_up">diastolic</string>
+    <string name="fahrenheit">\u2109</string>
+    <string name="mm_hg">mm/hg</string>
+    <string name="allergy">Allergy</string>
+    <string name="drugs">Drugs</string>
+    <string name="field_should_not_be_empty">Field should not be empty</string>
+    <string name="allergies">Allergies : </string>
+    <string name="search">Search</string>
+    <string name="drug_list">Drug List : </string>
+    <string name="no_drug_history">No drugs found</string>
+    <string name="search_drug">Search Drug</string>
+    <string name="confirm_remove_drug">Are you sure you want to remove this Drug?</string>
+    <string name="confirm_remove_test">Are you sure you want to remove this Test?</string>
+    <string name="confirm_drug_interaction">Confirm Drug Interaction&#160;</string>
+    <string name="title_no_interactions_found">No Interactions were found between your selected drugs</string>
+    <string name="msg_no_interactions_found">Note: This does not necessarily mean no Interactions exist.</string>
+
+    <string name="present_complaint">Present Complaint</string>
+    <string name="complaints">Complaints</string>
+    <string name="history_of_present_complaints">History of Present Complaint</string>
+    <string name="menstrual_history">Menstrual History</string>
+    <string name="obstetric_history">Obstetric History</string>
+    <string name="general_examination">General Examination</string>
+    <string name="systemic_examination">Systemic Examination</string>
+    <string name="observations">Observations</string>
+    <string name="investigations">Investigations</string>
+    <string name="provisional_diagnosis">Provisional Diagnosis</string>
+    <string name="diagnosis">Diagnosis</string>
+    <string name="ecg_details">ECG Details</string>
+    <string name="echo">Echo</string>
+    <string name="xray_details">X-Ray Details</string>
+    <string name="holter">Holter</string>
+    <string name="indication_of_usg">Indication of USG</string>
+    <string name="note">Note</string>
+    <string name="pa">P/A</string>
+    <string name="ps">P/S</string>
+    <string name="pv">P/V</string>
+
+    <string name="diagrams">Diagrams</string>
+
+    <string name="created_by">Created By</string>
+    <string name="vid"> | VID : </string>
+    <string name="vital_signs">Vital Signs</string>
+    <string name="hr">Heart Rate&#160;:&#160;</string>
+    <string name="bt">Body Temperature&#160;:&#160;</string>
+    <string name="wt">Weight&#160;:&#160;</string>
+    <string name="bp">Blood Pressure&#160;:&#160;</string>
+    <string name="rr">Respiratory Rate&#160;:&#160;</string>
+    <!--<string name="hr">HR&#160;:&#45;&#45;&#160;</string>-->
+    <!--<string name="bt">BT&#160;:&#45;&#45;&#160;</string>-->
+    <!--<string name="wt">WT&#160;:&#45;&#45;&#160;</string>-->
+    <!--<string name="bp">BP&#160;:&#45;&#45;&#160;</string>-->
+    <!--<string name="rr">RR&#160;:&#45;&#45;&#160;</string>-->
+
+    <string name="heart_rate">Heart Rate&#160;(beats/min)&#160;</string>
+    <string name="body_temperature">Body Temperature&#160;(\u2109)&#160;</string>
+    <string name="weight">Weight&#160;(Kilograms)&#160;</string>
+    <string name="blood_pressure">Blood Pressure&#160;(mm/Hg)&#160;</string>
+    <string name="respiratory_rate">Resp Rate&#160;(breaths/min)&#160;</string>
+    <string name="spo2">SpO2&#160;(%)&#160;</string>
+
+
+    <string name="spo2_colon">SpO2&#160;:&#160;</string>
+    <string name="kilograms">&#160;(Kilograms)&#160;</string>
+    <string name="bp_mm_hg">&#160;(mm/Hg)&#160;</string>
+    <string name="beats_per_min">&#160;(beats/min)&#160;</string>
+    <string name="faranheit">&#160;(\u2109)&#160;</string>
+    <string name="spo2_percent">&#160;(%)&#160;</string>
+    <string name="breaths_per_min">breaths/min</string>
+    <string name="edit">Edit</string>
+    <string name="advice">Advice&#160;:&#160;</string>
+    <string name="drug_name">Drug Name</string>
+    <string name="frequency">Frequency</string>
+    <string name="duration">Duration</string>
+    <string name="direction">Direction</string>
+    <string name="instruction">Instruction</string>
+    <string name="treatment_name">Treatment Name&#160;&#160;</string>
+    <string name="quantity_per_day">Qty/day</string>
+    <string name="cost">Cost</string>
+    <string name="discount">Discount</string>
+    <string name="status">Status</string>
+    <string name="discarded">Discarded</string>
+    <string name="treatment">Treatment</string>
+
+    <!--Common EMR texts-->
+    <string name="rx_id">RxId :&#160;</string>
+    <string name="rid">RID :&#160;</string>
+    <string name="cnid">CNID :&#160;</string>
+    <string name="email_caps">EMAIL</string>
+    <string name="prescribed_by">Prescribed by&#160;</string>
+    <string name="global_record">Global Record</string>
+    <!--//prescription confirmation messages-->
+    <string name="confirm_remove_prescription_from_history">Do you want to remove this Prescription from History?</string>
+    <string name="confirm_discard_prescription_title">Are you sure you want to discard this Prescription?</string>
+    <string name="confirm_discard_prescription_message">Patient will be requested to discontinue this Prescription.</string>
+    <string name="confirm_sms_prescription">Are you sure you want to send this Prescription to Mobile number&#160;</string>
+    <string name="confirm_sms_visit">Are you sure you want to send this Visit\'s Detail to Mobile number&#160;</string>
+    <string name="mobile_no_not_found">Mobile number not found for Patient&#160;</string>
+    <string name="sms_sent_to">SMS sent to&#160;</string>
+    <!--Success messages-->
+    <string name="added_to_history">Added to Important</string>
+    <string name="removed_from_history">Removed from Important</string>
+    <string name="noted_by">Noted By&#160;</string>
+    <string name="declined">Declined</string>
+    <!--//reports confirmation messages-->
+    <string name="confirm_remove_reports_from_history">Do you want to remove this Report from Important?</string>
+    <string name="confirm_discard_reports_title">Are you sure you want to discard this Report?</string>
+    <string name="confirm_discard_reports_message">This cannot be undone.</string>
+
+    <!-- reports -->
+    <string name="add_image">Add Image</string>
+    <string name="add_file">Add File</string>
+    <string name="uploaded_by">Uploaded by :&#160;</string>
+    <string name="open">OPEN</string>
+    <string name="new_template">New Template</string>
+    <string name="template_name">Template Name</string>
+    <string name="enter_template_name">Enter Template Name</string>
+    <string name="favourite_drug_list">Favourite Drug List</string>
+    <string name="all_drug_list">All Drug List</string>
+    <string name="all_drugs">All Drugs</string>
+    <string name="my_drugs">My Drugs</string>
+    <string name="drug_type">Drug Type</string>
+    <string name="please_enter_drug_name">Please Enter Drug Name</string>
+    <string name="success_drug_added">Drug \"%s\" added Successfully</string>
+    <string name="dosage">Dosage</string>
+    <string name="duration_unit">Duration Unit</string>
+    <string name="add_drug">Add Drug</string>
+    <string name="search_direction">Search Direction</string>
+    <string name="search_duration">Search Duration</string>
+    <string name="search_frequency">Search Frequency</string>
+    <string name="no_result_found">No result found</string>
+
+    <!--AdvanceSearchOptions Text-->
+    <string name="patient_id">Patient Id</string>
+    <string name="enter_patient_id">Enter Patient Id</string>
+    <string name="enter_patient_name">Enter Patient Name</string>
+    <string name="enter_mobile_number">Enter Mobile Number</string>
+    <string name="enter_email">Enter Email</string>
+    <string name="select_blood_group">Select Blood Group</string>
+    <string name="select_profession">Select Profession</string>
+    <string name="reference">Reference</string>
+    <string name="select_reference">Select Reference</string>
+    <string name="no_templates_added">No Template Added</string>
+    <string name="write_insruction_text">Write an instruction</string>
+    <string name="please_enter_template_name">Please Enter Template name</string>
+    <string name="please_add_drugs_for_template">Please Add Drugs for template&#160;</string>
+    <string name="success_template_added">Template \"%s\" added Successfully</string>
+
+    <!--//clinical Notes confirmation messages-->
+    <string name="confirm_remove_clinical_notes_from_history">Do you want to remove this Clinical Note from Important?</string>
+    <string name="confirm_discard_clinical_notes_title">Are you sure you want to discard this Clinical Note?</string>
+    <string name="confirm_discard_clinical_notes_message">This cannot be undone.</string>
+    <string name="rx_text">Rx</string>
+    <string name="date_with_colon">Date&#160;:&#160;</string>
+    <string name="patient_id_with_colon">Patient Id&#160;:&#160;</string>
+    <string name="prescription_rx">Prescription-Rx&#160;:</string>
+    <string name="mobile_no">Mobile No.&#160;:&#160;</string>
+    <string name="write_advice">Write Advice</string>
+    <string name="systolic">Systolic</string>
+    <string name="diastolic">Diastolic</string>
+    <string name="forward_slash">/</string>
+    <string name="add_visits">Add Visits</string>
+    <string name="no_diagrams_found">No Diagram Found</string>
+    <string name="search_diagram">Search Diagrams</string>
+    <string name="write_vital_signs">Write Vital Signs</string>
+    <string name="write_present_complaint">Write Present Complaint</string>
+    <string name="write_complaints">Write Complaints</string>
+    <string name="write_history_of_present_complaints">Write History of Present Complaint</string>
+    <string name="write_menstrual_history">Write Menstrual History</string>
+    <string name="write_obstetric_history">Write Obstetric History</string>
+    <string name="write_general_examination">Write General Examination</string>
+    <string name="write_systemic_examination">Write Systemic Examination</string>
+    <string name="write_observations">Write Observations</string>
+    <string name="write_investigations">Write Investigations</string>
+    <string name="write_provisional_diagnosis">Write Provisional Diagnosis</string>
+    <string name="write_diagnosis">Write Diagnosis</string>
+    <string name="write_ecg_details">Write ECG Details</string>
+    <string name="write_echo">Write Echo</string>
+    <string name="write_xray_details">Write X-Ray Details</string>
+    <string name="write_holter">Write Holter</string>
+    <string name="write_indication_of_usg">Write Indication of USG</string>
+    <string name="write_note">Write Note</string>
+    <string name="write_pa">Write P/A</string>
+    <string name="write_ps">Write P/S</string>
+    <string name="write_pv">Write P/V</string>
+    <string name="give_us_feedback">Give us Feedback</string>
+    <string name="send">Send</string>
+
+    <string name="model">Model</string>
+    <string name="manufacturer">Manufacturer</string>
+    <string name="version">Version</string>
+    <string name="sdk">SDK</string>
+    <string name="feedback_sent_successfully">Feedback sent Successfully</string>
+    <string name="space">Space</string>
+    <string name="delete">Del</string>
+    <string name="enter">Enter</string>
+
+    <!--visits alert messages-->
+    <string name="alert_blank_visit">Blank visit cannot be created</string>
+    <string name="please_add_systolic_and_diastolic_both">Please add Systolic and Diastolic both</string>
+    <string name="close">&#160;Close</string>
+    <string name="permission_received">Permissions Received.</string>
+    <string name="runtime_permissions_txt">Please enable ALL permissions from app settings.</string>
+    <string name="patients">Patients</string>
+    <string name="select_search_type">Select Search Type</string>
+    <string name="manage_clinic_profile">Manage Clinic\'s Profile</string>
+    <!--AppointmentCalendar Events Texts-->
+    <string name="aid">AID :&#160;</string>
+    <string name="remind">Remind</string>
+    <string name="confirm_cancel_appointment">Are you sure you want to cancel Appointment?</string>
+    <string name="are_you_sure_confirm_appointment">Confirm Appointment&#160;</string>
+    <string name="reminder_sent">Reminder to Patient has been sent Successfully</string>
+    <string name="no_appointment_found">No Appointment Found</string>
+    <string name="appointment_created">Appointment Created</string>
+    <string name="please_select_patient_or_add_new">Please select Patient or add New Patient</string>
+    <string name="please_enter_valid_mobile_no_or_select_existing_patient">Please enter valid Mobile Number or Select existing Patient</string>
+    <string name="please_enter_patient_name_or_select_existing_patient">Please enter Patient Name or Select existing Patient</string>
+    <string name="please_select_time_slot">Please select Time Slot</string>
+    <string name="please_select_date">Please select Date</string>
+    <string name="selected_time_slot_is_not_available">Selected Time Slot is not Available</string>
+    <string name="no_slots_available">No Slots Available</string>
+    <string name="select_patient">Select Patient</string>
+    <string name="add_new_patient">Add New Patient</string>
+    <string name="pick_time_slot">Pick Time Slot</string>
+    <string name="date">Date</string>
+    <string name="time">Time</string>
+    <string name="select_time_slot">Select Time Slot</string>
+    <string name="new_appointment">New Appointment</string>
+    <string name="patient_details">Patient Details</string>
+    <string name="patient_detail">Patient Details</string>
+    <string name="no_lab_test">No Lab Test Found</string>
+</resources>

@@ -1,0 +1,74 @@
+{
+  "project_info": {
+    "project_number": "950712478366",
+    "firebase_url": "https://healthcocopad-ff532.firebaseio.com",
+    "project_id": "healthcocopad-ff532",
+    "storage_bucket": "healthcocopad-ff532.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:950712478366:android:7bec24711baf5040",
+        "android_client_info": {
+          "package_name": "com.healthcoco.healthcocopad"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "950712478366-dcsabd3irji6essniopl743qrdj8f07b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.healthcoco.healthcocopad",
+            "certificate_hash": "f9d82915497d4fed24d38f449a3a4d3efb208c5f"
+          }
+        },
+        {
+          "client_id": "950712478366-874pp53aghtl74ks0rqh8nta8khikrvb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.healthcoco.healthcocopad",
+            "certificate_hash": "c64f9daf6ab8e1d8495a302b4c6231dd344f011c"
+          }
+        },
+        {
+          "client_id": "950712478366-8bnt75envgjmf7a2jnicfmgvd6lqggp3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.healthcoco.healthcocopad",
+            "certificate_hash": "c37904623d79187eb245e61e26c9caf7e2cf7eb0"
+          }
+        },
+        {
+          "client_id": "950712478366-p0aal0atsna5cj5jp00uutbmtoge66pr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAELonH-xuJTFZN9LDVXQuWShWOyTbABWI"
+        },
+        {
+          "current_key": "AIzaSyBkwjNeVvhkLt5KtgTdpN_KaCjFrJFPbEU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "950712478366-p0aal0atsna5cj5jp00uutbmtoge66pr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
