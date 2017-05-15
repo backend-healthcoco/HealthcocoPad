@@ -85,7 +85,7 @@
 
         <meta-data
             android:name="io.fabric.ApiKey"
-            android:value="fdd74ef6176572e8dd28bb20d49264b353c50213" />
+            android:value="4ec3a3f5d6fc8d8b710ed3aeeb261ae337dc38e7" />
         <!-- Goolge API Key -->
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"

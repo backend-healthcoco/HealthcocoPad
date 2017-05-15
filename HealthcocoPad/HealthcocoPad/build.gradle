@@ -63,7 +63,7 @@ dependencies {
     compile 'com.mcxiaoke.volley:library-aar:1.0.0'
     // For Multidex Application
     compile 'com.android.support:multidex:1.0.0'
-    compile('com.crashlytics.sdk.android:crashlytics:2.6.6@aar') {
+    compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
         transitive = true;
     }
     //required for SHA3 encryption
