@@ -589,8 +589,8 @@ public class MyScriptAddVisitsFragment extends HealthCocoFragment implements Vie
                 } else onNetworkUnavailable(null);
                 break;
             case R.id.fl_bt_swap:
+                Util.addVisitToggleStateInPreference(mActivity, PatientVisitDetailFragment.VISIT_TOGGLE_STATE);
                 openCommonOpenUpActivity(CommonOpenUpFragmentType.ADD_VISITS, null, null, 0);
-                Util.addVisitToggleStateInPreference(mActivity, PatientVisitDetailFragment.MYSCRIPT_VISIT_TOGGLE_STATE);
                 mActivity.finish();
                 break;
         }

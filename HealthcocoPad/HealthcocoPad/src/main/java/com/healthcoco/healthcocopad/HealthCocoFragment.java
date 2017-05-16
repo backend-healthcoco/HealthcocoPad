@@ -35,6 +35,7 @@ import com.healthcoco.healthcocopad.bean.server.OtpVerification;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.dialogFragment.CommonListDialogFragment;
+import com.healthcoco.healthcocopad.dialogFragment.CommonListSolarDialogFragment;
 import com.healthcoco.healthcocopad.dialogFragment.CommonOptionsDialogFragment;
 import com.healthcoco.healthcocopad.dialogFragment.GlobalRecordAccessDialogFragment;
 import com.healthcoco.healthcocopad.dialogFragment.VerifyOtpDialogFragment;
@@ -327,6 +328,17 @@ public abstract class HealthCocoFragment extends Fragment implements GsonRequest
             startActivity(intent);
         else
             startActivityForResult(intent, requestCode);
+    }
+
+    protected CommonListSolarDialogFragment openCommonListSolarDialogFragment(CommonListDialogItemClickListener listener, CommonListDialogType popupType) {
+        Util.checkNetworkStatus(mActivity);
+        if (HealthCocoConstants.isNetworkOnline) {
+            CommonListSolarDialogFragment commonListSolrDialogFragment = new CommonListSolarDialogFragment(listener, popupType);
+            commonListSolrDialogFragment.show(mFragmentManager, CommonListSolarDialogFragment.class.getSimpleName());
+            return commonListSolrDialogFragment;
+        } else
+            Util.showToast(mActivity, R.string.user_offline);
+        return null;
     }
 
     protected String getSearchEditTextValue() {

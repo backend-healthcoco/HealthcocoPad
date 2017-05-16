@@ -59,8 +59,9 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
     private ArrayList<Fragment> fragmentsList;
     private User user;
     private RegisteredPatientDetailsUpdated selectedPatient;
-    //    private AddNewPrescriptionFragment addNewPrescriptionFragment;
-//    private AddClinicalNotesVisitFragment addClinicalNoteFragment;
+    private AddEditNormalVisitPrescriptionFragment addEditNormalVisitPrescriptionFragment;
+    //    private AddClinicalNotesVisitFragment addEditNormalVisitClinicalNotesFragment;
+    private AddEditNormalVisitClinicalNotesFragment addEditNormalVisitClinicalNotesFragment;
     private String visitId;
     private VisitDetails visitDetails;
     private boolean isFromClone;
@@ -116,14 +117,14 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
         tabhost.setup();
         fragmentsList = new ArrayList<>();
         // init fragment 1
-//        addClinicalNoteFragment = new AddClinicalNotesVisitFragment();
+        addEditNormalVisitClinicalNotesFragment = new AddEditNormalVisitClinicalNotesFragment();
         // init fragment 2
-//        addNewPrescriptionFragment = new AddNewPrescriptionFragment();
+        addEditNormalVisitPrescriptionFragment = new AddEditNormalVisitPrescriptionFragment();
         Bundle bundle = new Bundle();
-//        bundle.putBoolean(AddNewPrescriptionFragment.TAG_HIDE_PATIENT_DETAIL_HEADER, true);
-//        addNewPrescriptionFragment.setArguments(bundle);
-//        addFragment(addClinicalNoteFragment, R.string.clinical_notes, false);
-//        addFragment(addNewPrescriptionFragment, R.string.prescriptions, true);
+//        bundle.putBoolean(AddEditNormalVisitPrescriptionFragment.TAG_HIDE_PATIENT_DETAIL_HEADER, true);
+        addEditNormalVisitPrescriptionFragment.setArguments(bundle);
+        addFragment(addEditNormalVisitClinicalNotesFragment, R.string.clinical_notes, false);
+        addFragment(addEditNormalVisitPrescriptionFragment, R.string.prescriptions, true);
     }
 
     private void addFragment(Fragment fragment, int tabIndicatorId, boolean isLastTab) {
@@ -245,8 +246,8 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
         switch (v.getId()) {
             case R.id.container_right_action:
                 int errorMsg = 0;
-//                int blankClinicalNoteMsgId = addClinicalNoteFragment.getBlankClinicalNoteMsgId();
-//                int blankPrescriptionMsgId = addNewPrescriptionFragment.getBlankPrescriptionMsg();
+//                int blankClinicalNoteMsgId = addEditNormalVisitClinicalNotesFragment.getBlankClinicalNoteMsgId();
+//                int blankPrescriptionMsgId = addEditNormalVisitPrescriptionFragment.getBlankPrescriptionMsg();
 //                if (blankClinicalNoteMsgId != 0 && blankPrescriptionMsgId != 0)
 //                    errorMsg = R.string.error_blank_visit;
 //                if (errorMsg == 0) {
@@ -255,14 +256,9 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
 //                    Util.showToast(mActivity, errorMsg);
                 break;
             case R.id.fl_bt_swap:
-//                String visitToggleStateFromPreferences = Util.getVisitToggleStateFromPreferences(mActivity);
-//                if (visitToggleStateFromPreferences != MYSCRIPT_VISIT_TOGGLE_STATE) {
-//                    openCommonVisistActivity(CommonOpenUpFragmentType.ADD_VISITS, null, null, 0);
-//                    Util.addVisitToggleStateInPreference(mActivity, MYSCRIPT_VISIT_TOGGLE_STATE);
-//                } else {
+                Util.addVisitToggleStateInPreference(mActivity, PatientVisitDetailFragment.MYSCRIPT_VISIT_TOGGLE_STATE);
                 openCommonVisistActivity(CommonOpenUpFragmentType.ADD_VISITS, null, null, 0);
-                Util.addVisitToggleStateInPreference(mActivity, PatientVisitDetailFragment.VISIT_TOGGLE_STATE);
-                mActivity.finish();
+                mActivity.onBackPressed();
                 break;
         }
     }
@@ -288,9 +284,9 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
         if (!Util.isNullOrBlank(visitId))
             visitDetails.setVisitId(visitId);
 //        if (blankClinicalNoteMsgId == 0)
-//            visitDetails.setClinicalNote(addClinicalNoteFragment.getClinicalNoteToSendDetails());
+//            visitDetails.setClinicalNote(addEditNormalVisitClinicalNotesFragment.getClinicalNoteToSendDetails());
 //        if (blankPrescriptionMsgId == 0)
-//            visitDetails.setPrescription(addNewPrescriptionFragment.getPrescriptionRequestDetails());
+//            visitDetails.setPrescription(addEditNormalVisitPrescriptionFragment.getPrescriptionRequestDetails());
         WebDataServiceImpl.getInstance(mApp).addVisit(VisitDetails.class, visitDetails, this, this);
     }
 }

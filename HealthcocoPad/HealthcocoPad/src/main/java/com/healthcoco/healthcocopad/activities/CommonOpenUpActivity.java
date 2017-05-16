@@ -26,7 +26,7 @@ import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.fragments.AboutUsFragment;
 import com.healthcoco.healthcocopad.fragments.AddEditClinicImageFragment;
 import com.healthcoco.healthcocopad.fragments.AddEditNormalVisitsFragment;
-import com.healthcoco.healthcocopad.fragments.AddNewPrescriptionFragment;
+import com.healthcoco.healthcocopad.fragments.AddEditNormalVisitPrescriptionFragment;
 import com.healthcoco.healthcocopad.fragments.AddNewTemplateFragment;
 import com.healthcoco.healthcocopad.fragments.CommonOpenUpPatientDetailFragment;
 import com.healthcoco.healthcocopad.fragments.CommonUiPermissionsFragment;
@@ -138,7 +138,7 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
 //                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_CROSS, ActionbarLeftRightActionTypeDrawables.WITH_SAVE, R.string.patient_tab_ui_permission_details, new CommonUiPermissionsFragment());
 //                break;
             case ADD_NEW_PRESCRIPTION:
-                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_CROSS, ActionbarLeftRightActionTypeDrawables.WITH_SAVE, R.string.new_prescription, new AddNewPrescriptionFragment());
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_CROSS, ActionbarLeftRightActionTypeDrawables.WITH_SAVE, R.string.new_prescription, new AddEditNormalVisitPrescriptionFragment());
                 break;
             case PATIENT_REGISTRATION:
                 openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.WITH_SAVE, fragmentType.getTitleId(), new PatientRegistrationFragment());
@@ -314,7 +314,7 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
 //                case ADD_NEW_TEMPLATE:
 //                case ADD_RECORD_DETAIL:
                 case PATIENT_REGISTRATION:
-//                case ADD_VISIT:
+                case ADD_VISITS:
 //                case BOOK_APPOINTMENT:
                     showFinishConfirmationAlert();
                     break;

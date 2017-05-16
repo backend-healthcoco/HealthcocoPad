@@ -468,7 +468,7 @@ public class PrescriptionListItemViewHolder extends HealthCocoViewHolder impleme
         Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
         intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.ADD_NEW_PRESCRIPTION.ordinal());
 //        if (prescription != null)
-//            intent.putExtra(AddNewPrescriptionFragment.TAG_PRESCRIPTION_ID, prescription.getUniqueId());
+//            intent.putExtra(AddEditNormalVisitPrescriptionFragment.TAG_PRESCRIPTION_ID, prescription.getUniqueId());
 //        mActivity.startActivityForResult(intent, HealthCocoConstants.REQUEST_CODE_PRESCRIPTION_LIST);
     }
 }

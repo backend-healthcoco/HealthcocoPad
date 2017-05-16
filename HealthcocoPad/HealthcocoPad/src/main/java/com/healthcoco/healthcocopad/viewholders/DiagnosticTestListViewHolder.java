@@ -38,7 +38,6 @@ public class DiagnosticTestListViewHolder extends HealthCocoViewHolder implement
         tvDiagnosisName.setText(diagnosticTest.getTestName());
     }
 
-
     @Override
     public View getContentView() {
         LinearLayout view = (LinearLayout) inflater.inflate(R.layout.list_item_diagnostic_test, null);

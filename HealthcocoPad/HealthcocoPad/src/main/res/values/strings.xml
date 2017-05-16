@@ -776,4 +776,7 @@
     <string name="patient_details">Patient Details</string>
     <string name="patient_detail">Patient Details</string>
     <string name="no_lab_test">No Lab Test Found</string>
+
+    <string name="tests_selected">&#160;Tests Selected</string>
+    <string name="lab_test_already_added">Lab Test \"%s\" already added</string>
 </resources>

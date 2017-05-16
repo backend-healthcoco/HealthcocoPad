@@ -38,7 +38,7 @@
             android:src="@drawable/tab_cancel_normal" />
 
         <ImageButton
-            android:id="@+id/bt_add_drug"
+            android:id="@+id/bt_add_lab_tests"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:background="@android:color/transparent"
@@ -47,50 +47,44 @@
             android:src="@drawable/icon_history_selected" />
     </LinearLayout>
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/swipe_refresh_layout"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_height="match_parent">
 
-        <FrameLayout
+        <com.healthcoco.healthcocopad.views.ListViewLoadMore
+            android:id="@+id/lv_lab_tests"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:clipToPadding="false"
+            android:divider="@null"
+            android:listSelector="@android:color/transparent"
+            android:paddingLeft="@dimen/list_margin_templates_list"
+            android:paddingRight="@dimen/list_margin_templates_list"
+            android:overScrollMode="never"
+            android:paddingTop="@dimen/list_margin_templates_list"
+            android:scrollbarStyle="outsideOverlay"
+            android:visibility="gone" />
 
-            <com.healthcoco.healthcocopad.views.ListViewLoadMore
-                android:id="@+id/lv_templates"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:clipToPadding="false"
-                android:divider="@null"
-                android:listSelector="@android:color/transparent"
-                android:paddingLeft="@dimen/list_margin_templates_list"
-                android:paddingRight="@dimen/list_margin_templates_list"
-                android:paddingTop="@dimen/list_margin_templates_list"
-                android:scrollbarStyle="outsideOverlay"
-                android:visibility="gone" />
+        <TextView
+            android:id="@+id/tv_no_lab_tests"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="@string/no_lab_test"
+            android:textSize="@dimen/text_size_no_results"
+            android:textStyle="bold"
+            android:visibility="visible" />
 
-            <TextView
-                android:id="@+id/tv_no_templates"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:text="@string/no_templates_added"
-                android:textSize="@dimen/text_size_no_results"
-                android:textStyle="bold"
-                android:visibility="visible" />
+        <ProgressBar
+            android:id="@+id/progress_loading"
+            style="?android:attr/progressBarStyleSmall"
+            android:layout_width="@dimen/round_progress_bar_size"
+            android:layout_height="@dimen/round_progress_bar_size"
+            android:layout_gravity="center|bottom"
+            android:progressDrawable="@drawable/progress_loading"
+            android:visibility="gone" />
+    </FrameLayout>
 
-            <ProgressBar
-                android:id="@+id/progress_loading"
-                style="?android:attr/progressBarStyleSmall"
-                android:layout_width="@dimen/round_progress_bar_size"
-                android:layout_height="@dimen/round_progress_bar_size"
-                android:layout_gravity="center|bottom"
-                android:progressDrawable="@drawable/progress_loading"
-                android:visibility="gone" />
-        </FrameLayout>
-
-    </android.support.v4.widget.SwipeRefreshLayout>
 </LinearLayout>

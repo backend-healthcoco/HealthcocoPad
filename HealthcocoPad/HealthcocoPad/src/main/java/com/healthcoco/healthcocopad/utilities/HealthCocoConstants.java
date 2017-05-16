@@ -33,7 +33,7 @@ public class HealthCocoConstants {
     public static final String TAG_INTENT_DATA = "intentData";
     public static final String TAG_PATIENT_PROFILE = "patientProfile";
     public static final String TAG_SELECTED_DATE_TIME_IN_MILLIS = "selectedTimeInMillis";
-
+    public static final String TAG_DIAGNOSTICS_LIST = "diagnostics_list";
     public static final int REQUEST_CODE_CAMERA = 102;
     public static final int REQUEST_CODE_GALLERY = 103;
     public static final int REQUEST_CODE_MENU_CLINIC_LIST = 106;
@@ -68,6 +68,7 @@ public class HealthCocoConstants {
     public static final String PARAM_PAGE_AND = "&page=";
     public static final String PARAM_DISCARDED_FALSE = "discarded=false";
     public static final int RESULT_CODE_BOOK_APPOINTMENT = 148;
+    public static final int RESULT_CODE_DIAGNOSTICS_TESTS = 149;
     public static boolean isNetworkOnline;
     public static final String PARAM_UPDATED_TIME = "&updatedTime=";
     public static final String PARAM_DISCARDED_AMPERCENT = "&discarded=";

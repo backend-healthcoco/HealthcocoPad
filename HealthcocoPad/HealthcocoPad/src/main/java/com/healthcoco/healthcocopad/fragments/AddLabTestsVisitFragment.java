@@ -146,6 +146,21 @@ public class AddLabTestsVisitFragment extends HealthCocoFragment implements View
     }
 
     @Override
+    public void onAddClicked(DiagnosticTest diagnosticTest) {
+
+    }
+
+    @Override
+    public void onAddedClicked(DiagnosticTest diagnosticTest) {
+
+    }
+
+    @Override
+    public DiagnosticTest getDiagnosticTest(String uniqueId) {
+        return null;
+    }
+
+    @Override
     public void onDeleteItemClicked(DiagnosticTest diagnosticTest) {
         showConfirmationAlertForDrugs(diagnosticTest);
     }
