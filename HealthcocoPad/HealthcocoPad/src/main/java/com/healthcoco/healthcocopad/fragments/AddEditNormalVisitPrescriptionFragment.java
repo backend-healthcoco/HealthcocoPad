@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TextView;
@@ -56,6 +57,7 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
     private LinkedHashMap<String, DrugItem> drugsListHashMap = new LinkedHashMap<>();
     private SelectedTemplateDrugItemsListAdapter adapter;
     private ListView lvTemplates;
+    private LinearLayout parentLayoutDrugList;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -91,6 +93,7 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
         etDuration = (EditText) view.findViewById(R.id.et_duration);
         etTemplateName = (EditText) view.findViewById(R.id.et_template_name);
         lvTemplates = (ListView) view.findViewById(R.id.lv_templates);
+        parentLayoutDrugList = (LinearLayout) view.findViewById(R.id.parent_layout_drugList);
     }
 
     @Override
@@ -165,7 +168,7 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
 
     @Override
     public void ondrugItemClick(SelectDrugItemType drugItemType, Object object) {
-
+        System.out.println("drug" + drugItemType);
     }
 
     @Override
@@ -175,7 +178,7 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
 
     @Override
     public void onDrugItemClicked(DrugItem drug) {
-
+        System.out.println("drug" + drug);
     }
 
     @Override

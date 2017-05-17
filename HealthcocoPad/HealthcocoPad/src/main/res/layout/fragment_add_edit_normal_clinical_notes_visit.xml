@@ -22,13 +22,30 @@
             android:visibility="visible" />
     </LinearLayout>
 
-    <ListView
-        android:id="@+id/lv_templates"
+    <!--<LinearLayout-->
+    <!--android:id="@+id/lv_"-->
+    <!--android:layout_width="0dp"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:layout_weight="1"-->
+    <!--android:orientation="vertical">-->
+
+    <!--<include layout="@layout/sub_item_vital_signs_add_visits" />-->
+
+    <!--<LinearLayout-->
+    <!--android:id="@+id/parent_permissions_items"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:background="@color/white"-->
+    <!--android:orientation="vertical">-->
+
+    <!--<include layout="@layout/layout_item_add_clinical_note_permision" />-->
+    <!--</LinearLayout>-->
+    <!--</LinearLayout>-->
+    <LinearLayout
+        android:id="@+id/parent_clinical_note"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:clipToPadding="false"
-        android:divider="@null"
-        android:listSelector="@android:color/transparent"
-        android:overScrollMode="never"></ListView>
+        android:orientation="vertical"
+        android:padding="10dp" />
 </LinearLayout>

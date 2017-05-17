@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,6 +76,7 @@ public class AddClinicalNotesVisitFragment extends HealthCocoFragment implements
     private MyScriptEditText editHeartRate;
     private ClinicalNotes clinicalNotes;
     private MyScriptAddVisitsFragment myScriptAddVisitsFragment;
+    private AddEditNormalVisitClinicalNotesFragment normalVisitsFragment;
     private ArrayList<String> clinicalNotesUiPermissionsList;
     private HashMap<String, String> diagramsList = new HashMap<>();
     private LinearLayout containerDiagrams;
@@ -103,6 +105,7 @@ public class AddClinicalNotesVisitFragment extends HealthCocoFragment implements
     @Override
     public void init() {
         myScriptAddVisitsFragment = (MyScriptAddVisitsFragment) mFragmentManager.findFragmentByTag(MyScriptAddVisitsFragment.class.getSimpleName());
+//        normalVisitsFragment = (AddEditNormalVisitClinicalNotesFragment) getFragmentManager().findFragmentByTag();
         initViews();
         initListeners();
     }
@@ -312,7 +315,11 @@ public class AddClinicalNotesVisitFragment extends HealthCocoFragment implements
         autotvPermission.setId(clinicalNotesPermissionType.getAutotvId());
         autotvPermission.setHint(clinicalNotesPermissionType.getHintId());
         autotvPermission.setTag(String.valueOf(clinicalNotesPermissionType));
-        autotvPermission.setOnTouchListener(myScriptAddVisitsFragment.getOnTouchListener());
+        if (myScriptAddVisitsFragment != null) {
+            autotvPermission.setOnTouchListener(myScriptAddVisitsFragment.getOnTouchListener());
+        }
+//        else
+//            autotvPermission.setOnTouchListener(normalVisitsFragment.getOnTouchListener());
         String text = "";
         if (clinicalNotes != null) {
             switch (clinicalNotesPermissionType) {

@@ -779,4 +779,6 @@
 
     <string name="tests_selected">&#160;Tests Selected</string>
     <string name="lab_test_already_added">Lab Test \"%s\" already added</string>
+    <string name="are_you_sure_want_to_toggle_this_page_view">Are you sure want to toggle this page view? Data will be reset.</string>
+    <string name="toggle">Toggle</string>
 </resources>

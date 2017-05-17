@@ -160,7 +160,7 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
                 openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_CROSS, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, R.string.location, new EnlargedMapViewFragment());
                 break;
             case ADD_VISITS:
-                openFragment(ActionbarType.HIDDEN, 0,new AddEditNormalVisitsFragment());
+                openFragment(ActionbarType.HIDDEN, 0, new AddEditNormalVisitsFragment());
                 break;
         }
     }
@@ -373,6 +373,7 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
                 rightActionButton.setEnabled(isEnabled);
         }
     }
+
     public void initRightActionView(ActionbarLeftRightActionTypeDrawables rightAction, View actionbar) {
         LinearLayout containerRightAction = (LinearLayout) actionbar.findViewById(R.id.container_right_action);
         if (containerRightAction != null) {

@@ -728,19 +728,19 @@ public class Util {
         }
     }
 
-    public static String getVisitToggleStateFromPreferences(Context context) {
+    public static boolean getVisitToggleStateFromPreferences(Context context) {
         ObscuredSharedPreferences prefs = ObscuredSharedPreferences.getPrefs(context,
                 context.getResources().getString(R.string.app_name), Context.MODE_PRIVATE);
         //retrieve data
-        String toggleState = prefs.getString(PatientVisitDetailFragment.TAG_TOGGLE_STATE, null);
+        boolean toggleState = prefs.getBoolean(PatientVisitDetailFragment.TAG_TOGGLE_STATE, false);
         return toggleState;
     }
 
-    public static void addVisitToggleStateInPreference(Context context, String tagToggleState) {
+    public static void addVisitToggleStateInPreference(Context context, boolean tagToggleState) {
         ObscuredSharedPreferences prefs = ObscuredSharedPreferences.getPrefs(context,
                 context.getResources().getString(R.string.app_name), Context.MODE_PRIVATE);
 
         //save data
-        prefs.edit().putString(PatientVisitDetailFragment.TAG_TOGGLE_STATE, tagToggleState).commit();
+        prefs.edit().putBoolean(PatientVisitDetailFragment.TAG_TOGGLE_STATE, tagToggleState).commit();
     }
 }

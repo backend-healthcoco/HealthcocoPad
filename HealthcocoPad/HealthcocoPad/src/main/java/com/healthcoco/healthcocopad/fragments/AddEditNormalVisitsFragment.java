@@ -1,5 +1,7 @@
 package com.healthcoco.healthcocopad.fragments;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -43,9 +45,6 @@ import org.parceler.Parcels;
 
 import java.util.ArrayList;
 
-import static com.healthcoco.healthcocopad.fragments.MyScriptAddVisitsFragment.TAG_IS_FROM_CLONE;
-import static com.healthcoco.healthcocopad.fragments.MyScriptAddVisitsFragment.TAG_VISIT_ID;
-
 /**
  * Created by Shreshtha on 15-05-2017.
  */
@@ -60,12 +59,12 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
     private User user;
     private RegisteredPatientDetailsUpdated selectedPatient;
     private AddEditNormalVisitPrescriptionFragment addEditNormalVisitPrescriptionFragment;
-    //    private AddClinicalNotesVisitFragment addEditNormalVisitClinicalNotesFragment;
     private AddEditNormalVisitClinicalNotesFragment addEditNormalVisitClinicalNotesFragment;
     private String visitId;
     private VisitDetails visitDetails;
     private boolean isFromClone;
     private FloatingActionButton flBtSwap;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -79,8 +78,8 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
         super.onActivityCreated(savedInstanceState);
         Intent intent = mActivity.getIntent();
         if (intent != null) {
-            visitId = Parcels.unwrap(intent.getParcelableExtra(TAG_VISIT_ID));
-            Parcelable isFromCloneParcelable = intent.getParcelableExtra(TAG_IS_FROM_CLONE);
+            visitId = Parcels.unwrap(intent.getParcelableExtra(HealthCocoConstants.TAG_VISIT_ID));
+            Parcelable isFromCloneParcelable = intent.getParcelableExtra(HealthCocoConstants.TAG_IS_FROM_CLONE);
             if (isFromCloneParcelable != null)
                 isFromClone = Parcels.unwrap(isFromCloneParcelable);
         }
@@ -202,7 +201,7 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
                         LocalDataServiceImpl.getInstance(mApp).addVisit(visit);
                         Util.sendBroadcast(mApp, PatientVisitDetailFragment.INTENT_GET_VISITS_LIST_FROM_LOCAL);
                         Intent intent = new Intent();
-                        intent.putExtra(PatientVisitDetailFragment.TAG_VISIT_ID, visit.getUniqueId());
+                        intent.putExtra(HealthCocoConstants.TAG_VISIT_ID, visit.getUniqueId());
                         mActivity.setResult(HealthCocoConstants.RESULT_CODE_ADD_VISIT, intent);
                     }
                     mActivity.finish();
@@ -256,11 +255,35 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
 //                    Util.showToast(mActivity, errorMsg);
                 break;
             case R.id.fl_bt_swap:
-                Util.addVisitToggleStateInPreference(mActivity, PatientVisitDetailFragment.MYSCRIPT_VISIT_TOGGLE_STATE);
-                openCommonVisistActivity(CommonOpenUpFragmentType.ADD_VISITS, null, null, 0);
-                mActivity.onBackPressed();
+                showToggleConfirmationAlert();
                 break;
         }
+    }
+
+    public void showToggleConfirmationAlert() {
+        final AlertDialog.Builder alertBuilder = new AlertDialog.Builder(mActivity);
+        alertBuilder.setTitle(R.string.alert);
+        alertBuilder.setMessage(R.string.are_you_sure_want_to_toggle_this_page_view);
+        alertBuilder.setCancelable(false);
+        alertBuilder.setPositiveButton(R.string.toggle, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                Util.addVisitToggleStateInPreference(mActivity, true);
+                openCommonVisistActivity(CommonOpenUpFragmentType.ADD_VISITS, null, null, 0);
+                mActivity.onBackPressed();
+            }
+        });
+        alertBuilder.setNegativeButton(R.string.stay, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        alertBuilder.create();
+        alertBuilder.show();
     }
 
     private void openCommonVisistActivity(CommonOpenUpFragmentType fragmentType, String tag, Object intentData, int requestCode) {

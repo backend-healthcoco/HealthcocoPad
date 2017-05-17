@@ -43,6 +43,7 @@ import com.healthcoco.healthcocopad.enums.CommonListDialogType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.LocalTabelType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
+import com.healthcoco.healthcocopad.fragments.PatientVisitDetailFragment;
 import com.healthcoco.healthcocopad.listeners.CommonListDialogItemClickListener;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
 import com.healthcoco.healthcocopad.services.GsonRequest;
@@ -97,7 +98,10 @@ public class CommonListDialogFragmentWithTitle extends HealthCocoDialogFragment 
     @Override
     public void onActivityCreated(Bundle arg0) {
         super.onActivityCreated(arg0);
-        ((AddVisitsActivity) mActivity).setWidthHeight(getDialog(), 0.90, 0.90);
+        boolean isMyScriptVisitToggleState = Util.getVisitToggleStateFromPreferences(mActivity);
+        if (isMyScriptVisitToggleState)
+            ((AddVisitsActivity) mActivity).setWidthHeight(getDialog(), 0.90, 0.90);
+        else setWidthHeight(0.90, 0.90);
         init();
     }
 

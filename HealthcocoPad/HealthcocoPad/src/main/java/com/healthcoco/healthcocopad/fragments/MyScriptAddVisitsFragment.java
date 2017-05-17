@@ -124,9 +124,6 @@ public class MyScriptAddVisitsFragment extends HealthCocoFragment implements Vie
     private static final float WIDGET_TEXT_SIZE = 40;
     private static final float WIDGET_INT_WIDTH = 4;
     private static final int WIDGET_TEXT_COLOR = 0xFF0077b5;
-    public static final String TAG_VISIT_ID = "visitId";
-    public static final String TAG_IS_FROM_CLONE = "isFromClone";
-
 
     private LinearLayout btClose;
     private ImageButton btClinicalNote;
@@ -202,8 +199,8 @@ public class MyScriptAddVisitsFragment extends HealthCocoFragment implements Vie
         super.onActivityCreated(savedInstanceState);
         Intent intent = mActivity.getIntent();
         if (intent != null) {
-            visitId = Parcels.unwrap(intent.getParcelableExtra(TAG_VISIT_ID));
-            Parcelable isFromCloneParcelable = intent.getParcelableExtra(TAG_IS_FROM_CLONE);
+            visitId = Parcels.unwrap(intent.getParcelableExtra(HealthCocoConstants.TAG_VISIT_ID));
+            Parcelable isFromCloneParcelable = intent.getParcelableExtra(HealthCocoConstants.TAG_IS_FROM_CLONE);
             if (isFromCloneParcelable != null)
                 isFromClone = Parcels.unwrap(isFromCloneParcelable);
         }
@@ -589,11 +586,35 @@ public class MyScriptAddVisitsFragment extends HealthCocoFragment implements Vie
                 } else onNetworkUnavailable(null);
                 break;
             case R.id.fl_bt_swap:
-                Util.addVisitToggleStateInPreference(mActivity, PatientVisitDetailFragment.VISIT_TOGGLE_STATE);
-                openCommonOpenUpActivity(CommonOpenUpFragmentType.ADD_VISITS, null, null, 0);
-                mActivity.finish();
+                showToggleConfirmationAlert();
                 break;
         }
+    }
+
+    private void showToggleConfirmationAlert() {
+        final AlertDialog.Builder alertBuilder = new AlertDialog.Builder(mActivity);
+        alertBuilder.setTitle(R.string.alert);
+        alertBuilder.setMessage(R.string.are_you_sure_want_to_toggle_this_page_view);
+        alertBuilder.setCancelable(false);
+        alertBuilder.setPositiveButton(R.string.toggle, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                Util.addVisitToggleStateInPreference(mActivity, false);
+                openCommonOpenUpActivity(CommonOpenUpFragmentType.ADD_VISITS, null, null, 0);
+                mActivity.finish();
+            }
+        });
+        alertBuilder.setNegativeButton(R.string.stay, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        alertBuilder.create();
+        alertBuilder.show();
     }
 
     public void showOnlyWidget() {
@@ -1052,7 +1073,6 @@ public class MyScriptAddVisitsFragment extends HealthCocoFragment implements Vie
     public View.OnTouchListener getOnTouchListener() {
         return this;
     }
-
 
     public boolean isClinicalNoteViewVisible() {
         return visibleViews.contains(VisitsUiType.CLINICAL_NOTES);
