@@ -38,7 +38,7 @@
     <!--android:background="@color/white"-->
     <!--android:orientation="vertical">-->
 
-    <!--<include layout="@layout/layout_item_add_clinical_note_permision" />-->
+    <!--<include layout="@layout/layout_item_add_myscript_clinical_note_permision" />-->
     <!--</LinearLayout>-->
     <!--</LinearLayout>-->
     <LinearLayout

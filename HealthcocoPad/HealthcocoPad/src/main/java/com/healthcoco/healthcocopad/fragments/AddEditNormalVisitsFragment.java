@@ -131,6 +131,10 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
         tabhost.addTab(getTabSpec(fragment.getClass().getSimpleName(), tabIndicatorId, isLastTab));
     }
 
+    public int currentFragment(){
+        return tabhost.getCurrentTab();
+    }
+
     private TabHost.TabSpec getTabSpec(String simpleName, int textId, boolean isLastTab) {
         View view1 = mActivity.getLayoutInflater().inflate(R.layout.tab_indicator_add_visit, null);
         View divider = (View) view1.findViewById(R.id.divider);

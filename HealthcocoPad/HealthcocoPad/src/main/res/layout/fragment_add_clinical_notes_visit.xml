@@ -2,17 +2,319 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:orientation="vertical">
 
-    <include layout="@layout/sub_item_vital_signs_add_visits" />
-
-    <LinearLayout
-        android:id="@+id/parent_permissions_items"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:background="@color/white"
         android:orientation="vertical">
 
-        <include layout="@layout/layout_item_add_clinical_note_permision" />
-    </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/parent_add_vital_signs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:clickable="true"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="@integer/add_visit_left_item_weight"
+                    android:text="@string/vital_signs"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_add_visits_lable" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="@integer/add_visit_right_item_weight"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center|start"
+                            android:orientation="vertical">
+
+                            <com.healthcoco.healthcocopad.custom.AutoFitTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="center|start"
+                                android:text="@string/body_temperature"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/text_size_add_visits_lable" />
+
+                            <TextView
+                                android:id="@+id/edit_body_temperature"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_marginTop="@dimen/margin_add_vital_signs_layout"
+                                android:background="@drawable/shape_rounded_corners_item_background"
+                                android:gravity="center"
+                                android:hint="@string/faranheit"
+                                android:inputType="numberDecimal"
+                                android:maxLines="1"
+                                android:nextFocusDown="@+id/edit_weight"
+                                android:padding="10dp"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/text_size_add_visits_lable" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/margin_left_right_add_vital_signs"
+                            android:layout_marginRight="@dimen/margin_left_right_add_vital_signs"
+                            android:layout_weight="1"
+                            android:gravity="center|start"
+                            android:orientation="vertical">
+
+                            <com.healthcoco.healthcocopad.custom.AutoFitTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center|start"
+                                android:text="@string/weight"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/text_size_add_visits_lable" />
+
+                            <TextView
+                                android:id="@+id/edit_weight"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_marginTop="@dimen/margin_add_vital_signs_layout"
+                                android:background="@drawable/shape_rounded_corners_item_background"
+                                android:gravity="center"
+                                android:hint="@string/kilograms"
+                                android:inputType="numberDecimal"
+                                android:maxLines="1"
+                                android:nextFocusDown="@+id/edit_heart_rate"
+                                android:nextFocusUp="@+id/edit_body_temperature"
+                                android:padding="10dp"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/text_size_add_visits_lable" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center|start"
+                            android:orientation="vertical">
+
+                            <com.healthcoco.healthcocopad.custom.AutoFitTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center|start"
+                                android:text="@string/heart_rate"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/text_size_add_visits_lable" />
+
+                            <TextView
+                                android:id="@+id/edit_heart_rate"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_marginTop="@dimen/margin_add_vital_signs_layout"
+                                android:background="@drawable/shape_rounded_corners_item_background"
+                                android:gravity="center"
+                                android:hint="@string/beats_per_min"
+                                android:inputType="numberDecimal"
+                                android:maxLines="1"
+                                android:nextFocusDown="@+id/edit_systolic"
+                                android:nextFocusUp="@+id/edit_weight"
+                                android:padding="10dp"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/text_size_add_visits_lable" />
+
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_add_vital_signs_layout"
+                        android:orientation="horizontal"
+                        android:weightSum="3">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center|start"
+                            android:orientation="vertical">
+
+                            <com.healthcoco.healthcocopad.custom.AutoFitTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center|start"
+                                android:text="@string/blood_pressure"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/text_size_add_visits_lable" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_marginTop="@dimen/margin_add_vital_signs_layout"
+                                android:gravity="center"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/edit_systolic"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_horizontal"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/shape_rounded_corners_item_background"
+                                    android:gravity="center"
+                                    android:hint="@string/systolic"
+                                    android:inputType="numberDecimal"
+                                    android:maxLines="1"
+                                    android:nextFocusDown="@+id/edit_diastolic"
+                                    android:nextFocusUp="@+id/edit_heart_rate"
+                                    android:padding="10dp"
+                                    android:textColor="@color/black"
+                                    android:textSize="@dimen/text_size_add_visits_lable" />
+
+                                <com.healthcoco.healthcocopad.custom.AutoFitTextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginLeft="5dp"
+                                    android:layout_marginRight="5dp"
+                                    android:gravity="center"
+                                    android:text="@string/forward_slash"
+                                    android:textColor="@color/black"
+                                    android:textSize="20sp" />
+
+                                <TextView
+                                    android:id="@+id/edit_diastolic"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_horizontal"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/shape_rounded_corners_item_background"
+                                    android:gravity="center"
+                                    android:hint="@string/diastolic"
+                                    android:inputType="numberDecimal"
+                                    android:maxLines="1"
+                                    android:nextFocusDown="@+id/edit_resp_rate"
+                                    android:nextFocusUp="@+id/edit_systolic"
+                                    android:padding="10dp"
+                                    android:textColor="@color/black"
+                                    android:textSize="@dimen/text_size_add_visits_lable" />
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/margin_left_right_add_vital_signs"
+                            android:layout_marginRight="@dimen/margin_left_right_add_vital_signs"
+                            android:layout_weight="1"
+                            android:gravity="center|start"
+                            android:orientation="vertical">
+
+                            <com.healthcoco.healthcocopad.custom.AutoFitTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center|start"
+                                android:text="@string/respiratory_rate"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/text_size_add_visits_lable" />
+
+                            <TextView
+                                android:id="@+id/edit_resp_rate"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_marginTop="@dimen/margin_add_vital_signs_layout"
+                                android:background="@drawable/shape_rounded_corners_item_background"
+                                android:gravity="center"
+                                android:hint="@string/breaths_per_min"
+                                android:inputType="numberDecimal"
+                                android:maxLines="1"
+                                android:nextFocusDown="@+id/edit_spo2"
+                                android:nextFocusUp="@+id/edit_diastolic"
+                                android:padding="10dp"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/text_size_add_visits_lable" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center|start"
+                            android:orientation="vertical">
+
+                            <com.healthcoco.healthcocopad.custom.AutoFitTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center|start"
+                                android:text="@string/spo2"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/text_size_add_visits_lable" />
+
+                            <TextView
+                                android:id="@+id/edit_spo2"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_marginTop="@dimen/margin_add_vital_signs_layout"
+                                android:background="@drawable/shape_rounded_corners_item_background"
+                                android:gravity="center"
+                                android:hint="@string/spo2"
+                                android:inputType="numberDecimal"
+                                android:maxLines="1"
+                                android:nextFocusUp="@+id/edit_resp_rate"
+                                android:padding="10dp"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/text_size_add_visits_lable" />
+
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/parent_permissions_items"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:visibility="visible"
+                android:orientation="vertical">
+
+                <include layout="@layout/layout_item_add_clinical_note_permision" />
+
+            </LinearLayout>
+
+            <include layout="@layout/layout_diagrams_add_clinical_notes" />
+
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

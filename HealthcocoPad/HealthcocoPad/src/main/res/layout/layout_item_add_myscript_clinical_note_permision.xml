@@ -10,7 +10,6 @@
         android:id="@+id/tv_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
         android:layout_weight="@integer/add_visit_left_item_weight"
         android:paddingTop="10dp"
         android:text="@string/holter"
@@ -18,7 +17,7 @@
         android:textSize="@dimen/text_size_add_visits_lable"
         android:visibility="visible" />
 
-    <TextView
+    <com.healthcoco.healthcocopad.custom.MyScriptEditText
         android:id="@+id/edit_permission_text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -27,10 +26,11 @@
         android:layout_marginTop="3dp"
         android:layout_weight="@integer/add_visit_right_item_weight"
         android:background="@android:color/transparent"
+        android:cursorVisible="true"
         android:gravity="start"
         android:hint="@string/holter"
         android:maxLines="5"
         android:paddingTop="5dp"
         android:textColorHint="@color/grey_light_text"
-        android:textSize="@dimen/text_size_add_visits_lable" />
-    </LinearLayout>
+        android:textSize="@dimen/text_size_add_visits_lable"/>
+</LinearLayout>

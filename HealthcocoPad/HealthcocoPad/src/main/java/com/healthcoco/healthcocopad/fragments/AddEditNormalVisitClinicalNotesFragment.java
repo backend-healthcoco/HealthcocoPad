@@ -156,7 +156,7 @@ public class AddEditNormalVisitClinicalNotesFragment extends HealthCocoFragment 
         return this;
     }
 
-    private void refreshSuggestionsList(View v, String searchTerm) {
+    public void refreshSuggestionsList(View v, String searchTerm) {
         selectedViewForSuggestionsList = v;
         Object tag = v.getTag();
         if (tag != null) {
@@ -269,7 +269,7 @@ public class AddEditNormalVisitClinicalNotesFragment extends HealthCocoFragment 
     }
 
     private String getLastTextAfterCharacterToBeReplaced(String searchTerm) {
-        Pattern p = Pattern.compile(".*" + AddClinicalNotesVisitFragment.CHARACTER_TO_BE_REPLACED + "\\s*(.*)");
+        Pattern p = Pattern.compile(".*" + AddClinicalNotesMyScriptVisitFragment.CHARACTER_TO_BE_REPLACED + "\\s*(.*)");
         Matcher m = p.matcher(searchTerm.trim());
 
         if (m.find())

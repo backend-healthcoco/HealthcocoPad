@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/parent_diagrams"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="top|start"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:paddingTop="10dp"
+            android:text="@string/diagrams"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_floating_label"
+            android:visibility="visible" />
+
+        <LinearLayout
+            android:id="@+id/bt_select_diagram"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_margin="5dp"
+            android:background="@drawable/shape_rounded_corners_solid_blue"
+            android:clickable="true"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingBottom="5dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="5dp">
+
+            <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
+                android:text="@string/fa_plus"
+                android:textColor="@drawable/text_selector_white_translucent"
+                android:textSize="@dimen/text_size_add_clinical_note_add_diagram_btn" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:gravity="center_vertical"
+                android:text="@string/add"
+                android:textAllCaps="false"
+                android:textColor="@drawable/text_selector_white_translucent"
+                android:textSize="@dimen/text_size_add_clinical_note_add_diagram_btn"
+                android:visibility="visible" />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="100dp"
+        android:paddingBottom="4dp"
+        android:scrollbarSize="3dp"
+        android:scrollbarStyle="outsideOverlay">
+
+        <LinearLayout
+            android:id="@+id/container_diagrams"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:orientation="horizontal" />
+    </HorizontalScrollView>
+</LinearLayout>

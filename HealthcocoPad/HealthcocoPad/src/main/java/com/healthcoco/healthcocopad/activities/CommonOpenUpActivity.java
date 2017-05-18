@@ -30,6 +30,7 @@ import com.healthcoco.healthcocopad.fragments.AddEditNormalVisitPrescriptionFrag
 import com.healthcoco.healthcocopad.fragments.AddNewTemplateFragment;
 import com.healthcoco.healthcocopad.fragments.CommonOpenUpPatientDetailFragment;
 import com.healthcoco.healthcocopad.fragments.CommonUiPermissionsFragment;
+import com.healthcoco.healthcocopad.fragments.DiagramsListFragment;
 import com.healthcoco.healthcocopad.fragments.DiseaseListFragment;
 import com.healthcoco.healthcocopad.fragments.EnlargedMapViewFragment;
 import com.healthcoco.healthcocopad.fragments.FeedbackFragment;
@@ -37,6 +38,7 @@ import com.healthcoco.healthcocopad.fragments.InitialSyncFragment;
 import com.healthcoco.healthcocopad.fragments.LoginSignupFragment;
 import com.healthcoco.healthcocopad.fragments.NotificationResponseDataFragment;
 import com.healthcoco.healthcocopad.fragments.PatientRegistrationFragment;
+import com.healthcoco.healthcocopad.fragments.SelectedDiagramDetailFragment;
 import com.healthcoco.healthcocopad.fragments.SettingUIPermissionsFragment;
 import com.healthcoco.healthcocopad.fragments.WebViewFragments;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
@@ -161,6 +163,12 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
                 break;
             case ADD_VISITS:
                 openFragment(ActionbarType.HIDDEN, 0, new AddEditNormalVisitsFragment());
+                break;
+            case SELECT_DIAGRAM:
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, fragmentType.getTitleId(), new DiagramsListFragment());
+                break;
+            case SELECTED_DIAGRAM_DETAIL:
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_CROSS, ActionbarLeftRightActionTypeDrawables.WITH_SAVE, fragmentType.getTitleId(), new SelectedDiagramDetailFragment());
                 break;
         }
     }
