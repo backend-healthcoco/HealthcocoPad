@@ -15,7 +15,6 @@ import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.ClinicDetailResponse;
 import com.healthcoco.healthcocopad.bean.server.Location;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
-import com.healthcoco.healthcocopad.fragments.MyClinicFragment;
 import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;

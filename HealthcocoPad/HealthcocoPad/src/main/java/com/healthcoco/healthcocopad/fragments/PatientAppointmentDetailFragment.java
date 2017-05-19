@@ -15,8 +15,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.android.volley.Response;
-import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
+import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.adapter.AppointmentsListAdapter;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
@@ -25,7 +25,6 @@ import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocopad.dialogFragment.BookAppointmentDialogFragment;
 import com.healthcoco.healthcocopad.enums.BookAppointmentFromScreenType;
-import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.LocalTabelType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;

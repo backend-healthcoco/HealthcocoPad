@@ -1,9 +1,5 @@
 package com.healthcoco.healthcocopad.bean.request;
 
-import com.healthcoco.healthcocopad.bean.server.AssignedUserUiPermissions;
-
-import java.util.ArrayList;
-
 /**
  * Created by neha on 13/04/17.
  */

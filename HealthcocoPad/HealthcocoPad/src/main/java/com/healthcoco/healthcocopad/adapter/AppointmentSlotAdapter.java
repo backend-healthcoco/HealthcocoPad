@@ -4,7 +4,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
-
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.bean.server.AvailableTimeSlots;
 import com.healthcoco.healthcocopad.utilities.LogUtils;

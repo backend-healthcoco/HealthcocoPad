@@ -4,7 +4,7 @@ package com.healthcoco.healthcocopad.bean;
  * Created by neha on 04/02/17.
  */
 public class DrugInteractions {
-   private String text;
+    private String text;
     private String reaction;
 
     public String getText() {

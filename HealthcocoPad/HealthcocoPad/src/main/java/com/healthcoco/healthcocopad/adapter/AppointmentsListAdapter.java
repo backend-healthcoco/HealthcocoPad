@@ -4,15 +4,12 @@ import android.util.Pair;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.TextView;
 
 import com.healthcoco.healthcocopad.HealthCocoActivity;
-import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
 import com.healthcoco.healthcocopad.enums.BookAppointmentFromScreenType;
 import com.healthcoco.healthcocopad.skscustomclasses.CustomListData;
 import com.healthcoco.healthcocopad.skscustomclasses.CustomListDataFormatter;
-import com.healthcoco.healthcocopad.skscustomclasses.SKSCustomListAdapter;
 import com.healthcoco.healthcocopad.utilities.ComparatorUtil;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.healthcoco.healthcocopad.viewholders.AppointmentsListViewholder;

@@ -11,7 +11,6 @@ import android.print.PrintAttributes;
 import android.print.PrintDocumentAdapter;
 import android.print.PrintDocumentInfo;
 
-
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 
 import java.io.File;

@@ -5,5 +5,6 @@ package com.healthcoco.healthcocopad.listeners;
  */
 public interface LoadMorePageListener {
     public void loadMore();
+
     public boolean isEndOfListAchieved();
 }

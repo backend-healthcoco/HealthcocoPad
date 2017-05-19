@@ -5,8 +5,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 
-import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.HealthCocoActivity;
+import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.enums.HealthCocoFileType;
 import com.healthcoco.healthcocopad.listeners.DownloadFileFromUrlListener;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;

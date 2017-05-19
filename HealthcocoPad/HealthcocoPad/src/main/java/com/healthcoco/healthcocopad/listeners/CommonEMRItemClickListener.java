@@ -16,6 +16,7 @@ public interface CommonEMRItemClickListener {
     public RegisteredPatientDetailsUpdated getSelectedPatient();
 
     public User getUser();
+
     public void openEmrScreen(HistoryFilterType historyFilterType);
 
 }

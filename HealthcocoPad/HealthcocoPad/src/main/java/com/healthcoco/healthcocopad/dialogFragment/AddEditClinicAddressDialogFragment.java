@@ -23,7 +23,6 @@ import com.healthcoco.healthcocopad.enums.AutoCompleteTextViewType;
 import com.healthcoco.healthcocopad.enums.CommonListDialogType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
-import com.healthcoco.healthcocopad.fragments.MyClinicFragment;
 import com.healthcoco.healthcocopad.listeners.CommonListDialogItemClickListener;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
 import com.healthcoco.healthcocopad.services.GsonRequest;

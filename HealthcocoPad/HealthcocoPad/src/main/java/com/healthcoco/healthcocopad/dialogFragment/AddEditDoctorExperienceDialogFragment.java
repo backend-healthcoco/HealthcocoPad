@@ -13,8 +13,8 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
 import com.android.volley.Response;
-import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.HealthCocoDialogFragment;
+import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.DoctorExperienceDetail;
 import com.healthcoco.healthcocopad.bean.server.DoctorProfile;
@@ -35,7 +35,7 @@ import java.util.List;
 /**
  * Created by Shreshtha on 18-02-2017.
  */
-public class AddEditDoctorExperienceDialogFragment extends HealthCocoDialogFragment implements View.OnClickListener ,GsonRequest.ErrorListener, Response.Listener<VolleyResponseBean>, ExperienceDetailItemListener {
+public class AddEditDoctorExperienceDialogFragment extends HealthCocoDialogFragment implements View.OnClickListener, GsonRequest.ErrorListener, Response.Listener<VolleyResponseBean>, ExperienceDetailItemListener {
     private LinearLayout containerItemsExperienceDetail;
     private List<DoctorExperienceDetail> experienceList = new ArrayList<>();
     private FloatingActionButton btAddMore;
@@ -100,6 +100,7 @@ public class AddEditDoctorExperienceDialogFragment extends HealthCocoDialogFragm
                 break;
         }
     }
+
     private void addEditExperienceItem(DoctorExperienceDetail experienceDetail, boolean isAddMoreClicked) {
         ExperienceDetailListViewHolder viewHolder = new ExperienceDetailListViewHolder(mActivity);
         viewHolder.setData(experienceDetail, this, containerItemsExperienceDetail.getChildCount());
@@ -208,6 +209,7 @@ public class AddEditDoctorExperienceDialogFragment extends HealthCocoDialogFragm
         Util.showToast(mActivity, R.string.user_offline);
         mActivity.hideLoading();
     }
+
     @Override
     public void initData() {
 

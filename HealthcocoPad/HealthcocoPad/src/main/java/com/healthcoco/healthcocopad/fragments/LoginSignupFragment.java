@@ -16,19 +16,17 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.adapter.InitialScreenViewPagerAapter;
-import com.healthcoco.healthcocopad.dialogFragment.LoginDialogFragment;
 import com.healthcoco.healthcocopad.dialogFragment.ContactUsDialogFragment;
+import com.healthcoco.healthcocopad.dialogFragment.LoginDialogFragment;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.InitialScreenType;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
 
-import org.parceler.Parcel;
 import org.parceler.Parcels;
 
 import java.util.ArrayList;

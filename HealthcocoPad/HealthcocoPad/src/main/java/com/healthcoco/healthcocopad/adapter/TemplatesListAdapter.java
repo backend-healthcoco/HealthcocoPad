@@ -7,7 +7,6 @@ import android.widget.BaseAdapter;
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.bean.server.TempTemplate;
 import com.healthcoco.healthcocopad.listeners.TemplateListItemListener;
-import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.healthcoco.healthcocopad.viewholders.TemplatesListViewHolder;
 

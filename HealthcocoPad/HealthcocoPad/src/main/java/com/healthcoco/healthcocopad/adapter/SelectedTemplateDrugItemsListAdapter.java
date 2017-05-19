@@ -5,11 +5,9 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
 import com.healthcoco.healthcocopad.HealthCocoActivity;
-import com.healthcoco.healthcocopad.bean.server.Drug;
 import com.healthcoco.healthcocopad.bean.server.DrugItem;
 import com.healthcoco.healthcocopad.listeners.SelectedDrugsListItemListener;
 import com.healthcoco.healthcocopad.utilities.Util;
-import com.healthcoco.healthcocopad.viewholders.SelectedDrugItemsListViewholder;
 import com.healthcoco.healthcocopad.viewholders.SelectedTemplateDrugItemsListViewholder;
 
 import java.util.ArrayList;

@@ -5,8 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
+import com.healthcoco.healthcocopad.R;
 
 /**
  * Created by Shreshtha on 07-03-2017.

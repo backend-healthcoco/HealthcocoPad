@@ -28,8 +28,8 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.android.volley.Response;
-import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.HealthCocoDialogFragment;
+import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.DoctorProfileToSend;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.DoctorExperience;
@@ -67,7 +67,6 @@ import com.healthcoco.healthcocopad.utilities.ScreenDimensions;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.healthcoco.healthcocopad.views.TextViewFontAwesome;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;

@@ -23,5 +23,6 @@ public interface ContactsItemOptionsListener {
     public void onEditClicked(RegisteredPatientDetailsUpdated patientDetailsUpdated);
 
     void onQueueClicked(RegisteredPatientDetailsUpdated objData);
+
     public ChangeViewType getChangedViewType();
 }

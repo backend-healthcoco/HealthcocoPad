@@ -6,7 +6,7 @@ import com.orm.annotation.Unique;
 /**
  * Created by neha on 30/06/16.
  */
-public class ForeignDiagnosesTable  extends SugarRecord {
+public class ForeignDiagnosesTable extends SugarRecord {
     @Unique
     private String customUniqueId;
     private String foreignUniqueId;

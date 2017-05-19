@@ -6,11 +6,11 @@ public enum AccessPermissionType {
     private String accessPermissionType;
 
     private AccessPermissionType(String accessPermissionType) {
-	this.accessPermissionType = accessPermissionType;
+        this.accessPermissionType = accessPermissionType;
     }
 
     public String getAccessPermissionType() {
-	return accessPermissionType;
+        return accessPermissionType;
     }
 
 }

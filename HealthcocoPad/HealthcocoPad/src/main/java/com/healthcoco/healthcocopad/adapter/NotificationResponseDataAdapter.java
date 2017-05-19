@@ -6,8 +6,8 @@ import android.widget.BaseAdapter;
 
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.HealthCocoViewHolder;
-import com.healthcoco.healthcocopad.bean.server.NotificationResponse;
 import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
+import com.healthcoco.healthcocopad.bean.server.NotificationResponse;
 import com.healthcoco.healthcocopad.bean.server.Records;
 import com.healthcoco.healthcocopad.enums.BookAppointmentFromScreenType;
 import com.healthcoco.healthcocopad.listeners.CommonEMRItemClickListener;

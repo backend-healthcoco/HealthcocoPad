@@ -6,11 +6,11 @@ public enum PatientTreatmentStatus {
     private String treamentStatus;
 
     private PatientTreatmentStatus(String treamentStatus) {
-	this.treamentStatus = treamentStatus;
+        this.treamentStatus = treamentStatus;
     }
 
     public String getTreamentStatus() {
-	return treamentStatus;
+        return treamentStatus;
     }
 
 }

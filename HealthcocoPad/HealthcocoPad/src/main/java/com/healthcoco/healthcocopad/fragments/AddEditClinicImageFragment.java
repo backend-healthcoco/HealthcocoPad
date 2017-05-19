@@ -14,8 +14,8 @@ import android.view.ViewGroup;
 import android.widget.GridView;
 
 import com.android.volley.Response;
-import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
+import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.adapter.ClinicImageGridAdapter;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.request.ClinicImageToSend;

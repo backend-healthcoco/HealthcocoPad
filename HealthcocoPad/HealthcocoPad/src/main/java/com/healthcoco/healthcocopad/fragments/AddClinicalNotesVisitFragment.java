@@ -8,7 +8,6 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -83,6 +82,8 @@ public class AddClinicalNotesVisitFragment extends HealthCocoFragment implements
     private ScrollView svScrollView;
     private LinearLayout parentDiagrams;
     private LinearLayout btSelectDiagram;
+    private AddEditNormalVisitsFragment addEditNormalVisitsFragment;
+    private AddEditNormalVisitClinicalNotesFragment addEditNormalVisitClinicalNotesFragment;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -108,6 +109,8 @@ public class AddClinicalNotesVisitFragment extends HealthCocoFragment implements
     public void init() {
         initViews();
         initListeners();
+        addEditNormalVisitsFragment = (AddEditNormalVisitsFragment) mFragmentManager.findFragmentByTag(AddEditNormalVisitsFragment.class.getSimpleName());
+        addEditNormalVisitClinicalNotesFragment = (AddEditNormalVisitClinicalNotesFragment) addEditNormalVisitsFragment.getCurrentFragment();
     }
 
     @Override
@@ -259,11 +262,12 @@ public class AddClinicalNotesVisitFragment extends HealthCocoFragment implements
         LinearLayout layoutItemPermission = (LinearLayout) mActivity.getLayoutInflater().inflate(R.layout.layout_item_add_clinical_note_permision, null);
         TextView tvTitle = (TextView) layoutItemPermission.findViewById(R.id.tv_title);
         TextView autotvPermission = (TextView) layoutItemPermission.findViewById(R.id.edit_permission_text);
-//        autotvPermission.setOnFocusChangeListener(this);
         tvTitle.setText(clinicalNotesPermissionType.getTextId());
         autotvPermission.setId(clinicalNotesPermissionType.getAutotvId());
         autotvPermission.setHint(clinicalNotesPermissionType.getHintId());
         autotvPermission.setTag(String.valueOf(clinicalNotesPermissionType));
+        autotvPermission.setOnTouchListener(addEditNormalVisitClinicalNotesFragment.getOnTouchListener());
+
         String text = "";
         if (clinicalNotes != null) {
             switch (clinicalNotesPermissionType) {

@@ -5,7 +5,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
 import com.healthcoco.healthcocopad.HealthCocoActivity;
-import com.healthcoco.healthcocopad.fragments.PatientRegistrationFragment;
 import com.healthcoco.healthcocopad.listeners.PatientRegistrationListener;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.healthcoco.healthcocopad.viewholders.NotesListItemViewHolder;

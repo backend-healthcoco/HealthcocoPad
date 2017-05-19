@@ -1,10 +1,7 @@
 package com.healthcoco.healthcocopad.enums;
 
-import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.server.UserGroups;
 import com.healthcoco.healthcocopad.utilities.StringUtil;
-
-import static com.healthcoco.healthcocopad.enums.ClinicalNotesType.DIAGRAMS;
 
 /**
  * Created by Shreshtha on 24-01-2017.

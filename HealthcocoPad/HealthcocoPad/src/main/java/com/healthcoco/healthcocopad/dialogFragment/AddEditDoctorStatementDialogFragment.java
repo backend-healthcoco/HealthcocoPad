@@ -8,8 +8,8 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 
 import com.android.volley.Response;
-import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.HealthCocoDialogFragment;
+import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.request.ProfessionalStatementRequest;
 import com.healthcoco.healthcocopad.bean.server.DoctorProfile;

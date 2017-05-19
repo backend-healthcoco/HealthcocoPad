@@ -1,7 +1,6 @@
 package com.healthcoco.healthcocopad.bean.server;
 
 import com.healthcoco.healthcocopad.bean.DOB;
-import com.healthcoco.healthcocopad.bean.UIPermissions;
 import com.healthcoco.healthcocopad.enums.RoleType;
 import com.healthcoco.healthcocopad.enums.UserState;
 import com.orm.SugarRecord;

@@ -4,6 +4,7 @@ import com.orm.SugarRecord;
 import com.orm.annotation.Unique;
 
 import org.parceler.Parcel;
+
 @Parcel
 public class DrugDosage extends SugarRecord {
     /**

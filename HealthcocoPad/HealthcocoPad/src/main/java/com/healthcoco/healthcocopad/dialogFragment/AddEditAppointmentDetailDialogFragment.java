@@ -13,13 +13,12 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.android.volley.Response;
-import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.HealthCocoDialogFragment;
+import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.AppointmentSlot;
 import com.healthcoco.healthcocopad.bean.server.ConsultationFee;
 import com.healthcoco.healthcocopad.bean.server.DoctorClinicProfile;
-import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.custom.AutoCompleteTextViewAdapter;
 import com.healthcoco.healthcocopad.enums.AppointmentSlotsType;
 import com.healthcoco.healthcocopad.enums.AutoCompleteTextViewType;

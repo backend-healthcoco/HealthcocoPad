@@ -5,6 +5,7 @@ import com.healthcoco.healthcocopad.bean.server.DoctorWorkingSchedule;
 import org.parceler.Parcel;
 
 import java.util.List;
+
 @Parcel
 public class AddEditLocaleVisitDetailsRequest {
 

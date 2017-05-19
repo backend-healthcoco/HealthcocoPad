@@ -11,7 +11,6 @@ import android.widget.TextView;
 
 import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
-import com.healthcoco.healthcocopad.bean.request.ProfessionalMembershipRequest;
 import com.healthcoco.healthcocopad.bean.server.Achievement;
 import com.healthcoco.healthcocopad.bean.server.DoctorExperienceDetail;
 import com.healthcoco.healthcocopad.bean.server.DoctorProfile;

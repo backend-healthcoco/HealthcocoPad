@@ -11,8 +11,8 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
-import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
+import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.enums.WebViewType;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.Util;

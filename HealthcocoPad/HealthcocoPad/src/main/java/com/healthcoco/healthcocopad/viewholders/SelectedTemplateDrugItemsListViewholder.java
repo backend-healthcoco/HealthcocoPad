@@ -8,7 +8,6 @@ import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.HealthCocoApplication;
 import com.healthcoco.healthcocopad.HealthCocoViewHolder;
 import com.healthcoco.healthcocopad.R;
-import com.healthcoco.healthcocopad.bean.server.Drug;
 import com.healthcoco.healthcocopad.bean.server.DrugItem;
 import com.healthcoco.healthcocopad.listeners.SelectedDrugsListItemListener;
 

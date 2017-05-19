@@ -6,7 +6,7 @@ import android.os.Parcelable;
 import com.orm.SugarRecord;
 import com.orm.annotation.Unique;
 
-public class ClinicImage extends SugarRecord implements Parcelable{
+public class ClinicImage extends SugarRecord implements Parcelable {
     private String imageUrl;
 
     private String thumbnailUrl;

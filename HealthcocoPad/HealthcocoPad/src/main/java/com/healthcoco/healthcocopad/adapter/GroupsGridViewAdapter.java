@@ -49,7 +49,7 @@ public class GroupsGridViewAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            holder = new GroupGridViewHolder(mActivity,assignGroupListener);
+            holder = new GroupGridViewHolder(mActivity, assignGroupListener);
             convertView = holder.getContentView();
             convertView.setTag(holder);
         } else

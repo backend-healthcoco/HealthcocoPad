@@ -10,7 +10,6 @@ import android.widget.LinearLayout;
 import android.widget.ListPopupWindow;
 import android.widget.PopupWindow;
 
-
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.enums.OptionsTypePopupWindow;

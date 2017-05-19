@@ -37,7 +37,7 @@ public class Records extends SugarRecord {
     private String uploadedByLocation;
     private String visitId;
     private String uniqueEmrId;
-//    @Ignore
+    //    @Ignore
 //    private FileDetails fileDetails;
     @Ignore
     private Bitmap recordsImageBitmap;

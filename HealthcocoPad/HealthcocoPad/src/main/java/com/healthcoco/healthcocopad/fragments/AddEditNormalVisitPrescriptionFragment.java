@@ -20,7 +20,6 @@ import com.healthcoco.healthcocopad.adapter.ContactsDetailViewPagerAdapter;
 import com.healthcoco.healthcocopad.adapter.SelectedTemplateDrugItemsListAdapter;
 import com.healthcoco.healthcocopad.bean.server.DiagnosticTest;
 import com.healthcoco.healthcocopad.bean.server.DrugItem;
-import com.healthcoco.healthcocopad.bean.server.Prescription;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.TempTemplate;
 import com.healthcoco.healthcocopad.bean.server.User;

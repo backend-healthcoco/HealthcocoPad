@@ -4,9 +4,9 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.HealthCocoViewHolder;
+import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.enums.SettingsItemType;
 import com.healthcoco.healthcocopad.enums.UIPermissionsItemType;
 

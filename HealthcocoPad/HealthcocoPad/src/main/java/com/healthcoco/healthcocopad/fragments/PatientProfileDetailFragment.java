@@ -567,7 +567,7 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
             case R.id.bt_edit_patient_profile_notes:
                 Util.checkNetworkStatus(mActivity);
                 if (HealthCocoConstants.isNetworkOnline)
-                   openRegistrationFragment(HealthCocoConstants.SELECTED_PATIENTS_USER_ID,REQUEST_CODE_PATIENT_PROFILE,true);
+                    openRegistrationFragment(HealthCocoConstants.SELECTED_PATIENTS_USER_ID, REQUEST_CODE_PATIENT_PROFILE, true);
                 else
                     onNetworkUnavailable(null);
                 break;

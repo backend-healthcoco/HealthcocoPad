@@ -5,9 +5,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.HealthCocoApplication;
+import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.enums.FragmentType;
 
 public class MenuListViewHolder {

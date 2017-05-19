@@ -12,7 +12,6 @@ import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
-
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.enums.SpinnerType;
 

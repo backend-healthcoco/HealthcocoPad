@@ -15,6 +15,7 @@ import com.android.volley.Response;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.activities.AddVisitsActivity;
+import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.Diagram;
 import com.healthcoco.healthcocopad.bean.server.FileDetails;
@@ -48,6 +49,7 @@ public class SelectedDiagramDetailFragment extends HealthCocoFragment implements
     private ImageButton btErase;
     private Diagram selectedDiagram;
     private User user;
+    private boolean toggleStateFromPreferences;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -90,7 +92,10 @@ public class SelectedDiagramDetailFragment extends HealthCocoFragment implements
 
     @Override
     public void initListeners() {
-        ((AddVisitsActivity) mActivity).initSaveButton(this);
+        toggleStateFromPreferences = Util.getVisitToggleStateFromPreferences(mActivity);
+        if (toggleStateFromPreferences)
+            ((AddVisitsActivity) mActivity).initSaveButton(this);
+        else ((CommonOpenUpActivity) mActivity).initActionbarRightAction(this);
         btColor.setOnClickListener(this);
         btErase.setOnClickListener(this);
     }
@@ -101,7 +106,9 @@ public class SelectedDiagramDetailFragment extends HealthCocoFragment implements
         if (selectedDiagram != null && !Util.isNullOrBlank(selectedDiagram.getDiagramUrl())) {
             mActivity.showLoading(false);
             String url = selectedDiagram.getDiagramUrl();
-            ((AddVisitsActivity) mActivity).initActionbarTitle(selectedDiagram.getTags());
+            if (toggleStateFromPreferences)
+                ((AddVisitsActivity) mActivity).initActionbarTitle(selectedDiagram.getTags());
+            else ((CommonOpenUpActivity) mActivity).initActionbarTitle(selectedDiagram.getTags());
             new DownloadFileFromUrlAsyncTask(mActivity, this, HealthCocoFileType.DIAGRAM_IMAGE, Util.getFileNameFromUrl(url), null, null).execute(url);
         }
     }
@@ -175,8 +182,13 @@ public class SelectedDiagramDetailFragment extends HealthCocoFragment implements
                         Intent intent = new Intent();
                         intent.putExtra(SELECTED_DIAGRAM_TAG, selectedDiagram.getTags());
                         intent.putExtra(HealthCocoConstants.TAG_UNIQUE_ID, diagramResponse.getUniqueId());
-                        ((AddVisitsActivity) mActivity).setResult(HealthCocoConstants.RESULT_CODE_DIAGRAM_DETAIL, intent);
-                        ((AddVisitsActivity) mActivity).finish();
+                        if (toggleStateFromPreferences) {
+                            ((AddVisitsActivity) mActivity).setResult(HealthCocoConstants.RESULT_CODE_DIAGRAM_DETAIL, intent);
+                            ((AddVisitsActivity) mActivity).finish();
+                        } else {
+                            ((CommonOpenUpActivity) mActivity).setResult(HealthCocoConstants.RESULT_CODE_DIAGRAM_DETAIL, intent);
+                            ((CommonOpenUpActivity) mActivity).finish();
+                        }
                     }
                     break;
             }

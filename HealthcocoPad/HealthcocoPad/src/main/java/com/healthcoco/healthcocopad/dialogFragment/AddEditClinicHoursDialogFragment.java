@@ -30,7 +30,6 @@ import com.healthcoco.healthcocopad.custom.CustomTimePickerDialog;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.enums.WeekDayNameType;
-import com.healthcoco.healthcocopad.fragments.MyClinicFragment;
 import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;

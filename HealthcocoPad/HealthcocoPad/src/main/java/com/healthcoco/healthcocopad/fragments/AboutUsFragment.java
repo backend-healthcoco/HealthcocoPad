@@ -9,8 +9,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
+import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.WebViewType;
 
@@ -73,10 +73,10 @@ public class AboutUsFragment extends HealthCocoFragment implements View.OnClickL
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.bt_privacy_policy:
-                openCommonOpenUpActivity(CommonOpenUpFragmentType.PRIVACY_POLICY,WebViewFragments.TAG_WEB_VIEW_TYPE, WebViewType.PRIVACY_POLICY.ordinal(), 0);
+                openCommonOpenUpActivity(CommonOpenUpFragmentType.PRIVACY_POLICY, WebViewFragments.TAG_WEB_VIEW_TYPE, WebViewType.PRIVACY_POLICY.ordinal(), 0);
                 break;
             case R.id.bt_terms_and_conditions:
-                openCommonOpenUpActivity(CommonOpenUpFragmentType.TERMS_OF_SERVICE,WebViewFragments.TAG_WEB_VIEW_TYPE, WebViewType.TERMS_OF_SERVICE.ordinal(), 0);
+                openCommonOpenUpActivity(CommonOpenUpFragmentType.TERMS_OF_SERVICE, WebViewFragments.TAG_WEB_VIEW_TYPE, WebViewType.TERMS_OF_SERVICE.ordinal(), 0);
                 break;
             case R.id.bt_google_plus:
                 try {

@@ -6,9 +6,9 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.HealthCocoViewHolder;
+import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.server.AlreadyRegisteredPatientsResponse;
 import com.healthcoco.healthcocopad.enums.HealthCocoFileType;
 import com.healthcoco.healthcocopad.enums.PatientProfileScreenType;

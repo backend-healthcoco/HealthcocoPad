@@ -1,7 +1,6 @@
 package com.healthcoco.healthcocopad.bean.request;
 
 
-
 import com.healthcoco.healthcocopad.bean.server.Complaint;
 import com.healthcoco.healthcocopad.bean.server.Diagnoses;
 import com.healthcoco.healthcocopad.bean.server.Investigation;

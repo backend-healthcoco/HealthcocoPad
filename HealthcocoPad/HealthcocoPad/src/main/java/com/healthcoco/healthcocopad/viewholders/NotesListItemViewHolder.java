@@ -4,9 +4,9 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.HealthCocoViewHolder;
+import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.listeners.PatientRegistrationListener;
 
 /**

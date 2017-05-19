@@ -1,16 +1,16 @@
 package com.healthcoco.healthcocopad.enums;
 
 public enum QuantityEnum {
-	DAYS("DAYS"),QTY("QTY");
-	private String duration;
+    DAYS("DAYS"), QTY("QTY");
+    private String duration;
 
-	public String getDuration() {
-		return duration;
-	}
+    public String getDuration() {
+        return duration;
+    }
 
-	private QuantityEnum(String duration) {
-		this.duration = duration;
-	}
-	
+    private QuantityEnum(String duration) {
+        this.duration = duration;
+    }
+
 
 }

@@ -12,8 +12,8 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
+import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.activities.HomeActivity;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.User;

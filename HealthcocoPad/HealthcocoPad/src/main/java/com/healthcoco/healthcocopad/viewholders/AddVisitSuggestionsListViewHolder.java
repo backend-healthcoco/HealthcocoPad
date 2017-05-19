@@ -15,9 +15,11 @@ import com.healthcoco.healthcocopad.bean.server.EcgDetailSuggestions;
 import com.healthcoco.healthcocopad.bean.server.EchoSuggestions;
 import com.healthcoco.healthcocopad.bean.server.GeneralExaminationSuggestions;
 import com.healthcoco.healthcocopad.bean.server.GenericName;
+import com.healthcoco.healthcocopad.bean.server.HistoryPresentComplaintSuggestions;
 import com.healthcoco.healthcocopad.bean.server.HolterSuggestions;
 import com.healthcoco.healthcocopad.bean.server.IndicationOfUsgSuggestions;
 import com.healthcoco.healthcocopad.bean.server.InvestigationSuggestions;
+import com.healthcoco.healthcocopad.bean.server.MenstrualHistorySuggestions;
 import com.healthcoco.healthcocopad.bean.server.NotesSuggestions;
 import com.healthcoco.healthcocopad.bean.server.ObservationSuggestions;
 import com.healthcoco.healthcocopad.bean.server.ObstetricHistorySuggestions;
@@ -28,8 +30,6 @@ import com.healthcoco.healthcocopad.bean.server.PsSuggestions;
 import com.healthcoco.healthcocopad.bean.server.PvSuggestions;
 import com.healthcoco.healthcocopad.bean.server.SystemicExaminationSuggestions;
 import com.healthcoco.healthcocopad.bean.server.XrayDetailSuggestions;
-import com.healthcoco.healthcocopad.bean.server.HistoryPresentComplaintSuggestions;
-import com.healthcoco.healthcocopad.bean.server.MenstrualHistorySuggestions;
 import com.healthcoco.healthcocopad.utilities.Util;
 
 /**

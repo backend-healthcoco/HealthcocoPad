@@ -9,9 +9,9 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.HealthCocoApplication;
+import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.listeners.AutoCompleteTextViewListener;
 import com.healthcoco.healthcocopad.listeners.ProfessipnalMembershipDetailItemListener;
 import com.healthcoco.healthcocopad.utilities.EditTextTextViewErrorUtil;

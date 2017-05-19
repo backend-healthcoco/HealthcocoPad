@@ -3,9 +3,9 @@ package com.healthcoco.healthcocopad.viewholders;
 import android.view.View;
 import android.widget.TextView;
 
-import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.HealthCocoViewHolder;
+import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.enums.OptionsType;
 
 public class CommonOptionsDialogViewHolder extends HealthCocoViewHolder {

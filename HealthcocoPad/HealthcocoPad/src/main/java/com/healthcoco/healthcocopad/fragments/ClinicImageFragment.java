@@ -8,8 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
-import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
+import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.server.ClinicImage;
 import com.healthcoco.healthcocopad.custom.DownloadFileFromUrlAsyncTask;
 import com.healthcoco.healthcocopad.enums.HealthCocoFileType;

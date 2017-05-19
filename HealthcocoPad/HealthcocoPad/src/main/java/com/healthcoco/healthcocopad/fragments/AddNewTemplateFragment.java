@@ -59,7 +59,7 @@ import java.util.List;
  */
 public class AddNewTemplateFragment extends HealthCocoFragment implements TabHost.OnTabChangeListener,
         ViewPager.OnPageChangeListener, View.OnClickListener, SelectDrugItemClickListener,
-        SelectedDrugsListItemListener, TemplateListItemListener, GsonRequest.ErrorListener, Response.Listener<VolleyResponseBean>,LocalDoInBackgroundListenerOptimised {
+        SelectedDrugsListItemListener, TemplateListItemListener, GsonRequest.ErrorListener, Response.Listener<VolleyResponseBean>, LocalDoInBackgroundListenerOptimised {
 
     private ViewPager viewPager;
     private TabHost tabhost;

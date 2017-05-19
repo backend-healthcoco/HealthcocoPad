@@ -5,7 +5,6 @@ import android.util.AttributeSet;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 
-
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.adapter.DiagramColorPalleteGridListAdapter;

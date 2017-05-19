@@ -1,6 +1,5 @@
 package com.healthcoco.healthcocopad.dialogFragment;
 
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -62,10 +61,10 @@ import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimis
 import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
+import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
 import com.healthcoco.healthcocopad.utilities.EditTextTextViewErrorUtil;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
-import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
 import com.healthcoco.healthcocopad.utilities.ScreenDimensions;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.healthcoco.healthcocopad.views.ExpandableGridView;
@@ -453,7 +452,7 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
         }
         intent.putExtra(TAG_APPOINTMENT_ID, aptId);
 //        if (intent != null && intent.getAction() != null)
-            LocalBroadcastManager.getInstance(mApp.getApplicationContext()).sendBroadcast(intent);
+        LocalBroadcastManager.getInstance(mApp.getApplicationContext()).sendBroadcast(intent);
         sendBroadcastToCalendarFragment();
     }
 

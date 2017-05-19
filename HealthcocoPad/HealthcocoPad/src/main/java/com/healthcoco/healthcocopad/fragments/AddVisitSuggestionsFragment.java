@@ -7,6 +7,8 @@ import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,6 +60,7 @@ import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimis
 import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
+import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.healthcoco.healthcocopad.views.GridViewLoadMore;
@@ -66,6 +69,7 @@ import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import static com.healthcoco.healthcocopad.enums.WebServiceType.FRAGMENT_INITIALISATION;
 
@@ -73,7 +77,7 @@ import static com.healthcoco.healthcocopad.enums.WebServiceType.FRAGMENT_INITIAL
  * Created by neha on 15/04/17.
  */
 
-public class AddVisitSuggestionsFragment extends HealthCocoFragment implements
+public class AddVisitSuggestionsFragment extends HealthCocoFragment implements TextWatcher,
         GsonRequest.ErrorListener, Response.Listener<VolleyResponseBean>, LocalDoInBackgroundListenerOptimised,
         LoadMorePageListener, View.OnClickListener, AddNewDrugListener, AdapterView.OnItemClickListener {
     public static final String INTENT_LOAD_DATA = "com.healthcoco.healthcocopad.fragments.AddVisitSuggestionsFragment.LOAD_DATA";
@@ -99,6 +103,7 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements
     private LinearLayout parentEditSearchView;
     private EditText editTextSearch;
     private TextView tvNoDrugs;
+    private boolean visitToggleStateFromPreferences;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -118,6 +123,8 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements
         initViews();
         initListeners();
         initAdapters();
+        visitToggleStateFromPreferences = Util.getVisitToggleStateFromPreferences(mActivity);
+
         showLoadingOverlay(true);
         new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_FRAGMENT_INITIALISATION_DATA, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
@@ -134,9 +141,38 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements
 
     @Override
     public void initListeners() {
-        editTextSearch = initEditSearchView(R.string.search, this);
+        if (visitToggleStateFromPreferences)
+            editTextSearch = initEditSearchView(R.string.search, (View.OnClickListener) this);
+        else initEditSearchView(R.string.search_drug, this, this);
         btAddNew.setOnClickListener(this);
         gvSuggestionsList.setOnItemClickListener(this);
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+        String search = String.valueOf(s).toUpperCase(Locale.ENGLISH);
+        if (lastTextSearched == null || !lastTextSearched.equalsIgnoreCase(search)) {
+            //sorting solar drugs list from server
+            Util.checkNetworkStatus(mActivity);
+            if (HealthCocoConstants.isNetworkOnline) {
+                PAGE_NUMBER = 0;
+                isLoadingFromSearch = true;
+                isEndOfListAchieved = false;
+//                getListFromLocal();
+            } else
+                Util.showToast(mActivity, R.string.user_offline);
+        }
+        lastTextSearched = search;
     }
 
     private void initAdapters() {
@@ -472,8 +508,13 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements
                 tvNoDrugs.setText(R.string.no_drug_history);
                 break;
             default:
-                parentEditSearchView.setVisibility(View.GONE);
-                btAddNew.setVisibility(View.GONE);
+                if (visitToggleStateFromPreferences) {
+                    parentEditSearchView.setVisibility(View.GONE);
+                    btAddNew.setVisibility(View.GONE);
+                } else {
+                    parentEditSearchView.setVisibility(View.VISIBLE);
+                    btAddNew.setVisibility(View.GONE);
+                }
                 tvNoDrugs.setText("");
                 break;
         }
@@ -560,14 +601,21 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Intent intent = new Intent(MyScriptAddVisitsFragment.INTENT_ON_SUGGESTION_ITEM_CLICK);
-        intent.putExtra(TAG_SUGGESTIONS_TYPE, suggestionType.ordinal());
-        intent.putExtra(MyScriptAddVisitsFragment.TAG_SELECTED_SUGGESTION_OBJECT, Parcels.wrap(adapterSolr.getItem(position)));
-        LocalBroadcastManager.getInstance(mApp).sendBroadcast(intent);
+        if(visitToggleStateFromPreferences){
+            Intent intent = new Intent(MyScriptAddVisitsFragment.INTENT_ON_SUGGESTION_ITEM_CLICK);
+            intent.putExtra(TAG_SUGGESTIONS_TYPE, suggestionType.ordinal());
+            intent.putExtra(MyScriptAddVisitsFragment.TAG_SELECTED_SUGGESTION_OBJECT, Parcels.wrap(adapterSolr.getItem(position)));
+            LocalBroadcastManager.getInstance(mApp).sendBroadcast(intent);
+        }else {
+            Intent intent = new Intent(MyScriptAddVisitsFragment.INTENT_ON_SUGGESTION_ITEM_CLICK);
+            intent.putExtra(TAG_SUGGESTIONS_TYPE, suggestionType.ordinal());
+            intent.putExtra(MyScriptAddVisitsFragment.TAG_SELECTED_SUGGESTION_OBJECT, Parcels.wrap(adapterSolr.getItem(position)));
+            LocalBroadcastManager.getInstance(mApp).sendBroadcast(intent);
+        }
     }
 
     public void refreshTagOfEditText(SuggestionType suggestionType) {
-        editTextSearch = initEditSearchView(suggestionType.getSearchHintId(), this);
+        editTextSearch = initEditSearchView(suggestionType.getSearchHintId(), (View.OnClickListener) this);
         editTextSearch.setText("");
         editTextSearch.setTag(suggestionType);
         MyScriptAddVisitsFragment myScriptAddVisitsFragment = (MyScriptAddVisitsFragment) mFragmentManager.findFragmentByTag(MyScriptAddVisitsFragment.class.getSimpleName());

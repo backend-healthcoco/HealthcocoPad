@@ -47,8 +47,7 @@ public enum OptionsTypePopupWindow {
         add(R.id.tv_confirmed);
         add(R.id.tv_pending_confirmation);
         add(R.id.tv_cancelled);
-    }});
-    ;
+    }});;
     private ArrayList<Integer> optionIdsList;
 
     private OptionsTypePopupWindow(ArrayList<Integer> optionIdsList) {

@@ -14,8 +14,8 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.android.volley.Response;
-import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.HealthCocoDialogFragment;
+import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.DoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.DoctorRegistrationDetail;

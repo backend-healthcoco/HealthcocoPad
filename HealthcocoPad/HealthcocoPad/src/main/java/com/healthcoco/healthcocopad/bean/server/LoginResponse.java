@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Created by Shreshtha on 23-01-2017.
  */
-public class LoginResponse extends SugarRecord{
+public class LoginResponse extends SugarRecord {
     @Ignore
     private User user;
     @Unique

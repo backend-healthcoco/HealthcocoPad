@@ -9,9 +9,9 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.HealthCocoApplication;
+import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.server.Achievement;
 import com.healthcoco.healthcocopad.custom.AutoCompleteTextViewAdapter;
 import com.healthcoco.healthcocopad.enums.AutoCompleteTextViewType;
@@ -80,7 +80,7 @@ public class AchievementDetailListViewHolder extends LinearLayout implements Vie
         autoTvYearOfAchievement.setOnClickListener(this);
     }
 
-    public void setData(Achievement achievement,AchievementDetailItemListner itemClickListener, int position) {
+    public void setData(Achievement achievement, AchievementDetailItemListner itemClickListener, int position) {
         this.itemClickListener = itemClickListener;
         this.objData = achievement;
         autoTvYearOfAchievement.setId(position);

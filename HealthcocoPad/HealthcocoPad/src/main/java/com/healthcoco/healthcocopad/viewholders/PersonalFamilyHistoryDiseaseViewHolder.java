@@ -4,11 +4,10 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
-import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.HealthCocoViewHolder;
+import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.server.Disease;
 import com.healthcoco.healthcocopad.listeners.MedicalFamilyHistoryItemListener;
 import com.healthcoco.healthcocopad.utilities.Util;

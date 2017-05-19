@@ -20,6 +20,7 @@ import com.android.volley.Response;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.activities.AddVisitsActivity;
+import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.adapter.DiagramGridAdapter;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.Diagram;
@@ -55,6 +56,7 @@ public class DiagramsListFragment extends HealthCocoFragment implements OnItemCl
     private DiagramGridAdapter adapter;
     private TextView tvNoDiagrams;
     private User user;
+    private boolean toggleStateFromPreferences;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -112,6 +114,7 @@ public class DiagramsListFragment extends HealthCocoFragment implements OnItemCl
     }
 
     private void getListFromLocal() {
+        toggleStateFromPreferences = Util.getVisitToggleStateFromPreferences(mActivity);
         mActivity.showLoading(false);
         new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_DIAGRAMS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
@@ -160,19 +163,32 @@ public class DiagramsListFragment extends HealthCocoFragment implements OnItemCl
     }
 
     private void openDiagramDetailActivity(Diagram diagram) {
-        Intent intent = new Intent(mActivity, AddVisitsActivity.class);
-        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.SELECTED_DIAGRAM_DETAIL.ordinal());
-        intent.putExtra(HealthCocoConstants.TAG_DIAGRAM_TAG, diagram.getTags());
-        intent.putExtra(HealthCocoConstants.TAG_SELECTED_DIAGRAM, Parcels.wrap(diagram));
-        startActivityForResult(intent, REQUEST_CODE_DIAGRAMS_LIST);
+        if (toggleStateFromPreferences) {
+            Intent intent = new Intent(mActivity, AddVisitsActivity.class);
+            intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.SELECTED_DIAGRAM_DETAIL.ordinal());
+            intent.putExtra(HealthCocoConstants.TAG_DIAGRAM_TAG, diagram.getTags());
+            intent.putExtra(HealthCocoConstants.TAG_SELECTED_DIAGRAM, Parcels.wrap(diagram));
+            startActivityForResult(intent, REQUEST_CODE_DIAGRAMS_LIST);
+        } else {
+            Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
+            intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.SELECTED_DIAGRAM_DETAIL.ordinal());
+            intent.putExtra(HealthCocoConstants.TAG_DIAGRAM_TAG, diagram.getTags());
+            intent.putExtra(HealthCocoConstants.TAG_SELECTED_DIAGRAM, Parcels.wrap(diagram));
+            startActivityForResult(intent, REQUEST_CODE_DIAGRAMS_LIST);
+        }
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_DIAGRAMS_LIST && resultCode == HealthCocoConstants.RESULT_CODE_DIAGRAM_DETAIL) {
-            ((AddVisitsActivity) mActivity).setResult(HealthCocoConstants.RESULT_CODE_DIAGRAM_DETAIL, data);
-            ((AddVisitsActivity) mActivity).finish();
+            if (toggleStateFromPreferences) {
+                ((AddVisitsActivity) mActivity).setResult(HealthCocoConstants.RESULT_CODE_DIAGRAM_DETAIL, data);
+                ((AddVisitsActivity) mActivity).finish();
+            } else {
+                ((CommonOpenUpActivity) mActivity).setResult(HealthCocoConstants.RESULT_CODE_DIAGRAM_DETAIL, data);
+                ((CommonOpenUpActivity) mActivity).finish();
+            }
         }
     }
 

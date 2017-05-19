@@ -7,5 +7,6 @@ import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
  */
 public interface LocalDoInBackgroundListenerOptimised {
     public VolleyResponseBean doInBackground(VolleyResponseBean response);
+
     public void onPostExecute(VolleyResponseBean aVoid);
 }

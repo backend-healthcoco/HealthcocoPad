@@ -7,11 +7,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
-import com.healthcoco.healthcocopad.HealthCocoActivity;
-import com.healthcoco.healthcocopad.utilities.Util;
+import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.enums.InitialScreenType;
+import com.healthcoco.healthcocopad.utilities.Util;
 
 /**
  * Created by Shreshtha on 20-01-2017.

@@ -9,5 +9,6 @@ import com.healthcoco.healthcocopad.bean.server.User;
 
 public interface CommonOpenUpPatientDetailListener {
     public User getUser();
+
     public RegisteredPatientDetailsUpdated getSelectedPatientDetails();
 }

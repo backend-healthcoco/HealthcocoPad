@@ -9,7 +9,7 @@ import org.parceler.Parcel;
  * Created by Shreshtha on 21-04-2017.
  */
 @Parcel
-public class HistoryPresentComplaintSuggestions extends SugarRecord{
+public class HistoryPresentComplaintSuggestions extends SugarRecord {
     @Unique
     private String uniqueId;
 

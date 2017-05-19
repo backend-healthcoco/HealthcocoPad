@@ -9,9 +9,9 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
-import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.HealthCocoApplication;
+import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.server.DoctorExperienceDetail;
 import com.healthcoco.healthcocopad.custom.AutoCompleteTextViewAdapter;
 import com.healthcoco.healthcocopad.enums.AutoCompleteTextViewType;

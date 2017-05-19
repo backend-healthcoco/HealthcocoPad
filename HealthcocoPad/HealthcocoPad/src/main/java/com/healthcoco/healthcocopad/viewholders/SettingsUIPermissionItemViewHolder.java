@@ -42,8 +42,8 @@ public class SettingsUIPermissionItemViewHolder extends HealthCocoViewHolder imp
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        if(isChecked)
-        commonUiPermissionsListener.assignPermission(permission);
+        if (isChecked)
+            commonUiPermissionsListener.assignPermission(permission);
         else
             commonUiPermissionsListener.removePermission(permission);
     }

@@ -784,7 +784,7 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
         } else if (requestCode == REQUEST_CODE_REGISTER_PATIENT) {
             LogUtils.LOGD(TAG, "Contacts List onActivityResult ");
             if (resultCode == HealthCocoConstants.RESULT_CODE_ADD_STRING && data != null) {
-                String note = Parcels.unwrap( data.getParcelableExtra(HealthCocoConstants.TAG_INTENT_DATA));
+                String note = Parcels.unwrap(data.getParcelableExtra(HealthCocoConstants.TAG_INTENT_DATA));
                 if (!Util.isNullOrBlank(note)) {
                     if (notesListLastAdded == null)
                         notesListLastAdded = new ArrayList<>();

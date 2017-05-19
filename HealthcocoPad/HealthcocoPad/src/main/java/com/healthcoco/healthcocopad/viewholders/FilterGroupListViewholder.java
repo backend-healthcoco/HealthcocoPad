@@ -4,9 +4,9 @@ import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
-import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.HealthCocoViewHolder;
+import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.server.UserGroups;
 import com.healthcoco.healthcocopad.listeners.OnFilterItemClickListener;
 import com.healthcoco.healthcocopad.utilities.Util;

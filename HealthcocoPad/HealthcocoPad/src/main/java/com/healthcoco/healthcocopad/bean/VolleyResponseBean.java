@@ -23,6 +23,7 @@ public class VolleyResponseBean {
     protected boolean isFromLocalAfterApiSuccess;
     private LocalBackgroundTaskType localBackgroundTaskType;
     protected boolean isDataFromLocal;
+
     public void setFromLocalAfterApiSuccess(boolean fromLocalAfterApiSuccess) {
         isFromLocalAfterApiSuccess = fromLocalAfterApiSuccess;
     }

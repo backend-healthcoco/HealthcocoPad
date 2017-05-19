@@ -15,7 +15,6 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-
 import com.healthcoco.healthcocopad.enums.ColorType;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.views.TouchImageView;

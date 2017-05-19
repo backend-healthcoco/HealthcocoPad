@@ -5,8 +5,9 @@ import com.orm.SugarRecord;
 import com.orm.annotation.Unique;
 
 import org.parceler.Parcel;
+
 @Parcel
-public class DrugType extends SugarRecord  {
+public class DrugType extends SugarRecord {
     public static String TABLE_NAME = " " + StringUtil.toSQLName(DrugType.class.getSimpleName());
     @Unique
     private String uniqueId;

@@ -1,7 +1,7 @@
 package com.healthcoco.healthcocopad.enums;
 
 public enum DoctorExperienceUnit {
-    MONTH("Month"), YEAR("Year"),YEARS("Years"),MONTHS("Months");
+    MONTH("Month"), YEAR("Year"), YEARS("Years"), MONTHS("Months");
 
     private String period;
 

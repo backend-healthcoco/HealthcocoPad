@@ -8,7 +8,6 @@ import android.view.ViewTreeObserver;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 
-
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 
 import java.util.ArrayList;

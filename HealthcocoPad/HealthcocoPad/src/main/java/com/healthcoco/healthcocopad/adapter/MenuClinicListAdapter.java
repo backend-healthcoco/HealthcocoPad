@@ -22,7 +22,7 @@ public class MenuClinicListAdapter extends BaseAdapter {
     private HealthCocoActivity mActivity;
     private MenuClinicListviewHolder holder;
 
-    public MenuClinicListAdapter(HealthCocoActivity mActivity, List<DoctorClinicProfile> clinicProfile,SelectedClinicListener selectedClinicListener) {
+    public MenuClinicListAdapter(HealthCocoActivity mActivity, List<DoctorClinicProfile> clinicProfile, SelectedClinicListener selectedClinicListener) {
         this.mActivity = mActivity;
         this.list = clinicProfile;
         this.selectedClinicListener = selectedClinicListener;
@@ -49,7 +49,7 @@ public class MenuClinicListAdapter extends BaseAdapter {
     public View getView(final int position, View convertView, final ViewGroup parent) {
         DoctorClinicProfile doctorClinicProfile = (DoctorClinicProfile) getItem(position);
         if (convertView == null) {
-            holder = new MenuClinicListviewHolder(mActivity,selectedClinicListener);
+            holder = new MenuClinicListviewHolder(mActivity, selectedClinicListener);
             convertView = holder.getContentView();
             convertView.setTag(holder);
         } else

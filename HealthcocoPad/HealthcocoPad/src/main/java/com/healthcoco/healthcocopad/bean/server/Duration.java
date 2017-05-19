@@ -5,6 +5,7 @@ import com.orm.SugarRecord;
 import com.orm.annotation.Unique;
 
 import org.parceler.Parcel;
+
 @Parcel
 public class Duration extends SugarRecord {
     public static String TABLE_NAME = " " + StringUtil.toSQLName(Duration.class.getSimpleName());

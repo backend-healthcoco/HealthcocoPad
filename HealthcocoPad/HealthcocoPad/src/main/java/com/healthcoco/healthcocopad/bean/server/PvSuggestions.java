@@ -9,7 +9,7 @@ import org.parceler.Parcel;
  * Created by Shreshtha on 21-04-2017.
  */
 @Parcel
-public class PvSuggestions  extends SugarRecord {
+public class PvSuggestions extends SugarRecord {
     @Unique
     private String uniqueId;
 

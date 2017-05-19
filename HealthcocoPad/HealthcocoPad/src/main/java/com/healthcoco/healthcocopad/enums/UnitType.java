@@ -1,15 +1,15 @@
 package com.healthcoco.healthcocopad.enums;
 
 public enum UnitType {
-	PERCENT("%"), INR("₹");
-	private String unit;
+    PERCENT("%"), INR("₹");
+    private String unit;
 
-	private UnitType(String unit) {
-		this.unit = unit;
-	}
+    private UnitType(String unit) {
+        this.unit = unit;
+    }
 
-	public String getUnit() {
-		return unit;
-	}
+    public String getUnit() {
+        return unit;
+    }
 
 }

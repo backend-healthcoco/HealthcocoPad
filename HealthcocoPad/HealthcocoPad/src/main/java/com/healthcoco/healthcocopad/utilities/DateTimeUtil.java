@@ -403,6 +403,7 @@ public class DateTimeUtil {
         calendar.add(Calendar.DATE, -1);
         return calendar.getTimeInMillis();
     }
+
     public static boolean isCurrentDateSelected(String format, String selectedTime) {
         if (getFormattedDateTime(format, getCurrentDateLong()).equalsIgnoreCase(selectedTime))
             return true;

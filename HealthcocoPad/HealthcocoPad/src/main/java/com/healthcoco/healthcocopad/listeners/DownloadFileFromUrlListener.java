@@ -6,6 +6,7 @@ package com.healthcoco.healthcocopad.listeners;
 
 public interface DownloadFileFromUrlListener {
     public void onPostExecute(String filePath);
+
     public void onPreExecute();
 }
 

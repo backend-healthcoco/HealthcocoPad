@@ -11,7 +11,7 @@ import org.parceler.Parcel;
  * Created by Shreshtha on 07-02-2017.
  */
 @Parcel
-public class Diagram extends SugarRecord{
+public class Diagram extends SugarRecord {
     private String uniqueId;
 
     protected String foreignClinicalNotesId;

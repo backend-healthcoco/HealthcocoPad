@@ -11,8 +11,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
+import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.adapter.SettingsListAdapter;
 import com.healthcoco.healthcocopad.bean.server.GCMRequest;
@@ -20,13 +20,9 @@ import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.SettingsItemType;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
-import com.orm.SugarContext;
 
 import java.util.Arrays;
 import java.util.List;
-
-import static android.Manifest.permission_group.SMS;
-import static com.healthcoco.healthcocopad.enums.ClassType.BILLING;
 
 /**
  * Created by Shreshtha on 31-01-2017.
@@ -125,6 +121,7 @@ public class SettingsFragment extends HealthCocoFragment implements AdapterView.
         intent.putExtra(HealthCocoConstants.TAG_NAME_EDIT_TYPE, typeOrdinal);
         startActivity(intent);
     }
+
     private void showConfirmSignOutAlert() {
         final AlertDialog.Builder alertBuilder = new AlertDialog.Builder(mActivity);
         alertBuilder.setTitle(R.string.confirm);

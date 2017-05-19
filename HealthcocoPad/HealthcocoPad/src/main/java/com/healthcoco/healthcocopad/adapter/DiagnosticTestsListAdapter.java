@@ -16,7 +16,7 @@ import java.util.List;
  * Created by neha on 19/04/17.
  */
 
-public class DiagnosticTestsListAdapter  extends BaseAdapter {
+public class DiagnosticTestsListAdapter extends BaseAdapter {
     private DiagnosticTestItemListener itemListener;
     private List<DiagnosticTest> list;
     private HealthCocoActivity mActivity;

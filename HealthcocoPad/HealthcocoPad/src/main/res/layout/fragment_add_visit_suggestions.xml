@@ -56,7 +56,6 @@
             android:layout_marginLeft="10dp"
             android:layout_weight="1"
             android:padding="5dp"
-            android:text="@string/all_drug_list"
             android:textColor="@color/black"
             android:textSize="15sp" />
 

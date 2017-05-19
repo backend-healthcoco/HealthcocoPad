@@ -7,9 +7,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
-import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.HealthCocoViewHolder;
+import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.server.ClinicImage;
 import com.healthcoco.healthcocopad.custom.DownloadFileFromUrlAsyncTask;
 import com.healthcoco.healthcocopad.enums.HealthCocoFileType;

@@ -8,6 +8,8 @@ import com.healthcoco.healthcocopad.bean.server.UserGroups;
 
 public interface PatientRegistrationListener {
     public void onAssignGroupCheckClicked(boolean isSelected, UserGroups group);
+
     public boolean isGroupAssigned(String groupId);
+
     public void onDeleteNotesClicked(String notes);
 }

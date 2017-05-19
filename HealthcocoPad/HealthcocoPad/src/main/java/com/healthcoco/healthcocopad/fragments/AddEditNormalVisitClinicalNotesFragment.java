@@ -39,6 +39,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType.GET_VISIT_DETAILS;
+import static com.healthcoco.healthcocopad.fragments.AddClinicalNotesMyScriptVisitFragment.CHARACTER_TO_BE_REPLACED;
 import static com.healthcoco.healthcocopad.fragments.AddVisitSuggestionsFragment.TAG_SUGGESTIONS_TYPE;
 
 /**
@@ -48,12 +49,12 @@ import static com.healthcoco.healthcocopad.fragments.AddVisitSuggestionsFragment
 public class AddEditNormalVisitClinicalNotesFragment extends HealthCocoFragment implements LocalDoInBackgroundListenerOptimised, View.OnTouchListener {
     private User user;
     private LinearLayout containerSuggestionsList;
-    private AddClinicalNotesVisitFragment addClinicalNotesFragment;
     private LinearLayout parentClinicalNote;
     private RegisteredPatientDetailsUpdated selectedPatient;
     private String visitId;
     public static final String TAG_VISIT_ID = "visitId";
     private AddVisitSuggestionsFragment addVisitSuggestionsFragment;
+    private AddClinicalNotesVisitFragment addClinicalNotesFragment;
     private View selectedViewForSuggestionsList;
     private SuggestionType selectedSuggestionType = null;
 
@@ -79,11 +80,6 @@ public class AddEditNormalVisitClinicalNotesFragment extends HealthCocoFragment 
 //        if (bundle != null && bundle.containsKey(TAG_USER))
 //            user = Parcels.unwrap(bundle.getParcelable(TAG_USER));
 //        String visitToggleStateFromPreferences = Util.getVisitToggleStateFromPreferences(mActivity);
-//        if (visitToggleStateFromPreferences != null) {
-//            switch (visitToggleStateFromPreferences) {
-//                case PatientVisitDetailFragment.MYSCRIPT_VISIT_TOGGLE_STATE:
-//                    break;
-//            }
         init();
         mActivity.showLoading(false);
         new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_FRAGMENT_INITIALISATION_DATA, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
@@ -99,6 +95,7 @@ public class AddEditNormalVisitClinicalNotesFragment extends HealthCocoFragment 
 
     private void initData() {
         initUiPermissions(user.getUiPermissions());
+//        refreshSuggestionsList(selectedViewForSuggestionsList, "");
     }
 
     private void initUiPermissions(AssignedUserUiPermissions uiPermissions) {
@@ -269,7 +266,7 @@ public class AddEditNormalVisitClinicalNotesFragment extends HealthCocoFragment 
     }
 
     private String getLastTextAfterCharacterToBeReplaced(String searchTerm) {
-        Pattern p = Pattern.compile(".*" + AddClinicalNotesMyScriptVisitFragment.CHARACTER_TO_BE_REPLACED + "\\s*(.*)");
+        Pattern p = Pattern.compile(".*" + CHARACTER_TO_BE_REPLACED + "\\s*(.*)");
         Matcher m = p.matcher(searchTerm.trim());
 
         if (m.find())
@@ -359,13 +356,30 @@ public class AddEditNormalVisitClinicalNotesFragment extends HealthCocoFragment 
     public boolean onTouch(View v, MotionEvent event) {
         switch (event.getAction()) {
             case MotionEvent.ACTION_UP:
-                refreshSuggestionsList(v, "");
                 LogUtils.LOGD(TAG, "Action UP");
                 break;
             case MotionEvent.ACTION_DOWN:
+                refreshSuggestionsList(v, "");
+                if (selectedSuggestionType != null)
+                    addVisitSuggestionsFragment.refreshTagOfEditText(selectedSuggestionType);
                 LogUtils.LOGD(TAG, "Action DOWN");
                 break;
         }
         return false;
+    }
+
+    /**
+     * Gets text before last occurance of CHARACTER_TO_BE_REPLACED in searchedTerm
+     *
+     * @param searchTerm
+     * @return : text Before  last occurance of CHARACTER_TO_BE_REPLACED
+     */
+    public String getTextBeforeLastOccuranceOfCharacter(String searchTerm) {
+        Pattern p = Pattern.compile("\\s*(.*)" + CHARACTER_TO_BE_REPLACED + ".*");
+        Matcher m = p.matcher(searchTerm.trim());
+
+        if (m.find())
+            return m.group(1);
+        return "";
     }
 }

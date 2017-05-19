@@ -10,8 +10,8 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.HealthCocoDialogFragment;
+import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.adapter.CommonOptionsDialogAdapter;
 import com.healthcoco.healthcocopad.enums.DialogType;
 import com.healthcoco.healthcocopad.listeners.CommonOptionsDialogItemClickListener;

@@ -39,6 +39,7 @@ public class EditTextTextViewErrorUtil {
         }
         Util.showAlert(context, msg);
     }
+
     private static void removeFocusFromEditText(View view) {
         try {
             view.setFocusable(false);

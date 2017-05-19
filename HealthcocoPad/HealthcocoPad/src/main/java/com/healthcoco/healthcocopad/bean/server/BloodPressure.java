@@ -11,7 +11,7 @@ import org.parceler.Parcel;
  * Created by neha on 14/04/16.
  */
 @Parcel
-public class BloodPressure extends SugarRecord  {
+public class BloodPressure extends SugarRecord {
     public static String TABLE_NAME = " " + StringUtil.toSQLName(BloodPressure.class.getSimpleName());
     @Unique
     protected String foreignTableId;

@@ -48,7 +48,7 @@ public class UIPermissionItemGridAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            holder = new SettingsUIPermissionItemViewHolder(mActivity,commonUiPermissionsListener);
+            holder = new SettingsUIPermissionItemViewHolder(mActivity, commonUiPermissionsListener);
             convertView = holder.getContentView();
             convertView.setTag(holder);
         } else

@@ -8,6 +8,7 @@ import com.orm.annotation.Unique;
 import org.parceler.Parcel;
 
 import java.util.List;
+
 @Parcel
 public class WorkingSchedule extends SugarRecord {
     private WeekDayNameType workingDay;

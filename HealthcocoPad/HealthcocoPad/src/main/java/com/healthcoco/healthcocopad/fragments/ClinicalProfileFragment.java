@@ -443,7 +443,7 @@ public class ClinicalProfileFragment extends HealthCocoFragment
             case R.id.bt_enlarged_map:
                 if (clinicDetailResponse != null && !Util.isNullOrBlank(clinicDetailResponse.getUniqueId()))
                     openMapViewActivity(CommonOpenUpFragmentType.ENLARGED_MAP_VIEW_FRAGMENT, clinicDetailResponse.getUniqueId(), MapType.CLINIC_PROFILE, 0);
-                    break;
+                break;
         }
     }
 

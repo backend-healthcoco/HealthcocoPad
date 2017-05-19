@@ -49,7 +49,7 @@ public class GroupsListViewAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            holder = new GroupListViewHolder(mActivity,assignGroupListener);
+            holder = new GroupListViewHolder(mActivity, assignGroupListener);
             convertView = holder.getContentView();
             convertView.setTag(holder);
         } else
