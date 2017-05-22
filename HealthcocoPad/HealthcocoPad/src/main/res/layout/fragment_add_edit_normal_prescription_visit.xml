@@ -10,8 +10,9 @@
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="0.6"
-        android:orientation="vertical">
+        android:layout_weight="0.35"
+        android:orientation="vertical"
+        android:visibility="visible">
 
         <TabHost
             android:id="@android:id/tabhost"
@@ -56,71 +57,87 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/container_suggestions_list"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.35"
+        android:orientation="vertical"
+        android:visibility="gone" />
+
+    <LinearLayout
         android:id="@+id/parent_layout_drugList"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="1"
+        android:layout_weight="0.65"
         android:orientation="vertical">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:background="@drawable/shape_emr_light_grey_background"
-            android:orientation="horizontal"
-            android:padding="10dp">
-
-            <TextView
-                android:id="@+id/tv_drugs"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_marginRight="20dp"
-                android:gravity="center"
-                android:padding="5dp"
-                android:text="@string/drugs"
-                android:textColor="@color/black"
-                android:textSize="13sp" />
-
-            <EditText
-                android:id="@+id/et_duration"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="80dp"
-                android:layout_toRightOf="@+id/tv_drugs"
-                android:background="@drawable/shape_rounded_corners_item_background_dark_grey"
-                android:gravity="center"
-                android:hint="@string/duration"
-                android:maxEms="5"
-                android:maxLines="1"
-                android:padding="5dp"
-                android:textSize="13sp" />
-
-            <com.healthcoco.healthcocopad.views.FontAwesomeButton
-                android:id="@+id/bt_header_two_interaction"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:background="@android:color/transparent"
-                android:minHeight="0dp"
-                android:minWidth="0dp"
-                android:padding="5dp"
-                android:text="@string/fa_interaction_checker"
-                android:textAllCaps="false"
-                android:textColor="@color/orange" />
-        </RelativeLayout>
-
-        <ListView
-            android:id="@+id/lv_templates"
+        <LinearLayout
+            android:id="@+id/parent_layout_drugs"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:clipToPadding="false"
-            android:divider="@null"
-            android:listSelector="@android:color/transparent"
-            android:overScrollMode="never"></ListView>
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/shape_emr_light_grey_background"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/tv_drugs"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginRight="20dp"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:text="@string/drugs"
+                    android:textColor="@color/black"
+                    android:textSize="13sp" />
+
+                <EditText
+                    android:id="@+id/et_duration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="80dp"
+                    android:layout_toRightOf="@+id/tv_drugs"
+                    android:background="@drawable/shape_rounded_corners_item_background_dark_grey"
+                    android:gravity="center"
+                    android:hint="@string/duration"
+                    android:maxEms="5"
+                    android:maxLines="1"
+                    android:padding="5dp"
+                    android:textSize="13sp" />
+
+                <com.healthcoco.healthcocopad.views.FontAwesomeButton
+                    android:id="@+id/bt_header_two_interaction"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:background="@android:color/transparent"
+                    android:minHeight="0dp"
+                    android:minWidth="0dp"
+                    android:padding="5dp"
+                    android:text="@string/fa_interaction_checker"
+                    android:textAllCaps="false"
+                    android:textColor="@color/orange" />
+            </RelativeLayout>
+
+            <ListView
+                android:id="@+id/lv_templates"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:clipToPadding="false"
+                android:divider="@null"
+                android:listSelector="@android:color/transparent"
+                android:overScrollMode="never"></ListView>
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"

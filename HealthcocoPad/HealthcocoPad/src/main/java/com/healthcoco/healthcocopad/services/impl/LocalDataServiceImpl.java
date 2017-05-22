@@ -1367,6 +1367,10 @@ public class LocalDataServiceImpl {
                     ArrayList<IndicationOfUsgSuggestions> indicationOfUsgSuggestionses = (ArrayList<IndicationOfUsgSuggestions>) (ArrayList<?>) list;
                     IndicationOfUsgSuggestions.saveInTx(indicationOfUsgSuggestionses);
                     break;
+                case ADVICE_SUGGESTIONS:
+                    ArrayList<AdviceSuggestion> adviceSuggestions = (ArrayList<AdviceSuggestion>) (ArrayList<?>) list;
+                    AdviceSuggestion.saveInTx(adviceSuggestions);
+                    break;
             }
             volleyResponseBean.setDataList(getObjectsListFromMap(list));
             if (responseListener != null)

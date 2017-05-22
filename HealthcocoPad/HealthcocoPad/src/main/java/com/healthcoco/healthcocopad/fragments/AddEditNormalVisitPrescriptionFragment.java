@@ -3,6 +3,7 @@ package com.healthcoco.healthcocopad.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +27,7 @@ import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.bean.server.VisitDetails;
 import com.healthcoco.healthcocopad.custom.DummyTabFactory;
 import com.healthcoco.healthcocopad.enums.SelectDrugItemType;
+import com.healthcoco.healthcocopad.enums.SuggestionType;
 import com.healthcoco.healthcocopad.listeners.DiagnosticTestItemListener;
 import com.healthcoco.healthcocopad.listeners.SelectDrugItemClickListener;
 import com.healthcoco.healthcocopad.listeners.SelectedDrugsListItemListener;
@@ -57,6 +59,10 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
     private SelectedTemplateDrugItemsListAdapter adapter;
     private ListView lvTemplates;
     private LinearLayout parentLayoutDrugList;
+    private LinearLayout parentLayoutDrugs;
+    private LinearLayout containerSuggestionsList;
+    private AddVisitSuggestionsFragment addVisitSuggestionsFragment;
+    private EditText editAdvice;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -78,6 +84,7 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
         initAdapters();
         initTabsFragmentsList();
         initViewPagerAdapter();
+        initSuggestionsFragment();
     }
 
     private void initAdapters() {
@@ -90,9 +97,21 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
         viewPager = (ViewPager) view.findViewById(R.id.viewpager);
         tabhost = (TabHost) view.findViewById(android.R.id.tabhost);
         etDuration = (EditText) view.findViewById(R.id.et_duration);
+        editAdvice = (EditText) view.findViewById(R.id.edit_advice);
         etTemplateName = (EditText) view.findViewById(R.id.et_template_name);
         lvTemplates = (ListView) view.findViewById(R.id.lv_templates);
         parentLayoutDrugList = (LinearLayout) view.findViewById(R.id.parent_layout_drugList);
+        parentLayoutDrugs = (LinearLayout) view.findViewById(R.id.parent_layout_drugs);
+        containerSuggestionsList = (LinearLayout) view.findViewById(R.id.container_suggestions_list);
+        parentLayoutDrugs.setVisibility(View.GONE);
+    }
+
+    private void initSuggestionsFragment() {
+        addVisitSuggestionsFragment = new AddVisitSuggestionsFragment();
+        FragmentTransaction transaction = mFragmentManager.beginTransaction();
+        transaction.add(R.id.container_suggestions_list, addVisitSuggestionsFragment, addVisitSuggestionsFragment.getClass().getSimpleName());
+        transaction.commit();
+//        addVisitSuggestionsFragment.refreshTagOfEditText(SuggestionType.ADVICE);
     }
 
     @Override
@@ -172,12 +191,12 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
 
     @Override
     public void onDeleteItemClicked(DrugItem drug) {
-
+        System.out.println("onDeleteItemClicked" + drug);
     }
 
     @Override
     public void onDrugItemClicked(DrugItem drug) {
-        System.out.println("drug" + drug);
+        System.out.println("onDrugItemClicked" + drug);
     }
 
     @Override
@@ -187,22 +206,22 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
 
     @Override
     public void onPrescriptionClicked(TempTemplate template) {
-
+        System.out.println("onPrescriptionClicked" + template);
     }
 
     @Override
     public void onEditClicked(TempTemplate template) {
-
+        System.out.println("onEditClicked" + template);
     }
 
     @Override
     public void onDeleteClicked(TempTemplate template) {
-
+        System.out.println("onDeleteClicked" + template);
     }
 
     @Override
     public void onItemClicked(TempTemplate template) {
-
+        System.out.println("onItemClicked" + template);
     }
 
     @Override
@@ -212,12 +231,12 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
 
     @Override
     public void onAddClicked(DiagnosticTest diagnosticTest) {
-
+        System.out.println("onAddClicked" + diagnosticTest);
     }
 
     @Override
     public void onAddedClicked(DiagnosticTest diagnosticTest) {
-
+        System.out.println("onAddedClicked" + diagnosticTest);
     }
 
     @Override
@@ -227,6 +246,11 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
 
     @Override
     public void onDeleteItemClicked(DiagnosticTest diagnosticTest) {
+        System.out.println("onDeleteItemClicked" + diagnosticTest);
+    }
 
+    @Override
+    public void onDiagnosticTestClicked(DiagnosticTest diagnosticTest) {
+        System.out.println("onDiagnosticTestClicked" + diagnosticTest);
     }
 }

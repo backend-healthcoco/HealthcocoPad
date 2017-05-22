@@ -28,7 +28,8 @@ public enum SuggestionType {
     PV(false, R.string.pv),
     PS(false, R.string.ps),
     INDICATION_OF_USG(false, R.string.indication_of_usg),
-    NOTES(false, R.string.notes);
+    NOTES(false, R.string.notes),
+    ADVICE(false, R.string.advice);
 
     private final boolean isFromServerList;
     private final int headerTitleId;

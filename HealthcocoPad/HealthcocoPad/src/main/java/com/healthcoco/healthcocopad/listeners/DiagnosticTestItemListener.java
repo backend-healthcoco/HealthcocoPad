@@ -14,4 +14,6 @@ public interface DiagnosticTestItemListener {
     public DiagnosticTest getDiagnosticTest(String uniqueId);
 
     public void onDeleteItemClicked(DiagnosticTest diagnosticTest);
+
+    public void onDiagnosticTestClicked(DiagnosticTest diagnosticTest);
 }

@@ -41,6 +41,7 @@ public enum DefaultSyncServiceType {
     GET_PS_SUGGESTIONS(R.string.syncing_ps_suggestions),
     GET_INDICATION_OF_USG_SUGGESTIONS(R.string.syncing_indication_of_usg_suggestions),
     GET_NOTES_SUGGESTIONS(R.string.syncing_notes_suggestions),
+    GET_SEARCH_ADVICE(R.string.syncing_advice_suggestions),
     GET_HISTORY(R.string.syncing_history),
     GET_TEMPLATES(R.string.syncing_templates),
     GET_BOTH_UI_PERMISSIONS(R.string.syncing_ui_Permissions),

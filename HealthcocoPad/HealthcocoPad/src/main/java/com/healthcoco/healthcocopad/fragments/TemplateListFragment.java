@@ -11,6 +11,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -23,6 +24,7 @@ import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.TempTemplate;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
+import com.healthcoco.healthcocopad.dialogFragment.AddNewDrugDialogFragment;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.LocalTabelType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
@@ -69,6 +71,7 @@ public class TemplateListFragment extends HealthCocoFragment implements View.OnC
     private TextView tvNoTemplates;
     private User user;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private ImageButton btAddDrug;
 
     public TemplateListFragment(TemplateListItemListener templateListItemListener) {
         this.templateListItemListener = templateListItemListener;
@@ -106,6 +109,7 @@ public class TemplateListFragment extends HealthCocoFragment implements View.OnC
         lvTemplates = (ListViewLoadMore) view.findViewById(R.id.lv_templates);
         tvNoTemplates = (TextView) view.findViewById(R.id.tv_no_templates);
         progressLoading = (ProgressBar) view.findViewById(R.id.progress_loading);
+        btAddDrug = (ImageButton) view.findViewById(R.id.bt_add_drug);
         initEditSearchView(R.string.search_template, this, this);
     }
 
@@ -114,6 +118,7 @@ public class TemplateListFragment extends HealthCocoFragment implements View.OnC
         lvTemplates.setLoadMoreListener(this);
         swipeRefreshLayout.setOnRefreshListener(this);
         lvTemplates.setSwipeRefreshLayout(swipeRefreshLayout);
+        btAddDrug.setOnClickListener(this);
     }
 
     private void initAdapters() {
@@ -292,6 +297,9 @@ public class TemplateListFragment extends HealthCocoFragment implements View.OnC
 
     @Override
     public void onClick(View v) {
-
+        switch (v.getId()) {
+            case R.id.bt_add_drug:
+                break;
+        }
     }
 }

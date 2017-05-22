@@ -31,6 +31,7 @@ import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.adapter.MyPrintDocumentAdapter;
 import com.healthcoco.healthcocopad.bean.UiPermissionsBoth;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
+import com.healthcoco.healthcocopad.bean.server.AdviceSuggestion;
 import com.healthcoco.healthcocopad.bean.server.BloodGroup;
 import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
 import com.healthcoco.healthcocopad.bean.server.CityResponse;
@@ -359,6 +360,10 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
                         getNotesSuggestions(user);
                         defaultWebServicesList.add(syncServiceType);
                         break;
+                    case GET_SEARCH_ADVICE:
+                        getAdviceSuggestions(user);
+                        defaultWebServicesList.add(syncServiceType);
+                        break;
                     case GET_BLOOD_GROUP:
                         WebDataServiceImpl.getInstance(mApp)
                                 .getBloodGroup(BloodGroup.class, this, this);
@@ -384,6 +389,12 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void getAdviceSuggestions(User user) {
+        Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.ADVICE_SUGGESTIONS);
+        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(AdviceSuggestion.class, WebServiceType.GET_SEARCH_ADVICE_SOLR, user.getUniqueId(),
+                latestUpdatedTime, this, this);
     }
 
     private void getEchoSuggestions(User user) {
@@ -662,6 +673,11 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
                 case GET_NOTES_SUGGESTIONS:
                     if (defaultWebServicesList.contains(DefaultSyncServiceType.getSyncType(webServiceType)))
                         defaultWebServicesList.remove(DefaultSyncServiceType.getSyncType(webServiceType));
+                    updateProgress(DefaultSyncServiceType.GET_SEARCH_ADVICE);
+                    break;
+                case GET_SEARCH_ADVICE_SOLR:
+                    if (defaultWebServicesList.contains(DefaultSyncServiceType.getSyncType(webServiceType)))
+                        defaultWebServicesList.remove(DefaultSyncServiceType.getSyncType(webServiceType));
                     updateProgress(DefaultSyncServiceType.GET_BLOOD_GROUP);
                     break;
                 case GET_BLOOD_GROUP:
@@ -823,6 +839,9 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
                         break;
                     case GET_NOTES_SUGGESTIONS:
                         new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_NOTES_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                        break;
+                    case GET_SEARCH_ADVICE_SOLR:
+                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_ADVICE_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
                         break;
                     case GET_DISEASE_LIST:
                         new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_DISEASE_LIST, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
@@ -1039,6 +1058,12 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
                 if (!Util.isNullOrEmptyList(response.getDataList()))
                     LocalDataServiceImpl.getInstance(mApp).
                             addSuggestionsList(WebServiceType.GET_NOTES_SUGGESTIONS, LocalTabelType.NOTES_SUGGESTIONS,
+                                    response.getDataList(), null, null);
+                break;
+            case ADD_ADVICE_SUGGESTIONS:
+                if (!Util.isNullOrEmptyList(response.getDataList()))
+                    LocalDataServiceImpl.getInstance(mApp).
+                            addSuggestionsList(WebServiceType.GET_SEARCH_ADVICE_SOLR, LocalTabelType.ADVICE_SUGGESTIONS,
                                     response.getDataList(), null, null);
                 break;
             case ADD_DISEASE_LIST:
@@ -1339,5 +1364,4 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
         InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
         imm.showSoftInput(getCurrentFocus(), InputMethodManager.SHOW_IMPLICIT);
     }
-
 }

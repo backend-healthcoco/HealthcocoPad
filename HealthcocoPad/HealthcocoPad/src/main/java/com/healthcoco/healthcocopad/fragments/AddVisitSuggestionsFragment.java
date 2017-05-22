@@ -24,6 +24,7 @@ import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.adapter.AddVisitSuggestionsListAdapter;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
+import com.healthcoco.healthcocopad.bean.server.AdviceSuggestion;
 import com.healthcoco.healthcocopad.bean.server.ComplaintSuggestions;
 import com.healthcoco.healthcocopad.bean.server.DiagnosisSuggestions;
 import com.healthcoco.healthcocopad.bean.server.DiagnosticTest;
@@ -64,6 +65,7 @@ import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.healthcoco.healthcocopad.views.GridViewLoadMore;
+import com.healthcoco.healthcocopad.views.ListViewLoadMore;
 
 import org.parceler.Parcels;
 
@@ -72,6 +74,7 @@ import java.util.List;
 import java.util.Locale;
 
 import static com.healthcoco.healthcocopad.enums.WebServiceType.FRAGMENT_INITIALISATION;
+import static com.healthcoco.healthcocopad.enums.WebServiceType.GET_SEARCH_ADVICE_SOLR;
 
 /**
  * Created by neha on 15/04/17.
@@ -104,6 +107,7 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements T
     private EditText editTextSearch;
     private TextView tvNoDrugs;
     private boolean visitToggleStateFromPreferences;
+    private ListViewLoadMore lvSuggestionsList;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -133,10 +137,12 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements T
     public void initViews() {
         parentEditSearchView = (LinearLayout) view.findViewById(R.id.parent_edit_search_view);
         tvHeaderTitle = (TextView) view.findViewById(R.id.tv_header_title);
-        gvSuggestionsList = (GridViewLoadMore) view.findViewById(R.id.lv_suggestions_list);
+        gvSuggestionsList = (GridViewLoadMore) view.findViewById(R.id.gv_suggestions_list);
+        lvSuggestionsList = (ListViewLoadMore) view.findViewById(R.id.lv_suggestions_list);
         progressLoading = (ProgressBar) view.findViewById(R.id.progress_loading);
         btAddNew = (ImageButton) view.findViewById(R.id.bt_add_new);
         tvNoDrugs = (TextView) view.findViewById(R.id.tv_no_drugs);
+        btAddNew.setVisibility(View.GONE);
     }
 
     @Override
@@ -146,6 +152,7 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements T
         else initEditSearchView(R.string.search_drug, this, this);
         btAddNew.setOnClickListener(this);
         gvSuggestionsList.setOnItemClickListener(this);
+        lvSuggestionsList.setOnItemClickListener(this);
     }
 
     @Override
@@ -177,16 +184,24 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements T
 
     private void initAdapters() {
         adapterSolr = new AddVisitSuggestionsListAdapter(mActivity);
-        gvSuggestionsList.setAdapter(adapterSolr);
+        if (visitToggleStateFromPreferences) {
+            gvSuggestionsList.setAdapter(adapterSolr);
+        } else {
+            lvSuggestionsList.setAdapter(adapterSolr);
+        }
     }
 
     private void notifyAdapter(List<Object> list) {
         if (!Util.isNullOrEmptyList(list)) {
             LogUtils.LOGD(TAG, "onResponse DrugsList notifyAdapter " + list.size());
-            gvSuggestionsList.setVisibility(View.VISIBLE);
+            if (visitToggleStateFromPreferences)
+                gvSuggestionsList.setVisibility(View.VISIBLE);
+            else lvSuggestionsList.setVisibility(View.VISIBLE);
             tvNoDrugs.setVisibility(View.GONE);
         } else {
-            gvSuggestionsList.setVisibility(View.GONE);
+            if (visitToggleStateFromPreferences)
+                gvSuggestionsList.setVisibility(View.GONE);
+            else lvSuggestionsList.setVisibility(View.GONE);
             tvNoDrugs.setVisibility(View.VISIBLE);
         }
         adapterSolr.setListData(list);
@@ -222,6 +237,7 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements T
                 case GET_NOTES_SUGGESTIONS:
                 case GET_DRUGS_LIST_SOLR:
                 case GET_DIAGNOSTIC_TESTS_SOLR:
+                case GET_SEARCH_ADVICE_SOLR:
                     responseList = response.getDataList();
                     break;
                 default:
@@ -362,6 +378,10 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements T
             case GET_NOTES_SUGGESTION:
                 volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getSuggestionsListAsResponse(WebServiceType.GET_NOTES_SUGGESTIONS,
                         NotesSuggestions.class, suggestionType, searchedTerm, PAGE_NUMBER, MAX_SIZE, null, null);
+                break;
+            case GET_SEARCH_ADVICE_SOLR:
+                volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getSuggestionsListAsResponse(WebServiceType.GET_SEARCH_ADVICE_SOLR,
+                        AdviceSuggestion.class, suggestionType, searchedTerm, PAGE_NUMBER, MAX_SIZE, null, null);
                 break;
         }
         if (volleyResponseBean == null)
@@ -513,7 +533,7 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements T
                     btAddNew.setVisibility(View.GONE);
                 } else {
                     parentEditSearchView.setVisibility(View.VISIBLE);
-                    btAddNew.setVisibility(View.GONE);
+                    btAddNew.setVisibility(View.VISIBLE);
                 }
                 tvNoDrugs.setText("");
                 break;
@@ -593,6 +613,9 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements T
             case INDICATION_OF_USG:
                 new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_INDICATION_OF_USG_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 break;
+            case ADVICE:
+                new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_SEARCH_ADVICE_SOLR, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                break;
             default:
                 onResponse(null);
                 break;
@@ -601,13 +624,13 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements T
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if(visitToggleStateFromPreferences){
+        if (visitToggleStateFromPreferences) {
             Intent intent = new Intent(MyScriptAddVisitsFragment.INTENT_ON_SUGGESTION_ITEM_CLICK);
             intent.putExtra(TAG_SUGGESTIONS_TYPE, suggestionType.ordinal());
             intent.putExtra(MyScriptAddVisitsFragment.TAG_SELECTED_SUGGESTION_OBJECT, Parcels.wrap(adapterSolr.getItem(position)));
             LocalBroadcastManager.getInstance(mApp).sendBroadcast(intent);
-        }else {
-            Intent intent = new Intent(MyScriptAddVisitsFragment.INTENT_ON_SUGGESTION_ITEM_CLICK);
+        } else {
+            Intent intent = new Intent(AddEditNormalVisitsFragment.INTENT_ON_SUGGESTION_ITEM_CLICK);
             intent.putExtra(TAG_SUGGESTIONS_TYPE, suggestionType.ordinal());
             intent.putExtra(MyScriptAddVisitsFragment.TAG_SELECTED_SUGGESTION_OBJECT, Parcels.wrap(adapterSolr.getItem(position)));
             LocalBroadcastManager.getInstance(mApp).sendBroadcast(intent);

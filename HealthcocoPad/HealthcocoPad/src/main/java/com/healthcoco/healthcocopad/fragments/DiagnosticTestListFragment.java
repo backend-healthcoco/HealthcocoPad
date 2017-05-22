@@ -307,6 +307,11 @@ public class DiagnosticTestListFragment extends HealthCocoFragment implements Di
     }
 
     @Override
+    public void onDiagnosticTestClicked(DiagnosticTest diagnosticTest) {
+        diagnosticTestItemListener.onDiagnosticTestClicked(diagnosticTest);
+    }
+
+    @Override
     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
     }

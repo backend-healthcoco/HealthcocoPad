@@ -781,4 +781,6 @@
     <string name="lab_test_already_added">Lab Test \"%s\" already added</string>
     <string name="are_you_sure_want_to_toggle_this_page_view">Are you sure want to toggle this page view? Data will be reset.</string>
     <string name="toggle">Toggle</string>
+    <string name="suggestion_list">Suggestion List</string>
+    <string name="syncing_advice_suggestions"><![CDATA[Syncing Advice Suggestions&#8230;]]></string>
 </resources>

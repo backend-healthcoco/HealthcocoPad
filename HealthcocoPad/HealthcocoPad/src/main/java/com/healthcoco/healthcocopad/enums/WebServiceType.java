@@ -273,7 +273,11 @@ public enum WebServiceType {
 
     //    GET http://example.com/api/v1/otp/doctorId/locationId/hospitalId/patientId/otpNumber/verify/
     VERIFY_OTP(Method.GET, "otp/"),
+
     GET_DIAGNOSTIC_TESTS_SOLR(Method.GET, "solr/prescription/searchDiagnosticTest/BOTH/?"),
+
+    GET_SEARCH_ADVICE_SOLR(Method.GET, "solr/prescription/searchAdvice/BOTH/?"),
+
     ADD_DIAGNOSTIC_TESTS(Method.POST, "prescription/diagnosticTest/addEdit/?"),
 
     //    GET http://example.com/v1/appointment/getTimeSlots/doctorId/locationId/date/

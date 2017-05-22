@@ -10,6 +10,7 @@ import com.healthcoco.healthcocopad.HealthCocoViewHolder;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.server.DiagnosticTest;
 import com.healthcoco.healthcocopad.listeners.DiagnosticTestItemListener;
+import com.healthcoco.healthcocopad.utilities.Util;
 
 /**
  * Created by neha on 13/04/16.
@@ -30,7 +31,6 @@ public class DiagnosticTestListViewHolder extends HealthCocoViewHolder implement
     @Override
     public void setData(Object object) {
         this.diagnosticTest = (DiagnosticTest) object;
-
     }
 
     @Override
@@ -40,10 +40,18 @@ public class DiagnosticTestListViewHolder extends HealthCocoViewHolder implement
 
     @Override
     public View getContentView() {
-        LinearLayout view = (LinearLayout) inflater.inflate(R.layout.list_item_diagnostic_test, null);
-        tvDiagnosisName = (TextView) view.findViewById(R.id.tv_name);
-        btDelete = (Button) view.findViewById(R.id.bt_delete);
-        btDelete.setOnClickListener(this);
+        LinearLayout view;
+        boolean visitToggleStateFromPreferences = Util.getVisitToggleStateFromPreferences(mActivity);
+        if (visitToggleStateFromPreferences) {
+            view = (LinearLayout) inflater.inflate(R.layout.list_item_diagnostic_test, null);
+            tvDiagnosisName = (TextView) view.findViewById(R.id.tv_name);
+            btDelete = (Button) view.findViewById(R.id.bt_delete);
+            btDelete.setOnClickListener(this);
+        } else {
+            view = (LinearLayout) inflater.inflate(R.layout.list_item_lab_test, null);
+            tvDiagnosisName = (TextView) view.findViewById(R.id.tv_name);
+            tvDiagnosisName.setOnClickListener(this);
+        }
         return view;
     }
 
@@ -52,6 +60,9 @@ public class DiagnosticTestListViewHolder extends HealthCocoViewHolder implement
         switch (v.getId()) {
             case R.id.bt_delete:
                 itemListener.onDeleteItemClicked(diagnosticTest);
+                break;
+            case R.id.tv_name:
+                itemListener.onDiagnosticTestClicked(diagnosticTest);
                 break;
         }
     }

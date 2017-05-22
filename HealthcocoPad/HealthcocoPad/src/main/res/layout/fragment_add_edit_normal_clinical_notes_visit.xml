@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/grey_background"
     android:focusable="true"
     android:focusableInTouchMode="true"
     android:orientation="horizontal">
@@ -10,42 +9,24 @@
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="0.6"
+        android:layout_weight="0.3"
         android:orientation="vertical">
 
         <LinearLayout
             android:id="@+id/container_suggestions_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/grey_light_divider"
+            android:background="@color/white"
             android:orientation="vertical"
             android:visibility="visible" />
     </LinearLayout>
 
-    <!--<LinearLayout-->
-    <!--android:id="@+id/lv_"-->
-    <!--android:layout_width="0dp"-->
-    <!--android:layout_height="match_parent"-->
-    <!--android:layout_weight="1"-->
-    <!--android:orientation="vertical">-->
-
-    <!--<include layout="@layout/sub_item_vital_signs_add_visits" />-->
-
-    <!--<LinearLayout-->
-    <!--android:layout_width="0dp"-->
-    <!--android:layout_height="match_parent"-->
-    <!--android:layout_weight="1"-->
-    <!--android:background="@color/white"-->
-    <!--android:orientation="vertical">-->
-
-    <!--<include layout="@layout/fragment_add_clinical_notes_visit" />-->
-    <!--</LinearLayout>-->
-    <!--</LinearLayout>-->
     <LinearLayout
         android:id="@+id/parent_clinical_note"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="1"
+        android:layout_weight="0.7"
+        android:background="@color/grey_background"
         android:orientation="vertical"
         android:padding="10dp" />
 </LinearLayout>

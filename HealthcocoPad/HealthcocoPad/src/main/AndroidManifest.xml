@@ -76,7 +76,7 @@
             android:name=".activities.HomeActivity"
             android:configChanges="orientation|keyboardHidden|screenSize|uiMode"
             android:screenOrientation="landscape"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
         <activity
             android:name=".activities.InitialSyncActivity"
             android:configChanges="orientation|keyboardHidden|screenSize|uiMode"

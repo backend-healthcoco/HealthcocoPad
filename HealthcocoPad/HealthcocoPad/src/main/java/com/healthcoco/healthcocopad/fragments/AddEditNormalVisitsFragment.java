@@ -81,7 +81,6 @@ import java.util.List;
 
 import static com.healthcoco.healthcocopad.fragments.AddClinicalNotesMyScriptVisitFragment.CHARACTER_TO_REPLACE_COMMA_WITH_SPACES;
 import static com.healthcoco.healthcocopad.fragments.AddVisitSuggestionsFragment.TAG_SUGGESTIONS_TYPE;
-import static com.healthcoco.healthcocopad.fragments.MyScriptAddVisitsFragment.INTENT_ON_SUGGESTION_ITEM_CLICK;
 import static com.healthcoco.healthcocopad.fragments.MyScriptAddVisitsFragment.TAG_SELECTED_SUGGESTION_OBJECT;
 
 /**
@@ -92,6 +91,7 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
         TabHost.OnTabChangeListener, ViewPager.OnPageChangeListener,
         LocalDoInBackgroundListenerOptimised, Response.Listener<VolleyResponseBean>, GsonRequest.ErrorListener,
         View.OnClickListener {
+    public static final String INTENT_ON_SUGGESTION_ITEM_CLICK = "com.healthcoco.healthcocopad.fragments.AddEditNormalVisitsFragment.ON_SUGGESTION_ITEM_CLICK";
     private ViewPager viewPager;
     private TabHost tabhost;
     private ArrayList<Fragment> fragmentsList;
@@ -175,13 +175,8 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
 
     private TabHost.TabSpec getTabSpec(String simpleName, int textId, boolean isLastTab) {
         View view1 = mActivity.getLayoutInflater().inflate(R.layout.tab_indicator_add_visit, null);
-        View divider = (View) view1.findViewById(R.id.divider);
         TextView tvTabText = (TextView) view1.findViewById(R.id.tv_tab_text);
         tvTabText.setText(textId);
-        if (isLastTab)
-            divider.setVisibility(View.GONE);
-        else
-            divider.setVisibility(View.VISIBLE);
         return tabhost.newTabSpec(simpleName).setIndicator(view1).setContent(new DummyTabFactory(mActivity));
     }
 

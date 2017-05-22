@@ -29,7 +29,8 @@ import java.util.List;
  * Created by neha on 19/04/17.
  */
 
-public class AddLabTestsVisitFragment extends HealthCocoFragment implements View.OnFocusChangeListener, DiagnosticTestItemListener {
+public class AddLabTestsVisitFragment extends HealthCocoFragment implements View.OnFocusChangeListener,
+        DiagnosticTestItemListener {
     private LinkedHashMap<String, DiagnosticTest> diagnosticTestsListHashMap = new LinkedHashMap<>();
     private DiagnosticTestsListAdapter adapter;
     private ListView lvDiagnoticTests;
@@ -163,6 +164,11 @@ public class AddLabTestsVisitFragment extends HealthCocoFragment implements View
     @Override
     public void onDeleteItemClicked(DiagnosticTest diagnosticTest) {
         showConfirmationAlertForDrugs(diagnosticTest);
+    }
+
+    @Override
+    public void onDiagnosticTestClicked(DiagnosticTest diagnosticTest) {
+
     }
 
     public boolean isBlankLabTestsList() {

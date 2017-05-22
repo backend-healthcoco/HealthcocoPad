@@ -44,7 +44,7 @@
     <dimen name="fab_margin_right">30dp</dimen>
     <dimen name="image_doctor_in_clinic_profile">40dp</dimen>
     <dimen name="text_size_initial_alphabet_emr_actionbar">30sp</dimen>
-    <dimen name="text_size_initial_alphabet_patient_profile_menu">15sp</dimen>
+    <dimen name="text_size_initial_alphabet_patient_profile_menu">18sp</dimen>
     <dimen name="text_size_doctor_profile_name">18sp</dimen>
     <dimen name="text_size_doctor_profile_speciality">16sp</dimen>
     <dimen name="text_size_doctor_profile_tab">18sp</dimen>
@@ -53,7 +53,7 @@
     <dimen name="initial_alphabet_doctor_profile">120dp</dimen>
     <dimen name="initial_alphabet_add_edit_doctor_profile">71dp</dimen>
     <dimen name="text_size_initial_alphabet_doctor_profile">20sp</dimen>
-    <dimen name="text_size_initial_alphabet_add_edit_doctor_profile">15sp</dimen>
+    <dimen name="text_size_initial_alphabet_add_edit_doctor_profile">18sp</dimen>
     <dimen name="dialog_action_bar_size">50dp</dimen>
     <dimen name="text_size_doctor_profile_item_header">18sp</dimen>
     <dimen name="text_size_doctor_profile_item_header_child">16sp</dimen>
@@ -105,11 +105,11 @@
     <dimen name="text_size_patient_deatil_fragment">20sp</dimen>
     <dimen name="edit_button_text_size_18sp">18sp</dimen>
     <dimen name="initial_alphabet_patient_profile_emr_header">50dp</dimen>
-    <dimen name="text_size_initial_alphabet_patient_profile_emr_header">15sp</dimen>
+    <dimen name="text_size_initial_alphabet_patient_profile_emr_header">18sp</dimen>
     <dimen name="text_size_patient_name_visit_fragment">18sp</dimen>
     <dimen name="initial_alphabet_patient_detail_layout">50dp</dimen>
     <dimen name="image_patient_detail_layout">50dp</dimen>
-    <dimen name="text_size_patients_list_initial_alphabet_detail_layout">12sp</dimen>
+    <dimen name="text_size_patients_list_initial_alphabet_detail_layout">18sp</dimen>
     <dimen name="image_patient_detail_profile">65dp</dimen>
     <dimen name="list_item_padding">10dp</dimen>
     <dimen name="text_icon_add_remove_item">13sp</dimen>
@@ -136,7 +136,7 @@
     <dimen name="padding_between_clinical_item_diagram">10dp</dimen>
     <dimen name="text_size_add_clinical_note_points">18sp</dimen>
     <dimen name="clinic_logo_image">70dp</dimen>
-    <dimen name="text_size_initial_alphabet_clinic_list">12sp</dimen>
+    <dimen name="text_size_initial_alphabet_clinic_list">15sp</dimen>
     <dimen name="emr_item_margin">8dp</dimen>
     <dimen name="text_size_discarded">20sp</dimen>
     <dimen name="miimumheight_groups_notes_view_patient_registration">200dp</dimen>
