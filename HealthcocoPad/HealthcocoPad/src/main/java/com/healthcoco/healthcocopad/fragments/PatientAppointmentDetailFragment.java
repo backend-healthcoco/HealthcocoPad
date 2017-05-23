@@ -152,8 +152,8 @@ public class PatientAppointmentDetailFragment extends HealthCocoFragment impleme
         this.isInitialLoading = initialLoading;
         showLoadingOverlay(isInitialLoading);
         if (isInitialLoading) {
-            if (isInitialLoading)
-                mActivity.showLoading(false);
+            mActivity.showLoading(false);
+            resetListAndPagingAttributes();
             progressLoading.setVisibility(View.GONE);
         } else
             progressLoading.setVisibility(View.VISIBLE);

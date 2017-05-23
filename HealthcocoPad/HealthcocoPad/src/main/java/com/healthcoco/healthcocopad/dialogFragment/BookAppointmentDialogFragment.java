@@ -355,7 +355,7 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
                             LocalDataServiceImpl.getInstance(mApp).addAppointment(calendarEvents);
                         Util.showToast(mActivity, R.string.appointment_created);
                         sendBroadcasts(calendarEvents.getAppointmentId());
-//                        getTargetFragment().onActivityResult(getTargetRequestCode(), HealthCocoConstants.RESULT_CODE_BOOK_APPOINTMENT, null);
+                        getTargetFragment().onActivityResult(getTargetRequestCode(), HealthCocoConstants.RESULT_CODE_BOOK_APPOINTMENT, null);
                         getDialog().dismiss();
                     }
                     break;
@@ -450,6 +450,7 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
                 intent.setAction(NotificationResponseDataFragment.INTENT_GET_NOTIFICATION_APPOINTMENT_LIST_LOCAL);
                 break;
         }
+        intent.setAction(PatientAppointmentDetailFragment.INTENT_GET_APPOINTMENT_LIST_LOCAL);
         intent.putExtra(TAG_APPOINTMENT_ID, aptId);
 //        if (intent != null && intent.getAction() != null)
         LocalBroadcastManager.getInstance(mApp.getApplicationContext()).sendBroadcast(intent);
