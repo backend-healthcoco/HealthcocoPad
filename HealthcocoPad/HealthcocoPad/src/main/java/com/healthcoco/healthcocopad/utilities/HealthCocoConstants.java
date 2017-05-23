@@ -69,6 +69,7 @@ public class HealthCocoConstants {
     public static final String PARAM_DISCARDED_FALSE = "discarded=false";
     public static final int RESULT_CODE_BOOK_APPOINTMENT = 148;
     public static final int RESULT_CODE_DIAGNOSTICS_TESTS = 149;
+    public static final int RESULT_CODE_ADD_DRUG_DETAILS = 105;
     public static boolean isNetworkOnline;
     public static final String PARAM_UPDATED_TIME = "&updatedTime=";
     public static final String PARAM_DISCARDED_AMPERCENT = "&discarded=";
@@ -93,4 +94,8 @@ public class HealthCocoConstants {
     public static final String PARAM_TAG_MAIL = "/mail/";
     public static final String TAG_VISIT_ID = "visitId";
     public static final String TAG_IS_FROM_CLONE = "isFromClone";
+
+    public static final String TAG_PRESCRIPTION_ID = "prescriptionId";
+    public static final String TAG_TEMPLATE_ID = "templateId";
+    public static final String TAG_DRUG_DETAILS = "drugDetails";
 }

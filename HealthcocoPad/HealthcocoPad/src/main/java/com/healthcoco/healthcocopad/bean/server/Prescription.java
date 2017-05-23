@@ -1,12 +1,14 @@
 package com.healthcoco.healthcocopad.bean.server;
 
 import com.healthcoco.healthcocopad.utilities.StringUtil;
+import com.healthcoco.healthcocopad.utilities.Util;
 import com.orm.SugarRecord;
 import com.orm.annotation.Ignore;
 import com.orm.annotation.Unique;
 
 import org.parceler.Parcel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Parcel
@@ -184,5 +186,19 @@ public class Prescription extends SugarRecord {
 
     public void setDiagnosticTestsIdsJsonString(String diagnosticTestsIdsJsonString) {
         this.diagnosticTestsIdsJsonString = diagnosticTestsIdsJsonString;
+    }
+
+    public static List<DiagnosticTest> getDiagnosticTestsList(List<DiagnosticTestsPrescription> list) {
+        ArrayList<DiagnosticTest> diagnosticTestsList = null;
+        if (!Util.isNullOrEmptyList(list)) {
+            for (DiagnosticTestsPrescription diagnosticTestPrescription : list) {
+                if (diagnosticTestPrescription.getTest() != null) {
+                    if (diagnosticTestsList == null)
+                        diagnosticTestsList = new ArrayList<>();
+                    diagnosticTestsList.add(diagnosticTestPrescription.getTest());
+                }
+            }
+        }
+        return diagnosticTestsList;
     }
 }

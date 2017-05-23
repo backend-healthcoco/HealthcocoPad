@@ -490,10 +490,11 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
     }
 
     public void openAddVisitFragment() {
-        boolean isMyScriptVisitToggleState = Util.getVisitToggleStateFromPreferences(mActivity);
-        if (isMyScriptVisitToggleState)
-            openCommonVisistActivity(CommonOpenUpFragmentType.ADD_VISITS, null, null, 0);
-        else openCommonOpenUpActivity(CommonOpenUpFragmentType.ADD_VISITS, null, null, 0);
+//        boolean isMyScriptVisitToggleState = Util.getVisitToggleStateFromPreferences(mActivity);
+//        if (isMyScriptVisitToggleState)
+        openCommonVisistActivity(CommonOpenUpFragmentType.ADD_VISITS, null, null, 0);
+//        else openCommonOpenUpActivity(CommonOpenUpFragmentType.ADD_VISITS, null, null, 0);
+        Util.addVisitToggleStateInPreference(mActivity, true);
     }
 
     @Override

@@ -8,6 +8,7 @@ import com.healthcoco.healthcocopad.fragments.MyScriptAddVisitsFragment;
  */
 
 public interface AddNewPrescriptionListener {
+    public void setDrugsListparentVisibility(boolean isVisible);
     public void onDeleteItemClicked(DrugItem drug);
 
     public void onDrugItemClicked(DrugItem drug);

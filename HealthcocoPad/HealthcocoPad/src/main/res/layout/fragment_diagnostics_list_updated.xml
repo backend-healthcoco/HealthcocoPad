@@ -17,7 +17,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@android:color/transparent"
+            android:background="@color/grey_background"
             android:drawableLeft="@drawable/icon_search_normal"
             android:drawablePadding="8dp"
             android:drawableStart="@drawable/icon_search_normal"
@@ -47,6 +47,17 @@
             android:src="@drawable/icon_history_selected" />
     </LinearLayout>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@color/grey_light_divider"
+        android:padding="5dp"
+        android:text="@string/lab_test"
+        android:textColor="@color/black"
+        android:textSize="15sp" />
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -59,9 +70,9 @@
             android:clipToPadding="false"
             android:divider="@null"
             android:listSelector="@android:color/transparent"
+            android:overScrollMode="never"
             android:paddingLeft="@dimen/list_margin_templates_list"
             android:paddingRight="@dimen/list_margin_templates_list"
-            android:overScrollMode="never"
             android:paddingTop="@dimen/list_margin_templates_list"
             android:scrollbarStyle="outsideOverlay"
             android:visibility="gone" />

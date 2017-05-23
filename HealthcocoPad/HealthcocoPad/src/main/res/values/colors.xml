@@ -17,6 +17,7 @@
     <color name="black">#000000</color>
     <color name="grey_hint_color">#CACACF</color>
     <color name="grey_light_divider">#EDEDED</color>
+    <color name="grey_lighter">#EDEDED</color>
     <color name="white_translucent_forgot_password">#F2ffffff</color>
     <color name="green_logo">#30CA70</color>
     <color name="green_translucent">#8030CA70</color>

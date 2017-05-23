@@ -52,6 +52,7 @@ import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.bean.server.XrayDetailSuggestions;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocopad.dialogFragment.AddNewDrugDialogFragment;
+import com.healthcoco.healthcocopad.enums.ChangeViewType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.SuggestionType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
@@ -83,6 +84,7 @@ import static com.healthcoco.healthcocopad.enums.WebServiceType.GET_SEARCH_ADVIC
 public class AddVisitSuggestionsFragment extends HealthCocoFragment implements TextWatcher,
         GsonRequest.ErrorListener, Response.Listener<VolleyResponseBean>, LocalDoInBackgroundListenerOptimised,
         LoadMorePageListener, View.OnClickListener, AddNewDrugListener, AdapterView.OnItemClickListener {
+
     public static final String INTENT_LOAD_DATA = "com.healthcoco.healthcocopad.fragments.AddVisitSuggestionsFragment.LOAD_DATA";
 
     public static final int MAX_SIZE = 25;
@@ -184,28 +186,28 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements T
 
     private void initAdapters() {
         adapterSolr = new AddVisitSuggestionsListAdapter(mActivity);
-        if (visitToggleStateFromPreferences) {
-            gvSuggestionsList.setAdapter(adapterSolr);
-        } else {
-            lvSuggestionsList.setAdapter(adapterSolr);
-        }
+        gvSuggestionsList.setAdapter(adapterSolr);
+        lvSuggestionsList.setAdapter(adapterSolr);
     }
 
     private void notifyAdapter(List<Object> list) {
+        View visibleView = getChangedView(visitToggleStateFromPreferences);
         if (!Util.isNullOrEmptyList(list)) {
             LogUtils.LOGD(TAG, "onResponse DrugsList notifyAdapter " + list.size());
-            if (visitToggleStateFromPreferences)
-                gvSuggestionsList.setVisibility(View.VISIBLE);
-            else lvSuggestionsList.setVisibility(View.VISIBLE);
+            visibleView.setVisibility(View.VISIBLE);
             tvNoDrugs.setVisibility(View.GONE);
         } else {
-            if (visitToggleStateFromPreferences)
-                gvSuggestionsList.setVisibility(View.GONE);
-            else lvSuggestionsList.setVisibility(View.GONE);
+            visibleView.setVisibility(View.GONE);
             tvNoDrugs.setVisibility(View.VISIBLE);
         }
         adapterSolr.setListData(list);
         adapterSolr.notifyDataSetChanged();
+    }
+
+    private View getChangedView(boolean visitToggleStateFromPreferences) {
+        if (visitToggleStateFromPreferences)
+            return gvSuggestionsList;
+        else return lvSuggestionsList;
     }
 
     @Override

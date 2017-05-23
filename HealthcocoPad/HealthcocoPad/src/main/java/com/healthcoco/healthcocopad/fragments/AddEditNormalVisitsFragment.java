@@ -28,6 +28,7 @@ import com.healthcoco.healthcocopad.activities.AddVisitsActivity;
 import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.adapter.ContactsDetailViewPagerAdapter;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
+import com.healthcoco.healthcocopad.bean.request.PrescriptionRequest;
 import com.healthcoco.healthcocopad.bean.server.ComplaintSuggestions;
 import com.healthcoco.healthcocopad.bean.server.DiagnosisSuggestions;
 import com.healthcoco.healthcocopad.bean.server.DiagnosticTest;
@@ -65,6 +66,7 @@ import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.PatientProfileScreenType;
 import com.healthcoco.healthcocopad.enums.SuggestionType;
+import com.healthcoco.healthcocopad.enums.VisitsUiType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
 import com.healthcoco.healthcocopad.services.GsonRequest;
@@ -288,14 +290,14 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
         switch (v.getId()) {
             case R.id.container_right_action:
                 int errorMsg = 0;
-//                int blankClinicalNoteMsgId = addEditNormalVisitClinicalNotesFragment.getBlankClinicalNoteMsgId();
-//                int blankPrescriptionMsgId = addEditNormalVisitPrescriptionFragment.getBlankPrescriptionMsg();
-//                if (blankClinicalNoteMsgId != 0 && blankPrescriptionMsgId != 0)
-//                    errorMsg = R.string.error_blank_visit;
-//                if (errorMsg == 0) {
-//                    addVisit(blankClinicalNoteMsgId, blankPrescriptionMsgId);
-//                } else
-//                    Util.showToast(mActivity, errorMsg);
+                int blankClinicalNoteMsgId = addEditNormalVisitClinicalNotesFragment.getBlankClinicalNoteMsgId();
+                int blankPrescriptionMsgId = addEditNormalVisitPrescriptionFragment.getBlankPrescriptionMsg();
+                if (blankClinicalNoteMsgId != 0 && blankPrescriptionMsgId != 0)
+                    errorMsg = R.string.alert_blank_visit;
+                if (errorMsg == 0) {
+                    addVisit(blankClinicalNoteMsgId, blankPrescriptionMsgId);
+                } else
+                    Util.showToast(mActivity, errorMsg);
                 break;
             case R.id.fl_bt_swap:
                 showToggleConfirmationAlert();
@@ -351,8 +353,8 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
             visitDetails.setVisitId(visitId);
 //        if (blankClinicalNoteMsgId == 0)
 //            visitDetails.setClinicalNote(addEditNormalVisitClinicalNotesFragment.getClinicalNoteToSendDetails());
-//        if (blankPrescriptionMsgId == 0)
-//            visitDetails.setPrescription(addEditNormalVisitPrescriptionFragment.getPrescriptionRequestDetails());
+        if (blankPrescriptionMsgId == 0)
+            visitDetails.setPrescription(addEditNormalVisitPrescriptionFragment.getPrescriptionRequestDetails());
         WebDataServiceImpl.getInstance(mApp).addVisit(VisitDetails.class, visitDetails, this, this);
     }
 
@@ -522,5 +524,29 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
             editText.setText(textBeforeComma + text);
             editText.setSelection(Util.getValidatedValueOrBlankTrimming(editText).length());
         }
+    }
+
+    private VisitDetails getVisitRequestObjectToSend() {
+        VisitDetails visitDetails = new VisitDetails();
+        visitDetails.setDoctorId(user.getUniqueId());
+        visitDetails.setLocationId(user.getForeignLocationId());
+        visitDetails.setHospitalId(user.getForeignHospitalId());
+        visitDetails.setPatientId(HealthCocoConstants.SELECTED_PATIENTS_USER_ID);
+        if (!Util.isNullOrBlank(visitId) && !isFromClone)
+            visitDetails.setVisitId(visitId);
+//        visitDetails.setClinicalNote(addEditNormalVisitClinicalNotesFragment.getClinicalNoteToSendDetails());
+//        if (!addEditNormalVisitPrescriptionFragment.isBlankDrugsList()) {
+//            PrescriptionRequest prescription = new PrescriptionRequest();
+//            LogUtils.LOGD(TAG, "Selected patient " + selectedPatient.getLocalPatientName());
+//            prescription.setUniqueId(prescriptionId);
+//            prescription.setPatientId(selectedPatient.getUserId());
+//            prescription.setDoctorId(user.getUniqueId());
+//            prescription.setLocationId(user.getForeignLocationId());
+//            prescription.setHospitalId(user.getForeignHospitalId());
+//            prescription.setAdvice(Util.getValidatedValueOrNull(etAdvice));
+//            prescription.setItems(addEditNormalVisitPrescriptionFragment.getModifiedDrugsList());
+//            visitDetails.setPrescription(prescription);
+//        }
+        return visitDetails;
     }
 }

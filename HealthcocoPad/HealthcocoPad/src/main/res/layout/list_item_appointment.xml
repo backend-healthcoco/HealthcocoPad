@@ -197,7 +197,8 @@
                         android:layout_height="wrap_content"
                         android:baselineAligned="false"
                         android:gravity="center"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:visibility="gone">
 
                         <LinearLayout
                             android:id="@+id/bt_reschedule"

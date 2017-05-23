@@ -783,4 +783,8 @@
     <string name="toggle">Toggle</string>
     <string name="suggestion_list">Suggestion List</string>
     <string name="syncing_advice_suggestions"><![CDATA[Syncing Advice Suggestions&#8230;]]></string>
+    <string name="template_list">Template List</string>
+    <string name="no_drug_lab_selected">No Drug or Lab Test Selected.\nPlease click +Drug or +Lab Test to add</string>
+    <string name="no_drugs_added">No Drugs Added</string>
+    <string name="alert_add_drugs">Blank prescription cannot be saved.Add Drugs</string>
 </resources>

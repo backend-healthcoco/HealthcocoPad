@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AutoCompleteTextView;
 import android.widget.LinearLayout;
 
 import com.healthcoco.healthcocopad.HealthCocoFragment;
@@ -382,4 +383,22 @@ public class AddEditNormalVisitClinicalNotesFragment extends HealthCocoFragment 
             return m.group(1);
         return "";
     }
+
+    public int getBlankClinicalNoteMsgId() {
+        boolean isDataPresent = false;
+        for (String clinicalNotesPermissionType :
+                user.getUiPermissions().getClinicalNotesPermissions()) {
+            AutoCompleteTextView autoTvPermission = (AutoCompleteTextView) view.findViewWithTag(clinicalNotesPermissionType);
+            if (autoTvPermission != null && !Util.isNullOrBlank(Util.getValidatedValueOrBlankTrimming(autoTvPermission))) {
+                isDataPresent = true;
+                break;
+            }
+        }
+//        if (selectedVitalSigns == null
+//                && !isDataPresent
+//                && Util.isNullOrEmptyList(diagramsList))
+//            return R.string.blank_clinical_note;
+        return 0;
+    }
+
 }

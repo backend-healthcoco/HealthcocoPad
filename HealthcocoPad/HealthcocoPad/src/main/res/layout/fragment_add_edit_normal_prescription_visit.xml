@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/grey_background"
     android:focusable="true"
     android:focusableInTouchMode="true"
     android:orientation="horizontal">
@@ -49,7 +48,7 @@
                         android:id="@+id/viewpager"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@color/grey_background"
+                        android:background="@color/white"
                         android:overScrollMode="never" />
                 </FrameLayout>
             </LinearLayout>
@@ -57,91 +56,207 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/container_suggestions_list"
+        android:id="@+id/container_advice_suggestions_list"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="0.35"
         android:orientation="vertical"
         android:visibility="gone" />
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/parent_layout_drugList"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="0.65"
+        android:background="@color/grey_background"
         android:orientation="vertical">
 
-        <LinearLayout
-            android:id="@+id/parent_layout_drugs"
+        <com.healthcoco.healthcocopad.views.ScrollViewWithHeaderNewPrescriptionLayout
+            android:id="@+id/sv_container"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            android:fillViewport="true">
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:background="@drawable/shape_emr_light_grey_background"
-                android:orientation="horizontal"
-                android:padding="10dp">
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/parent_diagnostic_tests_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <LinearLayout
+                        android:id="@+id/tv_header_one"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:background="@color/grey_header"
+                        android:padding="10dp">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center|start"
+                            android:text="@string/lab_test"
+                            android:textColor="@color/grey_dark_text"
+                            android:textSize="@dimen/text_size_doctor_profile_item_header_child" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/container_diagnostic_tests"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/grey_background"
+                        android:orientation="vertical"
+                        android:paddingBottom="8dp"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp">
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/parent_drugs_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:visibility="visible">
+
+                    <RelativeLayout
+                        android:id="@+id/tv_header_two"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:background="@drawable/shape_emr_light_grey_background"
+                        android:orientation="horizontal"
+                        android:padding="10dp">
+
+                        <TextView
+                            android:id="@+id/tv_header_two_drugs"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_marginRight="20dp"
+                            android:gravity="center"
+                            android:padding="5dp"
+                            android:text="@string/drugs"
+                            android:textColor="@color/black"
+                            android:textSize="13sp" />
+
+                        <EditText
+                            android:id="@+id/et_header_two_duration"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="80dp"
+                            android:layout_toRightOf="@+id/tv_header_two_drugs"
+                            android:background="@drawable/shape_rounded_corners_item_background_dark_grey"
+                            android:gravity="center"
+                            android:hint="@string/duration"
+                            android:maxEms="5"
+                            android:maxLines="1"
+                            android:padding="5dp"
+                            android:textSize="13sp" />
+
+                        <com.healthcoco.healthcocopad.views.FontAwesomeButton
+                            android:id="@+id/bt_header_two_interaction"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:background="@android:color/transparent"
+                            android:minHeight="0dp"
+                            android:minWidth="0dp"
+                            android:padding="5dp"
+                            android:text="@string/fa_interaction_checker"
+                            android:textAllCaps="false"
+                            android:textColor="@color/orange" />
+                    </RelativeLayout>
+
+                    <LinearLayout
+                        android:id="@+id/layout_selected_drugs_list_fragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/grey_background"
+                        android:orientation="vertical"
+                        android:paddingBottom="8dp"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp"></LinearLayout>
+                </LinearLayout>
 
                 <TextView
-                    android:id="@+id/tv_drugs"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_marginRight="20dp"
+                    android:id="@+id/tv_no_drug_lab_selected"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
                     android:gravity="center"
-                    android:padding="5dp"
-                    android:text="@string/drugs"
-                    android:textColor="@color/black"
-                    android:textSize="13sp" />
+                    android:text="@string/no_drug_lab_selected"
+                    android:textSize="@dimen/text_size_no_results"
+                    android:textStyle="bold"
+                    android:visibility="visible" />
 
-                <EditText
-                    android:id="@+id/et_duration"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="80dp"
-                    android:layout_toRightOf="@+id/tv_drugs"
-                    android:background="@drawable/shape_rounded_corners_item_background_dark_grey"
-                    android:gravity="center"
-                    android:hint="@string/duration"
-                    android:maxEms="5"
-                    android:maxLines="1"
-                    android:padding="5dp"
-                    android:textSize="13sp" />
+            </LinearLayout>
+        </com.healthcoco.healthcocopad.views.ScrollViewWithHeaderNewPrescriptionLayout>
 
-                <com.healthcoco.healthcocopad.views.FontAwesomeButton
-                    android:id="@+id/bt_header_two_interaction"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:background="@android:color/transparent"
-                    android:minHeight="0dp"
-                    android:minWidth="0dp"
-                    android:padding="5dp"
-                    android:text="@string/fa_interaction_checker"
-                    android:textAllCaps="false"
-                    android:textColor="@color/orange" />
-            </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/tv_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/shape_emr_light_grey_background"
+            android:orientation="horizontal"
+            android:padding="10dp">
 
-            <ListView
-                android:id="@+id/lv_templates"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:clipToPadding="false"
-                android:divider="@null"
-                android:listSelector="@android:color/transparent"
-                android:overScrollMode="never"></ListView>
-        </LinearLayout>
+            <TextView
+                android:id="@+id/tv_drugs"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_marginRight="20dp"
+                android:gravity="center"
+                android:padding="5dp"
+                android:text="@string/drugs"
+                android:textColor="@color/black"
+                android:textSize="13sp" />
+
+            <EditText
+                android:id="@+id/et_duration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="80dp"
+                android:layout_toRightOf="@+id/tv_drugs"
+                android:background="@drawable/shape_rounded_corners_item_background_dark_grey"
+                android:gravity="center"
+                android:hint="@string/duration"
+                android:maxEms="5"
+                android:maxLines="1"
+                android:padding="5dp"
+                android:textSize="13sp" />
+
+            <com.healthcoco.healthcocopad.views.FontAwesomeButton
+                android:id="@+id/bt_header_interaction"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:background="@android:color/transparent"
+                android:minHeight="0dp"
+                android:minWidth="0dp"
+                android:padding="5dp"
+                android:text="@string/fa_interaction_checker"
+                android:textAllCaps="false"
+                android:textColor="@color/orange" />
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
             android:layout_margin="10dp"
             android:background="@drawable/shape_rounded_corners_grey_border_solid_white"
             android:orientation="horizontal"
@@ -170,5 +285,5 @@
                 android:textSize="@dimen/edit_text_size" />
 
         </LinearLayout>
-    </LinearLayout>
+    </RelativeLayout>
 </LinearLayout>

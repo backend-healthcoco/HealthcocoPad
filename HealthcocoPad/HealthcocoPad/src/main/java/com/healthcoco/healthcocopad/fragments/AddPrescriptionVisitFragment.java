@@ -120,6 +120,11 @@ public class AddPrescriptionVisitFragment extends HealthCocoFragment implements 
     }
 
     @Override
+    public void setDrugsListparentVisibility(boolean isVisible) {
+
+    }
+
+    @Override
     public void onDeleteItemClicked(DrugItem drug) {
         showConfirmationAlertForDrugs(drug);
     }
