@@ -3592,4 +3592,40 @@ public class LocalDataServiceImpl {
         }
         return volleyResponseBean;
     }
+
+    public Prescription getPrescription(String prescriptionId) {
+        return getPrescription(null, prescriptionId);
+    }
+
+    public Prescription getPrescription(BooleanTypeValues discarded, String prescriptionId) {
+        Select<Prescription> selectQuery;
+        if (discarded != null)
+            selectQuery = Select.from(Prescription.class)
+                    .where(Condition.prop(LocalDatabaseUtils.KEY_UNIQUE_ID).eq(prescriptionId),
+                            Condition.prop(LocalDatabaseUtils.KEY_DISCARDED).eq(discarded.getBooleanIntValue()));
+        else
+            selectQuery = Select.from(Prescription.class)
+                    .where(Condition.prop(LocalDatabaseUtils.KEY_UNIQUE_ID).eq(prescriptionId));
+        Prescription prescription = selectQuery.first();
+        if (prescription != null) {
+            prescription.setItems(getDrugItemsList(LocalDatabaseUtils.KEY_FOREIGN_PRESCRIPTION_ID, prescription.getUniqueId()));
+            prescription.setDiagnosticTests(getDiagnosticTestPrescriptionsList(prescription.getUniqueId()));
+        }
+        return prescription;
+    }
+
+    private List<DiagnosticTestsPrescription> getDiagnosticTestPrescriptionsList(String foreignTableId) {
+        List<DiagnosticTestsPrescription> list = (List<DiagnosticTestsPrescription>) getObjectsList(DiagnosticTestsPrescription.class, LocalDatabaseUtils.KEY_FOREIGN_TABLE_ID, foreignTableId);
+        if (!Util.isNullOrEmptyList(list)) {
+            for (DiagnosticTestsPrescription diagnosticTestsPrescription : list
+                    ) {
+                DiagnosticTest diagnosticTest = getDiagnosticTest(diagnosticTestsPrescription.getForeignDiagnosticTestId());
+                if (diagnosticTest != null) {
+                    diagnosticTestsPrescription.setTest(diagnosticTest);
+                }
+            }
+        }
+        return list;
+    }
+
 }

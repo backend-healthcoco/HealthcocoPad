@@ -22,7 +22,6 @@ import com.healthcoco.healthcocopad.enums.CreatedByType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.fragments.PatientAppointmentDetailFragment;
 import com.healthcoco.healthcocopad.services.GsonRequest;
-import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
@@ -276,7 +275,7 @@ public class AppointmentsListViewholder extends HealthCocoViewHolder implements
                     if (response.isValidData(response) && response.getData() instanceof CalendarEvents) {
                         appointment = (CalendarEvents) response.getData();
                         appointment.setIsAddedOnSuccess(true);
-                        LocalDataServiceImpl.getInstance(mApp).addAppointment(appointment);
+//                        LocalDataServiceImpl.getInstance(mApp).addAppointment(appointment);
                         applyData();
                     }
                     break;
