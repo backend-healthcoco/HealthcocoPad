@@ -71,7 +71,7 @@ public class TemplateListFragment extends HealthCocoFragment implements View.OnC
     private TextView tvNoTemplates;
     private User user;
     private SwipeRefreshLayout swipeRefreshLayout;
-    private ImageButton btAddDrug;
+    private ImageButton btAddTemplate;
 
     public TemplateListFragment(TemplateListItemListener templateListItemListener) {
         this.templateListItemListener = templateListItemListener;
@@ -109,8 +109,9 @@ public class TemplateListFragment extends HealthCocoFragment implements View.OnC
         lvTemplates = (ListViewLoadMore) view.findViewById(R.id.lv_templates);
         tvNoTemplates = (TextView) view.findViewById(R.id.tv_no_templates);
         progressLoading = (ProgressBar) view.findViewById(R.id.progress_loading);
-        btAddDrug = (ImageButton) view.findViewById(R.id.bt_add_drug);
+        btAddTemplate = (ImageButton) view.findViewById(R.id.bt_add_template);
         initEditSearchView(R.string.search_template, this, this);
+        btAddTemplate.setVisibility(View.GONE);
     }
 
     @Override
@@ -118,7 +119,7 @@ public class TemplateListFragment extends HealthCocoFragment implements View.OnC
         lvTemplates.setLoadMoreListener(this);
         swipeRefreshLayout.setOnRefreshListener(this);
         lvTemplates.setSwipeRefreshLayout(swipeRefreshLayout);
-        btAddDrug.setOnClickListener(this);
+        btAddTemplate.setOnClickListener(this);
     }
 
     private void initAdapters() {
@@ -298,7 +299,7 @@ public class TemplateListFragment extends HealthCocoFragment implements View.OnC
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.bt_add_drug:
+            case R.id.bt_add_template:
                 break;
         }
     }

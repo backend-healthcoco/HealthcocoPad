@@ -27,11 +27,13 @@ import com.healthcoco.healthcocopad.listeners.SelectedDrugsListItemListener;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.LocalDatabaseUtils;
+import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.healthcoco.healthcocopad.viewholders.SelectedPrescriptionDrugDoseItemsListViewHolder;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
@@ -201,8 +203,12 @@ public class SelectedDrugItemsListFragment extends HealthCocoFragment implements
 
     //setting drug to null and drugId to uniqueId for sending on server
     public List<DrugItem> getModifiedDrugsList() {
+        refreshListViewUpdatedDrugsList();
         if (!Util.isNullOrEmptyList(drugsList)) {
-            List<DrugItem> modifiedList = new ArrayList<DrugItem>(drugsList.values());
+            LinkedHashMap<String, DrugItem> newHashMap = new LinkedHashMap<>();
+            newHashMap.putAll(drugsList);
+            List<DrugItem> modifiedList = new ArrayList<DrugItem>();
+            modifiedList.addAll(newHashMap.values());
             for (DrugItem drugItem :
                     modifiedList) {
                 if (drugItem.getDrug() != null) {
@@ -213,6 +219,19 @@ public class SelectedDrugItemsListFragment extends HealthCocoFragment implements
             return modifiedList;
         }
         return null;
+    }
+
+    private void refreshListViewUpdatedDrugsList() {
+        if (lvDrugsList.getChildCount() > 0) {
+            for (int i = 0; i < lvDrugsList.getChildCount(); i++) {
+                View child = lvDrugsList.getChildAt(i);
+                if (child.getTag() != null && child.getTag() instanceof SelectedPrescriptionDrugDoseItemsListViewHolder) {
+                    SelectedPrescriptionDrugDoseItemsListViewHolder viewHolder = (SelectedPrescriptionDrugDoseItemsListViewHolder) child.getTag();
+                    DrugItem modifiedDrug = viewHolder.getDrug();
+                    drugsList.put(modifiedDrug.getDrugId(), modifiedDrug);
+                }
+            }
+        }
     }
 
     public void addDrug(DrugItem drug) {

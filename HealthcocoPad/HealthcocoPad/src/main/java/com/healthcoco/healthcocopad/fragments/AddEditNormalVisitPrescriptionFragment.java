@@ -46,6 +46,7 @@ import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.bean.server.VisitDetails;
 import com.healthcoco.healthcocopad.custom.DummyTabFactory;
 import com.healthcoco.healthcocopad.custom.HealthcocoOnSelectionChanged;
+import com.healthcoco.healthcocopad.custom.HealthcocoTextWatcher;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocopad.enums.ClinicalNotesPermissionType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
@@ -53,9 +54,11 @@ import com.healthcoco.healthcocopad.enums.PatientProfileScreenType;
 import com.healthcoco.healthcocopad.enums.PrescriptionPermissionType;
 import com.healthcoco.healthcocopad.enums.SelectDrugItemType;
 import com.healthcoco.healthcocopad.enums.SuggestionType;
+import com.healthcoco.healthcocopad.enums.VisitIdType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.AddNewPrescriptionListener;
 import com.healthcoco.healthcocopad.listeners.DiagnosticTestItemListener;
+import com.healthcoco.healthcocopad.listeners.HealthcocoTextWatcherListener;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
 import com.healthcoco.healthcocopad.listeners.SelectDrugItemClickListener;
 import com.healthcoco.healthcocopad.listeners.SelectedDrugsListItemListener;
@@ -83,7 +86,8 @@ import static com.healthcoco.healthcocopad.fragments.AddVisitSuggestionsFragment
 public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment implements
         TabHost.OnTabChangeListener, ViewPager.OnPageChangeListener, View.OnClickListener,
         SelectDrugItemClickListener, SelectedDrugsListItemListener, TemplateListItemListener,
-        DiagnosticTestItemListener, AddNewPrescriptionListener, LocalDoInBackgroundListenerOptimised, View.OnTouchListener, TextWatcher {
+        DiagnosticTestItemListener, AddNewPrescriptionListener, LocalDoInBackgroundListenerOptimised,
+        View.OnTouchListener, HealthcocoTextWatcherListener {
 
     private ViewPager viewPager;
     private TabHost tabhost;
@@ -110,8 +114,6 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
     private RelativeLayout tvHeaderTwo;
     private LinearLayout parentDiagnosticTestList;
     private LinearLayout parentDrugsList;
-    private boolean hidePatientDetailHeader;
-    private LinearLayout layoutPatientImageGender;
     private String prescriptionId;
     private TextView tvNoDrugLabselected;
     private boolean isDiagnosticsListPresent;
@@ -195,9 +197,9 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
         btHeaderTwoInteraction.setOnClickListener(this);
         btHeaderInteraction.setOnClickListener(this);
         editAdvice.setOnTouchListener(this);
-        editAdvice.addTextChangedListener(this);
-        etDuration.addTextChangedListener(this);
-        etHeaderTwoDuration.addTextChangedListener(this);
+        editAdvice.addTextChangedListener(new HealthcocoTextWatcher(editAdvice, this));
+        etDuration.addTextChangedListener(new HealthcocoTextWatcher(etDuration, this));
+        etHeaderTwoDuration.addTextChangedListener(new HealthcocoTextWatcher(etHeaderTwoDuration, this));
         ((CommonOpenUpActivity) mActivity).initActionbarRightAction(this);
     }
 
@@ -302,6 +304,9 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.container_right_action:
+                validateData();
+                break;
             case R.id.bt_delete_diagnostic_test:
                 confirmDeleteDrugAlert(v, R.string.confirm_remove_diagnostic_test);
                 break;
@@ -312,6 +317,15 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
                 break;
             default:
                 break;
+        }
+    }
+
+    private void validateData() {
+        int msgId = getBlankPrescriptionMsg();
+        if (msgId == 0) {
+            addPrescription();
+        } else {
+            Util.showToast(mActivity, msgId);
         }
     }
 
@@ -385,9 +399,9 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
     private void addPrescription() {
         mActivity.showLoading(false);
         PrescriptionRequest prescription = getPrescriptionRequestDetails();
-//        if (Util.isNullOrBlank(prescriptionId))
-//            prescription.setVisitId(Util.getVisitId(VisitIdType.PRESCRIPTION));
-//        WebDataServiceImpl.getInstance(mApp).addPrescription(Prescription.class, prescription, this, this);
+        if (Util.isNullOrBlank(prescriptionId))
+            prescription.setVisitId(Util.getVisitId(VisitIdType.PRESCRIPTION));
+        WebDataServiceImpl.getInstance(mApp).addPrescription(Prescription.class, prescription, this, this);
     }
 
     public PrescriptionRequest getPrescriptionRequestDetails() {
@@ -399,6 +413,7 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
         prescription.setHospitalId(user.getForeignHospitalId());
         prescription.setItems(selectedDrugItemsListFragment.getModifiedDrugsList());
         prescription.setDiagnosticTests(getLabTestsList());
+        prescription.setAdvice(Util.getValidatedValueOrBlankTrimming(editAdvice));
         if (!Util.isNullOrBlank(prescriptionId))
             prescription.setUniqueId(prescriptionId);
         return prescription;
@@ -567,14 +582,14 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
                 break;
             case ADD_PRESCRIPTION:
             case UPDATE_PRESCRIPTION:
-//                if (response.getData() != null && response.getData() instanceof Prescription) {
-//                    Prescription prescription = (Prescription) response.getData();
-//                    LocalDataServiceImpl.getInstance(mApp).addPrescription(prescription);
-//                    Util.setVisitId(VisitIdType.PRESCRIPTION, prescription.getVisitId());
+                if (response.getData() != null && response.getData() instanceof Prescription) {
+                    Prescription prescription = (Prescription) response.getData();
+                    LocalDataServiceImpl.getInstance(mApp).addPrescription(prescription);
+                    Util.setVisitId(VisitIdType.PRESCRIPTION, prescription.getVisitId());
 //                    sendBroadcasts(prescription.getUniqueId());
-//                    mActivity.setResult(HealthCocoConstants.RESULT_CODE_ADD_PRESCIPTION, null);
-//                    ((CommonOpenUpActivity) mActivity).finish();
-//                }
+                    mActivity.setResult(HealthCocoConstants.RESULT_CODE_ADD_PRESCIPTION, null);
+                    ((CommonOpenUpActivity) mActivity).finish();
+                }
                 break;
             case GET_DRUG_INTERACTIONS:
                 if (!Util.isNullOrEmptyList(response.getDataList()))
@@ -605,8 +620,7 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
                 break;
             case MotionEvent.ACTION_DOWN:
                 requestFocus(v);
-                if (selectedSuggestionType != null)
-                    addVisitSuggestionsFragment.refreshTagOfEditText(selectedSuggestionType);
+                addVisitSuggestionsFragment.refreshTagOfEditText(SuggestionType.ADVICE);
                 LogUtils.LOGD(TAG, "Action DOWN");
                 break;
         }
@@ -614,9 +628,10 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
     }
 
     public void requestFocus(View v) {
+        if (v.getId() == R.id.edit_advice) {
+            editAdvice.setTag(SuggestionType.ADVICE);
+        }
         refreshSuggestionsList(v, "");
-        if (selectedSuggestionType != null)
-            addVisitSuggestionsFragment.refreshTagOfEditText(selectedSuggestionType);
     }
 
     public void refreshSuggestionsList(View v, String searchTerm) {
@@ -665,21 +680,11 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
     }
 
     @Override
-    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-    }
-
-    @Override
-    public void onTextChanged(CharSequence s, int start, int before, int count) {
-        refreshSuggestionsList(view, s.toString());
-        if (view.getId() == R.id.et_duration || (view.getId() == R.id.et_header_two_duration)) {
-            setDurationUnitToAll(s.toString());
+    public void afterTextChange(View v, String s) {
+        refreshSuggestionsList(v, s.toString());
+        if (v.getId() == R.id.et_duration || (v.getId() == R.id.et_header_two_duration)) {
+            setDurationUnitToAll(s);
         }
-    }
-
-    @Override
-    public void afterTextChanged(Editable s) {
-
     }
 
     private void setDurationUnitToAll(String unit) {

@@ -29,7 +29,7 @@ public enum SuggestionType {
     PS(false, R.string.ps),
     INDICATION_OF_USG(false, R.string.indication_of_usg),
     NOTES(false, R.string.notes),
-    ADVICE(false, R.string.advice);
+    ADVICE(false, R.string.advice_tag);
 
     private final boolean isFromServerList;
     private final int headerTitleId;
@@ -39,7 +39,6 @@ public enum SuggestionType {
         this.isFromServerList = isFromServerList;
         this.headerTitleId = headerTitleId;
     }
-
 
     SuggestionType(boolean isFromServerList, int searchHintId, int headerTitleId) {
         this.isFromServerList = isFromServerList;

@@ -37,6 +37,7 @@ import com.healthcoco.healthcocopad.bean.server.DoctorExperience;
 import com.healthcoco.healthcocopad.bean.server.DoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.enums.DoctorExperienceUnit;
+import com.healthcoco.healthcocopad.enums.VisitIdType;
 import com.healthcoco.healthcocopad.fragments.PatientVisitDetailFragment;
 
 import org.parceler.Parcels;
@@ -742,5 +743,65 @@ public class Util {
 
         //save data
         prefs.edit().putBoolean(PatientVisitDetailFragment.TAG_TOGGLE_STATE, tagToggleState).commit();
+    }
+
+    public static String getVisitId(VisitIdType visitIdType) {
+        switch (visitIdType) {
+            case CLINICAL_NOTES:
+                if (!Util.isNullOrBlank(HealthCocoConstants.VISIT_ID_CLINICAL_NOTES)) {
+                    LogUtils.LOGD(TAG, "VisitId reseting to null" + HealthCocoConstants.VISIT_ID_TO_SEND);
+                    resetAllVisitIds();
+                }
+                break;
+            case REPORTS:
+                if (!Util.isNullOrBlank(HealthCocoConstants.VISIT_ID_REPORTS)) {
+                    LogUtils.LOGD(TAG, "VisitId reseting to null" + HealthCocoConstants.VISIT_ID_TO_SEND);
+                    resetAllVisitIds();
+                }
+                break;
+            case PRESCRIPTION:
+                if (!Util.isNullOrBlank(HealthCocoConstants.VISIT_ID_PRESCRIPTION)) {
+                    LogUtils.LOGD(TAG, "VisitId reseting to null" + HealthCocoConstants.VISIT_ID_TO_SEND);
+                    resetAllVisitIds();
+                }
+                break;
+        }
+        LogUtils.LOGD(TAG, "VisitId " + HealthCocoConstants.VISIT_ID_TO_SEND);
+        return HealthCocoConstants.VISIT_ID_TO_SEND;
+    }
+
+    public static void resetAllVisitIds() {
+        HealthCocoConstants.VISIT_ID_TO_SEND = null;
+        HealthCocoConstants.VISIT_ID_CLINICAL_NOTES = null;
+        HealthCocoConstants.VISIT_ID_REPORTS = null;
+        HealthCocoConstants.VISIT_ID_PRESCRIPTION = null;
+    }
+
+    public static void setVisitId(VisitIdType visitIdType, String visitId) {
+        if (isNullOrBlank(HealthCocoConstants.VISIT_ID_TO_SEND))
+            HealthCocoConstants.VISIT_ID_TO_SEND = visitId;
+        switch (visitIdType) {
+            case CLINICAL_NOTES:
+                if (!Util.isNullOrBlank(HealthCocoConstants.VISIT_ID_CLINICAL_NOTES)) {
+                    HealthCocoConstants.VISIT_ID_TO_SEND = visitId;
+                    LogUtils.LOGD(TAG, "VisitId Update new" + HealthCocoConstants.VISIT_ID_TO_SEND);
+                }
+                HealthCocoConstants.VISIT_ID_CLINICAL_NOTES = visitId;
+                break;
+            case REPORTS:
+                if (!Util.isNullOrBlank(HealthCocoConstants.VISIT_ID_REPORTS)) {
+                    HealthCocoConstants.VISIT_ID_TO_SEND = visitId;
+                    LogUtils.LOGD(TAG, "VisitId Update new" + HealthCocoConstants.VISIT_ID_TO_SEND);
+                }
+                HealthCocoConstants.VISIT_ID_REPORTS = visitId;
+                break;
+            case PRESCRIPTION:
+                if (!Util.isNullOrBlank(HealthCocoConstants.VISIT_ID_PRESCRIPTION)) {
+                    HealthCocoConstants.VISIT_ID_TO_SEND = visitId;
+                    LogUtils.LOGD(TAG, "VisitId Update new" + HealthCocoConstants.VISIT_ID_TO_SEND);
+                }
+                HealthCocoConstants.VISIT_ID_PRESCRIPTION = visitId;
+                break;
+        }
     }
 }

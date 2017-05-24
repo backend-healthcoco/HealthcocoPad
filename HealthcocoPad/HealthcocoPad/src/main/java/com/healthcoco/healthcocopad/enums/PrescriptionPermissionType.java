@@ -5,7 +5,8 @@ package com.healthcoco.healthcocopad.enums;
  */
 
 public enum PrescriptionPermissionType {
-    GENERIC_DRUGS("GENERIC_DRUGS"), ALLDRUGS("ALLDRUGS"), LAB("LAB"), OPTHO_RX("OPTHO_RX"), MYDRUGS("MYDRUGS"), ADVICE("ADVICE");
+    GENERIC_DRUGS("GENERIC_DRUGS"), ALLDRUGS("ALLDRUGS"), LAB("LAB"), OPTHO_RX("OPTHO_RX"),
+    MYDRUGS("MYDRUGS"), ADVICE("ADVICE");
 
     PrescriptionPermissionType(String value) {
         this.value = value;

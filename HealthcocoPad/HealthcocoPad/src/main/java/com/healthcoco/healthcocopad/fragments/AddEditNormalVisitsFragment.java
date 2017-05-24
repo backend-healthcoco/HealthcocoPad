@@ -18,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TabHost;
 import android.widget.TextView;
 
@@ -109,6 +110,7 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
     private boolean receiversRegistered;
     private View selectedViewForSuggestionsList;
     private boolean isOnItemClick;
+    private LinearLayout btSave;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -153,7 +155,7 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
         viewPager.addOnPageChangeListener(this);
         flBtSwap.setOnClickListener(this);
         ((CommonOpenUpActivity) mActivity).initRightActionView(ActionbarLeftRightActionTypeDrawables.WITH_SAVE, view);
-        ((CommonOpenUpActivity) mActivity).initActionbarRightAction(this);
+        btSave = ((CommonOpenUpActivity) mActivity).initActionbarRightAction(this);
     }
 
     private void initTabsFragmentsList() {

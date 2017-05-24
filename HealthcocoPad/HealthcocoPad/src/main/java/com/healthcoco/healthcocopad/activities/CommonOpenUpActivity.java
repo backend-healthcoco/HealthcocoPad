@@ -358,9 +358,10 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
         alertBuilder.show();
     }
 
-    public void initActionbarRightAction(View.OnClickListener listener) {
+    public LinearLayout initActionbarRightAction(View.OnClickListener listener) {
         LinearLayout rightAction = (LinearLayout) findViewById(R.id.container_right_action);
         rightAction.setOnClickListener(listener);
+        return rightAction;
     }
 
     public void showRightAction(boolean show) {

@@ -25,6 +25,7 @@ import com.healthcoco.healthcocopad.bean.request.ClinicImageToSend;
 import com.healthcoco.healthcocopad.bean.request.DoctorSignupHandheldContinueRequest;
 import com.healthcoco.healthcocopad.bean.request.DrugInteractionRequest;
 import com.healthcoco.healthcocopad.bean.request.Feedback;
+import com.healthcoco.healthcocopad.bean.request.PrescriptionRequest;
 import com.healthcoco.healthcocopad.bean.request.ProfessionalMembershipRequest;
 import com.healthcoco.healthcocopad.bean.request.ProfessionalStatementRequest;
 import com.healthcoco.healthcocopad.bean.request.RegisterNewPatientRequest;
@@ -39,6 +40,7 @@ import com.healthcoco.healthcocopad.bean.server.DrugType;
 import com.healthcoco.healthcocopad.bean.server.GCMRequest;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.NotificationResponse;
+import com.healthcoco.healthcocopad.bean.server.Prescription;
 import com.healthcoco.healthcocopad.bean.server.Profession;
 import com.healthcoco.healthcocopad.bean.server.Records;
 import com.healthcoco.healthcocopad.bean.server.Reference;
@@ -1129,5 +1131,19 @@ public class WebDataServiceImpl implements GCMRefreshListener {
                     errorListener);
         } else {
         }
+    }
+
+    public void addPrescription(Class<Prescription> class1, PrescriptionRequest prescription,
+                                Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        WebServiceType webServiceType = WebServiceType.ADD_PRESCRIPTION;
+        String url = "";
+        if (Util.isNullOrBlank(prescription.getUniqueId())) {
+            url = webServiceType.getUrl();
+        } else {
+            webServiceType = webServiceType.UPDATE_PRESCRIPTION;
+            url = webServiceType.getUrl() + prescription.getUniqueId() + HealthCocoConstants.PARAM_TAG_UPDATE;
+        }
+        getResponse(webServiceType, class1, url, prescription,
+                null, responseListener, errorListener);
     }
 }

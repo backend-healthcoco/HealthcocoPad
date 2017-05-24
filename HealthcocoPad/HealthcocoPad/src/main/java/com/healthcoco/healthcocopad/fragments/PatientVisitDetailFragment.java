@@ -500,5 +500,4 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
     public void onClick(View v) {
 
     }
-
 }
