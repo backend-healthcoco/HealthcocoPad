@@ -55,6 +55,11 @@
         </TabHost>
     </LinearLayout>
 
+    <View
+        android:layout_width="0.3dp"
+        android:layout_height="match_parent"
+        android:background="@color/grey_icons"></View>
+
     <LinearLayout
         android:id="@+id/container_advice_suggestions_list"
         android:layout_width="0dp"
@@ -75,6 +80,7 @@
             android:id="@+id/sv_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_above="@+id/parent_layout_advice"
             android:fillViewport="true">
 
             <LinearLayout
@@ -254,6 +260,7 @@
         </RelativeLayout>
 
         <LinearLayout
+            android:id="@+id/parent_layout_advice"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"

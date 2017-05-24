@@ -2,6 +2,7 @@ package com.healthcoco.healthcocopad.fragments;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -25,21 +26,31 @@ import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.adapter.ContactsDetailViewPagerAdapter;
 import com.healthcoco.healthcocopad.adapter.SelectedTemplateDrugItemsListAdapter;
 import com.healthcoco.healthcocopad.bean.DrugInteractions;
+import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.request.PrescriptionRequest;
 import com.healthcoco.healthcocopad.bean.server.DiagnosticTest;
+import com.healthcoco.healthcocopad.bean.server.Drug;
 import com.healthcoco.healthcocopad.bean.server.DrugItem;
+import com.healthcoco.healthcocopad.bean.server.DrugsListSolrResponse;
+import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.Prescription;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.TempTemplate;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.bean.server.VisitDetails;
 import com.healthcoco.healthcocopad.custom.DummyTabFactory;
+import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
+import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
+import com.healthcoco.healthcocopad.enums.PatientProfileScreenType;
 import com.healthcoco.healthcocopad.enums.SelectDrugItemType;
+import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.AddNewPrescriptionListener;
 import com.healthcoco.healthcocopad.listeners.DiagnosticTestItemListener;
+import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
 import com.healthcoco.healthcocopad.listeners.SelectDrugItemClickListener;
 import com.healthcoco.healthcocopad.listeners.SelectedDrugsListItemListener;
 import com.healthcoco.healthcocopad.listeners.TemplateListItemListener;
+import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
@@ -57,7 +68,7 @@ import java.util.List;
 public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment implements
         TabHost.OnTabChangeListener, ViewPager.OnPageChangeListener, View.OnClickListener,
         SelectDrugItemClickListener, SelectedDrugsListItemListener, TemplateListItemListener,
-        DiagnosticTestItemListener, AddNewPrescriptionListener {
+        DiagnosticTestItemListener, AddNewPrescriptionListener, LocalDoInBackgroundListenerOptimised {
 
     private ViewPager viewPager;
     private TabHost tabhost;
@@ -96,7 +107,7 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
     private Button btHeaderTwoInteraction;
     private SelectedDrugItemsListFragment selectedDrugItemsListFragment;
     private Prescription selectedPrescription;
-    private List<DiagnosticTest> selectedDiagnosticTestsList = new ArrayList<>();
+    private LinkedHashMap<String, DiagnosticTest> selectedDiagnosticTestsList = new LinkedHashMap<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -109,6 +120,9 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         init();
+        mActivity.showLoading(false);
+        new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_FRAGMENT_INITIALISATION_DATA, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
     }
 
     @Override
@@ -145,7 +159,7 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
         containerAdviceSuggestionsList = (LinearLayout) view.findViewById(R.id.container_advice_suggestions_list);
         btHeaderInteraction = (FontAwesomeButton) tvHeader.findViewById(R.id.bt_header_interaction);
         btHeaderTwoInteraction = (FontAwesomeButton) tvHeaderTwo.findViewById(R.id.bt_header_two_interaction);
-        parentLayoutDrugs.setVisibility(View.GONE);
+        tvNoDrugLabselected = (TextView) view.findViewById(R.id.tv_no_drug_lab_selected);
     }
 
     private void initSuggestionsFragment() {
@@ -162,6 +176,7 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
         viewPager.addOnPageChangeListener(this);
         editAdvice.setOnClickListener(this);
         btHeaderTwoInteraction.setOnClickListener(this);
+        btHeaderInteraction.setOnClickListener(this);
         ((CommonOpenUpActivity) mActivity).initActionbarRightAction(this);
     }
 
@@ -213,8 +228,7 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
         else notifyDiagnosticsList(null);
     }
 
-    private void notifyDiagnosticsList(List<DiagnosticTest> diagnosticTests) {
-        this.selectedDiagnosticTestsList = diagnosticTests;
+    private void notifyDiagnosticsList(ArrayList<DiagnosticTest> diagnosticTests) {
         containerDiagnosticTests.removeAllViews();
         if (!Util.isNullOrEmptyList(diagnosticTests)) {
             tvNoDrugLabselected.setVisibility(View.GONE);
@@ -267,9 +281,9 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-//            case R.id.bt_delete_diagnostic_test:
-//                confirmDeleteDrugAlert(v, R.string.confirm_remove_diagnostic_test);
-//                break;
+            case R.id.bt_delete_diagnostic_test:
+                confirmDeleteDrugAlert(v, R.string.confirm_remove_diagnostic_test);
+                break;
             case R.id.bt_header_interaction:
             case R.id.bt_header_two_interaction:
                 confirmDrugInteractionsAlert();
@@ -291,13 +305,11 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
             public void onClick(DialogInterface dialog, int which) {
                 try {
                     switch (view.getId()) {
-//                        case R.id.bt_delete_diagnostic_test:
-//                            DiagnosticTest diagnosticTest = (DiagnosticTest) view.getTag();
-//                            selectedDiagnosticTestsList.remove(diagnosticTest);
-//                            containerDiagnosticTests.removeView((View) view.getParent().getParent());
-//                            if (Util.isNullOrEmptyList(selectedDiagnosticTestsList))
-//                                notifyDiagnosticsList(selectedDiagnosticTestsList);
-//                            break;
+                        case R.id.bt_delete_diagnostic_test:
+                            DiagnosticTest diagnosticTest = (DiagnosticTest) view.getTag();
+                            selectedDiagnosticTestsList.remove(diagnosticTest.getUniqueId());
+                            notifyDiagnosticsList(new ArrayList<DiagnosticTest>(selectedDiagnosticTestsList.values()));
+                            break;
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -365,7 +377,7 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
         prescription.setLocationId(user.getForeignLocationId());
         prescription.setHospitalId(user.getForeignHospitalId());
         prescription.setItems(selectedDrugItemsListFragment.getModifiedDrugsList());
-        prescription.setDiagnosticTests(selectedDiagnosticTestsList);
+        prescription.setDiagnosticTests(getLabTestsList());
         if (!Util.isNullOrBlank(prescriptionId))
             prescription.setUniqueId(prescriptionId);
         return prescription;
@@ -374,6 +386,13 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
     @Override
     public void ondrugItemClick(SelectDrugItemType drugItemType, Object object) {
         System.out.println("drug" + drugItemType);
+        selectedDrugItemsListFragment.addSelectedDrug(drugItemType, object);
+    }
+
+    public List<DiagnosticTest> getLabTestsList() {
+        if (!Util.isNullOrEmptyList(selectedDiagnosticTestsList))
+            return new ArrayList<>(selectedDiagnosticTestsList.values());
+        return null;
     }
 
     @Override
@@ -401,7 +420,6 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
 
     @Override
     public void onDrugItemClicked(DrugItem drug) {
-        selectedDrugItemsListFragment.addDrug(drug);
     }
 
     @Override
@@ -437,6 +455,7 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
     @Override
     public void onItemClicked(TempTemplate template) {
         System.out.println("onItemClicked" + template);
+        selectedDrugItemsListFragment.addDrugsList(template.getItems());
     }
 
     @Override
@@ -467,9 +486,91 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
     @Override
     public void onDiagnosticTestClicked(DiagnosticTest diagnosticTest) {
         System.out.println("onDiagnosticTestClicked" + diagnosticTest);
-        List<DiagnosticTest> list = new ArrayList<>();
-        list.add(diagnosticTest);
-        notifyDiagnosticsList(list);
+        selectedDiagnosticTestsList.put(diagnosticTest.getUniqueId(), diagnosticTest);
+        notifyDiagnosticsList(new ArrayList<DiagnosticTest>(selectedDiagnosticTestsList.values()));
         selectedDrugItemsListFragment.notifyList();
+    }
+
+    @Override
+    public VolleyResponseBean doInBackground(VolleyResponseBean response) {
+        VolleyResponseBean volleyResponseBean = null;
+        switch (response.getLocalBackgroundTaskType()) {
+            case GET_FRAGMENT_INITIALISATION_DATA:
+                volleyResponseBean = new VolleyResponseBean();
+                volleyResponseBean.setWebServiceType(WebServiceType.FRAGMENT_INITIALISATION);
+                LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
+                if (doctor != null)
+                    user = doctor.getUser();
+                selectedPatient = LocalDataServiceImpl.getInstance(mApp).getPatient(HealthCocoConstants.SELECTED_PATIENTS_USER_ID);
+                if (!Util.isNullOrBlank(prescriptionId))
+                    selectedPrescription = LocalDataServiceImpl.getInstance(mApp).getPrescription(prescriptionId);
+                break;
+        }
+        if (volleyResponseBean == null)
+            volleyResponseBean = new VolleyResponseBean();
+        volleyResponseBean.setIsFromLocalAfterApiSuccess(response.isFromLocalAfterApiSuccess());
+        return volleyResponseBean;
+    }
+
+    @Override
+    public void onPostExecute(VolleyResponseBean aVoid) {
+
+    }
+
+    @Override
+    public void onErrorResponse(VolleyResponseBean volleyResponseBean, String errorMessage) {
+        String errorMsg = null;
+        if (volleyResponseBean != null && !Util.isNullOrBlank(volleyResponseBean.getErrMsg())) {
+            errorMsg = volleyResponseBean.getErrMsg();
+        } else {
+            errorMsg = getResources().getString(R.string.error);
+        }
+        Util.showToast(mActivity, errorMsg);
+        mActivity.hideLoading();
+    }
+
+    @Override
+    public void onNetworkUnavailable(WebServiceType webServiceType) {
+        Util.showToast(mActivity, R.string.user_offline);
+    }
+
+    @Override
+    public void onResponse(VolleyResponseBean response) {
+        switch (response.getWebServiceType()) {
+            case FRAGMENT_INITIALISATION:
+                if (user != null && selectedPatient != null) {
+                    initData();
+                }
+                break;
+            case ADD_PRESCRIPTION:
+            case UPDATE_PRESCRIPTION:
+//                if (response.getData() != null && response.getData() instanceof Prescription) {
+//                    Prescription prescription = (Prescription) response.getData();
+//                    LocalDataServiceImpl.getInstance(mApp).addPrescription(prescription);
+//                    Util.setVisitId(VisitIdType.PRESCRIPTION, prescription.getVisitId());
+//                    sendBroadcasts(prescription.getUniqueId());
+//                    mActivity.setResult(HealthCocoConstants.RESULT_CODE_ADD_PRESCIPTION, null);
+//                    ((CommonOpenUpActivity) mActivity).finish();
+//                }
+                break;
+            case GET_DRUG_INTERACTIONS:
+                if (!Util.isNullOrEmptyList(response.getDataList()))
+                    showDrugInteractionsAlert((ArrayList<DrugInteractions>) (ArrayList<?>) response.getDataList());
+                else
+                    Util.showAlert(mActivity, R.string.title_no_interactions_found, R.string.msg_no_interactions_found);
+                break;
+            default:
+                break;
+        }
+        mActivity.hideLoading();
+    }
+
+    private void showDrugInteractionsAlert(ArrayList<DrugInteractions> interactionsList) {
+        String formattedString = "";
+        for (DrugInteractions drugInteractions :
+                interactionsList) {
+            formattedString = formattedString + drugInteractions.getText() + "\n";
+        }
+        Util.showAlert(mActivity, formattedString);
     }
 }

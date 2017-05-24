@@ -44,7 +44,6 @@ public class SelectedDrugItemsListFragment extends HealthCocoFragment implements
     private HashMap<String, DrugItem> drugsList = new HashMap<String, DrugItem>();
     private HashMap<String, DrugInteractionRequest> drugInteractionRequest = new HashMap<String, DrugInteractionRequest>();
     private SelectedPrescriptionDrugItemsListAdapter adapter;
-    private TextView tvNoDrugsAdded;
 
     public SelectedDrugItemsListFragment() {
 
@@ -91,7 +90,6 @@ public class SelectedDrugItemsListFragment extends HealthCocoFragment implements
     @Override
     public void initViews() {
         lvDrugsList = (ExpandableHeightListView) view.findViewById(R.id.lv_drugs_list);
-        tvNoDrugsAdded = (TextView) view.findViewById(R.id.tv_no_drugs_added);
         lvDrugsList.setExpanded(true);
     }
 
@@ -111,12 +109,10 @@ public class SelectedDrugItemsListFragment extends HealthCocoFragment implements
             if (prescriptionListener != null)
                 prescriptionListener.setDrugsListparentVisibility(true);
             lvDrugsList.setVisibility(View.VISIBLE);
-            tvNoDrugsAdded.setVisibility(View.GONE);
         } else {
             if (prescriptionListener != null)
                 prescriptionListener.setDrugsListparentVisibility(false);
             lvDrugsList.setVisibility(View.GONE);
-            tvNoDrugsAdded.setVisibility(View.VISIBLE);
         }
         adapter.setListData(list);
         adapter.notifyDataSetChanged();

@@ -20,6 +20,7 @@ public class DiagnosticTestsPrescription extends SugarRecord implements Serializ
     private String diagnosticTestJsonString;
     private String recordId;
 
+    private String foreignDiagnosticTestId;
 
     public DiagnosticTest getTest() {
         return test;
@@ -51,5 +52,13 @@ public class DiagnosticTestsPrescription extends SugarRecord implements Serializ
 
     public void setDiagnosticTestJsonString(String diagnosticTestJsonString) {
         this.diagnosticTestJsonString = diagnosticTestJsonString;
+    }
+
+    public String getForeignDiagnosticTestId() {
+        return foreignDiagnosticTestId;
+    }
+
+    public void setForeignDiagnosticTestId(String foreignDiagnosticTestId) {
+        this.foreignDiagnosticTestId = foreignDiagnosticTestId;
     }
 }

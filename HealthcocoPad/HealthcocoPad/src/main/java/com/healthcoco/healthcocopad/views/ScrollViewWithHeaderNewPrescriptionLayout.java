@@ -70,6 +70,7 @@ public class ScrollViewWithHeaderNewPrescriptionLayout extends ScrollView implem
     public void addChildHeaders(RelativeLayout v) {
         headerList.add(v);
     }
+
     public void addChildHeaders(LinearLayout v) {
         headerList.add(v);
     }

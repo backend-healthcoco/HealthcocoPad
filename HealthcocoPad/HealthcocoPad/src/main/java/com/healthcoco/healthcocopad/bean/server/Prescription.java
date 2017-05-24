@@ -188,7 +188,7 @@ public class Prescription extends SugarRecord {
         this.diagnosticTestsIdsJsonString = diagnosticTestsIdsJsonString;
     }
 
-    public static List<DiagnosticTest> getDiagnosticTestsList(List<DiagnosticTestsPrescription> list) {
+    public static ArrayList<DiagnosticTest> getDiagnosticTestsList(List<DiagnosticTestsPrescription> list) {
         ArrayList<DiagnosticTest> diagnosticTestsList = null;
         if (!Util.isNullOrEmptyList(list)) {
             for (DiagnosticTestsPrescription diagnosticTestPrescription : list) {
