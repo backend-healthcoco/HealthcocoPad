@@ -3,10 +3,8 @@
     android:id="@+id/container_drug_dose"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="5dp"
-    android:background="@drawable/shape_emr_item_background"
     android:orientation="vertical"
-    android:padding="10dp">
+    android:paddingBottom="10dp">
 
     <include layout="@layout/item_tablet_dose_add_visits" />
 

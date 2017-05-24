@@ -2,33 +2,41 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:padding="5dp">
 
-    <com.healthcoco.healthcocopad.views.FontAwesomeButton
-        android:id="@+id/bt_delete"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:background="@android:color/transparent"
-        android:gravity="center_vertical"
-        android:minHeight="0dp"
-        android:minWidth="0dp"
-        android:orientation="vertical"
-        android:padding="5dp"
-        android:text="@string/fa_trash"
-        android:textColor="@color/grey_dark_text"
-        android:textSize="@dimen/text_size_delete_fontawesome_text" />
-
-    <TextView
-        android:id="@+id/tv_name"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:gravity="center_vertical|start"
-        android:paddingBottom="10dp"
-        android:paddingLeft="10dp"
-        android:paddingTop="10dp"
-        android:text="tempText"
-        android:textColor="@color/black"
-        android:textSize="@dimen/text_size_select_drug_item" />
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_emr_item_background"
+        android:orientation="horizontal">
+
+        <com.healthcoco.healthcocopad.views.FontAwesomeButton
+            android:id="@+id/bt_delete_diagnostic_test"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:background="@android:color/transparent"
+            android:gravity="center_vertical"
+            android:minHeight="0dp"
+            android:minWidth="0dp"
+            android:orientation="vertical"
+            android:padding="5dp"
+            android:text="@string/fa_trash"
+            android:textColor="@color/grey_dark_text"
+            android:textSize="@dimen/text_size_delete_fontawesome_text" />
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical|start"
+            android:paddingBottom="10dp"
+            android:paddingLeft="10dp"
+            android:paddingTop="10dp"
+            android:text="tempText"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_select_drug_item" />
+    </LinearLayout>
 </LinearLayout>

@@ -45,7 +45,7 @@ public class DiagnosticTestListViewHolder extends HealthCocoViewHolder implement
         if (visitToggleStateFromPreferences) {
             view = (LinearLayout) inflater.inflate(R.layout.list_item_diagnostic_test, null);
             tvDiagnosisName = (TextView) view.findViewById(R.id.tv_name);
-            btDelete = (Button) view.findViewById(R.id.bt_delete);
+            btDelete = (Button) view.findViewById(R.id.bt_delete_diagnostic_test);
             btDelete.setOnClickListener(this);
         } else {
             view = (LinearLayout) inflater.inflate(R.layout.list_item_lab_test, null);
@@ -58,7 +58,7 @@ public class DiagnosticTestListViewHolder extends HealthCocoViewHolder implement
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.bt_delete:
+            case R.id.bt_delete_diagnostic_test:
                 itemListener.onDeleteItemClicked(diagnosticTest);
                 break;
             case R.id.tv_name:

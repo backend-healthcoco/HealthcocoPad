@@ -643,9 +643,11 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements T
         editTextSearch = initEditSearchView(suggestionType.getSearchHintId(), (View.OnClickListener) this);
         editTextSearch.setText("");
         editTextSearch.setTag(suggestionType);
-        MyScriptAddVisitsFragment myScriptAddVisitsFragment = (MyScriptAddVisitsFragment) mFragmentManager.findFragmentByTag(MyScriptAddVisitsFragment.class.getSimpleName());
-        if (myScriptAddVisitsFragment != null)
-            myScriptAddVisitsFragment.requestFocus(editTextSearch);
+        if (visitToggleStateFromPreferences) {
+            MyScriptAddVisitsFragment myScriptAddVisitsFragment = (MyScriptAddVisitsFragment) mFragmentManager.findFragmentByTag(MyScriptAddVisitsFragment.class.getSimpleName());
+            if (myScriptAddVisitsFragment != null)
+                myScriptAddVisitsFragment.requestFocus(editTextSearch);
+        }
         Util.requesFocus(editTextSearch);
     }
 }

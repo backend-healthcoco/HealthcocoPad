@@ -28,6 +28,7 @@ import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.LocalDatabaseUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
+import com.healthcoco.healthcocopad.viewholders.SelectedPrescriptionDrugDoseItemsListViewHolder;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,6 +45,7 @@ public class SelectedDrugItemsListFragment extends HealthCocoFragment implements
     private HashMap<String, DrugItem> drugsList = new HashMap<String, DrugItem>();
     private HashMap<String, DrugInteractionRequest> drugInteractionRequest = new HashMap<String, DrugInteractionRequest>();
     private SelectedPrescriptionDrugItemsListAdapter adapter;
+    private SelectedPrescriptionDrugDoseItemsListViewHolder viewHolder;
 
     public SelectedDrugItemsListFragment() {
 
@@ -116,7 +118,7 @@ public class SelectedDrugItemsListFragment extends HealthCocoFragment implements
         }
         adapter.setListData(list);
         adapter.notifyDataSetChanged();
-        checkForVisitEditAndSendBroadcast(Util.isNullOrEmptyList(drugsListMap));
+//        checkForVisitEditAndSendBroadcast(Util.isNullOrEmptyList(drugsListMap));
     }
 
     private void checkForVisitEditAndSendBroadcast(boolean isListNull) {
@@ -216,11 +218,11 @@ public class SelectedDrugItemsListFragment extends HealthCocoFragment implements
     public void addDrug(DrugItem drug) {
         formDrugInteractionsRequestList(drug);
         if (drug != null) {
-            String key = drug.getDrug().getUniqueId();
-            if (drugsList.containsKey(key))
-                drugsList.remove(key);
-            drugsList.put(key, drug);
+            if (drug.getDuration() == null || (drug.getDuration() != null && Util.isNullOrBlank(drug.getDuration().getValue())))
+                drug.setDuration(LocalDataServiceImpl.getInstance(mApp).getDefaultDuration());
+            drugsList.put(drug.getDrug().getUniqueId(), drug);
             notifyAdapter(drugsList);
+            lvDrugsList.setSelection(adapter.getCount());
         }
     }
 
@@ -248,23 +250,19 @@ public class SelectedDrugItemsListFragment extends HealthCocoFragment implements
         String dosage = "";
         String instructions = "";
         List<GenericName> genericNames = null;
-        switch (selectDrugItemType) {
-            case ALL_DRUGS:
-                DrugsListSolrResponse drugsSolr = (DrugsListSolrResponse) object;
-                drugId = drugsSolr.getUniqueId();
-                drugName = drugsSolr.getDrugName();
-                drugType = drugsSolr.getDrugType();
-                drugTypeId = drugsSolr.getDrugTypeId();
-                if (!Util.isNullOrEmptyList(drugsSolr.getDirection()))
-                    directionId = drugsSolr.getDirection().get(0).getUniqueId();
-                if (drugsSolr.getDuration() != null && drugsSolr.getDuration().getDurationUnit() != null) {
-                    durationtext = drugsSolr.getDuration().getValue();
-                    durationUnitId = drugsSolr.getDuration().getDurationUnit().getUniqueId();
-                }
-                dosage = drugsSolr.getDosage();
-                genericNames = drugsSolr.getGenericNames();
-                break;
+        DrugsListSolrResponse drugsSolr = (DrugsListSolrResponse) object;
+        drugId = drugsSolr.getUniqueId();
+        drugName = drugsSolr.getDrugName();
+        drugType = drugsSolr.getDrugType();
+        drugTypeId = drugsSolr.getDrugTypeId();
+        if (!Util.isNullOrEmptyList(drugsSolr.getDirection()))
+            directionId = drugsSolr.getDirection().get(0).getUniqueId();
+        if (drugsSolr.getDuration() != null && drugsSolr.getDuration().getDurationUnit() != null) {
+            durationtext = drugsSolr.getDuration().getValue();
+            durationUnitId = drugsSolr.getDuration().getDurationUnit().getUniqueId();
         }
+        dosage = drugsSolr.getDosage();
+        genericNames = drugsSolr.getGenericNames();
 
         Drug drug = new Drug();
         drug.setDrugName(drugName);
@@ -337,13 +335,14 @@ public class SelectedDrugItemsListFragment extends HealthCocoFragment implements
             adapter.notifyDataSetChanged();
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE_SELECTED_DRUGS_LIST) {
-            if (resultCode == HealthCocoConstants.RESULT_CODE_ADD_DRUG_DETAILS && data != null) {
-                DrugItem drug = (DrugItem) data.getSerializableExtra(HealthCocoConstants.TAG_DRUG_DETAILS);
-                addDrug(drug);
+    public void modifyDurationUnit(String unit) {
+        if (lvDrugsList.getChildCount() > 0) {
+            for (int i = 0; i < lvDrugsList.getChildCount(); i++) {
+                View child = lvDrugsList.getChildAt(i);
+                if (child.getTag() != null && child.getTag() instanceof SelectedPrescriptionDrugDoseItemsListViewHolder) {
+                    viewHolder = (SelectedPrescriptionDrugDoseItemsListViewHolder) child.getTag();
+                    viewHolder.setDurationUnitToAll(unit);
+                }
             }
         }
     }

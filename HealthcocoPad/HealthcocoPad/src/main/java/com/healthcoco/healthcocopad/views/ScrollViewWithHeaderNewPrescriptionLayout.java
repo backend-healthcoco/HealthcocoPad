@@ -5,6 +5,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
@@ -30,6 +31,7 @@ public class ScrollViewWithHeaderNewPrescriptionLayout extends ScrollView implem
     private LoadMorePageListener loadMoreListener;
     private HashMap<Integer, Boolean> headerVisibilityHashmap = new HashMap<>();
     private Button btHeaderInteraction;
+    private EditText etDuration;
 
     public ScrollViewWithHeaderNewPrescriptionLayout(Context context) {
         super(context);
@@ -78,6 +80,7 @@ public class ScrollViewWithHeaderNewPrescriptionLayout extends ScrollView implem
     public void addFixedHeader(RelativeLayout v) {
         this.tvHeader = v;
         btHeaderInteraction = (Button) tvHeader.findViewById(R.id.bt_header_interaction);
+        etDuration = (EditText) tvHeader.findViewById(R.id.et_duration);
     }
 
     @Override
@@ -115,10 +118,12 @@ public class ScrollViewWithHeaderNewPrescriptionLayout extends ScrollView implem
                                     case R.id.tv_header_one:
                                         textView.setText(R.string.lab_test);
                                         btHeaderInteraction.setVisibility(View.INVISIBLE);
+                                        etDuration.setVisibility(View.INVISIBLE);
                                         break;
                                     case R.id.tv_header_two:
                                         textView.setText(R.string.drugs);
                                         btHeaderInteraction.setVisibility(View.VISIBLE);
+                                        etDuration.setVisibility(View.VISIBLE);
                                         break;
                                 }
                             tvHeader.setVisibility(View.VISIBLE);

@@ -7,6 +7,7 @@
     android:orientation="horizontal">
 
     <LinearLayout
+        android:id="@+id/parent_layout_tabs"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="0.35"
@@ -69,7 +70,6 @@
         android:visibility="gone" />
 
     <RelativeLayout
-        android:id="@+id/parent_layout_drugList"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="0.65"
@@ -117,10 +117,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@color/grey_background"
-                        android:orientation="vertical"
-                        android:paddingBottom="8dp"
-                        android:paddingLeft="5dp"
-                        android:paddingRight="5dp">
+                        android:orientation="vertical">
 
                     </LinearLayout>
                 </LinearLayout>
@@ -159,8 +156,8 @@
                             android:id="@+id/et_header_two_duration"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="80dp"
-                            android:layout_toRightOf="@+id/tv_header_two_drugs"
+                            android:layout_marginRight="70dp"
+                            android:layout_toLeftOf="@+id/bt_header_two_interaction"
                             android:background="@drawable/shape_rounded_corners_item_background_dark_grey"
                             android:gravity="center"
                             android:hint="@string/duration"
@@ -235,8 +232,8 @@
                 android:id="@+id/et_duration"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="80dp"
-                android:layout_toRightOf="@+id/tv_drugs"
+                android:layout_marginRight="70dp"
+                android:layout_toLeftOf="@+id/bt_header_interaction"
                 android:background="@drawable/shape_rounded_corners_item_background_dark_grey"
                 android:gravity="center"
                 android:hint="@string/duration"
