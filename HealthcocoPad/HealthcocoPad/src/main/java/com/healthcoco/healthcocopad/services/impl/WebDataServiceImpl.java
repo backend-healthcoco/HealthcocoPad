@@ -22,6 +22,7 @@ import com.healthcoco.healthcocopad.bean.request.AddMedicalFamilyHistoryRequest;
 import com.healthcoco.healthcocopad.bean.request.AppointmentRequest;
 import com.healthcoco.healthcocopad.bean.request.AssignGroupRequest;
 import com.healthcoco.healthcocopad.bean.request.ClinicImageToSend;
+import com.healthcoco.healthcocopad.bean.request.ClinicalNoteToSend;
 import com.healthcoco.healthcocopad.bean.request.DoctorSignupHandheldContinueRequest;
 import com.healthcoco.healthcocopad.bean.request.DrugInteractionRequest;
 import com.healthcoco.healthcocopad.bean.request.Feedback;
@@ -1146,4 +1147,16 @@ public class WebDataServiceImpl implements GCMRefreshListener {
         getResponse(webServiceType, class1, url, prescription,
                 null, responseListener, errorListener);
     }
+
+    public void addClinicalNote(Class<?> class1, ClinicalNoteToSend clinicalNotes, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        getResponse(WebServiceType.ADD_CLINICAL_NOTES, class1, WebServiceType.ADD_CLINICAL_NOTES.getUrl(), clinicalNotes, null, responseListener,
+                errorListener);
+    }
+
+    public void updateClinicalNote(Class<?> class1, ClinicalNoteToSend clinicalNote, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        String url = WebServiceType.UPDATE_CLINICAL_NOTE.getUrl() + clinicalNote.getUniqueId() + HealthCocoConstants.PARAM_TAG_UPDATE;
+        getResponse(WebServiceType.UPDATE_CLINICAL_NOTE, class1, url, clinicalNote, null, responseListener,
+                errorListener);
+    }
+
 }

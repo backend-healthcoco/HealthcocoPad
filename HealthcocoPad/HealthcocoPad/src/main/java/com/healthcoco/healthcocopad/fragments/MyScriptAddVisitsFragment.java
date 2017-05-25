@@ -744,7 +744,7 @@ public class MyScriptAddVisitsFragment extends HealthCocoFragment implements Vie
                             selectedSuggestionType = SuggestionType.NOTES;
                             searchTerm = getLastTextAfterCharacterToBeReplaced(searchTerm);
                             break;
-                        case ECG_DETAILS:
+                        case ECG:
                             selectedSuggestionType = SuggestionType.ECG_DETAILS;
                             searchTerm = getLastTextAfterCharacterToBeReplaced(searchTerm);
                             break;
@@ -752,7 +752,7 @@ public class MyScriptAddVisitsFragment extends HealthCocoFragment implements Vie
                             selectedSuggestionType = SuggestionType.ECHO;
                             searchTerm = getLastTextAfterCharacterToBeReplaced(searchTerm);
                             break;
-                        case X_RAY_DETAILS:
+                        case XRAY:
                             selectedSuggestionType = SuggestionType.X_RAY_DETAILS;
                             searchTerm = getLastTextAfterCharacterToBeReplaced(searchTerm);
                             break;
@@ -1309,12 +1309,6 @@ public class MyScriptAddVisitsFragment extends HealthCocoFragment implements Vie
         }
         return isBlankClinicalNote && isBlankPrescription && isBlankAdvice && isBlankDiagram && isBlankLabTest;
     }
-
-
-    public boolean isBlankLabTests() {
-        return true;
-    }
-
 
     @Override
     public void onResume() {

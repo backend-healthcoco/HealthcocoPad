@@ -151,7 +151,6 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
         initTabsFragmentsList();
         initViewPagerAdapter();
         initSuggestionsFragment();
-        initSelectedDrugsListFragment();
     }
 
     private void initSelectedDrugsListFragment() {
@@ -200,7 +199,7 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
         editAdvice.addTextChangedListener(new HealthcocoTextWatcher(editAdvice, this));
         etDuration.addTextChangedListener(new HealthcocoTextWatcher(etDuration, this));
         etHeaderTwoDuration.addTextChangedListener(new HealthcocoTextWatcher(etHeaderTwoDuration, this));
-        ((CommonOpenUpActivity) mActivity).initActionbarRightAction(this);
+        ((CommonOpenUpActivity) mActivity).initSaveButton(this);
     }
 
     private void initScrollView() {
@@ -304,7 +303,7 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.container_right_action:
+            case R.id.bt_save:
                 validateData();
                 break;
             case R.id.bt_delete_diagnostic_test:
@@ -620,7 +619,6 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
                 break;
             case MotionEvent.ACTION_DOWN:
                 requestFocus(v);
-                addVisitSuggestionsFragment.refreshTagOfEditText(SuggestionType.ADVICE);
                 LogUtils.LOGD(TAG, "Action DOWN");
                 break;
         }
@@ -629,7 +627,7 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
 
     public void requestFocus(View v) {
         if (v.getId() == R.id.edit_advice) {
-            editAdvice.setTag(SuggestionType.ADVICE);
+            addVisitSuggestionsFragment.refreshTagOfEditText(SuggestionType.ADVICE);
         }
         refreshSuggestionsList(v, "");
     }

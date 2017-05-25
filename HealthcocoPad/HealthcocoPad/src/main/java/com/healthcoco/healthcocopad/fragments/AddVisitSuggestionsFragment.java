@@ -151,7 +151,7 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements T
     public void initListeners() {
         if (visitToggleStateFromPreferences)
             editTextSearch = initEditSearchView(R.string.search, (View.OnClickListener) this);
-        else initEditSearchView(R.string.search_drug, this, this);
+        else editTextSearch = initEditSearchView(R.string.search_drug, this, this);
         btAddNew.setOnClickListener(this);
         gvSuggestionsList.setOnItemClickListener(this);
         lvSuggestionsList.setOnItemClickListener(this);
@@ -632,7 +632,7 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements T
             intent.putExtra(MyScriptAddVisitsFragment.TAG_SELECTED_SUGGESTION_OBJECT, Parcels.wrap(adapterSolr.getItem(position)));
             LocalBroadcastManager.getInstance(mApp).sendBroadcast(intent);
         } else {
-            Intent intent = new Intent(AddEditNormalVisitsFragment.INTENT_ON_SUGGESTION_ITEM_CLICK);
+            Intent intent = new Intent(AddEditNormalVisitClinicalNotesFragment.INTENT_ON_SUGGESTION_ITEM_CLICK);
             intent.putExtra(TAG_SUGGESTIONS_TYPE, suggestionType.ordinal());
             intent.putExtra(MyScriptAddVisitsFragment.TAG_SELECTED_SUGGESTION_OBJECT, Parcels.wrap(adapterSolr.getItem(position)));
             LocalBroadcastManager.getInstance(mApp).sendBroadcast(intent);
@@ -648,6 +648,7 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements T
             if (myScriptAddVisitsFragment != null)
                 myScriptAddVisitsFragment.requestFocus(editTextSearch);
         }
+
         Util.requesFocus(editTextSearch);
     }
 }

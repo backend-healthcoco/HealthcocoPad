@@ -494,6 +494,8 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
         if (isMyScriptVisitToggleState)
             openCommonVisistActivity(CommonOpenUpFragmentType.ADD_VISITS, null, null, 0);
         else openCommonOpenUpActivity(CommonOpenUpFragmentType.ADD_VISITS, null, null, 0);
+//        openCommonVisistActivity(CommonOpenUpFragmentType.ADD_VISITS, null, null, 0);
+//        Util.addVisitToggleStateInPreference(mActivity,true);
     }
 
     @Override

@@ -358,6 +358,12 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
         alertBuilder.show();
     }
 
+    public void initSaveButton(View.OnClickListener listener) {
+        Button btSave = (Button) findViewById(R.id.bt_save);
+        if (btSave != null)
+            btSave.setOnClickListener(listener);
+    }
+
     public LinearLayout initActionbarRightAction(View.OnClickListener listener) {
         LinearLayout rightAction = (LinearLayout) findViewById(R.id.container_right_action);
         rightAction.setOnClickListener(listener);

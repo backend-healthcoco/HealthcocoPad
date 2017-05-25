@@ -11,6 +11,8 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AutoCompleteTextView;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -261,7 +263,7 @@ public class AddClinicalNotesVisitFragment extends HealthCocoFragment implements
     private void addPermissionItem(ClinicalNotesPermissionType clinicalNotesPermissionType) {
         LinearLayout layoutItemPermission = (LinearLayout) mActivity.getLayoutInflater().inflate(R.layout.layout_item_add_clinical_note_permision, null);
         TextView tvTitle = (TextView) layoutItemPermission.findViewById(R.id.tv_title);
-        TextView autotvPermission = (TextView) layoutItemPermission.findViewById(R.id.edit_permission_text);
+        EditText autotvPermission = (EditText) layoutItemPermission.findViewById(R.id.edit_permission_text);
         tvTitle.setText(clinicalNotesPermissionType.getTextId());
         autotvPermission.setId(clinicalNotesPermissionType.getAutotvId());
         autotvPermission.setHint(clinicalNotesPermissionType.getHintId());
@@ -345,20 +347,22 @@ public class AddClinicalNotesVisitFragment extends HealthCocoFragment implements
         return 0;
     }
 
-    public boolean isBlankClinicalNote() {
-        boolean isBlankClinicalNote = true;
-        if (!Util.isNullOrEmptyList(clinicalNotesUiPermissionsList))
-            for (String clinicalNotesPermissionType :
-                    clinicalNotesUiPermissionsList) {
-                TextView autoTvPermission = (TextView) view.findViewWithTag(clinicalNotesPermissionType);
-                if (autoTvPermission != null && !Util.isNullOrBlank(Util.getValidatedValueOrBlankTrimming(autoTvPermission))) {
-                    isBlankClinicalNote = false;
-                    break;
-                }
+    public int isBlankClinicalNote() {
+        boolean isDataPresent = false;
+        for (String clinicalNotesPermissionType :
+                user.getUiPermissions().getClinicalNotesPermissions()) {
+            EditText autoTvPermission = (EditText) view.findViewWithTag(clinicalNotesPermissionType);
+            if (autoTvPermission != null && !Util.isNullOrBlank(Util.getValidatedValueOrBlankTrimming(autoTvPermission))) {
+                isDataPresent = true;
+                break;
             }
-        if (!isBlankVitalSigns())
-            isBlankClinicalNote = false;
-        return isBlankClinicalNote;
+        }
+        if (isBlankVitalSigns()
+                && getValidatedMsgId() == 0
+                && !isDataPresent
+                && Util.isNullOrEmptyList(diagramsList))
+            return R.string.blank_clinical_note;
+        return 0;
     }
 
     private boolean isBlankVitalSigns() {
@@ -454,7 +458,6 @@ public class AddClinicalNotesVisitFragment extends HealthCocoFragment implements
             }
         }
 
-//        clinicalNotes.setDiagnoses(diagnosesListToSend);
         if (!Util.isNullOrEmptyList(diagramsList)) {
             ArrayList<String> diagramIdsList = new ArrayList<String>();
             diagramIdsList.addAll(diagramsList.keySet());

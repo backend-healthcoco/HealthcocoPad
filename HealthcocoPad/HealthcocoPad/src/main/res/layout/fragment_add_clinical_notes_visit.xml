@@ -18,7 +18,8 @@
             android:background="@color/white"
             android:focusable="true"
             android:focusableInTouchMode="true"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="5dp">
 
             <LinearLayout
                 android:id="@+id/parent_add_vital_signs"

@@ -789,4 +789,5 @@
     <string name="no_drugs_added">No Drugs Added</string>
     <string name="alert_add_drugs">Blank prescription cannot be saved.Add Drugs</string>
     <string name="confirm_remove_diagnostic_test">Are you sure you want to remove this Test?</string>
+    <string name="blank_clinical_note">Blank Clinical Note cannot be added</string>
 </resources>

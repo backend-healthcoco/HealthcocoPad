@@ -241,7 +241,7 @@ public class SelectedDrugItemsListFragment extends HealthCocoFragment implements
                 drug.setDuration(LocalDataServiceImpl.getInstance(mApp).getDefaultDuration());
             drugsList.put(drug.getDrug().getUniqueId(), drug);
             notifyAdapter(drugsList);
-            lvDrugsList.setSelection(adapter.getCount());
+//            lvDrugsList.setSelection(adapter.getCount());
         }
     }
 
