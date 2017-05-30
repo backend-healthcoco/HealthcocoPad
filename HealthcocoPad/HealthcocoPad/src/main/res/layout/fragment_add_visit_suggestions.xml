@@ -21,7 +21,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@android:color/transparent"
-            android:drawableLeft="@drawable/icon_search_normal"
             android:drawablePadding="8dp"
             android:drawableStart="@drawable/icon_search_normal"
             android:hint="@string/search"
@@ -83,7 +82,8 @@
             android:gravity="center"
             android:textSize="@dimen/text_size_no_results"
             android:textStyle="bold"
-            android:visibility="gone" />
+            android:text="@string/no_list_available"
+            android:visibility="visible" />
 
         <com.healthcoco.healthcocopad.views.GridViewLoadMore
             android:id="@+id/gv_suggestions_list"

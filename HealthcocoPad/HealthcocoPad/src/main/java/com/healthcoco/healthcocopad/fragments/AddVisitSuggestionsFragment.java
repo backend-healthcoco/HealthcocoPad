@@ -110,6 +110,8 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements T
     private TextView tvNoDrugs;
     private boolean visitToggleStateFromPreferences;
     private ListViewLoadMore lvSuggestionsList;
+    private AddEditNormalVisitsFragment addEditNormalVisitsFragment;
+    private AddEditNormalVisitClinicalNotesFragment addEditNormalVisitClinicalNotesFragment;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -151,7 +153,7 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements T
     public void initListeners() {
         if (visitToggleStateFromPreferences)
             editTextSearch = initEditSearchView(R.string.search, (View.OnClickListener) this);
-        else editTextSearch = initEditSearchView(R.string.search_drug, this, this);
+        else editTextSearch = initEditSearchView(R.string.search, this, this);
         btAddNew.setOnClickListener(this);
         gvSuggestionsList.setOnItemClickListener(this);
         lvSuggestionsList.setOnItemClickListener(this);
@@ -177,7 +179,6 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements T
                 PAGE_NUMBER = 0;
                 isLoadingFromSearch = true;
                 isEndOfListAchieved = false;
-//                getListFromLocal();
             } else
                 Util.showToast(mActivity, R.string.user_offline);
         }
@@ -434,10 +435,11 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements T
                 }
                 break;
             case R.id.bt_clear:
-                MyScriptAddVisitsFragment myScriptAddVisitsFragment = (MyScriptAddVisitsFragment) mFragmentManager.findFragmentByTag(MyScriptAddVisitsFragment.class.getSimpleName());
-                if (myScriptAddVisitsFragment != null)
-                    myScriptAddVisitsFragment.onClearButtonClick();
-//                clearSearchEditText();
+                if (visitToggleStateFromPreferences) {
+                    MyScriptAddVisitsFragment myScriptAddVisitsFragment = (MyScriptAddVisitsFragment) mFragmentManager.findFragmentByTag(MyScriptAddVisitsFragment.class.getSimpleName());
+                    if (myScriptAddVisitsFragment != null)
+                        myScriptAddVisitsFragment.onClearButtonClick();
+                } else clearSearchEditText();
                 break;
         }
     }
@@ -466,7 +468,6 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements T
         LocalBroadcastManager.getInstance(mActivity).unregisterReceiver(loadDataReceiver);
     }
 
-
     BroadcastReceiver loadDataReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, final Intent intent) {
@@ -483,25 +484,6 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements T
         }
     };
 
-    //
-//    @Override
-//    public void afterTextChanged(Editable s) {
-//        String search = String.valueOf(s).toUpperCase(Locale.ENGLISH);
-//        if (lastTextSearched == null || !lastTextSearched.equalsIgnoreCase(search)) {
-//            //sorting solar drugs list from server
-//            Util.checkNetworkStatus(mActivity);
-//            if (HealthCocoConstants.isNetworkOnline) {
-//                PAGE_NUMBER = 0;
-//                isLoadingFromSearch = true;
-//                isEndOfListAchieved = false;
-//                resetListAndPagingAttributes();
-//                LogUtils.LOGD(TAG, "TextChange afterTextChange");
-//                refreshData(false);
-//            } else
-//                Util.showToast(mActivity, R.string.user_offline);
-//        }
-//        lastTextSearched = search;
-//    }
     private void refreshData(boolean isInitialLoading) {
         refreshViewsAndTitle();
         mApp.cancelPendingRequests(String.valueOf(WebServiceType.GET_DRUGS_LIST_SOLR));
@@ -535,9 +517,18 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements T
                     btAddNew.setVisibility(View.GONE);
                 } else {
                     parentEditSearchView.setVisibility(View.VISIBLE);
-                    btAddNew.setVisibility(View.VISIBLE);
+//                    btAddNew.setVisibility(View.VISIBLE);
+                    switch (suggestionType) {
+                        case LAB_TESTS:
+                        case DRUGS:
+                            btAddNew.setVisibility(View.VISIBLE);
+                            break;
+                        default:
+                            btAddNew.setVisibility(View.GONE);
+                            break;
+                    }
                 }
-                tvNoDrugs.setText("");
+                tvNoDrugs.setText(R.string.no_list_available);
                 break;
         }
     }
@@ -626,17 +617,22 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements T
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Intent intent;
         if (visitToggleStateFromPreferences) {
-            Intent intent = new Intent(MyScriptAddVisitsFragment.INTENT_ON_SUGGESTION_ITEM_CLICK);
-            intent.putExtra(TAG_SUGGESTIONS_TYPE, suggestionType.ordinal());
-            intent.putExtra(MyScriptAddVisitsFragment.TAG_SELECTED_SUGGESTION_OBJECT, Parcels.wrap(adapterSolr.getItem(position)));
-            LocalBroadcastManager.getInstance(mApp).sendBroadcast(intent);
+            intent = new Intent(MyScriptAddVisitsFragment.INTENT_ON_SUGGESTION_ITEM_CLICK);
         } else {
-            Intent intent = new Intent(AddEditNormalVisitClinicalNotesFragment.INTENT_ON_SUGGESTION_ITEM_CLICK);
-            intent.putExtra(TAG_SUGGESTIONS_TYPE, suggestionType.ordinal());
-            intent.putExtra(MyScriptAddVisitsFragment.TAG_SELECTED_SUGGESTION_OBJECT, Parcels.wrap(adapterSolr.getItem(position)));
-            LocalBroadcastManager.getInstance(mApp).sendBroadcast(intent);
+            switch (suggestionType) {
+                case ADVICE:
+                    intent = new Intent(AddEditNormalVisitPrescriptionFragment.INTENT_ON_SUGGESTION_ITEM_CLICK);
+                    break;
+                default:
+                    intent = new Intent(AddEditNormalVisitClinicalNotesFragment.INTENT_ON_SUGGESTION_ITEM_CLICK);
+                    break;
+            }
         }
+        intent.putExtra(TAG_SUGGESTIONS_TYPE, suggestionType.ordinal());
+        intent.putExtra(MyScriptAddVisitsFragment.TAG_SELECTED_SUGGESTION_OBJECT, Parcels.wrap(adapterSolr.getItem(position)));
+        LocalBroadcastManager.getInstance(mApp).sendBroadcast(intent);
     }
 
     public void refreshTagOfEditText(SuggestionType suggestionType) {
@@ -648,7 +644,6 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements T
             if (myScriptAddVisitsFragment != null)
                 myScriptAddVisitsFragment.requestFocus(editTextSearch);
         }
-
         Util.requesFocus(editTextSearch);
     }
 }

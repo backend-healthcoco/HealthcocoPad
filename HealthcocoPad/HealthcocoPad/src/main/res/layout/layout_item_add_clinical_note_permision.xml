@@ -16,7 +16,7 @@
         android:layout_weight="@integer/add_visit_left_item_weight"
         android:padding="10dp"
         android:text="@string/holter"
-        android:gravity="center"
+        android:gravity="center|start"
         android:textColor="@color/black"
         android:textSize="@dimen/text_size_add_visits_lable"
         android:visibility="visible" />

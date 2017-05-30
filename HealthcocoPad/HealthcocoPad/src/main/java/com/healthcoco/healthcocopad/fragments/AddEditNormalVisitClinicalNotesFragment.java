@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -22,6 +24,7 @@ import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.request.ClinicalNoteToSend;
+import com.healthcoco.healthcocopad.bean.server.AdviceSuggestion;
 import com.healthcoco.healthcocopad.bean.server.AssignedUserUiPermissions;
 import com.healthcoco.healthcocopad.bean.server.ClinicalNotes;
 import com.healthcoco.healthcocopad.bean.server.ComplaintSuggestions;
@@ -49,6 +52,7 @@ import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.bean.server.VisitDetails;
 import com.healthcoco.healthcocopad.bean.server.VitalSigns;
 import com.healthcoco.healthcocopad.bean.server.XrayDetailSuggestions;
+import com.healthcoco.healthcocopad.custom.HealthcocoTextWatcher;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocopad.enums.ClinicalNotesPermissionType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
@@ -56,6 +60,7 @@ import com.healthcoco.healthcocopad.enums.SuggestionType;
 import com.healthcoco.healthcocopad.enums.VisitIdType;
 import com.healthcoco.healthcocopad.enums.VisitedForType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
+import com.healthcoco.healthcocopad.listeners.HealthcocoTextWatcherListener;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
@@ -79,7 +84,7 @@ import static com.healthcoco.healthcocopad.fragments.MyScriptAddVisitsFragment.T
  * Created by Shreshtha on 16-05-2017.
  */
 
-public class AddEditNormalVisitClinicalNotesFragment extends HealthCocoFragment implements LocalDoInBackgroundListenerOptimised, View.OnTouchListener, View.OnFocusChangeListener, View.OnClickListener {
+public class AddEditNormalVisitClinicalNotesFragment extends HealthCocoFragment implements LocalDoInBackgroundListenerOptimised, View.OnTouchListener, View.OnFocusChangeListener, View.OnClickListener, TextWatcher, HealthcocoTextWatcherListener {
     public static final String INTENT_ON_SUGGESTION_ITEM_CLICK = "com.healthcoco.healthcocopad.fragments.AddEditNormalVisitClinicalNotesFragment.ON_SUGGESTION_ITEM_CLICK";
     private User user;
     private LinearLayout containerSuggestionsList;
@@ -113,7 +118,6 @@ public class AddEditNormalVisitClinicalNotesFragment extends HealthCocoFragment 
 //            if (isFromCloneParcelable != null)
 //                isFromClone = Parcels.unwrap(isFromCloneParcelable);
         }
-        init();
 //        Bundle bundle = getArguments();
 //        if (bundle != null && bundle.containsKey(TAG_USER))
 //            user = Parcels.unwrap(bundle.getParcelable(TAG_USER));
@@ -133,7 +137,6 @@ public class AddEditNormalVisitClinicalNotesFragment extends HealthCocoFragment 
 
     private void initData() {
         initUiPermissions(user.getUiPermissions());
-//        refreshSuggestionsList(selectedViewForSuggestionsList, "");
     }
 
     private void initUiPermissions(AssignedUserUiPermissions uiPermissions) {
@@ -419,13 +422,17 @@ public class AddEditNormalVisitClinicalNotesFragment extends HealthCocoFragment 
                 LogUtils.LOGD(TAG, "Action UP");
                 break;
             case MotionEvent.ACTION_DOWN:
-                refreshSuggestionsList(v, "");
-                if (selectedSuggestionType != null)
-                    addVisitSuggestionsFragment.refreshTagOfEditText(selectedSuggestionType);
+                requestFocus(v);
                 LogUtils.LOGD(TAG, "Action DOWN");
                 break;
         }
         return false;
+    }
+
+    public void requestFocus(View v) {
+        refreshSuggestionsList(v, "");
+        if (selectedSuggestionType != null)
+            addVisitSuggestionsFragment.refreshTagOfEditText(selectedSuggestionType);
     }
 
     /**
@@ -674,6 +681,33 @@ public class AddEditNormalVisitClinicalNotesFragment extends HealthCocoFragment 
                 textBeforeComma = textBeforeComma + CHARACTER_TO_REPLACE_COMMA_WITH_SPACES;
             editText.setText(textBeforeComma + text);
             editText.setSelection(Util.getValidatedValueOrBlankTrimming(editText).length());
+        }
+    }
+
+
+    public TextWatcher addTextChangedListener(EditText autotvPermission) {
+        return new HealthcocoTextWatcher(autotvPermission, this);
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+
+    }
+
+    @Override
+    public void afterTextChange(View v, String s) {
+        if (v instanceof EditText) {
+            refreshSuggestionsList(v, s);
         }
     }
 }

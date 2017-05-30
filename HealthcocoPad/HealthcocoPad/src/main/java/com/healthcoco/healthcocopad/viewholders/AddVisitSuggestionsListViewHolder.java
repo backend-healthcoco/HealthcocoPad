@@ -7,6 +7,7 @@ import android.widget.TextView;
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.HealthCocoViewHolder;
 import com.healthcoco.healthcocopad.R;
+import com.healthcoco.healthcocopad.bean.server.AdviceSuggestion;
 import com.healthcoco.healthcocopad.bean.server.ComplaintSuggestions;
 import com.healthcoco.healthcocopad.bean.server.DiagnosisSuggestions;
 import com.healthcoco.healthcocopad.bean.server.DiagnosticTest;
@@ -99,6 +100,8 @@ public class AddVisitSuggestionsListViewHolder extends HealthCocoViewHolder {
             text = ((IndicationOfUsgSuggestions) objData).getIndicationOfUSG();
         else if (objData instanceof HolterSuggestions)
             text = ((HolterSuggestions) objData).getHolter();
+        else if (objData instanceof AdviceSuggestion)
+            text = ((AdviceSuggestion) objData).getAdvice();
         tvName.setText(text);
         if (objData instanceof DrugsListSolrResponse) {
             String genericNamesFormatted = "";

@@ -25,6 +25,7 @@
                 android:id="@+id/parent_add_vital_signs"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
                 android:background="@color/white"
                 android:clickable="true"
                 android:focusable="true"

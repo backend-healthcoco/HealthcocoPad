@@ -887,6 +887,11 @@ public class LocalDataServiceImpl {
                 if (!Util.isNullOrEmptyList(indicationOfUsgSuggestionsList))
                     latestUpdatedTime = indicationOfUsgSuggestionsList.get(0).getUpdatedTime();
                 break;
+            case ADVICE_SUGGESTIONS:
+                List<AdviceSuggestion> adviceSuggestions = AdviceSuggestion.find(AdviceSuggestion.class, null, null, null, "updated_time DESC", "1");
+                if (!Util.isNullOrEmptyList(adviceSuggestions))
+                    latestUpdatedTime = adviceSuggestions.get(0).getUpdatedTime();
+                break;
             case DRUG_DOSAGE:
                 List<DrugDosage> doasageList = DrugDosage.find(DrugDosage.class, null, null, null, "updated_time DESC", "1");
                 if (!Util.isNullOrEmptyList(doasageList))
@@ -3397,6 +3402,9 @@ public class LocalDataServiceImpl {
                     break;
                 case INDICATION_OF_USG:
                     key = LocalDatabaseUtils.KEY_INDICATION_OF_USG;
+                    break;
+                case ADVICE:
+                    key = LocalDatabaseUtils.KEY_ADVICE;
                     break;
                 default:
                     break;

@@ -96,6 +96,7 @@ public class LocalDatabaseUtils {
     public static final String KEY_PV = "pv";
     public static final String KEY_PS = "ps";
     public static final String KEY_INDICATION_OF_USG = "indication_of_usg";
+    public static final String KEY_ADVICE = "advice";
 
     public static String KEY_FOREIGN_ROLE_ID = "foreign_role_id";
     public static final String KEY_FOREIGN_MEDICAL_HISTORY_ID = "foreign_medical_history_id";

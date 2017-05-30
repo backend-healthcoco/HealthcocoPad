@@ -269,7 +269,7 @@ public class AddClinicalNotesVisitFragment extends HealthCocoFragment implements
         autotvPermission.setHint(clinicalNotesPermissionType.getHintId());
         autotvPermission.setTag(String.valueOf(clinicalNotesPermissionType));
         autotvPermission.setOnTouchListener(addEditNormalVisitClinicalNotesFragment.getOnTouchListener());
-
+        autotvPermission.addTextChangedListener(addEditNormalVisitClinicalNotesFragment.addTextChangedListener(autotvPermission));
         String text = "";
         if (clinicalNotes != null) {
             switch (clinicalNotesPermissionType) {

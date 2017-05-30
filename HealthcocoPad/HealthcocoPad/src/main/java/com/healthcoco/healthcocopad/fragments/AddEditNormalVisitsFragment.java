@@ -30,6 +30,7 @@ import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.adapter.ContactsDetailViewPagerAdapter;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.request.PrescriptionRequest;
+import com.healthcoco.healthcocopad.bean.server.AdviceSuggestion;
 import com.healthcoco.healthcocopad.bean.server.ComplaintSuggestions;
 import com.healthcoco.healthcocopad.bean.server.DiagnosisSuggestions;
 import com.healthcoco.healthcocopad.bean.server.DiagnosticTest;
@@ -81,7 +82,10 @@ import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import static com.healthcoco.healthcocopad.fragments.AddClinicalNotesMyScriptVisitFragment.CHARACTER_TO_BE_REPLACED;
 import static com.healthcoco.healthcocopad.fragments.AddClinicalNotesVisitFragment.CHARACTER_TO_REPLACE_COMMA_WITH_SPACES;
 import static com.healthcoco.healthcocopad.fragments.AddVisitSuggestionsFragment.TAG_SUGGESTIONS_TYPE;
 import static com.healthcoco.healthcocopad.fragments.MyScriptAddVisitsFragment.TAG_SELECTED_SUGGESTION_OBJECT;
@@ -379,5 +383,20 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
 //            visitDetails.setPrescription(prescription);
 //        }
         return visitDetails;
+    }
+
+    /**
+     * Gets text before last occurance of CHARACTER_TO_BE_REPLACED in searchedTerm
+     *
+     * @param searchTerm
+     * @return : text Before  last occurance of CHARACTER_TO_BE_REPLACED
+     */
+    public String getTextBeforeLastOccuranceOfCharacter(String searchTerm) {
+        Pattern p = Pattern.compile("\\s*(.*)" + CHARACTER_TO_BE_REPLACED + ".*");
+        Matcher m = p.matcher(searchTerm.trim());
+
+        if (m.find())
+            return m.group(1);
+        return "";
     }
 }

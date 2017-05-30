@@ -1,8 +1,11 @@
 package com.healthcoco.healthcocopad.fragments;
 
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -34,12 +37,14 @@ import com.healthcoco.healthcocopad.adapter.SelectedTemplateDrugItemsListAdapter
 import com.healthcoco.healthcocopad.bean.DrugInteractions;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.request.PrescriptionRequest;
+import com.healthcoco.healthcocopad.bean.server.AdviceSuggestion;
 import com.healthcoco.healthcocopad.bean.server.DiagnosticTest;
 import com.healthcoco.healthcocopad.bean.server.Drug;
 import com.healthcoco.healthcocopad.bean.server.DrugItem;
 import com.healthcoco.healthcocopad.bean.server.DrugsListSolrResponse;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.Prescription;
+import com.healthcoco.healthcocopad.bean.server.PresentComplaintSuggestions;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.TempTemplate;
 import com.healthcoco.healthcocopad.bean.server.User;
@@ -71,6 +76,8 @@ import com.healthcoco.healthcocopad.utilities.Util;
 import com.healthcoco.healthcocopad.views.FontAwesomeButton;
 import com.healthcoco.healthcocopad.views.ScrollViewWithHeaderNewPrescriptionLayout;
 
+import org.parceler.Parcels;
+
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -78,7 +85,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.healthcoco.healthcocopad.fragments.AddClinicalNotesMyScriptVisitFragment.CHARACTER_TO_BE_REPLACED;
+import static com.healthcoco.healthcocopad.fragments.AddClinicalNotesVisitFragment.CHARACTER_TO_REPLACE_COMMA_WITH_SPACES;
 import static com.healthcoco.healthcocopad.fragments.AddVisitSuggestionsFragment.TAG_SUGGESTIONS_TYPE;
+import static com.healthcoco.healthcocopad.fragments.MyScriptAddVisitsFragment.TAG_SELECTED_SUGGESTION_OBJECT;
 
 /**
  * Created by Shreshtha on 02-03-2017.
@@ -88,7 +97,8 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
         SelectDrugItemClickListener, SelectedDrugsListItemListener, TemplateListItemListener,
         DiagnosticTestItemListener, AddNewPrescriptionListener, LocalDoInBackgroundListenerOptimised,
         View.OnTouchListener, HealthcocoTextWatcherListener {
-
+    public static final String INTENT_ON_SUGGESTION_ITEM_CLICK = "com.healthcoco.healthcocopad.fragments.AddEditNormalVisitPrescriptionFragment.ON_SUGGESTION_ITEM_CLICK";
+    private boolean receiversRegistered;
     private ViewPager viewPager;
     private TabHost tabhost;
     private ArrayList<Fragment> fragmentsList;
@@ -127,6 +137,8 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
     private SuggestionType selectedSuggestionType = null;
     private LinearLayout parentLayoutTabs;
     private EditText etHeaderTwoDuration;
+    private boolean isOnItemClick;
+    private ImageButton btClear;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -174,10 +186,11 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
         parentDiagnosticTestList = (LinearLayout) view.findViewById(R.id.parent_diagnostic_tests_list);
         parentDrugsList = (LinearLayout) view.findViewById(R.id.parent_drugs_list);
         parentLayoutTabs = (LinearLayout) view.findViewById(R.id.parent_layout_tabs);
-        containerAdviceSuggestionsList = (LinearLayout) view.findViewById(R.id.container_advice_suggestions_list);
+        containerAdviceSuggestionsList = (LinearLayout) view.findViewById(R.id.parent_container_advice_suggestions_list);
         btHeaderInteraction = (FontAwesomeButton) tvHeader.findViewById(R.id.bt_header_interaction);
         btHeaderTwoInteraction = (FontAwesomeButton) tvHeaderTwo.findViewById(R.id.bt_header_two_interaction);
         tvNoDrugLabselected = (TextView) view.findViewById(R.id.tv_no_drug_lab_selected);
+        btClear = (ImageButton) view.findViewById(R.id.bt_clear);
     }
 
     private void initSuggestionsFragment() {
@@ -190,6 +203,7 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
 
     @Override
     public void initListeners() {
+        btClear.setOnClickListener(this);
         tabhost.setOnTabChangedListener(this);
         viewPager.addOnPageChangeListener(this);
         editAdvice.setOnClickListener(this);
@@ -197,6 +211,7 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
         btHeaderInteraction.setOnClickListener(this);
         editAdvice.setOnTouchListener(this);
         editAdvice.addTextChangedListener(new HealthcocoTextWatcher(editAdvice, this));
+        editAdvice.setTag(String.valueOf(PrescriptionPermissionType.ADVICE));
         etDuration.addTextChangedListener(new HealthcocoTextWatcher(etDuration, this));
         etHeaderTwoDuration.addTextChangedListener(new HealthcocoTextWatcher(etHeaderTwoDuration, this));
         ((CommonOpenUpActivity) mActivity).initSaveButton(this);
@@ -313,6 +328,10 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
             case R.id.bt_header_two_interaction:
                 confirmDrugInteractionsAlert();
                 LogUtils.LOGD(TAG, "Interactions Clicked");
+                break;
+            case R.id.bt_clear:
+                containerAdviceSuggestionsList.setVisibility(View.GONE);
+                parentLayoutTabs.setVisibility(View.VISIBLE);
                 break;
             default:
                 break;
@@ -679,13 +698,84 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
 
     @Override
     public void afterTextChange(View v, String s) {
-        refreshSuggestionsList(v, s.toString());
-        if (v.getId() == R.id.et_duration || (v.getId() == R.id.et_header_two_duration)) {
-            setDurationUnitToAll(s);
+        if (v instanceof EditText) {
+            refreshSuggestionsList(v, s);
+            if (v.getId() == R.id.et_duration || (v.getId() == R.id.et_header_two_duration)) {
+                setDurationUnitToAll(s);
+            }
         }
     }
 
     private void setDurationUnitToAll(String unit) {
         selectedDrugItemsListFragment.modifyDurationUnit(unit);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (!receiversRegistered) {
+            LogUtils.LOGD(TAG, "onResume " + receiversRegistered);
+
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(INTENT_ON_SUGGESTION_ITEM_CLICK);
+            LocalBroadcastManager.getInstance(mActivity).registerReceiver(onSuggestionItemClickReceiver, filter);
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        LocalBroadcastManager.getInstance(mActivity).unregisterReceiver(onSuggestionItemClickReceiver);
+    }
+
+    BroadcastReceiver onSuggestionItemClickReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, final Intent intent) {
+            if (intent != null && intent.hasExtra(TAG_SUGGESTIONS_TYPE) && intent.hasExtra(TAG_SELECTED_SUGGESTION_OBJECT)) {
+                int ordinal = intent.getIntExtra(TAG_SUGGESTIONS_TYPE, -1);
+                SuggestionType suggestionType = SuggestionType.values()[ordinal];
+                Object selectedSuggestionObject = Parcels.unwrap(intent.getParcelableExtra(TAG_SELECTED_SUGGESTION_OBJECT));
+                if (suggestionType != null && selectedSuggestionObject != null) {
+                    handleSelectedSugestionObject(suggestionType, selectedSuggestionObject);
+                }
+            }
+        }
+    };
+
+    private void handleSelectedSugestionObject(SuggestionType suggestionType, Object selectedSuggestionObject) {
+        String text = "";
+        switch (suggestionType) {
+            case ADVICE:
+                if (selectedSuggestionObject instanceof AdviceSuggestion) {
+                    AdviceSuggestion adviceSuggestion = (AdviceSuggestion) selectedSuggestionObject;
+                    text = adviceSuggestion.getAdvice() + CHARACTER_TO_REPLACE_COMMA_WITH_SPACES;
+                }
+                break;
+
+        }
+        if (selectedViewForSuggestionsList != null && selectedViewForSuggestionsList instanceof EditText && !Util.isNullOrBlank(text)) {
+            EditText editText = ((EditText) selectedViewForSuggestionsList);
+            isOnItemClick = true;
+            String textBeforeComma = getTextBeforeLastOccuranceOfCharacter(Util.getValidatedValueOrBlankWithoutTrimming(editText));
+            if (!Util.isNullOrBlank(textBeforeComma))
+                textBeforeComma = textBeforeComma + CHARACTER_TO_REPLACE_COMMA_WITH_SPACES;
+            editText.setText(textBeforeComma + text);
+            editText.setSelection(Util.getValidatedValueOrBlankTrimming(editText).length());
+        }
+    }
+
+    /**
+     * Gets text before last occurance of CHARACTER_TO_BE_REPLACED in searchedTerm
+     *
+     * @param searchTerm
+     * @return : text Before  last occurance of CHARACTER_TO_BE_REPLACED
+     */
+    public String getTextBeforeLastOccuranceOfCharacter(String searchTerm) {
+        Pattern p = Pattern.compile("\\s*(.*)" + CHARACTER_TO_BE_REPLACED + ".*");
+        Matcher m = p.matcher(searchTerm.trim());
+
+        if (m.find())
+            return m.group(1);
+        return "";
     }
 }
