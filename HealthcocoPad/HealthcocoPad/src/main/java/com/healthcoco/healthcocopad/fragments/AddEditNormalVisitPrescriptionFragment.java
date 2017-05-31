@@ -8,14 +8,12 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -39,23 +37,17 @@ import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.request.PrescriptionRequest;
 import com.healthcoco.healthcocopad.bean.server.AdviceSuggestion;
 import com.healthcoco.healthcocopad.bean.server.DiagnosticTest;
-import com.healthcoco.healthcocopad.bean.server.Drug;
 import com.healthcoco.healthcocopad.bean.server.DrugItem;
-import com.healthcoco.healthcocopad.bean.server.DrugsListSolrResponse;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.Prescription;
-import com.healthcoco.healthcocopad.bean.server.PresentComplaintSuggestions;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.TempTemplate;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.bean.server.VisitDetails;
 import com.healthcoco.healthcocopad.custom.DummyTabFactory;
-import com.healthcoco.healthcocopad.custom.HealthcocoOnSelectionChanged;
 import com.healthcoco.healthcocopad.custom.HealthcocoTextWatcher;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
-import com.healthcoco.healthcocopad.enums.ClinicalNotesPermissionType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
-import com.healthcoco.healthcocopad.enums.PatientProfileScreenType;
 import com.healthcoco.healthcocopad.enums.PrescriptionPermissionType;
 import com.healthcoco.healthcocopad.enums.SelectDrugItemType;
 import com.healthcoco.healthcocopad.enums.SuggestionType;
@@ -139,6 +131,9 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
     private EditText etHeaderTwoDuration;
     private boolean isOnItemClick;
     private ImageButton btClear;
+    private AddEditNormalVisitsFragment addEditNormalVisitsFragment;
+    private AddEditNormalVisitClinicalNotesFragment addEditNormalVisitClinicalNotesFragment;
+    private boolean isFromClone;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -151,8 +146,14 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         init();
-        mActivity.showLoading(false);
-        new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_FRAGMENT_INITIALISATION_DATA, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        Intent intent = mActivity.getIntent();
+        if (intent != null) {
+            Parcelable isFromCloneParcelable = intent.getParcelableExtra(HealthCocoConstants.TAG_IS_FROM_CLONE);
+            if (isFromCloneParcelable != null)
+                isFromClone = Parcels.unwrap(isFromCloneParcelable);
+            mActivity.showLoading(false);
+            new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_FRAGMENT_INITIALISATION_DATA, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        }
     }
 
     @Override
@@ -265,6 +266,32 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
         else notifyDiagnosticsList(null);
     }
 
+    public void prePopulateVisitDetails(List<Prescription> prescriptionList) {
+        if (!Util.isNullOrEmptyList(prescriptionList)) {
+            for (Prescription prescription :
+                    prescriptionList) {
+                //initialising drugs List
+                if (!Util.isNullOrEmptyList(prescription.getItems())) {
+                    for (DrugItem drugItem :
+                            prescription.getItems()) {
+                        if (drugItem.getDrug() != null && !Util.isNullOrBlank(drugItem.getDrug().getUniqueId()))
+                            selectedDrugItemsListFragment.addDrug(drugItem);
+                    }
+                }
+                //initialising DiagnosticTests(LabTests)
+                if (!Util.isNullOrEmptyList(prescription.getDiagnosticTests())) {
+                    notifyDiagnosticsList(prescription.getDiagnosticTestsList(prescription.getDiagnosticTests()));
+                }
+
+                if (!Util.isNullOrBlank(prescription.getAdvice())) {
+                    editAdvice.setText(prescription.getAdvice());
+                }
+                if (!isFromClone)
+                    prescriptionId = prescription.getUniqueId();
+            }
+        }
+    }
+
     private void notifyDiagnosticsList(ArrayList<DiagnosticTest> diagnosticTests) {
         containerDiagnosticTests.removeAllViews();
         if (!Util.isNullOrEmptyList(diagnosticTests)) {
@@ -280,6 +307,7 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
                 btDeleteDiagnosticTest.setTag(diagnosticTest);
                 btDeleteDiagnosticTest.setOnClickListener(this);
                 containerDiagnosticTests.addView(linearLayout);
+                selectedDiagnosticTestsList.put(diagnosticTest.getUniqueId(), diagnosticTest);
             }
         } else {
             if (!isDrugItemPresent)
@@ -332,6 +360,11 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
             case R.id.bt_clear:
                 containerAdviceSuggestionsList.setVisibility(View.GONE);
                 parentLayoutTabs.setVisibility(View.VISIBLE);
+
+                addEditNormalVisitsFragment = (AddEditNormalVisitsFragment) mFragmentManager.findFragmentByTag(AddEditNormalVisitsFragment.class.getSimpleName());
+                addEditNormalVisitClinicalNotesFragment = (AddEditNormalVisitClinicalNotesFragment) addEditNormalVisitsFragment.getCurrentTabFragment(0);
+                addVisitSuggestionsFragment.refreshTagOfEditText(SuggestionType.PRESENT_COMPLAINT);
+                addEditNormalVisitClinicalNotesFragment.getOnTouchListener();
                 break;
             default:
                 break;
@@ -431,7 +464,7 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
         prescription.setHospitalId(user.getForeignHospitalId());
         prescription.setItems(selectedDrugItemsListFragment.getModifiedDrugsList());
         prescription.setDiagnosticTests(getLabTestsList());
-        prescription.setAdvice(Util.getValidatedValueOrBlankTrimming(editAdvice));
+        prescription.setAdvice(Util.getValidatedValueOrNull(editAdvice));
         if (!Util.isNullOrBlank(prescriptionId))
             prescription.setUniqueId(prescriptionId);
         return prescription;

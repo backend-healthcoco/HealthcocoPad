@@ -50,7 +50,7 @@
                 android:layout_height="wrap_content"
                 android:clickable="false"
                 android:gravity="center_vertical"
-                android:text="@string/add"
+                android:text="@string/add_diagram"
                 android:textAllCaps="false"
                 android:textColor="@drawable/text_selector_white_translucent"
                 android:textSize="@dimen/text_size_add_clinical_note_add_diagram_btn"

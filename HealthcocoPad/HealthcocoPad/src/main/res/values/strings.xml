@@ -791,4 +791,5 @@
     <string name="confirm_remove_diagnostic_test">Are you sure you want to remove this Test?</string>
     <string name="blank_clinical_note">Blank Clinical Note cannot be added</string>
     <string name="no_list_available">No List Available</string>
+    <string name="add_diagram">Add Diagram</string>
 </resources>

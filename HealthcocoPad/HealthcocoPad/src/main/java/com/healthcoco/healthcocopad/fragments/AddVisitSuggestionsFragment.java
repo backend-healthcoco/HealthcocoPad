@@ -52,6 +52,7 @@ import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.bean.server.XrayDetailSuggestions;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocopad.dialogFragment.AddNewDrugDialogFragment;
+import com.healthcoco.healthcocopad.enums.AddUpdateNameDialogType;
 import com.healthcoco.healthcocopad.enums.ChangeViewType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.SuggestionType;
@@ -430,6 +431,8 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements T
                         newDrugDialogFragment.show(mActivity.getSupportFragmentManager(),
                                 newDrugDialogFragment.getClass().getSimpleName());
                         break;
+//                    case PRESENT_COMPLAINT:
+//                        mActivity.openAddUpdateNameDialogFragment(WebServiceType.ADD_DIAGNOSTIC_TESTS, AddUpdateNameDialogType.ADD_DIAGNOSTIC_TEST, this, user, null, HealthCocoConstants.RESULT_CODE_DIAGNOSTICS_TESTS);
                     default:
                         break;
                 }

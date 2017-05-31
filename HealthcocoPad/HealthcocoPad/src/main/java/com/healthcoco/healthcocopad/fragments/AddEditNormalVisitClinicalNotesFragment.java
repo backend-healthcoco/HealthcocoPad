@@ -110,18 +110,6 @@ public class AddEditNormalVisitClinicalNotesFragment extends HealthCocoFragment 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Intent intent = mActivity.getIntent();
-        if (intent != null) {
-            visitId = Parcels.unwrap(intent.getParcelableExtra(TAG_VISIT_ID));
-//            clinicalNoteId = intent.getStringExtra(TAG_CLINICAL_NOTE_ID);
-//            Parcelable isFromCloneParcelable = intent.getParcelableExtra(TAG_IS_FROM_CLONE);
-//            if (isFromCloneParcelable != null)
-//                isFromClone = Parcels.unwrap(isFromCloneParcelable);
-        }
-//        Bundle bundle = getArguments();
-//        if (bundle != null && bundle.containsKey(TAG_USER))
-//            user = Parcels.unwrap(bundle.getParcelable(TAG_USER));
-//        String visitToggleStateFromPreferences = Util.getVisitToggleStateFromPreferences(mActivity);
         init();
         mActivity.showLoading(false);
         new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_FRAGMENT_INITIALISATION_DATA, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
@@ -168,7 +156,7 @@ public class AddEditNormalVisitClinicalNotesFragment extends HealthCocoFragment 
         transaction.commit();
     }
 
-    private void prePopulateVisitDetails(VisitDetails visitDetails) {
+    public void prePopulateVisitDetails(VisitDetails visitDetails) {
         if (!Util.isNullOrEmptyList(visitDetails.getVisitedFor())) {
             for (VisitedForType visitedForType :
                     visitDetails.getVisitedFor()) {
@@ -177,13 +165,11 @@ public class AddEditNormalVisitClinicalNotesFragment extends HealthCocoFragment 
                         if (!Util.isNullOrEmptyList(visitDetails.getClinicalNotes())) {
                             for (ClinicalNotes clinicalNotes :
                                     visitDetails.getClinicalNotes()) {
-                                parentClinicalNote.setVisibility(View.VISIBLE);
                                 addClinicalNotesFragment.refreshData(clinicalNotes);
 //                                if (!isFromClone)
 //                                    clinicalNoteId = clinicalNotes.getUniqueId();
                             }
                         }
-                        parentClinicalNote.setVisibility(View.GONE);
                         break;
                 }
             }
@@ -336,6 +322,8 @@ public class AddEditNormalVisitClinicalNotesFragment extends HealthCocoFragment 
 //                volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getVisitDetailResponse(WebServiceType.GET_PATIENT_VISIT_DETAIL, visitId, null, null);
 //                break;
         }
+        if (volleyResponseBean == null)
+            volleyResponseBean = new VolleyResponseBean();
         volleyResponseBean.setIsFromLocalAfterApiSuccess(response.isFromLocalAfterApiSuccess());
         return volleyResponseBean;
     }

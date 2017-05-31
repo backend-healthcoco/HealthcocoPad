@@ -58,7 +58,7 @@ public class DiagnosticTestListFragment extends HealthCocoFragment implements Di
     private static final int REQUEST_CODE_DIAGNOSTICS_TESTS = 101;
     private int PAGE_NUMBER = 0;
     private HashMap<String, DiagnosticTest> addedDiagnosticsHashMap = new HashMap<>();
-    private DiagnosticTestsListAdapter mAdapterAssignedList;
+    private DiagnosticTestsListAdapter diagnosticTestsListAdapter;
     private User user;
     private CommonListSolarDialogFragment commonListDialog;
     private ListViewLoadMore lvLabTests;
@@ -127,8 +127,8 @@ public class DiagnosticTestListFragment extends HealthCocoFragment implements Di
     }
 
     private void initAssignedDiagnosticsListAdapter() {
-        mAdapterAssignedList = new DiagnosticTestsListAdapter(mActivity, this);
-        lvLabTests.setAdapter(mAdapterAssignedList);
+        diagnosticTestsListAdapter = new DiagnosticTestsListAdapter(mActivity, this);
+        lvLabTests.setAdapter(diagnosticTestsListAdapter);
     }
 
     private void notifyActivatedAdapter(List activatedList) {
@@ -139,8 +139,8 @@ public class DiagnosticTestListFragment extends HealthCocoFragment implements Di
             lvLabTests.setVisibility(View.GONE);
             tvNoLabTests.setVisibility(View.VISIBLE);
         }
-        mAdapterAssignedList.setListData(activatedList);
-        mAdapterAssignedList.notifyDataSetChanged();
+        diagnosticTestsListAdapter.setListData(activatedList);
+        diagnosticTestsListAdapter.notifyDataSetChanged();
 //        ListViewSizeHelper.getListViewSize(lvAssignedList);
     }
 
@@ -349,5 +349,11 @@ public class DiagnosticTestListFragment extends HealthCocoFragment implements Di
     @Override
     public boolean isEndOfListAchieved() {
         return isEndOfListAchieved;
+    }
+
+    public void addDiagnosticTest(DiagnosticTest diagnosticTests) {
+        addedDiagnosticsHashMap.put(diagnosticTests.getUniqueId(), diagnosticTests);
+        notifyActivatedAdapter(new ArrayList<DiagnosticTest>(addedDiagnosticsHashMap.values()));
+        lvLabTests.setSelection(diagnosticTestsListAdapter.getCount());
     }
 }

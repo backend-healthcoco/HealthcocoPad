@@ -602,7 +602,7 @@ public class MyScriptAddVisitsFragment extends HealthCocoFragment implements Vie
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
                 Util.addVisitToggleStateInPreference(mActivity, false);
-                openCommonOpenUpActivity(CommonOpenUpFragmentType.ADD_VISITS, null, null, 0);
+                openCommonOpenUpActivity(CommonOpenUpFragmentType.ADD_VISITS,  HealthCocoConstants.TAG_VISIT_ID, visitId, 0);
                 mActivity.finish();
             }
         });

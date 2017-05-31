@@ -20,6 +20,7 @@ import com.android.volley.Response;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.activities.AddVisitsActivity;
+import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.adapter.PatientDetailVisitAdapter;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.Prescription;
@@ -86,6 +87,7 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
     private OptionsPopupWindow popupWindow;
     private SwipeRefreshLayout swipeRefreshLayout;
     private int currentPageNumber;
+    boolean isMyScriptVisitToggleState;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -395,7 +397,11 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
 
     @Override
     public void editVisit(String visitId) {
-        openCommonVisistActivity(CommonOpenUpFragmentType.ADD_VISITS, HealthCocoConstants.TAG_VISIT_ID, visitId, 0);
+        isMyScriptVisitToggleState = Util.getVisitToggleStateFromPreferences(mActivity);
+        if (isMyScriptVisitToggleState)
+            openCommonVisistActivity(CommonOpenUpFragmentType.ADD_VISITS, HealthCocoConstants.TAG_VISIT_ID, visitId, 0);
+        else
+            openCommonOpenUpActivity(CommonOpenUpFragmentType.ADD_VISITS, HealthCocoConstants.TAG_VISIT_ID, visitId, 0);
     }
 
     @Override
@@ -418,11 +424,20 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
 
     @Override
     public void cloneVisit(String visitId) {
-        Intent intent = new Intent(mActivity, AddVisitsActivity.class);
-        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.ADD_VISITS.ordinal());
-        intent.putExtra(HealthCocoConstants.TAG_IS_FROM_CLONE, Parcels.wrap(true));
-        intent.putExtra(HealthCocoConstants.TAG_VISIT_ID, Parcels.wrap(visitId));
-        startActivity(intent);
+        isMyScriptVisitToggleState = Util.getVisitToggleStateFromPreferences(mActivity);
+        if (isMyScriptVisitToggleState) {
+            Intent intent = new Intent(mActivity, AddVisitsActivity.class);
+            intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.ADD_VISITS.ordinal());
+            intent.putExtra(HealthCocoConstants.TAG_IS_FROM_CLONE, Parcels.wrap(true));
+            intent.putExtra(HealthCocoConstants.TAG_VISIT_ID, Parcels.wrap(visitId));
+            startActivity(intent);
+        } else {
+            Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
+            intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.ADD_VISITS.ordinal());
+            intent.putExtra(HealthCocoConstants.TAG_IS_FROM_CLONE, Parcels.wrap(true));
+            intent.putExtra(HealthCocoConstants.TAG_VISIT_ID, Parcels.wrap(visitId));
+            startActivity(intent);
+        }
     }
 
     @Override
@@ -490,7 +505,7 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
     }
 
     public void openAddVisitFragment() {
-        boolean isMyScriptVisitToggleState = Util.getVisitToggleStateFromPreferences(mActivity);
+        isMyScriptVisitToggleState = Util.getVisitToggleStateFromPreferences(mActivity);
         if (isMyScriptVisitToggleState)
             openCommonVisistActivity(CommonOpenUpFragmentType.ADD_VISITS, null, null, 0);
         else openCommonOpenUpActivity(CommonOpenUpFragmentType.ADD_VISITS, null, null, 0);

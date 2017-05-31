@@ -1,23 +1,17 @@
 package com.healthcoco.healthcocopad.fragments;
 
 import android.app.AlertDialog;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TabHost;
 import android.widget.TextView;
@@ -29,46 +23,17 @@ import com.healthcoco.healthcocopad.activities.AddVisitsActivity;
 import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.adapter.ContactsDetailViewPagerAdapter;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
-import com.healthcoco.healthcocopad.bean.request.PrescriptionRequest;
-import com.healthcoco.healthcocopad.bean.server.AdviceSuggestion;
-import com.healthcoco.healthcocopad.bean.server.ComplaintSuggestions;
-import com.healthcoco.healthcocopad.bean.server.DiagnosisSuggestions;
-import com.healthcoco.healthcocopad.bean.server.DiagnosticTest;
-import com.healthcoco.healthcocopad.bean.server.Drug;
-import com.healthcoco.healthcocopad.bean.server.DrugItem;
-import com.healthcoco.healthcocopad.bean.server.DrugType;
-import com.healthcoco.healthcocopad.bean.server.DrugsListSolrResponse;
-import com.healthcoco.healthcocopad.bean.server.EcgDetailSuggestions;
-import com.healthcoco.healthcocopad.bean.server.EchoSuggestions;
-import com.healthcoco.healthcocopad.bean.server.GeneralExaminationSuggestions;
-import com.healthcoco.healthcocopad.bean.server.GenericName;
-import com.healthcoco.healthcocopad.bean.server.HistoryPresentComplaintSuggestions;
-import com.healthcoco.healthcocopad.bean.server.HolterSuggestions;
-import com.healthcoco.healthcocopad.bean.server.IndicationOfUsgSuggestions;
-import com.healthcoco.healthcocopad.bean.server.InvestigationSuggestions;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
-import com.healthcoco.healthcocopad.bean.server.MenstrualHistorySuggestions;
-import com.healthcoco.healthcocopad.bean.server.NotesSuggestions;
-import com.healthcoco.healthcocopad.bean.server.ObservationSuggestions;
-import com.healthcoco.healthcocopad.bean.server.ObstetricHistorySuggestions;
-import com.healthcoco.healthcocopad.bean.server.PaSuggestions;
-import com.healthcoco.healthcocopad.bean.server.PresentComplaintSuggestions;
-import com.healthcoco.healthcocopad.bean.server.ProvisionalDiagnosisSuggestions;
-import com.healthcoco.healthcocopad.bean.server.PsSuggestions;
-import com.healthcoco.healthcocopad.bean.server.PvSuggestions;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
-import com.healthcoco.healthcocopad.bean.server.SystemicExaminationSuggestions;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.bean.server.VisitDetails;
-import com.healthcoco.healthcocopad.bean.server.XrayDetailSuggestions;
 import com.healthcoco.healthcocopad.custom.DummyTabFactory;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocopad.enums.ActionbarLeftRightActionTypeDrawables;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.PatientProfileScreenType;
-import com.healthcoco.healthcocopad.enums.SuggestionType;
-import com.healthcoco.healthcocopad.enums.VisitsUiType;
+import com.healthcoco.healthcocopad.enums.VisitedForType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
 import com.healthcoco.healthcocopad.services.GsonRequest;
@@ -81,14 +46,8 @@ import com.healthcoco.healthcocopad.utilities.Util;
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import static com.healthcoco.healthcocopad.fragments.AddClinicalNotesMyScriptVisitFragment.CHARACTER_TO_BE_REPLACED;
-import static com.healthcoco.healthcocopad.fragments.AddClinicalNotesVisitFragment.CHARACTER_TO_REPLACE_COMMA_WITH_SPACES;
-import static com.healthcoco.healthcocopad.fragments.AddVisitSuggestionsFragment.TAG_SUGGESTIONS_TYPE;
-import static com.healthcoco.healthcocopad.fragments.MyScriptAddVisitsFragment.TAG_SELECTED_SUGGESTION_OBJECT;
+import static com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType.GET_VISIT_DETAILS;
 
 /**
  * Created by Shreshtha on 15-05-2017.
@@ -107,11 +66,10 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
     private AddEditNormalVisitClinicalNotesFragment addEditNormalVisitClinicalNotesFragment;
     private String visitId;
     private VisitDetails visitDetails;
-    private boolean isFromClone;
     private FloatingActionButton flBtSwap;
     private int currentPage = 0;
-    private View selectedViewForSuggestionsList;
     private LinearLayout btSave;
+    private boolean isFromClone;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -209,6 +167,12 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
         else return addEditNormalVisitPrescriptionFragment;
     }
 
+    public Fragment getCurrentTabFragment(int page) {
+        if (page == 0)
+            return addEditNormalVisitClinicalNotesFragment;
+        else return addEditNormalVisitPrescriptionFragment;
+    }
+
     @Override
     public void onPageSelected(int position) {
         tabhost.setCurrentTab(position);
@@ -241,6 +205,10 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
                     if (user != null && selectedPatient != null) {
                         LogUtils.LOGD(TAG, "Selected patient " + selectedPatient.getLocalPatientName());
                         initActionPatientDetailActionBar(PatientProfileScreenType.IN_ADD_VISIT_HEADER, view, selectedPatient);
+                        if (!Util.isNullOrBlank(visitId)) {
+                            new LocalDataBackgroundtaskOptimised(mActivity, GET_VISIT_DETAILS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                            return;
+                        }
                     }
                     break;
                 case ADD_VISIT:
@@ -254,6 +222,13 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
                     }
                     mActivity.finish();
                     break;
+                case GET_PATIENT_VISIT_DETAIL:
+                    if (response.getData() != null && response.getData() instanceof VisitDetails) {
+                        VisitDetails visit = (VisitDetails) response.getData();
+                        visit.setSelectedPatient(selectedPatient);
+                        prePopulateVisitDetails(visit);
+                    }
+                    break;
                 default:
                     break;
             }
@@ -261,6 +236,21 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
         mActivity.hideLoading();
     }
 
+    private void prePopulateVisitDetails(VisitDetails visitDetails) {
+        if (!Util.isNullOrEmptyList(visitDetails.getVisitedFor())) {
+            for (VisitedForType visitedForType :
+                    visitDetails.getVisitedFor()) {
+                switch (visitedForType) {
+                    case CLINICAL_NOTES:
+                        addEditNormalVisitClinicalNotesFragment.prePopulateVisitDetails(visitDetails);
+                        break;
+                    case PRESCRIPTION:
+                        addEditNormalVisitPrescriptionFragment.prePopulateVisitDetails(visitDetails.getPrescriptions());
+                        break;
+                }
+            }
+        }
+    }
 
     @Override
     public VolleyResponseBean doInBackground(VolleyResponseBean response) {
@@ -275,6 +265,9 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
                 selectedPatient = LocalDataServiceImpl.getInstance(mApp).getPatient(HealthCocoConstants.SELECTED_PATIENTS_USER_ID);
                 if (!Util.isNullOrBlank(visitId))
                     visitDetails = LocalDataServiceImpl.getInstance(mApp).getVisit(visitId);
+                break;
+            case GET_VISIT_DETAILS:
+                volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getVisitDetailResponse(WebServiceType.GET_PATIENT_VISIT_DETAIL, visitId, null, null);
                 break;
         }
         if (volleyResponseBean == null)
@@ -319,8 +312,8 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
                 Util.addVisitToggleStateInPreference(mActivity, true);
-                openCommonVisistActivity(CommonOpenUpFragmentType.ADD_VISITS, null, null, 0);
-                mActivity.onBackPressed();
+                openCommonVisistActivity(CommonOpenUpFragmentType.ADD_VISITS,  HealthCocoConstants.TAG_VISIT_ID, visitId, 0);
+                mActivity.finish();
             }
         });
         alertBuilder.setNegativeButton(R.string.stay, new DialogInterface.OnClickListener() {
@@ -369,34 +362,8 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
         visitDetails.setPatientId(HealthCocoConstants.SELECTED_PATIENTS_USER_ID);
         if (!Util.isNullOrBlank(visitId) && !isFromClone)
             visitDetails.setVisitId(visitId);
-//        visitDetails.setClinicalNote(addEditNormalVisitClinicalNotesFragment.getClinicalNoteToSendDetails());
-//        if (!addEditNormalVisitPrescriptionFragment.isBlankDrugsList()) {
-//            PrescriptionRequest prescription = new PrescriptionRequest();
-//            LogUtils.LOGD(TAG, "Selected patient " + selectedPatient.getLocalPatientName());
-//            prescription.setUniqueId(prescriptionId);
-//            prescription.setPatientId(selectedPatient.getUserId());
-//            prescription.setDoctorId(user.getUniqueId());
-//            prescription.setLocationId(user.getForeignLocationId());
-//            prescription.setHospitalId(user.getForeignHospitalId());
-//            prescription.setAdvice(Util.getValidatedValueOrNull(etAdvice));
-//            prescription.setItems(addEditNormalVisitPrescriptionFragment.getModifiedDrugsList());
-//            visitDetails.setPrescription(prescription);
-//        }
+        visitDetails.setClinicalNote(addEditNormalVisitClinicalNotesFragment.getClinicalNoteToSendDetails());
+        visitDetails.setPrescription(addEditNormalVisitPrescriptionFragment.getPrescriptionRequestDetails());
         return visitDetails;
-    }
-
-    /**
-     * Gets text before last occurance of CHARACTER_TO_BE_REPLACED in searchedTerm
-     *
-     * @param searchTerm
-     * @return : text Before  last occurance of CHARACTER_TO_BE_REPLACED
-     */
-    public String getTextBeforeLastOccuranceOfCharacter(String searchTerm) {
-        Pattern p = Pattern.compile("\\s*(.*)" + CHARACTER_TO_BE_REPLACED + ".*");
-        Matcher m = p.matcher(searchTerm.trim());
-
-        if (m.find())
-            return m.group(1);
-        return "";
     }
 }
