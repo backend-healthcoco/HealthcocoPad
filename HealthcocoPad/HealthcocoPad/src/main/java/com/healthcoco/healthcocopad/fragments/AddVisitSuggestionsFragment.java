@@ -646,6 +646,11 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements T
             MyScriptAddVisitsFragment myScriptAddVisitsFragment = (MyScriptAddVisitsFragment) mFragmentManager.findFragmentByTag(MyScriptAddVisitsFragment.class.getSimpleName());
             if (myScriptAddVisitsFragment != null)
                 myScriptAddVisitsFragment.requestFocus(editTextSearch);
+        } else {
+            addEditNormalVisitsFragment = (AddEditNormalVisitsFragment) mFragmentManager.findFragmentByTag(AddEditNormalVisitsFragment.class.getSimpleName());
+            addEditNormalVisitClinicalNotesFragment = (AddEditNormalVisitClinicalNotesFragment) addEditNormalVisitsFragment.getCurrentTabFragment(0);
+            editTextSearch.setOnTouchListener(addEditNormalVisitClinicalNotesFragment.getOnTouchListener());
+            editTextSearch.addTextChangedListener(addEditNormalVisitClinicalNotesFragment.addTextChangedListener(editTextSearch));
         }
         Util.requesFocus(editTextSearch);
     }

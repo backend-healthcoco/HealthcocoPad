@@ -20,6 +20,7 @@ import com.healthcoco.healthcocopad.bean.server.DrugType;
 import com.healthcoco.healthcocopad.bean.server.DrugsListSolrResponse;
 import com.healthcoco.healthcocopad.bean.server.Duration;
 import com.healthcoco.healthcocopad.bean.server.GenericName;
+import com.healthcoco.healthcocopad.bean.server.Prescription;
 import com.healthcoco.healthcocopad.custom.ExpandableHeightListView;
 import com.healthcoco.healthcocopad.enums.SelectDrugItemType;
 import com.healthcoco.healthcocopad.listeners.AddNewPrescriptionListener;
@@ -31,10 +32,14 @@ import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.healthcoco.healthcocopad.viewholders.SelectedPrescriptionDrugDoseItemsListViewHolder;
 
+import org.parceler.Parcels;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+
+import static com.healthcoco.healthcocopad.fragments.AddEditNormalVisitPrescriptionFragment.TAG_PRESCRIPTION_DATA;
 
 /**
  * Created by neha on 27/11/15.
@@ -48,6 +53,7 @@ public class SelectedDrugItemsListFragment extends HealthCocoFragment implements
     private HashMap<String, DrugInteractionRequest> drugInteractionRequest = new HashMap<String, DrugInteractionRequest>();
     private SelectedPrescriptionDrugItemsListAdapter adapter;
     private SelectedPrescriptionDrugDoseItemsListViewHolder viewHolder;
+    private List<Prescription> prescriptionList;
 
     public SelectedDrugItemsListFragment() {
 
@@ -67,6 +73,10 @@ public class SelectedDrugItemsListFragment extends HealthCocoFragment implements
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        Bundle bundle = getArguments();
+        if (bundle != null && bundle.containsKey(TAG_PRESCRIPTION_DATA)) {
+            prescriptionList = Parcels.unwrap(bundle.getParcelable(TAG_PRESCRIPTION_DATA));
+        }
         init();
     }
 
@@ -79,15 +89,27 @@ public class SelectedDrugItemsListFragment extends HealthCocoFragment implements
     }
 
     private void initData() {
-        Intent intent = mActivity.getIntent();
-        String prescriptionId = intent.getStringExtra(HealthCocoConstants.TAG_PRESCRIPTION_ID);
-        String templateId = intent.getStringExtra(HealthCocoConstants.TAG_TEMPLATE_ID);
-        if (!Util.isNullOrBlank(prescriptionId)) {
-            addDrugsList(LocalDataServiceImpl.getInstance(mApp).getDrugItemsList(LocalDatabaseUtils.KEY_FOREIGN_PRESCRIPTION_ID, prescriptionId));
-        } else if (!Util.isNullOrBlank(templateId))
-            addDrugsList(LocalDataServiceImpl.getInstance(mApp).getDrugItemsList(LocalDatabaseUtils.KEY_FOREIGN_TEMPLATE_ID, templateId));
-        else {
-            addDrugsList(null);
+//        Intent intent = mActivity.getIntent();
+//        String prescriptionId = intent.getStringExtra(HealthCocoConstants.TAG_PRESCRIPTION_ID);
+//        String templateId = intent.getStringExtra(HealthCocoConstants.TAG_TEMPLATE_ID);
+//        if (!Util.isNullOrBlank(prescriptionId)) {
+//            addDrugsList(LocalDataServiceImpl.getInstance(mApp).getDrugItemsList(LocalDatabaseUtils.KEY_FOREIGN_PRESCRIPTION_ID, prescriptionId));
+//        } else if (!Util.isNullOrBlank(templateId))
+//            addDrugsList(LocalDataServiceImpl.getInstance(mApp).getDrugItemsList(LocalDatabaseUtils.KEY_FOREIGN_TEMPLATE_ID, templateId));
+//        else {
+//            addDrugsList(null);
+//        }
+        if (!Util.isNullOrEmptyList(prescriptionList)) {
+            for (Prescription prescription :
+                    prescriptionList) {
+                if (!Util.isNullOrEmptyList(prescription.getItems())) {
+                    for (DrugItem drugItem :
+                            prescription.getItems()) {
+                        if (drugItem.getDrug() != null && !Util.isNullOrBlank(drugItem.getDrug().getUniqueId()))
+                            addDrug(drugItem);
+                    }
+                }
+            }
         }
     }
 

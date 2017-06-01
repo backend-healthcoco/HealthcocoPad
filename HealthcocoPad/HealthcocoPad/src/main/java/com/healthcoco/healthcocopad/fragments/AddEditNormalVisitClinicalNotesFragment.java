@@ -15,7 +15,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
@@ -24,7 +23,6 @@ import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.request.ClinicalNoteToSend;
-import com.healthcoco.healthcocopad.bean.server.AdviceSuggestion;
 import com.healthcoco.healthcocopad.bean.server.AssignedUserUiPermissions;
 import com.healthcoco.healthcocopad.bean.server.ClinicalNotes;
 import com.healthcoco.healthcocopad.bean.server.ComplaintSuggestions;
@@ -50,7 +48,6 @@ import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.SystemicExaminationSuggestions;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.bean.server.VisitDetails;
-import com.healthcoco.healthcocopad.bean.server.VitalSigns;
 import com.healthcoco.healthcocopad.bean.server.XrayDetailSuggestions;
 import com.healthcoco.healthcocopad.custom.HealthcocoTextWatcher;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
@@ -70,13 +67,14 @@ import com.healthcoco.healthcocopad.utilities.Util;
 
 import org.parceler.Parcels;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType.GET_VISIT_DETAILS;
 import static com.healthcoco.healthcocopad.fragments.AddClinicalNotesMyScriptVisitFragment.CHARACTER_TO_BE_REPLACED;
 import static com.healthcoco.healthcocopad.fragments.AddClinicalNotesVisitFragment.CHARACTER_TO_REPLACE_COMMA_WITH_SPACES;
+import static com.healthcoco.healthcocopad.fragments.AddClinicalNotesVisitFragment.TAG_CLINICAL_NOTES_DATA;
 import static com.healthcoco.healthcocopad.fragments.AddVisitSuggestionsFragment.TAG_SUGGESTIONS_TYPE;
 import static com.healthcoco.healthcocopad.fragments.MyScriptAddVisitsFragment.TAG_SELECTED_SUGGESTION_OBJECT;
 
@@ -88,17 +86,15 @@ public class AddEditNormalVisitClinicalNotesFragment extends HealthCocoFragment 
     public static final String INTENT_ON_SUGGESTION_ITEM_CLICK = "com.healthcoco.healthcocopad.fragments.AddEditNormalVisitClinicalNotesFragment.ON_SUGGESTION_ITEM_CLICK";
     private User user;
     private LinearLayout containerSuggestionsList;
-    private LinearLayout parentClinicalNote;
     private RegisteredPatientDetailsUpdated selectedPatient;
     private String visitId;
-    public static final String TAG_VISIT_ID = "visitId";
     private AddVisitSuggestionsFragment addVisitSuggestionsFragment;
     private AddClinicalNotesVisitFragment addClinicalNotesFragment;
     private View selectedViewForSuggestionsList;
     private SuggestionType selectedSuggestionType = null;
     private String clinicalNoteId;
     private boolean receiversRegistered;
-    private boolean isOnItemClick;
+    private List<ClinicalNotes> clinicalNotesList;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -110,6 +106,9 @@ public class AddEditNormalVisitClinicalNotesFragment extends HealthCocoFragment 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        Bundle bundle = getArguments();
+        if (bundle != null && bundle.containsKey(TAG_CLINICAL_NOTES_DATA))
+            clinicalNotesList = Parcels.unwrap(getArguments().getParcelable(TAG_CLINICAL_NOTES_DATA));
         init();
         mActivity.showLoading(false);
         new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_FRAGMENT_INITIALISATION_DATA, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
@@ -125,6 +124,12 @@ public class AddEditNormalVisitClinicalNotesFragment extends HealthCocoFragment 
 
     private void initData() {
         initUiPermissions(user.getUiPermissions());
+        if (!Util.isNullOrEmptyList(clinicalNotesList)) {
+            for (ClinicalNotes clinicalNotes :
+                    clinicalNotesList){
+                addClinicalNotesFragment.refreshData(clinicalNotes);
+            }
+        }
     }
 
     private void initUiPermissions(AssignedUserUiPermissions uiPermissions) {
@@ -133,7 +138,6 @@ public class AddEditNormalVisitClinicalNotesFragment extends HealthCocoFragment 
 
     @Override
     public void initViews() {
-        parentClinicalNote = (LinearLayout) view.findViewById(R.id.parent_clinical_note);
         containerSuggestionsList = (LinearLayout) view.findViewById(R.id.container_suggestions_list);
     }
 
@@ -663,7 +667,6 @@ public class AddEditNormalVisitClinicalNotesFragment extends HealthCocoFragment 
 
         if (selectedViewForSuggestionsList != null && selectedViewForSuggestionsList instanceof EditText && !Util.isNullOrBlank(text)) {
             EditText editText = ((EditText) selectedViewForSuggestionsList);
-            isOnItemClick = true;
             String textBeforeComma = getTextBeforeLastOccuranceOfCharacter(Util.getValidatedValueOrBlankWithoutTrimming(editText));
             if (!Util.isNullOrBlank(textBeforeComma))
                 textBeforeComma = textBeforeComma + CHARACTER_TO_REPLACE_COMMA_WITH_SPACES;

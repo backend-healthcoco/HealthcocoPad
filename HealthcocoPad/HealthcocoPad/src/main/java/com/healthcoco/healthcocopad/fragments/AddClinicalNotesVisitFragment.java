@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -65,6 +66,7 @@ public class AddClinicalNotesVisitFragment extends HealthCocoFragment implements
         LocalDoInBackgroundListenerOptimised {
     public static final String CHARACTER_TO_REPLACE_COMMA_WITH_SPACES = " , ";
     public static final String CHARACTER_TO_BE_REPLACED = ",";
+    public static final String TAG_CLINICAL_NOTES_DATA = "clinicaNotesData";
     private LinearLayout parentVitalSigns;
     private LinearLayout parentPermissionItems;
 
@@ -86,6 +88,10 @@ public class AddClinicalNotesVisitFragment extends HealthCocoFragment implements
     private LinearLayout btSelectDiagram;
     private AddEditNormalVisitsFragment addEditNormalVisitsFragment;
     private AddEditNormalVisitClinicalNotesFragment addEditNormalVisitClinicalNotesFragment;
+    private Boolean isFromClone;
+    private List<ClinicalNotes> clinicalNotesList;
+    private String clinicalNoteId;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -97,14 +103,16 @@ public class AddClinicalNotesVisitFragment extends HealthCocoFragment implements
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Bundle bundle = getArguments();
-        if (bundle != null && bundle.containsKey(TAG_USER))
-            user = Parcels.unwrap(bundle.getParcelable(TAG_USER));
-        init();
-        if (user == null) {
-            mActivity.showLoading(false);
-            new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_FRAGMENT_INITIALISATION_DATA, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
+        Intent intent = mActivity.getIntent();
+        if (intent != null) {
+            Parcelable isFromCloneParcelable = intent.getParcelableExtra(HealthCocoConstants.TAG_IS_FROM_CLONE);
+            if (isFromCloneParcelable != null)
+                isFromClone = Parcels.unwrap(isFromCloneParcelable);
         }
+        init();
+        mActivity.showLoading(false);
+        new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_FRAGMENT_INITIALISATION_DATA, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     @Override
@@ -463,7 +471,10 @@ public class AddClinicalNotesVisitFragment extends HealthCocoFragment implements
             diagramIdsList.addAll(diagramsList.keySet());
             clinicalNoteToSend.setDiagrams(diagramIdsList);
         }
+//        if (!isFromClone)
+//            clinicalNoteId = clinicalNotes.getUniqueId();
         if (clinicalNotes != null)
+//            clinicalNoteToSend.setUniqueId(clinicalNoteId);
             clinicalNoteToSend.setUniqueId(clinicalNotes.getUniqueId());
         return clinicalNoteToSend;
     }
@@ -637,6 +648,12 @@ public class AddClinicalNotesVisitFragment extends HealthCocoFragment implements
 //                        }
 
                         initUiPermissions(user.getUiPermissions().getClinicalNotesPermissionsString());
+                        if (!Util.isNullOrEmptyList(clinicalNotesList)) {
+                            for (ClinicalNotes clinicalNotes :
+                                    clinicalNotesList) {
+                                refreshData(clinicalNotes);
+                            }
+                        }
                     } else {
                         mActivity.hideLoading();
                         mActivity.finish();
