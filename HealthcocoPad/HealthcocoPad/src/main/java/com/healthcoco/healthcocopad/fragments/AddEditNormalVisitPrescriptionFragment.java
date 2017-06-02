@@ -129,6 +129,7 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
     private AddEditNormalVisitClinicalNotesFragment addEditNormalVisitClinicalNotesFragment;
     private boolean isFromClone;
     private List<Prescription> prescriptionList;
+    private boolean isOnItemClick;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -200,7 +201,6 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
         FragmentTransaction transaction = mFragmentManager.beginTransaction();
         transaction.add(R.id.container_advice_suggestions_list, addVisitSuggestionsFragment, addVisitSuggestionsFragment.getClass().getSimpleName());
         transaction.commit();
-//        addVisitSuggestionsFragment.refreshTagOfEditText(SuggestionType.ADVICE);
     }
 
     @Override
@@ -272,14 +272,6 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
         if (!Util.isNullOrEmptyList(prescriptionList)) {
             for (Prescription prescription :
                     prescriptionList) {
-                //initialising drugs List
-//                if (!Util.isNullOrEmptyList(prescription.getItems())) {
-//                    for (DrugItem drugItem :
-//                            prescription.getItems()) {
-//                        if (drugItem.getDrug() != null && !Util.isNullOrBlank(drugItem.getDrug().getUniqueId()))
-//                            selectedDrugItemsListFragment.addDrug(drugItem);
-//                    }
-//                }
                 //initialising DiagnosticTests(LabTests)
                 if (!Util.isNullOrEmptyList(prescription.getDiagnosticTests())) {
                     notifyDiagnosticsList(prescription.getDiagnosticTestsList(prescription.getDiagnosticTests()));
@@ -639,7 +631,6 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
                     Prescription prescription = (Prescription) response.getData();
                     LocalDataServiceImpl.getInstance(mApp).addPrescription(prescription);
                     Util.setVisitId(VisitIdType.PRESCRIPTION, prescription.getVisitId());
-//                    sendBroadcasts(prescription.getUniqueId());
                     mActivity.setResult(HealthCocoConstants.RESULT_CODE_ADD_PRESCIPTION, null);
                     ((CommonOpenUpActivity) mActivity).finish();
                 }
@@ -680,6 +671,7 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
     }
 
     public void requestFocus(View v) {
+        isOnItemClick = true;
         if (v.getId() == R.id.edit_advice) {
             addVisitSuggestionsFragment.refreshTagOfEditText(SuggestionType.ADVICE);
         }
@@ -733,10 +725,15 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
 
     @Override
     public void afterTextChange(View v, String s) {
-        if (v instanceof EditText) {
-            refreshSuggestionsList(v, s);
-            if (v.getId() == R.id.et_duration || (v.getId() == R.id.et_header_two_duration)) {
-                setDurationUnitToAll(s);
+        if (isOnItemClick) {
+            if (v instanceof EditText) {
+                refreshSuggestionsList(v, s);
+            }
+        } else {
+            if (v instanceof EditText) {
+                if (v.getId() == R.id.et_duration || (v.getId() == R.id.et_header_two_duration)) {
+                    setDurationUnitToAll(s);
+                }
             }
         }
     }
@@ -790,6 +787,7 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
         }
         if (selectedViewForSuggestionsList != null && selectedViewForSuggestionsList instanceof EditText && !Util.isNullOrBlank(text)) {
             EditText editText = ((EditText) selectedViewForSuggestionsList);
+            isOnItemClick = true;
             String textBeforeComma = getTextBeforeLastOccuranceOfCharacter(Util.getValidatedValueOrBlankWithoutTrimming(editText));
             if (!Util.isNullOrBlank(textBeforeComma))
                 textBeforeComma = textBeforeComma + CHARACTER_TO_REPLACE_COMMA_WITH_SPACES;

@@ -146,14 +146,11 @@ public class MyScriptAddVisitsFragment extends HealthCocoFragment implements Vie
     private RegisteredPatientDetailsUpdated selectedPatient;
     private User user;
     private ScrollView svScrollView;
-
-
     private ClinicalNotes clinicalNotes;
     private SingleLineWidget mWidget;
     private int isCorrectionMode;
 
     private MyScriptEditText etAdvice;
-
     private LinearLayout layoutWidget;
     private ImageButton btKeyboard;
     private ImageButton btDel;
@@ -498,7 +495,6 @@ public class MyScriptAddVisitsFragment extends HealthCocoFragment implements Vie
         }
     }
 
-
     private void setPrescriptionUiPermissionVisibility(PrescriptionPermissionType permissionsType, int visibility) {
         switch (permissionsType) {
 //            case ADVICE:
@@ -602,7 +598,7 @@ public class MyScriptAddVisitsFragment extends HealthCocoFragment implements Vie
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
                 Util.addVisitToggleStateInPreference(mActivity, false);
-                openCommonOpenUpActivity(CommonOpenUpFragmentType.ADD_VISITS,  HealthCocoConstants.TAG_VISIT_ID, visitId, 0);
+                openCommonOpenUpActivity(CommonOpenUpFragmentType.ADD_VISITS, HealthCocoConstants.TAG_VISIT_ID, visitId, 0);
                 mActivity.finish();
             }
         });
@@ -1242,7 +1238,8 @@ public class MyScriptAddVisitsFragment extends HealthCocoFragment implements Vie
         if (!addPrescriptionVisitFragment.isBlankDrugsList() || !addLabTestVisitFragment.isBlankLabTestsList()) {
             PrescriptionRequest prescription = new PrescriptionRequest();
             LogUtils.LOGD(TAG, "Selected patient " + selectedPatient.getLocalPatientName());
-            prescription.setUniqueId(prescriptionId);
+            if (!Util.isNullOrBlank(prescriptionId))
+                prescription.setUniqueId(prescriptionId);
             prescription.setPatientId(selectedPatient.getUserId());
             prescription.setDoctorId(user.getUniqueId());
             prescription.setLocationId(user.getForeignLocationId());

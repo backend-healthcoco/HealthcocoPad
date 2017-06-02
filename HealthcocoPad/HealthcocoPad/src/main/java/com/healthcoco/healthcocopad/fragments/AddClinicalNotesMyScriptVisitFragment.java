@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
@@ -80,6 +81,8 @@ public class AddClinicalNotesMyScriptVisitFragment extends HealthCocoFragment im
     private HashMap<String, String> diagramsList = new HashMap<>();
     private LinearLayout containerDiagrams;
     private User user;
+    private boolean isFromClone;
+    private String clinicalNoteId;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -95,6 +98,13 @@ public class AddClinicalNotesMyScriptVisitFragment extends HealthCocoFragment im
         if (bundle != null && bundle.containsKey(TAG_USER))
             user = Parcels.unwrap(bundle.getParcelable(TAG_USER));
         init();
+
+        Intent intent = mActivity.getIntent();
+        if (intent != null) {
+            Parcelable isFromCloneParcelable = intent.getParcelableExtra(HealthCocoConstants.TAG_IS_FROM_CLONE);
+            if (isFromCloneParcelable != null)
+                isFromClone = Parcels.unwrap(isFromCloneParcelable);
+        }
         if (user == null) {
             mActivity.showLoading(false);
             new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_FRAGMENT_INITIALISATION_DATA, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
@@ -511,8 +521,8 @@ public class AddClinicalNotesMyScriptVisitFragment extends HealthCocoFragment im
             diagramIdsList.addAll(diagramsList.keySet());
             clinicalNoteToSend.setDiagrams(diagramIdsList);
         }
-        if (clinicalNotes != null)
-            clinicalNoteToSend.setUniqueId(clinicalNotes.getUniqueId());
+        if (!Util.isNullOrBlank(clinicalNoteId))
+            clinicalNoteToSend.setUniqueId(clinicalNoteId);
         return clinicalNoteToSend;
     }
 
@@ -663,6 +673,8 @@ public class AddClinicalNotesMyScriptVisitFragment extends HealthCocoFragment im
                         addDiagramInContainer(diagram.getTags(), diagram.getUniqueId(), diagram.getDiagramUrl());
                     }
                 }
+                if (!isFromClone)
+                    clinicalNoteId = clinicalNotes.getUniqueId();
             } else
                 sendBroadcastForDiagramLayoutVisibility(false);
         }

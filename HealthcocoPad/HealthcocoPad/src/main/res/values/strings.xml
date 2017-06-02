@@ -792,4 +792,5 @@
     <string name="blank_clinical_note">Blank Clinical Note cannot be added</string>
     <string name="no_list_available">No List Available</string>
     <string name="add_diagram">Add Diagram</string>
+    <string name="next_review_on">Next Review On</string>
 </resources>

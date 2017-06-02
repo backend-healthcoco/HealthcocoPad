@@ -424,20 +424,17 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
 
     @Override
     public void cloneVisit(String visitId) {
+        Intent intent;
         isMyScriptVisitToggleState = Util.getVisitToggleStateFromPreferences(mActivity);
         if (isMyScriptVisitToggleState) {
-            Intent intent = new Intent(mActivity, AddVisitsActivity.class);
-            intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.ADD_VISITS.ordinal());
-            intent.putExtra(HealthCocoConstants.TAG_IS_FROM_CLONE, Parcels.wrap(true));
-            intent.putExtra(HealthCocoConstants.TAG_VISIT_ID, Parcels.wrap(visitId));
-            startActivity(intent);
+            intent = new Intent(mActivity, AddVisitsActivity.class);
         } else {
-            Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
-            intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.ADD_VISITS.ordinal());
-            intent.putExtra(HealthCocoConstants.TAG_IS_FROM_CLONE, Parcels.wrap(true));
-            intent.putExtra(HealthCocoConstants.TAG_VISIT_ID, Parcels.wrap(visitId));
-            startActivity(intent);
+            intent = new Intent(mActivity, CommonOpenUpActivity.class);
         }
+        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.ADD_VISITS.ordinal());
+        intent.putExtra(HealthCocoConstants.TAG_IS_FROM_CLONE, Parcels.wrap(true));
+        intent.putExtra(HealthCocoConstants.TAG_VISIT_ID, Parcels.wrap(visitId));
+        startActivity(intent);
     }
 
     @Override

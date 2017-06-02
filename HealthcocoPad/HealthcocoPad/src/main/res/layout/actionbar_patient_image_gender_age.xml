@@ -59,13 +59,15 @@
             android:textStyle="bold" />
     </LinearLayout>
 
-    <!--<ImageButton-->
-        <!--android:id="@+id/bt_global_record_access"-->
-        <!--android:layout_width="@dimen/actionbar_global_access_icon"-->
-        <!--android:layout_height="@dimen/actionbar_global_access_icon"-->
-        <!--android:layout_marginRight="5dp"-->
-        <!--android:background="@drawable/selector_btn_otp_verify"-->
-        <!--android:visibility="gone" />-->
+    <TextView
+        android:id="@+id/tv_next_review"
+        android:layout_width="@dimen/actionbar_next_review_width"
+        android:layout_height="@dimen/actionbar_next_review_height"
+        android:layout_marginRight="15dp"
+        android:drawableRight="@drawable/arrow_menu_down"
+        android:text="@string/next_review_on"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_size_actionbar_next_review" />
 
     <include
         layout="@layout/container_right_action"

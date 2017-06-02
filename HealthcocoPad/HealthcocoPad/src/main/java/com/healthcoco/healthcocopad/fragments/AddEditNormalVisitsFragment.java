@@ -1,6 +1,7 @@
 package com.healthcoco.healthcocopad.fragments;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -12,6 +13,10 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AutoCompleteTextView;
+import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.TabHost;
 import android.widget.TextView;
@@ -23,29 +28,44 @@ import com.healthcoco.healthcocopad.activities.AddVisitsActivity;
 import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.adapter.ContactsDetailViewPagerAdapter;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
+import com.healthcoco.healthcocopad.bean.server.AppointmentTimeSlotDetails;
+import com.healthcoco.healthcocopad.bean.server.AvailableTimeSlots;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.bean.server.VisitDetails;
+import com.healthcoco.healthcocopad.custom.AutoCompleteTextViewAdapter;
 import com.healthcoco.healthcocopad.custom.DummyTabFactory;
+import com.healthcoco.healthcocopad.custom.HealthcocoTextWatcher;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocopad.enums.ActionbarLeftRightActionTypeDrawables;
+import com.healthcoco.healthcocopad.enums.AutoCompleteTextViewType;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.PatientProfileScreenType;
+import com.healthcoco.healthcocopad.enums.PopupWindowType;
 import com.healthcoco.healthcocopad.enums.VisitedForType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
+import com.healthcoco.healthcocopad.listeners.AutoCompleteTextViewListener;
+import com.healthcoco.healthcocopad.listeners.HealthcocoTextWatcherListener;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
+import com.healthcoco.healthcocopad.listeners.PopupWindowListener;
 import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
+import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
+import com.healthcoco.healthcocopad.utilities.EditTextTextViewErrorUtil;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
+import com.healthcoco.healthcocopad.views.CustomAutoCompleteTextView;
+import com.healthcoco.healthcocopad.views.HealthcocoPopupWindow;
 
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import static com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType.GET_VISIT_DETAILS;
 
@@ -56,7 +76,8 @@ import static com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType.GET_VIS
 public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
         TabHost.OnTabChangeListener, ViewPager.OnPageChangeListener,
         LocalDoInBackgroundListenerOptimised, Response.Listener<VolleyResponseBean>, GsonRequest.ErrorListener,
-        View.OnClickListener {
+        View.OnClickListener, PopupWindowListener, AdapterView.OnItemClickListener, HealthcocoTextWatcherListener, AutoCompleteTextViewListener {
+    private static final String DATE_FORMAT_USED_IN_THIS_SCREEN = "EEE, MMM dd,yyyy";
     private ViewPager viewPager;
     private TabHost tabhost;
     private ArrayList<Fragment> fragmentsList;
@@ -65,11 +86,18 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
     private AddEditNormalVisitPrescriptionFragment addEditNormalVisitPrescriptionFragment;
     private AddEditNormalVisitClinicalNotesFragment addEditNormalVisitClinicalNotesFragment;
     private String visitId;
-    private VisitDetails visitDetails;
     private FloatingActionButton flBtSwap;
     private int currentPage = 0;
     private LinearLayout btSave;
     private boolean isFromClone;
+    private TextView tvNextReview;
+    private HealthcocoPopupWindow userStatePopupWindow;
+    private Button btDone;
+    private TextView tvSelectedDate;
+    private CustomAutoCompleteTextView autotvSelectedTimeSlot;
+    private AutoCompleteTextViewAdapter adapter;
+    private AvailableTimeSlots selectedTimeSlot;
+    private AppointmentTimeSlotDetails appointmentTimeSlotDetails;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -104,6 +132,8 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
         viewPager = (ViewPager) view.findViewById(R.id.viewpager_add_visit);
         tabhost = (TabHost) view.findViewById(android.R.id.tabhost);
         flBtSwap = (FloatingActionButton) view.findViewById(R.id.fl_bt_swap);
+        tvNextReview = (TextView) view.findViewById(R.id.tv_next_review);
+
     }
 
     @Override
@@ -111,8 +141,16 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
         tabhost.setOnTabChangedListener(this);
         viewPager.addOnPageChangeListener(this);
         flBtSwap.setOnClickListener(this);
+        tvNextReview.setOnClickListener(this);
+
         ((CommonOpenUpActivity) mActivity).initRightActionView(ActionbarLeftRightActionTypeDrawables.WITH_SAVE, view);
         btSave = ((CommonOpenUpActivity) mActivity).initActionbarRightAction(this);
+    }
+
+    private void initUserStatePopUpWindow() {
+        userStatePopupWindow = new HealthcocoPopupWindow(mActivity, PopupWindowType.NEXT_REVIEW, null, R.layout.layout_next_review_on, this);
+        userStatePopupWindow.setOutsideTouchable(true);
+        userStatePopupWindow.setContentView(userStatePopupWindow.getPopupView());
     }
 
     private void initTabsFragmentsList(VisitDetails visitDetails) {
@@ -134,7 +172,6 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
             bundle.putParcelable(AddEditNormalVisitPrescriptionFragment.TAG_PRESCRIPTION_DATA, Parcels.wrap(visitDetails.getPrescriptions()));
             addEditNormalVisitPrescriptionFragment.setArguments(bundle);
         }
-
         addFragment(addEditNormalVisitClinicalNotesFragment, R.string.clinical_notes, false);
         addFragment(addEditNormalVisitPrescriptionFragment, R.string.prescriptions, true);
     }
@@ -197,6 +234,19 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
         mActivity.hideLoading();
     }
 
+    private void initData() {
+        autotvSelectedTimeSlot.setText("");
+        if (appointmentTimeSlotDetails != null) {
+            if (appointmentTimeSlotDetails.getAppointmentSlot() != null) {
+                LogUtils.LOGD(TAG, "Time " + appointmentTimeSlotDetails.getAppointmentSlot().getTime());
+            }
+            if (!Util.isNullOrEmptyList(appointmentTimeSlotDetails.getSlots())) {
+                LogUtils.LOGD(TAG, "Slots Available " + appointmentTimeSlotDetails.getSlots().size());
+                initAutoTvAdapter(autotvSelectedTimeSlot, AutoCompleteTextViewType.AVAILABLE_BOOKED_APPOINTMENTS, (ArrayList<Object>) (ArrayList<?>) appointmentTimeSlotDetails.getSlots());
+            }
+        }
+    }
+
     @Override
     public void onNetworkUnavailable(WebServiceType webServiceType) {
         Util.showToast(mActivity, R.string.user_offline);
@@ -218,6 +268,7 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
                             return;
                         }
                         initTabsAndViewPagerFragments(null);
+                        tvSelectedDate.setText(DateTimeUtil.getCurrentFormattedDate(DATE_FORMAT_USED_IN_THIS_SCREEN));
                     }
                     break;
                 case ADD_VISIT:
@@ -235,6 +286,12 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
                     if (response.getData() != null && response.getData() instanceof VisitDetails) {
                         VisitDetails visit = (VisitDetails) response.getData();
                         initTabsAndViewPagerFragments(visit);
+                    }
+                    break;
+                case GET_APPOINTMENT_TIME_SLOTS:
+                    if (response.getData() != null && response.getData() instanceof AppointmentTimeSlotDetails) {
+                        appointmentTimeSlotDetails = (AppointmentTimeSlotDetails) response.getData();
+                        initData();
                     }
                     break;
                 default:
@@ -276,8 +333,7 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
                 if (doctor != null)
                     user = doctor.getUser();
                 selectedPatient = LocalDataServiceImpl.getInstance(mApp).getPatient(HealthCocoConstants.SELECTED_PATIENTS_USER_ID);
-                if (!Util.isNullOrBlank(visitId))
-                    visitDetails = LocalDataServiceImpl.getInstance(mApp).getVisit(visitId);
+                initUserStatePopUpWindow();
                 break;
             case GET_VISIT_DETAILS:
                 volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getVisitDetailResponse(WebServiceType.GET_PATIENT_VISIT_DETAIL, visitId, null, null);
@@ -311,7 +367,28 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
             case R.id.fl_bt_swap:
                 showToggleConfirmationAlert();
                 break;
+            case R.id.tv_next_review:
+                userStatePopupWindow.showOptionsWindowAtRightCenter(v);
+                break;
+            case R.id.bt_done:
+                break;
+            case R.id.tv_selected_date:
+                openDatePickerDialog((TextView) v);
         }
+    }
+
+    private void openDatePickerDialog(final TextView textView) {
+        Calendar calendar = Calendar.getInstance();
+        calendar = DateTimeUtil.setCalendarDefaultvalue(DateTimeUtil.DATE_FORMAT_WEEKDAY_DAY_MONTH_AS_TEXT_YEAR_DASH, calendar, textView);
+        DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                textView.setText(DateTimeUtil.getFormattedTime(DateTimeUtil.DATE_FORMAT_WEEKDAY_DAY_MONTH_AS_TEXT_YEAR_DASH, year, monthOfYear, dayOfMonth, 0, 0, 0));
+            }
+        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+        datePickerDialog.getDatePicker().setMinDate(new Date().getTime() - 10000);
+        datePickerDialog.show();
     }
 
     public void showToggleConfirmationAlert() {
@@ -365,5 +442,111 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
         if (blankPrescriptionMsgId == 0)
             visitDetails.setPrescription(addEditNormalVisitPrescriptionFragment.getPrescriptionRequestDetails());
         WebDataServiceImpl.getInstance(mApp).addVisit(VisitDetails.class, visitDetails, this, this);
+    }
+
+    @Override
+    public void onItemSelected(PopupWindowType popupWindowType, Object object) {
+        switch (popupWindowType) {
+            case NEXT_REVIEW:
+                if (object instanceof View) {
+                    View view = (View) object;
+                    initPopupviews(view);
+                }
+                break;
+        }
+    }
+
+    private void initPopupviews(View view) {
+        tvSelectedDate = (TextView) view.findViewById(R.id.tv_selected_date);
+        autotvSelectedTimeSlot = (CustomAutoCompleteTextView) view.findViewById(R.id.autotv_selected_time_slot);
+        btDone = (Button) view.findViewById(R.id.bt_done);
+        initAutoTvAdapter(autotvSelectedTimeSlot, AutoCompleteTextViewType.AVAILABLE_BOOKED_APPOINTMENTS, null);
+        tvSelectedDate.setOnClickListener(this);
+        tvSelectedDate.addTextChangedListener(new HealthcocoTextWatcher(tvSelectedDate, this));
+        autotvSelectedTimeSlot.setOnItemClickListener(this);
+        autotvSelectedTimeSlot.setAutoTvListener(this);
+        btDone.setOnClickListener(this);
+        refreshSelectedDate(DateTimeUtil.getCurrentDateLong());
+    }
+
+    private void initAutoTvAdapter(AutoCompleteTextView autoCompleteTextView, AutoCompleteTextViewType autoCompleteTextViewType, ArrayList<Object> list) {
+        try {
+            autotvSelectedTimeSlot.setText("");
+            adapter = new AutoCompleteTextViewAdapter(mActivity, R.layout.spinner_drop_down_item_available_time_slots,
+                    list, autoCompleteTextViewType);
+            autoCompleteTextView.setThreshold(0);
+            autoCompleteTextView.setAdapter(adapter);
+            autoCompleteTextView.setDropDownAnchor(autoCompleteTextView.getId());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void refreshSelectedDate(long date) {
+        tvSelectedDate.setText(DateTimeUtil.getFormattedDateTime(DATE_FORMAT_USED_IN_THIS_SCREEN, date));
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        switch (view.getId()) {
+            case R.id.item_drop_down:
+                Object object = adapter.getItem(position);
+                clearPreviousAlerts();
+                if (object != null && object instanceof AvailableTimeSlots) {
+                    AvailableTimeSlots availableTimeSlots = (AvailableTimeSlots) object;
+                    if (!availableTimeSlots.getIsAvailable()) {
+                        selectedTimeSlot = null;
+                        Util.showToast(mActivity, R.string.selected_time_slot_is_not_available);
+                        EditTextTextViewErrorUtil.showErrorOnEditText(mActivity, view, new ArrayList<View>() {{
+                            add(autotvSelectedTimeSlot);
+                        }}, null);
+                    } else {
+                        selectedTimeSlot = availableTimeSlots;
+                        autotvSelectedTimeSlot.setText(adapter.getText(position, null, AutoCompleteTextViewType.AVAILABLE_BOOKED_APPOINTMENTS, object));
+                    }
+                }
+                break;
+        }
+    }
+
+    private void clearPreviousAlerts() {
+        tvSelectedDate.setActivated(false);
+        autotvSelectedTimeSlot.setActivated(false);
+    }
+
+    @Override
+    public void afterTextChange(View v, String s) {
+        switch (v.getId()) {
+            case R.id.tv_selected_date:
+                LogUtils.LOGD(TAG, "TextVieew Selected Date ");
+                getAppointmentSlotNew(DATE_FORMAT_USED_IN_THIS_SCREEN, s);
+                break;
+        }
+    }
+
+    private void getAppointmentSlotNew(String format, String displayedDate) {
+        Util.checkNetworkStatus(mActivity);
+        if (HealthCocoConstants.isNetworkOnline) {
+            mActivity.showLoading(false);
+            if (displayedDate.equalsIgnoreCase(DateTimeUtil.getCurrentFormattedDate(format))) {
+                displayedDate = DateTimeUtil.getCurrentFormattedDate(DATE_FORMAT_USED_IN_THIS_SCREEN);
+            }
+            WebDataServiceImpl.getInstance(mApp).getAppointmentSlotsDetails(AppointmentTimeSlotDetails.class, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(), DateTimeUtil.getLongFromFormattedDayMonthYearFormatString(DATE_FORMAT_USED_IN_THIS_SCREEN, displayedDate), this, this);
+        } else
+            Util.showToast(mActivity, R.string.user_offline);
+    }
+
+    @Override
+    public void onEmptyListFound(AutoCompleteTextView autoCompleteTextView) {
+        switch (autoCompleteTextView.getId()) {
+            case R.id.autotv_selected_time_slot:
+                Util.showToast(mActivity, R.string.no_slots_available);
+                break;
+        }
+    }
+
+    @Override
+    public void scrollToPosition(int position) {
+
     }
 }

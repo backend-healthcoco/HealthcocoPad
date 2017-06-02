@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
@@ -95,6 +96,8 @@ public class AddEditNormalVisitClinicalNotesFragment extends HealthCocoFragment 
     private String clinicalNoteId;
     private boolean receiversRegistered;
     private List<ClinicalNotes> clinicalNotesList;
+    private boolean isFromClone;
+    private boolean isOnItemClick;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -109,6 +112,13 @@ public class AddEditNormalVisitClinicalNotesFragment extends HealthCocoFragment 
         Bundle bundle = getArguments();
         if (bundle != null && bundle.containsKey(TAG_CLINICAL_NOTES_DATA))
             clinicalNotesList = Parcels.unwrap(getArguments().getParcelable(TAG_CLINICAL_NOTES_DATA));
+
+        Intent intent = mActivity.getIntent();
+        if (intent != null) {
+            Parcelable isFromCloneParcelable = intent.getParcelableExtra(HealthCocoConstants.TAG_IS_FROM_CLONE);
+            if (isFromCloneParcelable != null)
+                isFromClone = Parcels.unwrap(isFromCloneParcelable);
+        }
         init();
         mActivity.showLoading(false);
         new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_FRAGMENT_INITIALISATION_DATA, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
@@ -126,7 +136,7 @@ public class AddEditNormalVisitClinicalNotesFragment extends HealthCocoFragment 
         initUiPermissions(user.getUiPermissions());
         if (!Util.isNullOrEmptyList(clinicalNotesList)) {
             for (ClinicalNotes clinicalNotes :
-                    clinicalNotesList){
+                    clinicalNotesList) {
                 addClinicalNotesFragment.refreshData(clinicalNotes);
             }
         }
@@ -422,6 +432,7 @@ public class AddEditNormalVisitClinicalNotesFragment extends HealthCocoFragment 
     }
 
     public void requestFocus(View v) {
+        isOnItemClick = true;
         refreshSuggestionsList(v, "");
         if (selectedSuggestionType != null)
             addVisitSuggestionsFragment.refreshTagOfEditText(selectedSuggestionType);
@@ -667,6 +678,7 @@ public class AddEditNormalVisitClinicalNotesFragment extends HealthCocoFragment 
 
         if (selectedViewForSuggestionsList != null && selectedViewForSuggestionsList instanceof EditText && !Util.isNullOrBlank(text)) {
             EditText editText = ((EditText) selectedViewForSuggestionsList);
+            isOnItemClick = true;
             String textBeforeComma = getTextBeforeLastOccuranceOfCharacter(Util.getValidatedValueOrBlankWithoutTrimming(editText));
             if (!Util.isNullOrBlank(textBeforeComma))
                 textBeforeComma = textBeforeComma + CHARACTER_TO_REPLACE_COMMA_WITH_SPACES;
@@ -674,7 +686,6 @@ public class AddEditNormalVisitClinicalNotesFragment extends HealthCocoFragment 
             editText.setSelection(Util.getValidatedValueOrBlankTrimming(editText).length());
         }
     }
-
 
     public TextWatcher addTextChangedListener(EditText autotvPermission) {
         return new HealthcocoTextWatcher(autotvPermission, this);
@@ -697,8 +708,10 @@ public class AddEditNormalVisitClinicalNotesFragment extends HealthCocoFragment 
 
     @Override
     public void afterTextChange(View v, String s) {
-        if (v instanceof EditText) {
-            refreshSuggestionsList(v, s);
+        if (isOnItemClick) {
+            if (v instanceof EditText) {
+                refreshSuggestionsList(v, s);
+            }
         }
     }
 }

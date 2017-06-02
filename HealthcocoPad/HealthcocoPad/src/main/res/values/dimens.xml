@@ -193,4 +193,7 @@
     <dimen name="spacing_suggestion_list_vist_fragment">1dp</dimen>
     <dimen name="actionbar_patient_name_size">16sp</dimen>
     <dimen name="actionbar_patient_gender_age_size">14sp</dimen>
+    <dimen name="actionbar_next_review_height">40dp</dimen>
+    <dimen name="actionbar_next_review_width">150dp</dimen>
+    <dimen name="text_size_actionbar_next_review">16sp</dimen>
 </resources>

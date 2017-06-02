@@ -88,7 +88,7 @@ public class AddClinicalNotesVisitFragment extends HealthCocoFragment implements
     private LinearLayout btSelectDiagram;
     private AddEditNormalVisitsFragment addEditNormalVisitsFragment;
     private AddEditNormalVisitClinicalNotesFragment addEditNormalVisitClinicalNotesFragment;
-    private Boolean isFromClone;
+    private boolean isFromClone;
     private List<ClinicalNotes> clinicalNotesList;
     private String clinicalNoteId;
 
@@ -471,11 +471,8 @@ public class AddClinicalNotesVisitFragment extends HealthCocoFragment implements
             diagramIdsList.addAll(diagramsList.keySet());
             clinicalNoteToSend.setDiagrams(diagramIdsList);
         }
-//        if (!isFromClone)
-//            clinicalNoteId = clinicalNotes.getUniqueId();
-        if (clinicalNotes != null)
-//            clinicalNoteToSend.setUniqueId(clinicalNoteId);
-            clinicalNoteToSend.setUniqueId(clinicalNotes.getUniqueId());
+        if (!Util.isNullOrBlank(clinicalNoteId))
+            clinicalNoteToSend.setUniqueId(clinicalNoteId);
         return clinicalNoteToSend;
     }
 
@@ -624,6 +621,8 @@ public class AddClinicalNotesVisitFragment extends HealthCocoFragment implements
                     }
                 }
             }
+            if (!isFromClone)
+                clinicalNoteId = clinicalNotes.getUniqueId();
         }
     }
 
@@ -640,13 +639,6 @@ public class AddClinicalNotesVisitFragment extends HealthCocoFragment implements
                     if (user != null && !Util.isNullOrBlank(user.getUniqueId())
                             && !Util.isNullOrBlank(user.getForeignHospitalId())
                             && !Util.isNullOrBlank(user.getForeignLocationId()) && user.getUiPermissions() != null) {
-//                        if (isNullClinicalNotePermissionsList) {
-//                            sendBroadcastForDiagramButtonVisibility(false);
-//                            sendBroadcastForClinicalNoteLayoutVisibility(false);
-//                        } else {
-//
-//                        }
-
                         initUiPermissions(user.getUiPermissions().getClinicalNotesPermissionsString());
                         if (!Util.isNullOrEmptyList(clinicalNotesList)) {
                             for (ClinicalNotes clinicalNotes :
