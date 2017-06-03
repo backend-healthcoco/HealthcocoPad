@@ -97,7 +97,6 @@ public class AddEditNormalVisitClinicalNotesFragment extends HealthCocoFragment 
     private boolean receiversRegistered;
     private List<ClinicalNotes> clinicalNotesList;
     private boolean isFromClone;
-    private boolean isOnItemClick;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -432,7 +431,7 @@ public class AddEditNormalVisitClinicalNotesFragment extends HealthCocoFragment 
     }
 
     public void requestFocus(View v) {
-        isOnItemClick = true;
+//        isOnItemClick = true;
         refreshSuggestionsList(v, "");
         if (selectedSuggestionType != null)
             addVisitSuggestionsFragment.refreshTagOfEditText(selectedSuggestionType);
@@ -678,7 +677,6 @@ public class AddEditNormalVisitClinicalNotesFragment extends HealthCocoFragment 
 
         if (selectedViewForSuggestionsList != null && selectedViewForSuggestionsList instanceof EditText && !Util.isNullOrBlank(text)) {
             EditText editText = ((EditText) selectedViewForSuggestionsList);
-            isOnItemClick = true;
             String textBeforeComma = getTextBeforeLastOccuranceOfCharacter(Util.getValidatedValueOrBlankWithoutTrimming(editText));
             if (!Util.isNullOrBlank(textBeforeComma))
                 textBeforeComma = textBeforeComma + CHARACTER_TO_REPLACE_COMMA_WITH_SPACES;
@@ -708,10 +706,8 @@ public class AddEditNormalVisitClinicalNotesFragment extends HealthCocoFragment 
 
     @Override
     public void afterTextChange(View v, String s) {
-        if (isOnItemClick) {
-            if (v instanceof EditText) {
-                refreshSuggestionsList(v, s);
-            }
+        if (v instanceof EditText) {
+            refreshSuggestionsList(v, s);
         }
     }
 }

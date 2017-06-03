@@ -15,7 +15,7 @@
         android:gravity="center|start"
         android:paddingLeft="10dp"
         android:text="@string/bullet"
-        android:textColor="@drawable/text_enabled_disabled_green_red_selector"
+        android:textColor="@drawable/text_selected_diselected_green_red_selector"
         android:textSize="@dimen/text_size_spinner_drop_down" />
 
     <TextView

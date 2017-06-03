@@ -52,8 +52,6 @@ import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.bean.server.XrayDetailSuggestions;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocopad.dialogFragment.AddNewDrugDialogFragment;
-import com.healthcoco.healthcocopad.enums.AddUpdateNameDialogType;
-import com.healthcoco.healthcocopad.enums.ChangeViewType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.SuggestionType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
@@ -76,7 +74,6 @@ import java.util.List;
 import java.util.Locale;
 
 import static com.healthcoco.healthcocopad.enums.WebServiceType.FRAGMENT_INITIALISATION;
-import static com.healthcoco.healthcocopad.enums.WebServiceType.GET_SEARCH_ADVICE_SOLR;
 
 /**
  * Created by neha on 15/04/17.
@@ -129,10 +126,10 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements T
 
     @Override
     public void init() {
+        visitToggleStateFromPreferences = Util.getVisitToggleStateFromPreferences(mActivity);
         initViews();
         initListeners();
         initAdapters();
-        visitToggleStateFromPreferences = Util.getVisitToggleStateFromPreferences(mActivity);
 
         showLoadingOverlay(true);
         new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_FRAGMENT_INITIALISATION_DATA, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
@@ -154,7 +151,13 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements T
     public void initListeners() {
         if (visitToggleStateFromPreferences)
             editTextSearch = initEditSearchView(R.string.search, (View.OnClickListener) this);
-        else editTextSearch = initEditSearchView(R.string.search, this, this);
+        else {
+            editTextSearch = initEditSearchView(R.string.search, this, this);
+            addEditNormalVisitsFragment = (AddEditNormalVisitsFragment) mFragmentManager.findFragmentByTag(AddEditNormalVisitsFragment.class.getSimpleName());
+            addEditNormalVisitClinicalNotesFragment = (AddEditNormalVisitClinicalNotesFragment) addEditNormalVisitsFragment.getCurrentTabFragment(0);
+            editTextSearch.setOnTouchListener(addEditNormalVisitClinicalNotesFragment.getOnTouchListener());
+            editTextSearch.addTextChangedListener(addEditNormalVisitClinicalNotesFragment.addTextChangedListener(editTextSearch));
+        }
         btAddNew.setOnClickListener(this);
         gvSuggestionsList.setOnItemClickListener(this);
         lvSuggestionsList.setOnItemClickListener(this);
@@ -640,17 +643,12 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements T
 
     public void refreshTagOfEditText(SuggestionType suggestionType) {
         editTextSearch = initEditSearchView(suggestionType.getSearchHintId(), (View.OnClickListener) this);
-        editTextSearch.setText("");
         editTextSearch.setTag(suggestionType);
+        editTextSearch.setText("");
         if (visitToggleStateFromPreferences) {
             MyScriptAddVisitsFragment myScriptAddVisitsFragment = (MyScriptAddVisitsFragment) mFragmentManager.findFragmentByTag(MyScriptAddVisitsFragment.class.getSimpleName());
             if (myScriptAddVisitsFragment != null)
                 myScriptAddVisitsFragment.requestFocus(editTextSearch);
-        } else {
-            addEditNormalVisitsFragment = (AddEditNormalVisitsFragment) mFragmentManager.findFragmentByTag(AddEditNormalVisitsFragment.class.getSimpleName());
-            addEditNormalVisitClinicalNotesFragment = (AddEditNormalVisitClinicalNotesFragment) addEditNormalVisitsFragment.getCurrentTabFragment(0);
-            editTextSearch.setOnTouchListener(addEditNormalVisitClinicalNotesFragment.getOnTouchListener());
-            editTextSearch.addTextChangedListener(addEditNormalVisitClinicalNotesFragment.addTextChangedListener(editTextSearch));
         }
         Util.requesFocus(editTextSearch);
     }

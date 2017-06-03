@@ -15,7 +15,6 @@
             android:id="@+id/container_popup_options"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:elevation="2dp"
             android:minWidth="200dp"
             android:orientation="vertical">
 

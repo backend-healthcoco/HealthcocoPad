@@ -155,10 +155,10 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
 //                case PATIENT_DETAIL_PRESCRIPTION:
 //                    healthcocoFragment = new PatientPrescriptionDetailFragment();
 //                    break;
-//                case PATIENT_DETAIL_APPOINTMENT:
-//                    appointmentFragment = new PatientAppointmentDetailFragment();
-//                    healthcocoFragment = appointmentFragment;
-//                    break;
+                case PATIENT_DETAIL_APPOINTMENT:
+                    appointmentFragment = new PatientAppointmentDetailFragment();
+                    healthcocoFragment = appointmentFragment;
+                    break;
 //                case PATIENT_DETAIL_TREATMENT:
 //                    healthcocoFragment = new PatientTreatmentDetailFragment();
 //                    break;
@@ -323,12 +323,12 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                         visitsFragment.refreshData(user, selectedPatient);
                         isVisitsTabClicked = true;
                     }
-//                case PATIENT_DETAIL_APPOINTMENT:
-//                    if (!isAppointmentTabClicked) {
-//                        appointmentFragment.refreshData(user, selectedPatient);
-//                        isAppointmentTabClicked = true;
-//                    }
-//                    break;
+                case PATIENT_DETAIL_APPOINTMENT:
+                    if (!isAppointmentTabClicked) {
+                        appointmentFragment.refreshData(user, selectedPatient);
+                        isAppointmentTabClicked = true;
+                    }
+                    break;
             }
         }
         ((CommonOpenUpActivity) mActivity).initActionbarTitle(patientDetailTabType.getActionBarTitleId());
@@ -373,9 +373,9 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                     case PATIENT_DETAIL_VISIT:
                         visitsFragment.openAddVisitFragment();
                         break;
-//                    case PATIENT_DETAIL_APPOINTMENT:
-//                        appointmentFragment.openAddNewAppointmentScreen();
-//                        break;
+                    case PATIENT_DETAIL_APPOINTMENT:
+                        appointmentFragment.openAddNewAppointmentScreen();
+                        break;
                 }
                 break;
         }

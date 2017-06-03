@@ -20,20 +20,17 @@
             android:drawableRight="@drawable/arrow_down_drug"
             android:gravity="center"
             android:text="@string/date"
-            android:textColor="@color/grey_hint_color"
+            android:textColor="@color/grey_dark_text"
             android:textSize="15sp" />
 
-        <com.healthcoco.healthcocopad.views.CustomAutoCompleteTextView
-            android:id="@+id/autotv_selected_time_slot"
+        <TextView
+            android:id="@+id/tv_selected_time_slot"
             style="@style/registration_edittext"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_weight="1"
             android:drawableRight="@drawable/arrow_down_drug"
-            android:editable="false"
-            android:enabled="false"
-            android:focusable="false"
             android:gravity="center"
             android:hint="@string/time"
             android:singleLine="true"
@@ -94,6 +91,7 @@
         android:layout_marginTop="20dp"
         android:background="@drawable/shape_rounded_corners_solid_blue"
         android:gravity="center|bottom"
+        android:layout_gravity="bottom"
         android:minHeight="0dp"
         android:padding="8dp"
         android:text="@string/done"

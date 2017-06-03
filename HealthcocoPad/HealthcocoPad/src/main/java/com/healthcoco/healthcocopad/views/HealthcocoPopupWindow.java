@@ -13,8 +13,12 @@ import android.widget.TextView;
 
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.R;
+import com.healthcoco.healthcocopad.bean.server.AppointmentSlot;
+import com.healthcoco.healthcocopad.bean.server.AvailableTimeSlots;
+import com.healthcoco.healthcocopad.dialogFragment.BookAppointmentDialogFragment;
 import com.healthcoco.healthcocopad.enums.PopupWindowType;
 import com.healthcoco.healthcocopad.listeners.PopupWindowListener;
+import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
 import com.healthcoco.healthcocopad.utilities.Util;
 
 import java.util.ArrayList;
@@ -30,6 +34,7 @@ public class HealthcocoPopupWindow extends PopupWindow implements View.OnClickLi
     private PopupWindowType popupWindowType;
     private int dropDownLayoutId;
     private Button btDone;
+    private String text;
 
     public HealthcocoPopupWindow(Context context, PopupWindowType popupWindowType, ArrayList<Object> list, PopupWindowListener popupWindowListener) {
         this(context, popupWindowType, list, R.layout.spinner_drop_down_item_grey_background, popupWindowListener);
@@ -46,27 +51,39 @@ public class HealthcocoPopupWindow extends PopupWindow implements View.OnClickLi
 
     public View getPopupView() {
         LinearLayout linearLayout = (LinearLayout) mActivity.getLayoutInflater().inflate(R.layout.popup_window_healthcoco, null);
-        LinearLayout containerBloodGroups = (LinearLayout) linearLayout.findViewById(R.id.container_popup_options);
-//        if (list != null) {
-//            for (Object object :
-//                    list) {
-        View view = mActivity.getLayoutInflater().inflate(dropDownLayoutId, null);
-        popupWindowListener.onItemSelected(popupWindowType, view);
+        LinearLayout containerPopupOptions = (LinearLayout) linearLayout.findViewById(R.id.container_popup_options);
+        if (!Util.isNullOrEmptyList(list)) {
+            for (Object object :
+                    list) {
+                View view = mActivity.getLayoutInflater().inflate(dropDownLayoutId, null);
 
-//        TextView textView = null;
-//        if (view instanceof TextView)
-//            textView = (TextView) view;
-//        else
-//            textView = (TextView) view.findViewById(R.id.tv_text);
-////                String text = getText(object);
-////                if (!Util.isNullOrBlank(text)) {
-////                    textView.setText(text);
-////                    textView.setTag(object);
-//        textView.setOnClickListener(this);
-        containerBloodGroups.addView(view);
-//                }
-//            }
-//        }
+                TextView tvText = (TextView) view.findViewById(R.id.tv_text);
+                TextView tvBullet = (TextView) view.findViewById(R.id.tv_bullet);
+                if (object instanceof AvailableTimeSlots) {
+                    AvailableTimeSlots availableTimeSlots = (AvailableTimeSlots) object;
+                    text = DateTimeUtil.convertFormattedDate(DateTimeUtil.TIME_FORMAT_24_HOUR, BookAppointmentDialogFragment.TIME_SLOT_FORMAT_USED_IN_THIS_SCREEN, availableTimeSlots.getTime());
+                    if (view != null)
+                        if (availableTimeSlots.getIsAvailable() != null && availableTimeSlots.getIsAvailable()) {
+                            tvBullet.setSelected(false);
+                        } else
+                            tvBullet.setSelected(true);
+                }
+                if (!Util.isNullOrBlank(text)) {
+                    tvText.setText(text);
+                    tvText.setTag(object);
+                    tvText.setOnClickListener(this);
+                    containerPopupOptions.addView(view);
+                    linearLayout.setVisibility(View.VISIBLE);
+                }
+            }
+        } else {
+            switch (popupWindowType) {
+                case NEXT_REVIEW:
+                    Util.showToast(mActivity, R.string.no_slots_available);
+                    linearLayout.setVisibility(View.GONE);
+                    break;
+            }
+        }
         setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         setOutsideTouchable(true);
         setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -114,6 +131,7 @@ public class HealthcocoPopupWindow extends PopupWindow implements View.OnClickLi
 
     @Override
     public void onClick(View v) {
-
+        popupWindowListener.onItemSelected(popupWindowType, v.getTag());
+        dismiss();
     }
 }

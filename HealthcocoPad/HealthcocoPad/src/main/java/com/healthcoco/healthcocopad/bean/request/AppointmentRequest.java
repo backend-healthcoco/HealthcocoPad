@@ -5,9 +5,12 @@ import com.healthcoco.healthcocopad.bean.server.WorkingHours;
 import com.healthcoco.healthcocopad.enums.AppointmentStatusType;
 import com.healthcoco.healthcocopad.enums.CreatedByType;
 
+import org.parceler.Parcel;
+
 /**
  * Created by neha on 26/11/16.
  */
+@Parcel
 public class AppointmentRequest {
     private String locationId;
     private String hospitalId;
