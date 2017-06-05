@@ -71,6 +71,7 @@ public class HealthCocoConstants {
     public static final String PARAM_PAGE_AND = "&page=";
     public static final String PARAM_DISCARDED_FALSE = "discarded=false";
     public static final int RESULT_CODE_NEXT_REVIEW = 150;
+    public static final int RESULT_CODE_ADD_CLINICAL_NOTE = 151;
 
     public static boolean isNetworkOnline;
     public static final String PARAM_UPDATED_TIME = "&updatedTime=";

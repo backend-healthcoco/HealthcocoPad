@@ -46,7 +46,8 @@ import java.util.HashMap;
 /**
  * Created by Shreshtha on 07-03-2017.
  */
-public class PatientAppointmentDetailFragment extends HealthCocoFragment implements SwipeRefreshLayout.OnRefreshListener, LocalDoInBackgroundListenerOptimised,
+public class PatientAppointmentDetailFragment extends HealthCocoFragment implements SwipeRefreshLayout.OnRefreshListener,
+        LocalDoInBackgroundListenerOptimised,
         Response.Listener<VolleyResponseBean>, GsonRequest.ErrorListener, LoadMorePageListener {
     public static final String DATE_FORMAT_USED_IN_THIS_SCREEN = "dd MMM yyyy";
     public static final String INTENT_GET_APPOINTMENT_LIST_LOCAL = "com.healthcoco.APPOINTMENT_LIST_LOCAL";
@@ -68,7 +69,6 @@ public class PatientAppointmentDetailFragment extends HealthCocoFragment impleme
     private boolean receiversRegistered;
     private RegisteredPatientDetailsUpdated selectedPatient;
     private User user;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -169,11 +169,10 @@ public class PatientAppointmentDetailFragment extends HealthCocoFragment impleme
 
     public void getAppointmentsList(boolean showLoading) {
         if (showLoading)
-            showLoadingOverlay(true);
-        else
-            showLoadingOverlay(false);
+            mActivity.showLoading(false);
         Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(user, LocalTabelType.APPOINTMENT);
-        WebDataServiceImpl.getInstance(mApp).getEmrListGeneralMethod(CalendarEvents.class, WebServiceType.GET_APPOINTMENT, isOTPVerified, true, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(),
+        WebDataServiceImpl.getInstance(mApp).getEmrListGeneralMethod(CalendarEvents.class, WebServiceType.GET_APPOINTMENT,
+                isOTPVerified, true, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(),
                 selectedPatient.getUserId(), latestUpdatedTime, this, this);
     }
 
@@ -236,6 +235,8 @@ public class PatientAppointmentDetailFragment extends HealthCocoFragment impleme
                         new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_APPOINTMENTS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
                         return;
                     }
+                    if (!response.isUserOnline())
+                        onNetworkUnavailable(response.getWebServiceType());
                     swipeRefreshLayout.setRefreshing(false);
                     progressLoading.setVisibility(View.GONE);
                     showLoadingOverlay(false);
@@ -246,6 +247,7 @@ public class PatientAppointmentDetailFragment extends HealthCocoFragment impleme
                     break;
             }
         }
+        progressLoading.setVisibility(View.GONE);
         showLoadingOverlay(false);
         mActivity.hideLoading();
         swipeRefreshLayout.setRefreshing(false);

@@ -1159,4 +1159,15 @@ public class WebDataServiceImpl implements GCMRefreshListener {
                 errorListener);
     }
 
+    public void discardClinicalNotes(Class<?> class1, String doctorId, String locationId, String hospitalId, String clinicalNoteId, String patientId, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        String url = WebServiceType.DISCARD_CLINICAL_NOTES.getUrl() + clinicalNoteId + HealthCocoConstants.PARAM_TAG_DELETE;
+        getResponse(WebServiceType.DISCARD_CLINICAL_NOTES, class1, url, null, null, responseListener,
+                errorListener);
+    }
+    public void discardPrescription(Class<?> class1, String doctorId, String locationId, String hospitalId, String prescriptionId, String patientId, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        String url = WebServiceType.DISCARD_PRESCRIPTION.getUrl() + prescriptionId + "/" + doctorId + "/" + locationId + "/" + hospitalId + "/" + patientId + HealthCocoConstants.PARAM_TAG_DELETE;
+        getResponse(WebServiceType.DISCARD_PRESCRIPTION, class1, url, null, null, responseListener,
+                errorListener);
+    }
+
 }

@@ -145,9 +145,9 @@
     <dimen name="drawable_text_padding">5dp</dimen>
     <dimen name="text_size_emr_date">17sp</dimen>
     <dimen name="padding_margin_prescribed_item_center">8dp</dimen>
-    <dimen name="text_size_prescribed_by_name">13sp</dimen>
+    <dimen name="text_size_prescribed_by_name">17sp</dimen>
     <dimen name="text_padding_appointment">10dp</dimen>
-    <dimen name="text_size_clinical_notes_noted_by">13sp</dimen>
+    <dimen name="text_size_clinical_notes_noted_by">17sp</dimen>
 
     <dimen name="report_thumbnail">60dp</dimen>
     <dimen name="text_size_reports_item_label">15sp</dimen>

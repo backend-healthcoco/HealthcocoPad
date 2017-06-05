@@ -1,12 +1,11 @@
 package com.healthcoco.healthcocopad.viewholders;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.text.Html;
 import android.view.View;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -18,24 +17,18 @@ import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.BloodPressure;
 import com.healthcoco.healthcocopad.bean.server.ClinicalNotes;
-import com.healthcoco.healthcocopad.bean.server.Complaint;
-import com.healthcoco.healthcocopad.bean.server.Diagnoses;
 import com.healthcoco.healthcocopad.bean.server.Diagram;
-import com.healthcoco.healthcocopad.bean.server.Investigation;
-import com.healthcoco.healthcocopad.bean.server.Notes;
-import com.healthcoco.healthcocopad.bean.server.Observation;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.bean.server.VitalSigns;
-import com.healthcoco.healthcocopad.custom.OptionsPopupWindow;
 import com.healthcoco.healthcocopad.enums.AddUpdateNameDialogType;
 import com.healthcoco.healthcocopad.enums.ClinicalNotesPermissionType;
-import com.healthcoco.healthcocopad.enums.ClinicalNotesType;
-import com.healthcoco.healthcocopad.enums.OptionsTypePopupWindow;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
+import com.healthcoco.healthcocopad.fragments.PatientClinicalNotesDetailFragment;
 import com.healthcoco.healthcocopad.listeners.CommonEMRItemClickListener;
 import com.healthcoco.healthcocopad.listeners.VisitDetailCombinedItemListener;
 import com.healthcoco.healthcocopad.services.GsonRequest;
+import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
@@ -43,6 +36,7 @@ import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.healthcoco.healthcocopad.views.TextViewFontAwesome;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -61,16 +55,12 @@ public class ClinicalNotesListItemViewHolder extends HealthCocoViewHolder implem
     private LinearLayout btHistory;
     private LinearLayout btEdit;
     private TextView tvDate;
-    private Context context;
     private ClinicalNotes clinicalNote;
-    private OptionsPopupWindow popupWindow;
     private LinearLayout btEmail;
-    private ImageButton btOptions;
     private TextView tvNotedBy;
     private LinearLayout containerDiagrams;
     private LinearLayout layoutDiagrams;
     private TextView tvCNID;
-    private LinearLayout btInfo;
     private LinearLayout layoutVitalSigns;
     //    private TextView tvVitalSIgnsDetails;
     private LinearLayout containerBottomButtons;
@@ -126,6 +116,8 @@ public class ClinicalNotesListItemViewHolder extends HealthCocoViewHolder implem
     private TextView tvBloodPressure;
     private TextView tvRespiratoryRate;
     private TextView tvSpo2;
+    private ImageView imageView;
+    private LinearLayout btDiscard;
 
     public ClinicalNotesListItemViewHolder(HealthCocoActivity mActivity,
                                            Object listenerObject, boolean isInEmrList) {
@@ -271,21 +263,18 @@ public class ClinicalNotesListItemViewHolder extends HealthCocoViewHolder implem
         } else {
             btHistory.setSelected(false);
         }
-//        if (user != null) {
-//            if (!user.getUniqueId().equalsIgnoreCase(clinicalNote.getDoctorId())) {
         if (detailCombinedItemListener != null) {
-            btOptions.setVisibility(View.GONE);
             containerBottomButtons.setVisibility(View.GONE);
             tvLabelGlobalRecord.setVisibility(View.VISIBLE);
             tvLabelNotedBy.setVisibility(View.GONE);
             tvNotedBy.setVisibility(View.GONE);
+            imageView.setVisibility(View.GONE);
         } else {
-            btOptions.setVisibility(View.VISIBLE);
             containerBottomButtons.setVisibility(View.VISIBLE);
             tvLabelGlobalRecord.setVisibility(View.GONE);
             tvLabelNotedBy.setVisibility(View.VISIBLE);
             tvNotedBy.setVisibility(View.VISIBLE);
-//            }
+            imageView.setVisibility(View.VISIBLE);
         }
     }
 
@@ -359,7 +348,6 @@ public class ClinicalNotesListItemViewHolder extends HealthCocoViewHolder implem
         View contentView = inflater.inflate(R.layout.temp_item_clinic_note, null);
         initViews(contentView);
         initListeners();
-        initOptionsPopupWindow();
         return contentView;
     }
 
@@ -367,8 +355,7 @@ public class ClinicalNotesListItemViewHolder extends HealthCocoViewHolder implem
         tvDate = (TextView) contentView.findViewById(R.id.tv_date);
         tvCNID = (TextView) contentView.findViewById(R.id.tv_cnid);
         layoutVitalSigns = (LinearLayout) contentView.findViewById(R.id.layout_vital_signs);
-//        tvVitalSIgnsDetails = (TextView) contentView.findViewById(R.id.tv_vital_signs_details);
-//        btInfo = (LinearLayout) contentView.findViewById(R.id.bt_info_show);
+        imageView = (ImageView) contentView.findViewById(R.id.image_view);
 
         layoutPresentComplaints = (LinearLayout) contentView.findViewById(R.id.layout_present_complaints);
         tvPresentComplaints = (TextViewFontAwesome) contentView.findViewById(R.id.tv_text_present_complaints);
@@ -419,13 +406,12 @@ public class ClinicalNotesListItemViewHolder extends HealthCocoViewHolder implem
         btEdit = (LinearLayout) contentView.findViewById(R.id.bt_edit);
         btEmail = (LinearLayout) contentView.findViewById(R.id.bt_email);
         btPrint = (LinearLayout) contentView.findViewById(R.id.bt_print);
+        btDiscard = (LinearLayout) contentView.findViewById(R.id.bt_discard);
 
-        btOptions = (ImageButton) contentView.findViewById(R.id.bt_options);
         tvNotedBy = (TextView) contentView.findViewById(R.id.tv_noted_by);
         containerBottomButtons = (LinearLayout) contentView.findViewById(R.id.container_bottom_buttons_clinical_note);
         tvLabelGlobalRecord = (TextView) contentView.findViewById(R.id.tv_label_global_record);
         tvLabelNotedBy = (TextView) contentView.findViewById(R.id.tv_label_created_by);
-
 
         tvBodyTemprature = (TextViewFontAwesome) contentView.findViewById(R.id.tv_body_temprature);
         tvWeight = (TextViewFontAwesome) contentView.findViewById(R.id.tv_weight);
@@ -434,21 +420,13 @@ public class ClinicalNotesListItemViewHolder extends HealthCocoViewHolder implem
         tvRespiratoryRate = (TextViewFontAwesome) contentView.findViewById(R.id.tv_respiratory_rate);
         tvSpo2 = (TextViewFontAwesome) contentView.findViewById(R.id.tv_spo2);
 
-        View headerCreatedByVisit = contentView.findViewById(R.id.container_header_created_by_visit);
         View headerCreatedByClinicalNote = contentView.findViewById(R.id.container_header_created_by_clinical_note);
         View containerPrescribedBy = contentView.findViewById(R.id.container_prescribed_by);
         if (detailCombinedItemListener != null) {
-            btPrint.setVisibility(View.VISIBLE);
-            btHistory.setVisibility(View.GONE);
-            headerCreatedByVisit.setVisibility(View.GONE);
             headerCreatedByClinicalNote.setVisibility(View.GONE);
             containerPrescribedBy.setVisibility(View.GONE);
             containerBottomButtons.setVisibility(View.GONE);
-            detailCombinedItemListener.setVisitHeader(headerCreatedByVisit);
         } else {
-            btPrint.setVisibility(View.GONE);
-            btHistory.setVisibility(View.VISIBLE);
-            headerCreatedByVisit.setVisibility(View.VISIBLE);
             containerPrescribedBy.setVisibility(View.VISIBLE);
             headerCreatedByClinicalNote.setVisibility(View.VISIBLE);
             containerBottomButtons.setVisibility(View.VISIBLE);
@@ -456,18 +434,11 @@ public class ClinicalNotesListItemViewHolder extends HealthCocoViewHolder implem
     }
 
     private void initListeners() {
-//        btInfo.setOnClickListener(this);
+        btDiscard.setOnClickListener(this);
         btHistory.setOnClickListener(this);
         btEdit.setOnClickListener(this);
         btEmail.setOnClickListener(this);
-        btOptions.setOnClickListener(this);
         btPrint.setOnClickListener(this);
-    }
-
-    private void initOptionsPopupWindow() {
-        popupWindow = new OptionsPopupWindow(mActivity, OptionsTypePopupWindow.CLINICAL_NOTES, this);
-        popupWindow.setOutsideTouchable(true);
-        popupWindow.setContentView(popupWindow.getPopupView());
     }
 
     private void checkIsDiscarded(Boolean isDiscarded) {
@@ -523,31 +494,6 @@ public class ClinicalNotesListItemViewHolder extends HealthCocoViewHolder implem
         layoutVitalSigns.setVisibility(View.GONE);
     }
 
-    private void setValueAndAddView(boolean isLastText, ClinicalNotesType clinicalNotesType, LinearLayout textView, Object object) {
-        switch (clinicalNotesType) {
-            case COMPLAINTS:
-                Complaint complaint = (Complaint) object;
-                setTextToTextViewIn(tvComplaints, complaint.getComplaint());
-                break;
-            case OBSERVATIONS:
-                Observation observation = (Observation) object;
-                setTextToTextViewIn(tvObservations, observation.getObservation());
-                break;
-            case INVESTIGATION:
-                Investigation investigation = (Investigation) object;
-                setTextToTextViewIn(tvInvestigations, investigation.getInvestigation());
-                break;
-            case DIAGNOSIS:
-                Diagnoses diagnoses = (Diagnoses) object;
-                setTextToTextViewIn(tvDiagnoses, diagnoses.getDiagnosis());
-                break;
-            case NOTE:
-                Notes notes = (Notes) object;
-                setTextToTextViewIn(tvNotes, notes.getNote());
-                break;
-        }
-    }
-
     /**
      * setting text to textview having bullet color as blue_tranlucent and text color as black
      *
@@ -555,8 +501,6 @@ public class ClinicalNotesListItemViewHolder extends HealthCocoViewHolder implem
      * @param text:       text to be appneded
      */
     private void setTextToTextViewIn(TextView tvTextView, String text) {
-//        String textModified = "<font color=#700077b5>" + mActivity.getResources().getString(R.string.bullet) + "</font> " +
-//                "<font color=#000000>" + text + "</font>";
         String textModified = mActivity.getResources().getString(R.string.bullet_with_space) + text;
         tvTextView.setText(Util.getValidatedValueOrBlankWithoutTrimming(tvTextView) + Html.fromHtml(textModified) + "  ");
     }
@@ -606,7 +550,6 @@ public class ClinicalNotesListItemViewHolder extends HealthCocoViewHolder implem
                 } else onNetworkUnavailable(null);
                 break;
             case R.id.bt_email:
-//                commonEMRItemClickListener.onEmailClicked(clinicalNote);
                 Util.checkNetworkStatus(mActivity);
                 if (HealthCocoConstants.isNetworkOnline) {
                     if (detailCombinedItemListener != null)
@@ -615,10 +558,7 @@ public class ClinicalNotesListItemViewHolder extends HealthCocoViewHolder implem
                         mActivity.openAddUpdateNameDialogFragment(WebServiceType.SEND_EMAIL_CLINICAL_NOTES, AddUpdateNameDialogType.EMAIL, clinicalNote.getUniqueId());
                 } else onNetworkUnavailable(null);
                 break;
-            case R.id.bt_options:
-                popupWindow.showOptionsWindow(v);
-                break;
-            case R.id.tv_discard:
+            case R.id.bt_discard:
                 LogUtils.LOGD(TAG, "Discard");
                 Util.checkNetworkStatus(mActivity);
                 if (HealthCocoConstants.isNetworkOnline) {
@@ -639,11 +579,7 @@ public class ClinicalNotesListItemViewHolder extends HealthCocoViewHolder implem
                         WebDataServiceImpl.getInstance(mApp).getPdfUrl(String.class, WebServiceType.GET_CLINICAL_NOTES_PDF_URL, clinicalNote.getUniqueId(), this, this);
                     } else onNetworkUnavailable(null);
                 }
-                popupWindow.dismiss();
                 break;
-//            case R.id.bt_info_show:
-//                openVitalSignsDetailDialogFragment();
-//                break;
             default:
                 break;
         }
@@ -686,21 +622,21 @@ public class ClinicalNotesListItemViewHolder extends HealthCocoViewHolder implem
                     LogUtils.LOGD(TAG, "Success DISCARD_PRESCRIPTION");
                     clinicalNote.setDiscarded(!clinicalNote.getDiscarded());
                     applyData();
-//                    LocalDataServiceImpl.getInstance(mApp).updateClinicalNote(clinicalNote);
+                    LocalDataServiceImpl.getInstance(mApp).updateClinicalNote(clinicalNote);
                     sendBroadcasts();
                     break;
                 case ADD_TO_HISTORY_CLINICAL_NOTE:
                     Util.showToast(mActivity, mActivity.getResources().getString(R.string.added_to_history));
                     clinicalNote.setInHistory(!clinicalNote.getInHistory());
                     applyData();
-//                    LocalDataServiceImpl.getInstance(mApp).updateClinicalNote(clinicalNote);
+                    LocalDataServiceImpl.getInstance(mApp).updateClinicalNote(clinicalNote);
                     sendBroadcasts();
                     break;
                 case REMOVE_HISTORY_CLINICAL_NOTE:
                     Util.showToast(mActivity, mActivity.getResources().getString(R.string.removed_from_history));
                     clinicalNote.setInHistory(!clinicalNote.getInHistory());
                     applyData();
-//                    LocalDataServiceImpl.getInstance(mApp).updateClinicalNote(clinicalNote);
+                    LocalDataServiceImpl.getInstance(mApp).updateClinicalNote(clinicalNote);
                     sendBroadcasts();
                     break;
                 default:
@@ -712,9 +648,9 @@ public class ClinicalNotesListItemViewHolder extends HealthCocoViewHolder implem
     }
 
     private void sendBroadcasts() {
-//        Util.sendBroadcasts(mApp, new ArrayList<String>() {{
-//            add(ClinicalNotesListNewFragment.INTENT_GET_CLINICAL_NOTES_LIST_LOCAL);
-//        }});
+        Util.sendBroadcasts(mApp, new ArrayList<String>() {{
+            add(PatientClinicalNotesDetailFragment.INTENT_GET_CLINICAL_NOTES_LIST_LOCAL);
+        }});
     }
 
     private void showConfirmationAlert(final int viewId, String title, String msg) {
@@ -729,9 +665,8 @@ public class ClinicalNotesListItemViewHolder extends HealthCocoViewHolder implem
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 switch (viewId) {
-                    case R.id.tv_discard:
+                    case R.id.bt_discard:
                         onDiscardedClicked(clinicalNote);
-                        popupWindow.dismiss();
                         break;
                     case R.id.bt_history:
                         onAddRemoveHistoryClicked(clinicalNote);
@@ -759,22 +694,22 @@ public class ClinicalNotesListItemViewHolder extends HealthCocoViewHolder implem
     }
 
     public void onAddRemoveHistoryClicked(Object object) {
-//        ClinicalNotes clinicalNotes = (ClinicalNotes) object;
-//        if (!clinicalNotes.getInHistory()) {
-//            if (commonEMRItemClickListener != null)
-//                commonEMRItemClickListener.showLoading(true);
-//            WebDataServiceImpl.getInstance(mApp).addToHistory(ClinicalNotes.class, WebServiceType.ADD_TO_HISTORY_CLINICAL_NOTE, clinicalNotes.getUniqueId(), HealthCocoConstants.SELECTED_PATIENTS_USER_ID, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(), this, this);
-//        } else {
-//            if (commonEMRItemClickListener != null)
-//                commonEMRItemClickListener.showLoading(true);
-//            WebDataServiceImpl.getInstance(mApp).removeFromHistory(ClinicalNotes.class, WebServiceType.REMOVE_HISTORY_CLINICAL_NOTE, clinicalNotes.getUniqueId(), HealthCocoConstants.SELECTED_PATIENTS_USER_ID, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(), this, this);
-//        }
+        ClinicalNotes clinicalNotes = (ClinicalNotes) object;
+        if (!clinicalNotes.getInHistory()) {
+            if (commonEMRItemClickListener != null)
+                commonEMRItemClickListener.showLoading(true);
+            WebDataServiceImpl.getInstance(mApp).addToHistory(ClinicalNotes.class, WebServiceType.ADD_TO_HISTORY_CLINICAL_NOTE, clinicalNotes.getUniqueId(), HealthCocoConstants.SELECTED_PATIENTS_USER_ID, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(), this, this);
+        } else {
+            if (commonEMRItemClickListener != null)
+                commonEMRItemClickListener.showLoading(true);
+            WebDataServiceImpl.getInstance(mApp).removeFromHistory(ClinicalNotes.class, WebServiceType.REMOVE_HISTORY_CLINICAL_NOTE, clinicalNotes.getUniqueId(), HealthCocoConstants.SELECTED_PATIENTS_USER_ID, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(), this, this);
+        }
     }
 
     public void onDiscardedClicked(Object object) {
-//        ClinicalNotes clinicalNotes = (ClinicalNotes) object;
-//        if (commonEMRItemClickListener != null)
-//            commonEMRItemClickListener.showLoading(true);
-//        WebDataServiceImpl.getInstance(mApp).discardClinicalNotes(ClinicalNotes.class, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(), clinicalNotes.getUniqueId(), HealthCocoConstants.SELECTED_PATIENTS_USER_ID, this, this);
+        ClinicalNotes clinicalNotes = (ClinicalNotes) object;
+        if (commonEMRItemClickListener != null)
+            commonEMRItemClickListener.showLoading(true);
+        WebDataServiceImpl.getInstance(mApp).discardClinicalNotes(ClinicalNotes.class, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(), clinicalNotes.getUniqueId(), HealthCocoConstants.SELECTED_PATIENTS_USER_ID, this, this);
     }
 }

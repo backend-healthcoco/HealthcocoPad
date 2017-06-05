@@ -311,8 +311,17 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
         @Override
         public void onReceive(Context context, final Intent intent) {
             refreshListFromLocal();
+//            sendBroadcasts();
         }
     };
+
+    private void sendBroadcasts() {
+        Util.sendBroadcasts(mApp, new ArrayList<String>() {{
+//            add(HistoryFragment.INTENT_GET_HISTORY_LIST);
+            add(PatientClinicalNotesDetailFragment.INTENT_GET_CLINICAL_NOTES_LIST);
+            add(PatientPrescriptionDetailFragment.INTENT_GET_PRESCRIPTION_LIST);
+        }});
+    }
 
     @Override
     public void loadMore() {

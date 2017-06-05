@@ -88,11 +88,11 @@ public class AddEditNormalVisitClinicalNotesFragment extends HealthCocoFragment 
     private User user;
     private LinearLayout containerSuggestionsList;
     private RegisteredPatientDetailsUpdated selectedPatient;
-    private String visitId;
     private AddVisitSuggestionsFragment addVisitSuggestionsFragment;
     private AddClinicalNotesVisitFragment addClinicalNotesFragment;
     private View selectedViewForSuggestionsList;
     private SuggestionType selectedSuggestionType = null;
+    private String visitId;
     private String clinicalNoteId;
     private boolean receiversRegistered;
     private List<ClinicalNotes> clinicalNotesList;
@@ -432,9 +432,10 @@ public class AddEditNormalVisitClinicalNotesFragment extends HealthCocoFragment 
 
     public void requestFocus(View v) {
 //        isOnItemClick = true;
-        refreshSuggestionsList(v, "");
-        if (selectedSuggestionType != null)
+        if (selectedSuggestionType != null) {
             addVisitSuggestionsFragment.refreshTagOfEditText(selectedSuggestionType);
+        }
+        refreshSuggestionsList(v, "");
     }
 
     /**

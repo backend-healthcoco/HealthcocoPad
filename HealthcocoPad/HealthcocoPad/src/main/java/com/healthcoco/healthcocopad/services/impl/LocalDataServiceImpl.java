@@ -3636,4 +3636,100 @@ public class LocalDataServiceImpl {
         return list;
     }
 
+    public VolleyResponseBean getClinicalNotesList(WebServiceType webServiceType, boolean isOtpVerified, String doctorId, String locationId, String hospitalId, String selectedPatientId, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
+        volleyResponseBean.setWebServiceType(webServiceType);
+        volleyResponseBean.setIsDataFromLocal(true);
+        volleyResponseBean.setIsUserOnline(HealthCocoConstants.isNetworkOnline);
+        try {
+            Select<ClinicalNotes> selectQuery = null;
+            if (!isOtpVerified && !Util.isNullOrBlank(doctorId)) {
+                selectQuery = Select.from(ClinicalNotes.class)
+                        .where(Condition.prop(LocalDatabaseUtils.KEY_PATIENT_ID).eq(selectedPatientId),
+                                Condition.prop(LocalDatabaseUtils.KEY_LOCATION_ID).eq(locationId),
+                                Condition.prop(LocalDatabaseUtils.KEY_HOSPITAL_ID).eq(hospitalId),
+                                Condition.prop(LocalDatabaseUtils.KEY_DOCTOR_ID).eq(doctorId));
+            } else {
+                selectQuery = Select.from(ClinicalNotes.class)
+                        .where(Condition.prop(LocalDatabaseUtils.KEY_PATIENT_ID).eq(selectedPatientId));
+
+            }
+            List<ClinicalNotes> list = selectQuery.list();
+            if (!Util.isNullOrEmptyList(list))
+                for (ClinicalNotes clinicalNote : list) {
+                    getClinicalNoteDetailsList(clinicalNote);
+                }
+            volleyResponseBean.setDataList(getObjectsListFromMap(list));
+            if (responseListener != null)
+                responseListener.onResponse(volleyResponseBean);
+        } catch (Exception e) {
+            e.printStackTrace();
+            showErrorLocal(volleyResponseBean, errorListener);
+        }
+        return volleyResponseBean;
+    }
+
+    public void updateClinicalNote(ClinicalNotes clinicalNote) {
+        addClinicalNote(clinicalNote);
+    }
+
+    public VolleyResponseBean getPrescriptionsListResponse(WebServiceType webServiceType, boolean isOtpVerified, String doctorId, String locationId, String hospitald, String selectedPatientId, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
+        volleyResponseBean.setWebServiceType(webServiceType);
+        volleyResponseBean.setIsDataFromLocal(true);
+        volleyResponseBean.setIsUserOnline(HealthCocoConstants.isNetworkOnline);
+        try {
+            List<Prescription> list = getPrescriptionsListAsList(isOtpVerified, doctorId, locationId, hospitald, selectedPatientId);
+            volleyResponseBean.setDataList(getObjectsListFromMap(list));
+            if (responseListener != null)
+                responseListener.onResponse(volleyResponseBean);
+        } catch (Exception e) {
+            e.printStackTrace();
+            showErrorLocal(volleyResponseBean, errorListener);
+        }
+        return volleyResponseBean;
+    }
+
+    private List<Prescription> getPrescriptionsListAsList(boolean isOtpVerified, String doctorId, String locationid, String hospitalId, String selectedPatientId) {
+        Select<Prescription> selectQuery = null;
+        if (!isOtpVerified && !Util.isNullOrBlank(doctorId)) {
+            selectQuery = Select.from(Prescription.class)
+                    .where(Condition.prop(LocalDatabaseUtils.KEY_PATIENT_ID).eq(selectedPatientId),
+                            Condition.prop(LocalDatabaseUtils.KEY_LOCATION_ID).eq(locationid),
+                            Condition.prop(LocalDatabaseUtils.KEY_HOSPITAL_ID).eq(hospitalId),
+                            Condition.prop(LocalDatabaseUtils.KEY_DOCTOR_ID).eq(doctorId));
+        } else {
+            selectQuery = Select.from(Prescription.class)
+                    .where(Condition.prop(LocalDatabaseUtils.KEY_PATIENT_ID).eq(selectedPatientId));
+
+        }
+        List<Prescription> list = selectQuery.list();
+        if (!Util.isNullOrEmptyList(list)) {
+            for (Prescription prescription : list) {
+                getPrescriptionDetail(prescription);
+            }
+            return list;
+        }
+        return null;
+    }
+
+    public void updatePrescription(Prescription prescription) {
+        addPrescription(prescription);
+    }
+
+    public void addPrescriptionsList(ArrayList<Prescription> list) {
+        for (Prescription prescription : list) {
+            addPrescription(prescription);
+        }
+    }
+
+    public void addClinicalNotesList(ArrayList<ClinicalNotes> clinicalNotesList) {
+        try {
+            for (ClinicalNotes clinicalNote : clinicalNotesList) {
+                addClinicalNote(clinicalNote);
+            }
+        } catch (Exception e) {
+            Log.i(null, "Error in saving in transaction " + e.getMessage());
+        }
+    }
 }

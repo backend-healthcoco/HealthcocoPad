@@ -208,7 +208,7 @@
                             android:background="@drawable/shape_rounded_corners_item_background_dark_grey"
                             android:gravity="center"
                             android:padding="5dp"
-                            android:visibility="gone">
+                            android:visibility="visible">
 
                             <ImageView
                                 android:layout_width="wrap_content"

@@ -21,9 +21,7 @@ public enum OptionsTypePopupWindow {
     }}),
     PRESCRIPTIONS(new ArrayList<Integer>() {{
         add(R.id.tv_discard);
-        add(R.id.tv_edit);
         add(R.id.tv_save_as_template);
-        add(R.id.tv_print);
     }}),
     CLINICAL_NOTES(new ArrayList<Integer>() {{
         add(R.id.tv_discard);

@@ -41,6 +41,7 @@ import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimis
 import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
+import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
@@ -49,6 +50,7 @@ import org.parceler.Parcels;
 
 import java.util.ArrayList;
 
+import static com.healthcoco.healthcocopad.dialogFragment.BookAppointmentDialogFragment.TIME_SLOT_FORMAT_USED_IN_THIS_SCREEN;
 import static com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType.GET_VISIT_DETAILS;
 
 /**
@@ -59,6 +61,7 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
         TabHost.OnTabChangeListener, ViewPager.OnPageChangeListener,
         LocalDoInBackgroundListenerOptimised, Response.Listener<VolleyResponseBean>, GsonRequest.ErrorListener,
         View.OnClickListener {
+    private static final String DATE_FORMAT_USED_IN_THIS_SCREEN = "dd-MM-yyyy";
     private static final int REQUEST_CODE_NEXT_REVIEW = 111;
     private ViewPager viewPager;
     private TabHost tabhost;
@@ -74,6 +77,8 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
     private boolean isFromClone;
     private TextView tvNextReview;
     private AppointmentRequest appointmentRequest;
+    private TextView tvNextReviewDate;
+    private TextView tvNextReviewTime;
 
 
     @Override
@@ -110,6 +115,8 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
         tabhost = (TabHost) view.findViewById(android.R.id.tabhost);
         flBtSwap = (FloatingActionButton) view.findViewById(R.id.fl_bt_swap);
         tvNextReview = (TextView) view.findViewById(R.id.tv_next_review);
+        tvNextReviewDate = (TextView) view.findViewById(R.id.tv_next_review_data);
+        tvNextReviewTime = (TextView) view.findViewById(R.id.tv_next_review_time);
     }
 
     @Override
@@ -384,6 +391,8 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
                 case HealthCocoConstants.RESULT_CODE_NEXT_REVIEW:
                     if (data != null && data.hasExtra(HealthCocoConstants.TAG_INTENT_DATA)) {
                         appointmentRequest = Parcels.unwrap(data.getParcelableExtra(HealthCocoConstants.TAG_INTENT_DATA));
+                        tvNextReviewDate.setText(DateTimeUtil.getFormattedDateTime(DATE_FORMAT_USED_IN_THIS_SCREEN, appointmentRequest.getFromDate()));
+//                        tvNextReviewTime.setText(DateTimeUtil.convertFormattedDate(DateTimeUtil.TIME_FORMAT_24_HOUR, TIME_SLOT_FORMAT_USED_IN_THIS_SCREEN, String.valueOf(appointmentRequest.getTime().getFromTime())));
                     }
                     break;
             }

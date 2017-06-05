@@ -804,4 +804,17 @@ public class Util {
                 break;
         }
     }
+
+    public static void sendBroadcasts(HealthCocoApplication mApp, ArrayList<String> intentFilters) {
+        try {
+            for (String intentFilter :
+                    intentFilters) {
+                Intent intent = new Intent(intentFilter);
+                LocalBroadcastManager.getInstance(mApp.getApplicationContext()).sendBroadcast(intent);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }

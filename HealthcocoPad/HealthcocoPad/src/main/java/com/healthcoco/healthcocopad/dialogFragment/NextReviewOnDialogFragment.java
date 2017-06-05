@@ -104,6 +104,7 @@ public class NextReviewOnDialogFragment extends HealthCocoDialogFragment impleme
         tvSelectedDate = (TextView) view.findViewById(R.id.tv_selected_date);
         tvSelectedTimeSlot = (TextView) view.findViewById(R.id.tv_selected_time_slot);
         btDone = (Button) view.findViewById(R.id.bt_done);
+        initActionbarTitle(getResources().getString(R.string.next_review_on));
     }
 
     @Override
@@ -112,6 +113,7 @@ public class NextReviewOnDialogFragment extends HealthCocoDialogFragment impleme
         tvSelectedDate.addTextChangedListener(new HealthcocoTextWatcher(tvSelectedDate, this));
         btDone.setOnClickListener(this);
         tvSelectedTimeSlot.setOnClickListener(this);
+        initCrossButton();
     }
 
     private void initUserStatePopUpWindow() {

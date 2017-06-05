@@ -443,14 +443,13 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
     private void sendBroadcasts(String aptId) {
         Intent intent = new Intent();
         switch (bookAppointmentFromScreenType) {
-            case APPOINTMENTS_LIST_RESCHEDULE:
-                intent.setAction(PatientAppointmentDetailFragment.INTENT_GET_APPOINTMENT_LIST_LOCAL);
-                break;
             case NOTIFICATION_APPOINTMENTS_LIST_RESCHEDULE:
                 intent.setAction(NotificationResponseDataFragment.INTENT_GET_NOTIFICATION_APPOINTMENT_LIST_LOCAL);
                 break;
+            default:
+                intent.setAction(PatientAppointmentDetailFragment.INTENT_GET_APPOINTMENT_LIST_LOCAL);
+                break;
         }
-        intent.setAction(PatientAppointmentDetailFragment.INTENT_GET_APPOINTMENT_LIST_LOCAL);
         intent.putExtra(TAG_APPOINTMENT_ID, aptId);
 //        if (intent != null && intent.getAction() != null)
         LocalBroadcastManager.getInstance(mApp.getApplicationContext()).sendBroadcast(intent);

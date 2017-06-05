@@ -76,10 +76,14 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
     private PatientProfileDetailFragment profileFragment;
     private PatientVisitDetailFragment visitsFragment;
     private PatientAppointmentDetailFragment appointmentFragment;
+    private PatientClinicalNotesDetailFragment clinicalNotesDetailFragment;
+    private PatientPrescriptionDetailFragment prescriptionDetailFragment;
 
     private boolean isProfileTabClicked = true;
     private boolean isVisitsTabClicked = false;
     private boolean isAppointmentTabClicked = false;
+    private boolean isPrescriptionTabClicked = false;
+    private boolean isClinicalNotesTabClicked = false;
     private TextView tvGenderDate;
 
     @Override
@@ -143,18 +147,20 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                     visitsFragment = new PatientVisitDetailFragment();
                     healthcocoFragment = visitsFragment;
                     break;
-//                case PATIENT_DETAIL_CLINICAL_NOTES:
-//                    healthcocoFragment = new PatientClinicalNotesDetailFragment();
-//                    break;
+                case PATIENT_DETAIL_CLINICAL_NOTES:
+                    clinicalNotesDetailFragment = new PatientClinicalNotesDetailFragment();
+                    healthcocoFragment = clinicalNotesDetailFragment;
+                    break;
 //                case PATIENT_DETAIL_IMPORTANT:
 //                    healthcocoFragment = new PatientImportantDetailFragment();
 //                    break;
 //                case PATIENT_DETAIL_REPORTS:
 //                    healthcocoFragment = new PatientReportsDetailFragment();
 //                    break;
-//                case PATIENT_DETAIL_PRESCRIPTION:
-//                    healthcocoFragment = new PatientPrescriptionDetailFragment();
-//                    break;
+                case PATIENT_DETAIL_PRESCRIPTION:
+                    prescriptionDetailFragment = new PatientPrescriptionDetailFragment();
+                    healthcocoFragment = prescriptionDetailFragment;
+                    break;
                 case PATIENT_DETAIL_APPOINTMENT:
                     appointmentFragment = new PatientAppointmentDetailFragment();
                     healthcocoFragment = appointmentFragment;
@@ -329,6 +335,18 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                         isAppointmentTabClicked = true;
                     }
                     break;
+                case PATIENT_DETAIL_CLINICAL_NOTES:
+                    if (!isClinicalNotesTabClicked) {
+                        clinicalNotesDetailFragment.refreshData(user, selectedPatient);
+                        isClinicalNotesTabClicked = true;
+                    }
+                    break;
+                case PATIENT_DETAIL_PRESCRIPTION:
+                    if (!isPrescriptionTabClicked) {
+                        prescriptionDetailFragment.refreshData(user, selectedPatient);
+                        isPrescriptionTabClicked = true;
+                    }
+                    break;
             }
         }
         ((CommonOpenUpActivity) mActivity).initActionbarTitle(patientDetailTabType.getActionBarTitleId());
@@ -375,6 +393,12 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                         break;
                     case PATIENT_DETAIL_APPOINTMENT:
                         appointmentFragment.openAddNewAppointmentScreen();
+                        break;
+                    case PATIENT_DETAIL_CLINICAL_NOTES:
+//                        clinicalNotesDetailFragment.openAddNewAppointmentScreen();
+                        break;
+                    case PATIENT_DETAIL_PRESCRIPTION:
+//                        clinicalNotesDetailFragment.openAddNewAppointmentScreen();
                         break;
                 }
                 break;

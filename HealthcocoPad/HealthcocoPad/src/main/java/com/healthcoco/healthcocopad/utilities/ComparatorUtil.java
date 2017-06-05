@@ -4,11 +4,13 @@ import android.text.TextUtils;
 
 import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
 import com.healthcoco.healthcocopad.bean.server.CityResponse;
+import com.healthcoco.healthcocopad.bean.server.ClinicalNotes;
 import com.healthcoco.healthcocopad.bean.server.Disease;
 import com.healthcoco.healthcocopad.bean.server.DrugDirection;
 import com.healthcoco.healthcocopad.bean.server.DrugDosage;
 import com.healthcoco.healthcocopad.bean.server.DrugDurationUnit;
 import com.healthcoco.healthcocopad.bean.server.HistoryDetailsResponse;
+import com.healthcoco.healthcocopad.bean.server.Prescription;
 import com.healthcoco.healthcocopad.bean.server.Reference;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.Specialities;
@@ -239,6 +241,27 @@ public class ComparatorUtil {
                 e.printStackTrace();
             }
             return 0;
+        }
+    };
+    public static Comparator<ClinicalNotes> clinicalNotesDateComparator = new Comparator<ClinicalNotes>() {
+
+        @Override
+        public int compare(ClinicalNotes clinicalNotes1, ClinicalNotes clinicalNotes2) {
+            if (clinicalNotes1.getCreatedTime() != null && clinicalNotes2.getCreatedTime() != null) {
+                Date date1 = new Date(clinicalNotes1.getCreatedTime());
+                Date date2 = new Date(clinicalNotes2.getCreatedTime());
+                return date2.compareTo(date1);
+            }
+            return 0;
+        }
+    };
+    public static Comparator<Prescription> prescriptionDateComparator = new Comparator<Prescription>() {
+
+        @Override
+        public int compare(Prescription prescription1, Prescription prescription2) {
+            Date date1 = new Date(prescription1.getCreatedTime());
+            Date date2 = new Date(prescription2.getCreatedTime());
+            return date2.compareTo(date1);
         }
     };
 }

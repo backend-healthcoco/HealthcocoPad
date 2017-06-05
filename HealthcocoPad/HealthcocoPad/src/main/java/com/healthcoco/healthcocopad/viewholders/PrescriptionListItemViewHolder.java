@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -24,15 +25,19 @@ import com.healthcoco.healthcocopad.enums.AddUpdateNameDialogType;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.OptionsTypePopupWindow;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
+import com.healthcoco.healthcocopad.fragments.AddEditNormalVisitPrescriptionFragment;
+import com.healthcoco.healthcocopad.fragments.PatientPrescriptionDetailFragment;
 import com.healthcoco.healthcocopad.listeners.CommonEMRItemClickListener;
 import com.healthcoco.healthcocopad.listeners.VisitDetailCombinedItemListener;
 import com.healthcoco.healthcocopad.services.GsonRequest;
+import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -65,6 +70,8 @@ public class PrescriptionListItemViewHolder extends HealthCocoViewHolder impleme
     private LinearLayout btPrint;
     private LinearLayout layoutAdvice;
     private LinearLayout containerParentDrugsList;
+    private LinearLayout btClone;
+    private ImageView imageView;
 
 
     public PrescriptionListItemViewHolder(HealthCocoActivity mActivity,
@@ -118,20 +125,20 @@ public class PrescriptionListItemViewHolder extends HealthCocoViewHolder impleme
         }
 
         initDiagnosticTests();
-        if (user != null) {
-            if (!user.getUniqueId().equalsIgnoreCase(prescription.getDoctorId())) {
-                btOptions.setVisibility(View.GONE);
-                containerBottomButtons.setVisibility(View.GONE);
-                tvLabelGlobalRecord.setVisibility(View.VISIBLE);
-                tvLabelPrescribedBy.setVisibility(View.GONE);
-                tvPrescribedBy.setVisibility(View.GONE);
-            } else {
-                btOptions.setVisibility(View.VISIBLE);
-                containerBottomButtons.setVisibility(View.VISIBLE);
-                tvLabelGlobalRecord.setVisibility(View.GONE);
-                tvLabelPrescribedBy.setVisibility(View.VISIBLE);
-                tvPrescribedBy.setVisibility(View.VISIBLE);
-            }
+        if (detailCombinedItemListener != null) {
+            btOptions.setVisibility(View.GONE);
+            containerBottomButtons.setVisibility(View.GONE);
+            tvLabelGlobalRecord.setVisibility(View.VISIBLE);
+            tvLabelPrescribedBy.setVisibility(View.GONE);
+            tvPrescribedBy.setVisibility(View.GONE);
+            imageView.setVisibility(View.GONE);
+        } else {
+            btOptions.setVisibility(View.VISIBLE);
+            containerBottomButtons.setVisibility(View.VISIBLE);
+            tvLabelGlobalRecord.setVisibility(View.GONE);
+            tvLabelPrescribedBy.setVisibility(View.VISIBLE);
+            tvPrescribedBy.setVisibility(View.VISIBLE);
+            imageView.setVisibility(View.VISIBLE);
         }
     }
 
@@ -184,12 +191,13 @@ public class PrescriptionListItemViewHolder extends HealthCocoViewHolder impleme
         tvPrescribedBy = (TextView) contentView.findViewById(R.id.tv_prescribed_by);
         containerDrugsList = (LinearLayout) contentView.findViewById(R.id.container_drugs_list);
         containerParentDrugsList = (LinearLayout) contentView.findViewById(R.id.container_parent_drugs_list);
-
+        imageView = (ImageView) contentView.findViewById(R.id.image_view);
         btHistory = (LinearLayout) contentView.findViewById(R.id.bt_history);
         btSms = (LinearLayout) contentView.findViewById(R.id.bt_sms);
         btEmail = (LinearLayout) contentView.findViewById(R.id.bt_email);
         btEdit = (LinearLayout) contentView.findViewById(R.id.bt_edit);
         btPrint = (LinearLayout) contentView.findViewById(R.id.bt_print);
+        btClone = (LinearLayout) contentView.findViewById(R.id.bt_clone);
 
         btOptions = (ImageButton) contentView.findViewById(R.id.bt_options);
         layoutDiscarded = (LinearLayout) contentView.findViewById(R.id.layout_discarded);
@@ -201,23 +209,13 @@ public class PrescriptionListItemViewHolder extends HealthCocoViewHolder impleme
         tvLabelPrescribedBy = (TextView) contentView.findViewById(R.id.tv_label_prescribed_by);
         layoutAdvice = (LinearLayout) contentView.findViewById(R.id.layout_parent_advice);
 
-        View headerCreatedByVisit = contentView.findViewById(R.id.container_header_created_by_visit);
         View headerCreatedByPrescription = contentView.findViewById(R.id.container_header_created_by_prescription);
         View containerPrescribedBy = contentView.findViewById(R.id.container_prescribed_by);
         if (detailCombinedItemListener != null) {
-            btEdit.setVisibility(View.VISIBLE);
-            btPrint.setVisibility(View.VISIBLE);
-            btHistory.setVisibility(View.GONE);
-            headerCreatedByVisit.setVisibility(View.GONE);
             headerCreatedByPrescription.setVisibility(View.GONE);
             containerPrescribedBy.setVisibility(View.GONE);
             containerBottomButtons.setVisibility(View.GONE);
-            detailCombinedItemListener.setVisitHeader(headerCreatedByVisit);
         } else {
-            btEdit.setVisibility(View.GONE);
-            btPrint.setVisibility(View.GONE);
-            btHistory.setVisibility(View.VISIBLE);
-            headerCreatedByVisit.setVisibility(View.VISIBLE);
             headerCreatedByPrescription.setVisibility(View.VISIBLE);
             containerPrescribedBy.setVisibility(View.VISIBLE);
             containerBottomButtons.setVisibility(View.VISIBLE);
@@ -225,6 +223,7 @@ public class PrescriptionListItemViewHolder extends HealthCocoViewHolder impleme
     }
 
     private void initListeners() {
+        btClone.setOnClickListener(this);
         btHistory.setOnClickListener(this);
         btSms.setOnClickListener(this);
         btEmail.setOnClickListener(this);
@@ -327,6 +326,8 @@ public class PrescriptionListItemViewHolder extends HealthCocoViewHolder impleme
                     onNetworkUnavailable(null);
                 popupWindow.dismiss();
                 break;
+            case R.id.bt_clone:
+                break;
             default:
                 break;
         }
@@ -374,30 +375,30 @@ public class PrescriptionListItemViewHolder extends HealthCocoViewHolder impleme
                     Prescription prescription = this.prescription;
                     prescription.setDiscarded(!prescription.getDiscarded());
                     applyData();
-//                    LocalDataServiceImpl.getInstance(mApp).updatePrescription(prescription);
-//                    Util.sendBroadcasts(mApp, new ArrayList<String>() {{
-//                        add(PrescriptioNewFragment.INTENT_GET_PRESCRIPTION_LIST_LOCAL);
-//                    }});
+                    LocalDataServiceImpl.getInstance(mApp).updatePrescription(prescription);
+                    Util.sendBroadcasts(mApp, new ArrayList<String>() {{
+                        add(PatientPrescriptionDetailFragment.INTENT_GET_PRESCRIPTION_LIST_LOCAL);
+                    }});
                     break;
                 case ADD_TO_HISTORY_PRESCRIPTION:
                     Util.showToast(mActivity, mActivity.getResources().getString(R.string.added_to_history));
                     Prescription prescription1 = this.prescription;
                     prescription1.setInHistory(!prescription1.getInHistory());
                     applyData();
-//                    LocalDataServiceImpl.getInstance(mApp).updatePrescription(prescription1);
-//                    Util.sendBroadcasts(mApp, new ArrayList<String>() {{
-//                        add(PrescriptioNewFragment.INTENT_GET_PRESCRIPTION_LIST_LOCAL);
-//                    }});
+                    LocalDataServiceImpl.getInstance(mApp).updatePrescription(prescription1);
+                    Util.sendBroadcasts(mApp, new ArrayList<String>() {{
+                        add(PatientPrescriptionDetailFragment.INTENT_GET_PRESCRIPTION_LIST_LOCAL);
+                    }});
                     break;
                 case REMOVE_HISTORY_PRESCRIPTION:
                     Util.showToast(mActivity, mActivity.getResources().getString(R.string.removed_from_history));
                     Prescription prescription2 = this.prescription;
                     prescription2.setInHistory(!prescription2.getInHistory());
                     applyData();
-//                    LocalDataServiceImpl.getInstance(mApp).updatePrescription(prescription2);
-//                    Util.sendBroadcasts(mApp, new ArrayList<String>() {{
-//                        add(PrescriptioNewFragment.INTENT_GET_PRESCRIPTION_LIST_LOCAL);
-//                    }});
+                    LocalDataServiceImpl.getInstance(mApp).updatePrescription(prescription2);
+                    Util.sendBroadcasts(mApp, new ArrayList<String>() {{
+                        add(PatientPrescriptionDetailFragment.INTENT_GET_PRESCRIPTION_LIST_LOCAL);
+                    }});
                     break;
 
                 default:
@@ -451,17 +452,17 @@ public class PrescriptionListItemViewHolder extends HealthCocoViewHolder impleme
     public void onAddRemoveHistoryClicked() {
         if (!prescription.getInHistory()) {
             if (commonEmrClickListener != null) commonEmrClickListener.showLoading(true);
-//            WebDataServiceImpl.getInstance(mApp).addToHistory(Prescription.class, WebServiceType.ADD_TO_HISTORY_PRESCRIPTION, prescription.getUniqueId(), HealthCocoConstants.SELECTED_PATIENTS_USER_ID, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(), this, this);
+            WebDataServiceImpl.getInstance(mApp).addToHistory(Prescription.class, WebServiceType.ADD_TO_HISTORY_PRESCRIPTION, prescription.getUniqueId(), HealthCocoConstants.SELECTED_PATIENTS_USER_ID, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(), this, this);
         } else {
             if (commonEmrClickListener != null) commonEmrClickListener.showLoading(true);
-//            WebDataServiceImpl.getInstance(mApp).removeFromHistory(Prescription.class, WebServiceType.REMOVE_HISTORY_PRESCRIPTION, prescription.getUniqueId(), HealthCocoConstants.SELECTED_PATIENTS_USER_ID, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(), this, this);
+            WebDataServiceImpl.getInstance(mApp).removeFromHistory(Prescription.class, WebServiceType.REMOVE_HISTORY_PRESCRIPTION, prescription.getUniqueId(), HealthCocoConstants.SELECTED_PATIENTS_USER_ID, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(), this, this);
         }
     }
 
     public void onDiscardedClicked() {
         if (commonEmrClickListener != null)
             commonEmrClickListener.showLoading(true);
-//        WebDataServiceImpl.getInstance(mApp).discardPrescription(Prescription.class, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(), prescription.getUniqueId(), HealthCocoConstants.SELECTED_PATIENTS_USER_ID, this, this);
+        WebDataServiceImpl.getInstance(mApp).discardPrescription(Prescription.class, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(), prescription.getUniqueId(), HealthCocoConstants.SELECTED_PATIENTS_USER_ID, this, this);
     }
 
     private void openAddNewPrescriptionScreen() {
