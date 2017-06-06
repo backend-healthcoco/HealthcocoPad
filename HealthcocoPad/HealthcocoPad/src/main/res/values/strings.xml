@@ -794,4 +794,6 @@
     <string name="add_diagram">Add Diagram</string>
     <string name="next_review_on">Next Review On</string>
     <string name="no_prescription_found">No Prescription Found</string>
+    <string name="please_reschedule_appointment">Please Reschedule Appointment</string>
+    <string name="change_next_review_date_from_calender">Change next review date from Calender.\n Appointment ID:</string>
 </resources>

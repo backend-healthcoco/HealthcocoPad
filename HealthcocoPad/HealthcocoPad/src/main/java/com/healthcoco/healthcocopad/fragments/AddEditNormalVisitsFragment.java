@@ -23,7 +23,7 @@ import com.healthcoco.healthcocopad.activities.AddVisitsActivity;
 import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.adapter.ContactsDetailViewPagerAdapter;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
-import com.healthcoco.healthcocopad.bean.request.AppointmentRequest;
+import com.healthcoco.healthcocopad.bean.server.AppointmentRequest;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.User;
@@ -35,7 +35,6 @@ import com.healthcoco.healthcocopad.enums.ActionbarLeftRightActionTypeDrawables;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.PatientProfileScreenType;
-import com.healthcoco.healthcocopad.enums.VisitedForType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
 import com.healthcoco.healthcocopad.services.GsonRequest;
@@ -50,7 +49,6 @@ import org.parceler.Parcels;
 
 import java.util.ArrayList;
 
-import static com.healthcoco.healthcocopad.dialogFragment.BookAppointmentDialogFragment.TIME_SLOT_FORMAT_USED_IN_THIS_SCREEN;
 import static com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType.GET_VISIT_DETAILS;
 
 /**
@@ -62,6 +60,7 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
         LocalDoInBackgroundListenerOptimised, Response.Listener<VolleyResponseBean>, GsonRequest.ErrorListener,
         View.OnClickListener {
     private static final String DATE_FORMAT_USED_IN_THIS_SCREEN = "dd-MM-yyyy";
+    public static final String TIME_SLOT_FORMAT_USED_IN_THIS_SCREEN = "hh:mm aaa";
     private static final int REQUEST_CODE_NEXT_REVIEW = 111;
     private ViewPager viewPager;
     private TabHost tabhost;
@@ -79,7 +78,7 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
     private AppointmentRequest appointmentRequest;
     private TextView tvNextReviewDate;
     private TextView tvNextReviewTime;
-
+    private VisitDetails visit;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -247,7 +246,7 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
                     break;
                 case GET_PATIENT_VISIT_DETAIL:
                     if (response.getData() != null && response.getData() instanceof VisitDetails) {
-                        VisitDetails visit = (VisitDetails) response.getData();
+                        visit = (VisitDetails) response.getData();
                         initTabsAndViewPagerFragments(visit);
                     }
                     break;
@@ -261,21 +260,14 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
     private void initTabsAndViewPagerFragments(VisitDetails visitDetails) {
         initTabsFragmentsList(visitDetails);
         initViewPagerAdapter();
+        if (visitDetails != null)
+            initNextReviewData(visitDetails.getAppointmentRequest());
     }
 
-    private void prePopulateVisitDetails(VisitDetails visitDetails) {
-        if (!Util.isNullOrEmptyList(visitDetails.getVisitedFor())) {
-            for (VisitedForType visitedForType :
-                    visitDetails.getVisitedFor()) {
-                switch (visitedForType) {
-                    case CLINICAL_NOTES:
-                        addEditNormalVisitClinicalNotesFragment.prePopulateVisitDetails(visitDetails);
-                        break;
-                    case PRESCRIPTION:
-                        addEditNormalVisitPrescriptionFragment.prePopulateVisitDetails(visitDetails.getPrescriptions());
-                        break;
-                }
-            }
+    private void initNextReviewData(AppointmentRequest appointmentRequest) {
+        if (appointmentRequest != null) {
+            tvNextReviewDate.setText(DateTimeUtil.getFormattedDateTime(DATE_FORMAT_USED_IN_THIS_SCREEN, appointmentRequest.getFromDate()));
+            tvNextReviewTime.setText(DateTimeUtil.getFormattedTime(0, Math.round(appointmentRequest.getTime().getFromTime())));
         }
     }
 
@@ -324,9 +316,28 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
                 showToggleConfirmationAlert();
                 break;
             case R.id.tv_next_review:
-                openDialogFragment(new NextReviewOnDialogFragment(), REQUEST_CODE_NEXT_REVIEW);
+                if (visit != null && visit.getAppointmentRequest() != null && visit.getAppointmentRequest().getAppointmentId() != null) {
+                    showNextReviewReschedulealert();
+                } else
+                    openDialogFragment(new NextReviewOnDialogFragment(), REQUEST_CODE_NEXT_REVIEW);
                 break;
         }
+    }
+
+    private void showNextReviewReschedulealert() {
+        final AlertDialog.Builder alertBuilder = new AlertDialog.Builder(mActivity);
+        alertBuilder.setTitle(R.string.please_reschedule_appointment);
+        alertBuilder.setMessage(mActivity.getResources().getString(R.string.change_next_review_date_from_calender) + visit.getAppointmentId());
+        alertBuilder.setCancelable(false);
+        alertBuilder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        alertBuilder.create();
+        alertBuilder.show();
     }
 
     public void showToggleConfirmationAlert() {
@@ -389,10 +400,11 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
         if (requestCode == REQUEST_CODE_NEXT_REVIEW) {
             switch (resultCode) {
                 case HealthCocoConstants.RESULT_CODE_NEXT_REVIEW:
-                    if (data != null && data.hasExtra(HealthCocoConstants.TAG_INTENT_DATA)) {
+                    if (data != null) {
                         appointmentRequest = Parcels.unwrap(data.getParcelableExtra(HealthCocoConstants.TAG_INTENT_DATA));
+                        appointmentRequest.setVisitId(visitId);
                         tvNextReviewDate.setText(DateTimeUtil.getFormattedDateTime(DATE_FORMAT_USED_IN_THIS_SCREEN, appointmentRequest.getFromDate()));
-//                        tvNextReviewTime.setText(DateTimeUtil.convertFormattedDate(DateTimeUtil.TIME_FORMAT_24_HOUR, TIME_SLOT_FORMAT_USED_IN_THIS_SCREEN, String.valueOf(appointmentRequest.getTime().getFromTime())));
+                        tvNextReviewTime.setText(DateTimeUtil.getFormattedTime(0, Math.round(appointmentRequest.getTime().getFromTime())));
                     }
                     break;
             }

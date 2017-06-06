@@ -10,6 +10,7 @@ import com.healthcoco.healthcocopad.dialogFragment.AddEditClinicHoursDialogFragm
 import com.healthcoco.healthcocopad.fragments.CalendarFragment;
 
 import java.sql.Date;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;

@@ -19,7 +19,7 @@ import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.request.AddDrugRequest;
 import com.healthcoco.healthcocopad.bean.request.AddEditDrugsAndAllergiesRequest;
 import com.healthcoco.healthcocopad.bean.request.AddMedicalFamilyHistoryRequest;
-import com.healthcoco.healthcocopad.bean.request.AppointmentRequest;
+import com.healthcoco.healthcocopad.bean.request.AppointmentRequestToSend;
 import com.healthcoco.healthcocopad.bean.request.AssignGroupRequest;
 import com.healthcoco.healthcocopad.bean.request.ClinicImageToSend;
 import com.healthcoco.healthcocopad.bean.request.ClinicalNoteToSend;
@@ -1054,7 +1054,7 @@ public class WebDataServiceImpl implements GCMRefreshListener {
         }
     }
 
-    public void addAppointment(Class<?> class1, AppointmentRequest appointment,
+    public void addAppointment(Class<?> class1, AppointmentRequestToSend appointment,
                                Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         WebServiceType webServiceType = WebServiceType.ADD_APPOINTMENT;
         checkNetworkStatus(mApp);

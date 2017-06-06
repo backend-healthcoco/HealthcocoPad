@@ -4,6 +4,7 @@ package com.healthcoco.healthcocopad.bean.request;
 import com.healthcoco.healthcocopad.bean.server.WorkingHours;
 import com.healthcoco.healthcocopad.enums.AppointmentStatusType;
 import com.healthcoco.healthcocopad.enums.CreatedByType;
+import com.orm.SugarRecord;
 
 import org.parceler.Parcel;
 
@@ -11,7 +12,7 @@ import org.parceler.Parcel;
  * Created by neha on 26/11/16.
  */
 @Parcel
-public class AppointmentRequest {
+public class AppointmentRequestToSend {
     private String locationId;
     private String hospitalId;
     private String doctorId;

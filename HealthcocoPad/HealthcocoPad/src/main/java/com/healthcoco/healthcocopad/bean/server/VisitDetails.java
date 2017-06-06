@@ -1,6 +1,5 @@
 package com.healthcoco.healthcocopad.bean.server;
 
-import com.healthcoco.healthcocopad.bean.request.AppointmentRequest;
 import com.healthcoco.healthcocopad.bean.request.ClinicalNoteToSend;
 import com.healthcoco.healthcocopad.bean.request.PrescriptionRequest;
 import com.healthcoco.healthcocopad.enums.VisitedForType;
@@ -48,6 +47,7 @@ public class VisitDetails extends SugarRecord {
 
     private String createdBy;
     private String visitId;
+    private String appointmentId;
 
     public String getUniqueId() {
         return uniqueId;
@@ -207,5 +207,13 @@ public class VisitDetails extends SugarRecord {
 
     public void setAppointmentRequest(AppointmentRequest appointmentRequest) {
         this.appointmentRequest = appointmentRequest;
+    }
+
+    public String getAppointmentId() {
+        return appointmentId;
+    }
+
+    public void setAppointmentId(String appointmentId) {
+        this.appointmentId = appointmentId;
     }
 }

@@ -15,6 +15,7 @@ import com.healthcoco.healthcocopad.bean.PersonalHistory;
 import com.healthcoco.healthcocopad.bean.UIPermissions;
 import com.healthcoco.healthcocopad.bean.UiPermissionsBoth;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
+import com.healthcoco.healthcocopad.bean.request.AppointmentRequestToSend;
 import com.healthcoco.healthcocopad.bean.server.*;
 import com.healthcoco.healthcocopad.enums.AdvanceSearchOptionsType;
 import com.healthcoco.healthcocopad.enums.BooleanTypeValues;
@@ -2681,7 +2682,18 @@ public class LocalDataServiceImpl {
                 }
             }
         }
+        details.setAppointmentRequest(getAppointmentRequest(details.getUniqueId()));
         return details;
+    }
+
+    private AppointmentRequest getAppointmentRequest(String visitId) {
+        String query = "Select  * from " + StringUtil.toSQLName(AppointmentRequest.class.getSimpleName())
+                + " where "
+                + LocalDatabaseUtils.KEY_VISIT_ID + "=\"" + visitId + "\"";
+        LogUtils.LOGD(TAG, "Select Query " + query);
+        AppointmentRequest appointmentRequest = SugarRecord.findObjectWithQuery(AppointmentRequest.class, query);
+        appointmentRequest.setTime((WorkingHours) getObject(WorkingHours.class, LocalDatabaseUtils.KEY_FOREIGN_TABLE_ID, appointmentRequest.getUniqueId()));
+        return appointmentRequest;
     }
 
     private List<ClinicalNotes> getVisitedClinicalNotesList(String patientId, String visitId) {
@@ -2935,11 +2947,17 @@ public class LocalDataServiceImpl {
                     }
                     addVisitForTable(details.getUniqueId(), type, customUniqueId);
                 }
+                addAppointmentRequest(details.getAppointmentRequest());
                 details.save();
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void addAppointmentRequest(AppointmentRequest appointmentRequest) {
+        addWorkingHour(AppointmentRequest.class.getSimpleName(), appointmentRequest.getUniqueId(), appointmentRequest.getTime());
+        appointmentRequest.save();
     }
 
     private void deleteVisitDetails(VisitDetails visitDetails) {

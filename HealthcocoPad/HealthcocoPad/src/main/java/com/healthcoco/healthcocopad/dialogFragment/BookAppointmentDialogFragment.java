@@ -28,7 +28,7 @@ import com.healthcoco.healthcocopad.HealthCocoDialogFragment;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.adapter.AppointmentSlotAdapter;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
-import com.healthcoco.healthcocopad.bean.request.AppointmentRequest;
+import com.healthcoco.healthcocopad.bean.request.AppointmentRequestToSend;
 import com.healthcoco.healthcocopad.bean.server.AlreadyRegisteredPatientsResponse;
 import com.healthcoco.healthcocopad.bean.server.AppointmentSlot;
 import com.healthcoco.healthcocopad.bean.server.AppointmentTimeSlotDetails;
@@ -591,7 +591,7 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
         Float selectedFromTimeInMinutes = DateTimeUtil.getMinutesFromFormattedDateime(TIME_FORMAT_RECEIVED_FROM_SERVER,
                 selectedTimeSlot.getTime());
 
-        AppointmentRequest appointment = new AppointmentRequest();
+        AppointmentRequestToSend appointment = new AppointmentRequestToSend();
         appointment.setCreatedBy(CreatedByType.DOCTOR);
         appointment.setDoctorId(user.getUniqueId());
         appointment.setHospitalId(user.getForeignHospitalId());

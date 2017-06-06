@@ -16,14 +16,13 @@ import com.android.volley.Response;
 import com.healthcoco.healthcocopad.HealthCocoDialogFragment;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
-import com.healthcoco.healthcocopad.bean.request.AppointmentRequest;
+import com.healthcoco.healthcocopad.bean.server.AppointmentRequest;
 import com.healthcoco.healthcocopad.bean.server.AppointmentTimeSlotDetails;
 import com.healthcoco.healthcocopad.bean.server.AvailableTimeSlots;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.bean.server.WorkingHours;
-import com.healthcoco.healthcocopad.custom.AutoCompleteTextViewAdapter;
 import com.healthcoco.healthcocopad.custom.HealthcocoTextWatcher;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocopad.enums.AppointmentStatusType;
@@ -60,6 +59,7 @@ public class NextReviewOnDialogFragment extends HealthCocoDialogFragment impleme
         LocalDoInBackgroundListenerOptimised, Response.Listener<VolleyResponseBean>, View.OnClickListener,
         HealthcocoTextWatcherListener, PopupWindowListener {
     public static final String DATE_FORMAT_USED_IN_THIS_SCREEN = "EEE, MMM dd,yyyy";
+    public static final String TAG_INTENT_SELECTED_TIME_SLOT = "selectedTimeSlot";
     private HealthcocoPopupWindow userStatePopupWindow;
     private Button btDone;
     private TextView tvSelectedDate;
@@ -306,6 +306,7 @@ public class NextReviewOnDialogFragment extends HealthCocoDialogFragment impleme
         appointment.setTime(new WorkingHours(selectedFromTimeInMinutes, selectedFromTimeInMinutes + appointmentTimeSlotDetails.getAppointmentSlot().getTime()));
 
         appointment.setState(AppointmentStatusType.CONFIRM);
+
         getTargetFragment().onActivityResult(getTargetRequestCode(), HealthCocoConstants.RESULT_CODE_NEXT_REVIEW, new Intent().putExtra(HealthCocoConstants.TAG_INTENT_DATA, Parcels.wrap(appointment)));
         getDialog().dismiss();
     }

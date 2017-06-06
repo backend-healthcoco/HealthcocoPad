@@ -12,7 +12,7 @@ import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.HealthCocoViewHolder;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
-import com.healthcoco.healthcocopad.bean.request.AppointmentRequest;
+import com.healthcoco.healthcocopad.bean.request.AppointmentRequestToSend;
 import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
 import com.healthcoco.healthcocopad.bean.server.WorkingHours;
 import com.healthcoco.healthcocopad.dialogFragment.BookAppointmentDialogFragment;
@@ -217,36 +217,36 @@ public class AppointmentsListViewholder extends HealthCocoViewHolder implements
 
     private void cancelAppointment() {
         mActivity.showLoading(false);
-        AppointmentRequest appointmentRequest = new AppointmentRequest();
-        appointmentRequest.setDoctorId(appointment.getDoctorId());
-        appointmentRequest.setHospitalId(appointment.getHospitalId());
-        appointmentRequest.setLocationId(appointment.getLocationId());
-        appointmentRequest.setPatientId(appointment.getPatientId());
-        appointmentRequest.setState(AppointmentStatusType.CANCEL);
-        appointmentRequest.setCancelledBy(CreatedByType.DOCTOR);
-        appointmentRequest.setNotifyDoctorByEmail(true);
-        appointmentRequest.setNotifyDoctorBySms(true);
-        appointmentRequest.setNotifyPatientByEmail(true);
-        appointmentRequest.setNotifyPatientBySms(true);
-        appointmentRequest.setAppointmentId(appointment.getAppointmentId());
-        WebDataServiceImpl.getInstance(mApp).addAppointment(CalendarEvents.class, appointmentRequest, this, this);
+        AppointmentRequestToSend appointmentRequestToSend = new AppointmentRequestToSend();
+        appointmentRequestToSend.setDoctorId(appointment.getDoctorId());
+        appointmentRequestToSend.setHospitalId(appointment.getHospitalId());
+        appointmentRequestToSend.setLocationId(appointment.getLocationId());
+        appointmentRequestToSend.setPatientId(appointment.getPatientId());
+        appointmentRequestToSend.setState(AppointmentStatusType.CANCEL);
+        appointmentRequestToSend.setCancelledBy(CreatedByType.DOCTOR);
+        appointmentRequestToSend.setNotifyDoctorByEmail(true);
+        appointmentRequestToSend.setNotifyDoctorBySms(true);
+        appointmentRequestToSend.setNotifyPatientByEmail(true);
+        appointmentRequestToSend.setNotifyPatientBySms(true);
+        appointmentRequestToSend.setAppointmentId(appointment.getAppointmentId());
+        WebDataServiceImpl.getInstance(mApp).addAppointment(CalendarEvents.class, appointmentRequestToSend, this, this);
     }
 
     private void confirmAppointment() {
         mActivity.showLoading(false);
-        AppointmentRequest appointmentRequest = new AppointmentRequest();
-        appointmentRequest.setDoctorId(appointment.getDoctorId());
-        appointmentRequest.setLocationId(appointment.getLocationId());
-        appointmentRequest.setHospitalId(appointment.getHospitalId());
-        appointmentRequest.setPatientId(appointment.getPatientId());
-        appointmentRequest.setState(AppointmentStatusType.CONFIRM);
-        appointmentRequest.setCreatedBy(CreatedByType.DOCTOR);
-        appointmentRequest.setNotifyDoctorByEmail(true);
-        appointmentRequest.setNotifyDoctorBySms(true);
-        appointmentRequest.setNotifyPatientByEmail(true);
-        appointmentRequest.setNotifyPatientBySms(true);
-        appointmentRequest.setAppointmentId(appointment.getAppointmentId());
-        WebDataServiceImpl.getInstance(mApp).addAppointment(CalendarEvents.class, appointmentRequest, this, this);
+        AppointmentRequestToSend appointmentRequestToSend = new AppointmentRequestToSend();
+        appointmentRequestToSend.setDoctorId(appointment.getDoctorId());
+        appointmentRequestToSend.setLocationId(appointment.getLocationId());
+        appointmentRequestToSend.setHospitalId(appointment.getHospitalId());
+        appointmentRequestToSend.setPatientId(appointment.getPatientId());
+        appointmentRequestToSend.setState(AppointmentStatusType.CONFIRM);
+        appointmentRequestToSend.setCreatedBy(CreatedByType.DOCTOR);
+        appointmentRequestToSend.setNotifyDoctorByEmail(true);
+        appointmentRequestToSend.setNotifyDoctorBySms(true);
+        appointmentRequestToSend.setNotifyPatientByEmail(true);
+        appointmentRequestToSend.setNotifyPatientBySms(true);
+        appointmentRequestToSend.setAppointmentId(appointment.getAppointmentId());
+        WebDataServiceImpl.getInstance(mApp).addAppointment(CalendarEvents.class, appointmentRequestToSend, this, this);
 
     }
 
