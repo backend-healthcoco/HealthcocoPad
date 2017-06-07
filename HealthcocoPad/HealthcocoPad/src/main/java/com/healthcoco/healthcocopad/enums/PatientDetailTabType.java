@@ -5,6 +5,8 @@ import android.view.View;
 
 import com.healthcoco.healthcocopad.R;
 
+import org.parceler.Parcel;
+
 /**
  * Created by neha on 14/10/16.
  */

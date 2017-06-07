@@ -23,7 +23,9 @@ import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.bean.server.VitalSigns;
 import com.healthcoco.healthcocopad.enums.AddUpdateNameDialogType;
 import com.healthcoco.healthcocopad.enums.ClinicalNotesPermissionType;
+import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
+import com.healthcoco.healthcocopad.fragments.AddEditNormalVisitClinicalNotesFragment;
 import com.healthcoco.healthcocopad.fragments.PatientClinicalNotesDetailFragment;
 import com.healthcoco.healthcocopad.listeners.CommonEMRItemClickListener;
 import com.healthcoco.healthcocopad.listeners.VisitDetailCombinedItemListener;
@@ -46,6 +48,7 @@ public class ClinicalNotesListItemViewHolder extends HealthCocoViewHolder implem
         Response.Listener<VolleyResponseBean>, GsonRequest.ErrorListener {
 
     private static final String TAG = ClinicalNotesListItemViewHolder.class.getSimpleName();
+    private static final int REQUEST_CODE_CLINICAL_NOTES = 111;
     private CommonEMRItemClickListener commonEMRItemClickListener;
     private User user;
     private RegisteredPatientDetailsUpdated selectedPatient;
@@ -587,10 +590,10 @@ public class ClinicalNotesListItemViewHolder extends HealthCocoViewHolder implem
 
     private void openAddClinicalNotesFragment(String clinicalNoteId) {
         Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
-//        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.ADD_CLINICAL_NOTE.ordinal());
-//        if (!Util.isNullOrBlank(clinicalNoteId))
-//            intent.putExtra(AddClinicalNoteFragment.TAG_CLINICAL_NOTE_ID, clinicalNoteId);
-//        mActivity.startActivityForResult(intent, HealthCocoConstants.REQUEST_CODE_CLINICAL_NOTES);
+        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.ADD_CLINICAL_NOTE.ordinal());
+        if (!Util.isNullOrBlank(clinicalNoteId))
+            intent.putExtra(AddEditNormalVisitClinicalNotesFragment.TAG_CLINICAL_NOTE_ID, clinicalNoteId);
+        mActivity.startActivityForResult(intent, REQUEST_CODE_CLINICAL_NOTES);
     }
 
     @Override
@@ -682,15 +685,6 @@ public class ClinicalNotesListItemViewHolder extends HealthCocoViewHolder implem
         });
         alertBuilder.create();
         alertBuilder.show();
-    }
-
-    private void openVitalSignsDetailDialogFragment() {
-//        Bundle bundle = new Bundle();
-//        bundle.putSerializable(HealthCocoConstants.TAG_VITAL_SIGNS, clinicalNote.getVitalSigns());
-//        VitalSignsDetailsDialogFragment dialogFragment = new VitalSignsDetailsDialogFragment();
-//        dialogFragment.setArguments(bundle);
-//        dialogFragment.show(mActivity.getSupportFragmentManager(),
-//                dialogFragment.getClass().getSimpleName());
     }
 
     public void onAddRemoveHistoryClicked(Object object) {

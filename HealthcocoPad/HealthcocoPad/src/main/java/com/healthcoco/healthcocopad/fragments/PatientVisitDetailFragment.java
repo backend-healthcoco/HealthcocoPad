@@ -35,6 +35,7 @@ import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.LocalTabelType;
 import com.healthcoco.healthcocopad.enums.OptionsTypePopupWindow;
+import com.healthcoco.healthcocopad.enums.PatientDetailTabType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.LoadMorePageListener;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
@@ -69,6 +70,7 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
     public static final int MAX_SIZE = 10;
     private static final int REQUEST_CODE_VISITS_LIST = 100;
     public static final String TAG_TOGGLE_STATE = "visitState";
+    public static final String TAG_PATIENT_DETAIL_TAB_TYPE = "detailTabType";
     private int PAGE_NUMBER = 0;
     private boolean isEndOfListAchieved;
     private boolean isInitialLoading;
@@ -510,11 +512,16 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
         getVisits(false);
     }
 
-    public void openAddVisitFragment() {
+    public void openAddVisitFragment(PatientDetailTabType detailTabType) {
         isMyScriptVisitToggleState = Util.getVisitToggleStateFromPreferences(mActivity);
         if (isMyScriptVisitToggleState)
             openCommonVisistActivity(CommonOpenUpFragmentType.ADD_VISITS, null, null, 0);
-        else openCommonOpenUpActivity(CommonOpenUpFragmentType.ADD_VISITS, null, null, 0);
+        else {
+            Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
+            intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.ADD_VISITS.ordinal());
+            intent.putExtra(TAG_PATIENT_DETAIL_TAB_TYPE, detailTabType);
+            startActivity(intent);
+        }
 //        openCommonVisistActivity(CommonOpenUpFragmentType.ADD_VISITS, null, null, 0);
 //        Util.addVisitToggleStateInPreference(mActivity,true);
     }

@@ -389,7 +389,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                 PatientDetailTabType patientDetailTabType = PatientDetailTabType.values()[ordinal];
                 switch (patientDetailTabType) {
                     case PATIENT_DETAIL_VISIT:
-                        visitsFragment.openAddVisitFragment();
+                        visitsFragment.openAddVisitFragment(PatientDetailTabType.PATIENT_DETAIL_VISIT);
                         break;
                     case PATIENT_DETAIL_APPOINTMENT:
                         appointmentFragment.openAddNewAppointmentScreen();
@@ -398,7 +398,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
 //                        clinicalNotesDetailFragment.openAddNewAppointmentScreen();
                         break;
                     case PATIENT_DETAIL_PRESCRIPTION:
-//                        clinicalNotesDetailFragment.openAddNewAppointmentScreen();
+//                        prescriptionDetailFragment.openAddNewAppointmentScreen();
                         break;
                 }
                 break;

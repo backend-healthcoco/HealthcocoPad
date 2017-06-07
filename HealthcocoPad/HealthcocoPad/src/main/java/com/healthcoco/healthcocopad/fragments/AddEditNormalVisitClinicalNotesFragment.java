@@ -86,6 +86,7 @@ import static com.healthcoco.healthcocopad.fragments.MyScriptAddVisitsFragment.T
 public class AddEditNormalVisitClinicalNotesFragment extends HealthCocoFragment implements LocalDoInBackgroundListenerOptimised, View.OnTouchListener, View.OnFocusChangeListener, View.OnClickListener, TextWatcher, HealthcocoTextWatcherListener {
     public static final String INTENT_ON_SUGGESTION_ITEM_CLICK = "com.healthcoco.healthcocopad.fragments.AddEditNormalVisitClinicalNotesFragment.ON_SUGGESTION_ITEM_CLICK";
     private User user;
+    public static final String TAG_CLINICAL_NOTE_ID = "clinicalNoteId";
     private LinearLayout containerSuggestionsList;
     private RegisteredPatientDetailsUpdated selectedPatient;
     private AddVisitSuggestionsFragment addVisitSuggestionsFragment;

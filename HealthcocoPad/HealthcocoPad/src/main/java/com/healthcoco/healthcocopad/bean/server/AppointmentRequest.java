@@ -36,14 +36,14 @@ public class AppointmentRequest extends SugarRecord {
     private WorkingHours time;
     private String appointmentId;
     private AppointmentStatusType state;
-    private boolean isRescheduled;
-    private boolean isCalenderBlocked;
-    private boolean isFeedbackAvailable;
-    private boolean isAllDayEvent;
-    private String doctorName;
-    private String locationName;
-    private String clinicAddress;
-    private String clinicNumber;
+//    private boolean isRescheduled;
+//    private boolean isCalenderBlocked;
+//    private boolean isFeedbackAvailable;
+//    private boolean isAllDayEvent;
+//    private String doctorName;
+//    private String locationName;
+//    private String clinicAddress;
+//    private String clinicNumber;
     private String visitId;
 
     public String getLocationId() {
@@ -226,69 +226,69 @@ public class AppointmentRequest extends SugarRecord {
         isAddedOnSuccess = addedOnSuccess;
     }
 
-    public boolean isRescheduled() {
-        return isRescheduled;
-    }
-
-    public void setRescheduled(boolean rescheduled) {
-        isRescheduled = rescheduled;
-    }
-
-    public boolean isCalenderBlocked() {
-        return isCalenderBlocked;
-    }
-
-    public void setCalenderBlocked(boolean calenderBlocked) {
-        isCalenderBlocked = calenderBlocked;
-    }
-
-    public boolean isFeedbackAvailable() {
-        return isFeedbackAvailable;
-    }
-
-    public void setFeedbackAvailable(boolean feedbackAvailable) {
-        isFeedbackAvailable = feedbackAvailable;
-    }
-
-    public boolean isAllDayEvent() {
-        return isAllDayEvent;
-    }
-
-    public void setAllDayEvent(boolean allDayEvent) {
-        isAllDayEvent = allDayEvent;
-    }
-
-    public String getDoctorName() {
-        return doctorName;
-    }
-
-    public void setDoctorName(String doctorName) {
-        this.doctorName = doctorName;
-    }
-
-    public String getLocationName() {
-        return locationName;
-    }
-
-    public void setLocationName(String locationName) {
-        this.locationName = locationName;
-    }
-
-    public String getClinicAddress() {
-        return clinicAddress;
-    }
-
-    public void setClinicAddress(String clinicAddress) {
-        this.clinicAddress = clinicAddress;
-    }
-
-    public String getClinicNumber() {
-        return clinicNumber;
-    }
-
-    public void setClinicNumber(String clinicNumber) {
-        this.clinicNumber = clinicNumber;
-    }
+//    public boolean isRescheduled() {
+//        return isRescheduled;
+//    }
+//
+//    public void setRescheduled(boolean rescheduled) {
+//        isRescheduled = rescheduled;
+//    }
+//
+//    public boolean isCalenderBlocked() {
+//        return isCalenderBlocked;
+//    }
+//
+//    public void setCalenderBlocked(boolean calenderBlocked) {
+//        isCalenderBlocked = calenderBlocked;
+//    }
+//
+//    public boolean isFeedbackAvailable() {
+//        return isFeedbackAvailable;
+//    }
+//
+//    public void setFeedbackAvailable(boolean feedbackAvailable) {
+//        isFeedbackAvailable = feedbackAvailable;
+//    }
+//
+//    public boolean isAllDayEvent() {
+//        return isAllDayEvent;
+//    }
+//
+//    public void setAllDayEvent(boolean allDayEvent) {
+//        isAllDayEvent = allDayEvent;
+//    }
+//
+//    public String getDoctorName() {
+//        return doctorName;
+//    }
+//
+//    public void setDoctorName(String doctorName) {
+//        this.doctorName = doctorName;
+//    }
+//
+//    public String getLocationName() {
+//        return locationName;
+//    }
+//
+//    public void setLocationName(String locationName) {
+//        this.locationName = locationName;
+//    }
+//
+//    public String getClinicAddress() {
+//        return clinicAddress;
+//    }
+//
+//    public void setClinicAddress(String clinicAddress) {
+//        this.clinicAddress = clinicAddress;
+//    }
+//
+//    public String getClinicNumber() {
+//        return clinicNumber;
+//    }
+//
+//    public void setClinicNumber(String clinicNumber) {
+//        this.clinicNumber = clinicNumber;
+//    }
 
     public String getVisitId() {
         return visitId;

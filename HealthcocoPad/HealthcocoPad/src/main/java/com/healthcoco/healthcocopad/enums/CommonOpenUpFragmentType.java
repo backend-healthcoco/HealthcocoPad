@@ -50,7 +50,8 @@ public enum CommonOpenUpFragmentType {
     SELECT_DIAGRAM(R.string.diagrams),
     SELECTED_DIAGRAM_DETAIL(0), BOOK_APPOINTMENT(R.string.book),
     CONTACTS_LIST(R.string.my_patients),
-    ENLARGED_MAP_VIEW_FRAGMENT(R.string.location);
+    ENLARGED_MAP_VIEW_FRAGMENT(R.string.location),
+    ADD_CLINICAL_NOTE(R.string.edit_clinical_note),;
 
     private final int titleId;
 

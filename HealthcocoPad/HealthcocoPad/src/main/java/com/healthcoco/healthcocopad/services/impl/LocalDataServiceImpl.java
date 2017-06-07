@@ -2692,7 +2692,8 @@ public class LocalDataServiceImpl {
                 + LocalDatabaseUtils.KEY_VISIT_ID + "=\"" + visitId + "\"";
         LogUtils.LOGD(TAG, "Select Query " + query);
         AppointmentRequest appointmentRequest = SugarRecord.findObjectWithQuery(AppointmentRequest.class, query);
-        appointmentRequest.setTime((WorkingHours) getObject(WorkingHours.class, LocalDatabaseUtils.KEY_FOREIGN_TABLE_ID, appointmentRequest.getUniqueId()));
+        if (appointmentRequest != null)
+            appointmentRequest.setTime((WorkingHours) getObject(WorkingHours.class, LocalDatabaseUtils.KEY_FOREIGN_TABLE_ID, appointmentRequest.getUniqueId()));
         return appointmentRequest;
     }
 
@@ -2947,7 +2948,8 @@ public class LocalDataServiceImpl {
                     }
                     addVisitForTable(details.getUniqueId(), type, customUniqueId);
                 }
-                addAppointmentRequest(details.getAppointmentRequest());
+                if (details.getAppointmentRequest() != null)
+                    addAppointmentRequest(details.getAppointmentRequest());
                 details.save();
             }
         } catch (Exception e) {

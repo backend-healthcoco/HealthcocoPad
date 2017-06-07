@@ -120,7 +120,10 @@ public class AddClinicalNotesVisitFragment extends HealthCocoFragment implements
         initViews();
         initListeners();
         addEditNormalVisitsFragment = (AddEditNormalVisitsFragment) mFragmentManager.findFragmentByTag(AddEditNormalVisitsFragment.class.getSimpleName());
-        addEditNormalVisitClinicalNotesFragment = (AddEditNormalVisitClinicalNotesFragment) addEditNormalVisitsFragment.getCurrentFragment();
+        if (addEditNormalVisitsFragment != null)
+            addEditNormalVisitClinicalNotesFragment = (AddEditNormalVisitClinicalNotesFragment) addEditNormalVisitsFragment.getCurrentTabFragment(0);
+        else
+            addEditNormalVisitClinicalNotesFragment = (AddEditNormalVisitClinicalNotesFragment) mFragmentManager.findFragmentByTag(AddEditNormalVisitClinicalNotesFragment.class.getSimpleName());
     }
 
     @Override

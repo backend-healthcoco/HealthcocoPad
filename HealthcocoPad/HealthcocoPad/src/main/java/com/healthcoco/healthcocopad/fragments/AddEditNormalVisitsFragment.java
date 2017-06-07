@@ -34,6 +34,7 @@ import com.healthcoco.healthcocopad.dialogFragment.NextReviewOnDialogFragment;
 import com.healthcoco.healthcocopad.enums.ActionbarLeftRightActionTypeDrawables;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
+import com.healthcoco.healthcocopad.enums.PatientDetailTabType;
 import com.healthcoco.healthcocopad.enums.PatientProfileScreenType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
@@ -74,11 +75,13 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
     private int currentPage = 0;
     private LinearLayout btSave;
     private boolean isFromClone;
-    private TextView tvNextReview;
+    private LinearLayout layoutNextReview;
     private AppointmentRequest appointmentRequest;
     private TextView tvNextReviewDate;
     private TextView tvNextReviewTime;
     private VisitDetails visit;
+    private String appointmentId;
+    private PatientDetailTabType detailTabType;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -92,6 +95,7 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
         super.onActivityCreated(savedInstanceState);
         Intent intent = mActivity.getIntent();
         if (intent != null) {
+            detailTabType = (PatientDetailTabType) intent.getExtras().get(PatientVisitDetailFragment.TAG_PATIENT_DETAIL_TAB_TYPE);
             visitId = Parcels.unwrap(intent.getParcelableExtra(HealthCocoConstants.TAG_VISIT_ID));
             Parcelable isFromCloneParcelable = intent.getParcelableExtra(HealthCocoConstants.TAG_IS_FROM_CLONE);
             if (isFromCloneParcelable != null)
@@ -113,7 +117,7 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
         viewPager = (ViewPager) view.findViewById(R.id.viewpager_add_visit);
         tabhost = (TabHost) view.findViewById(android.R.id.tabhost);
         flBtSwap = (FloatingActionButton) view.findViewById(R.id.fl_bt_swap);
-        tvNextReview = (TextView) view.findViewById(R.id.tv_next_review);
+        layoutNextReview = (LinearLayout) view.findViewById(R.id.layout_next_review);
         tvNextReviewDate = (TextView) view.findViewById(R.id.tv_next_review_data);
         tvNextReviewTime = (TextView) view.findViewById(R.id.tv_next_review_time);
     }
@@ -123,7 +127,7 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
         tabhost.setOnTabChangedListener(this);
         viewPager.addOnPageChangeListener(this);
         flBtSwap.setOnClickListener(this);
-        tvNextReview.setOnClickListener(this);
+        layoutNextReview.setOnClickListener(this);
 
         ((CommonOpenUpActivity) mActivity).initRightActionView(ActionbarLeftRightActionTypeDrawables.WITH_SAVE, view);
         btSave = ((CommonOpenUpActivity) mActivity).initActionbarRightAction(this);
@@ -260,8 +264,10 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
     private void initTabsAndViewPagerFragments(VisitDetails visitDetails) {
         initTabsFragmentsList(visitDetails);
         initViewPagerAdapter();
-        if (visitDetails != null)
+        if (visitDetails != null) {
+            appointmentId = visitDetails.getAppointmentId();
             initNextReviewData(visitDetails.getAppointmentRequest());
+        }
     }
 
     private void initNextReviewData(AppointmentRequest appointmentRequest) {
@@ -315,8 +321,8 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
             case R.id.fl_bt_swap:
                 showToggleConfirmationAlert();
                 break;
-            case R.id.tv_next_review:
-                if (visit != null && visit.getAppointmentRequest() != null && visit.getAppointmentRequest().getAppointmentId() != null) {
+            case R.id.layout_next_review:
+                if (visit != null && visit.getAppointmentRequest() != null && visit.getAppointmentId() != null) {
                     showNextReviewReschedulealert();
                 } else
                     openDialogFragment(new NextReviewOnDialogFragment(), REQUEST_CODE_NEXT_REVIEW);
@@ -390,7 +396,8 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
             visitDetails.setClinicalNote(addEditNormalVisitClinicalNotesFragment.getClinicalNoteToSendDetails());
         if (blankPrescriptionMsgId == 0)
             visitDetails.setPrescription(addEditNormalVisitPrescriptionFragment.getPrescriptionRequestDetails());
-        visitDetails.setAppointmentRequest(appointmentRequest);
+        if (Util.isNullOrBlank(appointmentId))
+            visitDetails.setAppointmentRequest(appointmentRequest);
         WebDataServiceImpl.getInstance(mApp).addVisit(VisitDetails.class, visitDetails, this, this);
     }
 
