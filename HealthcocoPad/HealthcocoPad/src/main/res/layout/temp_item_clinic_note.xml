@@ -206,7 +206,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginRight="5dp"
                                 android:background="@color/white"
-                                android:drawableLeft="@drawable/sms_selector"
+                                android:drawableLeft="@drawable/discard_selector"
                                 android:drawablePadding="5dp"
                                 android:gravity="center|start"
                                 android:paddingLeft="@dimen/item_visits_button_padding_left_right_20dp"

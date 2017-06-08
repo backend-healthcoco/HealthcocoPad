@@ -937,7 +937,15 @@ public class LocalDataServiceImpl {
 //                            null, "updated_time DESC", "1");
 //                    if (!Util.isNullOrEmptyList(tempCalendarEventsList))
 //                        latestUpdatedTime = tempCalendarEventsList.get(0).getUpdatedTime();
-//                    break;
+                break;
+            case CLINAL_NOTE:
+                List<ClinicalNotes> tempClinicalNotes = ClinicalNotes.find(ClinicalNotes.class,
+                        LocalDatabaseUtils.KEY_DOCTOR_ID + "= ? AND " + LocalDatabaseUtils.KEY_PATIENT_ID + "= ?",
+                        new String[]{doctorId, "" + HealthCocoConstants.SELECTED_PATIENTS_USER_ID},
+                        null, "updated_time DESC", "1");
+                if (!Util.isNullOrEmptyList(tempClinicalNotes))
+                    latestUpdatedTime = tempClinicalNotes.get(0).getUpdatedTime();
+                break;
         }
         if (latestUpdatedTime == null)
             latestUpdatedTime = 0l;
@@ -2829,6 +2837,10 @@ public class LocalDataServiceImpl {
                 + " where " + BloodPressure.TABLE_NAME + "." + LocalDatabaseUtils.KEY_FOREIGN_TABLE_ID + " = " + "\"" + uniqueId + "\"";
         LogUtils.LOGD(TAG, "Select query : " + query);
         return SugarRecord.findObjectWithQuery(BloodPressure.class, query);
+    }
+
+    public ClinicalNotes getClinicalNote(String clinicalNoteId, String patientId) {
+        return getClinicalNote(null, clinicalNoteId, patientId);
     }
 
     public ClinicalNotes getClinicalNote(BooleanTypeValues discarded, String clinicalNoteId, String patientId) {

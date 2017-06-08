@@ -70,7 +70,6 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
     public static final int MAX_SIZE = 10;
     private static final int REQUEST_CODE_VISITS_LIST = 100;
     public static final String TAG_TOGGLE_STATE = "visitState";
-    public static final String TAG_PATIENT_DETAIL_TAB_TYPE = "detailTabType";
     private int PAGE_NUMBER = 0;
     private boolean isEndOfListAchieved;
     private boolean isInitialLoading;
@@ -90,6 +89,7 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
     private SwipeRefreshLayout swipeRefreshLayout;
     private int currentPageNumber;
     boolean isMyScriptVisitToggleState;
+    private PatientDetailTabType detailTabType;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -109,14 +109,6 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
         initViews();
         initListeners();
         initAdapter();
-    }
-
-    private void getUserAndPatientDetails() {
-        CommonOpenUpPatientDetailFragment patientDetailFragmentUpdated = (CommonOpenUpPatientDetailFragment) getFragmentManager().findFragmentByTag(CommonOpenUpPatientDetailFragment.class.getSimpleName());
-        if (patientDetailFragmentUpdated != null) {
-            selectedPatient = patientDetailFragmentUpdated.getSelectedPatientDetails();
-            user = patientDetailFragmentUpdated.getUser();
-        }
     }
 
     @Override
@@ -139,10 +131,12 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
         lvVisits.setAdapter(patientsVisitAdapter);
     }
 
-    public void refreshData(User user, RegisteredPatientDetailsUpdated registeredPatientDetailsUpdated) {
+    public void refreshData(User user, RegisteredPatientDetailsUpdated registeredPatientDetailsUpdated,
+                            PatientDetailTabType detailTabType) {
         this.selectedPatient = registeredPatientDetailsUpdated;
         this.user = user;
         getListFromLocal(true, 0);
+        this.detailTabType = detailTabType;
     }
 
     public void getVisits(boolean showLoading) {
@@ -411,8 +405,13 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
         isMyScriptVisitToggleState = Util.getVisitToggleStateFromPreferences(mActivity);
         if (isMyScriptVisitToggleState)
             openCommonVisistActivity(CommonOpenUpFragmentType.ADD_VISITS, HealthCocoConstants.TAG_VISIT_ID, visitId, 0);
-        else
-            openCommonOpenUpActivity(CommonOpenUpFragmentType.ADD_VISITS, HealthCocoConstants.TAG_VISIT_ID, visitId, 0);
+        else {
+            Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
+            intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.ADD_VISITS.ordinal());
+            intent.putExtra(HealthCocoConstants.TAG_VISIT_ID, Parcels.wrap(visitId));
+            intent.putExtra(CommonOpenUpPatientDetailFragment.TAG_PATIENT_DETAIL_TAB_TYPE, detailTabType);
+            startActivity(intent);
+        }
     }
 
     @Override
@@ -445,6 +444,7 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
         intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.ADD_VISITS.ordinal());
         intent.putExtra(HealthCocoConstants.TAG_IS_FROM_CLONE, Parcels.wrap(true));
         intent.putExtra(HealthCocoConstants.TAG_VISIT_ID, Parcels.wrap(visitId));
+        intent.putExtra(CommonOpenUpPatientDetailFragment.TAG_PATIENT_DETAIL_TAB_TYPE, detailTabType);
         startActivity(intent);
     }
 
@@ -512,14 +512,14 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
         getVisits(false);
     }
 
-    public void openAddVisitFragment(PatientDetailTabType detailTabType) {
+    public void openAddVisitFragment() {
         isMyScriptVisitToggleState = Util.getVisitToggleStateFromPreferences(mActivity);
         if (isMyScriptVisitToggleState)
             openCommonVisistActivity(CommonOpenUpFragmentType.ADD_VISITS, null, null, 0);
         else {
             Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
             intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.ADD_VISITS.ordinal());
-            intent.putExtra(TAG_PATIENT_DETAIL_TAB_TYPE, detailTabType);
+            intent.putExtra(CommonOpenUpPatientDetailFragment.TAG_PATIENT_DETAIL_TAB_TYPE, detailTabType);
             startActivity(intent);
         }
 //        openCommonVisistActivity(CommonOpenUpFragmentType.ADD_VISITS, null, null, 0);

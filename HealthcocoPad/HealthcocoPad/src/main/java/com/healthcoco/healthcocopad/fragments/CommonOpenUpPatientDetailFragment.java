@@ -55,6 +55,7 @@ import static com.healthcoco.healthcocopad.R.id.fl_bt_add;
 public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implements View.OnClickListener, ViewPager.OnPageChangeListener, TabHost.OnTabChangeListener,
         LocalDoInBackgroundListenerOptimised, CommonOpenUpPatientDetailListener {
     public static final String INTENT_REFRESH_PATIENT_PROFILE = "com.healthcoco.REFRESH_PATIENT_PROFILE";
+    public static final String TAG_PATIENT_DETAIL_TAB_TYPE = "detailTabType";
     private TabHost tabhost;
     private ViewPager mViewPager;
     private ArrayList<Fragment> fragmentsList = new ArrayList<>();
@@ -326,7 +327,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                     break;
                 case PATIENT_DETAIL_VISIT:
                     if (!isVisitsTabClicked) {
-                        visitsFragment.refreshData(user, selectedPatient);
+                        visitsFragment.refreshData(user, selectedPatient, PatientDetailTabType.PATIENT_DETAIL_VISIT);
                         isVisitsTabClicked = true;
                     }
                 case PATIENT_DETAIL_APPOINTMENT:
@@ -337,13 +338,14 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                     break;
                 case PATIENT_DETAIL_CLINICAL_NOTES:
                     if (!isClinicalNotesTabClicked) {
-                        clinicalNotesDetailFragment.refreshData(user, selectedPatient);
+                        clinicalNotesDetailFragment.refreshData(user, selectedPatient, PatientDetailTabType.PATIENT_DETAIL_CLINICAL_NOTES);
                         isClinicalNotesTabClicked = true;
                     }
                     break;
                 case PATIENT_DETAIL_PRESCRIPTION:
                     if (!isPrescriptionTabClicked) {
-                        prescriptionDetailFragment.refreshData(user, selectedPatient);
+                        prescriptionDetailFragment.refreshData(user, selectedPatient, PatientDetailTabType.PATIENT_DETAIL_PRESCRIPTION
+                        );
                         isPrescriptionTabClicked = true;
                     }
                     break;
@@ -389,16 +391,16 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                 PatientDetailTabType patientDetailTabType = PatientDetailTabType.values()[ordinal];
                 switch (patientDetailTabType) {
                     case PATIENT_DETAIL_VISIT:
-                        visitsFragment.openAddVisitFragment(PatientDetailTabType.PATIENT_DETAIL_VISIT);
+                        visitsFragment.openAddVisitFragment();
                         break;
                     case PATIENT_DETAIL_APPOINTMENT:
                         appointmentFragment.openAddNewAppointmentScreen();
                         break;
                     case PATIENT_DETAIL_CLINICAL_NOTES:
-//                        clinicalNotesDetailFragment.openAddNewAppointmentScreen();
+                        clinicalNotesDetailFragment.openAddNewClinicalNotesScreen();
                         break;
                     case PATIENT_DETAIL_PRESCRIPTION:
-//                        prescriptionDetailFragment.openAddNewAppointmentScreen();
+//                        prescriptionDetailFragment.openAddNewClinicalNotesScreen();
                         break;
                 }
                 break;

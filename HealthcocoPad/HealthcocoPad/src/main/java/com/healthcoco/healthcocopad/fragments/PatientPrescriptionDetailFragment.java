@@ -29,6 +29,7 @@ import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.HistoryFilterType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.LocalTabelType;
+import com.healthcoco.healthcocopad.enums.PatientDetailTabType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.CommonEMRItemClickListener;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
@@ -74,6 +75,7 @@ public class PatientPrescriptionDetailFragment extends HealthCocoFragment implem
     private PrescriptionListAdapter adapter;
     private SwipeRefreshLayout swipeRefreshLayout;
     private boolean receiversRegistered = false;
+    private PatientDetailTabType detailTabType;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -399,9 +401,10 @@ public class PatientPrescriptionDetailFragment extends HealthCocoFragment implem
 
     }
 
-    public void refreshData(User user, RegisteredPatientDetailsUpdated registeredPatientDetailsUpdated) {
+    public void refreshData(User user, RegisteredPatientDetailsUpdated registeredPatientDetailsUpdated, PatientDetailTabType detailTabType) {
         this.selectedPatient = registeredPatientDetailsUpdated;
         this.user = user;
         getListFromLocal(false);
+        this.detailTabType = detailTabType;
     }
 }

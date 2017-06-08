@@ -48,6 +48,7 @@ public class VisitDetails extends SugarRecord {
     private String createdBy;
     private String visitId;
     private String appointmentId;
+    private Boolean discarded;
 
     public String getUniqueId() {
         return uniqueId;
@@ -215,5 +216,13 @@ public class VisitDetails extends SugarRecord {
 
     public void setAppointmentId(String appointmentId) {
         this.appointmentId = appointmentId;
+    }
+
+    public Boolean getDiscarded() {
+        return discarded;
+    }
+
+    public void setDiscarded(Boolean discarded) {
+        this.discarded = discarded;
     }
 }

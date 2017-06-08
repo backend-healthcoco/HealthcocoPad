@@ -13,335 +13,342 @@
         android:paddingRight="@dimen/item_visits_button_padding_left_right_20dp"
         android:src="@drawable/ic_icon_list_visit" />
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:background="@drawable/shape_emr_item_background"
-        android:orientation="vertical">
-
-        <include layout="@layout/header_created_by_visit"></include>
+        android:layout_weight="1">
 
         <LinearLayout
-            android:id="@+id/container_clinical_notes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"></LinearLayout>
-        <!--<FrameLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content">-->
-        <!---->
-        <!--<LinearLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content">-->
+            android:background="@drawable/shape_emr_item_background"
+            android:orientation="vertical">
 
-        <!--<include layout="@layout/layout_sub_item_clinical_note"></include>-->
-        <!--</LinearLayout>-->
+            <include layout="@layout/header_created_by_visit"></include>
 
-        <!--<include-->
-        <!--android:id="@+id/layout_discarded_clinical_note"-->
-        <!--layout="@layout/layout_discarded" />-->
-        <!--</FrameLayout>-->
-
-        <LinearLayout
-            android:id="@+id/container_prescription"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"></LinearLayout>
-        <!--<FrameLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content">-->
-
-        <!--<LinearLayout-->
-        <!--android:id="@+id/container_prescription"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:orientation="vertical"></LinearLayout>-->
-
-        <!--</FrameLayout>-->
-
-        <LinearLayout
-            android:id="@+id/container_reports"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"></LinearLayout>
-        <!--<FrameLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:visibility="gone">-->
-        <!---->
-        <!--<LinearLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content">-->
-
-        <!--<include layout="@layout/layout_sub_item_prescription" />-->
-        <!--</LinearLayout>-->
-
-        <!--<include-->
-        <!--android:id="@+id/layout_discarded_prescription"-->
-        <!--layout="@layout/layout_discarded" />-->
-        <!--</FrameLayout>-->
-
-        <LinearLayout
-            android:id="@+id/container_treatments"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"></LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/container_bottom_buttons_combined"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:baselineAligned="false"
-            android:orientation="vertical"
-            android:visibility="visible">
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginBottom="@dimen/item_padding"
-                android:layout_marginLeft="@dimen/item_padding"
-                android:layout_marginRight="@dimen/item_padding"
-                android:layout_marginTop="@dimen/item_visits_button_padding_top_bottom_8dp"
-                android:background="@color/grey_background" />
-
-            <RelativeLayout
+            <LinearLayout
+                android:id="@+id/container_clinical_notes"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/item_visits_button_padding_left_right_20dp"
+                android:orientation="vertical"></LinearLayout>
+            <!--<FrameLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content">-->
+            <!---->
+            <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content">-->
+
+            <!--<include layout="@layout/layout_sub_item_clinical_note"></include>-->
+            <!--</LinearLayout>-->
+
+            <!--<include-->
+            <!--android:id="@+id/layout_discarded_clinical_note"-->
+            <!--layout="@layout/layout_discarded" />-->
+            <!--</FrameLayout>-->
+
+            <LinearLayout
+                android:id="@+id/container_prescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"></LinearLayout>
+            <!--<FrameLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content">-->
+
+            <!--<LinearLayout-->
+            <!--android:id="@+id/container_prescription"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:orientation="vertical"></LinearLayout>-->
+
+            <!--</FrameLayout>-->
+
+            <LinearLayout
+                android:id="@+id/container_reports"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"></LinearLayout>
+            <!--<FrameLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:visibility="gone">-->
+            <!---->
+            <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content">-->
+
+            <!--<include layout="@layout/layout_sub_item_prescription" />-->
+            <!--</LinearLayout>-->
+
+            <!--<include-->
+            <!--android:id="@+id/layout_discarded_prescription"-->
+            <!--layout="@layout/layout_discarded" />-->
+            <!--</FrameLayout>-->
+
+            <LinearLayout
+                android:id="@+id/container_treatments"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"></LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/container_bottom_buttons_combined"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:baselineAligned="false"
-                android:clickable="false">
+                android:orientation="vertical"
+                android:visibility="visible">
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginBottom="@dimen/item_padding"
+                    android:layout_marginLeft="@dimen/item_padding"
+                    android:layout_marginRight="@dimen/item_padding"
+                    android:layout_marginTop="@dimen/item_visits_button_padding_top_bottom_8dp"
+                    android:background="@color/grey_background" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:orientation="horizontal">
+                    android:layout_marginBottom="@dimen/item_visits_button_padding_left_right_20dp"
+                    android:baselineAligned="false"
+                    android:clickable="false">
 
                     <LinearLayout
-                        android:id="@+id/bt_open_visit"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/item_visits_button_padding_left_right_20dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/shape_rounded_corners_item_background_dark_grey"
-                        android:clickable="true"
-                        android:gravity="center"
-                        android:padding="5dp"
-                        android:visibility="visible">
+                        android:layout_alignParentLeft="true"
+                        android:orientation="horizontal">
 
-                        <TextView
+                        <LinearLayout
+                            android:id="@+id/bt_open_visit"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@color/white"
-                            android:drawablePadding="5dp"
-                            android:drawableRight="@drawable/icon_download_selector"
-                            android:gravity="center|start"
-                            android:paddingLeft="@dimen/item_visits_button_padding_left_right_20dp"
-                            android:paddingRight="@dimen/item_visits_button_padding_left_right_20dp"
-                            android:text="@string/open"
-                            android:textColor="@drawable/text_selector_grey_blue"
-                            android:textSize="@dimen/text_size_bt_history_edit_sms_email" />
+                            android:layout_marginLeft="@dimen/item_visits_button_padding_left_right_20dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/shape_rounded_corners_item_background_dark_grey"
+                            android:clickable="true"
+                            android:gravity="center"
+                            android:padding="5dp"
+                            android:visibility="visible">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@color/white"
+                                android:drawablePadding="5dp"
+                                android:drawableRight="@drawable/icon_download_selector"
+                                android:gravity="center|start"
+                                android:paddingLeft="@dimen/item_visits_button_padding_left_right_20dp"
+                                android:paddingRight="@dimen/item_visits_button_padding_left_right_20dp"
+                                android:text="@string/open"
+                                android:textColor="@drawable/text_selector_grey_blue"
+                                android:textSize="@dimen/text_size_bt_history_edit_sms_email" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/bt_history_visit"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/item_visits_button_padding_left_right_20dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/shape_rounded_corners_item_background_dark_grey"
+                            android:clickable="true"
+                            android:gravity="center"
+                            android:padding="5dp">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="5dp"
+                                android:background="@drawable/selector_btn_add"
+                                android:paddingLeft="@dimen/item_visits_button_padding_left_right_20dp"
+                                android:visibility="visible" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="5dp"
+                                android:background="@color/white"
+                                android:gravity="center|start"
+                                android:paddingRight="@dimen/item_visits_button_padding_left_right_20dp"
+                                android:text="@string/important"
+                                android:textColor="@drawable/text_selector_grey_blue"
+                                android:textSize="@dimen/text_size_bt_history_edit_sms_email" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/bt_email_visit"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/item_visits_button_padding_left_right_20dp"
+                            android:layout_marginRight="@dimen/item_visits_button_padding_left_right_20dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/shape_rounded_corners_item_background_dark_grey"
+                            android:clickable="true"
+                            android:gravity="center"
+                            android:padding="5dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@color/white"
+                                android:drawableLeft="@drawable/email_selector"
+                                android:drawablePadding="5dp"
+                                android:gravity="center|start"
+                                android:paddingLeft="@dimen/item_visits_button_padding_left_right_20dp"
+                                android:paddingRight="@dimen/item_visits_button_padding_left_right_20dp"
+                                android:text="@string/email"
+                                android:textColor="@drawable/text_selector_grey_blue"
+                                android:textSize="@dimen/text_size_bt_history_edit_sms_email" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/bt_sms_visit"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="@dimen/item_visits_button_padding_left_right_20dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/shape_rounded_corners_item_background_dark_grey"
+                            android:clickable="true"
+                            android:gravity="center"
+                            android:padding="5dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="5dp"
+                                android:background="@color/white"
+                                android:drawableLeft="@drawable/sms_selector"
+                                android:drawablePadding="5dp"
+                                android:gravity="center|start"
+                                android:paddingLeft="@dimen/item_visits_button_padding_left_right_20dp"
+                                android:paddingRight="@dimen/item_visits_button_padding_left_right_20dp"
+                                android:text="@string/sms"
+                                android:textColor="@drawable/text_selector_grey_blue"
+                                android:textSize="@dimen/text_size_bt_history_edit_sms_email" />
+                        </LinearLayout>
+
                     </LinearLayout>
 
                     <LinearLayout
-                        android:id="@+id/bt_history_visit"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/item_visits_button_padding_left_right_20dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/shape_rounded_corners_item_background_dark_grey"
-                        android:clickable="true"
-                        android:gravity="center"
-                        android:padding="5dp">
+                        android:layout_alignParentRight="true"
+                        android:orientation="horizontal">
 
-                        <ImageView
+                        <LinearLayout
+                            android:id="@+id/bt_save_as_template_visit"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginRight="5dp"
-                            android:background="@drawable/selector_btn_add"
-                            android:paddingLeft="@dimen/item_visits_button_padding_left_right_20dp"
-                            android:visibility="visible" />
+                            android:layout_marginRight="@dimen/item_visits_button_padding_left_right_20dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/shape_rounded_corners_item_background_dark_grey"
+                            android:gravity="center"
+                            android:padding="5dp"
+                            android:visibility="visible">
 
-                        <TextView
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="5dp"
+                                android:background="@color/white"
+                                android:drawableLeft="@drawable/icon_template_selector"
+                                android:drawablePadding="5dp"
+                                android:gravity="center|start"
+                                android:paddingLeft="@dimen/item_visits_button_padding_left_right_20dp"
+                                android:paddingRight="@dimen/item_visits_button_padding_left_right_20dp"
+                                android:text="@string/save_as_template"
+                                android:textColor="@drawable/text_selector_grey_blue"
+                                android:textSize="@dimen/text_size_bt_history_edit_sms_email" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/bt_clone_visit"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginRight="5dp"
-                            android:background="@color/white"
-                            android:gravity="center|start"
-                            android:paddingRight="@dimen/item_visits_button_padding_left_right_20dp"
-                            android:text="@string/important"
-                            android:textColor="@drawable/text_selector_grey_blue"
-                            android:textSize="@dimen/text_size_bt_history_edit_sms_email" />
+                            android:layout_marginRight="@dimen/item_visits_button_padding_left_right_20dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/shape_rounded_corners_item_background_dark_grey"
+                            android:gravity="center"
+                            android:padding="5dp"
+                            android:visibility="visible">
+
+                            <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+                                android:id="@+id/textViewFontAwesome"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginRight="5dp"
+                                android:background="@color/white"
+                                android:gravity="center|start"
+                                android:paddingBottom="3dp"
+                                android:paddingLeft="@dimen/item_visits_button_padding_left_right_20dp"
+                                android:paddingRight="@dimen/item_visits_button_padding_left_right_20dp"
+                                android:paddingTop="3dp"
+                                android:text="@string/fa_clone"
+                                android:textColor="@drawable/text_selector_grey_blue"
+                                android:textSize="@dimen/text_size_bt_history_edit_sms_email" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/bt_print_visit"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="@dimen/item_visits_button_padding_left_right_20dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/shape_rounded_corners_item_background_dark_grey"
+                            android:gravity="center"
+                            android:padding="5dp"
+                            android:visibility="visible">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="5dp"
+                                android:background="@color/white"
+                                android:drawableLeft="@drawable/icon_print_selector"
+                                android:drawablePadding="5dp"
+                                android:gravity="center|start"
+                                android:paddingLeft="@dimen/item_visits_button_padding_left_right_20dp"
+                                android:paddingRight="@dimen/item_visits_button_padding_left_right_20dp"
+                                android:text="@string/print"
+                                android:textColor="@drawable/text_selector_grey_blue"
+                                android:textSize="@dimen/text_size_bt_history_edit_sms_email" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/bt_edit_visit"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="@dimen/item_visits_button_padding_left_right_20dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/shape_rounded_corners_item_background_dark_grey"
+                            android:gravity="center"
+                            android:padding="5dp"
+                            android:visibility="visible">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="5dp"
+                                android:background="@color/white"
+                                android:drawableLeft="@drawable/icon_edit_selector"
+                                android:drawablePadding="5dp"
+                                android:gravity="center|start"
+                                android:paddingLeft="@dimen/item_visits_button_padding_left_right_20dp"
+                                android:paddingRight="@dimen/item_visits_button_padding_left_right_20dp"
+                                android:text="@string/edit"
+                                android:textColor="@drawable/text_selector_grey_blue"
+                                android:textSize="@dimen/text_size_bt_history_edit_sms_email" />
+                        </LinearLayout>
                     </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/bt_email_visit"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/item_visits_button_padding_left_right_20dp"
-                        android:layout_marginRight="@dimen/item_visits_button_padding_left_right_20dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/shape_rounded_corners_item_background_dark_grey"
-                        android:clickable="true"
-                        android:gravity="center"
-                        android:padding="5dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@color/white"
-                            android:drawableLeft="@drawable/email_selector"
-                            android:drawablePadding="5dp"
-                            android:gravity="center|start"
-                            android:paddingLeft="@dimen/item_visits_button_padding_left_right_20dp"
-                            android:paddingRight="@dimen/item_visits_button_padding_left_right_20dp"
-                            android:text="@string/email"
-                            android:textColor="@drawable/text_selector_grey_blue"
-                            android:textSize="@dimen/text_size_bt_history_edit_sms_email" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/bt_sms_visit"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="@dimen/item_visits_button_padding_left_right_20dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/shape_rounded_corners_item_background_dark_grey"
-                        android:clickable="true"
-                        android:gravity="center"
-                        android:padding="5dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="5dp"
-                            android:background="@color/white"
-                            android:drawableLeft="@drawable/sms_selector"
-                            android:drawablePadding="5dp"
-                            android:gravity="center|start"
-                            android:paddingLeft="@dimen/item_visits_button_padding_left_right_20dp"
-                            android:paddingRight="@dimen/item_visits_button_padding_left_right_20dp"
-                            android:text="@string/sms"
-                            android:textColor="@drawable/text_selector_grey_blue"
-                            android:textSize="@dimen/text_size_bt_history_edit_sms_email" />
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:orientation="horizontal">
-
-                    <LinearLayout
-                        android:id="@+id/bt_save_as_template_visit"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="@dimen/item_visits_button_padding_left_right_20dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/shape_rounded_corners_item_background_dark_grey"
-                        android:gravity="center"
-                        android:padding="5dp"
-                        android:visibility="visible">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="5dp"
-                            android:background="@color/white"
-                            android:drawableLeft="@drawable/icon_template_selector"
-                            android:drawablePadding="5dp"
-                            android:gravity="center|start"
-                            android:paddingLeft="@dimen/item_visits_button_padding_left_right_20dp"
-                            android:paddingRight="@dimen/item_visits_button_padding_left_right_20dp"
-                            android:text="@string/save_as_template"
-                            android:textColor="@drawable/text_selector_grey_blue"
-                            android:textSize="@dimen/text_size_bt_history_edit_sms_email" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/bt_clone_visit"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="@dimen/item_visits_button_padding_left_right_20dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/shape_rounded_corners_item_background_dark_grey"
-                        android:gravity="center"
-                        android:padding="5dp"
-                        android:visibility="visible">
-
-                        <com.healthcoco.healthcocopad.views.TextViewFontAwesome
-                            android:id="@+id/textViewFontAwesome"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginRight="5dp"
-                            android:background="@color/white"
-                            android:gravity="center|start"
-                            android:paddingBottom="3dp"
-                            android:paddingLeft="@dimen/item_visits_button_padding_left_right_20dp"
-                            android:paddingRight="@dimen/item_visits_button_padding_left_right_20dp"
-                            android:paddingTop="3dp"
-                            android:text="@string/fa_clone"
-                            android:textColor="@drawable/text_selector_grey_blue"
-                            android:textSize="@dimen/text_size_bt_history_edit_sms_email" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/bt_print_visit"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="@dimen/item_visits_button_padding_left_right_20dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/shape_rounded_corners_item_background_dark_grey"
-                        android:gravity="center"
-                        android:padding="5dp"
-                        android:visibility="visible">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="5dp"
-                            android:background="@color/white"
-                            android:drawableLeft="@drawable/icon_print_selector"
-                            android:drawablePadding="5dp"
-                            android:gravity="center|start"
-                            android:paddingLeft="@dimen/item_visits_button_padding_left_right_20dp"
-                            android:paddingRight="@dimen/item_visits_button_padding_left_right_20dp"
-                            android:text="@string/print"
-                            android:textColor="@drawable/text_selector_grey_blue"
-                            android:textSize="@dimen/text_size_bt_history_edit_sms_email" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/bt_edit_visit"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="@dimen/item_visits_button_padding_left_right_20dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/shape_rounded_corners_item_background_dark_grey"
-                        android:gravity="center"
-                        android:padding="5dp"
-                        android:visibility="visible">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="5dp"
-                            android:background="@color/white"
-                            android:drawableLeft="@drawable/icon_edit_selector"
-                            android:drawablePadding="5dp"
-                            android:gravity="center|start"
-                            android:paddingLeft="@dimen/item_visits_button_padding_left_right_20dp"
-                            android:paddingRight="@dimen/item_visits_button_padding_left_right_20dp"
-                            android:text="@string/edit"
-                            android:textColor="@drawable/text_selector_grey_blue"
-                            android:textSize="@dimen/text_size_bt_history_edit_sms_email" />
-                    </LinearLayout>
-                </LinearLayout>
-            </RelativeLayout>
+                </RelativeLayout>
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
+
+        <include layout="@layout/layout_discarded"></include>
+    </FrameLayout>
 </LinearLayout>

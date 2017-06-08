@@ -44,6 +44,7 @@ public class VisitDetailCombinedViewHolder extends HealthCocoViewHolder implemen
     private LinearLayout containerReports;
     private LinearLayout btOpen;
     private LinearLayout containerBottomButtons;
+    private LinearLayout layoutDiscarded;
 
     public VisitDetailCombinedViewHolder(HealthCocoActivity mActivity, VisitDetailCombinedItemListener listItemClickListener) {
         super(mActivity);
@@ -89,6 +90,7 @@ public class VisitDetailCombinedViewHolder extends HealthCocoViewHolder implemen
         btHistory = (LinearLayout) contentView.findViewById(R.id.bt_history_visit);
         btSaveAsTemplate = (LinearLayout) contentView.findViewById(R.id.bt_save_as_template_visit);
         containerBottomButtons = (LinearLayout) contentView.findViewById(R.id.container_bottom_buttons_combined);
+        layoutDiscarded = (LinearLayout) contentView.findViewById(R.id.layout_discarded);
     }
 
     private void initClinicalNotesView(View contentView) {
@@ -189,6 +191,9 @@ public class VisitDetailCombinedViewHolder extends HealthCocoViewHolder implemen
     }
 
     private void checkIsDiscarded(Boolean isDiscarded) {
+//        if (visitDetail.getDiscarded() != null && visitDetail.getDiscarded())
+//            layoutDiscarded.setVisibility(View.VISIBLE);
+//        else layoutDiscarded.setVisibility(View.GONE);
         if (isDiscarded != null && isDiscarded)
             containerBottomButtons.setVisibility(View.GONE);
         else containerBottomButtons.setVisibility(View.VISIBLE);

@@ -17,15 +17,18 @@ import android.widget.TextView;
 
 import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
+import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.adapter.ClinicalNotesListAdapter;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.ClinicalNotes;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
+import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.HistoryFilterType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.LocalTabelType;
+import com.healthcoco.healthcocopad.enums.PatientDetailTabType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.CommonEMRItemClickListener;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
@@ -64,6 +67,7 @@ public class PatientClinicalNotesDetailFragment extends HealthCocoFragment imple
     private Button btAddClinicalNote;
     private boolean isInitialLoading;
     private RegisteredPatientDetailsUpdated selectedPatient;
+    private PatientDetailTabType detailTabType;
 
     public PatientClinicalNotesDetailFragment() {
     }
@@ -310,14 +314,15 @@ public class PatientClinicalNotesDetailFragment extends HealthCocoFragment imple
     BroadcastReceiver clinicalNoteUsingIdLocalReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, final Intent intent) {
-//            if (intent != null && intent.hasExtra(AddClinicalNoteFragment.TAG_CLINICAL_NOTE_ID)) {
-//                String clinicalNoteId = intent.getStringExtra(AddClinicalNoteFragment.TAG_CLINICAL_NOTE_ID);
+            if (intent != null && intent.hasExtra(AddEditNormalVisitClinicalNotesFragment.TAG_CLINICAL_NOTE_ID)) {
+//                String clinicalNoteId = intent.getStringExtra(AddEditNormalVisitClinicalNotesFragment.TAG_CLINICAL_NOTE_ID);
 //                ClinicalNotes clinicalNotes = LocalDataServiceImpl.getInstance(mApp).getClinicalNote(clinicalNoteId, HealthCocoConstants.SELECTED_PATIENTS_USER_ID);
 //                if (clinicalNotes != null)
 //                    clinicalNotesList.put(clinicalNotes.getUniqueId(), clinicalNotes);
 //                notifyAdapter(new ArrayList<>(clinicalNotesList.values()));
-//            }
-//            sendBroadcasts();
+
+            }
+            sendBroadcasts();
         }
     };
     BroadcastReceiver clinicalNotesListLocalReceiver = new BroadcastReceiver() {
@@ -339,9 +344,17 @@ public class PatientClinicalNotesDetailFragment extends HealthCocoFragment imple
         }});
     }
 
-    public void refreshData(User user, RegisteredPatientDetailsUpdated registeredPatientDetailsUpdated) {
+    public void refreshData(User user, RegisteredPatientDetailsUpdated registeredPatientDetailsUpdated, PatientDetailTabType detailTabType) {
         this.selectedPatient = registeredPatientDetailsUpdated;
         this.user = user;
-        getListFromLocal(false, true, user);
+        getListFromLocal(true, true, user);
+        this.detailTabType = detailTabType;
+    }
+
+    public void openAddNewClinicalNotesScreen() {
+        Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
+        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.ADD_VISITS.ordinal());
+        intent.putExtra(CommonOpenUpPatientDetailFragment.TAG_PATIENT_DETAIL_TAB_TYPE, detailTabType);
+        startActivity(intent);
     }
 }

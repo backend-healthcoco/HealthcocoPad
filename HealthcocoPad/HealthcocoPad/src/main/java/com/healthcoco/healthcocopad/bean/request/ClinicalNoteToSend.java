@@ -1,12 +1,14 @@
 package com.healthcoco.healthcocopad.bean.request;
 
 
+import com.healthcoco.healthcocopad.bean.server.AppointmentRequest;
 import com.healthcoco.healthcocopad.bean.server.Complaint;
 import com.healthcoco.healthcocopad.bean.server.Diagnoses;
 import com.healthcoco.healthcocopad.bean.server.Investigation;
 import com.healthcoco.healthcocopad.bean.server.Notes;
 import com.healthcoco.healthcocopad.bean.server.Observation;
 import com.healthcoco.healthcocopad.bean.server.VitalSigns;
+import com.orm.annotation.Ignore;
 
 import java.util.List;
 
@@ -62,6 +64,8 @@ public class ClinicalNoteToSend {
     private String xRayDetails;
     private String echo;
     private String holter;
+    @Ignore
+    private AppointmentRequest appointmentRequest;
 
     public String getProvisionalDiagnosis() {
         return provisionalDiagnosis;
@@ -385,5 +389,13 @@ public class ClinicalNoteToSend {
 
     public void setVitalSigns(VitalSigns vitalSigns) {
         this.vitalSigns = vitalSigns;
+    }
+
+    public AppointmentRequest getAppointmentRequest() {
+        return appointmentRequest;
+    }
+
+    public void setAppointmentRequest(AppointmentRequest appointmentRequest) {
+        this.appointmentRequest = appointmentRequest;
     }
 }
