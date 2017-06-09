@@ -344,9 +344,7 @@ public class PatientClinicalNotesDetailFragment extends HealthCocoFragment imple
         }});
     }
 
-    public void refreshData(User user, RegisteredPatientDetailsUpdated registeredPatientDetailsUpdated, PatientDetailTabType detailTabType) {
-        this.selectedPatient = registeredPatientDetailsUpdated;
-        this.user = user;
+    public void refreshData(PatientDetailTabType detailTabType) {
         getListFromLocal(true, true, user);
         this.detailTabType = detailTabType;
     }
@@ -356,5 +354,10 @@ public class PatientClinicalNotesDetailFragment extends HealthCocoFragment imple
         intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.ADD_VISITS.ordinal());
         intent.putExtra(CommonOpenUpPatientDetailFragment.TAG_PATIENT_DETAIL_TAB_TYPE, detailTabType);
         startActivity(intent);
+    }
+
+    public void setUserData(User user, RegisteredPatientDetailsUpdated registeredPatientDetailsUpdated) {
+        this.selectedPatient = registeredPatientDetailsUpdated;
+        this.user = user;
     }
 }

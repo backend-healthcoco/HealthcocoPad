@@ -321,9 +321,12 @@ public class PatientAppointmentDetailFragment extends HealthCocoFragment impleme
         }
     };
 
-    public void refreshData(User user, RegisteredPatientDetailsUpdated registeredPatientDetailsUpdated) {
+    public void refreshData() {
+        getListFromLocal(user);
+    }
+
+    public void setUserData(User user, RegisteredPatientDetailsUpdated registeredPatientDetailsUpdated) {
         this.selectedPatient = registeredPatientDetailsUpdated;
         this.user = user;
-        getListFromLocal(user);
     }
 }

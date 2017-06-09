@@ -104,10 +104,6 @@ public class PatientPrescriptionDetailFragment extends HealthCocoFragment implem
     }
 
     public void getListFromLocal(boolean showLoading) {
-//        ContactsDetailFragment contactsDetailFragment = (ContactsDetailFragment) mFragmentManager.findFragmentByTag(ContactsDetailFragment.class.getSimpleName());
-//        if (contactsDetailFragment != null) {
-//            isInitialLoading = showLoading;
-//            isOTPVerified = contactsDetailFragment.isOtpVerified();
         if (showLoading) {
             showLoadingOverlay(true);
         }
@@ -153,12 +149,13 @@ public class PatientPrescriptionDetailFragment extends HealthCocoFragment implem
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-//        if (requestCode == HealthCocoConstants.REQUEST_CODE_PRESCRIPTION_LIST) {
-//            if (resultCode == HealthCocoConstants.RESULT_CODE_ADD_PRESCIPTION) {
-//                lvPrescription.smoothScrollToPosition(0);
-//                getPrescription(true);
-//            }
-//        }
+        if (requestCode == REQUEST_CODE_PRESCRIPTION_LIST) {
+            if (resultCode == HealthCocoConstants.RESULT_CODE_ADD_PRESCIPTION) {
+                lvPrescription.smoothScrollToPosition(0);
+                getPrescription(true);
+                Util.showToast(mActivity, "Prescription Saved");
+            }
+        }
     }
 
     private void notifyAdapter(List<Prescription> prescriptionsList) {
@@ -173,12 +170,6 @@ public class PatientPrescriptionDetailFragment extends HealthCocoFragment implem
         progressLoading.setVisibility(View.GONE);
         adapter.setListData(prescriptionsList);
         adapter.notifyDataSetChanged();
-    }
-
-    private void openAddNewPrescriptionScreen() {
-        Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
-        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.ADD_NEW_PRESCRIPTION.ordinal());
-        startActivityForResult(intent, REQUEST_CODE_PRESCRIPTION_LIST);
     }
 
     @Override
@@ -217,12 +208,6 @@ public class PatientPrescriptionDetailFragment extends HealthCocoFragment implem
                         LogUtils.LOGD(TAG, "Selected patient " + selectedPatient.getLocalPatientName());
                         initAdapter();
                         getListFromLocal(true);
-//                        ContactsDetailFragment contactsDetailFragment = (ContactsDetailFragment) mFragmentManager.findFragmentByTag(ContactsDetailFragment.class.getSimpleName());
-//                        if (contactsDetailFragment != null) {
-//                            contactsDetailFragment.setUser(user);
-//                            contactsDetailFragment.setSelectedPatient(selectedPatient);
-//                            contactsDetailFragment.checkPatientStatus();
-//                        }
                         return;
                     }
                     break;
@@ -245,11 +230,11 @@ public class PatientPrescriptionDetailFragment extends HealthCocoFragment implem
                     progressLoading.setVisibility(View.GONE);
                     showLoadingOverlay(false);
                     break;
-
                 default:
                     break;
             }
         }
+        mActivity.hideLoading();
         showLoadingOverlay(false);
         swipeRefreshLayout.setRefreshing(false);
     }
@@ -356,7 +341,6 @@ public class PatientPrescriptionDetailFragment extends HealthCocoFragment implem
     BroadcastReceiver prescriptionListReceiverLocal = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, final Intent intent) {
-//            progressLoading.setVisibility(View.VISIBLE);
             boolean showLoading = false;
             if (intent != null && intent.hasExtra(SHOW_LOADING)) {
                 showLoading = intent.getBooleanExtra(SHOW_LOADING, false);
@@ -401,10 +385,20 @@ public class PatientPrescriptionDetailFragment extends HealthCocoFragment implem
 
     }
 
-    public void refreshData(User user, RegisteredPatientDetailsUpdated registeredPatientDetailsUpdated, PatientDetailTabType detailTabType) {
-        this.selectedPatient = registeredPatientDetailsUpdated;
-        this.user = user;
+    public void refreshData(PatientDetailTabType detailTabType) {
         getListFromLocal(false);
         this.detailTabType = detailTabType;
+    }
+
+    public void openAddNewPrescriptionScreen() {
+        Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
+        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.ADD_VISITS.ordinal());
+        intent.putExtra(CommonOpenUpPatientDetailFragment.TAG_PATIENT_DETAIL_TAB_TYPE, detailTabType);
+        startActivityForResult(intent, REQUEST_CODE_PRESCRIPTION_LIST);
+    }
+
+    public void setUserData(User user, RegisteredPatientDetailsUpdated registeredPatientDetailsUpdated) {
+        this.selectedPatient = registeredPatientDetailsUpdated;
+        this.user = user;
     }
 }

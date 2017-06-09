@@ -158,8 +158,10 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements T
                 addEditNormalVisitClinicalNotesFragment = (AddEditNormalVisitClinicalNotesFragment) addEditNormalVisitsFragment.getCurrentTabFragment(0);
             else
                 addEditNormalVisitClinicalNotesFragment = (AddEditNormalVisitClinicalNotesFragment) mFragmentManager.findFragmentByTag(AddEditNormalVisitClinicalNotesFragment.class.getSimpleName());
-            editTextSearch.setOnTouchListener(addEditNormalVisitClinicalNotesFragment.getOnTouchListener());
-            editTextSearch.addTextChangedListener(addEditNormalVisitClinicalNotesFragment.addTextChangedListener(editTextSearch));
+            if (addEditNormalVisitClinicalNotesFragment != null) {
+                editTextSearch.setOnTouchListener(addEditNormalVisitClinicalNotesFragment.getOnTouchListener());
+                editTextSearch.addTextChangedListener(addEditNormalVisitClinicalNotesFragment.addTextChangedListener(editTextSearch));
+            }
         }
         btAddNew.setOnClickListener(this);
         gvSuggestionsList.setOnItemClickListener(this);

@@ -89,16 +89,16 @@ public class SelectedDrugItemsListFragment extends HealthCocoFragment implements
     }
 
     private void initData() {
-//        Intent intent = mActivity.getIntent();
-//        String prescriptionId = intent.getStringExtra(HealthCocoConstants.TAG_PRESCRIPTION_ID);
-//        String templateId = intent.getStringExtra(HealthCocoConstants.TAG_TEMPLATE_ID);
-//        if (!Util.isNullOrBlank(prescriptionId)) {
-//            addDrugsList(LocalDataServiceImpl.getInstance(mApp).getDrugItemsList(LocalDatabaseUtils.KEY_FOREIGN_PRESCRIPTION_ID, prescriptionId));
-//        } else if (!Util.isNullOrBlank(templateId))
-//            addDrugsList(LocalDataServiceImpl.getInstance(mApp).getDrugItemsList(LocalDatabaseUtils.KEY_FOREIGN_TEMPLATE_ID, templateId));
-//        else {
-//            addDrugsList(null);
-//        }
+        Intent intent = mActivity.getIntent();
+        String prescriptionId = intent.getStringExtra(HealthCocoConstants.TAG_PRESCRIPTION_ID);
+        String templateId = intent.getStringExtra(HealthCocoConstants.TAG_TEMPLATE_ID);
+        if (!Util.isNullOrBlank(prescriptionId)) {
+            addDrugsList(LocalDataServiceImpl.getInstance(mApp).getDrugItemsList(LocalDatabaseUtils.KEY_FOREIGN_PRESCRIPTION_ID, prescriptionId));
+        } else if (!Util.isNullOrBlank(templateId))
+            addDrugsList(LocalDataServiceImpl.getInstance(mApp).getDrugItemsList(LocalDatabaseUtils.KEY_FOREIGN_TEMPLATE_ID, templateId));
+        else {
+            addDrugsList(null);
+        }
         if (!Util.isNullOrEmptyList(prescriptionList)) {
             for (Prescription prescription :
                     prescriptionList) {
@@ -225,7 +225,7 @@ public class SelectedDrugItemsListFragment extends HealthCocoFragment implements
 
     //setting drug to null and drugId to uniqueId for sending on server
     public List<DrugItem> getModifiedDrugsList() {
-        refreshListViewUpdatedDrugsList();
+//        refreshListViewUpdatedDrugsList();
         if (!Util.isNullOrEmptyList(drugsList)) {
             LinkedHashMap<String, DrugItem> newHashMap = new LinkedHashMap<>();
             newHashMap.putAll(drugsList);

@@ -415,7 +415,7 @@ public class AddClinicalNotesMyScriptVisitFragment extends HealthCocoFragment im
                     break;
                 }
             }
-        if (!isBlankVitalSigns())
+        if (!Util.isNullOrEmptyList(diagramsList) || !isBlankVitalSigns())
             isBlankClinicalNote = false;
         return isBlankClinicalNote;
     }
@@ -673,10 +673,11 @@ public class AddClinicalNotesMyScriptVisitFragment extends HealthCocoFragment im
                         addDiagramInContainer(diagram.getTags(), diagram.getUniqueId(), diagram.getDiagramUrl());
                     }
                 }
-                if (!isFromClone)
-                    clinicalNoteId = clinicalNotes.getUniqueId();
             } else
                 sendBroadcastForDiagramLayoutVisibility(false);
+
+            if (!isFromClone)
+                clinicalNoteId = clinicalNotes.getUniqueId();
         }
     }
 

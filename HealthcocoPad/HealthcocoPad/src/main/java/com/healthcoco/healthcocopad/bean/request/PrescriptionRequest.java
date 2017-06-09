@@ -1,9 +1,11 @@
 package com.healthcoco.healthcocopad.bean.request;
 
+import com.healthcoco.healthcocopad.bean.server.AppointmentRequest;
 import com.healthcoco.healthcocopad.bean.server.DiagnosticTest;
 import com.healthcoco.healthcocopad.bean.server.DrugItem;
 import com.healthcoco.healthcocopad.bean.server.Prescription;
 import com.healthcoco.healthcocopad.utilities.StringUtil;
+import com.orm.annotation.Ignore;
 import com.orm.annotation.Unique;
 
 import java.util.List;
@@ -29,6 +31,8 @@ public class PrescriptionRequest {
     private Boolean discarded;
     private String visitId;
     private String advice;
+    @Ignore
+    private AppointmentRequest appointmentRequest;
 
     public Long getCreatedTime() {
         return createdTime;
@@ -134,5 +138,21 @@ public class PrescriptionRequest {
 
     public void setAdvice(String advice) {
         this.advice = advice;
+    }
+
+    public List<DrugItem> getItems() {
+        return items;
+    }
+
+    public List<DiagnosticTest> getDiagnosticTests() {
+        return diagnosticTests;
+    }
+
+    public AppointmentRequest getAppointmentRequest() {
+        return appointmentRequest;
+    }
+
+    public void setAppointmentRequest(AppointmentRequest appointmentRequest) {
+        this.appointmentRequest = appointmentRequest;
     }
 }

@@ -28,6 +28,7 @@ import com.android.volley.Response;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.MyCertificate;
 import com.healthcoco.healthcocopad.R;
+import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.request.PrescriptionRequest;
 import com.healthcoco.healthcocopad.bean.server.AssignedUserUiPermissions;
@@ -69,6 +70,7 @@ import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocopad.custom.MyScriptEditText;
 import com.healthcoco.healthcocopad.enums.ClinicalNotesPermissionType;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
+import com.healthcoco.healthcocopad.enums.PatientDetailTabType;
 import com.healthcoco.healthcocopad.enums.PrescriptionPermissionType;
 import com.healthcoco.healthcocopad.enums.SuggestionType;
 import com.healthcoco.healthcocopad.enums.VisitedForType;
@@ -474,6 +476,8 @@ public class MyScriptAddVisitsFragment extends HealthCocoFragment implements Vie
                                 if (!Util.isNullOrBlank(prescription.getAdvice())) {
                                     btAdvice.setVisibility(View.VISIBLE);
                                     etAdvice.setText(prescription.getAdvice());
+                                    parentAdvice.setVisibility(View.VISIBLE);
+                                    addVisibileUiType(VisitsUiType.ADVICE);
                                 }
 
                                 //initialising DiagnosticTests(LabTests)
@@ -598,7 +602,11 @@ public class MyScriptAddVisitsFragment extends HealthCocoFragment implements Vie
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
                 Util.addVisitToggleStateInPreference(mActivity, false);
-                openCommonOpenUpActivity(CommonOpenUpFragmentType.ADD_VISITS, HealthCocoConstants.TAG_VISIT_ID, visitId, 0);
+                Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
+                intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.ADD_VISITS.ordinal());
+                intent.putExtra(CommonOpenUpPatientDetailFragment.TAG_PATIENT_DETAIL_TAB_TYPE, PatientDetailTabType.PATIENT_DETAIL_VISIT);
+                intent.putExtra(HealthCocoConstants.TAG_VISIT_ID, Parcels.wrap(visitId));
+                startActivityForResult(intent, 0);
                 mActivity.finish();
             }
         });

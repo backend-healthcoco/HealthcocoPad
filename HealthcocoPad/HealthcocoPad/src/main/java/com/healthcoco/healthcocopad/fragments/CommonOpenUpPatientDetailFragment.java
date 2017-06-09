@@ -327,25 +327,24 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                     break;
                 case PATIENT_DETAIL_VISIT:
                     if (!isVisitsTabClicked) {
-                        visitsFragment.refreshData(user, selectedPatient, PatientDetailTabType.PATIENT_DETAIL_VISIT);
+                        visitsFragment.refreshData(PatientDetailTabType.PATIENT_DETAIL_VISIT);
                         isVisitsTabClicked = true;
                     }
                 case PATIENT_DETAIL_APPOINTMENT:
                     if (!isAppointmentTabClicked) {
-                        appointmentFragment.refreshData(user, selectedPatient);
+                        appointmentFragment.refreshData();
                         isAppointmentTabClicked = true;
                     }
                     break;
                 case PATIENT_DETAIL_CLINICAL_NOTES:
                     if (!isClinicalNotesTabClicked) {
-                        clinicalNotesDetailFragment.refreshData(user, selectedPatient, PatientDetailTabType.PATIENT_DETAIL_CLINICAL_NOTES);
+                        clinicalNotesDetailFragment.refreshData(PatientDetailTabType.PATIENT_DETAIL_CLINICAL_NOTES);
                         isClinicalNotesTabClicked = true;
                     }
                     break;
                 case PATIENT_DETAIL_PRESCRIPTION:
                     if (!isPrescriptionTabClicked) {
-                        prescriptionDetailFragment.refreshData(user, selectedPatient, PatientDetailTabType.PATIENT_DETAIL_PRESCRIPTION
-                        );
+                        prescriptionDetailFragment.refreshData(PatientDetailTabType.PATIENT_DETAIL_PRESCRIPTION);
                         isPrescriptionTabClicked = true;
                     }
                     break;
@@ -374,6 +373,10 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                 tvGenderDate.setText("");
             }
             DownloadImageFromUrlUtil.loadImageWithInitialAlphabet(mActivity, PatientProfileScreenType.IN_PATIENT_DEATIL_SCREEN_EXCEPT_PROFILE, selectedPatient, null, ivContactProfile, tvInitialAlphabet);
+            visitsFragment.setUserData(user, selectedPatient);
+            clinicalNotesDetailFragment.setUserData(user, selectedPatient);
+            prescriptionDetailFragment.setUserData(user, selectedPatient);
+            appointmentFragment.setUserData(user, selectedPatient);
         } else {
             mActivity.showLoading(false);
             WebDataServiceImpl.getInstance(mApp).getPatientProfile(RegisteredPatientDetailsUpdated.class, HealthCocoConstants.SELECTED_PATIENTS_USER_ID, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(), this, this);
@@ -400,7 +403,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                         clinicalNotesDetailFragment.openAddNewClinicalNotesScreen();
                         break;
                     case PATIENT_DETAIL_PRESCRIPTION:
-//                        prescriptionDetailFragment.openAddNewClinicalNotesScreen();
+                        prescriptionDetailFragment.openAddNewPrescriptionScreen();
                         break;
                 }
                 break;

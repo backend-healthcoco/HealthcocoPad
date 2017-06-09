@@ -91,6 +91,7 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
         View.OnTouchListener, HealthcocoTextWatcherListener {
     public static final String INTENT_ON_SUGGESTION_ITEM_CLICK = "com.healthcoco.healthcocopad.fragments.AddEditNormalVisitPrescriptionFragment.ON_SUGGESTION_ITEM_CLICK";
     public static final String TAG_PRESCRIPTION_DATA = "prescriptionData";
+    public static final String TAG_PRESCRIPTION_ID = "prescriptionId";
     private boolean receiversRegistered;
     private ViewPager viewPager;
     private TabHost tabhost;

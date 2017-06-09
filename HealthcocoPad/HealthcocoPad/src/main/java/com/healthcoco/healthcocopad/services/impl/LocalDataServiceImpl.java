@@ -946,6 +946,11 @@ public class LocalDataServiceImpl {
                 if (!Util.isNullOrEmptyList(tempClinicalNotes))
                     latestUpdatedTime = tempClinicalNotes.get(0).getUpdatedTime();
                 break;
+            case PRESCRIPTION:
+                List<Prescription> prescriptionList = Prescription.find(Prescription.class, LocalDatabaseUtils.KEY_PATIENT_ID + "= ?", new String[]{"" + HealthCocoConstants.SELECTED_PATIENTS_USER_ID}, null, "updated_time DESC", "1");
+                if (!Util.isNullOrEmptyList(prescriptionList))
+                    latestUpdatedTime = prescriptionList.get(0).getUpdatedTime();
+                break;
         }
         if (latestUpdatedTime == null)
             latestUpdatedTime = 0l;

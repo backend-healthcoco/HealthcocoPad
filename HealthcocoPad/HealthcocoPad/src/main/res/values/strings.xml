@@ -693,6 +693,7 @@
     <string name="please_enter_template_name">Please Enter Template name</string>
     <string name="please_add_drugs_for_template">Please Add Drugs for template&#160;</string>
     <string name="success_template_added">Template \"%s\" added Successfully</string>
+    <string name="success_template_updated">Template \"%s\" updated Successfully</string>
 
     <!--//clinical Notes confirmation messages-->
     <string name="confirm_remove_clinical_notes_from_history">Do you want to remove this Clinical Note from Important?</string>
@@ -798,4 +799,5 @@
     <string name="change_next_review_date_from_calender">Change next review date from Calender.\n Appointment ID:</string>
     <string name="edit_clinical_note">Edit Clinical Note</string>
     <string name="alert_blank_clinical_note">Blank Clinical Note cannot be created</string>
+    <string name="alert_blank_prescription">Blank Prescriptiopn cannot be created</string>
 </resources>

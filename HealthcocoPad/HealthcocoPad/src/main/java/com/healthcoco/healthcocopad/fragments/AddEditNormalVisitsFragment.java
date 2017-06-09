@@ -26,9 +26,11 @@ import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.adapter.ContactsDetailViewPagerAdapter;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.request.ClinicalNoteToSend;
+import com.healthcoco.healthcocopad.bean.request.PrescriptionRequest;
 import com.healthcoco.healthcocopad.bean.server.AppointmentRequest;
 import com.healthcoco.healthcocopad.bean.server.ClinicalNotes;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
+import com.healthcoco.healthcocopad.bean.server.Prescription;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.bean.server.VisitDetails;
@@ -58,6 +60,7 @@ import java.util.ArrayList;
 import static com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType.GET_CLINICAL_NOTES;
 import static com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType.GET_VISIT_DETAILS;
 import static com.healthcoco.healthcocopad.fragments.AddEditNormalVisitClinicalNotesFragment.TAG_CLINICAL_NOTE_ID;
+import static com.healthcoco.healthcocopad.fragments.AddEditNormalVisitPrescriptionFragment.TAG_PRESCRIPTION_ID;
 
 /**
  * Created by Shreshtha on 15-05-2017.
@@ -93,6 +96,7 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
     private String clinicalNoteId;
     private boolean isOTPVerified = false;
     private ClinicalNotes notes;
+    private String prescriptionId;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -109,6 +113,7 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
             detailTabType = (PatientDetailTabType) intent.getExtras().get(CommonOpenUpPatientDetailFragment.TAG_PATIENT_DETAIL_TAB_TYPE);
             visitId = Parcels.unwrap(intent.getParcelableExtra(HealthCocoConstants.TAG_VISIT_ID));
             clinicalNoteId = intent.getStringExtra(TAG_CLINICAL_NOTE_ID);
+            prescriptionId = intent.getStringExtra(TAG_PRESCRIPTION_ID);
             Parcelable isFromCloneParcelable = intent.getParcelableExtra(HealthCocoConstants.TAG_IS_FROM_CLONE);
             if (isFromCloneParcelable != null)
                 isFromClone = Parcels.unwrap(isFromCloneParcelable);
@@ -170,14 +175,17 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
                 addFragment(addEditNormalVisitClinicalNotesFragment, R.string.clinical_notes, false);
                 addFragment(addEditNormalVisitPrescriptionFragment, R.string.prescriptions, true);
                 tabs.setVisibility(View.VISIBLE);
+                flBtSwap.setVisibility(View.VISIBLE);
                 break;
             case PATIENT_DETAIL_CLINICAL_NOTES:
                 addFragment(addEditNormalVisitClinicalNotesFragment, R.string.clinical_notes, false);
                 tabs.setVisibility(View.GONE);
+                flBtSwap.setVisibility(View.GONE);
                 break;
             case PATIENT_DETAIL_PRESCRIPTION:
                 addFragment(addEditNormalVisitPrescriptionFragment, R.string.prescriptions, true);
                 tabs.setVisibility(View.GONE);
+                flBtSwap.setVisibility(View.GONE);
                 break;
         }
     }
@@ -297,6 +305,17 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
                         ((CommonOpenUpActivity) mActivity).finish();
                     }
                     break;
+                case ADD_PRESCRIPTION:
+                case UPDATE_PRESCRIPTION:
+                    if (response.getData() != null && response.getData() instanceof Prescription) {
+                        Prescription prescription = (Prescription) response.getData();
+                        LocalDataServiceImpl.getInstance(mApp).addPrescription(prescription);
+                        Util.setVisitId(VisitIdType.PRESCRIPTION, prescription.getVisitId());
+                        sendBroadcasts(prescription.getUniqueId());
+                        mActivity.setResult(HealthCocoConstants.RESULT_CODE_ADD_PRESCIPTION, null);
+                        ((CommonOpenUpActivity) mActivity).finish();
+                    }
+                    break;
                 default:
                     break;
             }
@@ -308,10 +327,18 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
         Util.sendBroadcasts(mApp, new ArrayList<String>() {{
             add(PatientVisitDetailFragment.INTENT_GET_VISITS_LIST_FROM_LOCAL);
         }});
-
         try {
-            Intent intent = new Intent(PatientClinicalNotesDetailFragment.INTENT_GET_CLINICAL_NOTES_LIST_LOCAL);
-            intent.putExtra(TAG_CLINICAL_NOTE_ID, uniqueId);
+            Intent intent = null;
+            switch (detailTabType) {
+                case PATIENT_DETAIL_CLINICAL_NOTES:
+                    intent = new Intent(PatientClinicalNotesDetailFragment.INTENT_GET_CLINICAL_NOTES_LIST_LOCAL);
+                    intent.putExtra(TAG_CLINICAL_NOTE_ID, uniqueId);
+                    break;
+                case PATIENT_DETAIL_PRESCRIPTION:
+                    intent = new Intent(PatientPrescriptionDetailFragment.INTENT_GET_PRESCRIPTION_LIST_LOCAL);
+                    intent.putExtra(TAG_PRESCRIPTION_ID, prescriptionId);
+                    break;
+            }
             LocalBroadcastManager.getInstance(mApp.getApplicationContext()).sendBroadcast(intent);
         } catch (Exception e) {
             e.printStackTrace();
@@ -402,9 +429,28 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
                     Util.showToast(mActivity, errorMsg);
                 break;
             case PATIENT_DETAIL_PRESCRIPTION:
+                int prescriptionMsg = addEditNormalVisitPrescriptionFragment.getBlankPrescriptionMsg();
+                if (prescriptionMsg != 0)
+                    errorMsg = R.string.alert_blank_prescription;
+                if (errorMsg == 0) {
+                    addPrescription(prescriptionMsg);
+                } else
+                    Util.showToast(mActivity, errorMsg);
                 break;
         }
+    }
 
+    private void addPrescription(int prescriptionMsg) {
+        mActivity.showLoading(false);
+        LogUtils.LOGD(TAG, "Selected patient " + selectedPatient.getLocalPatientName());
+        if (prescriptionMsg == 0) {
+            PrescriptionRequest prescription = addEditNormalVisitPrescriptionFragment.getPrescriptionRequestDetails();
+            if (Util.isNullOrBlank(prescriptionId) && !isFromClone)
+                prescription.setVisitId(Util.getVisitId(VisitIdType.PRESCRIPTION));
+            if (Util.isNullOrBlank(appointmentId))
+                prescription.setAppointmentRequest(appointmentRequest);
+            WebDataServiceImpl.getInstance(mApp).addPrescription(Prescription.class, prescription, this, this);
+        }
     }
 
     private void addClinicalNote(int noteMsgId) {

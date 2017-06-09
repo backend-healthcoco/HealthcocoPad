@@ -24,8 +24,10 @@ import com.healthcoco.healthcocopad.custom.OptionsPopupWindow;
 import com.healthcoco.healthcocopad.enums.AddUpdateNameDialogType;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.OptionsTypePopupWindow;
+import com.healthcoco.healthcocopad.enums.PatientDetailTabType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.fragments.AddEditNormalVisitPrescriptionFragment;
+import com.healthcoco.healthcocopad.fragments.CommonOpenUpPatientDetailFragment;
 import com.healthcoco.healthcocopad.fragments.PatientPrescriptionDetailFragment;
 import com.healthcoco.healthcocopad.listeners.CommonEMRItemClickListener;
 import com.healthcoco.healthcocopad.listeners.VisitDetailCombinedItemListener;
@@ -37,6 +39,8 @@ import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
 
+import org.parceler.Parcels;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,6 +50,7 @@ import java.util.List;
 public class PrescriptionListItemViewHolder extends HealthCocoViewHolder implements View.OnClickListener,
         Response.Listener<VolleyResponseBean>, GsonRequest.ErrorListener {
     private static final String TAG = PrescriptionListItemViewHolder.class.getSimpleName();
+    private static final int REQUEST_CODE_PRESCRIPTION_LIST = 155;
     private User user;
     private RegisteredPatientDetailsUpdated selectedPatient;
     private VisitDetailCombinedItemListener detailCombinedItemListener;
@@ -320,13 +325,24 @@ public class PrescriptionListItemViewHolder extends HealthCocoViewHolder impleme
                     if (detailCombinedItemListener != null) {
                         detailCombinedItemListener.editVisit("");
                     } else {
-                        openAddNewPrescriptionScreen();
+                        openAddNewPrescriptionScreen(false);
                     }
                 } else
                     onNetworkUnavailable(null);
                 popupWindow.dismiss();
                 break;
             case R.id.bt_clone:
+                Util.checkNetworkStatus(mActivity);
+                if (HealthCocoConstants.isNetworkOnline) {
+                    if (detailCombinedItemListener != null) {
+                        detailCombinedItemListener.editVisit("");
+                    } else {
+                        openAddNewPrescriptionScreen(true);
+                    }
+                } else
+                    onNetworkUnavailable(null);
+                popupWindow.dismiss();
+
                 break;
             default:
                 break;
@@ -369,16 +385,13 @@ public class PrescriptionListItemViewHolder extends HealthCocoViewHolder impleme
                     Util.showToast(mActivity, mActivity.getResources().getString(R.string.sms_sent_to) + selectedPatient.getMobileNumber());
                     mActivity.hideLoading();
                     break;
-
                 case DISCARD_PRESCRIPTION:
                     LogUtils.LOGD(TAG, "Success DISCARD_PRESCRIPTION");
                     Prescription prescription = this.prescription;
                     prescription.setDiscarded(!prescription.getDiscarded());
                     applyData();
                     LocalDataServiceImpl.getInstance(mApp).updatePrescription(prescription);
-                    Util.sendBroadcasts(mApp, new ArrayList<String>() {{
-                        add(PatientPrescriptionDetailFragment.INTENT_GET_PRESCRIPTION_LIST_LOCAL);
-                    }});
+                    sendBroadcasts();
                     break;
                 case ADD_TO_HISTORY_PRESCRIPTION:
                     Util.showToast(mActivity, mActivity.getResources().getString(R.string.added_to_history));
@@ -386,9 +399,6 @@ public class PrescriptionListItemViewHolder extends HealthCocoViewHolder impleme
                     prescription1.setInHistory(!prescription1.getInHistory());
                     applyData();
                     LocalDataServiceImpl.getInstance(mApp).updatePrescription(prescription1);
-                    Util.sendBroadcasts(mApp, new ArrayList<String>() {{
-                        add(PatientPrescriptionDetailFragment.INTENT_GET_PRESCRIPTION_LIST_LOCAL);
-                    }});
                     break;
                 case REMOVE_HISTORY_PRESCRIPTION:
                     Util.showToast(mActivity, mActivity.getResources().getString(R.string.removed_from_history));
@@ -396,11 +406,7 @@ public class PrescriptionListItemViewHolder extends HealthCocoViewHolder impleme
                     prescription2.setInHistory(!prescription2.getInHistory());
                     applyData();
                     LocalDataServiceImpl.getInstance(mApp).updatePrescription(prescription2);
-                    Util.sendBroadcasts(mApp, new ArrayList<String>() {{
-                        add(PatientPrescriptionDetailFragment.INTENT_GET_PRESCRIPTION_LIST_LOCAL);
-                    }});
                     break;
-
                 default:
                     break;
             }
@@ -408,6 +414,12 @@ public class PrescriptionListItemViewHolder extends HealthCocoViewHolder impleme
         mActivity.hideLoading();
         if (commonEmrClickListener != null)
             commonEmrClickListener.showLoading(false);
+    }
+
+    private void sendBroadcasts() {
+        Util.sendBroadcasts(mApp, new ArrayList<String>() {{
+            add(PatientPrescriptionDetailFragment.INTENT_GET_PRESCRIPTION_LIST_LOCAL);
+        }});
     }
 
     private void showConfirmationAlert(final int viewId, String title, String msg) {
@@ -465,11 +477,15 @@ public class PrescriptionListItemViewHolder extends HealthCocoViewHolder impleme
         WebDataServiceImpl.getInstance(mApp).discardPrescription(Prescription.class, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(), prescription.getUniqueId(), HealthCocoConstants.SELECTED_PATIENTS_USER_ID, this, this);
     }
 
-    private void openAddNewPrescriptionScreen() {
+    private void openAddNewPrescriptionScreen(boolean isFromClone) {
         Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
-        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.ADD_NEW_PRESCRIPTION.ordinal());
-//        if (prescription != null)
-//            intent.putExtra(AddEditNormalVisitPrescriptionFragment.TAG_PRESCRIPTION_ID, prescription.getUniqueId());
-//        mActivity.startActivityForResult(intent, HealthCocoConstants.REQUEST_CODE_PRESCRIPTION_LIST);
+        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.ADD_VISITS.ordinal());
+        if (isFromClone)
+            intent.putExtra(HealthCocoConstants.TAG_IS_FROM_CLONE, Parcels.wrap(true));
+        if (prescription != null)
+            intent.putExtra(AddEditNormalVisitPrescriptionFragment.TAG_PRESCRIPTION_ID, prescription.getUniqueId());
+        intent.putExtra(HealthCocoConstants.TAG_VISIT_ID, Parcels.wrap(prescription.getVisitId()));
+        intent.putExtra(CommonOpenUpPatientDetailFragment.TAG_PATIENT_DETAIL_TAB_TYPE, PatientDetailTabType.PATIENT_DETAIL_PRESCRIPTION);
+        mActivity.startActivityForResult(intent, REQUEST_CODE_PRESCRIPTION_LIST);
     }
 }

@@ -131,10 +131,7 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
         lvVisits.setAdapter(patientsVisitAdapter);
     }
 
-    public void refreshData(User user, RegisteredPatientDetailsUpdated registeredPatientDetailsUpdated,
-                            PatientDetailTabType detailTabType) {
-        this.selectedPatient = registeredPatientDetailsUpdated;
-        this.user = user;
+    public void refreshData(PatientDetailTabType detailTabType) {
         getListFromLocal(true, 0);
         this.detailTabType = detailTabType;
     }
@@ -529,5 +526,10 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
     @Override
     public void onClick(View v) {
 
+    }
+
+    public void setUserData(User user, RegisteredPatientDetailsUpdated registeredPatientDetailsUpdated) {
+        this.selectedPatient = registeredPatientDetailsUpdated;
+        this.user = user;
     }
 }

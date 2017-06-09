@@ -916,6 +916,11 @@ public class WebDataServiceImpl implements GCMRefreshListener {
         getResponse(WebServiceType.ADD_TEMPLATE, class1, WebServiceType.ADD_TEMPLATE.getUrl(), template, null, responseListener,
                 errorListener);
     }
+    public void updateTemplate(Class<?> class1, TempTemplate template, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        String url = WebServiceType.UPDATE_TEMPLATE.getUrl() + template.getUniqueId() + HealthCocoConstants.PARAM_TAG_UPDATE;
+        getResponse(WebServiceType.UPDATE_TEMPLATE, class1, url, template, null, responseListener,
+                errorListener);
+    }
 
     public void changeRecordState(Class<?> class1, String recordId, RecordState recordState, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         WebServiceType webServiceType = WebServiceType.CHANGE_RECORD_STATE;
