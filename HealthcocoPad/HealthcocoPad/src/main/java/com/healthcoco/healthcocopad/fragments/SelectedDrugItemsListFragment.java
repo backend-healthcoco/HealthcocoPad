@@ -142,20 +142,6 @@ public class SelectedDrugItemsListFragment extends HealthCocoFragment implements
         }
         adapter.setListData(list);
         adapter.notifyDataSetChanged();
-//        checkForVisitEditAndSendBroadcast(Util.isNullOrEmptyList(drugsListMap));
-    }
-
-    private void checkForVisitEditAndSendBroadcast(boolean isListNull) {
-//        boolean isNewPrescription = prescriptionListener.getIsNewPrescription();
-//        if (!isNewPrescription) {
-//            try {
-//                Intent intent = new Intent(AddVisitFragment.INTENT_EDIT_VISIT_PRESCRIPTION);
-//                intent.putExtra(AddVisitFragment.TAG_WAS_VISIT_WITH_PRESCRIPTION_AND_IS_BLANK, isListNull);
-//                LocalBroadcastManager.getInstance(mApp.getApplicationContext()).sendBroadcast(intent);
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        }
     }
 
     @Override
@@ -225,7 +211,7 @@ public class SelectedDrugItemsListFragment extends HealthCocoFragment implements
 
     //setting drug to null and drugId to uniqueId for sending on server
     public List<DrugItem> getModifiedDrugsList() {
-//        refreshListViewUpdatedDrugsList();
+        refreshListViewUpdatedDrugsList();
         if (!Util.isNullOrEmptyList(drugsList)) {
             LinkedHashMap<String, DrugItem> newHashMap = new LinkedHashMap<>();
             newHashMap.putAll(drugsList);

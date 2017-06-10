@@ -15,6 +15,7 @@ import com.healthcoco.healthcocopad.HealthCocoViewHolder;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
+import com.healthcoco.healthcocopad.bean.server.AppointmentRequest;
 import com.healthcoco.healthcocopad.bean.server.BloodPressure;
 import com.healthcoco.healthcocopad.bean.server.ClinicalNotes;
 import com.healthcoco.healthcocopad.bean.server.Diagram;
@@ -125,6 +126,9 @@ public class ClinicalNotesListItemViewHolder extends HealthCocoViewHolder implem
     private TextView tvSpo2;
     private ImageView imageView;
     private LinearLayout btDiscard;
+    private TextView textViewNextReviewDate;
+    private LinearLayout layoutNextReviewDetail;
+    private static final String DATE_FORMAT_USED_IN_THIS_SCREEN = "EEE, dd MMM yyyy";
 
     public ClinicalNotesListItemViewHolder(HealthCocoActivity mActivity,
                                            Object listenerObject, boolean isInEmrList) {
@@ -276,12 +280,22 @@ public class ClinicalNotesListItemViewHolder extends HealthCocoViewHolder implem
             tvLabelNotedBy.setVisibility(View.GONE);
             tvNotedBy.setVisibility(View.GONE);
             imageView.setVisibility(View.GONE);
+            layoutNextReviewDetail.setVisibility(View.GONE);
         } else {
             containerBottomButtons.setVisibility(View.VISIBLE);
             tvLabelGlobalRecord.setVisibility(View.GONE);
             tvLabelNotedBy.setVisibility(View.VISIBLE);
             tvNotedBy.setVisibility(View.VISIBLE);
             imageView.setVisibility(View.VISIBLE);
+            if (clinicalNote.getAppointmentRequest() != null && clinicalNote.getAppointmentRequest().getAppointmentId() != null) {
+                AppointmentRequest appointmentRequest = clinicalNote.getAppointmentRequest();
+                String formattedTime = DateTimeUtil.getFormattedTime(0, Math.round(appointmentRequest.getTime().getFromTime()));
+                String formattedDate = DateTimeUtil.getFormattedDateTime(DATE_FORMAT_USED_IN_THIS_SCREEN, appointmentRequest.getFromDate());
+                textViewNextReviewDate.setText(formattedDate + " " + formattedTime);
+                layoutNextReviewDetail.setVisibility(View.VISIBLE);
+            } else {
+                layoutNextReviewDetail.setVisibility(View.GONE);
+            }
         }
     }
 
@@ -364,6 +378,9 @@ public class ClinicalNotesListItemViewHolder extends HealthCocoViewHolder implem
         layoutVitalSigns = (LinearLayout) contentView.findViewById(R.id.layout_vital_signs);
         imageView = (ImageView) contentView.findViewById(R.id.image_view);
 
+        textViewNextReviewDate = (TextView) contentView.findViewById(R.id.textView_next_review_date_for_clinical_note);
+        layoutNextReviewDetail = (LinearLayout) contentView.findViewById(R.id.layout_next_review_detail_for_clinical_note);
+
         layoutPresentComplaints = (LinearLayout) contentView.findViewById(R.id.layout_present_complaints);
         tvPresentComplaints = (TextViewFontAwesome) contentView.findViewById(R.id.tv_text_present_complaints);
         layoutComplaints = (LinearLayout) contentView.findViewById(R.id.layout_complaints);
@@ -433,6 +450,7 @@ public class ClinicalNotesListItemViewHolder extends HealthCocoViewHolder implem
             headerCreatedByClinicalNote.setVisibility(View.GONE);
             containerPrescribedBy.setVisibility(View.GONE);
             containerBottomButtons.setVisibility(View.GONE);
+            layoutNextReviewDetail.setVisibility(View.GONE);
         } else {
             containerPrescribedBy.setVisibility(View.VISIBLE);
             headerCreatedByClinicalNote.setVisibility(View.VISIBLE);

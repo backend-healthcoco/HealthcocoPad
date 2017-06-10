@@ -14,6 +14,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -131,6 +133,7 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
     private boolean isFromClone;
     private List<Prescription> prescriptionList;
     private boolean isOnItemClick;
+    private boolean isDurationSet;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -468,6 +471,7 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
     @Override
     public void ondrugItemClick(SelectDrugItemType drugItemType, Object object) {
         System.out.println("drug" + drugItemType);
+        isDurationSet = false;
         selectedDrugItemsListFragment.addSelectedDrug(drugItemType, object);
     }
 
@@ -503,18 +507,19 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
 
     @Override
     public void onDrugItemClicked(DrugItem drug) {
+        isDurationSet = false;
         selectedDrugItemsListFragment.addDrug(drug);
         selectedDrugItemsListFragment.notifyList();
     }
 
     @Override
     public String getDurationUnit() {
-        return null;
+        return Util.getValidatedValueOrBlankTrimming(etDuration);
     }
 
     @Override
     public boolean isDurationSet() {
-        return false;
+        return isDurationSet;
     }
 
     @Override
@@ -742,6 +747,14 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
     private void setDurationUnitToAll(String unit) {
         selectedDrugItemsListFragment.modifyDurationUnit(unit);
     }
+
+    InputFilter filter = new InputFilter() {
+        public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+            String text = dest.toString() + source.toString();
+            selectedDrugItemsListFragment.modifyDurationUnit(text);
+            return text;
+        }
+    };
 
     @Override
     public void onResume() {

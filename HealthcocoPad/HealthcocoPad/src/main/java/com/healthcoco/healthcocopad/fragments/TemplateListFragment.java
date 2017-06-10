@@ -18,13 +18,14 @@ import android.widget.TextView;
 import com.android.volley.Response;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
+import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.adapter.TemplatesListAdapter;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.TempTemplate;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
-import com.healthcoco.healthcocopad.dialogFragment.AddNewDrugDialogFragment;
+import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.LocalTabelType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
@@ -35,6 +36,7 @@ import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.ComparatorUtil;
+import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.healthcoco.healthcocopad.views.ListViewLoadMore;
@@ -56,6 +58,7 @@ public class TemplateListFragment extends HealthCocoFragment implements View.OnC
     //variables need for pagination
     public static final int MAX_SIZE = 10;
     public static final String TAG_IS_FROM_SETTINGS = "isFromSettings";
+    private static final int REQUEST_CODE_TEMPLATE_LIST = 121;
     private int PAGE_NUMBER = 0;
     private boolean isEndOfListAchieved;
     private int currentPageNumber;
@@ -71,7 +74,12 @@ public class TemplateListFragment extends HealthCocoFragment implements View.OnC
     private TextView tvNoTemplates;
     private User user;
     private SwipeRefreshLayout swipeRefreshLayout;
-    private ImageButton btAddTemplate;
+    private ImageButton btAddNewTemplate;
+    private boolean isFromAddNewTemplateFragment;
+    private boolean isFromSettingsScreen;
+
+    public TemplateListFragment() {
+    }
 
     public TemplateListFragment(TemplateListItemListener templateListItemListener) {
         this.templateListItemListener = templateListItemListener;
@@ -92,6 +100,10 @@ public class TemplateListFragment extends HealthCocoFragment implements View.OnC
 
     @Override
     public void init() {
+        Intent intent = mActivity.getIntent();
+        isFromAddNewTemplateFragment = intent.getBooleanExtra(HealthCocoConstants.TAG_IS_FROM_NEW_TEMPLATE_FRAGMENT, false);
+        isFromSettingsScreen = intent.getBooleanExtra(TAG_IS_FROM_SETTINGS, false);
+
         LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
         if (doctor != null && doctor.getUser() != null && !Util.isNullOrBlank(doctor.getUser().getUniqueId())) {
             user = doctor.getUser();
@@ -109,9 +121,10 @@ public class TemplateListFragment extends HealthCocoFragment implements View.OnC
         lvTemplates = (ListViewLoadMore) view.findViewById(R.id.lv_templates);
         tvNoTemplates = (TextView) view.findViewById(R.id.tv_no_templates);
         progressLoading = (ProgressBar) view.findViewById(R.id.progress_loading);
-        btAddTemplate = (ImageButton) view.findViewById(R.id.bt_add_template);
+        btAddNewTemplate = (ImageButton) view.findViewById(R.id.bt_add_template);
         initEditSearchView(R.string.search_template, this, this);
-        btAddTemplate.setVisibility(View.GONE);
+        if (isFromAddNewTemplateFragment)
+            btAddNewTemplate.setVisibility(View.GONE);
     }
 
     @Override
@@ -119,7 +132,7 @@ public class TemplateListFragment extends HealthCocoFragment implements View.OnC
         lvTemplates.setLoadMoreListener(this);
         swipeRefreshLayout.setOnRefreshListener(this);
         lvTemplates.setSwipeRefreshLayout(swipeRefreshLayout);
-        btAddTemplate.setOnClickListener(this);
+        btAddNewTemplate.setOnClickListener(this);
     }
 
     private void initAdapters() {
@@ -300,7 +313,34 @@ public class TemplateListFragment extends HealthCocoFragment implements View.OnC
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.bt_add_template:
+                openAddNewTemplatesFragment(null);
                 break;
+        }
+    }
+
+    private void openAddNewTemplatesFragment(String templateId) {
+        Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
+        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.ADD_NEW_TEMPLATE.ordinal());
+        intent.putExtra(HealthCocoConstants.TAG_TEMPLATE_ID, templateId);
+        intent.putExtra(HealthCocoConstants.TAG_IS_FROM_NEW_TEMPLATE_FRAGMENT, true);
+        this.startActivityForResult(intent, REQUEST_CODE_TEMPLATE_LIST);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_TEMPLATE_LIST) {
+            if (resultCode == HealthCocoConstants.RESULT_CODE_ADD_NEW_TEMPLATE) {
+                if (data != null && data.hasExtra(TAG_TEMPLATE_ID)) {
+                    clearSearchEditText();
+                    String templateId = data.getStringExtra(TAG_TEMPLATE_ID);
+                    TempTemplate template = LocalDataServiceImpl.getInstance(mApp).getTemplate(templateId);
+                    if (template != null) {
+                        templatesList.put(template.getUniqueId(), template);
+                        notifyAdapter(new ArrayList<TempTemplate>(templatesList.values()));
+                    }
+                }
+            }
         }
     }
 }

@@ -1,13 +1,10 @@
 package com.healthcoco.healthcocopad.bean.server;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import com.healthcoco.healthcocopad.enums.CurrencyType;
 import com.orm.SugarRecord;
 import com.orm.annotation.Unique;
-
-public class ConsultationFee extends SugarRecord implements Parcelable {
+@org.parceler.Parcel
+public class ConsultationFee extends SugarRecord{
     @Unique
     protected String foreignUniqueId;
     private Integer amount;
@@ -40,35 +37,4 @@ public class ConsultationFee extends SugarRecord implements Parcelable {
     public void setCurrency(CurrencyType currency) {
         this.currency = currency;
     }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(foreignUniqueId);
-        dest.writeInt(amount);
-        dest.writeInt(currency.ordinal());
-    }
-
-    // "De-parcel object
-    public ConsultationFee(Parcel in) {
-        foreignUniqueId = in.readString();
-        amount = in.readInt();
-        currency = CurrencyType.values()[in.readInt()];
-    }
-
-    public static final Creator<ConsultationFee> CREATOR = new Creator<ConsultationFee>() {
-        @Override
-        public ConsultationFee createFromParcel(Parcel in) {
-            return new ConsultationFee(in);
-        }
-
-        @Override
-        public ConsultationFee[] newArray(int size) {
-            return new ConsultationFee[size];
-        }
-    };
 }

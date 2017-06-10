@@ -1,11 +1,11 @@
 package com.healthcoco.healthcocopad.bean.server;
 
 import android.os.Parcel;
-import android.os.Parcelable;
 
 import com.orm.SugarRecord;
 
-public class Education extends SugarRecord implements Parcelable {
+@org.parceler.Parcel
+public class Education extends SugarRecord {
     private String qualification;
 
     private String collegeUniversity;
@@ -15,24 +15,6 @@ public class Education extends SugarRecord implements Parcelable {
 
     public Education() {
     }
-
-    protected Education(Parcel in) {
-        qualification = in.readString();
-        collegeUniversity = in.readString();
-        foreignUniqueId = in.readString();
-    }
-
-    public static final Creator<Education> CREATOR = new Creator<Education>() {
-        @Override
-        public Education createFromParcel(Parcel in) {
-            return new Education(in);
-        }
-
-        @Override
-        public Education[] newArray(int size) {
-            return new Education[size];
-        }
-    };
 
     public String getQualification() {
         return qualification;
@@ -64,17 +46,5 @@ public class Education extends SugarRecord implements Parcelable {
 
     public void setForeignUniqueId(String foreignUniqueId) {
         this.foreignUniqueId = foreignUniqueId;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(qualification);
-        dest.writeString(collegeUniversity);
-        dest.writeString(foreignUniqueId);
     }
 }

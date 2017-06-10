@@ -1,5 +1,7 @@
 package com.healthcoco.healthcocopad.fragments;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -23,6 +25,7 @@ import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.adapter.ContactsDetailViewPagerAdapter;
 import com.healthcoco.healthcocopad.adapter.SelectedTemplateDrugItemsListAdapter;
+import com.healthcoco.healthcocopad.bean.DrugInteractions;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.Drug;
 import com.healthcoco.healthcocopad.bean.server.DrugDirection;
@@ -40,6 +43,7 @@ import com.healthcoco.healthcocopad.bean.server.VisitDetails;
 import com.healthcoco.healthcocopad.custom.DummyTabFactory;
 import com.healthcoco.healthcocopad.custom.HealthcocoTextWatcher;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
+import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.SelectDrugItemType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
@@ -53,6 +57,7 @@ import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
+import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.healthcoco.healthcocopad.views.FontAwesomeButton;
 import com.healthcoco.healthcocopad.views.ScrollViewWithHeaderNewPrescriptionLayout;
@@ -77,29 +82,23 @@ public class AddNewTemplateFragment extends HealthCocoFragment implements TabHos
     private ArrayList<Fragment> fragmentsList;
     private User user;
     private RegisteredPatientDetailsUpdated selectedPatient;
-    private String visitId;
-    private VisitDetails visitDetails;
     private TemplateListFragment templateListFragment;
     private DrugListFragment drugListFragment;
     private EditText etDuration;
     private EditText etTemplateName;
-    private LinkedHashMap<String, DrugItem> drugsListHashMap = new LinkedHashMap<>();
-    private SelectedTemplateDrugItemsListAdapter adapter;
-    private ListView lvTemplates;
-    private Prescription prescription;
     private List<Prescription> prescriptionList;
     private RelativeLayout tvHeader;
-    private LinearLayout tvHeaderOne;
+    //    private LinearLayout tvHeaderOne;
     private RelativeLayout tvHeaderTwo;
     private Button btHeaderInteraction;
     private Button btHeaderTwoInteraction;
     private ScrollViewWithHeaderNewPrescriptionLayout svContainer;
-    private ImageButton btClear;
     private TextView tvNoDrugLabselected;
     private EditText etHeaderTwoDuration;
     private String templateId;
     private TempTemplate template;
     private SelectedDrugItemsListFragment selectedDrugItemsListFragment;
+    private LinearLayout parentDrugsList;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -114,8 +113,6 @@ public class AddNewTemplateFragment extends HealthCocoFragment implements TabHos
         init();
         Intent intent = mActivity.getIntent();
         templateId = intent.getStringExtra(HealthCocoConstants.TAG_TEMPLATE_ID);
-        if (!Util.isNullOrBlank(templateId))
-            initData(templateId);
         Bundle bundle = getArguments();
         if (bundle != null && bundle.containsKey(TAG_PRESCRIPTION_DATA)) {
             prescriptionList = Parcels.unwrap(bundle.getParcelable(TAG_PRESCRIPTION_DATA));
@@ -128,18 +125,18 @@ public class AddNewTemplateFragment extends HealthCocoFragment implements TabHos
     public void init() {
         initViews();
         initListeners();
-        initData(templateId);
         initTabsFragmentsList();
         initViewPagerAdapter();
+        if (!Util.isNullOrBlank(templateId))
+            initData(templateId);
         initScrollView();
+        initSelectedDrugsListFragment();
     }
 
     private void initData(String templateId) {
-//        template = LocalDataServiceImpl.getInstance(mApp).getTemplate(templateId);
-//        if (!Util.isNullOrBlank(template.getName()))
-//            etTemplateName.setText(template.getName());
-        initSelectedDrugsListFragment();
-        prePopulateVisitDetails(prescriptionList);
+        template = LocalDataServiceImpl.getInstance(mApp).getTemplate(templateId);
+        if (!Util.isNullOrBlank(template.getName()))
+            etTemplateName.setText(template.getName());
     }
 
     private void initSelectedDrugsListFragment() {
@@ -150,11 +147,6 @@ public class AddNewTemplateFragment extends HealthCocoFragment implements TabHos
         mFragmentManager.beginTransaction().add(R.id.layout_selected_drugs_list_fragment, selectedDrugItemsListFragment, selectedDrugItemsListFragment.getClass().getSimpleName()).commit();
     }
 
-//    private void initAdapters() {
-//        adapter = new SelectedTemplateDrugItemsListAdapter(mActivity, this);
-//        lvTemplates.setAdapter(adapter);
-//    }
-
     @Override
     public void initViews() {
         viewPager = (ViewPager) view.findViewById(R.id.viewpager);
@@ -163,12 +155,13 @@ public class AddNewTemplateFragment extends HealthCocoFragment implements TabHos
         etTemplateName = (EditText) view.findViewById(R.id.et_template_name);
         svContainer = (ScrollViewWithHeaderNewPrescriptionLayout) view.findViewById(R.id.sv_container);
         tvHeader = (RelativeLayout) view.findViewById(R.id.tv_header);
-        tvHeaderOne = (LinearLayout) view.findViewById(R.id.tv_header_one);
+//        tvHeaderOne = (LinearLayout) view.findViewById(R.id.tv_header_one);
         tvHeaderTwo = (RelativeLayout) view.findViewById(R.id.tv_header_two);
         btHeaderInteraction = (FontAwesomeButton) tvHeader.findViewById(R.id.bt_header_interaction);
         btHeaderTwoInteraction = (FontAwesomeButton) tvHeaderTwo.findViewById(R.id.bt_header_two_interaction);
         tvNoDrugLabselected = (TextView) view.findViewById(R.id.tv_no_drug_lab_selected);
         etHeaderTwoDuration = (EditText) view.findViewById(R.id.et_header_two_duration);
+        parentDrugsList = (LinearLayout) view.findViewById(R.id.parent_drugs_list);
     }
 
     @Override
@@ -184,7 +177,7 @@ public class AddNewTemplateFragment extends HealthCocoFragment implements TabHos
 
     private void initScrollView() {
         svContainer.addFixedHeader(tvHeader);
-        svContainer.addChildHeaders(tvHeaderOne);
+//        svContainer.addChildHeaders(tvHeaderOne);
         svContainer.addChildHeaders(tvHeaderTwo);
         svContainer.build(mActivity, this);
     }
@@ -220,24 +213,6 @@ public class AddNewTemplateFragment extends HealthCocoFragment implements TabHos
         viewPager.setAdapter(viewPagerAdapter);
     }
 
-    public void prePopulateVisitDetails(List<Prescription> prescriptionList) {
-        if (!Util.isNullOrEmptyList(prescriptionList)) {
-            for (Prescription prescription :
-                    prescriptionList) {
-                //initialising DiagnosticTests(LabTests)
-//                if (!Util.isNullOrEmptyList(prescription.getDiagnosticTests())) {
-//                    notifyDiagnosticsList(prescription.getDiagnosticTestsList(prescription.getDiagnosticTests()));
-//                }
-//
-//                if (!Util.isNullOrBlank(prescription.getAdvice())) {
-//                    editAdvice.setText(prescription.getAdvice());
-//                }
-//                if (!isFromClone)
-//                    prescriptionId = prescription.getUniqueId();
-            }
-        }
-    }
-
     @Override
     public void onTabChanged(String tabId) {
         viewPager.setCurrentItem(tabhost.getCurrentTab());
@@ -268,7 +243,40 @@ public class AddNewTemplateFragment extends HealthCocoFragment implements TabHos
             case R.id.container_right_action:
                 validateData();
                 break;
+            case R.id.bt_header_interaction:
+            case R.id.bt_header_two_interaction:
+                confirmDrugInteractionsAlert();
+                LogUtils.LOGD(TAG, "Interactions Clicked");
+                break;
         }
+    }
+
+    private void confirmDrugInteractionsAlert() {
+        final AlertDialog.Builder alertBuilder = new AlertDialog.Builder(mActivity);
+        alertBuilder.setTitle(R.string.confirm);
+        alertBuilder.setMessage(getResources().getString(
+                R.string.confirm_drug_interaction));
+        alertBuilder.setCancelable(false);
+        alertBuilder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                getDrugInteractionsResponse();
+            }
+        });
+        alertBuilder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+        alertBuilder.create();
+        alertBuilder.show();
+    }
+
+    private void getDrugInteractionsResponse() {
+        mActivity.showLoading(true);
+        WebDataServiceImpl.getInstance(mApp).getDrugsInteractionResponse(DrugInteractions.class, selectedPatient.getUserId(), selectedDrugItemsListFragment.getDrugInteractionRequestsList(), this, this);
     }
 
     private void validateData() {
@@ -278,7 +286,7 @@ public class AddNewTemplateFragment extends HealthCocoFragment implements TabHos
         if (Util.isNullOrBlank(templateName)) {
             selectedEditText = etTemplateName;
             msg = getResources().getString(R.string.please_enter_template_name);
-        } else if (Util.isNullOrEmptyList(drugsListHashMap)) {
+        } else if (Util.isNullOrEmptyList(selectedDrugItemsListFragment.getDrugsList())) {
             msg = getResources().getString(R.string.please_add_drugs_for_template) + "\"" + templateName + "\"";
         }
         if (!Util.isNullOrBlank(msg)) {
@@ -327,6 +335,12 @@ public class AddNewTemplateFragment extends HealthCocoFragment implements TabHos
     @Override
     public void onResponse(VolleyResponseBean response) {
         switch (response.getWebServiceType()) {
+            case GET_DRUG_INTERACTIONS:
+                if (!Util.isNullOrEmptyList(response.getDataList()))
+                    showDrugInteractionsAlert((ArrayList<DrugInteractions>) (ArrayList<?>) response.getDataList());
+                else
+                    Util.showAlert(mActivity, R.string.title_no_interactions_found, R.string.msg_no_interactions_found);
+                break;
             case ADD_TEMPLATE:
                 Util.showToast(mActivity, String.format(getResources().getString(R.string.success_template_added), Util.getValidatedValueOrBlankWithoutTrimming(etTemplateName)));
                 if (response.isValidData(response) && response.getData() instanceof TempTemplate) {
@@ -349,19 +363,13 @@ public class AddNewTemplateFragment extends HealthCocoFragment implements TabHos
         mActivity.hideLoading();
     }
 
-    private List<DrugItem> getDrugsItemList() {
-        if (!Util.isNullOrEmptyList(drugsListHashMap)) {
-            List<DrugItem> modifiedList = new ArrayList<DrugItem>(drugsListHashMap.values());
-            for (DrugItem drugItem :
-                    modifiedList) {
-                if (drugItem.getDrug() != null) {
-                    drugItem.setDrugId(drugItem.getDrug().getUniqueId());
-                    drugItem.setDrug(null);
-                }
-            }
-            return modifiedList;
+    private void showDrugInteractionsAlert(ArrayList<DrugInteractions> interactionsList) {
+        String formattedString = "";
+        for (DrugInteractions drugInteractions :
+                interactionsList) {
+            formattedString = formattedString + drugInteractions.getText() + "\n";
         }
-        return null;
+        Util.showAlert(mActivity, formattedString);
     }
 
     @Override
@@ -370,14 +378,16 @@ public class AddNewTemplateFragment extends HealthCocoFragment implements TabHos
         selectedDrugItemsListFragment.addSelectedDrug(drugItemType, object);
     }
 
-    private void notifyAdapter(ArrayList<DrugItem> drugsListMap) {
-        adapter.setListData(drugsListMap);
-        adapter.notifyDataSetChanged();
-    }
-
     @Override
     public void setDrugsListparentVisibility(boolean isVisible) {
-
+        if (isVisible) {
+            tvNoDrugLabselected.setVisibility(View.GONE);
+            parentDrugsList.setVisibility(View.VISIBLE);
+            svContainer.setHeaderVisiblilty(tvHeaderTwo, true);
+        } else {
+            parentDrugsList.setVisibility(View.GONE);
+            svContainer.setHeaderVisiblilty(tvHeaderTwo, false);
+        }
     }
 
     @Override
@@ -469,4 +479,5 @@ public class AddNewTemplateFragment extends HealthCocoFragment implements TabHos
     private void setDurationUnitToAll(String unit) {
         selectedDrugItemsListFragment.modifyDurationUnit(unit);
     }
+
 }

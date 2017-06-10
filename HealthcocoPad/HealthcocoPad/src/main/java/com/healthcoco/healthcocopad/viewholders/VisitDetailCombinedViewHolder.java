@@ -7,6 +7,7 @@ import android.widget.TextView;
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.HealthCocoViewHolder;
 import com.healthcoco.healthcocopad.R;
+import com.healthcoco.healthcocopad.bean.server.AppointmentRequest;
 import com.healthcoco.healthcocopad.bean.server.ClinicalNotes;
 import com.healthcoco.healthcocopad.bean.server.PatientTreatment;
 import com.healthcoco.healthcocopad.bean.server.Prescription;
@@ -45,6 +46,9 @@ public class VisitDetailCombinedViewHolder extends HealthCocoViewHolder implemen
     private LinearLayout btOpen;
     private LinearLayout containerBottomButtons;
     private LinearLayout layoutDiscarded;
+    private TextView textViewNextReviewDate;
+    private LinearLayout layoutNextReviewDetail;
+    private static final String DATE_FORMAT_USED_IN_THIS_SCREEN = "EEE, dd MMM yyyy";
 
     public VisitDetailCombinedViewHolder(HealthCocoActivity mActivity, VisitDetailCombinedItemListener listItemClickListener) {
         super(mActivity);
@@ -72,6 +76,9 @@ public class VisitDetailCombinedViewHolder extends HealthCocoViewHolder implemen
         initTreatmentsView(contentView);
         initReportsView(contentView);
         initBottomButtonViews(contentView);
+        textViewNextReviewDate = (TextView) contentView.findViewById(R.id.textView_next_review_date_for_visit);
+        layoutNextReviewDetail = (LinearLayout) contentView.findViewById(R.id.layout_next_review_detail_for_visit);
+        layoutNextReviewDetail.setVisibility(View.GONE);
     }
 
     private void initHeaderViews(View contentView) {
@@ -185,9 +192,22 @@ public class VisitDetailCombinedViewHolder extends HealthCocoViewHolder implemen
             checkIsDiscarded(recordsList.get(0).getDiscarded());
         } else
             containerReports.setVisibility(View.GONE);
+
         tvVID.setText(mActivity.getResources().getString(R.string.vid) + Util.getValidatedValue(visitDetail.getUniqueEmrId()));
         tvCreatedBy.setText(Util.getValidatedValue(visitDetail.getCreatedBy()));
         tvVisitDate.setText(DateTimeUtil.getFormatedDate(visitDetail.getVisitedTime()));
+
+        if (!Util.isNullOrBlank(visitDetail.getAppointmentId())) {
+            if (visitDetail.getAppointmentRequest() != null) {
+                AppointmentRequest appointmentRequest = visitDetail.getAppointmentRequest();
+                String formattedTime = DateTimeUtil.getFormattedTime(0, Math.round(appointmentRequest.getTime().getFromTime()));
+                String formattedDate = DateTimeUtil.getFormattedDateTime(DATE_FORMAT_USED_IN_THIS_SCREEN, appointmentRequest.getFromDate());
+                textViewNextReviewDate.setText(formattedDate + " " + formattedTime);
+                layoutNextReviewDetail.setVisibility(View.VISIBLE);
+            }
+        } else {
+            layoutNextReviewDetail.setVisibility(View.GONE);
+        }
     }
 
     private void checkIsDiscarded(Boolean isDiscarded) {

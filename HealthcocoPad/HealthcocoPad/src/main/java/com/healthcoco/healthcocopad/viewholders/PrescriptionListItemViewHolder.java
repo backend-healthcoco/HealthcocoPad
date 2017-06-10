@@ -15,6 +15,7 @@ import com.healthcoco.healthcocopad.HealthCocoViewHolder;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
+import com.healthcoco.healthcocopad.bean.server.AppointmentRequest;
 import com.healthcoco.healthcocopad.bean.server.DiagnosticTestsPrescription;
 import com.healthcoco.healthcocopad.bean.server.DrugItem;
 import com.healthcoco.healthcocopad.bean.server.Prescription;
@@ -77,7 +78,9 @@ public class PrescriptionListItemViewHolder extends HealthCocoViewHolder impleme
     private LinearLayout containerParentDrugsList;
     private LinearLayout btClone;
     private ImageView imageView;
-
+    private TextView textViewNextReviewDate;
+    private LinearLayout layoutNextReviewDetail;
+    private static final String DATE_FORMAT_USED_IN_THIS_SCREEN = "EEE, dd MMM yyyy";
 
     public PrescriptionListItemViewHolder(HealthCocoActivity mActivity,
                                           Object listenerObject, boolean isInPrescriptionsList) {
@@ -137,6 +140,7 @@ public class PrescriptionListItemViewHolder extends HealthCocoViewHolder impleme
             tvLabelPrescribedBy.setVisibility(View.GONE);
             tvPrescribedBy.setVisibility(View.GONE);
             imageView.setVisibility(View.GONE);
+            layoutNextReviewDetail.setVisibility(View.GONE);
         } else {
             btOptions.setVisibility(View.VISIBLE);
             containerBottomButtons.setVisibility(View.VISIBLE);
@@ -144,6 +148,15 @@ public class PrescriptionListItemViewHolder extends HealthCocoViewHolder impleme
             tvLabelPrescribedBy.setVisibility(View.VISIBLE);
             tvPrescribedBy.setVisibility(View.VISIBLE);
             imageView.setVisibility(View.VISIBLE);
+            if (prescription.getAppointmentRequest() != null && prescription.getAppointmentRequest().getAppointmentId() != null) {
+                AppointmentRequest appointmentRequest = prescription.getAppointmentRequest();
+                String formattedTime = DateTimeUtil.getFormattedTime(0, Math.round(appointmentRequest.getTime().getFromTime()));
+                String formattedDate = DateTimeUtil.getFormattedDateTime(DATE_FORMAT_USED_IN_THIS_SCREEN, appointmentRequest.getFromDate());
+                textViewNextReviewDate.setText(formattedDate + " " + formattedTime);
+                layoutNextReviewDetail.setVisibility(View.VISIBLE);
+            } else {
+                layoutNextReviewDetail.setVisibility(View.GONE);
+            }
         }
     }
 
@@ -204,6 +217,9 @@ public class PrescriptionListItemViewHolder extends HealthCocoViewHolder impleme
         btPrint = (LinearLayout) contentView.findViewById(R.id.bt_print);
         btClone = (LinearLayout) contentView.findViewById(R.id.bt_clone);
 
+        textViewNextReviewDate = (TextView) contentView.findViewById(R.id.textView_next_review_date_for_prescription);
+        layoutNextReviewDetail = (LinearLayout) contentView.findViewById(R.id.layout_next_review_detail_for_prescription);
+
         btOptions = (ImageButton) contentView.findViewById(R.id.bt_options);
         layoutDiscarded = (LinearLayout) contentView.findViewById(R.id.layout_discarded);
         tvPid = (TextView) contentView.findViewById(R.id.tv_pid);
@@ -220,6 +236,7 @@ public class PrescriptionListItemViewHolder extends HealthCocoViewHolder impleme
             headerCreatedByPrescription.setVisibility(View.GONE);
             containerPrescribedBy.setVisibility(View.GONE);
             containerBottomButtons.setVisibility(View.GONE);
+            layoutNextReviewDetail.setVisibility(View.GONE);
         } else {
             headerCreatedByPrescription.setVisibility(View.VISIBLE);
             containerPrescribedBy.setVisibility(View.VISIBLE);
@@ -350,10 +367,11 @@ public class PrescriptionListItemViewHolder extends HealthCocoViewHolder impleme
     }
 
     private void openNewTemplatesFragment() {
-//        Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
-//        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.ADD_NEW_TEMPLATE.ordinal());
-//        intent.putExtra(HealthCocoConstants.TAG_PRESCRIPTION_ID, prescription.getUniqueId());
-//        mActivity.startActivity(intent);
+        Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
+        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.ADD_NEW_TEMPLATE.ordinal());
+        intent.putExtra(HealthCocoConstants.TAG_PRESCRIPTION_ID, prescription.getUniqueId());
+        intent.putExtra(HealthCocoConstants.TAG_IS_FROM_NEW_TEMPLATE_FRAGMENT, true);
+        mActivity.startActivity(intent);
     }
 
     @Override

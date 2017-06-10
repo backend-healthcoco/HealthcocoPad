@@ -48,7 +48,7 @@
                         android:id="@+id/viewpager"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@color/grey_background"
+                        android:background="@color/white"
                         android:overScrollMode="never" />
                 </FrameLayout>
             </LinearLayout>
@@ -104,7 +104,6 @@
                 android:id="@+id/sv_container"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_above="@+id/parent_layout_advice"
                 android:fillViewport="true">
 
                 <LinearLayout
@@ -189,7 +188,7 @@
                         android:layout_height="0dp"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="@string/no_drug_lab_selected"
+                        android:text="@string/no_drugs_added"
                         android:textSize="@dimen/text_size_no_results"
                         android:textStyle="bold"
                         android:visibility="visible" />

@@ -105,4 +105,6 @@ public class HealthCocoConstants {
     public static String VISIT_ID_CLINICAL_NOTES = null;
     public static String VISIT_ID_REPORTS = null;
     public static String VISIT_ID_PRESCRIPTION = null;
+    public static final String TAG_IS_FROM_NEW_TEMPLATE_FRAGMENT = "isFromNewtemplateFragment";
+
 }

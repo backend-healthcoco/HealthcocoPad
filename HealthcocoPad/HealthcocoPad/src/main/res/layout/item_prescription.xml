@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="start"
         android:paddingRight="@dimen/item_visits_button_padding_left_right_20dp"
-        android:src="@drawable/ic_icon_list_visit" />
+        android:src="@drawable/ic_icon_list_rx" />
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -110,6 +110,29 @@
                 android:layout_height="wrap_content">
 
                 <include layout="@layout/layout_sub_item_prescription" />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/layout_next_review_detail_for_prescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/next_review_date"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/header_text_size"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/textView_next_review_date_for_prescription"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/header_text_size"
+                    android:textStyle="bold" />
             </LinearLayout>
 
             <LinearLayout

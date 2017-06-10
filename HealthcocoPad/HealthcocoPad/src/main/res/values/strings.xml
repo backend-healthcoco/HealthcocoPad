@@ -800,4 +800,5 @@
     <string name="edit_clinical_note">Edit Clinical Note</string>
     <string name="alert_blank_clinical_note">Blank Clinical Note cannot be created</string>
     <string name="alert_blank_prescription">Blank Prescriptiopn cannot be created</string>
+    <string name="next_review_date">Next Review Date</string>
 </resources>

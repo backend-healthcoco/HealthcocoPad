@@ -7,7 +7,7 @@ import com.healthcoco.healthcocopad.enums.AchievementType;
 import com.orm.SugarRecord;
 
 @org.parceler.Parcel
-public class Achievement extends SugarRecord implements Parcelable {
+public class Achievement extends SugarRecord {
     private String achievementName;
 
     private int year;
@@ -17,25 +17,6 @@ public class Achievement extends SugarRecord implements Parcelable {
 
     public Achievement() {
     }
-
-    protected Achievement(Parcel in) {
-        achievementName = in.readString();
-        year = in.readInt();
-        foreignUniqueId = in.readString();
-        achievementType = AchievementType.values()[in.readInt()];
-    }
-
-    public static final Creator<Achievement> CREATOR = new Creator<Achievement>() {
-        @Override
-        public Achievement createFromParcel(Parcel in) {
-            return new Achievement(in);
-        }
-
-        @Override
-        public Achievement[] newArray(int size) {
-            return new Achievement[size];
-        }
-    };
 
     public String getAchievementName() {
         return achievementName;
@@ -67,18 +48,5 @@ public class Achievement extends SugarRecord implements Parcelable {
 
     public void setForeignUniqueId(String foreignUniqueId) {
         this.foreignUniqueId = foreignUniqueId;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(achievementName);
-        dest.writeInt(year);
-        dest.writeString(foreignUniqueId);
-        dest.writeInt(achievementType.ordinal());
     }
 }

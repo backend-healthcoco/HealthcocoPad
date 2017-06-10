@@ -37,6 +37,21 @@ public class Prescription extends SugarRecord {
     private String visitId;
     private String uniqueEmrId;
     private String advice;
+    @Ignore
+    private AppointmentRequest appointmentRequest;
+    private String appointmentId;
+
+    public AppointmentRequest getAppointmentRequest() {
+        return appointmentRequest;
+    }
+
+    public void setAppointmentRequest(AppointmentRequest appointmentRequest) {
+        this.appointmentRequest = appointmentRequest;
+    }
+
+    public String getAppointmentId() {
+        return appointmentId;
+    }
 
     public Long getCreatedTime() {
         return createdTime;

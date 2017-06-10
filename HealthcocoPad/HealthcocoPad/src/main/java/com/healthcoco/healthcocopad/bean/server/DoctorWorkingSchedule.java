@@ -13,7 +13,8 @@ import java.util.List;
 /**
  * Created by neha on 17/02/16.
  */
-public class DoctorWorkingSchedule extends SugarRecord implements Parcelable {
+@org.parceler.Parcel
+public class DoctorWorkingSchedule extends SugarRecord {
     private WeekDayNameType workingDay;
 
     @Ignore
@@ -26,26 +27,6 @@ public class DoctorWorkingSchedule extends SugarRecord implements Parcelable {
 
     public DoctorWorkingSchedule() {
     }
-
-    protected DoctorWorkingSchedule(Parcel in) {
-        workingHours = in.createTypedArrayList(WorkingHours.CREATOR);
-        foreignLocationId = in.readString();
-        doctorId = in.readString();
-        customUniqueId = in.readString();
-        workingDay = WeekDayNameType.values()[in.readInt()];
-    }
-
-    public static final Creator<DoctorWorkingSchedule> CREATOR = new Creator<DoctorWorkingSchedule>() {
-        @Override
-        public DoctorWorkingSchedule createFromParcel(Parcel in) {
-            return new DoctorWorkingSchedule(in);
-        }
-
-        @Override
-        public DoctorWorkingSchedule[] newArray(int size) {
-            return new DoctorWorkingSchedule[size];
-        }
-    };
 
     public String getCustomUniqueId() {
         return customUniqueId;
@@ -87,17 +68,4 @@ public class DoctorWorkingSchedule extends SugarRecord implements Parcelable {
         this.doctorId = doctorId;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeTypedList(workingHours);
-        dest.writeString(foreignLocationId);
-        dest.writeString(doctorId);
-        dest.writeString(customUniqueId);
-        dest.writeInt(workingDay.ordinal());
-    }
 }

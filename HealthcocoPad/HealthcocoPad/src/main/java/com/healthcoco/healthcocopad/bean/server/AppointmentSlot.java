@@ -7,7 +7,8 @@ import com.healthcoco.healthcocopad.enums.TimeUnitType;
 import com.orm.SugarRecord;
 import com.orm.annotation.Unique;
 
-public class AppointmentSlot extends SugarRecord implements Parcelable {
+@org.parceler.Parcel
+public class AppointmentSlot extends SugarRecord {
     @Unique
     protected String foreignUniqueId;
     private Float time;
@@ -16,24 +17,6 @@ public class AppointmentSlot extends SugarRecord implements Parcelable {
 
     public AppointmentSlot() {
     }
-
-    protected AppointmentSlot(Parcel in) {
-        foreignUniqueId = in.readString();
-        time = in.readFloat();
-        timeUnit = TimeUnitType.values()[in.readInt()];
-    }
-
-    public static final Creator<AppointmentSlot> CREATOR = new Creator<AppointmentSlot>() {
-        @Override
-        public AppointmentSlot createFromParcel(Parcel in) {
-            return new AppointmentSlot(in);
-        }
-
-        @Override
-        public AppointmentSlot[] newArray(int size) {
-            return new AppointmentSlot[size];
-        }
-    };
 
     public String getForeignUniqueId() {
         return foreignUniqueId;
@@ -57,17 +40,5 @@ public class AppointmentSlot extends SugarRecord implements Parcelable {
 
     public void setTimeUnit(TimeUnitType timeUnit) {
         this.timeUnit = timeUnit;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(foreignUniqueId);
-        dest.writeFloat(time);
-        dest.writeInt(timeUnit.ordinal());
     }
 }

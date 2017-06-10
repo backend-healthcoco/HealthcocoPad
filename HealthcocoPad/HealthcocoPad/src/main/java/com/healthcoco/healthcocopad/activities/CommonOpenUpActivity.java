@@ -245,7 +245,7 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
                 containerLeftAction.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        finish();
+                        finishThisActivity();
                     }
                 });
             } else
@@ -321,13 +321,13 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
         if (fragmentType != null) {
             switch (fragmentType) {
                 case ADD_NEW_PRESCRIPTION:
-//                case ADD_CLINICAL_NOTE:
+                case ADD_CLINICAL_NOTE:
 //                case ADD_DRUG_DETAIL:
-//                case ADD_NEW_TEMPLATE:
+                case ADD_NEW_TEMPLATE:
 //                case ADD_RECORD_DETAIL:
                 case PATIENT_REGISTRATION:
                 case ADD_VISITS:
-//                case BOOK_APPOINTMENT:
+                case BOOK_APPOINTMENT:
                     showFinishConfirmationAlert();
                     break;
                 default:

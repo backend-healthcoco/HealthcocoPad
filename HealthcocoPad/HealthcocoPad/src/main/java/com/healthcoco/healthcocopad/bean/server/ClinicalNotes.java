@@ -5,8 +5,11 @@ import com.orm.SugarRecord;
 import com.orm.annotation.Ignore;
 import com.orm.annotation.Unique;
 
+import org.parceler.Parcel;
+
 import java.util.List;
 
+@Parcel
 public class ClinicalNotes extends SugarRecord {
     @Unique
     private String uniqueId;
@@ -55,6 +58,25 @@ public class ClinicalNotes extends SugarRecord {
     private String xRayDetails;
     private String echo;
     private String holter;
+    @Ignore
+    private AppointmentRequest appointmentRequest;
+    private String appointmentId;
+
+    public AppointmentRequest getAppointmentRequest() {
+        return appointmentRequest;
+    }
+
+    public void setAppointmentRequest(AppointmentRequest appointmentRequest) {
+        this.appointmentRequest = appointmentRequest;
+    }
+
+    public String getAppointmentId() {
+        return appointmentId;
+    }
+
+    public void setAppointmentId(String appointmentId) {
+        this.appointmentId = appointmentId;
+    }
 
     public String getProvisionalDiagnosis() {
         return provisionalDiagnosis;

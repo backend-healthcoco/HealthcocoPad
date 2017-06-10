@@ -100,6 +100,7 @@ public class AddPrescriptionVisitFragment extends HealthCocoFragment implements 
         lvPrescriptionItems.setStackFromBottom(true);
     }
 
+
     private void notifyAdapter(ArrayList<DrugItem> drugsListMap) {
         if (drugsListMap != null && drugsListMap.size() > 0) {
             sendBroadcastForAdviceButtonVisibility(true);

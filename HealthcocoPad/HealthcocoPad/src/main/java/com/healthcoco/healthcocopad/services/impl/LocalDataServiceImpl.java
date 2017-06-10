@@ -2397,6 +2397,8 @@ public class LocalDataServiceImpl {
         List<DrugItem> drugItemsList = prescription.getItems();
         addDrugItemsList(drugItemsList, FromTableType.ADD_PRESCRIPTION, prescription.getUniqueId());
         addDiagnosticTestsPrescription(prescription, prescription.getDiagnosticTests());
+        if (prescription.getAppointmentRequest() != null)
+            addAppointmentRequest(prescription.getAppointmentRequest());
         prescription.save();
     }
 
@@ -2413,6 +2415,8 @@ public class LocalDataServiceImpl {
         if (clinicalNote.getVitalSigns() != null) {
             addVitalSigns(clinicalNote.getUniqueId(), clinicalNote.getVitalSigns());
         }
+        if (clinicalNote.getAppointmentRequest() != null)
+            addAppointmentRequest(clinicalNote.getAppointmentRequest());
         clinicalNote.save();
     }
 
@@ -2754,6 +2758,7 @@ public class LocalDataServiceImpl {
     private void getPrescriptionDetail(Prescription prescription) {
         prescription.setItems(getDrugItemsList(LocalDatabaseUtils.KEY_FOREIGN_PRESCRIPTION_ID, prescription.getUniqueId()));
         prescription.setDiagnosticTests(getDiagnosticTestsList(LocalDatabaseUtils.KEY_DIAGNOSTIC_TEST_ID, (ArrayList<String>) (Object) getObjectsListFronJson(prescription.getDiagnosticTestsIdsJsonString())));
+        prescription.setAppointmentRequest(getAppointmentRequest(prescription.getVisitId()));
     }
 
     private List<DiagnosticTestsPrescription> getDiagnosticTestsList(String key, ArrayList<String> diagnosticIdsList) {
@@ -2779,6 +2784,7 @@ public class LocalDataServiceImpl {
         clinicalNote.setDiagnoses((List<Diagnoses>) getClinicalNotesDataListFromForeignTable(ForeignDiagnosesTable.class, clinicalNote.getUniqueId(), Diagnoses.class));
         clinicalNote.setDiagrams((List<Diagram>) getListByKeyValue(Diagram.class, LocalDatabaseUtils.KEY_FOREIGN_CLINICAL_NOTES_ID, clinicalNote.getUniqueId()));
         clinicalNote.setVitalSigns(getVitalSigns(clinicalNote.getUniqueId()));
+        clinicalNote.setAppointmentRequest(getAppointmentRequest(clinicalNote.getVisitId()));
     }
 
     private List<?> getClinicalNotesDataListFromForeignTable(Class<?> foreignTableClass, String foreignUniqueId, Class<?> dataTable) {
@@ -3178,7 +3184,6 @@ public class LocalDataServiceImpl {
             addDrugItemsList(template.getItems(), FromTableType.ADD_TEMPLATES, template.getUniqueId());
             template.save();
         }
-
     }
 
     public void deleteTemplate(String templateId) {

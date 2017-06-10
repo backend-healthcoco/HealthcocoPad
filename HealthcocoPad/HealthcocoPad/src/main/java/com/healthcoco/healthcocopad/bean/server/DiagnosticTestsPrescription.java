@@ -5,13 +5,15 @@ import com.orm.SugarRecord;
 import com.orm.annotation.Ignore;
 import com.orm.annotation.Unique;
 
+import org.parceler.Parcel;
+
 import java.io.Serializable;
 
 /**
  * Created by neha on 22/04/17.
  */
-
-public class DiagnosticTestsPrescription extends SugarRecord implements Serializable {
+@Parcel
+public class DiagnosticTestsPrescription extends SugarRecord  {
     public static String TABLE_NAME = " " + StringUtil.toSQLName(DiagnosticTestsPrescription.class.getSimpleName());
     @Unique
     protected String diagnosticTestId;
