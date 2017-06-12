@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
@@ -52,7 +53,7 @@ import static com.healthcoco.healthcocopad.fragments.AddVisitSuggestionsFragment
  */
 public class PatientClinicalNotesDetailFragment extends HealthCocoFragment implements
         SwipeRefreshLayout.OnRefreshListener, LocalDoInBackgroundListenerOptimised,
-        CommonEMRItemClickListener, LoadMorePageListener {
+        CommonEMRItemClickListener, LoadMorePageListener, View.OnClickListener {
 
     public static final String INTENT_GET_CLINICAL_NOTES_LIST = "com.healthcoco.CLINICAL_NOTES_LIST";
     public static final String INTENT_GET_CLINICAL_NOTES_LIST_LOCAL = "com.healthcoco.CLINICAL_NOTES_LIST_LOCAL";
@@ -76,7 +77,7 @@ public class PatientClinicalNotesDetailFragment extends HealthCocoFragment imple
     private boolean isLoading;
     private boolean isEndOfListAchieved;
     private int PAGE_NUMBER = 0;
-
+    public FloatingActionButton floatingActionButton;
     public PatientClinicalNotesDetailFragment() {
     }
 
@@ -132,12 +133,14 @@ public class PatientClinicalNotesDetailFragment extends HealthCocoFragment imple
         progressLoading = (ProgressBar) view.findViewById(R.id.progress_loading);
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
         btAddClinicalNote = (Button) view.findViewById(R.id.bt_add);
+        floatingActionButton = (FloatingActionButton) view.findViewById(R.id.fl_bt_add_notes);
     }
 
     @Override
     public void initListeners() {
         lvClinicalNotes.setSwipeRefreshLayout(swipeRefreshLayout);
         swipeRefreshLayout.setOnRefreshListener(this);
+        floatingActionButton.setOnClickListener(this);
     }
 
     private void notifyAdapter(ArrayList<ClinicalNotes> clinicalNotesList) {
@@ -397,5 +400,14 @@ public class PatientClinicalNotesDetailFragment extends HealthCocoFragment imple
         isEndOfListAchieved = false;
         currentPageNumber = 0;
         lvClinicalNotes.resetPreLastPosition(0);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.fl_bt_add_notes:
+                openAddNewClinicalNotesScreen();
+                break;
+        }
     }
 }

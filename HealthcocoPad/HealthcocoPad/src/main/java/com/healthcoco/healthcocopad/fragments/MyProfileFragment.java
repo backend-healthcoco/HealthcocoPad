@@ -28,6 +28,8 @@ import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.healthcoco.healthcocopad.views.TextViewFontAwesome;
 
+import org.parceler.Parcels;
+
 import java.util.List;
 
 /**
@@ -343,7 +345,7 @@ public class MyProfileFragment extends HealthCocoFragment implements View.OnClic
         if (requestCode == REQUEST_CODE_MY_PROFILE
                 && data != null && data.hasExtra(TAG_DOCTOR_PROFILE)
                 && doctorProfile != null) {
-            DoctorProfile profile = data.getParcelableExtra(TAG_DOCTOR_PROFILE);
+            DoctorProfile profile = Parcels.unwrap(data.getParcelableExtra(TAG_DOCTOR_PROFILE));
             if (resultCode == HealthCocoConstants.RESULT_CODE_DOCTOR_PROFESSIONAL_STATEMENT_DETAIL) {
                 doctorProfile = profile;
                 doctorProfile.setProfessionalStatement(profile.getProfessionalStatement());

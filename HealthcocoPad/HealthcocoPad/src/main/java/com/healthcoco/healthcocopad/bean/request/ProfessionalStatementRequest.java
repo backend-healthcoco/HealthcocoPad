@@ -7,8 +7,8 @@ import org.parceler.Parcel;
  */
 @Parcel
 public class ProfessionalStatementRequest {
-    public String doctorId;
-    public String professionalStatement;
+    private String doctorId;
+    private String professionalStatement;
 
     public String getDoctorId() {
         return doctorId;

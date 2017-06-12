@@ -2,7 +2,6 @@ package com.healthcoco.healthcocopad.fragments;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
@@ -47,7 +46,6 @@ import com.healthcoco.healthcocopad.utilities.Util;
 import java.util.ArrayList;
 
 import static com.healthcoco.healthcocopad.R.id.container_right_action;
-import static com.healthcoco.healthcocopad.R.id.fl_bt_add;
 
 /**
  * Created by Shreshtha on 03-03-2017.
@@ -70,7 +68,6 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
     private LinearLayout patientProfileLayout;
     private RegisteredPatientDetailsUpdated selectedPatient;
     private User user;
-    public FloatingActionButton floatingActionButton;
     private int tabOrdinal;
 
     //flags to refresh fragment when clicked for the first time
@@ -120,7 +117,6 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
         tvGenderDate = (TextView) view.findViewById(R.id.tv_patient_gender);
         ivContactProfile = (ImageView) view.findViewById(R.id.iv_image);
         patientProfileLayout = (LinearLayout) view.findViewById(R.id.patient_profile_layout);
-        floatingActionButton = (FloatingActionButton) view.findViewById(R.id.fl_bt_add);
         ((CommonOpenUpActivity) mActivity).showRightAction(false);
     }
 
@@ -128,7 +124,6 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
     public void initListeners() {
         mViewPager.addOnPageChangeListener(this);
         tabhost.setOnTabChangedListener(this);
-        floatingActionButton.setOnClickListener(this);
         ((CommonOpenUpActivity) mActivity).initActionbarRightAction(this);
     }
 
@@ -318,7 +313,6 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
         PatientDetailTabType patientDetailTabType = PatientDetailTabType.values()[ordinal];
         if (patientDetailTabType != null) {
             setPatientDetailHeaderVisibility(patientDetailTabType.getPatientDetailHeaderVisibility());
-            setFloatingButtonVisibility(patientDetailTabType.getFloatingButtonVisibility());
             switch (patientDetailTabType) {
                 case PATIENT_DETAIL_PROFILE:
                     if (!isProfileTabClicked) {
@@ -390,33 +384,11 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
             case container_right_action:
                 openGlobalRecordAccessDialogFragment();
                 break;
-            case fl_bt_add:
-                int ordinal = Integer.parseInt(tabhost.getCurrentTabTag());
-                PatientDetailTabType patientDetailTabType = PatientDetailTabType.values()[ordinal];
-                switch (patientDetailTabType) {
-                    case PATIENT_DETAIL_VISIT:
-                        visitsFragment.openAddVisitFragment();
-                        break;
-                    case PATIENT_DETAIL_APPOINTMENT:
-                        appointmentFragment.openAddNewAppointmentScreen();
-                        break;
-                    case PATIENT_DETAIL_CLINICAL_NOTES:
-                        clinicalNotesDetailFragment.openAddNewClinicalNotesScreen();
-                        break;
-                    case PATIENT_DETAIL_PRESCRIPTION:
-                        prescriptionDetailFragment.openAddNewPrescriptionScreen();
-                        break;
-                }
-                break;
         }
     }
 
     public void setPatientDetailHeaderVisibility(int visibility) {
         patientProfileLayout.setVisibility(visibility);
-    }
-
-    public void setFloatingButtonVisibility(int visibility) {
-        floatingActionButton.setVisibility(visibility);
     }
 
     @Override

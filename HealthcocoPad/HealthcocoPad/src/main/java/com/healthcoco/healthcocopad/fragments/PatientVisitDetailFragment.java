@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
@@ -90,6 +91,7 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
     private int currentPageNumber;
     boolean isMyScriptVisitToggleState;
     private PatientDetailTabType detailTabType;
+    public FloatingActionButton floatingActionButton;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -117,6 +119,7 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
         progressLoading = (ProgressBar) view.findViewById(R.id.progress_loading);
         lvVisits = (ListViewLoadMore) view.findViewById(R.id.lv_visits);
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
+        floatingActionButton = (FloatingActionButton) view.findViewById(R.id.fl_bt_add_visit);
     }
 
     @Override
@@ -124,6 +127,7 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
         lvVisits.setLoadMoreListener(this);
         lvVisits.setSwipeRefreshLayout(swipeRefreshLayout);
         swipeRefreshLayout.setOnRefreshListener(this);
+        floatingActionButton.setOnClickListener(this);
     }
 
     private void initAdapter() {
@@ -362,6 +366,7 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
             }
         }
     }
+
     private void refreshListFromLocal() {
         resetListAndPagingAttributes();
         getListFromLocal(true, 0);
@@ -524,7 +529,11 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
 
     @Override
     public void onClick(View v) {
-
+        switch (v.getId()) {
+            case R.id.fl_bt_add_visit:
+                openAddVisitFragment();
+                break;
+        }
     }
 
     public void setUserData(User user, RegisteredPatientDetailsUpdated registeredPatientDetailsUpdated) {

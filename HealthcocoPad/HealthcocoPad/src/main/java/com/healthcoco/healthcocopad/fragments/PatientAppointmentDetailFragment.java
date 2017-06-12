@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
@@ -48,7 +49,7 @@ import java.util.HashMap;
  */
 public class PatientAppointmentDetailFragment extends HealthCocoFragment implements SwipeRefreshLayout.OnRefreshListener,
         LocalDoInBackgroundListenerOptimised,
-        Response.Listener<VolleyResponseBean>, GsonRequest.ErrorListener, LoadMorePageListener {
+        Response.Listener<VolleyResponseBean>, GsonRequest.ErrorListener, LoadMorePageListener, View.OnClickListener {
     public static final String DATE_FORMAT_USED_IN_THIS_SCREEN = "dd MMM yyyy";
     public static final String INTENT_GET_APPOINTMENT_LIST_LOCAL = "com.healthcoco.APPOINTMENT_LIST_LOCAL";
 
@@ -69,7 +70,7 @@ public class PatientAppointmentDetailFragment extends HealthCocoFragment impleme
     private boolean receiversRegistered;
     private RegisteredPatientDetailsUpdated selectedPatient;
     private User user;
-
+    public FloatingActionButton floatingActionButton;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_patient_appointment_deatil, container, false);
@@ -114,6 +115,7 @@ public class PatientAppointmentDetailFragment extends HealthCocoFragment impleme
         tvNoAppointmentsFound = (TextView) view.findViewById(R.id.tv_no_appointments_found);
         progressLoading = (ProgressBar) view.findViewById(R.id.progress_loading);
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
+        floatingActionButton = (FloatingActionButton) view.findViewById(R.id.fl_bt_add_appointment);
     }
 
     @Override
@@ -121,6 +123,7 @@ public class PatientAppointmentDetailFragment extends HealthCocoFragment impleme
         lvAppointment.setSwipeRefreshLayout(swipeRefreshLayout);
         lvAppointment.setLoadMoreListener(this);
         swipeRefreshLayout.setOnRefreshListener(this);
+        floatingActionButton.setOnClickListener(this);
     }
 
     private void initAdapter() {
@@ -328,5 +331,14 @@ public class PatientAppointmentDetailFragment extends HealthCocoFragment impleme
     public void setUserData(User user, RegisteredPatientDetailsUpdated registeredPatientDetailsUpdated) {
         this.selectedPatient = registeredPatientDetailsUpdated;
         this.user = user;
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.fl_bt_add_appointment:
+                openAddNewAppointmentScreen();
+                break;
+        }
     }
 }

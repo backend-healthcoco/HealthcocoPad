@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
@@ -76,6 +77,7 @@ public class PatientPrescriptionDetailFragment extends HealthCocoFragment implem
     private boolean receiversRegistered = false;
     private PatientDetailTabType detailTabType;
     private boolean isLoading;
+    public FloatingActionButton floatingActionButton;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -134,18 +136,23 @@ public class PatientPrescriptionDetailFragment extends HealthCocoFragment implem
         tvNoPrescriptionFound = (TextView) view.findViewById(R.id.tv_no_prescriptions_found);
         progressLoading = (ProgressBar) view.findViewById(R.id.progress_loading);
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
+        floatingActionButton = (FloatingActionButton) view.findViewById(R.id.fl_bt_add_rx);
     }
 
     @Override
     public void initListeners() {
         lvPrescription.setSwipeRefreshLayout(swipeRefreshLayout);
         swipeRefreshLayout.setOnRefreshListener(this);
+        floatingActionButton.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.bt_options:
+                break;
+            case R.id.fl_bt_add_rx:
+                openAddNewPrescriptionScreen();
                 break;
             default:
                 break;
