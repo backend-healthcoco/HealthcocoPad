@@ -292,6 +292,7 @@ public class MyScriptAddVisitsFragment extends HealthCocoFragment implements Vie
         initToolbarView();
         initHeaderView();
         setHeightOfWidgetsAndSuggestions();
+        flBtSwap.setVisibility(View.GONE);
     }
 
     private void setHeightOfWidgetsAndSuggestions() {

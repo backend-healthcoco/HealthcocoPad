@@ -148,24 +148,25 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                     visitsFragment = new PatientVisitDetailFragment();
                     healthcocoFragment = visitsFragment;
                     break;
-                case PATIENT_DETAIL_CLINICAL_NOTES:
-                    clinicalNotesDetailFragment = new PatientClinicalNotesDetailFragment();
-                    healthcocoFragment = clinicalNotesDetailFragment;
+                case PATIENT_DETAIL_APPOINTMENT:
+                    appointmentFragment = new PatientAppointmentDetailFragment();
+                    healthcocoFragment = appointmentFragment;
                     break;
+//                case PATIENT_DETAIL_CLINICAL_NOTES:
+//                    clinicalNotesDetailFragment = new PatientClinicalNotesDetailFragment();
+//                    healthcocoFragment = clinicalNotesDetailFragment;
+//                    break;
+//                case PATIENT_DETAIL_PRESCRIPTION:
+//                    prescriptionDetailFragment = new PatientPrescriptionDetailFragment();
+//                    healthcocoFragment = prescriptionDetailFragment;
+//                    break;
+
 //                case PATIENT_DETAIL_IMPORTANT:
 //                    healthcocoFragment = new PatientImportantDetailFragment();
 //                    break;
 //                case PATIENT_DETAIL_REPORTS:
 //                    healthcocoFragment = new PatientReportsDetailFragment();
 //                    break;
-                case PATIENT_DETAIL_PRESCRIPTION:
-                    prescriptionDetailFragment = new PatientPrescriptionDetailFragment();
-                    healthcocoFragment = prescriptionDetailFragment;
-                    break;
-                case PATIENT_DETAIL_APPOINTMENT:
-                    appointmentFragment = new PatientAppointmentDetailFragment();
-                    healthcocoFragment = appointmentFragment;
-                    break;
 //                case PATIENT_DETAIL_TREATMENT:
 //                    healthcocoFragment = new PatientTreatmentDetailFragment();
 //                    break;
@@ -336,18 +337,18 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                         isAppointmentTabClicked = true;
                     }
                     break;
-                case PATIENT_DETAIL_CLINICAL_NOTES:
-                    if (!isClinicalNotesTabClicked) {
-                        clinicalNotesDetailFragment.refreshData(PatientDetailTabType.PATIENT_DETAIL_CLINICAL_NOTES);
-                        isClinicalNotesTabClicked = true;
-                    }
-                    break;
-                case PATIENT_DETAIL_PRESCRIPTION:
-                    if (!isPrescriptionTabClicked) {
-                        prescriptionDetailFragment.refreshData(PatientDetailTabType.PATIENT_DETAIL_PRESCRIPTION);
-                        isPrescriptionTabClicked = true;
-                    }
-                    break;
+//                case PATIENT_DETAIL_CLINICAL_NOTES:
+//                    if (!isClinicalNotesTabClicked) {
+//                        clinicalNotesDetailFragment.refreshData(PatientDetailTabType.PATIENT_DETAIL_CLINICAL_NOTES);
+//                        isClinicalNotesTabClicked = true;
+//                    }
+//                    break;
+//                case PATIENT_DETAIL_PRESCRIPTION:
+//                    if (!isPrescriptionTabClicked) {
+//                        prescriptionDetailFragment.refreshData(PatientDetailTabType.PATIENT_DETAIL_PRESCRIPTION);
+//                        isPrescriptionTabClicked = true;
+//                    }
+//                    break;
             }
         }
         ((CommonOpenUpActivity) mActivity).initActionbarTitle(patientDetailTabType.getActionBarTitleId());
@@ -374,9 +375,9 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
             }
             DownloadImageFromUrlUtil.loadImageWithInitialAlphabet(mActivity, PatientProfileScreenType.IN_PATIENT_DEATIL_SCREEN_EXCEPT_PROFILE, selectedPatient, null, ivContactProfile, tvInitialAlphabet);
             visitsFragment.setUserData(user, selectedPatient);
-            clinicalNotesDetailFragment.setUserData(user, selectedPatient);
-            prescriptionDetailFragment.setUserData(user, selectedPatient);
             appointmentFragment.setUserData(user, selectedPatient);
+//            clinicalNotesDetailFragment.setUserData(user, selectedPatient);
+//            prescriptionDetailFragment.setUserData(user, selectedPatient);
         } else {
             mActivity.showLoading(false);
             WebDataServiceImpl.getInstance(mApp).getPatientProfile(RegisteredPatientDetailsUpdated.class, HealthCocoConstants.SELECTED_PATIENTS_USER_ID, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(), this, this);
@@ -399,12 +400,12 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                     case PATIENT_DETAIL_APPOINTMENT:
                         appointmentFragment.openAddNewAppointmentScreen();
                         break;
-                    case PATIENT_DETAIL_CLINICAL_NOTES:
-                        clinicalNotesDetailFragment.openAddNewClinicalNotesScreen();
-                        break;
-                    case PATIENT_DETAIL_PRESCRIPTION:
-                        prescriptionDetailFragment.openAddNewPrescriptionScreen();
-                        break;
+//                    case PATIENT_DETAIL_CLINICAL_NOTES:
+//                        clinicalNotesDetailFragment.openAddNewClinicalNotesScreen();
+//                        break;
+//                    case PATIENT_DETAIL_PRESCRIPTION:
+//                        prescriptionDetailFragment.openAddNewPrescriptionScreen();
+//                        break;
                 }
                 break;
         }
