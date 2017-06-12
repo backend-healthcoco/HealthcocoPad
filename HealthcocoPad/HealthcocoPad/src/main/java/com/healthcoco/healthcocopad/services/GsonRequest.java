@@ -301,7 +301,7 @@ public class GsonRequest extends JsonRequest<VolleyResponseBean> {
                 case GET_PRESCRIPTION:
                 case GET_REPORTS_UPDATED:
                 case GET_CLINICAL_NOTES:
-                    sendBroadcastToHistory();
+//                    sendBroadcastToHistory();
             }
             if (intent != null && intent.getAction() != null)
                 LocalBroadcastManager.getInstance(mApp.getApplicationContext()).sendBroadcast(intent);

@@ -362,7 +362,6 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
             }
         }
     }
-
     private void refreshListFromLocal() {
         resetListAndPagingAttributes();
         getListFromLocal(true, 0);
@@ -510,17 +509,17 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
     }
 
     public void openAddVisitFragment() {
-//        isMyScriptVisitToggleState = Util.getVisitToggleStateFromPreferences(mActivity);
-//        if (isMyScriptVisitToggleState)
-//            openCommonVisistActivity(CommonOpenUpFragmentType.ADD_VISITS, null, null, 0);
-//        else {
-//            Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
-//            intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.ADD_VISITS.ordinal());
-//            intent.putExtra(CommonOpenUpPatientDetailFragment.TAG_PATIENT_DETAIL_TAB_TYPE, detailTabType);
-//            startActivity(intent);
-//        }
-        openCommonVisistActivity(CommonOpenUpFragmentType.ADD_VISITS, null, null, 0);
-        Util.addVisitToggleStateInPreference(mActivity, true);
+        isMyScriptVisitToggleState = Util.getVisitToggleStateFromPreferences(mActivity);
+        if (isMyScriptVisitToggleState)
+            openCommonVisistActivity(CommonOpenUpFragmentType.ADD_VISITS, null, null, 0);
+        else {
+            Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
+            intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.ADD_VISITS.ordinal());
+            intent.putExtra(CommonOpenUpPatientDetailFragment.TAG_PATIENT_DETAIL_TAB_TYPE, detailTabType);
+            startActivity(intent);
+        }
+//        openCommonVisistActivity(CommonOpenUpFragmentType.ADD_VISITS, null, null, 0);
+//        Util.addVisitToggleStateInPreference(mActivity,true);
     }
 
     @Override

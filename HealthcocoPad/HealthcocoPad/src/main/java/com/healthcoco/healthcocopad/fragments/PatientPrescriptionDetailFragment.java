@@ -11,7 +11,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -32,6 +31,7 @@ import com.healthcoco.healthcocopad.enums.LocalTabelType;
 import com.healthcoco.healthcocopad.enums.PatientDetailTabType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.CommonEMRItemClickListener;
+import com.healthcoco.healthcocopad.listeners.LoadMorePageListener;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
@@ -50,7 +50,7 @@ import java.util.List;
  * Created by Shreshtha on 07-03-2017.
  */
 public class PatientPrescriptionDetailFragment extends HealthCocoFragment implements SwipeRefreshLayout.OnRefreshListener,
-        View.OnClickListener, LocalDoInBackgroundListenerOptimised, CommonEMRItemClickListener {
+        View.OnClickListener, LocalDoInBackgroundListenerOptimised, CommonEMRItemClickListener, LoadMorePageListener {
 
     public static final String INTENT_GET_PRESCRIPTION_LIST = "com.healthcoco.PRESCRIPTION_LIST";
     public static final String INTENT_GET_PRESCRIPTION_LIST_LOCAL = "com.healthcoco.PRESCRIPTION_LIST_LOCAL";
@@ -64,7 +64,6 @@ public class PatientPrescriptionDetailFragment extends HealthCocoFragment implem
     private int currentPageNumber;
     private boolean isInitialLoading;
 
-
     private HashMap<String, Prescription> prescriptionsList = new HashMap<>();
     private TextView tvNoPrescriptionFound;
     private ListViewLoadMore lvPrescription;
@@ -76,6 +75,7 @@ public class PatientPrescriptionDetailFragment extends HealthCocoFragment implem
     private SwipeRefreshLayout swipeRefreshLayout;
     private boolean receiversRegistered = false;
     private PatientDetailTabType detailTabType;
+    private boolean isLoading;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -103,10 +103,17 @@ public class PatientPrescriptionDetailFragment extends HealthCocoFragment implem
         lvPrescription.setAdapter(adapter);
     }
 
-    public void getListFromLocal(boolean showLoading) {
-        if (showLoading) {
-            showLoadingOverlay(true);
-        }
+    public void getListFromLocal(boolean initialLoading, int PAGE_NUMBER) {
+        this.isInitialLoading = initialLoading;
+        this.currentPageNumber = PAGE_NUMBER;
+        isLoading = true;
+        if (isInitialLoading) {
+            if (isInitialLoading)
+                mActivity.showLoading(false);
+            this.currentPageNumber = 0;
+            progressLoading.setVisibility(View.GONE);
+        } else
+            progressLoading.setVisibility(View.VISIBLE);
         new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_PRESCRIPTION, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
@@ -167,7 +174,6 @@ public class PatientPrescriptionDetailFragment extends HealthCocoFragment implem
             lvPrescription.setVisibility(View.GONE);
             tvNoPrescriptionFound.setVisibility(View.VISIBLE);
         }
-        progressLoading.setVisibility(View.GONE);
         adapter.setListData(prescriptionsList);
         adapter.notifyDataSetChanged();
     }
@@ -207,7 +213,7 @@ public class PatientPrescriptionDetailFragment extends HealthCocoFragment implem
                     if (user != null) {
                         LogUtils.LOGD(TAG, "Selected patient " + selectedPatient.getLocalPatientName());
                         initAdapter();
-                        getListFromLocal(true);
+                        getListFromLocal(true, PAGE_NUMBER);
                         return;
                     }
                     break;
@@ -216,6 +222,9 @@ public class PatientPrescriptionDetailFragment extends HealthCocoFragment implem
                         ArrayList<Prescription> responseList = (ArrayList<Prescription>) (ArrayList<?>) response
                                 .getDataList();
                         formHashMapAndRefresh(responseList);
+                        if (Util.isNullOrEmptyList(responseList) || responseList.size() < MAX_SIZE || Util.isNullOrEmptyList(responseList))
+                            isEndOfListAchieved = true;
+                        else isEndOfListAchieved = false;
                         if (isInitialLoading && !response.isFromLocalAfterApiSuccess() && response.isUserOnline()) {
                             getPrescription(true);
                             return;
@@ -227,6 +236,7 @@ public class PatientPrescriptionDetailFragment extends HealthCocoFragment implem
                             LogUtils.LOGD(TAG, "Success onResponse prescriptionsList Size Total" + prescriptionsList.size() + " isDataFromLocal " + response.isDataFromLocal());
                         return;
                     }
+                    isInitialLoading = false;
                     progressLoading.setVisibility(View.GONE);
                     showLoadingOverlay(false);
                     break;
@@ -236,6 +246,7 @@ public class PatientPrescriptionDetailFragment extends HealthCocoFragment implem
         }
         mActivity.hideLoading();
         showLoadingOverlay(false);
+        progressLoading.setVisibility(View.GONE);
         swipeRefreshLayout.setRefreshing(false);
     }
 
@@ -321,6 +332,7 @@ public class PatientPrescriptionDetailFragment extends HealthCocoFragment implem
     BroadcastReceiver prescriptionListReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, final Intent intent) {
+            resetListAndPagingAttributes();
             getPrescription(true);
         }
     };
@@ -345,7 +357,8 @@ public class PatientPrescriptionDetailFragment extends HealthCocoFragment implem
             if (intent != null && intent.hasExtra(SHOW_LOADING)) {
                 showLoading = intent.getBooleanExtra(SHOW_LOADING, false);
             }
-            getListFromLocal(showLoading);
+            resetListAndPagingAttributes();
+            getListFromLocal(showLoading, PAGE_NUMBER);
             sendBroadcasts();
         }
     };
@@ -386,7 +399,7 @@ public class PatientPrescriptionDetailFragment extends HealthCocoFragment implem
     }
 
     public void refreshData(PatientDetailTabType detailTabType) {
-        getListFromLocal(false);
+        getListFromLocal(false, PAGE_NUMBER);
         this.detailTabType = detailTabType;
     }
 
@@ -400,5 +413,26 @@ public class PatientPrescriptionDetailFragment extends HealthCocoFragment implem
     public void setUserData(User user, RegisteredPatientDetailsUpdated registeredPatientDetailsUpdated) {
         this.selectedPatient = registeredPatientDetailsUpdated;
         this.user = user;
+    }
+
+    @Override
+    public void loadMore() {
+        if (!isEndOfListAchieved && !isLoading) {
+            PAGE_NUMBER = PAGE_NUMBER + 1;
+            LogUtils.LOGD(TAG, "LoadMore PAGE_NUMBER " + PAGE_NUMBER);
+            getListFromLocal(false, PAGE_NUMBER);
+        }
+    }
+
+    @Override
+    public boolean isEndOfListAchieved() {
+        return isEndOfListAchieved;
+    }
+
+    private void resetListAndPagingAttributes() {
+        PAGE_NUMBER = 0;
+        isEndOfListAchieved = false;
+        currentPageNumber = 0;
+        lvPrescription.resetPreLastPosition(0);
     }
 }

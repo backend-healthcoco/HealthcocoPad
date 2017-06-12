@@ -31,11 +31,13 @@ import com.healthcoco.healthcocopad.enums.LocalTabelType;
 import com.healthcoco.healthcocopad.enums.PatientDetailTabType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.CommonEMRItemClickListener;
+import com.healthcoco.healthcocopad.listeners.LoadMorePageListener;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.ComparatorUtil;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
+import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.healthcoco.healthcocopad.views.ListViewLoadMore;
 
@@ -43,18 +45,20 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
+import static com.healthcoco.healthcocopad.fragments.AddVisitSuggestionsFragment.PAGE_NUMBER;
+
 /**
  * Created by Shreshtha on 07-03-2017.
  */
 public class PatientClinicalNotesDetailFragment extends HealthCocoFragment implements
         SwipeRefreshLayout.OnRefreshListener, LocalDoInBackgroundListenerOptimised,
-        CommonEMRItemClickListener {
+        CommonEMRItemClickListener, LoadMorePageListener {
 
     public static final String INTENT_GET_CLINICAL_NOTES_LIST = "com.healthcoco.CLINICAL_NOTES_LIST";
     public static final String INTENT_GET_CLINICAL_NOTES_LIST_LOCAL = "com.healthcoco.CLINICAL_NOTES_LIST_LOCAL";
     public static final String INTENT_GET_CLINICAL_NOTE_USING_ID = "com.healthcoco.GET_CLINICAL_NOTE_USING_ID";
     private static final int REQUEST_CODE_CLINICAL_NOTES = 111;
-
+    public static final int MAX_SIZE = 10;
     private ListViewLoadMore lvClinicalNotes;
     private HashMap<String, ClinicalNotes> clinicalNotesList = new HashMap<>();
     private TextView tvNoNotesAdded;
@@ -68,6 +72,10 @@ public class PatientClinicalNotesDetailFragment extends HealthCocoFragment imple
     private boolean isInitialLoading;
     private RegisteredPatientDetailsUpdated selectedPatient;
     private PatientDetailTabType detailTabType;
+    private int currentPageNumber;
+    private boolean isLoading;
+    private boolean isEndOfListAchieved;
+    private int PAGE_NUMBER = 0;
 
     public PatientClinicalNotesDetailFragment() {
     }
@@ -92,16 +100,19 @@ public class PatientClinicalNotesDetailFragment extends HealthCocoFragment imple
         initAdapter();
     }
 
-    public void getListFromLocal(boolean showLoading, boolean isOTPVerified, User user) {
-        if (user != null) {
-            this.user = user;
-            isInitialLoading = showLoading;
-            this.isOTPVerified = isOTPVerified;
-            if (showLoading) {
-                showLoadingOverlay(true);
-            }
-            new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_CLINICAL_NOTES, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-        }
+    public void getListFromLocal(boolean initialLoading, boolean isOTPVerified, int pageNum) {
+        this.isInitialLoading = initialLoading;
+        this.currentPageNumber = pageNum;
+        this.isOTPVerified = isOTPVerified;
+        isLoading = true;
+        if (isInitialLoading) {
+            if (isInitialLoading)
+                mActivity.showLoading(false);
+            this.currentPageNumber = 0;
+            progressLoading.setVisibility(View.GONE);
+        } else
+            progressLoading.setVisibility(View.VISIBLE);
+        new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_CLINICAL_NOTES, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     public void getClinicalNotes(boolean showLoading) {
@@ -196,6 +207,9 @@ public class PatientClinicalNotesDetailFragment extends HealthCocoFragment imple
                     ArrayList<ClinicalNotes> responseList = (ArrayList<ClinicalNotes>) (ArrayList<?>) response
                             .getDataList();
                     formHashMapAndRefresh(responseList);
+                    if (Util.isNullOrEmptyList(responseList) || responseList.size() < MAX_SIZE || Util.isNullOrEmptyList(responseList))
+                        isEndOfListAchieved = true;
+                    else isEndOfListAchieved = false;
                     if (isInitialLoading && !response.isFromLocalAfterApiSuccess() && response.isUserOnline()) {
                         getClinicalNotes(true);
                         return;
@@ -206,6 +220,7 @@ public class PatientClinicalNotesDetailFragment extends HealthCocoFragment imple
                     return;
                 }
                 showLoadingOverlay(false);
+                isInitialLoading = false;
                 progressLoading.setVisibility(View.GONE);
                 break;
             default:
@@ -213,6 +228,7 @@ public class PatientClinicalNotesDetailFragment extends HealthCocoFragment imple
         }
         showLoadingOverlay(false);
         swipeRefreshLayout.setRefreshing(false);
+        mActivity.hideLoading();
     }
 
     private void formHashMapAndRefresh(ArrayList<ClinicalNotes> responseList) {
@@ -250,7 +266,7 @@ public class PatientClinicalNotesDetailFragment extends HealthCocoFragment imple
 
     @Override
     public RegisteredPatientDetailsUpdated getSelectedPatient() {
-        return null;
+        return selectedPatient;
     }
 
     @Override
@@ -307,6 +323,7 @@ public class PatientClinicalNotesDetailFragment extends HealthCocoFragment imple
     BroadcastReceiver clinicalNotesListReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, final Intent intent) {
+            resetListAndPagingAttributes();
             getClinicalNotes(true);
         }
     };
@@ -332,7 +349,8 @@ public class PatientClinicalNotesDetailFragment extends HealthCocoFragment imple
             if (intent != null && intent.hasExtra(SHOW_LOADING)) {
                 showLoading = intent.getBooleanExtra(SHOW_LOADING, false);
             }
-            getListFromLocal(showLoading, isOtpVerified(), user);
+            resetListAndPagingAttributes();
+            getListFromLocal(showLoading, isOtpVerified(), 0);
             sendBroadcasts();
         }
     };
@@ -345,7 +363,7 @@ public class PatientClinicalNotesDetailFragment extends HealthCocoFragment imple
     }
 
     public void refreshData(PatientDetailTabType detailTabType) {
-        getListFromLocal(true, true, user);
+        getListFromLocal(true, true, 0);
         this.detailTabType = detailTabType;
     }
 
@@ -359,5 +377,25 @@ public class PatientClinicalNotesDetailFragment extends HealthCocoFragment imple
     public void setUserData(User user, RegisteredPatientDetailsUpdated registeredPatientDetailsUpdated) {
         this.selectedPatient = registeredPatientDetailsUpdated;
         this.user = user;
+    }
+
+    @Override
+    public void loadMore() {
+        if (!isEndOfListAchieved && !isLoading) {
+            PAGE_NUMBER = PAGE_NUMBER + 1;
+            LogUtils.LOGD(TAG, "LoadMore PAGE_NUMBER " + PAGE_NUMBER);
+            getListFromLocal(false, true, PAGE_NUMBER);
+        }
+    }
+
+    @Override
+    public boolean isEndOfListAchieved() {
+        return isEndOfListAchieved;
+    }
+    private void resetListAndPagingAttributes() {
+        PAGE_NUMBER = 0;
+        isEndOfListAchieved = false;
+        currentPageNumber = 0;
+        lvClinicalNotes.resetPreLastPosition(0);
     }
 }
