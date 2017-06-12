@@ -62,7 +62,7 @@ public class ContactsListViewHolder extends HealthCocoViewHolder implements OnCl
     @Override
     public View getContentView() {
         convertView = mActivity.getLayoutInflater().inflate(R.layout.list_item_contacts, null);
-//        scrollViewContactsItems = (ContactsListItemHorizontalScrollView) convertView.findViewById(R.id.scrollview_contacts_item);
+//        scrollViewContactsItems = (ContactsListItemHorizontalScrollView) covertView.findViewById(R.id.scrollview_contacts_item);
         containerTop = (LinearLayout) convertView.findViewById(R.id.container_top);
         containerTop.setLayoutParams(new LinearLayout.LayoutParams(ScreenDimensions.SCREEN_WIDTH, LinearLayout.LayoutParams.MATCH_PARENT));
         tvContactName = (TextView) convertView.findViewById(R.id.tv_contact_name);

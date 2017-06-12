@@ -1,5 +1,6 @@
 package com.healthcoco.healthcocopad.fragments;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -103,6 +104,13 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
     public void init() {
         initViews();
         initListeners();
+        Intent intent = mActivity.getIntent();
+        int ordinal = intent.getIntExtra(HealthCocoConstants.TAG_TAB_TYPE, 0);
+        if (ordinal != 0) {
+            mViewPager.setCurrentItem(ordinal);
+//            onTabChanged(String.valueOf(ordinal));
+            PatientDetailTabType patientDetailTabType = PatientDetailTabType.values()[ordinal];
+        }
     }
 
     @Override
