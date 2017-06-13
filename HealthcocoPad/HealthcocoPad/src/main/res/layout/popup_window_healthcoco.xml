@@ -1,23 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@android:color/transparent"
     android:orientation="vertical">
 
-    <ScrollView
-        android:layout_width="wrap_content"
+    <ListView
+        android:id="@+id/lv_popup_options"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/shape_rounded_corners_grey_border_solid_white"
-        android:padding="10dp"
-        android:scrollbars="none">
-
-        <LinearLayout
-            android:id="@+id/container_popup_options"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:minWidth="200dp"
-            android:orientation="vertical">
-
-        </LinearLayout>
-    </ScrollView>
+        android:divider="@color/grey_item_border"
+        android:dividerHeight="1dp"
+        android:scrollbars="none" />
 </LinearLayout>

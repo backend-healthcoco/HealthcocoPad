@@ -40,9 +40,12 @@ import com.healthcoco.healthcocopad.enums.CommonListDialogType;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.DialogType;
 import com.healthcoco.healthcocopad.enums.PatientProfileScreenType;
+import com.healthcoco.healthcocopad.enums.PopupWindowType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.CommonListDialogItemClickListener;
 import com.healthcoco.healthcocopad.listeners.CommonOptionsDialogItemClickListener;
+import com.healthcoco.healthcocopad.popupwindow.HealthcocoPopupWindow;
+import com.healthcoco.healthcocopad.popupwindow.PopupWindowListener;
 import com.healthcoco.healthcocopad.utilities.DownloadImageFromUrlUtil;
 import com.healthcoco.healthcocopad.utilities.EditTextTextViewErrorUtil;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
@@ -394,5 +397,19 @@ public abstract class HealthCocoDialogFragment extends DialogFragment implements
             tvMobile.setText(selectedPatient.getMobileNumber());
             DownloadImageFromUrlUtil.loadImageWithInitialAlphabet(mActivity, patientProfileScreenType, selectedPatient, progressLoading, ivContactProfile, tvInitialAlphabet);
         }
+    }
+
+    protected void initPopupWindows(View anchorView, PopupWindowType popupWindowType) {
+        initPopupWindows(anchorView, popupWindowType, popupWindowType.getList(), 0, null);
+    }
+
+    protected void initPopupWindows(View anchorView, PopupWindowType popupWindowType, List<Object> list) {
+        initPopupWindows(anchorView, popupWindowType, list, 0, null);
+    }
+
+    protected void initPopupWindows(View anchorView, PopupWindowType popupWindowType, List<Object> list, int dropDownLayoutId, PopupWindowListener popupWindowListener) {
+        HealthcocoPopupWindow healthcocoPopupWindow = new HealthcocoPopupWindow(mActivity, anchorView, popupWindowType, list, dropDownLayoutId, popupWindowListener);
+        healthcocoPopupWindow.setOutsideTouchable(true);
+        healthcocoPopupWindow.setContentView(healthcocoPopupWindow.getPopupView());
     }
 }

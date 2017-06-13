@@ -32,7 +32,7 @@ import com.healthcoco.healthcocopad.enums.PopupWindowType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.HealthcocoTextWatcherListener;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
-import com.healthcoco.healthcocopad.listeners.PopupWindowListener;
+import com.healthcoco.healthcocopad.popupwindow.PopupWindowListener;
 import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
@@ -41,7 +41,7 @@ import com.healthcoco.healthcocopad.utilities.EditTextTextViewErrorUtil;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
-import com.healthcoco.healthcocopad.views.HealthcocoPopupWindow;
+import com.healthcoco.healthcocopad.popupwindow.HealthcocoPopupWindow;
 
 import org.parceler.Parcels;
 
@@ -60,7 +60,6 @@ public class NextReviewOnDialogFragment extends HealthCocoDialogFragment impleme
         HealthcocoTextWatcherListener, PopupWindowListener {
     public static final String DATE_FORMAT_USED_IN_THIS_SCREEN = "EEE, MMM dd,yyyy";
     public static final String TAG_INTENT_SELECTED_TIME_SLOT = "selectedTimeSlot";
-    private HealthcocoPopupWindow userStatePopupWindow;
     private Button btDone;
     private TextView tvSelectedDate;
     private TextView tvSelectedTimeSlot;
@@ -94,7 +93,6 @@ public class NextReviewOnDialogFragment extends HealthCocoDialogFragment impleme
         initViews();
         initListeners();
         initData();
-//        initUserStatePopUpWindow();
     }
 
     @Override
@@ -112,15 +110,7 @@ public class NextReviewOnDialogFragment extends HealthCocoDialogFragment impleme
         tvSelectedDate.setOnClickListener(this);
         tvSelectedDate.addTextChangedListener(new HealthcocoTextWatcher(tvSelectedDate, this));
         btDone.setOnClickListener(this);
-        tvSelectedTimeSlot.setOnClickListener(this);
         initCrossButton();
-    }
-
-    private void initUserStatePopUpWindow() {
-        userStatePopupWindow = new HealthcocoPopupWindow(mActivity, PopupWindowType.NEXT_REVIEW,
-                (ArrayList<Object>) (ArrayList<?>) availableTimeSlotsArrayList, R.layout.spinner_drop_down_item_available_time_slots, this);
-        userStatePopupWindow.setOutsideTouchable(true);
-        userStatePopupWindow.setContentView(userStatePopupWindow.getPopupView());
     }
 
     @Override
@@ -213,6 +203,7 @@ public class NextReviewOnDialogFragment extends HealthCocoDialogFragment impleme
                     if (response.getData() != null && response.getData() instanceof AppointmentTimeSlotDetails) {
                         appointmentTimeSlotDetails = (AppointmentTimeSlotDetails) response.getData();
                         availableTimeSlotsArrayList = appointmentTimeSlotDetails.getSlots();
+                        initPopupWindows(tvSelectedTimeSlot, PopupWindowType.TIME_SLOTS, (ArrayList<Object>) (ArrayList<?>) availableTimeSlotsArrayList, R.layout.spinner_drop_down_item_available_time_slots, this);
                     }
                     break;
             }
@@ -259,10 +250,6 @@ public class NextReviewOnDialogFragment extends HealthCocoDialogFragment impleme
                 break;
             case R.id.tv_selected_date:
                 openDatePickerDialog((TextView) v);
-                break;
-            case R.id.tv_selected_time_slot:
-                initUserStatePopUpWindow();
-                userStatePopupWindow.showOptionsWindow(v);
                 break;
         }
     }
@@ -328,7 +315,7 @@ public class NextReviewOnDialogFragment extends HealthCocoDialogFragment impleme
     @Override
     public void onItemSelected(PopupWindowType popupWindowType, Object object) {
         switch (popupWindowType) {
-            case NEXT_REVIEW:
+            case TIME_SLOTS:
                 if (object != null && object instanceof AvailableTimeSlots) {
                     clearPreviousAlerts();
                     AvailableTimeSlots availableTimeSlots = (AvailableTimeSlots) object;
