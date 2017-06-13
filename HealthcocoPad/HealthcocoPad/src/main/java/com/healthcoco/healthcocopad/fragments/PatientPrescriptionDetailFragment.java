@@ -94,10 +94,9 @@ public class PatientPrescriptionDetailFragment extends HealthCocoFragment implem
 
     @Override
     public void init() {
-        showLoadingOverlay(true);
-        new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_FRAGMENT_INITIALISATION_DATA, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         initViews();
         initListeners();
+        initAdapter();
     }
 
     private void initAdapter() {
@@ -105,9 +104,10 @@ public class PatientPrescriptionDetailFragment extends HealthCocoFragment implem
         lvPrescription.setAdapter(adapter);
     }
 
-    public void getListFromLocal(boolean initialLoading, int PAGE_NUMBER) {
+    public void getListFromLocal(boolean initialLoading, boolean isOTPVerified, int PAGE_NUMBER) {
         this.isInitialLoading = initialLoading;
         this.currentPageNumber = PAGE_NUMBER;
+        this.isOTPVerified = isOTPVerified;
         isLoading = true;
         if (isInitialLoading) {
             if (isInitialLoading)
@@ -216,14 +216,6 @@ public class PatientPrescriptionDetailFragment extends HealthCocoFragment implem
         if (response.getWebServiceType() != null) {
             LogUtils.LOGD(TAG, "Success " + String.valueOf(response.getWebServiceType()));
             switch (response.getWebServiceType()) {
-                case FRAGMENT_INITIALISATION:
-                    if (user != null) {
-                        LogUtils.LOGD(TAG, "Selected patient " + selectedPatient.getLocalPatientName());
-                        initAdapter();
-                        getListFromLocal(true, PAGE_NUMBER);
-                        return;
-                    }
-                    break;
                 case GET_PRESCRIPTION:
                     if (response.isDataFromLocal()) {
                         ArrayList<Prescription> responseList = (ArrayList<Prescription>) (ArrayList<?>) response
@@ -278,14 +270,6 @@ public class PatientPrescriptionDetailFragment extends HealthCocoFragment implem
             case GET_PRESCRIPTION:
                 volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getPrescriptionsListResponse(WebServiceType.GET_PRESCRIPTION,
                         isOTPVerified, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(), HealthCocoConstants.SELECTED_PATIENTS_USER_ID, null, null);
-                break;
-            case GET_FRAGMENT_INITIALISATION_DATA:
-                volleyResponseBean = new VolleyResponseBean();
-                volleyResponseBean.setWebServiceType(WebServiceType.FRAGMENT_INITIALISATION);
-                LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
-                if (doctor != null)
-                    user = doctor.getUser();
-                selectedPatient = LocalDataServiceImpl.getInstance(mApp).getPatient(HealthCocoConstants.SELECTED_PATIENTS_USER_ID);
                 break;
         }
         if (volleyResponseBean == null)
@@ -365,7 +349,7 @@ public class PatientPrescriptionDetailFragment extends HealthCocoFragment implem
                 showLoading = intent.getBooleanExtra(SHOW_LOADING, false);
             }
             resetListAndPagingAttributes();
-            getListFromLocal(showLoading, PAGE_NUMBER);
+            getListFromLocal(showLoading, isOtpVerified(), PAGE_NUMBER);
             sendBroadcasts();
         }
     };
@@ -406,7 +390,7 @@ public class PatientPrescriptionDetailFragment extends HealthCocoFragment implem
     }
 
     public void refreshData(PatientDetailTabType detailTabType) {
-        getListFromLocal(false, PAGE_NUMBER);
+        getListFromLocal(true, true, PAGE_NUMBER);
         this.detailTabType = detailTabType;
     }
 
@@ -427,7 +411,7 @@ public class PatientPrescriptionDetailFragment extends HealthCocoFragment implem
         if (!isEndOfListAchieved && !isLoading) {
             PAGE_NUMBER = PAGE_NUMBER + 1;
             LogUtils.LOGD(TAG, "LoadMore PAGE_NUMBER " + PAGE_NUMBER);
-            getListFromLocal(false, PAGE_NUMBER);
+            getListFromLocal(false, true, PAGE_NUMBER);
         }
     }
 

@@ -84,6 +84,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
     private boolean isPrescriptionTabClicked = false;
     private boolean isClinicalNotesTabClicked = false;
     private TextView tvGenderDate;
+    private int ordinal;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -105,12 +106,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
         initViews();
         initListeners();
         Intent intent = mActivity.getIntent();
-        int ordinal = intent.getIntExtra(HealthCocoConstants.TAG_TAB_TYPE, 0);
-        if (ordinal != 0) {
-            mViewPager.setCurrentItem(ordinal);
-//            onTabChanged(String.valueOf(ordinal));
-            PatientDetailTabType patientDetailTabType = PatientDetailTabType.values()[ordinal];
-        }
+        ordinal = intent.getIntExtra(HealthCocoConstants.TAG_TAB_TYPE, 0);
     }
 
     @Override
@@ -433,6 +429,10 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                         initViewPagerAdapter();
                         initData();
                         checkPatientStatus(user, selectedPatient);
+                        if (ordinal != 0) {
+                            mViewPager.setCurrentItem(ordinal);
+//                            prescriptionDetailFragment.refreshData(PatientDetailTabType.PATIENT_DETAIL_PRESCRIPTION);
+                        }
                     }
                     break;
                 case GET_PATIENT_PROFILE:

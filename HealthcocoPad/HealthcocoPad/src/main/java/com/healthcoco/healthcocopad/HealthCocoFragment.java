@@ -572,7 +572,7 @@ public abstract class HealthCocoFragment extends Fragment implements GsonRequest
             String formattedGenderAge = Util.getFormattedGenderAge(selectedPatient);
             if (!Util.isNullOrBlank(formattedGenderAge)) {
                 tvGenderAge.setVisibility(View.VISIBLE);
-                tvGenderAge.setText(formattedGenderAge);
+                tvGenderAge.setText(selectedPatient.getPid() + formattedGenderAge);
             } else
                 tvGenderAge.setVisibility(View.GONE);
             DownloadImageFromUrlUtil.loadImageWithInitialAlphabet(mActivity, patientProfileScreenType, selectedPatient, progressLoading, ivContactProfile, tvInitialAlphabet);

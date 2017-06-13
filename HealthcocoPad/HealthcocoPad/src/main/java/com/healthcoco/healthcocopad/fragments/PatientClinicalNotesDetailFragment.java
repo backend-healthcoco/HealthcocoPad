@@ -251,7 +251,10 @@ public class PatientClinicalNotesDetailFragment extends HealthCocoFragment imple
             case ADD_CLINAL_NOTE:
                 LocalDataServiceImpl.getInstance(mApp).addClinicalNotesList((ArrayList<ClinicalNotes>) (ArrayList<?>) response.getDataList());
             case GET_CLINICAL_NOTES:
-                volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getClinicalNotesList(WebServiceType.GET_CLINICAL_NOTES, isOTPVerified, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(), HealthCocoConstants.SELECTED_PATIENTS_USER_ID, null, null);
+                volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).
+                        getClinicalNotesList(WebServiceType.GET_CLINICAL_NOTES, isOTPVerified, user.getUniqueId(),
+                                user.getForeignLocationId(), user.getForeignHospitalId(),
+                                HealthCocoConstants.SELECTED_PATIENTS_USER_ID, null, null);
                 break;
         }
         volleyResponseBean.setIsFromLocalAfterApiSuccess(response.isFromLocalAfterApiSuccess());
