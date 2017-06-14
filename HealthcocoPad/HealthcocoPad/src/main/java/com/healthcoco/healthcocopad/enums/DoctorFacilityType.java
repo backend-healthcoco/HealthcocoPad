@@ -1,12 +1,12 @@
 package com.healthcoco.healthcocopad.enums;
 
-public enum DoctorFacility {
+public enum DoctorFacilityType {
 
     IBS("IBS"), CALL("CALL"), BOOK("BOOK");
 
     private String type;
 
-    private DoctorFacility(String type) {
+    private DoctorFacilityType(String type) {
         this.type = type;
     }
 

@@ -163,19 +163,7 @@ public class MyProfileFragment extends HealthCocoFragment implements View.OnClic
                 tvNoRegistrationDetail.setVisibility(View.VISIBLE);
             }
 
-            //setting contact details
-            String mobileNumber = "";
-            String additionalMobileNumber = "";
-            String primaryEmailAddress = "";
-            String secondaryEmailAddres = "";
-
-            mobileNumber = doctorProfile.getMobileNumber();
-            if (!Util.isNullOrEmptyList(doctorProfile.getAdditionalNumbers()))
-                additionalMobileNumber = doctorProfile.getAdditionalNumbers().get(0);
-            primaryEmailAddress = doctorProfile.getEmailAddress();
-            if (!Util.isNullOrEmptyList(doctorProfile.getOtherEmailAddresses()))
-                secondaryEmailAddres = doctorProfile.getOtherEmailAddresses().get(0);
-
+            refreshContactDetails(doctorProfile);
             //setting awards and publication
             if (!Util.isNullOrEmptyList(doctorProfile.getAchievements())) {
                 containerAwardsAndPublication.setVisibility(View.VISIBLE);
@@ -216,11 +204,27 @@ public class MyProfileFragment extends HealthCocoFragment implements View.OnClic
                 tvNoProfessionalStatement.setVisibility(View.VISIBLE);
             }
 
-            tvPersonalMobileNumber.setText(Util.getValidatedValueOrDash(mActivity, mobileNumber));
-            tvAdditionalMobileNumber.setText(Util.getValidatedValueOrDash(mActivity, additionalMobileNumber));
-            tvPrimaryEmail.setText(Util.getValidatedValueOrDash(mActivity, primaryEmailAddress));
-            tvSecondaryEmail.setText(Util.getValidatedValueOrDash(mActivity, secondaryEmailAddres));
+
         }
+    }
+
+    private void refreshContactDetails(DoctorProfile doctorProfile) {
+        //setting contact details
+        String mobileNumber = "";
+        String additionalMobileNumber = "";
+        String primaryEmailAddress = "";
+        String secondaryEmailAddres = "";
+
+        mobileNumber = doctorProfile.getMobileNumber();
+        if (!Util.isNullOrEmptyList(doctorProfile.getAdditionalNumbers()))
+            additionalMobileNumber = doctorProfile.getAdditionalNumbers().get(0);
+        primaryEmailAddress = doctorProfile.getEmailAddress();
+        if (!Util.isNullOrEmptyList(doctorProfile.getOtherEmailAddresses()))
+            secondaryEmailAddres = doctorProfile.getOtherEmailAddresses().get(0);
+        tvPersonalMobileNumber.setText(Util.getValidatedValueOrDash(mActivity, mobileNumber));
+        tvAdditionalMobileNumber.setText(Util.getValidatedValueOrDash(mActivity, additionalMobileNumber));
+        tvPrimaryEmail.setText(Util.getValidatedValueOrDash(mActivity, primaryEmailAddress));
+        tvSecondaryEmail.setText(Util.getValidatedValueOrDash(mActivity, secondaryEmailAddres));
     }
 
     private void addExperienceDetailItem(List<DoctorExperienceDetail> list) {
@@ -346,6 +350,7 @@ public class MyProfileFragment extends HealthCocoFragment implements View.OnClic
                 && data != null && data.hasExtra(TAG_DOCTOR_PROFILE)
                 && doctorProfile != null) {
             DoctorProfile profile = Parcels.unwrap(data.getParcelableExtra(TAG_DOCTOR_PROFILE));
+            doctorProfile = profile;
             if (resultCode == HealthCocoConstants.RESULT_CODE_DOCTOR_PROFESSIONAL_STATEMENT_DETAIL) {
                 doctorProfile = profile;
                 doctorProfile.setProfessionalStatement(profile.getProfessionalStatement());
@@ -354,6 +359,8 @@ public class MyProfileFragment extends HealthCocoFragment implements View.OnClic
                 doctorProfile = profile;
                 doctorProfile.setProfessionalMemberships(profile.getProfessionalMemberships());
                 initData(doctorProfile);
+            } else if (resultCode == HealthCocoConstants.RESULT_CODE_DOCTOR_PROFILE_CONTACT) {
+                refreshContactDetails(doctorProfile);
             }
         } else if (requestCode == REQUEST_CODE_MY_PROFILE && doctorProfile != null) {
             if (resultCode == Activity.RESULT_OK) {

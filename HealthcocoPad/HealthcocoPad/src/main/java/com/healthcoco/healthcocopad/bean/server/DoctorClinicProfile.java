@@ -2,7 +2,8 @@ package com.healthcoco.healthcocopad.bean.server;
 
 import android.content.Context;
 
-import com.healthcoco.healthcocopad.enums.DoctorFacility;
+import com.healthcoco.healthcocopad.bean.ConsultationFee;
+import com.healthcoco.healthcocopad.enums.DoctorFacilityType;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.orm.SugarRecord;
 import com.orm.annotation.Ignore;
@@ -35,16 +36,20 @@ public class DoctorClinicProfile extends SugarRecord {
     private Integer patientCounter;
     @Ignore
     private List<String> appointmentBookingNumber;
+    protected String appointmentBookingNumberJsonString;
     @Ignore
     private ConsultationFee consultationFee;
+    protected String consultationFeeJsonString;
     @Ignore
     private ConsultationFee revisitConsultationFee;
+    private String revisitConsultationFeeJsonString;
     @Ignore
     private AppointmentSlot appointmentSlot;
+    private String appointmentSlotJsonString;
     @Ignore
     private List<DoctorWorkingSchedule> workingSchedules;
 
-    private DoctorFacility facility;
+    private DoctorFacilityType facility;
     @Ignore
     private List<ClinicImage> images;
     private Boolean twentyFourSevenOpen;
@@ -228,11 +233,11 @@ public class DoctorClinicProfile extends SugarRecord {
         this.postalCode = postalCode;
     }
 
-    public DoctorFacility getFacility() {
+    public DoctorFacilityType getFacility() {
         return facility;
     }
 
-    public void setFacility(DoctorFacility facility) {
+    public void setFacility(DoctorFacilityType facility) {
         this.facility = facility;
     }
 
@@ -317,5 +322,37 @@ public class DoctorClinicProfile extends SugarRecord {
 
     public void setRoles(ArrayList<Role> roles) {
         this.roles = roles;
+    }
+
+    public String getAppointmentBookingNumberJsonString() {
+        return appointmentBookingNumberJsonString;
+    }
+
+    public void setAppointmentBookingNumberJsonString(String appointmentBookingNumberJsonString) {
+        this.appointmentBookingNumberJsonString = appointmentBookingNumberJsonString;
+    }
+
+    public String getConsultationFeeJsonString() {
+        return consultationFeeJsonString;
+    }
+
+    public void setConsultationFeeJsonString(String consultationFeeJsonString) {
+        this.consultationFeeJsonString = consultationFeeJsonString;
+    }
+
+    public String getRevisitConsultationFeeJsonString() {
+        return revisitConsultationFeeJsonString;
+    }
+
+    public void setRevisitConsultationFeeJsonString(String revisitConsultationFeeJsonString) {
+        this.revisitConsultationFeeJsonString = revisitConsultationFeeJsonString;
+    }
+
+    public String getAppointmentSlotJsonString() {
+        return appointmentSlotJsonString;
+    }
+
+    public void setAppointmentSlotJsonString(String appointmentSlotJsonString) {
+        this.appointmentSlotJsonString = appointmentSlotJsonString;
     }
 }

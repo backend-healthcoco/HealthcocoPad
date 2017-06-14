@@ -10,7 +10,9 @@ import com.google.gson.internal.LinkedTreeMap;
 import com.healthcoco.healthcocopad.HealthCocoApplication;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.Address;
+import com.healthcoco.healthcocopad.bean.ConsultationFee;
 import com.healthcoco.healthcocopad.bean.DOB;
+import com.healthcoco.healthcocopad.bean.DoctorExperience;
 import com.healthcoco.healthcocopad.bean.PersonalHistory;
 import com.healthcoco.healthcocopad.bean.UIPermissions;
 import com.healthcoco.healthcocopad.bean.UiPermissionsBoth;
@@ -929,7 +931,7 @@ public class LocalDataServiceImpl {
                     latestUpdatedTime = tempClinicalNotes.get(0).getUpdatedTime();
                 break;
             case PRESCRIPTION:
-                List<Prescription> prescriptionList = Prescription.find(Prescription.class, LocalDatabaseUtils.KEY_PATIENT_ID + "= ?",new String[]{"" + HealthCocoConstants.SELECTED_PATIENTS_USER_ID}, null, "updated_time DESC", "1");
+                List<Prescription> prescriptionList = Prescription.find(Prescription.class, LocalDatabaseUtils.KEY_PATIENT_ID + "= ?", new String[]{"" + HealthCocoConstants.SELECTED_PATIENTS_USER_ID}, null, "updated_time DESC", "1");
                 if (!Util.isNullOrEmptyList(prescriptionList))
                     latestUpdatedTime = prescriptionList.get(0).getUpdatedTime();
                 break;
@@ -947,10 +949,7 @@ public class LocalDataServiceImpl {
         doctorProfile.setOtherEmailAddressesJsonString(getJsonFromObject(doctorProfile.getOtherEmailAddresses()));
 
         //saving doctor Experience
-        if (doctorProfile.getExperience() != null) {
-            doctorProfile.getExperience().setForeignUniqueId(doctorProfile.getDoctorId());
-            doctorProfile.getExperience().save();
-        }
+        doctorProfile.setExperience((DoctorExperience) getObjectFromJson(String.class, doctorProfile.getExperienceJsonString()));
         //saving Education Details
         addEducationsList(doctorProfile.getDoctorId(), doctorProfile.getEducation());
 
@@ -1061,30 +1060,10 @@ public class LocalDataServiceImpl {
 
     public void addDoctorClinicProfile(String doctorId, DoctorClinicProfile clinicProfile) {
         clinicProfile.setForeignUniqueId(doctorId);
-        deleteAppointmentBookingNumbers(LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, clinicProfile.getUniqueId());
         //saving appointmentBookingNumber
-        if (!Util.isNullOrEmptyList(clinicProfile.getAppointmentBookingNumber())) {
-            for (String string :
-                    clinicProfile.getAppointmentBookingNumber()) {
-                ForeignAppointmentBookingNumber appointmentBookingNumber = new ForeignAppointmentBookingNumber();
-                appointmentBookingNumber.setForeignUniqueId(clinicProfile.getUniqueId());
-                appointmentBookingNumber.setAppintmentBookingNumber(string);
-                appointmentBookingNumber.setCustomUniqueId(appointmentBookingNumber.getForeignUniqueId() + appointmentBookingNumber.getAppintmentBookingNumber());
-                appointmentBookingNumber.save();
-            }
-        }
-
-        //saving consultation fee
-        if (clinicProfile.getConsultationFee() != null) {
-            clinicProfile.getConsultationFee().setForeignUniqueId(clinicProfile.getUniqueId());
-            clinicProfile.getConsultationFee().save();
-        }
-
-        //saving reconsultation fee
-        if (clinicProfile.getRevisitConsultationFee() != null) {
-            clinicProfile.getRevisitConsultationFee().setForeignUniqueId(clinicProfile.getUniqueId());
-            clinicProfile.getRevisitConsultationFee().save();
-        }
+        clinicProfile.setAppointmentBookingNumberJsonString(getJsonFromObject(clinicProfile.getAppointmentBookingNumber()));
+        clinicProfile.setConsultationFeeJsonString(getJsonFromObject(clinicProfile.getConsultationFee()));
+        clinicProfile.setRevisitConsultationFeeJsonString(getJsonFromObject(clinicProfile.getRevisitConsultationFee()));
 
         //saving AppointmentSlot
         if (clinicProfile.getAppointmentSlot() != null) {
@@ -1481,7 +1460,7 @@ public class LocalDataServiceImpl {
             doctorProfile.setDob((DOB) getObjectFromJson(DOB.class, doctorProfile.getDobJsonString()));
             doctorProfile.setAdditionalNumbers((ArrayList<String>) (Object) getObjectsListFronJson(String.class, doctorProfile.getAdditionalNumbersJsonString()));
             doctorProfile.setOtherEmailAddresses((ArrayList<String>) (Object) getObjectsListFronJson(String.class, doctorProfile.getOtherEmailAddressesJsonString()));
-            doctorProfile.setExperience((DoctorExperience) getObject(DoctorExperience.class, LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, doctorProfile.getDoctorId()));
+            doctorProfile.setExperience((DoctorExperience) getObjectFromJson(DoctorExperience.class, doctorProfile.getExperienceJsonString()));
             doctorProfile.setEducation((List<Education>) getListByKeyValue(Education.class, LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, doctorProfile.getDoctorId()));
             doctorProfile.setSpecialities(getSpecialities(LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, doctorProfile.getDoctorId()));
             doctorProfile.setAchievements((List<Achievement>) getListByKeyValue(Achievement.class, LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, doctorProfile.getDoctorId()));
@@ -1536,9 +1515,9 @@ public class LocalDataServiceImpl {
     }
 
     private void getDoctorCLinicProfileRestDetails(DoctorClinicProfile clinicProfile) {
-        clinicProfile.setAppointmentBookingNumber(getAppointmentBookingNumber(LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, clinicProfile.getUniqueId()));
-        clinicProfile.setConsultationFee((ConsultationFee) getObject(ConsultationFee.class, LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, clinicProfile.getUniqueId()));
-        clinicProfile.setAppointmentSlot(getAppointmentSlot(clinicProfile.getUniqueId()));
+        clinicProfile.setAppointmentBookingNumber((ArrayList<String>) (Object) getObjectsListFronJson(String.class, clinicProfile.getAppointmentBookingNumberJsonString()));
+        clinicProfile.setConsultationFee((ConsultationFee) getObjectFromJson(ConsultationFee.class, clinicProfile.getConsultationFeeJsonString()));
+        clinicProfile.setAppointmentSlot((AppointmentSlot) getObjectFromJson(AppointmentSlot.class, clinicProfile.getAppointmentSlotJsonString()));
         clinicProfile.setWorkingSchedules(getWorkingSchedulesForDoctor(clinicProfile.getDoctorId(), clinicProfile.getLocationId()));
         clinicProfile.setImages((List<ClinicImage>) getListByKeyValue(ClinicImage.class, LocalDatabaseUtils.KEY_FOREIGN_LOCATION_ID, clinicProfile.getUniqueId()));
         clinicProfile.setRoles((ArrayList<Role>) Select.from(Role.class)
@@ -1577,19 +1556,6 @@ public class LocalDataServiceImpl {
         return null;
     }
 
-    public List<String> getAppointmentBookingNumber(String key, String value) {
-        List<ForeignAppointmentBookingNumber> appointmentBookingNumbersList = (List<ForeignAppointmentBookingNumber>) getListByKeyValue(ForeignAppointmentBookingNumber.class, key, value);
-        if (!Util.isNullOrEmptyList(appointmentBookingNumbersList)) {
-            List<String> stringList = new ArrayList<>();
-            for (ForeignAppointmentBookingNumber bookingNumber :
-                    appointmentBookingNumbersList) {
-                stringList.add(bookingNumber.getAppintmentBookingNumber());
-            }
-            return stringList;
-        }
-        return null;
-    }
-
     private List<?> getListByKeyValue(Class<?> class1, String key, String value) {
         return Select.from(class1).where(Condition.prop(key).eq(value)).list();
     }
@@ -1620,10 +1586,6 @@ public class LocalDataServiceImpl {
 
     private void deleteDoctorClinicProfile(String key, String value) {
         DoctorClinicProfile.deleteAll(DoctorClinicProfile.class, key + "= ?", value);
-    }
-
-    private void deleteAppointmentBookingNumbers(String key, String value) {
-        ForeignAppointmentBookingNumber.deleteAll(ForeignAppointmentBookingNumber.class, key + "= ?", value);
     }
 
     /**

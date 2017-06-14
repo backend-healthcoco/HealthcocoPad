@@ -15,7 +15,7 @@ import com.healthcoco.healthcocopad.bean.server.CityResponse;
 import com.healthcoco.healthcocopad.bean.server.ComplaintSuggestions;
 import com.healthcoco.healthcocopad.bean.server.DiagnosisSuggestions;
 import com.healthcoco.healthcocopad.bean.server.DoctorClinicProfile;
-import com.healthcoco.healthcocopad.bean.server.DoctorExperience;
+import com.healthcoco.healthcocopad.bean.DoctorExperience;
 import com.healthcoco.healthcocopad.bean.server.DrugType;
 import com.healthcoco.healthcocopad.bean.server.InvestigationSuggestions;
 import com.healthcoco.healthcocopad.bean.server.ObservationSuggestions;

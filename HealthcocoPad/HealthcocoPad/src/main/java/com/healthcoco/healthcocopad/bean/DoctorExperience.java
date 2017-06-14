@@ -1,16 +1,9 @@
-package com.healthcoco.healthcocopad.bean.server;
-
-import android.os.Parcel;
-import android.os.Parcelable;
+package com.healthcoco.healthcocopad.bean;
 
 import com.healthcoco.healthcocopad.enums.DoctorExperienceUnit;
-import com.orm.SugarRecord;
-import com.orm.annotation.Unique;
-@org.parceler.Parcel
 
-public class DoctorExperience extends SugarRecord{
-    @Unique
-    protected String foreignUniqueId;
+@org.parceler.Parcel
+public class DoctorExperience {
     private Integer experience;
 
     private DoctorExperienceUnit period;
@@ -40,14 +33,6 @@ public class DoctorExperience extends SugarRecord{
 
     public void setPeriod(DoctorExperienceUnit period) {
         this.period = period;
-    }
-
-    public String getForeignUniqueId() {
-        return foreignUniqueId;
-    }
-
-    public void setForeignUniqueId(String foreignUniqueId) {
-        this.foreignUniqueId = foreignUniqueId;
     }
 
     public String getPeriodValue() {

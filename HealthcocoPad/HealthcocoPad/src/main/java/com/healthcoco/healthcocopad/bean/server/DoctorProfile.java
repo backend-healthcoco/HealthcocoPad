@@ -4,6 +4,7 @@ import android.app.Activity;
 
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.DOB;
+import com.healthcoco.healthcocopad.bean.DoctorExperience;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.orm.SugarRecord;
 import com.orm.annotation.Ignore;
@@ -36,7 +37,7 @@ public class DoctorProfile extends SugarRecord {
     private String thumbnailUrl;
     @Ignore
     private DOB dob;
-    private String dobJsonString;
+    protected String dobJsonString;
     private String coverImageUrl;
 
     private String coverThumbnailImageUrl;
@@ -44,15 +45,15 @@ public class DoctorProfile extends SugarRecord {
     //numbers saved in AdditinalNumbers Table reference to doctorId
     @Ignore
     private List<String> additionalNumbers;
-    private String additionalNumbersJsonString;
+    protected String additionalNumbersJsonString;
 
     //email addresses saved in EmailAddresses Table reference to doctorId
     @Ignore
     private List<String> otherEmailAddresses;
-    private String otherEmailAddressesJsonString;
+    protected String otherEmailAddressesJsonString;
     @Ignore
     private DoctorExperience experience;
-
+    private String experienceJsonString;
     @Ignore
     private List<Education> education;
 
@@ -351,5 +352,13 @@ public class DoctorProfile extends SugarRecord {
 
     public void setOtherEmailAddressesJsonString(String otherEmailAddressesJsonString) {
         this.otherEmailAddressesJsonString = otherEmailAddressesJsonString;
+    }
+
+    public String getExperienceJsonString() {
+        return experienceJsonString;
+    }
+
+    public void setExperienceJsonString(String experienceJsonString) {
+        this.experienceJsonString = experienceJsonString;
     }
 }
