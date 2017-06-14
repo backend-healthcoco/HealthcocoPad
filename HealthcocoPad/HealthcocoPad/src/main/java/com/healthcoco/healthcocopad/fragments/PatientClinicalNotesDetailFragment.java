@@ -192,6 +192,7 @@ public class PatientClinicalNotesDetailFragment extends HealthCocoFragment imple
         Util.showToast(mActivity, errorMsg);
         progressLoading.setVisibility(View.GONE);
         showLoadingOverlay(false);
+        mActivity.hideLoading();
         swipeRefreshLayout.setRefreshing(false);
     }
 
@@ -199,6 +200,7 @@ public class PatientClinicalNotesDetailFragment extends HealthCocoFragment imple
     public void onNetworkUnavailable(WebServiceType webServiceType) {
         Util.showToast(mActivity, R.string.user_offline);
         showLoadingOverlay(false);
+        mActivity.hideLoading();
         swipeRefreshLayout.setRefreshing(false);
     }
 

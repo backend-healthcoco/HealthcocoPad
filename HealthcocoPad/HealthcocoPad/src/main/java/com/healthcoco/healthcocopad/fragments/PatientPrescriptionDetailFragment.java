@@ -199,6 +199,7 @@ public class PatientPrescriptionDetailFragment extends HealthCocoFragment implem
         swipeRefreshLayout.setRefreshing(false);
         progressLoading.setVisibility(View.GONE);
         showLoadingOverlay(false);
+        mActivity.hideLoading();
         Util.showToast(mActivity, errorMsg);
     }
 
@@ -207,6 +208,7 @@ public class PatientPrescriptionDetailFragment extends HealthCocoFragment implem
         Util.showToast(mActivity, R.string.user_offline);
         progressLoading.setVisibility(View.GONE);
         showLoadingOverlay(false);
+        mActivity.hideLoading();
         swipeRefreshLayout.setRefreshing(false);
     }
 
@@ -235,9 +237,13 @@ public class PatientPrescriptionDetailFragment extends HealthCocoFragment implem
                             LogUtils.LOGD(TAG, "Success onResponse prescriptionsList Size Total" + prescriptionsList.size() + " isDataFromLocal " + response.isDataFromLocal());
                         return;
                     }
-                    isInitialLoading = false;
+                    if (!response.isUserOnline())
+                        onNetworkUnavailable(response.getWebServiceType());
                     progressLoading.setVisibility(View.GONE);
+                    isLoading = false;
+                    mActivity.hideLoading();
                     showLoadingOverlay(false);
+                    isInitialLoading = false;
                     break;
                 default:
                     break;

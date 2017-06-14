@@ -94,18 +94,16 @@
         android:background="@color/grey_background"
         android:orientation="vertical">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
             android:layout_weight="1"
-            android:background="@color/grey_background"
-            android:orientation="vertical">
+            android:background="@color/grey_background">
 
             <com.healthcoco.healthcocopad.views.ScrollViewWithHeaderNewPrescriptionLayout
                 android:id="@+id/sv_container"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_above="@+id/parent_layout_advice"
                 android:fillViewport="true">
 
                 <LinearLayout
@@ -159,8 +157,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="10dp"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginRight="10dp"
                             android:background="@drawable/shape_emr_light_grey_background"
                             android:orientation="horizontal"
                             android:padding="10dp">
@@ -237,8 +233,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
                 android:background="@drawable/shape_emr_light_grey_background"
                 android:orientation="horizontal"
                 android:padding="10dp">
@@ -284,7 +278,7 @@
                     android:textAllCaps="false"
                     android:textColor="@color/orange" />
             </RelativeLayout>
-        </LinearLayout>
+        </RelativeLayout>
 
         <LinearLayout
             android:id="@+id/parent_layout_advice"

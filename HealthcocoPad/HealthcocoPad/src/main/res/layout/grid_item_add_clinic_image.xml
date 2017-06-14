@@ -18,7 +18,7 @@
             android:layout_margin="3dp"
             android:background="@color/grey_light_text"
             android:padding="10dp"
-            android:src="@drawable/img_add_photo" />
+            android:src="@drawable/ic_add_image" />
     </LinearLayout>
 
 </LinearLayout>

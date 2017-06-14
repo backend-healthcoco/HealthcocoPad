@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,7 +76,9 @@ import static com.healthcoco.healthcocopad.fragments.AddEditNormalVisitPrescript
  */
 public class AddNewTemplateFragment extends HealthCocoFragment implements TabHost.OnTabChangeListener,
         ViewPager.OnPageChangeListener, View.OnClickListener, SelectDrugItemClickListener,
-        SelectedDrugsListItemListener, TemplateListItemListener, GsonRequest.ErrorListener, Response.Listener<VolleyResponseBean>, LocalDoInBackgroundListenerOptimised, AddNewPrescriptionListener, HealthcocoTextWatcherListener {
+        SelectedDrugsListItemListener, TemplateListItemListener, GsonRequest.ErrorListener,
+        Response.Listener<VolleyResponseBean>, LocalDoInBackgroundListenerOptimised,
+        AddNewPrescriptionListener, HealthcocoTextWatcherListener {
 
     private ViewPager viewPager;
     private TabHost tabhost;
@@ -180,6 +183,7 @@ public class AddNewTemplateFragment extends HealthCocoFragment implements TabHos
 //        svContainer.addChildHeaders(tvHeaderOne);
         svContainer.addChildHeaders(tvHeaderTwo);
         svContainer.build(mActivity, this);
+        tvHeader.setVisibility(View.GONE);
     }
 
     private void initTabsFragmentsList() {
@@ -376,6 +380,17 @@ public class AddNewTemplateFragment extends HealthCocoFragment implements TabHos
     public void ondrugItemClick(SelectDrugItemType drugItemType, Object object) {
         System.out.println("drug" + drugItemType);
         selectedDrugItemsListFragment.addSelectedDrug(drugItemType, object);
+        if (object != null && selectedDrugItemsListFragment != null) {
+            svContainer.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+                @Override
+                public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                    svContainer.removeOnLayoutChangeListener(this);
+                    Log.d(TAG, "list got updated, do what ever u want");
+                    svContainer.requestChildFocus(selectedDrugItemsListFragment.getLastChildView(), selectedDrugItemsListFragment.getLastChildView());
+
+                }
+            });
+        }
     }
 
     @Override
@@ -392,7 +407,6 @@ public class AddNewTemplateFragment extends HealthCocoFragment implements TabHos
 
     @Override
     public void onDeleteItemClicked(DrugItem drug) {
-
     }
 
     @Override
@@ -434,6 +448,17 @@ public class AddNewTemplateFragment extends HealthCocoFragment implements TabHos
     public void onItemClicked(TempTemplate template) {
         System.out.println("onItemClicked" + template);
         selectedDrugItemsListFragment.addDrugsList(template.getItems());
+        if (template != null && selectedDrugItemsListFragment != null) {
+            svContainer.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+                @Override
+                public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                    svContainer.removeOnLayoutChangeListener(this);
+                    Log.d(TAG, "list got updated, do what ever u want");
+                    svContainer.requestChildFocus(selectedDrugItemsListFragment.getLastChildView(), selectedDrugItemsListFragment.getLastChildView());
+
+                }
+            });
+        }
     }
 
     @Override
@@ -479,5 +504,4 @@ public class AddNewTemplateFragment extends HealthCocoFragment implements TabHos
     private void setDurationUnitToAll(String unit) {
         selectedDrugItemsListFragment.modifyDurationUnit(unit);
     }
-
 }

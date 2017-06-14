@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.TextView;
 
 import com.healthcoco.healthcocopad.HealthCocoFragment;
@@ -46,10 +47,9 @@ import static com.healthcoco.healthcocopad.fragments.AddEditNormalVisitPrescript
  */
 public class SelectedDrugItemsListFragment extends HealthCocoFragment implements
         SelectedDrugsListItemListener, AddNewPrescriptionListener {
-    private static final int REQUEST_CODE_SELECTED_DRUGS_LIST = 101;
     private AddNewPrescriptionListener prescriptionListener;
     private ExpandableHeightListView lvDrugsList;
-    private HashMap<String, DrugItem> drugsList = new HashMap<String, DrugItem>();
+    private LinkedHashMap<String, DrugItem> drugsList = new LinkedHashMap<String, DrugItem>();
     private HashMap<String, DrugInteractionRequest> drugInteractionRequest = new HashMap<String, DrugInteractionRequest>();
     private SelectedPrescriptionDrugItemsListAdapter adapter;
     private SelectedPrescriptionDrugDoseItemsListViewHolder viewHolder;
@@ -127,6 +127,7 @@ public class SelectedDrugItemsListFragment extends HealthCocoFragment implements
     private void initAdapter() {
         adapter = new SelectedPrescriptionDrugItemsListAdapter(mActivity, this);
         lvDrugsList.setAdapter(adapter);
+        lvDrugsList.setTranscriptMode(AbsListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
     }
 
     private void notifyAdapter(HashMap<String, DrugItem> drugsListMap) {
@@ -154,7 +155,7 @@ public class SelectedDrugItemsListFragment extends HealthCocoFragment implements
         showConfirmationAlert(drug);
     }
 
-    private void showConfirmationAlert(final DrugItem drug) {
+    public void showConfirmationAlert(final DrugItem drug) {
         final AlertDialog.Builder alertBuilder = new AlertDialog.Builder(mActivity);
         alertBuilder.setTitle(R.string.confirm);
         alertBuilder.setMessage(R.string.confirm_remove_drug);
@@ -184,6 +185,7 @@ public class SelectedDrugItemsListFragment extends HealthCocoFragment implements
 
     @Override
     public void onDrugItemClicked(DrugItem drugItem) {
+
     }
 
     @Override
@@ -249,7 +251,7 @@ public class SelectedDrugItemsListFragment extends HealthCocoFragment implements
                 drug.setDuration(LocalDataServiceImpl.getInstance(mApp).getDefaultDuration());
             drugsList.put(drug.getDrug().getUniqueId(), drug);
             notifyAdapter(drugsList);
-//            lvDrugsList.setSelection(adapter.getCount());
+            lvDrugsList.setSelection(adapter.getCount());
         }
     }
 
@@ -372,5 +374,17 @@ public class SelectedDrugItemsListFragment extends HealthCocoFragment implements
                 }
             }
         }
+    }
+
+    public View getLastChildView() {
+        View lastview = null;
+        try {
+            lastview = lvDrugsList.getChildAt(adapter.getCount() - 1);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (lastview == null)
+            lastview = view;
+        return lastview;
     }
 }

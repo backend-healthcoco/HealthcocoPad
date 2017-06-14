@@ -68,7 +68,7 @@ public class HealthcocoPopupWindow extends PopupWindow implements View.OnClickLi
 //        showAsDropDown(v, -5, 0);
         showAsDropDown(v);
 //        showAsDropDown(v, 0, 0, Gravity.NO_GRAVITY);
-        update(v, 0, 0, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        update(v, 0, 0, anchorView.getWidth(), LinearLayout.LayoutParams.WRAP_CONTENT);
     }
 
     public void showOptionsWindowAtLeftCenter(View v) {

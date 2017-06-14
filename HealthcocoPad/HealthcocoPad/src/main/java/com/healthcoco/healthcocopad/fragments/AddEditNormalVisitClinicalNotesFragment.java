@@ -83,7 +83,9 @@ import static com.healthcoco.healthcocopad.fragments.MyScriptAddVisitsFragment.T
  * Created by Shreshtha on 16-05-2017.
  */
 
-public class AddEditNormalVisitClinicalNotesFragment extends HealthCocoFragment implements LocalDoInBackgroundListenerOptimised, View.OnTouchListener, View.OnFocusChangeListener, View.OnClickListener, TextWatcher, HealthcocoTextWatcherListener {
+public class AddEditNormalVisitClinicalNotesFragment extends HealthCocoFragment implements
+        LocalDoInBackgroundListenerOptimised, View.OnTouchListener,
+        View.OnClickListener, TextWatcher, HealthcocoTextWatcherListener {
     public static final String INTENT_ON_SUGGESTION_ITEM_CLICK = "com.healthcoco.healthcocopad.fragments.AddEditNormalVisitClinicalNotesFragment.ON_SUGGESTION_ITEM_CLICK";
     private User user;
     public static final String TAG_CLINICAL_NOTE_ID = "clinicalNoteId";
@@ -192,10 +194,6 @@ public class AddEditNormalVisitClinicalNotesFragment extends HealthCocoFragment 
     }
 
     public View.OnTouchListener getOnTouchListener() {
-        return this;
-    }
-
-    public View.OnFocusChangeListener getOnFocusChangeListener() {
         return this;
     }
 
@@ -360,23 +358,6 @@ public class AddEditNormalVisitClinicalNotesFragment extends HealthCocoFragment 
                         return;
                     }
                     break;
-//                case ADD_VISIT:
-//                    if (response.getData() != null && response.getData() instanceof VisitDetails) {
-//                        VisitDetails visit = (VisitDetails) response.getData();
-//                        LocalDataServiceImpl.getInstance(mApp).addVisit(visit);
-//                        Util.sendBroadcast(mApp, PatientVisitDetailFragment.INTENT_GET_VISITS_LIST_FROM_LOCAL);
-//                        Intent intent = new Intent();
-//                        mActivity.setResult(HealthCocoConstants.RESULT_CODE_ADD_VISIT, intent);
-//                    }
-//                    mActivity.finish();
-//                    break;
-//                case GET_PATIENT_VISIT_DETAIL:
-//                    if (response.getData() != null && response.getData() instanceof VisitDetails) {
-//                        VisitDetails visit = (VisitDetails) response.getData();
-//                        visit.setSelectedPatient(selectedPatient);
-//                        prePopulateVisitDetails(visit);
-//                    }
-//                    break;
                 case ADD_CLINICAL_NOTES:
                     if (response.isValidData(response)) {
                         ClinicalNotes clinicalNote = (ClinicalNotes) response.getData();
@@ -433,11 +414,11 @@ public class AddEditNormalVisitClinicalNotesFragment extends HealthCocoFragment 
     }
 
     public void requestFocus(View v) {
-        refreshSuggestionsList(v, "");
         if (selectedSuggestionType != null) {
             addVisitSuggestionsFragment.refreshTagOfEditText(selectedSuggestionType);
             isOnItemClick = true;
         }
+        refreshSuggestionsList(v, "");
     }
 
     /**
@@ -457,17 +438,6 @@ public class AddEditNormalVisitClinicalNotesFragment extends HealthCocoFragment 
 
     public int getBlankClinicalNoteMsgId() {
         return addClinicalNotesFragment.isBlankClinicalNote();
-    }
-
-    @Override
-    public void onFocusChange(View v, boolean hasFocus) {
-//        if (hasFocus) {
-//            if (v instanceof EditText) {
-//                refreshSuggestionsList(v, "");
-//                if (selectedSuggestionType != null)
-//                    addVisitSuggestionsFragment.refreshTagOfEditText(selectedSuggestionType);
-//            }
-//        }
     }
 
     @Override

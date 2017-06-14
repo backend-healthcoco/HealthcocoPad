@@ -11,6 +11,7 @@
         android:background="@color/grey_background"
         android:clipToPadding="false"
         android:divider="@null"
+        android:stackFromBottom="true"
         android:scrollbarStyle="outsideOverlay"
         android:visibility="gone" />
 

@@ -54,7 +54,10 @@
             </LinearLayout>
         </TabHost>
     </LinearLayout>
-
+    <View
+        android:layout_width="0.3dp"
+        android:layout_height="match_parent"
+        android:background="@color/grey_icons"></View>
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
@@ -93,12 +96,11 @@
 
         </LinearLayout>
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
             android:layout_weight="1"
-            android:background="@color/grey_background"
-            android:orientation="vertical">
+            android:background="@color/grey_background">
 
             <com.healthcoco.healthcocopad.views.ScrollViewWithHeaderNewPrescriptionLayout
                 android:id="@+id/sv_container"
@@ -112,6 +114,40 @@
                     android:orientation="vertical">
 
                     <LinearLayout
+                        android:id="@+id/parent_diagnostic_tests_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <LinearLayout
+                            android:id="@+id/tv_header_one"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            android:background="@color/grey_header"
+                            android:padding="10dp">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center|start"
+                                android:text="@string/lab_test"
+                                android:textColor="@color/grey_dark_text"
+                                android:textSize="@dimen/text_size_doctor_profile_item_header_child" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/container_diagnostic_tests"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/grey_background"
+                            android:orientation="vertical">
+
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
                         android:id="@+id/parent_drugs_list"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -123,8 +159,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="10dp"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginRight="10dp"
                             android:background="@drawable/shape_emr_light_grey_background"
                             android:orientation="horizontal"
                             android:padding="10dp">
@@ -188,7 +222,7 @@
                         android:layout_height="0dp"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="@string/no_drugs_added"
+                        android:text="@string/no_drug_lab_selected"
                         android:textSize="@dimen/text_size_no_results"
                         android:textStyle="bold"
                         android:visibility="visible" />
@@ -201,8 +235,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
                 android:background="@drawable/shape_emr_light_grey_background"
                 android:orientation="horizontal"
                 android:padding="10dp">
@@ -248,7 +280,6 @@
                     android:textAllCaps="false"
                     android:textColor="@color/orange" />
             </RelativeLayout>
-        </LinearLayout>
-
+        </RelativeLayout>
     </LinearLayout>
 </LinearLayout>

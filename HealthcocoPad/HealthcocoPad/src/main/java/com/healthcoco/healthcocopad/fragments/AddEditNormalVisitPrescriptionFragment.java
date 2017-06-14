@@ -16,6 +16,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.text.InputFilter;
 import android.text.Spanned;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -24,7 +25,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TabHost;
 import android.widget.TextView;
@@ -33,7 +33,6 @@ import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.adapter.ContactsDetailViewPagerAdapter;
-import com.healthcoco.healthcocopad.adapter.SelectedTemplateDrugItemsListAdapter;
 import com.healthcoco.healthcocopad.bean.DrugInteractions;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.request.PrescriptionRequest;
@@ -45,10 +44,10 @@ import com.healthcoco.healthcocopad.bean.server.Prescription;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.TempTemplate;
 import com.healthcoco.healthcocopad.bean.server.User;
-import com.healthcoco.healthcocopad.bean.server.VisitDetails;
 import com.healthcoco.healthcocopad.custom.DummyTabFactory;
 import com.healthcoco.healthcocopad.custom.HealthcocoTextWatcher;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
+import com.healthcoco.healthcocopad.enums.ClinicalNotesPermissionType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.PrescriptionPermissionType;
 import com.healthcoco.healthcocopad.enums.SelectDrugItemType;
@@ -361,8 +360,6 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
 
                 addEditNormalVisitsFragment = (AddEditNormalVisitsFragment) mFragmentManager.findFragmentByTag(AddEditNormalVisitsFragment.class.getSimpleName());
                 addEditNormalVisitClinicalNotesFragment = (AddEditNormalVisitClinicalNotesFragment) addEditNormalVisitsFragment.getCurrentTabFragment(0);
-                addVisitSuggestionsFragment.refreshTagOfEditText(SuggestionType.PRESENT_COMPLAINT);
-                addEditNormalVisitClinicalNotesFragment.getOnTouchListener();
                 break;
             default:
                 break;
@@ -473,6 +470,17 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
         System.out.println("drug" + drugItemType);
         isDurationSet = false;
         selectedDrugItemsListFragment.addSelectedDrug(drugItemType, object);
+        if (object != null && selectedDrugItemsListFragment != null) {
+            svContainer.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+                @Override
+                public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                    svContainer.removeOnLayoutChangeListener(this);
+                    Log.d(TAG, "list got updated, do what ever u want");
+                    svContainer.requestChildFocus(selectedDrugItemsListFragment.getLastChildView(), selectedDrugItemsListFragment.getLastChildView());
+
+                }
+            });
+        }
     }
 
     public List<DiagnosticTest> getLabTestsList() {
@@ -501,8 +509,7 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
 
     @Override
     public void onDeleteItemClicked(DrugItem drug) {
-        System.out.println("onDeleteItemClicked" + drug);
-        selectedDrugItemsListFragment.notifyList();
+
     }
 
     @Override
@@ -546,6 +553,17 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
     public void onItemClicked(TempTemplate template) {
         System.out.println("onItemClicked" + template);
         selectedDrugItemsListFragment.addDrugsList(template.getItems());
+        if (template != null && selectedDrugItemsListFragment != null) {
+            svContainer.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+                @Override
+                public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                    svContainer.removeOnLayoutChangeListener(this);
+                    Log.d(TAG, "list got updated, do what ever u want");
+                    svContainer.requestChildFocus(selectedDrugItemsListFragment.getLastChildView(), selectedDrugItemsListFragment.getLastChildView());
+
+                }
+            });
+        }
     }
 
     @Override
