@@ -208,7 +208,7 @@ public class PatientClinicalNotesDetailFragment extends HealthCocoFragment imple
     public void onResponse(VolleyResponseBean response) {
         switch (response.getWebServiceType()) {
             case GET_CLINICAL_NOTES:
-                if (response.isDataFromLocal()) {
+                 if (response.isDataFromLocal()) {
                     ArrayList<ClinicalNotes> responseList = (ArrayList<ClinicalNotes>) (ArrayList<?>) response
                             .getDataList();
                     formHashMapAndRefresh(responseList);
