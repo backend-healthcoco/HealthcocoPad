@@ -15,7 +15,6 @@ import com.healthcoco.healthcocopad.bean.PersonalHistory;
 import com.healthcoco.healthcocopad.bean.UIPermissions;
 import com.healthcoco.healthcocopad.bean.UiPermissionsBoth;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
-import com.healthcoco.healthcocopad.bean.request.AppointmentRequestToSend;
 import com.healthcoco.healthcocopad.bean.server.*;
 import com.healthcoco.healthcocopad.enums.AdvanceSearchOptionsType;
 import com.healthcoco.healthcocopad.enums.BooleanTypeValues;
@@ -127,20 +126,6 @@ public class LocalDataServiceImpl {
         }
         return null;
     }
-
-//    private ArrayList<Object> getObjectsListFronJson(Class<?> class1, String jsonString) {
-//        if (!Util.isNullOrBlank(jsonString)) {
-//            ArrayList<Object> parsedObject = gson.fromJson(jsonString, ArrayList.class);
-//            if (!Util.isNullOrEmptyList(parsedObject)) {
-//                if (parsedObject.get(0) instanceof LinkedTreeMap) {
-//                    JsonArray jsonObject = gson.toJsonTree(parsedObject).getAsJsonArray();
-//                    return gson.fromJson(jsonObject, ArrayList.class);
-//                }
-//                return parsedObject;
-//            }
-//        }
-//        return null;
-//    }
 
     public void addSyncAllObject(SyncAll syncAll) {
         LogUtils.LOGD(TAG, "SyncAllType add " + syncAll.getSyncAllType());
@@ -558,7 +543,7 @@ public class LocalDataServiceImpl {
                 .where(Condition.prop(LocalDatabaseUtils.KEY_UNIQUE_ID).eq(locationId));
         Location location = selectQuery.first();
         if (location != null) {
-            location.setAlternateClinicNumbers(getAdditionalNumbersList(LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, location.getUniqueId()));
+            location.setAlternateClinicNumbers((ArrayList<String>) (Object) getObjectsListFronJson(String.class, location.getAlternateClinicNumbersJsonString()));
             location.setImages((List<ClinicImage>) getListByKeyValue(ClinicImage.class, LocalDatabaseUtils.KEY_FOREIGN_LOCATION_ID, location.getUniqueId()));
             location.setClinicWorkingSchedules(getClinicWorkingSchedules(LocalDatabaseUtils.KEY_FOREIGN_LOCATION_ID, location.getUniqueId()));
         }
@@ -948,7 +933,7 @@ public class LocalDataServiceImpl {
                 break;
             case PRESCRIPTION:
                 List<Prescription> prescriptionList = Prescription.find(Prescription.class,
-                        LocalDatabaseUtils.KEY_DOCTOR_ID + "= ? AND " +LocalDatabaseUtils.KEY_PATIENT_ID + "= ?",
+                        LocalDatabaseUtils.KEY_DOCTOR_ID + "= ? AND " + LocalDatabaseUtils.KEY_PATIENT_ID + "= ?",
                         new String[]{"" + HealthCocoConstants.SELECTED_PATIENTS_USER_ID},
                         null, "updated_time DESC", "1");
                 if (!Util.isNullOrEmptyList(prescriptionList))
@@ -964,18 +949,8 @@ public class LocalDataServiceImpl {
     public void addDoctorProfile(DoctorProfile doctorProfile) {
         // setting DOB
         doctorProfile.setDobJsonString(getJsonFromObject(doctorProfile.getDob()));
-
-        deleteAdditionalNumbersIfAlreadyPresent(LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, doctorProfile.getDoctorId());
-        //saving additionalNumbers
-        if (!Util.isNullOrEmptyList(doctorProfile.getAdditionalNumbers())) {
-            addAdditionalNumbers(LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, doctorProfile.getDoctorId(), doctorProfile.getAdditionalNumbers());
-        }
-
-        deleteOtherEmailAddressesIfAlreadyPresent(LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, doctorProfile.getDoctorId());
-        //saving EmailAddresses
-        if (!Util.isNullOrEmptyList(doctorProfile.getOtherEmailAddresses())) {
-            addOtherEmailAddressesList(LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, doctorProfile.getDoctorId(), doctorProfile.getOtherEmailAddresses());
-        }
+        doctorProfile.setAdditionalNumbersJsonString(getJsonFromObject(doctorProfile.getAdditionalNumbers()));
+        doctorProfile.setOtherEmailAddressesJsonString(getJsonFromObject(doctorProfile.getOtherEmailAddresses()));
 
         //saving doctor Experience
         if (doctorProfile.getExperience() != null) {
@@ -1442,18 +1417,13 @@ public class LocalDataServiceImpl {
     private void deleteAllFrom(Class<?> class1, String key, String value) {
         SugarRecord.deleteAll(class1, key + "= ?", value);
     }
-
-    private void deleteAdditionalNumbersIfAlreadyPresent(String key, String value) {
-        ForieignAdditionalNumbers.deleteAll(ForieignAdditionalNumbers.class, key + "= ?", value);
-    }
+//
+//    private void deleteAdditionalNumbersIfAlreadyPresent(String key, String value) {
+//        ForieignAdditionalNumbers.deleteAll(ForieignAdditionalNumbers.class, key + "= ?", value);
+//    }
 
     public void addLocation(Location location) {
-
-        deleteAdditionalNumbersIfAlreadyPresent(LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, location.getUniqueId());
-//        saving additionalNumbers/alernateNumbers
-        if (!Util.isNullOrEmptyList(location.getAlternateClinicNumbers())) {
-            addAdditionalNumbers(LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, location.getUniqueId(), location.getAlternateClinicNumbers());
-        }
+        location.setAlternateClinicNumbersJsonString(getJsonFromObject(location.getAlternateClinicNumbers()));
         //delete all clinic images first
         deleteClinicImages(LocalDatabaseUtils.KEY_FOREIGN_LOCATION_ID, location.getUniqueId());
         if (!Util.isNullOrEmptyList(location.getImages()))
@@ -1481,28 +1451,18 @@ public class LocalDataServiceImpl {
         ClinicImage.deleteInTx(list);
     }
 
-    private void addAdditionalNumbers(String key, String value, List<String> list) {
-        for (String number :
-                list) {
-            if (!Util.isNullOrBlank(number)) {
-                ForieignAdditionalNumbers additionalNumbers = new ForieignAdditionalNumbers();
-                additionalNumbers.setForeignUniqueId(value);
-                additionalNumbers.setAdditionalNumber(number);
-                additionalNumbers.setCustomUniqueId(additionalNumbers.getForeignUniqueId() + additionalNumbers.getAdditionalNumber());
-                additionalNumbers.save();
-            }
-        }
-    }
-
-    private void addOtherEmailAddressesList(String key, String value, List<String> list) {
-        for (String string :
-                list) {
-            ForeignOtherEmailAddresses otherEmailAddresses = new ForeignOtherEmailAddresses();
-            otherEmailAddresses.setForeignUniqueId(value);
-            otherEmailAddresses.setOtherEmailAddress(string);
-            otherEmailAddresses.save();
-        }
-    }
+//    private void addAdditionalNumbers(String key, String value, List<String> list) {
+//        for (String number :
+//                list) {
+//            if (!Util.isNullOrBlank(number)) {
+//                ForieignAdditionalNumbers additionalNumbers = new ForieignAdditionalNumbers();
+//                additionalNumbers.setForeignUniqueId(value);
+//                additionalNumbers.setAdditionalNumber(number);
+//                additionalNumbers.setCustomUniqueId(additionalNumbers.getForeignUniqueId() + additionalNumbers.getAdditionalNumber());
+//                additionalNumbers.save();
+//            }
+//        }
+//    }
 
     public VolleyResponseBean getDoctorProfileResponse(WebServiceType webServiceType, String doctorId, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
@@ -1525,8 +1485,8 @@ public class LocalDataServiceImpl {
         DoctorProfile doctorProfile = Select.from(DoctorProfile.class).where(Condition.prop(LocalDatabaseUtils.KEY_DOCTOR_ID).eq(doctorId)).first();
         if (doctorProfile != null) {
             doctorProfile.setDob((DOB) getObjectFromJson(DOB.class, doctorProfile.getDobJsonString()));
-            doctorProfile.setAdditionalNumbers(getAdditionalNumbersList(LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, doctorProfile.getDoctorId()));
-            doctorProfile.setOtherEmailAddresses(getOtherEmailAddresses(LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, doctorProfile.getDoctorId()));
+            doctorProfile.setAdditionalNumbers((ArrayList<String>) (Object) getObjectsListFronJson(String.class, doctorProfile.getAdditionalNumbersJsonString()));
+            doctorProfile.setOtherEmailAddresses((ArrayList<String>) (Object) getObjectsListFronJson(String.class, doctorProfile.getOtherEmailAddressesJsonString()));
             doctorProfile.setExperience((DoctorExperience) getObject(DoctorExperience.class, LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, doctorProfile.getDoctorId()));
             doctorProfile.setEducation((List<Education>) getListByKeyValue(Education.class, LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, doctorProfile.getDoctorId()));
             doctorProfile.setSpecialities(getSpecialities(LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, doctorProfile.getDoctorId()));
@@ -1541,32 +1501,6 @@ public class LocalDataServiceImpl {
 
     private Object getObject(Class<?> class1, String key, String value) {
         return Select.from(class1).where(Condition.prop(key).eq(value)).first();
-    }
-
-    public ArrayList<String> getAdditionalNumbersList(String key, String value) {
-        ArrayList<ForieignAdditionalNumbers> additionalNumbersList = (ArrayList<ForieignAdditionalNumbers>) getListByKeyValue(ForieignAdditionalNumbers.class, key, value);
-        if (!Util.isNullOrEmptyList(additionalNumbersList)) {
-            ArrayList<String> numbersList = new ArrayList<>();
-            for (ForieignAdditionalNumbers additionalNumbers :
-                    additionalNumbersList) {
-                numbersList.add(additionalNumbers.getAdditionalNumber());
-            }
-            return numbersList;
-        }
-        return null;
-    }
-
-    public List<String> getOtherEmailAddresses(String key, String value) {
-        List<ForeignOtherEmailAddresses> emailAddressesList = (List<ForeignOtherEmailAddresses>) getListByKeyValue(ForeignOtherEmailAddresses.class, key, value);
-        if (!Util.isNullOrEmptyList(emailAddressesList)) {
-            List<String> stringList = new ArrayList<>();
-            for (ForeignOtherEmailAddresses emailAddress :
-                    emailAddressesList) {
-                stringList.add(emailAddress.getOtherEmailAddress());
-            }
-            return stringList;
-        }
-        return null;
     }
 
     public List<String> getSpecialities(String key, String value) {
@@ -1664,10 +1598,6 @@ public class LocalDataServiceImpl {
 
     private List<?> getListByKeyValue(Class<?> class1, String key, String value) {
         return Select.from(class1).where(Condition.prop(key).eq(value)).list();
-    }
-
-    private void deleteOtherEmailAddressesIfAlreadyPresent(String key, String value) {
-        ForeignOtherEmailAddresses.deleteAll(ForeignOtherEmailAddresses.class, key + "= ?", value);
     }
 
     private void deleteEducationsIfAlreadyPresent(String key, String value) {

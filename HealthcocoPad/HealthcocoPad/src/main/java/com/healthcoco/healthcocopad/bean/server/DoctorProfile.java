@@ -44,11 +44,12 @@ public class DoctorProfile extends SugarRecord {
     //numbers saved in AdditinalNumbers Table reference to doctorId
     @Ignore
     private List<String> additionalNumbers;
-
+    private String additionalNumbersJsonString;
 
     //email addresses saved in EmailAddresses Table reference to doctorId
     @Ignore
     private List<String> otherEmailAddresses;
+    private String otherEmailAddressesJsonString;
     @Ignore
     private DoctorExperience experience;
 
@@ -334,5 +335,21 @@ public class DoctorProfile extends SugarRecord {
 
     public void setDobJsonString(String dobJsonString) {
         this.dobJsonString = dobJsonString;
+    }
+
+    public String getAdditionalNumbersJsonString() {
+        return additionalNumbersJsonString;
+    }
+
+    public void setAdditionalNumbersJsonString(String additionalNumbersJsonString) {
+        this.additionalNumbersJsonString = additionalNumbersJsonString;
+    }
+
+    public String getOtherEmailAddressesJsonString() {
+        return otherEmailAddressesJsonString;
+    }
+
+    public void setOtherEmailAddressesJsonString(String otherEmailAddressesJsonString) {
+        this.otherEmailAddressesJsonString = otherEmailAddressesJsonString;
     }
 }

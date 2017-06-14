@@ -63,6 +63,7 @@ public class Location extends SugarRecord {
     private String clinicNumber;
     @Ignore
     private ArrayList<String> alternateClinicNumbers;
+    private String alternateClinicNumbersJsonString;
     @Ignore
     private List<ClinicWorkingSchedule> clinicWorkingSchedules;
 
@@ -316,5 +317,13 @@ public class Location extends SugarRecord {
 
     public void setClinicAddress(String clinicAddress) {
         this.clinicAddress = clinicAddress;
+    }
+
+    public String getAlternateClinicNumbersJsonString() {
+        return alternateClinicNumbersJsonString;
+    }
+
+    public void setAlternateClinicNumbersJsonString(String alternateClinicNumbersJsonString) {
+        this.alternateClinicNumbersJsonString = alternateClinicNumbersJsonString;
     }
 }
