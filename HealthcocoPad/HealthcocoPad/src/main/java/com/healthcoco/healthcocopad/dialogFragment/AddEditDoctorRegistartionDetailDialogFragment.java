@@ -3,6 +3,8 @@ package com.healthcoco.healthcocopad.dialogFragment;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
@@ -17,21 +19,29 @@ import com.android.volley.Response;
 import com.healthcoco.healthcocopad.HealthCocoDialogFragment;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
+import com.healthcoco.healthcocopad.bean.request.AddEditDoctorRegRequest;
 import com.healthcoco.healthcocopad.bean.server.DoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.DoctorRegistrationDetail;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.MedicalCouncil;
 import com.healthcoco.healthcocopad.bean.server.User;
+import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocopad.enums.CommonListDialogType;
+import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
+import com.healthcoco.healthcocopad.fragments.MyProfileFragment;
 import com.healthcoco.healthcocopad.listeners.CommonListDialogItemClickListener;
+import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
 import com.healthcoco.healthcocopad.listeners.RegistrationDetailItemListener;
 import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
+import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.healthcoco.healthcocopad.viewholders.RegistrationDetailListViewHolder;
+
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +49,8 @@ import java.util.List;
 /**
  * Created by Shreshtha on 18-02-2017.
  */
-public class AddEditDoctorRegistartionDetailDialogFragment extends HealthCocoDialogFragment implements View.OnClickListener, RegistrationDetailItemListener, GsonRequest.ErrorListener, Response.Listener<VolleyResponseBean>, CommonListDialogItemClickListener {
+public class AddEditDoctorRegistartionDetailDialogFragment extends HealthCocoDialogFragment implements View.OnClickListener, RegistrationDetailItemListener, GsonRequest.ErrorListener, Response.Listener<VolleyResponseBean>, CommonListDialogItemClickListener, LocalDoInBackgroundListenerOptimised {
+    public static final String TAG_DOCTOR_REGISTRATION_DETAIL = "doctorsRegistrationDetail";
     private LinearLayout containerItemsRegistrationDetail;
     private List<DoctorRegistrationDetail> registrationDetailList = new ArrayList<>();
     private FloatingActionButton btAddMore;
@@ -47,6 +58,7 @@ public class AddEditDoctorRegistartionDetailDialogFragment extends HealthCocoDia
     private TextView seletectMedicalCouncil;
     private User user;
     private ScrollView scrollView;
+    private DoctorProfile doctorProfile;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -60,18 +72,16 @@ public class AddEditDoctorRegistartionDetailDialogFragment extends HealthCocoDia
         super.onActivityCreated(savedInstanceState);
         setWidthHeight(0.50, 0.80);
         init();
+        showLoadingOverlay(true);
+        new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_FRAGMENT_INITIALISATION_DATA, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     @Override
     public void init() {
-        LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
-        if (doctor != null && doctor.getUser() != null && !Util.isNullOrBlank(doctor.getUser().getUniqueId())) {
-            user = doctor.getUser();
-            registrationDetailList = LocalDataServiceImpl.getInstance(mApp).getRegistrationDetailsList(user.getUniqueId());
-            initViews();
-            initListeners();
-            notifyAdapter();
-        }
+        registrationDetailList = Parcels.unwrap(getArguments().getParcelable(TAG_DOCTOR_REGISTRATION_DETAIL));
+        initViews();
+        initListeners();
+        notifyAdapter();
     }
 
     @Override
@@ -115,10 +125,10 @@ public class AddEditDoctorRegistartionDetailDialogFragment extends HealthCocoDia
     private void addEditRegistrationDetails() {
         LogUtils.LOGD(TAG, "Registration Details List Size " + registrationDetailList.size());
         mActivity.showLoading(false);
-        DoctorProfile doctorProfile = new DoctorProfile();
-        doctorProfile.setDoctorId(user.getUniqueId());
-        doctorProfile.setRegistrationDetails(registrationDetailList);
-        WebDataServiceImpl.getInstance(mApp).addUpdateRegistrationDetail(DoctorProfile.class, doctorProfile, this, this);
+        AddEditDoctorRegRequest doctorRegRequest = new AddEditDoctorRegRequest();
+        doctorRegRequest.setDoctorId(user.getUniqueId());
+        doctorRegRequest.setRegistrationDetails(registrationDetailList);
+        WebDataServiceImpl.getInstance(mApp).addUpdateRegistrationDetail(AddEditDoctorRegRequest.class, doctorRegRequest, this, this);
     }
 
     private Object validateData(boolean isOnSaveClick) {
@@ -179,11 +189,15 @@ public class AddEditDoctorRegistartionDetailDialogFragment extends HealthCocoDia
         LogUtils.LOGD(TAG, "Success " + String.valueOf(response.getWebServiceType()));
         switch (response.getWebServiceType()) {
             case ADD_UPDATE_REGISTRATION_DETAIL:
-                if (response.getData() != null && response.getData() instanceof DoctorProfile) {
-                    DoctorProfile doctorProfileResponse = (DoctorProfile) response.getData();
-                    LocalDataServiceImpl.getInstance(mApp).addRegistrationDetailsList(user.getUniqueId(), doctorProfileResponse.getRegistrationDetails());
+                if (response.getData() != null && response.getData() instanceof AddEditDoctorRegRequest) {
+                    doctorProfile = new DoctorProfile();
+                    AddEditDoctorRegRequest addEditDoctorRegRequest = (AddEditDoctorRegRequest) response.getData();
+                    doctorProfile.setRegistrationDetails(addEditDoctorRegRequest.getRegistrationDetails());
+                    LocalDataServiceImpl.getInstance(mApp).addRegistrationDetailsList(user.getUniqueId(), doctorProfile.getRegistrationDetails());
                 }
-                getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, getActivity().getIntent());
+                Intent intent = new Intent();
+                intent.putExtra(MyProfileFragment.TAG_DOCTOR_PROFILE, Parcels.wrap(doctorProfile));
+                getTargetFragment().onActivityResult(getTargetRequestCode(), HealthCocoConstants.RESULT_CODE_REGISTRATION_DETAIL, intent);
                 getDialog().dismiss();
                 break;
         }
@@ -252,5 +266,25 @@ public class AddEditDoctorRegistartionDetailDialogFragment extends HealthCocoDia
         });
         alertBuilder.create();
         alertBuilder.show();
+    }
+
+    @Override
+    public VolleyResponseBean doInBackground(VolleyResponseBean response) {
+        VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
+        switch (response.getLocalBackgroundTaskType()) {
+            case GET_FRAGMENT_INITIALISATION_DATA:
+                volleyResponseBean.setWebServiceType(WebServiceType.FRAGMENT_INITIALISATION);
+                LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
+                if (doctor != null)
+                    user = doctor.getUser();
+                break;
+        }
+        volleyResponseBean.setIsFromLocalAfterApiSuccess(response.isFromLocalAfterApiSuccess());
+        return volleyResponseBean;
+    }
+
+    @Override
+    public void onPostExecute(VolleyResponseBean aVoid) {
+
     }
 }

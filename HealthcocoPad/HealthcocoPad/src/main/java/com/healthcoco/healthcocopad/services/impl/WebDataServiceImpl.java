@@ -17,6 +17,10 @@ import com.healthcoco.healthcocopad.bean.PersonalHistory;
 import com.healthcoco.healthcocopad.bean.VersionCheckRequest;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.request.AddDrugRequest;
+import com.healthcoco.healthcocopad.bean.request.AddEditAchievementsRequest;
+import com.healthcoco.healthcocopad.bean.request.AddEditDoctorEducationRequest;
+import com.healthcoco.healthcocopad.bean.request.AddEditDoctorExperinceRequest;
+import com.healthcoco.healthcocopad.bean.request.AddEditDoctorRegRequest;
 import com.healthcoco.healthcocopad.bean.request.AddEditDrugsAndAllergiesRequest;
 import com.healthcoco.healthcocopad.bean.request.AddMedicalFamilyHistoryRequest;
 import com.healthcoco.healthcocopad.bean.request.AppointmentRequestToSend;
@@ -473,12 +477,12 @@ public class WebDataServiceImpl implements GCMRefreshListener {
         }
     }
 
-    public void addUpdateEducation(Class<?> class1, DoctorProfile doctorProfile, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+    public void addUpdateEducation(Class<?> class1, AddEditDoctorEducationRequest doctorEducationRequest, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         WebServiceType webServiceType = WebServiceType.ADD_UPDATE_EDUCATION;
         String url = webServiceType.getUrl();
         checkNetworkStatus(mApp);
         if (HealthCocoConstants.isNetworkOnline) {
-            getResponse(webServiceType, class1, url, doctorProfile, null, responseListener,
+            getResponse(webServiceType, class1, url, doctorEducationRequest, null, responseListener,
                     errorListener);
         } else {
             errorListener.onNetworkUnavailable(webServiceType);
@@ -505,36 +509,36 @@ public class WebDataServiceImpl implements GCMRefreshListener {
     }
 
 
-    public void addUpdateRegistrationDetail(Class<?> class1, DoctorProfile doctorProfile, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+    public void addUpdateRegistrationDetail(Class<?> class1, AddEditDoctorRegRequest addEditDoctorRegRequest, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         WebServiceType webServiceType = WebServiceType.ADD_UPDATE_REGISTRATION_DETAIL;
         String url = webServiceType.getUrl();
         checkNetworkStatus(mApp);
         if (HealthCocoConstants.isNetworkOnline) {
-            getResponse(webServiceType, class1, url, doctorProfile, null, responseListener,
+            getResponse(webServiceType, class1, url, addEditDoctorRegRequest, null, responseListener,
                     errorListener);
         } else {
             errorListener.onNetworkUnavailable(webServiceType);
         }
     }
 
-    public void addUpdateAchievments(Class<?> class1, DoctorProfile doctorProfile, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+    public void addUpdateAchievments(Class<?> class1, AddEditAchievementsRequest achievementsRequest, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         WebServiceType webServiceType = WebServiceType.ADD_UPDATE_ACHIEVEMENTS_DETAIL;
         String url = webServiceType.getUrl();
         checkNetworkStatus(mApp);
         if (HealthCocoConstants.isNetworkOnline) {
-            getResponse(webServiceType, class1, url, doctorProfile, null, responseListener,
+            getResponse(webServiceType, class1, url, achievementsRequest, null, responseListener,
                     errorListener);
         } else {
             errorListener.onNetworkUnavailable(webServiceType);
         }
     }
 
-    public void addUpdateExperirnce(Class<?> class1, DoctorProfile doctorProfile, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+    public void addUpdateExperirnce(Class<?> class1, AddEditDoctorExperinceRequest doctorExperinceRequest, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         WebServiceType webServiceType = WebServiceType.ADD_UPDATE_EXPERIENCE_DETAIL;
         String url = webServiceType.getUrl();
         checkNetworkStatus(mApp);
         if (HealthCocoConstants.isNetworkOnline) {
-            getResponse(webServiceType, class1, url, doctorProfile, null, responseListener,
+            getResponse(webServiceType, class1, url, doctorExperinceRequest, null, responseListener,
                     errorListener);
         } else {
             errorListener.onNetworkUnavailable(webServiceType);

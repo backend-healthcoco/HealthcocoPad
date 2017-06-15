@@ -74,6 +74,10 @@ public class HealthCocoConstants {
     public static final int RESULT_CODE_ADD_CLINICAL_NOTE = 151;
     public static final String TAG_TAB_TYPE = "tabType";
     public static final int RESULT_CODE_DOCTOR_PROFILE_CONTACT = 152;
+    public static final int RESULT_CODE_AWARDS_AND_PUNLICATION = 153;
+    public static final int RESULT_CODE_EDUCATIONAL_DETAIL = 154;
+    public static final int RESULT_CODE_EXPERIENCE_DETAIL = 155;
+    public static final int RESULT_CODE_REGISTRATION_DETAIL = 156;
 
     public static boolean isNetworkOnline;
     public static final String PARAM_UPDATED_TIME = "&updatedTime=";

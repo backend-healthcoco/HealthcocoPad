@@ -39,7 +39,6 @@ public class MyProfileFragment extends HealthCocoFragment implements View.OnClic
     private static final String CHARACTER_BETWEEN_EDUCATION_AND_REGISTRATION_DETAILS = " ; ";
     public static final int REQUEST_CODE_MY_PROFILE = 113;
     public static final String TAG_DOCTOR_PROFILE = "doctor_profile";
-    private DoctorProfileListener doctorProfileListener;
 
     private LinearLayout containerEducationDetail;
     private LinearLayout containerRegistrationDetail;
@@ -70,10 +69,6 @@ public class MyProfileFragment extends HealthCocoFragment implements View.OnClic
     private DoctorProfile doctorProfile;
 
     public MyProfileFragment() {
-    }
-
-    public MyProfileFragment(DoctorProfileListener doctorProfileListener) {
-        this.doctorProfileListener = doctorProfileListener;
     }
 
     @Override
@@ -142,69 +137,85 @@ public class MyProfileFragment extends HealthCocoFragment implements View.OnClic
         clearPreviuosDetails();
         if (doctorProfile != null) {
             this.doctorProfile = doctorProfile;
-
-            //setting education details
-            if (!Util.isNullOrEmptyList(doctorProfile.getEducation())) {
-                containerEducationDetail.setVisibility(View.VISIBLE);
-                tvNoEducation.setVisibility(View.GONE);
-                addEducationDetailItem(doctorProfile.getEducation());
-            } else {
-                containerEducationDetail.setVisibility(View.GONE);
-                tvNoEducation.setVisibility(View.VISIBLE);
-            }
-
-            //setting registration details
-            if (!Util.isNullOrEmptyList(doctorProfile.getRegistrationDetails())) {
-                containerRegistrationDetail.setVisibility(View.VISIBLE);
-                tvNoRegistrationDetail.setVisibility(View.GONE);
-                addRegistrationDetailItem(doctorProfile.getRegistrationDetails());
-            } else {
-                containerRegistrationDetail.setVisibility(View.GONE);
-                tvNoRegistrationDetail.setVisibility(View.VISIBLE);
-            }
-
+            refreshEducationDetails(doctorProfile);
+            refreshRegistrationDetails(doctorProfile);
+            refreshAwardsAndPublicationDetails(doctorProfile);
+            refreshExperienceDetails(doctorProfile);
+            refreshProfessionalMembershipDetails(doctorProfile);
+            refreshProfessionalStatementDetails(doctorProfile);
             refreshContactDetails(doctorProfile);
-            //setting awards and publication
-            if (!Util.isNullOrEmptyList(doctorProfile.getAchievements())) {
-                containerAwardsAndPublication.setVisibility(View.VISIBLE);
-                tvNoAwardsAndPublication.setVisibility(View.GONE);
-                addAwardsAndPublicationDetailItem(doctorProfile.getAchievements());
-            } else {
-                containerAwardsAndPublication.setVisibility(View.GONE);
-                tvNoAwardsAndPublication.setVisibility(View.VISIBLE);
-            }
+        }
+    }
 
-            //setting experience
-            if (!Util.isNullOrEmptyList(doctorProfile.getExperienceDetails())) {
-                containerExperience.setVisibility(View.VISIBLE);
-                tvNoExperience.setVisibility(View.GONE);
-                addExperienceDetailItem(doctorProfile.getExperienceDetails());
-            } else {
-                containerExperience.setVisibility(View.GONE);
-                tvNoExperience.setVisibility(View.VISIBLE);
-            }
+    private void refreshProfessionalStatementDetails(DoctorProfile doctorProfile) {
+        //setting professional statement
+        if (doctorProfile.getProfessionalStatement() != null) {
+            containerProfessionalStatement.setVisibility(View.VISIBLE);
+            tvNoProfessionalStatement.setVisibility(View.GONE);
+            addProfessionalStatementDetailItem(doctorProfile.getProfessionalStatement());
+        } else {
+            containerProfessionalStatement.setVisibility(View.GONE);
+            tvNoProfessionalStatement.setVisibility(View.VISIBLE);
+        }
+    }
 
-            //setting professional membership
-            if (!Util.isNullOrEmptyList(doctorProfile.getProfessionalMemberships())) {
-                containerProfessionalMembership.setVisibility(View.VISIBLE);
-                tvNoProfessionalMembership.setVisibility(View.GONE);
-                addProfessionalMembershipDetailItem(doctorProfile.getProfessionalMemberships());
-            } else {
-                containerProfessionalMembership.setVisibility(View.GONE);
-                tvNoProfessionalMembership.setVisibility(View.VISIBLE);
-            }
+    private void refreshRegistrationDetails(DoctorProfile doctorProfile) {
+        //setting registration details
+        if (!Util.isNullOrEmptyList(doctorProfile.getRegistrationDetails())) {
+            containerRegistrationDetail.setVisibility(View.VISIBLE);
+            tvNoRegistrationDetail.setVisibility(View.GONE);
+            addRegistrationDetailItem(doctorProfile.getRegistrationDetails());
+        } else {
+            containerRegistrationDetail.setVisibility(View.GONE);
+            tvNoRegistrationDetail.setVisibility(View.VISIBLE);
+        }
+    }
 
-            //setting professional statement
-            if (doctorProfile.getProfessionalStatement() != null) {
-                containerProfessionalStatement.setVisibility(View.VISIBLE);
-                tvNoProfessionalStatement.setVisibility(View.GONE);
-                addProfessionalStatementDetailItem(doctorProfile.getProfessionalStatement());
-            } else {
-                containerProfessionalStatement.setVisibility(View.GONE);
-                tvNoProfessionalStatement.setVisibility(View.VISIBLE);
-            }
+    private void refreshAwardsAndPublicationDetails(DoctorProfile doctorProfile) {
+        //setting awards and publication
+        if (!Util.isNullOrEmptyList(doctorProfile.getAchievements())) {
+            containerAwardsAndPublication.setVisibility(View.VISIBLE);
+            tvNoAwardsAndPublication.setVisibility(View.GONE);
+            addAwardsAndPublicationDetailItem(doctorProfile.getAchievements());
+        } else {
+            containerAwardsAndPublication.setVisibility(View.GONE);
+            tvNoAwardsAndPublication.setVisibility(View.VISIBLE);
+        }
+    }
 
+    private void refreshExperienceDetails(DoctorProfile doctorProfile) {
+        //setting experience
+        if (!Util.isNullOrEmptyList(doctorProfile.getExperienceDetails())) {
+            containerExperience.setVisibility(View.VISIBLE);
+            tvNoExperience.setVisibility(View.GONE);
+            addExperienceDetailItem(doctorProfile.getExperienceDetails());
+        } else {
+            containerExperience.setVisibility(View.GONE);
+            tvNoExperience.setVisibility(View.VISIBLE);
+        }
+    }
 
+    private void refreshProfessionalMembershipDetails(DoctorProfile doctorProfile) {
+        //setting professional membership
+        if (!Util.isNullOrEmptyList(doctorProfile.getProfessionalMemberships())) {
+            containerProfessionalMembership.setVisibility(View.VISIBLE);
+            tvNoProfessionalMembership.setVisibility(View.GONE);
+            addProfessionalMembershipDetailItem(doctorProfile.getProfessionalMemberships());
+        } else {
+            containerProfessionalMembership.setVisibility(View.GONE);
+            tvNoProfessionalMembership.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void refreshEducationDetails(DoctorProfile doctorProfile) {
+        //setting education details
+        if (!Util.isNullOrEmptyList(doctorProfile.getEducation())) {
+            containerEducationDetail.setVisibility(View.VISIBLE);
+            tvNoEducation.setVisibility(View.GONE);
+            addEducationDetailItem(doctorProfile.getEducation());
+        } else {
+            containerEducationDetail.setVisibility(View.GONE);
+            tvNoEducation.setVisibility(View.VISIBLE);
         }
     }
 
@@ -228,6 +239,7 @@ public class MyProfileFragment extends HealthCocoFragment implements View.OnClic
     }
 
     private void addExperienceDetailItem(List<DoctorExperienceDetail> list) {
+        containerExperience.removeAllViews();
         for (DoctorExperienceDetail experienceDetail : list) {
             LinearLayout layout = (LinearLayout) mActivity.getLayoutInflater().inflate(R.layout.item_doctor_profile_experience_detail, null);
             TextView tvAwardsAndPublicationOrganization = (TextView) layout.findViewById(R.id.tv_awards_and_publication_organization);
@@ -242,6 +254,7 @@ public class MyProfileFragment extends HealthCocoFragment implements View.OnClic
     }
 
     private void addProfessionalMembershipDetailItem(List<String> list) {
+        containerProfessionalMembership.removeAllViews();
         for (String string : list) {
             LinearLayout layout = (LinearLayout) mActivity.getLayoutInflater().inflate(R.layout.item_doctor_professional_membership_detail, null);
             TextView tvProfessionalMembershipDetail = (TextView) layout.findViewById(R.id.tv_professional_membership_detail);
@@ -252,6 +265,7 @@ public class MyProfileFragment extends HealthCocoFragment implements View.OnClic
     }
 
     private void addProfessionalStatementDetailItem(String list) {
+        containerProfessionalStatement.removeAllViews();
         LinearLayout layout = (LinearLayout) mActivity.getLayoutInflater().inflate(R.layout.item_doctor_professional_membership_detail, null);
         TextView tvProfessionalMembershipDetail = (TextView) layout.findViewById(R.id.tv_professional_membership_detail);
 
@@ -260,6 +274,7 @@ public class MyProfileFragment extends HealthCocoFragment implements View.OnClic
     }
 
     private void addAwardsAndPublicationDetailItem(List<Achievement> list) {
+        containerAwardsAndPublication.removeAllViews();
         for (Achievement achievement : list) {
             LinearLayout layout = (LinearLayout) mActivity.getLayoutInflater().inflate(R.layout.item_doctor_profile_acheivements_detail, null);
             TextView tvAwardsAndPublicationDetail = (TextView) layout.findViewById(R.id.tv_awards_and_publication_detail);
@@ -271,6 +286,7 @@ public class MyProfileFragment extends HealthCocoFragment implements View.OnClic
     }
 
     private void addEducationDetailItem(List<Education> list) {
+        containerEducationDetail.removeAllViews();
         for (Education education : list) {
             LinearLayout layout = (LinearLayout) mActivity.getLayoutInflater().inflate(R.layout.item_doctor_profile_education_detail, null);
             TextView tvEducationYear = (TextView) layout.findViewById(R.id.tv_education_year);
@@ -279,10 +295,10 @@ public class MyProfileFragment extends HealthCocoFragment implements View.OnClic
             tvEducationDetails.setText(Util.getValidatedValue(education.getQualification()) + CHARACTER_BETWEEN_EDUCATION_AND_REGISTRATION_DETAILS + Util.getValidatedValue(education.getCollegeUniversity()));
             containerEducationDetail.addView(layout);
         }
-
     }
 
     private void addRegistrationDetailItem(List<DoctorRegistrationDetail> list) {
+        containerRegistrationDetail.removeAllViews();
         for (DoctorRegistrationDetail registrationDetail : list) {
             LinearLayout layout = (LinearLayout) mActivity.getLayoutInflater().inflate(R.layout.item_doctor_profile_registration_detail, null);
             TextView tvRegistrationYear = (TextView) layout.findViewById(R.id.tv_registration_year);
@@ -320,25 +336,25 @@ public class MyProfileFragment extends HealthCocoFragment implements View.OnClic
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.bt_edit_contact:
-                openDialogFragment(new AddEditDoctorContactDialogFragment(), REQUEST_CODE_MY_PROFILE);
+                openDialogFragment(new AddEditDoctorContactDialogFragment(), AddEditDoctorContactDialogFragment.TAG_DOCTOR_CONTACT_DETAIL, doctorProfile, REQUEST_CODE_MY_PROFILE);
                 break;
             case R.id.bt_edit_awards_and_publication:
-                openDialogFragment(new AddEditDoctorAwardAndPublicationDialogFragment(), REQUEST_CODE_MY_PROFILE);
+                openDialogFragment(new AddEditDoctorAwardAndPublicationDialogFragment(), AddEditDoctorAwardAndPublicationDialogFragment.TAG_DOCTOR_ACHIEVEMENTS, doctorProfile.getAchievements(), REQUEST_CODE_MY_PROFILE);
                 break;
             case R.id.bt_edit_education:
-                openDialogFragment(new AddEditDoctorEducationDialogFragment(), REQUEST_CODE_MY_PROFILE);
+                openDialogFragment(new AddEditDoctorEducationDialogFragment(), AddEditDoctorEducationDialogFragment.TAG_DOCTOR_EDUCATION, doctorProfile.getEducation(), REQUEST_CODE_MY_PROFILE);
                 break;
             case R.id.bt_edit_registration_detail:
-                openDialogFragment(new AddEditDoctorRegistartionDetailDialogFragment(), REQUEST_CODE_MY_PROFILE);
+                openDialogFragment(new AddEditDoctorRegistartionDetailDialogFragment(), AddEditDoctorRegistartionDetailDialogFragment.TAG_DOCTOR_REGISTRATION_DETAIL, doctorProfile.getRegistrationDetails(), REQUEST_CODE_MY_PROFILE);
                 break;
             case R.id.bt_edit_experience:
-                openDialogFragment(new AddEditDoctorExperienceDialogFragment(), REQUEST_CODE_MY_PROFILE);
+                openDialogFragment(new AddEditDoctorExperienceDialogFragment(), AddEditDoctorExperienceDialogFragment.TAG_DOCTOR_EXPERIENCE_DETAIL, doctorProfile.getExperienceDetails(), REQUEST_CODE_MY_PROFILE);
                 break;
             case R.id.bt_edit_professional_membership:
-                openDialogFragment(new AddEditDoctorMembershipDialogFragment(), REQUEST_CODE_MY_PROFILE);
+                openDialogFragment(new AddEditDoctorMembershipDialogFragment(), AddEditDoctorMembershipDialogFragment.TAG_DOCTOR_MEMBERSHIP_DETAIL, doctorProfile.getProfessionalMemberships(), REQUEST_CODE_MY_PROFILE);
                 break;
             case R.id.bt_edit_professional_statement:
-                openDialogFragment(new AddEditDoctorStatementDialogFragment(), REQUEST_CODE_MY_PROFILE);
+                openDialogFragment(new AddEditDoctorStatementDialogFragment(), AddEditDoctorStatementDialogFragment.TAG_DOCTOR_STATEMENT_DETAIL, doctorProfile.getProfessionalStatement(), REQUEST_CODE_MY_PROFILE);
                 break;
         }
     }
@@ -350,21 +366,35 @@ public class MyProfileFragment extends HealthCocoFragment implements View.OnClic
                 && data != null && data.hasExtra(TAG_DOCTOR_PROFILE)
                 && doctorProfile != null) {
             DoctorProfile profile = Parcels.unwrap(data.getParcelableExtra(TAG_DOCTOR_PROFILE));
-            doctorProfile = profile;
-            if (resultCode == HealthCocoConstants.RESULT_CODE_DOCTOR_PROFESSIONAL_STATEMENT_DETAIL) {
-                doctorProfile = profile;
-                doctorProfile.setProfessionalStatement(profile.getProfessionalStatement());
-                initData(doctorProfile);
-            } else if (resultCode == HealthCocoConstants.RESULT_CODE_DOCTOR_PROFESSIONAL_MEMBERSHIP_DETAIL) {
-                doctorProfile = profile;
-                doctorProfile.setProfessionalMemberships(profile.getProfessionalMemberships());
-                initData(doctorProfile);
-            } else if (resultCode == HealthCocoConstants.RESULT_CODE_DOCTOR_PROFILE_CONTACT) {
-                refreshContactDetails(doctorProfile);
-            }
-        } else if (requestCode == REQUEST_CODE_MY_PROFILE && doctorProfile != null) {
-            if (resultCode == Activity.RESULT_OK) {
-                doctorProfileListener.onRefresh();
+            switch (resultCode) {
+                case HealthCocoConstants.RESULT_CODE_DOCTOR_PROFESSIONAL_STATEMENT_DETAIL:
+                    doctorProfile.setProfessionalStatement(profile.getProfessionalStatement());
+                    refreshProfessionalStatementDetails(doctorProfile);
+                    break;
+                case HealthCocoConstants.RESULT_CODE_DOCTOR_PROFESSIONAL_MEMBERSHIP_DETAIL:
+                    doctorProfile.setProfessionalMemberships(profile.getProfessionalMemberships());
+                    refreshProfessionalMembershipDetails(doctorProfile);
+                    break;
+                case HealthCocoConstants.RESULT_CODE_AWARDS_AND_PUNLICATION:
+                    doctorProfile.setAchievements(profile.getAchievements());
+                    refreshAwardsAndPublicationDetails(doctorProfile);
+                    break;
+                case HealthCocoConstants.RESULT_CODE_EDUCATIONAL_DETAIL:
+                    doctorProfile.setEducation(profile.getEducation());
+                    refreshEducationDetails(doctorProfile);
+                    break;
+                case HealthCocoConstants.RESULT_CODE_REGISTRATION_DETAIL:
+                    doctorProfile.setRegistrationDetails(profile.getRegistrationDetails());
+                    refreshRegistrationDetails(doctorProfile);
+                    break;
+                case HealthCocoConstants.RESULT_CODE_EXPERIENCE_DETAIL:
+                    doctorProfile.setExperienceDetails(profile.getExperienceDetails());
+                    refreshExperienceDetails(doctorProfile);
+                    break;
+                case HealthCocoConstants.RESULT_CODE_DOCTOR_PROFILE_CONTACT:
+                    doctorProfile = profile;
+                    refreshContactDetails(doctorProfile);
+                    break;
             }
         }
     }

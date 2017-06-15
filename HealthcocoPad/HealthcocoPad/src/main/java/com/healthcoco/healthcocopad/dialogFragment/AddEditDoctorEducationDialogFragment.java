@@ -1,8 +1,9 @@
 package com.healthcoco.healthcocopad.dialogFragment;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
@@ -17,21 +18,29 @@ import com.android.volley.Response;
 import com.healthcoco.healthcocopad.HealthCocoDialogFragment;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
+import com.healthcoco.healthcocopad.bean.request.AddEditDoctorEducationRequest;
 import com.healthcoco.healthcocopad.bean.server.CollegeUniversityInstitute;
 import com.healthcoco.healthcocopad.bean.server.DoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.Education;
 import com.healthcoco.healthcocopad.bean.server.EducationQualification;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.User;
+import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocopad.enums.CommonListDialogType;
+import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
+import com.healthcoco.healthcocopad.fragments.MyProfileFragment;
 import com.healthcoco.healthcocopad.listeners.EducationDetailItemListner;
+import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
 import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
+import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.healthcoco.healthcocopad.viewholders.EducationDetailListViewHolder;
+
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +48,8 @@ import java.util.List;
 /**
  * Created by Shreshtha on 18-02-2017.
  */
-public class AddEditDoctorEducationDialogFragment extends HealthCocoDialogFragment implements View.OnClickListener, GsonRequest.ErrorListener, Response.Listener<VolleyResponseBean>, EducationDetailItemListner {
+public class AddEditDoctorEducationDialogFragment extends HealthCocoDialogFragment implements View.OnClickListener, GsonRequest.ErrorListener, Response.Listener<VolleyResponseBean>, EducationDetailItemListner, LocalDoInBackgroundListenerOptimised {
+    public static final String TAG_DOCTOR_EDUCATION = "doctorsEducationDeatil";
     private LinearLayout containerItemsEducationDetail;
     private List<Education> educationList = new ArrayList<>();
     private FloatingActionButton btAddMore;
@@ -48,6 +58,7 @@ public class AddEditDoctorEducationDialogFragment extends HealthCocoDialogFragme
     private TextView selectedInstituteView;
     private User user;
     private ScrollView scrollView;
+    private DoctorProfile doctorProfile;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -61,18 +72,16 @@ public class AddEditDoctorEducationDialogFragment extends HealthCocoDialogFragme
         super.onActivityCreated(savedInstanceState);
         setWidthHeight(0.50, 0.80);
         init();
+        showLoadingOverlay(true);
+        new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_FRAGMENT_INITIALISATION_DATA, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     @Override
     public void init() {
-        LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
-        if (doctor != null && doctor.getUser() != null && !Util.isNullOrBlank(doctor.getUser().getUniqueId())) {
-            user = doctor.getUser();
-            educationList = LocalDataServiceImpl.getInstance(mApp).getEducationDetailsList(user.getUniqueId());
-            initViews();
-            initListeners();
-            notifyAdapter();
-        }
+        educationList = Parcels.unwrap(getArguments().getParcelable(TAG_DOCTOR_EDUCATION));
+        initViews();
+        initListeners();
+        notifyAdapter();
     }
 
     @Override
@@ -115,10 +124,10 @@ public class AddEditDoctorEducationDialogFragment extends HealthCocoDialogFragme
     private void addEditEducationDetails() {
         LogUtils.LOGD(TAG, "Educations List Size " + educationList.size());
         mActivity.showLoading(false);
-        DoctorProfile doctorProfile = new DoctorProfile();
-        doctorProfile.setDoctorId(user.getUniqueId());
-        doctorProfile.setEducation(educationList);
-        WebDataServiceImpl.getInstance(mApp).addUpdateEducation(DoctorProfile.class, doctorProfile, this, this);
+        AddEditDoctorEducationRequest doctorEducationRequest = new AddEditDoctorEducationRequest();
+        doctorEducationRequest.setDoctorId(user.getUniqueId());
+        doctorEducationRequest.setEducation(educationList);
+        WebDataServiceImpl.getInstance(mApp).addUpdateEducation(AddEditDoctorEducationRequest.class, doctorEducationRequest, this, this);
     }
 
     private Object validateData(boolean isOnSaveClick) {
@@ -234,11 +243,15 @@ public class AddEditDoctorEducationDialogFragment extends HealthCocoDialogFragme
         LogUtils.LOGD(TAG, "Success " + String.valueOf(response.getWebServiceType()));
         switch (response.getWebServiceType()) {
             case ADD_UPDATE_EDUCATION:
-                if (response.getData() != null && response.getData() instanceof DoctorProfile) {
-                    DoctorProfile doctorProfileResponse = (DoctorProfile) response.getData();
-                    LocalDataServiceImpl.getInstance(mApp).addEducationsList(user.getUniqueId(), doctorProfileResponse.getEducation());
+                if (response.getData() != null && response.getData() instanceof AddEditDoctorEducationRequest) {
+                    doctorProfile = new DoctorProfile();
+                    AddEditDoctorEducationRequest addEditDoctorEducationRequest = (AddEditDoctorEducationRequest) response.getData();
+                    doctorProfile.setEducation(addEditDoctorEducationRequest.getEducation());
+                    LocalDataServiceImpl.getInstance(mApp).addEducationsList(user.getUniqueId(), doctorProfile.getEducation());
                 }
-                getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, getActivity().getIntent());
+                Intent intent = new Intent();
+                intent.putExtra(MyProfileFragment.TAG_DOCTOR_PROFILE, Parcels.wrap(doctorProfile));
+                getTargetFragment().onActivityResult(getTargetRequestCode(), HealthCocoConstants.RESULT_CODE_EDUCATIONAL_DETAIL, intent);
                 getDialog().dismiss();
                 break;
         }
@@ -271,5 +284,25 @@ public class AddEditDoctorEducationDialogFragment extends HealthCocoDialogFragme
         }
         if (commonListDialog != null)
             commonListDialog.dismiss();
+    }
+
+    @Override
+    public VolleyResponseBean doInBackground(VolleyResponseBean response) {
+        VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
+        switch (response.getLocalBackgroundTaskType()) {
+            case GET_FRAGMENT_INITIALISATION_DATA:
+                volleyResponseBean.setWebServiceType(WebServiceType.FRAGMENT_INITIALISATION);
+                LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
+                if (doctor != null)
+                    user = doctor.getUser();
+                break;
+        }
+        volleyResponseBean.setIsFromLocalAfterApiSuccess(response.isFromLocalAfterApiSuccess());
+        return volleyResponseBean;
+    }
+
+    @Override
+    public void onPostExecute(VolleyResponseBean aVoid) {
+
     }
 }

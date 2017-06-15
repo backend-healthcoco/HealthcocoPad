@@ -53,7 +53,6 @@ public class MyClinicFragment extends HealthCocoFragment implements View.OnClick
     public static final String TIME_FORMAT_CLINIC_HOURS = "hh:mm  aaa";
     public static final int REQUEST_CODE_MY_CLINIC = 114;
     public static final String INTENT_GET_DOCTOR_CLINIC_PROFILE = "com.healthcoco.REFRESH_DOCTOR_CLINIC_PROFILE";
-    private DoctorProfileListener doctorProfileListener;
     private AutoCompleteTextView autotvClinicName;
     private TextView tvAddress;
     private LinearLayout containerFromToTimeMon;
@@ -85,10 +84,6 @@ public class MyClinicFragment extends HealthCocoFragment implements View.OnClick
     private GoogleMap googleMap;
     private View btEnlargedMap;
     private boolean receiversRegistered;
-
-    public MyClinicFragment(DoctorProfileListener doctorProfileListener) {
-        this.doctorProfileListener = doctorProfileListener;
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

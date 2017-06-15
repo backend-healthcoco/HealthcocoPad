@@ -3,6 +3,7 @@ package com.healthcoco.healthcocopad.dialogFragment;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
@@ -22,10 +23,13 @@ import com.healthcoco.healthcocopad.bean.server.DoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.ProfessionalMembership;
 import com.healthcoco.healthcocopad.bean.server.User;
+import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocopad.enums.CommonListDialogType;
+import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.fragments.MyProfileFragment;
 import com.healthcoco.healthcocopad.listeners.CommonListDialogItemClickListener;
+import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
 import com.healthcoco.healthcocopad.listeners.ProfessipnalMembershipDetailItemListener;
 import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
@@ -43,7 +47,8 @@ import java.util.List;
 /**
  * Created by Shreshtha on 18-02-2017.
  */
-public class AddEditDoctorMembershipDialogFragment extends HealthCocoDialogFragment implements View.OnClickListener, GsonRequest.ErrorListener, Response.Listener<VolleyResponseBean>, ProfessipnalMembershipDetailItemListener, CommonListDialogItemClickListener {
+public class AddEditDoctorMembershipDialogFragment extends HealthCocoDialogFragment implements View.OnClickListener, GsonRequest.ErrorListener, Response.Listener<VolleyResponseBean>, ProfessipnalMembershipDetailItemListener, CommonListDialogItemClickListener, LocalDoInBackgroundListenerOptimised {
+    public static final String TAG_DOCTOR_MEMBERSHIP_DETAIL = "doctorsMembershipDetail";
     private LinearLayout containerItemsExperienceDetail;
     private List<String> professionalMembershipses = new ArrayList<>();
     private FloatingActionButton btAddMore;
@@ -65,19 +70,16 @@ public class AddEditDoctorMembershipDialogFragment extends HealthCocoDialogFragm
         super.onActivityCreated(savedInstanceState);
         init();
         setWidthHeight(0.50, 0.80);
+        showLoadingOverlay(true);
+        new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_FRAGMENT_INITIALISATION_DATA, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     @Override
     public void init() {
-        LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
-        if (doctor != null && doctor.getUser() != null && !Util.isNullOrBlank(doctor.getUser().getUniqueId())) {
-            user = doctor.getUser();
-            doctorProfile = LocalDataServiceImpl.getInstance(mApp).getDoctorProfileObject(user.getUniqueId());
-            professionalMembershipses = doctorProfile.getProfessionalMemberships();
-            initViews();
-            initListeners();
-            notifyAdapter();
-        }
+        professionalMembershipses = Parcels.unwrap(getArguments().getParcelable(TAG_DOCTOR_MEMBERSHIP_DETAIL));
+        initViews();
+        initListeners();
+        notifyAdapter();
     }
 
     @Override
@@ -202,6 +204,7 @@ public class AddEditDoctorMembershipDialogFragment extends HealthCocoDialogFragm
             case ADD_UPDATE_PROFESSIONAL_MEMBERSHIP_DETAIL:
                 if (response.getData() != null && response.getData() instanceof ProfessionalMembershipRequest) {
                     ProfessionalMembershipRequest membershipRequest = (ProfessionalMembershipRequest) response.getData();
+                    doctorProfile = new DoctorProfile();
                     doctorProfile.setProfessionalMemberships(membershipRequest.getMembership());
                     LocalDataServiceImpl.getInstance(mApp).addDoctorProfile(doctorProfile);
                     getTargetFragment().onActivityResult(getTargetRequestCode(), HealthCocoConstants.RESULT_CODE_DOCTOR_PROFESSIONAL_MEMBERSHIP_DETAIL, new Intent().putExtra(MyProfileFragment.TAG_DOCTOR_PROFILE, Parcels.wrap(doctorProfile)));
@@ -259,5 +262,25 @@ public class AddEditDoctorMembershipDialogFragment extends HealthCocoDialogFragm
         }
         if (commonListDialog != null)
             commonListDialog.dismiss();
+    }
+
+    @Override
+    public VolleyResponseBean doInBackground(VolleyResponseBean response) {
+        VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
+        switch (response.getLocalBackgroundTaskType()) {
+            case GET_FRAGMENT_INITIALISATION_DATA:
+                volleyResponseBean.setWebServiceType(WebServiceType.FRAGMENT_INITIALISATION);
+                LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
+                if (doctor != null)
+                    user = doctor.getUser();
+                break;
+        }
+        volleyResponseBean.setIsFromLocalAfterApiSuccess(response.isFromLocalAfterApiSuccess());
+        return volleyResponseBean;
+    }
+
+    @Override
+    public void onPostExecute(VolleyResponseBean aVoid) {
+
     }
 }

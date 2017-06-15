@@ -56,7 +56,7 @@ import java.util.List;
  */
 public class DoctorProfileFragment extends HealthCocoFragment implements GsonRequest.ErrorListener,
         LocalDoInBackgroundListenerOptimised, Response.Listener<VolleyResponseBean>, View.OnClickListener,
-        ViewPager.OnPageChangeListener, DoctorProfileListener, DownloadFileFromUrlListener {
+        ViewPager.OnPageChangeListener, DownloadFileFromUrlListener {
     public static final String INTENT_GET_DOCTOR_PROFILE_DETAILS = "DoctorProfileFragment.DOCTOR_PROFILE_DETAILS";
     public static final String INTENT_GET_DOCTOR_PROFILE_DETAILS_LOCAL = "DoctorProfileFragment.DOCTOR_PROFILE_DETAILS_LOCAL";
     public static final int REQUEST_CODE_DOCTOR_PROFILE = 111;
@@ -129,8 +129,8 @@ public class DoctorProfileFragment extends HealthCocoFragment implements GsonReq
 
     private void initViewPager() {
         fragmentsList = new ArrayList<>();
-        myProfileFragment = new MyProfileFragment(this);
-        myClinicFragment = new MyClinicFragment(this);
+        myProfileFragment = new MyProfileFragment();
+        myClinicFragment = new MyClinicFragment();
         fragmentsList.add(myProfileFragment);
         fragmentsList.add(myClinicFragment);
 
@@ -411,13 +411,8 @@ public class DoctorProfileFragment extends HealthCocoFragment implements GsonReq
         if (requestCode == REQUEST_CODE_DOCTOR_PROFILE) {
             if (resultCode == Activity.RESULT_OK) {
                 new SyncUtility(mApp, mActivity, user, null).updateMasterTableOnSpecialityChange();
-                onRefresh();
+                getDoctorProfileFromLocal();
             }
         }
-    }
-
-    @Override
-    public void onRefresh() {
-        getDoctorProfileFromLocal();
     }
 }

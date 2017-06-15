@@ -1,6 +1,7 @@
 package com.healthcoco.healthcocopad.dialogFragment;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,8 +16,11 @@ import com.healthcoco.healthcocopad.bean.request.ProfessionalStatementRequest;
 import com.healthcoco.healthcocopad.bean.server.DoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.User;
+import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
+import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.fragments.MyProfileFragment;
+import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
 import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
@@ -32,10 +36,10 @@ import java.util.ArrayList;
 /**
  * Created by Shreshtha on 18-02-2017.
  */
-public class AddEditDoctorStatementDialogFragment extends HealthCocoDialogFragment implements View.OnClickListener, GsonRequest.ErrorListener, Response.Listener<VolleyResponseBean> {
+public class AddEditDoctorStatementDialogFragment extends HealthCocoDialogFragment implements View.OnClickListener, GsonRequest.ErrorListener, Response.Listener<VolleyResponseBean>, LocalDoInBackgroundListenerOptimised {
+    public static final String TAG_DOCTOR_STATEMENT_DETAIL = "doctorsStatementDetail";
     private User user;
     private EditText etProfessionalStatement;
-    private String professionalStatement;
     private DoctorProfile doctorProfile;
 
     @Override
@@ -50,23 +54,20 @@ public class AddEditDoctorStatementDialogFragment extends HealthCocoDialogFragme
         super.onActivityCreated(savedInstanceState);
         init();
         setWidthHeight(0.50, 0.80);
+        showLoadingOverlay(true);
+        new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_FRAGMENT_INITIALISATION_DATA, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     @Override
     public void init() {
-        LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
-        if (doctor != null && doctor.getUser() != null && !Util.isNullOrBlank(doctor.getUser().getUniqueId())) {
-            user = doctor.getUser();
-            doctorProfile = LocalDataServiceImpl.getInstance(mApp).getDoctorProfileObject(user.getUniqueId());
-            initViews();
-            initListeners();
-            initData();
-        }
+        initViews();
+        initListeners();
+        initData();
     }
 
     @Override
     public void initData() {
-        String professionalStatement = doctorProfile.getProfessionalStatement();
+        String professionalStatement = Parcels.unwrap(getArguments().getParcelable(TAG_DOCTOR_STATEMENT_DETAIL));
         etProfessionalStatement.setText(Util.getValidatedValue(professionalStatement));
     }
 
@@ -95,7 +96,7 @@ public class AddEditDoctorStatementDialogFragment extends HealthCocoDialogFragme
     }
 
     private void addEditProfessionalStatementDetails(String professionalStatement) {
-        LogUtils.LOGD(TAG, "Professioanal Statement " + this.professionalStatement);
+        LogUtils.LOGD(TAG, "Professioanal Statement " + professionalStatement);
         mActivity.showLoading(false);
         ProfessionalStatementRequest statementRequest = new ProfessionalStatementRequest();
         statementRequest.setDoctorId(user.getUniqueId());
@@ -129,6 +130,7 @@ public class AddEditDoctorStatementDialogFragment extends HealthCocoDialogFragme
             case ADD_UPDATE_PROFESSIONAL_STATEMENT_DETAIL:
                 if (response.getData() != null && response.getData() instanceof ProfessionalStatementRequest) {
                     ProfessionalStatementRequest statementRequest = (ProfessionalStatementRequest) response.getData();
+                    doctorProfile = new DoctorProfile();
                     doctorProfile.setProfessionalStatement(statementRequest.getProfessionalStatement());
                     LocalDataServiceImpl.getInstance(mApp).addDoctorProfile(doctorProfile);
                     getTargetFragment().onActivityResult(getTargetRequestCode(), HealthCocoConstants.RESULT_CODE_DOCTOR_PROFESSIONAL_STATEMENT_DETAIL, new Intent().putExtra(MyProfileFragment.TAG_DOCTOR_PROFILE, Parcels.wrap(doctorProfile)));
@@ -153,5 +155,25 @@ public class AddEditDoctorStatementDialogFragment extends HealthCocoDialogFragme
     public void onNetworkUnavailable(WebServiceType webServiceType) {
         Util.showToast(mActivity, R.string.user_offline);
         mActivity.hideLoading();
+    }
+
+    @Override
+    public VolleyResponseBean doInBackground(VolleyResponseBean response) {
+        VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
+        switch (response.getLocalBackgroundTaskType()) {
+            case GET_FRAGMENT_INITIALISATION_DATA:
+                volleyResponseBean.setWebServiceType(WebServiceType.FRAGMENT_INITIALISATION);
+                LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
+                if (doctor != null)
+                    user = doctor.getUser();
+                break;
+        }
+        volleyResponseBean.setIsFromLocalAfterApiSuccess(response.isFromLocalAfterApiSuccess());
+        return volleyResponseBean;
+    }
+
+    @Override
+    public void onPostExecute(VolleyResponseBean aVoid) {
+
     }
 }

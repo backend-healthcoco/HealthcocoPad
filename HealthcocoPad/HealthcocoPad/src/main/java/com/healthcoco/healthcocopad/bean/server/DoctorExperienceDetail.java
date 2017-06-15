@@ -1,8 +1,5 @@
 package com.healthcoco.healthcocopad.bean.server;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import com.orm.SugarRecord;
 
 @org.parceler.Parcel

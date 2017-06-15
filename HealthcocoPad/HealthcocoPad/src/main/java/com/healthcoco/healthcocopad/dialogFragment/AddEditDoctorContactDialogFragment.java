@@ -39,12 +39,12 @@ import java.util.List;
  * Created by Shreshtha on 18-02-2017.
  */
 public class AddEditDoctorContactDialogFragment extends HealthCocoDialogFragment implements GsonRequest.ErrorListener, LocalDoInBackgroundListenerOptimised, Response.Listener<VolleyResponseBean>, View.OnClickListener {
+    public static final String TAG_DOCTOR_CONTACT_DETAIL = "doctorContactDetail";
     private EditText editPrimaryMobileNumber;
     private EditText editAlternateMobileNumber;
     private EditText editAlternateEmailId;
     private User user;
     private DoctorProfile doctorProfile;
-    private TextView tvTitle;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -56,27 +56,18 @@ public class AddEditDoctorContactDialogFragment extends HealthCocoDialogFragment
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        setWidthHeight(0.50, 0.80);
         init();
+        setWidthHeight(0.50, 0.80);
+        showLoadingOverlay(true);
+        new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_FRAGMENT_INITIALISATION_DATA, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     @Override
     public void init() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
-            mActivity.showLoading(false);
-        }
-        LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
-        if (doctor != null && doctor.getUser() != null && !Util.isNullOrBlank(doctor.getUser().getUniqueId())) {
-            user = doctor.getUser();
-            initViews();
-            initListeners();
-            getDataFromLocal();
-        }
-    }
-
-    private void getDataFromLocal() {
-        mActivity.showLoading(false);
-        new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_DOCTOR_PROFILE, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        doctorProfile = Parcels.unwrap(getArguments().getParcelable(TAG_DOCTOR_CONTACT_DETAIL));
+        initViews();
+        initListeners();
+        initData();
     }
 
     @Override
@@ -84,25 +75,18 @@ public class AddEditDoctorContactDialogFragment extends HealthCocoDialogFragment
         editPrimaryMobileNumber = (EditText) view.findViewById(R.id.edit_primary_mobile_number);
         editAlternateMobileNumber = (EditText) view.findViewById(R.id.edit_alternate_mobile_number);
         editAlternateEmailId = (EditText) view.findViewById(R.id.edit_alternate_email_id);
-        initSaveCancelButton(this);
         initActionbarTitle(getResources().getString(R.string.contact_details));
     }
 
     @Override
     public void initListeners() {
-
+        initSaveCancelButton(this);
     }
 
     @Override
     public void onResponse(VolleyResponseBean response) {
         if (response != null && response.getWebServiceType() != null) {
             switch (response.getWebServiceType()) {
-                case GET_DOCTOR_PROFILE:
-                    doctorProfile = (DoctorProfile) response.getData();
-                    if (doctorProfile != null)
-                        LogUtils.LOGD(TAG, "Success onResponse doctorProfile " + doctorProfile.getFirstName() + " isDataFromLocal " + response.isDataFromLocal());
-                    initData();
-                    break;
                 case ADD_UPDATE_DOCTOR_CONTACT:
                     if (response.getData() != null && response.getData() instanceof DoctorProfile) {
                         DoctorProfile doctorProfileResponse = (DoctorProfile) response.getData();
@@ -128,7 +112,6 @@ public class AddEditDoctorContactDialogFragment extends HealthCocoDialogFragment
             editAlternateMobileNumber.setText(Util.getValidatedValue(doctorProfile.getAdditionalNumbers().get(0)));
         if (!Util.isNullOrEmptyList(doctorProfile.getOtherEmailAddresses()))
             editAlternateEmailId.setText(Util.getValidatedValue(doctorProfile.getOtherEmailAddresses().get(0)));
-
     }
 
     @Override
@@ -146,8 +129,11 @@ public class AddEditDoctorContactDialogFragment extends HealthCocoDialogFragment
     public VolleyResponseBean doInBackground(VolleyResponseBean response) {
         VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
         switch (response.getLocalBackgroundTaskType()) {
-            case GET_DOCTOR_PROFILE:
-                volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getDoctorProfileResponse(WebServiceType.GET_DOCTOR_PROFILE, user.getUniqueId(), null, null);
+            case GET_FRAGMENT_INITIALISATION_DATA:
+                volleyResponseBean.setWebServiceType(WebServiceType.FRAGMENT_INITIALISATION);
+                LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
+                if (doctor != null)
+                    user = doctor.getUser();
                 break;
         }
         volleyResponseBean.setIsFromLocalAfterApiSuccess(response.isFromLocalAfterApiSuccess());
