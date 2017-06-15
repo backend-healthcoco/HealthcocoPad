@@ -9,14 +9,15 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
-import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -32,7 +33,6 @@ import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.bean.server.VitalSigns;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
-import com.healthcoco.healthcocopad.custom.MyScriptEditText;
 import com.healthcoco.healthcocopad.enums.ClinicalNotesPermissionType;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
@@ -50,6 +50,7 @@ import org.parceler.Parcels;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -57,36 +58,43 @@ import static com.healthcoco.healthcocopad.enums.ClinicalNotesPermissionType.PRE
 import static com.healthcoco.healthcocopad.utilities.HealthCocoConstants.REQUEST_CODE_ADD_CLINICAL_NOTES;
 
 /**
- * Created by neha on 24/04/17.
+ * Created by Shreshtha on 18-05-2017.
  */
 
-public class AddClinicalNotesMyScriptVisitFragment extends HealthCocoFragment implements
-        View.OnClickListener, LocalDoInBackgroundListenerOptimised {
+public class AddClinicalNotesSubFragment extends HealthCocoFragment implements View.OnClickListener,
+        LocalDoInBackgroundListenerOptimised {
     public static final String CHARACTER_TO_REPLACE_COMMA_WITH_SPACES = " , ";
     public static final String CHARACTER_TO_BE_REPLACED = ",";
+    public static final String TAG_CLINICAL_NOTES_DATA = "clinicaNotesData";
     private LinearLayout parentVitalSigns;
     private LinearLayout parentPermissionItems;
 
     //vitalsigns editTexts
-    private MyScriptEditText editSystolic;
-    private MyScriptEditText editDiastolic;
-    private MyScriptEditText editBodyTemperature;
-    private MyScriptEditText editRespRate;
-    private MyScriptEditText editSpo2;
-    private MyScriptEditText editWeight;
-    private MyScriptEditText editHeartRate;
+    private TextView editSystolic;
+    private TextView editDiastolic;
+    private TextView editBodyTemperature;
+    private TextView editRespRate;
+    private TextView editSpo2;
+    private TextView editWeight;
+    private TextView editHeartRate;
     private ClinicalNotes clinicalNotes;
-    private MyScriptAddVisitsFragment myScriptAddVisitsFragment;
     private ArrayList<String> clinicalNotesUiPermissionsList;
     private HashMap<String, String> diagramsList = new HashMap<>();
     private LinearLayout containerDiagrams;
     private User user;
+    private ScrollView svScrollView;
+    private LinearLayout parentDiagrams;
+    private LinearLayout btSelectDiagram;
+    private AddEditNormalVisitsFragment addEditNormalVisitsFragment;
+    private AddClinicalNotesVisitNormalFragment addClinicalNotesVisitNormalFragment;
     private boolean isFromClone;
+    private List<ClinicalNotes> clinicalNotesList;
     private String clinicalNoteId;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_add_myscript_clinical_notes_visit, container, false);
+        view = inflater.inflate(R.layout.fragment_add_clinical_notes_visit, container, false);
         super.onCreateView(inflater, container, savedInstanceState);
         return view;
     }
@@ -94,10 +102,6 @@ public class AddClinicalNotesMyScriptVisitFragment extends HealthCocoFragment im
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Bundle bundle = getArguments();
-        if (bundle != null && bundle.containsKey(TAG_USER))
-            user = Parcels.unwrap(bundle.getParcelable(TAG_USER));
-        init();
 
         Intent intent = mActivity.getIntent();
         if (intent != null) {
@@ -105,17 +109,20 @@ public class AddClinicalNotesMyScriptVisitFragment extends HealthCocoFragment im
             if (isFromCloneParcelable != null)
                 isFromClone = Parcels.unwrap(isFromCloneParcelable);
         }
-        if (user == null) {
-            mActivity.showLoading(false);
-            new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_FRAGMENT_INITIALISATION_DATA, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-        }
+        init();
+        mActivity.showLoading(false);
+        new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_FRAGMENT_INITIALISATION_DATA, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     @Override
     public void init() {
-        myScriptAddVisitsFragment = (MyScriptAddVisitsFragment) mFragmentManager.findFragmentByTag(MyScriptAddVisitsFragment.class.getSimpleName());
         initViews();
         initListeners();
+        addEditNormalVisitsFragment = (AddEditNormalVisitsFragment) mFragmentManager.findFragmentByTag(AddEditNormalVisitsFragment.class.getSimpleName());
+        if (addEditNormalVisitsFragment != null)
+            addClinicalNotesVisitNormalFragment = (AddClinicalNotesVisitNormalFragment) addEditNormalVisitsFragment.getCurrentTabFragment(0);
+        else
+            addClinicalNotesVisitNormalFragment = (AddClinicalNotesVisitNormalFragment) mFragmentManager.findFragmentByTag(AddClinicalNotesVisitNormalFragment.class.getSimpleName());
     }
 
     @Override
@@ -123,33 +130,30 @@ public class AddClinicalNotesMyScriptVisitFragment extends HealthCocoFragment im
         parentVitalSigns = (LinearLayout) view.findViewById(R.id.parent_add_vital_signs);
         parentPermissionItems = (LinearLayout) view.findViewById(R.id.parent_permissions_items);
 
-        editSystolic = (MyScriptEditText) view.findViewById(R.id.edit_systolic);
-        editDiastolic = (MyScriptEditText) view.findViewById(R.id.edit_diastolic);
-        editBodyTemperature = (MyScriptEditText) view.findViewById(R.id.edit_body_temperature);
-        editRespRate = (MyScriptEditText) view.findViewById(R.id.edit_resp_rate);
-        editHeartRate = (MyScriptEditText) view.findViewById(R.id.edit_heart_rate);
-        editSpo2 = (MyScriptEditText) view.findViewById(R.id.edit_spo2);
-        editWeight = (MyScriptEditText) view.findViewById(R.id.edit_weight);
+        editSystolic = (TextView) view.findViewById(R.id.edit_systolic);
+        editDiastolic = (TextView) view.findViewById(R.id.edit_diastolic);
+        editBodyTemperature = (TextView) view.findViewById(R.id.edit_body_temperature);
+        editRespRate = (TextView) view.findViewById(R.id.edit_resp_rate);
+        editHeartRate = (TextView) view.findViewById(R.id.edit_heart_rate);
+        editSpo2 = (TextView) view.findViewById(R.id.edit_spo2);
+        editWeight = (TextView) view.findViewById(R.id.edit_weight);
         containerDiagrams = (LinearLayout) view.findViewById(R.id.container_diagrams);
-        if (containerDiagrams == null && myScriptAddVisitsFragment != null)
-            containerDiagrams = myScriptAddVisitsFragment.getDiagramContainer();
+        svScrollView = (ScrollView) view.findViewById(R.id.sv_scrollview);
+
+        //diagrams views
+        parentDiagrams = (LinearLayout) view.findViewById(R.id.parent_diagrams);
+        btSelectDiagram = (LinearLayout) view.findViewById(R.id.bt_select_diagram);
+        containerDiagrams = (LinearLayout) view.findViewById(R.id.container_diagrams);
+
         //default UI ettings
+        parentPermissionItems.removeAllViews();
         parentVitalSigns.setVisibility(View.GONE);
+        parentDiagrams.setVisibility(View.GONE);
     }
 
     @Override
     public void initListeners() {
-        if (myScriptAddVisitsFragment != null) {
-            //initialising vital signs editTexts listeners
-            View.OnTouchListener touchListener = myScriptAddVisitsFragment.getOnTouchListener();
-            editBodyTemperature.setOnTouchListener(touchListener);
-            editWeight.setOnTouchListener(touchListener);
-            editHeartRate.setOnTouchListener(touchListener);
-            editRespRate.setOnTouchListener(touchListener);
-            editSpo2.setOnTouchListener(touchListener);
-            editDiastolic.setOnTouchListener(touchListener);
-            editSystolic.setOnTouchListener(touchListener);
-        }
+        btSelectDiagram.setOnClickListener(this);
     }
 
     private void initVitalSigns(VitalSigns vitalSigns) {
@@ -179,12 +183,6 @@ public class AddClinicalNotesMyScriptVisitFragment extends HealthCocoFragment im
                 clinicalNotesUiPermissionsList.removeAll(Collections.singleton(null));
                 if (!Util.isNullOrEmptyList(clinicalNotesUiPermissionsList)) {
                     parentPermissionItems.removeAllViews();
-                    if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.DIAGRAM.getValue()) && clinicalNotesUiPermissionsList.size() == 1) {
-                        sendBroadcastForClinicalNoteButtonVisibility(false);
-                        initialiseDiagramsView();
-                        return;
-                    } else
-                        sendBroadcastForClinicalNoteButtonVisibility(true);
 
                     if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.VITAL_SIGNS.getValue()) || (clinicalNotes != null && clinicalNotes.getVitalSigns() != null)) {
                         parentVitalSigns.setVisibility(View.VISIBLE);
@@ -251,81 +249,37 @@ public class AddClinicalNotesMyScriptVisitFragment extends HealthCocoFragment im
                     if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.PV.getValue())
                             || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getPv())))
                         addPermissionItem(ClinicalNotesPermissionType.PV);
-                    initialiseDiagramsView();
+                    if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.DIAGRAM.getValue())
+                            || (clinicalNotes != null && !Util.isNullOrEmptyList(clinicalNotes.getDiagrams()))) {
+                        parentDiagrams.setVisibility(View.VISIBLE);
+                        if (clinicalNotes != null) initDiagrams(clinicalNotes.getDiagrams());
+                    }
                 }
                 return;
             }
         }
-        hideClinicalNoteViewsAndButtons();
     }
 
-    private void hideClinicalNoteViewsAndButtons() {
-        sendBroadcastForClinicalNoteButtonVisibility(false);
-        sendBroadcastForDiagramButtonVisibility(false);
-    }
-
-    private void initialiseDiagramsView() {
-        //initialising diagrams view visibility
-        if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.DIAGRAM.getValue())
-                || (clinicalNotes != null && !Util.isNullOrEmptyList(clinicalNotes.getDiagrams()))) {
-            prePopulateDiagrams();
-            sendBroadcastForDiagramButtonVisibility(true);
-        } else
-            sendBroadcastForDiagramButtonVisibility(false);
-    }
-
-    private void sendBroadcastForDiagramButtonVisibility(boolean showVisibility) {
-        try {
-            Intent intent = new Intent(MyScriptAddVisitsFragment.INTENT_DIAGRAM_BUTTON_VISIBILITY);
-            intent.putExtra(MyScriptAddVisitsFragment.TAG_VISIBILITY, showVisibility);
-            LocalBroadcastManager.getInstance(mApp.getApplicationContext()).sendBroadcast(intent);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void sendBroadcastForDiagramLayoutVisibility(boolean showVisibility) {
-        try {
-            Intent intent = new Intent(MyScriptAddVisitsFragment.INTENT_DIAGRAM_LAYOUT_VISIBILITY);
-            intent.putExtra(MyScriptAddVisitsFragment.TAG_VISIBILITY, showVisibility);
-            LocalBroadcastManager.getInstance(mApp.getApplicationContext()).sendBroadcast(intent);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void sendBroadcastForClinicalNoteLayoutVisibility(boolean showVisibility) {
-        try {
-            Intent intent = new Intent(MyScriptAddVisitsFragment.INTENT_CLINCIAL_NOTE_LAYOUT_VISIBILITY);
-            intent.putExtra(MyScriptAddVisitsFragment.TAG_VISIBILITY, showVisibility);
-            LocalBroadcastManager.getInstance(mApp.getApplicationContext()).sendBroadcast(intent);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void sendBroadcastForClinicalNoteButtonVisibility(boolean showVisibility) {
-        try {
-            Intent intent = new Intent(MyScriptAddVisitsFragment.INTENT_CLINCIAL_NOTE_BUTTON_VISIBILITY);
-            intent.putExtra(MyScriptAddVisitsFragment.TAG_VISIBILITY, showVisibility);
-            LocalBroadcastManager.getInstance(mApp.getApplicationContext()).sendBroadcast(intent);
-        } catch (Exception e) {
-            e.printStackTrace();
+    private void initDiagrams(List<Diagram> list) {
+        containerDiagrams.removeAllViews();
+        if (!Util.isNullOrEmptyList(list)) {
+            for (Diagram diagram :
+                    list) {
+                addDiagramInContainer(diagram.getTags(), diagram.getUniqueId(), diagram.getDiagramUrl());
+            }
         }
     }
 
     private void addPermissionItem(ClinicalNotesPermissionType clinicalNotesPermissionType) {
-        LinearLayout layoutItemPermission = (LinearLayout) mActivity.getLayoutInflater().inflate(R.layout.layout_item_add_myscript_clinical_note_permision, null);
+        LinearLayout layoutItemPermission = (LinearLayout) mActivity.getLayoutInflater().inflate(R.layout.layout_item_add_clinical_note_permision, null);
         TextView tvTitle = (TextView) layoutItemPermission.findViewById(R.id.tv_title);
-        MyScriptEditText autotvPermission = (MyScriptEditText) layoutItemPermission.findViewById(R.id.edit_permission_text);
-//        autotvPermission.setOnFocusChangeListener(this);
+        EditText autotvPermission = (EditText) layoutItemPermission.findViewById(R.id.edit_permission_text);
         tvTitle.setText(clinicalNotesPermissionType.getTextId());
         autotvPermission.setId(clinicalNotesPermissionType.getAutotvId());
         autotvPermission.setHint(clinicalNotesPermissionType.getHintId());
         autotvPermission.setTag(String.valueOf(clinicalNotesPermissionType));
-        if (myScriptAddVisitsFragment != null) {
-            autotvPermission.setOnTouchListener(myScriptAddVisitsFragment.getOnTouchListener());
-        }
+        autotvPermission.setOnTouchListener(addClinicalNotesVisitNormalFragment.getOnTouchListener());
+        autotvPermission.addTextChangedListener(addClinicalNotesVisitNormalFragment.addTextChangedListener(autotvPermission));
         String text = "";
         if (clinicalNotes != null) {
             switch (clinicalNotesPermissionType) {
@@ -390,7 +344,6 @@ public class AddClinicalNotesMyScriptVisitFragment extends HealthCocoFragment im
                     text = clinicalNotes.getPv();
                     break;
             }
-            sendBroadcastForClinicalNoteLayoutVisibility(true);
             autotvPermission.setText(Util.getValidatedValue(text));
         }
         parentPermissionItems.addView(layoutItemPermission);
@@ -404,20 +357,22 @@ public class AddClinicalNotesMyScriptVisitFragment extends HealthCocoFragment im
         return 0;
     }
 
-    public boolean isBlankClinicalNote() {
-        boolean isBlankClinicalNote = true;
-        if (!Util.isNullOrEmptyList(clinicalNotesUiPermissionsList))
-            for (String clinicalNotesPermissionType :
-                    clinicalNotesUiPermissionsList) {
-                MyScriptEditText autoTvPermission = (MyScriptEditText) view.findViewWithTag(clinicalNotesPermissionType);
-                if (autoTvPermission != null && !Util.isNullOrBlank(Util.getValidatedValueOrBlankTrimming(autoTvPermission))) {
-                    isBlankClinicalNote = false;
-                    break;
-                }
+    public int isBlankClinicalNote() {
+        boolean isDataPresent = false;
+        for (String clinicalNotesPermissionType :
+                user.getUiPermissions().getClinicalNotesPermissions()) {
+            EditText autoTvPermission = (EditText) view.findViewWithTag(clinicalNotesPermissionType);
+            if (autoTvPermission != null && !Util.isNullOrBlank(Util.getValidatedValueOrBlankTrimming(autoTvPermission))) {
+                isDataPresent = true;
+                break;
             }
-        if (!Util.isNullOrEmptyList(diagramsList) || !isBlankVitalSigns())
-            isBlankClinicalNote = false;
-        return isBlankClinicalNote;
+        }
+        if (isBlankVitalSigns()
+                && getValidatedMsgId() == 0
+                && !isDataPresent
+                && Util.isNullOrEmptyList(diagramsList))
+            return R.string.blank_clinical_note;
+        return 0;
     }
 
     private boolean isBlankVitalSigns() {
@@ -443,80 +398,77 @@ public class AddClinicalNotesMyScriptVisitFragment extends HealthCocoFragment im
         clinicalNoteToSend.setLocationId(user.getForeignLocationId());
         clinicalNoteToSend.setHospitalId(user.getForeignHospitalId());
         clinicalNoteToSend.setPatientId(HealthCocoConstants.SELECTED_PATIENTS_USER_ID);
-        if (myScriptAddVisitsFragment.isClinicalNoteViewVisible()) {
-            clinicalNoteToSend.setVitalSigns(getVitalSigns());
-            for (String permission :
-                    user.getUiPermissions().getClinicalNotesPermissions()) {
-                ClinicalNotesPermissionType clinicalNotesPermissionType = ClinicalNotesPermissionType.getClinicalNotesPermissionType(permission);
-                if (clinicalNotesPermissionType != null) {
-                    switch (clinicalNotesPermissionType) {
-                        case PRESENT_COMPLAINT:
-                            clinicalNoteToSend.setPresentComplaint(getFormattedText(Util.getValidatedValueOrBlankWithoutTrimming((MyScriptEditText) parentPermissionItems.findViewWithTag(PRESENT_COMPLAINT.getValue()))));
-                            break;
-                        case COMPLAINT:
-                            clinicalNoteToSend.setComplaint(getFormattedText(Util.getValidatedValueOrBlankWithoutTrimming((MyScriptEditText) parentPermissionItems.findViewWithTag(ClinicalNotesPermissionType.COMPLAINT.getValue()))));
-                            break;
-                        case HISTORY_OF_PRESENT_COMPLAINT:
-                            clinicalNoteToSend.setPresentComplaintHistory(getFormattedText(Util.getValidatedValueOrBlankWithoutTrimming((MyScriptEditText) parentPermissionItems.findViewWithTag(ClinicalNotesPermissionType.HISTORY_OF_PRESENT_COMPLAINT.getValue()))));
-                            break;
-                        case MENSTRUAL_HISTORY:
-                            clinicalNoteToSend.setMenstrualHistory(getFormattedText(Util.getValidatedValueOrBlankWithoutTrimming((MyScriptEditText) parentPermissionItems.findViewWithTag(ClinicalNotesPermissionType.MENSTRUAL_HISTORY.getValue()))));
-                            break;
-                        case OBSTETRIC_HISTORY:
-                            clinicalNoteToSend.setObstetricHistory(getFormattedText(Util.getValidatedValueOrBlankWithoutTrimming((MyScriptEditText) parentPermissionItems.findViewWithTag(ClinicalNotesPermissionType.OBSTETRIC_HISTORY.getValue()))));
-                            break;
-                        case GENERAL_EXAMINATION:
-                            clinicalNoteToSend.setGeneralExam(getFormattedText(Util.getValidatedValueOrBlankWithoutTrimming((MyScriptEditText) parentPermissionItems.findViewWithTag(ClinicalNotesPermissionType.GENERAL_EXAMINATION.getValue()))));
-                            break;
-                        case SYSTEMIC_EXAMINATION:
-                            clinicalNoteToSend.setSystemExam(getFormattedText(Util.getValidatedValueOrBlankWithoutTrimming((MyScriptEditText) parentPermissionItems.findViewWithTag(ClinicalNotesPermissionType.SYSTEMIC_EXAMINATION.getValue()))));
-                            break;
-                        case OBSERVATION:
-                            clinicalNoteToSend.setObservation(getFormattedText(Util.getValidatedValueOrBlankWithoutTrimming((MyScriptEditText) parentPermissionItems.findViewWithTag(ClinicalNotesPermissionType.OBSERVATION.getValue()))));
-                            break;
-                        case INVESTIGATIONS:
-                            clinicalNoteToSend.setInvestigation(getFormattedText(Util.getValidatedValueOrBlankWithoutTrimming((MyScriptEditText) parentPermissionItems.findViewWithTag(ClinicalNotesPermissionType.INVESTIGATIONS.getValue()))));
-                            break;
-                        case PROVISIONAL_DIAGNOSIS:
-                            clinicalNoteToSend.setProvisionalDiagnosis(getFormattedText(Util.getValidatedValueOrBlankWithoutTrimming((MyScriptEditText) parentPermissionItems.findViewWithTag(ClinicalNotesPermissionType.PROVISIONAL_DIAGNOSIS.getValue()))));
-                            break;
-                        case DIAGNOSIS:
-                            clinicalNoteToSend.setDiagnosis(getFormattedText(Util.getValidatedValueOrBlankWithoutTrimming((MyScriptEditText) parentPermissionItems.findViewWithTag(ClinicalNotesPermissionType.DIAGNOSIS.getValue()))));
-                            break;
-                        case ECG:
-                            clinicalNoteToSend.setEcgDetails(getFormattedText(Util.getValidatedValueOrBlankWithoutTrimming((MyScriptEditText) parentPermissionItems.findViewWithTag(ClinicalNotesPermissionType.ECG.getValue()))));
-                            break;
-                        case ECHO:
-                            clinicalNoteToSend.setEcho(getFormattedText(Util.getValidatedValueOrBlankWithoutTrimming((MyScriptEditText) parentPermissionItems.findViewWithTag(ClinicalNotesPermissionType.ECHO.getValue()))));
-                            break;
-                        case XRAY:
-                            clinicalNoteToSend.setxRayDetails(getFormattedText(Util.getValidatedValueOrBlankWithoutTrimming((MyScriptEditText) parentPermissionItems.findViewWithTag(ClinicalNotesPermissionType.XRAY.getValue()))));
-                            break;
-                        case HOLTER:
-                            clinicalNoteToSend.setHolter(getFormattedText(Util.getValidatedValueOrBlankWithoutTrimming((MyScriptEditText) parentPermissionItems.findViewWithTag(ClinicalNotesPermissionType.HOLTER.getValue()))));
-                            break;
-                        case PA:
-                            clinicalNoteToSend.setPa(getFormattedText(Util.getValidatedValueOrBlankWithoutTrimming((MyScriptEditText) parentPermissionItems.findViewWithTag(ClinicalNotesPermissionType.PA.getValue()))));
-                            break;
-                        case PV:
-                            clinicalNoteToSend.setPv(getFormattedText(Util.getValidatedValueOrBlankWithoutTrimming((MyScriptEditText) parentPermissionItems.findViewWithTag(ClinicalNotesPermissionType.PV.getValue()))));
-                            break;
-                        case PS:
-                            clinicalNoteToSend.setPs(getFormattedText(Util.getValidatedValueOrBlankWithoutTrimming((MyScriptEditText) parentPermissionItems.findViewWithTag(ClinicalNotesPermissionType.PS.getValue()))));
-                            break;
-                        case INDICATION_OF_USG:
-                            clinicalNoteToSend.setIndicationOfUSG(getFormattedText(Util.getValidatedValueOrBlankWithoutTrimming((MyScriptEditText) parentPermissionItems.findViewWithTag(ClinicalNotesPermissionType.INDICATION_OF_USG.getValue()))));
-                            break;
-                        case NOTES:
-                            clinicalNoteToSend.setNote(getFormattedText(Util.getValidatedValueOrBlankWithoutTrimming((MyScriptEditText) parentPermissionItems.findViewWithTag(ClinicalNotesPermissionType.NOTES.getValue()))));
-                            break;
-                    }
+        clinicalNoteToSend.setVitalSigns(getVitalSigns());
+        for (String permission :
+                user.getUiPermissions().getClinicalNotesPermissions()) {
+            ClinicalNotesPermissionType clinicalNotesPermissionType = ClinicalNotesPermissionType.getClinicalNotesPermissionType(permission);
+            if (clinicalNotesPermissionType != null) {
+                switch (clinicalNotesPermissionType) {
+                    case PRESENT_COMPLAINT:
+                        clinicalNoteToSend.setPresentComplaint(getFormattedText(Util.getValidatedValueOrBlankWithoutTrimming((TextView) parentPermissionItems.findViewWithTag(PRESENT_COMPLAINT.getValue()))));
+                        break;
+                    case COMPLAINT:
+                        clinicalNoteToSend.setComplaint(getFormattedText(Util.getValidatedValueOrBlankWithoutTrimming((TextView) parentPermissionItems.findViewWithTag(ClinicalNotesPermissionType.COMPLAINT.getValue()))));
+                        break;
+                    case HISTORY_OF_PRESENT_COMPLAINT:
+                        clinicalNoteToSend.setPresentComplaintHistory(getFormattedText(Util.getValidatedValueOrBlankWithoutTrimming((TextView) parentPermissionItems.findViewWithTag(ClinicalNotesPermissionType.HISTORY_OF_PRESENT_COMPLAINT.getValue()))));
+                        break;
+                    case MENSTRUAL_HISTORY:
+                        clinicalNoteToSend.setMenstrualHistory(getFormattedText(Util.getValidatedValueOrBlankWithoutTrimming((TextView) parentPermissionItems.findViewWithTag(ClinicalNotesPermissionType.MENSTRUAL_HISTORY.getValue()))));
+                        break;
+                    case OBSTETRIC_HISTORY:
+                        clinicalNoteToSend.setObstetricHistory(getFormattedText(Util.getValidatedValueOrBlankWithoutTrimming((TextView) parentPermissionItems.findViewWithTag(ClinicalNotesPermissionType.OBSTETRIC_HISTORY.getValue()))));
+                        break;
+                    case GENERAL_EXAMINATION:
+                        clinicalNoteToSend.setGeneralExam(getFormattedText(Util.getValidatedValueOrBlankWithoutTrimming((TextView) parentPermissionItems.findViewWithTag(ClinicalNotesPermissionType.GENERAL_EXAMINATION.getValue()))));
+                        break;
+                    case SYSTEMIC_EXAMINATION:
+                        clinicalNoteToSend.setSystemExam(getFormattedText(Util.getValidatedValueOrBlankWithoutTrimming((TextView) parentPermissionItems.findViewWithTag(ClinicalNotesPermissionType.SYSTEMIC_EXAMINATION.getValue()))));
+                        break;
+                    case OBSERVATION:
+                        clinicalNoteToSend.setObservation(getFormattedText(Util.getValidatedValueOrBlankWithoutTrimming((TextView) parentPermissionItems.findViewWithTag(ClinicalNotesPermissionType.OBSERVATION.getValue()))));
+                        break;
+                    case INVESTIGATIONS:
+                        clinicalNoteToSend.setInvestigation(getFormattedText(Util.getValidatedValueOrBlankWithoutTrimming((TextView) parentPermissionItems.findViewWithTag(ClinicalNotesPermissionType.INVESTIGATIONS.getValue()))));
+                        break;
+                    case PROVISIONAL_DIAGNOSIS:
+                        clinicalNoteToSend.setProvisionalDiagnosis(getFormattedText(Util.getValidatedValueOrBlankWithoutTrimming((TextView) parentPermissionItems.findViewWithTag(ClinicalNotesPermissionType.PROVISIONAL_DIAGNOSIS.getValue()))));
+                        break;
+                    case DIAGNOSIS:
+                        clinicalNoteToSend.setDiagnosis(getFormattedText(Util.getValidatedValueOrBlankWithoutTrimming((TextView) parentPermissionItems.findViewWithTag(ClinicalNotesPermissionType.DIAGNOSIS.getValue()))));
+                        break;
+                    case ECG:
+                        clinicalNoteToSend.setEcgDetails(getFormattedText(Util.getValidatedValueOrBlankWithoutTrimming((TextView) parentPermissionItems.findViewWithTag(ClinicalNotesPermissionType.ECG.getValue()))));
+                        break;
+                    case ECHO:
+                        clinicalNoteToSend.setEcho(getFormattedText(Util.getValidatedValueOrBlankWithoutTrimming((TextView) parentPermissionItems.findViewWithTag(ClinicalNotesPermissionType.ECHO.getValue()))));
+                        break;
+                    case XRAY:
+                        clinicalNoteToSend.setxRayDetails(getFormattedText(Util.getValidatedValueOrBlankWithoutTrimming((TextView) parentPermissionItems.findViewWithTag(ClinicalNotesPermissionType.XRAY.getValue()))));
+                        break;
+                    case HOLTER:
+                        clinicalNoteToSend.setHolter(getFormattedText(Util.getValidatedValueOrBlankWithoutTrimming((TextView) parentPermissionItems.findViewWithTag(ClinicalNotesPermissionType.HOLTER.getValue()))));
+                        break;
+                    case PA:
+                        clinicalNoteToSend.setPa(getFormattedText(Util.getValidatedValueOrBlankWithoutTrimming((TextView) parentPermissionItems.findViewWithTag(ClinicalNotesPermissionType.PA.getValue()))));
+                        break;
+                    case PV:
+                        clinicalNoteToSend.setPv(getFormattedText(Util.getValidatedValueOrBlankWithoutTrimming((TextView) parentPermissionItems.findViewWithTag(ClinicalNotesPermissionType.PV.getValue()))));
+                        break;
+                    case PS:
+                        clinicalNoteToSend.setPs(getFormattedText(Util.getValidatedValueOrBlankWithoutTrimming((TextView) parentPermissionItems.findViewWithTag(ClinicalNotesPermissionType.PS.getValue()))));
+                        break;
+                    case INDICATION_OF_USG:
+                        clinicalNoteToSend.setIndicationOfUSG(getFormattedText(Util.getValidatedValueOrBlankWithoutTrimming((TextView) parentPermissionItems.findViewWithTag(ClinicalNotesPermissionType.INDICATION_OF_USG.getValue()))));
+                        break;
+                    case NOTES:
+                        clinicalNoteToSend.setNote(getFormattedText(Util.getValidatedValueOrBlankWithoutTrimming((TextView) parentPermissionItems.findViewWithTag(ClinicalNotesPermissionType.NOTES.getValue()))));
+                        break;
                 }
             }
         }
 
-//        clinicalNotes.setDiagnoses(diagnosesListToSend);
-        if (myScriptAddVisitsFragment.isDiagramViewVisible() && !Util.isNullOrEmptyList(diagramsList)) {
+        if (!Util.isNullOrEmptyList(diagramsList)) {
             ArrayList<String> diagramIdsList = new ArrayList<String>();
             diagramIdsList.addAll(diagramsList.keySet());
             clinicalNoteToSend.setDiagrams(diagramIdsList);
@@ -597,10 +549,6 @@ public class AddClinicalNotesMyScriptVisitFragment extends HealthCocoFragment im
         alertBuilder.show();
     }
 
-    public HashMap<?, ?> getDiagramsList() {
-        return diagramsList;
-    }
-
     private void addDiagramInContainer(String diagramTag, String diagramUniqueId, Object object) {
         RelativeLayout frameLayout = (RelativeLayout) mActivity.getLayoutInflater().inflate(R.layout.diagram_add_visits_item, null);
         ImageView ivDiagram = (ImageView) frameLayout.findViewById(R.id.iv_diagram);
@@ -624,7 +572,6 @@ public class AddClinicalNotesMyScriptVisitFragment extends HealthCocoFragment im
         diagramsList.put(diagramUniqueId, diagramUniqueId);
         containerDiagrams.addView(frameLayout);
 //        svScrollView.fullScroll(ScrollView.FOCUS_UP);
-        sendBroadcastForDiagramLayoutVisibility(true);
     }
 
     @Override
@@ -651,6 +598,9 @@ public class AddClinicalNotesMyScriptVisitFragment extends HealthCocoFragment im
                     showConfirmationAlert(null, getResources().getString(R.string.confirm_delete_diagram), parentView, diagramUniqueId);
                 }
                 break;
+            case R.id.bt_select_diagram:
+                openCommonOpenUpActivity(CommonOpenUpFragmentType.SELECT_DIAGRAM, null, HealthCocoConstants.REQUEST_CODE_ADD_CLINICAL_NOTES);
+                break;
         }
     }
 
@@ -665,7 +615,6 @@ public class AddClinicalNotesMyScriptVisitFragment extends HealthCocoFragment im
             //initialising diagrams in container
             containerDiagrams.removeAllViews();
             if (!Util.isNullOrEmptyList(clinicalNotes.getDiagrams())) {
-                sendBroadcastForDiagramLayoutVisibility(true);
                 containerDiagrams.setVisibility(View.VISIBLE);
                 for (Diagram diagram :
                         clinicalNotes.getDiagrams()) {
@@ -673,9 +622,7 @@ public class AddClinicalNotesMyScriptVisitFragment extends HealthCocoFragment im
                         addDiagramInContainer(diagram.getTags(), diagram.getUniqueId(), diagram.getDiagramUrl());
                     }
                 }
-            } else
-                sendBroadcastForDiagramLayoutVisibility(false);
-
+            }
             if (!isFromClone)
                 clinicalNoteId = clinicalNotes.getUniqueId();
         }
@@ -694,14 +641,13 @@ public class AddClinicalNotesMyScriptVisitFragment extends HealthCocoFragment im
                     if (user != null && !Util.isNullOrBlank(user.getUniqueId())
                             && !Util.isNullOrBlank(user.getForeignHospitalId())
                             && !Util.isNullOrBlank(user.getForeignLocationId()) && user.getUiPermissions() != null) {
-//                        if (isNullClinicalNotePermissionsList) {
-//                            sendBroadcastForDiagramButtonVisibility(false);
-//                            sendBroadcastForClinicalNoteLayoutVisibility(false);
-//                        } else {
-//
-//                        }
-
                         initUiPermissions(user.getUiPermissions().getClinicalNotesPermissionsString());
+                        if (!Util.isNullOrEmptyList(clinicalNotesList)) {
+                            for (ClinicalNotes clinicalNotes :
+                                    clinicalNotesList) {
+                                refreshData(clinicalNotes);
+                            }
+                        }
                     } else {
                         mActivity.hideLoading();
                         mActivity.finish();

@@ -46,8 +46,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
-import static com.healthcoco.healthcocopad.fragments.AddVisitSuggestionsFragment.PAGE_NUMBER;
-
 /**
  * Created by Shreshtha on 07-03-2017.
  */
@@ -339,8 +337,8 @@ public class PatientClinicalNotesDetailFragment extends HealthCocoFragment imple
     BroadcastReceiver clinicalNoteUsingIdLocalReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, final Intent intent) {
-            if (intent != null && intent.hasExtra(AddEditNormalVisitClinicalNotesFragment.TAG_CLINICAL_NOTE_ID)) {
-//                String clinicalNoteId = intent.getStringExtra(AddEditNormalVisitClinicalNotesFragment.TAG_CLINICAL_NOTE_ID);
+            if (intent != null && intent.hasExtra(AddClinicalNotesVisitNormalFragment.TAG_CLINICAL_NOTE_ID)) {
+//                String clinicalNoteId = intent.getStringExtra(AddClinicalNotesVisitNormalFragment.TAG_CLINICAL_NOTE_ID);
 //                ClinicalNotes clinicalNotes = LocalDataServiceImpl.getInstance(mApp).getClinicalNote(clinicalNoteId, HealthCocoConstants.SELECTED_PATIENTS_USER_ID);
 //                if (clinicalNotes != null)
 //                    clinicalNotesList.put(clinicalNotes.getUniqueId(), clinicalNotes);

@@ -109,7 +109,7 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements T
     private boolean visitToggleStateFromPreferences;
     private ListViewLoadMore lvSuggestionsList;
     private AddEditNormalVisitsFragment addEditNormalVisitsFragment;
-    private AddEditNormalVisitClinicalNotesFragment addEditNormalVisitClinicalNotesFragment;
+    private AddClinicalNotesVisitNormalFragment addClinicalNotesVisitNormalFragment;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -155,12 +155,12 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements T
             editTextSearch = initEditSearchView(R.string.search, this, this);
             addEditNormalVisitsFragment = (AddEditNormalVisitsFragment) mFragmentManager.findFragmentByTag(AddEditNormalVisitsFragment.class.getSimpleName());
             if (addEditNormalVisitsFragment != null)
-                addEditNormalVisitClinicalNotesFragment = (AddEditNormalVisitClinicalNotesFragment) addEditNormalVisitsFragment.getCurrentTabFragment(0);
+                addClinicalNotesVisitNormalFragment = (AddClinicalNotesVisitNormalFragment) addEditNormalVisitsFragment.getCurrentTabFragment(0);
             else
-                addEditNormalVisitClinicalNotesFragment = (AddEditNormalVisitClinicalNotesFragment) mFragmentManager.findFragmentByTag(AddEditNormalVisitClinicalNotesFragment.class.getSimpleName());
-            if (addEditNormalVisitClinicalNotesFragment != null) {
-                editTextSearch.setOnTouchListener(addEditNormalVisitClinicalNotesFragment.getOnTouchListener());
-                editTextSearch.addTextChangedListener(addEditNormalVisitClinicalNotesFragment.addTextChangedListener(editTextSearch));
+                addClinicalNotesVisitNormalFragment = (AddClinicalNotesVisitNormalFragment) mFragmentManager.findFragmentByTag(AddClinicalNotesVisitNormalFragment.class.getSimpleName());
+            if (addClinicalNotesVisitNormalFragment != null) {
+                editTextSearch.setOnTouchListener(addClinicalNotesVisitNormalFragment.getOnTouchListener());
+                editTextSearch.addTextChangedListener(addClinicalNotesVisitNormalFragment.addTextChangedListener(editTextSearch));
             }
         }
         btAddNew.setOnClickListener(this);
@@ -637,7 +637,7 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements T
                     intent = new Intent(AddEditNormalVisitPrescriptionFragment.INTENT_ON_SUGGESTION_ITEM_CLICK);
                     break;
                 default:
-                    intent = new Intent(AddEditNormalVisitClinicalNotesFragment.INTENT_ON_SUGGESTION_ITEM_CLICK);
+                    intent = new Intent(AddClinicalNotesVisitNormalFragment.INTENT_ON_SUGGESTION_ITEM_CLICK);
                     break;
             }
         }

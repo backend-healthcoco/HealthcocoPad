@@ -27,7 +27,7 @@ import com.healthcoco.healthcocopad.enums.ClinicalNotesPermissionType;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.PatientDetailTabType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
-import com.healthcoco.healthcocopad.fragments.AddEditNormalVisitClinicalNotesFragment;
+import com.healthcoco.healthcocopad.fragments.AddClinicalNotesVisitNormalFragment;
 import com.healthcoco.healthcocopad.fragments.CommonOpenUpPatientDetailFragment;
 import com.healthcoco.healthcocopad.fragments.PatientClinicalNotesDetailFragment;
 import com.healthcoco.healthcocopad.listeners.CommonEMRItemClickListener;
@@ -614,7 +614,7 @@ public class ClinicalNotesListItemViewHolder extends HealthCocoViewHolder implem
         Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
         intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.ADD_VISITS.ordinal());
         if (!Util.isNullOrBlank(clinicalNoteId))
-            intent.putExtra(AddEditNormalVisitClinicalNotesFragment.TAG_CLINICAL_NOTE_ID, clinicalNoteId);
+            intent.putExtra(AddClinicalNotesVisitNormalFragment.TAG_CLINICAL_NOTE_ID, clinicalNoteId);
         intent.putExtra(HealthCocoConstants.TAG_VISIT_ID, Parcels.wrap(clinicalNote.getVisitId()));
         intent.putExtra(CommonOpenUpPatientDetailFragment.TAG_PATIENT_DETAIL_TAB_TYPE, PatientDetailTabType.PATIENT_DETAIL_CLINICAL_NOTES);
         mActivity.startActivityForResult(intent, REQUEST_CODE_CLINICAL_NOTES);

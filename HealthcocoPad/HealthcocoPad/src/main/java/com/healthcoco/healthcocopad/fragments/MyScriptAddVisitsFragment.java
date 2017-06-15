@@ -101,7 +101,7 @@ import java.util.regex.Pattern;
 
 import static com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType.GET_FRAGMENT_INITIALISATION_DATA;
 import static com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType.GET_VISIT_DETAILS;
-import static com.healthcoco.healthcocopad.fragments.AddClinicalNotesMyScriptVisitFragment.CHARACTER_TO_REPLACE_COMMA_WITH_SPACES;
+import static com.healthcoco.healthcocopad.fragments.AddClinicalNotesVisitMyScriptFragment.CHARACTER_TO_REPLACE_COMMA_WITH_SPACES;
 import static com.healthcoco.healthcocopad.fragments.AddVisitSuggestionsFragment.TAG_SUGGESTIONS_TYPE;
 
 /**
@@ -182,7 +182,7 @@ public class MyScriptAddVisitsFragment extends HealthCocoFragment implements Vie
     SuggestionType selectedSuggestionType = null;
     private AddLabTestsVisitFragment addLabTestVisitFragment;
     private boolean mKeyboardStatus = false;
-    private AddClinicalNotesMyScriptVisitFragment addClinicalNotesFragment;
+    private AddClinicalNotesVisitMyScriptFragment addClinicalNotesFragment;
     private boolean isFromClone;
     private FloatingActionButton flBtSwap;
 
@@ -238,7 +238,7 @@ public class MyScriptAddVisitsFragment extends HealthCocoFragment implements Vie
     }
 
     private void initClinicalNotesFragment() {
-        addClinicalNotesFragment = new AddClinicalNotesMyScriptVisitFragment();
+        addClinicalNotesFragment = new AddClinicalNotesVisitMyScriptFragment();
         FragmentTransaction transaction = mFragmentManager.beginTransaction();
         transaction.add(R.id.parent_clinical_note, addClinicalNotesFragment, addClinicalNotesFragment.getClass().getSimpleName());
         transaction.commit();
@@ -806,7 +806,7 @@ public class MyScriptAddVisitsFragment extends HealthCocoFragment implements Vie
     }
 
     private String getLastTextAfterCharacterToBeReplaced(String searchTerm) {
-        Pattern p = Pattern.compile(".*" + AddClinicalNotesMyScriptVisitFragment.CHARACTER_TO_BE_REPLACED + "\\s*(.*)");
+        Pattern p = Pattern.compile(".*" + AddClinicalNotesVisitMyScriptFragment.CHARACTER_TO_BE_REPLACED + "\\s*(.*)");
         Matcher m = p.matcher(searchTerm.trim());
 
         if (m.find())
@@ -1610,73 +1610,73 @@ public class MyScriptAddVisitsFragment extends HealthCocoFragment implements Vie
             case GENERAL_EXAMINATION:
                 if (selectedSuggestionObject instanceof GeneralExaminationSuggestions) {
                     GeneralExaminationSuggestions complaint = (GeneralExaminationSuggestions) selectedSuggestionObject;
-                    text = complaint.getGeneralExam() + AddClinicalNotesMyScriptVisitFragment.CHARACTER_TO_REPLACE_COMMA_WITH_SPACES;
+                    text = complaint.getGeneralExam() + AddClinicalNotesVisitMyScriptFragment.CHARACTER_TO_REPLACE_COMMA_WITH_SPACES;
                 }
                 break;
             case SYSTEMIC_EXAMINATION:
                 if (selectedSuggestionObject instanceof SystemicExaminationSuggestions) {
                     SystemicExaminationSuggestions complaint = (SystemicExaminationSuggestions) selectedSuggestionObject;
-                    text = complaint.getSystemExam() + AddClinicalNotesMyScriptVisitFragment.CHARACTER_TO_REPLACE_COMMA_WITH_SPACES;
+                    text = complaint.getSystemExam() + AddClinicalNotesVisitMyScriptFragment.CHARACTER_TO_REPLACE_COMMA_WITH_SPACES;
                 }
                 break;
             case PROVISIONAL_DIAGNOSIS:
                 if (selectedSuggestionObject instanceof ProvisionalDiagnosisSuggestions) {
                     ProvisionalDiagnosisSuggestions complaint = (ProvisionalDiagnosisSuggestions) selectedSuggestionObject;
-                    text = complaint.getProvisionalDiagnosis() + AddClinicalNotesMyScriptVisitFragment.CHARACTER_TO_REPLACE_COMMA_WITH_SPACES;
+                    text = complaint.getProvisionalDiagnosis() + AddClinicalNotesVisitMyScriptFragment.CHARACTER_TO_REPLACE_COMMA_WITH_SPACES;
                 }
                 break;
             case NOTES:
                 if (selectedSuggestionObject instanceof NotesSuggestions) {
                     NotesSuggestions complaint = (NotesSuggestions) selectedSuggestionObject;
-                    text = complaint.getNote() + AddClinicalNotesMyScriptVisitFragment.CHARACTER_TO_REPLACE_COMMA_WITH_SPACES;
+                    text = complaint.getNote() + AddClinicalNotesVisitMyScriptFragment.CHARACTER_TO_REPLACE_COMMA_WITH_SPACES;
                 }
                 break;
             case ECG_DETAILS:
                 if (selectedSuggestionObject instanceof EcgDetailSuggestions) {
                     EcgDetailSuggestions complaint = (EcgDetailSuggestions) selectedSuggestionObject;
-                    text = complaint.getEcgDetails() + AddClinicalNotesMyScriptVisitFragment.CHARACTER_TO_REPLACE_COMMA_WITH_SPACES;
+                    text = complaint.getEcgDetails() + AddClinicalNotesVisitMyScriptFragment.CHARACTER_TO_REPLACE_COMMA_WITH_SPACES;
                 }
                 break;
             case ECHO:
                 if (selectedSuggestionObject instanceof EchoSuggestions) {
                     EchoSuggestions complaint = (EchoSuggestions) selectedSuggestionObject;
-                    text = complaint.getEcho() + AddClinicalNotesMyScriptVisitFragment.CHARACTER_TO_REPLACE_COMMA_WITH_SPACES;
+                    text = complaint.getEcho() + AddClinicalNotesVisitMyScriptFragment.CHARACTER_TO_REPLACE_COMMA_WITH_SPACES;
                 }
                 break;
             case X_RAY_DETAILS:
                 if (selectedSuggestionObject instanceof XrayDetailSuggestions) {
                     XrayDetailSuggestions complaint = (XrayDetailSuggestions) selectedSuggestionObject;
-                    text = complaint.getxRayDetails() + AddClinicalNotesMyScriptVisitFragment.CHARACTER_TO_REPLACE_COMMA_WITH_SPACES;
+                    text = complaint.getxRayDetails() + AddClinicalNotesVisitMyScriptFragment.CHARACTER_TO_REPLACE_COMMA_WITH_SPACES;
                 }
                 break;
             case HOLTER:
                 if (selectedSuggestionObject instanceof HolterSuggestions) {
                     HolterSuggestions complaint = (HolterSuggestions) selectedSuggestionObject;
-                    text = complaint.getHolter() + AddClinicalNotesMyScriptVisitFragment.CHARACTER_TO_REPLACE_COMMA_WITH_SPACES;
+                    text = complaint.getHolter() + AddClinicalNotesVisitMyScriptFragment.CHARACTER_TO_REPLACE_COMMA_WITH_SPACES;
                 }
                 break;
             case PA:
                 if (selectedSuggestionObject instanceof PaSuggestions) {
                     PaSuggestions complaint = (PaSuggestions) selectedSuggestionObject;
-                    text = complaint.getPa() + AddClinicalNotesMyScriptVisitFragment.CHARACTER_TO_REPLACE_COMMA_WITH_SPACES;
+                    text = complaint.getPa() + AddClinicalNotesVisitMyScriptFragment.CHARACTER_TO_REPLACE_COMMA_WITH_SPACES;
                 }
                 break;
             case PV:
                 if (selectedSuggestionObject instanceof PvSuggestions) {
                     PvSuggestions complaint = (PvSuggestions) selectedSuggestionObject;
-                    text = complaint.getPv() + AddClinicalNotesMyScriptVisitFragment.CHARACTER_TO_REPLACE_COMMA_WITH_SPACES;
+                    text = complaint.getPv() + AddClinicalNotesVisitMyScriptFragment.CHARACTER_TO_REPLACE_COMMA_WITH_SPACES;
                 }
                 break;
             case PS:
                 if (selectedSuggestionObject instanceof PsSuggestions) {
                     PsSuggestions complaint = (PsSuggestions) selectedSuggestionObject;
-                    text = complaint.getPs() + AddClinicalNotesMyScriptVisitFragment.CHARACTER_TO_REPLACE_COMMA_WITH_SPACES;
+                    text = complaint.getPs() + AddClinicalNotesVisitMyScriptFragment.CHARACTER_TO_REPLACE_COMMA_WITH_SPACES;
                 }
                 break;
             case INDICATION_OF_USG:
                 if (selectedSuggestionObject instanceof IndicationOfUsgSuggestions) {
                     IndicationOfUsgSuggestions complaint = (IndicationOfUsgSuggestions) selectedSuggestionObject;
-                    text = complaint.getIndicationOfUSG() + AddClinicalNotesMyScriptVisitFragment.CHARACTER_TO_REPLACE_COMMA_WITH_SPACES;
+                    text = complaint.getIndicationOfUSG() + AddClinicalNotesVisitMyScriptFragment.CHARACTER_TO_REPLACE_COMMA_WITH_SPACES;
                 }
                 break;
         }

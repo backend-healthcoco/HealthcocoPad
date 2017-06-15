@@ -25,7 +25,7 @@ import com.healthcoco.healthcocopad.enums.ActionbarType;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.fragments.AboutUsFragment;
 import com.healthcoco.healthcocopad.fragments.AddEditClinicImageFragment;
-import com.healthcoco.healthcocopad.fragments.AddEditNormalVisitClinicalNotesFragment;
+import com.healthcoco.healthcocopad.fragments.AddClinicalNotesVisitNormalFragment;
 import com.healthcoco.healthcocopad.fragments.AddEditNormalVisitPrescriptionFragment;
 import com.healthcoco.healthcocopad.fragments.AddEditNormalVisitsFragment;
 import com.healthcoco.healthcocopad.fragments.AddNewTemplateFragment;
@@ -172,7 +172,7 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
                 openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_CROSS, ActionbarLeftRightActionTypeDrawables.WITH_SAVE, fragmentType.getTitleId(), new SelectedDiagramDetailFragment());
                 break;
             case ADD_CLINICAL_NOTE:
-                openFragment(ActionbarType.HIDDEN, 0, new AddEditNormalVisitClinicalNotesFragment());
+                openFragment(ActionbarType.HIDDEN, 0, new AddClinicalNotesVisitNormalFragment());
                 break;
         }
     }

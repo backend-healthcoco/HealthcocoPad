@@ -57,9 +57,8 @@ import org.parceler.Parcels;
 
 import java.util.ArrayList;
 
-import static com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType.GET_CLINICAL_NOTES;
 import static com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType.GET_VISIT_DETAILS;
-import static com.healthcoco.healthcocopad.fragments.AddEditNormalVisitClinicalNotesFragment.TAG_CLINICAL_NOTE_ID;
+import static com.healthcoco.healthcocopad.fragments.AddClinicalNotesVisitNormalFragment.TAG_CLINICAL_NOTE_ID;
 import static com.healthcoco.healthcocopad.fragments.AddEditNormalVisitPrescriptionFragment.TAG_PRESCRIPTION_ID;
 
 /**
@@ -79,7 +78,7 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
     private User user;
     private RegisteredPatientDetailsUpdated selectedPatient;
     private AddEditNormalVisitPrescriptionFragment addEditNormalVisitPrescriptionFragment;
-    private AddEditNormalVisitClinicalNotesFragment addEditNormalVisitClinicalNotesFragment;
+    private AddClinicalNotesVisitNormalFragment addClinicalNotesVisitNormalFragment;
     private String visitId;
     private FloatingActionButton flBtSwap;
     private int currentPage = 0;
@@ -156,11 +155,11 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
         fragmentsList = new ArrayList<>();
 
         // init fragment 1
-        addEditNormalVisitClinicalNotesFragment = new AddEditNormalVisitClinicalNotesFragment();
+        addClinicalNotesVisitNormalFragment = new AddClinicalNotesVisitNormalFragment();
         if (visitDetails != null) {
             Bundle bundle = new Bundle();
-            bundle.putParcelable(AddClinicalNotesVisitFragment.TAG_CLINICAL_NOTES_DATA, Parcels.wrap(visitDetails.getClinicalNotes()));
-            addEditNormalVisitClinicalNotesFragment.setArguments(bundle);
+            bundle.putParcelable(AddClinicalNotesSubFragment.TAG_CLINICAL_NOTES_DATA, Parcels.wrap(visitDetails.getClinicalNotes()));
+            addClinicalNotesVisitNormalFragment.setArguments(bundle);
         }
 
         // init fragment 2
@@ -172,13 +171,13 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
         }
         switch (detailTabType) {
             case PATIENT_DETAIL_VISIT:
-                addFragment(addEditNormalVisitClinicalNotesFragment, R.string.clinical_notes, false);
+                addFragment(addClinicalNotesVisitNormalFragment, R.string.clinical_notes, false);
                 addFragment(addEditNormalVisitPrescriptionFragment, R.string.prescriptions, true);
                 tabs.setVisibility(View.VISIBLE);
                 flBtSwap.setVisibility(View.VISIBLE);
                 break;
             case PATIENT_DETAIL_CLINICAL_NOTES:
-                addFragment(addEditNormalVisitClinicalNotesFragment, R.string.clinical_notes, false);
+                addFragment(addClinicalNotesVisitNormalFragment, R.string.clinical_notes, false);
                 tabs.setVisibility(View.GONE);
                 flBtSwap.setVisibility(View.GONE);
                 break;
@@ -222,13 +221,13 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
 
     public Fragment getCurrentFragment() {
         if (currentPage == 0)
-            return addEditNormalVisitClinicalNotesFragment;
+            return addClinicalNotesVisitNormalFragment;
         else return addEditNormalVisitPrescriptionFragment;
     }
 
     public Fragment getCurrentTabFragment(int page) {
         if (page == 0)
-            return addEditNormalVisitClinicalNotesFragment;
+            return addClinicalNotesVisitNormalFragment;
         else return addEditNormalVisitPrescriptionFragment;
     }
 
@@ -410,7 +409,7 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
         int errorMsg = 0;
         switch (detailTabType) {
             case PATIENT_DETAIL_VISIT:
-                int blankClinicalNoteMsgId = addEditNormalVisitClinicalNotesFragment.getBlankClinicalNoteMsgId();
+                int blankClinicalNoteMsgId = addClinicalNotesVisitNormalFragment.getBlankClinicalNoteMsgId();
                 int blankPrescriptionMsgId = addEditNormalVisitPrescriptionFragment.getBlankPrescriptionMsg();
                 if (blankClinicalNoteMsgId != 0 && blankPrescriptionMsgId != 0)
                     errorMsg = R.string.alert_blank_visit;
@@ -420,7 +419,7 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
                     Util.showToast(mActivity, errorMsg);
                 break;
             case PATIENT_DETAIL_CLINICAL_NOTES:
-                int noteMsgId = addEditNormalVisitClinicalNotesFragment.getBlankClinicalNoteMsgId();
+                int noteMsgId = addClinicalNotesVisitNormalFragment.getBlankClinicalNoteMsgId();
                 if (noteMsgId != 0)
                     errorMsg = R.string.alert_blank_clinical_note;
                 if (errorMsg == 0) {
@@ -456,7 +455,7 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
     private void addClinicalNote(int noteMsgId) {
         mActivity.showLoading(false);
         if (noteMsgId == 0) {
-            ClinicalNoteToSend clinicalNotes = addEditNormalVisitClinicalNotesFragment.getClinicalNoteToSendDetails();
+            ClinicalNoteToSend clinicalNotes = addClinicalNotesVisitNormalFragment.getClinicalNoteToSendDetails();
             if (!Util.isNullOrBlank(clinicalNoteId)) {
                 clinicalNotes.setUniqueId(clinicalNoteId);
                 WebDataServiceImpl.getInstance(mApp).updateClinicalNote(ClinicalNotes.class, clinicalNotes, this, this);
@@ -532,7 +531,7 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
         if (!Util.isNullOrBlank(visitId) && !isFromClone)
             visitDetails.setVisitId(visitId);
         if (blankClinicalNoteMsgId == 0)
-            visitDetails.setClinicalNote(addEditNormalVisitClinicalNotesFragment.getClinicalNoteToSendDetails());
+            visitDetails.setClinicalNote(addClinicalNotesVisitNormalFragment.getClinicalNoteToSendDetails());
         if (blankPrescriptionMsgId == 0)
             visitDetails.setPrescription(addEditNormalVisitPrescriptionFragment.getPrescriptionRequestDetails());
         if (Util.isNullOrBlank(appointmentId))

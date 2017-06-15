@@ -47,7 +47,6 @@ import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.custom.DummyTabFactory;
 import com.healthcoco.healthcocopad.custom.HealthcocoTextWatcher;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
-import com.healthcoco.healthcocopad.enums.ClinicalNotesPermissionType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.PrescriptionPermissionType;
 import com.healthcoco.healthcocopad.enums.SelectDrugItemType;
@@ -77,8 +76,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.healthcoco.healthcocopad.fragments.AddClinicalNotesMyScriptVisitFragment.CHARACTER_TO_BE_REPLACED;
-import static com.healthcoco.healthcocopad.fragments.AddClinicalNotesVisitFragment.CHARACTER_TO_REPLACE_COMMA_WITH_SPACES;
+import static com.healthcoco.healthcocopad.fragments.AddClinicalNotesVisitMyScriptFragment.CHARACTER_TO_BE_REPLACED;
+import static com.healthcoco.healthcocopad.fragments.AddClinicalNotesSubFragment.CHARACTER_TO_REPLACE_COMMA_WITH_SPACES;
 import static com.healthcoco.healthcocopad.fragments.AddVisitSuggestionsFragment.TAG_SUGGESTIONS_TYPE;
 import static com.healthcoco.healthcocopad.fragments.MyScriptAddVisitsFragment.TAG_SELECTED_SUGGESTION_OBJECT;
 
@@ -128,7 +127,7 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
     private EditText etHeaderTwoDuration;
     private ImageButton btClear;
     private AddEditNormalVisitsFragment addEditNormalVisitsFragment;
-    private AddEditNormalVisitClinicalNotesFragment addEditNormalVisitClinicalNotesFragment;
+    private AddClinicalNotesVisitNormalFragment addClinicalNotesVisitNormalFragment;
     private boolean isFromClone;
     private List<Prescription> prescriptionList;
     private boolean isOnItemClick;
@@ -359,7 +358,7 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
                 parentLayoutTabs.setVisibility(View.VISIBLE);
 
                 addEditNormalVisitsFragment = (AddEditNormalVisitsFragment) mFragmentManager.findFragmentByTag(AddEditNormalVisitsFragment.class.getSimpleName());
-                addEditNormalVisitClinicalNotesFragment = (AddEditNormalVisitClinicalNotesFragment) addEditNormalVisitsFragment.getCurrentTabFragment(0);
+                addClinicalNotesVisitNormalFragment = (AddClinicalNotesVisitNormalFragment) addEditNormalVisitsFragment.getCurrentTabFragment(0);
                 break;
             default:
                 break;
