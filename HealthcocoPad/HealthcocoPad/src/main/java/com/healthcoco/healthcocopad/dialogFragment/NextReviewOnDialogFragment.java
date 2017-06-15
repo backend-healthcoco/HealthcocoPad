@@ -22,7 +22,7 @@ import com.healthcoco.healthcocopad.bean.server.AvailableTimeSlots;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.User;
-import com.healthcoco.healthcocopad.bean.server.WorkingHours;
+import com.healthcoco.healthcocopad.bean.WorkingHours;
 import com.healthcoco.healthcocopad.custom.HealthcocoTextWatcher;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocopad.enums.AppointmentStatusType;
@@ -41,7 +41,6 @@ import com.healthcoco.healthcocopad.utilities.EditTextTextViewErrorUtil;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
-import com.healthcoco.healthcocopad.popupwindow.HealthcocoPopupWindow;
 
 import org.parceler.Parcels;
 

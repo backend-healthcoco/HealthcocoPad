@@ -32,6 +32,7 @@ import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.adapter.ContactsDetailViewPagerAdapter;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
+import com.healthcoco.healthcocopad.bean.WorkingHours;
 import com.healthcoco.healthcocopad.bean.request.ClinicImageToSend;
 import com.healthcoco.healthcocopad.bean.server.ClinicDetailResponse;
 import com.healthcoco.healthcocopad.bean.server.ClinicImage;
@@ -41,7 +42,6 @@ import com.healthcoco.healthcocopad.bean.server.Location;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.Role;
 import com.healthcoco.healthcocopad.bean.server.User;
-import com.healthcoco.healthcocopad.bean.server.WorkingHours;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocopad.custom.ScrollViewWithHeader;
 import com.healthcoco.healthcocopad.dialogFragment.AddEditClinicAddressDialogFragment;
@@ -244,11 +244,7 @@ public class ClinicalProfileFragment extends HealthCocoFragment
                 } else {
                     containerClinicHours.setVisibility(View.VISIBLE);
                     containerClinicOpen247.setVisibility(View.GONE);
-                    if (!Util.isNullOrEmptyList(location.getClinicWorkingSchedules())) {
-                        addWorkingSchedules(location.getClinicWorkingSchedules());
-                    } else {
-                        clearWorkingSchedules();
-                    }
+                    addWorkingSchedules(location.getClinicWorkingSchedules());
                 }
                 tvClinicNumbers.setText(getClinicNumbers(location));
                 tvWebsite.setText(Util.getValidatedValueOrDash(mActivity, location.getWebsiteUrl()));
@@ -349,30 +345,33 @@ public class ClinicalProfileFragment extends HealthCocoFragment
     }
 
     private void addWorkingSchedules(List<ClinicWorkingSchedule> list) {
-        for (ClinicWorkingSchedule schedule :
-                list) {
-            switch (schedule.getWorkingDay()) {
-                case MONDAY:
-                    addWorkingHoursFromToTime(containerFromToTimeMon, tvnofromToTimeMon, schedule.getWorkingHours());
-                    break;
-                case TUESDAY:
-                    addWorkingHoursFromToTime(containerFromToTimeTue, tvnofromToTimeTue, schedule.getWorkingHours());
-                    break;
-                case WEDNESDAY:
-                    addWorkingHoursFromToTime(containerFromToTimeWed, tvnofromToTimeWed, schedule.getWorkingHours());
-                    break;
-                case THURSDAY:
-                    addWorkingHoursFromToTime(containerFromToTimeThu, tvnofromToTimeThu, schedule.getWorkingHours());
-                    break;
-                case FRIDAY:
-                    addWorkingHoursFromToTime(containerFromToTimeFri, tvnofromToTimeFri, schedule.getWorkingHours());
-                    break;
-                case SATURDAY:
-                    addWorkingHoursFromToTime(containerFromToTimeSat, tvnofromToTimeSat, schedule.getWorkingHours());
-                    break;
-                case SUNDAY:
-                    addWorkingHoursFromToTime(containerFromToTimeSun, tvnofromToTimeSun, schedule.getWorkingHours());
-                    break;
+        clearWorkingSchedules();
+        if (!Util.isNullOrEmptyList(list)) {
+            for (ClinicWorkingSchedule schedule :
+                    list) {
+                switch (schedule.getWorkingDay()) {
+                    case MONDAY:
+                        addWorkingHoursFromToTime(containerFromToTimeMon, tvnofromToTimeMon, schedule.getWorkingHours());
+                        break;
+                    case TUESDAY:
+                        addWorkingHoursFromToTime(containerFromToTimeTue, tvnofromToTimeTue, schedule.getWorkingHours());
+                        break;
+                    case WEDNESDAY:
+                        addWorkingHoursFromToTime(containerFromToTimeWed, tvnofromToTimeWed, schedule.getWorkingHours());
+                        break;
+                    case THURSDAY:
+                        addWorkingHoursFromToTime(containerFromToTimeThu, tvnofromToTimeThu, schedule.getWorkingHours());
+                        break;
+                    case FRIDAY:
+                        addWorkingHoursFromToTime(containerFromToTimeFri, tvnofromToTimeFri, schedule.getWorkingHours());
+                        break;
+                    case SATURDAY:
+                        addWorkingHoursFromToTime(containerFromToTimeSat, tvnofromToTimeSat, schedule.getWorkingHours());
+                        break;
+                    case SUNDAY:
+                        addWorkingHoursFromToTime(containerFromToTimeSun, tvnofromToTimeSun, schedule.getWorkingHours());
+                        break;
+                }
             }
         }
     }

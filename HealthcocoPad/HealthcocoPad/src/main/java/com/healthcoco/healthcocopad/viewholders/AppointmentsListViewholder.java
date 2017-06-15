@@ -14,7 +14,7 @@ import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.request.AppointmentRequestToSend;
 import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
-import com.healthcoco.healthcocopad.bean.server.WorkingHours;
+import com.healthcoco.healthcocopad.bean.WorkingHours;
 import com.healthcoco.healthcocopad.dialogFragment.BookAppointmentDialogFragment;
 import com.healthcoco.healthcocopad.enums.AppointmentStatusType;
 import com.healthcoco.healthcocopad.enums.BookAppointmentFromScreenType;

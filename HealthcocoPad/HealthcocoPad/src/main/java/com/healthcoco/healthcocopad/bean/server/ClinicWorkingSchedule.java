@@ -1,5 +1,6 @@
 package com.healthcoco.healthcocopad.bean.server;
 
+import com.healthcoco.healthcocopad.bean.WorkingHours;
 import com.healthcoco.healthcocopad.enums.WeekDayNameType;
 import com.orm.SugarRecord;
 import com.orm.annotation.Ignore;
@@ -18,17 +19,17 @@ public class ClinicWorkingSchedule extends SugarRecord {
 
     @Ignore
     private List<WorkingHours> workingHours;
-
-    protected String foreignLocationId;
+    protected String workingHoursJson;
+    protected String locationId;
     @Unique
-    protected String customUniqueId;
+    protected String uniqueId;
 
-    public String getCustomUniqueId() {
-        return customUniqueId;
+    public String getUniqueId() {
+        return uniqueId;
     }
 
-    public void setCustomUniqueId(String customUniqueId) {
-        this.customUniqueId = customUniqueId;
+    public void setUniqueId(String uniqueId) {
+        this.uniqueId = uniqueId;
     }
 
     public List<WorkingHours> getWorkingHours() {
@@ -39,12 +40,12 @@ public class ClinicWorkingSchedule extends SugarRecord {
         this.workingHours = workingHours;
     }
 
-    public String getForeignLocationId() {
-        return foreignLocationId;
+    public String getLocationId() {
+        return locationId;
     }
 
-    public void setForeignLocationId(String foreignLocationId) {
-        this.foreignLocationId = foreignLocationId;
+    public void setLocationId(String locationId) {
+        this.locationId = locationId;
     }
 
     public WeekDayNameType getWorkingDay() {
@@ -53,5 +54,13 @@ public class ClinicWorkingSchedule extends SugarRecord {
 
     public void setWorkingDay(WeekDayNameType workingDay) {
         this.workingDay = workingDay;
+    }
+
+    public String getWorkingHoursJson() {
+        return workingHoursJson;
+    }
+
+    public void setWorkingHoursJson(String workingHoursJson) {
+        this.workingHoursJson = workingHoursJson;
     }
 }

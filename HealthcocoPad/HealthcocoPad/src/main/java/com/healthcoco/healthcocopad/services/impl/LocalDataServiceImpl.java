@@ -17,6 +17,7 @@ import com.healthcoco.healthcocopad.bean.PersonalHistory;
 import com.healthcoco.healthcocopad.bean.UIPermissions;
 import com.healthcoco.healthcocopad.bean.UiPermissionsBoth;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
+import com.healthcoco.healthcocopad.bean.WorkingHours;
 import com.healthcoco.healthcocopad.bean.server.*;
 import com.healthcoco.healthcocopad.enums.AdvanceSearchOptionsType;
 import com.healthcoco.healthcocopad.enums.BooleanTypeValues;
@@ -185,7 +186,7 @@ public class LocalDataServiceImpl {
                             deleteAllWorkingSchedules(locationAndAccessControl.getUniqueId(), doctor.getUser().getUniqueId(), DoctorWorkingSchedule.class);
                             if (!Util.isNullOrEmptyList(locationAndAccessControl.getWorkingSchedules())) {
                                 locationAndAccessControl.setDoctorId(doctor.getUser().getUniqueId());
-                                addDoctorWorkingSchedules(doctor.getUser().getUniqueId(), LocalDatabaseUtils.KEY_FOREIGN_LOCATION_ID, locationAndAccessControl.getUniqueId(), locationAndAccessControl.getWorkingSchedules());
+                                addDoctorWorkingSchedules(doctor.getUser().getUniqueId(), locationAndAccessControl.getUniqueId(), locationAndAccessControl.getWorkingSchedules());
                             }
                             //saving roles
                             addRoles(doctor.getUser().getForeignLocationId(), doctor.getUser().getForeignHospitalId(), locationAndAccessControl.getRoles());
@@ -202,21 +203,14 @@ public class LocalDataServiceImpl {
         doctor.save();
     }
 
-    private void addDoctorWorkingSchedules(String doctorId, String key, String value, List<DoctorWorkingSchedule> workingSchedulesList) {
+    private void addDoctorWorkingSchedules(String doctorId, String locationId, List<DoctorWorkingSchedule> workingSchedulesList) {
         try {
             for (DoctorWorkingSchedule workingSchedule :
                     workingSchedulesList) {
+                workingSchedule.setWorkingHoursJson(getJsonFromObject(workingSchedule.getWorkingHours()));
                 workingSchedule.setDoctorId(doctorId);
-                if (key.equals(LocalDatabaseUtils.KEY_FOREIGN_LOCATION_ID))
-                    workingSchedule.setForeignLocationId(value);
-                workingSchedule.setCustomUniqueId(workingSchedule.getForeignLocationId() + workingSchedule.getWorkingDay() + workingSchedule.getDoctorId());
-//delete all working schedules and hours first
-//                deleteDoctorWorkingSchedules(workingSchedule.getDoctorId(), workingSchedule.getCustomUniqueId());
-//                deleteWorkingHoursIfAlreadyPresent(LocalDatabaseUtils.KEY_FOREIGN_TABLE_ID, workingSchedule.getCustomUniqueId());
-                if (!Util.isNullOrEmptyList(workingSchedule.getWorkingHours()))
-                    addWorkingHoursList(DoctorWorkingSchedule.class.getSimpleName(), workingSchedule.getCustomUniqueId(), workingSchedule.getWorkingHours());
-
-//                addWorkingHoursList(DoctorWorkingSchedule.class.getSimpleName(), LocalDatabaseUtils.KEY_FOREIGN_TABLE_ID, workingSchedule.getCustomUniqueId(), workingSchedule.getWorkingHours());
+                workingSchedule.setLocationId(locationId);
+                workingSchedule.setUniqueId(doctorId + locationId + workingSchedule.getWorkingDay());
                 workingSchedule.save();
             }
         } catch (Exception e) {
@@ -505,13 +499,13 @@ public class LocalDataServiceImpl {
         return clinicDetailResponse;
     }
 
-    public List<ClinicWorkingSchedule> getClinicWorkingSchedules(String key, String value) {
+    public List<ClinicWorkingSchedule> getClinicWorkingSchedules(String locationId) {
         List<ClinicWorkingSchedule> list = Select.from(ClinicWorkingSchedule.class)
-                .where(Condition.prop(key).eq(value)).list();
+                .where(Condition.prop(LocalDatabaseUtils.KEY_LOCATION_ID).eq(locationId)).list();
         if (!Util.isNullOrEmptyList(list)) {
             for (ClinicWorkingSchedule workingSchedule :
                     list) {
-                workingSchedule.setWorkingHours((List<WorkingHours>) getListByKeyValue(WorkingHours.class, LocalDatabaseUtils.KEY_FOREIGN_TABLE_ID, workingSchedule.getCustomUniqueId()));
+                workingSchedule.setWorkingHours((ArrayList<WorkingHours>) getObjectsListFronJson(WorkingHours.class, workingSchedule.getWorkingHoursJson()));
             }
         }
         return list;
@@ -547,7 +541,7 @@ public class LocalDataServiceImpl {
         if (location != null) {
             location.setAlternateClinicNumbers((ArrayList<String>) (Object) getObjectsListFronJson(String.class, location.getAlternateClinicNumbersJsonString()));
             location.setImages((List<ClinicImage>) getListByKeyValue(ClinicImage.class, LocalDatabaseUtils.KEY_FOREIGN_LOCATION_ID, location.getUniqueId()));
-            location.setClinicWorkingSchedules(getClinicWorkingSchedules(LocalDatabaseUtils.KEY_FOREIGN_LOCATION_ID, location.getUniqueId()));
+            location.setClinicWorkingSchedules(getClinicWorkingSchedules(location.getUniqueId()));
         }
         return location;
     }
@@ -1074,7 +1068,7 @@ public class LocalDataServiceImpl {
         deleteAllWorkingSchedules(clinicProfile.getLocationId(), doctorId, DoctorWorkingSchedule.class);
         //saving working schedules
         if (!Util.isNullOrEmptyList(clinicProfile.getWorkingSchedules())) {
-            addDoctorWorkingSchedules(doctorId, LocalDatabaseUtils.KEY_FOREIGN_LOCATION_ID, clinicProfile.getLocationId(), clinicProfile.getWorkingSchedules());
+            addDoctorWorkingSchedules(doctorId, clinicProfile.getLocationId(), clinicProfile.getWorkingSchedules());
         }
         deleteClinicImages(LocalDatabaseUtils.KEY_FOREIGN_LOCATION_ID, clinicProfile.getUniqueId());
         //saving clinic Images
@@ -1404,7 +1398,7 @@ public class LocalDataServiceImpl {
 
         deleteAllWorkingSchedules(location.getUniqueId(), "", ClinicWorkingSchedule.class);
         if (!Util.isNullOrEmptyList(location.getClinicWorkingSchedules()))
-            addClinicWorkingSchedules(LocalDatabaseUtils.KEY_FOREIGN_LOCATION_ID, location.getUniqueId(), location.getClinicWorkingSchedules());
+            addClinicWorkingSchedules(location.getUniqueId(), location.getClinicWorkingSchedules());
 
         location.save();
     }
@@ -1431,7 +1425,7 @@ public class LocalDataServiceImpl {
 //                ForieignAdditionalNumbers additionalNumbers = new ForieignAdditionalNumbers();
 //                additionalNumbers.setForeignUniqueId(value);
 //                additionalNumbers.setAdditionalNumber(number);
-//                additionalNumbers.setCustomUniqueId(additionalNumbers.getForeignUniqueId() + additionalNumbers.getAdditionalNumber());
+//                additionalNumbers.setUniqueId(additionalNumbers.getForeignUniqueId() + additionalNumbers.getAdditionalNumber());
 //                additionalNumbers.save();
 //            }
 //        }
@@ -1544,11 +1538,11 @@ public class LocalDataServiceImpl {
         if (!Util.isNullOrBlank(doctorId)) {
             List<DoctorWorkingSchedule> list = Select.from(DoctorWorkingSchedule.class)
                     .where(Condition.prop(LocalDatabaseUtils.KEY_DOCTOR_ID).eq(doctorId),
-                            Condition.prop(LocalDatabaseUtils.KEY_FOREIGN_LOCATION_ID).eq(locationId)).list();
+                            Condition.prop(LocalDatabaseUtils.KEY_LOCATION_ID).eq(locationId)).list();
             if (!Util.isNullOrEmptyList(list)) {
                 for (DoctorWorkingSchedule workingSchedule :
                         list) {
-                    workingSchedule.setWorkingHours((List<WorkingHours>) getListByKeyValue(WorkingHours.class, LocalDatabaseUtils.KEY_FOREIGN_TABLE_ID, workingSchedule.getCustomUniqueId()));
+                    workingSchedule.setWorkingHours((ArrayList<WorkingHours>) getObjectsListFronJson(WorkingHours.class, workingSchedule.getWorkingHoursJson()));
                 }
             }
             return list;
@@ -1599,71 +1593,28 @@ public class LocalDataServiceImpl {
                 WeekDayNameType.values()) {
             String customUniqueId = locationId + weekDayName + doctorId;
             if (class1 == ClinicWorkingSchedule.class)
-                deleteClinicWorkingSchedules(LocalDatabaseUtils.KEY_CUSTOM_UNIQUE_ID, customUniqueId);
+                deleteAllFrom(ClinicWorkingSchedule.class, LocalDatabaseUtils.KEY_LOCATION_ID, locationId);
             else if (class1 == DoctorWorkingSchedule.class)
-                deleteDoctorWorkingSchedules(doctorId, locationId);
-//            deleteWorkingHoursIfAlreadyPresent(LocalDatabaseUtils.KEY_FOREIGN_TABLE_ID, customUniqueId);
+                SugarRecord.deleteAll(DoctorWorkingSchedule.class, LocalDatabaseUtils.KEY_DOCTOR_ID + "= ? AND " + LocalDatabaseUtils.KEY_LOCATION_ID + "= ?",
+                        new String[]{doctorId, locationId});
+
+//            deleteWorkingHoursIfAlreadyPresent(LocalDatabaseUtils.KEY_FOREIGN_TABLE_ID, uniqueId);
 
         }
     }
 
-    private void deleteClinicWorkingSchedules(String key, String value) {
-        List<ClinicWorkingSchedule> listSchedule = getClinicWorkingSchedules(key, value);
-        if (!Util.isNullOrEmptyList(listSchedule)) {
-            for (ClinicWorkingSchedule workingSchedule :
-                    listSchedule) {
-                List<WorkingHours> listHours = (List<WorkingHours>) getListByKeyValue(WorkingHours.class, LocalDatabaseUtils.KEY_FOREIGN_TABLE_ID, workingSchedule.getCustomUniqueId());
-                if (!Util.isNullOrEmptyList(listHours)) {
-                    WorkingHours.deleteInTx(listHours);
-                }
-            }
-            ClinicWorkingSchedule.deleteInTx(listSchedule);
-        }
-    }
-
-    private void deleteDoctorWorkingSchedules(String doctorId, String locationId) {
-        List<DoctorWorkingSchedule> listSchedule = getWorkingSchedulesForDoctor(doctorId, locationId);
-        if (!Util.isNullOrEmptyList(listSchedule)) {
-            for (DoctorWorkingSchedule workingSchedule :
-                    listSchedule) {
-                List<WorkingHours> listHours = (List<WorkingHours>) getListByKeyValue(WorkingHours.class, LocalDatabaseUtils.KEY_FOREIGN_TABLE_ID, workingSchedule.getCustomUniqueId());
-                if (!Util.isNullOrEmptyList(listHours)) {
-                    WorkingHours.deleteInTx(listHours);
-                }
-            }
-            DoctorWorkingSchedule.deleteInTx(listSchedule);
-        }
-    }
-
-    private void addClinicWorkingSchedules(String key, String value, List<ClinicWorkingSchedule> workingSchedulesList) {
+    private void addClinicWorkingSchedules(String locationId, List<ClinicWorkingSchedule> workingSchedulesList) {
         try {
             for (ClinicWorkingSchedule workingSchedule :
                     workingSchedulesList) {
-                if (key.equals(LocalDatabaseUtils.KEY_FOREIGN_LOCATION_ID))
-                    workingSchedule.setForeignLocationId(value);
-                workingSchedule.setCustomUniqueId(workingSchedule.getForeignLocationId() + workingSchedule.getWorkingDay());
-//delete all working schedules and hours first
-                if (!Util.isNullOrEmptyList(workingSchedule.getWorkingHours()))
-                    addWorkingHoursList(ClinicWorkingSchedule.class.getSimpleName(), workingSchedule.getCustomUniqueId(), workingSchedule.getWorkingHours());
+                workingSchedule.setWorkingHoursJson(getJsonFromObject(workingSchedule.getWorkingHours()));
+                workingSchedule.setLocationId(locationId);
+                workingSchedule.setUniqueId(locationId + workingSchedule.getWorkingDay());
                 workingSchedule.save();
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    private void addWorkingHoursList(String className, String customUniqueId, List<WorkingHours> list) {
-        for (WorkingHours workingHour :
-                list) {
-            addWorkingHour(className, customUniqueId, workingHour);
-        }
-    }
-
-    private void addWorkingHour(String className, String foreignTableId, WorkingHours workingHour) {
-        String customUniqueId = className + foreignTableId + workingHour.getFromTime() + workingHour.getToTime();
-        workingHour.setCustomUniqueId(customUniqueId);
-        workingHour.setForeignTableId(foreignTableId);
-        workingHour.save();
     }
 
     public void updatedSelectedLocationDetails(String doctorId, DoctorClinicProfile clinicProfile) {
@@ -2372,7 +2323,7 @@ public class LocalDataServiceImpl {
 //                    duration.setForeignDrugDurationUnit(durationUnit.getUniqueId());
 //                    durationUnit.save();
 //                    duration.setDiagnosticTestId(prescriptionTemplateId);
-//                    drugItem.setForeignDurationId(duration.getCustomUniqueId());
+//                    drugItem.setForeignDurationId(duration.getUniqueId());
 //                    duration.save();
 //                }
                 drugItem.setDurationJsonString(getJsonFromObject(drugItem.getDuration()));
@@ -2599,7 +2550,7 @@ public class LocalDataServiceImpl {
         LogUtils.LOGD(TAG, "Select Query " + query);
         AppointmentRequest appointmentRequest = SugarRecord.findObjectWithQuery(AppointmentRequest.class, query);
         if (appointmentRequest != null)
-            appointmentRequest.setTime((WorkingHours) getObject(WorkingHours.class, LocalDatabaseUtils.KEY_FOREIGN_TABLE_ID, appointmentRequest.getUniqueId()));
+            appointmentRequest.setTime((WorkingHours) getObjectFromJson(WorkingHours.class, appointmentRequest.getWorkingHoursJson()));
         return appointmentRequest;
     }
 
@@ -2870,7 +2821,7 @@ public class LocalDataServiceImpl {
     }
 
     private void addAppointmentRequest(AppointmentRequest appointmentRequest) {
-        addWorkingHour(AppointmentRequest.class.getSimpleName(), appointmentRequest.getUniqueId(), appointmentRequest.getTime());
+        appointmentRequest.setWorkingHoursJson(getJsonFromObject(appointmentRequest.getTime()));
         appointmentRequest.save();
     }
 
@@ -3380,10 +3331,6 @@ public class LocalDataServiceImpl {
         return volleyResponseBean;
     }
 
-    private void deleteWorkingHoursIfAlreadyPresent(String key, String value) {
-        WorkingHours.deleteAll(WorkingHours.class, key + "= ?", value);
-    }
-
     public void addAppointmentsList(ArrayList<CalendarEvents> list) {
         if (!Util.isNullOrEmptyList(list))
             for (CalendarEvents appointment :
@@ -3393,9 +3340,8 @@ public class LocalDataServiceImpl {
     }
 
     public void addAppointment(CalendarEvents appointment) {
-        deleteWorkingHoursIfAlreadyPresent(LocalDatabaseUtils.KEY_FOREIGN_TABLE_ID, appointment.getUniqueId());
         if (appointment.getTime() != null) {
-            addWorkingHour(CalendarEvents.class.getSimpleName(), appointment.getUniqueId(), appointment.getTime());
+            appointment.setWorkingHoursJson(getJsonFromObject(appointment.getTime()));
         }
         if (appointment.getPatient() != null) {
             appointment.setPatientId(appointment.getPatient().getUserId());
@@ -3451,7 +3397,7 @@ public class LocalDataServiceImpl {
     }
 
     private void getAppointDetail(CalendarEvents appointment) {
-        appointment.setTime((WorkingHours) getObject(WorkingHours.class, LocalDatabaseUtils.KEY_FOREIGN_TABLE_ID, appointment.getUniqueId()));
+        appointment.setTime((WorkingHours) getObjectFromJson(WorkingHours.class, appointment.getWorkingHoursJson()));
         appointment.setPatient(getPatientCard(appointment.getPatientId()));
     }
 
@@ -3487,11 +3433,7 @@ public class LocalDataServiceImpl {
         if (calendarEvents.getFromDate() != null && calendarEvents.getToDate() != null && !(calendarEvents.getFromDate().equals(calendarEvents.getToDate()))) {
             addMultipledayEvent(calendarEvents);
         }
-
-        deleteWorkingHoursIfAlreadyPresent(LocalDatabaseUtils.KEY_FOREIGN_TABLE_ID, calendarEvents.getUniqueId());
-        if (calendarEvents.getTime() != null) {
-            addWorkingHour(CalendarEvents.class.getSimpleName(), calendarEvents.getUniqueId(), calendarEvents.getTime());
-        }
+        calendarEvents.setWorkingHoursJson(getJsonFromObject(calendarEvents.getTime()));
         if (calendarEvents.getPatient() != null) {
             calendarEvents.setPatientId(calendarEvents.getPatient().getUserId());
             addPatientCard(calendarEvents.getPatient());

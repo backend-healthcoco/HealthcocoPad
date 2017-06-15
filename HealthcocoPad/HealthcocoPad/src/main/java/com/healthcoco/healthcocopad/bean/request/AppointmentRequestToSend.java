@@ -1,10 +1,9 @@
 package com.healthcoco.healthcocopad.bean.request;
 
 
-import com.healthcoco.healthcocopad.bean.server.WorkingHours;
+import com.healthcoco.healthcocopad.bean.WorkingHours;
 import com.healthcoco.healthcocopad.enums.AppointmentStatusType;
 import com.healthcoco.healthcocopad.enums.CreatedByType;
-import com.orm.SugarRecord;
 
 import org.parceler.Parcel;
 

@@ -1,5 +1,6 @@
 package com.healthcoco.healthcocopad.bean.server;
 
+import com.healthcoco.healthcocopad.bean.WorkingHours;
 import com.healthcoco.healthcocopad.enums.AppointmentStatusType;
 import com.healthcoco.healthcocopad.enums.AppointmentType;
 import com.healthcoco.healthcocopad.fragments.PatientAppointmentDetailFragment;
@@ -33,7 +34,9 @@ public class CalendarEvents extends SugarRecord {
     private String cancelledBy;
     private AppointmentStatusType state;
     private AppointmentType type;
+    @Ignore
     private WorkingHours time;
+    protected String workingHoursJson;
     private String locationId;
     private String hospitalId;
     private String doctorId;
@@ -441,5 +444,13 @@ public class CalendarEvents extends SugarRecord {
             }
         }
         return sksListData;
+    }
+
+    public String getWorkingHoursJson() {
+        return workingHoursJson;
+    }
+
+    public void setWorkingHoursJson(String workingHoursJson) {
+        this.workingHoursJson = workingHoursJson;
     }
 }

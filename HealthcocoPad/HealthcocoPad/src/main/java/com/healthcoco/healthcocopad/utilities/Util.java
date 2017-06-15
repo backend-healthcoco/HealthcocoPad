@@ -30,10 +30,10 @@ import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.HealthCocoApplication;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.activities.SplashScreenActivity;
-import com.healthcoco.healthcocopad.bean.DOB;
-import com.healthcoco.healthcocopad.bean.server.AppointmentSlot;
 import com.healthcoco.healthcocopad.bean.ConsultationFee;
+import com.healthcoco.healthcocopad.bean.DOB;
 import com.healthcoco.healthcocopad.bean.DoctorExperience;
+import com.healthcoco.healthcocopad.bean.server.AppointmentSlot;
 import com.healthcoco.healthcocopad.bean.server.DoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.enums.DoctorExperienceUnit;
@@ -817,4 +817,9 @@ public class Util {
         }
     }
 
+    public static List<?> getValidatedList(ArrayList<?> list) {
+        if (Util.isNullOrEmptyList(list))
+            return null;
+        return list;
+    }
 }

@@ -125,7 +125,7 @@ public class Diagram extends SugarRecord {
     }
 
     public String getCustomUniqueId() {
-//        this.customUniqueId = doctorId + uniqueId;
+//        this.uniqueId = doctorId + uniqueId;
         return customUniqueId;
     }
 

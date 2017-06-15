@@ -65,7 +65,7 @@ public class LocationAndAccessControl extends SugarRecord {
     protected String doctorId;
 //    @Ignore
 //    private Location location;
-//    protected String foreignLocationId;
+//    protected String locationId;
 //
 //    @Ignore
 //    private AccessControl accessControl;
@@ -312,12 +312,12 @@ public class LocationAndAccessControl extends SugarRecord {
         this.doctorId = doctorId;
     }
 
-//    public String getForeignLocationId() {
-//        return foreignLocationId;
+//    public String getLocationId() {
+//        return locationId;
 //    }
 //
-//    public void setForeignLocationId(String foreignLocationId) {
-//        this.foreignLocationId = foreignLocationId;
+//    public void setLocationId(String locationId) {
+//        this.locationId = locationId;
 //    }
 //
 //    public String getForeignAccessControlId() {

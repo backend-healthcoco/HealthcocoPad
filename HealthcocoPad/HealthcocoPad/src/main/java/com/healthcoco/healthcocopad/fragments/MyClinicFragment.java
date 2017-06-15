@@ -21,19 +21,18 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
+import com.healthcoco.healthcocopad.bean.WorkingHours;
 import com.healthcoco.healthcocopad.bean.server.DoctorClinicProfile;
 import com.healthcoco.healthcocopad.bean.server.DoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.DoctorWorkingSchedule;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.User;
-import com.healthcoco.healthcocopad.bean.server.WorkingHours;
 import com.healthcoco.healthcocopad.custom.AutoCompleteTextViewAdapter;
 import com.healthcoco.healthcocopad.dialogFragment.AddEditAppointmentDetailDialogFragment;
 import com.healthcoco.healthcocopad.dialogFragment.AddEditClinicHoursDialogFragment;
 import com.healthcoco.healthcocopad.enums.AutoCompleteTextViewType;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.MapType;
-import com.healthcoco.healthcocopad.listeners.DoctorProfileListener;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
@@ -229,30 +228,27 @@ public class MyClinicFragment extends HealthCocoFragment implements View.OnClick
         } else {
             containerClinicHours.setVisibility(View.VISIBLE);
             containerClinicOpen247.setVisibility(View.GONE);
-            clearDetails();
-            if (!Util.isNullOrEmptyList(selectedClinicProfile.getWorkingSchedules())) {
-                addWorkingSchedules(selectedClinicProfile.getWorkingSchedules());
-            }
-            if (selectedClinicProfile.getConsultationFee() != null)
-                tvConsultantFees.setText(Util.getValidatedValueOrDash(mActivity, Util.getFormattedConsultantFee(selectedClinicProfile.getConsultationFee())));
-            else
-                tvConsultantFees.setText(R.string.no_text_dash);
-
-            if (selectedClinicProfile.getRevisitConsultationFee() != null)
-                tvSecondConsultantFees.setText(Util.getValidatedValueOrDash(mActivity, Util.getFormattedConsultantFee(selectedClinicProfile.getRevisitConsultationFee())));
-            else
-                tvSecondConsultantFees.setText(R.string.no_text_dash);
-
-            if (selectedClinicProfile.getFacility() != null)
-                tvBookingFacility.setText(Util.getValidatedValueOrDash(mActivity, selectedClinicProfile.getFacility().getType()));
-            if (!Util.isNullOrEmptyList(selectedClinicProfile.getAppointmentBookingNumber()))
-                tvAppointmentNumbers.setText(Util.getValidatedValueOrDash(mActivity, selectedClinicProfile.getAppointmentBookingNumber().get(0)));
-            else
-                tvAppointmentNumbers.setText(R.string.no_text_dash);
-            tvAppointmentSlot.setText(Util.getValidatedValueOrDash(mActivity, Util.getFormattedAppointmentSlot(selectedClinicProfile.getAppointmentSlot())));
-            refreshMapLocation();
-            view.requestFocus();
+            addWorkingSchedules(selectedClinicProfile.getWorkingSchedules());
         }
+        if (selectedClinicProfile.getConsultationFee() != null)
+            tvConsultantFees.setText(Util.getValidatedValueOrDash(mActivity, Util.getFormattedConsultantFee(selectedClinicProfile.getConsultationFee())));
+        else
+            tvConsultantFees.setText(R.string.no_text_dash);
+
+        if (selectedClinicProfile.getRevisitConsultationFee() != null)
+            tvSecondConsultantFees.setText(Util.getValidatedValueOrDash(mActivity, Util.getFormattedConsultantFee(selectedClinicProfile.getRevisitConsultationFee())));
+        else
+            tvSecondConsultantFees.setText(R.string.no_text_dash);
+
+        if (selectedClinicProfile.getFacility() != null)
+            tvBookingFacility.setText(Util.getValidatedValueOrDash(mActivity, selectedClinicProfile.getFacility().getType()));
+        if (!Util.isNullOrEmptyList(selectedClinicProfile.getAppointmentBookingNumber()))
+            tvAppointmentNumbers.setText(Util.getValidatedValueOrDash(mActivity, selectedClinicProfile.getAppointmentBookingNumber().get(0)));
+        else
+            tvAppointmentNumbers.setText(R.string.no_text_dash);
+        tvAppointmentSlot.setText(Util.getValidatedValueOrDash(mActivity, Util.getFormattedAppointmentSlot(selectedClinicProfile.getAppointmentSlot())));
+        refreshMapLocation();
+        view.requestFocus();
     }
 
     public void refreshMapLocation() {
@@ -261,30 +257,33 @@ public class MyClinicFragment extends HealthCocoFragment implements View.OnClick
     }
 
     private void addWorkingSchedules(List<DoctorWorkingSchedule> list) {
-        for (DoctorWorkingSchedule schedule :
-                list) {
-            switch (schedule.getWorkingDay()) {
-                case MONDAY:
-                    addWorkingHoursFromToTime(containerFromToTimeMon, tvnofromToTimeMon, schedule.getWorkingHours());
-                    break;
-                case TUESDAY:
-                    addWorkingHoursFromToTime(containerFromToTimeTue, tvnofromToTimeTue, schedule.getWorkingHours());
-                    break;
-                case WEDNESDAY:
-                    addWorkingHoursFromToTime(containerFromToTimeWed, tvnofromToTimeWed, schedule.getWorkingHours());
-                    break;
-                case THURSDAY:
-                    addWorkingHoursFromToTime(containerFromToTimeThu, tvnofromToTimeThu, schedule.getWorkingHours());
-                    break;
-                case FRIDAY:
-                    addWorkingHoursFromToTime(containerFromToTimeFri, tvnofromToTimeFri, schedule.getWorkingHours());
-                    break;
-                case SATURDAY:
-                    addWorkingHoursFromToTime(containerFromToTimeSat, tvnofromToTimeSat, schedule.getWorkingHours());
-                    break;
-                case SUNDAY:
-                    addWorkingHoursFromToTime(containerFromToTimeSun, tvnofromToTimeSun, schedule.getWorkingHours());
-                    break;
+        clearDetails();
+        if (!Util.isNullOrEmptyList(list)) {
+            for (DoctorWorkingSchedule schedule :
+                    list) {
+                switch (schedule.getWorkingDay()) {
+                    case MONDAY:
+                        addWorkingHoursFromToTime(containerFromToTimeMon, tvnofromToTimeMon, schedule.getWorkingHours());
+                        break;
+                    case TUESDAY:
+                        addWorkingHoursFromToTime(containerFromToTimeTue, tvnofromToTimeTue, schedule.getWorkingHours());
+                        break;
+                    case WEDNESDAY:
+                        addWorkingHoursFromToTime(containerFromToTimeWed, tvnofromToTimeWed, schedule.getWorkingHours());
+                        break;
+                    case THURSDAY:
+                        addWorkingHoursFromToTime(containerFromToTimeThu, tvnofromToTimeThu, schedule.getWorkingHours());
+                        break;
+                    case FRIDAY:
+                        addWorkingHoursFromToTime(containerFromToTimeFri, tvnofromToTimeFri, schedule.getWorkingHours());
+                        break;
+                    case SATURDAY:
+                        addWorkingHoursFromToTime(containerFromToTimeSat, tvnofromToTimeSat, schedule.getWorkingHours());
+                        break;
+                    case SUNDAY:
+                        addWorkingHoursFromToTime(containerFromToTimeSun, tvnofromToTimeSun, schedule.getWorkingHours());
+                        break;
+                }
             }
         }
     }

@@ -24,7 +24,7 @@ import com.healthcoco.healthcocopad.bean.server.ClinicWorkingSchedule;
 import com.healthcoco.healthcocopad.bean.server.DoctorClinicProfile;
 import com.healthcoco.healthcocopad.bean.server.DoctorWorkingSchedule;
 import com.healthcoco.healthcocopad.bean.server.Location;
-import com.healthcoco.healthcocopad.bean.server.WorkingHours;
+import com.healthcoco.healthcocopad.bean.WorkingHours;
 import com.healthcoco.healthcocopad.bean.server.WorkingSchedule;
 import com.healthcoco.healthcocopad.custom.CustomTimePickerDialog;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
@@ -316,7 +316,7 @@ public class AddEditClinicHoursDialogFragment extends HealthCocoDialogFragment i
                 scheduleList.add(schedule);
             }
         }
-        return scheduleList;
+        return Util.getValidatedList(scheduleList);
     }
 
     private void addSubItemFromTo(WeekDayNameType weekdayType, WorkingHours workingHours) {
