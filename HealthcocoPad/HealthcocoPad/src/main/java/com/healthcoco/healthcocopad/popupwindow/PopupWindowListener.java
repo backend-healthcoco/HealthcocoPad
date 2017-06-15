@@ -9,4 +9,5 @@ import com.healthcoco.healthcocopad.enums.PopupWindowType;
 
 public interface PopupWindowListener {
     public void onItemSelected(PopupWindowType popupWindowType, Object object);
+    public void onEmptyListFound();
 }

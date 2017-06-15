@@ -41,12 +41,15 @@ import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.DownloadImageFromUrlUtil;
+import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.ImageUtil;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.ScreenDimensions;
 import com.healthcoco.healthcocopad.utilities.SyncUtility;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.healthcoco.healthcocopad.views.TextViewFontAwesome;
+
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,6 +63,7 @@ public class DoctorProfileFragment extends HealthCocoFragment implements GsonReq
     public static final String INTENT_GET_DOCTOR_PROFILE_DETAILS = "DoctorProfileFragment.DOCTOR_PROFILE_DETAILS";
     public static final String INTENT_GET_DOCTOR_PROFILE_DETAILS_LOCAL = "DoctorProfileFragment.DOCTOR_PROFILE_DETAILS_LOCAL";
     public static final int REQUEST_CODE_DOCTOR_PROFILE = 111;
+    public static final String TAG_DOCTOR_PROFILE = "doctorProfile";
 
     private TextView tabMyProfile;
     private TextView tabMyClinic;
@@ -125,6 +129,7 @@ public class DoctorProfileFragment extends HealthCocoFragment implements GsonReq
         tabMyClinic.setOnClickListener(this);
         viewPager.addOnPageChangeListener(this);
         ivProfileImage.setOnClickListener(this);
+        ivDoctorCoverPhoto.setOnClickListener(this);
     }
 
     private void initViewPager() {
@@ -155,11 +160,15 @@ public class DoctorProfileFragment extends HealthCocoFragment implements GsonReq
                 viewPager.setCurrentItem(1);
                 break;
             case R.id.bt_edit:
-                openDialogFragment(new AddEditDoctorProfileDialogFragment(FragmentType.PROFILE), REQUEST_CODE_DOCTOR_PROFILE, CommonOpenUpFragmentType.ADD_EDIT_DOCTOR_PROFILE_DETAILS, user.getUniqueId());
+                openDialogFragment(new AddEditDoctorProfileDialogFragment(FragmentType.PROFILE), AddEditDoctorProfileDialogFragment.TAG_DOCTOR_PROFILE_DETAIL, doctorProfile, REQUEST_CODE_DOCTOR_PROFILE, CommonOpenUpFragmentType.ADD_EDIT_DOCTOR_PROFILE_DETAILS);
                 break;
             case R.id.iv_image:
                 if (doctorProfile != null && !Util.isNullOrBlank(doctorProfile.getImageUrl()))
                     mActivity.openEnlargedImageDialogFragment(doctorProfile.getImageUrl());
+                break;
+            case R.id.iv_doctor_cover_photo:
+                if (doctorProfile != null && !Util.isNullOrBlank(doctorProfile.getCoverImageUrl()))
+                    mActivity.openEnlargedImageDialogFragment(doctorProfile.getCoverImageUrl());
                 break;
         }
     }
@@ -227,8 +236,8 @@ public class DoctorProfileFragment extends HealthCocoFragment implements GsonReq
                 case GET_DOCTOR_PROFILE:
                     if (response.getData() != null)
                         if (response.isDataFromLocal()) {
-                            DoctorProfile doctorProfileResponse = (DoctorProfile) response.getData();
-                            initData(doctorProfileResponse);
+                            doctorProfile = (DoctorProfile) response.getData();
+                            initData(doctorProfile);
                             mActivity.refreshMenuFragment(doctorProfile);
                             if (isInitialLoading && response.isUserOnline()) {
                                 isInitialLoading = false;
@@ -245,10 +254,10 @@ public class DoctorProfileFragment extends HealthCocoFragment implements GsonReq
         mActivity.hideLoading();
     }
 
-    private void loadImages() {
+    private void loadImages(DoctorProfile doctorProfile) {
         if (doctorProfile != null) {
             //loadng profile image and cover image
-            DownloadImageFromUrlUtil.loadImageWithInitialAlphabet(mActivity, PatientProfileScreenType.IN_DOCTOR_PROFILE, doctorProfile, null, ivProfileImage, tvInitialAlphabet);
+            DownloadImageFromUrlUtil.loadImageWithInitialAlphabet(mActivity, PatientProfileScreenType.IN_DOCTOR_PROFILE, this.doctorProfile, null, ivProfileImage, tvInitialAlphabet);
             if (!Util.isNullOrBlank(doctorProfile.getCoverImageUrl())) {
                 doctorProfile.setCoverImagePath(ImageUtil.getPathToSaveFile(HealthCocoFileType.DOCTOR_COVER_IMAGE, Util.getFileNameFromUrl(doctorProfile.getCoverImageUrl()), Util.getFileExtension(doctorProfile.getCoverImageUrl())));
                 new DownloadFileFromUrlAsyncTask(mActivity, this, HealthCocoFileType.DOCTOR_COVER_IMAGE, Util.getFileNameFromUrl(doctorProfile.getCoverImageUrl()), null, null).execute(doctorProfile.getCoverImageUrl());
@@ -260,6 +269,14 @@ public class DoctorProfileFragment extends HealthCocoFragment implements GsonReq
 
     public void initData(DoctorProfile doctorProfile) {
         this.doctorProfile = doctorProfile;
+        refreshDoctorProfileData(this.doctorProfile);
+        if (myProfileFragment != null)
+            myProfileFragment.initData(doctorProfile);
+        if (myClinicFragment != null)
+            myClinicFragment.initData(doctorProfile);
+    }
+
+    private void refreshDoctorProfileData(DoctorProfile doctorProfile) {
         if (doctorProfile != null) {
             String title = doctorProfile.getTitle(false);
             if (Util.isNullOrBlank(title))
@@ -288,12 +305,8 @@ public class DoctorProfileFragment extends HealthCocoFragment implements GsonReq
                 tvGenderDate.setVisibility(View.GONE);
                 tvGenderDate.setText("");
             }
+            loadImages(doctorProfile);
         }
-        if (myProfileFragment != null)
-            myProfileFragment.initData(doctorProfile);
-        if (myClinicFragment != null)
-            myClinicFragment.initData(doctorProfile);
-        loadImages();
     }
 
     private void getMergedSpecialities(List<String> list) {
@@ -409,9 +422,11 @@ public class DoctorProfileFragment extends HealthCocoFragment implements GsonReq
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_DOCTOR_PROFILE) {
-            if (resultCode == Activity.RESULT_OK) {
+            if (resultCode == HealthCocoConstants.RESULT_CODE_ADD_EDIT_DOCTOR_PROFILE) {
                 new SyncUtility(mApp, mActivity, user, null).updateMasterTableOnSpecialityChange();
-                getDoctorProfileFromLocal();
+                DoctorProfile profile = Parcels.unwrap(data.getParcelableExtra(TAG_DOCTOR_PROFILE));
+                doctorProfile = profile;
+                refreshDoctorProfileData(doctorProfile);
             }
         }
     }

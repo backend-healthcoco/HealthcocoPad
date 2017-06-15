@@ -289,8 +289,6 @@ public class GsonRequest extends JsonRequest<VolleyResponseBean> {
                 case ADD_UPDATE_CLINIC_ADDRESS:
                 case ADD_CLINIC_IMAGE:
                 case DELETE_CLINIC_IMAGE:
-                case ADD_UPDATE_CLINIC_CONTACT:
-                case ADD_UPDATE_CLINIC_HOURS:
                     intent.setAction(ClinicalProfileFragment.INTENT_GET_CLINIC_PROFILE_DETAILS);
                     break;
 

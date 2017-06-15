@@ -50,6 +50,7 @@ import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.OptionsType;
 import com.healthcoco.healthcocopad.enums.PatientProfileScreenType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
+import com.healthcoco.healthcocopad.fragments.DoctorProfileFragment;
 import com.healthcoco.healthcocopad.listeners.CommonOptionsDialogItemClickListener;
 import com.healthcoco.healthcocopad.listeners.DownloadFileFromUrlListener;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
@@ -67,6 +68,8 @@ import com.healthcoco.healthcocopad.utilities.ScreenDimensions;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.healthcoco.healthcocopad.views.TextViewFontAwesome;
 
+import org.parceler.Parcels;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -76,6 +79,7 @@ import java.util.List;
  * Created by Shreshtha on 02-02-2017.
  */
 public class AddEditDoctorProfileDialogFragment extends HealthCocoDialogFragment implements GsonRequest.ErrorListener, DownloadFileFromUrlListener, LocalDoInBackgroundListenerOptimised, Response.Listener<VolleyResponseBean>, View.OnClickListener, AdapterView.OnItemClickListener, CommonOptionsDialogItemClickListener {
+    public static final String TAG_DOCTOR_PROFILE_DETAIL = "doctorProfileDetail";
     private FragmentType profile;
     private static final String DOCTOR_PROFILE_IMAGE = "DoctorProfileImage";
     private static final String DOCTOR_COVER_IMAGE = "DoctorCoverImage";
@@ -126,15 +130,16 @@ public class AddEditDoctorProfileDialogFragment extends HealthCocoDialogFragment
         super.onActivityCreated(savedInstanceState);
         init();
         setWidthHeight(0.70, 0.90);
+        mActivity.showLoading(false);
+        new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_FRAGMENT_INITIALISATION_DATA, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     @Override
     public void init() {
+        doctorProfile = Parcels.unwrap(getArguments().getParcelable(TAG_DOCTOR_PROFILE_DETAIL));
         initViews();
         initListeners();
         initAutoTvAdapter();
-        mActivity.showLoading(false);
-        new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_FRAGMENT_INITIALISATION_DATA, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     @Override
@@ -259,8 +264,6 @@ public class AddEditDoctorProfileDialogFragment extends HealthCocoDialogFragment
                     initData();
                     loadImages();
                     break;
-                case GET_DOCTOR_PROFILE:
-                    break;
                 case UPDATE_DOCTOR_PROFILE:
                     if (response.getData() != null && response.getData() instanceof DoctorProfile) {
                         DoctorProfile doctorProfileResponse = (DoctorProfile) response.getData();
@@ -275,7 +278,7 @@ public class AddEditDoctorProfileDialogFragment extends HealthCocoDialogFragment
                         doctorProfile.setExperience(doctorProfileResponse.getExperience());
                         LocalDataServiceImpl.getInstance(mApp).addDoctorProfile(doctorProfile);
                     }
-                    getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, getActivity().getIntent());
+                    getTargetFragment().onActivityResult(getTargetRequestCode(), HealthCocoConstants.RESULT_CODE_ADD_EDIT_DOCTOR_PROFILE, new Intent().putExtra(DoctorProfileFragment.TAG_DOCTOR_PROFILE, Parcels.wrap(doctorProfile)));
                     getDialog().dismiss();
                     break;
             }
@@ -307,7 +310,6 @@ public class AddEditDoctorProfileDialogFragment extends HealthCocoDialogFragment
                 LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
                 if (doctor != null && doctor.getUser() != null && !Util.isNullOrBlank(doctor.getUser().getUniqueId())) {
                     user = doctor.getUser();
-                    doctorProfile = LocalDataServiceImpl.getInstance(mApp).getDoctorProfileObject(user.getUniqueId());
                     specialitiesList = LocalDataServiceImpl.getInstance(mApp).getSpecialitiesListObject();
                 }
                 return volleyResponseBean;

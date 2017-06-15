@@ -91,7 +91,9 @@ public class HealthcocoPopupWindow extends PopupWindow implements View.OnClickLi
     @Override
     public void onClick(View v) {
         if (anchorView != null && anchorView.getId() == v.getId()) {
-            showOptionsWindow(v);
+            if (list != null && list.size() > 0)
+                showOptionsWindow(v);
+            else popupWindowListener.onEmptyListFound();
         }
     }
 }

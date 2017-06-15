@@ -222,14 +222,12 @@ public class MyClinicFragment extends HealthCocoFragment implements View.OnClick
         this.selectedClinicProfile = selectedClinicProfile;
         autotvClinicName.setText(Util.getValidatedValue(selectedClinicProfile.getLocationName()));
         tvAddress.setText(selectedClinicProfile.getFormattedClinicAddress(mActivity));
-        if (selectedClinicProfile.getTwentyFourSevenOpen() != null && selectedClinicProfile.getTwentyFourSevenOpen()) {
-            containerClinicHours.setVisibility(View.GONE);
-            containerClinicOpen247.setVisibility(View.VISIBLE);
-        } else {
-            containerClinicHours.setVisibility(View.VISIBLE);
-            containerClinicOpen247.setVisibility(View.GONE);
-            addWorkingSchedules(selectedClinicProfile.getWorkingSchedules());
-        }
+        refreshWorkingSchedule(selectedClinicProfile);
+        refreshAppointmentDetails(selectedClinicProfile);
+        refreshMapLocation();
+    }
+
+    private void refreshAppointmentDetails(DoctorClinicProfile selectedClinicProfile) {
         if (selectedClinicProfile.getConsultationFee() != null)
             tvConsultantFees.setText(Util.getValidatedValueOrDash(mActivity, Util.getFormattedConsultantFee(selectedClinicProfile.getConsultationFee())));
         else
@@ -247,8 +245,17 @@ public class MyClinicFragment extends HealthCocoFragment implements View.OnClick
         else
             tvAppointmentNumbers.setText(R.string.no_text_dash);
         tvAppointmentSlot.setText(Util.getValidatedValueOrDash(mActivity, Util.getFormattedAppointmentSlot(selectedClinicProfile.getAppointmentSlot())));
-        refreshMapLocation();
-        view.requestFocus();
+    }
+
+    private void refreshWorkingSchedule(DoctorClinicProfile selectedClinicProfile) {
+        if (selectedClinicProfile.getTwentyFourSevenOpen() != null && selectedClinicProfile.getTwentyFourSevenOpen()) {
+            containerClinicHours.setVisibility(View.GONE);
+            containerClinicOpen247.setVisibility(View.VISIBLE);
+        } else {
+            containerClinicHours.setVisibility(View.VISIBLE);
+            containerClinicOpen247.setVisibility(View.GONE);
+            addWorkingSchedules(selectedClinicProfile.getWorkingSchedules());
+        }
     }
 
     public void refreshMapLocation() {
@@ -332,19 +339,14 @@ public class MyClinicFragment extends HealthCocoFragment implements View.OnClick
                 && data != null && data.hasExtra(HealthCocoConstants.TAG_CLINIC_PROFILE)
                 && selectedClinicProfile != null) {
             DoctorClinicProfile profile = Parcels.unwrap(data.getParcelableExtra(HealthCocoConstants.TAG_CLINIC_PROFILE));
-            if (resultCode == HealthCocoConstants.RESULT_CODE_ADD_EDIT_CLINIC_HOURS) {
-                selectedClinicProfile = profile;
-                selectedClinicProfile.setWorkingSchedules(profile.getWorkingSchedules());
-                addWorkingSchedules(selectedClinicProfile.getWorkingSchedules());
-            } else if (resultCode == HealthCocoConstants.RESULT_CODE_ADD_EDIT_APPOINTMENT_DETAILS) {
-                selectedClinicProfile = profile;
-                selectedClinicProfile.setConsultationFee(profile.getConsultationFee());
-                selectedClinicProfile.setRevisitConsultationFee(profile.getRevisitConsultationFee());
-                selectedClinicProfile.setAppointmentSlot(profile.getAppointmentSlot());
-                selectedClinicProfile.setAppointmentBookingNumber(profile.getAppointmentBookingNumber());
-                selectedClinicProfile.setLocationId(profile.getLocationId());
-                selectedClinicProfile.setDoctorId(profile.getDoctorId());
-                refreshSelectedClinicProfileData(selectedClinicProfile);
+            selectedClinicProfile = profile;
+            switch (resultCode) {
+                case HealthCocoConstants.RESULT_CODE_ADD_EDIT_CLINIC_HOURS:
+                    refreshWorkingSchedule(selectedClinicProfile);
+                    break;
+                case HealthCocoConstants.RESULT_CODE_ADD_EDIT_APPOINTMENT_DETAILS:
+                    refreshAppointmentDetails(selectedClinicProfile);
+                    break;
             }
         }
     }

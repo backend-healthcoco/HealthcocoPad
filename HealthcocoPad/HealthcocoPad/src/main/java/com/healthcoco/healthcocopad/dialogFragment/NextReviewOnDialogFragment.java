@@ -202,7 +202,7 @@ public class NextReviewOnDialogFragment extends HealthCocoDialogFragment impleme
                     if (response.getData() != null && response.getData() instanceof AppointmentTimeSlotDetails) {
                         appointmentTimeSlotDetails = (AppointmentTimeSlotDetails) response.getData();
                         availableTimeSlotsArrayList = appointmentTimeSlotDetails.getSlots();
-                        initPopupWindows(tvSelectedTimeSlot, PopupWindowType.TIME_SLOTS, (ArrayList<Object>) (ArrayList<?>) availableTimeSlotsArrayList, R.layout.spinner_drop_down_item_available_time_slots, this);
+                            initPopupWindows(tvSelectedTimeSlot, PopupWindowType.TIME_SLOTS, (ArrayList<Object>) (ArrayList<?>) availableTimeSlotsArrayList, R.layout.spinner_drop_down_item_available_time_slots, this);
                     }
                     break;
             }
@@ -331,5 +331,10 @@ public class NextReviewOnDialogFragment extends HealthCocoDialogFragment impleme
                 }
                 break;
         }
+    }
+
+    @Override
+    public void onEmptyListFound() {
+        Util.showToast(mActivity, R.string.no_slots_available);
     }
 }

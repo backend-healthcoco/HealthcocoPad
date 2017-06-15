@@ -943,7 +943,7 @@ public class LocalDataServiceImpl {
         doctorProfile.setOtherEmailAddressesJsonString(getJsonFromObject(doctorProfile.getOtherEmailAddresses()));
 
         //saving doctor Experience
-        doctorProfile.setExperience((DoctorExperience) getObjectFromJson(String.class, doctorProfile.getExperienceJsonString()));
+        doctorProfile.setExperienceJsonString(getJsonFromObject(doctorProfile.getExperience()));
         //saving Education Details
         addEducationsList(doctorProfile.getDoctorId(), doctorProfile.getEducation());
 

@@ -79,7 +79,7 @@ public class ClinicalProfileFragment extends HealthCocoFragment
         implements View.OnClickListener, Response.Listener<VolleyResponseBean>, GsonRequest.ErrorListener, LocalDoInBackgroundListenerOptimised, ViewPager.OnPageChangeListener, CommonOptionsDialogItemClickListener, OnMapReadyCallback {
     public static final String INTENT_GET_CLINIC_PROFILE_DETAILS = "com.healthcoco.REFRESH_CLINIC_PROFILE";
     public static final int MAX_DOCTORS_LIST_COUNT = 3;
-    public static final int REQUEST_CODE_CLINIC_PROFILE_IMAGE = 105;
+    public static final int REQUEST_CODE_CLINIC_PROFILE = 105;
     private ScrollViewWithHeader svContainer;
     private TextView tvClinicname;
     private TextView tvHeader;
@@ -123,6 +123,7 @@ public class ClinicalProfileFragment extends HealthCocoFragment
     private List<Role> rolesList;
     private boolean isEditEnabled;
     private boolean receiversRegistered;
+    private ContactsDetailViewPagerAdapter viewPagerAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -236,27 +237,36 @@ public class ClinicalProfileFragment extends HealthCocoFragment
             Location location = clinicDetailResponse.getLocation();
             if (location != null) {
                 tvClinicname.setText(Util.getValidatedValue(location.getLocationName()));
-                tvClinicAddress.setText(location.getFormattedClinicAddress(mActivity));
-
-                if (location.getTwentyFourSevenOpen() != null && location.getTwentyFourSevenOpen()) {
-                    containerClinicHours.setVisibility(View.GONE);
-                    containerClinicOpen247.setVisibility(View.VISIBLE);
-                } else {
-                    containerClinicHours.setVisibility(View.VISIBLE);
-                    containerClinicOpen247.setVisibility(View.GONE);
-                    addWorkingSchedules(location.getClinicWorkingSchedules());
-                }
-                tvClinicNumbers.setText(getClinicNumbers(location));
-                tvWebsite.setText(Util.getValidatedValueOrDash(mActivity, location.getWebsiteUrl()));
-
-                tvEmailAddress.setText(Util.getValidatedValueOrDash(mActivity, location.getLocationEmailAddress()));
-
+                refreshClinicAddress(location);
+                refreshClinicHoursDetail(location);
+                refreshClinicContacDetail(location);
                 DownloadImageFromUrlUtil.loadImageUsingImageLoader(null, ivLogoImage, location.getLogoThumbnailUrl());
-
                 if (googleMap == null)
                     mapFragment.getMapAsync(this);
             }
         }
+    }
+
+    private void refreshClinicAddress(Location location) {
+        tvClinicAddress.setText(location.getFormattedClinicAddress(mActivity));
+    }
+
+    private void refreshClinicHoursDetail(Location location) {
+        if (location.getTwentyFourSevenOpen() != null && location.getTwentyFourSevenOpen()) {
+            containerClinicHours.setVisibility(View.GONE);
+            containerClinicOpen247.setVisibility(View.VISIBLE);
+        } else {
+            containerClinicHours.setVisibility(View.VISIBLE);
+            containerClinicOpen247.setVisibility(View.GONE);
+            addWorkingSchedules(location.getClinicWorkingSchedules());
+        }
+    }
+
+    private void refreshClinicContacDetail(Location location) {
+        tvClinicNumbers.setText(getClinicNumbers(location));
+        tvWebsite.setText(Util.getValidatedValueOrDash(mActivity, location.getWebsiteUrl()));
+
+        tvEmailAddress.setText(Util.getValidatedValueOrDash(mActivity, location.getLocationEmailAddress()));
     }
 
     private void clearWorkingSchedules() {
@@ -305,7 +315,7 @@ public class ClinicalProfileFragment extends HealthCocoFragment
             viewPager.setOffscreenPageLimit(fragmentsList.size());
             setBulletSelected(0, containerBullets);
         }
-        ContactsDetailViewPagerAdapter viewPagerAdapter = new ContactsDetailViewPagerAdapter(
+        viewPagerAdapter = new ContactsDetailViewPagerAdapter(
                 mActivity.getSupportFragmentManager());
         viewPagerAdapter.setFragmentsList(fragmentsList);
         viewPager.setAdapter(viewPagerAdapter);
@@ -406,26 +416,22 @@ public class ClinicalProfileFragment extends HealthCocoFragment
         switch (v.getId()) {
             case R.id.bt_edit_clinic_image:
                 if (clinicDetailResponse != null)
-                    mActivity.openCommonOpenUpActivity(CommonOpenUpFragmentType.ADD_EDIT_CLINIC_IMAGE, HealthCocoConstants.TAG_UNIQUE_ID, clinicDetailResponse.getUniqueId(), 0);
+                    mActivity.openCommonOpenUpActivity(CommonOpenUpFragmentType.ADD_EDIT_CLINIC_IMAGE, HealthCocoConstants.TAG_UNIQUE_ID, clinicDetailResponse.getUniqueId(), REQUEST_CODE_CLINIC_PROFILE);
                 break;
             case R.id.bt_edit_clinic_hours:
                 if (clinicDetailResponse != null) {
-                    openDialogFragment(new AddEditClinicHoursDialogFragment(), AddEditClinicHoursDialogFragment.TAG_CLINIC_HOURS, clinicDetailResponse, REQUEST_CODE_CLINIC_PROFILE_IMAGE, CommonOpenUpFragmentType.ADD_EDIT_CLINIC_HOURS);
+                    openDialogFragment(new AddEditClinicHoursDialogFragment(), AddEditClinicHoursDialogFragment.TAG_CLINIC_HOURS, clinicDetailResponse, REQUEST_CODE_CLINIC_PROFILE, CommonOpenUpFragmentType.ADD_EDIT_CLINIC_HOURS);
                 }
                 break;
             case R.id.bt_edit_address:
                 if (clinicDetailResponse != null) {
-                    openDialogFragment(new AddEditClinicAddressDialogFragment(), AddEditClinicAddressDialogFragment.TAG_CLINIC_ADDRESS, clinicDetailResponse, REQUEST_CODE_CLINIC_PROFILE_IMAGE, CommonOpenUpFragmentType.ADD_EDIT_CLINIC_ADDRESS);
+                    openDialogFragment(new AddEditClinicAddressDialogFragment(), AddEditClinicAddressDialogFragment.TAG_CLINIC_ADDRESS, clinicDetailResponse, REQUEST_CODE_CLINIC_PROFILE, CommonOpenUpFragmentType.ADD_EDIT_CLINIC_ADDRESS);
                 }
                 break;
             case R.id.bt_edit_contact:
                 if (clinicDetailResponse != null) {
-                    openDialogFragment(new AddEditClinicContactDialogFragment(), AddEditClinicContactDialogFragment.TAG_CONTACT, clinicDetailResponse, REQUEST_CODE_CLINIC_PROFILE_IMAGE, CommonOpenUpFragmentType.ADD_EDIT_CLINIC_CONTACT);
+                    openDialogFragment(new AddEditClinicContactDialogFragment(), AddEditClinicContactDialogFragment.TAG_CONTACT, clinicDetailResponse, REQUEST_CODE_CLINIC_PROFILE, CommonOpenUpFragmentType.ADD_EDIT_CLINIC_CONTACT);
                 }
-                break;
-            case R.id.bt_add_session:
-                LogUtils.LOGD(TAG, "AddSession Clicked");
-                if (clinicDetailResponse != null) addSubItemSession();
                 break;
             case R.id.parent_logo:
                 LogUtils.LOGD(TAG, "logo Clicked");
@@ -581,21 +587,21 @@ public class ClinicalProfileFragment extends HealthCocoFragment
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        } else if (requestCode == REQUEST_CODE_CLINIC_PROFILE_IMAGE) {
+        } else if (requestCode == REQUEST_CODE_CLINIC_PROFILE) {
+            initViewPagerAdapter();
             Location location = Parcels.unwrap(data.getParcelableExtra(HealthCocoConstants.TAG_CLINIC_PROFILE));
             clinicDetailResponse.setLocation(location);
             switch (resultCode) {
                 case HealthCocoConstants.RESULT_CODE_ADD_EDIT_CLINIC_ADDRESS:
-                    initData(clinicDetailResponse);
+                    refreshClinicAddress(clinicDetailResponse.getLocation());
                     break;
                 case HealthCocoConstants.RESULT_CODE_ADD_EDIT_CLINIC_CONTACT:
-                    initData(clinicDetailResponse);
+                    refreshClinicContacDetail(clinicDetailResponse.getLocation());
                     break;
                 case HealthCocoConstants.RESULT_CODE_ADD_EDIT_CLINIC_HOURS:
-                    initData(clinicDetailResponse);
+                    refreshClinicHoursDetail(clinicDetailResponse.getLocation());
                     break;
             }
-            initViewPagerAdapter();
         }
     }
 

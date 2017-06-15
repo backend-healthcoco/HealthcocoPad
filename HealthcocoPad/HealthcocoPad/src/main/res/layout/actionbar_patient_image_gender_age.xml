@@ -78,6 +78,7 @@
             android:textSize="@dimen/text_size_actionbar_next_review" />
 
         <LinearLayout
+            android:id="@+id/container_date_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal">

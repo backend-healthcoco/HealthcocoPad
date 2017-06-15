@@ -279,6 +279,7 @@ public class AddEditClinicImageFragment extends HealthCocoFragment implements Ad
                     }
                     break;
             }
+            mActivity.setResult(getTargetRequestCode());
         }
         mActivity.hideLoading();
     }

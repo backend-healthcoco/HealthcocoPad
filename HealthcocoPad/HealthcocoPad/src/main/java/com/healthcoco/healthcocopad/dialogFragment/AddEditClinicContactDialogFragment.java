@@ -129,7 +129,6 @@ public class AddEditClinicContactDialogFragment extends HealthCocoDialogFragment
         else {
             EditTextTextViewErrorUtil.showErrorOnEditText(mActivity, view, errorViewList, msg);
         }
-
     }
 
     private void addUpdateContact(String clinicNumber, String alternateNumber, String emailAddress, String websiteUrl) {
