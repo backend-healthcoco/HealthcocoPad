@@ -10,9 +10,11 @@ import com.google.gson.internal.LinkedTreeMap;
 import com.healthcoco.healthcocopad.HealthCocoApplication;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.Address;
+import com.healthcoco.healthcocopad.bean.BloodPressure;
 import com.healthcoco.healthcocopad.bean.ConsultationFee;
 import com.healthcoco.healthcocopad.bean.DOB;
 import com.healthcoco.healthcocopad.bean.DoctorExperience;
+import com.healthcoco.healthcocopad.bean.Duration;
 import com.healthcoco.healthcocopad.bean.PersonalHistory;
 import com.healthcoco.healthcocopad.bean.UIPermissions;
 import com.healthcoco.healthcocopad.bean.UiPermissionsBoth;
@@ -2248,8 +2250,6 @@ public class LocalDataServiceImpl {
 
     public void addClinicalNote(ClinicalNotes clinicalNote) {
         deleteClinicalNotesAndRelatedData(clinicalNote.getUniqueId());
-        if (!Util.isNullOrEmptyList(clinicalNote.getDiagnoses()))
-            addDiagnosisList(clinicalNote.getUniqueId(), clinicalNote.getDiagnoses());
         if (!Util.isNullOrEmptyList(clinicalNote.getDiagrams()))
             addDiagramsList(clinicalNote.getUniqueId(), clinicalNote.getDiagrams());
         if (clinicalNote.getVitalSigns() != null) {
@@ -2262,12 +2262,7 @@ public class LocalDataServiceImpl {
 
     private void addVitalSigns(String uniqueId, VitalSigns vitalSigns) {
         vitalSigns.setForeignTableId(uniqueId);
-        BloodPressure bloodPressure = vitalSigns.getBloodPressure();
-        deleteAllFrom(BloodPressure.class, LocalDatabaseUtils.KEY_FOREIGN_TABLE_ID, vitalSigns.getForeignTableId());
-        if (bloodPressure != null) {
-            bloodPressure.setForeignTableId(vitalSigns.getForeignTableId());
-            bloodPressure.save();
-        }
+        vitalSigns.setBloodPressureJsonString(getJsonFromObject(vitalSigns.getBloodPressure()));
         vitalSigns.save();
     }
 
@@ -2621,7 +2616,6 @@ public class LocalDataServiceImpl {
     }
 
     private void getClinicalNoteDetailsList(ClinicalNotes clinicalNote) {
-        clinicalNote.setDiagnoses((List<Diagnoses>) getClinicalNotesDataListFromForeignTable(ForeignDiagnosesTable.class, clinicalNote.getUniqueId(), Diagnoses.class));
         clinicalNote.setDiagrams((List<Diagram>) getListByKeyValue(Diagram.class, LocalDatabaseUtils.KEY_FOREIGN_CLINICAL_NOTES_ID, clinicalNote.getUniqueId()));
         clinicalNote.setVitalSigns(getVitalSigns(clinicalNote.getUniqueId()));
         clinicalNote.setAppointmentRequest(getAppointmentRequest(clinicalNote.getVisitId()));
@@ -2672,22 +2666,12 @@ public class LocalDataServiceImpl {
     private VitalSigns getVitalSigns(String uniqueId) {
         String query = "Select  " + LocalDatabaseUtils.getPrefixedColumnsString(VitalSigns.class, true)
                 + " from " + VitalSigns.TABLE_NAME
-                + " left outer join " + BloodPressure.TABLE_NAME
-                + " on " + VitalSigns.TABLE_NAME + "." + LocalDatabaseUtils.KEY_FOREIGN_TABLE_ID + "=" + BloodPressure.TABLE_NAME + "." + LocalDatabaseUtils.KEY_FOREIGN_TABLE_ID
                 + " where " + VitalSigns.TABLE_NAME + "." + LocalDatabaseUtils.KEY_FOREIGN_TABLE_ID + " = " + "\"" + uniqueId + "\"";
         LogUtils.LOGD(TAG, "Select query : " + query);
         VitalSigns vitalSigns = SugarRecord.findObjectWithQuery(VitalSigns.class, query);
         if (vitalSigns != null)
-            vitalSigns.setBloodPressure(getBloodPressure(uniqueId));
+            vitalSigns.setBloodPressure((BloodPressure) getObjectFromJson(BloodPressure.class, vitalSigns.getBloodPressureJsonString()));
         return vitalSigns;
-    }
-
-    private BloodPressure getBloodPressure(String uniqueId) {
-        String query = "Select  " + LocalDatabaseUtils.getPrefixedColumnsString(BloodPressure.class, true)
-                + " from " + BloodPressure.TABLE_NAME
-                + " where " + BloodPressure.TABLE_NAME + "." + LocalDatabaseUtils.KEY_FOREIGN_TABLE_ID + " = " + "\"" + uniqueId + "\"";
-        LogUtils.LOGD(TAG, "Select query : " + query);
-        return SugarRecord.findObjectWithQuery(BloodPressure.class, query);
     }
 
     public ClinicalNotes getClinicalNote(String clinicalNoteId, String patientId) {

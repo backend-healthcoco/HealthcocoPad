@@ -28,7 +28,7 @@ import com.healthcoco.healthcocopad.bean.server.DrugItem;
 import com.healthcoco.healthcocopad.bean.server.DrugType;
 import com.healthcoco.healthcocopad.bean.server.DrugsAndAllergies;
 import com.healthcoco.healthcocopad.bean.server.DrugsListSolrResponse;
-import com.healthcoco.healthcocopad.bean.server.Duration;
+import com.healthcoco.healthcocopad.bean.Duration;
 import com.healthcoco.healthcocopad.bean.server.GenericName;
 import com.healthcoco.healthcocopad.bean.server.HistoryDetailsResponse;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;

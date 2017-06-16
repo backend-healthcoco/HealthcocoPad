@@ -64,7 +64,7 @@ public class PatientCard extends SugarRecord {
 
     private String patientId;
     private String profession;
-
+    @Ignore
     private List<Relations> relations;
 
     public String getPatientId() {

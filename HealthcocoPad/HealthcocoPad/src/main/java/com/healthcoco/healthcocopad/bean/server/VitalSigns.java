@@ -2,6 +2,7 @@ package com.healthcoco.healthcocopad.bean.server;
 
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.R;
+import com.healthcoco.healthcocopad.bean.BloodPressure;
 import com.healthcoco.healthcocopad.utilities.StringUtil;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.orm.SugarRecord;
@@ -25,6 +26,8 @@ public class VitalSigns extends SugarRecord {
     private String height;
     @Ignore
     private BloodPressure bloodPressure;
+    private String bloodPressureJsonString;
+
     private String spo2;
 
     public String getWeight() {
@@ -133,5 +136,13 @@ public class VitalSigns extends SugarRecord {
     public String getFormattedBloodPressureValue(HealthCocoActivity mActivity, BloodPressure bloodPressure) {
         return mActivity.getResources().getString(R.string.fa_angle_down_thin) + " " + bloodPressure.getSystolic()
                 + "/" + " " + mActivity.getResources().getString(R.string.fa_angle_up_thin) + bloodPressure.getDiastolic() + "(" + mActivity.getResources().getString(R.string.mm_hg) + ")";
+    }
+
+    public String getBloodPressureJsonString() {
+        return bloodPressureJsonString;
+    }
+
+    public void setBloodPressureJsonString(String bloodPressureJsonString) {
+        this.bloodPressureJsonString = bloodPressureJsonString;
     }
 }

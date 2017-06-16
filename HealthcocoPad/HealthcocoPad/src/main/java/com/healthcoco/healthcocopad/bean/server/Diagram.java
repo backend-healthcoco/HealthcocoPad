@@ -1,5 +1,6 @@
 package com.healthcoco.healthcocopad.bean.server;
 
+import com.healthcoco.healthcocopad.bean.FileDetails;
 import com.healthcoco.healthcocopad.enums.RecordType;
 import com.orm.SugarRecord;
 import com.orm.annotation.Ignore;

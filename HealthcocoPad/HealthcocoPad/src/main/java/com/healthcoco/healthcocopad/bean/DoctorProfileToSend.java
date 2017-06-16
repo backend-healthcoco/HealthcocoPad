@@ -1,7 +1,5 @@
 package com.healthcoco.healthcocopad.bean;
 
-import com.healthcoco.healthcocopad.bean.server.FileDetails;
-
 import org.parceler.Parcel;
 
 import java.util.List;

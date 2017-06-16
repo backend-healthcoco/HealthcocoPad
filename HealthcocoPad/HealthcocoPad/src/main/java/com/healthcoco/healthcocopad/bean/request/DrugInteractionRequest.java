@@ -2,7 +2,7 @@ package com.healthcoco.healthcocopad.bean.request;
 
 import com.healthcoco.healthcocopad.bean.server.DrugDirection;
 import com.healthcoco.healthcocopad.bean.server.DrugType;
-import com.healthcoco.healthcocopad.bean.server.Duration;
+import com.healthcoco.healthcocopad.bean.Duration;
 import com.healthcoco.healthcocopad.bean.server.GenericName;
 import com.orm.annotation.Ignore;
 import com.orm.annotation.Unique;

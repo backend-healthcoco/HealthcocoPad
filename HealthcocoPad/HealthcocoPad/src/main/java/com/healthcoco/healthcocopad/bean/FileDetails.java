@@ -1,4 +1,4 @@
-package com.healthcoco.healthcocopad.bean.server;
+package com.healthcoco.healthcocopad.bean;
 
 import android.graphics.Bitmap;
 

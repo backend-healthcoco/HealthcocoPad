@@ -16,7 +16,7 @@ import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.AppointmentRequest;
-import com.healthcoco.healthcocopad.bean.server.BloodPressure;
+import com.healthcoco.healthcocopad.bean.BloodPressure;
 import com.healthcoco.healthcocopad.bean.server.ClinicalNotes;
 import com.healthcoco.healthcocopad.bean.server.Diagram;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;

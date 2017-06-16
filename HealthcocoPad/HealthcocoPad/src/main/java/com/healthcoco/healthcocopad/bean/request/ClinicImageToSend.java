@@ -1,6 +1,6 @@
 package com.healthcoco.healthcocopad.bean.request;
 
-import com.healthcoco.healthcocopad.bean.server.FileDetails;
+import com.healthcoco.healthcocopad.bean.FileDetails;
 
 import org.parceler.Parcel;
 

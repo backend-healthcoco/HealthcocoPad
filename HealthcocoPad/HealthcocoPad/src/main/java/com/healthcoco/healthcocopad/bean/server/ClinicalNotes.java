@@ -16,10 +16,7 @@ public class ClinicalNotes extends SugarRecord {
     private String complaint;
     private String observation;
     private String investigation;
-    @Ignore
-    private List<Diagnoses> diagnoses;
     private String diagnosis;
-
     private Long createdTime;
     private Long updatedTime;
     @Ignore
@@ -249,37 +246,6 @@ public class ClinicalNotes extends SugarRecord {
     public void setDiscarded(Boolean discarded) {
         this.discarded = discarded;
     }
-//    public List<Complaint> getComplaints() {
-//        return complaints;
-//    }
-//
-//    public void setComplaints(List<Complaint> complaints) {
-//        this.complaints = complaints;
-//    }
-//
-//    public List<Observation> getObservations() {
-//        return observations;
-//    }
-//
-//    public void setObservations(List<Observation> observations) {
-//        this.observations = observations;
-//    }
-//
-//    public List<Investigation> getInvestigations() {
-//        return investigations;
-//    }
-//
-//    public void setInvestigations(List<Investigation> investigations) {
-//        this.investigations = investigations;
-//    }
-
-    public List<Diagnoses> getDiagnoses() {
-        return diagnoses;
-    }
-
-    public void setDiagnoses(List<Diagnoses> diagnoses) {
-        this.diagnoses = diagnoses;
-    }
 
     public List<Diagram> getDiagrams() {
         return diagrams;
@@ -288,14 +254,6 @@ public class ClinicalNotes extends SugarRecord {
     public void setDiagrams(List<Diagram> diagrams) {
         this.diagrams = diagrams;
     }
-
-//    public List<Notes> getNotes() {
-//        return notes;
-//    }
-//
-//    public void setNotes(List<Notes> notes) {
-//        this.notes = notes;
-//    }
 
     public String getDoctorId() {
         return doctorId;

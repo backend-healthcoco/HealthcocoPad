@@ -1,7 +1,6 @@
 package com.healthcoco.healthcocopad.bean.server;
 
-import android.os.Parcel;
-
+import com.healthcoco.healthcocopad.bean.FileDetails;
 import com.orm.SugarRecord;
 import com.orm.annotation.Unique;
 @org.parceler.Parcel

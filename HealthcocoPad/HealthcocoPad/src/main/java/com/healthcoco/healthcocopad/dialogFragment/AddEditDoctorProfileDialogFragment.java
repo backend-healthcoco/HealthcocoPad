@@ -34,7 +34,7 @@ import com.healthcoco.healthcocopad.bean.DoctorProfileToSend;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.DoctorExperience;
 import com.healthcoco.healthcocopad.bean.server.DoctorProfile;
-import com.healthcoco.healthcocopad.bean.server.FileDetails;
+import com.healthcoco.healthcocopad.bean.FileDetails;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.Specialities;
 import com.healthcoco.healthcocopad.bean.server.User;

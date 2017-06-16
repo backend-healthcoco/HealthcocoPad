@@ -1,4 +1,4 @@
-package com.healthcoco.healthcocopad.bean.server;
+package com.healthcoco.healthcocopad.bean;
 
 import com.healthcoco.healthcocopad.utilities.StringUtil;
 import com.healthcoco.healthcocopad.utilities.Util;
@@ -11,10 +11,7 @@ import org.parceler.Parcel;
  * Created by neha on 14/04/16.
  */
 @Parcel
-public class BloodPressure extends SugarRecord {
-    public static String TABLE_NAME = " " + StringUtil.toSQLName(BloodPressure.class.getSimpleName());
-    @Unique
-    protected String foreignTableId;
+public class BloodPressure{
     private String systolic;
     private String diastolic;
 
@@ -32,14 +29,6 @@ public class BloodPressure extends SugarRecord {
 
     public void setDiastolic(String diastolic) {
         this.diastolic = diastolic;
-    }
-
-    public String getForeignTableId() {
-        return foreignTableId;
-    }
-
-    public void setForeignTableId(String foreignTableId) {
-        this.foreignTableId = foreignTableId;
     }
 
     public boolean areAllFieldsNull() {

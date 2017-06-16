@@ -2,7 +2,7 @@ package com.healthcoco.healthcocopad.bean.request;
 
 import com.healthcoco.healthcocopad.bean.Address;
 import com.healthcoco.healthcocopad.bean.DOB;
-import com.healthcoco.healthcocopad.bean.server.FileDetails;
+import com.healthcoco.healthcocopad.bean.FileDetails;
 import com.healthcoco.healthcocopad.bean.server.Reference;
 import com.healthcoco.healthcocopad.bean.server.Relations;
 
