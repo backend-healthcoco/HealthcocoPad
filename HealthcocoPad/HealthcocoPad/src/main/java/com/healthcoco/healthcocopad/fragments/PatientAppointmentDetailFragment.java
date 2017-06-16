@@ -71,6 +71,7 @@ public class PatientAppointmentDetailFragment extends HealthCocoFragment impleme
     private RegisteredPatientDetailsUpdated selectedPatient;
     private User user;
     public FloatingActionButton floatingActionButton;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_patient_appointment_deatil, container, false);
@@ -145,21 +146,15 @@ public class PatientAppointmentDetailFragment extends HealthCocoFragment impleme
         adapter.notifyDataSetChanged();
     }
 
-    public void getListFromLocal(User user) {
-        this.user = user;
-        showLoadingOverlay(true);
-        getListFromLocal(true);
-    }
-
     private void getListFromLocal(boolean initialLoading) {
         this.isInitialLoading = initialLoading;
         showLoadingOverlay(isInitialLoading);
-        if (isInitialLoading) {
-            mActivity.showLoading(false);
-            resetListAndPagingAttributes();
+        if (initialLoading) {
+            showLoadingOverlay(true);
             progressLoading.setVisibility(View.GONE);
-        } else
+        } else {
             progressLoading.setVisibility(View.VISIBLE);
+        }
         new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_APPOINTMENTS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
@@ -172,7 +167,9 @@ public class PatientAppointmentDetailFragment extends HealthCocoFragment impleme
 
     public void getAppointmentsList(boolean showLoading) {
         if (showLoading)
-            mActivity.showLoading(false);
+            showLoadingOverlay(true);
+        else
+            showLoadingOverlay(false);
         Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(user, LocalTabelType.APPOINTMENT);
         WebDataServiceImpl.getInstance(mApp).getEmrListGeneralMethod(CalendarEvents.class, WebServiceType.GET_APPOINTMENT,
                 isOTPVerified, true, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(),
@@ -198,7 +195,6 @@ public class PatientAppointmentDetailFragment extends HealthCocoFragment impleme
         swipeRefreshLayout.setRefreshing(false);
         progressLoading.setVisibility(View.GONE);
         showLoadingOverlay(false);
-        mActivity.hideLoading();
         Util.showToast(mActivity, errorMsg);
     }
 
@@ -207,7 +203,6 @@ public class PatientAppointmentDetailFragment extends HealthCocoFragment impleme
         Util.showToast(mActivity, R.string.user_offline);
         progressLoading.setVisibility(View.GONE);
         showLoadingOverlay(false);
-        mActivity.hideLoading();
         swipeRefreshLayout.setRefreshing(false);
     }
 
@@ -243,7 +238,6 @@ public class PatientAppointmentDetailFragment extends HealthCocoFragment impleme
                     swipeRefreshLayout.setRefreshing(false);
                     progressLoading.setVisibility(View.GONE);
                     showLoadingOverlay(false);
-                    mActivity.hideLoading();
                     isInitialLoading = false;
                     break;
                 default:
@@ -252,7 +246,6 @@ public class PatientAppointmentDetailFragment extends HealthCocoFragment impleme
         }
         progressLoading.setVisibility(View.GONE);
         showLoadingOverlay(false);
-        mActivity.hideLoading();
         swipeRefreshLayout.setRefreshing(false);
     }
 
@@ -320,12 +313,13 @@ public class PatientAppointmentDetailFragment extends HealthCocoFragment impleme
                     }
                 }
             }
+            resetListAndPagingAttributes();
             getListFromLocal(showLoading);
         }
     };
 
     public void refreshData() {
-        getListFromLocal(user);
+        getListFromLocal(true);
     }
 
     public void setUserData(User user, RegisteredPatientDetailsUpdated registeredPatientDetailsUpdated) {
@@ -335,7 +329,7 @@ public class PatientAppointmentDetailFragment extends HealthCocoFragment impleme
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.fl_bt_add_appointment:
                 openAddNewAppointmentScreen();
                 break;

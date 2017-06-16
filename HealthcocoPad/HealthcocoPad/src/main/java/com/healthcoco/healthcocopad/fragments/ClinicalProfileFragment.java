@@ -668,6 +668,7 @@ public class ClinicalProfileFragment extends HealthCocoFragment
         if (clinicDetailResponse != null && clinicDetailResponse.getLocation() != null) {
             Location location = clinicDetailResponse.getLocation();
             if (googleMap != null && location.getLatitude() != null && location.getLongitude() != null) {
+                googleMap.clear();
                 // create marker
                 MarkerOptions marker = new MarkerOptions().position(new LatLng(location.getLatitude(), location.getLongitude())).title(location.getLocationName());
                 // adding marker
