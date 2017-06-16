@@ -18,7 +18,7 @@ import com.healthcoco.healthcocopad.activities.AddVisitsActivity;
 import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.Diagram;
-import com.healthcoco.healthcocopad.bean.server.FileDetails;
+import com.healthcoco.healthcocopad.bean.FileDetails;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.custom.DownloadFileFromUrlAsyncTask;

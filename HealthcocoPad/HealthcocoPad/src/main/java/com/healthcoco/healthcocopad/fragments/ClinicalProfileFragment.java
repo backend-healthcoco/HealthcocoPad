@@ -37,7 +37,7 @@ import com.healthcoco.healthcocopad.bean.request.ClinicImageToSend;
 import com.healthcoco.healthcocopad.bean.server.ClinicDetailResponse;
 import com.healthcoco.healthcocopad.bean.server.ClinicImage;
 import com.healthcoco.healthcocopad.bean.server.ClinicWorkingSchedule;
-import com.healthcoco.healthcocopad.bean.server.FileDetails;
+import com.healthcoco.healthcocopad.bean.FileDetails;
 import com.healthcoco.healthcocopad.bean.server.Location;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.Role;

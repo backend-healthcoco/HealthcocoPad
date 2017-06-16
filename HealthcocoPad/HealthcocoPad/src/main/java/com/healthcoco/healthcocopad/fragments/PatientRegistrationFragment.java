@@ -41,7 +41,7 @@ import com.healthcoco.healthcocopad.bean.request.RegisterNewPatientRequest;
 import com.healthcoco.healthcocopad.bean.server.AlreadyRegisteredPatientsResponse;
 import com.healthcoco.healthcocopad.bean.server.BloodGroup;
 import com.healthcoco.healthcocopad.bean.server.CityResponse;
-import com.healthcoco.healthcocopad.bean.server.FileDetails;
+import com.healthcoco.healthcocopad.bean.FileDetails;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.Profession;
 import com.healthcoco.healthcocopad.bean.server.Reference;

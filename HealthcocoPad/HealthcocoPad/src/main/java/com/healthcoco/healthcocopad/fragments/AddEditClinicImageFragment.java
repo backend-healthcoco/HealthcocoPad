@@ -20,7 +20,7 @@ import com.healthcoco.healthcocopad.adapter.ClinicImageGridAdapter;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.request.ClinicImageToSend;
 import com.healthcoco.healthcocopad.bean.server.ClinicImage;
-import com.healthcoco.healthcocopad.bean.server.FileDetails;
+import com.healthcoco.healthcocopad.bean.FileDetails;
 import com.healthcoco.healthcocopad.bean.server.Location;
 import com.healthcoco.healthcocopad.enums.DialogType;
 import com.healthcoco.healthcocopad.enums.OptionsType;
