@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -15,7 +16,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.print.PrintManager;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -99,6 +102,8 @@ import org.parceler.Parcels;
 import java.io.File;
 import java.util.ArrayList;
 
+import static com.healthcoco.healthcocopad.activities.HomeActivity.REQUEST_PERMISSIONS;
+
 /**
  * Created by Shreshtha on 18-01-2017.
  */
@@ -114,6 +119,7 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
     private ArrayList<DefaultSyncServiceType> defaultWebServicesList = new ArrayList<>();
     private boolean isInitialLoading;
     private User user;
+    private String mobileNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -1265,6 +1271,7 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
     }
 
     public void showCallConfirmationAlert(final String mobileNo) {
+        mobileNumber = mobileNo;
         final AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
         alertBuilder.setTitle(R.string.confirm);
         alertBuilder.setMessage(getResources().getString(
@@ -1274,9 +1281,7 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Intent callIntent = new Intent(Intent.ACTION_CALL);
-                callIntent.setData(Uri.parse("tel:" + mobileNo));
-                startActivity(callIntent);
+                requestPermission();
             }
         });
         alertBuilder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
@@ -1287,6 +1292,47 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
         });
         alertBuilder.create();
         alertBuilder.show();
+    }
+
+    public void requestPermission() {
+        requestAppPermissions(new
+                String[]{android.Manifest.permission.CALL_PHONE,
+                android.Manifest.permission.PROCESS_OUTGOING_CALLS,
+        }, REQUEST_PERMISSIONS);
+    }
+
+    public void requestAppPermissions(final String[] requestedPermissions, final int requestCode) {
+        int permissionCheck = PackageManager.PERMISSION_GRANTED;
+        for (String permission : requestedPermissions) {
+            permissionCheck = permissionCheck + ContextCompat.checkSelfPermission(this, permission);
+        }
+        ActivityCompat.requestPermissions(this, requestedPermissions, requestCode);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        int permissionCheck = PackageManager.PERMISSION_GRANTED;
+        for (int permission : grantResults) {
+            permissionCheck = permissionCheck + permission;
+        }
+        if ((grantResults.length > 0) && permissionCheck == PackageManager.PERMISSION_GRANTED) {
+            Intent callIntent = new Intent(Intent.ACTION_CALL);
+            callIntent.setData(Uri.parse("tel:" + mobileNumber));
+            if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+
+                return;
+            } else startActivity(callIntent);
+        } else {
+
+        }
     }
 
     public void syncContacts(User user) {

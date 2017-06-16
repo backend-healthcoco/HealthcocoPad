@@ -496,21 +496,21 @@ public class HomeActivity extends HealthCocoActivity implements View.OnClickList
         if ((grantResults.length > 0) && permissionCheck == PackageManager.PERMISSION_GRANTED) {
 
         } else {
-            Snackbar.make(findViewById(android.R.id.content), R.string.runtime_permissions_txt,
-                    Snackbar.LENGTH_INDEFINITE).setAction("ENABLE",
-                    new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent = new Intent();
-                            intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                            intent.addCategory(Intent.CATEGORY_DEFAULT);
-                            intent.setData(Uri.parse("package:" + getPackageName()));
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-                            startActivity(intent);
-                        }
-                    }).show();
+//            Snackbar.make(findViewById(android.R.id.content), R.string.runtime_permissions_txt,
+//                    Snackbar.LENGTH_INDEFINITE).setAction("ENABLE",
+//                    new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//                            Intent intent = new Intent();
+//                            intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+//                            intent.addCategory(Intent.CATEGORY_DEFAULT);
+//                            intent.setData(Uri.parse("package:" + getPackageName()));
+//                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                            intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+//                            intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+//                            startActivity(intent);
+//                        }
+//                    }).show();
         }
     }
 

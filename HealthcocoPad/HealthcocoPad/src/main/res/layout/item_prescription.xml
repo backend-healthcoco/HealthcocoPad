@@ -111,6 +111,7 @@
 
                 <include layout="@layout/layout_sub_item_prescription" />
             </LinearLayout>
+
             <LinearLayout
                 android:id="@+id/layout_next_review_detail_for_prescription"
                 android:layout_width="match_parent"
@@ -172,7 +173,8 @@
                             android:background="@drawable/shape_rounded_corners_item_background_dark_grey"
                             android:clickable="true"
                             android:gravity="center"
-                            android:padding="5dp">
+                            android:padding="5dp"
+                            android:visibility="gone">
 
                             <ImageView
                                 android:layout_width="wrap_content"

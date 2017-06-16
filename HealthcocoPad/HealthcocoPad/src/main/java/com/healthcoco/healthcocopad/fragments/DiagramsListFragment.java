@@ -81,7 +81,11 @@ public class DiagramsListFragment extends HealthCocoFragment implements OnItemCl
         if ((grantResults.length > 0) && permissionCheck == PackageManager.PERMISSION_GRANTED) {
             init();
         } else {
-            ((AddVisitsActivity) mActivity).finish();
+            boolean visitToggleStateFromPreferences = Util.getVisitToggleStateFromPreferences(mActivity);
+            if (visitToggleStateFromPreferences)
+                ((AddVisitsActivity) mActivity).finish();
+            else
+                ((CommonOpenUpActivity) mActivity).finish();
         }
     }
 

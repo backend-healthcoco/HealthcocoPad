@@ -166,6 +166,7 @@
                             android:background="@drawable/shape_rounded_corners_item_background_dark_grey"
                             android:clickable="true"
                             android:gravity="center"
+                            android:visibility="gone"
                             android:padding="5dp">
 
                             <ImageView
