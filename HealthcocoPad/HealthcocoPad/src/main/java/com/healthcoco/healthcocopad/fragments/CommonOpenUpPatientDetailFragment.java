@@ -77,12 +77,14 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
     private PatientAppointmentDetailFragment appointmentFragment;
     private PatientClinicalNotesDetailFragment clinicalNotesDetailFragment;
     private PatientPrescriptionDetailFragment prescriptionDetailFragment;
+//    private PatientReportsDetailFragment reportsDetailFragment;
 
     private boolean isProfileTabClicked = true;
     private boolean isVisitsTabClicked = false;
     private boolean isAppointmentTabClicked = false;
     private boolean isPrescriptionTabClicked = false;
     private boolean isClinicalNotesTabClicked = false;
+    private boolean isReportsTabClicked = false;
     private TextView tvGenderDate;
     private int ordinal;
 
@@ -159,12 +161,12 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                     prescriptionDetailFragment = new PatientPrescriptionDetailFragment();
                     healthcocoFragment = prescriptionDetailFragment;
                     break;
-
+//                case PATIENT_DETAIL_REPORTS:
+//                    reportsDetailFragment = new PatientReportsDetailFragment();
+//                    healthcocoFragment = reportsDetailFragment;
+//                    break;
 //                case PATIENT_DETAIL_IMPORTANT:
 //                    healthcocoFragment = new PatientImportantDetailFragment();
-//                    break;
-//                case PATIENT_DETAIL_REPORTS:
-//                    healthcocoFragment = new PatientReportsDetailFragment();
 //                    break;
 //                case PATIENT_DETAIL_TREATMENT:
 //                    healthcocoFragment = new PatientTreatmentDetailFragment();
@@ -329,7 +331,6 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                         visitsFragment.refreshData(PatientDetailTabType.PATIENT_DETAIL_VISIT);
                         isVisitsTabClicked = true;
                     }
-
                 case PATIENT_DETAIL_APPOINTMENT:
                     if (!isAppointmentTabClicked) {
                         appointmentFragment.refreshData();
@@ -348,6 +349,12 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                         isPrescriptionTabClicked = true;
                     }
                     break;
+//                case PATIENT_DETAIL_REPORTS:
+//                    if (!isReportsTabClicked) {
+//                        reportsDetailFragment.refreshData(PatientDetailTabType.PATIENT_DETAIL_REPORTS);
+//                        isReportsTabClicked = true;
+//                    }
+//                    break;
             }
         }
         ((CommonOpenUpActivity) mActivity).initActionbarTitle(patientDetailTabType.getActionBarTitleId());
@@ -377,6 +384,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
             clinicalNotesDetailFragment.setUserData(user, selectedPatient);
             prescriptionDetailFragment.setUserData(user, selectedPatient);
             appointmentFragment.setUserData(user, selectedPatient);
+//            reportsDetailFragment.setUserData(user, selectedPatient);
         } else {
             mActivity.showLoading(false);
             WebDataServiceImpl.getInstance(mApp).getPatientProfile(RegisteredPatientDetailsUpdated.class, HealthCocoConstants.SELECTED_PATIENTS_USER_ID, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(), this, this);
@@ -426,10 +434,10 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
             switch (response.getWebServiceType()) {
                 case FRAGMENT_INITIALISATION:
                     if (selectedPatient != null) {
+                        checkPatientStatus(user, selectedPatient);
                         initTabs();
                         initViewPagerAdapter();
                         initData();
-                        checkPatientStatus(user, selectedPatient);
                         if (ordinal != 0) {
                             mViewPager.setCurrentItem(ordinal);
 //                            prescriptionDetailFragment.refreshData(PatientDetailTabType.PATIENT_DETAIL_PRESCRIPTION);
@@ -473,5 +481,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
     public RegisteredPatientDetailsUpdated getSelectedPatientDetails() {
         return selectedPatient;
     }
+
+
 
 }

@@ -390,7 +390,7 @@ public class PatientPrescriptionDetailFragment extends HealthCocoFragment implem
     }
 
     public void refreshData(PatientDetailTabType detailTabType) {
-        getListFromLocal(true, true, PAGE_NUMBER);
+        getListFromLocal(true, isOtpVerified(), PAGE_NUMBER);
         this.detailTabType = detailTabType;
     }
 
@@ -411,7 +411,7 @@ public class PatientPrescriptionDetailFragment extends HealthCocoFragment implem
         if (!isEndOfListAchieved && !isLoading) {
             PAGE_NUMBER = PAGE_NUMBER + 1;
             LogUtils.LOGD(TAG, "LoadMore PAGE_NUMBER " + PAGE_NUMBER);
-            getListFromLocal(false, true, PAGE_NUMBER);
+            getListFromLocal(false, isOtpVerified(), PAGE_NUMBER);
         }
     }
 

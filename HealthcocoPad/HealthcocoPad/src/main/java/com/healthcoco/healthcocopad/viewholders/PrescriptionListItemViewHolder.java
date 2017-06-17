@@ -142,11 +142,19 @@ public class PrescriptionListItemViewHolder extends HealthCocoViewHolder impleme
             imageView.setVisibility(View.GONE);
             layoutNextReviewDetail.setVisibility(View.GONE);
         } else {
-            btOptions.setVisibility(View.VISIBLE);
-            containerBottomButtons.setVisibility(View.VISIBLE);
-            tvLabelGlobalRecord.setVisibility(View.GONE);
-            tvLabelPrescribedBy.setVisibility(View.VISIBLE);
-            tvPrescribedBy.setVisibility(View.VISIBLE);
+            if (!user.getUniqueId().equalsIgnoreCase(prescription.getDoctorId())) {
+                btOptions.setVisibility(View.GONE);
+                containerBottomButtons.setVisibility(View.GONE);
+                tvLabelGlobalRecord.setVisibility(View.VISIBLE);
+                tvLabelPrescribedBy.setVisibility(View.GONE);
+                tvPrescribedBy.setVisibility(View.GONE);
+            } else {
+                btOptions.setVisibility(View.VISIBLE);
+                containerBottomButtons.setVisibility(View.VISIBLE);
+                tvLabelGlobalRecord.setVisibility(View.GONE);
+                tvLabelPrescribedBy.setVisibility(View.VISIBLE);
+                tvPrescribedBy.setVisibility(View.VISIBLE);
+            }
             imageView.setVisibility(View.VISIBLE);
             if (prescription.getAppointmentRequest() != null && prescription.getAppointmentRequest().getAppointmentId() != null) {
                 AppointmentRequest appointmentRequest = prescription.getAppointmentRequest();

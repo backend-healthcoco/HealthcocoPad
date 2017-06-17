@@ -5,9 +5,10 @@
     android:background="@android:color/transparent"
     android:clickable="false"
     android:drawableLeft="@drawable/selector_btn_otp_verify"
+    android:drawablePadding="5dp"
     android:gravity="center"
     android:maxWidth="300dp"
     android:textAllCaps="false"
     android:textColor="@color/white">
-.
+    .
 </Button>

@@ -387,9 +387,10 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
     public void enableRightActionButton(boolean isEnabled) {
         LinearLayout rightAction = (LinearLayout) findViewById(R.id.container_right_action);
         if (rightAction != null) {
-            Button rightActionButton = (Button) rightAction.getChildAt(0);
-            if (rightActionButton != null)
-                rightActionButton.setEnabled(isEnabled);
+            Util.enableAllChildViews(rightAction,isEnabled);
+//            Button rightActionButton = (Button) rightAction.getChildAt(0);
+//            if (rightActionButton != null)
+//                rightActionButton.setEnabled(isEnabled);
         }
     }
 
@@ -414,4 +415,5 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
             }
         }
     }
+
 }

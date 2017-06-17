@@ -3589,4 +3589,87 @@ public class LocalDataServiceImpl {
             Log.i(null, "Error in saving in transaction " + e.getMessage());
         }
     }
+
+    public Records getRecord(String recordId, String patientId) {
+        return getRecord(null, recordId, patientId);
+    }
+
+    public Records getRecord(BooleanTypeValues discarded, String recordId, String patientId) {
+        Select<Records> selectQuery;
+        if (discarded != null) {
+            selectQuery = Select.from(Records.class)
+                    .where(Condition.prop(LocalDatabaseUtils.KEY_UNIQUE_ID).eq(recordId),
+                            Condition.prop(LocalDatabaseUtils.KEY_DISCARDED).eq(discarded.getBooleanIntValue()));
+        } else {
+            selectQuery = Select.from(Records.class)
+                    .where(Condition.prop(LocalDatabaseUtils.KEY_UNIQUE_ID).eq(recordId));
+        }
+        Records record = selectQuery.first();
+        return record;
+    }
+
+    public void addRecordsList(ArrayList<Records> recordsList) {
+        try {
+            for (Records records : recordsList) {
+                addRecord(records);
+            }
+        } catch (Exception e) {
+            Log.i(null, "Error in saving in transaction " + e.getMessage());
+        }
+    }
+
+    public void updateRecord(Records record) {
+        addRecord(record);
+    }
+
+    /**
+     * if OTVerified,get all doctors list for partientId (since want records of all doctors)
+     *
+     * @param webServiceType
+     * @param doctorId
+     * @param patientId
+     * @param responseListener
+     * @param errorListener
+     * @return
+     */
+    public VolleyResponseBean getRecordsList(WebServiceType webServiceType, boolean isOtpVerified, String doctorId, String locationId, String hospitalId, String patientId, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
+        volleyResponseBean.setWebServiceType(webServiceType);
+        volleyResponseBean.setIsDataFromLocal(true);
+        volleyResponseBean.setIsUserOnline(HealthCocoConstants.isNetworkOnline);
+        try {
+            String whereCondition;
+            if (!isOtpVerified && !Util.isNullOrBlank(doctorId)) {
+                whereCondition = "Select * from " + StringUtil.toSQLName(Records.class.getSimpleName())
+                        + " where "
+                        + "(" + LocalDatabaseUtils.KEY_DOCTOR_ID + "=\"" + doctorId + "\""
+                        + " OR "
+                        + LocalDatabaseUtils.KEY_PRESCRIBED_BY_DOCTOR_ID + "=\"" + doctorId + "\"" + ")"
+                        + " AND "
+                        + "(" + LocalDatabaseUtils.KEY_HOSPITAL_ID + "=\"" + hospitalId + "\""
+                        + " OR "
+                        + LocalDatabaseUtils.KEY_PRESCRIBED_BY_HOSPITAL_ID + "=\"" + hospitalId + "\"" + ")"
+                        + " AND "
+                        + "(" + LocalDatabaseUtils.KEY_LOCATION_ID + "=\"" + locationId + "\""
+                        + " OR "
+                        + LocalDatabaseUtils.KEY_PRESCRIBED_BY_LOCATION_ID + "=\"" + locationId + "\"" + ")"
+                        + " AND "
+                        + LocalDatabaseUtils.KEY_PATIENT_ID + "=\"" + patientId + "\"";
+
+            } else {
+                whereCondition = "Select * from " + StringUtil.toSQLName(Records.class.getSimpleName())
+                        + " where "
+                        + LocalDatabaseUtils.KEY_PATIENT_ID + "=\"" + patientId + "\"";
+            }
+            LogUtils.LOGD(TAG, "Select Query " + whereCondition);
+            List<Records> list = SugarRecord.findWithQuery(Records.class, whereCondition);
+            volleyResponseBean.setDataList(getObjectsListFromMap(list));
+            if (responseListener != null)
+                responseListener.onResponse(volleyResponseBean);
+        } catch (Exception e) {
+            e.printStackTrace();
+            showErrorLocal(volleyResponseBean, errorListener);
+        }
+        return volleyResponseBean;
+    }
 }

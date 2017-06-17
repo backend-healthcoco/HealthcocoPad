@@ -148,6 +148,7 @@ public class PatientAppointmentDetailFragment extends HealthCocoFragment impleme
 
     private void getListFromLocal(boolean initialLoading) {
         this.isInitialLoading = initialLoading;
+        this.isOTPVerified = isOtpVerified();
         showLoadingOverlay(isInitialLoading);
         if (initialLoading) {
             showLoadingOverlay(true);
