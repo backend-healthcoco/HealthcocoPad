@@ -69,4 +69,7 @@
             </RelativeLayout>
         </com.healthcoco.healthcocopad.views.CustomSwipeRefreshLayout>
     </android.support.design.widget.CoordinatorLayout>
+
+    <include layout="@layout/loading_healthcoco_overlay" />
+
 </FrameLayout>

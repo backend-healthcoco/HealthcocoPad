@@ -76,6 +76,7 @@ public class PatientClinicalNotesDetailFragment extends HealthCocoFragment imple
     private boolean isEndOfListAchieved;
     private int PAGE_NUMBER = 0;
     public FloatingActionButton floatingActionButton;
+
     public PatientClinicalNotesDetailFragment() {
     }
 
@@ -104,13 +105,12 @@ public class PatientClinicalNotesDetailFragment extends HealthCocoFragment imple
         this.currentPageNumber = pageNum;
         this.isOTPVerified = isOTPVerified;
         isLoading = true;
-        if (isInitialLoading) {
-            if (isInitialLoading)
-                mActivity.showLoading(false);
-            this.currentPageNumber = 0;
+        if (initialLoading) {
+            showLoadingOverlay(true);
             progressLoading.setVisibility(View.GONE);
-        } else
+        } else {
             progressLoading.setVisibility(View.VISIBLE);
+        }
         new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_CLINICAL_NOTES, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
@@ -190,7 +190,6 @@ public class PatientClinicalNotesDetailFragment extends HealthCocoFragment imple
         Util.showToast(mActivity, errorMsg);
         progressLoading.setVisibility(View.GONE);
         showLoadingOverlay(false);
-        mActivity.hideLoading();
         swipeRefreshLayout.setRefreshing(false);
     }
 
@@ -198,7 +197,6 @@ public class PatientClinicalNotesDetailFragment extends HealthCocoFragment imple
     public void onNetworkUnavailable(WebServiceType webServiceType) {
         Util.showToast(mActivity, R.string.user_offline);
         showLoadingOverlay(false);
-        mActivity.hideLoading();
         swipeRefreshLayout.setRefreshing(false);
     }
 
@@ -206,7 +204,7 @@ public class PatientClinicalNotesDetailFragment extends HealthCocoFragment imple
     public void onResponse(VolleyResponseBean response) {
         switch (response.getWebServiceType()) {
             case GET_CLINICAL_NOTES:
-                 if (response.isDataFromLocal()) {
+                if (response.isDataFromLocal()) {
                     ArrayList<ClinicalNotes> responseList = (ArrayList<ClinicalNotes>) (ArrayList<?>) response
                             .getDataList();
                     formHashMapAndRefresh(responseList);
@@ -222,6 +220,7 @@ public class PatientClinicalNotesDetailFragment extends HealthCocoFragment imple
                     response.setIsFromLocalAfterApiSuccess(true);
                     return;
                 }
+                isLoading = false;
                 showLoadingOverlay(false);
                 isInitialLoading = false;
                 progressLoading.setVisibility(View.GONE);
@@ -230,8 +229,8 @@ public class PatientClinicalNotesDetailFragment extends HealthCocoFragment imple
                 break;
         }
         showLoadingOverlay(false);
+        progressLoading.setVisibility(View.GONE);
         swipeRefreshLayout.setRefreshing(false);
-        mActivity.hideLoading();
     }
 
     private void formHashMapAndRefresh(ArrayList<ClinicalNotes> responseList) {
@@ -398,6 +397,7 @@ public class PatientClinicalNotesDetailFragment extends HealthCocoFragment imple
     public boolean isEndOfListAchieved() {
         return isEndOfListAchieved;
     }
+
     private void resetListAndPagingAttributes() {
         PAGE_NUMBER = 0;
         isEndOfListAchieved = false;
@@ -407,7 +407,7 @@ public class PatientClinicalNotesDetailFragment extends HealthCocoFragment imple
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.fl_bt_add_notes:
                 openAddNewClinicalNotesScreen();
                 break;

@@ -354,6 +354,7 @@ public class MyClinicFragment extends HealthCocoFragment implements View.OnClick
     @Override
     public void onMapReady(GoogleMap googleMap) {
         if (googleMap != null && selectedClinicProfile != null && selectedClinicProfile.getLatitude() != null && selectedClinicProfile.getLongitude() != null) {
+            googleMap.clear();
             MarkerOptions marker = new MarkerOptions().position(new LatLng(selectedClinicProfile.getLatitude(), selectedClinicProfile.getLongitude())).title(selectedClinicProfile.getLocationName());
             // adding marker
             googleMap.addMarker(marker);

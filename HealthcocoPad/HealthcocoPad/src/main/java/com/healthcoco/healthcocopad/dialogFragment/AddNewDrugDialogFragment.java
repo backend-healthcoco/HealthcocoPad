@@ -188,9 +188,10 @@ public class AddNewDrugDialogFragment extends HealthCocoDialogFragment
         }
         if (Util.isNullOrBlank(name))
             msg = getResources().getString(R.string.please_enter_drug_name);
-        if (!Util.isNullOrBlank(msg)) {
-        } else {
+        if (Util.isNullOrBlank(msg)) {
             addDrug(name);
+        } else {
+            Util.showToast(mActivity, msg);
         }
     }
 

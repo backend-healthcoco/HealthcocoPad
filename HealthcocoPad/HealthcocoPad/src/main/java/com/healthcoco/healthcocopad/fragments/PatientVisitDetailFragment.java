@@ -142,7 +142,10 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
 
     public void getVisits(boolean showLoading) {
         Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(user, LocalTabelType.VISIT_DETAILS);
-        if (showLoading) mActivity.showLoading(false);
+        if (showLoading)
+            showLoadingOverlay(true);
+        else
+            showLoadingOverlay(false);
         WebDataServiceImpl.getInstance(mApp).getVisitsList(VisitDetails.class, GET_PATIENT_VISIT, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(),
                 selectedPatient.getUserId(), latestUpdatedTime, this, this);
     }
@@ -181,16 +184,16 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
             errorMsg = getResources().getString(R.string.error);
         }
         progressLoading.setVisibility(View.GONE);
-        mActivity.hideLoading();
         swipeRefreshLayout.setRefreshing(false);
+        showLoadingOverlay(false);
         Util.showToast(mActivity, errorMsg);
     }
 
     @Override
     public void onNetworkUnavailable(WebServiceType webServiceType) {
         Util.showToast(mActivity, R.string.user_offline);
-        mActivity.hideLoading();
         swipeRefreshLayout.setRefreshing(false);
+        showLoadingOverlay(false);
     }
 
     @Override
@@ -219,7 +222,7 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
                         onNetworkUnavailable(response.getWebServiceType());
                     progressLoading.setVisibility(View.GONE);
                     isLoading = false;
-                    mActivity.hideLoading();
+                    showLoadingOverlay(false);
                     isInitialLoading = false;
                     break;
                 case GET_VISIT_PDF_URL:
@@ -235,7 +238,7 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
             }
         }
         progressLoading.setVisibility(View.GONE);
-        mActivity.hideLoading();
+        showLoadingOverlay(false);
         swipeRefreshLayout.setRefreshing(false);
     }
 
@@ -340,17 +343,16 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
         return isEndOfListAchieved;
     }
 
-    public void getListFromLocal(boolean initialLoading, int pageNum) {
-        this.isInitialLoading = initialLoading;
+    public void getListFromLocal(boolean showLoading, int pageNum) {
+        this.isInitialLoading = showLoading;
         this.currentPageNumber = pageNum;
         isLoading = true;
         if (isInitialLoading) {
-            if (isInitialLoading)
-                mActivity.showLoading(false);
-            this.currentPageNumber = 0;
+            showLoadingOverlay(true);
             progressLoading.setVisibility(View.GONE);
-        } else
+        } else {
             progressLoading.setVisibility(View.VISIBLE);
+        }
         new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_VISITS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
@@ -386,7 +388,7 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
     public void doPrint(String visitId) {
         Util.checkNetworkStatus(mActivity);
         if (HealthCocoConstants.isNetworkOnline) {
-            mActivity.showLoading(false);
+            showLoadingOverlay(false);
             WebDataServiceImpl.getInstance(mApp).getPdfUrl(String.class, WebServiceType.GET_VISIT_PDF_URL, visitId, this, this);
         } else onNetworkUnavailable(null);
     }
@@ -480,7 +482,7 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                mActivity.showLoading(false);
+                showLoadingOverlay(false);
                 WebDataServiceImpl.getInstance(mApp).sendSms(WebServiceType.SEND_SMS_VISIT, uniqueId,
                         user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(),
                         selectedPatient.getMobileNumber(), PatientVisitDetailFragment.this, PatientVisitDetailFragment.this);

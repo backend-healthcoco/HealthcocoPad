@@ -329,6 +329,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                         visitsFragment.refreshData(PatientDetailTabType.PATIENT_DETAIL_VISIT);
                         isVisitsTabClicked = true;
                     }
+
                 case PATIENT_DETAIL_APPOINTMENT:
                     if (!isAppointmentTabClicked) {
                         appointmentFragment.refreshData();
@@ -373,9 +374,9 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
             }
             DownloadImageFromUrlUtil.loadImageWithInitialAlphabet(mActivity, PatientProfileScreenType.IN_PATIENT_DEATIL_SCREEN_EXCEPT_PROFILE, selectedPatient, null, ivContactProfile, tvInitialAlphabet);
             visitsFragment.setUserData(user, selectedPatient);
-            appointmentFragment.setUserData(user, selectedPatient);
             clinicalNotesDetailFragment.setUserData(user, selectedPatient);
             prescriptionDetailFragment.setUserData(user, selectedPatient);
+            appointmentFragment.setUserData(user, selectedPatient);
         } else {
             mActivity.showLoading(false);
             WebDataServiceImpl.getInstance(mApp).getPatientProfile(RegisteredPatientDetailsUpdated.class, HealthCocoConstants.SELECTED_PATIENTS_USER_ID, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(), this, this);
@@ -460,6 +461,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
     @Override
     public void onNetworkUnavailable(WebServiceType webServiceType) {
         Util.showToast(mActivity, R.string.user_offline);
+        mActivity.hideLoading();
     }
 
     @Override

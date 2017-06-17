@@ -62,7 +62,6 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentLeft="true"
                             android:layout_centerVertical="true"
-                            android:text="jij"
                             android:textColor="@color/blue_action_bar"
                             android:textSize="@dimen/text_size_patient_name_visit_fragment" />
 
@@ -80,7 +79,6 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="10dp"
                                 android:maxLines="1"
-                                android:text="P103456790"
                                 android:textSize="@dimen/text_size_patient_id_deatil_fragment" />
 
                             <TextView
@@ -89,7 +87,6 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="10dp"
                                 android:maxLines="1"
-                                android:text="P103456790"
                                 android:textSize="@dimen/text_size_patient_id_deatil_fragment" />
                         </LinearLayout>
                     </RelativeLayout>

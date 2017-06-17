@@ -109,13 +109,12 @@ public class PatientPrescriptionDetailFragment extends HealthCocoFragment implem
         this.currentPageNumber = PAGE_NUMBER;
         this.isOTPVerified = isOTPVerified;
         isLoading = true;
-        if (isInitialLoading) {
-            if (isInitialLoading)
-                mActivity.showLoading(false);
-            this.currentPageNumber = 0;
+        if (initialLoading) {
+            showLoadingOverlay(true);
             progressLoading.setVisibility(View.GONE);
-        } else
+        } else {
             progressLoading.setVisibility(View.VISIBLE);
+        }
         new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_PRESCRIPTION, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
@@ -199,7 +198,6 @@ public class PatientPrescriptionDetailFragment extends HealthCocoFragment implem
         swipeRefreshLayout.setRefreshing(false);
         progressLoading.setVisibility(View.GONE);
         showLoadingOverlay(false);
-        mActivity.hideLoading();
         Util.showToast(mActivity, errorMsg);
     }
 
@@ -208,7 +206,6 @@ public class PatientPrescriptionDetailFragment extends HealthCocoFragment implem
         Util.showToast(mActivity, R.string.user_offline);
         progressLoading.setVisibility(View.GONE);
         showLoadingOverlay(false);
-        mActivity.hideLoading();
         swipeRefreshLayout.setRefreshing(false);
     }
 
@@ -241,7 +238,6 @@ public class PatientPrescriptionDetailFragment extends HealthCocoFragment implem
                         onNetworkUnavailable(response.getWebServiceType());
                     progressLoading.setVisibility(View.GONE);
                     isLoading = false;
-                    mActivity.hideLoading();
                     showLoadingOverlay(false);
                     isInitialLoading = false;
                     break;
@@ -249,9 +245,7 @@ public class PatientPrescriptionDetailFragment extends HealthCocoFragment implem
                     break;
             }
         }
-        mActivity.hideLoading();
         showLoadingOverlay(false);
-        progressLoading.setVisibility(View.GONE);
         swipeRefreshLayout.setRefreshing(false);
     }
 

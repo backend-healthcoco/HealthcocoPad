@@ -667,7 +667,7 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
                     break;
             }
         }
-        mActivity.hideLoading();
+        showLoadingOverlay(false);
     }
 
     public void getHistoryListFromServer(boolean showLoading) {
@@ -691,12 +691,20 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
 
     @Override
     public void onErrorResponse(VolleyResponseBean volleyResponseBean, String errorMessage) {
-        mActivity.hideLoading();
+        String errorMsg = null;
+        if (volleyResponseBean != null && !Util.isNullOrBlank(volleyResponseBean.getErrMsg())) {
+            errorMsg = volleyResponseBean.getErrMsg();
+        } else {
+            errorMsg = getResources().getString(R.string.error);
+        }
+        Util.showToast(mActivity, errorMsg);
+        showLoadingOverlay(false);
     }
 
     @Override
     public void onNetworkUnavailable(WebServiceType webServiceType) {
         Util.showToast(mActivity, R.string.user_offline);
+        showLoadingOverlay(false);
     }
 
     @Override
