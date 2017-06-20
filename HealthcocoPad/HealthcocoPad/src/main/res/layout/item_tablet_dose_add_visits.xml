@@ -2,22 +2,23 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="10dp"
     android:background="@drawable/shape_emr_item_background"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="10dp">
 
     <LinearLayout
         android:id="@+id/container_dosage_direction_duration"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="3dp"
-        android:gravity="bottom"
         android:orientation="horizontal">
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
             android:layout_weight="@integer/weight_drug_name"
+            android:gravity="center|bottom"
             android:orientation="horizontal">
 
             <com.healthcoco.healthcocopad.views.TextViewFontAwesome
@@ -70,12 +71,13 @@
             android:id="@+id/tv_frequency"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_gravity="bottom"
             android:layout_marginLeft="5dp"
             android:layout_weight="@integer/weight_drugs_items"
             android:background="@drawable/selector_drug_detail_background"
-            android:gravity="center"
+            android:gravity="center|bottom"
             android:hint="@string/dosage"
+            android:maxLines="5"
             android:paddingBottom="@dimen/padding_item_drug_dosage_top_bottom"
             android:paddingLeft="@dimen/padding_item_drug_dosage_top_bottom"
             android:paddingTop="@dimen/padding_item_drug_dosage_top_bottom"
@@ -85,8 +87,10 @@
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
             android:layout_weight="@integer/weight_drugs_items"
+            android:gravity="center|bottom"
             android:orientation="horizontal">
 
             <com.healthcoco.healthcocopad.custom.MyScriptEditText
@@ -97,8 +101,10 @@
                 android:layout_marginLeft="5dp"
                 android:layout_weight="1"
                 android:background="@drawable/selector_drug_detail_background"
+                android:digits="0123456789"
                 android:gravity="center"
                 android:hint="@string/duration"
+                android:inputType="phone"
                 android:maxLines="1"
                 android:paddingBottom="@dimen/padding_item_drug_dosage_top_bottom"
                 android:paddingLeft="@dimen/padding_item_drug_dosage_top_bottom"
@@ -131,12 +137,13 @@
             android:id="@+id/tv_directions"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_gravity="bottom"
             android:layout_marginLeft="5dp"
             android:layout_weight="@integer/weight_drugs_items"
             android:background="@drawable/selector_drug_detail_background"
-            android:gravity="center"
+            android:gravity="center|bottom"
             android:hint="@string/direction"
+            android:maxLines="5"
             android:paddingBottom="@dimen/padding_item_drug_dosage_top_bottom"
             android:paddingLeft="@dimen/padding_item_drug_dosage_top_bottom"
             android:paddingTop="@dimen/padding_item_drug_dosage_top_bottom"
@@ -175,14 +182,5 @@
             android:textColorHint="@color/grey_light_text"
             android:textSize="@dimen/text_size_drug_dose_item_dosage_direction_instruction"
             android:visibility="visible" />
-
-        <!--<com.healthcoco.healthcocopad.views.TextViewFontAwesome-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_margin="5dp"-->
-        <!--android:gravity="center|start"-->
-        <!--android:text="@string/fa_align_text"-->
-        <!--android:textColor="@color/grey_light_text"-->
-        <!--android:textSize="18sp" />-->
     </LinearLayout>
 </LinearLayout>

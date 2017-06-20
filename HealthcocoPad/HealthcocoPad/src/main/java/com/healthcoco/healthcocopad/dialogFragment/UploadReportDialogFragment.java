@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.content.LocalBroadcastManager;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.Response;
@@ -51,6 +53,10 @@ import java.util.ArrayList;
 public class UploadReportDialogFragment extends HealthCocoDialogFragment implements View.OnClickListener,
         CommonOptionsDialogItemClickListener, GsonRequest.ErrorListener, Response.Listener<VolleyResponseBean> {
     public static final String TAG_REPORT_ID = "reportId";
+    private static final String[] ACCEPT_MIME_TYPES = {
+            "image/*", "application/pdf", "text/*",
+            "application/rtf", "application/msword", "application/vnd.ms-powerpoint"
+    };
     private TextView tvSelectImage;
     private EditText editTitle;
     private EditText editDescription;
@@ -60,6 +66,9 @@ public class UploadReportDialogFragment extends HealthCocoDialogFragment impleme
     private User user;
     private RegisteredPatientDetailsUpdated selectedPatient;
     private Bitmap originalBitmap;
+    private TextView tvSelectFile;
+    private TextView tvFileName;
+    private LinearLayout containerFileDetails;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -92,14 +101,20 @@ public class UploadReportDialogFragment extends HealthCocoDialogFragment impleme
     @Override
     public void initViews() {
         tvSelectImage = (TextView) view.findViewById(R.id.tv_select_image);
+        tvSelectFile = (TextView) view.findViewById(R.id.tv_select_file);
         editTitle = (EditText) view.findViewById(R.id.edit_title);
         editDescription = (EditText) view.findViewById(R.id.edit_description);
         ivReport = (ImageView) view.findViewById(R.id.iv_report);
+        tvFileName = (TextView) view.findViewById(R.id.tv_file_name);
+        containerFileDetails = (LinearLayout) view.findViewById(R.id.container_file_details);
+        containerFileDetails.setVisibility(View.GONE);
+        ivReport.setVisibility(View.GONE);
     }
 
     @Override
     public void initListeners() {
         tvSelectImage.setOnClickListener(this);
+        tvSelectFile.setOnClickListener(this);
         initSaveCancelButton(this);
         initActionbarTitle(getResources().getString(R.string.upload_record));
     }
@@ -114,6 +129,23 @@ public class UploadReportDialogFragment extends HealthCocoDialogFragment impleme
         switch (v.getId()) {
             case R.id.tv_select_image:
                 openDialogFragment(DialogType.SELECT_IMAGE, this);
+                break;
+            case R.id.tv_select_file:
+                try {
+                    String action = "";
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT)
+                        action = Intent.ACTION_GET_CONTENT;
+                    else
+                        action = Intent.ACTION_OPEN_DOCUMENT;
+                    Intent intent = new Intent(action);
+                    intent.addCategory(Intent.CATEGORY_OPENABLE);
+                    intent.setType("*/*");
+                    intent.putExtra(Intent.EXTRA_MIME_TYPES, ACCEPT_MIME_TYPES);
+                    startActivityForResult(intent, HealthCocoConstants.REQUEST_CODE_FILE);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
                 break;
             case R.id.bt_save:
                 Util.checkNetworkStatus(mActivity);
@@ -182,18 +214,15 @@ public class UploadReportDialogFragment extends HealthCocoDialogFragment impleme
                 if (requestCode == HealthCocoConstants.REQUEST_CODE_CAMERA && imageUri != null) {
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(mActivity.getContentResolver(), imageUri);
                     if (bitmap != null) {
-                        showImage(imageUri.getPath(), imageUri);
+                        showImage(imageUri);
                     }
                 } else if (requestCode == HealthCocoConstants.REQUEST_CODE_GALLERY && data.getData() != null) {
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(mActivity.getContentResolver(), data.getData());
                     if (bitmap != null) {
-                        showImage(data.getData().getPath(), data.getData());
+                        showImage(data.getData());
                     }
                 } else if (requestCode == HealthCocoConstants.REQUEST_CODE_FILE && data.getData() != null) {
-                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(mActivity.getContentResolver(), data.getData());
-                    if (bitmap != null) {
-                        showImage(data.getData().getPath(), data.getData());
-                    }
+                    showImage(data.getData());
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -201,18 +230,40 @@ public class UploadReportDialogFragment extends HealthCocoDialogFragment impleme
         }
     }
 
-    private void showImage(String filePath, Uri imageUri) {
-//        originalBitmap = ImageUtil.getRotatedBitmapIfRequiredFromPath(filePath, originalBitmap);
-        //croping bitmap to show on image as per its dimensions
-//        Bitmap bitmap1 = BitmapUtil.scaleCenterCrop(originalBitmap, Util.getValidatedWidth(ivReport.getWidth()),
-//                Util.getValidatedHeight(ivReport.getHeight()));
-        originalBitmap = ImageUtil.getBitmapFromUri(mActivity, imageUri);
-        if (originalBitmap != null) ivReport.setImageBitmap(originalBitmap);
-
+    private void showImage(Uri imageUri) {
         reportDetailsToSend = new ReportDetailsToSend();
         reportDetailsToSend.setReportUri(imageUri);
         reportDetailsToSend.setFileExtension(ImageUtil.DEFAULT_IMAGE_EXTENSION);
-        reportDetailsToSend.setReportFileType(ReportFileType.IMAGE);
+        try {
+            originalBitmap = ImageUtil.getBitmapFromUri(mActivity, imageUri);
+            if (originalBitmap != null) {
+                ivReport.setImageBitmap(originalBitmap);
+            }
+            reportDetailsToSend.setReportFileType(ReportFileType.IMAGE);
+            showFileNamePath(null, false);
+        } catch (Exception e) {
+            e.printStackTrace();
+            showFileNamePath(imageUri.getPath(), true);
+            reportDetailsToSend.setReportFileType(ReportFileType.OTHER_TYPE);
+        }
+    }
+
+    /**
+     * Displays the fileType based on isShowFileNamePath
+     *
+     * @param extension          : extension of file
+     * @param isShowFileNamePath : if true  then prints file extension in TextView and hides ImageView.
+     *                           if false,shows ImageView and hides TextView.
+     */
+    private void showFileNamePath(String extension, boolean isShowFileNamePath) {
+        if (isShowFileNamePath) {
+            tvFileName.setText(extension + " " + getResources().getString(R.string.file));
+            containerFileDetails.setVisibility(View.VISIBLE);
+            ivReport.setVisibility(View.GONE);
+        } else {
+            containerFileDetails.setVisibility(View.GONE);
+            ivReport.setVisibility(View.VISIBLE);
+        }
     }
 
     private FileDetails getFileDetails() {

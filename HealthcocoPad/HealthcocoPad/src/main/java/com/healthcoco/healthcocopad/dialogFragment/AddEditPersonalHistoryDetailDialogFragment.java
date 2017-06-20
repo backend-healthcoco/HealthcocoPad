@@ -154,7 +154,7 @@ public class AddEditPersonalHistoryDetailDialogFragment extends HealthCocoDialog
                 if (response.getData() != null && response.getData() instanceof HistoryDetailsResponse) {
                     HistoryDetailsResponse historyDetailsResponse = (HistoryDetailsResponse) response.getData();
                     personalHistory = historyDetailsResponse.getPersonalHistory();
-//                    LocalDataServiceImpl.getInstance(mApp).addDoctorProfile(doctorProfile);
+//                    LocalDataServiceImpl.getInstance(mApp).addHistoryDetailResponse(historyDetailsResponse);
                     getTargetFragment().onActivityResult(getTargetRequestCode(), HealthCocoConstants.RESULT_CODE_DOCTOR_PERSONAL_HISTORY_DETAIL, new Intent().putExtra(PatientProfileDetailFragment.TAG_PERSONAL_HISTORY, Parcels.wrap(personalHistory)));
                     getDialog().dismiss();
                 }

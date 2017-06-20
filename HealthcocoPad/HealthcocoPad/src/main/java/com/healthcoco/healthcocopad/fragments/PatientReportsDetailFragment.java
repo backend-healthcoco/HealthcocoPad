@@ -65,10 +65,6 @@ public class PatientReportsDetailFragment extends HealthCocoFragment implements 
     public static final String INTENT_GET_REPORTS_LIST_LOCAL = "com.healthcoco.GET_REPORTS_LIST_LOCAL";
     public static final String INTENT_GET_REPORTS_LIST_USING_ID = "com.healthcoco.GET_REPORTS_LIST_USING_ID";
 
-    private static final String[] ACCEPT_MIME_TYPES = {
-            "image/*", "application/pdf", "text/*",
-            "application/rtf", "application/msword", "application/vnd.ms-powerpoint"
-    };
     private static final int REQUEST_CODE_REPORTS_LIST = 188;
     private static final int REQUEST_CODE_UPLOAD_REPORT = 124;
 

@@ -2,6 +2,7 @@ package com.healthcoco.healthcocopad.utilities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -586,15 +587,41 @@ public class Util {
     }
 
     public static void openFile(Context context, String filePath) {
-//        String fileType = getMimeTypeOfFile(filePath);
-//        Intent newIntent = new Intent(Intent.ACTION_VIEW);
-//        newIntent.setDataAndType(Uri.fromFile(new File(filePath)), fileType);
-//        newIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//        try {
-//            context.startActivity(newIntent);
-//        } catch (ActivityNotFoundException e) {
-//            showAlertToDownloadApp(context, fileType);
-//        }
+        String fileType = getMimeTypeOfFile(filePath);
+        Intent newIntent = new Intent(Intent.ACTION_VIEW);
+        newIntent.setDataAndType(Uri.fromFile(new File(filePath)), fileType);
+        newIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        try {
+            context.startActivity(newIntent);
+        } catch (ActivityNotFoundException e) {
+            showAlertToDownloadApp(context, fileType);
+        }
+    }
+
+    private static void showAlertToDownloadApp(final Context context, final String fileType) {
+        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(context);
+        alertBuilder.setTitle(R.string.no_app_found);
+        alertBuilder.setMessage(String.format(context.getResources().getString(R.string.message_no_app_found_to_open_file), fileType));
+        alertBuilder.setCancelable(false);
+        alertBuilder.setPositiveButton(R.string.search, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String str = "https://market.android.com/search?q=%s";
+                Intent shopIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(String.format(str, fileType)));
+                shopIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(shopIntent);
+            }
+        });
+        alertBuilder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        alertBuilder.create();
+        alertBuilder.show();
     }
 
     public static boolean isValidMobileNoLandlineNumber(String num) {

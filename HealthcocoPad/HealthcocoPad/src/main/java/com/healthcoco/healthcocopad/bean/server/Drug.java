@@ -1,5 +1,12 @@
 package com.healthcoco.healthcocopad.bean.server;
 
+import android.graphics.Typeface;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.style.RelativeSizeSpan;
+import android.text.style.StyleSpan;
+
 import com.healthcoco.healthcocopad.bean.Duration;
 import com.healthcoco.healthcocopad.utilities.StringUtil;
 import com.healthcoco.healthcocopad.utilities.Util;
@@ -14,7 +21,7 @@ import java.util.List;
 @Parcel
 public class Drug extends SugarRecord {
     public static String TABLE_NAME = " " + StringUtil.toSQLName(Drug.class.getSimpleName());
-    private static final String GENERIC_NAME_SEPARATOR = ", ";
+    private static final String GENERIC_NAME_SEPARATOR = " + ";
     @Unique
     private String uniqueId;
     private String explanation;
@@ -251,12 +258,16 @@ public class Drug extends SugarRecord {
     }
 
     public String getFormattedDrugName() {
-        String genericNamesFormatted = "";
         String drugName = getDrugName();
         if (getDrugType() != null) {
             String type = getDrugType().getType();
             drugName = type + " " + drugName;
         }
+        return drugName;
+    }
+
+    public String getFormattedGenricName() {
+        String genericNamesFormatted = "";
         if (!Util.isNullOrEmptyList(getGenericNames())) {
             genericNamesFormatted = " (";
             for (GenericName genericName : getGenericNames()) {
@@ -267,7 +278,6 @@ public class Drug extends SugarRecord {
             }
             genericNamesFormatted = genericNamesFormatted + ")";
         }
-        drugName = drugName + genericNamesFormatted;
-        return drugName;
+        return genericNamesFormatted;
     }
 }

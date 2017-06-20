@@ -32,15 +32,27 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="70">
 
-                <TextView
+                <com.healthcoco.healthcocopad.views.TextViewFontAwesome
                     android:id="@+id/tv_select_image"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:background="@drawable/shape_rounded_corners_grey_border_solid_white"
                     android:padding="10dp"
-                    android:text="@string/choose_image"
-                    android:textColor="@color/grey_dark_text"
+                    android:text="@string/icon_add_image"
+                    android:textColor="@drawable/text_selector_grey_blue"
+                    android:textSize="@dimen/text_size_upload_record_dialog" />
+
+                <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+                    android:id="@+id/tv_select_file"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:layout_toRightOf="@+id/tv_select_image"
+                    android:background="@drawable/shape_rounded_corners_grey_border_solid_white"
+                    android:padding="10dp"
+                    android:text="@string/icon_add_file"
+                    android:textColor="@drawable/text_selector_grey_blue"
                     android:textSize="@dimen/text_size_upload_record_dialog" />
 
                 <com.healthcoco.healthcocopad.views.TouchImageView
@@ -49,7 +61,33 @@
                     android:layout_height="@dimen/image_width_height_upload_record"
                     android:layout_centerVertical="true"
                     android:layout_margin="10dp"
-                    android:layout_toRightOf="@+id/tv_select_image" />
+                    android:layout_toRightOf="@+id/tv_select_file"
+                    android:layout_weight="1" />
+
+                <LinearLayout
+                    android:id="@+id/container_file_details"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/tv_select_file"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:background="@drawable/img_report_doc_normal"
+                        android:contentDescription="@string/content_description" />
+
+                    <TextView
+                        android:id="@+id/tv_file_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center" />
+                </LinearLayout>
+
             </RelativeLayout>
         </LinearLayout>
 

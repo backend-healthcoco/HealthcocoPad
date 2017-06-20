@@ -296,17 +296,6 @@
                             android:padding="15dp"
                             android:textColor="@color/black"
                             android:textSize="@dimen/text_size_book_appointment_dialog_fragment" />
-
-                        <!--<TextView-->
-                            <!--android:id="@+id/tv_selected_time_slot"-->
-                            <!--android:layout_width="wrap_content"-->
-                            <!--android:layout_height="wrap_content"-->
-                            <!--android:layout_toRightOf="@+id/tv_selected_date"-->
-                            <!--android:gravity="center"-->
-                            <!--android:minHeight="0dp"-->
-                            <!--android:padding="15dp"-->
-                            <!--android:textColor="@color/black"-->
-                            <!--android:textSize="@dimen/text_size_book_appointment_dialog_fragment" />-->
                     </LinearLayout>
 
                     <ImageButton
@@ -340,7 +329,8 @@
                 <com.healthcoco.healthcocopad.views.ExpandableGridView
                     android:id="@+id/gv_time_Slots"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:clipToPadding="false"
                     android:horizontalSpacing="@dimen/grid_item_book_appointment_time_slots"
                     android:numColumns="4"
@@ -351,7 +341,7 @@
                 <TextView
                     android:id="@+id/tv_clinic_closed"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="@string/clinic_closed"
                     android:textSize="@dimen/text_size_book_appointment_dialog_fragment"

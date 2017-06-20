@@ -269,7 +269,7 @@
     <string name="clinic_photos">Clinic Photos</string>
     <string name="clinic_hours">Clinic Hours</string>
     <string name="temp_report_description">It is a long established fact that a reader will be distracted by the readable content of a while looking at its content</string>
-    <string name="visiting_hours">Visitors Hour</string>
+    <string name="visiting_hours">Visiting Hour</string>
     <string name="clinic_open">Clinic Open</string>
     <string name="text_24_7">24&#160;X&#160;7</string>
     <string name="monday">Monday</string>
@@ -809,4 +809,8 @@
     <string name="upload_record">Upload Record</string>
     <string name="please_enter_image_label">Please enter Image Label</string>
     <string name="please_select_image_or_file_to_upload">Please select image or file to upload</string>
+    <string name="file">File</string>
+    <string name="no_app_found">No App Found</string>
+    <string name="message_no_app_found_to_open_file">You don\'t have an app that can open this file (%s). Try searching Google Play for one that can.</string>
+
 </resources>

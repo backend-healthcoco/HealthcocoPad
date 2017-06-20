@@ -99,8 +99,6 @@ public class EnlargedImageViewDialogFragment extends HealthCocoDialogFragment im
             String imageUrl = bundle.getString(TAG_IMAGE_URL);
             isPrintPdf = bundle.getBoolean(TAG_PRINT_PDF);
             if (!Util.isNullOrBlank(imageUrl))
-//                DownloadImageFromUrlUtil.loadImageUsingImageLoader(null, ivImage, imageUrl);
-
                 new DownloadFileFromUrlAsyncTask(mActivity, this, HealthCocoFileType.ENLARGED_IMAGE, Util.getFileNameFromUrl(imageUrl), progressLoadingCircular, progressLoadingHorizontal).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, imageUrl);
         } else dismiss();
     }
