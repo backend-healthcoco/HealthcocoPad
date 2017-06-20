@@ -170,7 +170,7 @@
     <string name="syncing_templates">Syncing Templates&#8230;</string>
     <string name="syncing_calendar_events">Syncing Calendar Events&#8230;</string>
     <string name="syncing_medical_councils">Syncing Medical Councils&#8230;</string>
-    <string name="syncing_ui_Permissions">Syncing UI Permissions</string>
+    <string name="syncing_ui_Permissions">Syncing UI Permissions&#8230;</string>
     <string name="sync_complete">Sync Complete</string>
     <string name="sync">Sync</string>
     <string name="loading">Loading&#8230;</string>
@@ -784,7 +784,7 @@
     <string name="are_you_sure_want_to_toggle_this_page_view">Are you sure want to toggle this page view? Data will be reset.</string>
     <string name="toggle">Toggle</string>
     <string name="suggestion_list">Suggestion List</string>
-    <string name="syncing_advice_suggestions"><![CDATA[Syncing Advice Suggestions&#8230;]]></string>
+    <string name="syncing_advice_suggestions">Syncing Advice Suggestions&#8230;</string>
     <string name="template_list">Template List</string>
     <string name="no_drug_lab_selected">No Drug or Lab Test Selected.\nPlease click +Drug or +Lab Test to add</string>
     <string name="no_drugs_added">No Drugs Added</string>

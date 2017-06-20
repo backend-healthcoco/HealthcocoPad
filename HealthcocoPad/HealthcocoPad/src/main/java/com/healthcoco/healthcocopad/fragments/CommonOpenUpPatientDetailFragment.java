@@ -161,10 +161,10 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                     prescriptionDetailFragment = new PatientPrescriptionDetailFragment();
                     healthcocoFragment = prescriptionDetailFragment;
                     break;
-                case PATIENT_DETAIL_REPORTS:
-                    reportsDetailFragment = new PatientReportsDetailFragment();
-                    healthcocoFragment = reportsDetailFragment;
-                    break;
+//                case PATIENT_DETAIL_REPORTS:
+//                    reportsDetailFragment = new PatientReportsDetailFragment();
+//                    healthcocoFragment = reportsDetailFragment;
+//                    break;
 //                case PATIENT_DETAIL_IMPORTANT:
 //                    healthcocoFragment = new PatientImportantDetailFragment();
 //                    break;
@@ -350,12 +350,12 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                         isPrescriptionTabClicked = true;
                     }
                     break;
-                case PATIENT_DETAIL_REPORTS:
-                    if (!isReportsTabClicked) {
-                        reportsDetailFragment.refreshData(PatientDetailTabType.PATIENT_DETAIL_REPORTS);
-                        isReportsTabClicked = true;
-                    }
-                    break;
+//                case PATIENT_DETAIL_REPORTS:
+//                    if (!isReportsTabClicked) {
+//                        reportsDetailFragment.refreshData(PatientDetailTabType.PATIENT_DETAIL_REPORTS);
+//                        isReportsTabClicked = true;
+//                    }
+//                    break;
             }
         }
         ((CommonOpenUpActivity) mActivity).initActionbarTitle(patientDetailTabType.getActionBarTitleId());
@@ -385,7 +385,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
             clinicalNotesDetailFragment.setUserData(user, selectedPatient);
             prescriptionDetailFragment.setUserData(user, selectedPatient);
             appointmentFragment.setUserData(user, selectedPatient);
-            reportsDetailFragment.setUserData(user, selectedPatient);
+//            reportsDetailFragment.setUserData(user, selectedPatient);
         } else {
             mActivity.showLoading(false);
             WebDataServiceImpl.getInstance(mApp).getPatientProfile(RegisteredPatientDetailsUpdated.class, HealthCocoConstants.SELECTED_PATIENTS_USER_ID, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(), this, this);

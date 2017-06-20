@@ -13,10 +13,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="3dp"
-            android:layout_marginLeft="3dp"
-            android:layout_marginRight="3dp"
-            android:layout_marginTop="3dp"
+            android:layout_margin="3dp"
             android:background="@drawable/shape_rounded_corners_grey_border_solid_white"
             android:orientation="horizontal"
             android:padding="10dp">
@@ -24,25 +21,25 @@
             <EditText
                 android:id="@+id/tv_awards_and_publication"
                 style="@style/add_education_registration_details_material_text_view_style"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:focusableInTouchMode="false"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
                 android:layout_marginRight="5dp"
+                android:layout_weight="70"
+                android:focusableInTouchMode="false"
                 android:gravity="center|start"
                 android:hint="@string/awards_and_publication" />
 
             <com.healthcoco.healthcocopad.views.CustomAutoCompleteTextView
                 android:id="@+id/autotv_year_of_passing"
                 style="@style/add_education_registration_details_material_text_view_style"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="30"
                 android:drawableEnd="@drawable/arrow_down_drug"
                 android:drawableRight="@drawable/arrow_down_drug"
                 android:editable="false"
                 android:enabled="false"
-                android:layout_marginLeft="5dp"
                 android:focusable="false"
                 android:gravity="center|start"
                 android:hint="@string/year" />

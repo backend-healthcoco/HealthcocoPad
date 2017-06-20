@@ -1062,10 +1062,7 @@ public class LocalDataServiceImpl {
         clinicProfile.setRevisitConsultationFeeJsonString(getJsonFromObject(clinicProfile.getRevisitConsultationFee()));
 
         //saving AppointmentSlot
-        if (clinicProfile.getAppointmentSlot() != null) {
-            clinicProfile.getAppointmentSlot().setForeignUniqueId(clinicProfile.getUniqueId());
-            clinicProfile.getAppointmentSlot().save();
-        }
+        clinicProfile.setAppointmentSlotJsonString(getJsonFromObject(clinicProfile.getAppointmentSlot()));
 
         deleteAllWorkingSchedules(clinicProfile.getLocationId(), doctorId, DoctorWorkingSchedule.class);
         //saving working schedules
