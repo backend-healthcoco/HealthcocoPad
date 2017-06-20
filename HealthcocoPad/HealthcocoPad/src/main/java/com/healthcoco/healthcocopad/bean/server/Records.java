@@ -2,6 +2,7 @@ package com.healthcoco.healthcocopad.bean.server;
 
 import android.graphics.Bitmap;
 
+import com.healthcoco.healthcocopad.bean.FileDetails;
 import com.healthcoco.healthcocopad.enums.RecordState;
 import com.orm.SugarRecord;
 import com.orm.annotation.Ignore;
@@ -37,8 +38,8 @@ public class Records extends SugarRecord {
     private String uploadedByLocation;
     private String visitId;
     private String uniqueEmrId;
-    //    @Ignore
-//    private FileDetails fileDetails;
+        @Ignore
+    private FileDetails fileDetails;
     @Ignore
     private Bitmap recordsImageBitmap;
     @Ignore
@@ -171,13 +172,13 @@ public class Records extends SugarRecord {
         this.updatedTime = updatedTime;
     }
 
-//    public FileDetails getFileDetails() {
-//        return fileDetails;
-//    }
+    public FileDetails getFileDetails() {
+        return fileDetails;
+    }
 
-//    public void setFileDetails(FileDetails fileDetails) {
-//        this.fileDetails = fileDetails;
-//    }
+    public void setFileDetails(FileDetails fileDetails) {
+        this.fileDetails = fileDetails;
+    }
 
     public Boolean getInHistory() {
         return inHistory;

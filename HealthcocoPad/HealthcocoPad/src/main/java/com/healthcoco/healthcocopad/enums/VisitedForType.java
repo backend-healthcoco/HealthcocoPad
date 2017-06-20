@@ -36,8 +36,6 @@ public enum VisitedForType {
     REPORTS(new ArrayList() {{
         add(R.id.bt_open_visit);
         add(R.id.bt_email_visit);
-        add(R.id.bt_print_visit);
-        add(R.id.bt_edit_visit);
     }}),
     FAMILY_HISTORY(new ArrayList() {{
         add(R.id.bt_email_visit);

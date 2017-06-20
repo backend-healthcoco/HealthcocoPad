@@ -920,6 +920,7 @@ public class WebDataServiceImpl implements GCMRefreshListener {
         getResponse(WebServiceType.ADD_TEMPLATE, class1, WebServiceType.ADD_TEMPLATE.getUrl(), template, null, responseListener,
                 errorListener);
     }
+
     public void updateTemplate(Class<?> class1, TempTemplate template, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         String url = WebServiceType.UPDATE_TEMPLATE.getUrl() + template.getUniqueId() + HealthCocoConstants.PARAM_TAG_UPDATE;
         getResponse(WebServiceType.UPDATE_TEMPLATE, class1, url, template, null, responseListener,
@@ -1173,9 +1174,15 @@ public class WebDataServiceImpl implements GCMRefreshListener {
         getResponse(WebServiceType.DISCARD_CLINICAL_NOTES, class1, url, null, null, responseListener,
                 errorListener);
     }
+
     public void discardPrescription(Class<?> class1, String doctorId, String locationId, String hospitalId, String prescriptionId, String patientId, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         String url = WebServiceType.DISCARD_PRESCRIPTION.getUrl() + prescriptionId + "/" + doctorId + "/" + locationId + "/" + hospitalId + "/" + patientId + HealthCocoConstants.PARAM_TAG_DELETE;
         getResponse(WebServiceType.DISCARD_PRESCRIPTION, class1, url, null, null, responseListener,
+                errorListener);
+    }
+
+    public void addRecord(Class<Records> class1, Records record, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        getResponse(WebServiceType.ADD_RECORD, class1, WebServiceType.ADD_RECORD.getUrl(), record, null, responseListener,
                 errorListener);
     }
 

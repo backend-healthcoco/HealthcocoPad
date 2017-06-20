@@ -22,10 +22,12 @@ import com.healthcoco.healthcocopad.enums.AddUpdateNameDialogType;
 import com.healthcoco.healthcocopad.enums.OptionsTypePopupWindow;
 import com.healthcoco.healthcocopad.enums.RecordState;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
+import com.healthcoco.healthcocopad.fragments.PatientReportsDetailFragment;
 import com.healthcoco.healthcocopad.listeners.CommonEMRItemClickListener;
 import com.healthcoco.healthcocopad.listeners.ImageLoadedListener;
 import com.healthcoco.healthcocopad.listeners.VisitDetailCombinedItemListener;
 import com.healthcoco.healthcocopad.services.GsonRequest;
+import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
 import com.healthcoco.healthcocopad.utilities.DownloadImageFromUrlUtil;
@@ -54,18 +56,16 @@ public class ReportsListItemViewHolder extends HealthCocoViewHolder
     private TextView tvDate;
     private Records record;
     private VisitDetailCombinedItemListener detailCombinedItemListener;
-    private ImageButton btOptions;
     private LinearLayout layoutDiscarded;
     private TextView tvRid;
     private LinearLayout containerBottomButtons;
     private TextView tvLabelGlobalRecord;
     private TextView tvLabelUploadedBy;
-    private LinearLayout btPrint;
     private LinearLayout btApprove;
     private LinearLayout btDecline;
-    private TextView tvDiscarded;
-    private OptionsPopupWindow popupWindow;
-
+    private LinearLayout btDiscard;
+    private ImageView imageView;
+    private TextView tvDiscard;
 
     public ReportsListItemViewHolder(HealthCocoActivity mActivity,
                                      Object listItemClickListener, boolean isInEmrList) {
@@ -107,7 +107,6 @@ public class ReportsListItemViewHolder extends HealthCocoViewHolder
 
         LogUtils.LOGD(TAG, "Record type " + record.getRecordsType());
         if (record.getRecordsType() != null && record.getRecordsType().equalsIgnoreCase(DEFAULT_RECORD_TYPE)) {
-            ivReportType.setBackgroundResource(R.drawable.img_report_normal);
             if (!Util.isNullOrBlank(record.getRecordsUrl())) {
                 if (record.getRecordsImageBitmap() != null) {
                     LogUtils.LOGD(TAG, "Already bitmap loaded");
@@ -121,53 +120,36 @@ public class ReportsListItemViewHolder extends HealthCocoViewHolder
             ivReportType.setBackgroundResource(R.drawable.img_report_doc_normal);
         }
         checkIsDiscarded(record.getDiscarded());
-        if (user != null) {
+        if (detailCombinedItemListener != null) {
+            containerBottomButtons.setVisibility(View.GONE);
+            tvLabelGlobalRecord.setVisibility(View.VISIBLE);
+            imageView.setVisibility(View.GONE);
+        } else {
             if (!user.getUniqueId().equalsIgnoreCase(record.getDoctorId())) {
-                btOptions.setVisibility(View.GONE);
                 containerBottomButtons.setVisibility(View.GONE);
                 tvLabelGlobalRecord.setVisibility(View.VISIBLE);
-                tvLabelUploadedBy.setVisibility(View.GONE);
-                tvUploadedBy.setVisibility(View.GONE);
             } else {
-                btOptions.setVisibility(View.VISIBLE);
                 containerBottomButtons.setVisibility(View.VISIBLE);
                 tvLabelGlobalRecord.setVisibility(View.GONE);
-                tvLabelUploadedBy.setVisibility(View.VISIBLE);
-                tvUploadedBy.setVisibility(View.VISIBLE);
             }
+            imageView.setVisibility(View.VISIBLE);
         }
-
-        //handling print view visibility in reports emr list screen and visitDetails screen
-        btPrint.setVisibility(View.GONE);
-        View printView = popupWindow.getContentView().findViewById(R.id.tv_print);
-        if (printView != null) {
-            printView.setVisibility(View.GONE);
-            if (!Util.isNullOrBlank(record.getRecordsUrl())
-                    && record.getRecordsUrl().toLowerCase(Locale.getDefault()).endsWith("pdf".toLowerCase(Locale.getDefault()))) {
-                if (detailCombinedItemListener != null) {
-                    btPrint.setVisibility(View.VISIBLE);
-                } else
-                    printView.setVisibility(View.VISIBLE);
-            }
-        }
-
         //handling approve decline view visibility
         if (record.getRecordsState() != null) {
             hideAllOptions();
             switch (record.getRecordsState()) {
                 case DECLINED_BY_DOCTOR:
                     checkIsDiscarded(true);
-                    tvDiscarded.setText(R.string.declined);
+                    tvDiscard.setText(R.string.declined);
                     layoutDiscarded.setOnClickListener(this);
                 case APPROVED_BY_DOCTOR:
                 case APPROVAL_NOT_REQUIRED:
-                    btHistory.setVisibility(View.VISIBLE);
+//                    btHistory.setVisibility(View.VISIBLE);
                     btEmail.setVisibility(View.VISIBLE);
                     break;
                 case APPROVAL_REQUIRED:
                     btApprove.setVisibility(View.VISIBLE);
                     btDecline.setVisibility(View.VISIBLE);
-                    btOptions.setVisibility(View.GONE);
                     break;
             }
         } else {
@@ -188,7 +170,6 @@ public class ReportsListItemViewHolder extends HealthCocoViewHolder
         View contentView = inflater.inflate(R.layout.item_report, null);
         initViews(contentView);
         initListeners();
-        initOptionsPopupWindow();
         return contentView;
     }
 
@@ -199,37 +180,28 @@ public class ReportsListItemViewHolder extends HealthCocoViewHolder
         ivReportType = (ImageView) contentView.findViewById(R.id.iv_report_type);
         tvDescription = (TextView) contentView.findViewById(R.id.tv_report_description);
         tvUploadedBy = (TextView) contentView.findViewById(R.id.tv_uploaded_by);
-
+        imageView = (ImageView) contentView.findViewById(R.id.image_view);
         btHistory = (LinearLayout) contentView.findViewById(R.id.bt_history);
         btOpen = (LinearLayout) contentView.findViewById(R.id.bt_open);
         btEmail = (LinearLayout) contentView.findViewById(R.id.bt_email);
-        btPrint = (LinearLayout) contentView.findViewById(R.id.bt_print);
+        btDiscard = (LinearLayout) contentView.findViewById(R.id.bt_discard);
         btApprove = (LinearLayout) contentView.findViewById(R.id.bt_approve);
         btDecline = (LinearLayout) contentView.findViewById(R.id.bt_decline);
-
-        btOptions = (ImageButton) contentView.findViewById(R.id.bt_options);
-        layoutDiscarded = (LinearLayout) contentView.findViewById(R.id.layout_discarded);
-        tvDiscarded = (TextView) contentView.findViewById(R.id.tv_discarded);
+        tvDiscard = (TextView) contentView.findViewById(R.id.tv_discard);
         containerBottomButtons = (LinearLayout) contentView.findViewById(R.id.container_bottom_buttons_report);
         tvLabelGlobalRecord = (TextView) contentView.findViewById(R.id.tv_label_global_record);
         tvLabelUploadedBy = (TextView) contentView.findViewById(R.id.tv_label_uploaded_by);
-
-        View headerCreatedByVisit = contentView.findViewById(R.id.container_header_created_by_visit);
+        layoutDiscarded = (LinearLayout) contentView.findViewById(R.id.layout_discarded);
         View headerCreatedByReport = contentView.findViewById(R.id.container_header_created_by_report);
+        View containerReportedBy = contentView.findViewById(R.id.container_reported_by);
         if (detailCombinedItemListener != null) {
-            btPrint.setVisibility(View.VISIBLE);
-            btHistory.setVisibility(View.GONE);
-            headerCreatedByVisit.setVisibility(View.GONE);
+            containerReportedBy.setVisibility(View.GONE);
             headerCreatedByReport.setVisibility(View.GONE);
             containerBottomButtons.setVisibility(View.GONE);
-            detailCombinedItemListener.setVisitHeader(headerCreatedByVisit);
         } else {
-            btPrint.setVisibility(View.GONE);
-            btHistory.setVisibility(View.VISIBLE);
-            headerCreatedByVisit.setVisibility(View.VISIBLE);
+            containerReportedBy.setVisibility(View.VISIBLE);
             headerCreatedByReport.setVisibility(View.VISIBLE);
             containerBottomButtons.setVisibility(View.VISIBLE);
-
         }
     }
 
@@ -237,17 +209,10 @@ public class ReportsListItemViewHolder extends HealthCocoViewHolder
         btHistory.setOnClickListener(this);
         btOpen.setOnClickListener(this);
         btEmail.setOnClickListener(this);
-        btOptions.setOnClickListener(this);
+        btDiscard.setOnClickListener(this);
         ivReportType.setOnClickListener(this);
-        btPrint.setOnClickListener(this);
         btApprove.setOnClickListener(this);
         btDecline.setOnClickListener(this);
-    }
-
-    private void initOptionsPopupWindow() {
-        popupWindow = new OptionsPopupWindow(mActivity, OptionsTypePopupWindow.REPORTS, this);
-        popupWindow.setOutsideTouchable(true);
-        popupWindow.setContentView(popupWindow.getPopupView());
     }
 
     private void checkIsDiscarded(Boolean isDiscarded) {
@@ -272,7 +237,6 @@ public class ReportsListItemViewHolder extends HealthCocoViewHolder
                     } else onNetworkUnavailable(null);
                 }
                 break;
-            case R.id.layout_discarded:
             case R.id.bt_open:
             case R.id.iv_report_type:
                 if (!Util.isNullOrBlank(record.getRecordsUrl()))
@@ -284,10 +248,7 @@ public class ReportsListItemViewHolder extends HealthCocoViewHolder
                     mActivity.openAddUpdateNameDialogFragment(WebServiceType.SEND_EMAIL_REPORTS, AddUpdateNameDialogType.EMAIL, record.getUniqueId());
                 else onNetworkUnavailable(null);
                 break;
-            case R.id.bt_options:
-                popupWindow.showOptionsWindow(v);
-                break;
-            case R.id.tv_discard:
+            case R.id.bt_discard:
                 if (commonEmrClickListener != null) {
                     Util.checkNetworkStatus(mActivity);
                     if (HealthCocoConstants.isNetworkOnline) {
@@ -311,7 +272,6 @@ public class ReportsListItemViewHolder extends HealthCocoViewHolder
                         WebDataServiceImpl.getInstance(mApp).getPdfUrl(String.class, WebServiceType.GET_REPORT_PDF_URL, record.getUniqueId(), this, this);
                     } else onNetworkUnavailable(null);
                 }
-                popupWindow.dismiss();
                 break;
             case R.id.bt_approve:
                 Util.checkNetworkStatus(mActivity);
@@ -347,9 +307,8 @@ public class ReportsListItemViewHolder extends HealthCocoViewHolder
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 switch (viewId) {
-                    case R.id.tv_discard:
+                    case R.id.bt_discard:
                         onDiscardedClicked(record);
-                        popupWindow.dismiss();
                         break;
                     case R.id.bt_history:
                         onAddRemoveHistoryClicked(record);
@@ -411,22 +370,22 @@ public class ReportsListItemViewHolder extends HealthCocoViewHolder
                     LogUtils.LOGD(TAG, "Success DISCARD_PRESCRIPTION");
                     record.setDiscarded(!record.getDiscarded());
                     applyData();
-//                    LocalDataServiceImpl.getInstance(mApp).updateRecord(record);
-//                    Util.sendBroadcast(mApp, ReportsListNewFragment.INTENT_GET_REPORTS_LIST_LOCAL);
+                    LocalDataServiceImpl.getInstance(mApp).updateRecord(record);
+                    Util.sendBroadcast(mApp, PatientReportsDetailFragment.INTENT_GET_REPORTS_LIST_LOCAL);
                     break;
                 case ADD_TO_HISTORY_REPORT:
                     Util.showToast(mActivity, mActivity.getResources().getString(R.string.added_to_history));
                     record.setInHistory(!record.getInHistory());
                     applyData();
-//                    LocalDataServiceImpl.getInstance(mApp).updateRecord(record);
-//                    Util.sendBroadcast(mApp, ReportsListNewFragment.INTENT_GET_REPORTS_LIST_LOCAL);
+                    LocalDataServiceImpl.getInstance(mApp).updateRecord(record);
+                    Util.sendBroadcast(mApp, PatientReportsDetailFragment.INTENT_GET_REPORTS_LIST_LOCAL);
                     break;
                 case REMOVE_HISTORY_REPORT:
                     Util.showToast(mActivity, mActivity.getResources().getString(R.string.removed_from_history));
                     record.setInHistory(!record.getInHistory());
                     applyData();
-//                    LocalDataServiceImpl.getInstance(mApp).updateRecord(record);
-//                    Util.sendBroadcast(mApp, ReportsListNewFragment.INTENT_GET_REPORTS_LIST_LOCAL);
+                    LocalDataServiceImpl.getInstance(mApp).updateRecord(record);
+                    Util.sendBroadcast(mApp, PatientReportsDetailFragment.INTENT_GET_REPORTS_LIST_LOCAL);
                     break;
                 case CHANGE_RECORD_STATE:
                     if (response != null && response.getData() instanceof Records) {
@@ -435,7 +394,6 @@ public class ReportsListItemViewHolder extends HealthCocoViewHolder
                         applyData();
                     }
                     break;
-
                 default:
                     break;
             }

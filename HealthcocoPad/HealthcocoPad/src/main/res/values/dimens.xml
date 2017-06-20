@@ -150,10 +150,10 @@
     <dimen name="text_size_clinical_notes_noted_by">17sp</dimen>
 
     <dimen name="report_thumbnail">60dp</dimen>
-    <dimen name="text_size_reports_item_label">15sp</dimen>
+    <dimen name="text_size_reports_item_label">18sp</dimen>
     <dimen name="text_between_padding">5dp</dimen>
-    <dimen name="text_size_reports_item_desc">13sp</dimen>
-    <dimen name="text_size_uploaded_by_name">13sp</dimen>
+    <dimen name="text_size_reports_item_desc">16sp</dimen>
+    <dimen name="text_size_uploaded_by_name">16sp</dimen>
     <dimen name="edit_text_size">17sp</dimen>
     <dimen name="text_size_add_new_drug_name">15sp</dimen>
     <dimen name="text_size_add_drug_detail_items">15sp</dimen>
@@ -196,4 +196,6 @@
     <dimen name="actionbar_next_review_height">40dp</dimen>
     <dimen name="actionbar_next_review_width">150dp</dimen>
     <dimen name="text_size_actionbar_next_review">16sp</dimen>
+    <dimen name="text_size_upload_record_dialog">17sp</dimen>
+    <dimen name="image_width_height_upload_record">80dp</dimen>
 </resources>

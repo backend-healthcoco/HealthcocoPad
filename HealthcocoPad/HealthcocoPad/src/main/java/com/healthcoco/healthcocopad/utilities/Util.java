@@ -2,13 +2,16 @@ package com.healthcoco.healthcocopad.utilities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
+import android.database.Cursor;
 import android.graphics.Point;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.provider.Settings;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Base64;
@@ -18,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.view.inputmethod.InputMethodManager;
+import android.webkit.MimeTypeMap;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -43,6 +47,10 @@ import com.healthcoco.healthcocopad.fragments.PatientVisitDetailFragment;
 import org.parceler.Parcels;
 import org.spongycastle.jcajce.provider.digest.Keccak;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -490,6 +498,23 @@ public class Util {
         return formattedString;
     }
 
+    public static String getFileExtension(Context context, Uri contentUri) {
+        Cursor cursor = null;
+        try {
+            ContentResolver cR = context.getContentResolver();
+            MimeTypeMap mime = MimeTypeMap.getSingleton();
+            String type = mime.getExtensionFromMimeType(cR.getType(contentUri));
+            return type;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return null;
+    }
+
     public static String getFileExtension(String filePathOrUrl) {
         String extension = "";
         if (filePathOrUrl.lastIndexOf(".") != -1) {
@@ -821,5 +846,29 @@ public class Util {
         if (Util.isNullOrEmptyList(list))
             return null;
         return list;
+    }
+
+    public static String getByteArrayFromUri(Context context, Uri uri) {
+        File f = new File(uri.getPath());
+        byte[] byteArray = null;
+        try {
+            InputStream iStream = context.getContentResolver().openInputStream(uri);
+            byteArray = getBytes(iStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return getStringFromByteArray(byteArray);
+    }
+
+    public static byte[] getBytes(InputStream inputStream) throws IOException {
+        ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
+        int bufferSize = 1024;
+        byte[] buffer = new byte[bufferSize];
+
+        int len = 0;
+        while ((len = inputStream.read(buffer)) != -1) {
+            byteBuffer.write(buffer, 0, len);
+        }
+        return byteBuffer.toByteArray();
     }
 }

@@ -79,6 +79,7 @@ public class HealthCocoConstants {
     public static final int RESULT_CODE_EXPERIENCE_DETAIL = 155;
     public static final int RESULT_CODE_REGISTRATION_DETAIL = 156;
     public static final int RESULT_CODE_ADD_EDIT_DOCTOR_PROFILE = 157;
+    public static final int REQUEST_CODE_FILE = 158;
 
     public static boolean isNetworkOnline;
     public static final String PARAM_UPDATED_TIME = "&updatedTime=";

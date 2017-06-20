@@ -14,6 +14,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -46,6 +47,7 @@ import com.healthcoco.healthcocopad.enums.MapType;
 import com.healthcoco.healthcocopad.enums.PatientProfileScreenType;
 import com.healthcoco.healthcocopad.enums.PopupWindowType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
+import com.healthcoco.healthcocopad.fragments.CommonOpenUpPatientDetailFragment;
 import com.healthcoco.healthcocopad.fragments.PatientProfileDetailFragment;
 import com.healthcoco.healthcocopad.listeners.CommonListDialogItemClickListener;
 import com.healthcoco.healthcocopad.listeners.CommonOptionsDialogItemClickListener;
@@ -83,8 +85,8 @@ public abstract class HealthCocoFragment extends Fragment implements GsonRequest
     private boolean isOTPVerified;
     private User user;
     private RegisteredPatientDetailsUpdated selectedPatient;
-    private ImageButton btGlobalRecordAccess;
-    private OtpVerification otpVerification;
+    private LinearLayout btGlobalRecordAccess;
+    public OtpVerification otpVerification;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         TAG = getClass().getSimpleName();
@@ -96,6 +98,7 @@ public abstract class HealthCocoFragment extends Fragment implements GsonRequest
         view.setFocusableInTouchMode(true);
         view.requestFocus();
         setupUI(view);
+
         if (savedInstanceState != null) {
             LogUtils.LOGD(TAG, "onCreateView");
             HealthCocoConstants.SELECTED_PATIENTS_USER_ID = savedInstanceState.getString(HealthCocoConstants.TAG_SELECTED_USER_ID);
@@ -460,7 +463,7 @@ public abstract class HealthCocoFragment extends Fragment implements GsonRequest
         try {
             listIntentFilters = new ArrayList<String>() {{
                 add(PatientProfileDetailFragment.INTENT_GET_HISTORY_LIST_LOCAL);
-//                add(PatientProfileDetailFragment.INTENT_REFRESH_GLOBAL_RECORDS_ACCESS);
+//                add(CommonOpenUpPatientDetailFragment.INTENT_REFRESH_GLOBAL_RECORDS_ACCESS);
             }};
             for (String intentFilter :
                     listIntentFilters) {

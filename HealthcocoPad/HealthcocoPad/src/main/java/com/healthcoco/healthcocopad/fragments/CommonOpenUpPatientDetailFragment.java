@@ -77,7 +77,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
     private PatientAppointmentDetailFragment appointmentFragment;
     private PatientClinicalNotesDetailFragment clinicalNotesDetailFragment;
     private PatientPrescriptionDetailFragment prescriptionDetailFragment;
-//    private PatientReportsDetailFragment reportsDetailFragment;
+    private PatientReportsDetailFragment reportsDetailFragment;
 
     private boolean isProfileTabClicked = true;
     private boolean isVisitsTabClicked = false;
@@ -87,7 +87,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
     private boolean isReportsTabClicked = false;
     private TextView tvGenderDate;
     private int ordinal;
-
+    private boolean isOTPVerified;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_common_open_up_patient_deatil, container, false);
@@ -161,10 +161,10 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                     prescriptionDetailFragment = new PatientPrescriptionDetailFragment();
                     healthcocoFragment = prescriptionDetailFragment;
                     break;
-//                case PATIENT_DETAIL_REPORTS:
-//                    reportsDetailFragment = new PatientReportsDetailFragment();
-//                    healthcocoFragment = reportsDetailFragment;
-//                    break;
+                case PATIENT_DETAIL_REPORTS:
+                    reportsDetailFragment = new PatientReportsDetailFragment();
+                    healthcocoFragment = reportsDetailFragment;
+                    break;
 //                case PATIENT_DETAIL_IMPORTANT:
 //                    healthcocoFragment = new PatientImportantDetailFragment();
 //                    break;
@@ -331,6 +331,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                         visitsFragment.refreshData(PatientDetailTabType.PATIENT_DETAIL_VISIT);
                         isVisitsTabClicked = true;
                     }
+                    break;
                 case PATIENT_DETAIL_APPOINTMENT:
                     if (!isAppointmentTabClicked) {
                         appointmentFragment.refreshData();
@@ -349,12 +350,12 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                         isPrescriptionTabClicked = true;
                     }
                     break;
-//                case PATIENT_DETAIL_REPORTS:
-//                    if (!isReportsTabClicked) {
-//                        reportsDetailFragment.refreshData(PatientDetailTabType.PATIENT_DETAIL_REPORTS);
-//                        isReportsTabClicked = true;
-//                    }
-//                    break;
+                case PATIENT_DETAIL_REPORTS:
+                    if (!isReportsTabClicked) {
+                        reportsDetailFragment.refreshData(PatientDetailTabType.PATIENT_DETAIL_REPORTS);
+                        isReportsTabClicked = true;
+                    }
+                    break;
             }
         }
         ((CommonOpenUpActivity) mActivity).initActionbarTitle(patientDetailTabType.getActionBarTitleId());
@@ -384,7 +385,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
             clinicalNotesDetailFragment.setUserData(user, selectedPatient);
             prescriptionDetailFragment.setUserData(user, selectedPatient);
             appointmentFragment.setUserData(user, selectedPatient);
-//            reportsDetailFragment.setUserData(user, selectedPatient);
+            reportsDetailFragment.setUserData(user, selectedPatient);
         } else {
             mActivity.showLoading(false);
             WebDataServiceImpl.getInstance(mApp).getPatientProfile(RegisteredPatientDetailsUpdated.class, HealthCocoConstants.SELECTED_PATIENTS_USER_ID, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(), this, this);
@@ -482,6 +483,8 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
         return selectedPatient;
     }
 
-
+    public boolean isOtpVerified() {
+        return isOTPVerified;
+    }
 
 }

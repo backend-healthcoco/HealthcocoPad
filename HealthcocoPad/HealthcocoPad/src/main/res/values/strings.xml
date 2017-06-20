@@ -636,7 +636,7 @@
     <string name="cnid"> | CNID :&#160;</string>
     <string name="email_caps">EMAIL</string>
     <string name="prescribed_by">Prescribed by&#160;</string>
-    <string name="global_record">Global Record</string>
+    <string name="global_record">Global Record&#160;</string>
     <!--//prescription confirmation messages-->
     <string name="confirm_remove_prescription_from_history">Do you want to remove this Prescription from History?</string>
     <string name="confirm_discard_prescription_title">Are you sure you want to discard this Prescription?</string>
@@ -801,4 +801,12 @@
     <string name="alert_blank_clinical_note">Blank Clinical Note cannot be created</string>
     <string name="alert_blank_prescription">Blank Prescriptiopn cannot be created</string>
     <string name="next_review_date">Next Review Date</string>
+    <string name="no_report_found">No Report found</string>
+    <string name="attachment">Attachment</string>
+    <string name="image_label">Image Label</string>
+    <string name="image_description">Image Description</string>
+    <string name="choose_image">Choose Image</string>
+    <string name="upload_record">Upload Record</string>
+    <string name="please_enter_image_label">Please enter Image Label</string>
+    <string name="please_select_image_or_file_to_upload">Please select image or file to upload</string>
 </resources>

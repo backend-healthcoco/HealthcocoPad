@@ -11,6 +11,7 @@ import com.healthcoco.healthcocopad.bean.server.DrugDosage;
 import com.healthcoco.healthcocopad.bean.server.DrugDurationUnit;
 import com.healthcoco.healthcocopad.bean.server.HistoryDetailsResponse;
 import com.healthcoco.healthcocopad.bean.server.Prescription;
+import com.healthcoco.healthcocopad.bean.server.Records;
 import com.healthcoco.healthcocopad.bean.server.Reference;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.Specialities;
@@ -262,6 +263,18 @@ public class ComparatorUtil {
             Date date1 = new Date(prescription1.getCreatedTime());
             Date date2 = new Date(prescription2.getCreatedTime());
             return date2.compareTo(date1);
+        }
+    };
+    public static Comparator<Records> reportsDateComparator = new Comparator<Records>() {
+
+        @Override
+        public int compare(Records records1, Records records2) {
+            if (records1.getCreatedTime() != null && records2.getCreatedTime() != null) {
+                Date date1 = new Date(records1.getCreatedTime());
+                Date date2 = new Date(records2.getCreatedTime());
+                return date2.compareTo(date1);
+            }
+            return 0;
         }
     };
 }
