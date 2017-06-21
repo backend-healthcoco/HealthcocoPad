@@ -68,9 +68,10 @@
         android:orientation="vertical">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
+            android:drawablePadding="10dp"
             android:drawableRight="@drawable/arrow_menu_down"
             android:gravity="center|start"
             android:text="@string/next_review_on"
@@ -79,7 +80,7 @@
 
         <LinearLayout
             android:id="@+id/container_date_time"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 

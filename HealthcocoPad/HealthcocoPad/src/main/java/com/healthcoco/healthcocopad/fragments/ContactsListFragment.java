@@ -401,11 +401,6 @@ public class ContactsListFragment extends HealthCocoFragment implements
     @Override
     public void onEditClicked(RegisteredPatientDetailsUpdated patientDetailsUpdated) {
         openRegistrationFragment(patientDetailsUpdated.getForeignPatientId(), REQUEST_CODE_CONTACTS_DETAIL, true);
-//        Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
-//        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.PATIENT_REGISTRATION.ordinal());
-//        intent.putExtra(HealthCocoConstants.TAG_UNIQUE_ID, );
-//        intent.putExtra(HealthCocoConstants.TAG_IS_EDIT_PATIENT, true);
-//        startActivityForResult(intent, REQUEST_CODE_CONTACTS_DETAIL);
     }
 
     @Override
@@ -679,7 +674,10 @@ public class ContactsListFragment extends HealthCocoFragment implements
         if (requestCode == REQUEST_CODE_CONTACTS_DETAIL) {
             LogUtils.LOGD(TAG, "Contacts List onActivityResult ");
             if (resultCode == HealthCocoConstants.RESULT_CODE_REGISTRATION) {
-                getListFromLocal(false);
+                RegisteredPatientDetailsUpdated patientDetails = Parcels.unwrap(data.getParcelableExtra(HealthCocoConstants.TAG_PATIENT_PROFILE));
+                patientsListHashMap.put(patientDetails.getUserId(), patientDetails);
+                notifyAdapter(new ArrayList<RegisteredPatientDetailsUpdated>(patientsListHashMap.values()));
+//                getListFromLocal(false);
             } else if (resultCode == HealthCocoConstants.RESULT_CODE_GROUPS_LIST) {
                 filterList(filterType);
             } else if (resultCode == HealthCocoConstants.RESULT_CODE_SEARCH_NUMBER_RESULTS) {

@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="3dp"
+        android:gravity="bottom"
         android:orientation="horizontal">
 
         <LinearLayout
@@ -67,23 +68,27 @@
             </LinearLayout>
         </LinearLayout>
 
-        <com.healthcoco.healthcocopad.custom.CustomActivatedTextView
-            android:id="@+id/tv_frequency"
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
             android:layout_marginLeft="5dp"
-            android:layout_weight="@integer/weight_drugs_items"
-            android:background="@drawable/selector_drug_detail_background"
-            android:gravity="center|bottom"
-            android:hint="@string/dosage"
-            android:maxLines="5"
-            android:paddingBottom="@dimen/padding_item_drug_dosage_top_bottom"
-            android:paddingLeft="@dimen/padding_item_drug_dosage_top_bottom"
-            android:paddingTop="@dimen/padding_item_drug_dosage_top_bottom"
-            android:textColor="@color/black"
-            android:textColorHint="@color/grey_light_text"
-            android:textSize="@dimen/text_size_add_new_drug_name" />
+            android:layout_weight="@integer/weight_drugs_items">
+
+            <com.healthcoco.healthcocopad.custom.CustomActivatedTextView
+                android:id="@+id/tv_frequency"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/selector_drug_detail_background"
+                android:gravity="center"
+                android:hint="@string/dosage"
+                android:maxLines="5"
+                android:paddingBottom="@dimen/padding_item_drug_dosage_top_bottom"
+                android:paddingLeft="@dimen/padding_item_drug_dosage_top_bottom"
+                android:paddingTop="@dimen/padding_item_drug_dosage_top_bottom"
+                android:textColor="@color/black"
+                android:textColorHint="@color/grey_light_text"
+                android:textSize="@dimen/text_size_add_new_drug_name" />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="0dp"
@@ -133,23 +138,27 @@
                 android:textSize="@dimen/text_size_add_new_drug_name" />
         </LinearLayout>
 
-        <com.healthcoco.healthcocopad.custom.CustomActivatedTextView
-            android:id="@+id/tv_directions"
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
             android:layout_marginLeft="5dp"
-            android:layout_weight="@integer/weight_drugs_items"
-            android:background="@drawable/selector_drug_detail_background"
-            android:gravity="center|bottom"
-            android:hint="@string/direction"
-            android:maxLines="5"
-            android:paddingBottom="@dimen/padding_item_drug_dosage_top_bottom"
-            android:paddingLeft="@dimen/padding_item_drug_dosage_top_bottom"
-            android:paddingTop="@dimen/padding_item_drug_dosage_top_bottom"
-            android:textColor="@color/black"
-            android:textColorHint="@color/grey_light_text"
-            android:textSize="@dimen/text_size_add_new_drug_name" />
+            android:layout_weight="@integer/weight_drugs_items">
+
+            <com.healthcoco.healthcocopad.custom.CustomActivatedTextView
+                android:id="@+id/tv_directions"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/selector_drug_detail_background"
+                android:gravity="center"
+                android:hint="@string/direction"
+                android:maxLines="5"
+                android:paddingBottom="@dimen/padding_item_drug_dosage_top_bottom"
+                android:paddingLeft="@dimen/padding_item_drug_dosage_top_bottom"
+                android:paddingTop="@dimen/padding_item_drug_dosage_top_bottom"
+                android:textColor="@color/black"
+                android:textColorHint="@color/grey_light_text"
+                android:textSize="@dimen/text_size_add_new_drug_name" />
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout

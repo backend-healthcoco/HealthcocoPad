@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Healthcoco Pad</string>
-    <string name="app_version_name">1.0.1</string>
+    <string name="app_version_name">1.0.0.0</string>
     <string name="app_version_about_us_name">v%s(Beta)</string>
     <string name="database_name">healthcoco_pad.db</string>
     <string name="join">Join</string>
@@ -192,7 +192,7 @@
     <string name="new_direction">New Direction</string>
     <string name="new_disease">New Disease</string>
     <string name="help_us_to_improve">Help Us to Improve</string>
-    <string name="new_frequency">New Frequency</string>
+    <string name="new_frequency">New Dosage</string>
     <string name="new_history">New History</string>
     <string name="visit_detail">Visit Detail</string>
     <string name="new_contact">New Contact</string>
@@ -461,7 +461,7 @@
     <string name="enter_reference">Enter Reference</string>
     <string name="enter_email_address">Enter Email Address</string>
 
-    <string name="enter_frequency_dose">Enter Frequency</string>
+    <string name="enter_frequency_dose">Enter Dosage</string>
     <string name="enter_drug">Enter Drug</string>
     <string name="enter_direction">Enter Direction</string>
     <string name="enter_history">Enter History</string>
@@ -618,7 +618,7 @@
     <string name="advice">Advice&#160;:&#160;</string>
     <string name="advice_tag">Advice</string>
     <string name="drug_name">Drug Name</string>
-    <string name="frequency">Frequency</string>
+    <string name="frequency">Dosage</string>
     <string name="duration">Duration</string>
     <string name="direction">Direction</string>
     <string name="instruction">Instruction</string>
@@ -675,7 +675,7 @@
     <string name="add_drug">Add Drug</string>
     <string name="search_direction">Search Direction</string>
     <string name="search_duration">Search Duration</string>
-    <string name="search_frequency">Search Frequency</string>
+    <string name="search_frequency">Search Dosage</string>
     <string name="no_result_found">No result found</string>
 
     <!--AdvanceSearchOptions Text-->

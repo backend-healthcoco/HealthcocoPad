@@ -11,7 +11,7 @@ public class DevConfig {
      * Builds
      * sets which server build it is
      */
-    public static final BuildType buildType = BuildType.QA;
+    public static final BuildType buildType = BuildType.DEV;
     /**
      * Set it to true to enable forms in application pre-filled with data
      */
