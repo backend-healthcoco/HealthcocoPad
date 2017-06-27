@@ -131,6 +131,7 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
     private LinearLayout containerGroups;
     private LinearLayout containerNotes;
     private TextView tvGenderDate;
+    private CommonOpenUpPatientDetailFragment patientDetailFragmentUpdated;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -155,7 +156,7 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
     }
 
     private void getUserAndPatientDetails() {
-        CommonOpenUpPatientDetailFragment patientDetailFragmentUpdated = (CommonOpenUpPatientDetailFragment) getFragmentManager().findFragmentByTag(CommonOpenUpPatientDetailFragment.class.getSimpleName());
+        patientDetailFragmentUpdated = (CommonOpenUpPatientDetailFragment) getFragmentManager().findFragmentByTag(CommonOpenUpPatientDetailFragment.class.getSimpleName());
         if (patientDetailFragmentUpdated != null) {
             selectedPatient = patientDetailFragmentUpdated.getSelectedPatientDetails();
             user = patientDetailFragmentUpdated.getUser();
@@ -273,28 +274,33 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
 
     public void initData() {
         if (selectedPatient != null) {
-            ivContactProfile.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (!Util.isNullOrBlank(selectedPatient.getImageUrl()))
-                        mActivity.openEnlargedImageDialogFragment(selectedPatient.getImageUrl());
-                }
-            });
-            tvPatientName.setText(selectedPatient.getLocalPatientName());
-            tvPatientId.setText(selectedPatient.getPid());
-            String formattedGenderAge = Util.getFormattedGenderAge(selectedPatient);
-            if (!Util.isNullOrBlank(formattedGenderAge)) {
-                tvGenderDate.setVisibility(View.VISIBLE);
-                tvGenderDate.setText(formattedGenderAge);
-            } else {
-                tvGenderDate.setVisibility(View.GONE);
-                tvGenderDate.setText("");
-            }
-            DownloadImageFromUrlUtil.loadImageWithInitialAlphabet(mActivity, PatientProfileScreenType.IN_PATIENT_DEATIL_PROFILE, selectedPatient, null, ivContactProfile, tvInitialAlphabet);
+            refreshHeaderData(selectedPatient);
             initProfileData();
             initGroups();
             initNotes();
         }
+    }
+
+    private void refreshHeaderData(final RegisteredPatientDetailsUpdated selectedPatient) {
+        ivContactProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!Util.isNullOrBlank(selectedPatient.getImageUrl()))
+                    mActivity.openEnlargedImageDialogFragment(selectedPatient.getImageUrl());
+            }
+        });
+        tvPatientName.setText(selectedPatient.getLocalPatientName());
+        tvPatientId.setText(selectedPatient.getPid());
+        String formattedGenderAge = Util.getFormattedGenderAge(selectedPatient);
+        if (!Util.isNullOrBlank(formattedGenderAge)) {
+            tvGenderDate.setVisibility(View.VISIBLE);
+            tvGenderDate.setText(formattedGenderAge);
+        } else {
+            tvGenderDate.setVisibility(View.GONE);
+            tvGenderDate.setText("");
+        }
+        DownloadImageFromUrlUtil.loadImageWithInitialAlphabet(mActivity, PatientProfileScreenType.IN_PATIENT_DEATIL_PROFILE, selectedPatient, null, ivContactProfile, tvInitialAlphabet);
+
     }
 
     private void initProfileData() {
@@ -468,8 +474,8 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
                 tvNoDrugsAndAllergyData.setVisibility(View.GONE);
                 for (Drug drug : drugsAndAllergies.getDrugs()) {
                     LinearLayout linearLayout = (LinearLayout) mActivity.getLayoutInflater().inflate(R.layout.sub_item_profile_detail_drugs_text, null);
-                    TextView drugName= (TextView) linearLayout.findViewById(R.id.drug_name);
-                    TextView genericName= (TextView) linearLayout.findViewById(R.id.generic_name);
+                    TextView drugName = (TextView) linearLayout.findViewById(R.id.drug_name);
+                    TextView genericName = (TextView) linearLayout.findViewById(R.id.generic_name);
                     drugName.setText(drug.getFormattedDrugName());
                     genericName.setText(drug.getFormattedGenricName());
                     containerDrugsDetail.addView(linearLayout);
@@ -610,13 +616,20 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
                 initGroups();
                 initNotes();
                 initProfileData();
+                refreshHeaderData(selectedPatient);
+                patientDetailFragmentUpdated.refreshHeaderData(selectedPatient);
             } else if (resultCode == HealthCocoConstants.RESULT_CODE_DOCTOR_PERSONAL_HISTORY_DETAIL) {
                 PersonalHistory personalHistory = Parcels.unwrap(data.getParcelableExtra(TAG_PERSONAL_HISTORY));
-                historyDetailsResponse.setPersonalHistory(personalHistory);
+                if (historyDetailsResponse == null)
+                    historyDetailsResponse = new HistoryDetailsResponse();
+                else
+                    historyDetailsResponse.setPersonalHistory(personalHistory);
                 initPersonalHistory(personalHistory);
             } else if (resultCode == HealthCocoConstants.RESULT_CODE_DRUGS_AND_ALLERGIES_DETAIL) {
                 DrugsAndAllergies drugsAndAllergies = Parcels.unwrap(data.getParcelableExtra(DRUG_AND_ALLERGIES));
-                historyDetailsResponse.setDrugsAndAllergies(drugsAndAllergies);
+                if (historyDetailsResponse == null)
+                    historyDetailsResponse = new HistoryDetailsResponse();
+                else historyDetailsResponse.setDrugsAndAllergies(drugsAndAllergies);
                 initDrugsAndAllergyHistory(drugsAndAllergies);
             } else if (resultCode == HealthCocoConstants.RESULT_CODE_DISEASE_LIST) {
                 if (data != null && data.hasExtra(DiseaseListFragment.TAG_FILTER_TYPE) && data.hasExtra(DiseaseListFragment.TAG_DISEASES_LIST)) {

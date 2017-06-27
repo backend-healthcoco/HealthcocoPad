@@ -166,6 +166,7 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
     private ArrayList<String> groupIdsToAssign = new ArrayList<String>();
     private TextView tvNoNotes;
     private TextView tvNoGroups;
+    private LinearLayout containerAge;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -233,7 +234,7 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
         btDeleteBloodGroup = (ImageButton) view.findViewById(R.id.bt_delete_blood_group);
         btDeleteReferredBy = (ImageButton) view.findViewById(R.id.bt_delete_referred_by);
         editAge = (EditText) view.findViewById(R.id.edit_age);
-//        containerAge = (LinearLayout) view.findViewById(R.id.container_age);
+        containerAge = (LinearLayout) view.findViewById(R.id.container_age);
         btAddNote = (TextView) view.findViewById(R.id.bt_add_note);
         lvNotes = (ListView) view.findViewById(R.id.lv_notes);
         tvNoNotes = (TextView) view.findViewById(R.id.tv_no_notes);
@@ -404,10 +405,10 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
         if (radioButton != null)
             radioButton.setChecked(true);
 
-//        if (!Util.isNullOrBlank(birthday)) {
-//            containerAge.setVisibility(View.GONE);
+        if (!Util.isNullOrBlank(birthday)) {
+            containerAge.setVisibility(View.GONE);
         tvBirthDay.setText(birthday);
-//        } else containerAge.setVisibility(View.VISIBLE);
+        } else containerAge.setVisibility(View.VISIBLE);
         editEmail.setText(emailAddress);
 
         notifyNoteListAdapter(notesListLastAdded);
@@ -642,7 +643,7 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
             case UPDATE_PATIENT:
                 if (response.isValidData(response) && response.getData() instanceof RegisteredPatientDetailsUpdated) {
                     RegisteredPatientDetailsUpdated patientDetails = (RegisteredPatientDetailsUpdated) response.getData();
-                    LocalDataServiceImpl.getInstance(mApp).addPatient(patientDetails);
+                    refreshContactsData(patientDetails);
                     mActivity.hideLoading();
                     //will directly refresh PatientDetailSCreen on its onActivityResult
                     mActivity.setResult(HealthCocoConstants.RESULT_CODE_REGISTRATION, new Intent().putExtra(HealthCocoConstants.TAG_PATIENT_PROFILE, Parcels.wrap(patientDetails)));

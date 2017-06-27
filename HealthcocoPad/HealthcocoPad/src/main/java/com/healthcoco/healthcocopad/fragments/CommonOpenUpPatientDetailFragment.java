@@ -88,6 +88,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
     private TextView tvGenderDate;
     private int ordinal;
     private boolean isOTPVerified;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_common_open_up_patient_deatil, container, false);
@@ -363,24 +364,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
 
     private void initData() {
         if (selectedPatient != null) {
-            ivContactProfile.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (!Util.isNullOrBlank(selectedPatient.getImageUrl()))
-                        mActivity.openEnlargedImageDialogFragment(selectedPatient.getImageUrl());
-                }
-            });
-            tvPatientName.setText(selectedPatient.getLocalPatientName());
-            tvPatientId.setText(selectedPatient.getPid());
-            String formattedGenderAge = Util.getFormattedGenderAge(selectedPatient);
-            if (!Util.isNullOrBlank(formattedGenderAge)) {
-                tvGenderDate.setVisibility(View.VISIBLE);
-                tvGenderDate.setText(formattedGenderAge);
-            } else {
-                tvGenderDate.setVisibility(View.GONE);
-                tvGenderDate.setText("");
-            }
-            DownloadImageFromUrlUtil.loadImageWithInitialAlphabet(mActivity, PatientProfileScreenType.IN_PATIENT_DEATIL_SCREEN_EXCEPT_PROFILE, selectedPatient, null, ivContactProfile, tvInitialAlphabet);
+            refreshHeaderData(selectedPatient);
             visitsFragment.setUserData(user, selectedPatient);
             clinicalNotesDetailFragment.setUserData(user, selectedPatient);
             prescriptionDetailFragment.setUserData(user, selectedPatient);
@@ -390,6 +374,27 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
             mActivity.showLoading(false);
             WebDataServiceImpl.getInstance(mApp).getPatientProfile(RegisteredPatientDetailsUpdated.class, HealthCocoConstants.SELECTED_PATIENTS_USER_ID, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(), this, this);
         }
+    }
+
+    protected void refreshHeaderData(final RegisteredPatientDetailsUpdated selectedPatient) {
+        ivContactProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!Util.isNullOrBlank(selectedPatient.getImageUrl()))
+                    mActivity.openEnlargedImageDialogFragment(selectedPatient.getImageUrl());
+            }
+        });
+        tvPatientName.setText(selectedPatient.getLocalPatientName());
+        tvPatientId.setText(selectedPatient.getPid());
+        String formattedGenderAge = Util.getFormattedGenderAge(selectedPatient);
+        if (!Util.isNullOrBlank(formattedGenderAge)) {
+            tvGenderDate.setVisibility(View.VISIBLE);
+            tvGenderDate.setText(formattedGenderAge);
+        } else {
+            tvGenderDate.setVisibility(View.GONE);
+            tvGenderDate.setText("");
+        }
+        DownloadImageFromUrlUtil.loadImageWithInitialAlphabet(mActivity, PatientProfileScreenType.IN_PATIENT_DEATIL_PROFILE, selectedPatient, null, ivContactProfile, tvInitialAlphabet);
     }
 
     @Override
