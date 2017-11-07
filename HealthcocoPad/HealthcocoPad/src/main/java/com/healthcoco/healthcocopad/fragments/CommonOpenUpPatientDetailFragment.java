@@ -78,6 +78,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
     private PatientClinicalNotesDetailFragment clinicalNotesDetailFragment;
     private PatientPrescriptionDetailFragment prescriptionDetailFragment;
     private PatientReportsDetailFragment reportsDetailFragment;
+    private PatientTreatmentDetailFragment treatmentDetailFragment;
 
     private boolean isProfileTabClicked = true;
     private boolean isVisitsTabClicked = false;
@@ -85,6 +86,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
     private boolean isPrescriptionTabClicked = false;
     private boolean isClinicalNotesTabClicked = false;
     private boolean isReportsTabClicked = false;
+    private boolean isTreatmentTabClicked = false;
     private TextView tvGenderDate;
     private int ordinal;
     private boolean isOTPVerified;
@@ -169,9 +171,10 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
 //                case PATIENT_DETAIL_IMPORTANT:
 //                    healthcocoFragment = new PatientImportantDetailFragment();
 //                    break;
-//                case PATIENT_DETAIL_TREATMENT:
-//                    healthcocoFragment = new PatientTreatmentDetailFragment();
-//                    break;
+                case PATIENT_DETAIL_TREATMENT:
+                    treatmentDetailFragment = new PatientTreatmentDetailFragment();
+                    healthcocoFragment = treatmentDetailFragment;
+                    break;
             }
             if (healthcocoFragment != null)
                 tabhost.addTab(getTabSpec(detailTabType, healthcocoFragment));
@@ -357,6 +360,11 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                         isReportsTabClicked = true;
                     }
                     break;
+                case PATIENT_DETAIL_TREATMENT:
+                    if (!isTreatmentTabClicked) {
+                        treatmentDetailFragment.refreshData(PatientDetailTabType.PATIENT_DETAIL_TREATMENT);
+                        isTreatmentTabClicked = true;
+                    }
             }
         }
         ((CommonOpenUpActivity) mActivity).initActionbarTitle(patientDetailTabType.getActionBarTitleId());
@@ -370,6 +378,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
             prescriptionDetailFragment.setUserData(user, selectedPatient);
             appointmentFragment.setUserData(user, selectedPatient);
             reportsDetailFragment.setUserData(user, selectedPatient);
+            treatmentDetailFragment.setUserData(user, selectedPatient);
         } else {
             mActivity.showLoading(false);
             WebDataServiceImpl.getInstance(mApp).getPatientProfile(RegisteredPatientDetailsUpdated.class, HealthCocoConstants.SELECTED_PATIENTS_USER_ID, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(), this, this);

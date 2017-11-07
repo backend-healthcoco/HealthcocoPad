@@ -1,8 +1,10 @@
 package com.healthcoco.healthcocopad.bean.server;
 
+import com.healthcoco.healthcocopad.bean.WorkingHours;
 import com.healthcoco.healthcocopad.enums.PatientTreatmentStatus;
 import com.orm.SugarRecord;
 import com.orm.annotation.Ignore;
+import com.orm.annotation.Unique;
 
 import org.parceler.Parcel;
 
@@ -13,89 +15,207 @@ import java.util.List;
  */
 @Parcel
 public class Treatments extends SugarRecord {
+    protected String workingHoursJson;
+    @Unique
+    private String uniqueId;
+    private Long createdTime;
+    private Long updatedTime;
+    private String doctorId;
+    private String locationId;
+    private String hospitalId;
+    private String patientId;
+    private Boolean discarded;
+    private String createdBy;
+    private Boolean inHistory;
+    private String visitId;
+    private String uniqueEmrId;
+    private double grandTotal = 0.0;
+    private double totalCost = 0.0;
     @Ignore
-    private TreatmentService treatmentService;
-    private String treatmentServiceId;
-    private PatientTreatmentStatus status;
-    private double cost = 0.0;
-    private String note;
-    private double finalCost = 0.0;
+    private UnitValue totalDiscount;
+    private String totalDiscountJsonString;
     @Ignore
-    private Discount discount;
+    private WorkingHours time;
+    private String appointmentId;
+    private Long fromDate;
     @Ignore
-    private Quantity quantity;
+    private AppointmentRequest appointmentRequest;
     @Ignore
-    private List<TreatmentService> treatmentServices;
+    private List<TreatmentItem> treatments;
 
-    public TreatmentService getTreatmentService() {
-        return treatmentService;
+    public String getUniqueId() {
+        return uniqueId;
     }
 
-    public void setTreatmentService(TreatmentService treatmentService) {
-        this.treatmentService = treatmentService;
+    public void setUniqueId(String uniqueId) {
+        this.uniqueId = uniqueId;
     }
 
-    public String getTreatmentServiceId() {
-        return treatmentServiceId;
+    public Long getCreatedTime() {
+        return createdTime;
     }
 
-    public void setTreatmentServiceId(String treatmentServiceId) {
-        this.treatmentServiceId = treatmentServiceId;
+    public void setCreatedTime(Long createdTime) {
+        this.createdTime = createdTime;
     }
 
-    public Discount getDiscount() {
-        return discount;
+    public Long getUpdatedTime() {
+        return updatedTime;
     }
 
-    public void setDiscount(Discount discount) {
-        this.discount = discount;
+    public void setUpdatedTime(Long updatedTime) {
+        this.updatedTime = updatedTime;
     }
 
-    public Quantity getQuantity() {
-        return quantity;
+    public String getDoctorId() {
+        return doctorId;
     }
 
-    public void setQuantity(Quantity quantity) {
-        this.quantity = quantity;
+    public void setDoctorId(String doctorId) {
+        this.doctorId = doctorId;
     }
 
-    public List<TreatmentService> getTreatmentServices() {
-        return treatmentServices;
+    public String getLocationId() {
+        return locationId;
     }
 
-    public void setTreatmentServices(List<TreatmentService> treatmentServices) {
-        this.treatmentServices = treatmentServices;
+    public void setLocationId(String locationId) {
+        this.locationId = locationId;
     }
 
-    public PatientTreatmentStatus getStatus() {
-        return status;
+    public String getHospitalId() {
+        return hospitalId;
     }
 
-    public void setStatus(PatientTreatmentStatus status) {
-        this.status = status;
+    public void setHospitalId(String hospitalId) {
+        this.hospitalId = hospitalId;
     }
 
-    public double getCost() {
-        return cost;
+    public String getPatientId() {
+        return patientId;
     }
 
-    public void setCost(double cost) {
-        this.cost = cost;
+    public void setPatientId(String patientId) {
+        this.patientId = patientId;
     }
 
-    public String getNote() {
-        return note;
+    public Boolean getDiscarded() {
+        return discarded;
     }
 
-    public void setNote(String note) {
-        this.note = note;
+    public void setDiscarded(Boolean discarded) {
+        this.discarded = discarded;
     }
 
-    public double getFinalCost() {
-        return finalCost;
+    public String getCreatedBy() {
+        return createdBy;
     }
 
-    public void setFinalCost(double finalCost) {
-        this.finalCost = finalCost;
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public Boolean getInHistory() {
+        return inHistory;
+    }
+
+    public void setInHistory(Boolean inHistory) {
+        this.inHistory = inHistory;
+    }
+
+    public String getVisitId() {
+        return visitId;
+    }
+
+    public void setVisitId(String visitId) {
+        this.visitId = visitId;
+    }
+
+    public String getUniqueEmrId() {
+        return uniqueEmrId;
+    }
+
+    public void setUniqueEmrId(String uniqueEmrId) {
+        this.uniqueEmrId = uniqueEmrId;
+    }
+
+    public double getGrandTotal() {
+        return grandTotal;
+    }
+
+    public void setGrandTotal(double grandTotal) {
+        this.grandTotal = grandTotal;
+    }
+
+    public double getTotalCost() {
+        return totalCost;
+    }
+
+    public void setTotalCost(double totalCost) {
+        this.totalCost = totalCost;
+    }
+
+    public UnitValue getTotalDiscount() {
+        return totalDiscount;
+    }
+
+    public void setTotalDiscount(UnitValue totalDiscount) {
+        this.totalDiscount = totalDiscount;
+    }
+
+    public String getTotalDiscountJsonString() {
+        return totalDiscountJsonString;
+    }
+
+    public void setTotalDiscountJsonString(String totalDiscountJsonString) {
+        this.totalDiscountJsonString = totalDiscountJsonString;
+    }
+
+    public WorkingHours getTime() {
+        return time;
+    }
+
+    public void setTime(WorkingHours time) {
+        this.time = time;
+    }
+
+    public String getWorkingHoursJson() {
+        return workingHoursJson;
+    }
+
+    public void setWorkingHoursJson(String workingHoursJson) {
+        this.workingHoursJson = workingHoursJson;
+    }
+
+    public String getAppointmentId() {
+        return appointmentId;
+    }
+
+    public void setAppointmentId(String appointmentId) {
+        this.appointmentId = appointmentId;
+    }
+
+    public Long getFromDate() {
+        return fromDate;
+    }
+
+    public void setFromDate(Long fromDate) {
+        this.fromDate = fromDate;
+    }
+
+    public AppointmentRequest getAppointmentRequest() {
+        return appointmentRequest;
+    }
+
+    public void setAppointmentRequest(AppointmentRequest appointmentRequest) {
+        this.appointmentRequest = appointmentRequest;
+    }
+
+    public List<TreatmentItem> getTreatments() {
+        return treatments;
+    }
+
+    public void setTreatments(List<TreatmentItem> treatments) {
+        this.treatments = treatments;
     }
 }

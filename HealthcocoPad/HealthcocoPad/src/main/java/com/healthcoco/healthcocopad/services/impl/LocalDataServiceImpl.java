@@ -67,11 +67,6 @@ public class LocalDataServiceImpl {
     private LocalDataServiceImpl() {
     }
 
-
-    private enum FromTableType {
-        ADD_TEMPLATES, ADD_TREATMENT, ADD_PRESCRIPTION
-    }
-
     public static LocalDataServiceImpl getInstance(HealthCocoApplication application) {
         if (mInstance == null) {
             mInstance = new LocalDataServiceImpl();
@@ -219,15 +214,15 @@ public class LocalDataServiceImpl {
             e.printStackTrace();
         }
     }
-//
-//    private void deleteDOBRecordIfAlreadyPresent(String key, String value) {
-//        DOB.deleteAll(DOB.class, key + "= ?", value);
-//    }
 
     private void clearUser() {
         //TODO clear rest of linked tables remaining
         User.deleteAll(User.class);
     }
+//
+//    private void deleteDOBRecordIfAlreadyPresent(String key, String value) {
+//        DOB.deleteAll(DOB.class, key + "= ?", value);
+//    }
 
     public void addCities(List<CityResponse> citiesResponse) {
         CityResponse.saveInTx(citiesResponse);
@@ -389,22 +384,6 @@ public class LocalDataServiceImpl {
         }
         return user;
     }
-//
-//    public UserPermissionsResponse getUserUiPermissionsObject(String doctorId) {
-//        UserPermissionsResponse userPermissions = Select.from(UserPermissionsResponse.class)
-//                .where(Condition.prop(LocalDatabaseUtils.KEY_DOCTOR_ID).eq(doctorId)).first();
-//        if (userPermissions != null) {
-//            AssignedUserUiPermissions assignedPermisions = getAssignedUserUiPermissions(userPermissions.getDoctorId());
-//            if (assignedPermisions != null) {
-//                assignedPermisions.setTabPermissions((ArrayList<String>) (Object) getObjectsListFronJson(assignedPermisions.getTabPermissionsString()));
-//                assignedPermisions.setClinicalNotesPermissions((ArrayList<String>) (Object) getObjectsListFronJson(assignedPermisions.getClinicalNotesPermissionsString()));
-//                assignedPermisions.setPrescriptionPermissions((ArrayList<String>) (Object) getObjectsListFronJson(assignedPermisions.getPrescriptionPermissionsString()));
-//                assignedPermisions.setPatientVisitPermissions((ArrayList<String>) (Object) getObjectsListFronJson(assignedPermisions.getPatientVisitPermissionsString()));
-//                assignedPermisions.setProfilePermissions((ArrayList<String>) (Object) getObjectsListFronJson(assignedPermisions.getProfilePermissionsString()));
-//            }
-//        }
-//        return userPermissions;
-//    }
 
     public void getDosageDurationDirectionList(WebServiceType webServiceType, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
@@ -430,6 +409,22 @@ public class LocalDataServiceImpl {
             showErrorLocal(volleyResponseBean, errorListener);
         }
     }
+//
+//    public UserPermissionsResponse getUserUiPermissionsObject(String doctorId) {
+//        UserPermissionsResponse userPermissions = Select.from(UserPermissionsResponse.class)
+//                .where(Condition.prop(LocalDatabaseUtils.KEY_DOCTOR_ID).eq(doctorId)).first();
+//        if (userPermissions != null) {
+//            AssignedUserUiPermissions assignedPermisions = getAssignedUserUiPermissions(userPermissions.getDoctorId());
+//            if (assignedPermisions != null) {
+//                assignedPermisions.setTabPermissions((ArrayList<String>) (Object) getObjectsListFronJson(assignedPermisions.getTabPermissionsString()));
+//                assignedPermisions.setClinicalNotesPermissions((ArrayList<String>) (Object) getObjectsListFronJson(assignedPermisions.getClinicalNotesPermissionsString()));
+//                assignedPermisions.setPrescriptionPermissions((ArrayList<String>) (Object) getObjectsListFronJson(assignedPermisions.getPrescriptionPermissionsString()));
+//                assignedPermisions.setPatientVisitPermissions((ArrayList<String>) (Object) getObjectsListFronJson(assignedPermisions.getPatientVisitPermissionsString()));
+//                assignedPermisions.setProfilePermissions((ArrayList<String>) (Object) getObjectsListFronJson(assignedPermisions.getProfilePermissionsString()));
+//            }
+//        }
+//        return userPermissions;
+//    }
 
     public void addDrugDosageList(ArrayList<DrugDosage> dosageList) {
         DrugDosage.saveInTx(dosageList);
@@ -686,7 +681,6 @@ public class LocalDataServiceImpl {
         return volleyResponseBean;
     }
 
-
     public void updateLatestTime(APILatestUpdatedTimes apiLatestUpdatedTimes) {
         apiLatestUpdatedTimes.save();
     }
@@ -931,6 +925,13 @@ public class LocalDataServiceImpl {
                 if (!Util.isNullOrEmptyList(prescriptionList))
                     latestUpdatedTime = prescriptionList.get(0).getUpdatedTime();
                 break;
+
+            case TREATMENT:
+                List<Treatments> treatmentsList = Treatments.find(Treatments.class, LocalDatabaseUtils.KEY_PATIENT_ID + "= ?", new String[]{"" + HealthCocoConstants.SELECTED_PATIENTS_USER_ID}, null, "updated_time DESC", "1");
+                if (!Util.isNullOrEmptyList(treatmentsList))
+                    latestUpdatedTime = treatmentsList.get(0).getUpdatedTime();
+                break;
+
         }
         if (latestUpdatedTime == null)
             latestUpdatedTime = 0l;
@@ -1106,7 +1107,6 @@ public class LocalDataServiceImpl {
                 LocalDatabaseUtils.KEY_LOCATION_ID + "= ? AND " + LocalDatabaseUtils.KEY_HOSPITAL_ID + "= ?",
                 new String[]{locationId, hospitalId});
     }
-
 
     private void addExperienceDetailsList(String key, String value, List<DoctorExperienceDetail> list) {
         for (DoctorExperienceDetail experienceDetail :
@@ -1383,10 +1383,6 @@ public class LocalDataServiceImpl {
     private void deleteAllFrom(Class<?> class1, String key, String value) {
         SugarRecord.deleteAll(class1, key + "= ?", value);
     }
-//
-//    private void deleteAdditionalNumbersIfAlreadyPresent(String key, String value) {
-//        ForieignAdditionalNumbers.deleteAll(ForieignAdditionalNumbers.class, key + "= ?", value);
-//    }
 
     public void addLocation(Location location) {
         location.setAlternateClinicNumbersJsonString(getJsonFromObject(location.getAlternateClinicNumbers()));
@@ -1401,6 +1397,10 @@ public class LocalDataServiceImpl {
 
         location.save();
     }
+//
+//    private void deleteAdditionalNumbersIfAlreadyPresent(String key, String value) {
+//        ForieignAdditionalNumbers.deleteAll(ForieignAdditionalNumbers.class, key + "= ?", value);
+//    }
 
     private void addClinicImages(String key, String value, List<ClinicImage> list) {
         for (ClinicImage image :
@@ -1416,19 +1416,6 @@ public class LocalDataServiceImpl {
         List<ClinicImage> list = (List<ClinicImage>) getListByKeyValue(ClinicImage.class, key, value);
         ClinicImage.deleteInTx(list);
     }
-
-//    private void addAdditionalNumbers(String key, String value, List<String> list) {
-//        for (String number :
-//                list) {
-//            if (!Util.isNullOrBlank(number)) {
-//                ForieignAdditionalNumbers additionalNumbers = new ForieignAdditionalNumbers();
-//                additionalNumbers.setForeignUniqueId(value);
-//                additionalNumbers.setAdditionalNumber(number);
-//                additionalNumbers.setUniqueId(additionalNumbers.getForeignUniqueId() + additionalNumbers.getAdditionalNumber());
-//                additionalNumbers.save();
-//            }
-//        }
-//    }
 
     public VolleyResponseBean getDoctorProfileResponse(WebServiceType webServiceType, String doctorId, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
@@ -1446,6 +1433,19 @@ public class LocalDataServiceImpl {
         }
         return volleyResponseBean;
     }
+
+//    private void addAdditionalNumbers(String key, String value, List<String> list) {
+//        for (String number :
+//                list) {
+//            if (!Util.isNullOrBlank(number)) {
+//                ForieignAdditionalNumbers additionalNumbers = new ForieignAdditionalNumbers();
+//                additionalNumbers.setForeignUniqueId(value);
+//                additionalNumbers.setAdditionalNumber(number);
+//                additionalNumbers.setUniqueId(additionalNumbers.getForeignUniqueId() + additionalNumbers.getAdditionalNumber());
+//                additionalNumbers.save();
+//            }
+//        }
+//    }
 
     public DoctorProfile getDoctorProfileObject(String doctorId) {
         DoctorProfile doctorProfile = Select.from(DoctorProfile.class).where(Condition.prop(LocalDatabaseUtils.KEY_DOCTOR_ID).eq(doctorId)).first();
@@ -1934,7 +1934,6 @@ public class LocalDataServiceImpl {
         }
         return groupsList;
     }
-
 
     public void clearPatientsList() {
         RegisteredPatientDetailsUpdated.deleteAll(RegisteredPatientDetailsUpdated.class);
@@ -3577,6 +3576,161 @@ public class LocalDataServiceImpl {
         }
     }
 
+    public VolleyResponseBean getTreatmentList(WebServiceType webServiceType, String doctorId, String foreignLocationId,
+                                               String foreignHospitalId, String selectedPatientId, int pageNum, int maxSize,
+                                               Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
+        volleyResponseBean.setWebServiceType(webServiceType);
+        volleyResponseBean.setIsDataFromLocal(true);
+        volleyResponseBean.setIsUserOnline(HealthCocoConstants.isNetworkOnline);
+        try {
+            List<Treatments> list = getTreatmentListPageWise(doctorId, foreignLocationId, foreignHospitalId, pageNum, maxSize, selectedPatientId);
+            volleyResponseBean.setDataList(getObjectsListFromMap(list));
+            if (responseListener != null)
+                responseListener.onResponse(volleyResponseBean);
+        } catch (Exception e) {
+            e.printStackTrace();
+            showErrorLocal(volleyResponseBean, errorListener);
+        }
+        return volleyResponseBean;
+    }
+
+    private List<Treatments> getTreatmentListPageWise(String doctorId, String locationId, String hospitalId, int pageNum, int maxSize, String
+            selectedPatientId) {
+
+        String whereCondition = "Select * from " + StringUtil.toSQLName(Treatments.class.getSimpleName())
+                + " where "
+                + LocalDatabaseUtils.KEY_PATIENT_ID + "=\"" + selectedPatientId + "\"";
+        whereCondition = whereCondition + " AND "
+                + LocalDatabaseUtils.KEY_DOCTOR_ID + "=\"" + doctorId + "\""
+                + " AND "
+                + LocalDatabaseUtils.KEY_HOSPITAL_ID + "=\"" + hospitalId + "\""
+                + " AND "
+                + LocalDatabaseUtils.KEY_LOCATION_ID + "=\"" + locationId + "\"";
+        String conditionsLimit = " ORDER BY " + LocalDatabaseUtils.KEY_CREATED_TIME + " DESC "
+                + " LIMIT " + maxSize
+                + " OFFSET " + (pageNum * maxSize);
+
+        whereCondition = whereCondition + conditionsLimit;
+        LogUtils.LOGD(TAG, "Select Query " + whereCondition);
+        List<Treatments> list = SugarRecord.findWithQuery(Treatments.class, whereCondition);
+        if (!Util.isNullOrEmptyList(list)) {
+            for (Treatments treatment : list) {
+                getTreatmentDetail(treatment);
+            }
+            return list;
+        }
+        return null;
+    }
+
+    private void getTreatmentDetail(Treatments treatment) {
+        treatment.setTreatments(getTreatmentsList(treatment.getUniqueId()));
+        treatment.setTotalDiscount((UnitValue) getObjectFromJson(UnitValue.class, treatment.getTotalDiscountJsonString()));
+        treatment.setWorkingHoursJson(getJsonFromObject(treatment.getTime()));
+        if (treatment.getAppointmentRequest() != null)
+            addAppointmentRequest(treatment.getAppointmentRequest());
+    }
+
+    private List<TreatmentItem> getTreatmentsList(String treatmentId) {
+        Select<TreatmentItem> selectQuery = Select.from(TreatmentItem.class)
+                .where(Condition.prop(LocalDatabaseUtils.KEY_TREATMENT_ID).eq(treatmentId));
+        List<TreatmentItem> list = selectQuery.list();
+        if (!Util.isNullOrEmptyList(list))
+            for (TreatmentItem treatmentItem : list) {
+                getTreatmentItemDetail(treatmentItem);
+            }
+        return list;
+    }
+
+    private void getTreatmentItemDetail(TreatmentItem treatmentItem) {
+        treatmentItem.setDiscount((Discount) getObjectFromJson(Discount.class, treatmentItem.getDiscountJsonString()));
+        treatmentItem.setQuantity((Quantity) getObjectFromJson(Quantity.class, treatmentItem.getQuantityJsonString()));
+        treatmentItem.setTreatmentFields((ArrayList<TreatmentFields>) (Object) getObjectsListFronJson(TreatmentFields.class, treatmentItem.getTreatmentFieldsJsonString()));
+        treatmentItem.setTreatmentServices(getTreatmentServices(treatmentItem.getTreatmentId()));
+        treatmentItem.setTreatmentService(getTreatmentServiceDetail(treatmentItem.getTreatmentServiceId()));
+    }
+
+    private TreatmentService getTreatmentServiceDetail(String treatmentItemId) {
+        TreatmentService treatmentService = Select.from(TreatmentService.class)
+                .where(Condition.prop(LocalDatabaseUtils.KEY_TREATMENT_ITEM_ID).eq(treatmentItemId)).first();
+        if (treatmentService.getFieldsRequiredJsonString() != null)
+            treatmentService.setFieldsRequired((ArrayList<String>) (Object) getObjectsListFronJson(String.class, treatmentService.getFieldsRequiredJsonString()));
+        return treatmentService;
+    }
+
+    private List<TreatmentService> getTreatmentServices(String treatmentId) {
+        Select<TreatmentService> selectQuery = Select.from(TreatmentService.class)
+                .where(Condition.prop(LocalDatabaseUtils.KEY_TREATMENT_ITEM_ID).eq(treatmentId));
+        List<TreatmentService> list = selectQuery.list();
+        if (!Util.isNullOrEmptyList(list))
+            for (TreatmentService treatmentService : list) {
+                getTreatmentServiceDetail(treatmentService);
+            }
+        return list;
+    }
+
+    private TreatmentService getTreatmentServiceDetail(TreatmentService treatmentService) {
+        if (treatmentService.getFieldsRequiredJsonString() != null)
+            treatmentService.setFieldsRequired((ArrayList<String>) (Object) getObjectsListFronJson(String.class, treatmentService.getFieldsRequiredJsonString()));
+        return treatmentService;
+    }
+
+    public void addTreatmentList(ArrayList<Treatments> treatmentArrayList) {
+        for (Treatments treatment :
+                treatmentArrayList) {
+            addTreatment(treatment);
+        }
+    }
+
+    public void addTreatment(Treatments treatment) {
+        deleteTreatmentIfAlreadyExists(LocalDatabaseUtils.KEY_UNIQUE_ID, treatment.getUniqueId());
+        treatment.setTotalDiscountJsonString(getJsonFromObject(treatment.getTotalDiscount()));
+        treatment.setWorkingHoursJson(getJsonFromObject(treatment.getTime()));
+        if (treatment.getAppointmentRequest() != null)
+            addAppointmentRequest(treatment.getAppointmentRequest());
+
+        deleteAllFrom(TreatmentItem.class, LocalDatabaseUtils.KEY_TREATMENT_ID, treatment.getUniqueId());
+        if (!Util.isNullOrEmptyList(treatment.getTreatments())) {
+            for (TreatmentItem treatmentItem :
+                    treatment.getTreatments()) {
+                addTreatmentItem(treatment.getUniqueId(), treatmentItem);
+            }
+        }
+        treatment.save();
+    }
+
+    private void deleteTreatmentIfAlreadyExists(String key, String value) {
+        Treatments.deleteAll(Treatments.class, key + "= ?", value);
+    }
+
+    private void addTreatmentItem(String treatmentId, TreatmentItem treatmentItem) {
+        treatmentItem.setTreatmentId(treatmentId);
+        treatmentItem.setDiscountJsonString(getJsonFromObject(treatmentItem.getDiscount()));
+        treatmentItem.setQuantityJsonString(getJsonFromObject(treatmentItem.getQuantity()));
+        treatmentItem.setTreatmentFieldsJsonString(getJsonFromObject(treatmentItem.getTreatmentFields()));
+        if (treatmentItem.getTreatmentService() != null)
+            addTreatmentService(treatmentItem.getTreatmentServiceId(), treatmentItem.getTreatmentService());
+        if (!Util.isNullOrEmptyList(treatmentItem.getTreatmentServices()))
+            treatmentItem.setTreatmentServices(addTreatmentServices(treatmentItem.getTreatmentServiceId(), treatmentItem.getTreatmentServices()));
+        treatmentItem.save();
+    }
+
+    private List<TreatmentService> addTreatmentServices(String treatmentServiceId, List<TreatmentService> treatmentServices) {
+//        deleteAllFrom(TreatmentService.class, LocalDatabaseUtils.KEY_UNIQUE_ID, treatmentServiceId);
+        for (TreatmentService treatmentService :
+                treatmentServices) {
+            addTreatmentService(treatmentServiceId, treatmentService);
+        }
+        return treatmentServices;
+    }
+
+    private void addTreatmentService(String treatmentServiceId, TreatmentService treatmentService) {
+        deleteAllFrom(TreatmentService.class, LocalDatabaseUtils.KEY_TREATMENT_ITEM_ID, treatmentServiceId);
+        treatmentService.setTreatmentItemId(treatmentServiceId);
+        treatmentService.setFieldsRequiredJsonString(getJsonFromObject(treatmentService.getFieldsRequired()));
+        treatmentService.save();
+    }
+
     public void addClinicalNotesList(ArrayList<ClinicalNotes> clinicalNotesList) {
         try {
             for (ClinicalNotes clinicalNote : clinicalNotesList) {
@@ -3668,5 +3822,9 @@ public class LocalDataServiceImpl {
             showErrorLocal(volleyResponseBean, errorListener);
         }
         return volleyResponseBean;
+    }
+
+    private enum FromTableType {
+        ADD_TEMPLATES, ADD_TREATMENT, ADD_PRESCRIPTION
     }
 }

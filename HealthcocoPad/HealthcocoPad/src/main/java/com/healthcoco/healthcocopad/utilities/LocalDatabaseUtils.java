@@ -15,7 +15,6 @@ import java.util.Map;
  * Created by Shreshtha on 21-01-2017.
  */
 public class LocalDatabaseUtils {
-    private static final String TAG = LocalDatabaseUtils.class.getSimpleName();
     public static final String KEY_FOREIGN_CUSTOM_HISTORY_ID = "foreign_custom_history_id";
     public static final String ID = "\"id\"";
     public static final String ID_REPLACED = "\"uniqueId\"";
@@ -29,6 +28,8 @@ public class LocalDatabaseUtils {
     public static final String KEY_PRESCRIBED_BY_LOCATION_ID = "prescribed_by_location_id";
     public static final String KEY_PRESCRIBED_BY_HOSPITAL_ID = "prescribed_by_hospital_id";
     public static final String KEY_FOREIGN_CLINICAL_NOTES_ID = "foreign_clinical_notes_id";
+    public static final String KEY_TREATMENT_ID = "treatment_id";
+    public static final String KEY_TREATMENT_ITEM_ID = "treatment_item_id";
     public static final String KEY_FOREIGN_TEMPLATE_ID = "foreign_template_id";
     public static final String KEY_FOREIGN_TABLE_KEY = "foreign_table_key";
     public static final String KEY_IS_FROM_CALENDAR_API = "is_from_calendar_api";
@@ -40,10 +41,8 @@ public class LocalDatabaseUtils {
     public static final String KEY_REFERENCE = "reference";
     public static final String KEY_REFERRED_BY = "referred_by";
     public static final String KEY_REFERRED_BY_JSON_STRING = "referred_by_json_string";
-
     public static final String KEY_PROFESSION = "profession";
     public static final String KEY_BLOOD_GROUP = "blood_group";
-
     public static final String KEY_VISIT_ID = "visit_id";
     public static final String KEY_HOSPITAL_ID = "hospital_id";
     public static final String KEY_LOCATION_ID = "location_id";
@@ -54,7 +53,6 @@ public class LocalDatabaseUtils {
     public static final String KEY_FOREIGN_DRUG_DURATION_UNIT_ID = "foreign_drug_duration_unit";
     public static final String KEY_UNIQUE_ID = "unique_id";
     public static final String KEY_DIAGNOSTIC_TEST_ID = "diagnostic_test_id";
-
     public static final String KEY_APPOINTMENT_ID = "appointment_id";
     public static final String KEY_VISITED_TIME = "visited_time";
     public static final String KEY_DISCARDED = "discarded";
@@ -67,13 +65,10 @@ public class LocalDatabaseUtils {
     public static final String KEY_FROM_DATE = "from_date";
     public static final String KEY_UPDATED_TIME = "updated_time";
     public static final String IS_DRUG_FROM_GET_DRUGS_LIST = "is_drug_from_get_drugs_list";
-
     public static final String KEY_FOREIGN_LOCATION_ID = "foreign_location_id";
     public static final String KEY_FOREIGN_TABLE_ID = "foreign_table_id";
-
     public static final String KEY_CREATED_TIME = "created_time";
     public static final String KEY_CUSTOM_UNIQUE_ID = "custom_unique_id";
-
     public static final String KEY_FOREIGN_HOSPITAL_ID = "foreign_hospital_id";
     public static final String KEY_USER_ID = "user_id";
     public static final String KEY_FOREIGN_PATIENT_ID = "foreign_patient_id";
@@ -97,19 +92,17 @@ public class LocalDatabaseUtils {
     public static final String KEY_PS = "ps";
     public static final String KEY_INDICATION_OF_USG = "indication_of_usg";
     public static final String KEY_ADVICE = "advice";
-
-    public static String KEY_FOREIGN_ROLE_ID = "foreign_role_id";
     public static final String KEY_FOREIGN_MEDICAL_HISTORY_ID = "foreign_medical_history_id";
     public static final String KEY_HISTORY_FILTER_TYPE = "history_filter_type";
     public static final String KEY_DEVICE_ID = "device_id";
     public static final String KEY_IS_PART_OF_CONSULTANT_DOCTOR = "is_part_of_consultant_doctor";
     public static final String KEY_CONSULTANT_DOCTOR_IDS_JSON_STRING = "consultant_doctor_ids_json_string";
-
-
     public static final String KEY_COMPLAINT = "complaint";
     public static final String KEY_OBSERVATION = "observation";
     public static final String KEY_INVESTIGATION = "investigation";
     public static final String KEY_DIAGNOSIS = "diagnosis";
+    private static final String TAG = LocalDatabaseUtils.class.getSimpleName();
+    public static String KEY_FOREIGN_ROLE_ID = "foreign_role_id";
 
     public static String getSearchTermEqualsIgnoreCaseQuery(String filedName, String value) {
         return filedName + " LIKE \"%" + value + "%\"" + " COLLATE NOCASE ";

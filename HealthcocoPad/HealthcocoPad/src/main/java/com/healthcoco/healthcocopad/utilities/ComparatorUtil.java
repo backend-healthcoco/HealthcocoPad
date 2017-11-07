@@ -16,6 +16,7 @@ import com.healthcoco.healthcocopad.bean.server.Reference;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.Specialities;
 import com.healthcoco.healthcocopad.bean.server.TempTemplate;
+import com.healthcoco.healthcocopad.bean.server.Treatments;
 import com.healthcoco.healthcocopad.bean.server.UserGroups;
 import com.healthcoco.healthcocopad.bean.server.VisitDetails;
 
@@ -277,4 +278,18 @@ public class ComparatorUtil {
             return 0;
         }
     };
+
+    public static Comparator<Treatments> treatmentDateComparator = new Comparator<Treatments>() {
+
+        @Override
+        public int compare(Treatments treatment1, Treatments treatment2) {
+            if (treatment1.getCreatedTime() != null && treatment2.getCreatedTime() != null) {
+                Date date1 = new Date(treatment1.getCreatedTime());
+                Date date2 = new Date(treatment2.getCreatedTime());
+                return date2.compareTo(date1);
+            }
+            return 0;
+        }
+    };
+
 }

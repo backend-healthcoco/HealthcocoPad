@@ -364,6 +364,7 @@
     <string name="templates">Templates</string>
     <string name="id_creation">ID creation</string>
     <string name="print">Print</string>
+    <string name="generate_invoice">Generate Invoice</string>
     <string name="sms">SMS</string>
     <string name="billing">Billing</string>
     <string name="ui_permission">UI Permission</string>
@@ -632,10 +633,12 @@
 
     <!--Common EMR texts-->
     <string name="rx_id"> | RxId :&#160;</string>
+    <string name="treatment_id"> | Treatment Id :&#160;</string>
     <string name="rid">RID :&#160;</string>
     <string name="cnid"> | CNID :&#160;</string>
     <string name="email_caps">EMAIL</string>
     <string name="prescribed_by">Prescribed by&#160;</string>
+    <string name="treatment_by">Treatment by&#160;</string>
     <string name="global_record">Global Record&#160;</string>
     <!--//prescription confirmation messages-->
     <string name="confirm_remove_prescription_from_history">Do you want to remove this Prescription from History?</string>
@@ -795,6 +798,7 @@
     <string name="add_diagram">Add Diagram</string>
     <string name="next_review_on">Next Review On</string>
     <string name="no_prescription_found">No Prescription Found</string>
+    <string name="no_treatment_found">No Treatment Found</string>
     <string name="please_reschedule_appointment">Please Reschedule Appointment</string>
     <string name="change_next_review_date_from_calender">Change next review date from Calender.\n Appointment ID:</string>
     <string name="edit_clinical_note">Edit Clinical Note</string>

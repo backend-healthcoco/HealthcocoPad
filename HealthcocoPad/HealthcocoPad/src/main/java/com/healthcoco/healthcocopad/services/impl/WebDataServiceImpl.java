@@ -1129,6 +1129,24 @@ public class WebDataServiceImpl implements GCMRefreshListener {
         }
     }
 
+    public void getTreatment(Class<?> class1, WebServiceType webServiceType, boolean discarded,
+                             String doctorId, String locationId, String hospitalId, String patientId, long updatedTime,
+                             Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        if (HealthCocoConstants.isNetworkOnline) {
+            String url = webServiceType.getUrl() + "?"
+                    + HealthCocoConstants.PARAM_PATIENT_ID + patientId
+                    + HealthCocoConstants.PARAM_DOCTOR_ID + doctorId
+                    + HealthCocoConstants.PARAM_LOCATION_ID + locationId
+                    + HealthCocoConstants.PARAM_HOSPITAL_ID + hospitalId
+                    + HealthCocoConstants.PARAM_DISCARDED_AMPERCENT + discarded
+                    + HealthCocoConstants.PARAM_UPDATED_TIME + updatedTime;
+            getResponse(Request.Priority.IMMEDIATE, webServiceType, class1, url, null, null, responseListener,
+                    errorListener);
+        } else {
+            showUserOffline(webServiceType, responseListener);
+        }
+    }
+
     public void getAppointmentSlotsDetails(Class<?> class1, String doctorId, String locationId, String hospitalId, long date,
                                            Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         WebServiceType webServiceType = WebServiceType.GET_APPOINTMENT_TIME_SLOTS;

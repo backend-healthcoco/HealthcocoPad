@@ -13,6 +13,7 @@ public enum WebServiceType {
     GET_PATIENTS_COUNT(0, ""),
     ADD_PRESCRIPTION(Method.POST, "prescription/prescriptionHandheld/add/"),
 
+    GET_TREATMENT(Method.GET, "treatment/"),
     GET_PRESCRIPTION(Method.GET, "prescription/"),
     GET_REPORTS_UPDATED(Method.GET, "records/"),
     GET_CLINICAL_NOTES(Method.GET, "clinicalNotes/"),

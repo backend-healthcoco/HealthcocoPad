@@ -1,29 +1,38 @@
 package com.healthcoco.healthcocopad.bean.server;
 
 import com.orm.SugarRecord;
+import com.orm.annotation.Ignore;
 import com.orm.annotation.Unique;
 
 import org.parceler.Parcel;
+
+import java.util.ArrayList;
 
 /**
  * Created by Shreshtha on 24-03-2017.
  */
 @Parcel
 public class TreatmentService extends SugarRecord {
+    protected String fieldsRequiredJsonString;
     @Unique
     private String uniqueId;
-    private String createdBy;
-    private Boolean discarded;
+    private String customUniqueId;
+    private String treatmentItemId;
     private Long createdTime;
     private Long updatedTime;
-    private String name;
-    private String speciality;
+    private String doctorId;
     private String locationId;
     private String hospitalId;
-    private String doctorId;
-    private double cost = 0.0;
+    private Boolean discarded;
+    private String createdBy;
+    private String name;
+    private String speciality;
     private String treatmentCode;
-    private long rankingCount = 0;
+    private String category;
+    private double cost = 0.0;
+    private Integer rankingCount;
+    @Ignore
+    private ArrayList<String> fieldsRequired;
 
     public String getUniqueId() {
         return uniqueId;
@@ -31,6 +40,22 @@ public class TreatmentService extends SugarRecord {
 
     public void setUniqueId(String uniqueId) {
         this.uniqueId = uniqueId;
+    }
+
+    public Long getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(Long createdTime) {
+        this.createdTime = createdTime;
+    }
+
+    public Long getUpdatedTime() {
+        return updatedTime;
+    }
+
+    public void setUpdatedTime(Long updatedTime) {
+        this.updatedTime = updatedTime;
     }
 
     public String getDoctorId() {
@@ -57,14 +82,6 @@ public class TreatmentService extends SugarRecord {
         this.hospitalId = hospitalId;
     }
 
-    public String getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
-    }
-
     public Boolean getDiscarded() {
         return discarded;
     }
@@ -73,12 +90,12 @@ public class TreatmentService extends SugarRecord {
         this.discarded = discarded;
     }
 
-    public String getSpeciality() {
-        return speciality;
+    public String getCreatedBy() {
+        return createdBy;
     }
 
-    public void setSpeciality(String speciality) {
-        this.speciality = speciality;
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
     }
 
     public String getName() {
@@ -89,6 +106,14 @@ public class TreatmentService extends SugarRecord {
         this.name = name;
     }
 
+    public String getSpeciality() {
+        return speciality;
+    }
+
+    public void setSpeciality(String speciality) {
+        this.speciality = speciality;
+    }
+
     public String getTreatmentCode() {
         return treatmentCode;
     }
@@ -97,20 +122,12 @@ public class TreatmentService extends SugarRecord {
         this.treatmentCode = treatmentCode;
     }
 
-    public Long getCreatedTime() {
-        return createdTime;
+    public String getCategory() {
+        return category;
     }
 
-    public void setCreatedTime(Long createdTime) {
-        this.createdTime = createdTime;
-    }
-
-    public Long getUpdatedTime() {
-        return updatedTime;
-    }
-
-    public void setUpdatedTime(Long updatedTime) {
-        this.updatedTime = updatedTime;
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     public double getCost() {
@@ -121,11 +138,44 @@ public class TreatmentService extends SugarRecord {
         this.cost = cost;
     }
 
-    public long getRankingCount() {
+    public Integer getRankingCount() {
         return rankingCount;
     }
 
-    public void setRankingCount(long rankingCount) {
+    public void setRankingCount(Integer rankingCount) {
         this.rankingCount = rankingCount;
+    }
+
+    public ArrayList<String> getFieldsRequired() {
+        return fieldsRequired;
+    }
+
+    public void setFieldsRequired(ArrayList<String> fieldsRequired) {
+        this.fieldsRequired = fieldsRequired;
+    }
+
+    public String getFieldsRequiredJsonString() {
+        return fieldsRequiredJsonString;
+    }
+
+    public void setFieldsRequiredJsonString(String fieldsRequiredJsonString) {
+        this.fieldsRequiredJsonString = fieldsRequiredJsonString;
+    }
+
+    public String getCustomUniqueId() {
+        return customUniqueId;
+    }
+
+    public void setCustomUniqueId(String customUniqueId) {
+        this.customUniqueId = customUniqueId;
+    }
+
+    public String getTreatmentItemId() {
+        return treatmentItemId;
+    }
+
+    public void setTreatmentItemId(String treatmentItemId) {
+        this.treatmentItemId = treatmentItemId;
+        this.customUniqueId = this.treatmentItemId + uniqueId;
     }
 }
