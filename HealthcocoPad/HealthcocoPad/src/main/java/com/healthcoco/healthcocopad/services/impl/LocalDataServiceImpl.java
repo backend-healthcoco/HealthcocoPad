@@ -2780,7 +2780,7 @@ public class LocalDataServiceImpl {
                             break;
                         case TREATMENT:
                             if (!Util.isNullOrEmptyList(details.getPatientTreatments())) {
-                                for (PatientTreatment patientTreatment :
+                                for (Treatments patientTreatment :
                                         details.getPatientTreatments()) {
                                     customUniqueId = patientTreatment.getUniqueId();
                                     addTreatment(patientTreatment);

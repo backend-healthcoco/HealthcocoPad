@@ -1,19 +1,37 @@
 package com.healthcoco.healthcocopad.bean.server;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.orm.SugarRecord;
 
-@org.parceler.Parcel
-public class DoctorExperienceDetail extends SugarRecord {
+public class DoctorExperienceDetail extends SugarRecord implements Parcelable {
+    public static final Creator<DoctorExperienceDetail> CREATOR = new Creator<DoctorExperienceDetail>() {
+        @Override
+        public DoctorExperienceDetail createFromParcel(Parcel in) {
+            return new DoctorExperienceDetail(in);
+        }
+
+        @Override
+        public DoctorExperienceDetail[] newArray(int size) {
+            return new DoctorExperienceDetail[size];
+        }
+    };
     protected String foreignUniqueId;
     private String organization;
-
     private String city;
-
     private int fromValue;
-
     private int toValue;
 
     public DoctorExperienceDetail() {
+    }
+
+    protected DoctorExperienceDetail(Parcel in) {
+        foreignUniqueId = in.readString();
+        organization = in.readString();
+        city = in.readString();
+        fromValue = in.readInt();
+        toValue = in.readInt();
     }
 
     public String getOrganization() {
@@ -54,5 +72,19 @@ public class DoctorExperienceDetail extends SugarRecord {
 
     public void setForeignUniqueId(String foreignUniqueId) {
         this.foreignUniqueId = foreignUniqueId;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(foreignUniqueId);
+        dest.writeString(organization);
+        dest.writeString(city);
+        dest.writeInt(fromValue);
+        dest.writeInt(toValue);
     }
 }

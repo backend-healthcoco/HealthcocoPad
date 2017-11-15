@@ -53,6 +53,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -65,8 +67,8 @@ import java.util.regex.Pattern;
  */
 
 public class Util {
-    private static Toast visibleToast;
     private static final String TAG = Util.class.getSimpleName();
+    private static Toast visibleToast;
 
     /**
      * Check the device to make sure it has the Google Play Services APK. If
@@ -155,6 +157,13 @@ public class Util {
             formattedString = consultationFee.getCurrency() + " " + consultationFee.getAmount();
         }
         return formattedString;
+    }
+
+    public static String formatDoubleNumber(double doubleString) {
+        NumberFormat formatter = new DecimalFormat("##.##");
+        if (doubleString != 0)
+            return formatter.format(doubleString);
+        return "0";
     }
 
     public static String getFormattedAppointmentSlot(AppointmentSlot appointmentSlot) {
@@ -817,6 +826,12 @@ public class Util {
                     resetAllVisitIds();
                 }
                 break;
+            case TREATMENT:
+                if (!Util.isNullOrBlank(HealthCocoConstants.VISIT_ID_TREATMENT)) {
+                    LogUtils.LOGD(TAG, "VisitId reseting to null" + HealthCocoConstants.VISIT_ID_TO_SEND);
+                    resetAllVisitIds();
+                }
+                break;
         }
         LogUtils.LOGD(TAG, "VisitId " + HealthCocoConstants.VISIT_ID_TO_SEND);
         return HealthCocoConstants.VISIT_ID_TO_SEND;
@@ -827,6 +842,7 @@ public class Util {
         HealthCocoConstants.VISIT_ID_CLINICAL_NOTES = null;
         HealthCocoConstants.VISIT_ID_REPORTS = null;
         HealthCocoConstants.VISIT_ID_PRESCRIPTION = null;
+        HealthCocoConstants.VISIT_ID_TREATMENT = null;
     }
 
     public static void setVisitId(VisitIdType visitIdType, String visitId) {

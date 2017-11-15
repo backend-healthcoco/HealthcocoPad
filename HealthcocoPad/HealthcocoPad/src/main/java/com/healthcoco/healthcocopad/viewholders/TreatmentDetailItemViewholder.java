@@ -8,11 +8,15 @@ import android.widget.TextView;
 
 import com.healthcoco.healthcocopad.HealthCocoApplication;
 import com.healthcoco.healthcocopad.R;
+import com.healthcoco.healthcocopad.bean.server.TreatmentFields;
 import com.healthcoco.healthcocopad.bean.server.TreatmentItem;
 import com.healthcoco.healthcocopad.bean.server.TreatmentService;
 import com.healthcoco.healthcocopad.bean.server.Treatments;
 import com.healthcoco.healthcocopad.enums.PatientTreatmentStatus;
+import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.Util;
+
+import java.util.List;
 
 /**
  * Created by shreshtha on 3/26/2017.
@@ -28,6 +32,10 @@ public class TreatmentDetailItemViewholder extends LinearLayout {
     private TextView tvStatus;
     private View divider;
     private TextView tvTotalRupees;
+    private LinearLayout layoutTreatmentToothNo;
+    private LinearLayout layoutTreatmentMaterial;
+    private TextView tvTreatmentToothNo;
+    private TextView tvTreatmentMaterial;
 
     public TreatmentDetailItemViewholder(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -57,6 +65,10 @@ public class TreatmentDetailItemViewholder extends LinearLayout {
         tvDiscount = (TextView) findViewById(R.id.tv_discount);
         tvStatus = (TextView) findViewById(R.id.tv_status);
         tvTotalRupees = (TextView) findViewById(R.id.tv_total_rupees);
+        tvTreatmentToothNo = (TextView) findViewById(R.id.tv_tooth_numbers);
+        tvTreatmentMaterial = (TextView) findViewById(R.id.tv_tooth_material);
+        layoutTreatmentToothNo = (LinearLayout) findViewById(R.id.layout_treatment_tooth_no);
+        layoutTreatmentMaterial = (LinearLayout) findViewById(R.id.layout_treatment_material);
     }
 
     public void setData(TreatmentItem item) {
@@ -108,5 +120,34 @@ public class TreatmentDetailItemViewholder extends LinearLayout {
         if (finalCost != 0) {
             tvTotalRupees.setText(Util.getIntValue(finalCost) + "");
         } else tvTotalRupees.setText(getResources().getString(R.string.no_text_dash));
+
+        if (!Util.isNullOrEmptyList(treatmentItem.getTreatmentFields())) {
+            List<TreatmentFields> treatmentFieldsList = treatmentItem.getTreatmentFields();
+            for (TreatmentFields treatmentField :
+                    treatmentFieldsList) {
+                if (treatmentField.getKey().equals(HealthCocoConstants.TAG_TOOTH_NUMBER)
+                        && !Util.isNullOrBlank(treatmentField.getValue())) {
+                    tvTreatmentToothNo.setText(treatmentField.getValue());
+                    layoutTreatmentToothNo.setVisibility(View.VISIBLE);
+                } else {
+                    layoutTreatmentToothNo.setVisibility(View.GONE);
+                    tvTreatmentToothNo.setText("");
+                }
+
+                if (treatmentField.getKey().equals(HealthCocoConstants.TAG_TOOTH_MATERIAL)
+                        && !Util.isNullOrBlank(treatmentField.getValue())) {
+                    if (treatmentField.getKey().equals(HealthCocoConstants.TAG_TOOTH_MATERIAL)) {
+                        tvTreatmentMaterial.setText(treatmentField.getValue());
+                        layoutTreatmentMaterial.setVisibility(View.VISIBLE);
+                    } else {
+                        layoutTreatmentMaterial.setVisibility(View.GONE);
+                        tvTreatmentMaterial.setText("");
+                    }
+                }
+            }
+        } else {
+            layoutTreatmentToothNo.setVisibility(View.GONE);
+            layoutTreatmentMaterial.setVisibility(View.GONE);
+        }
     }
 }

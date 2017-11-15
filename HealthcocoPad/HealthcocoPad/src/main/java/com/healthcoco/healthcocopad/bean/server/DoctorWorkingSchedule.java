@@ -1,5 +1,8 @@
 package com.healthcoco.healthcocopad.bean.server;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.healthcoco.healthcocopad.bean.WorkingHours;
 import com.healthcoco.healthcocopad.enums.WeekDayNameType;
 import com.orm.SugarRecord;
@@ -13,15 +16,14 @@ import java.util.List;
  */
 @org.parceler.Parcel
 public class DoctorWorkingSchedule extends SugarRecord {
-    private WeekDayNameType workingDay;
-
-    @Ignore
-    private List<WorkingHours> workingHours;
-   protected String workingHoursJson;
+    protected String workingHoursJson;
     protected String locationId;
     protected String doctorId;
     @Unique
     protected String uniqueId;
+    private WeekDayNameType workingDay;
+    @Ignore
+    private List<WorkingHours> workingHours;
 
     public DoctorWorkingSchedule() {
     }

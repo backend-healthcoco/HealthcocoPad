@@ -17,12 +17,14 @@ import android.widget.TextView;
 
 import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
+import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.adapter.TreatmentListAdapter;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.Treatments;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
+import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.HistoryFilterType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.LocalTabelType;
@@ -31,12 +33,15 @@ import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.CommonEMRItemClickListener;
 import com.healthcoco.healthcocopad.listeners.LoadMorePageListener;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
+import com.healthcoco.healthcocopad.listeners.TreatmentListItemClickListeners;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.ComparatorUtil;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.healthcoco.healthcocopad.views.ListViewLoadMore;
+
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -47,8 +52,9 @@ import java.util.List;
  * Created by Shreshtha on 07-03-2017.
  */
 public class PatientTreatmentDetailFragment extends HealthCocoFragment implements SwipeRefreshLayout.OnRefreshListener,
-        View.OnClickListener, LocalDoInBackgroundListenerOptimised, CommonEMRItemClickListener, LoadMorePageListener {
+        View.OnClickListener, LocalDoInBackgroundListenerOptimised, CommonEMRItemClickListener, LoadMorePageListener, TreatmentListItemClickListeners {
 
+    public static final String TAG_TREATMENT_DATA = "treatment_data";
     public static final String INTENT_GET_TREATMENT_LIST = "com.healthcoco.TREATMENT_LIST";
     public static final String INTENT_GET_TREATMENT_LIST_LOCAL = "com.healthcoco.TREATMENT_LIST_LOCAL";
     public static final String INTENT_GET_TREATMENT_USING_TREATMENT_ID = "com.healthcoco.TREATMENT_USING_TREATMENT_ID";
@@ -107,7 +113,7 @@ public class PatientTreatmentDetailFragment extends HealthCocoFragment implement
     }
 
     private void initAdapter() {
-        adapter = new TreatmentListAdapter(mActivity, this);
+        adapter = new TreatmentListAdapter(mActivity, this, this);
         lvTreatment.setAdapter(adapter);
     }
 
@@ -155,7 +161,7 @@ public class PatientTreatmentDetailFragment extends HealthCocoFragment implement
     public void onClick(View v) {
         switch (v.getId()) {
 
-            case R.id.fl_bt_add_rx:
+            case R.id.fl_bt_add_treatment:
                 openAddTreatmentFragment();
                 break;
             default:
@@ -184,7 +190,10 @@ public class PatientTreatmentDetailFragment extends HealthCocoFragment implement
     }
 
     private void openAddTreatmentFragment() {
-
+        Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
+        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.ADD_VISITS.ordinal());
+        intent.putExtra(CommonOpenUpPatientDetailFragment.TAG_PATIENT_DETAIL_TAB_TYPE, detailTabType);
+        startActivityForResult(intent, REQUEST_CODE_TREATMENT_LIST);
     }
 
     @Override
@@ -314,6 +323,21 @@ public class PatientTreatmentDetailFragment extends HealthCocoFragment implement
     @Override
     public RegisteredPatientDetailsUpdated getSelectedPatient() {
         return selectedPatient;
+    }
+
+    @Override
+    public void onInvoiceClicked(Treatments treatment) {
+
+    }
+
+    @Override
+    public void onAddTreatmentClicked(Treatments treatment) {
+        Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
+        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.ADD_VISITS.ordinal());
+        if (treatment != null)
+            intent.putExtra(TAG_TREATMENT_DATA, Parcels.wrap(treatment));
+        intent.putExtra(CommonOpenUpPatientDetailFragment.TAG_PATIENT_DETAIL_TAB_TYPE, detailTabType);
+        startActivityForResult(intent, HealthCocoConstants.REQUEST_CODE_TREATMENT);
     }
 
     @Override

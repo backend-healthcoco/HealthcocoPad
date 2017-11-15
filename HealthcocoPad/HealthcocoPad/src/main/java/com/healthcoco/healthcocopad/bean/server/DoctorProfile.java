@@ -1,6 +1,8 @@
 package com.healthcoco.healthcocopad.bean.server;
 
 import android.app.Activity;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.DOB;
@@ -16,66 +18,51 @@ import java.util.Locale;
 @org.parceler.Parcel
 public class DoctorProfile extends SugarRecord {
 
+    protected String dobJsonString;
+    protected String additionalNumbersJsonString;
+    protected String otherEmailAddressesJsonString;
+    protected String profileImagePath;
+    protected String coverImagePath;
     private String uniqueId;
     @Unique
     private String doctorId;
-
     private String userId;
-
     private String title;
-
     private String firstName;
-
     private String emailAddress;
-
     private String mobileNumber;
-
     private String gender;
-
     private String imageUrl;
-
     private String thumbnailUrl;
     @Ignore
     private DOB dob;
-    protected String dobJsonString;
     private String coverImageUrl;
-
     private String coverThumbnailImageUrl;
     private String colorCode;
     //numbers saved in AdditinalNumbers Table reference to doctorId
     @Ignore
     private List<String> additionalNumbers;
-    protected String additionalNumbersJsonString;
-
     //email addresses saved in EmailAddresses Table reference to doctorId
     @Ignore
     private List<String> otherEmailAddresses;
-    protected String otherEmailAddressesJsonString;
     @Ignore
     private DoctorExperience experience;
     private String experienceJsonString;
     @Ignore
     private List<Education> education;
-
     @Ignore
     private List<String> specialities;
     @Ignore
     private List<Achievement> achievements;
-
     private String professionalStatement;
     @Ignore
     private List<DoctorRegistrationDetail> registrationDetails;
-
     @Ignore
     private List<DoctorExperienceDetail> experienceDetails;
     @Ignore
     private List<String> professionalMemberships;
-
     @Ignore
     private List<DoctorClinicProfile> clinicProfile;
-
-    protected String profileImagePath;
-    protected String coverImagePath;
 
     public DoctorProfile() {
     }

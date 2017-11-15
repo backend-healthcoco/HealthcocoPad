@@ -77,6 +77,7 @@ import static android.content.Context.INPUT_METHOD_SERVICE;
 public abstract class HealthCocoFragment extends Fragment implements GsonRequest.ErrorListener, Response.Listener<VolleyResponseBean> {
     protected static final String TAG_USER = "user";
     protected static String SHOW_LOADING = "showLoading";
+    public OtpVerification otpVerification;
     protected View view;
     protected HealthCocoActivity mActivity;
     protected FragmentManager mFragmentManager;
@@ -86,7 +87,6 @@ public abstract class HealthCocoFragment extends Fragment implements GsonRequest
     private User user;
     private RegisteredPatientDetailsUpdated selectedPatient;
     private LinearLayout btGlobalRecordAccess;
-    public OtpVerification otpVerification;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         TAG = getClass().getSimpleName();
@@ -584,4 +584,12 @@ public abstract class HealthCocoFragment extends Fragment implements GsonRequest
             DownloadImageFromUrlUtil.loadImageWithInitialAlphabet(mActivity, patientProfileScreenType, selectedPatient, progressLoading, ivContactProfile, tvInitialAlphabet);
         }
     }
+
+    public void initPopupWindows(View anchorView, PopupWindowType
+            popupWindowType, List<Object> list, PopupWindowListener popupWindowListener) {
+        HealthcocoPopupWindow healthcocoPopupWindow = new HealthcocoPopupWindow(mActivity, anchorView, popupWindowType, list, popupWindowListener);
+        healthcocoPopupWindow.setOutsideTouchable(true);
+        healthcocoPopupWindow.setContentView(healthcocoPopupWindow.getPopupView());
+    }
+
 }

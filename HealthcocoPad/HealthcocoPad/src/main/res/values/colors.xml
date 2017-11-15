@@ -7,10 +7,12 @@
     <color name="blue_action_bar">#0077b5</color>
     <color name="blue_primary_dark">#016EA7</color>
     <color name="white">#ffffff</color>
+    <color name="white_off">#fafafa</color>
     <color name="white_translucent">#80ffffff</color>
     <color name="grey_light_text">#9C9C9C</color>
     <color name="grey_dark_text">#656565</color>
     <color name="black_greyish">#282828</color>
+    <color name="blue_light">#abdaf8</color>
     <color name="black_translucent">#80000000</color>
     <color name="black_translucent_more">#60000000</color>
     <color name="grey_translucent">#404C4C4C</color>
@@ -28,6 +30,7 @@
     <color name="red_error">#F50434</color>
     <color name="red_translucent">#80F50434</color>
     <color name="blue_translucent">#700077b5</color>
+    <color name="gray_more_translucent">#10E8E8E8</color>
     <color name="grey_darker">#323232</color>
     <color name="grey_item_border">#C5C5CD</color>
     <color name="grey_icons">#9C9C9C</color>

@@ -190,6 +190,7 @@
     <string name="settings">Settings</string>
     <string name="new_group">New Group</string>
     <string name="new_direction">New Direction</string>
+    <string name="register">Register</string>
     <string name="new_disease">New Disease</string>
     <string name="help_us_to_improve">Help Us to Improve</string>
     <string name="new_frequency">New Dosage</string>
@@ -383,6 +384,7 @@
     <string name="clinic_image_uploaded_successfully">Clinic image uploaded successfully</string>
     <string name="device_doesnt_support_camera">Device doesn\'t support Camera</string>
     <string name="yes">Yes</string>
+    <string name="confirm_remove_invoice_item">Are you sure you want to remove this item?</string>
     <string name="no">No</string>
     <string name="speciality_already_added">Speciality already Added</string>
     <string name="rb_male">&#160;Male</string>
@@ -545,6 +547,7 @@
     <string name="bmp">bmp</string>
     <string name="kg">kg</string>
     <string name="percentage">%</string>
+    <string name="inr">INR</string>
     <string name="systolic_down">sys</string>
     <string name="diastolic_up">diastolic</string>
     <string name="fahrenheit">\u2109</string>
@@ -625,11 +628,15 @@
     <string name="instruction">Instruction</string>
     <string name="treatment_name">Treatment Name&#160;&#160;</string>
     <string name="quantity_per_day">Qty/day</string>
-    <string name="cost">Cost</string>
+    <string name="quantity">Quantity</string>
+    <string name="cost">Cost&#160;(\u20B9)&#160;</string>
     <string name="discount">Discount</string>
     <string name="status">Status</string>
     <string name="discarded">Discarded</string>
     <string name="treatment">Treatment</string>
+    <string name="new_treatment_plan">New Treatment Plan</string>
+    <string name="toggle_to_adult_chart">Toggle To Adult Chart</string>
+    <string name="toggle_to_baby_chart">Toggle To Baby Chart</string>
 
     <!--Common EMR texts-->
     <string name="rx_id"> | RxId :&#160;</string>
@@ -799,6 +806,8 @@
     <string name="next_review_on">Next Review On</string>
     <string name="no_prescription_found">No Prescription Found</string>
     <string name="no_treatment_found">No Treatment Found</string>
+    <string name="no_treatment_added">No Treatment Added</string>
+    <string name="alert_add_treatment">Blank treatment cannot be saved.Add Treatments</string>
     <string name="please_reschedule_appointment">Please Reschedule Appointment</string>
     <string name="change_next_review_date_from_calender">Change next review date from Calender.\n Appointment ID:</string>
     <string name="edit_clinical_note">Edit Clinical Note</string>
@@ -816,5 +825,13 @@
     <string name="file">File</string>
     <string name="no_app_found">No App Found</string>
     <string name="message_no_app_found_to_open_file">You don\'t have an app that can open this file (%s). Try searching Google Play for one that can.</string>
-
+    <string name="tooth_number">Tooth Number</string>
+    <string name="select_tooth">Select Tooth</string>
+    <string name="tooth_no_with_colon">Tooth No:&#160;</string>
+    <string name="material_with_colon">Material:&#160;</string>
+    <string name="material">Material</string>
+    <string name="videos">Videos</string>
+    <string name="subscription">Subscription</string>
+    <string name="search_treatment">Search Treatment</string>
+    <string name="featured">Featured</string>
 </resources>

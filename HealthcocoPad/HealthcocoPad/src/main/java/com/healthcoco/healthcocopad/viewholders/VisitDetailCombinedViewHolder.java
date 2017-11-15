@@ -12,6 +12,7 @@ import com.healthcoco.healthcocopad.bean.server.ClinicalNotes;
 import com.healthcoco.healthcocopad.bean.server.PatientTreatment;
 import com.healthcoco.healthcocopad.bean.server.Prescription;
 import com.healthcoco.healthcocopad.bean.server.Records;
+import com.healthcoco.healthcocopad.bean.server.Treatments;
 import com.healthcoco.healthcocopad.bean.server.VisitDetails;
 import com.healthcoco.healthcocopad.enums.VisitedForType;
 import com.healthcoco.healthcocopad.listeners.VisitDetailCombinedItemListener;
@@ -27,6 +28,7 @@ import java.util.List;
  */
 public class VisitDetailCombinedViewHolder extends HealthCocoViewHolder implements View.OnClickListener {
 
+    private static final String DATE_FORMAT_USED_IN_THIS_SCREEN = "EEE, dd MMM yyyy";
     private VisitDetails visitDetail;
     private LinearLayout btPrint;
     private LinearLayout btSms;
@@ -48,7 +50,6 @@ public class VisitDetailCombinedViewHolder extends HealthCocoViewHolder implemen
     private LinearLayout layoutDiscarded;
     private TextView textViewNextReviewDate;
     private LinearLayout layoutNextReviewDetail;
-    private static final String DATE_FORMAT_USED_IN_THIS_SCREEN = "EEE, dd MMM yyyy";
 
     public VisitDetailCombinedViewHolder(HealthCocoActivity mActivity, VisitDetailCombinedItemListener listItemClickListener) {
         super(mActivity);
@@ -126,7 +127,7 @@ public class VisitDetailCombinedViewHolder extends HealthCocoViewHolder implemen
 
     private void initTreatmentsView(View contentView) {
         containerTreatment = (LinearLayout) contentView.findViewById(R.id.container_treatments);
-        TreatmentListItemViewHolder treatmentListItemViewHolder = new TreatmentListItemViewHolder(mActivity, listItemClickListener, false);
+        TreatmentListItemViewHolder treatmentListItemViewHolder = new TreatmentListItemViewHolder(mActivity, listItemClickListener, false, null);
         containerTreatment.addView(treatmentListItemViewHolder.getContentView());
         containerTreatment.setTag(treatmentListItemViewHolder);
     }
@@ -170,8 +171,8 @@ public class VisitDetailCombinedViewHolder extends HealthCocoViewHolder implemen
         if (!Util.isNullOrEmptyList(visitDetail.getPatientTreatments())) {
             containerTreatment.setVisibility(View.VISIBLE);
             setButtonVisible(VisitedForType.TREATMENT);
-            List<PatientTreatment> patientTreatmentList = visitDetail.getPatientTreatments();
-            for (PatientTreatment treatment : patientTreatmentList) {
+            List<Treatments> patientTreatmentList = visitDetail.getPatientTreatments();
+            for (Treatments treatment : patientTreatmentList) {
                 TreatmentListItemViewHolder treatmentListItemViewHolder = (TreatmentListItemViewHolder) containerPrescription.getTag();
                 treatmentListItemViewHolder.setData(treatment);
                 treatmentListItemViewHolder.applyData();

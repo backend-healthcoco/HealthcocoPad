@@ -24,7 +24,7 @@ import com.healthcoco.healthcocopad.enums.AppointmentSlotsType;
 import com.healthcoco.healthcocopad.enums.AutoCompleteTextViewType;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.CurrencyType;
-import com.healthcoco.healthcocopad.enums.DoctorFacilityType;
+import com.healthcoco.healthcocopad.enums.DoctorFacility;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
@@ -103,9 +103,9 @@ public class AddEditAppointmentDetailDialogFragment extends HealthCocoDialogFrag
         rbIBS = (RadioButton) view.findViewById(R.id.rb_ibs);
         rbBOOK = (RadioButton) view.findViewById(R.id.rb_book);
         rbCALL = (RadioButton) view.findViewById(R.id.rb_call);
-        rbIBS.setTag(DoctorFacilityType.IBS);
-        rbBOOK.setTag(DoctorFacilityType.BOOK);
-        rbCALL.setTag(DoctorFacilityType.CALL);
+        rbIBS.setTag(DoctorFacility.IBS);
+        rbBOOK.setTag(DoctorFacility.BOOK);
+        rbCALL.setTag(DoctorFacility.CALL);
         initSaveCancelButton(this);
         initActionbarTitle(getResources().getString(R.string.appointment_details));
     }
@@ -218,8 +218,8 @@ public class AddEditAppointmentDetailDialogFragment extends HealthCocoDialogFrag
         View checkedRadioButton = view.findViewById(rgFacilityType.getCheckedRadioButtonId());
         if (checkedRadioButton != null) {
             Object tag = checkedRadioButton.getTag();
-            if (tag != null && tag instanceof DoctorFacilityType) {
-                doctorClinicProfile.setFacility((DoctorFacilityType) tag);
+            if (tag != null && tag instanceof DoctorFacility) {
+                doctorClinicProfile.setFacility((DoctorFacility) tag);
             }
         }
         WebDataServiceImpl.getInstance(mApp).addUpdateGeneralInfo(DoctorClinicProfile.class, doctorClinicProfile, this, this);

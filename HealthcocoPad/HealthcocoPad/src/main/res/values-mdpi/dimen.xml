@@ -9,6 +9,8 @@
     <dimen name="widget_delete_icon_size">50px</dimen>
     <dimen name="widget_space_icon_size">50px</dimen>
     <dimen name="widget_enter_icon_size">50px</dimen>
+    <dimen name="treatment_tooth_height">60px</dimen>
+    <dimen name="treatment_tooth_width">35px</dimen>
 
     <dimen name="visits_icon_notes">60px</dimen>
     <dimen name="visits_icon_drugs">60px</dimen>

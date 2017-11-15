@@ -83,11 +83,14 @@ import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.DefaultSyncServiceType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.LocalTabelType;
+import com.healthcoco.healthcocopad.enums.PopupWindowType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.fragments.DoctorProfileFragment;
 import com.healthcoco.healthcocopad.fragments.InitialSyncFragment;
 import com.healthcoco.healthcocopad.fragments.MenuDrawerFragment;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
+import com.healthcoco.healthcocopad.popupwindow.HealthcocoPopupWindow;
+import com.healthcoco.healthcocopad.popupwindow.PopupWindowListener;
 import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
@@ -101,6 +104,7 @@ import org.parceler.Parcels;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import static com.healthcoco.healthcocopad.activities.HomeActivity.REQUEST_PERMISSIONS;
 
@@ -110,12 +114,12 @@ import static com.healthcoco.healthcocopad.activities.HomeActivity.REQUEST_PERMI
 
 public class HealthCocoActivity extends AppCompatActivity implements GsonRequest.ErrorListener, LocalDoInBackgroundListenerOptimised, Response.Listener<VolleyResponseBean> {
     protected static final String TAG = HealthCocoActivity.class.getSimpleName();
+    private static final long DEFAULT_LOADING_TIME = 20000;
     public static long GCM_WAIT_TIME = 2000;
     protected HealthCocoApplication mApp;
     private Dialog alertDialog;
     private Handler mHandler;
     private Runnable runnable;
-    private static final long DEFAULT_LOADING_TIME = 20000;
     private ArrayList<DefaultSyncServiceType> defaultWebServicesList = new ArrayList<>();
     private boolean isInitialLoading;
     private User user;
@@ -1410,4 +1414,12 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
         InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
         imm.showSoftInput(getCurrentFocus(), InputMethodManager.SHOW_IMPLICIT);
     }
+
+    public void initPopupWindows(View anchorView, PopupWindowType
+            popupWindowType, List<Object> list, PopupWindowListener popupWindowListener) {
+        HealthcocoPopupWindow healthcocoPopupWindow = new HealthcocoPopupWindow(this, anchorView, popupWindowType, list, popupWindowListener);
+        healthcocoPopupWindow.setOutsideTouchable(true);
+        healthcocoPopupWindow.setContentView(healthcocoPopupWindow.getPopupView());
+    }
+
 }

@@ -17,6 +17,7 @@ import com.healthcoco.healthcocopad.bean.server.UnitValue;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.custom.OptionsPopupWindow;
 import com.healthcoco.healthcocopad.listeners.CommonEMRItemClickListener;
+import com.healthcoco.healthcocopad.listeners.TreatmentListItemClickListeners;
 import com.healthcoco.healthcocopad.listeners.VisitDetailCombinedItemListener;
 import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
 import com.healthcoco.healthcocopad.utilities.Util;
@@ -50,18 +51,21 @@ public class TreatmentListItemViewHolder extends HealthCocoViewHolder implements
     private TextView tvGrandTotal;
     private TextView tvTotalDiscount;
     private TextView tvTotalCost;
+    private TreatmentListItemClickListeners listItemClickListeners;
 
     public TreatmentListItemViewHolder(HealthCocoActivity mActivity,
-                                       Object listenerObject, boolean isInTreatmentsList) {
+                                       Object listenerObject, boolean isInTreatmentsList, TreatmentListItemClickListeners listItemClickListeners) {
         super(mActivity);
         if (!isInTreatmentsList) {
             this.detailCombinedItemListener = (VisitDetailCombinedItemListener) listenerObject;
             this.user = detailCombinedItemListener.getUser();
             this.selectedPatient = detailCombinedItemListener.getSelectedPatient();
+            this.listItemClickListeners = listItemClickListeners;
         } else {
             this.commonEmrClickListener = (CommonEMRItemClickListener) listenerObject;
             this.user = commonEmrClickListener.getUser();
             this.selectedPatient = commonEmrClickListener.getSelectedPatient();
+            this.listItemClickListeners = listItemClickListeners;
         }
     }
 
@@ -192,6 +196,7 @@ public class TreatmentListItemViewHolder extends HealthCocoViewHolder implements
             case R.id.bt_prescription:
                 break;
             case R.id.bt_edit:
+                listItemClickListeners.onAddTreatmentClicked(treatments);
                 break;
             case R.id.bt_print:
                 break;

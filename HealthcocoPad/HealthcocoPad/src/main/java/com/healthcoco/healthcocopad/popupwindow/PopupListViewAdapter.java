@@ -9,7 +9,9 @@ import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.server.AvailableTimeSlots;
 import com.healthcoco.healthcocopad.dialogFragment.BookAppointmentDialogFragment;
+import com.healthcoco.healthcocopad.enums.PatientTreatmentStatus;
 import com.healthcoco.healthcocopad.enums.PopupWindowType;
+import com.healthcoco.healthcocopad.enums.UnitType;
 import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
 import com.healthcoco.healthcocopad.utilities.Util;
 
@@ -55,27 +57,42 @@ public class PopupListViewAdapter extends BaseAdapter {
         if (convertView == null) {
             convertView = mActivity.getLayoutInflater().inflate(dropDownLayoutId, null);
         }
-        TextView tvText = (TextView) convertView.findViewById(R.id.tv_text);
-        tvBullet = (TextView) convertView.findViewById(R.id.tv_bullet);
-        String text = getText(getItem(position));
+        TextView textView;
+        if (convertView instanceof TextView)
+            textView = (TextView) convertView;
+        else
+            textView = (TextView) convertView.findViewById(R.id.tv_text);
+        String text = getText(mActivity, getItem(position));
         if (!Util.isNullOrBlank(text)) {
-            tvText.setText(text);
+            textView.setText(text);
             convertView.setTag(getItem(position));
         }
         return convertView;
     }
 
-    private String getText(Object object) {
+    private String getText(HealthCocoActivity context, Object object) {
         String text = "";
         switch (popupWindowType) {
+            case DISCOUNT_TYPE:
+                if (object instanceof UnitType) {
+                    UnitType unitType = (UnitType) object;
+                    text = context.getResources().getString(unitType.getSymbolId());
+                }
+                break;
+            case STATUS_TYPE:
+                if (object instanceof PatientTreatmentStatus) {
+                    PatientTreatmentStatus treatmentStatus = (PatientTreatmentStatus) object;
+                    text = treatmentStatus.getTreamentStatus();
+                }
+                break;
             case TIME_SLOTS:
                 if (object instanceof AvailableTimeSlots) {
                     AvailableTimeSlots availableTimeSlots = (AvailableTimeSlots) object;
                     text = DateTimeUtil.convertFormattedDate(DateTimeUtil.TIME_FORMAT_24_HOUR, BookAppointmentDialogFragment.TIME_SLOT_FORMAT_USED_IN_THIS_SCREEN, availableTimeSlots.getTime());
-                        if (availableTimeSlots.getIsAvailable() != null && availableTimeSlots.getIsAvailable()) {
-                            tvBullet.setSelected(false);
-                        } else
-                            tvBullet.setSelected(true);
+                    if (availableTimeSlots.getIsAvailable() != null && availableTimeSlots.getIsAvailable()) {
+                        tvBullet.setSelected(false);
+                    } else
+                        tvBullet.setSelected(true);
                 }
                 break;
             default:

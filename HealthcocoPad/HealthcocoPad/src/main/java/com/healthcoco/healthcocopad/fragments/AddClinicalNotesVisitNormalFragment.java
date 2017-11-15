@@ -87,8 +87,8 @@ public class AddClinicalNotesVisitNormalFragment extends HealthCocoFragment impl
         LocalDoInBackgroundListenerOptimised, View.OnTouchListener,
         View.OnClickListener, TextWatcher, HealthcocoTextWatcherListener {
     public static final String INTENT_ON_SUGGESTION_ITEM_CLICK = "com.healthcoco.healthcocopad.fragments.AddClinicalNotesVisitNormalFragment.ON_SUGGESTION_ITEM_CLICK";
-    private User user;
     public static final String TAG_CLINICAL_NOTE_ID = "clinicalNoteId";
+    private User user;
     private LinearLayout containerSuggestionsList;
     private RegisteredPatientDetailsUpdated selectedPatient;
     private AddVisitSuggestionsFragment addVisitSuggestionsFragment;
@@ -101,6 +101,19 @@ public class AddClinicalNotesVisitNormalFragment extends HealthCocoFragment impl
     private List<ClinicalNotes> clinicalNotesList;
     private boolean isFromClone;
     private boolean isOnItemClick = false;
+    BroadcastReceiver onSuggestionItemClickReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, final Intent intent) {
+            if (intent != null && intent.hasExtra(TAG_SUGGESTIONS_TYPE) && intent.hasExtra(TAG_SELECTED_SUGGESTION_OBJECT)) {
+                int ordinal = intent.getIntExtra(TAG_SUGGESTIONS_TYPE, -1);
+                SuggestionType suggestionType = SuggestionType.values()[ordinal];
+                Object selectedSuggestionObject = Parcels.unwrap(intent.getParcelableExtra(TAG_SELECTED_SUGGESTION_OBJECT));
+                if (suggestionType != null && selectedSuggestionObject != null) {
+                    handleSelectedSugestionObject(suggestionType, selectedSuggestionObject);
+                }
+            }
+        }
+    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -136,7 +149,7 @@ public class AddClinicalNotesVisitNormalFragment extends HealthCocoFragment impl
     }
 
     private void initData() {
-        initUiPermissions(user.getUiPermissions());
+//        initUiPermissions(user.getUiPermissions());
         if (!Util.isNullOrEmptyList(clinicalNotesList)) {
             for (ClinicalNotes clinicalNotes :
                     clinicalNotesList) {
@@ -508,20 +521,6 @@ public class AddClinicalNotesVisitNormalFragment extends HealthCocoFragment impl
         super.onDestroy();
         LocalBroadcastManager.getInstance(mActivity).unregisterReceiver(onSuggestionItemClickReceiver);
     }
-
-    BroadcastReceiver onSuggestionItemClickReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, final Intent intent) {
-            if (intent != null && intent.hasExtra(TAG_SUGGESTIONS_TYPE) && intent.hasExtra(TAG_SELECTED_SUGGESTION_OBJECT)) {
-                int ordinal = intent.getIntExtra(TAG_SUGGESTIONS_TYPE, -1);
-                SuggestionType suggestionType = SuggestionType.values()[ordinal];
-                Object selectedSuggestionObject = Parcels.unwrap(intent.getParcelableExtra(TAG_SELECTED_SUGGESTION_OBJECT));
-                if (suggestionType != null && selectedSuggestionObject != null) {
-                    handleSelectedSugestionObject(suggestionType, selectedSuggestionObject);
-                }
-            }
-        }
-    };
 
     private void handleSelectedSugestionObject(SuggestionType suggestionType, Object selectedSuggestionObject) {
         String text = "";

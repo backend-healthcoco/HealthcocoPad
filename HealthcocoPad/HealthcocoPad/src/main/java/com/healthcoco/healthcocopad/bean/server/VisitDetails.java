@@ -13,6 +13,7 @@ import java.util.List;
  * Created by Shreshtha on 07-03-2017.
  */
 public class VisitDetails extends SugarRecord {
+    protected Long updatedTime;
     @Unique
     private String uniqueId;
     private String doctorId;
@@ -26,12 +27,11 @@ public class VisitDetails extends SugarRecord {
     @Ignore
     private List<Records> records;
     @Ignore
-    private List<PatientTreatment> patientTreatments;
+    private List<Treatments> patientTreatments;
     @Ignore
     private List<VisitedForType> visitedFor;
     private Long visitedTime;
     private Long createdTime;
-    protected Long updatedTime;
     @Ignore
     private ClinicalNoteToSend clinicalNote;
     @Ignore
@@ -106,11 +106,11 @@ public class VisitDetails extends SugarRecord {
         this.clinicalNotes = clinicalNotes;
     }
 
-    public List<PatientTreatment> getPatientTreatments() {
+    public List<Treatments> getPatientTreatments() {
         return patientTreatments;
     }
 
-    public void setPatientTreatments(List<PatientTreatment> patientTreatments) {
+    public void setPatientTreatments(List<Treatments> patientTreatments) {
         this.patientTreatments = patientTreatments;
     }
 

@@ -19,7 +19,7 @@
         <android.support.design.widget.CoordinatorLayout
             android:id="@+id/main_content"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@color/grey_background"
             android:clickable="true">
@@ -96,7 +96,7 @@
                     android:id="@+id/view_pager"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="1" />
+                    android:layout_weight="5" />
             </LinearLayout>
         </android.support.design.widget.CoordinatorLayout>
 
@@ -104,20 +104,22 @@
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
             android:layout_gravity="bottom"
-            android:background="@color/grey_item_border" />
+            android:background="@drawable/bottom_tab_shadow" />
 
         <HorizontalScrollView
             android:id="@+id/h_Scroll_View"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:fillViewport="true"
-            android:scrollbars="none">
+            android:scrollbars="none"
+            android:showDividers="none">
 
             <TabWidget
                 android:id="@android:id/tabs"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fillViewport="true"></TabWidget>
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fillViewport="true" />
 
         </HorizontalScrollView>
     </LinearLayout>

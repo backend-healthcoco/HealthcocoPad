@@ -12,6 +12,8 @@
     <dimen name="widget_delete_icon_size">60px</dimen>
     <dimen name="widget_space_icon_size">60px</dimen>
     <dimen name="widget_enter_icon_size">60px</dimen>
+    <dimen name="treatment_tooth_height">85px</dimen>
+    <dimen name="treatment_tooth_width">48px</dimen>
 
 
     <dimen name="visits_icon_notes">81px</dimen>

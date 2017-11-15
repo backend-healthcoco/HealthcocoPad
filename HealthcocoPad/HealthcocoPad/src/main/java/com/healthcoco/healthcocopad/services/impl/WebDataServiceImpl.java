@@ -34,6 +34,7 @@ import com.healthcoco.healthcocopad.bean.request.PrescriptionRequest;
 import com.healthcoco.healthcocopad.bean.request.ProfessionalMembershipRequest;
 import com.healthcoco.healthcocopad.bean.request.ProfessionalStatementRequest;
 import com.healthcoco.healthcocopad.bean.request.RegisterNewPatientRequest;
+import com.healthcoco.healthcocopad.bean.request.TreatmentRequest;
 import com.healthcoco.healthcocopad.bean.request.UserPermissionsRequest;
 import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
 import com.healthcoco.healthcocopad.bean.server.Diagram;
@@ -1142,6 +1143,47 @@ public class WebDataServiceImpl implements GCMRefreshListener {
                     + HealthCocoConstants.PARAM_UPDATED_TIME + updatedTime;
             getResponse(Request.Priority.IMMEDIATE, webServiceType, class1, url, null, null, responseListener,
                     errorListener);
+        } else {
+            showUserOffline(webServiceType, responseListener);
+        }
+    }
+
+    public void addTreatment(Class<?> class1, TreatmentRequest treatment,
+                             Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        WebServiceType webServiceType = WebServiceType.ADD_TREATMENT;
+        checkNetworkStatus(mApp);
+        if (HealthCocoConstants.isNetworkOnline) {
+            String url = webServiceType.getUrl();
+            getResponse(webServiceType, class1, url, treatment, null, responseListener,
+                    errorListener);
+        } else {
+            showUserOffline(webServiceType, responseListener);
+        }
+    }
+
+
+    public void getTreatmentsListSolr(Class<?> class1, WebServiceType webServiceType, int pageNum, int size, String doctorId, String hospitalId, String locationId, String searchTerm, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        checkNetworkStatus(mApp.getApplicationContext());
+        String url = null;
+        if (HealthCocoConstants.isNetworkOnline) {
+            switch (webServiceType) {
+                case GET_TREATMENT_LIST_BOTH_SOLR:
+                    url = webServiceType.getUrl()
+                            + HealthCocoConstants.PARAM_DISCARDED_FALSE
+                            + HealthCocoConstants.PARAM_PAGE + pageNum
+                            + HealthCocoConstants.PARAM_SIZE + size
+
+                            + HealthCocoConstants.PARAM_DOCTOR_ID + doctorId
+                            + HealthCocoConstants.PARAM_HOSPITAL_ID + hospitalId
+                            + HealthCocoConstants.PARAM_LOCATION_ID + locationId
+                            + HealthCocoConstants.PARAM_SEARCH_TERM + searchTerm;
+                    break;
+                case GET_TREATMENT_LIST_FEATURED:
+                    url = webServiceType.getUrl()
+                            + HealthCocoConstants.PARAM_SPECIALITY + "Dentist";
+                    break;
+            }
+            getResponse(webServiceType, class1, url, null, null, responseListener, errorListener);
         } else {
             showUserOffline(webServiceType, responseListener);
         }

@@ -32,6 +32,7 @@ import com.healthcoco.healthcocopad.bean.server.ClinicalNotes;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.Prescription;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
+import com.healthcoco.healthcocopad.bean.server.Treatments;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.bean.server.VisitDetails;
 import com.healthcoco.healthcocopad.custom.DummyTabFactory;
@@ -78,6 +79,7 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
     private RegisteredPatientDetailsUpdated selectedPatient;
     private AddEditNormalVisitPrescriptionFragment addEditNormalVisitPrescriptionFragment;
     private AddClinicalNotesVisitNormalFragment addClinicalNotesVisitNormalFragment;
+    private AddNewTreatmentFragment addNewTreatmentFragment;
     private String visitId;
     private FloatingActionButton flBtSwap;
     private int currentPage = 0;
@@ -169,10 +171,17 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
             bundle.putParcelable(AddEditNormalVisitPrescriptionFragment.TAG_PRESCRIPTION_DATA, Parcels.wrap(visitDetails.getPrescriptions()));
             addEditNormalVisitPrescriptionFragment.setArguments(bundle);
         }
+        addNewTreatmentFragment = new AddNewTreatmentFragment();
+        if (visitDetails != null) {
+            Bundle bundle = new Bundle();
+            bundle.putParcelable(PatientTreatmentDetailFragment.TAG_TREATMENT_DATA, Parcels.wrap(visitDetails.getPatientTreatments()));
+            addNewTreatmentFragment.setArguments(bundle);
+        }
         switch (detailTabType) {
             case PATIENT_DETAIL_VISIT:
                 addFragment(addClinicalNotesVisitNormalFragment, R.string.clinical_notes, false);
                 addFragment(addEditNormalVisitPrescriptionFragment, R.string.prescriptions, true);
+                addFragment(addNewTreatmentFragment, R.string.treatment, true);
                 tabs.setVisibility(View.VISIBLE);
                 flBtSwap.setVisibility(View.VISIBLE);
                 break;
@@ -183,6 +192,11 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
                 break;
             case PATIENT_DETAIL_PRESCRIPTION:
                 addFragment(addEditNormalVisitPrescriptionFragment, R.string.prescriptions, true);
+                tabs.setVisibility(View.GONE);
+                flBtSwap.setVisibility(View.GONE);
+                break;
+            case PATIENT_DETAIL_TREATMENT:
+                addFragment(addNewTreatmentFragment, R.string.treatment, true);
                 tabs.setVisibility(View.GONE);
                 flBtSwap.setVisibility(View.GONE);
                 break;
@@ -315,6 +329,17 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
                         ((CommonOpenUpActivity) mActivity).finish();
                     }
                     break;
+                case ADD_TREATMENT:
+                case GET_TREATMENT:
+                    if (response.getData() != null && response.getData() instanceof Treatments) {
+                        Treatments treatments = (Treatments) response.getData();
+                        LocalDataServiceImpl.getInstance(mApp).addTreatment(treatments);
+                        Util.setVisitId(VisitIdType.TREATMENT, treatments.getVisitId());
+                        sendBroadcasts(treatments.getUniqueId());
+                        mActivity.setResult(HealthCocoConstants.RESULT_CODE_ADD_NEW_TREATMENT, null);
+                        ((CommonOpenUpActivity) mActivity).finish();
+                    }
+                    break;
                 default:
                     break;
             }
@@ -337,6 +362,10 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
                     intent = new Intent(PatientPrescriptionDetailFragment.INTENT_GET_PRESCRIPTION_LIST_LOCAL);
                     intent.putExtra(TAG_PRESCRIPTION_ID, prescriptionId);
                     break;
+//                case PATIENT_DETAIL_TREATMENT:
+//                    intent = new Intent(SelectedTreatmentsListFragment.INTENT_GET_PRESCRIPTION_LIST_LOCAL);
+//                    intent.putExtra(, prescriptionId);
+//                    break;
             }
             LocalBroadcastManager.getInstance(mApp.getApplicationContext()).sendBroadcast(intent);
         } catch (Exception e) {
@@ -436,6 +465,9 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
                     addPrescription(prescriptionMsg);
                 } else
                     Util.showToast(mActivity, errorMsg);
+                break;
+            case PATIENT_DETAIL_TREATMENT:
+                addNewTreatmentFragment.validateData();
                 break;
         }
     }

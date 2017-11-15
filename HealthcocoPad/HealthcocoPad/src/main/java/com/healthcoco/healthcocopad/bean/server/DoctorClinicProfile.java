@@ -1,9 +1,12 @@
 package com.healthcoco.healthcocopad.bean.server;
 
 import android.content.Context;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.healthcoco.healthcocopad.bean.ConsultationFee;
-import com.healthcoco.healthcocopad.enums.DoctorFacilityType;
+import com.healthcoco.healthcocopad.enums.DoctorFacility;
+import com.healthcoco.healthcocopad.enums.BooleanTypeValues;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.orm.SugarRecord;
 import com.orm.annotation.Ignore;
@@ -11,35 +14,27 @@ import com.orm.annotation.Unique;
 
 import java.util.ArrayList;
 import java.util.List;
-
 @org.parceler.Parcel
 public class DoctorClinicProfile extends SugarRecord {
+    protected String appointmentBookingNumberJsonString;
+    protected String consultationFeeJsonString;
+    @Ignore
+    protected boolean foreignIsClinicSelected;
     @Unique
     private String uniqueId;
-
     private String locationId;
-
     private String clinicAddress;
-
     private String locationName;
-
     private String country;
-
     private String state;
-
     private String city;
-
     private String postalCode;
-
     private String patientInitial;
-
     private Integer patientCounter;
     @Ignore
     private List<String> appointmentBookingNumber;
-    protected String appointmentBookingNumberJsonString;
     @Ignore
     private ConsultationFee consultationFee;
-    protected String consultationFeeJsonString;
     @Ignore
     private ConsultationFee revisitConsultationFee;
     private String revisitConsultationFeeJsonString;
@@ -48,27 +43,24 @@ public class DoctorClinicProfile extends SugarRecord {
     private String appointmentSlotJsonString;
     @Ignore
     private List<DoctorWorkingSchedule> workingSchedules;
-
-    private DoctorFacilityType facility;
+    private DoctorFacility facility;
     @Ignore
     private List<ClinicImage> images;
     private Boolean twentyFourSevenOpen;
     private String logoUrl;
-
     private String logoThumbnailUrl;
-
     private String foreignUniqueId;
     private String doctorId;
     private Double latitude;
-
     private Double longitude;
     private Integer noOfReviews;
     private Integer noOfRecommenations;
     private String hospitalId;
     @Ignore
     private ArrayList<Role> roles;
-    @Ignore
-    protected boolean foreignIsClinicSelected;
+
+    public DoctorClinicProfile() {
+    }
 
     public boolean isForeignIsClinicSelected() {
         return foreignIsClinicSelected;
@@ -76,9 +68,6 @@ public class DoctorClinicProfile extends SugarRecord {
 
     public void setForeignIsClinicSelected(boolean foreignIsClinicSelected) {
         this.foreignIsClinicSelected = foreignIsClinicSelected;
-    }
-
-    public DoctorClinicProfile() {
     }
 
     public Integer getNoOfReviews() {
@@ -233,11 +222,11 @@ public class DoctorClinicProfile extends SugarRecord {
         this.postalCode = postalCode;
     }
 
-    public DoctorFacilityType getFacility() {
+    public DoctorFacility getFacility() {
         return facility;
     }
 
-    public void setFacility(DoctorFacilityType facility) {
+    public void setFacility(DoctorFacility facility) {
         this.facility = facility;
     }
 

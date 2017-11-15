@@ -5,7 +5,7 @@ import android.os.Parcel;
 import com.healthcoco.healthcocopad.utilities.LocalDatabaseUtils;
 
 /**
- * Created by Shreshtha on 27-01-2017.
+ * Created by neha on 20/03/16.
  */
 public enum BooleanTypeValues {
     TRUE(LocalDatabaseUtils.BOOLEAN_TRUE_VALUE, true), FALSE(LocalDatabaseUtils.BOOLEAN_FALSE_VALUE, false);
@@ -18,19 +18,19 @@ public enum BooleanTypeValues {
         this.booleanFlag = booleanFlag;
     }
 
-    public int getBooleanIntValue() {
-        return booleanTypeValue;
-    }
-
-    public boolean getBooleanFlag() {
-        return booleanFlag;
-    }
-
     public static Boolean readBoolean(Parcel in) {
         return (in.readInt() == BooleanTypeValues.FALSE.getBooleanIntValue()) ? false : true;
     }
 
     public static int writeBoolean(Boolean twentyFourSevenOpen) {
         return (!twentyFourSevenOpen || twentyFourSevenOpen == null ? BooleanTypeValues.FALSE.getBooleanIntValue() : BooleanTypeValues.TRUE.getBooleanIntValue());
+    }
+
+    public int getBooleanIntValue() {
+        return booleanTypeValue;
+    }
+
+    public boolean getBooleanFlag() {
+        return booleanFlag;
     }
 }

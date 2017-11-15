@@ -21,12 +21,12 @@ import java.util.concurrent.TimeUnit;
  * Created by Shreshtha on 24-01-2017.
  */
 public class DateTimeUtil {
-    protected static final String TAG = CalendarEvents.class.getSimpleName();
-    private static final String DATE_FORMAT_DAY_MONTH_YEAR_SLASH = "dd/MM/yyyy";
     public static final String YEAR_FORMAT = "yyyy";
     public static final String DATE_FORMAT_WEEKDAY_DAY_MONTH_AS_TEXT_YEAR_DASH = "EEE, MMM dd,yyyy";
     public static final String DATE_TIME_FORMAT_WEEKDAY_DAY_MONTH_AS_TEXT_YEAR_DASH = "EEE, MMM dd,yyyy hh:mm aaa";
     public static final String TIME_FORMAT_24_HOUR = "H:mm";
+    protected static final String TAG = CalendarEvents.class.getSimpleName();
+    private static final String DATE_FORMAT_DAY_MONTH_YEAR_SLASH = "dd/MM/yyyy";
 
     /**
      * in YY format for year
@@ -63,6 +63,10 @@ public class DateTimeUtil {
             return dob;
         }
         return null;
+    }
+
+    public static String getCurrentFormattedDate() {
+        return new SimpleDateFormat("dd-MM-yyyy").format(new java.util.Date());
     }
 
     public static String getCurrentFormattedDate(String format) {

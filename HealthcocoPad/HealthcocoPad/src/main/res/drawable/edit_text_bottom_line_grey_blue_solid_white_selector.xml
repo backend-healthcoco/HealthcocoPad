@@ -4,7 +4,6 @@
     <item android:drawable="@drawable/edit_text_bottom_line_blue" android:state_pressed="true" />
     <item android:drawable="@drawable/edit_text_bottom_line_blue" android:state_selected="true" />
     <item android:drawable="@drawable/edit_text_bottom_line_blue" android:state_focused="true" />
-    <item android:drawable="@drawable/edit_text_bottom_line_red" android:state_activated="true" />
     <item android:drawable="@drawable/edit_text_bottom_line_grey_solid_white" />
 
 </selector>

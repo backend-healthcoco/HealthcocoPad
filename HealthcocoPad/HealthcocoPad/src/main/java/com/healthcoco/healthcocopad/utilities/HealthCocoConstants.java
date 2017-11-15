@@ -15,12 +15,15 @@ public class HealthCocoConstants {
     public static final String TAG_TOTAL_SYNC_SERVICES = "maxProgressValue";
     public static final String TAG_SYNC_SERVICE_TYPE = "syncServiceType";
     public static final String TAG_CLINIC_PROFILE = "clinicProfile";
+    public static final String TAG_DOCTOR_PROFILE = "doctorProfile";
     public static final String TAG_UNIQUE_ID = "uniqueId";
     public static final String TAG_NAME_EDIT_TYPE = "nameEditDeleteType";
     public static final String TAG_ORDINAL = "ordinal";
     public static final String TAG_GROUP_ID = "group_id";
     public static final String TAG_GROUP_IDS_LIST = "groupsIdsList";
     public static final String TAG_IS_EDIT_PATIENT = "isEditPatient";
+    public static final String TAG_TOOTH_NUMBER = "toothNumber";
+    public static final String TAG_TOOTH_MATERIAL = "material";
     public static final String PARAM_TAG_UPDATE = "/update/";
     public static final String PARAM_TAG_GENERATE = "/generate/";
     public static final String PARAM_TAG_VERIFY = "/verify/";
@@ -49,6 +52,10 @@ public class HealthCocoConstants {
     public static final int REQUEST_CODE_GLOBAL_RECORDS_ACCESS = 114;
     public static final int RESULT_CODE_GLOBAL_RECORDS_ACCESS = 115;
     public static final int REQUEST_CODE_VERIFY_OTP = 116;
+    public static final int REQUEST_CODE_TREATMENT = 195;
+    public static final int RESULT_CODE_SELECTED_TREATMENT = 199;
+    public static final int REQUEST_CODE_ADD_TREATMENT = 200;
+    public static final int RESULT_CODE_ADD_NEW_TREATMENT = 206;
     public static final int RESULT_CODE_VERIFY_OTP = 117;
     public static final int RESULT_CODE_DOCTOR_PERSONAL_HISTORY_DETAIL = 142;
     public static final int RESULT_CODE_DRUGS_AND_ALLERGIES_DETAIL = 143;
@@ -67,8 +74,10 @@ public class HealthCocoConstants {
     public static final int RESULT_CODE_BOOK_APPOINTMENT = 148;
     public static final int RESULT_CODE_DIAGNOSTICS_TESTS = 149;
     public static final String PARAM_SIZE = "&size=";
+    public static final String PARAM_PAGE = "&page=";
     public static final String PARAM_SEARCH_TERM = "&searchTerm=";
     public static final String PARAM_PAGE_AND = "&page=";
+    public static final String PARAM_SPECIALITY = "?speciality=";
     public static final String PARAM_DISCARDED_FALSE = "discarded=false";
     public static final int RESULT_CODE_NEXT_REVIEW = 150;
     public static final int RESULT_CODE_ADD_CLINICAL_NOTE = 151;
@@ -80,8 +89,6 @@ public class HealthCocoConstants {
     public static final int RESULT_CODE_REGISTRATION_DETAIL = 156;
     public static final int RESULT_CODE_ADD_EDIT_DOCTOR_PROFILE = 157;
     public static final int REQUEST_CODE_FILE = 158;
-
-    public static boolean isNetworkOnline;
     public static final String PARAM_UPDATED_TIME = "&updatedTime=";
     public static final String PARAM_DISCARDED_AMPERCENT = "&discarded=";
     public static final String PARAM_DOCTOR_ID = "&doctorId=";
@@ -90,10 +97,7 @@ public class HealthCocoConstants {
     public static final String PARAM_LOCATION_ID = "&locationId=";
     public static final String PARAM_TAG_VIEW = "/view/?";
     public static final String PARAM_ROLE = "&role=";
-
     public static final String TAG_SELECTED_USER_ID = "selectedPatientId";
-    public static String SELECTED_PATIENTS_USER_ID = null;
-
     public static final String TAG_MOBILE_NUMBER = "mobileNo";
     public static final String PARAM_TAG_DELETE = "/delete/";
     public static final String TAG_ORDINAL_DIALOG_TYPE = "dialogTypeOrdinal";
@@ -105,14 +109,16 @@ public class HealthCocoConstants {
     public static final String PARAM_TAG_MAIL = "/mail/";
     public static final String TAG_VISIT_ID = "visitId";
     public static final String TAG_IS_FROM_CLONE = "isFromClone";
-
     public static final String TAG_PRESCRIPTION_ID = "prescriptionId";
     public static final String TAG_TEMPLATE_ID = "templateId";
     public static final String TAG_DRUG_DETAILS = "drugDetails";
+    public static final String TAG_IS_FROM_NEW_TEMPLATE_FRAGMENT = "isFromNewtemplateFragment";
+    public static boolean isNetworkOnline;
+    public static String SELECTED_PATIENTS_USER_ID = null;
     public static String VISIT_ID_TO_SEND = null;
     public static String VISIT_ID_CLINICAL_NOTES = null;
     public static String VISIT_ID_REPORTS = null;
     public static String VISIT_ID_PRESCRIPTION = null;
-    public static final String TAG_IS_FROM_NEW_TEMPLATE_FRAGMENT = "isFromNewtemplateFragment";
+    public static String VISIT_ID_TREATMENT = null;
 
 }

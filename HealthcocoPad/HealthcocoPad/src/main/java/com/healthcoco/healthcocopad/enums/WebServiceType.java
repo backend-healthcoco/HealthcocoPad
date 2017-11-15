@@ -14,6 +14,13 @@ public enum WebServiceType {
     ADD_PRESCRIPTION(Method.POST, "prescription/prescriptionHandheld/add/"),
 
     GET_TREATMENT(Method.GET, "treatment/"),
+
+    ADD_TREATMENT(Method.POST, "treatment/add"),
+
+    GET_TREATMENT_LIST_BOTH_SOLR(Method.GET, "solr/treatment/SERVICE/BOTH/?"),
+
+    GET_TREATMENT_LIST_FEATURED(Method.GET, "treatment/getServicesBySpeciality"),
+
     GET_PRESCRIPTION(Method.GET, "prescription/"),
     GET_REPORTS_UPDATED(Method.GET, "records/"),
     GET_CLINICAL_NOTES(Method.GET, "clinicalNotes/"),
