@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/shape_emr_item_background"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/edit_search"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/grey_background"
+            android:drawableLeft="@drawable/icon_search_normal"
+            android:drawablePadding="8dp"
+            android:drawableStart="@drawable/icon_search_normal"
+            android:hint="@string/search"
+            android:inputType="textNoSuggestions|textFilter"
+            android:padding="10dp"
+            android:singleLine="true"
+            android:textColorHint="@color/grey_hint_color"
+            android:textSize="@dimen/edit_text_top_search_size" />
+
+        <ImageButton
+            android:id="@+id/bt_clear"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            android:paddingLeft="20dp"
+            android:paddingRight="10dp"
+            android:src="@drawable/tab_cancel_normal" />
+
+        <ImageButton
+            android:id="@+id/bt_add_treatment"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            android:paddingLeft="20dp"
+            android:paddingRight="10dp"
+            android:src="@drawable/icon_history_selected" />
+    </LinearLayout>
+
+    <!--<TextView-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_marginLeft="10dp"-->
+    <!--android:layout_marginRight="10dp"-->
+    <!--android:background="@color/grey_light_divider"-->
+    <!--android:padding="5dp"-->
+    <!--android:text="@string/all_drug_list"-->
+    <!--android:textColor="@color/black"-->
+    <!--android:textSize="15sp" />-->
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+        <com.healthcoco.healthcocopad.views.ListViewLoadMore
+            android:id="@+id/lv_treatment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:clipToPadding="false"
+            android:divider="@null"
+            android:listSelector="@android:color/transparent"
+            android:scrollbarStyle="outsideOverlay"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:id="@+id/layout_custom_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <com.healthcoco.healthcocopad.views.CustomSwipeRefreshLayout
+                android:id="@+id/swipe_refresh_layout"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:visibility="visible">
+
+                    <com.healthcoco.healthcocopad.skscustomclasses.SKSCustomListView
+                        android:id="@+id/lv_appointment"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clipToPadding="false"
+                        android:divider="@null"
+                        android:scrollbarStyle="outsideOverlay"
+                        android:visibility="visible" />
+
+                </FrameLayout>
+            </com.healthcoco.healthcocopad.views.CustomSwipeRefreshLayout>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_no_treatment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="@string/no_treatment_added"
+            android:textSize="@dimen/text_size_no_results"
+            android:textStyle="bold"
+            android:visibility="visible" />
+
+        <ProgressBar
+            android:id="@+id/progress_loading"
+            style="?android:attr/progressBarStyleSmall"
+            android:layout_width="@dimen/round_progress_bar_size"
+            android:layout_height="@dimen/round_progress_bar_size"
+            android:layout_gravity="center|bottom"
+            android:progressDrawable="@drawable/progress_loading"
+            android:visibility="gone" />
+    </FrameLayout>
+</LinearLayout>
