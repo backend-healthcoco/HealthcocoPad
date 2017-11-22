@@ -20,12 +20,11 @@ import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.adapter.ContactsDetailViewPagerAdapter;
+import com.healthcoco.healthcocopad.bean.TotalTreatmentCostDiscountValues;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
-import com.healthcoco.healthcocopad.bean.request.PrescriptionRequest;
 import com.healthcoco.healthcocopad.bean.request.TreatmentRequest;
 import com.healthcoco.healthcocopad.bean.server.DoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
-import com.healthcoco.healthcocopad.bean.server.Prescription;
 import com.healthcoco.healthcocopad.bean.server.Quantity;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.TreatmentItem;
@@ -47,7 +46,6 @@ import com.healthcoco.healthcocopad.listeners.SelectedTreatmentItemClickListener
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
-import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.healthcoco.healthcocopad.views.ScrollViewWithHeaderNewPrescriptionLayout;
 
@@ -77,12 +75,6 @@ public class AddNewTreatmentFragment extends HealthCocoFragment implements Local
     private SelectedTreatmentsListFragment selectedTreatmentsListFragment;
     private boolean receiversRegistered;
     private Treatments treatment;
-    BroadcastReceiver getModifiedValueOfTreatmentReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, final Intent intent) {
-            setModifiedValues();
-        }
-    };
     private List<Treatments> treatmentsList;
     private DoctorProfile doctorProfile;
     private TreatmentListFragment treatmentListFragment;
@@ -292,10 +284,10 @@ public class AddNewTreatmentFragment extends HealthCocoFragment implements Local
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == HealthCocoConstants.REQUEST_CODE_ADD_TREATMENT) {
-            if (resultCode == HealthCocoConstants.RESULT_CODE_SELECTED_TREATMENT && data != null) {
-                TreatmentService treatmentService = Parcels.unwrap(data.getParcelableExtra(TAG_SELECTED_TREATMENT_OBJECT));
-                addTreatmentService(treatmentService);
-            }
+//            if (resultCode == HealthCocoConstants.RESULT_CODE_SELECTED_TREATMENT && data != null) {
+//                TreatmentService treatmentService = Parcels.unwrap(data.getParcelableExtra(TAG_SELECTED_TREATMENT_OBJECT));
+//                addTreatmentService(treatmentService);
+//            }
         }
     }
 
@@ -453,4 +445,33 @@ public class AddNewTreatmentFragment extends HealthCocoFragment implements Local
         initTabsFragmentsList();
         initViewPagerAdapter();
     }
+
+    private void setModifiedValues(TotalTreatmentCostDiscountValues totalTreatmentCostDiscountValues) {
+        Double totalCost = totalTreatmentCostDiscountValues.getTotalCost();
+        Double totalGrandTotal = totalTreatmentCostDiscountValues.getTotalGrandTotal();
+        Double totalDiscount = totalTreatmentCostDiscountValues.getTotalCost() - totalTreatmentCostDiscountValues.getTotalGrandTotal();
+        if (treatment == null)
+            treatment = new Treatments();
+        //set Total Cost
+        treatment.setTotalCost(totalCost);
+        //set TotalDiscount Cost
+        UnitValue unitTotalDiscount = new UnitValue();
+        unitTotalDiscount.setValue(totalDiscount);
+        unitTotalDiscount.setUnit(UnitType.INR);
+        treatment.setTotalDiscount(unitTotalDiscount);
+        //set GrandTotal Cost
+        treatment.setGrandTotal(totalGrandTotal);
+        initDefaultData(treatment);
+    }
+
+    BroadcastReceiver getModifiedValueOfTreatmentReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, final Intent intent) {
+            if (intent != null && intent.hasExtra(SelectedTreatmentsListFragment.TAG_TOTAL_COST_DISCOUNT_DETAIL_VALUES)) {
+                TotalTreatmentCostDiscountValues totalTreatmentCostDiscountValues = Parcels.unwrap(intent.getParcelableExtra(SelectedTreatmentsListFragment.TAG_TOTAL_COST_DISCOUNT_DETAIL_VALUES));
+                setModifiedValues(totalTreatmentCostDiscountValues);
+            }
+        }
+
+    };
 }

@@ -1,5 +1,7 @@
 package com.healthcoco.healthcocopad.enums;
 
+import android.content.Context;
+
 import com.healthcoco.healthcocopad.R;
 
 public enum UnitType {
@@ -19,6 +21,13 @@ public enum UnitType {
 
     public int getSymbolId() {
         return symbolId;
+    }
+
+    public static UnitType getUnitType(Context context, String value) {
+        UnitType unitType = PERCENT;
+        if (context.getResources().getString(INR.getSymbolId()).equalsIgnoreCase(value))
+            return INR;
+        return unitType;
     }
 
 }

@@ -8,13 +8,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
-import android.widget.ListView;
 import android.widget.TextView;
-
 
 import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.adapter.SelectedTreatmentsItemsListAdapter;
+import com.healthcoco.healthcocopad.bean.TotalTreatmentCostDiscountValues;
 import com.healthcoco.healthcocopad.bean.request.TreatmentItemRequest;
 import com.healthcoco.healthcocopad.bean.request.TreatmentServiceRequest;
 import com.healthcoco.healthcocopad.bean.server.DoctorProfile;
@@ -23,13 +22,10 @@ import com.healthcoco.healthcocopad.bean.server.TreatmentService;
 import com.healthcoco.healthcocopad.bean.server.Treatments;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.custom.ExpandableHeightListView;
-import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.UnitType;
-import com.healthcoco.healthcocopad.listeners.SelectedTreatmentItemClickListener;
 import com.healthcoco.healthcocopad.listeners.SelectedTreatmentsListItemListener;
-import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
+import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
-import com.healthcoco.healthcocopad.viewholders.SelectedPrescriptionDrugDoseItemsListViewHolder;
 import com.healthcoco.healthcocopad.viewholders.SelectedTreatmentsItemsListViewholder;
 
 import org.parceler.Parcels;
@@ -38,7 +34,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import static com.healthcoco.healthcocopad.fragments.AddEditNormalVisitPrescriptionFragment.TAG_PRESCRIPTION_DATA;
 
@@ -49,10 +44,13 @@ import static com.healthcoco.healthcocopad.fragments.AddEditNormalVisitPrescript
 public class SelectedTreatmentsListFragment extends HealthCocoFragment implements SelectedTreatmentsListItemListener {
     public static final String TAG_TREATMENT_ITEM_DETAIL = "treatmentItemDetail";
     public static final String TAG_DOCTOR_PROFILE = "doctorprofile";
+    public static final String TAG_TOTAL_COST_DISCOUNT_DETAIL_VALUES = "totalCoustDiscountValues";
+    AddNewTreatmentFragment addNewTreatmentFragment;
     private ExpandableHeightListView lvTreatmentsList;
     private TextView tvNoTreatmentAdded;
     private SelectedTreatmentsItemsListAdapter adapter;
     private LinkedHashMap<String, TreatmentItem> treatmentItemList;/* = new LinkedHashMap<String,TreatmentItem>();*/
+    private LinkedHashMap<String, TotalTreatmentCostDiscountValues> totalCostHashMap = new LinkedHashMap<>();
     private TreatmentItem treatmentItem;
     private Treatments treatment;
     private DoctorProfile doctorProfile;
@@ -162,6 +160,22 @@ public class SelectedTreatmentsListFragment extends HealthCocoFragment implement
     public void onTreatmentItemClicked(TreatmentItem treatmentItem) {
         this.treatmentItem = treatmentItem;
 //        openCommonOpenUpActivity(CommonOpenUpFragmentType.ADD_TREATMENT_ITEM_DETAIL, TAG_TREATMENT_ITEM_DETAIL, this.treatmentItem, HealthCocoConstants.REQUEST_CODE_TREATMENT_ITEM_DETAIL);
+    }
+
+    @Override
+    public void onTotalValueTypeDetailChanged(String treatmentId, TotalTreatmentCostDiscountValues totalTreatmentCostDiscountValues) {
+        totalCostHashMap.put(treatmentId, totalTreatmentCostDiscountValues);
+
+        TotalTreatmentCostDiscountValues finalCostDiscontDetails = new TotalTreatmentCostDiscountValues();
+        for (TotalTreatmentCostDiscountValues totalValues :
+                totalCostHashMap.values()) {
+            finalCostDiscontDetails.setTotalCost(finalCostDiscontDetails.getTotalCost() + totalValues.getTotalCost());
+            finalCostDiscontDetails.setTotalGrandTotal(finalCostDiscontDetails.getTotalGrandTotal() + totalValues.getTotalGrandTotal());
+            finalCostDiscontDetails.setTotalDiscount(finalCostDiscontDetails.getTotalDiscount() + totalValues.getTotalDiscount());
+        }
+        LogUtils.LOGD(TAG, "Total value for totalCost " + finalCostDiscontDetails.getTotalCost() + " grandTotal : " + finalCostDiscontDetails.getTotalGrandTotal());
+        Util.sendBroadcastWithParcelData(mApp, AddNewTreatmentFragment.INTENT_GET_MODIFIED_VALUE, new String[]{TAG_TOTAL_COST_DISCOUNT_DETAIL_VALUES}, new Object[]{finalCostDiscontDetails});
+
     }
 
     @Override

@@ -451,15 +451,30 @@ public class Util {
         return null;
     }
 
-    public static void sendBroadcast(HealthCocoApplication mApp, String intentFilter) {
-        sendBroadcast(mApp, intentFilter, null);
-    }
-
     public static void sendBroadcast(HealthCocoApplication mApp, String intentFilter, Object extra) {
         try {
             Intent intent = new Intent(intentFilter);
             if (extra != null)
                 intent.putExtra(HealthCocoConstants.TAG_BROADCAST_EXTRA, Parcels.wrap(extra));
+            LocalBroadcastManager.getInstance(mApp.getApplicationContext()).sendBroadcast(intent);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void sendBroadcast(HealthCocoApplication mApp, String intentFilter) {
+        sendBroadcastWithParcelData(mApp, intentFilter, null, null);
+    }
+
+    public static void sendBroadcastWithParcelData(HealthCocoApplication mApp, String intentFilter, String[] tagArray, Object... intentData) {
+        try {
+            Intent intent = new Intent(intentFilter);
+            if (tagArray != null && intentData != null && tagArray.length == intentData.length) {
+                for (int i = 0; i < tagArray.length; i++) {
+                    if (tagArray[i] != null && intentData[i] != null)
+                        intent.putExtra(tagArray[i], Parcels.wrap(intentData[i]));
+                }
+            }
             LocalBroadcastManager.getInstance(mApp.getApplicationContext()).sendBroadcast(intent);
         } catch (Exception e) {
             e.printStackTrace();

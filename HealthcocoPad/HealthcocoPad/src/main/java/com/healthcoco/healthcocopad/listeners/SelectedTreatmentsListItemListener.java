@@ -1,5 +1,6 @@
 package com.healthcoco.healthcocopad.listeners;
 
+import com.healthcoco.healthcocopad.bean.TotalTreatmentCostDiscountValues;
 import com.healthcoco.healthcocopad.bean.server.DoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.TreatmentItem;
 import com.healthcoco.healthcocopad.bean.server.User;
@@ -12,6 +13,8 @@ public interface SelectedTreatmentsListItemListener {
     public void onDeleteItemClicked(TreatmentItem invoiceItem);
 
     public void onTreatmentItemClicked(TreatmentItem invoiceItem);
+
+    public void onTotalValueTypeDetailChanged(String treatmentId, TotalTreatmentCostDiscountValues totalTreatmentCostDiscountValues);
 
     public User getUser();
 

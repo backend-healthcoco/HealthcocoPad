@@ -29,6 +29,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.Response;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.healthcoco.healthcocopad.activities.CloudPrintActivity;
 import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.adapter.MyPrintDocumentAdapter;
@@ -1254,18 +1255,38 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
 
     public void initGCM() {
         if (Util.checkPlayServices(this)) {
+            // Check for current token
             LoginResponse doctor = LocalDataServiceImpl.getInstance((HealthCocoApplication) this.getApplicationContext()).getDoctor();
-            GCMRequest gcmRequest = LocalDataServiceImpl.getInstance(mApp).getGCMRequestData();
-            if (gcmRequest != null) {
+            GCMRequest fcmRequest = LocalDataServiceImpl.getInstance(mApp).getGCMRequestData();
+            if (fcmRequest != null) {
                 if (doctor != null && doctor.getUser() != null) {
                     ArrayList<String> userIdsList = new ArrayList<>();
                     userIdsList.add(doctor.getUser().getUniqueId());
-                    gcmRequest.setUserIds(userIdsList);
-                    LocalDataServiceImpl.getInstance(mApp).addGCMRequest(gcmRequest);
+                    fcmRequest.setUserIds(userIdsList);
+                    LocalDataServiceImpl.getInstance(mApp).addGCMRequest(fcmRequest);
                 }
                 WebDataServiceImpl.getInstance(mApp).sendGcmRegistrationId(false);
+            } else {
+                refreshToken();
             }
         }
+    }
+
+    public void refreshToken() {
+        new AsyncTask<Void, Void, Void>() {
+
+            @Override
+            protected Void doInBackground(Void... params) {
+                try {
+                    // Resets Instance ID and revokes all tokens.
+                    FirebaseInstanceId.getInstance().deleteInstanceId();
+                    FirebaseInstanceId.getInstance().getToken();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+        }.execute();
     }
 
     public void refreshMenuFragment(User user) {
