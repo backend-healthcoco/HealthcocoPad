@@ -119,6 +119,13 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
     private Button btHeaderInteraction;
     private Button btHeaderTwoInteraction;
     private SelectedDrugItemsListFragment selectedDrugItemsListFragment;
+    InputFilter filter = new InputFilter() {
+        public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+            String text = dest.toString() + source.toString();
+            selectedDrugItemsListFragment.modifyDurationUnit(text);
+            return text;
+        }
+    };
     private Prescription selectedPrescription;
     private LinkedHashMap<String, DiagnosticTest> selectedDiagnosticTestsList = new LinkedHashMap<>();
     private View selectedViewForSuggestionsList;
@@ -129,8 +136,22 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
     private AddEditNormalVisitsFragment addEditNormalVisitsFragment;
     private AddClinicalNotesVisitNormalFragment addClinicalNotesVisitNormalFragment;
     private boolean isFromClone;
+    private boolean isFromVisit;
     private List<Prescription> prescriptionList;
     private boolean isOnItemClick;
+    BroadcastReceiver onSuggestionItemClickReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, final Intent intent) {
+            if (intent != null && intent.hasExtra(TAG_SUGGESTIONS_TYPE) && intent.hasExtra(TAG_SELECTED_SUGGESTION_OBJECT)) {
+                int ordinal = intent.getIntExtra(TAG_SUGGESTIONS_TYPE, -1);
+                SuggestionType suggestionType = SuggestionType.values()[ordinal];
+                Object selectedSuggestionObject = Parcels.unwrap(intent.getParcelableExtra(TAG_SELECTED_SUGGESTION_OBJECT));
+                if (suggestionType != null && selectedSuggestionObject != null) {
+                    handleSelectedSugestionObject(suggestionType, selectedSuggestionObject);
+                }
+            }
+        }
+    };
     private boolean isDurationSet;
 
     @Override
@@ -153,6 +174,9 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
         if (bundle != null && bundle.containsKey(TAG_PRESCRIPTION_DATA)) {
             prescriptionList = Parcels.unwrap(bundle.getParcelable(TAG_PRESCRIPTION_DATA));
         }
+        if (bundle != null && bundle.containsKey(HealthCocoConstants.TAG_IS_FROM_VISIT)) {
+            isFromVisit = Parcels.unwrap(bundle.getParcelable(HealthCocoConstants.TAG_IS_FROM_VISIT));
+        }
         init();
         mActivity.showLoading(false);
         new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_FRAGMENT_INITIALISATION_DATA, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
@@ -163,9 +187,11 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
         initViews();
         initListeners();
         initScrollView();
-        initTabsFragmentsList();
-        initViewPagerAdapter();
-        initSuggestionsFragment();
+        if (!isFromVisit) {
+            initTabsFragmentsList();
+            initViewPagerAdapter();
+            initSuggestionsFragment();
+        }
     }
 
     private void initSelectedDrugsListFragment() {
@@ -765,14 +791,6 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
         selectedDrugItemsListFragment.modifyDurationUnit(unit);
     }
 
-    InputFilter filter = new InputFilter() {
-        public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
-            String text = dest.toString() + source.toString();
-            selectedDrugItemsListFragment.modifyDurationUnit(text);
-            return text;
-        }
-    };
-
     @Override
     public void onResume() {
         super.onResume();
@@ -790,20 +808,6 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
         super.onDestroy();
         LocalBroadcastManager.getInstance(mActivity).unregisterReceiver(onSuggestionItemClickReceiver);
     }
-
-    BroadcastReceiver onSuggestionItemClickReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, final Intent intent) {
-            if (intent != null && intent.hasExtra(TAG_SUGGESTIONS_TYPE) && intent.hasExtra(TAG_SELECTED_SUGGESTION_OBJECT)) {
-                int ordinal = intent.getIntExtra(TAG_SUGGESTIONS_TYPE, -1);
-                SuggestionType suggestionType = SuggestionType.values()[ordinal];
-                Object selectedSuggestionObject = Parcels.unwrap(intent.getParcelableExtra(TAG_SELECTED_SUGGESTION_OBJECT));
-                if (suggestionType != null && selectedSuggestionObject != null) {
-                    handleSelectedSugestionObject(suggestionType, selectedSuggestionObject);
-                }
-            }
-        }
-    };
 
     private void handleSelectedSugestionObject(SuggestionType suggestionType, Object selectedSuggestionObject) {
         String text = "";
@@ -840,5 +844,11 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
         if (m.find())
             return m.group(1);
         return "";
+    }
+
+    public void refreshData() {
+        initTabsFragmentsList();
+        initViewPagerAdapter();
+        initSuggestionsFragment();
     }
 }

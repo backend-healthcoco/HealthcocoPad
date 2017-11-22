@@ -88,6 +88,7 @@ public class AddNewTreatmentFragment extends HealthCocoFragment implements Local
     private TreatmentListFragment treatmentListFragment;
     private TreatmentCustomListFragment customListFragment;
     private ScrollViewWithHeaderNewPrescriptionLayout svContainer;
+    private boolean isFromVisit;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -107,7 +108,9 @@ public class AddNewTreatmentFragment extends HealthCocoFragment implements Local
                     treatment = treatments;
                 }
             }
-
+        }
+        if (bundle != null && bundle.containsKey(HealthCocoConstants.TAG_IS_FROM_VISIT)) {
+            isFromVisit = Parcels.unwrap(bundle.getParcelable(HealthCocoConstants.TAG_IS_FROM_VISIT));
         }
         init();
         mActivity.showLoading(false);
@@ -176,16 +179,9 @@ public class AddNewTreatmentFragment extends HealthCocoFragment implements Local
     }
 
     private void initData() {
-        initSelectedTreatmentsListFragment();
-        initIntentData();
+
     }
 
-    private void initIntentData() {
-//        Intent intent = mActivity.getIntent();
-//        if (intent != null) {
-//            treatment = Parcels.unwrap(intent.getParcelableExtra(PatientTreatmentDetailFragment.TAG_TREATMENT_DATA));
-//        }
-    }
 
     private void initDefaultData(Treatments treatment) {
         tvTotalCost.setText(Util.formatDoubleNumber(treatment.getTotalCost()));
@@ -340,9 +336,12 @@ public class AddNewTreatmentFragment extends HealthCocoFragment implements Local
         switch (response.getWebServiceType()) {
             case FRAGMENT_INITIALISATION:
                 if (user != null && selectedPatient != null) {
-                    initData();
-                    initTabsFragmentsList();
-                    initViewPagerAdapter();
+                    if (!isFromVisit) {
+                        initSelectedTreatmentsListFragment();
+                        initTabsFragmentsList();
+                        initViewPagerAdapter();
+                    }
+
 //                    initActionPatientDetailActionBar(PatientProfileScreenType.IN_EMR_HEADER, view, selectedPatient);
                 }
                 break;
@@ -447,5 +446,11 @@ public class AddNewTreatmentFragment extends HealthCocoFragment implements Local
     @Override
     public User getUser() {
         return user;
+    }
+
+    public void refreshData() {
+        initSelectedTreatmentsListFragment();
+        initTabsFragmentsList();
+        initViewPagerAdapter();
     }
 }

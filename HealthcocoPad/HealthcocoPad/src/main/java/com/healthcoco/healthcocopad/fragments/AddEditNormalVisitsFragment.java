@@ -102,6 +102,10 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
     private String treatmentId;
     private LinearLayout containerDateTime;
 
+    private boolean isPrescriptionTabClicked = false;
+    private boolean isClinicalNotesTabClicked = false;
+    private boolean isTreatmentTabClicked = false;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_add_normal_visit, container, false);
@@ -173,41 +177,50 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
 
         // init fragment 2
         addEditNormalVisitPrescriptionFragment = new AddEditNormalVisitPrescriptionFragment();
-        if (visitDetails != null) {
-            Bundle bundle = new Bundle();
-            bundle.putParcelable(AddEditNormalVisitPrescriptionFragment.TAG_PRESCRIPTION_DATA, Parcels.wrap(visitDetails.getPrescriptions()));
-            addEditNormalVisitPrescriptionFragment.setArguments(bundle);
-        }
+
+        // init fragment 3
         addNewTreatmentFragment = new AddNewTreatmentFragment();
-        if (visitDetails != null) {
-            Bundle bundle = new Bundle();
-            bundle.putParcelable(PatientTreatmentDetailFragment.TAG_TREATMENT_DATA, Parcels.wrap(visitDetails.getPatientTreatment()));
-            addNewTreatmentFragment.setArguments(bundle);
-        }
+
+        Bundle bundle = new Bundle();
         switch (detailTabType) {
             case PATIENT_DETAIL_VISIT:
+                if (visitDetails != null) {
+                    bundle.putParcelable(AddEditNormalVisitPrescriptionFragment.TAG_PRESCRIPTION_DATA, Parcels.wrap(visitDetails.getPrescriptions()));
+                }
+                bundle.putParcelable(HealthCocoConstants.TAG_IS_FROM_VISIT, Parcels.wrap(true));
+                addEditNormalVisitPrescriptionFragment.setArguments(bundle);
+
+                Bundle bundle1 = new Bundle();
+                if (visitDetails != null) {
+                    bundle1.putParcelable(PatientTreatmentDetailFragment.TAG_TREATMENT_DATA, Parcels.wrap(visitDetails.getPatientTreatment()));
+                }
+                bundle1.putParcelable(HealthCocoConstants.TAG_IS_FROM_VISIT, Parcels.wrap(true));
+                addNewTreatmentFragment.setArguments(bundle1);
+
                 addFragment(addClinicalNotesVisitNormalFragment, R.string.clinical_notes, false);
-                addFragment(addEditNormalVisitPrescriptionFragment, R.string.prescriptions, true);
+                addFragment(addEditNormalVisitPrescriptionFragment, R.string.prescriptions, false);
                 addFragment(addNewTreatmentFragment, R.string.treatment, true);
                 tabs.setVisibility(View.VISIBLE);
                 flBtSwap.setVisibility(View.VISIBLE);
                 break;
+
             case PATIENT_DETAIL_CLINICAL_NOTES:
-                addFragment(addClinicalNotesVisitNormalFragment, R.string.clinical_notes, false);
+                addFragment(addClinicalNotesVisitNormalFragment, R.string.clinical_notes, true);
                 tabs.setVisibility(View.GONE);
                 flBtSwap.setVisibility(View.GONE);
                 break;
+
             case PATIENT_DETAIL_PRESCRIPTION:
                 addFragment(addEditNormalVisitPrescriptionFragment, R.string.prescriptions, true);
                 tabs.setVisibility(View.GONE);
                 flBtSwap.setVisibility(View.GONE);
                 break;
+
             case PATIENT_DETAIL_TREATMENT:
                 if (!Util.isNullOrEmptyList(treatment)) {
-                    Bundle bundle = new Bundle();
                     bundle.putParcelable(PatientTreatmentDetailFragment.TAG_TREATMENT_DATA, Parcels.wrap(treatment));
-                    addNewTreatmentFragment.setArguments(bundle);
                 }
+                addNewTreatmentFragment.setArguments(bundle);
                 addFragment(addNewTreatmentFragment, R.string.treatment, true);
                 tabs.setVisibility(View.GONE);
                 flBtSwap.setVisibility(View.GONE);
@@ -239,6 +252,23 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
     public void onTabChanged(String tabId) {
         hideKeyboard(view);
         viewPager.setCurrentItem(tabhost.getCurrentTab());
+        String currentTabTag = tabhost.getCurrentTabTag();
+        if (currentTabTag != null) {
+            switch (currentTabTag) {
+                case "AddEditNormalVisitPrescriptionFragment":
+                    if (!isPrescriptionTabClicked) {
+                        addEditNormalVisitPrescriptionFragment.refreshData();
+                        isPrescriptionTabClicked = true;
+                    }
+                    break;
+
+                case "AddNewTreatmentFragment":
+                    if (!isTreatmentTabClicked) {
+                        addNewTreatmentFragment.refreshData();
+                        isTreatmentTabClicked = true;
+                    }
+            }
+        }
     }
 
     @Override

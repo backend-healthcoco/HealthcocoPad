@@ -109,6 +109,7 @@ public class HealthCocoConstants {
     public static final String PARAM_TAG_MAIL = "/mail/";
     public static final String TAG_VISIT_ID = "visitId";
     public static final String TAG_IS_FROM_CLONE = "isFromClone";
+    public static final String TAG_IS_FROM_VISIT = "isFromVisit";
     public static final String TAG_PRESCRIPTION_ID = "prescriptionId";
     public static final String TAG_TEMPLATE_ID = "templateId";
     public static final String TAG_DRUG_DETAILS = "drugDetails";
