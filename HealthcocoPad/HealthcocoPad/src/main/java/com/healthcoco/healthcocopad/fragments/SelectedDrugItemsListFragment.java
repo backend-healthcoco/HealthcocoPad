@@ -230,13 +230,15 @@ public class SelectedDrugItemsListFragment extends HealthCocoFragment implements
     }
 
     private void refreshListViewUpdatedDrugsList() {
-        if (lvDrugsList.getChildCount() > 0) {
-            for (int i = 0; i < lvDrugsList.getChildCount(); i++) {
-                View child = lvDrugsList.getChildAt(i);
-                if (child.getTag() != null && child.getTag() instanceof SelectedPrescriptionDrugDoseItemsListViewHolder) {
-                    SelectedPrescriptionDrugDoseItemsListViewHolder viewHolder = (SelectedPrescriptionDrugDoseItemsListViewHolder) child.getTag();
-                    DrugItem modifiedDrug = viewHolder.getDrug();
-                    drugsList.put(modifiedDrug.getDrugId(), modifiedDrug);
+        if (drugsList.size() > 0) {
+            if (lvDrugsList.getChildCount() > 0) {
+                for (int i = 0; i < lvDrugsList.getChildCount(); i++) {
+                    View child = lvDrugsList.getChildAt(i);
+                    if (child.getTag() != null && child.getTag() instanceof SelectedPrescriptionDrugDoseItemsListViewHolder) {
+                        SelectedPrescriptionDrugDoseItemsListViewHolder viewHolder = (SelectedPrescriptionDrugDoseItemsListViewHolder) child.getTag();
+                        DrugItem modifiedDrug = viewHolder.getDrug();
+                        drugsList.put(modifiedDrug.getDrugId(), modifiedDrug);
+                    }
                 }
             }
         }

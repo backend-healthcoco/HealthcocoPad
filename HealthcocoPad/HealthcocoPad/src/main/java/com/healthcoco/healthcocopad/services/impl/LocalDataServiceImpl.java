@@ -2527,6 +2527,9 @@ public class LocalDataServiceImpl {
                     case CLINICAL_NOTES:
                         details.setClinicalNotes(getVisitedClinicalNotesList(details.getPatientId(), details.getUniqueId()));
                         break;
+                    case TREATMENT:
+                        details.setPatientTreatment(getVisitedTreatmentsList(details.getPatientId(), details.getUniqueId()));
+                        break;
                 }
             }
         }
@@ -2572,6 +2575,18 @@ public class LocalDataServiceImpl {
             }
         return list;
     }
+
+    private List<Treatments> getVisitedTreatmentsList(String patientId, String visitId) {
+        Select<Treatments> selectQuery = Select.from(Treatments.class)
+                .where(Condition.prop(LocalDatabaseUtils.KEY_PATIENT_ID).eq(patientId), Condition.prop(LocalDatabaseUtils.KEY_VISIT_ID).eq(visitId));
+        List<Treatments> list = selectQuery.list();
+        if (!Util.isNullOrEmptyList(list))
+            for (Treatments treatments : list) {
+                getTreatmentDetail(treatments);
+            }
+        return list;
+    }
+
 
     private List<VisitedForType> getVisitedFor(String visitId) {
         List<VisitedForTypeTable> visitForTableList = Select.from(VisitedForTypeTable.class)
@@ -2779,9 +2794,9 @@ public class LocalDataServiceImpl {
                                 continue;
                             break;
                         case TREATMENT:
-                            if (!Util.isNullOrEmptyList(details.getPatientTreatments())) {
+                            if (!Util.isNullOrEmptyList(details.getPatientTreatment())) {
                                 for (Treatments patientTreatment :
-                                        details.getPatientTreatments()) {
+                                        details.getPatientTreatment()) {
                                     customUniqueId = patientTreatment.getUniqueId();
                                     addTreatment(patientTreatment);
                                 }
@@ -2813,11 +2828,6 @@ public class LocalDataServiceImpl {
                 new String[]{visitDetails.getPatientId(), visitDetails.getUniqueId()});
     }
 
-    private void addTreatment(PatientTreatment patientTreatment) {
-        List<Treatments> treatmentsList = patientTreatment.getTreatments();
-//        addTreatmentList(treatmentsList, FromTableType.ADD_TREATMENT, patientTreatment.getUniqueId());
-        patientTreatment.save();
-    }
 
     private void addVisitForTable(String visitId, VisitedForType type, String customUniqueId) {
         VisitedForTypeTable visitedForTypeTable = new VisitedForTypeTable();
@@ -3680,6 +3690,10 @@ public class LocalDataServiceImpl {
                 treatmentArrayList) {
             addTreatment(treatment);
         }
+    }
+
+    public void updateTreatment(Treatments treatment) {
+        addTreatment(treatment);
     }
 
     public void addTreatment(Treatments treatment) {

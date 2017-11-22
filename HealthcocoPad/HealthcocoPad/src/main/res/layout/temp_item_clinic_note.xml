@@ -7,8 +7,8 @@
 
     <ImageView
         android:id="@+id/image_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/list_item_image_size"
+        android:layout_height="@dimen/list_item_image_size"
         android:layout_gravity="start"
         android:paddingRight="@dimen/item_visits_button_padding_left_right_20dp"
         android:src="@drawable/ic_icon_list_clinical_note" />
@@ -109,8 +109,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:visibility="gone"
-                android:padding="10dp">
+                android:padding="10dp"
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -166,8 +166,8 @@
                             android:background="@drawable/shape_rounded_corners_item_background_dark_grey"
                             android:clickable="true"
                             android:gravity="center"
-                            android:visibility="gone"
-                            android:padding="5dp">
+                            android:padding="5dp"
+                            android:visibility="gone">
 
                             <ImageView
                                 android:layout_width="wrap_content"

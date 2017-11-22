@@ -1,31 +1,40 @@
 package com.healthcoco.healthcocopad.viewholders;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.android.volley.Response;
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.HealthCocoViewHolder;
 import com.healthcoco.healthcocopad.R;
-import com.healthcoco.healthcocopad.bean.server.Discount;
-import com.healthcoco.healthcocopad.bean.server.PatientTreatment;
+import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.TreatmentItem;
 import com.healthcoco.healthcocopad.bean.server.Treatments;
 import com.healthcoco.healthcocopad.bean.server.UnitValue;
 import com.healthcoco.healthcocopad.bean.server.User;
-import com.healthcoco.healthcocopad.custom.OptionsPopupWindow;
+import com.healthcoco.healthcocopad.enums.AddUpdateNameDialogType;
+import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.CommonEMRItemClickListener;
 import com.healthcoco.healthcocopad.listeners.TreatmentListItemClickListeners;
 import com.healthcoco.healthcocopad.listeners.VisitDetailCombinedItemListener;
+import com.healthcoco.healthcocopad.services.GsonRequest;
+import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
+import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
+import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
+import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
 
 /**
  * Created by Shreshtha on 25-03-2017.
  */
-public class TreatmentListItemViewHolder extends HealthCocoViewHolder implements View.OnClickListener {
+public class TreatmentListItemViewHolder extends HealthCocoViewHolder implements View.OnClickListener, GsonRequest.ErrorListener, Response.Listener<VolleyResponseBean> {
     private static final String TAG = TreatmentListItemViewHolder.class.getSimpleName();
     private User user;
     private RegisteredPatientDetailsUpdated selectedPatient;
@@ -47,6 +56,7 @@ public class TreatmentListItemViewHolder extends HealthCocoViewHolder implements
     private LinearLayout btDiscard;
     private LinearLayout btGenerateInvoice;
     private LinearLayout layoutAdvice;
+    private ImageView imageView;
     private LinearLayout containerParentTreatmentsList;
     private TextView tvGrandTotal;
     private TextView tvTotalDiscount;
@@ -138,6 +148,7 @@ public class TreatmentListItemViewHolder extends HealthCocoViewHolder implements
         tvTreatmentBy = (TextView) contentView.findViewById(R.id.tv_treatment_by);
         containerTreatmentList = (LinearLayout) contentView.findViewById(R.id.container_treatment_list);
         containerParentTreatmentsList = (LinearLayout) contentView.findViewById(R.id.parent_treatment_layout);
+        imageView = (ImageView) contentView.findViewById(R.id.image_view);
 
         btHistory = (LinearLayout) contentView.findViewById(R.id.bt_history);
         btEmail = (LinearLayout) contentView.findViewById(R.id.bt_email);
@@ -160,12 +171,14 @@ public class TreatmentListItemViewHolder extends HealthCocoViewHolder implements
             btHistory.setVisibility(View.GONE);
             headerCreatedByTreatment.setVisibility(View.GONE);
             containerTreatmentBy.setVisibility(View.GONE);
+            imageView.setVisibility(View.GONE);
             containerBottomButtons.setVisibility(View.GONE);
         } else {
             btHistory.setVisibility(View.GONE);
             headerCreatedByTreatment.setVisibility(View.VISIBLE);
             containerTreatmentBy.setVisibility(View.VISIBLE);
             containerBottomButtons.setVisibility(View.VISIBLE);
+            imageView.setVisibility(View.VISIBLE);
         }
     }
 
@@ -188,18 +201,121 @@ public class TreatmentListItemViewHolder extends HealthCocoViewHolder implements
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.bt_email:
+                Util.checkNetworkStatus(mActivity);
+                if (HealthCocoConstants.isNetworkOnline)
+                    if (detailCombinedItemListener != null)
+                        detailCombinedItemListener.sendEmail("");
+                    else
+                        mActivity.openAddUpdateNameDialogFragment(WebServiceType.SEND_EMAIL_TREATMENT, AddUpdateNameDialogType.EMAIL, treatments.getUniqueId());
+                else onNetworkUnavailable(null);
                 break;
+
             case R.id.bt_discard:
+                if (commonEmrClickListener != null) {
+                    LogUtils.LOGD(TAG, "Discard");
+                    Util.checkNetworkStatus(mActivity);
+                    if (HealthCocoConstants.isNetworkOnline) {
+                        int msgId = R.string.confirm_discard_clinical_notes_message;
+                        int titleId = R.string.confirm_discard_treatment_title;
+                        showConfirmationAlert(v.getId(), mActivity.getResources().getString(titleId), mActivity.getResources().getString(msgId));
+                    } else onNetworkUnavailable(null);
+                }
                 break;
             case R.id.bt_generate_invoice:
                 break;
-            case R.id.bt_prescription:
-                break;
             case R.id.bt_edit:
-                listItemClickListeners.onAddTreatmentClicked(treatments);
+                Util.checkNetworkStatus(mActivity);
+                if (HealthCocoConstants.isNetworkOnline) {
+                    listItemClickListeners.onAddTreatmentClicked(treatments);
+                } else onNetworkUnavailable(null);
                 break;
             case R.id.bt_print:
+                LogUtils.LOGD(TAG, "Print");
+                if (detailCombinedItemListener != null) {
+                    detailCombinedItemListener.doPrint("");
+                } else {
+                    Util.checkNetworkStatus(mActivity);
+                    if (HealthCocoConstants.isNetworkOnline) {
+                        mActivity.showLoading(false);
+                        WebDataServiceImpl.getInstance(mApp).getPdfUrl(String.class, WebServiceType.GET_TREATMENT_PDF_URL, treatments.getUniqueId(), this, this);
+                    } else onNetworkUnavailable(null);
+                }
                 break;
         }
     }
+
+
+    @Override
+    public void onErrorResponse(VolleyResponseBean volleyResponseBean, String errorMessage) {
+        mActivity.hideLoading();
+        if (commonEmrClickListener != null)
+            commonEmrClickListener.showLoading(false);
+    }
+
+    @Override
+    public void onNetworkUnavailable(WebServiceType webServiceType) {
+        Util.showToast(mActivity, R.string.user_offline);
+        mActivity.hideLoading();
+        if (commonEmrClickListener != null)
+            commonEmrClickListener.showLoading(false);
+    }
+
+    @Override
+    public void onResponse(VolleyResponseBean response) {
+        if (response.getWebServiceType() != null) {
+            LogUtils.LOGD(TAG, "Success " + String.valueOf(response.getWebServiceType()));
+            switch (response.getWebServiceType()) {
+                case GET_TREATMENT_PDF_URL:
+                    if (response.getData() != null && response.getData() instanceof String) {
+                        mActivity.openEnlargedImageDialogFragment(true, (String) response.getData());
+                    }
+                    break;
+                case DISCARD_TREATMENT:
+                    LogUtils.LOGD(TAG, "Success DISCARD_TREATMENT");
+                    treatments.setDiscarded(!treatments.getDiscarded());
+                    applyData();
+                    LocalDataServiceImpl.getInstance(mApp).addTreatment(treatments);
+                    break;
+                default:
+                    break;
+            }
+        }
+        mActivity.hideLoading();
+    }
+
+    private void showConfirmationAlert(final int viewId, String title, String msg) {
+        if (Util.isNullOrBlank(title))
+            title = mActivity.getResources().getString(R.string.confirm);
+        final AlertDialog.Builder alertBuilder = new AlertDialog.Builder(mActivity);
+        alertBuilder.setTitle(title);
+        alertBuilder.setMessage(msg);
+        alertBuilder.setCancelable(false);
+        alertBuilder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (viewId) {
+                    case R.id.bt_discard:
+                        onDiscardedClicked();
+                        break;
+                }
+            }
+        });
+        alertBuilder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+        alertBuilder.create();
+        alertBuilder.show();
+    }
+
+    public void onDiscardedClicked() {
+        if (HealthCocoConstants.isNetworkOnline) {
+            mActivity.showLoading(false);
+            WebDataServiceImpl.getInstance(mApp).discardTreatment(Treatments.class, treatments.getUniqueId(), user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(), this, this);
+        } else onNetworkUnavailable(null);
+    }
+
 }

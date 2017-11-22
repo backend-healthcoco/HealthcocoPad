@@ -57,15 +57,13 @@ public class SelectedTreatmentsItemsListViewholder extends HealthCocoViewHolder 
     private TextView tvTreatmentMaterial;
     private EditText etTextTreatmentNote;
     private LinearLayout layoutTreatmentToothNo;
-    private HealthCocoFragment mFragment;
     private DoctorProfile doctorProfile;
 
-    public SelectedTreatmentsItemsListViewholder(HealthCocoActivity mActivity, SelectedTreatmentsListItemListener selectedTreatmentItemClickListener, HealthCocoFragment mFragment) {
+    public SelectedTreatmentsItemsListViewholder(HealthCocoActivity mActivity, SelectedTreatmentsListItemListener selectedTreatmentItemClickListener) {
         super(mActivity);
         this.mActivity = mActivity;
         this.selectedTreatmentItemClickListener = selectedTreatmentItemClickListener;
         this.mApp = ((HealthCocoApplication) mActivity.getApplication());
-        this.mFragment = mFragment;
         this.doctorProfile = selectedTreatmentItemClickListener.getDoctorProfile();
     }
 

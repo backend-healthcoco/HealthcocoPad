@@ -40,13 +40,15 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.healthcoco.healthcocopad.fragments.AddEditNormalVisitPrescriptionFragment.TAG_PRESCRIPTION_DATA;
+
 /**
  * Created by Shreshtha on 18-07-2017.
  */
 
 public class SelectedTreatmentsListFragment extends HealthCocoFragment implements SelectedTreatmentsListItemListener {
     public static final String TAG_TREATMENT_ITEM_DETAIL = "treatmentItemDetail";
-    AddNewTreatmentFragment addNewTreatmentFragment;
+    public static final String TAG_DOCTOR_PROFILE = "doctorprofile";
     private ExpandableHeightListView lvTreatmentsList;
     private TextView tvNoTreatmentAdded;
     private SelectedTreatmentsItemsListAdapter adapter;
@@ -56,10 +58,8 @@ public class SelectedTreatmentsListFragment extends HealthCocoFragment implement
     private DoctorProfile doctorProfile;
     private SelectedTreatmentsItemsListViewholder viewHolder;
 
-    public SelectedTreatmentsListFragment(DoctorProfile doctorProfile, AddNewTreatmentFragment addNewTreatmentFragment) {
+    public SelectedTreatmentsListFragment() {
         super();
-        this.doctorProfile = doctorProfile;
-        this.addNewTreatmentFragment = addNewTreatmentFragment;
     }
 
     @Override
@@ -84,9 +84,16 @@ public class SelectedTreatmentsListFragment extends HealthCocoFragment implement
     }
 
     private void initIntentData() {
-        Intent intent = mActivity.getIntent();
-        treatment = Parcels.unwrap(intent.getParcelableExtra(PatientTreatmentDetailFragment.TAG_TREATMENT_DATA));
+//        Intent intent = mActivity.getIntent();
+//        treatment = Parcels.unwrap(intent.getParcelableExtra(PatientTreatmentDetailFragment.TAG_TREATMENT_DATA));
 //        doctorProfile = Parcels.unwrap(intent.getParcelableExtra(HealthCocoConstants.TAG_DOCTOR_PROFILE));
+        Bundle bundle = getArguments();
+        if (bundle != null && bundle.containsKey(TAG_TREATMENT_ITEM_DETAIL)) {
+            treatment = Parcels.unwrap(bundle.getParcelable(TAG_TREATMENT_ITEM_DETAIL));
+        }
+        if (bundle != null && bundle.containsKey(TAG_DOCTOR_PROFILE)) {
+            doctorProfile = Parcels.unwrap(bundle.getParcelable(TAG_DOCTOR_PROFILE));
+        }
         if (treatment != null) {
             List<TreatmentItem> treatments = treatment.getTreatments();
             for (TreatmentItem treatmentItem :
@@ -113,7 +120,7 @@ public class SelectedTreatmentsListFragment extends HealthCocoFragment implement
     }
 
     private void initAdapter() {
-        adapter = new SelectedTreatmentsItemsListAdapter(mActivity, this, this);
+        adapter = new SelectedTreatmentsItemsListAdapter(mActivity, this);
         lvTreatmentsList.setAdapter(adapter);
         lvTreatmentsList.setTranscriptMode(AbsListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
     }
@@ -169,7 +176,7 @@ public class SelectedTreatmentsListFragment extends HealthCocoFragment implement
 
     @Override
     public void onTotalCostChange() {
-        addNewTreatmentFragment.setModifiedValues();
+//        addNewTreatmentFragment.setModifiedValues();
 //        Util.sendBroadcast(mApp, AddNewTreatmentFragment.INTENT_GET_MODIFIED_VALUE);
     }
 

@@ -21,9 +21,11 @@ import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.adapter.ContactsDetailViewPagerAdapter;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
+import com.healthcoco.healthcocopad.bean.request.PrescriptionRequest;
 import com.healthcoco.healthcocopad.bean.request.TreatmentRequest;
 import com.healthcoco.healthcocopad.bean.server.DoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
+import com.healthcoco.healthcocopad.bean.server.Prescription;
 import com.healthcoco.healthcocopad.bean.server.Quantity;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.TreatmentItem;
@@ -37,6 +39,7 @@ import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.QuantityEnum;
 import com.healthcoco.healthcocopad.enums.SelectDrugItemType;
 import com.healthcoco.healthcocopad.enums.UnitType;
+import com.healthcoco.healthcocopad.enums.VisitIdType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
 import com.healthcoco.healthcocopad.listeners.SelectDrugItemClickListener;
@@ -44,12 +47,14 @@ import com.healthcoco.healthcocopad.listeners.SelectedTreatmentItemClickListener
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
+import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.healthcoco.healthcocopad.views.ScrollViewWithHeaderNewPrescriptionLayout;
 
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Aai on 09/11/2017.
@@ -60,7 +65,7 @@ public class AddNewTreatmentFragment extends HealthCocoFragment implements Local
         View.OnClickListener, TabHost.OnTabChangeListener, ViewPager.OnPageChangeListener, SelectDrugItemClickListener, SelectedTreatmentItemClickListener {
     public static final String INTENT_GET_MODIFIED_VALUE = "com.healthcoco.MODIFIED_VALUE";
     public static final String TAG_SELECTED_TREATMENT_OBJECT = "selectedTreatmentItemOrdinal";
-
+    public static final String TAG_TREATMENT_ID = "treatmentId";
     private ViewPager viewPager;
     private TabHost tabhost;
     private ArrayList<Fragment> fragmentsList;
@@ -78,6 +83,7 @@ public class AddNewTreatmentFragment extends HealthCocoFragment implements Local
             setModifiedValues();
         }
     };
+    private List<Treatments> treatmentsList;
     private DoctorProfile doctorProfile;
     private TreatmentListFragment treatmentListFragment;
     private TreatmentCustomListFragment customListFragment;
@@ -93,6 +99,16 @@ public class AddNewTreatmentFragment extends HealthCocoFragment implements Local
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        Bundle bundle = getArguments();
+        if (bundle != null && bundle.containsKey(PatientTreatmentDetailFragment.TAG_TREATMENT_DATA)) {
+            treatmentsList = Parcels.unwrap(bundle.getParcelable(PatientTreatmentDetailFragment.TAG_TREATMENT_DATA));
+            if (!Util.isNullOrEmptyList(treatmentsList)) {
+                for (Treatments treatments : treatmentsList) {
+                    treatment = treatments;
+                }
+            }
+
+        }
         init();
         mActivity.showLoading(false);
         new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_FRAGMENT_INITIALISATION_DATA, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
@@ -130,14 +146,14 @@ public class AddNewTreatmentFragment extends HealthCocoFragment implements Local
         treatmentListFragment = new TreatmentListFragment(this);
         addFragment(treatmentListFragment, R.string.all, false);
 
-//        if (doctorProfile.getSpecialities().contains("Dentist")) {
-//        init fragment 2
-//            customListFragment = new TreatmentCustomListFragment(this);
-//            addFragment(customListFragment, R.string.featured, true);
-//        } else {
-//            tabhost.getTabWidget().setVisibility(View.GONE);
-//
-//        }
+        if (doctorProfile.getSpecialities().contains("Dentist")) {
+            // init fragment 2
+            customListFragment = new TreatmentCustomListFragment(this);
+            addFragment(customListFragment, R.string.featured, true);
+        } else {
+            tabhost.getTabWidget().setVisibility(View.GONE);
+
+        }
     }
 
     private void addFragment(Fragment fragment, int tabIndicatorId, boolean isLastTab) {
@@ -146,7 +162,7 @@ public class AddNewTreatmentFragment extends HealthCocoFragment implements Local
     }
 
     private TabHost.TabSpec getTabSpec(String simpleName, int textId, boolean isLastTab) {
-        View view1 = mActivity.getLayoutInflater().inflate(R.layout.tab_indicator_add_visit, null);
+        View view1 = mActivity.getLayoutInflater().inflate(R.layout.tab_indicator_add_treatment, null);
         TextView tvTabText = (TextView) view1.findViewById(R.id.tv_tab_text);
         tvTabText.setText(textId);
         return tabhost.newTabSpec(simpleName).setIndicator(view1).setContent(new DummyTabFactory(mActivity));
@@ -154,8 +170,7 @@ public class AddNewTreatmentFragment extends HealthCocoFragment implements Local
 
     private void initViewPagerAdapter() {
         viewPager.setOffscreenPageLimit(fragmentsList.size());
-        ContactsDetailViewPagerAdapter viewPagerAdapter = new ContactsDetailViewPagerAdapter(
-                mActivity.getSupportFragmentManager());
+        ContactsDetailViewPagerAdapter viewPagerAdapter = new ContactsDetailViewPagerAdapter(getChildFragmentManager());
         viewPagerAdapter.setFragmentsList(fragmentsList);
         viewPager.setAdapter(viewPagerAdapter);
     }
@@ -166,8 +181,10 @@ public class AddNewTreatmentFragment extends HealthCocoFragment implements Local
     }
 
     private void initIntentData() {
-        Intent intent = mActivity.getIntent();
-        treatment = Parcels.unwrap(intent.getParcelableExtra(PatientTreatmentDetailFragment.TAG_TREATMENT_DATA));
+//        Intent intent = mActivity.getIntent();
+//        if (intent != null) {
+//            treatment = Parcels.unwrap(intent.getParcelableExtra(PatientTreatmentDetailFragment.TAG_TREATMENT_DATA));
+//        }
     }
 
     private void initDefaultData(Treatments treatment) {
@@ -178,7 +195,12 @@ public class AddNewTreatmentFragment extends HealthCocoFragment implements Local
     }
 
     private void initSelectedTreatmentsListFragment() {
-        selectedTreatmentsListFragment = new SelectedTreatmentsListFragment(doctorProfile, this);
+        Bundle bundle = new Bundle();
+        selectedTreatmentsListFragment = new SelectedTreatmentsListFragment();
+        if (!Util.isNullOrEmptyList(treatmentsList))
+            bundle.putParcelable(SelectedTreatmentsListFragment.TAG_TREATMENT_ITEM_DETAIL, Parcels.wrap(treatmentsList.get(0)));
+        bundle.putParcelable(SelectedTreatmentsListFragment.TAG_DOCTOR_PROFILE, Parcels.wrap(doctorProfile));
+        selectedTreatmentsListFragment.setArguments(bundle);
         mFragmentManager.beginTransaction().add(R.id.layout_selected_treatment_list_fragment, selectedTreatmentsListFragment, selectedTreatmentsListFragment.getClass().getSimpleName()).commit();
     }
 
@@ -211,7 +233,7 @@ public class AddNewTreatmentFragment extends HealthCocoFragment implements Local
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.bt_save:
-                validateData();
+//                validateData();
                 break;
             default:
                 break;
@@ -221,14 +243,29 @@ public class AddNewTreatmentFragment extends HealthCocoFragment implements Local
     public void validateData() {
         int msgId = getBlankTreatmentMsg();
         if (msgId == 0) {
-            setModifiedValues();
+            refreshListViewUpdatedTreatmentList();
             addTreatment();
         } else {
             Util.showToast(mActivity, msgId);
         }
     }
 
+    public void refreshListViewUpdatedTreatmentList() {
+        selectedTreatmentsListFragment.modifyTreatmentsList();
+        setModifiedValues();
+    }
+
     private void addTreatment() {
+
+        mActivity.showLoading(false);
+        TreatmentRequest treatmentRequest = getTreatmentRequestDetails();
+//        treatmentRequest.setVisitId(Util.getVisitId(VisitIdType.TREATMENT));
+
+        WebDataServiceImpl.getInstance(mApp).addTreatment(Treatments.class, treatmentRequest, this, this);
+    }
+
+    public TreatmentRequest getTreatmentRequestDetails() {
+
         TreatmentRequest treatmentRequest = new TreatmentRequest();
         treatmentRequest.setTreatments(selectedTreatmentsListFragment.getModifiedTreatmentsItemRequestList());
         treatmentRequest.setDoctorId(user.getUniqueId());
@@ -242,11 +279,10 @@ public class AddNewTreatmentFragment extends HealthCocoFragment implements Local
         if (treatment.getUniqueId() != null)
             treatmentRequest.setUniqueId(treatment.getUniqueId());
 
-
         if (treatment.getUniqueEmrId() != null)
             treatmentRequest.setUniqueEmrId(treatment.getUniqueEmrId());
-        mActivity.showLoading(false);
-        WebDataServiceImpl.getInstance(mApp).addTreatment(Treatments.class, treatmentRequest, this, this);
+
+        return treatmentRequest;
     }
 
     public int getBlankTreatmentMsg() {
@@ -314,6 +350,7 @@ public class AddNewTreatmentFragment extends HealthCocoFragment implements Local
                 if (response.getData() != null && response.getData() instanceof Treatments) {
                     Treatments treatment = (Treatments) response.getData();
                     LocalDataServiceImpl.getInstance(mApp).addTreatment(treatment);
+                    Util.setVisitId(VisitIdType.TREATMENT, treatment.getVisitId());
                     Util.sendBroadcast(mApp, PatientTreatmentDetailFragment.INTENT_GET_TREATMENT_LIST_LOCAL);
                     mActivity.setResult(HealthCocoConstants.RESULT_CODE_ADD_NEW_TREATMENT, null);
                     ((CommonOpenUpActivity) mActivity).finish();
@@ -349,7 +386,6 @@ public class AddNewTreatmentFragment extends HealthCocoFragment implements Local
     }
 
     public void setModifiedValues() {
-        selectedTreatmentsListFragment.modifyTreatmentsList();
         Double totalCost = selectedTreatmentsListFragment.getTotalCost();
         Double totalDiscount = selectedTreatmentsListFragment.getTotalDiscount();
         Double totalGrandTotal = selectedTreatmentsListFragment.getGrandTotalCost();
@@ -379,7 +415,7 @@ public class AddNewTreatmentFragment extends HealthCocoFragment implements Local
 
     @Override
     public void onPageSelected(int position) {
-
+        tabhost.setCurrentTab(position);
     }
 
     @Override

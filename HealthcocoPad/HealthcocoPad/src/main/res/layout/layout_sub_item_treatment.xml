@@ -101,7 +101,8 @@
             android:layout_weight="1"
             android:text="@string/fa_total_cost"
             android:textColor="@color/black"
-            android:textSize="@dimen/text_size_drug_child_lable" />
+            android:textSize="@dimen/text_size_drug_child_lable"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/tv_total_cost"
@@ -109,7 +110,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textColor="@color/black_greyish"
-            android:textSize="@dimen/text_size_drug_child_lable" />
+            android:textSize="@dimen/text_size_drug_child_lable"
+            android:textStyle="bold" />
 
         <TextView
             android:layout_width="0dp"
@@ -117,7 +119,8 @@
             android:layout_weight="1"
             android:text="@string/fa_total_discount"
             android:textColor="@color/black"
-            android:textSize="@dimen/text_size_drug_child_lable" />
+            android:textSize="@dimen/text_size_drug_child_lable"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/tv_total_discount"
@@ -125,7 +128,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textColor="@color/black_greyish"
-            android:textSize="@dimen/text_size_drug_child_lable" />
+            android:textSize="@dimen/text_size_drug_child_lable"
+            android:textStyle="bold" />
 
         <TextView
             android:layout_width="0dp"
@@ -133,7 +137,8 @@
             android:layout_weight="1"
             android:text="@string/fa_grand_total_rupees"
             android:textColor="@color/black"
-            android:textSize="@dimen/text_size_drug_child_lable" />
+            android:textSize="@dimen/text_size_drug_child_lable"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/tv_grand_total"
@@ -141,6 +146,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textColor="@color/black_greyish"
-            android:textSize="@dimen/text_size_drug_child_lable" />
+            android:textSize="@dimen/text_size_drug_child_lable"
+            android:textStyle="bold" />
     </LinearLayout>
 </LinearLayout>

@@ -62,16 +62,23 @@ public class PatientTreatmentDetailFragment extends HealthCocoFragment implement
     //variables need for pagination
     public static final int MAX_SIZE = 10;
     private static final int REQUEST_CODE_TREATMENT_LIST = 129;
+    List<Treatments> treatmentsList;
     private int PAGE_NUMBER = 0;
     private boolean isEndOfListAchieved;
     private int currentPageNumber;
     private boolean isInitialLoading;
-
     private HashMap<String, Treatments> treatmentHashMap = new HashMap<>();
     private RegisteredPatientDetailsUpdated selectedPatient;
     private TextView tvNoTreatmentFound;
     private ListViewLoadMore lvTreatment;
     private User user;
+    BroadcastReceiver treatmentListReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, final Intent intent) {
+            resetListAndPagingAttributes();
+            getTreatment(true);
+        }
+    };
     private boolean isOTPVerified = false;
     private boolean isLoading;
     private ProgressBar progressLoading;
@@ -82,6 +89,7 @@ public class PatientTreatmentDetailFragment extends HealthCocoFragment implement
             if (intent != null && intent.hasExtra(SHOW_LOADING)) {
                 showLoading = intent.getBooleanExtra(SHOW_LOADING, false);
             }
+            resetListAndPagingAttributes();
             getListFromLocal(showLoading, isOtpVerified(), PAGE_NUMBER);
             sendBroadcasts();
         }
@@ -289,6 +297,10 @@ public class PatientTreatmentDetailFragment extends HealthCocoFragment implement
     public void onResume() {
         super.onResume();
         if (!receiversRegistered) {
+            //receiver for prescription list refresh
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(INTENT_GET_TREATMENT_LIST);
+            LocalBroadcastManager.getInstance(mActivity).registerReceiver(treatmentListReceiver, filter);
             //receiver for prescription list refresh from local
             IntentFilter filter2 = new IntentFilter();
             filter2.addAction(INTENT_GET_TREATMENT_LIST_LOCAL);
@@ -311,7 +323,7 @@ public class PatientTreatmentDetailFragment extends HealthCocoFragment implement
     private void sendBroadcasts() {
         Util.sendBroadcasts(mApp, new ArrayList<String>() {{
 //            add(HistoryFragment.INTENT_GET_HISTORY_LIST);
-            add(PatientVisitDetailFragment.INTENT_GET_VISITS_LIST_FROM_LOCAL);
+            add(PatientVisitDetailFragment.INTENT_GET_VISITS_LIST);
         }});
     }
 
@@ -335,7 +347,9 @@ public class PatientTreatmentDetailFragment extends HealthCocoFragment implement
         Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
         intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.ADD_VISITS.ordinal());
         if (treatment != null)
-            intent.putExtra(TAG_TREATMENT_DATA, Parcels.wrap(treatment));
+            treatmentsList = new ArrayList<>();
+        treatmentsList.add(treatment);
+        intent.putExtra(TAG_TREATMENT_DATA, Parcels.wrap(treatmentsList));
         intent.putExtra(CommonOpenUpPatientDetailFragment.TAG_PATIENT_DETAIL_TAB_TYPE, detailTabType);
         startActivityForResult(intent, HealthCocoConstants.REQUEST_CODE_TREATMENT);
     }

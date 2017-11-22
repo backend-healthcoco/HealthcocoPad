@@ -52,6 +52,7 @@ public class PrescriptionListItemViewHolder extends HealthCocoViewHolder impleme
         Response.Listener<VolleyResponseBean>, GsonRequest.ErrorListener {
     private static final String TAG = PrescriptionListItemViewHolder.class.getSimpleName();
     private static final int REQUEST_CODE_PRESCRIPTION_LIST = 155;
+    private static final String DATE_FORMAT_USED_IN_THIS_SCREEN = "EEE, dd MMM yyyy";
     private User user;
     private RegisteredPatientDetailsUpdated selectedPatient;
     private VisitDetailCombinedItemListener detailCombinedItemListener;
@@ -80,7 +81,6 @@ public class PrescriptionListItemViewHolder extends HealthCocoViewHolder impleme
     private ImageView imageView;
     private TextView textViewNextReviewDate;
     private LinearLayout layoutNextReviewDetail;
-    private static final String DATE_FORMAT_USED_IN_THIS_SCREEN = "EEE, dd MMM yyyy";
 
     public PrescriptionListItemViewHolder(HealthCocoActivity mActivity,
                                           Object listenerObject, boolean isInPrescriptionsList) {
@@ -332,6 +332,7 @@ public class PrescriptionListItemViewHolder extends HealthCocoViewHolder impleme
                     } else onNetworkUnavailable(null);
                 }
                 popupWindow.dismiss();
+
                 break;
             case R.id.tv_save_as_template:
                 LogUtils.LOGD(TAG, "save template");

@@ -9,7 +9,6 @@ import com.healthcoco.healthcocopad.HealthCocoViewHolder;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.server.AppointmentRequest;
 import com.healthcoco.healthcocopad.bean.server.ClinicalNotes;
-import com.healthcoco.healthcocopad.bean.server.PatientTreatment;
 import com.healthcoco.healthcocopad.bean.server.Prescription;
 import com.healthcoco.healthcocopad.bean.server.Records;
 import com.healthcoco.healthcocopad.bean.server.Treatments;
@@ -168,12 +167,12 @@ public class VisitDetailCombinedViewHolder extends HealthCocoViewHolder implemen
             }
             checkIsDiscarded(prescriptionsList.get(0).getDiscarded());
         } else containerPrescription.setVisibility(View.GONE);
-        if (!Util.isNullOrEmptyList(visitDetail.getPatientTreatments())) {
+        if (!Util.isNullOrEmptyList(visitDetail.getPatientTreatment())) {
             containerTreatment.setVisibility(View.VISIBLE);
             setButtonVisible(VisitedForType.TREATMENT);
-            List<Treatments> patientTreatmentList = visitDetail.getPatientTreatments();
+            List<Treatments> patientTreatmentList = visitDetail.getPatientTreatment();
             for (Treatments treatment : patientTreatmentList) {
-                TreatmentListItemViewHolder treatmentListItemViewHolder = (TreatmentListItemViewHolder) containerPrescription.getTag();
+                TreatmentListItemViewHolder treatmentListItemViewHolder = (TreatmentListItemViewHolder) containerTreatment.getTag();
                 treatmentListItemViewHolder.setData(treatment);
                 treatmentListItemViewHolder.applyData();
             }

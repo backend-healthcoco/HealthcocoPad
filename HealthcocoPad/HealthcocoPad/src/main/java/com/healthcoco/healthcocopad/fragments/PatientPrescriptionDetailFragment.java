@@ -60,11 +60,23 @@ public class PatientPrescriptionDetailFragment extends HealthCocoFragment implem
     //variables need for pagination
     public static final int MAX_SIZE = 10;
     private static final int REQUEST_CODE_PRESCRIPTION_LIST = 121;
+    public FloatingActionButton floatingActionButton;
+    BroadcastReceiver prescriptionUsingPrescriptionIdReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, final Intent intent) {
+//            if (intent != null && intent.hasExtra(AddNewPrescriptionFragment.TAG_PRESCRIPTION_ID)) {
+//                String prescriptionId = intent.getStringExtra(AddNewPrescriptionFragment.TAG_PRESCRIPTION_ID);
+//                Prescription prescripton = LocalDataServiceImpl.getInstance(mApp).getPrescription(prescriptionId);
+//                prescriptionsList.put(prescripton.getUniqueId(), prescripton);
+//                notifyAdapter(new ArrayList<>(prescriptionsList.values()));
+//            }
+            sendBroadcasts();
+        }
+    };
     private int PAGE_NUMBER = 0;
     private boolean isEndOfListAchieved;
     private int currentPageNumber;
     private boolean isInitialLoading;
-
     private HashMap<String, Prescription> prescriptionsList = new HashMap<>();
     private TextView tvNoPrescriptionFound;
     private ListViewLoadMore lvPrescription;
@@ -72,12 +84,30 @@ public class PatientPrescriptionDetailFragment extends HealthCocoFragment implem
     private User user;
     private ProgressBar progressLoading;
     private boolean isOTPVerified = false;
+    BroadcastReceiver prescriptionListReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, final Intent intent) {
+            resetListAndPagingAttributes();
+            getPrescription(true);
+        }
+    };
     private PrescriptionListAdapter adapter;
     private SwipeRefreshLayout swipeRefreshLayout;
     private boolean receiversRegistered = false;
     private PatientDetailTabType detailTabType;
     private boolean isLoading;
-    public FloatingActionButton floatingActionButton;
+    BroadcastReceiver prescriptionListReceiverLocal = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, final Intent intent) {
+            boolean showLoading = false;
+            if (intent != null && intent.hasExtra(SHOW_LOADING)) {
+                showLoading = intent.getBooleanExtra(SHOW_LOADING, false);
+            }
+            resetListAndPagingAttributes();
+            getListFromLocal(showLoading, isOtpVerified(), PAGE_NUMBER);
+            sendBroadcasts();
+        }
+    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -306,7 +336,6 @@ public class PatientPrescriptionDetailFragment extends HealthCocoFragment implem
         }
     }
 
-
     @Override
     public void onPause() {
         super.onPause();
@@ -320,44 +349,10 @@ public class PatientPrescriptionDetailFragment extends HealthCocoFragment implem
         LocalBroadcastManager.getInstance(mActivity).unregisterReceiver(prescriptionUsingPrescriptionIdReceiver);
     }
 
-    BroadcastReceiver prescriptionListReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, final Intent intent) {
-            resetListAndPagingAttributes();
-            getPrescription(true);
-        }
-    };
-
-    BroadcastReceiver prescriptionUsingPrescriptionIdReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, final Intent intent) {
-//            if (intent != null && intent.hasExtra(AddNewPrescriptionFragment.TAG_PRESCRIPTION_ID)) {
-//                String prescriptionId = intent.getStringExtra(AddNewPrescriptionFragment.TAG_PRESCRIPTION_ID);
-//                Prescription prescripton = LocalDataServiceImpl.getInstance(mApp).getPrescription(prescriptionId);
-//                prescriptionsList.put(prescripton.getUniqueId(), prescripton);
-//                notifyAdapter(new ArrayList<>(prescriptionsList.values()));
-//            }
-            sendBroadcasts();
-        }
-    };
-
-    BroadcastReceiver prescriptionListReceiverLocal = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, final Intent intent) {
-            boolean showLoading = false;
-            if (intent != null && intent.hasExtra(SHOW_LOADING)) {
-                showLoading = intent.getBooleanExtra(SHOW_LOADING, false);
-            }
-            resetListAndPagingAttributes();
-            getListFromLocal(showLoading, isOtpVerified(), PAGE_NUMBER);
-            sendBroadcasts();
-        }
-    };
-
     private void sendBroadcasts() {
         Util.sendBroadcasts(mApp, new ArrayList<String>() {{
 //            add(HistoryFragment.INTENT_GET_HISTORY_LIST);
-            add(PatientVisitDetailFragment.INTENT_GET_VISITS_LIST_FROM_LOCAL);
+//            add(PatientVisitDetailFragment.INTENT_GET_VISITS_LIST);
         }});
     }
 
@@ -366,22 +361,22 @@ public class PatientPrescriptionDetailFragment extends HealthCocoFragment implem
         getPrescription(false);
     }
 
-    public void setSelectedPatient(RegisteredPatientDetailsUpdated selectedPatient) {
-        this.selectedPatient = selectedPatient;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
     @Override
     public RegisteredPatientDetailsUpdated getSelectedPatient() {
         return selectedPatient;
     }
 
+    public void setSelectedPatient(RegisteredPatientDetailsUpdated selectedPatient) {
+        this.selectedPatient = selectedPatient;
+    }
+
     @Override
     public User getUser() {
         return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.healthcoco.healthcocopad.bean.server;
 
 import com.healthcoco.healthcocopad.bean.request.ClinicalNoteToSend;
 import com.healthcoco.healthcocopad.bean.request.PrescriptionRequest;
+import com.healthcoco.healthcocopad.bean.request.TreatmentRequest;
 import com.healthcoco.healthcocopad.enums.VisitedForType;
 import com.orm.SugarRecord;
 import com.orm.annotation.Ignore;
@@ -27,7 +28,7 @@ public class VisitDetails extends SugarRecord {
     @Ignore
     private List<Records> records;
     @Ignore
-    private List<Treatments> patientTreatments;
+    private List<Treatments> patientTreatment;
     @Ignore
     private List<VisitedForType> visitedFor;
     private Long visitedTime;
@@ -36,6 +37,9 @@ public class VisitDetails extends SugarRecord {
     private ClinicalNoteToSend clinicalNote;
     @Ignore
     private PrescriptionRequest prescription;
+
+    @Ignore
+    private TreatmentRequest treatmentRequest;
 
     private String uniqueEmrId;
 
@@ -106,12 +110,12 @@ public class VisitDetails extends SugarRecord {
         this.clinicalNotes = clinicalNotes;
     }
 
-    public List<Treatments> getPatientTreatments() {
-        return patientTreatments;
+    public List<Treatments> getPatientTreatment() {
+        return patientTreatment;
     }
 
-    public void setPatientTreatments(List<Treatments> patientTreatments) {
-        this.patientTreatments = patientTreatments;
+    public void setPatientTreatment(List<Treatments> patientTreatment) {
+        this.patientTreatment = patientTreatment;
     }
 
     public List<Records> getRecords() {
@@ -168,6 +172,14 @@ public class VisitDetails extends SugarRecord {
 
     public void setPrescription(PrescriptionRequest prescription) {
         this.prescription = prescription;
+    }
+
+    public TreatmentRequest getTreatmentRequest() {
+        return treatmentRequest;
+    }
+
+    public void setTreatmentRequest(TreatmentRequest treatmentRequest) {
+        this.treatmentRequest = treatmentRequest;
     }
 
     public String getUniqueEmrId() {

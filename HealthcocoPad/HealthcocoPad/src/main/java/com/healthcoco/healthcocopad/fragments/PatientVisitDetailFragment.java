@@ -69,14 +69,15 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
     public static final String INTENT_GET_VISITS_LIST_FROM_LOCAL = "com.healthcoco.healthcocopad.fragments.PatientVisitDetailFragment.VISITS_LIST_FROM_LOCAl";
     //variables need for pagination
     public static final int MAX_SIZE = 10;
-    private static final int REQUEST_CODE_VISITS_LIST = 100;
     public static final String TAG_TOGGLE_STATE = "visitState";
+    //other variables
+    public static final String INTENT_GET_VISITS_LIST = "com.healthcoco.VISITS_LIST";
+    private static final int REQUEST_CODE_VISITS_LIST = 100;
+    public FloatingActionButton floatingActionButton;
+    boolean isMyScriptVisitToggleState;
     private int PAGE_NUMBER = 0;
     private boolean isEndOfListAchieved;
     private boolean isInitialLoading;
-
-    //other variables
-    public static final String INTENT_GET_VISITS_LIST = "com.healthcoco.VISITS_LIST";
     private User user;
     private RegisteredPatientDetailsUpdated selectedPatient;
     private TextView tvNoVisits;
@@ -89,9 +90,21 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
     private OptionsPopupWindow popupWindow;
     private SwipeRefreshLayout swipeRefreshLayout;
     private int currentPageNumber;
-    boolean isMyScriptVisitToggleState;
+    BroadcastReceiver visitsListReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, final Intent intent) {
+            resetListAndPagingAttributes();
+            getVisits(false);
+        }
+    };
+    BroadcastReceiver visitsListLocalReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, final Intent intent) {
+            refreshListFromLocal();
+            sendBroadcasts();
+        }
+    };
     private PatientDetailTabType detailTabType;
-    public FloatingActionButton floatingActionButton;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -141,11 +154,11 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
     }
 
     public void getVisits(boolean showLoading) {
-        Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(user, LocalTabelType.VISIT_DETAILS);
         if (showLoading)
             showLoadingOverlay(true);
         else
             showLoadingOverlay(false);
+        Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(user, LocalTabelType.VISIT_DETAILS);
         WebDataServiceImpl.getInstance(mApp).getVisitsList(VisitDetails.class, GET_PATIENT_VISIT, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(),
                 selectedPatient.getUserId(), latestUpdatedTime, this, this);
     }
@@ -300,26 +313,12 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
         LocalBroadcastManager.getInstance(mActivity).unregisterReceiver(visitsListLocalReceiver);
     }
 
-    BroadcastReceiver visitsListReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, final Intent intent) {
-            resetListAndPagingAttributes();
-            getVisits(false);
-        }
-    };
-    BroadcastReceiver visitsListLocalReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, final Intent intent) {
-            refreshListFromLocal();
-//            sendBroadcasts();
-        }
-    };
-
     private void sendBroadcasts() {
         Util.sendBroadcasts(mApp, new ArrayList<String>() {{
 //            add(HistoryFragment.INTENT_GET_HISTORY_LIST);
             add(PatientClinicalNotesDetailFragment.INTENT_GET_CLINICAL_NOTES_LIST);
             add(PatientPrescriptionDetailFragment.INTENT_GET_PRESCRIPTION_LIST);
+            add(PatientTreatmentDetailFragment.INTENT_GET_TREATMENT_LIST);
         }});
     }
 

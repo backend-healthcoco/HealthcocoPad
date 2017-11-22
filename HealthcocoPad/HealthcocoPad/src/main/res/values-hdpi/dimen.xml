@@ -6,7 +6,7 @@
     <dimen name="btn_padding">15dp</dimen>
     <dimen name="hcc_pad_top_logo_width">40px</dimen>
     <dimen name="hcc_pad_top_logo_height">63px</dimen>
-    <dimen name="tab_home_image_size">25px</dimen>
+    <dimen name="tab_home_image_size">37px</dimen>
     <dimen name="tab_global_access_button_size">35px</dimen>
     <dimen name="visits_icon_with_circle_size">60px</dimen>
     <dimen name="widget_delete_icon_size">60px</dimen>
@@ -24,4 +24,5 @@
     <dimen name="visits_icon_diagram">81px</dimen>
     <dimen name="image_width_manage_clinic">60px</dimen>
     <dimen name="image_height_manage_clinic">45px</dimen>
+    <dimen name="list_item_image_size">87px</dimen>
 </resources>

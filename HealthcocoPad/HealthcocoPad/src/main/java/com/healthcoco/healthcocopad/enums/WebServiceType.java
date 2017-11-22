@@ -21,6 +21,12 @@ public enum WebServiceType {
 
     GET_TREATMENT_LIST_FEATURED(Method.GET, "treatment/getServicesBySpeciality"),
 
+    GET_TREATMENT_PDF_URL(Method.GET, "treatment/download/"),
+
+    DISCARD_TREATMENT(Method.DELETE, "treatment/"),
+
+    SEND_EMAIL_TREATMENT(Method.GET, "treatment/"),
+
     GET_PRESCRIPTION(Method.GET, "prescription/"),
     GET_REPORTS_UPDATED(Method.GET, "records/"),
     GET_CLINICAL_NOTES(Method.GET, "clinicalNotes/"),

@@ -27,10 +27,9 @@ public class SelectedTreatmentsItemsListAdapter extends BaseAdapter {
     public SelectedTreatmentsItemsListAdapter() {
     }
 
-    public SelectedTreatmentsItemsListAdapter(HealthCocoActivity activity, SelectedTreatmentsListItemListener treatmentsListItemListener, HealthCocoFragment mFragment) {
+    public SelectedTreatmentsItemsListAdapter(HealthCocoActivity activity, SelectedTreatmentsListItemListener treatmentsListItemListener) {
         this.mActivity = activity;
         this.treatmentsListItemListener = treatmentsListItemListener;
-        this.mFragment = mFragment;
     }
 
     @Override
@@ -53,7 +52,7 @@ public class SelectedTreatmentsItemsListAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            holder = new SelectedTreatmentsItemsListViewholder(mActivity, treatmentsListItemListener, mFragment);
+            holder = new SelectedTreatmentsItemsListViewholder(mActivity, treatmentsListItemListener);
             convertView = holder.getContentView();
             convertView.setTag(holder);
         } else

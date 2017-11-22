@@ -709,6 +709,7 @@
     <string name="confirm_remove_clinical_notes_from_history">Do you want to remove this Clinical Note from Important?</string>
     <string name="confirm_discard_clinical_notes_title">Are you sure you want to discard this Clinical Note?</string>
     <string name="confirm_discard_clinical_notes_message">This cannot be undone.</string>
+    <string name="confirm_discard_treatment_title">Are you sure you want to discard this Treatment?</string>
     <string name="rx_text">Rx</string>
     <string name="date_with_colon">Date&#160;:&#160;</string>
     <string name="patient_id_with_colon">Patient Id&#160;:&#160;</string>

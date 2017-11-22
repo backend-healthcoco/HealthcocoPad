@@ -3,7 +3,7 @@
     <dimen name="initial_screen_icon_width_size">437px</dimen>
     <dimen name="hcc_pad_top_logo_width">26px</dimen>
     <dimen name="hcc_pad_top_logo_height">42px</dimen>
-    <dimen name="tab_home_image_size">20px</dimen>
+    <dimen name="tab_home_image_size">33px</dimen>
     <dimen name="tab_global_access_button_size">45px</dimen>
     <dimen name="visits_icon_with_circle_size">40px</dimen>
     <dimen name="widget_delete_icon_size">50px</dimen>
@@ -20,4 +20,5 @@
     <dimen name="visits_icon_diagram">60px</dimen>
     <dimen name="image_width_manage_clinic">40px</dimen>
     <dimen name="image_height_manage_clinic">30px</dimen>
+    <dimen name="list_item_image_size">58px</dimen>
 </resources>

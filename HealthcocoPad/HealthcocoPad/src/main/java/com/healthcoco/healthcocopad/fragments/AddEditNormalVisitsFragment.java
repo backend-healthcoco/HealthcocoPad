@@ -27,6 +27,7 @@ import com.healthcoco.healthcocopad.adapter.ContactsDetailViewPagerAdapter;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.request.ClinicalNoteToSend;
 import com.healthcoco.healthcocopad.bean.request.PrescriptionRequest;
+import com.healthcoco.healthcocopad.bean.request.TreatmentRequest;
 import com.healthcoco.healthcocopad.bean.server.AppointmentRequest;
 import com.healthcoco.healthcocopad.bean.server.ClinicalNotes;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
@@ -57,10 +58,12 @@ import com.healthcoco.healthcocopad.utilities.Util;
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType.GET_VISIT_DETAILS;
 import static com.healthcoco.healthcocopad.fragments.AddClinicalNotesVisitNormalFragment.TAG_CLINICAL_NOTE_ID;
 import static com.healthcoco.healthcocopad.fragments.AddEditNormalVisitPrescriptionFragment.TAG_PRESCRIPTION_ID;
+import static com.healthcoco.healthcocopad.fragments.AddNewTreatmentFragment.TAG_TREATMENT_ID;
 
 /**
  * Created by Shreshtha on 15-05-2017.
@@ -93,8 +96,10 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
     private String appointmentId;
     private PatientDetailTabType detailTabType;
     private TabWidget tabs;
+    private List<Treatments> treatment;
     private String clinicalNoteId;
     private String prescriptionId;
+    private String treatmentId;
     private LinearLayout containerDateTime;
 
     @Override
@@ -113,6 +118,8 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
             visitId = Parcels.unwrap(intent.getParcelableExtra(HealthCocoConstants.TAG_VISIT_ID));
             clinicalNoteId = intent.getStringExtra(TAG_CLINICAL_NOTE_ID);
             prescriptionId = intent.getStringExtra(TAG_PRESCRIPTION_ID);
+            treatmentId = intent.getStringExtra(TAG_TREATMENT_ID);
+            treatment = Parcels.unwrap(intent.getParcelableExtra(PatientTreatmentDetailFragment.TAG_TREATMENT_DATA));
             Parcelable isFromCloneParcelable = intent.getParcelableExtra(HealthCocoConstants.TAG_IS_FROM_CLONE);
             if (isFromCloneParcelable != null)
                 isFromClone = Parcels.unwrap(isFromCloneParcelable);
@@ -174,7 +181,7 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
         addNewTreatmentFragment = new AddNewTreatmentFragment();
         if (visitDetails != null) {
             Bundle bundle = new Bundle();
-            bundle.putParcelable(PatientTreatmentDetailFragment.TAG_TREATMENT_DATA, Parcels.wrap(visitDetails.getPatientTreatments()));
+            bundle.putParcelable(PatientTreatmentDetailFragment.TAG_TREATMENT_DATA, Parcels.wrap(visitDetails.getPatientTreatment()));
             addNewTreatmentFragment.setArguments(bundle);
         }
         switch (detailTabType) {
@@ -196,6 +203,11 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
                 flBtSwap.setVisibility(View.GONE);
                 break;
             case PATIENT_DETAIL_TREATMENT:
+                if (!Util.isNullOrEmptyList(treatment)) {
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable(PatientTreatmentDetailFragment.TAG_TREATMENT_DATA, Parcels.wrap(treatment));
+                    addNewTreatmentFragment.setArguments(bundle);
+                }
                 addFragment(addNewTreatmentFragment, R.string.treatment, true);
                 tabs.setVisibility(View.GONE);
                 flBtSwap.setVisibility(View.GONE);
@@ -362,10 +374,10 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
                     intent = new Intent(PatientPrescriptionDetailFragment.INTENT_GET_PRESCRIPTION_LIST_LOCAL);
                     intent.putExtra(TAG_PRESCRIPTION_ID, prescriptionId);
                     break;
-//                case PATIENT_DETAIL_TREATMENT:
-//                    intent = new Intent(SelectedTreatmentsListFragment.INTENT_GET_PRESCRIPTION_LIST_LOCAL);
-//                    intent.putExtra(, prescriptionId);
-//                    break;
+                case PATIENT_DETAIL_TREATMENT:
+                    intent = new Intent(PatientTreatmentDetailFragment.INTENT_GET_TREATMENT_LIST_LOCAL);
+                    intent.putExtra(TAG_TREATMENT_ID, prescriptionId);
+                    break;
             }
             LocalBroadcastManager.getInstance(mApp.getApplicationContext()).sendBroadcast(intent);
         } catch (Exception e) {
@@ -441,10 +453,11 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
             case PATIENT_DETAIL_VISIT:
                 int blankClinicalNoteMsgId = addClinicalNotesVisitNormalFragment.getBlankClinicalNoteMsgId();
                 int blankPrescriptionMsgId = addEditNormalVisitPrescriptionFragment.getBlankPrescriptionMsg();
-                if (blankClinicalNoteMsgId != 0 && blankPrescriptionMsgId != 0)
+                int blankTreatmentMsgId = addNewTreatmentFragment.getBlankTreatmentMsg();
+                if (blankClinicalNoteMsgId != 0 && blankPrescriptionMsgId != 0 && blankTreatmentMsgId != 0)
                     errorMsg = R.string.alert_blank_visit;
                 if (errorMsg == 0) {
-                    addVisit(blankClinicalNoteMsgId, blankPrescriptionMsgId);
+                    addVisit(blankClinicalNoteMsgId, blankPrescriptionMsgId, blankTreatmentMsgId);
                 } else
                     Util.showToast(mActivity, errorMsg);
                 break;
@@ -467,8 +480,28 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
                     Util.showToast(mActivity, errorMsg);
                 break;
             case PATIENT_DETAIL_TREATMENT:
+                int msgId = addNewTreatmentFragment.getBlankTreatmentMsg();
+                if (msgId == 0) {
+                    addNewTreatmentFragment.refreshListViewUpdatedTreatmentList();
+                    addTreatment(msgId);
+                } else {
+                    Util.showToast(mActivity, msgId);
+                }
                 addNewTreatmentFragment.validateData();
                 break;
+        }
+    }
+
+    private void addTreatment(int msgId) {
+        mActivity.showLoading(false);
+        LogUtils.LOGD(TAG, "Selected patient " + selectedPatient.getLocalPatientName());
+        if (msgId == 0) {
+            TreatmentRequest treatmentRequest = addNewTreatmentFragment.getTreatmentRequestDetails();
+            if (Util.isNullOrBlank(treatmentId))
+                treatmentRequest.setVisitId(Util.getVisitId(VisitIdType.TREATMENT));
+            if (Util.isNullOrBlank(appointmentId))
+                treatmentRequest.setAppointmentRequest(appointmentRequest);
+            WebDataServiceImpl.getInstance(mApp).addTreatment(Treatments.class, treatmentRequest, this, this);
         }
     }
 
@@ -554,7 +587,7 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
             startActivityForResult(intent, requestCode);
     }
 
-    private void addVisit(int blankClinicalNoteMsgId, int blankPrescriptionMsgId) {
+    private void addVisit(int blankClinicalNoteMsgId, int blankPrescriptionMsgId, int blankTreatmentMsgId) {
         mActivity.showLoading(false);
         VisitDetails visitDetails = new VisitDetails();
         visitDetails.setDoctorId(user.getUniqueId());
@@ -567,6 +600,9 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
             visitDetails.setClinicalNote(addClinicalNotesVisitNormalFragment.getClinicalNoteToSendDetails());
         if (blankPrescriptionMsgId == 0)
             visitDetails.setPrescription(addEditNormalVisitPrescriptionFragment.getPrescriptionRequestDetails());
+        if (blankTreatmentMsgId == 0)
+            addNewTreatmentFragment.refreshListViewUpdatedTreatmentList();
+        visitDetails.setTreatmentRequest(addNewTreatmentFragment.getTreatmentRequestDetails());
         if (Util.isNullOrBlank(appointmentId))
             visitDetails.setAppointmentRequest(appointmentRequest);
         WebDataServiceImpl.getInstance(mApp).addVisit(VisitDetails.class, visitDetails, this, this);

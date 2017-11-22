@@ -3,6 +3,7 @@ package com.healthcoco.healthcocopad.fragments;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
@@ -12,6 +13,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -55,6 +57,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
         LocalDoInBackgroundListenerOptimised, CommonOpenUpPatientDetailListener {
     public static final String INTENT_REFRESH_PATIENT_PROFILE = "com.healthcoco.REFRESH_PATIENT_PROFILE";
     public static final String TAG_PATIENT_DETAIL_TAB_TYPE = "detailTabType";
+
     private TabHost tabhost;
     private ViewPager mViewPager;
     private ArrayList<Fragment> fragmentsList = new ArrayList<>();
@@ -70,6 +73,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
     private RegisteredPatientDetailsUpdated selectedPatient;
     private User user;
     private int tabOrdinal;
+//    private TabLayout tabLayout;
 
     //flags to refresh fragment when clicked for the first time
     private PatientProfileDetailFragment profileFragment;
@@ -118,7 +122,9 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
     public void initViews() {
         tabhost = (TabHost) view.findViewById(android.R.id.tabhost);
         tabhost.setup();
+//        tabLayout = (TabLayout) view.findViewById(R.id.tabs);
         mViewPager = (ViewPager) view.findViewById(R.id.view_pager);
+//        tabLayout.setupWithViewPager(mViewPager);
 //        mHorizontalScroll = (HorizontalScrollView) view.findViewById(R.id.h_Scroll_View);
         tvInitialAlphabet = (TextView) view.findViewById(R.id.tv_initial_aplhabet);
         tvPatientName = (TextView) view.findViewById(R.id.tv_name);
@@ -127,7 +133,10 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
         ivContactProfile = (ImageView) view.findViewById(R.id.iv_image);
         patientProfileLayout = (LinearLayout) view.findViewById(R.id.patient_profile_layout);
         ((CommonOpenUpActivity) mActivity).showRightAction(false);
+
+
     }
+
 
     @Override
     public void initListeners() {
@@ -181,6 +190,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
         }
     }
 
+
     private TabHost.TabSpec getTabSpec(PatientDetailTabType detailTabType, Fragment fragment) {
         fragmentsList.add(fragment);
         View view1 = mActivity.getLayoutInflater().inflate(R.layout.tab_indicator_home, null);
@@ -190,6 +200,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
         tvText.setText(detailTabType.getTextId());
         return tabhost.newTabSpec(String.valueOf(detailTabType.ordinal())).setIndicator(view1).setContent(new DummyTabFactory(mActivity));
     }
+
 
     private void initViewPagerAdapter() {
         mViewPager.setOffscreenPageLimit(fragmentsList.size());
@@ -294,19 +305,20 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-//        View tabView = tabhost.getTabWidget().getChildAt(position);
-//        if (tabView != null) {
-//            final int width = mHorizontalScroll.getWidth();
-//            final int scrollPos = tabView.getLeft() - (width - tabView.getWidth()) / 2;
-//            mHorizontalScroll.scrollTo(scrollPos, 0);
-//            tabhost.refreshDrawableState();
-//        } else {
-//            mHorizontalScroll.scrollBy(positionOffsetPixels, 0);
-//        }
+        View tabView = tabhost.getTabWidget().getChildAt(position);
+        /*if (tabView != null) {
+            final int width = mHorizontalScroll.getWidth();
+            final int scrollPos = tabView.getLeft() - (width - tabView.getWidth()) / 2;
+            mHorizontalScroll.scrollTo(scrollPos, 0);
+            tabhost.refreshDrawableState();
+        } else {
+            mHorizontalScroll.scrollBy(positionOffsetPixels, 0);
+        }*/
     }
 
     @Override
     public void onPageSelected(int position) {
+
         tabhost.setCurrentTab(position);
     }
 
