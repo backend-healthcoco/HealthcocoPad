@@ -219,7 +219,7 @@ public class SelectedTreatmentsListFragment extends HealthCocoFragment implement
         }
     }
 
-    public void modifyTreatmentsList() {
+ /*   public void modifyTreatmentsList() {
         if (lvTreatmentsList.getChildCount() > 0) {
 
             for (int i = 0; i < lvTreatmentsList.getChildCount(); i++) {
@@ -236,7 +236,7 @@ public class SelectedTreatmentsListFragment extends HealthCocoFragment implement
                 }
             }
         }
-    }
+    }*/
 
 
     //setting drug to null and drugId to uniqueId for sending on server
@@ -304,7 +304,7 @@ public class SelectedTreatmentsListFragment extends HealthCocoFragment implement
         return treatmentServiceRequest;
     }
 
-    public double getTotalCost() {
+  /*  public double getTotalCost() {
         double totalPrice = 0;
         if (getModifiedTreatmentsItemList() != null) {
             for (int i = 0; i < getModifiedTreatmentsItemList().size(); i++) {
@@ -338,9 +338,9 @@ public class SelectedTreatmentsListFragment extends HealthCocoFragment implement
             }
         }
         return totalPrice;
-    }
+    }*/
 
-    private double getCalculatedDiscount(int i) {
+   /* private double getCalculatedDiscount(int i) {
         double calculatedDiscount = 0;
         //final cost=((qty*cost)-((qty*cost)*discount))
         if (getModifiedTreatmentsItemList().get(i).getDiscount() != null) {
@@ -358,7 +358,7 @@ public class SelectedTreatmentsListFragment extends HealthCocoFragment implement
             }
         }
         return calculatedDiscount;
-    }
+    }*/
 
     public View getLastChildView() {
         View lastview = null;

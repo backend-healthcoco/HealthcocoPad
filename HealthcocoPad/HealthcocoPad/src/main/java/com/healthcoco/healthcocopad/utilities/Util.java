@@ -885,6 +885,13 @@ public class Util {
                 }
                 HealthCocoConstants.VISIT_ID_PRESCRIPTION = visitId;
                 break;
+            case TREATMENT:
+                if (!Util.isNullOrBlank(HealthCocoConstants.VISIT_ID_TREATMENT)) {
+                    HealthCocoConstants.VISIT_ID_TO_SEND = visitId;
+                    LogUtils.LOGD(TAG, "VisitId Update new" + HealthCocoConstants.VISIT_ID_TO_SEND);
+                }
+                HealthCocoConstants.VISIT_ID_TREATMENT = visitId;
+                break;
         }
     }
 

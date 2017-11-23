@@ -847,8 +847,10 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
     }
 
     public void refreshData() {
-        initTabsFragmentsList();
-        initViewPagerAdapter();
-        initSuggestionsFragment();
+        if (isFromVisit) {
+            initTabsFragmentsList();
+            initViewPagerAdapter();
+            initSuggestionsFragment();
+        }
     }
 }

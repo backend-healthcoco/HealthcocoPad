@@ -350,6 +350,7 @@ public class PatientTreatmentDetailFragment extends HealthCocoFragment implement
             treatmentsList = new ArrayList<>();
         treatmentsList.add(treatment);
         intent.putExtra(TAG_TREATMENT_DATA, Parcels.wrap(treatmentsList));
+        intent.putExtra(AddNewTreatmentFragment.TAG_TREATMENT_ID, treatment.getUniqueId());
         intent.putExtra(CommonOpenUpPatientDetailFragment.TAG_PATIENT_DETAIL_TAB_TYPE, detailTabType);
         startActivityForResult(intent, HealthCocoConstants.REQUEST_CODE_TREATMENT);
     }

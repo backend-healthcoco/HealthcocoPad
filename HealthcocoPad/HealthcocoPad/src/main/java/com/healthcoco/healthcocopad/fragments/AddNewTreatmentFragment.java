@@ -55,12 +55,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Aai on 09/11/2017.
+ * Created by Prashant on 09/11/2017.
  */
 
 
 public class AddNewTreatmentFragment extends HealthCocoFragment implements LocalDoInBackgroundListenerOptimised,
-        View.OnClickListener, TabHost.OnTabChangeListener, ViewPager.OnPageChangeListener, SelectDrugItemClickListener, SelectedTreatmentItemClickListener {
+        View.OnClickListener, TabHost.OnTabChangeListener, ViewPager.OnPageChangeListener, SelectedTreatmentItemClickListener {
     public static final String INTENT_GET_MODIFIED_VALUE = "com.healthcoco.MODIFIED_VALUE";
     public static final String TAG_SELECTED_TREATMENT_OBJECT = "selectedTreatmentItemOrdinal";
     public static final String TAG_TREATMENT_ID = "treatmentId";
@@ -75,6 +75,16 @@ public class AddNewTreatmentFragment extends HealthCocoFragment implements Local
     private SelectedTreatmentsListFragment selectedTreatmentsListFragment;
     private boolean receiversRegistered;
     private Treatments treatment;
+    BroadcastReceiver getModifiedValueOfTreatmentReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, final Intent intent) {
+            if (intent != null && intent.hasExtra(SelectedTreatmentsListFragment.TAG_TOTAL_COST_DISCOUNT_DETAIL_VALUES)) {
+                TotalTreatmentCostDiscountValues totalTreatmentCostDiscountValues = Parcels.unwrap(intent.getParcelableExtra(SelectedTreatmentsListFragment.TAG_TOTAL_COST_DISCOUNT_DETAIL_VALUES));
+                setModifiedValues(totalTreatmentCostDiscountValues);
+            }
+        }
+
+    };
     private List<Treatments> treatmentsList;
     private DoctorProfile doctorProfile;
     private TreatmentListFragment treatmentListFragment;
@@ -174,7 +184,6 @@ public class AddNewTreatmentFragment extends HealthCocoFragment implements Local
 
     }
 
-
     private void initDefaultData(Treatments treatment) {
         tvTotalCost.setText(Util.formatDoubleNumber(treatment.getTotalCost()));
         if (treatment.getTotalDiscount() != null)
@@ -228,26 +237,26 @@ public class AddNewTreatmentFragment extends HealthCocoFragment implements Local
         }
     }
 
+//    public void refreshListViewUpdatedTreatmentList() {
+//        selectedTreatmentsListFragment.modifyTreatmentsList();
+//        setModifiedValues();
+//    }
+
     public void validateData() {
         int msgId = getBlankTreatmentMsg();
         if (msgId == 0) {
-            refreshListViewUpdatedTreatmentList();
+//            refreshListViewUpdatedTreatmentList();
             addTreatment();
         } else {
             Util.showToast(mActivity, msgId);
         }
     }
 
-    public void refreshListViewUpdatedTreatmentList() {
-        selectedTreatmentsListFragment.modifyTreatmentsList();
-        setModifiedValues();
-    }
-
     private void addTreatment() {
 
         mActivity.showLoading(false);
         TreatmentRequest treatmentRequest = getTreatmentRequestDetails();
-//        treatmentRequest.setVisitId(Util.getVisitId(VisitIdType.TREATMENT));
+        treatmentRequest.setVisitId(Util.getVisitId(VisitIdType.TREATMENT));
 
         WebDataServiceImpl.getInstance(mApp).addTreatment(Treatments.class, treatmentRequest, this, this);
     }
@@ -376,24 +385,24 @@ public class AddNewTreatmentFragment extends HealthCocoFragment implements Local
         LocalBroadcastManager.getInstance(mActivity).unregisterReceiver(getModifiedValueOfTreatmentReceiver);
     }
 
-    public void setModifiedValues() {
-        Double totalCost = selectedTreatmentsListFragment.getTotalCost();
-        Double totalDiscount = selectedTreatmentsListFragment.getTotalDiscount();
-        Double totalGrandTotal = selectedTreatmentsListFragment.getGrandTotalCost();
-        if (treatment == null)
-            treatment = new Treatments();
-        //set Total Cost
-        treatment.setTotalCost(totalCost);
-        //set TotalDiscount Cost
-        UnitValue unitTotalDiscount = new UnitValue();
-        unitTotalDiscount.setValue(totalDiscount);
-        unitTotalDiscount.setUnit(UnitType.INR);
-        treatment.setTotalDiscount(unitTotalDiscount);
-        //set GrandTotal Cost
-        treatment.setGrandTotal(totalGrandTotal);
-        initDefaultData(treatment);
-    }
-
+    /*  public void setModifiedValues() {
+          Double totalCost = selectedTreatmentsListFragment.getTotalCost();
+          Double totalDiscount = selectedTreatmentsListFragment.getTotalDiscount();
+          Double totalGrandTotal = selectedTreatmentsListFragment.getGrandTotalCost();
+          if (treatment == null)
+              treatment = new Treatments();
+          //set Total Cost
+          treatment.setTotalCost(totalCost);
+          //set TotalDiscount Cost
+          UnitValue unitTotalDiscount = new UnitValue();
+          unitTotalDiscount.setValue(totalDiscount);
+          unitTotalDiscount.setUnit(UnitType.INR);
+          treatment.setTotalDiscount(unitTotalDiscount);
+          //set GrandTotal Cost
+          treatment.setGrandTotal(totalGrandTotal);
+          initDefaultData(treatment);
+      }
+  */
     @Override
     public void onTabChanged(String tabId) {
         viewPager.setCurrentItem(tabhost.getCurrentTab());
@@ -411,11 +420,6 @@ public class AddNewTreatmentFragment extends HealthCocoFragment implements Local
 
     @Override
     public void onPageScrollStateChanged(int state) {
-
-    }
-
-    @Override
-    public void ondrugItemClick(SelectDrugItemType drugItemType, Object object) {
 
     }
 
@@ -441,9 +445,11 @@ public class AddNewTreatmentFragment extends HealthCocoFragment implements Local
     }
 
     public void refreshData() {
-        initSelectedTreatmentsListFragment();
-        initTabsFragmentsList();
-        initViewPagerAdapter();
+        if (isFromVisit) {
+            initSelectedTreatmentsListFragment();
+            initTabsFragmentsList();
+            initViewPagerAdapter();
+        }
     }
 
     private void setModifiedValues(TotalTreatmentCostDiscountValues totalTreatmentCostDiscountValues) {
@@ -463,15 +469,4 @@ public class AddNewTreatmentFragment extends HealthCocoFragment implements Local
         treatment.setGrandTotal(totalGrandTotal);
         initDefaultData(treatment);
     }
-
-    BroadcastReceiver getModifiedValueOfTreatmentReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, final Intent intent) {
-            if (intent != null && intent.hasExtra(SelectedTreatmentsListFragment.TAG_TOTAL_COST_DISCOUNT_DETAIL_VALUES)) {
-                TotalTreatmentCostDiscountValues totalTreatmentCostDiscountValues = Parcels.unwrap(intent.getParcelableExtra(SelectedTreatmentsListFragment.TAG_TOTAL_COST_DISCOUNT_DETAIL_VALUES));
-                setModifiedValues(totalTreatmentCostDiscountValues);
-            }
-        }
-
-    };
 }

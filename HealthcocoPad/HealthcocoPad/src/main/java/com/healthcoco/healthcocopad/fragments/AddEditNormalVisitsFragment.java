@@ -209,8 +209,11 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
                 tabs.setVisibility(View.GONE);
                 flBtSwap.setVisibility(View.GONE);
                 break;
-
             case PATIENT_DETAIL_PRESCRIPTION:
+                if (visitDetails != null) {
+                    bundle.putParcelable(AddEditNormalVisitPrescriptionFragment.TAG_PRESCRIPTION_DATA, Parcels.wrap(visitDetails.getPrescriptions()));
+                }
+                addEditNormalVisitPrescriptionFragment.setArguments(bundle);
                 addFragment(addEditNormalVisitPrescriptionFragment, R.string.prescriptions, true);
                 tabs.setVisibility(View.GONE);
                 flBtSwap.setVisibility(View.GONE);
@@ -512,12 +515,12 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
             case PATIENT_DETAIL_TREATMENT:
                 int msgId = addNewTreatmentFragment.getBlankTreatmentMsg();
                 if (msgId == 0) {
-                    addNewTreatmentFragment.refreshListViewUpdatedTreatmentList();
+//                    addNewTreatmentFragment.refreshListViewUpdatedTreatmentList();
                     addTreatment(msgId);
                 } else {
                     Util.showToast(mActivity, msgId);
                 }
-                addNewTreatmentFragment.validateData();
+//                addNewTreatmentFragment.validateData();
                 break;
         }
     }
@@ -631,8 +634,8 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
         if (blankPrescriptionMsgId == 0)
             visitDetails.setPrescription(addEditNormalVisitPrescriptionFragment.getPrescriptionRequestDetails());
         if (blankTreatmentMsgId == 0)
-            addNewTreatmentFragment.refreshListViewUpdatedTreatmentList();
-        visitDetails.setTreatmentRequest(addNewTreatmentFragment.getTreatmentRequestDetails());
+//            addNewTreatmentFragment.refreshListViewUpdatedTreatmentList();
+            visitDetails.setTreatmentRequest(addNewTreatmentFragment.getTreatmentRequestDetails());
         if (Util.isNullOrBlank(appointmentId))
             visitDetails.setAppointmentRequest(appointmentRequest);
         WebDataServiceImpl.getInstance(mApp).addVisit(VisitDetails.class, visitDetails, this, this);
