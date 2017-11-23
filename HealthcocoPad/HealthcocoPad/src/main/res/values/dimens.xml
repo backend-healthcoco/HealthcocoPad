@@ -44,7 +44,7 @@
     <dimen name="fab_margin_right">30dp</dimen>
     <dimen name="image_doctor_in_clinic_profile">40dp</dimen>
     <dimen name="text_size_initial_alphabet_emr_actionbar">30sp</dimen>
-    <dimen name="text_size_initial_alphabet_patient_profile_menu">18sp</dimen>
+    <dimen name="text_size_initial_alphabet_patient_profile_menu">20sp</dimen>
     <dimen name="text_size_doctor_profile_name">18sp</dimen>
     <dimen name="text_size_doctor_profile_speciality">16sp</dimen>
     <dimen name="text_size_doctor_profile_tab">18sp</dimen>
@@ -110,7 +110,7 @@
     <dimen name="initial_alphabet_patient_detail_layout">50dp</dimen>
     <dimen name="image_patient_detail_layout">50dp</dimen>
     <dimen name="text_size_patients_list_initial_alphabet_detail_layout">18sp</dimen>
-    <dimen name="image_patient_detail_profile">65dp</dimen>
+    <dimen name="image_patient_detail_profile">52dp</dimen>
     <dimen name="list_item_padding">10dp</dimen>
     <dimen name="text_icon_add_remove_item">13sp</dimen>
     <dimen name="icon_history_size">20sp</dimen>

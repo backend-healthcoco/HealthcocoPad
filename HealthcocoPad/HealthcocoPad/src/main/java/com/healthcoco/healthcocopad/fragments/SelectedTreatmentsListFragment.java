@@ -138,7 +138,8 @@ public class SelectedTreatmentsListFragment extends HealthCocoFragment implement
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 try {
-                    treatmentItemList.remove(treatmentItem.getCustomUniqueId());
+                    treatmentItemList.remove(treatmentItem.getTreatmentServiceId());
+                    totalCostHashMap.remove(treatmentItem.getTreatmentServiceId());
                     notifyAdapter(treatmentItemList);
                     Util.sendBroadcast(mApp, AddNewTreatmentFragment.INTENT_GET_MODIFIED_VALUE);
                 } catch (Exception e) {
@@ -210,7 +211,7 @@ public class SelectedTreatmentsListFragment extends HealthCocoFragment implement
 
     public void addTreatment(TreatmentItem treatmentItem) {
         if (treatmentItem != null) {
-            String key = treatmentItem.getCustomUniqueId();
+            String key = treatmentItem.getTreatmentServiceId();
             if (treatmentItemList.containsKey(key))
                 treatmentItemList.remove(key);
             treatmentItemList.put(key, treatmentItem);

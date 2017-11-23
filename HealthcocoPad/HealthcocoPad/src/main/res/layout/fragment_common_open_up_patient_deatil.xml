@@ -38,7 +38,6 @@
                     android:background="@color/white"
                     android:elevation="5dp"
                     android:orientation="horizontal"
-                    android:padding="@dimen/layout_padding_5dp"
                     android:visibility="visible">
 
                     <LinearLayout
@@ -54,6 +53,7 @@
                         android:layout_height="match_parent"
                         android:layout_alignParentRight="true"
                         android:layout_marginLeft="10dp"
+                        android:gravity="center_vertical"
                         android:orientation="horizontal">
 
                         <TextView
@@ -77,7 +77,6 @@
                                 android:id="@+id/tv_patient_id"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="10dp"
                                 android:maxLines="1"
                                 android:textSize="@dimen/text_size_patient_id_deatil_fragment" />
 
@@ -85,7 +84,6 @@
                                 android:id="@+id/tv_patient_gender"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="10dp"
                                 android:maxLines="1"
                                 android:textSize="@dimen/text_size_patient_id_deatil_fragment" />
                         </LinearLayout>
@@ -103,7 +101,7 @@
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
             android:layout_gravity="bottom"
-            android:background="@drawable/bottom_tab_shadow" />
+            android:background="@color/grey_item_border" />
 
         <!--  <HorizontalScrollView
               android:id="@+id/h_Scroll_View"

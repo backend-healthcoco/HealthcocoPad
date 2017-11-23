@@ -355,7 +355,7 @@ public class SelectedTreatmentsItemsListViewholder extends HealthCocoViewHolder 
                     totalTreatmentCostDiscountValues.setTotalCost(costPriceValue);
 
 //                getDiscountUnitType(tvDiscountType);
-                selectedTreatmentItemClickListener.onTotalValueTypeDetailChanged(objData.getCustomUniqueId(), totalTreatmentCostDiscountValues);
+                selectedTreatmentItemClickListener.onTotalValueTypeDetailChanged(objData.getTreatmentServiceId(), totalTreatmentCostDiscountValues);
 //                selectedTreatmentItemClickListener.onTotalValueTypeDetailChanged(SelectedTreatmentsListFragment.TotalValueType.TOTAL_GRAND_TOTAL, objData.getCustomUniqueId(), parseDouble(s));
                 break;
             case R.id.tv_discount_type:

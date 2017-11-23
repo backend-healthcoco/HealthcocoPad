@@ -59,6 +59,7 @@ import com.healthcoco.healthcocopad.enums.BooleanTypeValues;
 import com.healthcoco.healthcocopad.enums.LocalTabelType;
 import com.healthcoco.healthcocopad.enums.RecordState;
 import com.healthcoco.healthcocopad.enums.RoleType;
+import com.healthcoco.healthcocopad.enums.VisitedForType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.GCMRefreshListener;
 import com.healthcoco.healthcocopad.services.GsonRequest;
@@ -358,6 +359,8 @@ public class WebDataServiceImpl implements GCMRefreshListener {
             String url = webServiceType.getUrl()
                     + HealthCocoConstants.PARAM_DISCARDED_TRUE
                     + HealthCocoConstants.PARAM_DOCTOR_ID + doctorId
+                    + HealthCocoConstants.PARAM_HOSPITAL_ID + hospitalId
+                    + HealthCocoConstants.PARAM_LOCATION_ID + locationId
                     + HealthCocoConstants.PARAM_UPDATED_TIME + updatedTime;
             getResponse(webServiceType, class1, url, null, null, responseListener, errorListener);
         } else {
@@ -785,7 +788,8 @@ public class WebDataServiceImpl implements GCMRefreshListener {
         }
     }
 
-    public void getVisitsList(Class<?> class1, WebServiceType webServiceType, String doctorId, String locationId, String hospitalId, String patientId, Long updatedTime, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+    public void getVisitsList(Class<?> class1, WebServiceType webServiceType, String doctorId, String locationId,
+                              String hospitalId, String patientId, Long updatedTime, String visitedForType, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         checkNetworkStatus(mApp.getApplicationContext());
         if (HealthCocoConstants.isNetworkOnline) {
             String url = webServiceType.getUrl() + doctorId
@@ -793,6 +797,7 @@ public class WebDataServiceImpl implements GCMRefreshListener {
                     + "/" + hospitalId
                     + "/" + patientId
                     + "?"
+                    + HealthCocoConstants.PARAM_VISIT_FOR + visitedForType
                     + HealthCocoConstants.PARAM_UPDATED_TIME + updatedTime;
             getResponse(webServiceType, class1, url, null, null, responseListener, errorListener);
         } else {

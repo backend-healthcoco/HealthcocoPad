@@ -37,6 +37,7 @@ import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.LocalTabelType;
 import com.healthcoco.healthcocopad.enums.OptionsTypePopupWindow;
 import com.healthcoco.healthcocopad.enums.PatientDetailTabType;
+import com.healthcoco.healthcocopad.enums.VisitedForType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.LoadMorePageListener;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
@@ -160,7 +161,7 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
             showLoadingOverlay(false);
         Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(user, LocalTabelType.VISIT_DETAILS);
         WebDataServiceImpl.getInstance(mApp).getVisitsList(VisitDetails.class, GET_PATIENT_VISIT, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(),
-                selectedPatient.getUserId(), latestUpdatedTime, this, this);
+                selectedPatient.getUserId(), latestUpdatedTime, VisitedForType.TREATMENT.getVisitFor(), this, this);
     }
 
     private void initOptionsPopupWindow(OptionsTypePopupWindow optionsTypePopupWindow) {

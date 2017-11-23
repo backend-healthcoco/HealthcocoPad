@@ -123,7 +123,7 @@ public class AddNewTreatmentFragment extends HealthCocoFragment implements Local
     public void init() {
         initViews();
         initListeners();
-
+        initSelectedTreatmentsListFragment();
     }
 
     @Override
@@ -338,7 +338,7 @@ public class AddNewTreatmentFragment extends HealthCocoFragment implements Local
             case FRAGMENT_INITIALISATION:
                 if (user != null && selectedPatient != null) {
                     if (!isFromVisit) {
-                        initSelectedTreatmentsListFragment();
+//                        initSelectedTreatmentsListFragment();
                         initTabsFragmentsList();
                         initViewPagerAdapter();
                     }
@@ -446,7 +446,7 @@ public class AddNewTreatmentFragment extends HealthCocoFragment implements Local
 
     public void refreshData() {
         if (isFromVisit) {
-            initSelectedTreatmentsListFragment();
+
             initTabsFragmentsList();
             initViewPagerAdapter();
         }
