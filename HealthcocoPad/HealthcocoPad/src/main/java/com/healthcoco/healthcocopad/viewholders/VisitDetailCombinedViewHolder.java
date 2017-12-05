@@ -1,12 +1,17 @@
 package com.healthcoco.healthcocopad.viewholders;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.android.volley.Response;
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.HealthCocoViewHolder;
 import com.healthcoco.healthcocopad.R;
+import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.AppointmentRequest;
 import com.healthcoco.healthcocopad.bean.server.ClinicalNotes;
 import com.healthcoco.healthcocopad.bean.server.Prescription;
@@ -14,8 +19,13 @@ import com.healthcoco.healthcocopad.bean.server.Records;
 import com.healthcoco.healthcocopad.bean.server.Treatments;
 import com.healthcoco.healthcocopad.bean.server.VisitDetails;
 import com.healthcoco.healthcocopad.enums.VisitedForType;
+import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.VisitDetailCombinedItemListener;
+import com.healthcoco.healthcocopad.services.GsonRequest;
+import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
+import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
+import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
 
@@ -25,7 +35,7 @@ import java.util.List;
 /**
  * Created by neha on 02/09/16.
  */
-public class VisitDetailCombinedViewHolder extends HealthCocoViewHolder implements View.OnClickListener {
+public class VisitDetailCombinedViewHolder extends HealthCocoViewHolder implements View.OnClickListener, GsonRequest.ErrorListener, Response.Listener<VolleyResponseBean> {
 
     private static final String DATE_FORMAT_USED_IN_THIS_SCREEN = "EEE, dd MMM yyyy";
     private VisitDetails visitDetail;
@@ -35,6 +45,7 @@ public class VisitDetailCombinedViewHolder extends HealthCocoViewHolder implemen
     private LinearLayout btEmail;
     private LinearLayout btClone;
     private LinearLayout btHistory;
+    private LinearLayout btDiscard;
     private LinearLayout btSaveAsTemplate;
     private TextView tvVID;
     private VisitDetailCombinedItemListener listItemClickListener;
@@ -49,6 +60,7 @@ public class VisitDetailCombinedViewHolder extends HealthCocoViewHolder implemen
     private LinearLayout layoutDiscarded;
     private TextView textViewNextReviewDate;
     private LinearLayout layoutNextReviewDetail;
+    private Boolean isDiscarded;
 
     public VisitDetailCombinedViewHolder(HealthCocoActivity mActivity, VisitDetailCombinedItemListener listItemClickListener) {
         super(mActivity);
@@ -95,9 +107,10 @@ public class VisitDetailCombinedViewHolder extends HealthCocoViewHolder implemen
         btPrint = (LinearLayout) contentView.findViewById(R.id.bt_print_visit);
         btClone = (LinearLayout) contentView.findViewById(R.id.bt_clone_visit);
         btHistory = (LinearLayout) contentView.findViewById(R.id.bt_history_visit);
+        btDiscard = (LinearLayout) contentView.findViewById(R.id.bt_discard_visit);
         btSaveAsTemplate = (LinearLayout) contentView.findViewById(R.id.bt_save_as_template_visit);
         containerBottomButtons = (LinearLayout) contentView.findViewById(R.id.container_bottom_buttons_combined);
-        layoutDiscarded = (LinearLayout) contentView.findViewById(R.id.layout_discarded);
+        layoutDiscarded = (LinearLayout) contentView.findViewById(R.id.layout_discarded_visit);
     }
 
     private void initClinicalNotesView(View contentView) {
@@ -138,45 +151,47 @@ public class VisitDetailCombinedViewHolder extends HealthCocoViewHolder implemen
         btEmail.setOnClickListener(this);
         btSms.setOnClickListener(this);
         btClone.setOnClickListener(this);
+        btDiscard.setOnClickListener(this);
         btSaveAsTemplate.setOnClickListener(this);
     }
 
     @Override
     public void applyData() {
+        checkIsDiscarded(visitDetail.getDiscarded());
         setVisibilityOfButtons(View.GONE);
         if (!Util.isNullOrEmptyList(visitDetail.getClinicalNotes())) {
             containerClinicalNotes.setVisibility(View.VISIBLE);
             setButtonVisible(VisitedForType.CLINICAL_NOTES);
             List<ClinicalNotes> clinicalNotesList = visitDetail.getClinicalNotes();
+            if (isDiscarded) clinicalNotesList.get(0).setDiscarded(false);
             for (ClinicalNotes clinicalNotes : clinicalNotesList) {
                 ClinicalNotesListItemViewHolder clinicalNotesListItemViewHolder = (ClinicalNotesListItemViewHolder) containerClinicalNotes.getTag();
                 clinicalNotesListItemViewHolder.setData(clinicalNotes);
                 clinicalNotesListItemViewHolder.applyData();
             }
-            checkIsDiscarded(clinicalNotesList.get(0).getDiscarded());
         } else
             containerClinicalNotes.setVisibility(View.GONE);
         if (!Util.isNullOrEmptyList(visitDetail.getPrescriptions())) {
             containerPrescription.setVisibility(View.VISIBLE);
             setButtonVisible(VisitedForType.PRESCRIPTION);
             List<Prescription> prescriptionsList = visitDetail.getPrescriptions();
+            if (isDiscarded) prescriptionsList.get(0).setDiscarded(false);
             for (Prescription prescription : prescriptionsList) {
                 PrescriptionListItemViewHolder prescriptionListItemViewHolder = (PrescriptionListItemViewHolder) containerPrescription.getTag();
                 prescriptionListItemViewHolder.setData(prescription);
                 prescriptionListItemViewHolder.applyData();
             }
-            checkIsDiscarded(prescriptionsList.get(0).getDiscarded());
         } else containerPrescription.setVisibility(View.GONE);
         if (!Util.isNullOrEmptyList(visitDetail.getPatientTreatment())) {
             containerTreatment.setVisibility(View.VISIBLE);
             setButtonVisible(VisitedForType.TREATMENT);
             List<Treatments> patientTreatmentList = visitDetail.getPatientTreatment();
+            if (isDiscarded) patientTreatmentList.get(0).setDiscarded(false);
             for (Treatments treatment : patientTreatmentList) {
                 TreatmentListItemViewHolder treatmentListItemViewHolder = (TreatmentListItemViewHolder) containerTreatment.getTag();
                 treatmentListItemViewHolder.setData(treatment);
                 treatmentListItemViewHolder.applyData();
             }
-            checkIsDiscarded(patientTreatmentList.get(0).getDiscarded());
         } else
             containerTreatment.setVisibility(View.GONE);
 
@@ -184,12 +199,12 @@ public class VisitDetailCombinedViewHolder extends HealthCocoViewHolder implemen
             containerReports.setVisibility(View.VISIBLE);
             setButtonVisible(VisitedForType.REPORTS);
             List<Records> recordsList = visitDetail.getRecords();
+            if (isDiscarded) recordsList.get(0).setDiscarded(false);
             for (Records record : recordsList) {
                 ReportsListItemViewHolder reportsListItemViewHolder = (ReportsListItemViewHolder) containerReports.getTag();
                 reportsListItemViewHolder.setData(record);
                 reportsListItemViewHolder.applyData();
             }
-            checkIsDiscarded(recordsList.get(0).getDiscarded());
         } else
             containerReports.setVisibility(View.GONE);
 
@@ -211,9 +226,10 @@ public class VisitDetailCombinedViewHolder extends HealthCocoViewHolder implemen
     }
 
     private void checkIsDiscarded(Boolean isDiscarded) {
-//        if (visitDetail.getDiscarded() != null && visitDetail.getDiscarded())
-//            layoutDiscarded.setVisibility(View.VISIBLE);
-//        else layoutDiscarded.setVisibility(View.GONE);
+        this.isDiscarded = isDiscarded;
+        if (visitDetail.getDiscarded() != null && visitDetail.getDiscarded()) {
+            layoutDiscarded.setVisibility(View.VISIBLE);
+        } else layoutDiscarded.setVisibility(View.GONE);
         if (isDiscarded != null && isDiscarded)
             containerBottomButtons.setVisibility(View.GONE);
         else containerBottomButtons.setVisibility(View.VISIBLE);
@@ -249,6 +265,9 @@ public class VisitDetailCombinedViewHolder extends HealthCocoViewHolder implemen
                     case R.id.bt_edit_visit:
                         btEdit.setVisibility(View.VISIBLE);
                         break;
+                    case R.id.bt_discard:
+                        btEdit.setVisibility(View.VISIBLE);
+                        break;
                 }
             }
         }
@@ -262,6 +281,7 @@ public class VisitDetailCombinedViewHolder extends HealthCocoViewHolder implemen
         btEmail.setVisibility(visibility);
         btSms.setVisibility(visibility);
         btClone.setVisibility(visibility);
+//        btDiscard.setVisibility(visibility);
         btSaveAsTemplate.setVisibility(visibility);
     }
 
@@ -295,6 +315,81 @@ public class VisitDetailCombinedViewHolder extends HealthCocoViewHolder implemen
                     listItemClickListener.openRecord(records);
                 }
                 break;
+            case R.id.bt_discard_visit:
+                LogUtils.LOGD(TAG, "Discard");
+                Util.checkNetworkStatus(mActivity);
+                if (HealthCocoConstants.isNetworkOnline) {
+                    int msgId = R.string.confirm_discard_clinical_notes_message;
+                    int titleId = R.string.confirm_discard_visit_title;
+                    showConfirmationAlert(v.getId(), mActivity.getResources().getString(titleId), mActivity.getResources().getString(msgId));
+                } else onNetworkUnavailable(null);
+                break;
         }
     }
+
+    private void discardVisit() {
+        mActivity.showLoading(false);
+        WebDataServiceImpl.getInstance(mApp).discardVisit(VisitDetails.class, visitDetail.getUniqueId(), this, this);
+
+    }
+
+    @Override
+    public void onResponse(VolleyResponseBean response) {
+        if (response.getWebServiceType() != null) {
+            LogUtils.LOGD(TAG, "Success " + String.valueOf(response.getWebServiceType()));
+            switch (response.getWebServiceType()) {
+
+                case DISCARD_PATIENT_VISIT:
+                    if (response.getData() != null && response.getData() instanceof VisitDetails) {
+                        visitDetail = (VisitDetails) response.getData();
+                        applyData();
+                        mActivity.hideLoading();
+                        LocalDataServiceImpl.getInstance(mApp).updateDiscardedValueInVisit(visitDetail);
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+
+    }
+
+    @Override
+    public void onErrorResponse(VolleyResponseBean volleyResponseBean, String errorMessage) {
+
+    }
+
+    @Override
+    public void onNetworkUnavailable(WebServiceType webServiceType) {
+
+    }
+
+    private void showConfirmationAlert(final int viewId, String title, String msg) {
+        if (Util.isNullOrBlank(title))
+            title = mActivity.getResources().getString(R.string.confirm);
+        final AlertDialog.Builder alertBuilder = new AlertDialog.Builder(mActivity);
+        alertBuilder.setTitle(title);
+        alertBuilder.setMessage(msg);
+        alertBuilder.setCancelable(false);
+        alertBuilder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (viewId) {
+                    case R.id.bt_discard_visit:
+                        discardVisit();
+                        break;
+                }
+            }
+        });
+        alertBuilder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+        alertBuilder.create();
+        alertBuilder.show();
+    }
+
 }

@@ -184,6 +184,8 @@ public enum WebServiceType {
     //    GET http://example.com/api/v1/patientVisit/doctorId/locationId/hospitalId/patientId/
     GET_PATIENT_VISIT(Method.GET, "patientVisit/"),
 
+    DISCARD_PATIENT_VISIT(Method.DELETE, "patientVisit/"),
+
     UPDATE_PRESCRIPTION(Method.PUT, "prescription/"),
 
     SIGN_UP(Method.POST, "signup/doctorHandheld/"),

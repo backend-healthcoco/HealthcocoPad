@@ -1,5 +1,6 @@
 package com.healthcoco.healthcocopad.bean.server;
 
+import com.healthcoco.healthcocopad.utilities.StringUtil;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.orm.SugarRecord;
 import com.orm.annotation.Ignore;
@@ -11,6 +12,8 @@ import java.util.List;
 
 @Parcel
 public class ClinicalNotes extends SugarRecord {
+    public static String TABLE_NAME = " " + StringUtil.toSQLName(ClinicalNotes.class.getSimpleName());
+
     @Unique
     private String uniqueId;
     private String complaint;

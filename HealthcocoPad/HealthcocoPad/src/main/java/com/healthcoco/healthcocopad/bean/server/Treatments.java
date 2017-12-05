@@ -2,6 +2,7 @@ package com.healthcoco.healthcocopad.bean.server;
 
 import com.healthcoco.healthcocopad.bean.WorkingHours;
 import com.healthcoco.healthcocopad.enums.PatientTreatmentStatus;
+import com.healthcoco.healthcocopad.utilities.StringUtil;
 import com.orm.SugarRecord;
 import com.orm.annotation.Ignore;
 import com.orm.annotation.Unique;
@@ -15,6 +16,8 @@ import java.util.List;
  */
 @Parcel
 public class Treatments extends SugarRecord {
+    public static String TABLE_NAME = " " + StringUtil.toSQLName(Treatments.class.getSimpleName());
+
     protected String workingHoursJson;
     @Unique
     private String uniqueId;

@@ -1205,6 +1205,13 @@ public class WebDataServiceImpl implements GCMRefreshListener {
                 errorListener);
     }
 
+    public void discardVisit(Class<?> class1, String visitId, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        String url = WebServiceType.DISCARD_PATIENT_VISIT.getUrl() + visitId + HealthCocoConstants.PARAM_TAG_DELETE;
+        getResponse(WebServiceType.DISCARD_PATIENT_VISIT, class1, url, null, null, responseListener,
+                errorListener);
+    }
+
+
     public void getAppointmentSlotsDetails(Class<?> class1, String doctorId, String locationId, String hospitalId, long date,
                                            Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         WebServiceType webServiceType = WebServiceType.GET_APPOINTMENT_TIME_SLOTS;

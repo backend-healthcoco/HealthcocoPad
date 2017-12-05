@@ -254,6 +254,32 @@
                                 android:textSize="@dimen/text_size_bt_history_edit_sms_email" />
                         </LinearLayout>
 
+                        <LinearLayout
+                            android:id="@+id/bt_discard_visit"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="@dimen/item_visits_button_padding_left_right_20dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/shape_rounded_corners_item_background_dark_grey"
+                            android:clickable="true"
+                            android:gravity="center"
+                            android:padding="5dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="5dp"
+                                android:background="@color/white"
+                                android:drawableLeft="@drawable/discard_selector"
+                                android:drawablePadding="5dp"
+                                android:gravity="center|start"
+                                android:paddingLeft="@dimen/item_visits_button_padding_left_right_20dp"
+                                android:paddingRight="@dimen/item_visits_button_padding_left_right_20dp"
+                                android:text="@string/discard"
+                                android:textColor="@drawable/text_selector_grey_blue"
+                                android:textSize="@dimen/text_size_bt_history_edit_sms_email" />
+                        </LinearLayout>
+
                     </LinearLayout>
 
                     <LinearLayout
@@ -373,6 +399,26 @@
             </LinearLayout>
         </LinearLayout>
 
-        <include layout="@layout/layout_discarded"></include>
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/layout_discarded_visit"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/shape_rounded_corners_rect_discarded"
+            android:clickable="true"
+            android:orientation="horizontal"
+            android:padding="20dp"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/tv_discarded"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:gravity="center|end"
+                android:text="@string/discarded"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_discarded"
+                android:textStyle="bold" />
+        </LinearLayout>
     </FrameLayout>
 </LinearLayout>

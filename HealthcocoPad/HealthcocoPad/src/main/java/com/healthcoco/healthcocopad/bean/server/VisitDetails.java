@@ -4,6 +4,7 @@ import com.healthcoco.healthcocopad.bean.request.ClinicalNoteToSend;
 import com.healthcoco.healthcocopad.bean.request.PrescriptionRequest;
 import com.healthcoco.healthcocopad.bean.request.TreatmentRequest;
 import com.healthcoco.healthcocopad.enums.VisitedForType;
+import com.healthcoco.healthcocopad.utilities.StringUtil;
 import com.orm.SugarRecord;
 import com.orm.annotation.Ignore;
 import com.orm.annotation.Unique;
@@ -14,6 +15,8 @@ import java.util.List;
  * Created by Shreshtha on 07-03-2017.
  */
 public class VisitDetails extends SugarRecord {
+    public static String TABLE_NAME = " " + StringUtil.toSQLName(VisitDetails.class.getSimpleName());
+
     protected Long updatedTime;
     @Unique
     private String uniqueId;

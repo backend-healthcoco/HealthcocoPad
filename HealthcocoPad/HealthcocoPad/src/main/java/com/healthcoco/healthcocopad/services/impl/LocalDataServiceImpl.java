@@ -2828,6 +2828,57 @@ public class LocalDataServiceImpl {
                 new String[]{visitDetails.getPatientId(), visitDetails.getUniqueId()});
     }
 
+    public void updateDiscardedValueInVisit(VisitDetails visit) {
+        Boolean discardedVisitValue = visit.getDiscarded();
+        int discardedValue;
+        if (discardedVisitValue)
+            discardedValue = LocalDatabaseUtils.BOOLEAN_TRUE_VALUE;
+        else
+            discardedValue = LocalDatabaseUtils.BOOLEAN_FALSE_VALUE;
+
+        //updating prescription discarded value
+        if (!Util.isNullOrEmptyList(visit.getPrescriptions()) && visit.getPrescriptions().get(0) != null) {
+            Prescription prescription = (Prescription) visit.getPrescriptions().get(0);
+            Boolean discardedPrescription = prescription.getDiscarded();
+            int discardedPrescriptionValue;
+            if (discardedPrescription)
+                discardedPrescriptionValue = LocalDatabaseUtils.BOOLEAN_TRUE_VALUE;
+            else
+                discardedPrescriptionValue = LocalDatabaseUtils.BOOLEAN_FALSE_VALUE;
+            updateTable(Prescription.TABLE_NAME, LocalDatabaseUtils.KEY_DISCARDED, discardedPrescriptionValue, LocalDatabaseUtils.KEY_UNIQUE_ID, prescription.getUniqueId());
+        }
+        //updating treatment discarded value
+        if (!Util.isNullOrEmptyList(visit.getPatientTreatment()) && visit.getPatientTreatment().get(0) != null) {
+            Treatments treatments = (Treatments) visit.getPatientTreatment().get(0);
+            Boolean discardedTreatment = treatments.getDiscarded();
+            int discardedTreatmentValue;
+            if (discardedTreatment)
+                discardedTreatmentValue = LocalDatabaseUtils.BOOLEAN_TRUE_VALUE;
+            else
+                discardedTreatmentValue = LocalDatabaseUtils.BOOLEAN_FALSE_VALUE;
+            updateTable(Treatments.TABLE_NAME, LocalDatabaseUtils.KEY_DISCARDED, discardedTreatmentValue, LocalDatabaseUtils.KEY_UNIQUE_ID, treatments.getUniqueId());
+        }
+
+        //updating clincialNote discarded value
+        if (!Util.isNullOrEmptyList(visit.getClinicalNotes()) && visit.getClinicalNotes().get(0) != null) {
+            ClinicalNotes clinicalNote = (ClinicalNotes) visit.getClinicalNotes().get(0);
+            Boolean discardedClinicalNote = clinicalNote.getDiscarded();
+            int discardedClinicalNoteValue;
+            if (discardedClinicalNote)
+                discardedClinicalNoteValue = LocalDatabaseUtils.BOOLEAN_TRUE_VALUE;
+            else
+                discardedClinicalNoteValue = LocalDatabaseUtils.BOOLEAN_FALSE_VALUE;
+            updateTable(ClinicalNotes.TABLE_NAME, LocalDatabaseUtils.KEY_DISCARDED, discardedClinicalNoteValue, LocalDatabaseUtils.KEY_UNIQUE_ID, clinicalNote.getUniqueId());
+        }
+
+        //updating visit discarded value
+        updateTable(VisitDetails.TABLE_NAME, LocalDatabaseUtils.KEY_DISCARDED, discardedValue, LocalDatabaseUtils.KEY_UNIQUE_ID, visit.getUniqueId());
+    }
+
+    private void updateTable(String tableName, String columnNameToChange, int columnValue, String wherRowName, String rowValue) {
+        String query = "UPDATE " + tableName + " SET " + columnNameToChange + " = '" + columnValue + "' WHERE " + wherRowName + " = '" + rowValue + "'";
+        SugarRecord.executeQuery(query);
+    }
 
     private void addVisitForTable(String visitId, VisitedForType type, String customUniqueId) {
         VisitedForTypeTable visitedForTypeTable = new VisitedForTypeTable();

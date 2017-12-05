@@ -279,6 +279,9 @@ public class AddNewTreatmentFragment extends HealthCocoFragment implements Local
         if (treatment.getUniqueEmrId() != null)
             treatmentRequest.setUniqueEmrId(treatment.getUniqueEmrId());
 
+        if (treatment.getVisitId() != null)
+            treatmentRequest.setVisitId(treatment.getVisitId());
+
         return treatmentRequest;
     }
 
