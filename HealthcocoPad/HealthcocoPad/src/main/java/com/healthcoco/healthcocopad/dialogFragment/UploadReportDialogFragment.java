@@ -20,6 +20,7 @@ import com.android.volley.Response;
 import com.healthcoco.healthcocopad.HealthCocoDialogFragment;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.FileDetails;
+import com.healthcoco.healthcocopad.bean.RecordMultipartRequest;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.request.ReportDetailsToSend;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
@@ -33,6 +34,7 @@ import com.healthcoco.healthcocopad.enums.ReportFileType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.fragments.PatientReportsDetailFragment;
 import com.healthcoco.healthcocopad.listeners.CommonOptionsDialogItemClickListener;
+import com.healthcoco.healthcocopad.multipart.MultipartUploadRequestAsynTask;
 import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
@@ -43,6 +45,7 @@ import com.healthcoco.healthcocopad.utilities.ImageUtil;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -188,6 +191,15 @@ public class UploadReportDialogFragment extends HealthCocoDialogFragment impleme
         records.setRecordsType(String.valueOf(reportDetailsToSend.getReportFileType()));
         records.setFileDetails(getFileDetails());
         WebDataServiceImpl.getInstance(mApp).addRecord(Records.class, records, this, this);
+
+   /*     RecordMultipartRequest recordMultipartRequest = new RecordMultipartRequest();
+        records.setRecordsLabel(Util.getValidatedValueOrNull(editTitle));
+        recordMultipartRequest.setData(records);
+        recordMultipartRequest.setFile(new File(reportDetailsToSend.getReportUri().getPath()));
+//        sendRecord(recordMultipartRequest);
+//        WebDataServiceImpl.getInstance(mApp).addRecordMultipart(Records.class, recordMultipartRequest, this, this);
+        new MultipartUploadRequestAsynTask(mActivity, RecordMultipartRequest.class, WebServiceType.ADD_RECORD_MULTIPART, recordMultipartRequest,reportDetailsToSend.getReportUri().getPath(), this, this).execute();
+*/
     }
 
     @Override
