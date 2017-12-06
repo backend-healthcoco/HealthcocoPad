@@ -791,6 +791,7 @@
     <string name="patient_detail">Patient Details</string>
     <string name="no_lab_test">No Lab Test Found</string>
 
+    <string name="error_creating_request">Error Creating Request</string>
     <string name="tests_selected">&#160;Tests Selected</string>
     <string name="lab_test_already_added">Lab Test \"%s\" already added</string>
     <string name="are_you_sure_want_to_toggle_this_page_view">Are you sure want to toggle this page view? Data will be reset.</string>

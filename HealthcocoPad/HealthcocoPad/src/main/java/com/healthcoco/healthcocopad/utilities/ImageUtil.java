@@ -7,12 +7,14 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
+import android.webkit.MimeTypeMap;
 
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.enums.HealthCocoFileType;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
@@ -23,15 +25,15 @@ import java.util.Locale;
  * Created by Shreshtha on 02-02-2017.
  */
 public class ImageUtil {
-    private static final String TAG = ImageUtil.class.getSimpleName();
     public static final String DEFAULT_IMAGE_EXTENSION = "jpg";
-    private static final String DEFAULT_FOLDER_NAME = "HealthCococMedia";
     public static final int MEDIA_TYPE_IMAGE = 1;
     public static final String DEFAULT_CLINIC_LOGO_NAME = "clinicLogoImage";
     public static final String DEFAULT_CLINIC_IMAGE_NAME = "clinicImage";
     public static final String DEFAULT_PATIENT_IMAGE_NAME = "patientImage";
-    public static byte[] DIAGRAM_SELECTED_BYTE_ARRAY = null;
     public static final String DEFAULT_IMAGE_NAME = "defaultFileName";
+    private static final String TAG = ImageUtil.class.getSimpleName();
+    private static final String DEFAULT_FOLDER_NAME = "HealthCococMedia";
+    public static byte[] DIAGRAM_SELECTED_BYTE_ARRAY = null;
 
     public static String encodeTobase64(Bitmap image) {
         Bitmap immagex = image;
@@ -265,5 +267,41 @@ public class ImageUtil {
             return null;
         }
     }
+
+    public static String getCroppedFilePath(String filePath) {
+        File file = new File(filePath);
+        try {
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+            BitmapFactory.decodeFile(filePath, options);
+            int imageOriginalHeight = options.outHeight;
+            int imageOriginalWidth = options.outWidth;
+
+            int calcualtedHeight = (int) Math.ceil((1200f / imageOriginalWidth) * imageOriginalHeight);
+            Bitmap b = BitmapFactory.decodeFile(filePath);
+            Bitmap out = Bitmap.createScaledBitmap(b, 1200, calcualtedHeight, false);
+            FileOutputStream fOut;
+
+            fOut = new FileOutputStream(file);
+            out.compress(Bitmap.CompressFormat.PNG, 100, fOut);
+            fOut.flush();
+            fOut.close();
+            b.recycle();
+            out.recycle();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return file.getAbsolutePath();
+    }
+
+    public static String appendFileExtensionIfNotPresent(String filePathOrUrl) {
+        String extension = MimeTypeMap.getFileExtensionFromUrl(filePathOrUrl);
+        if (Util.isNullOrBlank(extension)) {
+            filePathOrUrl = filePathOrUrl + "." + ImageUtil.DEFAULT_IMAGE_EXTENSION;
+        }
+        return filePathOrUrl;
+    }
+
+
 }
 
