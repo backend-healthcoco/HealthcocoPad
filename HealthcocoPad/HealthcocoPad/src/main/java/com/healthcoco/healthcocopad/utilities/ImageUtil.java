@@ -302,6 +302,8 @@ public class ImageUtil {
         return filePathOrUrl;
     }
 
-
+    public static String getRealPathFromURI(Activity activity, Uri contentURI) {
+        return FileChooser.getPath(activity, contentURI);
+    }
 }
 

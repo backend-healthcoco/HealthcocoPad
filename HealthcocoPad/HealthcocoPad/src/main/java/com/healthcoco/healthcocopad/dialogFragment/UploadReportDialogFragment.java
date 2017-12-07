@@ -22,6 +22,7 @@ import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.FileDetails;
 import com.healthcoco.healthcocopad.bean.RecordMultipartRequest;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
+import com.healthcoco.healthcocopad.bean.request.RecordsAddRequestMultipart;
 import com.healthcoco.healthcocopad.bean.request.ReportDetailsToSend;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.Records;
@@ -37,15 +38,12 @@ import com.healthcoco.healthcocopad.listeners.CommonOptionsDialogItemClickListen
 import com.healthcoco.healthcocopad.multipart.MultipartUploadRequestAsynTask;
 import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
-import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
-import com.healthcoco.healthcocopad.utilities.BitmapUtil;
 import com.healthcoco.healthcocopad.utilities.EditTextTextViewErrorUtil;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.ImageUtil;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -180,7 +178,7 @@ public class UploadReportDialogFragment extends HealthCocoDialogFragment impleme
     }
 
     private void addRecord() {
-        mActivity.showLoading(false);
+     /*   mActivity.showLoading(false);
         Records records = new Records();
         records.setExplanation(Util.getValidatedValue(String.valueOf(editDescription.getText())));
         records.setDoctorId(user.getUniqueId());
@@ -190,17 +188,23 @@ public class UploadReportDialogFragment extends HealthCocoDialogFragment impleme
         records.setRecordsState(RecordState.APPROVAL_NOT_REQUIRED);
         records.setRecordsType(String.valueOf(reportDetailsToSend.getReportFileType()));
         records.setFileDetails(getFileDetails());
-        WebDataServiceImpl.getInstance(mApp).addRecord(Records.class, records, this, this);
+    WebDataServiceImpl.getInstance(mApp).addRecord(Records.class, records, this, this);
 
-   /*     RecordMultipartRequest recordMultipartRequest = new RecordMultipartRequest();
-        records.setRecordsLabel(Util.getValidatedValueOrNull(editTitle));
-        recordMultipartRequest.setData(records);
-        recordMultipartRequest.setFile(new File(reportDetailsToSend.getReportUri().getPath()));
-//        sendRecord(recordMultipartRequest);
-//        WebDataServiceImpl.getInstance(mApp).addRecordMultipart(Records.class, recordMultipartRequest, this, this);
-        new MultipartUploadRequestAsynTask(mActivity, RecordMultipartRequest.class, WebServiceType.ADD_RECORD_MULTIPART, recordMultipartRequest,reportDetailsToSend.getReportUri().getPath(), this, this).execute();
 */
+        mActivity.showLoading(false);
+        RecordsAddRequestMultipart requestMultipart = new RecordsAddRequestMultipart();
+        requestMultipart.setExplanation(Util.getValidatedValue(String.valueOf(editDescription.getText())));
+        requestMultipart.setDoctorId(user.getUniqueId());
+        requestMultipart.setHospitalId(user.getForeignHospitalId());
+        requestMultipart.setLocationId(user.getForeignLocationId());
+        requestMultipart.setPatientId(selectedPatient.getUserId());
+//        requestMultipart.setRecordsState(RecordState.APPROVAL_NOT_REQUIRED);
+        requestMultipart.setRecordsType(String.valueOf(reportDetailsToSend.getReportFileType()));
+
+        new MultipartUploadRequestAsynTask(mActivity, RecordsAddRequestMultipart.class, WebServiceType.ADD_RECORD_MULTIPART, requestMultipart, reportDetailsToSend.getRecordsPath(), this, this).execute();
+
     }
+
 
     @Override
     public void onOptionsItemSelected(Object object) {
@@ -226,15 +230,15 @@ public class UploadReportDialogFragment extends HealthCocoDialogFragment impleme
                 if (requestCode == HealthCocoConstants.REQUEST_CODE_CAMERA && imageUri != null) {
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(mActivity.getContentResolver(), imageUri);
                     if (bitmap != null) {
-                        showImage(imageUri);
+                        showImage(imageUri.getPath(), imageUri);
                     }
                 } else if (requestCode == HealthCocoConstants.REQUEST_CODE_GALLERY && data.getData() != null) {
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(mActivity.getContentResolver(), data.getData());
                     if (bitmap != null) {
-                        showImage(data.getData());
+                        showImage(ImageUtil.getRealPathFromURI(mActivity, data.getData()), data.getData());
                     }
                 } else if (requestCode == HealthCocoConstants.REQUEST_CODE_FILE && data.getData() != null) {
-                    showImage(data.getData());
+                    showImage(ImageUtil.getRealPathFromURI(mActivity, data.getData()), data.getData());
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -242,10 +246,11 @@ public class UploadReportDialogFragment extends HealthCocoDialogFragment impleme
         }
     }
 
-    private void showImage(Uri imageUri) {
+    private void showImage(String filePath, Uri imageUri) {
         reportDetailsToSend = new ReportDetailsToSend();
         reportDetailsToSend.setReportUri(imageUri);
         reportDetailsToSend.setFileExtension(ImageUtil.DEFAULT_IMAGE_EXTENSION);
+        reportDetailsToSend.setRecordsPath(filePath);
         try {
             originalBitmap = ImageUtil.getBitmapFromUri(mActivity, imageUri);
             if (originalBitmap != null) {
@@ -309,7 +314,21 @@ public class UploadReportDialogFragment extends HealthCocoDialogFragment impleme
     public void onResponse(VolleyResponseBean response) {
         LogUtils.LOGD(TAG, "ADD_RECORD Success");
         switch (response.getWebServiceType()) {
-            case ADD_RECORD:
+            case ADD_RECORD_MULTIPART:
+//        /*        if (response.getData() instanceof MyFileRecordDetail) {
+//                    MyFileRecordDetail myFileRecordDetail = (MyFileRecordDetail) response.getData();
+//                    if (uploadedFilesResponseList == null)
+//                        uploadedFilesResponseList = new ArrayList<>();
+//                    uploadedFilesResponseList.add(myFileRecordDetail);
+//                }
+//                if (uploadedFilesResponseList.size() == mAdapter.getValidListCount()) {
+//                    addRecord(myFileRecordDetail);
+//                    return;
+//                }
+
+//                break;
+//            case ADD_RECORD:
+//                */
                 if (response.isValidData(response)) {
                     Records record = (Records) response.getData();
                     LocalDataServiceImpl.getInstance(mApp).addRecord(record);

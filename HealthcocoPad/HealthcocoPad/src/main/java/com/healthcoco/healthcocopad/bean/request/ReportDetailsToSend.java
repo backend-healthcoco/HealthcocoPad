@@ -9,6 +9,7 @@ import com.healthcoco.healthcocopad.enums.ReportFileType;
  * Created by neha on 03/01/16.
  */
 public class ReportDetailsToSend {
+    protected String recordsPath;
     private ReportFileType reportFileType;
     private Uri reportUri;
     private String fileExtension;
@@ -35,5 +36,13 @@ public class ReportDetailsToSend {
 
     public void setFileExtension(String fileExtension) {
         this.fileExtension = fileExtension;
+    }
+
+    public String getRecordsPath() {
+        return recordsPath;
+    }
+
+    public void setRecordsPath(String recordsPath) {
+        this.recordsPath = recordsPath;
     }
 }
