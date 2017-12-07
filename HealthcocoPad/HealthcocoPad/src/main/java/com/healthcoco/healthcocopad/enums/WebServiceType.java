@@ -67,7 +67,10 @@ public enum WebServiceType {
     GET_TEMPLATES_LIST(Method.GET, "prescription/templates/?"),
 
     ADD_RECORD(Method.POST, "records/add/"),
-    ADD_RECORD_MULTIPART(Method.POST, "records/add/"),
+
+//    ADD_FILE_RECORDS(Method.POST, "records/upload/file"),
+
+    ADD_RECORD_MULTIPART(Method.POST, "records/addMultipart"),
 
 //    GET_HISTORY_LIST(Method.GET, "history/getPatientHistory/"),
 
