@@ -19,6 +19,7 @@ import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -1203,7 +1204,13 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
         if (ImageUtil.isDeviceSupportCamera(this)) {
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             Uri fileUri = ImageUtil.getOutputMediaFileUri(ImageUtil.MEDIA_TYPE_IMAGE);
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
+            } else {
+                File file = new File(fileUri.getPath());
+                Uri photoUri = FileProvider.getUriForFile(getApplicationContext(), getApplicationContext().getPackageName() + ".provider", file);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
+            }
 //// ******** code for crop image
 //            intent.putExtra("crop", "true");
 //            intent.putExtra("aspectX", 0);
