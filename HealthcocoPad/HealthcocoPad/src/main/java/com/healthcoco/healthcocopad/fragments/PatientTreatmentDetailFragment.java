@@ -234,6 +234,7 @@ public class PatientTreatmentDetailFragment extends HealthCocoFragment implement
                     if (response.isDataFromLocal()) {
                         ArrayList<Treatments> responseList = (ArrayList<Treatments>) (ArrayList<?>) response
                                 .getDataList();
+                        treatmentHashMap.clear();
                         formHashMapAndRefresh(responseList);
                         if (Util.isNullOrEmptyList(responseList) || responseList.size() < MAX_SIZE || Util.isNullOrEmptyList(responseList))
                             isEndOfListAchieved = true;

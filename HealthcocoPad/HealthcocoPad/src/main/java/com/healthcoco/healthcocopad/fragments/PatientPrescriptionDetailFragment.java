@@ -249,6 +249,7 @@ public class PatientPrescriptionDetailFragment extends HealthCocoFragment implem
                     if (response.isDataFromLocal()) {
                         ArrayList<Prescription> responseList = (ArrayList<Prescription>) (ArrayList<?>) response
                                 .getDataList();
+                        prescriptionsList.clear();
                         formHashMapAndRefresh(responseList);
                         if (Util.isNullOrEmptyList(responseList) || responseList.size() < MAX_SIZE || Util.isNullOrEmptyList(responseList))
                             isEndOfListAchieved = true;

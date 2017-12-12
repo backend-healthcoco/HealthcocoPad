@@ -16,6 +16,7 @@ import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.enums.PopupWindowType;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,12 +24,13 @@ import java.util.List;
  */
 
 public class HealthcocoPopupWindow extends PopupWindow implements View.OnClickListener, AdapterView.OnItemClickListener {
+    private final View anchorView;
+    PopupListViewAdapter popupListViewAdapter;
     private List<Object> list;
     private PopupWindowListener popupWindowListener;
     private HealthCocoActivity mActivity;
     private PopupWindowType popupWindowType;
     private int dropDownLayoutId;
-    private final View anchorView;
 
     public HealthcocoPopupWindow(Context context, View view, PopupWindowType popupWindowType, List<Object> list, PopupWindowListener popupWindowListener) {
         this(context, view, popupWindowType, list, R.layout.spinner_drop_down_item_grey_background, popupWindowListener);
@@ -47,7 +49,7 @@ public class HealthcocoPopupWindow extends PopupWindow implements View.OnClickLi
     public View getPopupView() {
         LinearLayout linearLayout = (LinearLayout) mActivity.getLayoutInflater().inflate(R.layout.popup_window_healthcoco, null);
         ListView lvList = (ListView) linearLayout.findViewById(R.id.lv_popup_options);
-        PopupListViewAdapter popupListViewAdapter = new PopupListViewAdapter(mActivity, popupWindowType, dropDownLayoutId);
+        popupListViewAdapter = new PopupListViewAdapter(mActivity, popupWindowType, dropDownLayoutId);
         popupListViewAdapter.setListData(list);
         lvList.setAdapter(popupListViewAdapter);
         lvList.setOnItemClickListener(this);
@@ -96,4 +98,11 @@ public class HealthcocoPopupWindow extends PopupWindow implements View.OnClickLi
             else popupWindowListener.onEmptyListFound();
         }
     }
+
+    public void notifyAdapter(ArrayList<Object> list) {
+        this.list = list;
+        popupListViewAdapter.setListData(list);
+        popupListViewAdapter.notifyDataSetChanged();
+    }
+
 }

@@ -29,7 +29,10 @@ import com.healthcoco.healthcocopad.bean.request.ClinicalNoteToSend;
 import com.healthcoco.healthcocopad.bean.request.PrescriptionRequest;
 import com.healthcoco.healthcocopad.bean.request.TreatmentRequest;
 import com.healthcoco.healthcocopad.bean.server.AppointmentRequest;
+import com.healthcoco.healthcocopad.bean.server.ClinicDetailResponse;
+import com.healthcoco.healthcocopad.bean.server.ClinicDoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.ClinicalNotes;
+import com.healthcoco.healthcocopad.bean.server.DoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.Prescription;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
@@ -44,9 +47,12 @@ import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.PatientDetailTabType;
 import com.healthcoco.healthcocopad.enums.PatientProfileScreenType;
+import com.healthcoco.healthcocopad.enums.PopupWindowType;
 import com.healthcoco.healthcocopad.enums.VisitIdType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
+import com.healthcoco.healthcocopad.popupwindow.HealthcocoPopupWindow;
+import com.healthcoco.healthcocopad.popupwindow.PopupWindowListener;
 import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
@@ -58,6 +64,7 @@ import com.healthcoco.healthcocopad.utilities.Util;
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import static com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType.GET_VISIT_DETAILS;
@@ -72,7 +79,7 @@ import static com.healthcoco.healthcocopad.fragments.AddNewTreatmentFragment.TAG
 public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
         TabHost.OnTabChangeListener, ViewPager.OnPageChangeListener,
         LocalDoInBackgroundListenerOptimised, Response.Listener<VolleyResponseBean>, GsonRequest.ErrorListener,
-        View.OnClickListener {
+        View.OnClickListener, PopupWindowListener {
     private static final String DATE_FORMAT_USED_IN_THIS_SCREEN = "dd-MM-yyyy";
     private static final int REQUEST_CODE_NEXT_REVIEW = 111;
     private ViewPager viewPager;
@@ -91,6 +98,7 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
     private LinearLayout layoutNextReview;
     private AppointmentRequest appointmentRequest;
     private TextView tvNextReviewDate;
+    private TextView tvDoctorName;
     private TextView tvNextReviewTime;
     private VisitDetails visit;
     private String appointmentId;
@@ -101,6 +109,11 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
     private String prescriptionId;
     private String treatmentId;
     private LinearLayout containerDateTime;
+    private LinkedHashMap<String, ClinicDoctorProfile> clinicDoctorListHashMap = new LinkedHashMap<>();
+    private ClinicDetailResponse selectedClinicProfile;
+    private DoctorProfile doctorProfile;
+    private HealthcocoPopupWindow doctorsListPopupWindow;
+
 
     private boolean isPrescriptionTabClicked = false;
     private boolean isClinicalNotesTabClicked = false;
@@ -122,6 +135,7 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
             visitId = Parcels.unwrap(intent.getParcelableExtra(HealthCocoConstants.TAG_VISIT_ID));
             clinicalNoteId = intent.getStringExtra(TAG_CLINICAL_NOTE_ID);
             prescriptionId = intent.getStringExtra(TAG_PRESCRIPTION_ID);
+            tvDoctorName = (TextView) view.findViewById(R.id.tv_doctor_name);
             treatmentId = intent.getStringExtra(TAG_TREATMENT_ID);
             treatment = Parcels.unwrap(intent.getParcelableExtra(PatientTreatmentDetailFragment.TAG_TREATMENT_DATA));
             Parcelable isFromCloneParcelable = intent.getParcelableExtra(HealthCocoConstants.TAG_IS_FROM_CLONE);
@@ -327,6 +341,8 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
                             return;
                         }
                         initTabsAndViewPagerFragments(null);
+                        refreshDoctorClinicText();
+                        refreshDoctorsList();
                     }
                     break;
                 case ADD_VISIT:
@@ -384,6 +400,14 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
                         mActivity.setResult(HealthCocoConstants.RESULT_CODE_ADD_NEW_TREATMENT, null);
                         ((CommonOpenUpActivity) mActivity).finish();
                     }
+                    break;
+                case GET_CLINIC_PROFILE:
+                    if (response.getData() != null) {
+                        selectedClinicProfile = (ClinicDetailResponse) response.getData();
+                        formHashMapAndRefresh(selectedClinicProfile.getDoctors());
+                    }
+                    if (!response.isUserOnline())
+                        onNetworkUnavailable(response.getWebServiceType());
                     break;
                 default:
                     break;
@@ -446,6 +470,8 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
                 if (doctor != null)
                     user = doctor.getUser();
                 selectedPatient = LocalDataServiceImpl.getInstance(mApp).getPatient(HealthCocoConstants.SELECTED_PATIENTS_USER_ID);
+                doctorProfile = LocalDataServiceImpl.getInstance(mApp).getDoctorProfileObject(user.getUniqueId());
+                selectedClinicProfile = LocalDataServiceImpl.getInstance(mApp).getClinicResponseDetails(user.getForeignLocationId());
                 break;
             case GET_VISIT_DETAILS:
                 volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getVisitDetailResponse(WebServiceType.GET_PATIENT_VISIT_DETAIL, visitId, null, null);
@@ -530,6 +556,7 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
         LogUtils.LOGD(TAG, "Selected patient " + selectedPatient.getLocalPatientName());
         if (msgId == 0) {
             TreatmentRequest treatmentRequest = addNewTreatmentFragment.getTreatmentRequestDetails();
+            treatmentRequest.setDoctorId(user.getUniqueId());
             if (Util.isNullOrBlank(treatmentId))
                 treatmentRequest.setVisitId(Util.getVisitId(VisitIdType.TREATMENT));
             if (Util.isNullOrBlank(appointmentId))
@@ -543,6 +570,7 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
         LogUtils.LOGD(TAG, "Selected patient " + selectedPatient.getLocalPatientName());
         if (prescriptionMsg == 0) {
             PrescriptionRequest prescription = addEditNormalVisitPrescriptionFragment.getPrescriptionRequestDetails();
+            prescription.setDoctorId(user.getUniqueId());
             if (Util.isNullOrBlank(prescriptionId) && !isFromClone)
                 prescription.setVisitId(Util.getVisitId(VisitIdType.PRESCRIPTION));
             if (Util.isNullOrBlank(appointmentId))
@@ -555,6 +583,7 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
         mActivity.showLoading(false);
         if (noteMsgId == 0) {
             ClinicalNoteToSend clinicalNotes = addClinicalNotesVisitNormalFragment.getClinicalNoteToSendDetails();
+            clinicalNotes.setDoctorId(user.getUniqueId());
             if (!Util.isNullOrBlank(clinicalNoteId)) {
                 clinicalNotes.setUniqueId(clinicalNoteId);
                 WebDataServiceImpl.getInstance(mApp).updateClinicalNote(ClinicalNotes.class, clinicalNotes, this, this);
@@ -629,13 +658,19 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
         visitDetails.setPatientId(HealthCocoConstants.SELECTED_PATIENTS_USER_ID);
         if (!Util.isNullOrBlank(visitId) && !isFromClone)
             visitDetails.setVisitId(visitId);
-        if (blankClinicalNoteMsgId == 0)
+        if (blankClinicalNoteMsgId == 0) {
             visitDetails.setClinicalNote(addClinicalNotesVisitNormalFragment.getClinicalNoteToSendDetails());
-        if (blankPrescriptionMsgId == 0)
+            visitDetails.getClinicalNote().setDoctorId(user.getUniqueId());
+        }
+        if (blankPrescriptionMsgId == 0) {
             visitDetails.setPrescription(addEditNormalVisitPrescriptionFragment.getPrescriptionRequestDetails());
-        if (blankTreatmentMsgId == 0)
+            visitDetails.getPrescription().setDoctorId(user.getUniqueId());
+        }
+        if (blankTreatmentMsgId == 0) {
 //            addNewTreatmentFragment.refreshListViewUpdatedTreatmentList();
             visitDetails.setTreatmentRequest(addNewTreatmentFragment.getTreatmentRequestDetails());
+            visitDetails.getTreatmentRequest().setDoctorId(user.getUniqueId());
+        }
         if (Util.isNullOrBlank(appointmentId))
             visitDetails.setAppointmentRequest(appointmentRequest);
         WebDataServiceImpl.getInstance(mApp).addVisit(VisitDetails.class, visitDetails, this, this);
@@ -658,4 +693,47 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
             }
         }
     }
+
+    private void refreshDoctorsList() {
+        showLoadingOverlay(true);
+        WebDataServiceImpl.getInstance(mApp).getClinicDetails(ClinicDetailResponse.class, user.getForeignLocationId(), this, this);
+    }
+
+    private void formHashMapAndRefresh(List<ClinicDoctorProfile> responseList) {
+        if (!Util.isNullOrEmptyList(responseList)) {
+            for (ClinicDoctorProfile clinicDoctorProfile :
+                    responseList) {
+                clinicDoctorListHashMap.put(clinicDoctorProfile.getUniqueId(), clinicDoctorProfile);
+            }
+        }
+//        notifyAdapter(new ArrayList<ClinicDoctorProfile>(clinicDoctorListHashMap.values()));
+        if (doctorsListPopupWindow != null)
+            doctorsListPopupWindow.notifyAdapter(new ArrayList<Object>(clinicDoctorListHashMap.values()));
+        else
+            mActivity.initPopupWindows(tvDoctorName, PopupWindowType.DOCTOR_LIST, new ArrayList<Object>(clinicDoctorListHashMap.values()), this);
+
+    }
+
+    @Override
+    public void onItemSelected(PopupWindowType popupWindowType, Object object) {
+        switch (popupWindowType) {
+            case DOCTOR_LIST:
+                if (object instanceof ClinicDoctorProfile) {
+                    ClinicDoctorProfile doctorProfile = (ClinicDoctorProfile) object;
+                    tvDoctorName.setText(doctorProfile.getFirstNameWithTitle());
+                    user.setUniqueId(doctorProfile.getUniqueId());
+                }
+                break;
+        }
+    }
+
+    @Override
+    public void onEmptyListFound() {
+
+    }
+
+    private void refreshDoctorClinicText() {
+        tvDoctorName.setText(Util.getValidatedValue(doctorProfile.getFirstNameWithTitle()));
+    }
+
 }

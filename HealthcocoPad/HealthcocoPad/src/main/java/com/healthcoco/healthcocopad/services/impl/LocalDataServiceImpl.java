@@ -485,7 +485,7 @@ public class LocalDataServiceImpl {
         return volleyResponseBean;
     }
 
-    private ClinicDetailResponse getClinicResponseDetails(String locationId) {
+    public ClinicDetailResponse getClinicResponseDetails(String locationId) {
         Select<ClinicDetailResponse> selectQuery = Select.from(ClinicDetailResponse.class)
                 .where(Condition.prop(LocalDatabaseUtils.KEY_UNIQUE_ID).eq(locationId));
         ClinicDetailResponse clinicDetailResponse = selectQuery.first();

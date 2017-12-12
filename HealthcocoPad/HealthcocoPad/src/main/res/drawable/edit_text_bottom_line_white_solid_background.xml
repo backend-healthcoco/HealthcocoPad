@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item>
+        <shape>
+            <solid android:color="@color/white" />
+        </shape>
+    </item>
+    white
+
+    <!-- main color -->
+    <item android:bottom="@dimen/edit_text_bottom_line_stroke">
+        <shape>
+            <solid android:color="@color/blue_action_bar" />
+        </shape>
+    </item>
+
+</layer-list>

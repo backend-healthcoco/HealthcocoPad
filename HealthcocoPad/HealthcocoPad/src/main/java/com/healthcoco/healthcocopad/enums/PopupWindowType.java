@@ -15,6 +15,8 @@ public enum PopupWindowType {
         add(PatientTreatmentStatus.COMPLETED);
     }}),
 
+    DOCTOR_LIST,
+
     DISCOUNT_TYPE(new ArrayList<Object>() {{
         add(UnitType.PERCENT);
         add(UnitType.INR);

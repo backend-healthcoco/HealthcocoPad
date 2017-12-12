@@ -25,6 +25,7 @@
     <color name="green_translucent">#8030CA70</color>
     <color name="login_sign_in_bt">#5a5676</color>
     <color name="login_sign_in_bt_translucent">#905a5676</color>
+    <color name="background_light">#fcfcfc</color>
     <color name="grey_background">#f2f2f2</color>
     <color name="grey_dark_bg">#e4e0e0</color>
     <color name="red_error">#F50434</color>

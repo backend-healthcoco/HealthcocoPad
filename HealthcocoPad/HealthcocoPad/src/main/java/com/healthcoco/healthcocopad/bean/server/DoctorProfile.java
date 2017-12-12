@@ -348,4 +348,13 @@ public class DoctorProfile extends SugarRecord {
     public void setExperienceJsonString(String experienceJsonString) {
         this.experienceJsonString = experienceJsonString;
     }
+
+    public String getFirstNameWithTitle() {
+        if (Util.isNullOrBlank(title))
+            title = "Dr.";
+        else if (!title.trim().contains("."))
+            title = title + ".";
+        return title + " " + firstName;
+    }
+
 }
