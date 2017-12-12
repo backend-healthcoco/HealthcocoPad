@@ -56,8 +56,23 @@ public class PatientClinicalNotesDetailFragment extends HealthCocoFragment imple
     public static final String INTENT_GET_CLINICAL_NOTES_LIST = "com.healthcoco.CLINICAL_NOTES_LIST";
     public static final String INTENT_GET_CLINICAL_NOTES_LIST_LOCAL = "com.healthcoco.CLINICAL_NOTES_LIST_LOCAL";
     public static final String INTENT_GET_CLINICAL_NOTE_USING_ID = "com.healthcoco.GET_CLINICAL_NOTE_USING_ID";
-    private static final int REQUEST_CODE_CLINICAL_NOTES = 111;
     public static final int MAX_SIZE = 10;
+    private static final int REQUEST_CODE_CLINICAL_NOTES = 111;
+    public FloatingActionButton floatingActionButton;
+    BroadcastReceiver clinicalNoteUsingIdLocalReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, final Intent intent) {
+            if (intent != null && intent.hasExtra(AddClinicalNotesVisitNormalFragment.TAG_CLINICAL_NOTE_ID)) {
+//                String clinicalNoteId = intent.getStringExtra(AddClinicalNotesVisitNormalFragment.TAG_CLINICAL_NOTE_ID);
+//                ClinicalNotes clinicalNotes = LocalDataServiceImpl.getInstance(mApp).getClinicalNote(clinicalNoteId, HealthCocoConstants.SELECTED_PATIENTS_USER_ID);
+//                if (clinicalNotes != null)
+//                    clinicalNotesList.put(clinicalNotes.getUniqueId(), clinicalNotes);
+//                notifyAdapter(new ArrayList<>(clinicalNotesList.values()));
+
+            }
+            sendBroadcasts();
+        }
+    };
     private ListViewLoadMore lvClinicalNotes;
     private HashMap<String, ClinicalNotes> clinicalNotesList = new HashMap<>();
     private TextView tvNoNotesAdded;
@@ -75,7 +90,25 @@ public class PatientClinicalNotesDetailFragment extends HealthCocoFragment imple
     private boolean isLoading;
     private boolean isEndOfListAchieved;
     private int PAGE_NUMBER = 0;
-    public FloatingActionButton floatingActionButton;
+    BroadcastReceiver clinicalNotesListReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, final Intent intent) {
+            resetListAndPagingAttributes();
+            getClinicalNotes(true);
+        }
+    };
+    BroadcastReceiver clinicalNotesListLocalReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, final Intent intent) {
+            boolean showLoading = false;
+            if (intent != null && intent.hasExtra(SHOW_LOADING)) {
+                showLoading = intent.getBooleanExtra(SHOW_LOADING, false);
+            }
+            resetListAndPagingAttributes();
+            getListFromLocal(showLoading, isOtpVerified(), 0);
+            sendBroadcasts();
+        }
+    };
 
     public PatientClinicalNotesDetailFragment() {
     }
@@ -207,6 +240,7 @@ public class PatientClinicalNotesDetailFragment extends HealthCocoFragment imple
                 if (response.isDataFromLocal()) {
                     ArrayList<ClinicalNotes> responseList = (ArrayList<ClinicalNotes>) (ArrayList<?>) response
                             .getDataList();
+                    clinicalNotesList.clear();
                     formHashMapAndRefresh(responseList);
                     if (Util.isNullOrEmptyList(responseList) || responseList.size() < MAX_SIZE || Util.isNullOrEmptyList(responseList))
                         isEndOfListAchieved = true;
@@ -311,7 +345,6 @@ public class PatientClinicalNotesDetailFragment extends HealthCocoFragment imple
         }
     }
 
-
     @Override
     public void onPause() {
         super.onPause();
@@ -324,41 +357,6 @@ public class PatientClinicalNotesDetailFragment extends HealthCocoFragment imple
         LocalBroadcastManager.getInstance(mActivity).unregisterReceiver(clinicalNotesListLocalReceiver);
         LocalBroadcastManager.getInstance(mActivity).unregisterReceiver(clinicalNoteUsingIdLocalReceiver);
     }
-
-    BroadcastReceiver clinicalNotesListReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, final Intent intent) {
-            resetListAndPagingAttributes();
-            getClinicalNotes(true);
-        }
-    };
-
-    BroadcastReceiver clinicalNoteUsingIdLocalReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, final Intent intent) {
-            if (intent != null && intent.hasExtra(AddClinicalNotesVisitNormalFragment.TAG_CLINICAL_NOTE_ID)) {
-//                String clinicalNoteId = intent.getStringExtra(AddClinicalNotesVisitNormalFragment.TAG_CLINICAL_NOTE_ID);
-//                ClinicalNotes clinicalNotes = LocalDataServiceImpl.getInstance(mApp).getClinicalNote(clinicalNoteId, HealthCocoConstants.SELECTED_PATIENTS_USER_ID);
-//                if (clinicalNotes != null)
-//                    clinicalNotesList.put(clinicalNotes.getUniqueId(), clinicalNotes);
-//                notifyAdapter(new ArrayList<>(clinicalNotesList.values()));
-
-            }
-            sendBroadcasts();
-        }
-    };
-    BroadcastReceiver clinicalNotesListLocalReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, final Intent intent) {
-            boolean showLoading = false;
-            if (intent != null && intent.hasExtra(SHOW_LOADING)) {
-                showLoading = intent.getBooleanExtra(SHOW_LOADING, false);
-            }
-            resetListAndPagingAttributes();
-            getListFromLocal(showLoading, isOtpVerified(), 0);
-            sendBroadcasts();
-        }
-    };
 
     private void sendBroadcasts() {
         Util.sendBroadcasts(mApp, new ArrayList<String>() {{

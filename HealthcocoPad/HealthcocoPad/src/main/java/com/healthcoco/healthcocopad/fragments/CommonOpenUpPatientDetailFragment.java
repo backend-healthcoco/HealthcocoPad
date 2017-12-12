@@ -25,6 +25,9 @@ import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.adapter.CommonViewPagerAdapter;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
+import com.healthcoco.healthcocopad.bean.server.ClinicDetailResponse;
+import com.healthcoco.healthcocopad.bean.server.ClinicDoctorProfile;
+import com.healthcoco.healthcocopad.bean.server.DoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.User;
@@ -36,9 +39,12 @@ import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.PatientDetailTabType;
 import com.healthcoco.healthcocopad.enums.PatientProfileScreenType;
+import com.healthcoco.healthcocopad.enums.PopupWindowType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.CommonOpenUpPatientDetailListener;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
+import com.healthcoco.healthcocopad.popupwindow.HealthcocoPopupWindow;
+import com.healthcoco.healthcocopad.popupwindow.PopupWindowListener;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.DownloadImageFromUrlUtil;
@@ -47,6 +53,8 @@ import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 import static com.healthcoco.healthcocopad.R.id.container_right_action;
 
@@ -54,7 +62,7 @@ import static com.healthcoco.healthcocopad.R.id.container_right_action;
  * Created by Shreshtha on 03-03-2017.
  */
 public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implements View.OnClickListener, ViewPager.OnPageChangeListener, TabHost.OnTabChangeListener,
-        LocalDoInBackgroundListenerOptimised, CommonOpenUpPatientDetailListener {
+        LocalDoInBackgroundListenerOptimised, CommonOpenUpPatientDetailListener, PopupWindowListener {
     public static final String INTENT_REFRESH_PATIENT_PROFILE = "com.healthcoco.REFRESH_PATIENT_PROFILE";
     public static final String TAG_PATIENT_DETAIL_TAB_TYPE = "detailTabType";
 
@@ -67,12 +75,16 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
     private Toolbar toolbar;
     private TextView tvInitialAlphabet;
     private TextView tvPatientName;
+    private TextView tvDoctorName;
     private TextView tvPatientId;
     private ImageView ivContactProfile;
     private LinearLayout patientProfileLayout;
     private RegisteredPatientDetailsUpdated selectedPatient;
     private User user;
+    private ClinicDetailResponse selectedClinicProfile;
+    private LinkedHashMap<String, ClinicDoctorProfile> clinicDoctorListHashMap = new LinkedHashMap<>();
     private int tabOrdinal;
+    private DoctorProfile doctorProfile;
 //    private TabLayout tabLayout;
 
     //flags to refresh fragment when clicked for the first time
@@ -83,6 +95,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
     private PatientPrescriptionDetailFragment prescriptionDetailFragment;
     private PatientReportsDetailFragment reportsDetailFragment;
     private PatientTreatmentDetailFragment treatmentDetailFragment;
+    private HealthcocoPopupWindow doctorsListPopupWindow;
 
     private boolean isProfileTabClicked = true;
     private boolean isVisitsTabClicked = false;
@@ -130,6 +143,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
         tvPatientName = (TextView) view.findViewById(R.id.tv_name);
         tvPatientId = (TextView) view.findViewById(R.id.tv_patient_id);
         tvGenderDate = (TextView) view.findViewById(R.id.tv_patient_gender);
+        tvDoctorName = (TextView) view.findViewById(R.id.tv_doctor_name);
         ivContactProfile = (ImageView) view.findViewById(R.id.iv_image);
         patientProfileLayout = (LinearLayout) view.findViewById(R.id.patient_profile_layout);
         ((CommonOpenUpActivity) mActivity).showRightAction(false);
@@ -442,6 +456,8 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                 LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
                 if (doctor != null && doctor.getUser() != null && !Util.isNullOrBlank(doctor.getUser().getUniqueId()) && selectedPatient != null && !Util.isNullOrBlank(selectedPatient.getUserId())) {
                     user = doctor.getUser();
+                    doctorProfile = LocalDataServiceImpl.getInstance(mApp).getDoctorProfileObject(user.getUniqueId());
+                    selectedClinicProfile = LocalDataServiceImpl.getInstance(mApp).getClinicResponseDetails(user.getForeignLocationId());
                 }
                 break;
         }
@@ -465,6 +481,8 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                         initTabs();
                         initViewPagerAdapter();
                         initData();
+                        refreshDoctorClinicText();
+                        refreshDoctorsList();
                         if (ordinal != 0) {
                             mViewPager.setCurrentItem(ordinal);
 //                            prescriptionDetailFragment.refreshData(PatientDetailTabType.PATIENT_DETAIL_PRESCRIPTION);
@@ -477,6 +495,15 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                         LocalDataServiceImpl.getInstance(mApp).addPatient(selectedPatient);
                         initData();
                     }
+                    break;
+                case GET_CLINIC_PROFILE:
+                    if (response.getData() != null) {
+                        selectedClinicProfile = (ClinicDetailResponse) response.getData();
+                        formHashMapAndRefresh(selectedClinicProfile.getDoctors());
+//                        initSelectedDoctorClinicData();
+                    }
+                    if (!response.isUserOnline())
+                        onNetworkUnavailable(response.getWebServiceType());
                     break;
             }
         }
@@ -513,4 +540,57 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
         return isOTPVerified;
     }
 
+    private void refreshDoctorsList() {
+        showLoadingOverlay(true);
+        WebDataServiceImpl.getInstance(mApp).getClinicDetails(ClinicDetailResponse.class, user.getForeignLocationId(), this, this);
+    }
+
+    private void formHashMapAndRefresh(List<ClinicDoctorProfile> responseList) {
+        if (!Util.isNullOrEmptyList(responseList)) {
+            for (ClinicDoctorProfile clinicDoctorProfile :
+                    responseList) {
+                clinicDoctorListHashMap.put(clinicDoctorProfile.getUniqueId(), clinicDoctorProfile);
+            }
+        }
+//        notifyAdapter(new ArrayList<ClinicDoctorProfile>(clinicDoctorListHashMap.values()));
+        if (doctorsListPopupWindow != null)
+            doctorsListPopupWindow.notifyAdapter(new ArrayList<Object>(clinicDoctorListHashMap.values()));
+        else
+            mActivity.initPopupWindows(tvDoctorName, PopupWindowType.DOCTOR_LIST, new ArrayList<Object>(clinicDoctorListHashMap.values()), this);
+
+    }
+
+    @Override
+    public void onItemSelected(PopupWindowType popupWindowType, Object object) {
+        switch (popupWindowType) {
+            case DOCTOR_LIST:
+                if (object instanceof ClinicDoctorProfile) {
+                    ClinicDoctorProfile doctorProfile = (ClinicDoctorProfile) object;
+                    tvDoctorName.setText(doctorProfile.getFirstNameWithTitle());
+                    user.setUniqueId(doctorProfile.getUniqueId());
+                    resetAllFlags();
+                    onTabChanged(null);
+                }
+                break;
+        }
+    }
+
+    private void resetAllFlags() {
+        isProfileTabClicked = false;
+        isVisitsTabClicked = false;
+        isAppointmentTabClicked = false;
+        isPrescriptionTabClicked = false;
+        isClinicalNotesTabClicked = false;
+        isReportsTabClicked = false;
+        isTreatmentTabClicked = false;
+    }
+
+    @Override
+    public void onEmptyListFound() {
+
+    }
+
+    private void refreshDoctorClinicText() {
+        tvDoctorName.setText(Util.getValidatedValue(doctorProfile.getFirstNameWithTitle()));
+    }
 }

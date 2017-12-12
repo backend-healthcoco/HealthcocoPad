@@ -201,7 +201,7 @@ public class UploadReportDialogFragment extends HealthCocoDialogFragment impleme
 //        requestMultipart.setRecordsState(RecordState.APPROVAL_NOT_REQUIRED);
         requestMultipart.setRecordsType(String.valueOf(reportDetailsToSend.getReportFileType()));
 
-        new MultipartUploadRequestAsynTask(mActivity, RecordsAddRequestMultipart.class, WebServiceType.ADD_RECORD_MULTIPART, requestMultipart, reportDetailsToSend.getRecordsPath(), this, this).execute();
+        new MultipartUploadRequestAsynTask(mActivity, Records.class, WebServiceType.ADD_RECORD_MULTIPART, requestMultipart, reportDetailsToSend.getRecordsPath(), this, this).execute();
 
     }
 
@@ -315,20 +315,6 @@ public class UploadReportDialogFragment extends HealthCocoDialogFragment impleme
         LogUtils.LOGD(TAG, "ADD_RECORD Success");
         switch (response.getWebServiceType()) {
             case ADD_RECORD_MULTIPART:
-//        /*        if (response.getData() instanceof MyFileRecordDetail) {
-//                    MyFileRecordDetail myFileRecordDetail = (MyFileRecordDetail) response.getData();
-//                    if (uploadedFilesResponseList == null)
-//                        uploadedFilesResponseList = new ArrayList<>();
-//                    uploadedFilesResponseList.add(myFileRecordDetail);
-//                }
-//                if (uploadedFilesResponseList.size() == mAdapter.getValidListCount()) {
-//                    addRecord(myFileRecordDetail);
-//                    return;
-//                }
-
-//                break;
-//            case ADD_RECORD:
-//                */
                 if (response.isValidData(response)) {
                     Records record = (Records) response.getData();
                     LocalDataServiceImpl.getInstance(mApp).addRecord(record);

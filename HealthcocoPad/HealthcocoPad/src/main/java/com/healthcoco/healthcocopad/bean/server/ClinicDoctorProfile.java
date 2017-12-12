@@ -1,6 +1,7 @@
 package com.healthcoco.healthcocopad.bean.server;
 
 import com.healthcoco.healthcocopad.enums.UserState;
+import com.healthcoco.healthcocopad.utilities.Util;
 import com.orm.SugarRecord;
 import com.orm.annotation.Ignore;
 import com.orm.annotation.Unique;
@@ -16,6 +17,7 @@ import java.util.List;
 public class ClinicDoctorProfile extends SugarRecord {
     @Unique
     private String uniqueId;
+    private String title;
     private String firstName;
     private String lastName;
     private String mobileNumber;
@@ -28,6 +30,7 @@ public class ClinicDoctorProfile extends SugarRecord {
     private String locationId;
     @Ignore
     private List<String> specialities;
+    private String specialitiesJsonString;
     private Long createdTime;
     private Long updatedTime;
     private UserState userState;
@@ -150,5 +153,29 @@ public class ClinicDoctorProfile extends SugarRecord {
 
     public void setUserState(UserState userState) {
         this.userState = userState;
+    }
+
+    public String getSpecialitiesJsonString() {
+        return specialitiesJsonString;
+    }
+
+    public void setSpecialitiesJsonString(String specialitiesJsonString) {
+        this.specialitiesJsonString = specialitiesJsonString;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getFirstNameWithTitle() {
+        if (Util.isNullOrBlank(title))
+            title = "Dr.";
+        else if (!title.trim().contains("."))
+            title = title + ".";
+        return title + " " + firstName;
     }
 }
