@@ -80,6 +80,7 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
     private boolean isEndOfListAchieved;
     private boolean isInitialLoading;
     private User user;
+    private String loginedUser;
     private RegisteredPatientDetailsUpdated selectedPatient;
     private TextView tvNoVisits;
     private ProgressBar progressLoading;
@@ -106,6 +107,7 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
         }
     };
     private PatientDetailTabType detailTabType;
+    private boolean forAllDoctor = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -149,9 +151,11 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
         lvVisits.setAdapter(patientsVisitAdapter);
     }
 
-    public void refreshData(PatientDetailTabType detailTabType) {
+    public void refreshData(PatientDetailTabType detailTabType, boolean forAllDoctor) {
+        this.forAllDoctor = forAllDoctor;
         getListFromLocal(true, 0);
         this.detailTabType = detailTabType;
+
     }
 
     public void getVisits(boolean showLoading) {
@@ -272,8 +276,13 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
             case ADD_VISITS:
                 LocalDataServiceImpl.getInstance(mApp).addVisitsList((ArrayList<VisitDetails>) (ArrayList<?>) response.getDataList());
             case GET_VISITS:
-                volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getVisitsListPageWise(GET_PATIENT_VISIT, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(),
-                        selectedPatient.getUserId(), PAGE_NUMBER, MAX_SIZE, null, null);
+                if (forAllDoctor) {
+                    volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getVisitsListPageWise(GET_PATIENT_VISIT, forAllDoctor, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(),
+                            selectedPatient.getUserId(), PAGE_NUMBER, MAX_SIZE, null, null);
+                } else {
+                    volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getVisitsListPageWise(GET_PATIENT_VISIT, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(),
+                            selectedPatient.getUserId(), PAGE_NUMBER, MAX_SIZE, null, null);
+                }
                 break;
         }
         if (volleyResponseBean == null)
@@ -377,7 +386,12 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
 
     @Override
     public User getUser() {
-        return null;
+        return user;
+    }
+
+    @Override
+    public String getLoginedUser() {
+        return loginedUser;
     }
 
     @Override
@@ -539,8 +553,9 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
         }
     }
 
-    public void setUserData(User user, RegisteredPatientDetailsUpdated registeredPatientDetailsUpdated) {
+    public void setUserData(User user, String loginedUser, RegisteredPatientDetailsUpdated registeredPatientDetailsUpdated) {
         this.selectedPatient = registeredPatientDetailsUpdated;
         this.user = user;
+        this.loginedUser = loginedUser;
     }
 }

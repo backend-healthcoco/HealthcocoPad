@@ -2888,7 +2888,15 @@ public class LocalDataServiceImpl {
         visitedForTypeTable.save();
     }
 
+    //For Selected Doctors
     public VolleyResponseBean getVisitsListPageWise(WebServiceType webServiceType, String doctorId, String locationId, String hospitalId,
+                                                    String patientId, int pageNum, int maxSize,
+                                                    Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        return getVisitsListPageWise(webServiceType, false, doctorId, locationId, hospitalId, patientId, pageNum, maxSize, responseListener, errorListener);
+    }
+
+    //For All Doctors
+    public VolleyResponseBean getVisitsListPageWise(WebServiceType webServiceType, boolean forAll, String doctorId, String locationId, String hospitalId,
                                                     String patientId, int pageNum, int maxSize,
                                                     Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
@@ -2899,14 +2907,14 @@ public class LocalDataServiceImpl {
             //forming where condition query
             String whereCondition = "Select * from " + StringUtil.toSQLName(VisitDetails.class.getSimpleName())
                     + " where "
-                    + LocalDatabaseUtils.KEY_DOCTOR_ID + "=\"" + doctorId + "\""
-                    + " AND "
                     + LocalDatabaseUtils.KEY_LOCATION_ID + "=\"" + locationId + "\""
                     + " AND "
                     + LocalDatabaseUtils.KEY_HOSPITAL_ID + "=\"" + hospitalId + "\""
                     + " AND "
                     + LocalDatabaseUtils.KEY_PATIENT_ID + "=\"" + patientId + "\"";
-
+            if (!forAll) {
+                whereCondition = whereCondition + " AND " + LocalDatabaseUtils.KEY_DOCTOR_ID + "=\"" + doctorId + "\"";
+            }
             //specifying order by limit and offset query
             String conditionsLimit = " ORDER BY " + LocalDatabaseUtils.KEY_VISITED_TIME + " DESC "
                     + " LIMIT " + maxSize

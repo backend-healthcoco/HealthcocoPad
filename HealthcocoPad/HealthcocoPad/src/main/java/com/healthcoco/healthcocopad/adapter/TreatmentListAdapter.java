@@ -34,9 +34,7 @@ public class TreatmentListAdapter extends BaseAdapter {
 
     public TreatmentListAdapter(HealthCocoActivity activity, CommonEMRItemClickListener commonEMRItemClickListener, TreatmentListItemClickListeners listItemClickListeners) {
         this.mActivity = activity;
-        this.user = user;
         this.listItemClickListeners = listItemClickListeners;
-        this.selectedPatient = selectedPatient;
         this.commonEMRItemClickListener = commonEMRItemClickListener;
     }
 

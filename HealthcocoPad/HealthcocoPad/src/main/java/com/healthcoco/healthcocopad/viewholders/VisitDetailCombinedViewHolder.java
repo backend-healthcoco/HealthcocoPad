@@ -3,7 +3,6 @@ package com.healthcoco.healthcocopad.viewholders;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.view.View;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -17,7 +16,9 @@ import com.healthcoco.healthcocopad.bean.server.ClinicalNotes;
 import com.healthcoco.healthcocopad.bean.server.Prescription;
 import com.healthcoco.healthcocopad.bean.server.Records;
 import com.healthcoco.healthcocopad.bean.server.Treatments;
+import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.bean.server.VisitDetails;
+import com.healthcoco.healthcocopad.enums.RoleType;
 import com.healthcoco.healthcocopad.enums.VisitedForType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.VisitDetailCombinedItemListener;
@@ -41,6 +42,8 @@ public class VisitDetailCombinedViewHolder extends HealthCocoViewHolder implemen
     private VisitDetails visitDetail;
     private LinearLayout btPrint;
     private LinearLayout btSms;
+    private User user;
+    private String loginedUser;
     private LinearLayout btEdit;
     private LinearLayout btEmail;
     private LinearLayout btClone;
@@ -66,6 +69,9 @@ public class VisitDetailCombinedViewHolder extends HealthCocoViewHolder implemen
         super(mActivity);
         this.mActivity = mActivity;
         this.listItemClickListener = listItemClickListener;
+        this.user = listItemClickListener.getUser();
+        this.loginedUser = listItemClickListener.getLoginedUser();
+
     }
 
     @Override
@@ -222,6 +228,16 @@ public class VisitDetailCombinedViewHolder extends HealthCocoViewHolder implemen
             }
         } else {
             layoutNextReviewDetail.setVisibility(View.GONE);
+        }
+        checkRollType();
+    }
+
+    private void checkRollType() {
+        if (user != null && (!RoleType.isAdmin(user.getRoleTypes()))) {
+            if (!loginedUser.equals(user.getUniqueId())) {
+                btDiscard.setVisibility(View.GONE);
+                btEdit.setVisibility(View.GONE);
+            }
         }
     }
 

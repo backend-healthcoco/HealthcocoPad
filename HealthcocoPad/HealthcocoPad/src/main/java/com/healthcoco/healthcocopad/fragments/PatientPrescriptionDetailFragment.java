@@ -108,6 +108,7 @@ public class PatientPrescriptionDetailFragment extends HealthCocoFragment implem
             sendBroadcasts();
         }
     };
+    private String loginedUser;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -381,6 +382,11 @@ public class PatientPrescriptionDetailFragment extends HealthCocoFragment implem
     }
 
     @Override
+    public String getLoginedUser() {
+        return loginedUser;
+    }
+
+    @Override
     public void openEmrScreen(HistoryFilterType historyFilterType) {
 
     }
@@ -397,9 +403,10 @@ public class PatientPrescriptionDetailFragment extends HealthCocoFragment implem
         startActivityForResult(intent, REQUEST_CODE_PRESCRIPTION_LIST);
     }
 
-    public void setUserData(User user, RegisteredPatientDetailsUpdated registeredPatientDetailsUpdated) {
+    public void setUserData(User user, String loginedUser, RegisteredPatientDetailsUpdated registeredPatientDetailsUpdated) {
         this.selectedPatient = registeredPatientDetailsUpdated;
         this.user = user;
+        this.loginedUser = loginedUser;
     }
 
     @Override

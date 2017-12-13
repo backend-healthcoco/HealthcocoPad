@@ -44,7 +44,15 @@ import java.util.ArrayList;
 
 public class LoginDialogFragment extends HealthCocoDialogFragment implements View.OnClickListener, GsonRequest.ErrorListener, Response.Listener<VolleyResponseBean> {
     public static final String INTENT_SIGNUP_SUCCESS = "com.healthcoco.healthcocopad.dialogFragment.LoginDialogFragment";
-
+    BroadcastReceiver signUpSuccessReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, final Intent intent) {
+            String msg = getResources().getString(R.string.message_thank_you);
+            if (intent != null && intent.hasExtra(HealthCocoConstants.TAG_BROADCAST_EXTRA))
+                msg = Parcels.unwrap(intent.getParcelableExtra(HealthCocoConstants.TAG_BROADCAST_EXTRA));
+            Util.showAlert(mActivity, getResources().getString(R.string.thank_you), msg);
+        }
+    };
     private EditText editUserName;
     private EditText editPassword;
     private Button btLogin;
@@ -72,7 +80,7 @@ public class LoginDialogFragment extends HealthCocoDialogFragment implements Vie
     }
 
     private void preFillForm() {
-        editUserName.setText("manishmethani6@gmail.com");
+        editUserName.setText("nehasantani06@gmail.com");
         editPassword.setText("neha");
     }
 
@@ -235,16 +243,6 @@ public class LoginDialogFragment extends HealthCocoDialogFragment implements Vie
         intent.putExtra(HealthCocoConstants.TAG_IS_FROM_LOGIN_SIGNUP, true);
         startActivity(intent);
     }
-
-    BroadcastReceiver signUpSuccessReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, final Intent intent) {
-            String msg = getResources().getString(R.string.message_thank_you);
-            if (intent != null && intent.hasExtra(HealthCocoConstants.TAG_BROADCAST_EXTRA))
-                msg = Parcels.unwrap(intent.getParcelableExtra(HealthCocoConstants.TAG_BROADCAST_EXTRA));
-            Util.showAlert(mActivity, getResources().getString(R.string.thank_you), msg);
-        }
-    };
 
     @Override
     public void onResume() {

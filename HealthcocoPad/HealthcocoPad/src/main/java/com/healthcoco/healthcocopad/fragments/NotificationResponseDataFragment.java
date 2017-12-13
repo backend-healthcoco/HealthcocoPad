@@ -48,6 +48,15 @@ public class NotificationResponseDataFragment extends HealthCocoFragment impleme
     public static final String INTENT_GET_NOTIFICATION_APPOINTMENT_LIST_LOCAL = "com.healthcoco.NOTIFICATION_APPOINTMENT_LIST_LOCAL";
     private ListView lvNotificationResponseData;
     private NotificationResponse notificationResponse;
+    BroadcastReceiver appointmentListReceiverLocal = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, final Intent intent) {
+            if (intent != null) {
+                getData();
+                return;
+            }
+        }
+    };
     private User user;
     private NotificationResponseDataAdapter adapter;
     private boolean receiversRegistered;
@@ -127,6 +136,11 @@ public class NotificationResponseDataFragment extends HealthCocoFragment impleme
     }
 
     @Override
+    public String getLoginedUser() {
+        return null;
+    }
+
+    @Override
     public void openEmrScreen(HistoryFilterType historyFilterType) {
 
     }
@@ -146,7 +160,6 @@ public class NotificationResponseDataFragment extends HealthCocoFragment impleme
         Util.showToast(mActivity, R.string.user_offline);
         mActivity.hideLoading();
     }
-
 
     @Override
     public void onResponse(VolleyResponseBean response) {
@@ -242,14 +255,4 @@ public class NotificationResponseDataFragment extends HealthCocoFragment impleme
             receiversRegistered = true;
         }
     }
-
-    BroadcastReceiver appointmentListReceiverLocal = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, final Intent intent) {
-            if (intent != null) {
-                getData();
-                return;
-            }
-        }
-    };
 }
