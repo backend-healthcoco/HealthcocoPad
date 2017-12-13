@@ -17,6 +17,8 @@ public interface CommonEMRItemClickListener {
 
     public User getUser();
 
+    public String getLoginedUser();
+
     public void openEmrScreen(HistoryFilterType historyFilterType);
 
 }

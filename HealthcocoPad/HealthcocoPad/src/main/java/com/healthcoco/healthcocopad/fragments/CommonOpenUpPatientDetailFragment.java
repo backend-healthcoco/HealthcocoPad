@@ -81,6 +81,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
     private LinearLayout patientProfileLayout;
     private RegisteredPatientDetailsUpdated selectedPatient;
     private User user;
+    private String loginedUser;
     private ClinicDetailResponse selectedClinicProfile;
     private LinkedHashMap<String, ClinicDoctorProfile> clinicDoctorListHashMap = new LinkedHashMap<>();
     private int tabOrdinal;
@@ -104,6 +105,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
     private boolean isClinicalNotesTabClicked = false;
     private boolean isReportsTabClicked = false;
     private boolean isTreatmentTabClicked = false;
+    private boolean forAllDoctor = false;
     private TextView tvGenderDate;
     private int ordinal;
     private boolean isOTPVerified;
@@ -358,7 +360,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                     break;
                 case PATIENT_DETAIL_VISIT:
                     if (!isVisitsTabClicked) {
-                        visitsFragment.refreshData(PatientDetailTabType.PATIENT_DETAIL_VISIT);
+                        visitsFragment.refreshData(PatientDetailTabType.PATIENT_DETAIL_VISIT, forAllDoctor);
                         isVisitsTabClicked = true;
                     }
                     break;
@@ -399,12 +401,12 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
     private void initData() {
         if (selectedPatient != null) {
             refreshHeaderData(selectedPatient);
-            visitsFragment.setUserData(user, selectedPatient);
-            clinicalNotesDetailFragment.setUserData(user, selectedPatient);
-            prescriptionDetailFragment.setUserData(user, selectedPatient);
+            visitsFragment.setUserData(user, loginedUser, selectedPatient);
+            clinicalNotesDetailFragment.setUserData(user, loginedUser, selectedPatient);
+            prescriptionDetailFragment.setUserData(user, loginedUser, selectedPatient);
             appointmentFragment.setUserData(user, selectedPatient);
             reportsDetailFragment.setUserData(user, selectedPatient);
-            treatmentDetailFragment.setUserData(user, selectedPatient);
+            treatmentDetailFragment.setUserData(user, loginedUser, selectedPatient);
         } else {
             mActivity.showLoading(false);
             WebDataServiceImpl.getInstance(mApp).getPatientProfile(RegisteredPatientDetailsUpdated.class, HealthCocoConstants.SELECTED_PATIENTS_USER_ID, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(), this, this);
@@ -456,6 +458,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                 LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
                 if (doctor != null && doctor.getUser() != null && !Util.isNullOrBlank(doctor.getUser().getUniqueId()) && selectedPatient != null && !Util.isNullOrBlank(selectedPatient.getUserId())) {
                     user = doctor.getUser();
+                    loginedUser = doctor.getUser().getUniqueId();
                     doctorProfile = LocalDataServiceImpl.getInstance(mApp).getDoctorProfileObject(user.getUniqueId());
                     selectedClinicProfile = LocalDataServiceImpl.getInstance(mApp).getClinicResponseDetails(user.getForeignLocationId());
                 }

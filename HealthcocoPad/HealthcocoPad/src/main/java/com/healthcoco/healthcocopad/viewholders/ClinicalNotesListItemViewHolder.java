@@ -26,6 +26,7 @@ import com.healthcoco.healthcocopad.enums.AddUpdateNameDialogType;
 import com.healthcoco.healthcocopad.enums.ClinicalNotesPermissionType;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.PatientDetailTabType;
+import com.healthcoco.healthcocopad.enums.RoleType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.fragments.AddClinicalNotesVisitNormalFragment;
 import com.healthcoco.healthcocopad.fragments.CommonOpenUpPatientDetailFragment;
@@ -54,12 +55,13 @@ public class ClinicalNotesListItemViewHolder extends HealthCocoViewHolder implem
 
     private static final String TAG = ClinicalNotesListItemViewHolder.class.getSimpleName();
     private static final int REQUEST_CODE_CLINICAL_NOTES = 111;
+    private static final String DATE_FORMAT_USED_IN_THIS_SCREEN = "EEE, dd MMM yyyy";
     private CommonEMRItemClickListener commonEMRItemClickListener;
     private User user;
+    private String loginedUser;
     private RegisteredPatientDetailsUpdated selectedPatient;
     private VisitDetailCombinedItemListener detailCombinedItemListener;
     private LinearLayout layoutDiscarded;
-
     private LinearLayout btHistory;
     private LinearLayout btEdit;
     private TextView tvDate;
@@ -75,7 +77,6 @@ public class ClinicalNotesListItemViewHolder extends HealthCocoViewHolder implem
     private TextView tvLabelGlobalRecord;
     private TextView tvLabelNotedBy;
     private LinearLayout btPrint;
-
     //permissions Views
     private TextView tvComplaints;
     private TextView tvObservations;
@@ -117,7 +118,6 @@ public class ClinicalNotesListItemViewHolder extends HealthCocoViewHolder implem
     private TextViewFontAwesome tvPS;
     private LinearLayout layoutInidicationOfUsg;
     private TextViewFontAwesome tvIndicationOfUSG;
-
     private TextView tvBodyTemprature;
     private TextView tvWeight;
     private TextView tvHeartRate;
@@ -128,7 +128,6 @@ public class ClinicalNotesListItemViewHolder extends HealthCocoViewHolder implem
     private LinearLayout btDiscard;
     private TextView textViewNextReviewDate;
     private LinearLayout layoutNextReviewDetail;
-    private static final String DATE_FORMAT_USED_IN_THIS_SCREEN = "EEE, dd MMM yyyy";
 
     public ClinicalNotesListItemViewHolder(HealthCocoActivity mActivity,
                                            Object listenerObject, boolean isInEmrList) {
@@ -141,6 +140,8 @@ public class ClinicalNotesListItemViewHolder extends HealthCocoViewHolder implem
             this.commonEMRItemClickListener = (CommonEMRItemClickListener) listenerObject;
             this.user = commonEMRItemClickListener.getUser();
             this.selectedPatient = commonEMRItemClickListener.getSelectedPatient();
+            this.loginedUser = commonEMRItemClickListener.getLoginedUser();
+
         }
     }
 
@@ -302,6 +303,16 @@ public class ClinicalNotesListItemViewHolder extends HealthCocoViewHolder implem
                 layoutNextReviewDetail.setVisibility(View.VISIBLE);
             } else {
                 layoutNextReviewDetail.setVisibility(View.GONE);
+            }
+        }
+        checkRollType();
+    }
+
+    private void checkRollType() {
+        if (user != null && (!RoleType.isAdmin(user.getRoleTypes()))) {
+            if (!loginedUser.equals(user.getUniqueId())) {
+                btDiscard.setVisibility(View.GONE);
+                btEdit.setVisibility(View.GONE);
             }
         }
     }

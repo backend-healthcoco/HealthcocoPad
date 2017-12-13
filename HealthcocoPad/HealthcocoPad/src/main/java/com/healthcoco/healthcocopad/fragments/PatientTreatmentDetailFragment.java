@@ -81,6 +81,7 @@ public class PatientTreatmentDetailFragment extends HealthCocoFragment implement
     };
     private boolean isOTPVerified = false;
     private boolean isLoading;
+    private String loginedUser;
     private ProgressBar progressLoading;
     BroadcastReceiver treatmentListLocalReceiver = new BroadcastReceiver() {
         @Override
@@ -362,6 +363,11 @@ public class PatientTreatmentDetailFragment extends HealthCocoFragment implement
     }
 
     @Override
+    public String getLoginedUser() {
+        return null;
+    }
+
+    @Override
     public void openEmrScreen(HistoryFilterType historyFilterType) {
 
     }
@@ -371,9 +377,10 @@ public class PatientTreatmentDetailFragment extends HealthCocoFragment implement
         this.detailTabType = detailTabType;
     }
 
-    public void setUserData(User user, RegisteredPatientDetailsUpdated registeredPatientDetailsUpdated) {
+    public void setUserData(User user, String loginedUser, RegisteredPatientDetailsUpdated registeredPatientDetailsUpdated) {
         this.selectedPatient = registeredPatientDetailsUpdated;
         this.user = user;
+        this.loginedUser = loginedUser;
     }
 
 

@@ -109,6 +109,7 @@ public class PatientClinicalNotesDetailFragment extends HealthCocoFragment imple
             sendBroadcasts();
         }
     };
+    private String loginedUser;
 
     public PatientClinicalNotesDetailFragment() {
     }
@@ -314,6 +315,11 @@ public class PatientClinicalNotesDetailFragment extends HealthCocoFragment imple
     }
 
     @Override
+    public String getLoginedUser() {
+        return loginedUser;
+    }
+
+    @Override
     public void openEmrScreen(HistoryFilterType historyFilterType) {
 
     }
@@ -377,9 +383,10 @@ public class PatientClinicalNotesDetailFragment extends HealthCocoFragment imple
         startActivity(intent);
     }
 
-    public void setUserData(User user, RegisteredPatientDetailsUpdated registeredPatientDetailsUpdated) {
+    public void setUserData(User user, String loginedUser, RegisteredPatientDetailsUpdated registeredPatientDetailsUpdated) {
         this.selectedPatient = registeredPatientDetailsUpdated;
         this.user = user;
+        this.loginedUser = loginedUser;
     }
 
     @Override

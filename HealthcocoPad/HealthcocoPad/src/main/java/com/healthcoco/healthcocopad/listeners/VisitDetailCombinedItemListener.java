@@ -14,6 +14,8 @@ import com.healthcoco.healthcocopad.bean.server.User;
 public interface VisitDetailCombinedItemListener {
     public User getUser();
 
+    public String getLoginedUser();
+
     public RegisteredPatientDetailsUpdated getSelectedPatient();
 
     public void doPrint(String visitId);

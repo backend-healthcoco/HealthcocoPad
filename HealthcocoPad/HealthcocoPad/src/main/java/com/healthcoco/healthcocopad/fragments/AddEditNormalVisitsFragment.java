@@ -48,6 +48,7 @@ import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.PatientDetailTabType;
 import com.healthcoco.healthcocopad.enums.PatientProfileScreenType;
 import com.healthcoco.healthcocopad.enums.PopupWindowType;
+import com.healthcoco.healthcocopad.enums.RoleType;
 import com.healthcoco.healthcocopad.enums.VisitIdType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
@@ -60,6 +61,7 @@ import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
+import com.myscript.atk.core.Line;
 
 import org.parceler.Parcels;
 
@@ -100,6 +102,7 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
     private TextView tvNextReviewDate;
     private TextView tvDoctorName;
     private TextView tvNextReviewTime;
+    private LinearLayout lvDoctorName;
     private VisitDetails visit;
     private String appointmentId;
     private PatientDetailTabType detailTabType;
@@ -135,7 +138,6 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
             visitId = Parcels.unwrap(intent.getParcelableExtra(HealthCocoConstants.TAG_VISIT_ID));
             clinicalNoteId = intent.getStringExtra(TAG_CLINICAL_NOTE_ID);
             prescriptionId = intent.getStringExtra(TAG_PRESCRIPTION_ID);
-            tvDoctorName = (TextView) view.findViewById(R.id.tv_doctor_name);
             treatmentId = intent.getStringExtra(TAG_TREATMENT_ID);
             treatment = Parcels.unwrap(intent.getParcelableExtra(PatientTreatmentDetailFragment.TAG_TREATMENT_DATA));
             Parcelable isFromCloneParcelable = intent.getParcelableExtra(HealthCocoConstants.TAG_IS_FROM_CLONE);
@@ -161,6 +163,8 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
         flBtSwap = (FloatingActionButton) view.findViewById(R.id.fl_bt_swap);
         layoutNextReview = (LinearLayout) view.findViewById(R.id.layout_next_review);
         containerDateTime = (LinearLayout) view.findViewById(R.id.container_date_time);
+        tvDoctorName = (TextView) view.findViewById(R.id.tv_doctor_name);
+        lvDoctorName = (LinearLayout) view.findViewById(R.id.lv_doctor_name);
         tvNextReviewDate = (TextView) view.findViewById(R.id.tv_next_review_data);
         tvNextReviewTime = (TextView) view.findViewById(R.id.tv_next_review_time);
         containerDateTime.setVisibility(View.GONE);
@@ -342,7 +346,7 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
                         }
                         initTabsAndViewPagerFragments(null);
                         refreshDoctorClinicText();
-                        refreshDoctorsList();
+                        initSelectedDoctorClinicData();
                     }
                     break;
                 case ADD_VISIT:
@@ -360,6 +364,8 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
                     if (response.getData() != null && response.getData() instanceof VisitDetails) {
                         visit = (VisitDetails) response.getData();
                         initTabsAndViewPagerFragments(visit);
+                        refreshDoctorClinicText();
+                        initSelectedDoctorClinicData();
                     }
                     break;
                 case ADD_CLINICAL_NOTES:
@@ -556,9 +562,10 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
         LogUtils.LOGD(TAG, "Selected patient " + selectedPatient.getLocalPatientName());
         if (msgId == 0) {
             TreatmentRequest treatmentRequest = addNewTreatmentFragment.getTreatmentRequestDetails();
-            treatmentRequest.setDoctorId(user.getUniqueId());
-            if (Util.isNullOrBlank(treatmentId))
+            if (Util.isNullOrBlank(treatmentId)) {
+                treatmentRequest.setDoctorId(user.getUniqueId());
                 treatmentRequest.setVisitId(Util.getVisitId(VisitIdType.TREATMENT));
+            }
             if (Util.isNullOrBlank(appointmentId))
                 treatmentRequest.setAppointmentRequest(appointmentRequest);
             WebDataServiceImpl.getInstance(mApp).addTreatment(Treatments.class, treatmentRequest, this, this);
@@ -570,9 +577,10 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
         LogUtils.LOGD(TAG, "Selected patient " + selectedPatient.getLocalPatientName());
         if (prescriptionMsg == 0) {
             PrescriptionRequest prescription = addEditNormalVisitPrescriptionFragment.getPrescriptionRequestDetails();
-            prescription.setDoctorId(user.getUniqueId());
-            if (Util.isNullOrBlank(prescriptionId) && !isFromClone)
+            if (Util.isNullOrBlank(prescriptionId) && !isFromClone) {
+                prescription.setDoctorId(user.getUniqueId());
                 prescription.setVisitId(Util.getVisitId(VisitIdType.PRESCRIPTION));
+            }
             if (Util.isNullOrBlank(appointmentId))
                 prescription.setAppointmentRequest(appointmentRequest);
             WebDataServiceImpl.getInstance(mApp).addPrescription(Prescription.class, prescription, this, this);
@@ -583,11 +591,11 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
         mActivity.showLoading(false);
         if (noteMsgId == 0) {
             ClinicalNoteToSend clinicalNotes = addClinicalNotesVisitNormalFragment.getClinicalNoteToSendDetails();
-            clinicalNotes.setDoctorId(user.getUniqueId());
             if (!Util.isNullOrBlank(clinicalNoteId)) {
                 clinicalNotes.setUniqueId(clinicalNoteId);
                 WebDataServiceImpl.getInstance(mApp).updateClinicalNote(ClinicalNotes.class, clinicalNotes, this, this);
             } else {
+                clinicalNotes.setDoctorId(user.getUniqueId());
                 clinicalNotes.setVisitId(Util.getVisitId(VisitIdType.CLINICAL_NOTES));
                 if (Util.isNullOrBlank(appointmentId))
                     clinicalNotes.setAppointmentRequest(appointmentRequest);
@@ -652,12 +660,15 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
     private void addVisit(int blankClinicalNoteMsgId, int blankPrescriptionMsgId, int blankTreatmentMsgId) {
         mActivity.showLoading(false);
         VisitDetails visitDetails = new VisitDetails();
-        visitDetails.setDoctorId(user.getUniqueId());
         visitDetails.setLocationId(user.getForeignLocationId());
         visitDetails.setHospitalId(user.getForeignHospitalId());
         visitDetails.setPatientId(HealthCocoConstants.SELECTED_PATIENTS_USER_ID);
-        if (!Util.isNullOrBlank(visitId) && !isFromClone)
+        if (!Util.isNullOrBlank(visitId) && !isFromClone) {
             visitDetails.setVisitId(visitId);
+        }
+        if (Util.isNullOrBlank(visitId) && !isFromClone) {
+            visitDetails.setDoctorId(user.getUniqueId());
+        }
         if (blankClinicalNoteMsgId == 0) {
             visitDetails.setClinicalNote(addClinicalNotesVisitNormalFragment.getClinicalNoteToSendDetails());
             visitDetails.getClinicalNote().setDoctorId(user.getUniqueId());
@@ -693,6 +704,29 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
             }
         }
     }
+
+    private void initSelectedDoctorClinicData() {
+        if (user != null && RoleType.isAdmin(user.getRoleTypes())) {
+            tvDoctorName.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.arrow_menu_down, 0);
+            tvDoctorName.setEnabled(true);
+            lvDoctorName.setVisibility(View.VISIBLE);
+            refreshDoctorsList();
+        }
+        if ((!Util.isNullOrBlank(visitId)) || (!Util.isNullOrBlank(prescriptionId))) {
+            tvDoctorName.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+            tvDoctorName.setEnabled(false);
+            tvDoctorName.setClickable(false);
+            lvDoctorName.setVisibility(View.VISIBLE);
+            tvDoctorName.setText(Util.getValidatedValue(visit.getCreatedBy()));
+        } else if (!Util.isNullOrBlank(treatmentId)) {
+            tvDoctorName.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+            tvDoctorName.setEnabled(false);
+            tvDoctorName.setClickable(false);
+            lvDoctorName.setVisibility(View.VISIBLE);
+            tvDoctorName.setText(Util.getValidatedValue(treatment.get(0).getCreatedBy()));
+        }
+    }
+
 
     private void refreshDoctorsList() {
         showLoadingOverlay(true);

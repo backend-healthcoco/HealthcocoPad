@@ -23,10 +23,6 @@ public enum RoleType {
         this.text = text;
     }
 
-    public String getText() {
-        return text;
-    }
-
     public static boolean isOnlyConsultant(ArrayList<RoleType> roleTypes) {
         if (!Util.isNullOrEmptyList(roleTypes)
                 && !roleTypes.contains(RoleType.SUPER_ADMIN)
@@ -37,4 +33,17 @@ public enum RoleType {
             return true;
         return false;
     }
+
+    public static boolean isAdmin(ArrayList<RoleType> roleTypes) {
+        if (!Util.isNullOrEmptyList(roleTypes)
+                && (roleTypes.contains(RoleType.HOSPITAL_ADMIN)
+                && roleTypes.contains(RoleType.LOCATION_ADMIN)))
+            return true;
+        return false;
+    }
+
+    public String getText() {
+        return text;
+    }
+
 }

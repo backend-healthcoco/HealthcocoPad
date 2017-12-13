@@ -76,10 +76,39 @@ public class PatientReportsDetailFragment extends HealthCocoFragment implements 
     private Uri reportImageUri;
     private SwipeRefreshLayout swipeRefreshLayout;
     private boolean isOTPVerified = false;
+    BroadcastReceiver reportsListReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, final Intent intent) {
+            getRecords(true);
+        }
+    };
     private ReportsListAdapter adapter;
+    BroadcastReceiver reportsListUsingIdReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, final Intent intent) {
+            if (intent != null && intent.hasExtra(UploadReportDialogFragment.TAG_REPORT_ID)) {
+                String reportId = intent.getStringExtra(UploadReportDialogFragment.TAG_REPORT_ID);
+                Records records = LocalDataServiceImpl.getInstance(mApp).getRecord(reportId, HealthCocoConstants.SELECTED_PATIENTS_USER_ID);
+                if (records != null) recordsList.add(records);
+                notifyAdapter(recordsList);
+            }
+            sendBroadcasts();
+        }
+    };
     private ProgressBar progressLoading;
     private boolean receiversRegistered = false;
     private boolean isInitialLoading;
+    BroadcastReceiver reportsListReceiverLocal = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, final Intent intent) {
+            boolean showLoading = false;
+            if (intent != null && intent.hasExtra(SHOW_LOADING)) {
+                showLoading = intent.getBooleanExtra(SHOW_LOADING, false);
+            }
+            getListFromLocal(showLoading, isOtpVerified(), user);
+            sendBroadcasts();
+        }
+    };
     private FloatingActionButton floatingActionButton;
     private PatientDetailTabType detailTabType;
 
@@ -314,7 +343,6 @@ public class PatientReportsDetailFragment extends HealthCocoFragment implements 
         showLoadingOverlay(showLoading);
     }
 
-
     @Override
     public RegisteredPatientDetailsUpdated getSelectedPatient() {
         return null;
@@ -323,6 +351,15 @@ public class PatientReportsDetailFragment extends HealthCocoFragment implements 
     @Override
     public User getUser() {
         return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    @Override
+    public String getLoginedUser() {
+        return null;
     }
 
     @Override
@@ -370,43 +407,6 @@ public class PatientReportsDetailFragment extends HealthCocoFragment implements 
         LocalBroadcastManager.getInstance(mActivity).unregisterReceiver(reportsListUsingIdReceiver);
     }
 
-    BroadcastReceiver reportsListReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, final Intent intent) {
-            getRecords(true);
-        }
-    };
-    BroadcastReceiver reportsListReceiverLocal = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, final Intent intent) {
-            boolean showLoading = false;
-            if (intent != null && intent.hasExtra(SHOW_LOADING)) {
-                showLoading = intent.getBooleanExtra(SHOW_LOADING, false);
-            }
-            getListFromLocal(showLoading, isOtpVerified(), user);
-            sendBroadcasts();
-        }
-    };
-    BroadcastReceiver reportsListUsingIdReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, final Intent intent) {
-            if (intent != null && intent.hasExtra(UploadReportDialogFragment.TAG_REPORT_ID)) {
-                String reportId = intent.getStringExtra(UploadReportDialogFragment.TAG_REPORT_ID);
-                Records records = LocalDataServiceImpl.getInstance(mApp).getRecord(reportId, HealthCocoConstants.SELECTED_PATIENTS_USER_ID);
-                if (records != null) recordsList.add(records);
-                notifyAdapter(recordsList);
-            }
-            sendBroadcasts();
-        }
-    };
-
-    private void sendBroadcasts() {
-        Util.sendBroadcasts(mApp, new ArrayList<String>() {{
-//            add(HistoryFragment.INTENT_GET_HISTORY_LIST);
-            add(PatientVisitDetailFragment.INTENT_GET_VISITS_LIST_FROM_LOCAL);
-        }});
-    }
-
 //    @Override
 //    public void onDialogItemClicked(CommonListDialogType commonListDialogType, Object object) {
 //        switch (commonListDialogType) {
@@ -421,8 +421,11 @@ public class PatientReportsDetailFragment extends HealthCocoFragment implements 
 //        }
 //    }
 
-    public void setUser(User user) {
-        this.user = user;
+    private void sendBroadcasts() {
+        Util.sendBroadcasts(mApp, new ArrayList<String>() {{
+//            add(HistoryFragment.INTENT_GET_HISTORY_LIST);
+            add(PatientVisitDetailFragment.INTENT_GET_VISITS_LIST_FROM_LOCAL);
+        }});
     }
 
     public void refreshData(PatientDetailTabType detailTabType) {
