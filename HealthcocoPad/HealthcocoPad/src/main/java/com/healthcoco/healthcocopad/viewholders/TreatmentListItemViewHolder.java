@@ -19,6 +19,7 @@ import com.healthcoco.healthcocopad.bean.server.Treatments;
 import com.healthcoco.healthcocopad.bean.server.UnitValue;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.enums.AddUpdateNameDialogType;
+import com.healthcoco.healthcocopad.enums.RoleType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.CommonEMRItemClickListener;
 import com.healthcoco.healthcocopad.listeners.TreatmentListItemClickListeners;
@@ -41,6 +42,7 @@ public class TreatmentListItemViewHolder extends HealthCocoViewHolder implements
     private VisitDetailCombinedItemListener detailCombinedItemListener;
     private TextView tvTreatmentBy;
     private TextView tvDate;
+    private String loginedUser;
     private Treatments treatments;
     private LinearLayout containerTreatmentList;
     private LinearLayout btHistory;
@@ -71,11 +73,13 @@ public class TreatmentListItemViewHolder extends HealthCocoViewHolder implements
             this.user = detailCombinedItemListener.getUser();
             this.selectedPatient = detailCombinedItemListener.getSelectedPatient();
             this.listItemClickListeners = listItemClickListeners;
+            this.loginedUser = detailCombinedItemListener.getLoginedUser();
         } else {
             this.commonEmrClickListener = (CommonEMRItemClickListener) listenerObject;
             this.user = commonEmrClickListener.getUser();
             this.selectedPatient = commonEmrClickListener.getSelectedPatient();
             this.listItemClickListeners = listItemClickListeners;
+            this.loginedUser = commonEmrClickListener.getLoginedUser();
         }
     }
 
@@ -130,7 +134,18 @@ public class TreatmentListItemViewHolder extends HealthCocoViewHolder implements
             tvGrandTotal.setText(mActivity.getResources().getString(R.string.no_text_dash));
 
         checkIsDiscarded(treatments.getDiscarded());
+        checkRollType();
     }
+
+    private void checkRollType() {
+        if (user != null && (!RoleType.isAdmin(user.getRoleTypes()))) {
+            if (!loginedUser.equals(user.getUniqueId())) {
+                btDiscard.setVisibility(View.GONE);
+                btEdit.setVisibility(View.GONE);
+            }
+        }
+    }
+
 
     @Override
     public View getContentView() {
