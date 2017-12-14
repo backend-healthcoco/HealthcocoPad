@@ -26,6 +26,7 @@ import com.healthcoco.healthcocopad.enums.AddUpdateNameDialogType;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.OptionsTypePopupWindow;
 import com.healthcoco.healthcocopad.enums.PatientDetailTabType;
+import com.healthcoco.healthcocopad.enums.RoleType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.fragments.AddEditNormalVisitPrescriptionFragment;
 import com.healthcoco.healthcocopad.fragments.CommonOpenUpPatientDetailFragment;
@@ -54,6 +55,7 @@ public class PrescriptionListItemViewHolder extends HealthCocoViewHolder impleme
     private static final int REQUEST_CODE_PRESCRIPTION_LIST = 155;
     private static final String DATE_FORMAT_USED_IN_THIS_SCREEN = "EEE, dd MMM yyyy";
     private User user;
+    private String loginedUser;
     private RegisteredPatientDetailsUpdated selectedPatient;
     private VisitDetailCombinedItemListener detailCombinedItemListener;
     private TextView tvPrescribedBy;
@@ -89,10 +91,12 @@ public class PrescriptionListItemViewHolder extends HealthCocoViewHolder impleme
             this.detailCombinedItemListener = (VisitDetailCombinedItemListener) listenerObject;
             this.user = detailCombinedItemListener.getUser();
             this.selectedPatient = detailCombinedItemListener.getSelectedPatient();
+            this.loginedUser = detailCombinedItemListener.getLoginedUser();
         } else {
             this.commonEmrClickListener = (CommonEMRItemClickListener) listenerObject;
             this.user = commonEmrClickListener.getUser();
             this.selectedPatient = commonEmrClickListener.getSelectedPatient();
+            this.loginedUser = commonEmrClickListener.getLoginedUser();
         }
     }
 
@@ -166,7 +170,18 @@ public class PrescriptionListItemViewHolder extends HealthCocoViewHolder impleme
                 layoutNextReviewDetail.setVisibility(View.GONE);
             }
         }
+        checkRollType();
     }
+
+    private void checkRollType() {
+        if (user != null && (!RoleType.isAdmin(user.getRoleTypes()))) {
+            if (!loginedUser.equals(user.getUniqueId())) {
+                btOptions.setVisibility(View.GONE);
+                btEdit.setVisibility(View.GONE);
+            }
+        }
+    }
+
 
     private void initDiagnosticTests() {
         containerDiagnosticTests.removeAllViews();

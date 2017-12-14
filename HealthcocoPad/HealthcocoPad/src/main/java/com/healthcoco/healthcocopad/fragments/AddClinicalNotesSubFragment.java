@@ -606,7 +606,8 @@ public class AddClinicalNotesSubFragment extends HealthCocoFragment implements V
 
     public void refreshData(ClinicalNotes clinicalNotes) {
         this.clinicalNotes = clinicalNotes;
-        initUiPermissions(user.getUiPermissions().getClinicalNotesPermissionsString());
+        if (user != null)
+            initUiPermissions(user.getUiPermissions().getClinicalNotesPermissionsString());
         prePopulateDiagrams();
     }
 

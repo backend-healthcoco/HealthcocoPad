@@ -364,7 +364,7 @@ public class PatientTreatmentDetailFragment extends HealthCocoFragment implement
 
     @Override
     public String getLoginedUser() {
-        return null;
+        return loginedUser;
     }
 
     @Override

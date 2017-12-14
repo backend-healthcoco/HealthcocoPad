@@ -136,6 +136,7 @@ public class ClinicalNotesListItemViewHolder extends HealthCocoViewHolder implem
             this.detailCombinedItemListener = (VisitDetailCombinedItemListener) listenerObject;
             this.user = detailCombinedItemListener.getUser();
             this.selectedPatient = detailCombinedItemListener.getSelectedPatient();
+            this.loginedUser = detailCombinedItemListener.getLoginedUser();
         } else {
             this.commonEMRItemClickListener = (CommonEMRItemClickListener) listenerObject;
             this.user = commonEMRItemClickListener.getUser();
