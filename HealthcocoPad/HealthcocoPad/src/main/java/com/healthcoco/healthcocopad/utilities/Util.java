@@ -936,4 +936,12 @@ public class Util {
         }
         return byteBuffer.toByteArray();
     }
+
+    public static String getFormattedDoubleNumber(double doubleNumber) {
+        NumberFormat formatter = new DecimalFormat("##.##");
+        if (doubleNumber != 0)
+            return formatter.format(Math.abs(doubleNumber));
+        return "0";
+    }
+
 }

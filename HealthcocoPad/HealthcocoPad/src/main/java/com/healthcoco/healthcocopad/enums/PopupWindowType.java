@@ -9,6 +9,12 @@ import java.util.ArrayList;
 public enum PopupWindowType {
     TIME_SLOTS,
 
+    PAYMENT_TYPE(new ArrayList<Object>() {{
+        add(ModeOfPaymentType.CASH.getType());
+        add(ModeOfPaymentType.CARD.getType());
+        add(ModeOfPaymentType.WALLET.getType());
+    }}),
+
     STATUS_TYPE(new ArrayList<Object>() {{
         add(PatientTreatmentStatus.NOT_STARTED);
         add(PatientTreatmentStatus.IN_PROGRESS);

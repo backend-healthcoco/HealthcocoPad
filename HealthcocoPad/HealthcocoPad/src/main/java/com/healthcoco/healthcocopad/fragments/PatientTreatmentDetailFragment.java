@@ -205,6 +205,20 @@ public class PatientTreatmentDetailFragment extends HealthCocoFragment implement
         startActivityForResult(intent, REQUEST_CODE_TREATMENT_LIST);
     }
 
+    @SuppressWarnings("unchecked")
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_TREATMENT_LIST) {
+            if (resultCode == HealthCocoConstants.RESULT_CODE_ADD_NEW_TREATMENT) {
+                lvTreatment.smoothScrollToPosition(0);
+                getTreatment(true);
+                Util.showToast(mActivity, "Invoice Saved");
+            }
+        }
+    }
+
+
     @Override
     public void onErrorResponse(VolleyResponseBean volleyResponseBean, String errorMessage) {
         String errorMsg = null;

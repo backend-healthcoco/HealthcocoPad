@@ -20,8 +20,10 @@ import java.util.List;
 
 @Parcel
 public class Drug extends SugarRecord {
-    public static String TABLE_NAME = " " + StringUtil.toSQLName(Drug.class.getSimpleName());
     private static final String GENERIC_NAME_SEPARATOR = " + ";
+    public static String TABLE_NAME = " " + StringUtil.toSQLName(Drug.class.getSimpleName());
+    protected String foreignDrugTypeId;
+    protected boolean isDrugFromGetDrugsList;
     @Unique
     private String uniqueId;
     private String explanation;
@@ -30,7 +32,6 @@ public class Drug extends SugarRecord {
     private String locationId;
     @Ignore
     private DrugType drugType;
-    protected String foreignDrugTypeId;
     private Boolean discarded;
     private String drugCode;
     private String genericId;
@@ -256,6 +257,15 @@ public class Drug extends SugarRecord {
     public void setCreatedTime(Long createdTime) {
         this.createdTime = createdTime;
     }
+
+    public boolean isDrugFromGetDrugsList() {
+        return isDrugFromGetDrugsList;
+    }
+
+    public void setIsDrugFromGetDrugsList(boolean isDrugFromGetDrugsList) {
+        this.isDrugFromGetDrugsList = isDrugFromGetDrugsList;
+    }
+
 
     public String getFormattedDrugName() {
         String drugName = getDrugName();

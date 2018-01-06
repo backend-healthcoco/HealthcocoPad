@@ -403,7 +403,7 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
     public void doPrint(String visitId) {
         Util.checkNetworkStatus(mActivity);
         if (HealthCocoConstants.isNetworkOnline) {
-            showLoadingOverlay(false);
+            showLoadingOverlay(true);
             WebDataServiceImpl.getInstance(mApp).getPdfUrl(String.class, WebServiceType.GET_VISIT_PDF_URL, visitId, this, this);
         } else onNetworkUnavailable(null);
     }

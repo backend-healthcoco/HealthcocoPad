@@ -212,32 +212,13 @@ public class SelectedTreatmentsListFragment extends HealthCocoFragment implement
     public void addTreatment(TreatmentItem treatmentItem) {
         if (treatmentItem != null) {
             String key = treatmentItem.getTreatmentServiceId();
-            if (treatmentItemList.containsKey(key))
-                treatmentItemList.remove(key);
-            treatmentItemList.put(key, treatmentItem);
-            notifyAdapter(treatmentItemList);
-            lvTreatmentsList.setSelection(adapter.getCount());
-        }
-    }
-
- /*   public void modifyTreatmentsList() {
-        if (lvTreatmentsList.getChildCount() > 0) {
-
-            for (int i = 0; i < lvTreatmentsList.getChildCount(); i++) {
-                View child = lvTreatmentsList.getChildAt(i);
-                if (child.getTag() != null && child.getTag() instanceof SelectedTreatmentsItemsListViewholder) {
-                    viewHolder = (SelectedTreatmentsItemsListViewholder) child.getTag();
-                    TreatmentItem treatmentItem = viewHolder.getTreatmentItem();
-                    if (treatmentItem != null) {
-                        String key = treatmentItem.getCustomUniqueId();
-                        if (treatmentItemList.containsKey(key))
-                            treatmentItemList.remove(key);
-                        treatmentItemList.put(key, treatmentItem);
-                    }
-                }
+            if (!treatmentItemList.containsKey(key)) {
+                treatmentItemList.put(key, treatmentItem);
+                notifyAdapter(treatmentItemList);
+                lvTreatmentsList.setSelection(adapter.getCount());
             }
         }
-    }*/
+    }
 
 
     //setting drug to null and drugId to uniqueId for sending on server

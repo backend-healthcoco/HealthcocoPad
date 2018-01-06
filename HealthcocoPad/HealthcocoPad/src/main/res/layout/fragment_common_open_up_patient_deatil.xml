@@ -66,6 +66,7 @@
                             android:textSize="@dimen/text_size_patient_name_visit_fragment" />
 
                         <LinearLayout
+                            android:id="@+id/layout_doctor_name"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_alignParentLeft="true"

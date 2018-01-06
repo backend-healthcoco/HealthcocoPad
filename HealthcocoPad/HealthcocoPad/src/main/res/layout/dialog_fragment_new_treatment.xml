@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <include layout="@layout/action_bar_title_save" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/patient_detail_top_bottom_paddding"
+        android:layout_marginRight="@dimen/patient_detail_top_bottom_paddding"
+        android:layout_marginTop="@dimen/margin_left_right_add_vital_signs"
+        android:text="@string/treatment_service"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size_edit_otp_number" />
+
+    <EditText
+        android:id="@+id/edit_treatment_name"
+        style="@style/add_drug_detail_edittext_textview_padding"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/patient_detail_top_bottom_paddding"
+        android:layout_marginLeft="@dimen/patient_detail_top_bottom_paddding"
+        android:layout_marginRight="@dimen/patient_detail_top_bottom_paddding"
+        android:hint="@string/treatment_service_name_hint"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:textSize="@dimen/text_size_edit_otp_number" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/patient_detail_top_bottom_paddding"
+        android:layout_marginRight="@dimen/patient_detail_top_bottom_paddding"
+        android:layout_marginTop="@dimen/margin_left_right_add_vital_signs"
+        android:text="@string/treatment_cost"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size_edit_otp_number" />
+
+    <EditText
+        android:id="@+id/edit_treatment_cost"
+        style="@style/add_drug_detail_edittext_textview_padding"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/fab_margin_bottom"
+        android:layout_marginLeft="@dimen/patient_detail_top_bottom_paddding"
+        android:layout_marginRight="@dimen/patient_detail_top_bottom_paddding"
+        android:digits="0123456789"
+        android:hint="@string/treatment_service_cost_hint"
+        android:inputType="phone"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:textSize="@dimen/text_size_edit_otp_number" />
+</LinearLayout>

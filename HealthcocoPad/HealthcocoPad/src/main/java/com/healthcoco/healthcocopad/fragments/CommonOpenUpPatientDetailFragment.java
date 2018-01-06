@@ -79,6 +79,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
     private TextView tvPatientId;
     private ImageView ivContactProfile;
     private LinearLayout patientProfileLayout;
+    private LinearLayout doctorNameLayout;
     private RegisteredPatientDetailsUpdated selectedPatient;
     private User user;
     private String loginedUser;
@@ -96,6 +97,8 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
     private PatientPrescriptionDetailFragment prescriptionDetailFragment;
     private PatientReportsDetailFragment reportsDetailFragment;
     private PatientTreatmentDetailFragment treatmentDetailFragment;
+    private PatientInvoiceDetailFragment invoiceDetailFragment;
+    private PatientReceiptDetailFragment receiptDetailFragment;
     private HealthcocoPopupWindow doctorsListPopupWindow;
 
     private boolean isProfileTabClicked = true;
@@ -105,6 +108,8 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
     private boolean isClinicalNotesTabClicked = false;
     private boolean isReportsTabClicked = false;
     private boolean isTreatmentTabClicked = false;
+    private boolean isInvoiceTabClicked = false;
+    private boolean isReceiptTabClicked = false;
     private boolean forAllDoctor = false;
     private TextView tvGenderDate;
     private int ordinal;
@@ -148,6 +153,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
         tvDoctorName = (TextView) view.findViewById(R.id.tv_doctor_name);
         ivContactProfile = (ImageView) view.findViewById(R.id.iv_image);
         patientProfileLayout = (LinearLayout) view.findViewById(R.id.patient_profile_layout);
+        doctorNameLayout = (LinearLayout) view.findViewById(R.id.layout_doctor_name);
         ((CommonOpenUpActivity) mActivity).showRightAction(false);
 
 
@@ -199,6 +205,14 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                 case PATIENT_DETAIL_TREATMENT:
                     treatmentDetailFragment = new PatientTreatmentDetailFragment();
                     healthcocoFragment = treatmentDetailFragment;
+                    break;
+                case PATIENT_DETAIL_INVOICE:
+                    invoiceDetailFragment = new PatientInvoiceDetailFragment();
+                    healthcocoFragment = invoiceDetailFragment;
+                    break;
+                case PATIENT_DETAIL_RECEIPT:
+                    receiptDetailFragment = new PatientReceiptDetailFragment();
+                    healthcocoFragment = receiptDetailFragment;
                     break;
             }
             if (healthcocoFragment != null)
@@ -349,6 +363,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
         LogUtils.LOGD(TAG, tabhost.getCurrentTabTag());
         int ordinal = Integer.parseInt(tabhost.getCurrentTabTag());
         PatientDetailTabType patientDetailTabType = PatientDetailTabType.values()[ordinal];
+        doctorNameLayout.setVisibility(View.VISIBLE);
         if (patientDetailTabType != null) {
             setPatientDetailHeaderVisibility(patientDetailTabType.getPatientDetailHeaderVisibility());
             switch (patientDetailTabType) {
@@ -393,6 +408,20 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                         treatmentDetailFragment.refreshData(PatientDetailTabType.PATIENT_DETAIL_TREATMENT);
                         isTreatmentTabClicked = true;
                     }
+                    break;
+                case PATIENT_DETAIL_INVOICE:
+                    doctorNameLayout.setVisibility(View.INVISIBLE);
+                    if (!isInvoiceTabClicked) {
+                        invoiceDetailFragment.refreshData(PatientDetailTabType.PATIENT_DETAIL_INVOICE);
+                        isInvoiceTabClicked = true;
+                    }
+                    break;
+                case PATIENT_DETAIL_RECEIPT:
+                    doctorNameLayout.setVisibility(View.INVISIBLE);
+                    if (!isReceiptTabClicked) {
+                        receiptDetailFragment.refreshData(PatientDetailTabType.PATIENT_DETAIL_RECEIPT);
+                        isReceiptTabClicked = true;
+                    }
             }
         }
         ((CommonOpenUpActivity) mActivity).initActionbarTitle(patientDetailTabType.getActionBarTitleId());
@@ -407,6 +436,8 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
             appointmentFragment.setUserData(user, selectedPatient);
             reportsDetailFragment.setUserData(user, selectedPatient);
             treatmentDetailFragment.setUserData(user, loginedUser, selectedPatient);
+            invoiceDetailFragment.setUserData(user, loginedUser, selectedPatient);
+            receiptDetailFragment.setUserData(user, loginedUser, selectedPatient);
         } else {
             mActivity.showLoading(false);
             WebDataServiceImpl.getInstance(mApp).getPatientProfile(RegisteredPatientDetailsUpdated.class, HealthCocoConstants.SELECTED_PATIENTS_USER_ID, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(), this, this);

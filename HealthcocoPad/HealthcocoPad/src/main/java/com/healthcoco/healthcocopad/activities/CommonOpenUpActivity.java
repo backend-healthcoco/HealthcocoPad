@@ -28,8 +28,10 @@ import com.healthcoco.healthcocopad.fragments.AddEditClinicImageFragment;
 import com.healthcoco.healthcocopad.fragments.AddClinicalNotesVisitNormalFragment;
 import com.healthcoco.healthcocopad.fragments.AddEditNormalVisitPrescriptionFragment;
 import com.healthcoco.healthcocopad.fragments.AddEditNormalVisitsFragment;
+import com.healthcoco.healthcocopad.fragments.AddInvoiceFragment;
 import com.healthcoco.healthcocopad.fragments.AddNewTemplateFragment;
 import com.healthcoco.healthcocopad.fragments.AddNewTreatmentFragment;
+import com.healthcoco.healthcocopad.fragments.AddReceiptFragment;
 import com.healthcoco.healthcocopad.fragments.CommonOpenUpPatientDetailFragment;
 import com.healthcoco.healthcocopad.fragments.CommonUiPermissionsFragment;
 import com.healthcoco.healthcocopad.fragments.DiagramsListFragment;
@@ -42,6 +44,7 @@ import com.healthcoco.healthcocopad.fragments.NotificationResponseDataFragment;
 import com.healthcoco.healthcocopad.fragments.PatientRegistrationFragment;
 import com.healthcoco.healthcocopad.fragments.SelectedDiagramDetailFragment;
 import com.healthcoco.healthcocopad.fragments.SettingUIPermissionsFragment;
+import com.healthcoco.healthcocopad.fragments.SyncFragment;
 import com.healthcoco.healthcocopad.fragments.WebViewFragments;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
@@ -163,8 +166,17 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
             case ENLARGED_MAP_VIEW_FRAGMENT:
                 openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_CROSS, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, R.string.location, new EnlargedMapViewFragment());
                 break;
+           /* case ADD_NEW_TREATMENT:
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_CROSS,ActionbarLeftRightActionTypeDrawables.WITH_SAVE, fragmentType.getTitleId(), new AddNewTreatmentDialogFragment());
+                break;*/
             case ADD_VISITS:
                 openFragment(ActionbarType.HIDDEN, 0, new AddEditNormalVisitsFragment());
+                break;
+            case ADD_INVOICE:
+                openFragment(ActionbarType.HIDDEN, 0, new AddInvoiceFragment());
+                break;
+            case ADD_RECEIPT:
+                openFragment(ActionbarType.HIDDEN, fragmentType.getTitleId(), new AddReceiptFragment());
                 break;
             case SELECT_DIAGRAM:
                 openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, fragmentType.getTitleId(), new DiagramsListFragment());
@@ -177,6 +189,9 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
                 break;
             case ADD_TREATMENT:
                 openFragment(ActionbarType.HIDDEN, 0, new AddNewTreatmentFragment());
+                break;
+            case SYNC:
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, R.string.sync, new SyncFragment());
                 break;
         }
     }
@@ -331,6 +346,8 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
 //                case ADD_RECORD_DETAIL:
                 case PATIENT_REGISTRATION:
                 case ADD_VISITS:
+                case ADD_INVOICE:
+                case ADD_RECEIPT:
                 case BOOK_APPOINTMENT:
                     showFinishConfirmationAlert();
                     break;
@@ -391,7 +408,7 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
     public void enableRightActionButton(boolean isEnabled) {
         LinearLayout rightAction = (LinearLayout) findViewById(R.id.container_right_action);
         if (rightAction != null) {
-            Util.enableAllChildViews(rightAction,isEnabled);
+            Util.enableAllChildViews(rightAction, isEnabled);
 //            Button rightActionButton = (Button) rightAction.getChildAt(0);
 //            if (rightActionButton != null)
 //                rightActionButton.setEnabled(isEnabled);

@@ -53,6 +53,8 @@ public class HealthCocoConstants {
     public static final int RESULT_CODE_GLOBAL_RECORDS_ACCESS = 115;
     public static final int REQUEST_CODE_VERIFY_OTP = 116;
     public static final int REQUEST_CODE_TREATMENT = 195;
+    public static final int RESULT_CODE_ADD_INVOICE = 207;
+    public static final int RESULT_CODE_ADD_RECEIPT = 208;
     public static final int RESULT_CODE_SELECTED_TREATMENT = 199;
     public static final int REQUEST_CODE_ADD_TREATMENT = 200;
     public static final int RESULT_CODE_ADD_NEW_TREATMENT = 206;
@@ -89,6 +91,11 @@ public class HealthCocoConstants {
     public static final int RESULT_CODE_REGISTRATION_DETAIL = 156;
     public static final int RESULT_CODE_ADD_EDIT_DOCTOR_PROFILE = 157;
     public static final int REQUEST_CODE_FILE = 158;
+    public static final int REQUEST_CODE_INVOICE = 187;
+    public static final int REQUEST_CODE_TREATMENT_LIST = 197;
+    public static final int RESULT_CODE_ADD_NEW_TREATMENT_DETAIL = 198;
+
+
     public static final String PARAM_UPDATED_TIME = "&updatedTime=";
     public static final String PARAM_DISCARDED_AMPERCENT = "&discarded=";
     public static final String PARAM_DOCTOR_ID = "&doctorId=";

@@ -9,8 +9,6 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -19,36 +17,29 @@ import android.widget.TextView;
 import com.android.volley.Response;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
-import com.healthcoco.healthcocopad.adapter.SelectDrugListSolrAdapter;
-import com.healthcoco.healthcocopad.adapter.TreatmentsCustomListAdapter;
 import com.healthcoco.healthcocopad.adapter.TreatmentsListSolrAdapter;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
-import com.healthcoco.healthcocopad.bean.server.Drug;
-import com.healthcoco.healthcocopad.bean.server.DrugsListSolrResponse;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.TreatmentService;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
-import com.healthcoco.healthcocopad.dialogFragment.AddNewDrugDialogFragment;
+import com.healthcoco.healthcocopad.dialogFragment.AddNewTreatmentDialogFragment;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
+import com.healthcoco.healthcocopad.listeners.AddNewDrugListener;
 import com.healthcoco.healthcocopad.listeners.LoadMorePageListener;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
 import com.healthcoco.healthcocopad.listeners.SelectedTreatmentItemClickListener;
 import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
-import com.healthcoco.healthcocopad.skscustomclasses.CustomListData;
 import com.healthcoco.healthcocopad.skscustomclasses.SKSCustomListView;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.healthcoco.healthcocopad.views.ListViewLoadMore;
 
-import org.parceler.Parcels;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -58,7 +49,7 @@ import java.util.Locale;
 public class TreatmentListFragment extends HealthCocoFragment implements View.OnClickListener,
         Response.Listener<VolleyResponseBean>, GsonRequest.ErrorListener,
         TextWatcher, LocalDoInBackgroundListenerOptimised,
-        LoadMorePageListener, SwipeRefreshLayout.OnRefreshListener {
+        LoadMorePageListener, SwipeRefreshLayout.OnRefreshListener, AddNewDrugListener {
 
     //variables need for pagination
     public static final int MAX_SIZE = 25;
@@ -175,9 +166,11 @@ public class TreatmentListFragment extends HealthCocoFragment implements View.On
     }
 
     private void openAddNewTreatmentsFragment() {
-//        Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
-//        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.ADD_NEW_TREATMENT.ordinal());
-//        this.startActivityForResult(intent, HealthCocoConstants.REQUEST_CODE_TREATMENT_LIST);
+
+        AddNewTreatmentDialogFragment addNewTreatmentDetailFragment = new AddNewTreatmentDialogFragment(this);
+        addNewTreatmentDetailFragment.show(mActivity.getSupportFragmentManager(),
+                addNewTreatmentDetailFragment.getClass().getSimpleName());
+
     }
 
     @Override
@@ -319,5 +312,15 @@ public class TreatmentListFragment extends HealthCocoFragment implements View.On
     @Override
     public void onRefresh() {
         getTreatmentList(true, PAGE_NUMBER, MAX_SIZE, getSearchEditTextValue());
+    }
+
+    @Override
+    public void onSaveClicked(Object treatmentService) {
+        lvTreatments.smoothScrollToPosition(0);
+        PAGE_NUMBER = 0;
+        isEndOfListAchieved = false;
+        isLoadingFromSearch = false;
+        clearSearchEditText();
+        getTreatmentList(false, PAGE_NUMBER, MAX_SIZE, "");
     }
 }

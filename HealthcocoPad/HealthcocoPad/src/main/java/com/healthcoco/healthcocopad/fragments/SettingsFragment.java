@@ -94,6 +94,9 @@ public class SettingsFragment extends HealthCocoFragment implements AdapterView.
             case UI_PERMISSION:
                 openCommonOpenUpActivity(CommonOpenUpFragmentType.SETTING_UI_PERMISSION, itemType.ordinal());
                 break;
+            case SYNC:
+                openCommonOpenUpActivity(CommonOpenUpFragmentType.SYNC, itemType.ordinal());
+                break;
 //            case BILLING:
 ////                openCommonOpenUpActivity(CommonOpenUpFragmentType.SETTINGS_BILLING, itemType.ordinal());
 //                break;

@@ -210,6 +210,7 @@ public class SelectedTreatmentsItemsListViewholder extends HealthCocoViewHolder 
                 tvTreatmentStatus.setTag(object);
                 PatientTreatmentStatus patientTreatmentStatus = getPatientTreatmentStatus(tvTreatmentStatus);
                 tvTreatmentStatus.setText(patientTreatmentStatus.getTreamentStatus());
+                objData.setStatus(patientTreatmentStatus);
                 break;
             case MATERIAL_TYPE:
                 tvTreatmentMaterial.setText(object.toString());

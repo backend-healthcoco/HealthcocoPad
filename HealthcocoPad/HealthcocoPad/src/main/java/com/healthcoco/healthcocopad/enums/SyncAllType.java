@@ -70,6 +70,94 @@ public enum SyncAllType {
     CLINICAL_NOTE_INVESTIGATION_SUGGESTIONS(0, 0, false) {
         @Override
         public SyncAllType getNextSyncType(SyncAllType syncAllType) {
+            return SyncAllType.CLINICAL_NOTE_HISTORY_OF_PRESENT_COMPLAINT_SUGGESTIONS;
+        }
+    },
+    CLINICAL_NOTE_HISTORY_OF_PRESENT_COMPLAINT_SUGGESTIONS(0, 0, false) {
+        @Override
+        public SyncAllType getNextSyncType(SyncAllType syncAllType) {
+            return SyncAllType.CLINICAL_NOTE_PRESENT_COMPLAINT_SUGGESTIONS;
+        }
+    },
+    CLINICAL_NOTE_PRESENT_COMPLAINT_SUGGESTIONS(0, 0, false) {
+        @Override
+        public SyncAllType getNextSyncType(SyncAllType syncAllType) {
+            return SyncAllType.CLINICAL_NOTE_OBSTETRIC_HISTORY_SUGGESTIONS;
+        }
+    },
+    CLINICAL_NOTE_OBSTETRIC_HISTORY_SUGGESTIONS(0, 0, false) {
+        @Override
+        public SyncAllType getNextSyncType(SyncAllType syncAllType) {
+            return SyncAllType.CLINICAL_NOTE_GENERAL_EXAMINATION_SUGGESTIONS;
+        }
+    }, CLINICAL_NOTE_GENERAL_EXAMINATION_SUGGESTIONS(0, 0, false) {
+        @Override
+        public SyncAllType getNextSyncType(SyncAllType syncAllType) {
+            return SyncAllType.CLINICAL_NOTE_SYSTEMIC_EXAMINATION_SUGGESTIONS;
+        }
+    }, CLINICAL_NOTE_SYSTEMIC_EXAMINATION_SUGGESTIONS(0, 0, false) {
+        @Override
+        public SyncAllType getNextSyncType(SyncAllType syncAllType) {
+            return SyncAllType.CLINICAL_NOTE_PROVISIONAL_DIAGNOSIS_SUGGESTIONS;
+        }
+    }, CLINICAL_NOTE_PROVISIONAL_DIAGNOSIS_SUGGESTIONS(0, 0, false) {
+        @Override
+        public SyncAllType getNextSyncType(SyncAllType syncAllType) {
+            return SyncAllType.CLINICAL_NOTE_ECG_DETAILS_SUGGESTIONS;
+        }
+    }, CLINICAL_NOTE_ECG_DETAILS_SUGGESTIONS(0, 0, false) {
+        @Override
+        public SyncAllType getNextSyncType(SyncAllType syncAllType) {
+            return SyncAllType.CLINICAL_NOTE_ECHO_SUGGESTIONS;
+        }
+    }, CLINICAL_NOTE_ECHO_SUGGESTIONS(0, 0, false) {
+        @Override
+        public SyncAllType getNextSyncType(SyncAllType syncAllType) {
+            return SyncAllType.CLINICAL_NOTE_X_RAY_DETAILS_SUGGESTIONS;
+        }
+    }, CLINICAL_NOTE_X_RAY_DETAILS_SUGGESTIONS(0, 0, false) {
+        @Override
+        public SyncAllType getNextSyncType(SyncAllType syncAllType) {
+            return SyncAllType.CLINICAL_NOTE_HOLTER_SUGGESTIONS;
+        }
+    }, CLINICAL_NOTE_HOLTER_SUGGESTIONS(0, 0, false) {
+        @Override
+        public SyncAllType getNextSyncType(SyncAllType syncAllType) {
+            return SyncAllType.CLINICAL_NOTE_PA_SUGGESTIONS;
+        }
+    }, CLINICAL_NOTE_PA_SUGGESTIONS(0, 0, false) {
+        @Override
+        public SyncAllType getNextSyncType(SyncAllType syncAllType) {
+            return SyncAllType.CLINICAL_NOTE_PV_SUGGESTIONS;
+        }
+    },
+    CLINICAL_NOTE_PV_SUGGESTIONS(0, 0, false) {
+        @Override
+        public SyncAllType getNextSyncType(SyncAllType syncAllType) {
+            return SyncAllType.CLINICAL_NOTE_PS_SUGGESTIONS;
+        }
+    },
+    CLINICAL_NOTE_PS_SUGGESTIONS(0, 0, false) {
+        @Override
+        public SyncAllType getNextSyncType(SyncAllType syncAllType) {
+            return SyncAllType.CLINICAL_NOTE_INDICATION_OF_USG_SUGGESTIONS;
+        }
+    },
+    CLINICAL_NOTE_INDICATION_OF_USG_SUGGESTIONS(0, 0, false) {
+        @Override
+        public SyncAllType getNextSyncType(SyncAllType syncAllType) {
+            return SyncAllType.CLINICAL_NOTE_NOTES_SUGGESTIONS;
+        }
+    },
+    CLINICAL_NOTE_NOTES_SUGGESTIONS(0, 0, false) {
+        @Override
+        public SyncAllType getNextSyncType(SyncAllType syncAllType) {
+            return SyncAllType.CLINICAL_NOTE_MENSTRUAL_HISTORY_SUGGESTIONS;
+        }
+    },
+    CLINICAL_NOTE_MENSTRUAL_HISTORY_SUGGESTIONS(0, 0, false) {
+        @Override
+        public SyncAllType getNextSyncType(SyncAllType syncAllType) {
             return SyncAllType.CLINICAL_NOTE_DIAGNOSIS_SUGGESTIONS;
         }
     },

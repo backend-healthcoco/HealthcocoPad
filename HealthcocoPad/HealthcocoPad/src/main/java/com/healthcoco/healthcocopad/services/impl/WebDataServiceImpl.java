@@ -23,6 +23,7 @@ import com.healthcoco.healthcocopad.bean.request.AddEditDoctorExperinceRequest;
 import com.healthcoco.healthcocopad.bean.request.AddEditDoctorRegRequest;
 import com.healthcoco.healthcocopad.bean.request.AddEditDrugsAndAllergiesRequest;
 import com.healthcoco.healthcocopad.bean.request.AddMedicalFamilyHistoryRequest;
+import com.healthcoco.healthcocopad.bean.request.AddReceiptRequest;
 import com.healthcoco.healthcocopad.bean.request.AppointmentRequestToSend;
 import com.healthcoco.healthcocopad.bean.request.AssignGroupRequest;
 import com.healthcoco.healthcocopad.bean.request.ClinicImageToSend;
@@ -30,12 +31,14 @@ import com.healthcoco.healthcocopad.bean.request.ClinicalNoteToSend;
 import com.healthcoco.healthcocopad.bean.request.DoctorSignupHandheldContinueRequest;
 import com.healthcoco.healthcocopad.bean.request.DrugInteractionRequest;
 import com.healthcoco.healthcocopad.bean.request.Feedback;
+import com.healthcoco.healthcocopad.bean.request.InvoiceRequest;
 import com.healthcoco.healthcocopad.bean.request.PrescriptionRequest;
 import com.healthcoco.healthcocopad.bean.request.ProfessionalMembershipRequest;
 import com.healthcoco.healthcocopad.bean.request.ProfessionalStatementRequest;
 import com.healthcoco.healthcocopad.bean.request.RegisterNewPatientRequest;
 import com.healthcoco.healthcocopad.bean.request.TreatmentRequest;
 import com.healthcoco.healthcocopad.bean.request.UserPermissionsRequest;
+import com.healthcoco.healthcocopad.bean.server.AdviceSuggestion;
 import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
 import com.healthcoco.healthcocopad.bean.server.Diagram;
 import com.healthcoco.healthcocopad.bean.server.Disease;
@@ -52,6 +55,7 @@ import com.healthcoco.healthcocopad.bean.server.Records;
 import com.healthcoco.healthcocopad.bean.server.Reference;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.TempTemplate;
+import com.healthcoco.healthcocopad.bean.server.TreatmentService;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.bean.server.UserGroups;
 import com.healthcoco.healthcocopad.bean.server.VisitDetails;
@@ -271,6 +275,7 @@ public class WebDataServiceImpl implements GCMRefreshListener {
             errorListener.onNetworkUnavailable(webServiceType);
         }
     }
+
 
     public void getContactsList(Class<RegisteredPatientDetailsUpdated> class1, String doctorId,
                                 String hospitalId, String locationId, long updatedTime, Response.Listener<VolleyResponseBean> responseListener,
@@ -988,6 +993,15 @@ public class WebDataServiceImpl implements GCMRefreshListener {
         }
     }
 
+    public void getDrugsList(WebServiceType webServiceType, Class<?> class1, String doctorId, long updatedTime, boolean discarded, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        String url = webServiceType.getUrl() +
+                HealthCocoConstants.PARAM_DISCARDED_AMPERCENT + discarded
+                + HealthCocoConstants.PARAM_DOCTOR_ID + doctorId
+                + HealthCocoConstants.PARAM_UPDATED_TIME + updatedTime;
+        getResponse(webServiceType, class1, url, null, null, responseListener,
+                errorListener);
+    }
+
     public void sendFeedback(Class<?> class1, Feedback feedback, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         checkNetworkStatus(mApp);
         if (HealthCocoConstants.isNetworkOnline) {
@@ -1205,12 +1219,99 @@ public class WebDataServiceImpl implements GCMRefreshListener {
                 errorListener);
     }
 
+    public void addTreatmentListSolr(Class<?> class1, TreatmentService treatmentListSolrResponse,
+                                     Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        WebServiceType webServiceType = WebServiceType.ADD_TREATMENT_SERVICE;
+        checkNetworkStatus(mApp);
+        if (HealthCocoConstants.isNetworkOnline) {
+            String url = webServiceType.getUrl();
+            getResponse(webServiceType, class1, url, treatmentListSolrResponse, null, responseListener,
+                    errorListener);
+        } else {
+            showUserOffline(webServiceType, responseListener);
+        }
+    }
+
+
     public void discardVisit(Class<?> class1, String visitId, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         String url = WebServiceType.DISCARD_PATIENT_VISIT.getUrl() + visitId + HealthCocoConstants.PARAM_TAG_DELETE;
         getResponse(WebServiceType.DISCARD_PATIENT_VISIT, class1, url, null, null, responseListener,
                 errorListener);
     }
 
+    public void getInvoice(Class<?> class1, WebServiceType webServiceType, boolean discarded,
+                           String doctorId, String locationId, String hospitalId, String patientId, long updatedTime,
+                           Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        if (HealthCocoConstants.isNetworkOnline) {
+            String url = webServiceType.getUrl() + "?"
+                    + HealthCocoConstants.PARAM_PATIENT_ID + patientId
+                    + HealthCocoConstants.PARAM_DOCTOR_ID + doctorId
+                    + HealthCocoConstants.PARAM_LOCATION_ID + locationId
+                    + HealthCocoConstants.PARAM_HOSPITAL_ID + hospitalId
+                    + HealthCocoConstants.PARAM_DISCARDED_AMPERCENT + discarded
+                    + HealthCocoConstants.PARAM_UPDATED_TIME + updatedTime;
+            getResponse(Request.Priority.IMMEDIATE, webServiceType, class1, url, null, null, responseListener,
+                    errorListener);
+        } else {
+            errorListener.onNetworkUnavailable(webServiceType);
+        }
+    }
+
+    public void discardInvoice(Class<?> class1, String invoiceId, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        String url = WebServiceType.DISCARD_INVOICE.getUrl() + invoiceId + HealthCocoConstants.PARAM_TAG_DELETE;
+        getResponse(WebServiceType.DISCARD_INVOICE, class1, url, null, null, responseListener,
+                errorListener);
+    }
+
+    public void addInvoice(Class<?> class1, InvoiceRequest invoice,
+                           Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        WebServiceType webServiceType = WebServiceType.ADD_INVOICE;
+        checkNetworkStatus(mApp);
+        if (HealthCocoConstants.isNetworkOnline) {
+            String url = webServiceType.getUrl();
+            getResponse(webServiceType, class1, url, invoice, null, responseListener,
+                    errorListener);
+        } else {
+            showUserOffline(webServiceType, responseListener);
+        }
+    }
+
+    public void getReceipt(Class<?> class1, WebServiceType webServiceType, boolean discarded,
+                           String doctorId, String locationId, String hospitalId, String patientId, long updatedTime,
+                           Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        if (HealthCocoConstants.isNetworkOnline) {
+            String url = webServiceType.getUrl() + "?"
+                    + HealthCocoConstants.PARAM_PATIENT_ID + patientId
+                    + HealthCocoConstants.PARAM_DOCTOR_ID + doctorId
+                    + HealthCocoConstants.PARAM_LOCATION_ID + locationId
+                    + HealthCocoConstants.PARAM_HOSPITAL_ID + hospitalId
+                    + HealthCocoConstants.PARAM_DISCARDED_AMPERCENT + discarded
+                    + HealthCocoConstants.PARAM_UPDATED_TIME + updatedTime;
+            getResponse(Request.Priority.IMMEDIATE, webServiceType, class1, url, null, null, responseListener,
+                    errorListener);
+        } else {
+            errorListener.onNetworkUnavailable(webServiceType);
+        }
+    }
+
+    public void discardReceipt(Class<?> class1, String receiptId, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        String url = WebServiceType.DISCARD_RECEIPT.getUrl() + receiptId + HealthCocoConstants.PARAM_TAG_DELETE + HealthCocoConstants.PARAM_DISCARDED_TRUE;
+        getResponse(WebServiceType.DISCARD_RECEIPT, class1, url, null, null, responseListener,
+                errorListener);
+    }
+
+    public void addReceipt(Class<?> class1, AddReceiptRequest addReceiptRequest,
+                           Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        WebServiceType webServiceType = WebServiceType.ADD_RECEIPT;
+        checkNetworkStatus(mApp);
+        if (HealthCocoConstants.isNetworkOnline) {
+            String url = webServiceType.getUrl();
+            getResponse(webServiceType, class1, url, addReceiptRequest, null, responseListener,
+                    errorListener);
+        } else {
+            showUserOffline(webServiceType, responseListener);
+        }
+    }
 
     public void getAppointmentSlotsDetails(Class<?> class1, String doctorId, String locationId, String hospitalId, long date,
                                            Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
@@ -1269,4 +1370,16 @@ public class WebDataServiceImpl implements GCMRefreshListener {
                 errorListener);
     }
 
+
+    public void addSuggestion(Class<?> class1, WebServiceType webServiceType, Object obj,
+                              Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        checkNetworkStatus(mApp);
+        if (HealthCocoConstants.isNetworkOnline) {
+            String url = webServiceType.getUrl();
+            getResponse(webServiceType, class1, url, obj, null, responseListener,
+                    errorListener);
+        } else {
+            showUserOffline(webServiceType, responseListener);
+        }
+    }
 }

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/grey_light_divider"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="8dp">
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="2dp">
+
+            <TextView
+                android:id="@+id/tv_initial_aplhabet"
+                android:layout_width="@dimen/profile_image_doctor_profile"
+                android:layout_height="@dimen/profile_image_doctor_profile"
+                android:layout_gravity="center"
+                android:background="@drawable/shape_circular_border_grey"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_patients_list_initial_alphabet" />
+
+            <com.healthcoco.healthcocopad.custom.CircularImageView
+                android:id="@+id/iv_image"
+                android:layout_width="@dimen/profile_image_doctor_profile"
+                android:layout_height="@dimen/profile_image_doctor_profile"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/layout_margin" />
+
+            <ProgressBar
+                android:id="@+id/progress_loading"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:indeterminateDrawable="@drawable/progress_loading"
+                android:max="100"
+                android:visibility="gone" />
+        </FrameLayout>
+
+
+        <TextView
+            android:id="@+id/tv_doctor_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:text="DoctorName"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_doctor_profile_name" />
+
+        <LinearLayout
+            android:id="@+id/bt_sync_all"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+                android:id="@+id/tv_refresh"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:text="@string/fa_refresh"
+                android:textColor="@color/black"
+                android:textSize="@dimen/about_us_social_icon_size"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:text="@string/sync_all"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_doctor_profile_name" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/lv_sync_all"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:cacheColorHint="@android:color/transparent"
+        android:clipToPadding="false"
+        android:divider="@null"
+        android:listSelector="@android:color/transparent"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="10dp"
+        android:scrollbarStyle="outsideOverlay" />
+
+</LinearLayout>

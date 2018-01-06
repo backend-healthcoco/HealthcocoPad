@@ -10,6 +10,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -28,7 +29,6 @@ import com.healthcoco.healthcocopad.bean.server.AdviceSuggestion;
 import com.healthcoco.healthcocopad.bean.server.ComplaintSuggestions;
 import com.healthcoco.healthcocopad.bean.server.DiagnosisSuggestions;
 import com.healthcoco.healthcocopad.bean.server.DiagnosticTest;
-import com.healthcoco.healthcocopad.bean.server.Drug;
 import com.healthcoco.healthcocopad.bean.server.DrugsListSolrResponse;
 import com.healthcoco.healthcocopad.bean.server.EcgDetailSuggestions;
 import com.healthcoco.healthcocopad.bean.server.EchoSuggestions;
@@ -50,12 +50,17 @@ import com.healthcoco.healthcocopad.bean.server.PvSuggestions;
 import com.healthcoco.healthcocopad.bean.server.SystemicExaminationSuggestions;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.bean.server.XrayDetailSuggestions;
+import com.healthcoco.healthcocopad.custom.HealthcocoTextWatcher;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocopad.dialogFragment.AddNewDrugDialogFragment;
+import com.healthcoco.healthcocopad.dialogFragment.AddNewSuggestionDialogFragment;
+import com.healthcoco.healthcocopad.dialogFragment.AddNewTreatmentDialogFragment;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.SuggestionType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.AddNewDrugListener;
+import com.healthcoco.healthcocopad.listeners.AddNewSuggestionListener;
+import com.healthcoco.healthcocopad.listeners.HealthcocoTextWatcherListener;
 import com.healthcoco.healthcocopad.listeners.LoadMorePageListener;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
 import com.healthcoco.healthcocopad.services.GsonRequest;
@@ -81,7 +86,7 @@ import static com.healthcoco.healthcocopad.enums.WebServiceType.FRAGMENT_INITIAL
 
 public class AddVisitSuggestionsFragment extends HealthCocoFragment implements TextWatcher,
         GsonRequest.ErrorListener, Response.Listener<VolleyResponseBean>, LocalDoInBackgroundListenerOptimised,
-        LoadMorePageListener, View.OnClickListener, AddNewDrugListener, AdapterView.OnItemClickListener {
+        LoadMorePageListener, View.OnClickListener, AddNewDrugListener, AdapterView.OnItemClickListener, View.OnTouchListener, HealthcocoTextWatcherListener, AddNewSuggestionListener {
 
     public static final String INTENT_LOAD_DATA = "com.healthcoco.healthcocopad.fragments.AddVisitSuggestionsFragment.LOAD_DATA";
 
@@ -97,7 +102,7 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements T
     private boolean isLoadingFromSearch;
     private String lastTextSearched;
     private boolean isInitialLoading = true;
-    private ImageButton btAddNew;
+    private LinearLayout btAddNew;
     private User user;
     private boolean receiversRegistered;
     private SuggestionType suggestionType;
@@ -108,6 +113,22 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements T
     private TextView tvNoDrugs;
     private boolean visitToggleStateFromPreferences;
     private ListViewLoadMore lvSuggestionsList;
+    BroadcastReceiver loadDataReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, final Intent intent) {
+            if (intent != null) {
+                int ordinal = intent.getIntExtra(TAG_SUGGESTIONS_TYPE, -1);
+                searchedTerm = intent.getStringExtra(TAG_SEARCHED_TERM);
+                suggestionType = SuggestionType.values()[ordinal];
+                btAddNew.setVisibility(View.VISIBLE);
+                if (suggestionType != null) {
+                    isLoadingFromSearch = true;
+                    resetListAndPagingAttributes();
+                    refreshData(false);
+                }
+            }
+        }
+    };
     private AddEditNormalVisitsFragment addEditNormalVisitsFragment;
     private AddClinicalNotesVisitNormalFragment addClinicalNotesVisitNormalFragment;
 
@@ -142,9 +163,9 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements T
         gvSuggestionsList = (GridViewLoadMore) view.findViewById(R.id.gv_suggestions_list);
         lvSuggestionsList = (ListViewLoadMore) view.findViewById(R.id.lv_suggestions_list);
         progressLoading = (ProgressBar) view.findViewById(R.id.progress_loading);
-        btAddNew = (ImageButton) view.findViewById(R.id.bt_add_new);
+        btAddNew = (LinearLayout) view.findViewById(R.id.bt_add_new);
         tvNoDrugs = (TextView) view.findViewById(R.id.tv_no_drugs);
-        btAddNew.setVisibility(View.GONE);
+//        btAddNew.setVisibility(View.GONE);
     }
 
     @Override
@@ -159,8 +180,8 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements T
             else
                 addClinicalNotesVisitNormalFragment = (AddClinicalNotesVisitNormalFragment) mFragmentManager.findFragmentByTag(AddClinicalNotesVisitNormalFragment.class.getSimpleName());
             if (addClinicalNotesVisitNormalFragment != null) {
-                editTextSearch.setOnTouchListener(addClinicalNotesVisitNormalFragment.getOnTouchListener());
-                editTextSearch.addTextChangedListener(addClinicalNotesVisitNormalFragment.addTextChangedListener(editTextSearch));
+                editTextSearch.setOnTouchListener(this);
+                editTextSearch.addTextChangedListener(new HealthcocoTextWatcher(editTextSearch, this));
             }
         }
         btAddNew.setOnClickListener(this);
@@ -259,10 +280,11 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements T
         if (suggestionsList == null)
             suggestionsList = new ArrayList<>();
         if (isLoadingFromSearch) {
-            suggestionsList.clear();
-            notifyAdapter(suggestionsList);
+//            suggestionsList.clear();
+//            notifyAdapter(suggestionsList);
         }
         if (!Util.isNullOrEmptyList(responseList)) {
+            suggestionsList.clear();
             suggestionsList.addAll(responseList);
         }
         if (Util.isNullOrEmptyList(responseList) || responseList.size() < MAX_SIZE || Util.isNullOrEmptyList(responseList))
@@ -433,16 +455,42 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements T
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.bt_add_new:
-                switch (suggestionType) {
-                    case DRUGS:
-                        AddNewDrugDialogFragment newDrugDialogFragment = new AddNewDrugDialogFragment(this);
-                        newDrugDialogFragment.show(mActivity.getSupportFragmentManager(),
-                                newDrugDialogFragment.getClass().getSimpleName());
-                        break;
+                if (suggestionType != null) {
+                    switch (suggestionType) {
+                        case DRUGS:
+                            AddNewDrugDialogFragment newDrugDialogFragment = new AddNewDrugDialogFragment(this);
+                            newDrugDialogFragment.show(mActivity.getSupportFragmentManager(),
+                                    newDrugDialogFragment.getClass().getSimpleName());
+                            break;
+
+                        case COMPLAINTS:
+                        case OBSERVATION:
+                        case INVESTIGATION:
+                        case DIAGNOSIS:
+                        case PRESENT_COMPLAINT:
+                        case HISTORY_OF_PRESENT_COMPLAINT:
+                        case MENSTRUAL_HISTORY:
+                        case OBSTETRIC_HISTORY:
+                        case PROVISIONAL_DIAGNOSIS:
+                        case GENERAL_EXAMINATION:
+                        case SYSTEMIC_EXAMINATION:
+                        case NOTES:
+                        case ECG_DETAILS:
+                        case ECHO:
+                        case X_RAY_DETAILS:
+                        case HOLTER:
+                        case PA:
+                        case PS:
+                        case PV:
+                        case INDICATION_OF_USG:
+                        case ADVICE:
+                            openAddNewSuggestionDailogFragment();
+                            break;
 //                    case PRESENT_COMPLAINT:
 //                        mActivity.openAddUpdateNameDialogFragment(WebServiceType.ADD_DIAGNOSTIC_TESTS, AddUpdateNameDialogType.ADD_DIAGNOSTIC_TEST, this, user, null, HealthCocoConstants.RESULT_CODE_DIAGNOSTICS_TESTS);
-                    default:
-                        break;
+                        default:
+                            break;
+                    }
                 }
                 break;
             case R.id.bt_clear:
@@ -456,7 +504,20 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements T
     }
 
     @Override
-    public void onSaveClicked(Drug drug) {
+    public void onSaveClicked(Object drug) {
+
+    }
+
+    @Override
+    public SuggestionType getSuggestionType() {
+        return suggestionType;
+    }
+
+    private void openAddNewSuggestionDailogFragment() {
+
+        AddNewSuggestionDialogFragment addNewSuggestionDialogFragment = new AddNewSuggestionDialogFragment(this);
+        addNewSuggestionDialogFragment.show(mActivity.getSupportFragmentManager(),
+                addNewSuggestionDialogFragment.getClass().getSimpleName());
 
     }
 
@@ -478,22 +539,6 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements T
         super.onDestroy();
         LocalBroadcastManager.getInstance(mActivity).unregisterReceiver(loadDataReceiver);
     }
-
-    BroadcastReceiver loadDataReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, final Intent intent) {
-            if (intent != null) {
-                int ordinal = intent.getIntExtra(TAG_SUGGESTIONS_TYPE, -1);
-                searchedTerm = intent.getStringExtra(TAG_SEARCHED_TERM);
-                suggestionType = SuggestionType.values()[ordinal];
-                if (suggestionType != null) {
-                    isLoadingFromSearch = true;
-                    resetListAndPagingAttributes();
-                    refreshData(false);
-                }
-            }
-        }
-    };
 
     private void refreshData(boolean isInitialLoading) {
         refreshViewsAndTitle();
@@ -535,7 +580,7 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements T
                             btAddNew.setVisibility(View.VISIBLE);
                             break;
                         default:
-                            btAddNew.setVisibility(View.GONE);
+                            btAddNew.setVisibility(View.VISIBLE);
                             break;
                     }
                 }
@@ -656,6 +701,25 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements T
                 myScriptAddVisitsFragment.requestFocus(editTextSearch);
         }
         Util.requesFocus(editTextSearch);
+    }
+
+    @Override
+    public void afterTextChange(View v, String s) {
+        addClinicalNotesVisitNormalFragment.refreshSuggestionsList(v, s);
+    }
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_UP:
+                LogUtils.LOGD(TAG, "Action UP");
+                break;
+            case MotionEvent.ACTION_DOWN:
+                addClinicalNotesVisitNormalFragment.requestFocus(v);
+                LogUtils.LOGD(TAG, "Action DOWN");
+                break;
+        }
+        return false;
     }
 }
 

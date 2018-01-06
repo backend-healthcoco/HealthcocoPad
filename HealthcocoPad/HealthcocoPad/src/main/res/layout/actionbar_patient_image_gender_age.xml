@@ -99,7 +99,8 @@
         android:layout_height="?attr/actionBarSize"
         android:layout_marginRight="15dp"
         android:gravity="center_vertical"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="visible">
 
         <TextView
             android:layout_width="match_parent"

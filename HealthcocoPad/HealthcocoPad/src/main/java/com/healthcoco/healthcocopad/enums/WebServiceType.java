@@ -27,10 +27,35 @@ public enum WebServiceType {
 
     SEND_EMAIL_TREATMENT(Method.GET, "treatment/"),
 
+    ADD_TREATMENT_SERVICE(Method.POST, "treatment/service/add"),
+
     GET_PRESCRIPTION(Method.GET, "prescription/"),
     GET_REPORTS_UPDATED(Method.GET, "records/"),
     GET_CLINICAL_NOTES(Method.GET, "clinicalNotes/"),
     GET_APPOINTMENT(Method.GET, "appointment/"),
+
+    GET_INVOICE(Method.GET, "billing/invoice/BOTH"),
+
+    GET_INVOICE_PDF_URL(Method.GET, "billing/downloadInvoice/"),
+
+    ADD_INVOICE(Method.POST, "billing/invoice/add"),
+
+    SEND_EMAIL_INVOICE(Method.GET, "billing/invoice/"),
+
+    DISCARD_INVOICE(Method.DELETE, "billing/invoice/"),
+
+    GET_RECEIPT(Method.GET, "billing/receipt/"),
+
+    GET_RECEIPT_PDF_URL(Method.GET, "billing/downloadReceipt/"),
+
+    DISCARD_RECEIPT(Method.DELETE, "billing/receipt/"),
+
+    GET_AMOUNT(Method.GET, "billing/amount/"),
+
+    ADD_RECEIPT(Method.POST, "billing/receipt/add"),
+
+    SEND_EMAIL_RECEIPT(Method.GET, "billing/receipt/"),
+
 //GET /v1/records/{recordId}/view  GET_RECORDS_BY_ID
 
     GET_RECORD_BY_RECORD_ID(Method.GET, "records/"),
@@ -115,6 +140,69 @@ public enum WebServiceType {
     REMOVE_HISTORY_REPORT(Method.GET, "history/removeReports/"),
 
     DISCARD_PRESCRIPTION(Method.DELETE, "prescription/"),
+
+    //    Clinical note Add Suggession
+    ADD_COMPLAINT_SUGGESTIONS(Method.POST, "clinicalNotes/complaint/add/"),
+
+    ADD_DIAGNOSIS_SUGGESTIONS(Method.POST, "clinicalNotes/diagnosis/add/"),
+
+    ADD_EARS_EXAM_SUGGESTIONS(Method.POST, "clinicalNotes/earsExam/add/"),
+
+    ADD_ECG_DETAILS_SUGGESTIONS(Method.POST, "clinicalNotes/ecgDetails/add/"),
+
+    ADD_ECHO_SUGGESTIONS(Method.POST, "clinicalNotes/echo/add/"),
+
+    ADD_EYE_OBSERVATION_SUGGESTIONS(Method.POST, "clinicalNotes/eyeObservation/add/"),
+
+    ADD_GENERAL_EXAM_SUGGESTIONS(Method.POST, "clinicalNotes/generalExam/add/"),
+
+    ADD_HOLTER_SUGGESTIONS(Method.POST, "clinicalNotes/holter/add/"),
+
+    ADD_INDICATION_OF_USG_SUGGESTIONS(Method.POST, "clinicalNotes/indicationOfUSG/add/"),
+
+    ADD_INDIRECT_LARYGOSCOPY_EXAM_SUGGESTIONS(Method.POST, "clinicalNotes/indirectLarygoscopyExam/add/"),
+
+    ADD_INVESTIGATION_SUGGESTIONS(Method.POST, "clinicalNotes/investigation/add/"),
+
+    ADD_MENSTRUAL_HISTORY_SUGGESTIONS(Method.POST, "clinicalNotes/menstrualHistory/add/"),
+
+    ADD_NECK_EXAM_SUGGESTIONS(Method.POST, "clinicalNotes/neckExam/add/"),
+
+    ADD_NOSE_EXAM_SUGGESTIONS(Method.POST, "clinicalNotes/noseExam/add/"),
+
+    ADD_NOTES_SUGGESTIONS(Method.POST, "clinicalNotes/notes/add/"),
+
+    ADD_OBSERVATION_SUGGESTIONS(Method.POST, "clinicalNotes/observation/add/"),
+
+    ADD_OBSTETRIC_HISTORY_SUGGESTIONS(Method.POST, "clinicalNotes/obstetricHistory/add/"),
+
+    ADD_ORAL_CAVITY_THROAT_EXAM_SUGGESTIONS(Method.POST, "clinicalNotes/oralCavityThroatExam/add/"),
+
+    ADD_PA_SUGGESTIONS(Method.POST, "clinicalNotes/pa/add/"),
+
+    ADD_PC_EARS_SUGGESTIONS(Method.POST, "clinicalNotes/pcears/add/"),
+
+    ADD_PC_NOSE_SUGGESTIONS(Method.POST, "clinicalNotes/pcnose/add/"),
+
+    ADD_PC_ORAL_CAVITY_SUGGESTIONS(Method.POST, "clinicalNotes/pcoralCavity/add/"),
+
+    ADD_PC_THROAT_SUGGESTIONS(Method.POST, "clinicalNotes/pcthroat/add/"),
+
+    ADD_PRESENT_COMPLAINT_SUGGESTIONS(Method.POST, "clinicalNotes/presentComplaint/add/"),
+
+    ADD_HISTORY_OF_PRESENT_COMPLAINT_SUGGESTIONS(Method.POST, "clinicalNotes/presentComplaintHistory/add/"),
+
+    ADD_PROCEDURE_NOTE_SUGGESTIONS(Method.POST, "clinicalNotes/procedureNote/add/"),
+
+    ADD_PROVISIONAL_DIAGNOSIS_SUGGESTIONS(Method.POST, "clinicalNotes/provisionalDiagnosis/add/"),
+
+    ADD_PS_SUGGESTIONS(Method.POST, "clinicalNotes/ps/add/"),
+
+    ADD_PV_SUGGESTIONS(Method.POST, "clinicalNotes/pv/add/"),
+
+    ADD_SYSTEM_EXAM_SUGGESTIONS(Method.POST, "clinicalNotes/systemExam/add/"),
+
+    ADD_XRAY_DETAILS_SUGGESTIONS(Method.POST, "clinicalNotes/xRayDetails/add/"),
 
     GET_PRESENT_COMPLAINT_SUGGESTIONS(Method.GET, "clinicalNotes/PRESENT_COMPLAINT/BOTH/" + HealthCocoConstants.PARAM_DISCARDED_TRUE),
 
