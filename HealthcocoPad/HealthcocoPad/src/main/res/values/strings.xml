@@ -500,6 +500,7 @@
     <string name="driving_license">Driving Licence</string>
     <string name="pan_number">Pan Number</string>
     <string name="aadhar_id">Aadhar Id</string>
+    <string name="success_treatment_added">Treatment \"%s\" added Successfully</string>
     <string name="basic_info">Basic Info</string>
     <string name="date_of_birth">Date of Birth</string>
     <string name="search_profession">Search Profession</string>
@@ -589,7 +590,7 @@
 
     <string name="diagrams">Diagrams</string>
 
-    <string name="created_by">Created By</string>
+    <string name="created_by">Created By&#160;</string>
     <string name="vid"> | VID : </string>
     <string name="vital_signs">Vital Signs</string>
     <string name="hr">Heart Rate&#160;:&#160;</string>
@@ -635,6 +636,7 @@
     <string name="discarded">Discarded</string>
     <string name="treatment">Treatment</string>
     <string name="new_treatment_plan">New Treatment Plan</string>
+    <string name="new_treatment">New Treatment</string>
     <string name="toggle_to_adult_chart">Toggle To Adult Chart</string>
     <string name="toggle_to_baby_chart">Toggle To Baby Chart</string>
 
@@ -711,6 +713,8 @@
     <string name="confirm_discard_clinical_notes_message">This cannot be undone.</string>
     <string name="confirm_discard_treatment_title">Are you sure you want to discard this Treatment?</string>
     <string name="confirm_discard_visit_title">Are you sure you want to discard this Visit?</string>
+    <string name="confirm_discard_invoice_title">Are you sure you want to discard this Invoice?</string>
+    <string name="confirm_discard_receipt_title">Are you sure you want to discard this Receipt?</string>
     <string name="rx_text">Rx</string>
     <string name="date_with_colon">Date&#160;:&#160;</string>
     <string name="patient_id_with_colon">Patient Id&#160;:&#160;</string>
@@ -746,6 +750,11 @@
     <string name="write_pv">Write P/V</string>
     <string name="give_us_feedback">Give us Feedback</string>
     <string name="send">Send</string>
+    <string name="add_suggestion_hint">Write Suggestion</string>
+    <string name="suggestion">Suggestion</string>
+    <string name="new_suggestion">New Suggestion</string>
+    <string name="please_enter_suggestion">Please enter Suggestion</string>
+
 
     <string name="model">Model</string>
     <string name="manufacturer">Manufacturer</string>
@@ -809,8 +818,11 @@
     <string name="next_review_on">Next Review On</string>
     <string name="no_prescription_found">No Prescription Found</string>
     <string name="no_treatment_found">No Treatment Found</string>
+    <string name="no_invoice_found">No Invoice Found</string>
+    <string name="no_receipts_found">No Receipts Found</string>
     <string name="no_treatment_added">No Treatment Added</string>
     <string name="alert_add_treatment">Blank treatment cannot be saved.Add Treatments</string>
+    <string name="alert_add_invoice">Blank invoice cannot be saved.Add Services</string>
     <string name="please_reschedule_appointment">Please Reschedule Appointment</string>
     <string name="change_next_review_date_from_calender">Change next review date from Calender.\n Appointment ID:</string>
     <string name="edit_clinical_note">Edit Clinical Note</string>
@@ -837,4 +849,58 @@
     <string name="subscription">Subscription</string>
     <string name="search_treatment">Search Treatment</string>
     <string name="featured">Featured</string>
+
+    <!--Treatment texts-->
+    <string name="treatment_service">Treatment Service</string>
+    <string name="treatment_service_name_hint">Treatment Service Name</string>
+    <string name="treatment_service_cost_hint">Treatment Service Cost</string>
+    <string name="please_enter_service_name">Please enter Service name</string>
+    <string name="treatment_cost">Treatment Cost</string>
+
+    <!--Invoice texts-->
+    <string name="invoice">Invoice</string>
+    <string name="total">Total</string>
+    <string name="tax">Tax</string>
+    <string name="taxes">Taxes(%)</string>
+    <string name="discount_with_colon">Discount&#160;:&#160;</string>
+    <string name="cost_with_colon">Cost&#160;:&#160;</string>
+    <string name="qty_per_day">Qty/Day</string>
+    <string name="invoice_id"> | Invoice ID&#160;:&#160;</string>
+    <string name="product_service">Product/Service</string>
+    <string name="pay">Pay</string>
+    <string name="balance_amount_rupees">Balance Amount&#160;:&#160;\u20B9&#160;&#160;</string>
+    <string name="paid_rupees">Paid&#160;:&#160;\u20B9&#160;&#160;</string>
+    <string name="grand_total_rupees">Grand Total&#160;:&#160;\u20B9&#160;&#160;</string>
+    <string name="service_product_name">Service/Product Name</string>
+
+    <!--Receipt texts-->
+    <string name="receipt">Receipt</string>
+    <string name="used_advance_amount">Used Advance Amount</string>
+    <string name="payment_method">Payment Method</string>
+    <string name="receipt_id"> | Receipt Id&#160;:&#160;</string>
+    <string name="amount_paid">Amount Paid</string>
+    <string name="due_rupees">Due&#160;(\u20B9)</string>
+    <string name="invoice_no">Invoice NO</string>
+    <string name="grand_total">Grand Total&#160;(\u20B9)&#160;</string>
+    <string name="paid">Paid&#160;(\u20B9)&#160;</string>
+    <string name="invoice_id_receipt">Invoice ID</string>
+    <string name="invoice_id_select_invoice">Invoice ID&#160;:&#160;</string>
+    <string name="available_advance">Available Advance:&#160;</string>
+    <string name="invoice_due">Invoice Due:&#160;</string>
+    <string name="pay_from_advance">Pay From Advance:&#160;</string>
+    <string name="zero_rupees">\u20B9&#160;0</string>
+    <string name="due_after_advance">Due After Advance:&#160;\u20B9&#160;</string>
+    <string name="cash">Cash</string>
+    <string name="received_date">Received Date:&#160;</string>
+    <string name="amount_added_to_patient_account">* Amount will be added to Patient\'s Advance Amount</string>
+    <string name="advance_left">Advance left After Payment</string>
+    <string name="pay_now">Pay Now:&#160;</string>
+    <string name="confirm_remove_invoice">Are you want to discountinue payment for selected Invoice?</string>
+    <string name="please_enter_amount_to_pay">Please Enter Amount to Pay</string>
+    <string name="advance">&#160;Advance</string>
+    <string name="due">&#160;Due</string>
+    <string name="new_receipt">New Receipt</string>
+    <string name="sync_all">Sync All</string>
+    <string name="select_due_invoice">Select Due Invoice</string>
+
 </resources>

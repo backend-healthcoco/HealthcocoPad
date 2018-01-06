@@ -10,11 +10,14 @@ import com.healthcoco.healthcocopad.bean.server.DrugDirection;
 import com.healthcoco.healthcocopad.bean.server.DrugDosage;
 import com.healthcoco.healthcocopad.bean.server.DrugDurationUnit;
 import com.healthcoco.healthcocopad.bean.server.HistoryDetailsResponse;
+import com.healthcoco.healthcocopad.bean.server.Invoice;
 import com.healthcoco.healthcocopad.bean.server.Prescription;
+import com.healthcoco.healthcocopad.bean.server.ReceiptResponse;
 import com.healthcoco.healthcocopad.bean.server.Records;
 import com.healthcoco.healthcocopad.bean.server.Reference;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.Specialities;
+import com.healthcoco.healthcocopad.bean.server.SyncAll;
 import com.healthcoco.healthcocopad.bean.server.TempTemplate;
 import com.healthcoco.healthcocopad.bean.server.Treatments;
 import com.healthcoco.healthcocopad.bean.server.UserGroups;
@@ -169,6 +172,17 @@ public class ComparatorUtil {
             return name1.compareTo(name2);
         }
     };
+
+    public static Comparator<SyncAll> syncListComparator = new Comparator<SyncAll>() {
+
+        @Override
+        public int compare(SyncAll syncAll1, SyncAll syncAll2) {
+            Integer position1 = syncAll1.getPosition();
+            Integer position2 = syncAll2.getPosition();
+            return position1.compareTo(position2);
+        }
+    };
+
     public static Comparator<TempTemplate> templateListDateComparator = new Comparator<TempTemplate>() {
 
         @Override
@@ -292,4 +306,29 @@ public class ComparatorUtil {
         }
     };
 
+    public static Comparator<Invoice> invoiceDateComparator = new Comparator<Invoice>() {
+
+        @Override
+        public int compare(Invoice invoice1, Invoice invoice2) {
+            if (invoice1.getCreatedTime() != null && invoice2.getCreatedTime() != null) {
+                Date date1 = new Date(invoice1.getCreatedTime());
+                Date date2 = new Date(invoice2.getCreatedTime());
+                return date2.compareTo(date1);
+            }
+            return 0;
+        }
+    };
+
+    public static Comparator<ReceiptResponse> receiptDateComparator = new Comparator<ReceiptResponse>() {
+
+        @Override
+        public int compare(ReceiptResponse receiptResponse1, ReceiptResponse receiptResponse2) {
+            if (receiptResponse1.getReceivedDate() != null && receiptResponse2.getReceivedDate() != null) {
+                Date date1 = new Date(receiptResponse1.getReceivedDate());
+                Date date2 = new Date(receiptResponse2.getReceivedDate());
+                return date2.compareTo(date1);
+            }
+            return 0;
+        }
+    };
 }

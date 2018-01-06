@@ -17,68 +17,57 @@ import java.util.List;
 
 @Parcel
 public class RegisteredPatientDetailsUpdated extends SugarRecord {
+
+    protected String foreignPatientId;
+    protected String addressJsonString;
+    @Ignore
+    protected ArrayList<String> groupIds;
+    protected String groupIdsJsonString;
+    protected String imageFilePath;
+    protected String foreignReferredById;
+    protected String referredByJsonString;
+    protected String bloodGroup;
+    protected String profession;
+    protected String consultantDoctorIdsJsonString;
     @Unique
     private String uniqueId;
     @Ignore
     private Bitmap profileImageBitmap;
     private String localPatientName;
     private String firstName;
-
     private String lastName;
-
     private String middleName;
-
     private String imageUrl;
     @Ignore
     private DOB dob;
     private String dobJsonString;
     private String userId;
-
     private String userName;
-
     private String mobileNumber;
-
     private String gender;
-
     @Ignore
     private Patient patient;
-    protected String foreignPatientId;
-
     @Ignore
     private Address address;
-    protected String addressJsonString;
     @Ignore
     private List<UserGroups> groups;
-    @Ignore
-    protected ArrayList<String> groupIds;
-    protected String groupIdsJsonString;
-
     private String doctorId;
-
     private String locationId;
-
     private String hospitalId;
-
     private String pid;
     private String colorCode;
-
     private Long createdTime;
     private Long updatedTime;
-    protected String imageFilePath;
     @Ignore
     private Reference referredBy;
-    protected String foreignReferredById;
-    protected String referredByJsonString;
-
     private String thumbnailUrl;
     private Boolean discarded;
-    protected String bloodGroup;
-    protected String profession;
     private String emailAddress;
     private boolean isPartOfConsultantDoctor;
     @Ignore
     private ArrayList<String> consultantDoctorIds;
-    protected String consultantDoctorIdsJsonString;
+    private double totalDueAmount;
+    private double totalRemainingAdvanceAmount;
 
     public boolean isPartOfConsultantDoctor() {
         return isPartOfConsultantDoctor;
@@ -392,11 +381,27 @@ public class RegisteredPatientDetailsUpdated extends SugarRecord {
         this.referredByJsonString = referredByJsonString;
     }
 
+    public String getEmailAddress() {
+        return emailAddress;
+    }
+
     public void setEmailAddress(String emailAddress) {
         this.emailAddress = emailAddress;
     }
 
-    public String getEmailAddress() {
-        return emailAddress;
+    public double getTotalDueAmount() {
+        return totalDueAmount;
+    }
+
+    public void setTotalDueAmount(double totalDueAmount) {
+        this.totalDueAmount = totalDueAmount;
+    }
+
+    public double getTotalRemainingAdvanceAmount() {
+        return totalRemainingAdvanceAmount;
+    }
+
+    public void setTotalRemainingAdvanceAmount(double totalRemainingAdvanceAmount) {
+        this.totalRemainingAdvanceAmount = totalRemainingAdvanceAmount;
     }
 }

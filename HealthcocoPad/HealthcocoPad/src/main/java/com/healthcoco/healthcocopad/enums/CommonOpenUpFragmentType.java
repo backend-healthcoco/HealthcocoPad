@@ -43,16 +43,18 @@ public enum CommonOpenUpFragmentType {
     PATIENT_DETAIL_PRESCRIPTION(R.string.prescriptions),
     PATIENT_DETAIL_APPOINTMENT(R.string.appointment),
     PATIENT_DETAIL_TREATMENT(R.string.treatment),
-    ADD_TREATMENT(R.string.new_treatment_plan),
+    ADD_TREATMENT(R.string.new_treatment_plan), ADD_NEW_TREATMENT(R.string.new_treatment), ADD_RECEIPT(R.string.new_receipt),
     HISTORY_DISEASE_LIST(R.string.past_history),
     ADD_NEW_TEMPLATE(R.string.new_template),
     NOTIFICATION_RESPONSE_DATA(R.string.notification_details),
     ADD_VISITS(0),
+    ADD_INVOICE(R.string.invoice),
     SELECT_DIAGRAM(R.string.diagrams),
     SELECTED_DIAGRAM_DETAIL(0), BOOK_APPOINTMENT(R.string.book),
     CONTACTS_LIST(R.string.my_patients),
     ENLARGED_MAP_VIEW_FRAGMENT(R.string.location),
-    ADD_CLINICAL_NOTE(R.string.edit_clinical_note),;
+    ADD_CLINICAL_NOTE(R.string.edit_clinical_note),
+    SYNC(R.string.sync);
 
     private final int titleId;
 

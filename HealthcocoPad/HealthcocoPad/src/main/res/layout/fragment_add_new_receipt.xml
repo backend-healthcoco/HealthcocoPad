@@ -1,0 +1,436 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <include layout="@layout/actionbar_patient_image_gender_age" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/layout_select_invoice_fragment"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.3"
+            android:orientation="vertical"
+            android:visibility="visible">
+
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="0.3dp"
+            android:layout_height="match_parent"
+            android:background="@color/grey_icons"></View>
+
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.7"
+            android:background="@color/white"
+            android:orientation="vertical">
+
+
+            <LinearLayout
+                android:id="@+id/layout_invoice_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shape_emr_item_background"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.2"
+                        android:text="@string/invoice_no"
+                        android:textAllCaps="true"
+                        android:textSize="@dimen/text_size_reports_item_label" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.5"
+                        android:gravity="center"
+                        android:text="@string/grand_total"
+                        android:textAllCaps="true"
+                        android:textSize="@dimen/text_size_reports_item_label" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="@string/due_rupees"
+                        android:textAllCaps="true"
+                        android:textSize="@dimen/text_size_reports_item_label" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="@string/paid"
+                        android:textAllCaps="true"
+                        android:textSize="@dimen/text_size_reports_item_label" />
+
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:textAllCaps="true"
+                        android:textColor="@color/black_greyish" />
+
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginBottom="@dimen/item_padding"
+                    android:layout_marginTop="@dimen/item_padding"
+                    android:background="@color/grey_background" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="10dp">
+
+
+                    <TextView
+                        android:id="@+id/tv_invoice_id"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.2"
+                        android:textAllCaps="true"
+                        android:textColor="@color/black_greyish"
+                        android:textSize="@dimen/text_size_drug_child_lable" />
+
+                    <TextView
+                        android:id="@+id/tv_grand_total_rupees"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.5"
+                        android:gravity="center"
+                        android:textAllCaps="true"
+                        android:textColor="@color/black_greyish"
+                        android:textSize="@dimen/text_size_drug_child_lable" />
+
+                    <TextView
+                        android:id="@+id/tv_due_rupees"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:textAllCaps="true"
+                        android:textColor="@color/black_greyish"
+                        android:textSize="@dimen/text_size_drug_child_lable" />
+
+                    <TextView
+                        android:id="@+id/tv_paid_rupees"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:textAllCaps="true"
+                        android:textColor="@color/black_greyish"
+                        android:textSize="@dimen/text_size_drug_child_lable" />
+
+                    <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+                        android:id="@+id/bt_delete"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:adjustViewBounds="true"
+                        android:gravity="center"
+                        android:text="@string/fa_times_circle"
+                        android:textColor="@color/grey_icons"
+                        android:textSize="25sp" />
+
+                </LinearLayout>
+
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginBottom="@dimen/item_padding"
+                    android:layout_marginTop="@dimen/item_padding"
+                    android:background="@color/grey_background" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@color/white"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/available_advance"
+                            android:textAllCaps="true"
+                            android:textColor="@color/green_logo"
+                            android:textSize="@dimen/text_size_reports_item_label" />
+
+                        <TextView
+                            android:id="@+id/tv_available_advance_amount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAllCaps="true"
+                            android:textColor="@color/green_logo"
+                            android:textSize="@dimen/text_size_reports_item_label" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/layout_invoice_due"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@color/white"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/invoice_due"
+                            android:textAllCaps="true"
+                            android:textColor="@color/red_error"
+                            android:textSize="@dimen/text_size_reports_item_label" />
+
+                        <TextView
+                            android:id="@+id/tv_invoice_due_amount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAllCaps="true"
+                            android:textColor="@color/red_error"
+                            android:textSize="@dimen/text_size_reports_item_label" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginBottom="@dimen/item_padding"
+                    android:layout_marginTop="@dimen/item_padding" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/blue_translucent_lighter"
+                    android:orientation="vertical"
+                    android:padding="15dp">
+
+                    <LinearLayout
+                        android:id="@+id/layout_pay_from_advance"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="15dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1.4"
+                            android:text="@string/pay_from_advance"
+                            android:textAllCaps="true"
+                            android:textColor="@color/black_greyish"
+                            android:textSize="@dimen/text_size_reports_item_label" />
+
+                        <EditText
+                            android:id="@+id/editText_pay_from_advance"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="10dp"
+                            android:layout_weight="1.2"
+                            android:background="@color/white"
+                            android:digits="0123456789."
+                            android:gravity="center"
+                            android:hint="@string/zero_rupees"
+                            android:inputType="numberDecimal"
+                            android:padding="5dp"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/text_size_reports_item_label" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_weight="2"
+                            android:textAllCaps="true"
+                            android:textColor="@color/black_greyish"
+                            android:textSize="@dimen/text_size_reports_item_label" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/layout_due_after_advance"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="15dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.85"
+                            android:text="@string/due_after_advance"
+                            android:textAllCaps="true"
+                            android:textColor="@color/black_greyish"
+                            android:textSize="@dimen/text_size_reports_item_label" />
+
+                        <TextView
+                            android:id="@+id/tv_text_due_after_advance"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:textAllCaps="true"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/text_size_reports_item_label" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1.4"
+                            android:text="@string/pay_now"
+                            android:textAllCaps="true"
+                            android:textColor="@color/black_greyish"
+                            android:textSize="@dimen/text_size_reports_item_label" />
+
+                        <EditText
+                            android:id="@+id/edit_pay_now"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="10dp"
+                            android:layout_weight="1.2"
+                            android:background="@color/white"
+                            android:digits="0123456789."
+                            android:gravity="center"
+                            android:hint="@string/zero_rupees"
+                            android:inputType="numberDecimal"
+                            android:padding="5dp"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/text_size_reports_item_label" />
+
+                        <TextView
+                            android:id="@+id/tv_cash_mode"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_weight="1"
+                            android:drawableRight="@drawable/arrow_down_drug"
+                            android:gravity="center"
+                            android:text="@string/cash"
+                            android:textAllCaps="true"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/text_size_reports_item_label"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textAllCaps="true"
+                            android:textColor="@color/black_greyish"
+                            android:textSize="@dimen/text_size_reports_item_label" />
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:layout_weight="1.5"
+                        android:text="@string/received_date"
+                        android:textColor="@color/black_greyish"
+                        android:textSize="@dimen/text_size_drug_child_lable" />
+
+                    <TextView
+                        android:id="@+id/tv_received_date"
+                        style="@style/registration_edittext"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="15dp"
+                        android:layout_weight="1"
+                        android:drawableRight="@drawable/arrow_down_drug"
+                        android:gravity="center" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tv_added_to_patient_advance"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:text="@string/amount_added_to_patient_account"
+                    android:textColor="@color/red_error"
+                    android:textSize="@dimen/text_size_drug_child_lable"
+                    android:visibility="visible" />
+
+                <LinearLayout
+                    android:id="@+id/layout_advance_left"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/advance_left"
+                        android:textColor="@color/green_logo"
+                        android:textSize="@dimen/text_size_drug_child_lable"
+                        android:visibility="visible" />
+
+                    <TextView
+                        android:id="@+id/tv_advance_left"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/green_logo"
+                        android:textSize="@dimen/text_size_drug_child_lable"
+                        android:visibility="visible" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>

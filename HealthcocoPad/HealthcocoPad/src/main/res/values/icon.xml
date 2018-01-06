@@ -36,8 +36,9 @@
     <string name="fa_print">&#xf02f;&#160;Print&#160;</string>
     <string name="fa_save_as_template">&#xf0f6;&#160;Save as Template&#160;</string>
     <string name="fa_total_rupees">Total&#160;(\u20B9)&#160;</string>
-    <string name="fa_total_discount">Total Discount&#160;:\u20B9</string>
-    <string name="fa_total_cost">Total Cost&#160;:&#160;\u20B9</string>
+    <string name="fa_total_discount">Total Discount&#160;:&#160;\u20B9&#160;</string>
+    <string name="fa_total_tax">Total Tax&#160;:&#160;\u20B9&#160;</string>
+    <string name="fa_total_cost">Total Cost&#160;:&#160;\u20B9&#160;</string>
     <string name="fa_grand_total_rupees">Grand Total&#160;:&#160;\u20B9</string>
     <string name="icon_add_note">&#xf067;&#160;Add Note</string>
 
@@ -73,4 +74,9 @@
     <string name="fa_exchange">&#xf0ec;</string>
     <string name="icon_add_image">&#xf067;&#160;Image</string>
     <string name="icon_add_file">&#xf067;&#160;File</string>
+    <string name="fa_product">&#xf288;</string>
+    <string name="fa_test">&#xf0c3;</string>
+    <string name="fa_service">&#xf0fe;</string>
+    <string name="fa_refresh">&#xf021;</string>
+
 </resources>

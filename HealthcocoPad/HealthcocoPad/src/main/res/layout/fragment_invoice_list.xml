@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/grey_background"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <com.healthcoco.healthcocopad.views.CustomSwipeRefreshLayout
+            android:id="@+id/swipe_refresh_layout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:visibility="visible">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="@dimen/popup_item_padding"
+                    android:text="@string/select_due_invoice"
+                    android:textColor="@color/black_greyish"
+                    android:textSize="@dimen/edit_text_size" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/grey_dark_background" />
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:visibility="visible">
+
+
+                    <com.healthcoco.healthcocopad.views.ListViewLoadMore
+                        android:id="@+id/lv_invoice"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clipToPadding="false"
+                        android:divider="@null"
+                        android:scrollbars="none"
+                        android:visibility="visible" />
+
+                    <LinearLayout
+                        android:id="@+id/container_no_data_found"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+
+                        <TextView
+                            android:id="@+id/tv_no_invoice_added"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="@string/no_invoice_found"
+                            android:textSize="@dimen/text_size_no_results"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <ProgressBar
+                        android:id="@+id/progress_loading"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center|bottom"
+                        android:indeterminateDrawable="@drawable/progress_loading"
+                        android:visibility="gone" />
+                </FrameLayout>
+            </LinearLayout>
+        </com.healthcoco.healthcocopad.views.CustomSwipeRefreshLayout>
+
+    </LinearLayout>
+
+    <include layout="@layout/loading_healthcoco_overlay" />
+</FrameLayout>

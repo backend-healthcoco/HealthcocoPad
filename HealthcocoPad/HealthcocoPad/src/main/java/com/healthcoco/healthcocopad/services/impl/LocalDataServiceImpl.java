@@ -29,6 +29,7 @@ import com.healthcoco.healthcocopad.enums.LocalTabelType;
 import com.healthcoco.healthcocopad.enums.RecordType;
 import com.healthcoco.healthcocopad.enums.RoleType;
 import com.healthcoco.healthcocopad.enums.SuggestionType;
+import com.healthcoco.healthcocopad.enums.SyncAllType;
 import com.healthcoco.healthcocopad.enums.VisitedForType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.enums.WeekDayNameType;
@@ -51,6 +52,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static android.R.id.list;
 import static com.orm.util.ReflectionUtil.getDomainClasses;
 
 /**
@@ -132,6 +134,20 @@ public class LocalDataServiceImpl {
         syncAll.save();
     }
 
+
+    public List<SyncAll> getSyncAllData() {
+        return SyncAll.listAll(SyncAll.class);
+    }
+
+    public SyncAll getSynAll(SyncAllType syncAllType) {
+        LogUtils.LOGD(TAG, "SyncAllType get " + syncAllType);
+        return (SyncAll) getObject(SyncAll.class, LocalDatabaseUtils.KEY_SYNC_ALL_TYPE, "" + syncAllType);
+    }
+
+    public void addSyncAllData(List<SyncAll> syncAllList) {
+        SyncAll.saveInTx(syncAllList);
+    }
+
     public OtpVerification getOtpVerification(String doctorId, String locationId, String hospitalId, String patientId) {
         OtpVerification otpVerification = Select.from(OtpVerification.class)
                 .where(Condition.prop(LocalDatabaseUtils.KEY_DOCTOR_ID).eq(doctorId),
@@ -147,6 +163,7 @@ public class LocalDataServiceImpl {
     private void clearDoctor() {
         LoginResponse.deleteAll(LoginResponse.class);
     }
+
 
     public void addDoctor(LoginResponse doctor) {
         if (doctor.getUser() != null) {
@@ -1344,6 +1361,105 @@ public class LocalDataServiceImpl {
         }
     }
 
+    public void addSuggestions(WebServiceType webServiceType, LocalTabelType localTabelType, Object response, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
+        volleyResponseBean.setWebServiceType(webServiceType);
+        volleyResponseBean.setIsDataFromLocal(true);
+        volleyResponseBean.setIsUserOnline(HealthCocoConstants.isNetworkOnline);
+        try {
+            switch (localTabelType) {
+                case PRESENT_COMPLAINT_SUGGESTIONS:
+                    PresentComplaintSuggestions presentComplaintSuggestions = (PresentComplaintSuggestions) response;
+                    PresentComplaintSuggestions.saveInTx(presentComplaintSuggestions);
+                    break;
+                case COMPLAINT_SUGGESTIONS:
+                    ComplaintSuggestions complaintSuggestions = (ComplaintSuggestions) response;
+                    ComplaintSuggestions.save(complaintSuggestions);
+                    break;
+                case HISTORY_OF_PRESENT_COMPLAINT_SUGGESTIONS:
+                    HistoryPresentComplaintSuggestions historyPresentComplaintSuggestions = (HistoryPresentComplaintSuggestions) response;
+                    HistoryPresentComplaintSuggestions.save(historyPresentComplaintSuggestions);
+                    break;
+                case MENSTRUAL_HISTORY_SUGGESTIONS:
+                    MenstrualHistorySuggestions menstrualHistorySuggestions = (MenstrualHistorySuggestions) response;
+                    MenstrualHistorySuggestions.save(menstrualHistorySuggestions);
+                    break;
+                case OBSTETRIC_HISTORY_SUGGESTIONS:
+                    ObstetricHistorySuggestions obstetricHistorySuggestions = (ObstetricHistorySuggestions) response;
+                    ObstetricHistorySuggestions.save(obstetricHistorySuggestions);
+                    break;
+                case GENERAL_EXAMINATION_SUGGESTIONS:
+                    GeneralExaminationSuggestions generalExaminationSuggestions = (GeneralExaminationSuggestions) response;
+                    GeneralExaminationSuggestions.save(generalExaminationSuggestions);
+                    break;
+                case SYSTEMIC_EXAMINATION_SUGGESTIONS:
+                    SystemicExaminationSuggestions systemicExaminationSuggestions = (SystemicExaminationSuggestions) response;
+                    SystemicExaminationSuggestions.save(systemicExaminationSuggestions);
+                    break;
+                case OBSERVATION_SUGGESTIONS:
+                    ObservationSuggestions observationSuggestions = (ObservationSuggestions) response;
+                    ObservationSuggestions.save(observationSuggestions);
+                    break;
+                case INVESTIGATION_SUGGESTIONS:
+                    InvestigationSuggestions investigationSuggestions = (InvestigationSuggestions) response;
+                    InvestigationSuggestions.save(investigationSuggestions);
+                    break;
+                case PROVISIONAL_DIAGNOSIS_SUGGESTIONS:
+                    ProvisionalDiagnosisSuggestions provisionalDiagnosisSuggestions = (ProvisionalDiagnosisSuggestions) response;
+                    ProvisionalDiagnosisSuggestions.save(provisionalDiagnosisSuggestions);
+                    break;
+                case DIAGNOSIS_SUGGESTIONS:
+                    DiagnosisSuggestions diagnosisSuggestions = (DiagnosisSuggestions) response;
+                    DiagnosisSuggestions.save(diagnosisSuggestions);
+                    break;
+                case NOTES_SUGGESTIONS:
+                    NotesSuggestions notesSuggestions = (NotesSuggestions) response;
+                    NotesSuggestions.save(notesSuggestions);
+                    break;
+                case ECG_DETAILS_SUGGESTIONS:
+                    EcgDetailSuggestions ecgDetailSuggestions = (EcgDetailSuggestions) response;
+                    EcgDetailSuggestions.save(ecgDetailSuggestions);
+                    break;
+                case ECHO_SUGGESTIONS:
+                    EchoSuggestions echoSuggestions = (EchoSuggestions) response;
+                    EchoSuggestions.save(echoSuggestions);
+                    break;
+                case X_RAY_DETAILS_SUGGESTIONS:
+                    XrayDetailSuggestions xrayDetailSuggestions = (XrayDetailSuggestions) response;
+                    XrayDetailSuggestions.save(xrayDetailSuggestions);
+                    break;
+                case HOLTER_SUGGESTIONS:
+                    HolterSuggestions holterSuggestions = (HolterSuggestions) response;
+                    HolterSuggestions.save(holterSuggestions);
+                    break;
+                case PA_SUGGESTIONS:
+                    PaSuggestions paSuggestions = (PaSuggestions) response;
+                    PaSuggestions.save(paSuggestions);
+                    break;
+                case PV_SUGGESTIONS:
+                    PvSuggestions pvSuggestions = (PvSuggestions) response;
+                    PvSuggestions.save(pvSuggestions);
+                    break;
+                case PS_SUGGESTIONS:
+                    PsSuggestions psSuggestions = (PsSuggestions) response;
+                    PsSuggestions.save(psSuggestions);
+                    break;
+                case INDICATION_OF_USG_SUGGESTIONS:
+                    IndicationOfUsgSuggestions indicationOfUsgSuggestions = (IndicationOfUsgSuggestions) response;
+                    IndicationOfUsgSuggestions.save(indicationOfUsgSuggestions);
+                    break;
+                case ADVICE_SUGGESTIONS:
+                    AdviceSuggestion adviceSuggestion = (AdviceSuggestion) response;
+                    AdviceSuggestion.save(adviceSuggestion);
+                    break;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            showErrorLocal(volleyResponseBean, errorListener);
+        }
+    }
+
     public void addClinicDetailResponse(ClinicDetailResponse clinicDetailResponse) {
         if (clinicDetailResponse.getLocation() != null)
             addLocation(clinicDetailResponse.getLocation());
@@ -2344,6 +2460,34 @@ public class LocalDataServiceImpl {
         if (!Util.isNullOrEmptyList(list))
             DrugItem.deleteInTx(list);
     }
+
+    public void addDrugsList(List<Drug> drugsList) {
+        try {
+            for (Drug drug : drugsList) {
+                if (drug.getDiscarded())
+                    removeFromRecentlyPrescribed(drug.getUniqueId());
+                addDrug(drug, true);
+            }
+        } catch (Exception e) {
+            Log.i(null, "Error in saving in transaction " + e.getMessage());
+        }
+    }
+
+    private void removeFromRecentlyPrescribed(String uniqueId) {
+        deleteAllFrom(DrugItemRecentlyPrescribed.class, LocalDatabaseUtils.KEY_DRUG_ID, uniqueId);
+    }
+
+    public void addDrug(Drug drug, boolean isDrugFromGetDrugsListAPI) {
+        if (drug.getDrugType() != null) {
+            if (!Util.isNullOrEmptyList(drug.getGenericNames()))
+                drug.setGenericNamesJsonString(new Gson().toJson(drug.getGenericNames()));
+            drug.setIsDrugFromGetDrugsList(isDrugFromGetDrugsListAPI);
+            drug.setForeignDrugTypeId(drug.getDrugType().getUniqueId());
+            drug.getDrugType().save();
+        }
+        drug.save();
+    }
+
 
     public void addDrug(Drug drug) {
         if (drug.getDrugType() != null) {
@@ -3803,6 +3947,256 @@ public class LocalDataServiceImpl {
         treatmentService.setFieldsRequiredJsonString(getJsonFromObject(treatmentService.getFieldsRequired()));
         treatmentService.save();
     }
+
+
+    public void addInvoiceList(ArrayList<Invoice> invoiceArrayList) {
+        for (Invoice invoice :
+                invoiceArrayList) {
+            addInvoice(invoice);
+        }
+    }
+
+    public void addInvoice(Invoice invoice) {
+        deleteInvoiceIfAlreadyExists(LocalDatabaseUtils.KEY_UNIQUE_ID, invoice.getUniqueId());
+        invoice.setTotalDiscountJsonString(getJsonFromObject(invoice.getTotalDiscount()));
+        invoice.setTotalTaxJsonString(getJsonFromObject(invoice.getTotalTax()));
+        invoice.setReceiptIdsJsonString(getJsonFromObject(invoice.getReceiptIds()));
+        if (!Util.isNullOrEmptyList(invoice.getReceiptIds())) {
+            LogUtils.LOGD(TAG, "Receipt Ids : " + invoice.getReceiptIds().size());
+            LogUtils.LOGD(TAG, "Receipt Ids JsonString : " + invoice.getReceiptIdsJsonString());
+        }
+        if (!Util.isNullOrEmptyList(invoice.getInvoiceItems())) {
+            deleteAllFrom(InvoiceItem.class, LocalDatabaseUtils.KEY_INVOICE_ID, invoice.getUniqueId());
+            for (InvoiceItem invoiceItem :
+                    invoice.getInvoiceItems()) {
+                addInvoiceItem(invoice.getUniqueId(), invoiceItem);
+            }
+        }
+        invoice.save();
+    }
+
+    private void deleteInvoiceIfAlreadyExists(String key, String value) {
+        Invoice.deleteAll(Invoice.class, key + "= ?", value);
+    }
+
+    private void addInvoiceItem(String invoiceId, InvoiceItem invoiceItem) {
+        invoiceItem.setInvoiceId(invoiceId);
+        invoiceItem.setDiscountJsonString(getJsonFromObject(invoiceItem.getDiscount()));
+        invoiceItem.setTaxJsonString(getJsonFromObject(invoiceItem.getTax()));
+        invoiceItem.setTreatmentFieldsJsonString(getJsonFromObject(invoiceItem.getTreatmentFields()));
+        invoiceItem.setQuantityJsonString(getJsonFromObject(invoiceItem.getQuantity()));
+        invoiceItem.save();
+    }
+
+    public void updateInvoice(Invoice invoice) {
+        addInvoice(invoice);
+    }
+
+
+    public VolleyResponseBean getInvoiceList(WebServiceType webServiceType, String doctorId, String foreignLocationId,
+                                             String foreignHospitalId, String selectedPatientId, int pageNum, int maxSize,
+                                             Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
+        volleyResponseBean.setWebServiceType(webServiceType);
+        volleyResponseBean.setIsDataFromLocal(true);
+        volleyResponseBean.setIsUserOnline(HealthCocoConstants.isNetworkOnline);
+        try {
+            List<Invoice> list = getInvoiceListPageWise(doctorId, foreignLocationId, foreignHospitalId, pageNum, maxSize, selectedPatientId);
+            volleyResponseBean.setDataList(getObjectsListFromMap(list));
+            if (responseListener != null)
+                responseListener.onResponse(volleyResponseBean);
+        } catch (Exception e) {
+            e.printStackTrace();
+            showErrorLocal(volleyResponseBean, errorListener);
+        }
+        return volleyResponseBean;
+    }
+
+    private List<Invoice> getInvoiceListPageWise(String doctorId, String locationId, String hospitalId, int pageNum, int maxSize, String selectedPatientId) {
+
+        String whereCondition = "Select * from " + StringUtil.toSQLName(Invoice.class.getSimpleName())
+                + " where "
+                + LocalDatabaseUtils.KEY_PATIENT_ID + "=\"" + selectedPatientId + "\"";
+        whereCondition = whereCondition + " AND "
+                + LocalDatabaseUtils.KEY_DOCTOR_ID + "=\"" + doctorId + "\""
+                + " AND "
+                + LocalDatabaseUtils.KEY_HOSPITAL_ID + "=\"" + hospitalId + "\""
+                + " AND "
+                + LocalDatabaseUtils.KEY_LOCATION_ID + "=\"" + locationId + "\"";
+        String conditionsLimit = " ORDER BY " + LocalDatabaseUtils.KEY_CREATED_TIME + " DESC "
+                + " LIMIT " + maxSize
+                + " OFFSET " + (pageNum * maxSize);
+
+        whereCondition = whereCondition + conditionsLimit;
+        LogUtils.LOGD(TAG, "Select Query " + whereCondition);
+        List<Invoice> list = SugarRecord.findWithQuery(Invoice.class, whereCondition);
+        if (!Util.isNullOrEmptyList(list)) {
+            for (Invoice invoice : list) {
+                getInvoiceDetail(invoice);
+            }
+            return list;
+        }
+        return null;
+    }
+
+    private void getInvoiceDetail(Invoice invoice) {
+        invoice.setInvoiceItems(getInvoiceItemList(invoice.getUniqueId()));
+        invoice.setTotalDiscount((UnitValue) getObjectFromJson(UnitValue.class, invoice.getTotalDiscountJsonString()));
+        invoice.setTotalTax((UnitValue) getObjectFromJson(UnitValue.class, invoice.getTotalTaxJsonString()));
+        invoice.setReceiptIds((ArrayList<String>) (Object) getObjectsListFronJson(String.class, invoice.getReceiptIdsJsonString()));
+    }
+
+    private List<InvoiceItem> getInvoiceItemList(String invoiceId) {
+        Select<InvoiceItem> selectQuery = Select.from(InvoiceItem.class)
+                .where(Condition.prop(LocalDatabaseUtils.KEY_INVOICE_ID).eq(invoiceId));
+        List<InvoiceItem> list = selectQuery.list();
+        if (!Util.isNullOrEmptyList(list))
+            for (InvoiceItem invoiceItem : list) {
+                getInvoiceItemDetail(invoiceItem);
+            }
+        return list;
+    }
+
+    private void getInvoiceItemDetail(InvoiceItem invoiceItem) {
+        invoiceItem.setDiscount((Discount) getObjectFromJson(Discount.class, invoiceItem.getDiscountJsonString()));
+        invoiceItem.setTax((Discount) getObjectFromJson(Discount.class, invoiceItem.getTaxJsonString()));
+        invoiceItem.setTreatmentFields((ArrayList<TreatmentFields>) (Object) getObjectsListFronJson(TreatmentFields.class, invoiceItem.getTreatmentFieldsJsonString()));
+        invoiceItem.setQuantity((Quantity) getObjectFromJson(Quantity.class, invoiceItem.getQuantityJsonString()));
+    }
+
+    public VolleyResponseBean getInvoiceSortedList(WebServiceType webServiceType, String doctorId, String foreignLocationId,
+                                                   String foreignHospitalId, String selectedPatientId,
+                                                   Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
+        volleyResponseBean.setWebServiceType(webServiceType);
+        volleyResponseBean.setIsDataFromLocal(true);
+        volleyResponseBean.setIsUserOnline(HealthCocoConstants.isNetworkOnline);
+        try {
+            List<Invoice> list = getSelectedInvoiceList(doctorId, foreignLocationId, foreignHospitalId, selectedPatientId);
+            volleyResponseBean.setDataList(getObjectsListFromMap(list));
+            if (responseListener != null)
+                responseListener.onResponse(volleyResponseBean);
+        } catch (Exception e) {
+            e.printStackTrace();
+            showErrorLocal(volleyResponseBean, errorListener);
+        }
+        return volleyResponseBean;
+    }
+
+    public void addReceiptList(ArrayList<ReceiptResponse> receiptResponses) {
+        for (ReceiptResponse receiptResponse :
+                receiptResponses) {
+            addReceipt(receiptResponse);
+        }
+    }
+
+    private List<Invoice> getSelectedInvoiceList(String doctorId, String locationId, String hospitalId, String selectedPatientId) {
+        String whereCondition = "Select * from " + StringUtil.toSQLName(Invoice.class.getSimpleName())
+                + " where "
+                + LocalDatabaseUtils.KEY_PATIENT_ID + "=\"" + selectedPatientId + "\"";
+        whereCondition = whereCondition + " AND "
+                + LocalDatabaseUtils.KEY_DOCTOR_ID + "=\"" + doctorId + "\""
+                + " AND "
+                + LocalDatabaseUtils.KEY_HOSPITAL_ID + "=\"" + hospitalId + "\""
+                + " AND "
+                + LocalDatabaseUtils.KEY_LOCATION_ID + "=\"" + locationId + "\""
+                + " AND "
+                + LocalDatabaseUtils.KEY_BALANCE_AMOUNT + ">" + 0;
+
+        LogUtils.LOGD(TAG, "Select Query " + whereCondition);
+        List<Invoice> list = SugarRecord.findWithQuery(Invoice.class, whereCondition);
+        if (!Util.isNullOrEmptyList(list)) {
+            for (Invoice invoice : list) {
+                getInvoiceDetail(invoice);
+            }
+            return list;
+        }
+        return null;
+    }
+
+
+    public void updateReceipt(ReceiptResponse receiptResponse) {
+        addReceipt(receiptResponse);
+    }
+
+
+    public void addReceipt(ReceiptResponse receiptResponse) {
+        deleteReceiptIfAlreadyExists(LocalDatabaseUtils.KEY_UNIQUE_ID, receiptResponse.getUniqueId());
+        if (!Util.isNullOrEmptyList(receiptResponse.getAdvanceReceiptIdWithAmounts())) {
+            for (AdvanceReceiptIdWithAmountsResponse advanceReceiptIdWithAmountsResponse :
+                    receiptResponse.getAdvanceReceiptIdWithAmounts()) {
+                addAdvanceReceiptItem(receiptResponse.getUniqueId(), advanceReceiptIdWithAmountsResponse);
+            }
+        }
+        receiptResponse.save();
+    }
+
+    private void addAdvanceReceiptItem(String uniqueId, AdvanceReceiptIdWithAmountsResponse advanceReceiptIdWithAmountsResponse) {
+        advanceReceiptIdWithAmountsResponse.setCustomUniqueId(uniqueId);
+        advanceReceiptIdWithAmountsResponse.save();
+    }
+
+    private void deleteReceiptIfAlreadyExists(String key, String value) {
+        ReceiptResponse.deleteAll(ReceiptResponse.class, key + "= ?", value);
+    }
+
+    public VolleyResponseBean getReceiptList(WebServiceType webServiceType, String doctorId, String foreignLocationId,
+                                             String foreignHospitalId, String selectedPatientId, int pageNum, int maxSize,
+                                             Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
+        volleyResponseBean.setWebServiceType(webServiceType);
+        volleyResponseBean.setIsDataFromLocal(true);
+        volleyResponseBean.setIsUserOnline(HealthCocoConstants.isNetworkOnline);
+        try {
+            List<ReceiptResponse> list = getReceiptListPageWise(doctorId, foreignLocationId, foreignHospitalId, pageNum, maxSize, selectedPatientId);
+            volleyResponseBean.setDataList(getObjectsListFromMap(list));
+            if (responseListener != null)
+                responseListener.onResponse(volleyResponseBean);
+        } catch (Exception e) {
+            e.printStackTrace();
+            showErrorLocal(volleyResponseBean, errorListener);
+        }
+        return volleyResponseBean;
+    }
+
+    private List<ReceiptResponse> getReceiptListPageWise(String doctorId, String locationId, String hospitalId, int pageNum, int maxSize, String selectedPatientId) {
+
+        String whereCondition = "Select * from " + StringUtil.toSQLName(ReceiptResponse.class.getSimpleName())
+                + " where "
+                + LocalDatabaseUtils.KEY_PATIENT_ID + "=\"" + selectedPatientId + "\"";
+        whereCondition = whereCondition + " AND "
+                + LocalDatabaseUtils.KEY_DOCTOR_ID + "=\"" + doctorId + "\""
+                + " AND "
+                + LocalDatabaseUtils.KEY_HOSPITAL_ID + "=\"" + hospitalId + "\""
+                + " AND "
+                + LocalDatabaseUtils.KEY_LOCATION_ID + "=\"" + locationId + "\"";
+        String conditionsLimit = " ORDER BY " + LocalDatabaseUtils.KEY_CREATED_TIME + " DESC "
+                + " LIMIT " + maxSize
+                + " OFFSET " + (pageNum * maxSize);
+
+        whereCondition = whereCondition + conditionsLimit;
+        LogUtils.LOGD(TAG, "Select Query " + whereCondition);
+        List<ReceiptResponse> list = SugarRecord.findWithQuery(ReceiptResponse.class, whereCondition);
+        if (!Util.isNullOrEmptyList(list)) {
+            for (ReceiptResponse receiptResponse : list) {
+                getReceiptResponseDetail(receiptResponse);
+            }
+            return list;
+        }
+        return null;
+    }
+
+    private void getReceiptResponseDetail(ReceiptResponse receiptResponse) {
+        receiptResponse.setAdvanceReceiptIdWithAmounts(getReceiptResponseItemList(receiptResponse.getUniqueId()));
+    }
+
+    private List<AdvanceReceiptIdWithAmountsResponse> getReceiptResponseItemList(String uniqueId) {
+        Select<AdvanceReceiptIdWithAmountsResponse> selectQuery = Select.from(AdvanceReceiptIdWithAmountsResponse.class)
+                .where(Condition.prop(LocalDatabaseUtils.KEY_CUSTOM_UNIQUE_ID).eq(uniqueId));
+        List<AdvanceReceiptIdWithAmountsResponse> list = selectQuery.list();
+        return list;
+    }
+
 
     public void addClinicalNotesList(ArrayList<ClinicalNotes> clinicalNotesList) {
         try {

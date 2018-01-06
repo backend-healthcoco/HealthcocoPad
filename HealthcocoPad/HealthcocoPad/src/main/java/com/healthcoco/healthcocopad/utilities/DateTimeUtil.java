@@ -15,6 +15,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -39,6 +41,14 @@ public class DateTimeUtil {
             // give date time with 24hr format(use "dd/MM/yyyy HH:mm a" for 12 hr
             // format )
             return new SimpleDateFormat("dd/MM/yyyy HH:mm").format(new Date(date));
+        return null;
+    }
+
+    public static String getFormatedDateAndTime(String format, Long date) {
+        if (date != null)
+            // give date time with 24hr format(use "dd/MM/yyyy HH:mm a" for 12 hr
+            // format )
+            return new SimpleDateFormat(format, Locale.ENGLISH).format(new Date(date));
         return null;
     }
 
@@ -331,6 +341,31 @@ public class DateTimeUtil {
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
         String currentDateTime = sdf.format(c.getTime());
         return currentDateTime;
+    }
+
+    public static Calendar getCalendarInstance() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeZone(TimeZone.getDefault());
+        return calendar;
+    }
+
+
+    public static String getFormattedDate(String format, int year, int monthOfYear, int dayOfMonth, int hour, int minute, int seconds) {
+        Calendar calendar = getCalendarInstance();
+        if (year == 0)
+            year = calendar.get(Calendar.YEAR);
+        if (monthOfYear == 0)
+            monthOfYear = calendar.get(Calendar.MONTH);
+        if (dayOfMonth == 0)
+            dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+        if (hour == 0)
+            hour = calendar.get(Calendar.HOUR);
+        if (minute == 0)
+            minute = calendar.get(Calendar.MINUTE);
+        if (seconds == 0)
+            seconds = calendar.get(Calendar.SECOND);
+        calendar.set(year, monthOfYear, dayOfMonth, hour, minute, seconds);
+        return (String) DateFormat.format(format, calendar.getTime());
     }
 
     public static List<Long> getFormattedDatesBetween(Long fromMilli, Long toMilli) {

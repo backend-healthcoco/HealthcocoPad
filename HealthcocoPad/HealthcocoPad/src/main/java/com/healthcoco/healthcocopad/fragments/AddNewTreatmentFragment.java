@@ -237,15 +237,9 @@ public class AddNewTreatmentFragment extends HealthCocoFragment implements Local
         }
     }
 
-//    public void refreshListViewUpdatedTreatmentList() {
-//        selectedTreatmentsListFragment.modifyTreatmentsList();
-//        setModifiedValues();
-//    }
-
     public void validateData() {
         int msgId = getBlankTreatmentMsg();
         if (msgId == 0) {
-//            refreshListViewUpdatedTreatmentList();
             addTreatment();
         } else {
             Util.showToast(mActivity, msgId);

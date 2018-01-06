@@ -10,6 +10,7 @@ public class TotalTreatmentCostDiscountValues {
     private double totalCost;
     private double totalDiscount;
     private double totalGrandTotal;
+    private double totalTax;
 
     public double getTotalCost() {
         return totalCost;
@@ -33,5 +34,13 @@ public class TotalTreatmentCostDiscountValues {
 
     public void setTotalGrandTotal(double totalGrandTotal) {
         this.totalGrandTotal = totalGrandTotal;
+    }
+
+    public double getTotalTax() {
+        return totalTax;
+    }
+
+    public void setTotalTax(double totalTax) {
+        this.totalTax = totalTax;
     }
 }

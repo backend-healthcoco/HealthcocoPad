@@ -94,13 +94,14 @@ public class AddClinicalNotesVisitNormalFragment extends HealthCocoFragment impl
     private AddVisitSuggestionsFragment addVisitSuggestionsFragment;
     private AddClinicalNotesSubFragment addClinicalNotesFragment;
     private View selectedViewForSuggestionsList;
+    private View selectedView;
     private SuggestionType selectedSuggestionType = null;
     private String visitId;
     private String clinicalNoteId;
     private boolean receiversRegistered;
     private List<ClinicalNotes> clinicalNotesList;
     private boolean isFromClone;
-    private boolean isOnItemClick = false;
+    private boolean isOnItemClick = true;
     BroadcastReceiver onSuggestionItemClickReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, final Intent intent) {
@@ -414,17 +415,21 @@ public class AddClinicalNotesVisitNormalFragment extends HealthCocoFragment impl
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_UP:
-                LogUtils.LOGD(TAG, "Action UP");
-                break;
-            case MotionEvent.ACTION_DOWN:
-                requestFocus(v);
-                LogUtils.LOGD(TAG, "Action DOWN");
-                break;
+        if (v instanceof EditText) {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_UP:
+                    LogUtils.LOGD(TAG, "Action UP");
+                    break;
+                case MotionEvent.ACTION_DOWN:
+                    requestFocus(v);
+                    selectedView = v;
+                    LogUtils.LOGD(TAG, "Action DOWN");
+                    break;
+            }
         }
         return false;
     }
+
 
     public void requestFocus(View v) {
         if (selectedSuggestionType != null) {
@@ -647,8 +652,8 @@ public class AddClinicalNotesVisitNormalFragment extends HealthCocoFragment impl
                 break;
         }
 
-        if (selectedViewForSuggestionsList != null && selectedViewForSuggestionsList instanceof EditText && !Util.isNullOrBlank(text)) {
-            EditText editText = ((EditText) selectedViewForSuggestionsList);
+        if (selectedView != null && selectedView instanceof EditText && !Util.isNullOrBlank(text)) {
+            EditText editText = ((EditText) selectedView);
             isOnItemClick = true;
             String textBeforeComma = getTextBeforeLastOccuranceOfCharacter(Util.getValidatedValueOrBlankWithoutTrimming(editText));
             if (!Util.isNullOrBlank(textBeforeComma))

@@ -273,7 +273,7 @@ public class DrugListFragment extends HealthCocoFragment implements
     }
 
     @Override
-    public void onSaveClicked(Drug drug) {
+    public void onSaveClicked(Object drugObject) {
 
     }
 }

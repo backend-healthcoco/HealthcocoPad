@@ -59,14 +59,38 @@
             android:textColor="@color/black"
             android:textSize="15sp" />
 
-        <ImageButton
+
+        <LinearLayout
             android:id="@+id/bt_add_new"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:background="@android:color/transparent"
-            android:paddingLeft="20dp"
-            android:paddingRight="10dp"
-            android:src="@drawable/icon_history_selected" />
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/item_visits_button_margin_8dp"
+            android:background="@drawable/selector_rounded_corners_btn_grey_selector"
+            android:gravity="center"
+            android:padding="5dp"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawablePadding="5dp"
+                android:gravity="center|start"
+                android:paddingBottom="1dp"
+                android:paddingLeft="@dimen/item_visits_button_margin_8dp"
+                android:paddingRight="@dimen/item_visits_button_margin_8dp"
+                android:text="ADD"
+                android:textColor="@drawable/text_selector_grey_blue"
+                android:textSize="@dimen/text_size_initial_alphabet_clinic_list" />
+        </LinearLayout>
+
+        <!--  <ImageButton
+              android:id="@+id/bt_add_new"
+              android:layout_width="wrap_content"
+              android:layout_height="match_parent"
+              android:background="@android:color/transparent"
+              android:paddingLeft="20dp"
+              android:paddingRight="10dp"
+              android:src="@drawable/icon_history_selected" />-->
     </LinearLayout>
 
     <RelativeLayout
@@ -80,9 +104,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
+            android:text="@string/no_list_available"
             android:textSize="@dimen/text_size_no_results"
             android:textStyle="bold"
-            android:text="@string/no_list_available"
             android:visibility="visible" />
 
         <com.healthcoco.healthcocopad.views.GridViewLoadMore

@@ -112,7 +112,7 @@ public class TreatmentDetailItemViewholder extends LinearLayout {
         PatientTreatmentStatus status = null;
         status = treatmentItem.getStatus();
         if (status != null)
-            tvStatus.setText(status.toString());
+            tvStatus.setText(status.getTreamentStatus());
         else tvStatus.setText(getResources().getString(R.string.no_text_dash));
 
         //set Total Cost

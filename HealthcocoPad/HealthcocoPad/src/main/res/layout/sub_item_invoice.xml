@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="@dimen/item_padding">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2.5"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+                    android:id="@+id/textview_fontawesome_invoice_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/fa_product"
+                    android:textColor="@color/black_greyish"
+                    android:textSize="@dimen/text_size_drug_child_lable" />
+
+                <TextView
+                    android:id="@+id/tv_text_invoice_type_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:textColor="@color/black_greyish"
+                    android:textSize="@dimen/text_size_drug_child_lable" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_treatment_tooth_no"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tooth_no_with_colon"
+                    android:textColor="@color/grey_dark_text"
+                    android:textSize="@dimen/text_size_menu_notif_no"
+                    android:textStyle="italic" />
+
+                <TextView
+                    android:id="@+id/tv_tooth_numbers"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/grey_dark_text"
+                    android:textSize="@dimen/text_size_menu_notif_no"
+                    android:textStyle="italic" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_treatment_material"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/material_with_colon"
+                    android:textColor="@color/black_greyish"
+                    android:textSize="@dimen/text_size_menu_notif_no"
+                    android:textStyle="italic" />
+
+                <TextView
+                    android:id="@+id/tv_tooth_material"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black_greyish"
+                    android:textSize="@dimen/text_size_menu_notif_no"
+                    android:textStyle="italic" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/tv_qty_per_day"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="1"
+            android:textColor="@color/black_greyish"
+            android:textSize="@dimen/text_size_drug_child_lable" />
+
+        <TextView
+            android:id="@+id/tv_cost"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="\u20B9"
+            android:textColor="@color/black_greyish"
+            android:textSize="@dimen/text_size_drug_child_lable" />
+
+        <TextView
+            android:id="@+id/tv_discount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="0 %"
+            android:textColor="@color/black_greyish"
+            android:textSize="@dimen/text_size_drug_child_lable" />
+
+        <TextView
+            android:id="@+id/tv_tax"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.75"
+            android:gravity="center"
+            android:text="0 %"
+            android:textColor="@color/black_greyish"
+            android:textSize="@dimen/text_size_drug_child_lable" />
+
+        <TextView
+            android:id="@+id/tv_text_invoice_status"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1.3"
+            android:gravity="center"
+            android:text="--"
+            android:textColor="@color/black_greyish"
+            android:textSize="@dimen/text_size_drug_child_lable" />
+
+        <TextView
+            android:id="@+id/tv_total_ruppes"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Rs.200"
+            android:textColor="@color/black_greyish"
+            android:textSize="@dimen/text_size_drug_child_lable" />
+
+    </LinearLayout>
+
+</LinearLayout>

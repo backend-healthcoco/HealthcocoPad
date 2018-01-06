@@ -15,6 +15,8 @@ import java.util.Map;
  * Created by Shreshtha on 21-01-2017.
  */
 public class LocalDatabaseUtils {
+
+    public static final String KEY_SYNC_ALL_TYPE = "sync_all_type";
     public static final String KEY_FOREIGN_CUSTOM_HISTORY_ID = "foreign_custom_history_id";
     public static final String ID = "\"id\"";
     public static final String ID_REPLACED = "\"uniqueId\"";
@@ -30,6 +32,7 @@ public class LocalDatabaseUtils {
     public static final String KEY_FOREIGN_CLINICAL_NOTES_ID = "foreign_clinical_notes_id";
     public static final String KEY_TREATMENT_ID = "treatment_id";
     public static final String KEY_TREATMENT_ITEM_ID = "treatment_item_id";
+    public static final String KEY_INVOICE_ID = "invoice_id";
     public static final String KEY_FOREIGN_TEMPLATE_ID = "foreign_template_id";
     public static final String KEY_FOREIGN_TABLE_KEY = "foreign_table_key";
     public static final String KEY_IS_FROM_CALENDAR_API = "is_from_calendar_api";
@@ -101,6 +104,8 @@ public class LocalDatabaseUtils {
     public static final String KEY_OBSERVATION = "observation";
     public static final String KEY_INVESTIGATION = "investigation";
     public static final String KEY_DIAGNOSIS = "diagnosis";
+    public static final String KEY_BALANCE_AMOUNT = "balance_amount";
+    public static final String KEY_DRUG_ID = "drug_id";
     private static final String TAG = LocalDatabaseUtils.class.getSimpleName();
     public static String KEY_FOREIGN_ROLE_ID = "foreign_role_id";
 

@@ -41,4 +41,6 @@
     <color name="grey_widget_background">#e6e6e6</color>
     <color name="grey_widget_background_translucent">#d9d9d9</color>
     <color name="grey_header">#F0F0F0</color>
+    <color name="blue_translucent_lighter">#302754a3</color>
+
 </resources>
