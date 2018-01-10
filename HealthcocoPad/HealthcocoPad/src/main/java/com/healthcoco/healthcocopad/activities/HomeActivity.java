@@ -65,8 +65,9 @@ import com.healthcoco.healthcocopad.views.SlidingPaneDrawerLayout;
 public class HomeActivity extends HealthCocoActivity implements View.OnClickListener, GsonRequest.ErrorListener,
         LocalDoInBackgroundListenerOptimised, Response.Listener<VolleyResponseBean> {
     public static final String INTENT_SYNC_SUCCESS = "com.healthcoco.INITIAL_SYNC_SUCCESS";
+    public static final int REQUEST_PERMISSIONS = 101;
+    public static final int REQUEST_CALL_PERMISSIONS = 102;
     private static final int MENU_SELECTION_TIME = 500;
-
     private ImageButton btMenu;
     private TextView tvTitle;
     private DrawerLayout drawerLayout;
@@ -81,7 +82,14 @@ public class HomeActivity extends HealthCocoActivity implements View.OnClickList
     private MenuDrawerFragment menuFragment;
     private ContactsListFragment contactsFragment;
     private FilterFragment filterFragment;
-    public static final int REQUEST_PERMISSIONS = 101;
+    BroadcastReceiver initialSyncSuccessreceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, final Intent intent) {
+            if (intent.getAction() != null && intent.getAction().equals(INTENT_SYNC_SUCCESS)) {
+                refreshFragments();
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -282,7 +290,6 @@ public class HomeActivity extends HealthCocoActivity implements View.OnClickList
         startActivity(intent);
     }
 
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -305,15 +312,6 @@ public class HomeActivity extends HealthCocoActivity implements View.OnClickList
         super.onDestroy();
         LocalBroadcastManager.getInstance(this).unregisterReceiver(initialSyncSuccessreceiver);
     }
-
-    BroadcastReceiver initialSyncSuccessreceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, final Intent intent) {
-            if (intent.getAction() != null && intent.getAction().equals(INTENT_SYNC_SUCCESS)) {
-                refreshFragments();
-            }
-        }
-    };
 
     public void initFragments() {
         initMenuFragment();

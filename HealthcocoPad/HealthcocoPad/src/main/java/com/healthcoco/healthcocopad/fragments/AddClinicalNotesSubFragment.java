@@ -90,6 +90,7 @@ public class AddClinicalNotesSubFragment extends HealthCocoFragment implements V
     private boolean isFromClone;
     private List<ClinicalNotes> clinicalNotesList;
     private String clinicalNoteId;
+    private boolean isInitialLoading = true;
 
 
     @Override
@@ -656,6 +657,7 @@ public class AddClinicalNotesSubFragment extends HealthCocoFragment implements V
                     break;
             }
         }
+        isInitialLoading = false;
         mActivity.hideLoading();
     }
 
@@ -681,5 +683,9 @@ public class AddClinicalNotesSubFragment extends HealthCocoFragment implements V
     @Override
     public void onPostExecute(VolleyResponseBean aVoid) {
 
+    }
+
+    public boolean isInitialLoading() {
+        return isInitialLoading;
     }
 }

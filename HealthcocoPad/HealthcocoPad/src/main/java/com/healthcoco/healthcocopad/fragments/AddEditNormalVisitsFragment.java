@@ -219,7 +219,7 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
                 addFragment(addEditNormalVisitPrescriptionFragment, R.string.prescriptions, false);
                 addFragment(addNewTreatmentFragment, R.string.treatment, true);
                 tabs.setVisibility(View.VISIBLE);
-                flBtSwap.setVisibility(View.VISIBLE);
+//                flBtSwap.setVisibility(View.VISIBLE);
                 break;
 
             case PATIENT_DETAIL_CLINICAL_NOTES:
@@ -343,10 +343,11 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
                         if (!Util.isNullOrBlank(visitId)) {
                             new LocalDataBackgroundtaskOptimised(mActivity, GET_VISIT_DETAILS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                             return;
+                        } else {
+                            initTabsAndViewPagerFragments(null);
+                            refreshDoctorClinicText();
+                            initSelectedDoctorClinicData();
                         }
-                        initTabsAndViewPagerFragments(null);
-                        refreshDoctorClinicText();
-                        initSelectedDoctorClinicData();
                     }
                     break;
                 case ADD_VISIT:
@@ -439,7 +440,7 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
                     break;
                 case PATIENT_DETAIL_TREATMENT:
                     intent = new Intent(PatientTreatmentDetailFragment.INTENT_GET_TREATMENT_LIST_LOCAL);
-                    intent.putExtra(TAG_TREATMENT_ID, prescriptionId);
+                    intent.putExtra(TAG_TREATMENT_ID, treatmentId);
                     break;
             }
             LocalBroadcastManager.getInstance(mApp.getApplicationContext()).sendBroadcast(intent);
@@ -662,13 +663,13 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
         VisitDetails visitDetails = new VisitDetails();
         visitDetails.setLocationId(user.getForeignLocationId());
         visitDetails.setHospitalId(user.getForeignHospitalId());
+        visitDetails.setDoctorId(user.getUniqueId());
         visitDetails.setPatientId(HealthCocoConstants.SELECTED_PATIENTS_USER_ID);
         if (!Util.isNullOrBlank(visitId) && !isFromClone) {
             visitDetails.setVisitId(visitId);
         }
-        if (Util.isNullOrBlank(visitId) && !isFromClone) {
-            visitDetails.setDoctorId(user.getUniqueId());
-        }
+      /*  if (Util.isNullOrBlank(visitId) && !isFromClone) {
+        }*/
         if (blankClinicalNoteMsgId == 0) {
             visitDetails.setClinicalNote(addClinicalNotesVisitNormalFragment.getClinicalNoteToSendDetails());
             visitDetails.getClinicalNote().setDoctorId(user.getUniqueId());
@@ -709,21 +710,23 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
         if (user != null && RoleType.isAdmin(user.getRoleTypes())) {
             tvDoctorName.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.arrow_menu_down, 0);
             tvDoctorName.setEnabled(true);
-            lvDoctorName.setVisibility(View.VISIBLE);
+//            lvDoctorName.setVisibility(View.VISIBLE);
             refreshDoctorsList();
         }
         if ((!Util.isNullOrBlank(visitId)) || (!Util.isNullOrBlank(prescriptionId))) {
             tvDoctorName.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
             tvDoctorName.setEnabled(false);
             tvDoctorName.setClickable(false);
-            lvDoctorName.setVisibility(View.VISIBLE);
-            tvDoctorName.setText(Util.getValidatedValue(visit.getCreatedBy()));
+//            lvDoctorName.setVisibility(View.VISIBLE);
+            if (visit != null)
+                tvDoctorName.setText(Util.getValidatedValue(visit.getCreatedBy()));
         } else if (!Util.isNullOrBlank(treatmentId)) {
             tvDoctorName.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
             tvDoctorName.setEnabled(false);
             tvDoctorName.setClickable(false);
-            lvDoctorName.setVisibility(View.VISIBLE);
-            tvDoctorName.setText(Util.getValidatedValue(treatment.get(0).getCreatedBy()));
+//            lvDoctorName.setVisibility(View.VISIBLE);
+            if (treatment != null)
+                tvDoctorName.setText(Util.getValidatedValue(treatment.get(0).getCreatedBy()));
         }
     }
 

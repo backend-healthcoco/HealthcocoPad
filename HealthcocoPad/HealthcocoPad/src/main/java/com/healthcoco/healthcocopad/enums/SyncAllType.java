@@ -164,6 +164,13 @@ public enum SyncAllType {
     CLINICAL_NOTE_DIAGNOSIS_SUGGESTIONS(0, 0, false) {
         @Override
         public SyncAllType getNextSyncType(SyncAllType syncAllType) {
+            return SyncAllType.CLINICAL_NOTE_ADVICE_SUGGESTIONS;
+        }
+    },
+
+    CLINICAL_NOTE_ADVICE_SUGGESTIONS(0, 0, false) {
+        @Override
+        public SyncAllType getNextSyncType(SyncAllType syncAllType) {
             return SyncAllType.REFERENCES;
         }
     },

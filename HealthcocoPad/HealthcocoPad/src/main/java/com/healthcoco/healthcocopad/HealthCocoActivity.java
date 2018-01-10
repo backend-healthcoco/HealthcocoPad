@@ -108,6 +108,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.healthcoco.healthcocopad.activities.HomeActivity.REQUEST_CALL_PERMISSIONS;
 import static com.healthcoco.healthcocopad.activities.HomeActivity.REQUEST_PERMISSIONS;
 
 /**
@@ -1177,7 +1178,13 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
         if (ImageUtil.isDeviceSupportCamera(this)) {
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             Uri fileUri = ImageUtil.getOutputMediaFileUri(ImageUtil.MEDIA_TYPE_IMAGE);
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
+            } else {
+                File file = new File(fileUri.getPath());
+                Uri photoUri = FileProvider.getUriForFile(getApplicationContext(), getApplicationContext().getPackageName() + ".provider", file);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
+            }
 //// ******** code for crop image
 //            intent.putExtra("crop", "true");
 //            intent.putExtra("aspectX", 0);
@@ -1313,7 +1320,7 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                requestPermission();
+                requestCallPermission();
             }
         });
         alertBuilder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
@@ -1326,7 +1333,15 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
         alertBuilder.show();
     }
 
-    public void requestPermission() {
+    private void requestCallPermission() {
+        requestAppPermissions(new
+                String[]{android.Manifest.permission.CALL_PHONE,
+                android.Manifest.permission.PROCESS_OUTGOING_CALLS,
+        }, REQUEST_CALL_PERMISSIONS);
+    }
+
+
+    private void requestPermission() {
         requestAppPermissions(new
                 String[]{android.Manifest.permission.CALL_PHONE,
                 android.Manifest.permission.PROCESS_OUTGOING_CALLS,
@@ -1359,9 +1374,11 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
                 //                                          int[] grantResults)
                 // to handle the case where the user grants the permission. See the documentation
                 // for ActivityCompat#requestPermissions for more details.
+                startActivity(callIntent);
+            }
+            if (requestCode == REQUEST_CALL_PERMISSIONS)
+                startActivity(callIntent);
 
-                return;
-            } else startActivity(callIntent);
         } else {
 
         }

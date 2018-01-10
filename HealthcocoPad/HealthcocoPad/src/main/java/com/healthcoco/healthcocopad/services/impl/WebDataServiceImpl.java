@@ -1313,6 +1313,18 @@ public class WebDataServiceImpl implements GCMRefreshListener {
         }
     }
 
+    public void getPatientAmountDetails(Class<?> class1, WebServiceType webServiceType, String locationId, String hospitalId, String patientId,
+                                        Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        if (HealthCocoConstants.isNetworkOnline) {
+            String url = webServiceType.getUrl() + locationId + "/" + hospitalId + "/" + patientId;
+            getResponse(Request.Priority.IMMEDIATE, webServiceType, class1, url, null, null, responseListener,
+                    errorListener);
+        } else {
+            errorListener.onNetworkUnavailable(webServiceType);
+        }
+    }
+
+
     public void getAppointmentSlotsDetails(Class<?> class1, String doctorId, String locationId, String hospitalId, long date,
                                            Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         WebServiceType webServiceType = WebServiceType.GET_APPOINTMENT_TIME_SLOTS;

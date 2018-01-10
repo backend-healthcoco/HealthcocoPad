@@ -50,6 +50,7 @@ public class SelectedDiagramDetailFragment extends HealthCocoFragment implements
     private Diagram selectedDiagram;
     private User user;
     private boolean toggleStateFromPreferences;
+    private String selectedDiagramTag;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -103,6 +104,7 @@ public class SelectedDiagramDetailFragment extends HealthCocoFragment implements
     private void initData() {
         Intent intent = mActivity.getIntent();
         selectedDiagram = Parcels.unwrap(intent.getParcelableExtra(HealthCocoConstants.TAG_SELECTED_DIAGRAM));
+        selectedDiagramTag = intent.getStringExtra(HealthCocoConstants.TAG_DIAGRAM_TAG);
         if (selectedDiagram != null && !Util.isNullOrBlank(selectedDiagram.getDiagramUrl())) {
             mActivity.showLoading(false);
             String url = selectedDiagram.getDiagramUrl();
@@ -146,6 +148,8 @@ public class SelectedDiagramDetailFragment extends HealthCocoFragment implements
         Diagram diagram = new Diagram();
         diagram.setDoctorId(user.getUniqueId());
         diagram.setHospitalId(user.getForeignHospitalId());
+        if (!Util.isNullOrBlank(selectedDiagramTag))
+            diagram.setTags(selectedDiagramTag);
         diagram.setLocationId(user.getForeignLocationId());
         diagram.setFileExtension(ImageUtil.DEFAULT_IMAGE_EXTENSION);
         diagram.setDiagram(getFileDetails(diagramSelectedByteArray));

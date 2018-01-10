@@ -457,12 +457,12 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements T
             case R.id.bt_add_new:
                 if (suggestionType != null) {
                     switch (suggestionType) {
-                        case DRUGS:
+                      /*  case DRUGS:
                             AddNewDrugDialogFragment newDrugDialogFragment = new AddNewDrugDialogFragment(this);
                             newDrugDialogFragment.show(mActivity.getSupportFragmentManager(),
                                     newDrugDialogFragment.getClass().getSimpleName());
                             break;
-
+*/
                         case COMPLAINTS:
                         case OBSERVATION:
                         case INVESTIGATION:
@@ -505,7 +505,7 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements T
 
     @Override
     public void onSaveClicked(Object drug) {
-
+        refreshData(true);
     }
 
     @Override
@@ -705,7 +705,8 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements T
 
     @Override
     public void afterTextChange(View v, String s) {
-        addClinicalNotesVisitNormalFragment.refreshSuggestionsList(v, s);
+        if (!s.isEmpty())
+            addClinicalNotesVisitNormalFragment.refreshSuggestionsList(v, s);
     }
 
     @Override

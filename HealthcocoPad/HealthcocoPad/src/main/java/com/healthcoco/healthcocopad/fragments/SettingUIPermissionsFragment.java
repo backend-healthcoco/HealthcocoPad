@@ -47,6 +47,12 @@ import static com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType.SETTIN
  */
 public class SettingUIPermissionsFragment extends HealthCocoFragment implements AdapterView.OnItemClickListener, LocalDoInBackgroundListenerOptimised, View.OnClickListener {
     public static final String INTENT_REFRESH_UI_PERMISSIONS_FROM_LOCAL = "com.healthcoco.REFRESH_UI_PERMISSIONS_FROM_LOCAL";
+    BroadcastReceiver refreshUiPermissionsLocalReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, final Intent intent) {
+            getBothUserUIPermissionsFromLocal();
+        }
+    };
     private ListView lvSettingsUIPermission;
     private SettingsUIPermissionListAdapter adapter;
     private List<UIPermissionsItemType> permissionTypesList;
@@ -87,13 +93,6 @@ public class SettingUIPermissionsFragment extends HealthCocoFragment implements 
         LocalBroadcastManager.getInstance(mActivity).unregisterReceiver(refreshUiPermissionsLocalReceiver);
     }
 
-    BroadcastReceiver refreshUiPermissionsLocalReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, final Intent intent) {
-            getBothUserUIPermissionsFromLocal();
-        }
-    };
-
     @Override
     public void init() {
         initViews();
@@ -126,15 +125,15 @@ public class SettingUIPermissionsFragment extends HealthCocoFragment implements 
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         UIPermissionsItemType itemType = permissionTypesList.get(position);
         switch (itemType) {
-            case PRESCRIPTION_UI_PERMISSION:
-                openCommonOpenUpActivity(SETTINGS_UI_PERMISSION_PRESCRIPTION, itemType.ordinal());
-                break;
+//            case PRESCRIPTION_UI_PERMISSION:
+//                openCommonOpenUpActivity(SETTINGS_UI_PERMISSION_PRESCRIPTION, itemType.ordinal());
+//                break;
             case CLINICAL_NOTES:
                 openCommonOpenUpActivity(SETTINGS_UI_PERMISSION_CLINICAL_NOTES, itemType.ordinal());
                 break;
-            case VISITS:
-                openCommonOpenUpActivity(SETTINGS_UI_PERMISSION_VISITS, itemType.ordinal());
-                break;
+//            case VISITS:
+//                openCommonOpenUpActivity(SETTINGS_UI_PERMISSION_VISITS, itemType.ordinal());
+//                break;
 //            case PATIENT_TAB_PERMISSION:
 //                openCommonOpenUpActivity(CommonOpenUpFragmentType.SETTINGS_UI_PERMISSION_PATIENT_TAB, itemType.ordinal());
 //                break;
