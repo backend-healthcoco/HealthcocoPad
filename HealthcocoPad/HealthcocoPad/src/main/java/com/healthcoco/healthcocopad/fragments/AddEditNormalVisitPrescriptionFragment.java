@@ -103,7 +103,7 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
     private DrugListFragment drugListFragment;
     private EditText etDuration;
     private LinearLayout containerAdviceSuggestionsList;
-    private AddVisitSuggestionsFragment addVisitSuggestionsFragment;
+    private AddAdviseSuggestionsFragment addAdviseSuggestionsFragment;
     private EditText editAdvice;
     private LinearLayout containerDiagnosticTests;
     private ScrollViewWithHeaderNewPrescriptionLayout svContainer;
@@ -133,8 +133,8 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
     private LinearLayout parentLayoutTabs;
     private EditText etHeaderTwoDuration;
     private ImageButton btClear;
-    private AddEditNormalVisitsFragment addEditNormalVisitsFragment;
-    private AddClinicalNotesVisitNormalFragment addClinicalNotesVisitNormalFragment;
+    //    private AddEditNormalVisitsFragment addEditNormalVisitsFragment;
+//    private AddClinicalNotesVisitNormalFragment addClinicalNotesVisitNormalFragment;
     private boolean isFromClone;
     private boolean isFromVisit;
     private List<Prescription> prescriptionList;
@@ -225,9 +225,9 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
     }
 
     private void initSuggestionsFragment() {
-        addVisitSuggestionsFragment = new AddVisitSuggestionsFragment();
+        addAdviseSuggestionsFragment = new AddAdviseSuggestionsFragment();
         FragmentTransaction transaction = mFragmentManager.beginTransaction();
-        transaction.add(R.id.container_advice_suggestions_list, addVisitSuggestionsFragment, addVisitSuggestionsFragment.getClass().getSimpleName());
+        transaction.add(R.id.container_advice_suggestions_list, addAdviseSuggestionsFragment, addAdviseSuggestionsFragment.getClass().getSimpleName());
         transaction.commit();
     }
 
@@ -383,8 +383,8 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
                 containerAdviceSuggestionsList.setVisibility(View.GONE);
                 parentLayoutTabs.setVisibility(View.VISIBLE);
 
-                addEditNormalVisitsFragment = (AddEditNormalVisitsFragment) mFragmentManager.findFragmentByTag(AddEditNormalVisitsFragment.class.getSimpleName());
-                addClinicalNotesVisitNormalFragment = (AddClinicalNotesVisitNormalFragment) addEditNormalVisitsFragment.getCurrentTabFragment(0);
+//                addEditNormalVisitsFragment = (AddEditNormalVisitsFragment) mFragmentManager.findFragmentByTag(AddEditNormalVisitsFragment.class.getSimpleName());
+//                addClinicalNotesVisitNormalFragment = (AddClinicalNotesVisitNormalFragment) addEditNormalVisitsFragment.getCurrentTabFragment(0);
                 break;
             default:
                 break;
@@ -722,7 +722,7 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
     public void requestFocus(View v) {
         isOnItemClick = true;
         if (v.getId() == R.id.edit_advice) {
-            addVisitSuggestionsFragment.refreshTagOfEditText(SuggestionType.ADVICE);
+            addAdviseSuggestionsFragment.refreshTagOfEditText(SuggestionType.ADVICE);
         }
         refreshSuggestionsList(v, "");
     }
@@ -750,7 +750,7 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
             containerAdviceSuggestionsList.setVisibility(View.VISIBLE);
             parentLayoutTabs.setVisibility(View.GONE);
             try {
-                Intent intent = new Intent(AddVisitSuggestionsFragment.INTENT_LOAD_DATA);
+                Intent intent = new Intent(AddAdviseSuggestionsFragment.INTENT_LOAD_DATA);
                 intent.putExtra(AddVisitSuggestionsFragment.TAG_SEARCHED_TERM, searchTerm);
                 intent.putExtra(TAG_SUGGESTIONS_TYPE, selectedSuggestionType.ordinal());
                 LocalBroadcastManager.getInstance(mApp.getApplicationContext()).sendBroadcast(intent);

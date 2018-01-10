@@ -15,7 +15,7 @@
         android:gravity="center"
         android:orientation="horizontal">
 
-        <com.healthcoco.healthcocopad.custom.MyScriptEditText
+        <EditText
             android:id="@+id/edit_search"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -65,7 +65,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/item_visits_button_margin_8dp"
-            android:background="@drawable/selector_rounded_corners_btn_grey_selector"
+            android:background="@drawable/shape_rounded_corners_blue_border_solid_gray"
             android:gravity="center"
             android:padding="5dp"
             android:visibility="gone">
@@ -79,7 +79,7 @@
                 android:paddingLeft="@dimen/item_visits_button_margin_8dp"
                 android:paddingRight="@dimen/item_visits_button_margin_8dp"
                 android:text="ADD"
-                android:textColor="@drawable/text_selector_grey_blue"
+                android:textColor="@color/blue_action_bar"
                 android:textSize="@dimen/text_size_initial_alphabet_clinic_list" />
         </LinearLayout>
 

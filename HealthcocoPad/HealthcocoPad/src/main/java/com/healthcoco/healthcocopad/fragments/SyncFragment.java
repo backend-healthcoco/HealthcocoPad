@@ -21,6 +21,7 @@ import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.adapter.SyncAllAdapter;
 import com.healthcoco.healthcocopad.bean.UiPermissionsBoth;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
+import com.healthcoco.healthcocopad.bean.server.AdviceSuggestion;
 import com.healthcoco.healthcocopad.bean.server.ComplaintSuggestions;
 import com.healthcoco.healthcocopad.bean.server.DiagnosisSuggestions;
 import com.healthcoco.healthcocopad.bean.server.Diagram;
@@ -373,6 +374,12 @@ public class SyncFragment extends HealthCocoFragment implements View.OnClickList
                         latestUpdatedTimeDiagnosis, this, this);
                 break;
 
+            case CLINICAL_NOTE_ADVICE_SUGGESTIONS:
+                Long latestUpdatedTimeAdvice = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.ADVICE_SUGGESTIONS);
+                WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(AdviceSuggestion.class, WebServiceType.GET_SEARCH_ADVICE_SOLR, user.getUniqueId(),
+                        latestUpdatedTimeAdvice, this, this);
+                break;
+
             case DRUG_TYPE:
                 //getting drugTypesList
                 Long latestUpdatedTimeStrengthUnit = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.STRENGTH_UNIT);
@@ -688,6 +695,14 @@ public class SyncFragment extends HealthCocoFragment implements View.OnClickList
                         new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_DIAGNOSIS_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
                         return;
                     }
+                    syncNext(SyncAllType.CLINICAL_NOTE_DIAGNOSIS_SUGGESTIONS);
+                    return;
+                case GET_SEARCH_ADVICE_SOLR:
+//                    SyncAllType syncAllClinicalNotesData = SyncAllType.CLINICAL_NOTES_DATA;
+                    if (!response.isDataFromLocal() && !Util.isNullOrEmptyList(response.getDataList())) {
+                        new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_ADVICE_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                        return;
+                    }
                     break;
                 case GET_REFERENCE:
 //                    SyncAllType syncAllTypeReferences = SyncAllType.REFERENCES;
@@ -761,15 +776,12 @@ public class SyncFragment extends HealthCocoFragment implements View.OnClickList
                     break;
                 case GET_DRUG_DOSAGE:
                     syncAllType = SyncAllType.FREQUENCY;
-
                     break;
                 case GET_DIRECTION:
                     syncAllType = SyncAllType.DIRECTION;
-
                     break;
                 case GET_DIAGRAMS_LIST:
                     syncAllType = SyncAllType.NOTES_DIAGRAM;
-
                     break;
                 case GET_COMPLAINT_SUGGESTIONS:
                     syncAllType = SyncAllType.CLINICAL_NOTE_COMPLAINT_SUGGESTIONS;
@@ -781,6 +793,9 @@ public class SyncFragment extends HealthCocoFragment implements View.OnClickList
                     syncAllType = SyncAllType.CLINICAL_NOTE_INVESTIGATION_SUGGESTIONS;
                     break;
                 case GET_DIAGNOSIS_SUGGESTIONS:
+                    syncAllType = SyncAllType.CLINICAL_NOTE_DIAGNOSIS_SUGGESTIONS;
+                    break;
+                case GET_SEARCH_ADVICE_SOLR:
                     syncAllType = SyncAllType.CLINICAL_NOTES_DATA;
                     break;
                 case GET_REFERENCE:
@@ -872,7 +887,7 @@ public class SyncFragment extends HealthCocoFragment implements View.OnClickList
                 LocalDataServiceImpl.getInstance(mApp).
                         addSuggestionsList(WebServiceType.GET_DIAGNOSIS_SUGGESTIONS, LocalTabelType.DIAGNOSIS_SUGGESTIONS,
                                 response.getDataList(), null, null);
-                updateSyncObjectInHashMap(SyncAllType.CLINICAL_NOTES_DATA);
+//                updateSyncObjectInHashMap(SyncAllType.CLINICAL_NOTES_DATA);
                 break;
             case ADD_PRESENT_COMPLAINT_SUGGESTIONS:
                 if (!Util.isNullOrEmptyList(response.getDataList()))
@@ -975,6 +990,7 @@ public class SyncFragment extends HealthCocoFragment implements View.OnClickList
                     LocalDataServiceImpl.getInstance(mApp).
                             addSuggestionsList(WebServiceType.GET_SEARCH_ADVICE_SOLR, LocalTabelType.ADVICE_SUGGESTIONS,
                                     response.getDataList(), null, null);
+                updateSyncObjectInHashMap(SyncAllType.CLINICAL_NOTE_ADVICE_SUGGESTIONS);
                 break;
             case ADD_BOTH_USER_UI_PERMISSIONS:
                 if (response.getData() != null)

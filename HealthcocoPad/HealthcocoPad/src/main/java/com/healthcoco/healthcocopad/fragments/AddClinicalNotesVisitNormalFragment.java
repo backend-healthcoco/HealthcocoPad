@@ -685,7 +685,7 @@ public class AddClinicalNotesVisitNormalFragment extends HealthCocoFragment impl
     @Override
     public void afterTextChange(View v, String s) {
         if (isOnItemClick) {
-            if (v instanceof EditText) {
+            if (v instanceof EditText && !addClinicalNotesFragment.isInitialLoading()) {
                 refreshSuggestionsList(v, s);
             }
         }

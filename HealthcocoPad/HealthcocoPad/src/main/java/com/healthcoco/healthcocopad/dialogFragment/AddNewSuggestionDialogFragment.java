@@ -11,6 +11,7 @@ import com.android.volley.Response;
 import com.healthcoco.healthcocopad.HealthCocoDialogFragment;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
+import com.healthcoco.healthcocopad.bean.server.AdviceSuggestion;
 import com.healthcoco.healthcocopad.bean.server.ComplaintSuggestions;
 import com.healthcoco.healthcocopad.bean.server.DiagnosisSuggestions;
 import com.healthcoco.healthcocopad.bean.server.EcgDetailSuggestions;
@@ -119,12 +120,12 @@ public class AddNewSuggestionDialogFragment extends HealthCocoDialogFragment imp
             msg = getResources().getString((R.string.please_enter_suggestion));
 
         if (Util.isNullOrBlank(msg)) {
-            addTreatment(suggestion);
+            addSuggestion(suggestion);
         } else
             Util.showToast(mActivity, msg);
     }
 
-    private void addTreatment(String suggestion) {
+    private void addSuggestion(String suggestion) {
         switch (suggestionType) {
             case COMPLAINTS:
                 addComplaintSuggestions(suggestion);
@@ -186,16 +187,20 @@ public class AddNewSuggestionDialogFragment extends HealthCocoDialogFragment imp
             case INDICATION_OF_USG:
                 addIndicationUsgSuggestions(suggestion);
                 break;
-          /*  case ADVICE:
-                AdviceSuggestion adviceSuggestion = new AdviceSuggestion();
-                adviceSuggestion.setAdvice(suggestion);
-                adviceSuggestion.setDoctorId(user.getUniqueId());
-                adviceSuggestion.setHospitalId(user.getForeignHospitalId());
-                adviceSuggestion.setLocationId(user.getForeignLocationId());
-                mActivity.showLoading(false);
-                WebDataServiceImpl.getInstance(mApp).addSuggestion(AdviceSuggestion.class, WebServiceType.Add_, adviceSuggestion, this, this);
-                break;*/
+            case ADVICE:
+                addAdviceSuggestion(suggestion);
+                break;
         }
+    }
+
+    private void addAdviceSuggestion(String suggestion) {
+        AdviceSuggestion adviceSuggestion = new AdviceSuggestion();
+        adviceSuggestion.setAdvice(suggestion);
+        adviceSuggestion.setDoctorId(user.getUniqueId());
+        adviceSuggestion.setHospitalId(user.getForeignHospitalId());
+        adviceSuggestion.setLocationId(user.getForeignLocationId());
+        mActivity.showLoading(false);
+        WebDataServiceImpl.getInstance(mApp).addSuggestion(AdviceSuggestion.class, WebServiceType.ADD_ADVICE_SUGGESTIONS, adviceSuggestion, this, this);
     }
 
     private void addInvestigationSuggestions(String suggestion) {
@@ -540,12 +545,12 @@ public class AddNewSuggestionDialogFragment extends HealthCocoDialogFragment imp
                             addSuggestions(WebServiceType.GET_NOTES_SUGGESTIONS, LocalTabelType.NOTES_SUGGESTIONS,
                                     response.getData(), null, null);
                 break;
-//            case ADD_ADVICE_SUGGESTIONS:
-//                if (!Util.isNullOrEmptyList(response.getDataList()))
-//                    LocalDataServiceImpl.getInstance(mApp).
-//                            addSuggestionsList(WebServiceType.GET_SEARCH_ADVICE_SOLR, LocalTabelType.ADVICE_SUGGESTIONS,
-//                                    response.getDataList(), null, null);
-//                break;
+            case ADD_ADVICE_SUGGESTIONS:
+                if (response.isValidData(response))
+                    LocalDataServiceImpl.getInstance(mApp).
+                            addSuggestions(WebServiceType.GET_SEARCH_ADVICE_SOLR, LocalTabelType.ADVICE_SUGGESTIONS,
+                                    response.getData(), null, null);
+                break;
         }
         mActivity.hideLoading();
         addNewSuggestionListener.onSaveClicked(null);

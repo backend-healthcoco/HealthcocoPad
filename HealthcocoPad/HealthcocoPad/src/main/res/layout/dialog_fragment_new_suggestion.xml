@@ -27,8 +27,6 @@
         android:layout_marginRight="@dimen/fab_margin_bottom"
         android:layout_marginTop="@dimen/list_item_padding"
         android:hint="@string/add_suggestion_hint"
-        android:maxLines="1"
-        android:singleLine="true"
         android:textSize="@dimen/text_size_edit_otp_number" />
 
 

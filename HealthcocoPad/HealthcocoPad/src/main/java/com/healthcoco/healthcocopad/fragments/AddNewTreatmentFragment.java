@@ -123,7 +123,7 @@ public class AddNewTreatmentFragment extends HealthCocoFragment implements Local
     public void init() {
         initViews();
         initListeners();
-        initSelectedTreatmentsListFragment();
+//        initSelectedTreatmentsListFragment();
     }
 
     @Override
@@ -213,6 +213,7 @@ public class AddNewTreatmentFragment extends HealthCocoFragment implements Local
                     user = doctor.getUser();
                 selectedPatient = LocalDataServiceImpl.getInstance(mApp).getPatient(HealthCocoConstants.SELECTED_PATIENTS_USER_ID);
                 doctorProfile = LocalDataServiceImpl.getInstance(mApp).getDoctorProfileObject(user.getUniqueId());
+                initSelectedTreatmentsListFragment();
                 break;
         }
         if (volleyResponseBean == null)

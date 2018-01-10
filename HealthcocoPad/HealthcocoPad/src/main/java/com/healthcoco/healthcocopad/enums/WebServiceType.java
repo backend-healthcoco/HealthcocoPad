@@ -204,6 +204,8 @@ public enum WebServiceType {
 
     ADD_XRAY_DETAILS_SUGGESTIONS(Method.POST, "clinicalNotes/xRayDetails/add/"),
 
+    ADD_ADVICE_SUGGESTIONS(Method.POST, "prescription/advice/"),
+
     GET_PRESENT_COMPLAINT_SUGGESTIONS(Method.GET, "clinicalNotes/PRESENT_COMPLAINT/BOTH/" + HealthCocoConstants.PARAM_DISCARDED_TRUE),
 
     GET_COMPLAINT_SUGGESTIONS(Method.GET, "clinicalNotes/COMPLAINTS/BOTH/" + HealthCocoConstants.PARAM_DISCARDED_TRUE),

@@ -1,5 +1,6 @@
 package com.healthcoco.healthcocopad.viewholders;
 
+import android.text.InputFilter;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -184,6 +185,9 @@ public class SelectedTreatmentsItemsListViewholder extends HealthCocoViewHolder 
         tvTreatmentToothNo.setOnClickListener(this);
         tvTotalRuppes.addTextChangedListener(new HealthcocoTextWatcher(tvTotalRuppes, this));
         tvDiscountType.addTextChangedListener(new HealthcocoTextWatcher(tvDiscountType, this));
+
+        etDiscount.setFilters(new InputFilter[]{new InputFilter.LengthFilter(2)});
+
     }
 
     @Override
@@ -219,6 +223,11 @@ public class SelectedTreatmentsItemsListViewholder extends HealthCocoViewHolder 
                 tvDiscountType.setTag(object);
                 if (object instanceof UnitType) {
                     UnitType discountUnit = (UnitType) object;
+                    etDiscount.setText("");
+                    if (discountUnit == UnitType.INR)
+                        etDiscount.setFilters(new InputFilter[]{new InputFilter.LengthFilter(etCost.getText().length())});
+                    if (discountUnit == UnitType.PERCENT)
+                        etDiscount.setFilters(new InputFilter[]{new InputFilter.LengthFilter(2)});
                     tvDiscountType.setText(discountUnit.getSymbolId());
                     tvTotalRuppes.setText(String.valueOf(Util.formatDoubleNumber(getFinalCost())));
                 }

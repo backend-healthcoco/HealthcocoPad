@@ -223,7 +223,7 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
                     if (response.isDataFromLocal()) {
                         ArrayList<VisitDetails> responseList = (ArrayList<VisitDetails>) (ArrayList<?>) response
                                 .getDataList();
-                        visitsListHashMap.clear();
+                        if (isInitialLoading) visitsListHashMap.clear();
                         formHashMapAndRefresh(responseList);
                         if (Util.isNullOrEmptyList(responseList) || responseList.size() < MAX_SIZE || Util.isNullOrEmptyList(responseList))
                             isEndOfListAchieved = true;

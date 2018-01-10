@@ -45,6 +45,7 @@
                     android:layout_marginRight="@dimen/fab_margin_right"
                     android:scaleType="center"
                     android:src="@drawable/ic_swap_horiz_white"
+                    android:visibility="gone"
                     app:layout_anchorGravity="bottom|right|end" />
 
                 <android.support.v4.view.ViewPager

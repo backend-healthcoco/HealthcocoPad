@@ -20,6 +20,7 @@ import com.healthcoco.healthcocopad.enums.UnitType;
 import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
 import com.healthcoco.healthcocopad.utilities.DownloadImageFromUrlUtil;
 import com.healthcoco.healthcocopad.utilities.Util;
+import com.healthcoco.healthcocopad.views.TextViewFontAwesome;
 
 import java.util.List;
 
@@ -32,7 +33,7 @@ public class PopupListViewAdapter extends BaseAdapter {
     private PopupWindowType popupWindowType;
     private HealthCocoActivity mActivity;
     private List<Object> list;
-    private TextView tvBullet;
+    private TextViewFontAwesome tvBullet;
 
     public PopupListViewAdapter(HealthCocoActivity mActivity, PopupWindowType popupWindowType, int dropDownLayoutId) {
         this.mActivity = mActivity;
@@ -94,6 +95,7 @@ public class PopupListViewAdapter extends BaseAdapter {
                         textView = (TextView) convertView;
                     else
                         textView = (TextView) convertView.findViewById(R.id.tv_text);
+                    tvBullet = (TextViewFontAwesome) convertView.findViewById(R.id.tv_bullet);
                     String text = getText(mActivity, getItem(position));
                     if (!Util.isNullOrBlank(text)) {
                         textView.setText(text);
