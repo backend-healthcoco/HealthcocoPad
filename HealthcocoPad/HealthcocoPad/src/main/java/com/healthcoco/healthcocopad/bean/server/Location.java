@@ -53,7 +53,7 @@ public class Location extends SugarRecord {
     private String landmarkDetails;
 
     private String locationEmailAddress;
-
+    @Ignore
     private List<String> specialization;
 
     private String streetAddress;

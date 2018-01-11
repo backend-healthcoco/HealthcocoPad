@@ -93,7 +93,7 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
     public static final String TAG_PRESCRIPTION_DATA = "prescriptionData";
     public static final String TAG_PRESCRIPTION_ID = "prescriptionId";
     private boolean receiversRegistered;
-    private ViewPager viewPager;
+    private ViewPager viewPagerPrescription;
     private TabHost tabhost;
     private ArrayList<Fragment> fragmentsList;
     private User user;
@@ -204,7 +204,7 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
 
     @Override
     public void initViews() {
-        viewPager = (ViewPager) view.findViewById(R.id.viewpager);
+        viewPagerPrescription = (ViewPager) view.findViewById(R.id.viewpager);
         tabhost = (TabHost) view.findViewById(android.R.id.tabhost);
         etDuration = (EditText) view.findViewById(R.id.et_duration);
         etHeaderTwoDuration = (EditText) view.findViewById(R.id.et_header_two_duration);
@@ -235,7 +235,7 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
     public void initListeners() {
         btClear.setOnClickListener(this);
         tabhost.setOnTabChangedListener(this);
-        viewPager.addOnPageChangeListener(this);
+        viewPagerPrescription.addOnPageChangeListener(this);
         editAdvice.setOnClickListener(this);
         btHeaderTwoInteraction.setOnClickListener(this);
         btHeaderInteraction.setOnClickListener(this);
@@ -281,11 +281,10 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
     }
 
     private void initViewPagerAdapter() {
-        viewPager.setOffscreenPageLimit(fragmentsList.size());
-        ContactsDetailViewPagerAdapter viewPagerAdapter = new ContactsDetailViewPagerAdapter(
-                mActivity.getSupportFragmentManager());
+        viewPagerPrescription.setOffscreenPageLimit(fragmentsList.size());
+        ContactsDetailViewPagerAdapter viewPagerAdapter = new ContactsDetailViewPagerAdapter(getChildFragmentManager());
         viewPagerAdapter.setFragmentsList(fragmentsList);
-        viewPager.setAdapter(viewPagerAdapter);
+        viewPagerPrescription.setAdapter(viewPagerAdapter);
     }
 
     private void initData() {
@@ -343,7 +342,7 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
 
     @Override
     public void onTabChanged(String tabId) {
-        viewPager.setCurrentItem(tabhost.getCurrentTab());
+        viewPagerPrescription.setCurrentItem(tabhost.getCurrentTab());
     }
 
     @Override

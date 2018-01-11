@@ -902,5 +902,6 @@
     <string name="new_receipt">New Receipt</string>
     <string name="sync_all">Sync All</string>
     <string name="select_due_invoice">Select Due Invoice</string>
+    <string name="treatment_saved">Treatment Saved</string>
 
 </resources>
