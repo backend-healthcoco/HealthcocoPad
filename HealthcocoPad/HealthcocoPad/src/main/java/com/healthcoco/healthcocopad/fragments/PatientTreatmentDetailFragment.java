@@ -213,7 +213,7 @@ public class PatientTreatmentDetailFragment extends HealthCocoFragment implement
             if (resultCode == HealthCocoConstants.RESULT_CODE_ADD_NEW_TREATMENT) {
                 lvTreatment.smoothScrollToPosition(0);
                 getTreatment(true);
-                Util.showToast(mActivity, "Invoice Saved");
+                Util.showToast(mActivity, getString(R.string.treatment_saved));
             }
         }
     }

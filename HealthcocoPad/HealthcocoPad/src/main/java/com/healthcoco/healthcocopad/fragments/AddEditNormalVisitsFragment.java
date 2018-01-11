@@ -84,6 +84,8 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
         View.OnClickListener, PopupWindowListener {
     private static final String DATE_FORMAT_USED_IN_THIS_SCREEN = "dd-MM-yyyy";
     private static final int REQUEST_CODE_NEXT_REVIEW = 111;
+    private static final int TAB_POSITION_PRESCRIPTION = 1;
+    private static final int TAB_POSITION_TREATMENT = 2;
     private ViewPager viewPager;
     private TabHost tabhost;
     private ArrayList<Fragment> fragmentsList;
@@ -271,25 +273,7 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
 
     @Override
     public void onTabChanged(String tabId) {
-        hideKeyboard(view);
         viewPager.setCurrentItem(tabhost.getCurrentTab());
-        String currentTabTag = tabhost.getCurrentTabTag();
-        if (currentTabTag != null) {
-            switch (currentTabTag) {
-                case "AddEditNormalVisitPrescriptionFragment":
-                    if (!isPrescriptionTabClicked) {
-                        addEditNormalVisitPrescriptionFragment.refreshData();
-                        isPrescriptionTabClicked = true;
-                    }
-                    break;
-
-                case "AddNewTreatmentFragment":
-                    if (!isTreatmentTabClicked) {
-                        addNewTreatmentFragment.refreshData();
-                        isTreatmentTabClicked = true;
-                    }
-            }
-        }
     }
 
     @Override
@@ -311,6 +295,21 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
     @Override
     public void onPageSelected(int position) {
         tabhost.setCurrentTab(position);
+        hideKeyboard(view);
+        switch (position) {
+            case TAB_POSITION_PRESCRIPTION:
+                if (!isPrescriptionTabClicked) {
+                    addEditNormalVisitPrescriptionFragment.refreshData();
+                    isPrescriptionTabClicked = true;
+                }
+                break;
+
+            case TAB_POSITION_TREATMENT:
+                if (!isTreatmentTabClicked) {
+                    addNewTreatmentFragment.refreshData();
+                    isTreatmentTabClicked = true;
+                }
+        }
         currentPage = position;
     }
 

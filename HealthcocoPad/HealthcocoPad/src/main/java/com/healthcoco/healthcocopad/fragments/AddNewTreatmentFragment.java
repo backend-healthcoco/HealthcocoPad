@@ -36,12 +36,10 @@ import com.healthcoco.healthcocopad.custom.DummyTabFactory;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.QuantityEnum;
-import com.healthcoco.healthcocopad.enums.SelectDrugItemType;
 import com.healthcoco.healthcocopad.enums.UnitType;
 import com.healthcoco.healthcocopad.enums.VisitIdType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
-import com.healthcoco.healthcocopad.listeners.SelectDrugItemClickListener;
 import com.healthcoco.healthcocopad.listeners.SelectedTreatmentItemClickListener;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
@@ -64,7 +62,7 @@ public class AddNewTreatmentFragment extends HealthCocoFragment implements Local
     public static final String INTENT_GET_MODIFIED_VALUE = "com.healthcoco.MODIFIED_VALUE";
     public static final String TAG_SELECTED_TREATMENT_OBJECT = "selectedTreatmentItemOrdinal";
     public static final String TAG_TREATMENT_ID = "treatmentId";
-    private ViewPager viewPager;
+    private ViewPager viewPagerTreatment;
     private TabHost tabhost;
     private ArrayList<Fragment> fragmentsList;
     private User user;
@@ -128,7 +126,7 @@ public class AddNewTreatmentFragment extends HealthCocoFragment implements Local
 
     @Override
     public void initViews() {
-        viewPager = (ViewPager) view.findViewById(R.id.viewpager);
+        viewPagerTreatment = (ViewPager) view.findViewById(R.id.viewpager);
         tabhost = (TabHost) view.findViewById(android.R.id.tabhost);
         tvTotalCost = (TextView) view.findViewById(R.id.tv_total_cost);
         tvTotalDiscount = (TextView) view.findViewById(R.id.tv_total_discount);
@@ -140,7 +138,7 @@ public class AddNewTreatmentFragment extends HealthCocoFragment implements Local
     public void initListeners() {
         ((CommonOpenUpActivity) mActivity).initSaveButton(this);
         tabhost.setOnTabChangedListener(this);
-        viewPager.addOnPageChangeListener(this);
+        viewPagerTreatment.addOnPageChangeListener(this);
     }
 
     private void initTabsFragmentsList() {
@@ -174,10 +172,10 @@ public class AddNewTreatmentFragment extends HealthCocoFragment implements Local
     }
 
     private void initViewPagerAdapter() {
-        viewPager.setOffscreenPageLimit(fragmentsList.size());
+        viewPagerTreatment.setOffscreenPageLimit(fragmentsList.size());
         ContactsDetailViewPagerAdapter viewPagerAdapter = new ContactsDetailViewPagerAdapter(getChildFragmentManager());
         viewPagerAdapter.setFragmentsList(fragmentsList);
-        viewPager.setAdapter(viewPagerAdapter);
+        viewPagerTreatment.setAdapter(viewPagerAdapter);
     }
 
     private void initData() {
@@ -403,7 +401,7 @@ public class AddNewTreatmentFragment extends HealthCocoFragment implements Local
   */
     @Override
     public void onTabChanged(String tabId) {
-        viewPager.setCurrentItem(tabhost.getCurrentTab());
+        viewPagerTreatment.setCurrentItem(tabhost.getCurrentTab());
     }
 
     @Override
