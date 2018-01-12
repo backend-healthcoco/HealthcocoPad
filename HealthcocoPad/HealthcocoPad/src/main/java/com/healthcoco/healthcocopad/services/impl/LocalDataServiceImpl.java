@@ -2351,8 +2351,10 @@ public class LocalDataServiceImpl {
         List<DrugItem> drugItemsList = prescription.getItems();
         addDrugItemsList(drugItemsList, FromTableType.ADD_PRESCRIPTION, prescription.getUniqueId());
         addDiagnosticTestsPrescription(prescription, prescription.getDiagnosticTests());
-        if (prescription.getAppointmentRequest() != null)
+        if (prescription.getAppointmentRequest() != null) {
+            prescription.getAppointmentRequest().setVisitId(prescription.getVisitId());
             addAppointmentRequest(prescription.getAppointmentRequest());
+        }
         prescription.save();
     }
 
@@ -2367,8 +2369,10 @@ public class LocalDataServiceImpl {
         if (clinicalNote.getVitalSigns() != null) {
             addVitalSigns(clinicalNote.getUniqueId(), clinicalNote.getVitalSigns());
         }
-        if (clinicalNote.getAppointmentRequest() != null)
+        if (clinicalNote.getAppointmentRequest() != null) {
+            clinicalNote.getAppointmentRequest().setVisitId(clinicalNote.getVisitId());
             addAppointmentRequest(clinicalNote.getAppointmentRequest());
+        }
         clinicalNote.save();
     }
 
@@ -3840,8 +3844,7 @@ public class LocalDataServiceImpl {
         treatment.setTreatments(getTreatmentsList(treatment.getUniqueId()));
         treatment.setTotalDiscount((UnitValue) getObjectFromJson(UnitValue.class, treatment.getTotalDiscountJsonString()));
         treatment.setWorkingHoursJson(getJsonFromObject(treatment.getTime()));
-        if (treatment.getAppointmentRequest() != null)
-            addAppointmentRequest(treatment.getAppointmentRequest());
+        treatment.setAppointmentRequest(getAppointmentRequest(treatment.getVisitId()));
     }
 
     private List<TreatmentItem> getTreatmentsList(String treatmentId) {
@@ -3903,9 +3906,10 @@ public class LocalDataServiceImpl {
         deleteTreatmentIfAlreadyExists(LocalDatabaseUtils.KEY_UNIQUE_ID, treatment.getUniqueId());
         treatment.setTotalDiscountJsonString(getJsonFromObject(treatment.getTotalDiscount()));
         treatment.setWorkingHoursJson(getJsonFromObject(treatment.getTime()));
-        if (treatment.getAppointmentRequest() != null)
+        if (treatment.getAppointmentRequest() != null) {
+            treatment.getAppointmentRequest().setVisitId(treatment.getVisitId());
             addAppointmentRequest(treatment.getAppointmentRequest());
-
+        }
         deleteAllFrom(TreatmentItem.class, LocalDatabaseUtils.KEY_TREATMENT_ID, treatment.getUniqueId());
         if (!Util.isNullOrEmptyList(treatment.getTreatments())) {
             for (TreatmentItem treatmentItem :

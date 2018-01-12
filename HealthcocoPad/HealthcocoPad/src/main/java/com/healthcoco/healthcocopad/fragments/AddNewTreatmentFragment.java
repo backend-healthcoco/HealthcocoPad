@@ -248,13 +248,13 @@ public class AddNewTreatmentFragment extends HealthCocoFragment implements Local
     private void addTreatment() {
 
         mActivity.showLoading(false);
-        TreatmentRequest treatmentRequest = getTreatmentRequestDetails();
+        TreatmentRequest treatmentRequest = getTreatmentRequestDetails(false);
         treatmentRequest.setVisitId(Util.getVisitId(VisitIdType.TREATMENT));
 
         WebDataServiceImpl.getInstance(mApp).addTreatment(Treatments.class, treatmentRequest, this, this);
     }
 
-    public TreatmentRequest getTreatmentRequestDetails() {
+    public TreatmentRequest getTreatmentRequestDetails(boolean isFromClone) {
 
         TreatmentRequest treatmentRequest = new TreatmentRequest();
         treatmentRequest.setTreatments(selectedTreatmentsListFragment.getModifiedTreatmentsItemRequestList());
@@ -267,7 +267,8 @@ public class AddNewTreatmentFragment extends HealthCocoFragment implements Local
         treatmentRequest.setGrandTotal(treatment.getGrandTotal());
         treatmentRequest.setTotalDiscount(treatment.getTotalDiscount());
         if (treatment.getUniqueId() != null)
-            treatmentRequest.setUniqueId(treatment.getUniqueId());
+            if (!isFromClone)
+                treatmentRequest.setUniqueId(treatment.getUniqueId());
 
         if (treatment.getUniqueEmrId() != null)
             treatmentRequest.setUniqueEmrId(treatment.getUniqueEmrId());

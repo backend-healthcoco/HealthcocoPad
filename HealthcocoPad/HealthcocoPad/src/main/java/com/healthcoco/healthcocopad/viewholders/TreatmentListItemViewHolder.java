@@ -13,6 +13,7 @@ import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.HealthCocoViewHolder;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
+import com.healthcoco.healthcocopad.bean.server.AppointmentRequest;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.TreatmentItem;
 import com.healthcoco.healthcocopad.bean.server.Treatments;
@@ -36,6 +37,8 @@ import com.healthcoco.healthcocopad.utilities.Util;
  * Created by Shreshtha on 25-03-2017.
  */
 public class TreatmentListItemViewHolder extends HealthCocoViewHolder implements View.OnClickListener, GsonRequest.ErrorListener, Response.Listener<VolleyResponseBean> {
+
+    private static final String DATE_FORMAT_USED_IN_THIS_SCREEN = "EEE, dd MMM yyyy";
     private static final String TAG = TreatmentListItemViewHolder.class.getSimpleName();
     private User user;
     private RegisteredPatientDetailsUpdated selectedPatient;
@@ -63,6 +66,8 @@ public class TreatmentListItemViewHolder extends HealthCocoViewHolder implements
     private TextView tvGrandTotal;
     private TextView tvTotalDiscount;
     private TextView tvTotalCost;
+    private LinearLayout layoutNextReviewDetail;
+    private TextView textViewNextReviewDate;
     private TreatmentListItemClickListeners listItemClickListeners;
 
     public TreatmentListItemViewHolder(HealthCocoActivity mActivity,
@@ -133,6 +138,17 @@ public class TreatmentListItemViewHolder extends HealthCocoViewHolder implements
         else
             tvGrandTotal.setText(mActivity.getResources().getString(R.string.no_text_dash));
 
+        if (!Util.isNullOrBlank(treatments.getAppointmentId())) {
+            if (treatments.getAppointmentRequest() != null) {
+                layoutNextReviewDetail.setVisibility(View.VISIBLE);
+                AppointmentRequest appointmentRequest = treatments.getAppointmentRequest();
+                String formattedTime = DateTimeUtil.getFormattedTime(0, Math.round(appointmentRequest.getTime().getFromTime()));
+                String formattedDate = DateTimeUtil.getFormattedDateTime(DATE_FORMAT_USED_IN_THIS_SCREEN, appointmentRequest.getFromDate());
+                textViewNextReviewDate.setText(formattedDate + " " + formattedTime);
+            }
+        } else {
+            layoutNextReviewDetail.setVisibility(View.GONE);
+        }
         checkIsDiscarded(treatments.getDiscarded());
         checkRollType();
     }
@@ -195,6 +211,11 @@ public class TreatmentListItemViewHolder extends HealthCocoViewHolder implements
             containerBottomButtons.setVisibility(View.VISIBLE);
             imageView.setVisibility(View.VISIBLE);
         }
+
+        textViewNextReviewDate = (TextView) contentView.findViewById(R.id.textView_next_review_date_for_treatment);
+        layoutNextReviewDetail = (LinearLayout) contentView.findViewById(R.id.layout_next_review_detail_for_treatment);
+        layoutNextReviewDetail.setVisibility(View.GONE);
+
     }
 
     private void initListeners() {

@@ -533,6 +533,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                         initData();
                         refreshDoctorClinicText();
                         refreshDoctorsList();
+                        visitsFragment.refreshData(PatientDetailTabType.PATIENT_DETAIL_VISIT, forAllDoctor);
                         if (ordinal != 0) {
                             mViewPager.setCurrentItem(ordinal);
 //                            prescriptionDetailFragment.refreshData(PatientDetailTabType.PATIENT_DETAIL_PRESCRIPTION);

@@ -13,7 +13,8 @@ public enum WeekDayNameType {
     THURSDAY(R.layout.item_weekdayname_add_session, 3, R.string.thursday),
     FRIDAY(R.layout.item_weekdayname_add_session, 4, R.string.friday),
     SATURDAY(R.layout.item_weekdayname_add_session, 5, R.string.saturday),
-    SUNDAY(R.layout.item_weekdayname_add_session, 6, R.string.sunday);;
+    SUNDAY(R.layout.item_weekdayname_add_session, 6, R.string.sunday);
+
     private int tag;
     private int layoutId;
     private int weekDayNameId;
