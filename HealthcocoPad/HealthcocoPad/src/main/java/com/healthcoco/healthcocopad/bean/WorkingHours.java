@@ -4,21 +4,12 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.healthcoco.healthcocopad.enums.WeekDayNameType;
+import com.orm.SugarRecord;
 import com.orm.annotation.Unique;
 
 @org.parceler.Parcel
-public class WorkingHours implements Parcelable {
-    public static final Creator<WorkingHours> CREATOR = new Creator<WorkingHours>() {
-        @Override
-        public WorkingHours createFromParcel(Parcel in) {
-            return new WorkingHours(in);
-        }
+public class WorkingHours extends SugarRecord {
 
-        @Override
-        public WorkingHours[] newArray(int size) {
-            return new WorkingHours[size];
-        }
-    };
     protected WeekDayNameType workingDay;
     protected String foreignLocationId;
     protected String doctorId;
@@ -95,22 +86,6 @@ public class WorkingHours implements Parcelable {
         this.customUniqueId = customUniqueId;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-//        dest.writeString(foreignTableId);
-        dest.writeString(foreignLocationId);
-        dest.writeString(doctorId);
-        if (workingDay != null)
-            dest.writeInt(workingDay.ordinal());
-        dest.writeString(customUniqueId);
-        dest.writeFloat(fromTime);
-        dest.writeFloat(toTime);
-    }
 
     public String getForeignTableId() {
         return foreignTableId;
@@ -119,4 +94,5 @@ public class WorkingHours implements Parcelable {
     public void setForeignTableId(String foreignTableId) {
         this.foreignTableId = foreignTableId;
     }
+
 }

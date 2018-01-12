@@ -161,11 +161,11 @@ public class PrescriptionListItemViewHolder extends HealthCocoViewHolder impleme
             }
             imageView.setVisibility(View.VISIBLE);
             if (prescription.getAppointmentRequest() != null && prescription.getAppointmentRequest().getAppointmentId() != null) {
+                layoutNextReviewDetail.setVisibility(View.VISIBLE);
                 AppointmentRequest appointmentRequest = prescription.getAppointmentRequest();
                 String formattedTime = DateTimeUtil.getFormattedTime(0, Math.round(appointmentRequest.getTime().getFromTime()));
                 String formattedDate = DateTimeUtil.getFormattedDateTime(DATE_FORMAT_USED_IN_THIS_SCREEN, appointmentRequest.getFromDate());
                 textViewNextReviewDate.setText(formattedDate + " " + formattedTime);
-                layoutNextReviewDetail.setVisibility(View.VISIBLE);
             } else {
                 layoutNextReviewDetail.setVisibility(View.GONE);
             }

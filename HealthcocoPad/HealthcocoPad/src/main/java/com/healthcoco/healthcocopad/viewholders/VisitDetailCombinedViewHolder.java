@@ -194,6 +194,7 @@ public class VisitDetailCombinedViewHolder extends HealthCocoViewHolder implemen
             List<Treatments> patientTreatmentList = visitDetail.getPatientTreatment();
             if (isDiscarded) patientTreatmentList.get(0).setDiscarded(false);
             for (Treatments treatment : patientTreatmentList) {
+                treatment.setAppointmentRequest(null);
                 TreatmentListItemViewHolder treatmentListItemViewHolder = (TreatmentListItemViewHolder) containerTreatment.getTag();
                 treatmentListItemViewHolder.setData(treatment);
                 treatmentListItemViewHolder.applyData();
@@ -220,11 +221,11 @@ public class VisitDetailCombinedViewHolder extends HealthCocoViewHolder implemen
 
         if (!Util.isNullOrBlank(visitDetail.getAppointmentId())) {
             if (visitDetail.getAppointmentRequest() != null) {
+                layoutNextReviewDetail.setVisibility(View.VISIBLE);
                 AppointmentRequest appointmentRequest = visitDetail.getAppointmentRequest();
                 String formattedTime = DateTimeUtil.getFormattedTime(0, Math.round(appointmentRequest.getTime().getFromTime()));
                 String formattedDate = DateTimeUtil.getFormattedDateTime(DATE_FORMAT_USED_IN_THIS_SCREEN, appointmentRequest.getFromDate());
                 textViewNextReviewDate.setText(formattedDate + " " + formattedTime);
-                layoutNextReviewDetail.setVisibility(View.VISIBLE);
             }
         } else {
             layoutNextReviewDetail.setVisibility(View.GONE);

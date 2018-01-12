@@ -458,7 +458,7 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
     }
 
     private void initNextReviewData(AppointmentRequest appointmentRequest) {
-        if (appointmentRequest != null) {
+        if (appointmentRequest != null && !isFromClone) {
             containerDateTime.setVisibility(View.VISIBLE);
             tvNextReviewDate.setText(DateTimeUtil.getFormattedDateTime(DATE_FORMAT_USED_IN_THIS_SCREEN, appointmentRequest.getFromDate()));
             tvNextReviewTime.setText(DateTimeUtil.getFormattedTime(0, Math.round(appointmentRequest.getTime().getFromTime())));
@@ -561,8 +561,8 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
         mActivity.showLoading(false);
         LogUtils.LOGD(TAG, "Selected patient " + selectedPatient.getLocalPatientName());
         if (msgId == 0) {
-            TreatmentRequest treatmentRequest = addNewTreatmentFragment.getTreatmentRequestDetails();
-            if (Util.isNullOrBlank(treatmentId)) {
+            TreatmentRequest treatmentRequest = addNewTreatmentFragment.getTreatmentRequestDetails(false);
+            if (Util.isNullOrBlank(treatmentId) && !isFromClone) {
                 treatmentRequest.setDoctorId(user.getUniqueId());
                 treatmentRequest.setVisitId(Util.getVisitId(VisitIdType.TREATMENT));
             }
@@ -577,7 +577,7 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
         LogUtils.LOGD(TAG, "Selected patient " + selectedPatient.getLocalPatientName());
         if (prescriptionMsg == 0) {
             PrescriptionRequest prescription = addEditNormalVisitPrescriptionFragment.getPrescriptionRequestDetails();
-            if (Util.isNullOrBlank(prescriptionId) && !isFromClone) {
+            if (Util.isNullOrBlank(prescriptionId)) {
                 prescription.setDoctorId(user.getUniqueId());
                 prescription.setVisitId(Util.getVisitId(VisitIdType.PRESCRIPTION));
             }
@@ -679,7 +679,7 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
         }
         if (blankTreatmentMsgId == 0) {
 //            addNewTreatmentFragment.refreshListViewUpdatedTreatmentList();
-            visitDetails.setTreatmentRequest(addNewTreatmentFragment.getTreatmentRequestDetails());
+            visitDetails.setTreatmentRequest(addNewTreatmentFragment.getTreatmentRequestDetails(isFromClone));
             visitDetails.getTreatmentRequest().setDoctorId(user.getUniqueId());
         }
         if (Util.isNullOrBlank(appointmentId))

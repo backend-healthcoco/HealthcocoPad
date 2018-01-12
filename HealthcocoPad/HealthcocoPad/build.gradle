@@ -22,7 +22,7 @@ android {
         applicationId "com.healthcoco.healthcocopad"
         minSdkVersion 17
         targetSdkVersion 25
-        versionCode 5
+        versionCode 6
         versionName "@string/app_version_name"
     }
     buildTypes {
@@ -32,6 +32,7 @@ android {
         release {
             multiDexEnabled true
             minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }

@@ -388,6 +388,7 @@ public class AddUpdateNameDialogFragment extends HealthCocoDialogFragment implem
                 case SEND_EMAIL_CLINICAL_NOTES:
                 case SEND_EMAIL_REPORTS:
                 case SEND_EMAIL_PRESCRIPTION:
+                case SEND_EMAIL_TREATMENT:
                 case SEND_EMAIL_VISIT:
                     mActivity.hideLoading();
                     Util.showToast(mActivity, getResources().getString(R.string.email_sent_to) + String.valueOf(editName.getText()));
