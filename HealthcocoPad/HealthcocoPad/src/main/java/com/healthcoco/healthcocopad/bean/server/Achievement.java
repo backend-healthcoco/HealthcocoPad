@@ -1,37 +1,15 @@
 package com.healthcoco.healthcocopad.bean.server;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import com.healthcoco.healthcocopad.enums.AchievementType;
 import com.orm.SugarRecord;
 
-public class Achievement extends SugarRecord implements Parcelable {
-    public static final Creator<Achievement> CREATOR = new Creator<Achievement>() {
-        @Override
-        public Achievement createFromParcel(Parcel in) {
-            return new Achievement(in);
-        }
+@org.parceler.Parcel
+public class Achievement extends SugarRecord{
 
-        @Override
-        public Achievement[] newArray(int size) {
-            return new Achievement[size];
-        }
-    };
     protected String foreignUniqueId;
     private String achievementName;
     private int year;
     private AchievementType achievementType;
-
-    public Achievement() {
-    }
-
-    protected Achievement(Parcel in) {
-        achievementName = in.readString();
-        year = in.readInt();
-        foreignUniqueId = in.readString();
-        achievementType = AchievementType.values()[in.readInt()];
-    }
 
     public String getAchievementName() {
         return achievementName;
@@ -63,18 +41,5 @@ public class Achievement extends SugarRecord implements Parcelable {
 
     public void setForeignUniqueId(String foreignUniqueId) {
         this.foreignUniqueId = foreignUniqueId;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(achievementName);
-        dest.writeInt(year);
-        dest.writeString(foreignUniqueId);
-        dest.writeInt(achievementType.ordinal());
     }
 }

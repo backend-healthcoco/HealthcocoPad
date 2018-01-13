@@ -1,38 +1,16 @@
 package com.healthcoco.healthcocopad.bean;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import com.healthcoco.healthcocopad.enums.DoctorExperienceUnit;
 import com.orm.SugarRecord;
 import com.orm.annotation.Unique;
 
-public class DoctorExperience extends SugarRecord implements Parcelable {
-    public static final Creator<DoctorExperience> CREATOR = new Creator<DoctorExperience>() {
-        @Override
-        public DoctorExperience createFromParcel(Parcel in) {
-            return new DoctorExperience(in);
-        }
-
-        @Override
-        public DoctorExperience[] newArray(int size) {
-            return new DoctorExperience[size];
-        }
-    };
+@org.parceler.Parcel
+public class DoctorExperience extends SugarRecord {
     @Unique
     protected String foreignUniqueId;
     protected String periodValue;
     private Integer experience;
     private DoctorExperienceUnit period;
-
-    public DoctorExperience() {
-    }
-
-    protected DoctorExperience(Parcel in) {
-        foreignUniqueId = in.readString();
-        experience = in.readInt();
-        periodValue = in.readString();
-    }
 
     public String getFormattedExperience() {
         String formattedExperience = experience + " " + getPeriod().getExperiencePeriod();
@@ -73,15 +51,4 @@ public class DoctorExperience extends SugarRecord implements Parcelable {
         this.periodValue = periodValue;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(foreignUniqueId);
-        dest.writeInt(experience);
-        dest.writeString(periodValue);
-    }
 }
