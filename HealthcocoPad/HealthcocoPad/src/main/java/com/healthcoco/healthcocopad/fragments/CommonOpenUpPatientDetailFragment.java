@@ -100,8 +100,8 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
     private PatientPrescriptionDetailFragment prescriptionDetailFragment;
     private PatientReportsDetailFragment reportsDetailFragment;
     private PatientTreatmentDetailFragment treatmentDetailFragment;
-    //    private PatientInvoiceDetailFragment invoiceDetailFragment;
-//    private PatientReceiptDetailFragment receiptDetailFragment;
+    private PatientInvoiceDetailFragment invoiceDetailFragment;
+    private PatientReceiptDetailFragment receiptDetailFragment;
     private HealthcocoPopupWindow doctorsListPopupWindow;
 
     private boolean isProfileTabClicked = true;
@@ -210,14 +210,14 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                     treatmentDetailFragment = new PatientTreatmentDetailFragment();
                     healthcocoFragment = treatmentDetailFragment;
                     break;
-//                case PATIENT_DETAIL_INVOICE:
-//                    invoiceDetailFragment = new PatientInvoiceDetailFragment();
-//                    healthcocoFragment = invoiceDetailFragment;
-//                    break;
-//                case PATIENT_DETAIL_RECEIPT:
-//                    receiptDetailFragment = new PatientReceiptDetailFragment();
-//                    healthcocoFragment = receiptDetailFragment;
-//                    break;
+                case PATIENT_DETAIL_INVOICE:
+                    invoiceDetailFragment = new PatientInvoiceDetailFragment();
+                    healthcocoFragment = invoiceDetailFragment;
+                    break;
+                case PATIENT_DETAIL_RECEIPT:
+                    receiptDetailFragment = new PatientReceiptDetailFragment();
+                    healthcocoFragment = receiptDetailFragment;
+                    break;
             }
             if (healthcocoFragment != null)
                 tabhost.addTab(getTabSpec(detailTabType, healthcocoFragment));
@@ -414,19 +414,19 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                         isTreatmentTabClicked = true;
                     }
                     break;
-//                case PATIENT_DETAIL_INVOICE:
-//                    doctorNameLayout.setVisibility(View.INVISIBLE);
-//                    if (!isInvoiceTabClicked) {
-//                        invoiceDetailFragment.refreshData(PatientDetailTabType.PATIENT_DETAIL_INVOICE);
-//                        isInvoiceTabClicked = true;
-//                    }
-//                    break;
-//                case PATIENT_DETAIL_RECEIPT:
-//                    doctorNameLayout.setVisibility(View.INVISIBLE);
-//                    if (!isReceiptTabClicked) {
-//                        receiptDetailFragment.refreshData(PatientDetailTabType.PATIENT_DETAIL_RECEIPT);
-//                        isReceiptTabClicked = true;
-//                    }
+                case PATIENT_DETAIL_INVOICE:
+                    doctorNameLayout.setVisibility(View.INVISIBLE);
+                    if (!isInvoiceTabClicked) {
+                        invoiceDetailFragment.refreshData(PatientDetailTabType.PATIENT_DETAIL_INVOICE);
+                        isInvoiceTabClicked = true;
+                    }
+                    break;
+                case PATIENT_DETAIL_RECEIPT:
+                    doctorNameLayout.setVisibility(View.INVISIBLE);
+                    if (!isReceiptTabClicked) {
+                        receiptDetailFragment.refreshData(PatientDetailTabType.PATIENT_DETAIL_RECEIPT);
+                        isReceiptTabClicked = true;
+                    }
             }
         }
         ((CommonOpenUpActivity) mActivity).initActionbarTitle(patientDetailTabType.getActionBarTitleId());
@@ -441,8 +441,8 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
             appointmentFragment.setUserData(user, selectedPatient);
             reportsDetailFragment.setUserData(user, selectedPatient);
             treatmentDetailFragment.setUserData(user, loginedUser, selectedPatient);
-//            invoiceDetailFragment.setUserData(user, loginedUser, selectedPatient);
-//            receiptDetailFragment.setUserData(user, loginedUser, selectedPatient);
+            invoiceDetailFragment.setUserData(user, loginedUser, selectedPatient);
+            receiptDetailFragment.setUserData(user, loginedUser, selectedPatient);
         } else {
             mActivity.showLoading(false);
             WebDataServiceImpl.getInstance(mApp).getPatientProfile(RegisteredPatientDetailsUpdated.class, HealthCocoConstants.SELECTED_PATIENTS_USER_ID, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(), this, this);

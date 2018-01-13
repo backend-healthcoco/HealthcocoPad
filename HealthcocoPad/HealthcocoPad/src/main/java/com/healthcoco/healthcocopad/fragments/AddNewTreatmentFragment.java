@@ -81,7 +81,6 @@ public class AddNewTreatmentFragment extends HealthCocoFragment implements Local
                 setModifiedValues(totalTreatmentCostDiscountValues);
             }
         }
-
     };
     private List<Treatments> treatmentsList;
     private DoctorProfile doctorProfile;
@@ -178,9 +177,6 @@ public class AddNewTreatmentFragment extends HealthCocoFragment implements Local
         viewPagerTreatment.setAdapter(viewPagerAdapter);
     }
 
-    private void initData() {
-
-    }
 
     private void initDefaultData(Treatments treatment) {
         tvTotalCost.setText(Util.formatDoubleNumber(treatment.getTotalCost()));

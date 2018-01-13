@@ -193,6 +193,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/margin_edit_text_bottom_add_drug_detail"
                         android:gravity="center"
+                        android:singleLine="true"
                         android:text=""
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_size_drug_child_lable" />
@@ -219,6 +220,7 @@
                         android:layout_marginLeft="@dimen/margin_edit_text_bottom_add_drug_detail"
                         android:layout_weight="1"
                         android:gravity="start"
+                        android:singleLine="true"
                         android:text=""
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_size_drug_child_lable" />
@@ -245,6 +247,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/margin_edit_text_bottom_add_drug_detail"
+                        android:singleLine="true"
                         android:text=""
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_size_drug_child_lable" />
@@ -271,6 +274,7 @@
                         android:layout_marginLeft="@dimen/margin_edit_text_bottom_add_drug_detail"
                         android:layout_weight="1"
                         android:gravity="center"
+                        android:singleLine="true"
                         android:text=""
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_size_drug_child_lable" />
