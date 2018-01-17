@@ -118,7 +118,6 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="@dimen/margin_left_right_add_vital_signs"
                                 android:padding="@dimen/dotor_profile_edit_text_bottom_padding"
-                                android:text="@string/due"
                                 android:textColor="@color/red_error"
                                 android:textSize="@dimen/text_size_patient_name_visit_fragment"
                                 android:visibility="gone" />

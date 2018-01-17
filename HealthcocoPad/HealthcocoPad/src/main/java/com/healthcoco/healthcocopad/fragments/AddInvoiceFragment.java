@@ -352,6 +352,7 @@ public class AddInvoiceFragment extends HealthCocoFragment implements LocalDoInB
                     Util.sendBroadcasts(mApp, new ArrayList<String>() {{
                         add(PatientReceiptDetailFragment.INTENT_GET_RECEIPT_LIST_LOCAL);
                         add(PatientInvoiceDetailFragment.INTENT_GET_INVOICE_LIST_LOCAL);
+                        add(CommonOpenUpPatientDetailFragment.INTENT_REFRESH_AMOUNT_DETAILS);
                     }});
                     mActivity.setResult(HealthCocoConstants.RESULT_CODE_ADD_INVOICE, null);
                     ((CommonOpenUpActivity) mActivity).finish();
