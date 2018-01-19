@@ -101,8 +101,8 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
     private ClinicDetailResponse selectedClinicProfile;
     private LinkedHashMap<String, ClinicDoctorProfile> clinicDoctorListHashMap = new LinkedHashMap<>();
     private int tabOrdinal;
-//    private TabLayout tabLayout;
-private DoctorProfile doctorProfile;
+    //    private TabLayout tabLayout;
+    private DoctorProfile doctorProfile;
     //flags to refresh fragment when clicked for the first time
     private PatientProfileDetailFragment profileFragment;
     private PatientVisitDetailFragment visitsFragment;
@@ -124,6 +124,7 @@ private DoctorProfile doctorProfile;
     private boolean isInvoiceTabClicked = false;
     private boolean isReceiptTabClicked = false;
     private boolean forAllDoctor = false;
+    private boolean isSingleDoctor = false;
     private TextView tvGenderDate;
     private int ordinal;
     private boolean isOTPVerified;
@@ -374,7 +375,10 @@ private DoctorProfile doctorProfile;
         LogUtils.LOGD(TAG, tabhost.getCurrentTabTag());
         int ordinal = Integer.parseInt(tabhost.getCurrentTabTag());
         PatientDetailTabType patientDetailTabType = PatientDetailTabType.values()[ordinal];
-//        doctorNameLayout.setVisibility(View.VISIBLE);
+        if (!isSingleDoctor)
+            doctorNameLayout.setVisibility(View.VISIBLE);
+        else
+            doctorNameLayout.setVisibility(View.INVISIBLE);
         tvDueAmount.setVisibility(View.GONE);
         if (patientDetailTabType != null) {
             setPatientDetailHeaderVisibility(patientDetailTabType.getPatientDetailHeaderVisibility());
@@ -482,11 +486,11 @@ private DoctorProfile doctorProfile;
 
     private void refreshHeaderDueAmountData(RegisteredPatientDetailsUpdated selectedPatient) {
         if (selectedPatient.getTotalDueAmount() < 0) {
-            tvDueAmount.setVisibility(View.VISIBLE);
+//            tvDueAmount.setVisibility(View.VISIBLE);
             tvDueAmount.setText(String.valueOf(mActivity.getResources().getString(R.string.advance_amount)) + "\u20B9 " + Util.getFormattedDoubleNumber(selectedPatient.getTotalDueAmount()));
             tvDueAmount.setTextColor(mActivity.getResources().getColor(R.color.green_logo));
         } else if (selectedPatient.getTotalDueAmount() > 0) {
-            tvDueAmount.setVisibility(View.VISIBLE);
+//            tvDueAmount.setVisibility(View.VISIBLE);
             tvDueAmount.setText(String.valueOf(mActivity.getResources().getString(R.string.due_amount)) + "\u20B9 " + Util.getFormattedDoubleNumber(selectedPatient.getTotalDueAmount()));
             tvDueAmount.setTextColor(mActivity.getResources().getColor(R.color.red_error));
         } else {
@@ -541,12 +545,12 @@ private DoctorProfile doctorProfile;
                 case FRAGMENT_INITIALISATION:
                     if (selectedPatient != null) {
                         checkPatientStatus(user, selectedPatient);
+                        refreshDoctorsList();
                         initTabs();
-                        getPatientAmountDetails();
                         initViewPagerAdapter();
                         initData();
                         refreshDoctorClinicText();
-                        refreshDoctorsList();
+                        getPatientAmountDetails();
                         visitsFragment.refreshData(PatientDetailTabType.PATIENT_DETAIL_VISIT, forAllDoctor);
                         if (ordinal != 0) {
                             mViewPager.setCurrentItem(ordinal);
@@ -630,18 +634,22 @@ private DoctorProfile doctorProfile;
     }
 
     private void formHashMapAndRefresh(List<ClinicDoctorProfile> responseList) {
-        if (!Util.isNullOrEmptyList(responseList)) {
-            for (ClinicDoctorProfile clinicDoctorProfile :
-                    responseList) {
-                clinicDoctorListHashMap.put(clinicDoctorProfile.getUniqueId(), clinicDoctorProfile);
+        if (responseList.size() > 1) {
+            if (!Util.isNullOrEmptyList(responseList)) {
+                for (ClinicDoctorProfile clinicDoctorProfile :
+                        responseList) {
+                    clinicDoctorListHashMap.put(clinicDoctorProfile.getUniqueId(), clinicDoctorProfile);
+                }
             }
-        }
 //        notifyAdapter(new ArrayList<ClinicDoctorProfile>(clinicDoctorListHashMap.values()));
-        if (doctorsListPopupWindow != null)
-            doctorsListPopupWindow.notifyAdapter(new ArrayList<Object>(clinicDoctorListHashMap.values()));
-        else
-            mActivity.initPopupWindows(tvDoctorName, PopupWindowType.DOCTOR_LIST, new ArrayList<Object>(clinicDoctorListHashMap.values()), this);
-
+            if (doctorsListPopupWindow != null)
+                doctorsListPopupWindow.notifyAdapter(new ArrayList<Object>(clinicDoctorListHashMap.values()));
+            else
+                mActivity.initPopupWindows(tvDoctorName, PopupWindowType.DOCTOR_LIST, new ArrayList<Object>(clinicDoctorListHashMap.values()), this);
+        } else {
+            doctorNameLayout.setVisibility(View.INVISIBLE);
+            isSingleDoctor = true;
+        }
     }
 
     @Override

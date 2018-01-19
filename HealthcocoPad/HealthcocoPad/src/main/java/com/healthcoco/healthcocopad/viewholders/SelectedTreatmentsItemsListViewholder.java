@@ -77,30 +77,32 @@ public class SelectedTreatmentsItemsListViewholder extends HealthCocoViewHolder 
 
     @Override
     public void applyData() {
-        tvTreatmentName.setText(String.valueOf(objData.getTreatmentService().getName()));
-        if (doctorProfile != null) {
-            if (doctorProfile.getSpecialities().contains("Dentist")) {
-                if (!Util.isNullOrEmptyList(objData.getTreatmentService().getFieldsRequired())) {
-                    ArrayList<String> fieldsRequired = objData.getTreatmentService().getFieldsRequired();
+        if (objData.getTreatmentService() != null) {
+            tvTreatmentName.setText(String.valueOf(objData.getTreatmentService().getName()));
+            if (doctorProfile != null) {
+                if (doctorProfile.getSpecialities().contains("Dentist")) {
+                    if (!Util.isNullOrEmptyList(objData.getTreatmentService().getFieldsRequired())) {
+                        ArrayList<String> fieldsRequired = objData.getTreatmentService().getFieldsRequired();
 
-                    if (fieldsRequired.contains(HealthCocoConstants.TAG_TOOTH_NUMBER)) {
-                        layoutTreatmentToothNo.setVisibility(View.VISIBLE);
-                        tvTreatmentToothNo.setVisibility(View.VISIBLE);
-                        tvTreatmentToothNo.setText("");
+                        if (fieldsRequired.contains(HealthCocoConstants.TAG_TOOTH_NUMBER)) {
+                            layoutTreatmentToothNo.setVisibility(View.VISIBLE);
+                            tvTreatmentToothNo.setVisibility(View.VISIBLE);
+                            tvTreatmentToothNo.setText("");
+                        } else {
+                            layoutTreatmentToothNo.setVisibility(View.GONE);
+                        }
+                        if (fieldsRequired.contains(HealthCocoConstants.TAG_TOOTH_MATERIAL)) {
+                            tvTreatmentMaterial.setVisibility(View.VISIBLE);
+                        } else {
+                            tvTreatmentMaterial.setVisibility(View.INVISIBLE);
+                        }
+
                     } else {
                         layoutTreatmentToothNo.setVisibility(View.GONE);
                     }
-                    if (fieldsRequired.contains(HealthCocoConstants.TAG_TOOTH_MATERIAL)) {
-                        tvTreatmentMaterial.setVisibility(View.VISIBLE);
-                    } else {
-                        tvTreatmentMaterial.setVisibility(View.INVISIBLE);
-                    }
-
                 } else {
                     layoutTreatmentToothNo.setVisibility(View.GONE);
                 }
-            } else {
-                layoutTreatmentToothNo.setVisibility(View.GONE);
             }
         }
         if (objData.getQuantity() != null)

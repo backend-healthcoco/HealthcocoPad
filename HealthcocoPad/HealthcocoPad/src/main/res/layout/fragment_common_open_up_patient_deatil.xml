@@ -93,7 +93,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_centerVertical="true"
                                     android:layout_marginRight="@dimen/padding_item_drug_dosage_top_bottom"
-                                    android:text="Doctor"
+                                    android:text="@string/doctor"
                                     android:textSize="@dimen/text_size_patient_name_visit_fragment" />
 
                                 <TextView

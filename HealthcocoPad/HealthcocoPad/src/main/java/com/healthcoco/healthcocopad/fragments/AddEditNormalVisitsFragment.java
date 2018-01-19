@@ -707,25 +707,27 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
 
     private void initSelectedDoctorClinicData() {
         if (user != null && RoleType.isAdmin(user.getRoleTypes())) {
-            tvDoctorName.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.arrow_menu_down, 0);
-            tvDoctorName.setEnabled(true);
-//            lvDoctorName.setVisibility(View.VISIBLE);
-            refreshDoctorsList();
-        }
-        if ((!Util.isNullOrBlank(visitId)) || (!Util.isNullOrBlank(prescriptionId))) {
-            tvDoctorName.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-            tvDoctorName.setEnabled(false);
-            tvDoctorName.setClickable(false);
-//            lvDoctorName.setVisibility(View.VISIBLE);
-            if (visit != null)
-                tvDoctorName.setText(Util.getValidatedValue(visit.getCreatedBy()));
-        } else if (!Util.isNullOrBlank(treatmentId)) {
-            tvDoctorName.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-            tvDoctorName.setEnabled(false);
-            tvDoctorName.setClickable(false);
-//            lvDoctorName.setVisibility(View.VISIBLE);
-            if (treatment != null)
-                tvDoctorName.setText(Util.getValidatedValue(treatment.get(0).getCreatedBy()));
+
+            if ((!Util.isNullOrBlank(visitId)) || (!Util.isNullOrBlank(prescriptionId))) {
+                tvDoctorName.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+                tvDoctorName.setEnabled(false);
+                tvDoctorName.setClickable(false);
+                lvDoctorName.setVisibility(View.VISIBLE);
+                if (visit != null)
+                    tvDoctorName.setText(Util.getValidatedValue(visit.getCreatedBy()));
+            } else if (!Util.isNullOrBlank(treatmentId)) {
+                tvDoctorName.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+                tvDoctorName.setEnabled(false);
+                tvDoctorName.setClickable(false);
+                lvDoctorName.setVisibility(View.VISIBLE);
+                if (treatment != null)
+                    tvDoctorName.setText(Util.getValidatedValue(treatment.get(0).getCreatedBy()));
+            } else {
+                tvDoctorName.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+                tvDoctorName.setEnabled(false);
+                lvDoctorName.setVisibility(View.VISIBLE);
+                refreshDoctorsList();
+            }
         }
     }
 
@@ -736,18 +738,24 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
     }
 
     private void formHashMapAndRefresh(List<ClinicDoctorProfile> responseList) {
-        if (!Util.isNullOrEmptyList(responseList)) {
-            for (ClinicDoctorProfile clinicDoctorProfile :
-                    responseList) {
-                clinicDoctorListHashMap.put(clinicDoctorProfile.getUniqueId(), clinicDoctorProfile);
-            }
-        }
-//        notifyAdapter(new ArrayList<ClinicDoctorProfile>(clinicDoctorListHashMap.values()));
-        if (doctorsListPopupWindow != null)
-            doctorsListPopupWindow.notifyAdapter(new ArrayList<Object>(clinicDoctorListHashMap.values()));
-        else
-            mActivity.initPopupWindows(tvDoctorName, PopupWindowType.DOCTOR_LIST, new ArrayList<Object>(clinicDoctorListHashMap.values()), this);
+        if (responseList.size() > 1) {
+            tvDoctorName.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.arrow_menu_down, 0);
+            tvDoctorName.setEnabled(true);
+            lvDoctorName.setVisibility(View.VISIBLE);
 
+            if (!Util.isNullOrEmptyList(responseList)) {
+                for (ClinicDoctorProfile clinicDoctorProfile :
+                        responseList) {
+                    clinicDoctorListHashMap.put(clinicDoctorProfile.getUniqueId(), clinicDoctorProfile);
+                }
+            }
+//        notifyAdapter(new ArrayList<ClinicDoctorProfile>(clinicDoctorListHashMap.values()));
+            if (doctorsListPopupWindow != null)
+                doctorsListPopupWindow.notifyAdapter(new ArrayList<Object>(clinicDoctorListHashMap.values()));
+            else
+                mActivity.initPopupWindows(tvDoctorName, PopupWindowType.DOCTOR_LIST, new ArrayList<Object>(clinicDoctorListHashMap.values()), this);
+
+        }
     }
 
     @Override

@@ -31,7 +31,6 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1.5"
                     android:gravity="center_vertical"
-                    android:text="@string/treatment_name"
                     android:textColor="@color/black"
                     android:textSize="@dimen/text_size_drug_child_lable" />
 
