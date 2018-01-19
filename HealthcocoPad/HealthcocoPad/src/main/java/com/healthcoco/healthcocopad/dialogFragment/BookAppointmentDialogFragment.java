@@ -1,6 +1,7 @@
 package com.healthcoco.healthcocopad.dialogFragment;
 
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -23,6 +24,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import com.android.volley.Response;
 import com.healthcoco.healthcocopad.HealthCocoDialogFragment;
@@ -44,12 +46,14 @@ import com.healthcoco.healthcocopad.custom.ExistingPatientAutoCompleteAdapter;
 import com.healthcoco.healthcocopad.custom.HealthcocoTextWatcher;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocopad.custom.ScrollViewWithRelativeLayoutHeader;
+import com.healthcoco.healthcocopad.enums.AppointmentSlotsType;
 import com.healthcoco.healthcocopad.enums.AppointmentStatusType;
 import com.healthcoco.healthcocopad.enums.BookAppointmentFromScreenType;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.CreatedByType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.PatientProfileScreenType;
+import com.healthcoco.healthcocopad.enums.PopupWindowType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.fragments.CalendarFragment;
 import com.healthcoco.healthcocopad.fragments.CommonOpenUpPatientDetailFragment;
@@ -59,6 +63,7 @@ import com.healthcoco.healthcocopad.fragments.PatientAppointmentDetailFragment;
 import com.healthcoco.healthcocopad.listeners.AutoCompleteTextViewListener;
 import com.healthcoco.healthcocopad.listeners.HealthcocoTextWatcherListener;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
+import com.healthcoco.healthcocopad.popupwindow.PopupWindowListener;
 import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
@@ -82,13 +87,15 @@ import java.util.List;
  */
 public class BookAppointmentDialogFragment extends HealthCocoDialogFragment implements
         GsonRequest.ErrorListener, LocalDoInBackgroundListenerOptimised, Response.Listener<VolleyResponseBean>,
-        View.OnClickListener, AdapterView.OnItemClickListener, HealthcocoTextWatcherListener, AutoCompleteTextViewListener {
+        View.OnClickListener, AdapterView.OnItemClickListener, HealthcocoTextWatcherListener, AutoCompleteTextViewListener, PopupWindowListener {
     public static final String INTENT_REFRESH_SELECTED_PATIENT = "com.healthcoco.REFRESH_SELECTED_PATIENT";
-    private static final String DATE_FORMAT_USED_IN_THIS_SCREEN = "EEE, MMM dd,yyyy";
     public static final String TIME_SLOT_FORMAT_USED_IN_THIS_SCREEN = "hh:mm aaa";
     public static final String TIME_FORMAT_RECEIVED_FROM_SERVER = "H:mm";
+    public static final int DEFAULT_TIME_INTERVAL = 15;
+    public static final String TIME_FORMAT = "hh:mm aaa";
     public static final String TAG_FROM_SCREEN_TYPE = "isFromCalendarFragment";
     public static final String TAG_APPOINTMENT_ID = "appointmentId";
+    private static final String DATE_FORMAT_USED_IN_THIS_SCREEN = "EEE, MMM dd,yyyy";
     private static final int REQUEST_CODE_BOOK_APPOINTMENT = 101;
 
     private User user;
@@ -98,6 +105,7 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
     private AppointmentSlotAdapter adapter;
     private Button btSelectPatient;
     private LinearLayout containerPatientProfileHeader;
+    private LinearLayout layoutSelectTimeSlot;
     private BookAppointmentFromScreenType bookAppointmentFromScreenType;
     private AvailableTimeSlots selectedTimeSlot;
     private String appointmentId;
@@ -109,19 +117,33 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
     private CheckBox cbSmsDoctor;
     private CheckBox cbSmsPatient;
     private LinearLayout containerSelectPatient;
+    private TextView tvSelectedTime;
+    private TextView tvAppointmentSlotDuration;
     private Button btAddNewPatient;
     private EditText editMobileNumber;
     private ImageButton btClearMobileNumber;
     private FrameLayout containerDetailsAddNewPatient;
     private ExistingPatientAutoCompleteAdapter existingPatientAutotvAdapter;
     private AutoCompleteTextView autotvPatientName;
+    BroadcastReceiver refreshSelectedContactReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, final Intent intent) {
+            getAndRefreshSelectedPatient(false);
+        }
+    };
+    BroadcastReceiver refreshPatientProfileReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, final Intent intent) {
+            getAndRefreshSelectedPatient(false);
+        }
+    };
     private LinearLayout loadingExistingPatientsList;
     private LinearLayout parentAddSelectPatient;
     private TextView tvClinicName;
     private DoctorClinicProfile doctorClinicProfile;
-    private GridView gvTimeSlots;
-    private ImageButton btPreviousDate;
-    private ImageButton btNextDate;
+    //    private GridView gvTimeSlots;
+//    private ImageButton btPreviousDate;
+//    private ImageButton btNextDate;
     private TextView tvClinicClosed;
     private AppointmentSlot selectedAppointmentSlot;
 
@@ -169,7 +191,8 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
     public void init() {
         initViews();
         initListeners();
-        initAdapter();
+//        initAdapter();
+        mActivity.initPopupWindows(tvAppointmentSlotDuration, PopupWindowType.APPOINTMENT_SLOT, PopupWindowType.APPOINTMENT_SLOT.getList(), this);
         initPatientProfile();
     }
 
@@ -193,11 +216,14 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
         parentAddSelectPatient = (LinearLayout) view.findViewById(R.id.parent_add_select_patient);
         tvClinicName = (TextView) view.findViewById(R.id.tv_clinic_name);
 
-        gvTimeSlots = (GridView) view.findViewById(R.id.gv_time_Slots);
+//        gvTimeSlots = (GridView) view.findViewById(R.id.gv_time_Slots);
 
+        tvSelectedTime = (TextView) view.findViewById(R.id.tv_selected_time);
+        tvAppointmentSlotDuration = (TextView) view.findViewById(R.id.tv_appointment_slot);
         tvSelectedDate = (TextView) view.findViewById(R.id.tv_selected_date);
-        btPreviousDate = (ImageButton) view.findViewById(R.id.bt_previuos_date);
-        btNextDate = (ImageButton) view.findViewById(R.id.bt_next_date);
+//        btPreviousDate = (ImageButton) view.findViewById(R.id.bt_previuos_date);
+//        btNextDate = (ImageButton) view.findViewById(R.id.bt_next_date);
+        layoutSelectTimeSlot = (LinearLayout) view.findViewById(R.id.layout_select_time_slot);
         tvClinicClosed = (TextView) view.findViewById(R.id.tv_clinic_closed);
 //        tvClinicClosed.setMinimumHeight((int) (ScreenDimensions.SCREEN_HEIGHT * 0.70));
 //        gvTimeSlots.setMinimumHeight((int) (ScreenDimensions.SCREEN_HEIGHT * 0.70));
@@ -211,6 +237,7 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
         tvSelectedDate.setOnClickListener(this);
         tvSelectedDate.addTextChangedListener(new HealthcocoTextWatcher(tvSelectedDate, this));
         btSelectPatient.setOnClickListener(this);
+        tvSelectedTime.setOnClickListener(this);
         switch (bookAppointmentFromScreenType) {
             case CALENDAR_LIST_ADD_NEW:
                 containerPatientProfileHeader.setOnClickListener(this);
@@ -223,22 +250,34 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
         btClearMobileNumber.setOnClickListener(this);
         editMobileNumber.addTextChangedListener(new HealthcocoTextWatcher(editMobileNumber, this));
         autotvPatientName.addTextChangedListener(new HealthcocoTextWatcher(autotvPatientName, this));
-        gvTimeSlots.setOnItemClickListener(this);
-        btPreviousDate.setOnClickListener(this);
-        btNextDate.setOnClickListener(this);
+//        gvTimeSlots.setOnItemClickListener(this);
+//        btPreviousDate.setOnClickListener(this);
+//        btNextDate.setOnClickListener(this);
     }
 
     @Override
     public void initData() {
-        tvClinicName.setText(doctorClinicProfile.getLocationName());
+//        tvClinicName.setText(doctorClinicProfile.getLocationName());
+
+        if (selectedAppointment != null && selectedAppointment.getTime() != null && selectedAppointment.getTime().getFromTime() != null)
+            tvSelectedTime.setText(DateTimeUtil.getFormattedTime(0, Math.round(selectedAppointment.getTime().getFromTime())));
+        if (doctorClinicProfile != null) {
+            tvClinicName.setText(Util.getValidatedValue(doctorClinicProfile.getLocationName()));
+            if (doctorClinicProfile.getAppointmentSlot() != null) {
+                tvAppointmentSlotDuration.setTag(doctorClinicProfile.getAppointmentSlot().getTime());
+                String formattedString = Math.round(doctorClinicProfile.getAppointmentSlot().getTime()) + " " + Util.getValidatedValue(doctorClinicProfile.getAppointmentSlot().getTimeUnit().getValueToDisplay());
+                tvAppointmentSlotDuration.setText(formattedString);
+            }
+        }
     }
 
-    private void initAdapter() {
-        adapter = new AppointmentSlotAdapter(mActivity);
-        gvTimeSlots.setAdapter(adapter);
-    }
-
+    /*  private void initAdapter() {
+          adapter = new AppointmentSlotAdapter(mActivity);
+          gvTimeSlots.setAdapter(adapter);
+      }
+  */
     private void refreshSelectedDate(long date) {
+        tvSelectedTime.setTag(date);
         tvSelectedDate.setText(DateTimeUtil.getFormattedDateTime(DATE_FORMAT_USED_IN_THIS_SCREEN, date));
     }
 
@@ -275,11 +314,80 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
 
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                long selectedFromDateTimeMillis = getSelectedFromDateTime(year, monthOfYear, dayOfMonth);
                 textView.setText(DateTimeUtil.getFormattedTime(DateTimeUtil.DATE_FORMAT_WEEKDAY_DAY_MONTH_AS_TEXT_YEAR_DASH, year, monthOfYear, dayOfMonth, 0, 0, 0));
+                tvSelectedTime.setTag(selectedFromDateTimeMillis);
+                int msg = 0;
+                if (!DateTimeUtil.selectedTimeIsGreaterThanTime(selectedFromDateTimeMillis, DateTimeUtil.getCurrentDateLong())) {
+                    msg = R.string.time_to_should_be_greater_than_current_time;
+                }
+
+                if (msg == 0) {
+                    LogUtils.LOGD(TAG, "Time lesser");
+                    tvSelectedTime.setTag(selectedFromDateTimeMillis);
+                } else {
+                    Util.showToast(mActivity, msg);
+                    LogUtils.LOGD(TAG, "Time greater");
+                    tvSelectedTime.setText("");
+                    openTimePickerDialog(DateTimeUtil.getCurrentDateLong().toString(), tvSelectedTime);
+                }
             }
         }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
         datePickerDialog.getDatePicker().setMinDate(new Date().getTime() - 10000);
         datePickerDialog.show();
+    }
+
+    private void openTimePickerDialog(final String selectedFromTime, final TextView tvToTime) {
+        String defaultPickerTime = selectedFromTime;
+        String textTime = Util.getValidatedValueOrNull(tvToTime);
+        boolean isTextShown = false;
+        if (!Util.isNullOrBlank(textTime)) {
+            isTextShown = true;
+            defaultPickerTime = textTime;
+        }
+        final Calendar calendar = DateTimeUtil.getCalendarInstanceFromFormattedTime(TIME_FORMAT, defaultPickerTime, isTextShown, DEFAULT_TIME_INTERVAL);
+
+        final TimePickerDialog datePickerDialog = new TimePickerDialog(getActivity(), new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                long selectedFromDateTimeMillis = getSelectedFromDateTime(hourOfDay, minute);
+                int msg = 0;
+                if (!DateTimeUtil.selectedTimeIsGreaterThanTime(selectedFromDateTimeMillis, DateTimeUtil.getCurrentDateLong(DATE_FORMAT_USED_IN_THIS_SCREEN + "" + TIME_FORMAT))) {
+                    msg = R.string.time_to_should_be_greater_than_current_time;
+                }
+
+                if (msg == 0) {
+                    LogUtils.LOGD(TAG, "Time lesser");
+                    tvToTime.setText(DateTimeUtil.getFormattedDateTime(TIME_FORMAT, selectedFromDateTimeMillis));
+                    tvSelectedTime.setTag(selectedFromDateTimeMillis);
+                } else {
+                    openTimePickerDialog(selectedFromTime, tvToTime);
+                    Util.showToast(mActivity, msg);
+                    LogUtils.LOGD(TAG, "Time greater");
+                }
+            }
+
+        }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), false);
+        datePickerDialog.show();
+    }
+
+    private long getSelectedFromDateTime(int year, int month, int day) {
+        long selectedDatePickerTime = DateTimeUtil.getLongFromFormattedDateTime(TIME_FORMAT, Util.getValidatedValueOrNull(tvSelectedTime));
+        Calendar calendar1 = DateTimeUtil.getCalendarInstance();
+        calendar1.setTimeInMillis(selectedDatePickerTime);
+        calendar1.set(Calendar.YEAR, year);
+        calendar1.set(Calendar.MONTH, month);
+        calendar1.set(Calendar.DAY_OF_MONTH, day);
+        return calendar1.getTimeInMillis();
+    }
+
+    private long getSelectedFromDateTime(int hourOfDay, int minute) {
+        long selectedDatePickerTime = DateTimeUtil.getLongFromFormattedDateTime(DATE_FORMAT_USED_IN_THIS_SCREEN, Util.getValidatedValueOrNull(tvSelectedDate));
+        Calendar calendar1 = DateTimeUtil.getCalendarInstance();
+        calendar1.setTimeInMillis(selectedDatePickerTime);
+        calendar1.set(Calendar.HOUR_OF_DAY, hourOfDay);
+        calendar1.set(Calendar.MINUTE, minute);
+        return calendar1.getTimeInMillis();
     }
 
     @Override
@@ -312,12 +420,6 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
                         return;
                     }
                     break;
-                case GET_APPOINTMENT_TIME_SLOTS:
-                    if (response.getData() != null && response.getData() instanceof AppointmentTimeSlotDetails) {
-                        appointmentTimeSlotDetails = (AppointmentTimeSlotDetails) response.getData();
-                        refreshAppointmentSlotDetails(appointmentTimeSlotDetails);
-                    }
-                    break;
                 case ADD_APPOINTMENT:
                     if (response.isValidData(response) && response.getData() instanceof CalendarEvents) {
                         CalendarEvents calendarEvents = (CalendarEvents) response.getData();
@@ -333,6 +435,7 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
                         getDialog().dismiss();
                     }
                     break;
+
                 case SEARCH_PATIENTS:
                     if (!Util.isNullOrEmptyList(response.getDataList())) {
                         ArrayList<AlreadyRegisteredPatientsResponse> list = (ArrayList<AlreadyRegisteredPatientsResponse>) (ArrayList<?>) response
@@ -349,28 +452,6 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
             }
         }
         mActivity.hideLoading();
-    }
-
-    private void refreshAppointmentSlotDetails(AppointmentTimeSlotDetails appointmentTimeSlotDetails) {
-        if (appointmentTimeSlotDetails != null) {
-            if (appointmentTimeSlotDetails.getAppointmentSlot() != null) {
-                this.selectedAppointmentSlot = appointmentTimeSlotDetails.getAppointmentSlot();
-                LogUtils.LOGD(TAG, "Time " + appointmentTimeSlotDetails.getAppointmentSlot().getTime());
-            }
-            notifyAdapter(appointmentTimeSlotDetails.getSlots());
-        }
-    }
-
-    private void notifyAdapter(ArrayList<AvailableTimeSlots> list) {
-        if (!Util.isNullOrEmptyList(list)) {
-            tvClinicClosed.setVisibility(View.GONE);
-            gvTimeSlots.setVisibility(View.VISIBLE);
-            adapter.setListData(list);
-            adapter.notifyDataSetChanged();
-        } else {
-            tvClinicClosed.setVisibility(View.VISIBLE);
-            gvTimeSlots.setVisibility(View.GONE);
-        }
     }
 
     private void showSearchedPatientsListPopUp(List<AlreadyRegisteredPatientsResponse> list) {
@@ -424,6 +505,8 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
                 intent.setAction(PatientAppointmentDetailFragment.INTENT_GET_APPOINTMENT_LIST_LOCAL);
                 break;
         }
+//        sendBroadcastToCalendarFragment();
+
         intent.putExtra(TAG_APPOINTMENT_ID, aptId);
 //        if (intent != null && intent.getAction() != null)
         LocalBroadcastManager.getInstance(mApp.getApplicationContext()).sendBroadcast(intent);
@@ -475,6 +558,9 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
             case R.id.tv_selected_date:
                 openDatePickerDialog((TextView) v);
                 break;
+            case R.id.tv_selected_time:
+                openTimePickerDialog(null, (TextView) v);
+                break;
             case R.id.container_patient_profile_header:
             case R.id.bt_select_patient:
                 openContactsListScreen();
@@ -499,16 +585,16 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
                 autotvPatientName.setEnabled(true);
                 requestFocusOnEditText(autotvPatientName);
                 break;
-            case R.id.bt_next_date:
-                long nextDateTimeInMillis = DateTimeUtil.getNextDate(DateTimeUtil.getLongFromFormattedDayMonthYearFormatString(DATE_FORMAT_USED_IN_THIS_SCREEN,
-                        Util.getValidatedValueOrNull(tvSelectedDate)));
-                tvSelectedDate.setText(DateTimeUtil.getFormattedDateTime(DATE_FORMAT_USED_IN_THIS_SCREEN, nextDateTimeInMillis));
-                break;
-            case R.id.bt_previuos_date:
-                long previousDateTimeInMillis = DateTimeUtil.getPreviousDate(DateTimeUtil.getLongFromFormattedDayMonthYearFormatString(DATE_FORMAT_USED_IN_THIS_SCREEN,
-                        Util.getValidatedValueOrNull(tvSelectedDate)));
-                tvSelectedDate.setText(DateTimeUtil.getFormattedDateTime(DATE_FORMAT_USED_IN_THIS_SCREEN, previousDateTimeInMillis));
-                break;
+//            case R.id.bt_next_date:
+//                long nextDateTimeInMillis = DateTimeUtil.getNextDate(DateTimeUtil.getLongFromFormattedDayMonthYearFormatString(DATE_FORMAT_USED_IN_THIS_SCREEN,
+//                        Util.getValidatedValueOrNull(tvSelectedDate)));
+//                tvSelectedDate.setText(DateTimeUtil.getFormattedDateTime(DATE_FORMAT_USED_IN_THIS_SCREEN, nextDateTimeInMillis));
+//                break;
+//            case R.id.bt_previuos_date:
+//                long previousDateTimeInMillis = DateTimeUtil.getPreviousDate(DateTimeUtil.getLongFromFormattedDayMonthYearFormatString(DATE_FORMAT_USED_IN_THIS_SCREEN,
+//                        Util.getValidatedValueOrNull(tvSelectedDate)));
+//                tvSelectedDate.setText(DateTimeUtil.getFormattedDateTime(DATE_FORMAT_USED_IN_THIS_SCREEN, previousDateTimeInMillis));
+//                break;
         }
     }
 
@@ -534,6 +620,8 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
         clearPreviousAlerts();
         ArrayList<View> errorViewList = new ArrayList<>();
         String msg = null;
+        String selectedTime = String.valueOf(tvSelectedTime.getText()).trim();
+        String selectedSlotDuration = String.valueOf(tvAppointmentSlotDuration.getText()).trim();
         String selectedDate = String.valueOf(tvSelectedDate.getText()).trim();
         String mobileNumber = String.valueOf(editMobileNumber.getText()).trim();
         String patientName = String.valueOf(autotvPatientName.getText()).trim();
@@ -547,9 +635,15 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
         } else if (Util.isNullOrBlank(selectedDate)) {
             msg = getResources().getString(R.string.please_select_date);
             errorViewList.add(tvSelectedDate);
-        } else if (selectedAppointmentSlot == null || selectedTimeSlot == null) {
+        } else if (Util.isNullOrBlank(selectedTime)) {
             msg = getResources().getString(R.string.please_select_time_slot);
-        }
+            errorViewList.add(tvSelectedTime);
+        } else if (Util.isNullOrBlank(selectedSlotDuration)) {
+            msg = getResources().getString(R.string.please_select_appointment_slot_duration);
+            errorViewList.add(tvSelectedTime);
+        } /*else if (selectedAppointmentSlot == null || selectedTimeSlot == null) {
+            msg = getResources().getString(R.string.please_select_time_slot);
+        }*/
         if (Util.isNullOrBlank(msg))
             addAppointment(selectedDate);
         else {
@@ -559,8 +653,9 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
 
     private void addAppointment(String selecetdDate) {
         mActivity.showLoading(false);
-        Float selectedFromTimeInMinutes = DateTimeUtil.getMinutesFromFormattedDateime(TIME_FORMAT_RECEIVED_FROM_SERVER,
-                selectedTimeSlot.getTime());
+        Float selectedFromTimeInMinutes = 0f;
+        if (tvSelectedTime.getTag() != null)
+            selectedFromTimeInMinutes = DateTimeUtil.getMinutesFromFormattedTime((long) tvSelectedTime.getTag());
 
         AppointmentRequestToSend appointment = new AppointmentRequestToSend();
         appointment.setCreatedBy(CreatedByType.DOCTOR);
@@ -580,7 +675,7 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
         appointment.setExplanation(Util.getValidatedValueOrNull(editNote));
         appointment.setFromDate(DateTimeUtil.getLongFromFormattedDayMonthYearFormatString(DATE_FORMAT_USED_IN_THIS_SCREEN, selecetdDate));
         appointment.setToDate(DateTimeUtil.getLongFromFormattedDayMonthYearFormatString(DATE_FORMAT_USED_IN_THIS_SCREEN, selecetdDate));
-        appointment.setTime(new WorkingHours(selectedFromTimeInMinutes, selectedFromTimeInMinutes + selectedAppointmentSlot.getTime()));
+        appointment.setTime(new WorkingHours(selectedFromTimeInMinutes, selectedFromTimeInMinutes + (float) tvAppointmentSlotDuration.getTag()));
 
         if (!Util.isNullOrBlank(appointmentId))
             appointment.setAppointmentId(appointmentId);
@@ -609,7 +704,7 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
             if (displayedDate.equalsIgnoreCase(DateTimeUtil.getCurrentFormattedDate(format))) {
                 displayedDate = DateTimeUtil.getCurrentFormattedDate(DATE_FORMAT_USED_IN_THIS_SCREEN);
             }
-            WebDataServiceImpl.getInstance(mApp).getAppointmentSlotsDetails(AppointmentTimeSlotDetails.class, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(), DateTimeUtil.getLongFromFormattedDayMonthYearFormatString(DATE_FORMAT_USED_IN_THIS_SCREEN, displayedDate), this, this);
+//            WebDataServiceImpl.getInstance(mApp).getAppointmentSlotsDetails(AppointmentTimeSlotDetails.class, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(), DateTimeUtil.getLongFromFormattedDayMonthYearFormatString(DATE_FORMAT_USED_IN_THIS_SCREEN, displayedDate), this, this);
         } else
             Util.showToast(mActivity, R.string.user_offline);
     }
@@ -639,6 +734,8 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
     @Override
     public void onDestroy() {
         super.onDestroy();
+//        sendBroadcasts(null);
+        mActivity.hideLoading();
         if (bookAppointmentFromScreenType == BookAppointmentFromScreenType.CALENDAR_LIST_ADD_NEW || bookAppointmentFromScreenType == BookAppointmentFromScreenType.CALENDAR_LIST_RESCHEDULE)
             HealthCocoConstants.SELECTED_PATIENTS_USER_ID = null;
         LocalBroadcastManager.getInstance(mActivity).unregisterReceiver(refreshSelectedContactReceiver);
@@ -658,13 +755,6 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
     public void scrollToPosition(int position) {
 
     }
-
-    BroadcastReceiver refreshSelectedContactReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, final Intent intent) {
-            getAndRefreshSelectedPatient(false);
-        }
-    };
 
     private void getAndRefreshSelectedPatient(boolean isExistingPatientPartOfClinic) {
         LogUtils.LOGD(TAG, "SELECTED_PATIENTS_USER_ID selected " + HealthCocoConstants.SELECTED_PATIENTS_USER_ID);
@@ -697,7 +787,7 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
                 break;
             case R.id.tv_selected_date:
                 LogUtils.LOGD(TAG, "TextVieew Selected Date ");
-                getAppointmentSlotNew(DATE_FORMAT_USED_IN_THIS_SCREEN, s);
+//                getAppointmentSlotNew(DATE_FORMAT_USED_IN_THIS_SCREEN, s);
                 if (!DateTimeUtil.isCurrentDateSelected(DATE_FORMAT_USED_IN_THIS_SCREEN,
                         Util.getValidatedValueOrNull(tvSelectedDate))) {
                     setPreviousButtonVisibility(View.VISIBLE);
@@ -708,7 +798,7 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
     }
 
     private void setPreviousButtonVisibility(int visibility) {
-        btPreviousDate.setVisibility(visibility);
+//        btPreviousDate.setVisibility(visibility);
     }
 
     private void getExistingPatientsList(String mobileNo) {
@@ -716,10 +806,22 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
         WebDataServiceImpl.getInstance(mApp).getAlreadyRegisteredPatients(AlreadyRegisteredPatientsResponse.class, mobileNo, user, this, this);
     }
 
-    BroadcastReceiver refreshPatientProfileReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, final Intent intent) {
-            getAndRefreshSelectedPatient(false);
+    @Override
+    public void onItemSelected(PopupWindowType popupWindowType, Object object) {
+        switch (popupWindowType) {
+            case APPOINTMENT_SLOT:
+                if (object != null && object instanceof AppointmentSlotsType) {
+                    AppointmentSlotsType appointmentSlotsType = (AppointmentSlotsType) object;
+                    String formattedString = Math.round(appointmentSlotsType.getTime()) + " " + Util.getValidatedValue(appointmentSlotsType.getUnits().getValueToDisplay());
+                    tvAppointmentSlotDuration.setText(formattedString);
+                    tvAppointmentSlotDuration.setTag(appointmentSlotsType.getTime());
+                }
+                break;
         }
-    };
+    }
+
+    @Override
+    public void onEmptyListFound() {
+
+    }
 }

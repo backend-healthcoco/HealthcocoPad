@@ -3537,13 +3537,28 @@ public class LocalDataServiceImpl {
     }
 
     public void addAppointment(CalendarEvents appointment) {
+
+        deleteWorkingHoursIfAlreadyPresent(LocalDatabaseUtils.KEY_FOREIGN_TABLE_ID, appointment.getUniqueId());
         if (appointment.getTime() != null) {
-            appointment.setWorkingHoursJson(getJsonFromObject(appointment.getTime()));
+            addWorkingHour(CalendarEvents.class.getSimpleName(), appointment.getUniqueId(), appointment.getTime());
+//            addWorkingHour(CalendarEvents.class.getSimpleName() + appointment.getUniqueId(), LocalDatabaseUtils.KEY_FOREIGN_TABLE_ID, appointment.getUniqueId(), appointment.getTime());
         }
         if (appointment.getPatient() != null) {
             appointment.setPatientId(appointment.getPatient().getUserId());
+//            addPatient(appointment.getPatient());
         }
         appointment.save();
+    }
+
+    private void addWorkingHour(String className, String foreignTableId, WorkingHours workingHour) {
+        String customUniqueId = className + foreignTableId + workingHour.getFromTime() + workingHour.getToTime();
+        workingHour.setCustomUniqueId(customUniqueId);
+        workingHour.setForeignTableId(foreignTableId);
+        workingHour.save();
+    }
+
+    private void deleteWorkingHoursIfAlreadyPresent(String key, String value) {
+        WorkingHours.deleteAll(WorkingHours.class, key + "= ?", value);
     }
 
     public VolleyResponseBean getAppointmentsListResponsePageWise(WebServiceType webServiceType, boolean isOtpVerified, String doctorId, String hospitalId, String locationId,
@@ -3594,7 +3609,7 @@ public class LocalDataServiceImpl {
     }
 
     private void getAppointDetail(CalendarEvents appointment) {
-        appointment.setTime((WorkingHours) getObjectFromJson(WorkingHours.class, appointment.getWorkingHoursJson()));
+        appointment.setTime((WorkingHours) getObject(WorkingHours.class, LocalDatabaseUtils.KEY_FOREIGN_TABLE_ID, appointment.getUniqueId()));
         appointment.setPatient(getPatientCard(appointment.getPatientId()));
     }
 
@@ -3630,7 +3645,9 @@ public class LocalDataServiceImpl {
         if (calendarEvents.getFromDate() != null && calendarEvents.getToDate() != null && !(calendarEvents.getFromDate().equals(calendarEvents.getToDate()))) {
             addMultipledayEvent(calendarEvents);
         }
-        calendarEvents.setWorkingHoursJson(getJsonFromObject(calendarEvents.getTime()));
+        if (calendarEvents.getTime() != null) {
+            addWorkingHour(CalendarEvents.class.getSimpleName(), calendarEvents.getUniqueId(), calendarEvents.getTime());
+        }
         if (calendarEvents.getPatient() != null) {
             calendarEvents.setPatientId(calendarEvents.getPatient().getUserId());
             addPatientCard(calendarEvents.getPatient());
@@ -3869,8 +3886,9 @@ public class LocalDataServiceImpl {
     private TreatmentService getTreatmentServiceDetail(String treatmentItemId) {
         TreatmentService treatmentService = Select.from(TreatmentService.class)
                 .where(Condition.prop(LocalDatabaseUtils.KEY_TREATMENT_ITEM_ID).eq(treatmentItemId)).first();
-        if (treatmentService.getFieldsRequiredJsonString() != null)
-            treatmentService.setFieldsRequired((ArrayList<String>) (Object) getObjectsListFronJson(String.class, treatmentService.getFieldsRequiredJsonString()));
+        if (treatmentService != null)
+            if (treatmentService.getFieldsRequiredJsonString() != null)
+                treatmentService.setFieldsRequired((ArrayList<String>) (Object) getObjectsListFronJson(String.class, treatmentService.getFieldsRequiredJsonString()));
         return treatmentService;
     }
 

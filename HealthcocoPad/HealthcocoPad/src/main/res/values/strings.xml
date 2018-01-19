@@ -319,6 +319,7 @@
     <string name="generate_otp">Generate OTP</string>
 
     <string name="appointment_details">Appointment Details</string>
+    <string name="select_time">Select Time</string>
     <string name="consultant_fees">Consultant Fees</string>
     <string name="second_consultant_fees">Second Consultant Fees</string>
     <string name="rupee_consultant_fees">\u20B9 Consultant Fees</string>
@@ -781,11 +782,13 @@
     <string name="are_you_sure_confirm_appointment">Confirm Appointment&#160;</string>
     <string name="reminder_sent">Reminder to Patient has been sent Successfully</string>
     <string name="no_appointment_found">No Appointment Found</string>
+    <string name="time_to_should_be_greater_than_current_time">Time to should be greater than Current Time </string>
     <string name="appointment_created">Appointment Created</string>
     <string name="please_select_patient_or_add_new">Please select Patient or add New Patient</string>
     <string name="please_enter_valid_mobile_no_or_select_existing_patient">Please enter valid Mobile Number or Select existing Patient</string>
     <string name="please_enter_patient_name_or_select_existing_patient">Please enter Patient Name or Select existing Patient</string>
     <string name="please_select_time_slot">Please select Time Slot</string>
+    <string name="please_select_appointment_slot_duration">Please select Appointment Slot Duration</string>
     <string name="please_select_date">Please select Date</string>
     <string name="selected_time_slot_is_not_available">Selected Time Slot is not Available</string>
     <string name="no_slots_available">No Slots Available</string>

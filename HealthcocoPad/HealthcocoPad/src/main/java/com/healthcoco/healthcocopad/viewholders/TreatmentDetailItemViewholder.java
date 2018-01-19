@@ -76,7 +76,8 @@ public class TreatmentDetailItemViewholder extends LinearLayout {
         TreatmentService treatmentService = null;
         if (treatmentItem.getTreatmentServices() != null) {
             treatmentService = treatmentItem.getTreatmentService();
-            treatmentItem.setId(treatmentService.getId());
+            if (treatmentService != null)
+                treatmentItem.setId(treatmentService.getId());
         }
 //        else if (!Util.isNullOrBlank(treatments.getDrugId())) {
 //            treatmentService = LocalDataServiceImpl.getInstance(mApp).getDrug(treatments.getDrugId());

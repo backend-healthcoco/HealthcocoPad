@@ -56,10 +56,10 @@ public class PatientAppointmentDetailFragment extends HealthCocoFragment impleme
     //variables need for pagination
     public static final int MAX_SIZE = 10;
     public static final int REQUEST_CODE_APPOINTMENTS_LIST = 111;
+    public FloatingActionButton floatingActionButton;
     private int PAGE_NUMBER = 0;
     private boolean isEndOfListAchieved;
     private boolean isInitialLoading;
-
     private SwipeRefreshLayout swipeRefreshLayout;
     private ListViewLoadMore lvAppointment;
     private TextView tvNoAppointmentsFound;
@@ -67,10 +67,31 @@ public class PatientAppointmentDetailFragment extends HealthCocoFragment impleme
     private AppointmentsListAdapter adapter;
     private boolean isOTPVerified = false;
     private HashMap<String, CalendarEvents> appointmentsListHashMap = new HashMap<String, CalendarEvents>();
+    BroadcastReceiver appointmentListReceiverLocal = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, final Intent intent) {
+            boolean showLoading = false;
+            String appointmentId = "";
+            if (intent != null) {
+                if (intent.hasExtra(SHOW_LOADING))
+                    showLoading = intent.getBooleanExtra(SHOW_LOADING, false);
+                appointmentId = intent.getStringExtra(BookAppointmentDialogFragment.TAG_APPOINTMENT_ID);
+                if (!Util.isNullOrBlank(appointmentId)) {
+                    CalendarEvents appointment = LocalDataServiceImpl.getInstance(mApp).getAppointment(appointmentId);
+                    if (appointment != null) {
+                        appointmentsListHashMap.put(appointment.getUniqueId(), appointment);
+                        notifyAdapter(new ArrayList<CalendarEvents>(appointmentsListHashMap.values()));
+                        return;
+                    }
+                }
+            }
+            resetListAndPagingAttributes();
+            getListFromLocal(showLoading);
+        }
+    };
     private boolean receiversRegistered;
     private RegisteredPatientDetailsUpdated selectedPatient;
     private User user;
-    public FloatingActionButton floatingActionButton;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -296,28 +317,6 @@ public class PatientAppointmentDetailFragment extends HealthCocoFragment impleme
     public boolean isEndOfListAchieved() {
         return isEndOfListAchieved;
     }
-
-    BroadcastReceiver appointmentListReceiverLocal = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, final Intent intent) {
-            boolean showLoading = false;
-            String appointmentId = "";
-            if (intent != null) {
-                if (intent.hasExtra(SHOW_LOADING))
-                    showLoading = intent.getBooleanExtra(SHOW_LOADING, false);
-                if (!Util.isNullOrBlank(appointmentId)) {
-                    CalendarEvents appointment = LocalDataServiceImpl.getInstance(mApp).getAppointment(appointmentId);
-                    if (appointment != null) {
-                        appointmentsListHashMap.put(appointment.getUniqueId(), appointment);
-                        notifyAdapter(new ArrayList<CalendarEvents>(appointmentsListHashMap.values()));
-                        return;
-                    }
-                }
-            }
-            resetListAndPagingAttributes();
-            getListFromLocal(showLoading);
-        }
-    };
 
     public void refreshData() {
         getListFromLocal(true);

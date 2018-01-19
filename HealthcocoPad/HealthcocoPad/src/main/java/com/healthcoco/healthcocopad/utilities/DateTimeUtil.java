@@ -7,6 +7,7 @@ import android.widget.TextView;
 import com.healthcoco.healthcocopad.bean.DOB;
 import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
 import com.healthcoco.healthcocopad.dialogFragment.AddEditClinicHoursDialogFragment;
+import com.healthcoco.healthcocopad.dialogFragment.BookAppointmentDialogFragment;
 import com.healthcoco.healthcocopad.fragments.CalendarFragment;
 
 import java.sql.Date;
@@ -252,6 +253,21 @@ public class DateTimeUtil {
 
     }
 
+    public static boolean selectedTimeIsGreaterThanTime(long toTime, long fromTime) {
+        if (fromTime > 0) {
+            try {
+                java.util.Date toDate = new Date(toTime);
+                java.util.Date fromDate = new Date(fromTime);
+                int comparision = toDate.compareTo(fromDate);
+                if (comparision < 0)
+                    return false;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return true;
+    }
+
     /**
      * if fomrattedFrom time is null or blank wil return current calnedar time
      * else
@@ -273,6 +289,34 @@ public class DateTimeUtil {
                 int selectedMinuteFrom = calendar.get(Calendar.MINUTE);
                 if (!isTextShown) {
                     selectedMinuteFrom = selectedMinuteFrom + AddEditClinicHoursDialogFragment.DEFAULT_TIME_INTERVAL;
+                    if (selectedMinuteFrom > 60) {
+                        selectedHourFrom++;
+                        selectedMinuteFrom = selectedMinuteFrom - 60;
+                    }
+                }
+                calendar.set(Calendar.HOUR_OF_DAY, selectedHourFrom);
+                calendar.set(Calendar.MINUTE, selectedMinuteFrom);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+        return calendar;
+    }
+
+
+    public static Calendar getCalendarInstanceFromFormattedTime(String format, String formattedFromTime, boolean isTextShown, int timeDifference) {
+        Calendar calendar = getCalendarInstance();
+        if (!Util.isNullOrBlank(formattedFromTime)) {
+            SimpleDateFormat originalFormat = new SimpleDateFormat(format, Locale.ENGLISH);
+            try {
+                java.util.Date date = new java.util.Date(getLongFromFormattedDateTime(format, formattedFromTime));
+                System.out.println("Old Format :   " + originalFormat.format(date));
+                calendar.setTime(date);
+
+                int selectedHourFrom = calendar.get(Calendar.HOUR_OF_DAY);
+                int selectedMinuteFrom = calendar.get(Calendar.MINUTE);
+                if (!isTextShown) {
+                    selectedMinuteFrom = selectedMinuteFrom + BookAppointmentDialogFragment.DEFAULT_TIME_INTERVAL;
                     if (selectedMinuteFrom > 60) {
                         selectedHourFrom++;
                         selectedMinuteFrom = selectedMinuteFrom - 60;
@@ -310,6 +354,17 @@ public class DateTimeUtil {
         return null;
     }
 
+    public static Float getMinutesFromFormattedTime(long time) {
+        float totalMinutes = 0;
+        Calendar calendar = getCalendarInstance();
+        calendar.setTimeInMillis(time);
+        int hours = calendar.get(Calendar.HOUR_OF_DAY);
+        int minutes = calendar.get(Calendar.MINUTE);
+        int seconds = calendar.get(Calendar.SECOND);
+        totalMinutes = (hours * 60) + minutes + (seconds / 60);
+        return totalMinutes;
+    }
+
     public static long getMaxDate(long time) {
         Calendar maxDate = Calendar.getInstance();
         maxDate.setTimeInMillis(time);
@@ -334,6 +389,12 @@ public class DateTimeUtil {
     public static Long getCurrentDateLong() {
         long currentDateTime = new java.util.Date().getTime();
         return currentDateTime;
+    }
+
+    public static Long getCurrentDateLong(String format) {
+        long currentDateTime = new java.util.Date().getTime();
+        String formatteddate = new SimpleDateFormat(format, Locale.ENGLISH).format(new Date(currentDateTime));
+        return getLongFromFormattedDateTime(format, formatteddate);
     }
 
     public static String getCurrentDate() {
@@ -449,4 +510,28 @@ public class DateTimeUtil {
             return true;
         return false;
     }
+
+    public static long getLongFromFormattedDateTime(String format, String formattedDate) {
+        try {
+            if (!Util.isNullOrBlank(formattedDate)) {
+                SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.ENGLISH);
+                sdf.setTimeZone(TimeZone.getDefault());
+                long timeInMillis = sdf.parse(formattedDate).getTime();
+                Calendar calendar = getCalendarInstance();
+                calendar.setTimeInMillis(timeInMillis);
+                return calendar.getTimeInMillis();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (formattedDate.contains("PM") || formattedDate.contains("pm") || formattedDate.contains("AM") || formattedDate.contains("am")) {
+                formattedDate = formattedDate.replace("PM", "p.m.");
+                formattedDate = formattedDate.replace("pm", "p.m.");
+                formattedDate = formattedDate.replace("AM", "a.m.");
+                formattedDate = formattedDate.replace("am", "a.m.");
+                getLongFromFormattedDateTime(format, formattedDate);
+            }
+        }
+        return 0;
+    }
+
 }

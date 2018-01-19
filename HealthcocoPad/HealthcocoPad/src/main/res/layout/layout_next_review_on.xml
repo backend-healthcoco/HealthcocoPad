@@ -7,44 +7,119 @@
 
     <include layout="@layout/action_bar_title_cross"></include>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
         android:orientation="vertical"
         android:padding="20dp">
 
+
         <LinearLayout
+            android:id="@+id/header_one"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:background="@color/grey_background"
+            android:gravity="center"
+            android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/tv_selected_date"
-                style="@style/registration_edittext"
-                android:layout_width="0dp"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:drawableRight="@drawable/arrow_down_drug"
-                android:gravity="center"
-                android:text="@string/date"
-                android:textColor="@color/grey_dark_text"
-                android:textSize="15sp" />
+                android:background="@color/white"
+                android:orientation="horizontal"
+                android:padding="@dimen/list_item_padding">
 
-            <TextView
-                android:id="@+id/tv_selected_time_slot"
-                style="@style/registration_edittext"
-                android:layout_width="0dp"
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|start"
+                    android:layout_weight="1"
+                    android:gravity="center|start"
+                    android:paddingLeft="10dp"
+                    android:text="@string/date"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_book_appointment_dialog_fragment" />
+
+                <TextView
+                    android:id="@+id/tv_selected_date"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|start"
+                    android:layout_weight="1"
+                    android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
+                    android:drawableEnd="@drawable/arrow_down_drug"
+                    android:gravity="center|start"
+                    android:minHeight="0dp"
+                    android:padding="10dp"
+                    android:text="Thu, 10 May,2016"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_book_appointment_dialog_fragment" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/grey_light_divider" />
+
+
+            <LinearLayout
+                android:id="@+id/layout_select_time_slot"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_weight="1"
-                android:drawableRight="@drawable/arrow_down_drug"
-                android:gravity="center"
-                android:hint="@string/time"
-                android:singleLine="true"
-                android:textColor="@drawable/text_black_normal_red_error_selector"
-                android:textColorHint="@drawable/text_grey_hint_normal_red_error_selector"
-                android:textSize="15sp" />
+                android:background="@color/white"
+                android:orientation="horizontal"
+                android:padding="@dimen/list_item_padding"
+                android:visibility="visible">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|start"
+                    android:layout_weight="20"
+                    android:gravity="center|start"
+                    android:paddingLeft="10dp"
+                    android:text="@string/time"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_book_appointment_dialog_fragment" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="70"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tv_selected_time"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/patient_profile_image_padding"
+                        android:layout_weight="50"
+                        android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
+                        android:drawableEnd="@drawable/arrow_down_drug"
+                        android:gravity="center"
+                        android:hint="@string/select_time"
+                        android:maxLines="1"
+                        android:padding="10dp"
+                        android:textColor="@drawable/text_black_normal_red_error_selector"
+                        android:textColorHint="@drawable/text_grey_hint_normal_red_error_selector"
+                        android:textSize="@dimen/text_size_book_appointment_dialog_fragment" />
+
+                    <TextView
+                        android:id="@+id/tv_appointment_slot"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="40"
+                        android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
+                        android:drawableEnd="@drawable/arrow_down_drug"
+                        android:gravity="center"
+                        android:hint="@string/select_slot"
+                        android:padding="10dp"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_book_appointment_dialog_fragment" />
+                </LinearLayout>
+            </LinearLayout>
+
         </LinearLayout>
 
         <LinearLayout

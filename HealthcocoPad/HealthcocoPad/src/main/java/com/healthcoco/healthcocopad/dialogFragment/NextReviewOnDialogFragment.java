@@ -1,6 +1,7 @@
 package com.healthcoco.healthcocopad.dialogFragment;
 
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -11,20 +12,25 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import com.android.volley.Response;
 import com.healthcoco.healthcocopad.HealthCocoDialogFragment;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
+import com.healthcoco.healthcocopad.bean.request.AppointmentRequestToSend;
 import com.healthcoco.healthcocopad.bean.server.AppointmentRequest;
 import com.healthcoco.healthcocopad.bean.server.AppointmentTimeSlotDetails;
 import com.healthcoco.healthcocopad.bean.server.AvailableTimeSlots;
+import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
+import com.healthcoco.healthcocopad.bean.server.DoctorClinicProfile;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.bean.WorkingHours;
 import com.healthcoco.healthcocopad.custom.HealthcocoTextWatcher;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
+import com.healthcoco.healthcocopad.enums.AppointmentSlotsType;
 import com.healthcoco.healthcocopad.enums.AppointmentStatusType;
 import com.healthcoco.healthcocopad.enums.CreatedByType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
@@ -60,8 +66,10 @@ public class NextReviewOnDialogFragment extends HealthCocoDialogFragment impleme
     public static final String DATE_FORMAT_USED_IN_THIS_SCREEN = "EEE, MMM dd,yyyy";
     public static final String TAG_INTENT_SELECTED_TIME_SLOT = "selectedTimeSlot";
     private Button btDone;
+    private TextView tvSelectedTime;
     private TextView tvSelectedDate;
-    private TextView tvSelectedTimeSlot;
+    //    private TextView tvSelectedTimeSlot;
+    private TextView tvAppointmentSlotDuration;
     private AvailableTimeSlots selectedTimeSlot;
     private AppointmentTimeSlotDetails appointmentTimeSlotDetails;
     private CheckBox cbSmsPatient;
@@ -70,6 +78,8 @@ public class NextReviewOnDialogFragment extends HealthCocoDialogFragment impleme
     private User user;
     private RegisteredPatientDetailsUpdated selectedPatient;
     private ArrayList<AvailableTimeSlots> availableTimeSlotsArrayList;
+    private DoctorClinicProfile clinicProfile;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -92,6 +102,7 @@ public class NextReviewOnDialogFragment extends HealthCocoDialogFragment impleme
         initViews();
         initListeners();
         initData();
+        mActivity.initPopupWindows(tvAppointmentSlotDuration, PopupWindowType.APPOINTMENT_SLOT, PopupWindowType.APPOINTMENT_SLOT.getList(), this);
     }
 
     @Override
@@ -99,14 +110,17 @@ public class NextReviewOnDialogFragment extends HealthCocoDialogFragment impleme
         cbEmailPatient = (CheckBox) view.findViewById(R.id.cb_email_patient);
         cbSmsPatient = (CheckBox) view.findViewById(R.id.cb_sms_patient);
         tvSelectedDate = (TextView) view.findViewById(R.id.tv_selected_date);
-        tvSelectedTimeSlot = (TextView) view.findViewById(R.id.tv_selected_time_slot);
+//        tvSelectedTimeSlot = (TextView) view.findViewById(R.id.tv_selected_time_slot);
         btDone = (Button) view.findViewById(R.id.bt_done);
+        tvSelectedTime = (TextView) view.findViewById(R.id.tv_selected_time);
+        tvAppointmentSlotDuration = (TextView) view.findViewById(R.id.tv_appointment_slot);
         initActionbarTitle(getResources().getString(R.string.next_review_on));
     }
 
     @Override
     public void initListeners() {
         tvSelectedDate.setOnClickListener(this);
+        tvSelectedTime.setOnClickListener(this);
         tvSelectedDate.addTextChangedListener(new HealthcocoTextWatcher(tvSelectedDate, this));
         btDone.setOnClickListener(this);
         initCrossButton();
@@ -114,13 +128,20 @@ public class NextReviewOnDialogFragment extends HealthCocoDialogFragment impleme
 
     @Override
     public void initData() {
-        tvSelectedTimeSlot.setText("");
-        if (appointmentTimeSlotDetails != null) {
-            if (appointmentTimeSlotDetails.getAppointmentSlot() != null) {
-                LogUtils.LOGD(TAG, "Time " + appointmentTimeSlotDetails.getAppointmentSlot().getTime());
-            }
-            if (!Util.isNullOrEmptyList(appointmentTimeSlotDetails.getSlots())) {
-                LogUtils.LOGD(TAG, "Slots Available " + appointmentTimeSlotDetails.getSlots().size());
+//        tvSelectedTimeSlot.setText("");
+//        if (appointmentTimeSlotDetails != null) {
+//            if (appointmentTimeSlotDetails.getAppointmentSlot() != null) {
+//                LogUtils.LOGD(TAG, "Time " + appointmentTimeSlotDetails.getAppointmentSlot().getTime());
+//            }
+//            if (!Util.isNullOrEmptyList(appointmentTimeSlotDetails.getSlots())) {
+//                LogUtils.LOGD(TAG, "Slots Available " + appointmentTimeSlotDetails.getSlots().size());
+//            }
+//        }
+        if (clinicProfile != null) {
+            if (clinicProfile.getAppointmentSlot() != null) {
+                tvAppointmentSlotDuration.setTag(clinicProfile.getAppointmentSlot().getTime());
+                String formattedString = Math.round(clinicProfile.getAppointmentSlot().getTime()) + " " + Util.getValidatedValue(clinicProfile.getAppointmentSlot().getTimeUnit().getValueToDisplay());
+                tvAppointmentSlotDuration.setText(formattedString);
             }
         }
     }
@@ -131,7 +152,10 @@ public class NextReviewOnDialogFragment extends HealthCocoDialogFragment impleme
 
     private void clearPreviousAlerts() {
         tvSelectedDate.setActivated(false);
-        tvSelectedTimeSlot.setActivated(false);
+        tvAppointmentSlotDuration.setActivated(false);
+        tvSelectedTime.setActivated(false);
+
+
     }
 
     @Override
@@ -198,13 +222,7 @@ public class NextReviewOnDialogFragment extends HealthCocoDialogFragment impleme
                         return;
                     }
                     break;
-                case GET_APPOINTMENT_TIME_SLOTS:
-                    if (response.getData() != null && response.getData() instanceof AppointmentTimeSlotDetails) {
-                        appointmentTimeSlotDetails = (AppointmentTimeSlotDetails) response.getData();
-                        availableTimeSlotsArrayList = appointmentTimeSlotDetails.getSlots();
-                            initPopupWindows(tvSelectedTimeSlot, PopupWindowType.TIME_SLOTS, (ArrayList<Object>) (ArrayList<?>) availableTimeSlotsArrayList, R.layout.spinner_drop_down_item_available_time_slots, this);
-                    }
-                    break;
+
             }
         }
         mActivity.hideLoading();
@@ -221,6 +239,7 @@ public class NextReviewOnDialogFragment extends HealthCocoDialogFragment impleme
                 if (doctor != null && doctor.getUser() != null) {
                     user = doctor.getUser();
                     selectedPatient = LocalDataServiceImpl.getInstance(mApp).getPatient(HealthCocoConstants.SELECTED_PATIENTS_USER_ID);
+                    clinicProfile = LocalDataServiceImpl.getInstance(mApp).getDoctorClinicProfile(user.getUniqueId(), user.getForeignLocationId());
                 }
                 break;
         }
@@ -250,32 +269,96 @@ public class NextReviewOnDialogFragment extends HealthCocoDialogFragment impleme
             case R.id.tv_selected_date:
                 openDatePickerDialog((TextView) v);
                 break;
+            case R.id.tv_selected_time:
+                openTimePickerDialog(null, (TextView) v);
+                break;
         }
+    }
+
+    private void openTimePickerDialog(final String selectedFromTime, final TextView tvToTime) {
+        String defaultPickerTime = selectedFromTime;
+        String textTime = Util.getValidatedValueOrNull(tvToTime);
+        boolean isTextShown = false;
+        if (!Util.isNullOrBlank(textTime)) {
+            isTextShown = true;
+            defaultPickerTime = textTime;
+        }
+        final Calendar calendar = DateTimeUtil.getCalendarInstanceFromFormattedTime(BookAppointmentDialogFragment.TIME_FORMAT, defaultPickerTime, isTextShown, BookAppointmentDialogFragment.DEFAULT_TIME_INTERVAL);
+
+        final TimePickerDialog datePickerDialog = new TimePickerDialog(getActivity(), new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                long selectedFromDateTimeMillis = getSelectedFromDateTime(hourOfDay, minute);
+                int msg = 0;
+                if (!DateTimeUtil.selectedTimeIsGreaterThanTime(selectedFromDateTimeMillis, DateTimeUtil.getCurrentDateLong(DATE_FORMAT_USED_IN_THIS_SCREEN + "" + BookAppointmentDialogFragment.TIME_FORMAT))) {
+                    msg = R.string.time_to_should_be_greater_than_current_time;
+                }
+
+                if (msg == 0) {
+                    LogUtils.LOGD(TAG, "Time lesser");
+                    tvToTime.setText(DateTimeUtil.getFormattedDateTime(BookAppointmentDialogFragment.TIME_FORMAT, selectedFromDateTimeMillis));
+                    tvSelectedTime.setTag(selectedFromDateTimeMillis);
+                } else {
+                    openTimePickerDialog(selectedFromTime, tvToTime);
+                    Util.showToast(mActivity, msg);
+                    LogUtils.LOGD(TAG, "Time greater");
+                }
+            }
+
+        }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), false);
+        datePickerDialog.show();
+    }
+
+    private long getSelectedFromDateTime(int hourOfDay, int minute) {
+        long selectedDatePickerTime = DateTimeUtil.getLongFromFormattedDateTime(DATE_FORMAT_USED_IN_THIS_SCREEN, Util.getValidatedValueOrNull(tvSelectedDate));
+        Calendar calendar1 = DateTimeUtil.getCalendarInstance();
+        calendar1.setTimeInMillis(selectedDatePickerTime);
+        calendar1.set(Calendar.HOUR_OF_DAY, hourOfDay);
+        calendar1.set(Calendar.MINUTE, minute);
+        return calendar1.getTimeInMillis();
+    }
+
+    private long getSelectedFromDateTime(int year, int month, int day) {
+        long selectedDatePickerTime = DateTimeUtil.getLongFromFormattedDateTime(BookAppointmentDialogFragment.TIME_FORMAT, Util.getValidatedValueOrNull(tvSelectedTime));
+        Calendar calendar1 = DateTimeUtil.getCalendarInstance();
+        calendar1.setTimeInMillis(selectedDatePickerTime);
+        calendar1.set(Calendar.YEAR, year);
+        calendar1.set(Calendar.MONTH, month);
+        calendar1.set(Calendar.DAY_OF_MONTH, day);
+        return calendar1.getTimeInMillis();
     }
 
     private void validateData() {
         clearPreviousAlerts();
         ArrayList<View> errorViewList = new ArrayList<>();
         String msg = null;
-        String selectedTime = String.valueOf(tvSelectedTimeSlot.getText()).trim();
+        String selectedTime = String.valueOf(tvSelectedTime.getText()).trim();
         String selectedDate = String.valueOf(tvSelectedDate.getText()).trim();
+        String selectedSlotDuration = String.valueOf(tvAppointmentSlotDuration.getText()).trim();
 
         if (Util.isNullOrBlank(selectedDate)) {
             msg = getResources().getString(R.string.please_select_date);
             errorViewList.add(tvSelectedDate);
-        } else if (Util.isNullOrBlank(selectedTime) || selectedTimeSlot == null) {
+        } else if (Util.isNullOrBlank(selectedTime)) {
             msg = getResources().getString(R.string.please_select_time_slot);
-            errorViewList.add(tvSelectedTimeSlot);
-        }
+            errorViewList.add(tvSelectedTime);
+        } else if (Util.isNullOrBlank(selectedSlotDuration)) {
+            msg = getResources().getString(R.string.please_select_appointment_slot_duration);
+            errorViewList.add(tvSelectedTime);
+        } /*else if (selectedAppointmentSlot == null || selectedTimeSlot == null) {
+            msg = getResources().getString(R.string.please_select_time_slot);
+        }*/
         if (Util.isNullOrBlank(msg))
-            addAppointment(selectedDate, selectedTime);
+            addAppointment(selectedDate);
         else {
             EditTextTextViewErrorUtil.showErrorOnEditText(mActivity, view, errorViewList, msg);
         }
     }
 
-    private void addAppointment(String selecetdDate, String selectedTime) {
-        Float selectedFromTimeInMinutes = DateTimeUtil.getMinutesFromFormattedDateime(TIME_SLOT_FORMAT_USED_IN_THIS_SCREEN, selectedTime);
+    private void addAppointment(String selecetdDate) {
+        Float selectedFromTimeInMinutes = 0f;
+        if (tvSelectedTime.getTag() != null)
+            selectedFromTimeInMinutes = DateTimeUtil.getMinutesFromFormattedTime((long) tvSelectedTime.getTag());
 
         appointment = new AppointmentRequest();
         appointment.setCreatedBy(CreatedByType.DOCTOR);
@@ -289,12 +372,14 @@ public class NextReviewOnDialogFragment extends HealthCocoDialogFragment impleme
 
         appointment.setFromDate(DateTimeUtil.getLongFromFormattedDayMonthYearFormatString(DATE_FORMAT_USED_IN_THIS_SCREEN, selecetdDate));
         appointment.setToDate(DateTimeUtil.getLongFromFormattedDayMonthYearFormatString(DATE_FORMAT_USED_IN_THIS_SCREEN, selecetdDate));
-        appointment.setTime(new WorkingHours(selectedFromTimeInMinutes, selectedFromTimeInMinutes + appointmentTimeSlotDetails.getAppointmentSlot().getTime()));
+        appointment.setTime(new WorkingHours(selectedFromTimeInMinutes, selectedFromTimeInMinutes + (float) tvAppointmentSlotDuration.getTag()));
+
 
         appointment.setState(AppointmentStatusType.CONFIRM);
 
         getTargetFragment().onActivityResult(getTargetRequestCode(), HealthCocoConstants.RESULT_CODE_NEXT_REVIEW, new Intent().putExtra(HealthCocoConstants.TAG_INTENT_DATA, Parcels.wrap(appointment)));
         getDialog().dismiss();
+
     }
 
     private void openDatePickerDialog(final TextView textView) {
@@ -304,7 +389,23 @@ public class NextReviewOnDialogFragment extends HealthCocoDialogFragment impleme
 
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                long selectedFromDateTimeMillis = getSelectedFromDateTime(year, monthOfYear, dayOfMonth);
                 textView.setText(DateTimeUtil.getFormattedTime(DateTimeUtil.DATE_FORMAT_WEEKDAY_DAY_MONTH_AS_TEXT_YEAR_DASH, year, monthOfYear, dayOfMonth, 0, 0, 0));
+                tvSelectedTime.setTag(selectedFromDateTimeMillis);
+                int msg = 0;
+                if (!DateTimeUtil.selectedTimeIsGreaterThanTime(selectedFromDateTimeMillis, DateTimeUtil.getCurrentDateLong())) {
+                    msg = R.string.time_to_should_be_greater_than_current_time;
+                }
+
+                if (msg == 0) {
+                    LogUtils.LOGD(TAG, "Time lesser");
+                    tvSelectedTime.setTag(selectedFromDateTimeMillis);
+                } else {
+                    Util.showToast(mActivity, msg);
+                    LogUtils.LOGD(TAG, "Time greater");
+                    tvSelectedTime.setText("");
+                    openTimePickerDialog(DateTimeUtil.getCurrentDateLong().toString(), tvSelectedTime);
+                }
             }
         }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
         datePickerDialog.getDatePicker().setMinDate(new Date().getTime() - 10000);
@@ -314,20 +415,12 @@ public class NextReviewOnDialogFragment extends HealthCocoDialogFragment impleme
     @Override
     public void onItemSelected(PopupWindowType popupWindowType, Object object) {
         switch (popupWindowType) {
-            case TIME_SLOTS:
-                if (object != null && object instanceof AvailableTimeSlots) {
-                    clearPreviousAlerts();
-                    AvailableTimeSlots availableTimeSlots = (AvailableTimeSlots) object;
-                    if (!availableTimeSlots.getIsAvailable()) {
-                        selectedTimeSlot = null;
-                        Util.showToast(mActivity, R.string.selected_time_slot_is_not_available);
-                        EditTextTextViewErrorUtil.showErrorOnEditText(mActivity, view, new ArrayList<View>() {{
-                            add(tvSelectedTimeSlot);
-                        }}, null);
-                    } else {
-                        selectedTimeSlot = availableTimeSlots;
-                        tvSelectedTimeSlot.setText(DateTimeUtil.convertFormattedDate(DateTimeUtil.TIME_FORMAT_24_HOUR, TIME_SLOT_FORMAT_USED_IN_THIS_SCREEN, selectedTimeSlot.getTime()));
-                    }
+            case APPOINTMENT_SLOT:
+                if (object != null && object instanceof AppointmentSlotsType) {
+                    AppointmentSlotsType appointmentSlotsType = (AppointmentSlotsType) object;
+                    String formattedString = Math.round(appointmentSlotsType.getTime()) + " " + Util.getValidatedValue(appointmentSlotsType.getUnits().getValueToDisplay());
+                    tvAppointmentSlotDuration.setText(formattedString);
+                    tvAppointmentSlotDuration.setTag(appointmentSlotsType.getTime());
                 }
                 break;
         }

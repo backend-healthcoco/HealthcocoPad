@@ -28,6 +28,21 @@ public enum PopupWindowType {
         add(UnitType.INR);
     }}),
 
+    APPOINTMENT_SLOT(new ArrayList<Object>() {{
+        add(AppointmentSlotsType.SLOT1);
+        add(AppointmentSlotsType.SLOT2);
+        add(AppointmentSlotsType.SLOT3);
+        add(AppointmentSlotsType.SLOT4);
+        add(AppointmentSlotsType.SLOT5);
+        add(AppointmentSlotsType.SLOT6);
+        add(AppointmentSlotsType.SLOT7);
+        add(AppointmentSlotsType.SLOT8);
+        add(AppointmentSlotsType.SLOT9);
+        add(AppointmentSlotsType.SLOT10);
+        add(AppointmentSlotsType.SLOT11);
+        add(AppointmentSlotsType.SLOT12);
+    }}),
+
     MATERIAL_TYPE(new ArrayList<Object>() {{
         add("Ceramic-full ceramic/pfm");
         add("Ni Cr");
