@@ -909,5 +909,8 @@
     <string name="select_due_invoice">Select Due Invoice</string>
     <string name="treatment_saved">Treatment Saved</string>
     <string name="doctor">Doctor&#160;:</string>
+    <string name="apply">Apply</string>
+    <string name="clear_all">Clear All</string>
+    <string name="select_all">Select All</string>
 
 </resources>

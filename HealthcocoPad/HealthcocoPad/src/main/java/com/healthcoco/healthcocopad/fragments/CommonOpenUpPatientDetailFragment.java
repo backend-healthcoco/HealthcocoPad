@@ -645,7 +645,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
             if (doctorsListPopupWindow != null)
                 doctorsListPopupWindow.notifyAdapter(new ArrayList<Object>(clinicDoctorListHashMap.values()));
             else
-                mActivity.initPopupWindows(tvDoctorName, PopupWindowType.DOCTOR_LIST, new ArrayList<Object>(clinicDoctorListHashMap.values()), this);
+                mActivity.initDoctorListPopupWindows(tvDoctorName, PopupWindowType.DOCTOR_LIST, new ArrayList<Object>(clinicDoctorListHashMap.values()), this);
         } else {
             doctorNameLayout.setVisibility(View.INVISIBLE);
             isSingleDoctor = true;
