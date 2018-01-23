@@ -15,37 +15,43 @@ import android.widget.TextView;
 
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.R;
+import com.healthcoco.healthcocopad.bean.server.ClinicDoctorProfile;
 import com.healthcoco.healthcocopad.enums.PopupWindowType;
+import com.healthcoco.healthcocopad.listeners.CBSelectedItemTypeListener;
+import com.healthcoco.healthcocopad.listeners.DoctorListPopupWindowListener;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
  * Created by neha on 03/05/17.
  */
 
-public class DoctorListPopupWindow extends PopupWindow implements View.OnClickListener, AdapterView.OnItemClickListener {
+public class DoctorListPopupWindow extends PopupWindow implements View.OnClickListener, AdapterView.OnItemClickListener, CBSelectedItemTypeListener {
     private final View anchorView;
     DoctorPopupListViewAdapter popupListViewAdapter;
     private List<Object> list;
-    private PopupWindowListener popupWindowListener;
+    private DoctorListPopupWindowListener doctorListPopupWindowListener;
     private HealthCocoActivity mActivity;
     private PopupWindowType popupWindowType;
     private int dropDownLayoutId;
     private LinearLayout layoutSelectAll;
     private TextView tvClearAll;
     private TextView tvApply;
+    private LinkedHashMap<String, ClinicDoctorProfile> requestLinkedHashMapForValidate = new LinkedHashMap<String, ClinicDoctorProfile>();
     private CheckBox cbSelectAll;
+    private boolean selectAll;
 
-    public DoctorListPopupWindow(Context context, View view, PopupWindowType popupWindowType, List<Object> list, PopupWindowListener popupWindowListener) {
-        this(context, view, popupWindowType, list, R.layout.spinner_drop_down_item_grey_background, popupWindowListener);
+    public DoctorListPopupWindow(Context context, View view, PopupWindowType popupWindowType, List<Object> list, DoctorListPopupWindowListener doctorListPopupWindowListener) {
+        this(context, view, popupWindowType, list, R.layout.spinner_drop_down_item_grey_background, doctorListPopupWindowListener);
     }
 
-    public DoctorListPopupWindow(Context context, View view, PopupWindowType popupWindowType, List<Object> list, int dropDownLayoutId, PopupWindowListener popupWindowListener) {
+    public DoctorListPopupWindow(Context context, View view, PopupWindowType popupWindowType, List<Object> list, int dropDownLayoutId, DoctorListPopupWindowListener doctorListPopupWindowListener) {
         super(context);
         this.mActivity = (HealthCocoActivity) context;
         this.popupWindowType = popupWindowType;
-        this.popupWindowListener = popupWindowListener;
+        this.doctorListPopupWindowListener = doctorListPopupWindowListener;
         this.dropDownLayoutId = dropDownLayoutId;
         this.list = list;
         this.anchorView = view;
@@ -53,11 +59,18 @@ public class DoctorListPopupWindow extends PopupWindow implements View.OnClickLi
 
     public View getPopupView() {
         LinearLayout linearLayout = (LinearLayout) mActivity.getLayoutInflater().inflate(R.layout.popup_window_doctor_list, null);
+        cbSelectAll = (CheckBox) linearLayout.findViewById(R.id.cb_select_all);
+        layoutSelectAll = (LinearLayout) linearLayout.findViewById(R.id.layout_select_all);
+        tvClearAll = (TextView) linearLayout.findViewById(R.id.tv_clear_all);
+        tvApply = (TextView) linearLayout.findViewById(R.id.tv_apply);
         ListView lvList = (ListView) linearLayout.findViewById(R.id.lv_popup_options);
-        popupListViewAdapter = new DoctorPopupListViewAdapter(mActivity, popupWindowType, dropDownLayoutId);
+        popupListViewAdapter = new DoctorPopupListViewAdapter(mActivity, popupWindowType, dropDownLayoutId, this);
         popupListViewAdapter.setListData(list);
         lvList.setAdapter(popupListViewAdapter);
         lvList.setOnItemClickListener(this);
+        tvClearAll.setOnClickListener(this);
+        tvApply.setOnClickListener(this);
+        layoutSelectAll.setOnClickListener(this);
 
         setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         setOutsideTouchable(true);
@@ -90,9 +103,9 @@ public class DoctorListPopupWindow extends PopupWindow implements View.OnClickLi
             TextView tvText = (TextView) anchorView;
             tvText.setText((String) tag);
         }
-        if (popupWindowListener != null)
-            popupWindowListener.onItemSelected(popupWindowType, tag);
-        dismiss();
+        if (doctorListPopupWindowListener != null)
+//            doctorListPopupWindowListener.onDoctorSelected(popupWindowType, tag);
+            dismiss();
     }
 
     @Override
@@ -100,7 +113,24 @@ public class DoctorListPopupWindow extends PopupWindow implements View.OnClickLi
         if (anchorView != null && anchorView.getId() == v.getId()) {
             if (list != null && list.size() > 0)
                 showOptionsWindow(v);
-            else popupWindowListener.onEmptyListFound();
+            else doctorListPopupWindowListener.onEmptyListFound();
+        }
+        switch (v.getId()) {
+            case R.id.layout_select_all:
+                selectAll = (!cbSelectAll.isChecked());
+//                setSelectAllSelected(!cbSelectAll.isChecked());
+                popupListViewAdapter.notifyDataSetChanged();
+                break;
+            case R.id.tv_clear_all:
+                selectAll = false;
+//                setSelectAllSelected(false);
+                popupListViewAdapter.notifyDataSetChanged();
+                break;
+            case R.id.tv_apply:
+                doctorListPopupWindowListener.onDoctorSelected(new ArrayList<ClinicDoctorProfile>(requestLinkedHashMapForValidate.values()));
+                dismiss();
+                break;
+
         }
     }
 
@@ -110,4 +140,29 @@ public class DoctorListPopupWindow extends PopupWindow implements View.OnClickLi
         popupListViewAdapter.notifyDataSetChanged();
     }
 
+    @Override
+    public void onCBSelectedItemTypeCheckClicked(boolean isChecked, Object object) {
+        if (object instanceof ClinicDoctorProfile) {
+            ClinicDoctorProfile clinicDoctorProfile = ((ClinicDoctorProfile) object);
+            if (isChecked)
+                requestLinkedHashMapForValidate.put(clinicDoctorProfile.getUniqueId(), clinicDoctorProfile);
+            else requestLinkedHashMapForValidate.remove(clinicDoctorProfile.getUniqueId());
+        }
+        if (requestLinkedHashMapForValidate.size() == list.size()) {
+            setSelectAllSelected(true);
+        } else
+            cbSelectAll.setChecked(false);
+
+
+    }
+
+    @Override
+    public boolean isSelectAll() {
+        return selectAll;
+    }
+
+    @Override
+    public void setSelectAllSelected(boolean isSelected) {
+        cbSelectAll.setChecked(isSelected);
+    }
 }

@@ -24,6 +24,7 @@ import com.healthcoco.healthcocopad.activities.AddVisitsActivity;
 import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.adapter.PatientDetailVisitAdapter;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
+import com.healthcoco.healthcocopad.bean.server.ClinicDoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.Prescription;
 import com.healthcoco.healthcocopad.bean.server.Records;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
@@ -107,7 +108,8 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
         }
     };
     private PatientDetailTabType detailTabType;
-    private boolean forAllDoctor = false;
+    //    private boolean forAllDoctor = false;
+    private ArrayList<ClinicDoctorProfile> clinicDoctorProfileList;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -151,10 +153,11 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
         lvVisits.setAdapter(patientsVisitAdapter);
     }
 
-    public void refreshData(PatientDetailTabType detailTabType, boolean forAllDoctor) {
-        this.forAllDoctor = forAllDoctor;
+    public void refreshData(PatientDetailTabType detailTabType, ArrayList<ClinicDoctorProfile> clinicDoctorProfileList) {
+//        this.forAllDoctor = forAllDoctor;
         getListFromLocal(true, 0);
         this.detailTabType = detailTabType;
+        this.clinicDoctorProfileList = clinicDoctorProfileList;
 
     }
 
@@ -276,13 +279,13 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
             case ADD_VISITS:
                 LocalDataServiceImpl.getInstance(mApp).addVisitsList((ArrayList<VisitDetails>) (ArrayList<?>) response.getDataList());
             case GET_VISITS:
-                if (forAllDoctor) {
-                    volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getVisitsListPageWise(GET_PATIENT_VISIT, forAllDoctor, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(),
-                            selectedPatient.getUserId(), PAGE_NUMBER, MAX_SIZE, null, null);
-                } else {
-                    volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getVisitsListPageWise(GET_PATIENT_VISIT, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(),
-                            selectedPatient.getUserId(), PAGE_NUMBER, MAX_SIZE, null, null);
-                }
+//                if (forAllDoctor) {
+//                    volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getVisitsListPageWise(GET_PATIENT_VISIT, forAllDoctor, null, user.getForeignLocationId(), user.getForeignHospitalId(),
+//                            selectedPatient.getUserId(), PAGE_NUMBER, MAX_SIZE, null, null);
+//                } else {
+                volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getVisitsListPageWise(GET_PATIENT_VISIT, clinicDoctorProfileList, user.getForeignLocationId(), user.getForeignHospitalId(),
+                        selectedPatient.getUserId(), PAGE_NUMBER, MAX_SIZE, null, null);
+//                }
                 break;
         }
         if (volleyResponseBean == null)

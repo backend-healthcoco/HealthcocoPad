@@ -3037,14 +3037,14 @@ public class LocalDataServiceImpl {
     }
 
     //For Selected Doctors
-    public VolleyResponseBean getVisitsListPageWise(WebServiceType webServiceType, String doctorId, String locationId, String hospitalId,
+    public VolleyResponseBean getVisitsListPageWise(WebServiceType webServiceType, ArrayList<ClinicDoctorProfile> clinicDoctorProfileArrayList, String locationId, String hospitalId,
                                                     String patientId, int pageNum, int maxSize,
                                                     Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
-        return getVisitsListPageWise(webServiceType, false, doctorId, locationId, hospitalId, patientId, pageNum, maxSize, responseListener, errorListener);
+        return getVisitsListPageWise(webServiceType, false, clinicDoctorProfileArrayList, locationId, hospitalId, patientId, pageNum, maxSize, responseListener, errorListener);
     }
 
     //For All Doctors
-    public VolleyResponseBean getVisitsListPageWise(WebServiceType webServiceType, boolean forAll, String doctorId, String locationId, String hospitalId,
+    public VolleyResponseBean getVisitsListPageWise(WebServiceType webServiceType, boolean forAll, ArrayList<ClinicDoctorProfile> clinicDoctorProfileArrayList, String locationId, String hospitalId,
                                                     String patientId, int pageNum, int maxSize,
                                                     Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
@@ -3060,9 +3060,16 @@ public class LocalDataServiceImpl {
                     + LocalDatabaseUtils.KEY_HOSPITAL_ID + "=\"" + hospitalId + "\""
                     + " AND "
                     + LocalDatabaseUtils.KEY_PATIENT_ID + "=\"" + patientId + "\"";
-            if (!forAll) {
-                whereCondition = whereCondition + " AND " + LocalDatabaseUtils.KEY_DOCTOR_ID + "=\"" + doctorId + "\"";
+//            if (!forAll) {
+
+            for (int i = 0; i < clinicDoctorProfileArrayList.size(); i++) {
+                if (i == 0)
+                    whereCondition = whereCondition + " AND " + LocalDatabaseUtils.KEY_DOCTOR_ID + "=\"" + clinicDoctorProfileArrayList.get(i).getUniqueId() + "\"";
+                else
+                    whereCondition = whereCondition + " OR " + LocalDatabaseUtils.KEY_DOCTOR_ID + "=\"" + clinicDoctorProfileArrayList.get(i).getUniqueId() + "\"";
+
             }
+//            }
             //specifying order by limit and offset query
             String conditionsLimit = " ORDER BY " + LocalDatabaseUtils.KEY_VISITED_TIME + " DESC "
                     + " LIMIT " + maxSize

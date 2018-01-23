@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
@@ -17,7 +16,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -47,9 +45,9 @@ import com.healthcoco.healthcocopad.enums.PatientProfileScreenType;
 import com.healthcoco.healthcocopad.enums.PopupWindowType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.CommonOpenUpPatientDetailListener;
+import com.healthcoco.healthcocopad.listeners.DoctorListPopupWindowListener;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
 import com.healthcoco.healthcocopad.popupwindow.HealthcocoPopupWindow;
-import com.healthcoco.healthcocopad.popupwindow.PopupWindowListener;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.DownloadImageFromUrlUtil;
@@ -67,12 +65,11 @@ import static com.healthcoco.healthcocopad.R.id.container_right_action;
  * Created by Shreshtha on 03-03-2017.
  */
 public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implements View.OnClickListener, ViewPager.OnPageChangeListener, TabHost.OnTabChangeListener,
-        LocalDoInBackgroundListenerOptimised, CommonOpenUpPatientDetailListener, PopupWindowListener {
+        LocalDoInBackgroundListenerOptimised, CommonOpenUpPatientDetailListener, DoctorListPopupWindowListener {
     public static final String INTENT_REFRESH_PATIENT_PROFILE = "com.healthcoco.REFRESH_PATIENT_PROFILE";
     public static final String TAG_PATIENT_DETAIL_TAB_TYPE = "detailTabType";
     public static final String INTENT_REFRESH_AMOUNT_DETAILS = "com.healthcoco.REFRESH_AMOUNT_DETAILS";
-
-
+    ArrayList<ClinicDoctorProfile> clinicDoctorProfileList = new ArrayList<>();
     private TabHost tabhost;
     private ViewPager mViewPager;
     private ArrayList<Fragment> fragmentsList = new ArrayList<>();
@@ -123,7 +120,6 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
     private boolean isTreatmentTabClicked = false;
     private boolean isInvoiceTabClicked = false;
     private boolean isReceiptTabClicked = false;
-    private boolean forAllDoctor = false;
     private boolean isSingleDoctor = false;
     private TextView tvGenderDate;
     private int ordinal;
@@ -391,7 +387,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                     break;
                 case PATIENT_DETAIL_VISIT:
                     if (!isVisitsTabClicked) {
-                        visitsFragment.refreshData(PatientDetailTabType.PATIENT_DETAIL_VISIT, forAllDoctor);
+                        visitsFragment.refreshData(PatientDetailTabType.PATIENT_DETAIL_VISIT, clinicDoctorProfileList);
                         isVisitsTabClicked = true;
                     }
                     break;
@@ -403,7 +399,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                     break;
                 case PATIENT_DETAIL_CLINICAL_NOTES:
                     if (!isClinicalNotesTabClicked) {
-                        clinicalNotesDetailFragment.refreshData(PatientDetailTabType.PATIENT_DETAIL_CLINICAL_NOTES);
+                        clinicalNotesDetailFragment.refreshData(PatientDetailTabType.PATIENT_DETAIL_CLINICAL_NOTES, clinicDoctorProfileList);
                         isClinicalNotesTabClicked = true;
                     }
                     break;
@@ -486,11 +482,9 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
 
     private void refreshHeaderDueAmountData(RegisteredPatientDetailsUpdated selectedPatient) {
         if (selectedPatient.getTotalDueAmount() < 0) {
-//            tvDueAmount.setVisibility(View.VISIBLE);
             tvDueAmount.setText(String.valueOf(mActivity.getResources().getString(R.string.advance_amount)) + "\u20B9 " + Util.getFormattedDoubleNumber(selectedPatient.getTotalDueAmount()));
             tvDueAmount.setTextColor(mActivity.getResources().getColor(R.color.green_logo));
         } else if (selectedPatient.getTotalDueAmount() > 0) {
-//            tvDueAmount.setVisibility(View.VISIBLE);
             tvDueAmount.setText(String.valueOf(mActivity.getResources().getString(R.string.due_amount)) + "\u20B9 " + Util.getFormattedDoubleNumber(selectedPatient.getTotalDueAmount()));
             tvDueAmount.setTextColor(mActivity.getResources().getColor(R.color.red_error));
         } else {
@@ -551,7 +545,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                         initData();
                         refreshDoctorClinicText();
                         getPatientAmountDetails();
-                        visitsFragment.refreshData(PatientDetailTabType.PATIENT_DETAIL_VISIT, forAllDoctor);
+                        visitsFragment.refreshData(PatientDetailTabType.PATIENT_DETAIL_VISIT, clinicDoctorProfileList);
                         if (ordinal != 0) {
                             mViewPager.setCurrentItem(ordinal);
 //                            prescriptionDetailFragment.refreshData(PatientDetailTabType.PATIENT_DETAIL_PRESCRIPTION);
@@ -652,7 +646,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
         }
     }
 
-    @Override
+  /*  @Override
     public void onItemSelected(PopupWindowType popupWindowType, Object object) {
         switch (popupWindowType) {
             case DOCTOR_LIST:
@@ -665,7 +659,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                 }
                 break;
         }
-    }
+    }*/
 
     private void resetAllFlags() {
         isProfileTabClicked = false;
@@ -675,6 +669,22 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
         isClinicalNotesTabClicked = false;
         isReportsTabClicked = false;
         isTreatmentTabClicked = false;
+    }
+
+    @Override
+    public void onDoctorSelected(ArrayList<ClinicDoctorProfile> clinicDoctorProfileList) {
+        this.clinicDoctorProfileList = clinicDoctorProfileList;
+
+        if (clinicDoctorProfileList.size() == clinicDoctorListHashMap.size())
+            tvDoctorName.setText(R.string.for_all_doctor);
+        else if (clinicDoctorProfileList.size() > 1)
+            tvDoctorName.setText("For Multiple Doctor");
+        else {
+            tvDoctorName.setText(clinicDoctorProfileList.get(0).getFirstNameWithTitle());
+        }
+        user.setUniqueId(doctorProfile.getUniqueId());
+        resetAllFlags();
+        onTabChanged(null);
     }
 
     @Override

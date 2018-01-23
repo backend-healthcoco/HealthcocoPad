@@ -4,6 +4,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -13,15 +14,20 @@ import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.server.AvailableTimeSlots;
 import com.healthcoco.healthcocopad.bean.server.ClinicDoctorProfile;
+import com.healthcoco.healthcocopad.bean.server.UserGroups;
 import com.healthcoco.healthcocopad.dialogFragment.BookAppointmentDialogFragment;
 import com.healthcoco.healthcocopad.enums.AppointmentSlotsType;
 import com.healthcoco.healthcocopad.enums.PatientProfileScreenType;
 import com.healthcoco.healthcocopad.enums.PatientTreatmentStatus;
 import com.healthcoco.healthcocopad.enums.PopupWindowType;
 import com.healthcoco.healthcocopad.enums.UnitType;
+import com.healthcoco.healthcocopad.listeners.AssignGroupListener;
+import com.healthcoco.healthcocopad.listeners.CBSelectedItemTypeListener;
 import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
 import com.healthcoco.healthcocopad.utilities.DownloadImageFromUrlUtil;
 import com.healthcoco.healthcocopad.utilities.Util;
+import com.healthcoco.healthcocopad.viewholders.DoctorListViewHolder;
+import com.healthcoco.healthcocopad.viewholders.GroupListViewHolder;
 import com.healthcoco.healthcocopad.views.TextViewFontAwesome;
 
 import java.util.List;
@@ -30,26 +36,28 @@ import java.util.List;
  * Created by neha on 11/05/17.
  */
 
-public class DoctorPopupListViewAdapter extends BaseAdapter implements View.OnClickListener {
+public class DoctorPopupListViewAdapter extends BaseAdapter {
+
+    CBSelectedItemTypeListener cbSelectedItemTypeListener;
+    private DoctorListViewHolder holder;
     private int dropDownLayoutId;
     private PopupWindowType popupWindowType;
     private HealthCocoActivity mActivity;
     private List<Object> list;
-    private TextViewFontAwesome tvBullet;
-    private CheckBox cbSelectDoctor;
 
-    public DoctorPopupListViewAdapter(HealthCocoActivity mActivity, PopupWindowType popupWindowType, int dropDownLayoutId) {
+    public DoctorPopupListViewAdapter(HealthCocoActivity mActivity, PopupWindowType popupWindowType, int dropDownLayoutId, CBSelectedItemTypeListener cbSelectedItemTypeListener) {
         this.mActivity = mActivity;
         this.dropDownLayoutId = dropDownLayoutId;
         this.popupWindowType = popupWindowType;
+        this.cbSelectedItemTypeListener = cbSelectedItemTypeListener;
 
     }
 
     @Override
     public int getCount() {
-        if (list == null)
-            return 0;
-        return list.size();
+        if (!Util.isNullOrEmptyList(list))
+            return list.size();
+        return 0;
     }
 
     @Override
@@ -63,116 +71,24 @@ public class DoctorPopupListViewAdapter extends BaseAdapter implements View.OnCl
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            switch (popupWindowType) {
-                case DOCTOR_LIST:
-                    convertView = mActivity.getLayoutInflater().inflate(R.layout.item_doctor_popup_list, null);
-                    break;
-                default:
-                    convertView = mActivity.getLayoutInflater().inflate(dropDownLayoutId, null);
-                    break;
-            }
-        }
-        try {
-            applyData(convertView, getItem(position));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            holder = new DoctorListViewHolder(mActivity, cbSelectedItemTypeListener);
+            convertView = holder.getContentView();
+            convertView.setTag(holder);
+        } else
+            holder = (DoctorListViewHolder) convertView.getTag();
+        holder.setData(getItem(position));
+        holder.applyData();
         return convertView;
     }
 
-    private void applyData(View convertView, Object objData) {
-        convertView.setTag(objData);
-        switch (popupWindowType) {
-            case DOCTOR_LIST:
-                try {
-                    LinearLayout layoutImage = (LinearLayout) convertView.findViewById(R.id.layout_image);
-                    TextView tvName = (TextView) convertView.findViewById(R.id.tv_name);
-                    TextView tvInitialAlphabet = (TextView) convertView.findViewById(R.id.tv_initial_aplhabet);
-                    ProgressBar progressLoading = (ProgressBar) convertView.findViewById(R.id.progress_loading);
-                    ImageView ivContactProfile = (ImageView) convertView.findViewById(R.id.iv_image);
-                    cbSelectDoctor = (CheckBox) convertView.findViewById(R.id.cb_select_doctor);
-                    tvName.setOnClickListener(this);
-                    switch (popupWindowType) {
-                        case DOCTOR_LIST:
-                            ClinicDoctorProfile clinicDoctorProfile = null;
-                            if (objData instanceof ClinicDoctorProfile)
-                                clinicDoctorProfile = (ClinicDoctorProfile) objData;
-                            if (clinicDoctorProfile != null) {
-                                tvName.setText(Util.getValidatedValue(clinicDoctorProfile.getFirstNameWithTitle()));
-                                DownloadImageFromUrlUtil.loadImageWithInitialAlphabet(mActivity, PatientProfileScreenType.IN_EMR_HEADER, clinicDoctorProfile, progressLoading, ivContactProfile, tvInitialAlphabet);
-                            }
-                            layoutImage.setVisibility(View.VISIBLE);
-                            break;
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                break;
-            default:
-                TextView textView;
-                if (convertView instanceof TextView)
-                    textView = (TextView) convertView;
-                else
-                    textView = (TextView) convertView.findViewById(R.id.tv_text);
-                String text = getText(mActivity, objData);
-                if (!Util.isNullOrBlank(text)) {
-                    textView.setText(text);
-                }
-                break;
-        }
-    }
-
-    private String getText(HealthCocoActivity context, Object object) {
-        String text = "";
-        switch (popupWindowType) {
-            case DISCOUNT_TYPE:
-                if (object instanceof UnitType) {
-                    UnitType unitType = (UnitType) object;
-                    text = context.getResources().getString(unitType.getSymbolId());
-                }
-                break;
-            case STATUS_TYPE:
-                if (object instanceof PatientTreatmentStatus) {
-                    PatientTreatmentStatus treatmentStatus = (PatientTreatmentStatus) object;
-                    text = treatmentStatus.getTreamentStatus();
-                }
-                break;
-            case APPOINTMENT_SLOT:
-                if (object instanceof AppointmentSlotsType) {
-                    AppointmentSlotsType appointmentSlotsType = (AppointmentSlotsType) object;
-                    text = Math.round(appointmentSlotsType.getTime()) + " " + Util.getValidatedValue(appointmentSlotsType.getUnits().getValueToDisplay());
-                }
-                break;
-            case TIME_SLOTS:
-                if (object instanceof AvailableTimeSlots) {
-                    AvailableTimeSlots availableTimeSlots = (AvailableTimeSlots) object;
-                    text = DateTimeUtil.convertFormattedDate(DateTimeUtil.TIME_FORMAT_24_HOUR, BookAppointmentDialogFragment.TIME_SLOT_FORMAT_USED_IN_THIS_SCREEN, availableTimeSlots.getTime());
-                    if (availableTimeSlots.getIsAvailable() != null && availableTimeSlots.getIsAvailable()) {
-                        tvBullet.setSelected(false);
-                    } else
-                        tvBullet.setSelected(true);
-                }
-                break;
-            default:
-                if (object instanceof String)
-                    text = (String) object;
-                break;
-        }
-        return text;
-
-    }
 
     public void setListData(List<Object> listData) {
         this.list = listData;
     }
 
-    @Override
-    public void onClick(View v) {
-        cbSelectDoctor.setChecked(!cbSelectDoctor.isChecked());
 
-    }
 }
 
 

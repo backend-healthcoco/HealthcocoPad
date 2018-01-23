@@ -21,6 +21,7 @@ import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.adapter.ClinicalNotesListAdapter;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
+import com.healthcoco.healthcocopad.bean.server.ClinicDoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.ClinicalNotes;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.User;
@@ -110,6 +111,7 @@ public class PatientClinicalNotesDetailFragment extends HealthCocoFragment imple
         }
     };
     private String loginedUser;
+    private ArrayList<ClinicDoctorProfile> clinicDoctorProfileList = new ArrayList<>();
 
     public PatientClinicalNotesDetailFragment() {
     }
@@ -371,7 +373,7 @@ public class PatientClinicalNotesDetailFragment extends HealthCocoFragment imple
         }});
     }
 
-    public void refreshData(PatientDetailTabType detailTabType) {
+    public void refreshData(PatientDetailTabType detailTabType, ArrayList<ClinicDoctorProfile> clinicDoctorProfileList) {
         getListFromLocal(true, isOtpVerified(), 0);
         this.detailTabType = detailTabType;
     }
