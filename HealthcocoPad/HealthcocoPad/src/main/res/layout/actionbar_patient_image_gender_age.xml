@@ -67,28 +67,25 @@
         android:layout_marginRight="@dimen/list_item_clinic_profile_padding"
         android:layout_weight="1"
         android:gravity="center"
-        android:visibility="invisible">
+        android:visibility="visible">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="@dimen/padding_item_drug_dosage_top_bottom"
-            android:text="Doctor"
-            android:textColor="@color/white"
-            android:textSize="@dimen/text_size_patient_name_visit_fragment" />
 
         <TextView
             android:id="@+id/tv_doctor_name"
             android:layout_width="@dimen/doctor_name_textview_width"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/padding_item_drug_dosage_top_bottom"
-            android:background="@drawable/edit_text_bottom_line_grey_blue_solid_transparent_selector"
+            android:background="@drawable/shape_rounded_corners_white_border_solid_blue"
+            android:drawableEnd="@drawable/arrow_down_drug"
             android:drawablePadding="@dimen/patient_profile_image_padding"
             android:hint="@string/doctors"
-            android:padding="@dimen/dotor_profile_edit_text_bottom_padding"
+            android:paddingBottom="@dimen/dotor_profile_edit_text_top_padding"
+            android:paddingLeft="@dimen/item_contact_padding"
+            android:paddingRight="@dimen/dotor_profile_edit_text_top_padding"
+            android:paddingTop="@dimen/dotor_profile_edit_text_top_padding"
+            android:singleLine="true"
             android:textColor="@color/white"
-            android:textColorHint="@color/white_off"
+            android:textColorHint="@color/grey_light_text"
             android:textSize="@dimen/text_size_patient_name_visit_fragment" />
 
     </LinearLayout>

@@ -155,9 +155,9 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
 
     public void refreshData(PatientDetailTabType detailTabType, ArrayList<ClinicDoctorProfile> clinicDoctorProfileList) {
 //        this.forAllDoctor = forAllDoctor;
+        this.clinicDoctorProfileList = clinicDoctorProfileList;
         getListFromLocal(true, 0);
         this.detailTabType = detailTabType;
-        this.clinicDoctorProfileList = clinicDoctorProfileList;
 
     }
 

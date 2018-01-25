@@ -88,6 +88,7 @@ public abstract class HealthCocoFragment extends Fragment implements GsonRequest
     private RegisteredPatientDetailsUpdated selectedPatient;
     private LinearLayout btGlobalRecordAccess;
 
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         TAG = getClass().getSimpleName();
         mActivity = (HealthCocoActivity) getActivity();

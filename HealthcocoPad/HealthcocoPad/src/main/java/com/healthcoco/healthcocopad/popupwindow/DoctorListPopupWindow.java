@@ -42,6 +42,7 @@ public class DoctorListPopupWindow extends PopupWindow implements View.OnClickLi
     private LinkedHashMap<String, ClinicDoctorProfile> requestLinkedHashMapForValidate = new LinkedHashMap<String, ClinicDoctorProfile>();
     private CheckBox cbSelectAll;
     private boolean selectAll;
+    private boolean isInitialLaunch;
 
     public DoctorListPopupWindow(Context context, View view, PopupWindowType popupWindowType, List<Object> list, DoctorListPopupWindowListener doctorListPopupWindowListener) {
         this(context, view, popupWindowType, list, R.layout.spinner_drop_down_item_grey_background, doctorListPopupWindowListener);
@@ -73,7 +74,7 @@ public class DoctorListPopupWindow extends PopupWindow implements View.OnClickLi
         layoutSelectAll.setOnClickListener(this);
 
         setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        setOutsideTouchable(true);
+        setOutsideTouchable(false);
         setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
         setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
         setFocusable(true);
@@ -87,6 +88,7 @@ public class DoctorListPopupWindow extends PopupWindow implements View.OnClickLi
     public void showOptionsWindow(View v) {
 //        showAsDropDown(v, -5, 0);
         showAsDropDown(v);
+        isInitialLaunch = true;
 //        showAsDropDown(v, 0, 0, Gravity.NO_GRAVITY);
         update(v, 0, 0, anchorView.getWidth(), LinearLayout.LayoutParams.WRAP_CONTENT);
     }
@@ -120,14 +122,17 @@ public class DoctorListPopupWindow extends PopupWindow implements View.OnClickLi
                 selectAll = (!cbSelectAll.isChecked());
 //                setSelectAllSelected(!cbSelectAll.isChecked());
                 popupListViewAdapter.notifyDataSetChanged();
+                isInitialLaunch = false;
                 break;
             case R.id.tv_clear_all:
                 selectAll = false;
 //                setSelectAllSelected(false);
+                isInitialLaunch = false;
                 popupListViewAdapter.notifyDataSetChanged();
                 break;
             case R.id.tv_apply:
                 doctorListPopupWindowListener.onDoctorSelected(new ArrayList<ClinicDoctorProfile>(requestLinkedHashMapForValidate.values()));
+                isInitialLaunch = false;
                 dismiss();
                 break;
 
@@ -164,5 +169,15 @@ public class DoctorListPopupWindow extends PopupWindow implements View.OnClickLi
     @Override
     public void setSelectAllSelected(boolean isSelected) {
         cbSelectAll.setChecked(isSelected);
+    }
+
+    @Override
+    public ArrayList<String> getDoctorProfileArrayList() {
+        return new ArrayList<String>(requestLinkedHashMapForValidate.keySet());
+    }
+
+    @Override
+    public boolean isInitialLaunch() {
+        return isInitialLaunch;
     }
 }

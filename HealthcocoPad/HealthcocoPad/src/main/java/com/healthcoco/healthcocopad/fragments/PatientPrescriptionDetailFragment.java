@@ -20,6 +20,7 @@ import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.adapter.PrescriptionListAdapter;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
+import com.healthcoco.healthcocopad.bean.server.ClinicDoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.Prescription;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
@@ -109,6 +110,8 @@ public class PatientPrescriptionDetailFragment extends HealthCocoFragment implem
         }
     };
     private String loginedUser;
+    private ArrayList<ClinicDoctorProfile> clinicDoctorProfileList;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -301,7 +304,7 @@ public class PatientPrescriptionDetailFragment extends HealthCocoFragment implem
                                 .getDataList());
             case GET_PRESCRIPTION:
                 volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getPrescriptionsListResponse(WebServiceType.GET_PRESCRIPTION,
-                        isOTPVerified, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(), HealthCocoConstants.SELECTED_PATIENTS_USER_ID, null, null);
+                        isOTPVerified, clinicDoctorProfileList, user.getForeignLocationId(), user.getForeignHospitalId(), HealthCocoConstants.SELECTED_PATIENTS_USER_ID, null, null);
                 break;
         }
         if (volleyResponseBean == null)
@@ -391,7 +394,8 @@ public class PatientPrescriptionDetailFragment extends HealthCocoFragment implem
 
     }
 
-    public void refreshData(PatientDetailTabType detailTabType) {
+    public void refreshData(PatientDetailTabType detailTabType, ArrayList<ClinicDoctorProfile> clinicDoctorProfileList) {
+        this.clinicDoctorProfileList = clinicDoctorProfileList;
         getListFromLocal(true, isOtpVerified(), PAGE_NUMBER);
         this.detailTabType = detailTabType;
     }

@@ -797,7 +797,7 @@ public class WebDataServiceImpl implements GCMRefreshListener {
                               String hospitalId, String patientId, Long updatedTime, String visitedForType, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         checkNetworkStatus(mApp.getApplicationContext());
         if (HealthCocoConstants.isNetworkOnline) {
-            String url = webServiceType.getUrl() + doctorId
+            String url = webServiceType.getUrl() + null
                     + "/" + locationId
                     + "/" + hospitalId
                     + "/" + patientId

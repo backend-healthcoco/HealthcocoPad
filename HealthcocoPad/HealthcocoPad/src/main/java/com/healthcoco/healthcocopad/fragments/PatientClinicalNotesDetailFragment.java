@@ -288,9 +288,9 @@ public class PatientClinicalNotesDetailFragment extends HealthCocoFragment imple
                 LocalDataServiceImpl.getInstance(mApp).addClinicalNotesList((ArrayList<ClinicalNotes>) (ArrayList<?>) response.getDataList());
             case GET_CLINICAL_NOTES:
                 volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).
-                        getClinicalNotesList(WebServiceType.GET_CLINICAL_NOTES, isOTPVerified, user.getUniqueId(),
+                        getClinicalNotesList(WebServiceType.GET_CLINICAL_NOTES, isOTPVerified, clinicDoctorProfileList,
                                 user.getForeignLocationId(), user.getForeignHospitalId(),
-                                HealthCocoConstants.SELECTED_PATIENTS_USER_ID, null, null);
+                                HealthCocoConstants.SELECTED_PATIENTS_USER_ID, PAGE_NUMBER, MAX_SIZE, null, null);
                 break;
         }
         volleyResponseBean.setIsFromLocalAfterApiSuccess(response.isFromLocalAfterApiSuccess());
@@ -374,6 +374,7 @@ public class PatientClinicalNotesDetailFragment extends HealthCocoFragment imple
     }
 
     public void refreshData(PatientDetailTabType detailTabType, ArrayList<ClinicDoctorProfile> clinicDoctorProfileList) {
+        this.clinicDoctorProfileList = clinicDoctorProfileList;
         getListFromLocal(true, isOtpVerified(), 0);
         this.detailTabType = detailTabType;
     }

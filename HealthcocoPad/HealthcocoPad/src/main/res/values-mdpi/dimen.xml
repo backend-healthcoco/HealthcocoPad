@@ -21,5 +21,5 @@
     <dimen name="image_width_manage_clinic">40px</dimen>
     <dimen name="image_height_manage_clinic">30px</dimen>
     <dimen name="list_item_image_size">58px</dimen>
-    <dimen name="doctor_name_textview_width">330px</dimen>
+    <dimen name="doctor_name_textview_width">400px</dimen>
 </resources>

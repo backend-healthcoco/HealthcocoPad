@@ -81,31 +81,28 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
                                 android:layout_alignParentLeft="true"
-                                android:layout_marginBottom="@dimen/list_item_clinic_profile_padding"
+                                android:layout_marginBottom="@dimen/border_profile_images"
                                 android:layout_marginLeft="@dimen/list_item_clinic_profile_padding"
                                 android:layout_marginRight="@dimen/list_item_clinic_profile_padding"
-                                android:layout_marginTop="@dimen/list_item_clinic_profile_padding"
+                                android:layout_marginTop="@dimen/border_profile_images"
                                 android:gravity="center"
                                 android:visibility="invisible">
 
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_centerVertical="true"
-                                    android:layout_marginRight="@dimen/padding_item_drug_dosage_top_bottom"
-                                    android:text="@string/doctor"
-                                    android:textSize="@dimen/text_size_patient_name_visit_fragment" />
 
                                 <TextView
                                     android:id="@+id/tv_doctor_name"
                                     android:layout_width="@dimen/doctor_name_textview_width"
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="@dimen/padding_item_drug_dosage_top_bottom"
-                                    android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
+                                    android:background="@drawable/shape_rounded_corners_item_background_dark_grey"
                                     android:drawableEnd="@drawable/arrow_down_drug"
                                     android:drawablePadding="@dimen/patient_profile_image_padding"
                                     android:hint="@string/doctors"
-                                    android:padding="@dimen/dotor_profile_edit_text_bottom_padding"
+                                    android:paddingBottom="@dimen/dotor_profile_edit_text_top_padding"
+                                    android:paddingLeft="@dimen/item_contact_padding"
+                                    android:paddingRight="@dimen/dotor_profile_edit_text_top_padding"
+                                    android:paddingTop="@dimen/dotor_profile_edit_text_top_padding"
+                                    android:singleLine="true"
                                     android:textColor="@color/black"
                                     android:textColorHint="@color/grey_light_text"
                                     android:textSize="@dimen/text_size_patient_name_visit_fragment" />

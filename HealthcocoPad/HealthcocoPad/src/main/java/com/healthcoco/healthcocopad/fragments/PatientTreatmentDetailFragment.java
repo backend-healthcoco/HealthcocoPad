@@ -20,6 +20,7 @@ import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.adapter.TreatmentListAdapter;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
+import com.healthcoco.healthcocopad.bean.server.ClinicDoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.Treatments;
 import com.healthcoco.healthcocopad.bean.server.User;
@@ -38,6 +39,7 @@ import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.ComparatorUtil;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
+import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.healthcoco.healthcocopad.views.ListViewLoadMore;
 
@@ -62,6 +64,7 @@ public class PatientTreatmentDetailFragment extends HealthCocoFragment implement
     //variables need for pagination
     public static final int MAX_SIZE = 10;
     private static final int REQUEST_CODE_TREATMENT_LIST = 129;
+    public ArrayList<ClinicDoctorProfile> clinicDoctorProfileList;
     List<Treatments> treatmentsList;
     private int PAGE_NUMBER = 0;
     private boolean isEndOfListAchieved;
@@ -161,6 +164,7 @@ public class PatientTreatmentDetailFragment extends HealthCocoFragment implement
 
     @Override
     public void initListeners() {
+        lvTreatment.setLoadMoreListener(this);
         lvTreatment.setSwipeRefreshLayout(swipeRefreshLayout);
         swipeRefreshLayout.setOnRefreshListener(this);
         floatingActionButton.setOnClickListener(this);
@@ -249,7 +253,7 @@ public class PatientTreatmentDetailFragment extends HealthCocoFragment implement
                     if (response.isDataFromLocal()) {
                         ArrayList<Treatments> responseList = (ArrayList<Treatments>) (ArrayList<?>) response
                                 .getDataList();
-                        treatmentHashMap.clear();
+                        if (isInitialLoading) treatmentHashMap.clear();
                         formHashMapAndRefresh(responseList);
                         if (Util.isNullOrEmptyList(responseList) || responseList.size() < MAX_SIZE || Util.isNullOrEmptyList(responseList))
                             isEndOfListAchieved = true;
@@ -266,6 +270,7 @@ public class PatientTreatmentDetailFragment extends HealthCocoFragment implement
                     showLoadingOverlay(false);
                     progressLoading.setVisibility(View.GONE);
                     isInitialLoading = false;
+                    isLoading = false;
                     break;
                 default:
                     break;
@@ -294,7 +299,7 @@ public class PatientTreatmentDetailFragment extends HealthCocoFragment implement
                         (ArrayList<Treatments>) (ArrayList<?>) response
                                 .getDataList());
             case GET_TREATMENT:
-                volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getTreatmentList(WebServiceType.GET_TREATMENT, user.getUniqueId(), user.getForeignLocationId(),
+                volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getTreatmentList(WebServiceType.GET_TREATMENT, clinicDoctorProfileList, user.getForeignLocationId(),
                         user.getForeignHospitalId(), selectedPatient.getUserId(), PAGE_NUMBER, MAX_SIZE, null, null);
                 break;
         }
@@ -387,7 +392,8 @@ public class PatientTreatmentDetailFragment extends HealthCocoFragment implement
 
     }
 
-    public void refreshData(PatientDetailTabType detailTabType) {
+    public void refreshData(PatientDetailTabType detailTabType, ArrayList<ClinicDoctorProfile> clinicDoctorProfileList) {
+        this.clinicDoctorProfileList = clinicDoctorProfileList;
         getListFromLocal(true, isOtpVerified(), PAGE_NUMBER);
         this.detailTabType = detailTabType;
     }
@@ -401,8 +407,9 @@ public class PatientTreatmentDetailFragment extends HealthCocoFragment implement
 
     @Override
     public void loadMore() {
-        if (!isEndOfListAchieved && !isInitialLoading) {
-            PAGE_NUMBER++;
+        if (!isEndOfListAchieved && !isLoading) {
+            PAGE_NUMBER = PAGE_NUMBER + 1;
+            LogUtils.LOGD(TAG, "LoadMore PAGE_NUMBER " + PAGE_NUMBER);
             getListFromLocal(false, isOtpVerified(), PAGE_NUMBER);
         }
     }

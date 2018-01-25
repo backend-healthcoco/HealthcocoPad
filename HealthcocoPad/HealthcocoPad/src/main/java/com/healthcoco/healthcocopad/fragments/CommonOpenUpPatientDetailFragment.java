@@ -392,6 +392,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                     }
                     break;
                 case PATIENT_DETAIL_APPOINTMENT:
+                    doctorNameLayout.setVisibility(View.INVISIBLE);
                     if (!isAppointmentTabClicked) {
                         appointmentFragment.refreshData();
                         isAppointmentTabClicked = true;
@@ -405,19 +406,20 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                     break;
                 case PATIENT_DETAIL_PRESCRIPTION:
                     if (!isPrescriptionTabClicked) {
-                        prescriptionDetailFragment.refreshData(PatientDetailTabType.PATIENT_DETAIL_PRESCRIPTION);
+                        prescriptionDetailFragment.refreshData(PatientDetailTabType.PATIENT_DETAIL_PRESCRIPTION, clinicDoctorProfileList);
                         isPrescriptionTabClicked = true;
                     }
                     break;
                 case PATIENT_DETAIL_REPORTS:
+                    doctorNameLayout.setVisibility(View.INVISIBLE);
                     if (!isReportsTabClicked) {
-                        reportsDetailFragment.refreshData(PatientDetailTabType.PATIENT_DETAIL_REPORTS);
+                        reportsDetailFragment.refreshData(PatientDetailTabType.PATIENT_DETAIL_REPORTS, clinicDoctorProfileList);
                         isReportsTabClicked = true;
                     }
                     break;
                 case PATIENT_DETAIL_TREATMENT:
                     if (!isTreatmentTabClicked) {
-                        treatmentDetailFragment.refreshData(PatientDetailTabType.PATIENT_DETAIL_TREATMENT);
+                        treatmentDetailFragment.refreshData(PatientDetailTabType.PATIENT_DETAIL_TREATMENT, clinicDoctorProfileList);
                         isTreatmentTabClicked = true;
                     }
                     break;
@@ -674,15 +676,19 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
     @Override
     public void onDoctorSelected(ArrayList<ClinicDoctorProfile> clinicDoctorProfileList) {
         this.clinicDoctorProfileList = clinicDoctorProfileList;
-
-        if (clinicDoctorProfileList.size() == clinicDoctorListHashMap.size())
-            tvDoctorName.setText(R.string.for_all_doctor);
-        else if (clinicDoctorProfileList.size() > 1)
-            tvDoctorName.setText("For Multiple Doctor");
-        else {
-            tvDoctorName.setText(clinicDoctorProfileList.get(0).getFirstNameWithTitle());
+        String doctorName = "";
+        if (!Util.isNullOrEmptyList(clinicDoctorProfileList)) {
+            if (clinicDoctorProfileList.size() == clinicDoctorListHashMap.size())
+                tvDoctorName.setText(R.string.all_doctor);
+            else {
+                for (ClinicDoctorProfile clinicDoctorProfile : clinicDoctorProfileList) {
+                    doctorName = doctorName + clinicDoctorProfile.getFirstNameWithTitle() + ", ";
+                }
+                doctorName = doctorName.substring(0, doctorName.length() - 2);
+                tvDoctorName.setText(doctorName);
+            }
         }
-        user.setUniqueId(doctorProfile.getUniqueId());
+//        user.setUniqueId(doctorProfile.getUniqueId());
         resetAllFlags();
         onTabChanged(null);
     }
@@ -693,7 +699,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
     }
 
     private void refreshDoctorClinicText() {
-        tvDoctorName.setText(Util.getValidatedValue(doctorProfile.getFirstNameWithTitle()));
+        tvDoctorName.setText(R.string.all_doctor);
     }
 
     @Override
