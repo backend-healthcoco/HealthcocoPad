@@ -64,6 +64,29 @@ public class ClinicalNoteToSend {
     private String xRayDetails;
     private String echo;
     private String holter;
+    private String procedureNote;
+    private String getxRayDetails;
+    private String pcNose;
+    private String pcOralCavity;
+    private String pcThroat;
+    private String pcEars;
+    private String noseExam;
+    private String oralCavityThroatExam;
+    private String indirectLarygoscopyExam;
+    private String neckExam;
+    private String earsExam;
+    private String pastHistory;
+    private String familyHistory;
+    private String personalHistoryTobacco;
+    private String personalHistoryAlcohol;
+    private String personalHistorySmoking;
+    private String personalHistoryDiet;
+    private String personalHistoryOccupation;
+    private String generalHistoryDrugs;
+    private String generalHistoryMedicine;
+    private String generalHistoryAllergies;
+    private String generalHistorySurgical;
+    private String painScale;
     @Ignore
     private AppointmentRequest appointmentRequest;
 
@@ -397,5 +420,189 @@ public class ClinicalNoteToSend {
 
     public void setAppointmentRequest(AppointmentRequest appointmentRequest) {
         this.appointmentRequest = appointmentRequest;
+    }
+
+    public String getProcedureNote() {
+        return procedureNote;
+    }
+
+    public void setProcedureNote(String procedureNote) {
+        this.procedureNote = procedureNote;
+    }
+
+    public String getGetxRayDetails() {
+        return getxRayDetails;
+    }
+
+    public void setGetxRayDetails(String getxRayDetails) {
+        this.getxRayDetails = getxRayDetails;
+    }
+
+    public String getPcNose() {
+        return pcNose;
+    }
+
+    public void setPcNose(String pcNose) {
+        this.pcNose = pcNose;
+    }
+
+    public String getPcOralCavity() {
+        return pcOralCavity;
+    }
+
+    public void setPcOralCavity(String pcOralCavity) {
+        this.pcOralCavity = pcOralCavity;
+    }
+
+    public String getPcThroat() {
+        return pcThroat;
+    }
+
+    public void setPcThroat(String pcThroat) {
+        this.pcThroat = pcThroat;
+    }
+
+    public String getPcEars() {
+        return pcEars;
+    }
+
+    public void setPcEars(String pcEars) {
+        this.pcEars = pcEars;
+    }
+
+    public String getNoseExam() {
+        return noseExam;
+    }
+
+    public void setNoseExam(String noseExam) {
+        this.noseExam = noseExam;
+    }
+
+    public String getOralCavityThroatExam() {
+        return oralCavityThroatExam;
+    }
+
+    public void setOralCavityThroatExam(String oralCavityThroatExam) {
+        this.oralCavityThroatExam = oralCavityThroatExam;
+    }
+
+    public String getIndirectLarygoscopyExam() {
+        return indirectLarygoscopyExam;
+    }
+
+    public void setIndirectLarygoscopyExam(String indirectLarygoscopyExam) {
+        this.indirectLarygoscopyExam = indirectLarygoscopyExam;
+    }
+
+    public String getNeckExam() {
+        return neckExam;
+    }
+
+    public void setNeckExam(String neckExam) {
+        this.neckExam = neckExam;
+    }
+
+    public String getEarsExam() {
+        return earsExam;
+    }
+
+    public void setEarsExam(String earsExam) {
+        this.earsExam = earsExam;
+    }
+
+    public String getPastHistory() {
+        return pastHistory;
+    }
+
+    public void setPastHistory(String pastHistory) {
+        this.pastHistory = pastHistory;
+    }
+
+    public String getFamilyHistory() {
+        return familyHistory;
+    }
+
+    public void setFamilyHistory(String familyHistory) {
+        this.familyHistory = familyHistory;
+    }
+
+    public String getPersonalHistoryTobacco() {
+        return personalHistoryTobacco;
+    }
+
+    public void setPersonalHistoryTobacco(String personalHistoryTobacco) {
+        this.personalHistoryTobacco = personalHistoryTobacco;
+    }
+
+    public String getPersonalHistoryAlcohol() {
+        return personalHistoryAlcohol;
+    }
+
+    public void setPersonalHistoryAlcohol(String personalHistoryAlcohol) {
+        this.personalHistoryAlcohol = personalHistoryAlcohol;
+    }
+
+    public String getPersonalHistorySmoking() {
+        return personalHistorySmoking;
+    }
+
+    public void setPersonalHistorySmoking(String personalHistorySmoking) {
+        this.personalHistorySmoking = personalHistorySmoking;
+    }
+
+    public String getPersonalHistoryDiet() {
+        return personalHistoryDiet;
+    }
+
+    public void setPersonalHistoryDiet(String personalHistoryDiet) {
+        this.personalHistoryDiet = personalHistoryDiet;
+    }
+
+    public String getPersonalHistoryOccupation() {
+        return personalHistoryOccupation;
+    }
+
+    public void setPersonalHistoryOccupation(String personalHistoryOccupation) {
+        this.personalHistoryOccupation = personalHistoryOccupation;
+    }
+
+    public String getGeneralHistoryDrugs() {
+        return generalHistoryDrugs;
+    }
+
+    public void setGeneralHistoryDrugs(String generalHistoryDrugs) {
+        this.generalHistoryDrugs = generalHistoryDrugs;
+    }
+
+    public String getGeneralHistoryMedicine() {
+        return generalHistoryMedicine;
+    }
+
+    public void setGeneralHistoryMedicine(String generalHistoryMedicine) {
+        this.generalHistoryMedicine = generalHistoryMedicine;
+    }
+
+    public String getGeneralHistoryAllergies() {
+        return generalHistoryAllergies;
+    }
+
+    public void setGeneralHistoryAllergies(String generalHistoryAllergies) {
+        this.generalHistoryAllergies = generalHistoryAllergies;
+    }
+
+    public String getGeneralHistorySurgical() {
+        return generalHistorySurgical;
+    }
+
+    public void setGeneralHistorySurgical(String generalHistorySurgical) {
+        this.generalHistorySurgical = generalHistorySurgical;
+    }
+
+    public String getPainScale() {
+        return painScale;
+    }
+
+    public void setPainScale(String painScale) {
+        this.painScale = painScale;
     }
 }

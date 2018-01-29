@@ -7,6 +7,25 @@ import com.healthcoco.healthcocopad.R;
  */
 
 public enum SuggestionType {
+
+    PAIN_SCALE(false, R.string.pain_scale),
+    EARS_EXAM(false, R.string.ears_exam),
+    ORAL_CAVITY_THROAT_EXAM(false, R.string.oral_cavity_throat_exam),
+    PROCEDURES(false, R.string.procedures),
+    PAST_HISTORY(false, R.string.past_history),
+    PC_THROAT(false, R.string.pc_throat),
+    FAMILY_HISTORY(false, R.string.family_history),
+    INDIRECT_LARYGOSCOPY_EXAM(false, R.string.indirect_larygoscopy_exam),
+    PERSONAL_HISTORY(false, R.string.personal_history),
+    PC_ORAL_CAVITY(false, R.string.pc_oral_cavity),
+    PC_NOSE(false, R.string.pc_nose),
+    PC_EARS(false, R.string.pc_ears),
+    GENERAL_HISTORY(false, R.string.general_history),
+    NOSE_EXAM(false, R.string.nose_exam),
+    NECK_EXAM(false, R.string.neck_exam),
+    USG_GENDER_COUNT(false, R.string.usg_gender_count),
+    LMP(false, R.string.lmp),
+    EDD(false, R.string.edd),
     DRUGS(true, R.string.search_drug, R.string.all_drugs),
     LAB_TESTS(true, R.string.search_lab_test, R.string.lab_tests),
     COMPLAINTS(false, R.string.complaints),
@@ -29,6 +48,8 @@ public enum SuggestionType {
     PS(false, R.string.ps),
     INDICATION_OF_USG(false, R.string.indication_of_usg),
     NOTES(false, R.string.notes),
+
+
     ADVICE(false, R.string.advice_tag);
 
     private final boolean isFromServerList;

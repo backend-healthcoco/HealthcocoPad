@@ -588,7 +588,27 @@
     <string name="pa">P/A</string>
     <string name="ps">P/S</string>
     <string name="pv">P/V</string>
-
+    <string name="edd">EDD</string>
+    <string name="ears_exam">Ears</string>
+    <string name="oral_cavity_throat_exam">Oral Cavity Throat</string>
+    <string name="procedures">Procedures</string>
+    <string name="pc_throat">Throat</string>
+    <string name="indirect_larygoscopy_exam">Indirect Larygoscopy</string>
+    <string name="pc_oral_cavity">Oral Cavity</string>
+    <string name="pc_nose">Nose</string>
+    <string name="pc_ears">Ears</string>
+    <string name="general_history">General History</string>
+    <string name="nose_exam">Nose</string>
+    <string name="neck_exam">Neck</string>
+    <string name="usg_gender_count">Usg Gender Count</string>
+    <string name="lmp">LMP</string>
+    <string name="pain_scale">Pain Scale</string>
+    <string name="tobacco">Tobacco</string>
+    <string name="alcohol">Alcohol</string>
+    <string name="smoking">Smoking</string>
+    <string name="occupation">Occupation</string>
+    <string name="medicine">Medicine</string>
+    <string name="surgical">Surgical</string>
     <string name="diagrams">Diagrams</string>
 
     <string name="created_by">Created By&#160;</string>
@@ -913,5 +933,11 @@
     <string name="clear_all">Clear All</string>
     <string name="select_all">Select All</string>
     <string name="all_doctor">All Doctor</string>
+    <string name="ent_compaints">ENT Complaints&#160;:</string>
+    <string name="ent_examinations">ENT Examinations&#160;:</string>
+    <string name="past_history_colon">Past History&#160;:</string>
+    <string name="personal_history_colon">Personal History&#160;:</string>
+    <string name="general_history_colon">General History&#160;:</string>
+
 
 </resources>
