@@ -944,4 +944,10 @@ public class Util {
         return "0";
     }
 
+    public static boolean getValidatedBooleanValue(Boolean discarded) {
+        if (discarded != null)
+            return discarded;
+        return false;
+    }
+
 }

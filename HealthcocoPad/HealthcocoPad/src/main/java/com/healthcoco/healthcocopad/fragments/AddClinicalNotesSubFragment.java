@@ -237,6 +237,18 @@ public class AddClinicalNotesSubFragment extends HealthCocoFragment implements V
                     if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.SYSTEMIC_EXAMINATION.getValue())
                             || (clinicalNotes != null && clinicalNotes.getSystemExam() != null))
                         addPermissionItem(ClinicalNotesPermissionType.SYSTEMIC_EXAMINATION);
+                    if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.INDICATION_OF_USG.getValue())
+                            || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getIndicationOfUSG())))
+                        addPermissionItem(ClinicalNotesPermissionType.INDICATION_OF_USG);
+                    if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.PA.getValue())
+                            || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getPa())))
+                        addPermissionItem(ClinicalNotesPermissionType.PA);
+                    if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.PS.getValue())
+                            || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getPs())))
+                        addPermissionItem(ClinicalNotesPermissionType.PS);
+                    if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.PV.getValue())
+                            || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getPv())))
+                        addPermissionItem(ClinicalNotesPermissionType.PV);
                     if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.OBSERVATION.getValue())
                             || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getObservation())))
                         addPermissionItem(ClinicalNotesPermissionType.OBSERVATION);
@@ -264,18 +276,9 @@ public class AddClinicalNotesSubFragment extends HealthCocoFragment implements V
                     if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.NOTES.getValue())
                             || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getNote())))
                         addPermissionItem(ClinicalNotesPermissionType.NOTES);
-                    if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.INDICATION_OF_USG.getValue())
-                            || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getIndicationOfUSG())))
-                        addPermissionItem(ClinicalNotesPermissionType.INDICATION_OF_USG);
-                    if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.PA.getValue())
-                            || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getPa())))
-                        addPermissionItem(ClinicalNotesPermissionType.PA);
-                    if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.PS.getValue())
-                            || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getPs())))
-                        addPermissionItem(ClinicalNotesPermissionType.PS);
-                    if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.PV.getValue())
-                            || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getPv())))
-                        addPermissionItem(ClinicalNotesPermissionType.PV);
+                    if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.PROCEDURES.getValue())
+                            || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getProcedureNote())))
+                        addPermissionItem(ClinicalNotesPermissionType.PROCEDURES);
                     if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.DIAGRAM.getValue())
                             || (clinicalNotes != null && !Util.isNullOrEmptyList(clinicalNotes.getDiagrams()))) {
                         parentDiagrams.setVisibility(View.VISIBLE);

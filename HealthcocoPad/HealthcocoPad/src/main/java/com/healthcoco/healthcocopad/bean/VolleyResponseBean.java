@@ -11,22 +11,17 @@ import java.util.Map;
  * Created by Shreshtha on 20-01-2017.
  */
 public class VolleyResponseBean {
-    private WebServiceType webServiceType;
     protected boolean isUserOnline = true;
+    protected boolean isFromLocalAfterApiSuccess;
+    protected boolean isDataFromLocal;
+    protected boolean breakAfterAddRequest;
+    private WebServiceType webServiceType;
     private Map<String, String> headers;
-
     // success response keys
     private Object data;
     private ArrayList<Object> dataList = new ArrayList<Object>();
     private String errMsg;
-
-    protected boolean isFromLocalAfterApiSuccess;
     private LocalBackgroundTaskType localBackgroundTaskType;
-    protected boolean isDataFromLocal;
-
-    public void setFromLocalAfterApiSuccess(boolean fromLocalAfterApiSuccess) {
-        isFromLocalAfterApiSuccess = fromLocalAfterApiSuccess;
-    }
 
     public String getErrMsg() {
         return errMsg;
@@ -100,6 +95,10 @@ public class VolleyResponseBean {
         return isFromLocalAfterApiSuccess;
     }
 
+    public void setFromLocalAfterApiSuccess(boolean fromLocalAfterApiSuccess) {
+        isFromLocalAfterApiSuccess = fromLocalAfterApiSuccess;
+    }
+
     public void setIsFromLocalAfterApiSuccess(boolean isFromLocalAfterApiSuccess) {
         this.isFromLocalAfterApiSuccess = isFromLocalAfterApiSuccess;
     }
@@ -111,4 +110,14 @@ public class VolleyResponseBean {
     public void setLocalBackgroundTaskType(LocalBackgroundTaskType localBackgroundTaskType) {
         this.localBackgroundTaskType = localBackgroundTaskType;
     }
+
+    public boolean isBreakAfterAddRequest() {
+        return breakAfterAddRequest;
+    }
+
+    public void setBreakAfterAddRequest(boolean breakAfterAddRequest) {
+        this.breakAfterAddRequest = breakAfterAddRequest;
+    }
+
+
 }

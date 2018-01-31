@@ -419,16 +419,16 @@ public class AddUpdateNameDialogFragment extends HealthCocoDialogFragment implem
                 case ADD_CUSTOM_HISTORY:
                     mActivity.hideLoading();
                     if (response.getData() != null && response.getData() instanceof Disease) {
-//                        LocalDataServiceImpl.getInstance(mApp).addDisease((Disease) response.getData());
+                        LocalDataServiceImpl.getInstance(mApp).addDisease((Disease) response.getData());
                     }
-//                    getTargetFragment().onActivityResult(HealthCocoConstants.REQUEST_CODE_DISEASED_LIST, HealthCocoConstants.RESULT_CODE_REFERENCE_LIST, null);
+                    getTargetFragment().onActivityResult(HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, HealthCocoConstants.RESULT_CODE_REFERENCE_LIST, null);
                     break;
                 case ADD_REFERENCE:
                     mActivity.hideLoading();
                     if (response.getData() != null && response.getData() instanceof Reference) {
-//                        LocalDataServiceImpl.getInstance(mApp).addReference((Reference) response.getData());
+                        LocalDataServiceImpl.getInstance(mApp).addReference((Reference) response.getData());
                     }
-//                    getTargetFragment().onActivityResult(HealthCocoConstants.REQUEST_CODE_DISEASED_LIST, HealthCocoConstants.RESULT_CODE_REFERENCE_LIST, null);
+                    getTargetFragment().onActivityResult(HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, HealthCocoConstants.RESULT_CODE_REFERENCE_LIST, null);
                     break;
                 case ADD_DIAGNOSTIC_TESTS:
                     //not adding tests in local(Since tests are got from Solar)

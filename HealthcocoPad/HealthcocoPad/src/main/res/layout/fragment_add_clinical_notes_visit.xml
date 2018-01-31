@@ -308,6 +308,14 @@
                 </LinearLayout>
             </LinearLayout>
 
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="@dimen/item_contact_padding"
+                android:layout_marginTop="@dimen/item_contact_padding"
+                android:background="@color/grey_hint_color" />
+
             <LinearLayout
                 android:id="@+id/parent_permissions_items"
                 android:layout_width="match_parent"

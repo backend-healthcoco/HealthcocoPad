@@ -162,6 +162,16 @@
     <string name="syncing_ps_suggestions">Syncing PS Suggestions&#8230;</string>
     <string name="syncing_indication_of_usg_suggestions">Syncing Indication of Usg Suggestions&#8230;</string>
     <string name="syncing_notes_suggestions">Syncing Notes Suggestions&#8230;</string>
+    <string name="syncing_pc_ear_suggestions">Syncing Pc Ears Suggestions&#8230;</string>
+    <string name="syncing_pc_nose_suggestions">Syncing Pc Nose Suggestions&#8230;</string>
+    <string name="syncing_pc_throat_suggestions">Syncing Pc Throat Suggestions&#8230;</string>
+    <string name="syncing_pc_oral_cavity_suggestions">Syncing PcOral Cavity Suggestions&#8230;</string>
+    <string name="syncing_nose_exam_suggestions">Syncing Notes Suggestions&#8230;</string>
+    <string name="syncing_ear_exam_suggestions">Syncing Notes Suggestions&#8230;</string>
+    <string name="syncing_neck_exam_suggestions">Syncing Notes Suggestions&#8230;</string>
+    <string name="syncing_oral_cavity_throat_exam_suggestions">Syncing Notes Suggestions&#8230;</string>
+    <string name="syncing_indirect_larygoscopy_exam_suggestions">Syncing Indirect Larygoscopy Exam Suggestions&#8230;</string>
+    <string name="syncing_procedures_suggestions">Syncing Procedures Suggestions&#8230;</string>
     <string name="syncing_complaint_suggestions">Syncing Complaint Suggestions&#8230;</string>
     <string name="syncing_observation_suggestions">Syncing Observation Suggestions&#8230;</string>
     <string name="syncing_investigation_suggestions">Syncing Investigation Suggestions&#8230;</string>
@@ -174,6 +184,7 @@
     <string name="sync_complete">Sync Complete</string>
     <string name="sync">Sync</string>
     <string name="loading">Loading&#8230;</string>
+
 
     <!--Actionbar titles-->
     <string name="profile">Profile</string>
@@ -192,6 +203,7 @@
     <string name="new_direction">New Direction</string>
     <string name="register">Register</string>
     <string name="new_disease">New Disease</string>
+    <string name="contact_sync">Sync Contact</string>
     <string name="help_us_to_improve">Help Us to Improve</string>
     <string name="new_frequency">New Dosage</string>
     <string name="new_history">New History</string>
@@ -212,6 +224,7 @@
     <string name="clinical_notes">Clinical Notes</string>
 
     <string name="confirm">Confirm</string>
+    <string name="confirm_delete_group">Are you sure you want to delete Group &#160;</string>
     <string name="pending_confirmation">Pending Confirmation</string>
     <string name="confirm_call_number">Call&#160;</string>
     <string name="no_mobile_number_found">No Mobile Number found for this patient</string>
@@ -370,6 +383,16 @@
     <string name="sms">SMS</string>
     <string name="billing">Billing</string>
     <string name="ui_permission">UI Permission</string>
+    <string name="settings_no_groups_added">No Groups Added</string>
+    <string name="settings_no_direction_added">No Direction Added</string>
+    <string name="settings_no_reffered_by_added">No Referred By Added</string>
+    <string name="settings_no_frequency_added">No Frequency Added</string>
+    <string name="settings_no_drug_added">No Drug Added</string>
+    <string name="settings_no_treatment_added">No Treatment Added</string>
+    <string name="search_disease">Search Direction</string>
+    <string name="search_group_name">Search Group name</string>
+    <string name="search_referred_by">Search Referred By</string>
+
 
     <string name="select_option">Select Option</string>
     <string name="select_image">Select Image</string>
@@ -449,6 +472,52 @@
     <string name="visits_ui_permission_details">Visits UI  Permission Details</string>
     <string name="patient_tab_ui_permission_details">Patient UI  Permission Details</string>
 
+
+    <!--Ui permission-->
+    <string name="search_present_complaint">Search Present Complaint</string>
+    <string name="search_complaints">Search Complaint</string>
+    <string name="search_history_of_present_complaints">Search History of Present Complaints</string>
+    <string name="search_menstrual_history">Search Menstrual History</string>
+    <string name="search_obstetric_history">Search Obstetric History</string>
+    <string name="search_general_examination">Search General Examination</string>
+    <string name="search_systemic_examination">Search Systemic Examination</string>
+    <string name="search_observations">Search Observations</string>
+    <string name="search_investigations">Search Investigations</string>
+    <string name="search_provisional_diagnosis">Search Provisional Diagnosis</string>
+    <string name="search_diagnosis">Search Diagnosis</string>
+    <string name="search_ecg_details">Search ECG Details</string>
+    <string name="search_echo">Search Echo</string>
+    <string name="search_xray_details">Search X-Ray Details</string>
+    <string name="search_holter">Search Holter</string>
+    <string name="search_pa">Search PA</string>
+    <string name="search_pv">Search PV</string>
+    <string name="search_ps">Search PS</string>
+    <string name="search_indication_of_usg">Search Indication of USG</string>
+    <string name="search_note">Search Note</string>
+    <string name="search_procedure_note">Search Procedure Note</string>
+
+    <string name="settings_no_present_complaint_added">No Present Complaint Added</string>
+    <string name="settings_no_complaints_added">No Complaint Added</string>
+    <string name="settings_no_history_of_present_complaints_added">No History of Present Complaints Added</string>
+    <string name="settings_no_menstrual_history_added">No Menstrual History Added</string>
+    <string name="settings_no_obstetric_history_added">No Obstetric History Added</string>
+    <string name="settings_no_general_examination_added">No General Examination Added</string>
+    <string name="settings_no_systemic_examination_added">No Systemic Examination Added</string>
+    <string name="settings_no_observations_added">No Observations Added</string>
+    <string name="settings_no_investigations_added">No Investigations Added</string>
+    <string name="settings_no_provisional_diagnosis_added">No Provisional Diagnosis Added</string>
+    <string name="settings_no_diagnosis_added">No Diagnosis Added</string>
+    <string name="settings_no_ecg_details_added">No ECG Details Added</string>
+    <string name="settings_no_echo_added">No Echo Added</string>
+    <string name="settings_no_xray_details_added">No X-Ray Details Added</string>
+    <string name="settings_no_holter_added">No Holter Added</string>
+    <string name="settings_no_pa_added">No PA Added</string>
+    <string name="settings_no_pv_added">No PV Added</string>
+    <string name="settings_no_ps_added">No PS Added</string>
+    <string name="settings_no_indication_of_usg_added">No Indication of USG Added</string>
+    <string name="settings_no_note_added">No Note Added</string>
+    <string name="settings_no_procedure_added">No Procedure Added</string>
+
     <!-- Prescription -->
     <string name="new_prescription">New Prescription</string>
 
@@ -464,6 +533,25 @@
     <string name="enter_name">Enter Name</string>
     <string name="enter_reference">Enter Reference</string>
     <string name="enter_email_address">Enter Email Address</string>
+    <string name="please_enter_present_complaint">Please Enter a Present Complaint</string>
+    <string name="please_enter_complaints">Please Enter a Complaints</string>
+    <string name="please_enter_history_of_present_complaints">Please Enter a History of Present Complaints</string>
+    <string name="please_enter_menstrual_history">Please Enter a Menstrual History</string>
+    <string name="please_enter_obstetric_history">Please Enter a Obstetric History</string>
+    <string name="please_enter_general_examination">Please Enter a General Examination</string>
+    <string name="please_enter_systemic_examination">Please Enter a Systemic Examination</string>
+    <string name="please_enter_observations">Please Enter a Observations</string>
+    <string name="please_enter_provisional_diagnosis">Please Enter a Provisional Diagnosis</string>
+    <string name="please_enter_diagnoses">Please Enter Diagnosis</string>
+    <string name="please_enter_ecg_details">Please Enter a ECG Details</string>
+    <string name="please_enter_echo">Please Enter a Echo</string>
+    <string name="please_enter_xray_details">Please Enter a X-Ray Details</string>
+    <string name="please_enter_holter">Please Enter a Holter</string>
+    <string name="please_enter_indication_of_usg">Please Enter a Indication of USG</string>
+    <string name="please_enter_notes">Please Enter a Note</string>
+    <string name="please_enter_pa">Please Enter a PA</string>
+    <string name="please_enter_ps">Please Enter a PS</string>
+    <string name="please_enter_pv">Please Enter a PV</string>
 
     <string name="enter_frequency_dose">Enter Dosage</string>
     <string name="enter_drug">Enter Drug</string>
@@ -675,6 +763,7 @@
     <string name="confirm_discard_prescription_title">Are you sure you want to discard this Prescription?</string>
     <string name="confirm_discard_prescription_message">Patient will be requested to discontinue this Prescription.</string>
     <string name="confirm_sms_prescription">Are you sure you want to send this Prescription to Mobile number&#160;</string>
+    <string name="are_you_sure_you_Want_to_hide_this">Are you sure you want to hide this&#160;</string>
     <string name="confirm_sms_visit">Are you sure you want to send this Visit\'s Detail to Mobile number&#160;</string>
     <string name="mobile_no_not_found">Mobile number not found for Patient&#160;</string>
     <string name="sms_sent_to">SMS sent to&#160;</string>
@@ -763,6 +852,8 @@
     <string name="write_ecg_details">Write ECG Details</string>
     <string name="write_echo">Write Echo</string>
     <string name="write_xray_details">Write X-Ray Details</string>
+    <string name="write_a_complaints">Write a Complaints</string>
+    <string name="write_a_present_complaint">Write a Present Complaint</string>
     <string name="write_holter">Write Holter</string>
     <string name="write_indication_of_usg">Write Indication of USG</string>
     <string name="write_note">Write Note</string>
@@ -939,5 +1030,8 @@
     <string name="personal_history_colon">Personal History&#160;:</string>
     <string name="general_history_colon">General History&#160;:</string>
 
+    <string name="active">Active</string>
+    <string name="hidden">Hidden</string>
+    <string name="add_new">Add New</string>
 
 </resources>

@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <include layout="@layout/layout_edit_search" />
+
+    <com.healthcoco.healthcocopad.views.CustomAutoCompleteTextView
+        android:id="@+id/autotv_clinic_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@android:color/transparent"
+        android:clickable="true"
+        android:drawableLeft="@drawable/icon_clinic_profile_normal"
+        android:drawablePadding="5dp"
+        android:drawableRight="@drawable/arrow_down_drug"
+        android:editable="false"
+        android:focusable="false"
+        android:gravity="center|start"
+        android:padding="10dp"
+        android:text="@string/no_text_dash"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size_clinic_profile_clinic_name"
+        android:visibility="gone" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="6dp"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/toolbar_drop_shadow" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <com.healthcoco.healthcocopad.custom.ScrollViewWithHeader
+            android:id="@+id/sv_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/container_hide_activate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <LinearLayout
+                        android:id="@+id/container_activated_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:id="@+id/tv_header_one"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/grey_light_divider"
+                            android:padding="10dp"
+                            android:text="@string/active" />
+
+                        <com.healthcoco.healthcocopad.custom.ExpandableHeightListView
+                            android:id="@+id/lv_activated_list"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:cacheColorHint="@android:color/transparent"
+                            android:clipToPadding="false"
+                            android:divider="@color/grey_light_divider"
+                            android:dividerHeight="0.5dp"
+                            android:listSelector="@android:color/transparent"
+                            android:paddingLeft="@dimen/layout_margin"
+                            android:paddingRight="@dimen/layout_margin"
+                            android:scrollbarStyle="outsideOverlay" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/container_hidden_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:id="@+id/tv_header_two"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/grey_light_divider"
+                            android:padding="10dp"
+                            android:text="@string/hidden"
+                            android:visibility="visible" />
+
+                        <com.healthcoco.healthcocopad.custom.ExpandableHeightListView
+                            android:id="@+id/lv_hidden_list"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:cacheColorHint="@android:color/transparent"
+                            android:clipToPadding="false"
+                            android:divider="@color/grey_light_divider"
+                            android:dividerHeight="0.5dp"
+                            android:listSelector="@android:color/transparent"
+                            android:paddingLeft="@dimen/layout_margin"
+                            android:paddingRight="@dimen/layout_margin"
+                            android:scrollbarStyle="outsideOverlay" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tv_no_data_found"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="@string/no_history_found"
+                    android:textSize="@dimen/text_size_no_results"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+        </com.healthcoco.healthcocopad.custom.ScrollViewWithHeader>
+
+        <TextView
+            android:id="@+id/tv_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/grey_light_divider"
+            android:padding="10dp"
+            android:text="@string/active"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+
+</LinearLayout>

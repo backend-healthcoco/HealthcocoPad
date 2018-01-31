@@ -1394,4 +1394,51 @@ public class WebDataServiceImpl implements GCMRefreshListener {
             showUserOffline(webServiceType, responseListener);
         }
     }
+
+    public void deleteData(WebServiceType webServiceType, Class<?> class1, String doctorId, String locationId, String hospitalId, String uniqueId, boolean discard, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        String url = webServiceType.getUrl();
+        switch (webServiceType) {
+            case DELETE_DRUG:
+            case DELETE_DRUG_DOSAGE:
+            case DELETE_DIRECTION:
+            case DELETE_DISEASE:
+            case DELETE_PRESENT_COMPLAINT:
+            case DELETE_COMPLAINT:
+            case DELETE_HISTORY_OF_PRESENT_COMPLAINT:
+            case DELETE_MENSTRUAL_HISTORY:
+            case DELETE_OBSTETRIC_HISTORY:
+            case DELETE_GENERAL_EXAMINATION:
+            case DELETE_SYSTEMIC_EXAMINATION:
+            case DELETE_OBSERVATION:
+            case DELETE_INVESTIGATION:
+            case DELETE_PROVISIONAL_DIAGNOSIS:
+            case DELETE_DIAGNOSIS:
+            case DELETE_ECG:
+            case DELETE_ECHO:
+            case DELETE_XRAY:
+            case DELETE_NOTES:
+            case DELETE_INDICATION_OF_USG:
+            case DELETE_PA:
+            case DELETE_PS:
+            case DELETE_PV:
+                url = url + uniqueId
+                        + "/" + doctorId
+                        + "/" + locationId
+                        + "/" + hospitalId
+                        + HealthCocoConstants.PARAM_TAG_DELETE + "?"
+                        + HealthCocoConstants.PARAM_DISCARDED_AMPERCENT + discard;
+                break;
+//            case DELETE_DRUG:
+//            case DELETE_DRUG_DOSAGE:
+//            case DELETE_DIRECTION:
+            case DELETE_REFERENCE:
+                url = url + uniqueId + HealthCocoConstants.PARAM_TAG_DELETE + "?"
+                        + HealthCocoConstants.PARAM_DISCARDED_AMPERCENT + discard
+                        + HealthCocoConstants.PARAM_DOCTOR_ID + doctorId;
+                break;
+        }
+        getResponse(webServiceType, class1, url, null, null, responseListener,
+                errorListener);
+    }
+
 }

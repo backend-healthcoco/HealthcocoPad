@@ -140,6 +140,66 @@ public enum SyncAllType {
     CLINICAL_NOTE_PS_SUGGESTIONS(0, 0, false) {
         @Override
         public SyncAllType getNextSyncType(SyncAllType syncAllType) {
+            return SyncAllType.CLINICAL_NOTE_EAR_EXAM_SUGGESTIONS;
+        }
+    },
+    CLINICAL_NOTE_EAR_EXAM_SUGGESTIONS(0, 0, false) {
+        @Override
+        public SyncAllType getNextSyncType(SyncAllType syncAllType) {
+            return SyncAllType.CLINICAL_NOTE_INDIRECT_LARYGOSCOPY_EXAM_SUGGESTIONS;
+        }
+    },
+    CLINICAL_NOTE_INDIRECT_LARYGOSCOPY_EXAM_SUGGESTIONS(0, 0, false) {
+        @Override
+        public SyncAllType getNextSyncType(SyncAllType syncAllType) {
+            return SyncAllType.CLINICAL_NOTE_NECK_EXAM_SUGGESTIONS;
+        }
+    },
+    CLINICAL_NOTE_NECK_EXAM_SUGGESTIONS(0, 0, false) {
+        @Override
+        public SyncAllType getNextSyncType(SyncAllType syncAllType) {
+            return SyncAllType.CLINICAL_NOTE_NOSE_EXAM_SUGGESTIONS;
+        }
+    },
+    CLINICAL_NOTE_NOSE_EXAM_SUGGESTIONS(0, 0, false) {
+        @Override
+        public SyncAllType getNextSyncType(SyncAllType syncAllType) {
+            return SyncAllType.CLINICAL_NOTE_ORAL_CAVITY_THROAT_EXAM_SUGGESTIONS;
+        }
+    },
+    CLINICAL_NOTE_ORAL_CAVITY_THROAT_EXAM_SUGGESTIONS(0, 0, false) {
+        @Override
+        public SyncAllType getNextSyncType(SyncAllType syncAllType) {
+            return SyncAllType.CLINICAL_NOTE_PC_EARS_SUGGESTIONS;
+        }
+    },
+    CLINICAL_NOTE_PC_EARS_SUGGESTIONS(0, 0, false) {
+        @Override
+        public SyncAllType getNextSyncType(SyncAllType syncAllType) {
+            return SyncAllType.CLINICAL_NOTE_PC_NOSE_SUGGESTIONS;
+        }
+    },
+    CLINICAL_NOTE_PC_NOSE_SUGGESTIONS(0, 0, false) {
+        @Override
+        public SyncAllType getNextSyncType(SyncAllType syncAllType) {
+            return SyncAllType.CLINICAL_NOTE_PC_ORAL_CAVITY_SUGGESTIONS;
+        }
+    },
+    CLINICAL_NOTE_PC_ORAL_CAVITY_SUGGESTIONS(0, 0, false) {
+        @Override
+        public SyncAllType getNextSyncType(SyncAllType syncAllType) {
+            return SyncAllType.CLINICAL_NOTE_PC_THROAT_SUGGESTIONS;
+        }
+    },
+    CLINICAL_NOTE_PC_THROAT_SUGGESTIONS(0, 0, false) {
+        @Override
+        public SyncAllType getNextSyncType(SyncAllType syncAllType) {
+            return SyncAllType.CLINICAL_NOTE_PROCEDURE_NOTE_SUGGESTIONS;
+        }
+    },
+    CLINICAL_NOTE_PROCEDURE_NOTE_SUGGESTIONS(0, 0, false) {
+        @Override
+        public SyncAllType getNextSyncType(SyncAllType syncAllType) {
             return SyncAllType.CLINICAL_NOTE_INDICATION_OF_USG_SUGGESTIONS;
         }
     },

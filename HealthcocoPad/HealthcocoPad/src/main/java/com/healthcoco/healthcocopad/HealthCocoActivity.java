@@ -50,6 +50,7 @@ import com.healthcoco.healthcocopad.bean.server.DrugDirection;
 import com.healthcoco.healthcocopad.bean.server.DrugDosage;
 import com.healthcoco.healthcocopad.bean.server.DrugDurationUnit;
 import com.healthcoco.healthcocopad.bean.server.DrugType;
+import com.healthcoco.healthcocopad.bean.server.EarsExamSuggestions;
 import com.healthcoco.healthcocopad.bean.server.EcgDetailSuggestions;
 import com.healthcoco.healthcocopad.bean.server.EchoSuggestions;
 import com.healthcoco.healthcocopad.bean.server.GCMRequest;
@@ -57,14 +58,23 @@ import com.healthcoco.healthcocopad.bean.server.GeneralExaminationSuggestions;
 import com.healthcoco.healthcocopad.bean.server.HistoryPresentComplaintSuggestions;
 import com.healthcoco.healthcocopad.bean.server.HolterSuggestions;
 import com.healthcoco.healthcocopad.bean.server.IndicationOfUsgSuggestions;
+import com.healthcoco.healthcocopad.bean.server.IndirectLarygoscopyExamSuggestions;
 import com.healthcoco.healthcocopad.bean.server.InvestigationSuggestions;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.MenstrualHistorySuggestions;
+import com.healthcoco.healthcocopad.bean.server.NeckExamSuggestions;
+import com.healthcoco.healthcocopad.bean.server.NoseExamSuggestions;
 import com.healthcoco.healthcocopad.bean.server.NotesSuggestions;
 import com.healthcoco.healthcocopad.bean.server.ObservationSuggestions;
 import com.healthcoco.healthcocopad.bean.server.ObstetricHistorySuggestions;
+import com.healthcoco.healthcocopad.bean.server.OralCavityThroatExamSuggestions;
 import com.healthcoco.healthcocopad.bean.server.PaSuggestions;
+import com.healthcoco.healthcocopad.bean.server.PcEarsSuggestions;
+import com.healthcoco.healthcocopad.bean.server.PcNoseSuggestions;
+import com.healthcoco.healthcocopad.bean.server.PcOralCavitySuggestions;
+import com.healthcoco.healthcocopad.bean.server.PcThroatSuggestions;
 import com.healthcoco.healthcocopad.bean.server.PresentComplaintSuggestions;
+import com.healthcoco.healthcocopad.bean.server.ProcedureNoteSuggestions;
 import com.healthcoco.healthcocopad.bean.server.Profession;
 import com.healthcoco.healthcocopad.bean.server.ProvisionalDiagnosisSuggestions;
 import com.healthcoco.healthcocopad.bean.server.PsSuggestions;
@@ -78,6 +88,7 @@ import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.bean.server.UserGroups;
 import com.healthcoco.healthcocopad.bean.server.XrayDetailSuggestions;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
+import com.healthcoco.healthcocopad.dialogFragment.AddNewDrugDialogFragment;
 import com.healthcoco.healthcocopad.dialogFragment.AddUpdateNameDialogFragment;
 import com.healthcoco.healthcocopad.dialogFragment.EnlargedImageViewDialogFragment;
 import com.healthcoco.healthcocopad.enums.AddUpdateNameDialogType;
@@ -376,6 +387,46 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
                         getNotesSuggestions(user);
                         defaultWebServicesList.add(syncServiceType);
                         break;
+                    case GET_EAR_EXAM_SUGGESTIONS:
+                        getEarExamSuggestions(user);
+                        defaultWebServicesList.add(syncServiceType);
+                        break;
+                    case GET_NECK_EXAM_SUGGESTIONS:
+                        getNeckExamSuggestions(user);
+                        defaultWebServicesList.add(syncServiceType);
+                        break;
+                    case GET_NOSE_EXAM_SUGGESTIONS:
+                        getNoseEaxmSuggestions(user);
+                        defaultWebServicesList.add(syncServiceType);
+                        break;
+                    case GET_INDIRECT_LARYGOSCOPY_EXAM_SUGGESTIONS:
+                        getIndirectLarygoscopyExamSuggestions(user);
+                        defaultWebServicesList.add(syncServiceType);
+                        break;
+                    case GET_ORAL_CAVITY_THROAT_EXAM_SUGGESTIONS:
+                        getOralCavityExamSuggestions(user);
+                        defaultWebServicesList.add(syncServiceType);
+                        break;
+                    case GET_PC_EARS_SUGGESTIONS:
+                        getPcEarsSuggestions(user);
+                        defaultWebServicesList.add(syncServiceType);
+                        break;
+                    case GET_PC_NOSE_SUGGESTIONS:
+                        getPcNoseSuggestions(user);
+                        defaultWebServicesList.add(syncServiceType);
+                        break;
+                    case GET_PC_ORAL_CAVITY_SUGGESTIONS:
+                        getPcOralCavitySuggestions(user);
+                        defaultWebServicesList.add(syncServiceType);
+                        break;
+                    case GET_PC_THROAT_SUGGESTIONS:
+                        getPcThroatSuggestions(user);
+                        defaultWebServicesList.add(syncServiceType);
+                        break;
+                    case GET_PROCEDURE_NOTE_SUGGESTIONS:
+                        getProcedureSuggestions(user);
+                        defaultWebServicesList.add(syncServiceType);
+                        break;
                     case GET_SEARCH_ADVICE:
                         getAdviceSuggestions(user);
                         defaultWebServicesList.add(syncServiceType);
@@ -503,11 +554,72 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
                 latestUpdatedTime, this, this);
     }
 
+    private void getEarExamSuggestions(User user) {
+        Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.EAR_EXAM_SUGGESTIONS);
+        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(EarsExamSuggestions.class, WebServiceType.GET_EAR_EXAM_SUGGESTIONS, user.getUniqueId(),
+                latestUpdatedTime, this, this);
+    }
+
+    private void getNoseEaxmSuggestions(User user) {
+        Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.NOSE_EXAM_SUGGESTIONS);
+        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(NoseExamSuggestions.class, WebServiceType.GET_NOSE_EXAM_SUGGESTIONS, user.getUniqueId(),
+                latestUpdatedTime, this, this);
+    }
+
+    private void getNeckExamSuggestions(User user) {
+        Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.NECK_EXAM_SUGGESTIONS);
+        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(NeckExamSuggestions.class, WebServiceType.GET_NECK_EXAM_SUGGESTIONS, user.getUniqueId(),
+                latestUpdatedTime, this, this);
+    }
+
+    private void getOralCavityExamSuggestions(User user) {
+        Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.ORAL_CAVITY_THROAT_EXAM_SUGGESTIONS);
+        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(OralCavityThroatExamSuggestions.class, WebServiceType.GET_ORAL_CAVITY_THROAT_EXAM_SUGGESTIONS, user.getUniqueId(),
+                latestUpdatedTime, this, this);
+    }
+
+    private void getIndirectLarygoscopyExamSuggestions(User user) {
+        Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.INDIRECT_LARYGOSCOPY_EXAM_SUGGESTIONS);
+        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(IndirectLarygoscopyExamSuggestions.class, WebServiceType.GET_INDIRECT_LARYGOSCOPY_EXAM_SUGGESTIONS, user.getUniqueId(),
+                latestUpdatedTime, this, this);
+    }
+
+    private void getPcEarsSuggestions(User user) {
+        Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.PC_EARS_SUGGESTIONS);
+        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(PcEarsSuggestions.class, WebServiceType.GET_PC_EARS_SUGGESTIONS, user.getUniqueId(),
+                latestUpdatedTime, this, this);
+    }
+
+    private void getPcNoseSuggestions(User user) {
+        Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.PC_NOSE_SUGGESTIONS);
+        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(PcNoseSuggestions.class, WebServiceType.GET_PC_NOSE_SUGGESTIONS, user.getUniqueId(),
+                latestUpdatedTime, this, this);
+    }
+
+    private void getPcOralCavitySuggestions(User user) {
+        Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.PC_ORAL_CAVITY_SUGGESTIONS);
+        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(PcOralCavitySuggestions.class, WebServiceType.GET_PC_ORAL_CAVITY_SUGGESTIONS, user.getUniqueId(),
+                latestUpdatedTime, this, this);
+    }
+
+    private void getPcThroatSuggestions(User user) {
+        Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.PC_THROAT_SUGGESTIONS);
+        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(PcThroatSuggestions.class, WebServiceType.GET_PC_THROAT_SUGGESTIONS, user.getUniqueId(),
+                latestUpdatedTime, this, this);
+    }
+
+    private void getProcedureSuggestions(User user) {
+        Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.PROCEDURE_NOTE_SUGGESTIONS);
+        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(ProcedureNoteSuggestions.class, WebServiceType.GET_PROCEDURE_NOTE_SUGGESTIONS, user.getUniqueId(),
+                latestUpdatedTime, this, this);
+    }
+
     private void getNotesSuggestions(User user) {
         Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.NOTES_SUGGESTIONS);
         WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(NotesSuggestions.class, WebServiceType.GET_NOTES_SUGGESTIONS, user.getUniqueId(),
                 latestUpdatedTime, this, this);
     }
+
 
     public void syncGroups(User user) {
         //Get groupsList
@@ -679,8 +791,52 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
                 case GET_PA_SUGGESTIONS:
                     if (defaultWebServicesList.contains(DefaultSyncServiceType.getSyncType(webServiceType)))
                         defaultWebServicesList.remove(DefaultSyncServiceType.getSyncType(webServiceType));
+                    updateProgress(DefaultSyncServiceType.GET_EAR_EXAM_SUGGESTIONS);
+                    break;
+
+                case GET_EAR_EXAM_SUGGESTIONS:
+                    if (defaultWebServicesList.contains(DefaultSyncServiceType.getSyncType(webServiceType)))
+                        defaultWebServicesList.remove(DefaultSyncServiceType.getSyncType(webServiceType));
+                    updateProgress(DefaultSyncServiceType.GET_NECK_EXAM_SUGGESTIONS);
+                    break;
+                case GET_NECK_EXAM_SUGGESTIONS:
+                    if (defaultWebServicesList.contains(DefaultSyncServiceType.getSyncType(webServiceType)))
+                        defaultWebServicesList.remove(DefaultSyncServiceType.getSyncType(webServiceType));
+                    updateProgress(DefaultSyncServiceType.GET_NOSE_EXAM_SUGGESTIONS);
+                    break;
+                case GET_NOSE_EXAM_SUGGESTIONS:
+                    defaultWebServicesList.remove(DefaultSyncServiceType.getSyncType(webServiceType));
+                    updateProgress(DefaultSyncServiceType.GET_INDIRECT_LARYGOSCOPY_EXAM_SUGGESTIONS);
+                    break;
+                case GET_INDIRECT_LARYGOSCOPY_EXAM_SUGGESTIONS:
+                    defaultWebServicesList.remove(DefaultSyncServiceType.getSyncType(webServiceType));
+                    updateProgress(DefaultSyncServiceType.GET_ORAL_CAVITY_THROAT_EXAM_SUGGESTIONS);
+                    break;
+                case GET_ORAL_CAVITY_THROAT_EXAM_SUGGESTIONS:
+                    defaultWebServicesList.remove(DefaultSyncServiceType.getSyncType(webServiceType));
+                    updateProgress(DefaultSyncServiceType.GET_PC_EARS_SUGGESTIONS);
+                    break;
+                case GET_PC_EARS_SUGGESTIONS:
+                    defaultWebServicesList.remove(DefaultSyncServiceType.getSyncType(webServiceType));
+                    updateProgress(DefaultSyncServiceType.GET_PC_NOSE_SUGGESTIONS);
+                    break;
+                case GET_PC_NOSE_SUGGESTIONS:
+                    defaultWebServicesList.remove(DefaultSyncServiceType.getSyncType(webServiceType));
+                    updateProgress(DefaultSyncServiceType.GET_PC_ORAL_CAVITY_SUGGESTIONS);
+                    break;
+                case GET_PC_ORAL_CAVITY_SUGGESTIONS:
+                    defaultWebServicesList.remove(DefaultSyncServiceType.getSyncType(webServiceType));
+                    updateProgress(DefaultSyncServiceType.GET_PC_THROAT_SUGGESTIONS);
+                    break;
+                case GET_PC_THROAT_SUGGESTIONS:
+                    defaultWebServicesList.remove(DefaultSyncServiceType.getSyncType(webServiceType));
+                    updateProgress(DefaultSyncServiceType.GET_PROCEDURE_NOTE_SUGGESTIONS);
+                    break;
+                case GET_PROCEDURE_NOTE_SUGGESTIONS:
+                    defaultWebServicesList.remove(DefaultSyncServiceType.getSyncType(webServiceType));
                     updateProgress(DefaultSyncServiceType.GET_INDICATION_OF_USG_SUGGESTIONS);
                     break;
+
                 case GET_INDICATION_OF_USG_SUGGESTIONS:
                     if (defaultWebServicesList.contains(DefaultSyncServiceType.getSyncType(webServiceType)))
                         defaultWebServicesList.remove(DefaultSyncServiceType.getSyncType(webServiceType));
@@ -849,6 +1005,36 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
                         break;
                     case GET_PS_SUGGESTIONS:
                         new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_PS_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                        break;
+                    case GET_EAR_EXAM_SUGGESTIONS:
+                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_PC_EARS_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                        break;
+                    case GET_NECK_EXAM_SUGGESTIONS:
+                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_NECK_EXAM_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                        break;
+                    case GET_NOSE_EXAM_SUGGESTIONS:
+                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_NOSE_EXAM_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                        break;
+                    case GET_INDIRECT_LARYGOSCOPY_EXAM_SUGGESTIONS:
+                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_INDIRECT_LARYGOSCOPY_EXAM_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                        break;
+                    case GET_ORAL_CAVITY_THROAT_EXAM_SUGGESTIONS:
+                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_ORAL_CAVITY_THROAT_EXAM_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                        break;
+                    case GET_PC_EARS_SUGGESTIONS:
+                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_PC_EARS_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                        break;
+                    case GET_PC_NOSE_SUGGESTIONS:
+                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_PC_NOSE_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                        break;
+                    case GET_PC_ORAL_CAVITY_SUGGESTIONS:
+                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_PC_ORAL_CAVITY_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                        break;
+                    case GET_PC_THROAT_SUGGESTIONS:
+                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_PC_THROAT_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                        break;
+                    case GET_PROCEDURE_NOTE_SUGGESTIONS:
+                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_PROCEDURE_NOTE_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
                         break;
                     case GET_INDICATION_OF_USG_SUGGESTIONS:
                         new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_INDICATION_OF_USG_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
@@ -1074,6 +1260,66 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
                 if (!Util.isNullOrEmptyList(response.getDataList()))
                     LocalDataServiceImpl.getInstance(mApp).
                             addSuggestionsList(WebServiceType.GET_NOTES_SUGGESTIONS, LocalTabelType.NOTES_SUGGESTIONS,
+                                    response.getDataList(), null, null);
+                break;
+            case ADD_ORAL_CAVITY_THROAT_EXAM_SUGGESTIONS:
+                if (!Util.isNullOrEmptyList(response.getDataList()))
+                    LocalDataServiceImpl.getInstance(mApp).
+                            addSuggestionsList(WebServiceType.GET_ORAL_CAVITY_THROAT_EXAM_SUGGESTIONS, LocalTabelType.ORAL_CAVITY_THROAT_EXAM_SUGGESTIONS,
+                                    response.getDataList(), null, null);
+                break;
+            case ADD_NECK_EXAM_SUGGESTIONS:
+                if (!Util.isNullOrEmptyList(response.getDataList()))
+                    LocalDataServiceImpl.getInstance(mApp).
+                            addSuggestionsList(WebServiceType.GET_NECK_EXAM_SUGGESTIONS, LocalTabelType.NECK_EXAM_SUGGESTIONS,
+                                    response.getDataList(), null, null);
+                break;
+            case ADD_NOSE_EXAM_SUGGESTIONS:
+                if (!Util.isNullOrEmptyList(response.getDataList()))
+                    LocalDataServiceImpl.getInstance(mApp).
+                            addSuggestionsList(WebServiceType.GET_NOSE_EXAM_SUGGESTIONS, LocalTabelType.NOSE_EXAM_SUGGESTIONS,
+                                    response.getDataList(), null, null);
+                break;
+            case ADD_PC_EARS_SUGGESTIONS:
+                if (!Util.isNullOrEmptyList(response.getDataList()))
+                    LocalDataServiceImpl.getInstance(mApp).
+                            addSuggestionsList(WebServiceType.GET_PC_EARS_SUGGESTIONS, LocalTabelType.PC_EARS_SUGGESTIONS,
+                                    response.getDataList(), null, null);
+                break;
+            case ADD_PC_NOSE_SUGGESTIONS:
+                if (!Util.isNullOrEmptyList(response.getDataList()))
+                    LocalDataServiceImpl.getInstance(mApp).
+                            addSuggestionsList(WebServiceType.GET_PC_NOSE_SUGGESTIONS, LocalTabelType.PC_NOSE_SUGGESTIONS,
+                                    response.getDataList(), null, null);
+                break;
+            case ADD_PC_ORAL_CAVITY_SUGGESTIONS:
+                if (!Util.isNullOrEmptyList(response.getDataList()))
+                    LocalDataServiceImpl.getInstance(mApp).
+                            addSuggestionsList(WebServiceType.GET_PC_ORAL_CAVITY_SUGGESTIONS, LocalTabelType.PC_ORAL_CAVITY_SUGGESTIONS,
+                                    response.getDataList(), null, null);
+                break;
+            case ADD_PC_THROAT_SUGGESTIONS:
+                if (!Util.isNullOrEmptyList(response.getDataList()))
+                    LocalDataServiceImpl.getInstance(mApp).
+                            addSuggestionsList(WebServiceType.GET_PC_THROAT_SUGGESTIONS, LocalTabelType.PC_THROAT_SUGGESTIONS,
+                                    response.getDataList(), null, null);
+                break;
+            case ADD_PROCEDURE_NOTE_SUGGESTIONS:
+                if (!Util.isNullOrEmptyList(response.getDataList()))
+                    LocalDataServiceImpl.getInstance(mApp).
+                            addSuggestionsList(WebServiceType.GET_PROCEDURE_NOTE_SUGGESTIONS, LocalTabelType.PROCEDURE_NOTE_SUGGESTIONS,
+                                    response.getDataList(), null, null);
+                break;
+            case ADD_INDIRECT_LARYGOSCOPY_EXAM_SUGGESTIONS:
+                if (!Util.isNullOrEmptyList(response.getDataList()))
+                    LocalDataServiceImpl.getInstance(mApp).
+                            addSuggestionsList(WebServiceType.GET_INDIRECT_LARYGOSCOPY_EXAM_SUGGESTIONS, LocalTabelType.INDIRECT_LARYGOSCOPY_EXAM_SUGGESTIONS,
+                                    response.getDataList(), null, null);
+                break;
+            case ADD_EARS_EXAM_SUGGESTIONS:
+                if (!Util.isNullOrEmptyList(response.getDataList()))
+                    LocalDataServiceImpl.getInstance(mApp).
+                            addSuggestionsList(WebServiceType.GET_EAR_EXAM_SUGGESTIONS, LocalTabelType.EAR_EXAM_SUGGESTIONS,
                                     response.getDataList(), null, null);
                 break;
             case ADD_ADVICE_SUGGESTIONS:
@@ -1437,6 +1683,13 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
         addUpdateNameDialogFragment.setTargetFragment(fragment, requestCode);
         addUpdateNameDialogFragment.show(getSupportFragmentManager(),
                 addUpdateNameDialogFragment.getClass().getSimpleName());
+    }
+
+    public void openAddNewDrugFragment(Fragment fragment, int requestCode) {
+        AddNewDrugDialogFragment newDrugDialogFragment = new AddNewDrugDialogFragment();
+        newDrugDialogFragment.setTargetFragment(fragment, requestCode);
+        newDrugDialogFragment.show(getSupportFragmentManager(),
+                newDrugDialogFragment.getClass().getSimpleName());
     }
 
     @TargetApi(Build.VERSION_CODES.KITKAT)

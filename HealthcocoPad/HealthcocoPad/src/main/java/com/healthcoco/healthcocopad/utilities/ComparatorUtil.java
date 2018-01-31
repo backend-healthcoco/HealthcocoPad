@@ -6,6 +6,7 @@ import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
 import com.healthcoco.healthcocopad.bean.server.CityResponse;
 import com.healthcoco.healthcocopad.bean.server.ClinicalNotes;
 import com.healthcoco.healthcocopad.bean.server.Disease;
+import com.healthcoco.healthcocopad.bean.server.Drug;
 import com.healthcoco.healthcocopad.bean.server.DrugDirection;
 import com.healthcoco.healthcocopad.bean.server.DrugDosage;
 import com.healthcoco.healthcocopad.bean.server.DrugDurationUnit;
@@ -22,9 +23,12 @@ import com.healthcoco.healthcocopad.bean.server.TempTemplate;
 import com.healthcoco.healthcocopad.bean.server.Treatments;
 import com.healthcoco.healthcocopad.bean.server.UserGroups;
 import com.healthcoco.healthcocopad.bean.server.VisitDetails;
+import com.healthcoco.healthcocopad.enums.ClassType;
 
 import java.sql.Date;
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
@@ -331,4 +335,45 @@ public class ComparatorUtil {
             return 0;
         }
     };
+
+    public static void commonDateComparator(final ClassType classType, final List<?> list) {
+        Comparator<Object> commonComparator = new Comparator<Object>() {
+
+            @Override
+            public int compare(Object object1, Object object2) {
+                try {
+                    Date date1 = null;
+                    Date date2 = null;
+                    switch (classType) {
+                        case REFERENCE:
+                            date1 = new Date(((Reference) object1).getCreatedTime());
+                            date2 = new Date(((Reference) object2).getCreatedTime());
+                            break;
+                        case HISTORY:
+                            date1 = new Date(((Disease) object1).getCreatedTime());
+                            date2 = new Date(((Disease) object2).getCreatedTime());
+                            break;
+                        case DRUG:
+                            date1 = new Date(((Drug) object1).getCreatedTime());
+                            date2 = new Date(((Drug) object2).getCreatedTime());
+                            break;
+                        case DIRECTIONS:
+                            date1 = new Date(((DrugDirection) object1).getCreatedTime());
+                            date2 = new Date(((DrugDirection) object2).getCreatedTime());
+                            break;
+                        case FREQUENCY_DOSAGE:
+                            date1 = new Date(((DrugDosage) object1).getCreatedTime());
+                            date2 = new Date(((DrugDosage) object2).getCreatedTime());
+                            break;
+                    }
+                    return date2.compareTo(date1);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return 0;
+            }
+        };
+        Collections.sort(list, commonComparator);
+    }
+
 }

@@ -44,7 +44,10 @@ import com.healthcoco.healthcocopad.fragments.NotificationResponseDataFragment;
 import com.healthcoco.healthcocopad.fragments.PatientRegistrationFragment;
 import com.healthcoco.healthcocopad.fragments.SelectedDiagramDetailFragment;
 import com.healthcoco.healthcocopad.fragments.SettingUIPermissionsFragment;
+import com.healthcoco.healthcocopad.fragments.SettingsNameEditDeleteFragment;
+import com.healthcoco.healthcocopad.fragments.SettingsNameHideActivateFragment;
 import com.healthcoco.healthcocopad.fragments.SyncFragment;
+import com.healthcoco.healthcocopad.fragments.TemplateListFragment;
 import com.healthcoco.healthcocopad.fragments.WebViewFragments;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
@@ -111,9 +114,6 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
             case SETTINGS_CLINICAL_NOTES:
 //                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, R.string.clinical_notes, new SettingUIPermissionsFragment());
                 break;
-            case SETTINGS_HISTORY:
-//                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, R.string.history_small, new SettingUIPermissionsFragment());
-                break;
             case SETTINGS_PRESCRIPTION:
 //                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, R.string.prescriptions, new SettingUIPermissionsFragment());
                 break;
@@ -129,6 +129,30 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
             case SETTING_SMS:
 //                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, R.string.sms, new SettingUIPermissionsFragment());
                 break;
+            case SETTINGS_GROUPS:
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, R.string.groups, new SettingsNameEditDeleteFragment());
+                break;
+            case SETTINGS_REFERENCE:
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, R.string.referred_by_settings, new SettingsNameHideActivateFragment());
+                break;
+            case SETTINGS_HISTORY:
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, R.string.history_small, new SettingsNameHideActivateFragment());
+                break;
+            case SETTINGS_DISEASE:
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, R.string.direction, new SettingsNameHideActivateFragment());
+                break;
+            case SETTINGS_FREQUENCY:
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, R.string.frequency, new SettingsNameHideActivateFragment());
+                break;
+            case SETTINGS_DRUG:
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, R.string.drug, new SettingsNameHideActivateFragment());
+                break;
+            case TEMPLATE_LIST:
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, R.string.templates, new TemplateListFragment());
+                break;
+//            case SYNC_CONTACT:
+//                openFragment(ActionbarType.TITLE, fragmentType.getTitleId(), ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, new SyncContactListFragment());
+//                break;
             case SETTING_ABOUT_US:
                 openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, R.string.about_us, new AboutUsFragment());
                 break;

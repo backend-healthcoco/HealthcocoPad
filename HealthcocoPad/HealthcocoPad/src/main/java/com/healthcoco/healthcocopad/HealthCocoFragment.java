@@ -355,6 +355,15 @@ public abstract class HealthCocoFragment extends Fragment implements GsonRequest
         return "";
     }
 
+    protected void setSearchEditTextValue(String text) {
+        EditText editSearch = (EditText) view.findViewById(R.id.edit_search);
+        if (editSearch != null) {
+            editSearch.setText(text);
+            if (!Util.isNullOrBlank(String.valueOf(editSearch.getText())))
+                editSearch.setSelection(editSearch.getText().length());
+        }
+    }
+
     protected void clearSearchEditText() {
         try {
             EditText editSearch = (EditText) view.findViewById(R.id.edit_search);
@@ -418,7 +427,6 @@ public abstract class HealthCocoFragment extends Fragment implements GsonRequest
     protected boolean isOtpVerified() {
         return isOTPVerified;
     }
-
 
     @Override
     public void onResponse(VolleyResponseBean response) {

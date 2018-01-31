@@ -176,6 +176,10 @@ public enum WebServiceType {
 
     ADD_OBSTETRIC_HISTORY_SUGGESTIONS(Method.POST, "clinicalNotes/obstetricHistory/add/"),
 
+    ADD_GENERAL_EXAMINATION_SUGGESTIONS(Method.POST, "clinicalNotes/generalExam/add"),
+
+    ADD_SYSTEMIC_EXAMINATION_SUGGESTIONS(Method.POST, "clinicalNotes/systemExam/add"),
+
     ADD_ORAL_CAVITY_THROAT_EXAM_SUGGESTIONS(Method.POST, "clinicalNotes/oralCavityThroatExam/add/"),
 
     ADD_PA_SUGGESTIONS(Method.POST, "clinicalNotes/pa/add/"),
@@ -245,6 +249,26 @@ public enum WebServiceType {
     GET_INDICATION_OF_USG_SUGGESTIONS(Method.GET, "clinicalNotes/INDICATION_OF_USG/BOTH/" + HealthCocoConstants.PARAM_DISCARDED_TRUE),
 
     GET_NOTES_SUGGESTIONS(Method.GET, "clinicalNotes/NOTES/BOTH/" + HealthCocoConstants.PARAM_DISCARDED_TRUE),
+
+    GET_EAR_EXAM_SUGGESTIONS(Method.GET, "clinicalNotes/EARS_EXAM/BOTH/" + HealthCocoConstants.PARAM_DISCARDED_TRUE),
+
+    GET_INDIRECT_LARYGOSCOPY_EXAM_SUGGESTIONS(Method.GET, "clinicalNotes/INDIRECT_LAGYROSCOPY_EXAM/BOTH/" + HealthCocoConstants.PARAM_DISCARDED_TRUE),
+
+    GET_NECK_EXAM_SUGGESTIONS(Method.GET, "clinicalNotes/NECK_EXAM/BOTH/" + HealthCocoConstants.PARAM_DISCARDED_TRUE),
+
+    GET_NOSE_EXAM_SUGGESTIONS(Method.GET, "clinicalNotes/NOSE_EXAM/BOTH/" + HealthCocoConstants.PARAM_DISCARDED_TRUE),
+
+    GET_ORAL_CAVITY_THROAT_EXAM_SUGGESTIONS(Method.GET, "clinicalNotes/ORAL_CAVITY_THROAT_EXAM/BOTH/" + HealthCocoConstants.PARAM_DISCARDED_TRUE),
+
+    GET_PC_EARS_SUGGESTIONS(Method.GET, "clinicalNotes/PC_EARS/BOTH/" + HealthCocoConstants.PARAM_DISCARDED_TRUE),
+
+    GET_PC_NOSE_SUGGESTIONS(Method.GET, "clinicalNotes/PC_NOSE/BOTH/" + HealthCocoConstants.PARAM_DISCARDED_TRUE),
+
+    GET_PC_ORAL_CAVITY_SUGGESTIONS(Method.GET, "clinicalNotes/PC_ORAL_CAVITY/BOTH/" + HealthCocoConstants.PARAM_DISCARDED_TRUE),
+
+    GET_PC_THROAT_SUGGESTIONS(Method.GET, "clinicalNotes/PC_THROAT/BOTH/" + HealthCocoConstants.PARAM_DISCARDED_TRUE),
+
+    GET_PROCEDURE_NOTE_SUGGESTIONS(Method.GET, "clinicalNotes/PROCEDURE_NOTE/BOTH/" + HealthCocoConstants.PARAM_DISCARDED_TRUE),
 
     GET_DISEASE_LIST(Method.GET, "history/diseases/BOTH/"),
 
@@ -322,6 +346,27 @@ public enum WebServiceType {
 
 
     DELETE_DISEASE(Method.DELETE, "history/disease/"),
+
+    DELETE_COMPLAINT(Method.DELETE, "clinicalNotes/complaint/"),
+    DELETE_PRESENT_COMPLAINT(Method.DELETE, "clinicalNotes/presentComplaint/"),
+    DELETE_HISTORY_OF_PRESENT_COMPLAINT(Method.DELETE, "clinicalNotes/presentComplaintHistory/"),
+    DELETE_MENSTRUAL_HISTORY(Method.DELETE, "clinicalNotes/menstrualHistory/"),
+    DELETE_OBSTETRIC_HISTORY(Method.DELETE, "clinicalNotes/obstetricHistory/"),
+    DELETE_GENERAL_EXAMINATION(Method.DELETE, "clinicalNotes/generalExam/"),
+    DELETE_SYSTEMIC_EXAMINATION(Method.DELETE, "clinicalNotes/systemExam/"),
+    DELETE_OBSERVATION(Method.DELETE, "clinicalNotes/observation/"),
+    DELETE_INVESTIGATION(Method.DELETE, "clinicalNotes/investigation/"),
+    DELETE_PROVISIONAL_DIAGNOSIS(Method.DELETE, "clinicalNotes/provisionalDiagnosis/"),
+    DELETE_DIAGNOSIS(Method.DELETE, "clinicalNotes/diagnosis/"),
+    DELETE_ECG(Method.DELETE, "clinicalNotes/ecgDetails/"),
+    DELETE_ECHO(Method.DELETE, "clinicalNotes/echo/"),
+    DELETE_XRAY(Method.DELETE, "clinicalNotes/xRayDetails/"),
+    DELETE_HOLTER(Method.DELETE, "clinicalNotes/holter/"),
+    DELETE_PA(Method.DELETE, "clinicalNotes/pa/"),
+    DELETE_PS(Method.DELETE, "clinicalNotes/ps/"),
+    DELETE_PV(Method.DELETE, "clinicalNotes/pv/"),
+    DELETE_INDICATION_OF_USG(Method.DELETE, "clinicalNotes/indicationOfUSG/"),
+    DELETE_NOTES(Method.DELETE, "clinicalNotes/notes/"),
 
     ADD_DIRECTION(Method.POST, "prescription/drugDirection/add/"),
 

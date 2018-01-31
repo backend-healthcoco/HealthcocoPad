@@ -14,20 +14,30 @@ import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.AdviceSuggestion;
 import com.healthcoco.healthcocopad.bean.server.ComplaintSuggestions;
 import com.healthcoco.healthcocopad.bean.server.DiagnosisSuggestions;
+import com.healthcoco.healthcocopad.bean.server.EarsExamSuggestions;
 import com.healthcoco.healthcocopad.bean.server.EcgDetailSuggestions;
 import com.healthcoco.healthcocopad.bean.server.EchoSuggestions;
 import com.healthcoco.healthcocopad.bean.server.GeneralExaminationSuggestions;
 import com.healthcoco.healthcocopad.bean.server.HistoryPresentComplaintSuggestions;
 import com.healthcoco.healthcocopad.bean.server.HolterSuggestions;
 import com.healthcoco.healthcocopad.bean.server.IndicationOfUsgSuggestions;
+import com.healthcoco.healthcocopad.bean.server.IndirectLarygoscopyExamSuggestions;
 import com.healthcoco.healthcocopad.bean.server.InvestigationSuggestions;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.MenstrualHistorySuggestions;
+import com.healthcoco.healthcocopad.bean.server.NeckExamSuggestions;
+import com.healthcoco.healthcocopad.bean.server.NoseExamSuggestions;
 import com.healthcoco.healthcocopad.bean.server.NotesSuggestions;
 import com.healthcoco.healthcocopad.bean.server.ObservationSuggestions;
 import com.healthcoco.healthcocopad.bean.server.ObstetricHistorySuggestions;
+import com.healthcoco.healthcocopad.bean.server.OralCavityThroatExamSuggestions;
 import com.healthcoco.healthcocopad.bean.server.PaSuggestions;
+import com.healthcoco.healthcocopad.bean.server.PcEarsSuggestions;
+import com.healthcoco.healthcocopad.bean.server.PcNoseSuggestions;
+import com.healthcoco.healthcocopad.bean.server.PcOralCavitySuggestions;
+import com.healthcoco.healthcocopad.bean.server.PcThroatSuggestions;
 import com.healthcoco.healthcocopad.bean.server.PresentComplaintSuggestions;
+import com.healthcoco.healthcocopad.bean.server.ProcedureNoteSuggestions;
 import com.healthcoco.healthcocopad.bean.server.ProvisionalDiagnosisSuggestions;
 import com.healthcoco.healthcocopad.bean.server.PsSuggestions;
 import com.healthcoco.healthcocopad.bean.server.PvSuggestions;
@@ -190,7 +200,139 @@ public class AddNewSuggestionDialogFragment extends HealthCocoDialogFragment imp
             case ADVICE:
                 addAdviceSuggestion(suggestion);
                 break;
+            case PC_EARS:
+                addPcEarsSuggestion(suggestion);
+                break;
+            case PC_NOSE:
+                addPcNoseSuggestion(suggestion);
+                break;
+            case PC_ORAL_CAVITY:
+                addPcOralCavitySuggestion(suggestion);
+                break;
+            case PC_THROAT:
+                addPcThroatSuggestion(suggestion);
+                break;
+            case EARS_EXAM:
+                addEarsExamSuggestion(suggestion);
+                break;
+            case NOSE_EXAM:
+                addNoseExamSuggestion(suggestion);
+                break;
+            case ORAL_CAVITY_THROAT_EXAM:
+                addOralCavityThroatExamSuggestion(suggestion);
+                break;
+            case INDIRECT_LARYGOSCOPY_EXAM:
+                addIndirectLarygoscopyExamSuggestion(suggestion);
+                break;
+            case NECK_EXAM:
+                addNeckExamSuggestion(suggestion);
+                break;
+            case PROCEDURES:
+                addProcedureSuggestion(suggestion);
+                break;
+
+
         }
+    }
+
+    private void addPcEarsSuggestion(String suggestion) {
+        PcEarsSuggestions pcEarsSuggestions = new PcEarsSuggestions();
+        pcEarsSuggestions.setPcEars(suggestion);
+        pcEarsSuggestions.setDoctorId(user.getUniqueId());
+        pcEarsSuggestions.setHospitalId(user.getForeignHospitalId());
+        pcEarsSuggestions.setLocationId(user.getForeignLocationId());
+        mActivity.showLoading(false);
+        WebDataServiceImpl.getInstance(mApp).addSuggestion(PcEarsSuggestions.class, WebServiceType.ADD_PC_EARS_SUGGESTIONS, pcEarsSuggestions, this, this);
+    }
+
+    private void addPcNoseSuggestion(String suggestion) {
+        PcNoseSuggestions pcNoseSuggestions = new PcNoseSuggestions();
+        pcNoseSuggestions.setPcNose(suggestion);
+        pcNoseSuggestions.setDoctorId(user.getUniqueId());
+        pcNoseSuggestions.setHospitalId(user.getForeignHospitalId());
+        pcNoseSuggestions.setLocationId(user.getForeignLocationId());
+        mActivity.showLoading(false);
+        WebDataServiceImpl.getInstance(mApp).addSuggestion(PcNoseSuggestions.class, WebServiceType.ADD_PC_NOSE_SUGGESTIONS, pcNoseSuggestions, this, this);
+    }
+
+    private void addPcOralCavitySuggestion(String suggestion) {
+        PcOralCavitySuggestions pcOralCavitySuggestions = new PcOralCavitySuggestions();
+        pcOralCavitySuggestions.setPcOralCavity(suggestion);
+        pcOralCavitySuggestions.setDoctorId(user.getUniqueId());
+        pcOralCavitySuggestions.setHospitalId(user.getForeignHospitalId());
+        pcOralCavitySuggestions.setLocationId(user.getForeignLocationId());
+        mActivity.showLoading(false);
+        WebDataServiceImpl.getInstance(mApp).addSuggestion(PcOralCavitySuggestions.class, WebServiceType.ADD_PC_ORAL_CAVITY_SUGGESTIONS, pcOralCavitySuggestions, this, this);
+    }
+
+    private void addPcThroatSuggestion(String suggestion) {
+        PcThroatSuggestions pcThroatSuggestions = new PcThroatSuggestions();
+        pcThroatSuggestions.setPcThroat(suggestion);
+        pcThroatSuggestions.setDoctorId(user.getUniqueId());
+        pcThroatSuggestions.setHospitalId(user.getForeignHospitalId());
+        pcThroatSuggestions.setLocationId(user.getForeignLocationId());
+        mActivity.showLoading(false);
+        WebDataServiceImpl.getInstance(mApp).addSuggestion(PcThroatSuggestions.class, WebServiceType.ADD_PC_THROAT_SUGGESTIONS, pcThroatSuggestions, this, this);
+    }
+
+    private void addEarsExamSuggestion(String suggestion) {
+        EarsExamSuggestions earsExamSuggestions = new EarsExamSuggestions();
+        earsExamSuggestions.setEarsExam(suggestion);
+        earsExamSuggestions.setDoctorId(user.getUniqueId());
+        earsExamSuggestions.setHospitalId(user.getForeignHospitalId());
+        earsExamSuggestions.setLocationId(user.getForeignLocationId());
+        mActivity.showLoading(false);
+        WebDataServiceImpl.getInstance(mApp).addSuggestion(EarsExamSuggestions.class, WebServiceType.ADD_EARS_EXAM_SUGGESTIONS, earsExamSuggestions, this, this);
+    }
+
+    private void addNoseExamSuggestion(String suggestion) {
+        NoseExamSuggestions noseExamSuggestions = new NoseExamSuggestions();
+        noseExamSuggestions.setNoseExam(suggestion);
+        noseExamSuggestions.setDoctorId(user.getUniqueId());
+        noseExamSuggestions.setHospitalId(user.getForeignHospitalId());
+        noseExamSuggestions.setLocationId(user.getForeignLocationId());
+        mActivity.showLoading(false);
+        WebDataServiceImpl.getInstance(mApp).addSuggestion(NoseExamSuggestions.class, WebServiceType.ADD_NOSE_EXAM_SUGGESTIONS, noseExamSuggestions, this, this);
+    }
+
+    private void addOralCavityThroatExamSuggestion(String suggestion) {
+        OralCavityThroatExamSuggestions oralCavityThroatExamSuggestions = new OralCavityThroatExamSuggestions();
+        oralCavityThroatExamSuggestions.setOralCavityThroatExam(suggestion);
+        oralCavityThroatExamSuggestions.setDoctorId(user.getUniqueId());
+        oralCavityThroatExamSuggestions.setHospitalId(user.getForeignHospitalId());
+        oralCavityThroatExamSuggestions.setLocationId(user.getForeignLocationId());
+        mActivity.showLoading(false);
+        WebDataServiceImpl.getInstance(mApp).addSuggestion(OralCavityThroatExamSuggestions.class, WebServiceType.ADD_ORAL_CAVITY_THROAT_EXAM_SUGGESTIONS, oralCavityThroatExamSuggestions, this, this);
+    }
+
+    private void addIndirectLarygoscopyExamSuggestion(String suggestion) {
+        IndirectLarygoscopyExamSuggestions indirectLarygoscopyExamSuggestions = new IndirectLarygoscopyExamSuggestions();
+        indirectLarygoscopyExamSuggestions.setIndirectLarygoscopyExam(suggestion);
+        indirectLarygoscopyExamSuggestions.setDoctorId(user.getUniqueId());
+        indirectLarygoscopyExamSuggestions.setHospitalId(user.getForeignHospitalId());
+        indirectLarygoscopyExamSuggestions.setLocationId(user.getForeignLocationId());
+        mActivity.showLoading(false);
+        WebDataServiceImpl.getInstance(mApp).addSuggestion(IndirectLarygoscopyExamSuggestions.class, WebServiceType.ADD_INDIRECT_LARYGOSCOPY_EXAM_SUGGESTIONS, indirectLarygoscopyExamSuggestions, this, this);
+    }
+
+    private void addNeckExamSuggestion(String suggestion) {
+        NeckExamSuggestions neckExamSuggestions = new NeckExamSuggestions();
+        neckExamSuggestions.setNeckExam(suggestion);
+        neckExamSuggestions.setDoctorId(user.getUniqueId());
+        neckExamSuggestions.setHospitalId(user.getForeignHospitalId());
+        neckExamSuggestions.setLocationId(user.getForeignLocationId());
+        mActivity.showLoading(false);
+        WebDataServiceImpl.getInstance(mApp).addSuggestion(NeckExamSuggestions.class, WebServiceType.ADD_NECK_EXAM_SUGGESTIONS, neckExamSuggestions, this, this);
+    }
+
+    private void addProcedureSuggestion(String suggestion) {
+        ProcedureNoteSuggestions procedureNoteSuggestions = new ProcedureNoteSuggestions();
+        procedureNoteSuggestions.setProcedureNote(suggestion);
+        procedureNoteSuggestions.setDoctorId(user.getUniqueId());
+        procedureNoteSuggestions.setHospitalId(user.getForeignHospitalId());
+        procedureNoteSuggestions.setLocationId(user.getForeignLocationId());
+        mActivity.showLoading(false);
+        WebDataServiceImpl.getInstance(mApp).addSuggestion(ProcedureNoteSuggestions.class, WebServiceType.ADD_PROCEDURE_NOTE_SUGGESTIONS, procedureNoteSuggestions, this, this);
     }
 
     private void addAdviceSuggestion(String suggestion) {
@@ -543,6 +685,67 @@ public class AddNewSuggestionDialogFragment extends HealthCocoDialogFragment imp
                 if (response.isValidData(response))
                     LocalDataServiceImpl.getInstance(mApp).
                             addSuggestions(WebServiceType.GET_NOTES_SUGGESTIONS, LocalTabelType.NOTES_SUGGESTIONS,
+                                    response.getData(), null, null);
+                break;
+
+            case ADD_PC_EARS_SUGGESTIONS:
+                if (response.isValidData(response))
+                    LocalDataServiceImpl.getInstance(mApp).
+                            addSuggestions(WebServiceType.GET_PC_EARS_SUGGESTIONS, LocalTabelType.PC_EARS_SUGGESTIONS,
+                                    response.getData(), null, null);
+                break;
+            case ADD_PC_NOSE_SUGGESTIONS:
+                if (response.isValidData(response))
+                    LocalDataServiceImpl.getInstance(mApp).
+                            addSuggestions(WebServiceType.GET_PC_NOSE_SUGGESTIONS, LocalTabelType.PC_NOSE_SUGGESTIONS,
+                                    response.getData(), null, null);
+                break;
+            case ADD_PC_ORAL_CAVITY_SUGGESTIONS:
+                if (response.isValidData(response))
+                    LocalDataServiceImpl.getInstance(mApp).
+                            addSuggestions(WebServiceType.GET_PC_ORAL_CAVITY_SUGGESTIONS, LocalTabelType.PC_ORAL_CAVITY_SUGGESTIONS,
+                                    response.getData(), null, null);
+                break;
+            case ADD_PC_THROAT_SUGGESTIONS:
+                if (response.isValidData(response))
+                    LocalDataServiceImpl.getInstance(mApp).
+                            addSuggestions(WebServiceType.GET_PC_THROAT_SUGGESTIONS, LocalTabelType.PC_THROAT_SUGGESTIONS,
+                                    response.getData(), null, null);
+                break;
+            case ADD_EARS_EXAM_SUGGESTIONS:
+                if (response.isValidData(response))
+                    LocalDataServiceImpl.getInstance(mApp).
+                            addSuggestions(WebServiceType.GET_EAR_EXAM_SUGGESTIONS, LocalTabelType.EAR_EXAM_SUGGESTIONS,
+                                    response.getData(), null, null);
+                break;
+            case ADD_NOSE_EXAM_SUGGESTIONS:
+                if (response.isValidData(response))
+                    LocalDataServiceImpl.getInstance(mApp).
+                            addSuggestions(WebServiceType.GET_NOSE_EXAM_SUGGESTIONS, LocalTabelType.NOSE_EXAM_SUGGESTIONS,
+                                    response.getData(), null, null);
+                break;
+            case ADD_ORAL_CAVITY_THROAT_EXAM_SUGGESTIONS:
+                if (response.isValidData(response))
+                    LocalDataServiceImpl.getInstance(mApp).
+                            addSuggestions(WebServiceType.GET_ORAL_CAVITY_THROAT_EXAM_SUGGESTIONS, LocalTabelType.ORAL_CAVITY_THROAT_EXAM_SUGGESTIONS,
+                                    response.getData(), null, null);
+                break;
+            case ADD_INDIRECT_LARYGOSCOPY_EXAM_SUGGESTIONS:
+                if (response.isValidData(response))
+                    LocalDataServiceImpl.getInstance(mApp).
+                            addSuggestions(WebServiceType.GET_INDIRECT_LARYGOSCOPY_EXAM_SUGGESTIONS, LocalTabelType.INDIRECT_LARYGOSCOPY_EXAM_SUGGESTIONS,
+                                    response.getData(), null, null);
+                break;
+            case ADD_NECK_EXAM_SUGGESTIONS:
+                if (response.isValidData(response))
+                    LocalDataServiceImpl.getInstance(mApp).
+                            addSuggestions(WebServiceType.GET_NECK_EXAM_SUGGESTIONS, LocalTabelType.NECK_EXAM_SUGGESTIONS,
+                                    response.getData(), null, null);
+                break;
+            case ADD_PROCEDURE_NOTE_SUGGESTIONS:
+                if (response.isValidData(response))
+                    LocalDataServiceImpl.getInstance(mApp).
+                            addSuggestions(WebServiceType.GET_PROCEDURE_NOTE_SUGGESTIONS, LocalTabelType.PROCEDURE_NOTE_SUGGESTIONS,
                                     response.getData(), null, null);
                 break;
             case ADD_ADVICE_SUGGESTIONS:

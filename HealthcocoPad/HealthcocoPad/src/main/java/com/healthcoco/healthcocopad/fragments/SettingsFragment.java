@@ -76,38 +76,71 @@ public class SettingsFragment extends HealthCocoFragment implements AdapterView.
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         SettingsItemType itemType = listType.get(position);
         switch (itemType) {
-//            case PATIENT:
-////                openCommonOpenUpActivity(CommonOpenUpFragmentType.SETTINGS_PATIENT, itemType.ordinal());
-//                break;
-//            case CLINICAL_NOTES:
-////                openCommonOpenUpActivity(CommonOpenUpFragmentType.SETTINGS_CLINICAL_NOTES, itemType.ordinal());
-//                break;
-//            case HISTORY:
-////                openCommonOpenUpActivity(CommonOpenUpFragmentType.SETTINGS_HISTORY, itemType.ordinal());
-//                break;
-//            case PRESCRIPTION:
-////                openCommonOpenUpActivity(CommonOpenUpFragmentType.SETTINGS_PRESCRIPTION, itemType.ordinal());
-//                break;
-//            case TEMPLATE:
-////                openCommonOpenUpActivity(CommonOpenUpFragmentType.SETTINGS_TEMPLATE, itemType.ordinal());
-//                break;
+            case GROUPS:
+                openCommonOpenUpActivity(CommonOpenUpFragmentType.SETTINGS_GROUPS, itemType.ordinal());
+                break;
+            case REFERENCE:
+                openCommonOpenUpActivity(CommonOpenUpFragmentType.SETTINGS_REFERENCE, itemType.ordinal());
+                break;
+            case HISTORY:
+                openCommonOpenUpActivity(CommonOpenUpFragmentType.SETTINGS_HISTORY, itemType.ordinal());
+                break;
+            case DIRECTION:
+                openCommonOpenUpActivity(CommonOpenUpFragmentType.SETTINGS_DISEASE, itemType.ordinal());
+                break;
+            case FREQUENCY:
+                openCommonOpenUpActivity(CommonOpenUpFragmentType.SETTINGS_FREQUENCY, itemType.ordinal());
+                break;
+            case DRUG:
+                openCommonOpenUpActivity(CommonOpenUpFragmentType.SETTINGS_DRUG, itemType.ordinal());
+                break;
+            case TEMPLATES:
+                openCommonOpenUpActivity(CommonOpenUpFragmentType.TEMPLATE_LIST, TemplateListFragment.TAG_IS_FROM_SETTINGS, true, 0);
+                break;
+      /*      case CLINICAL_NOTE:
+                openCommonOpenUpActivity(CommonOpenUpFragmentType.CLINICAL_NOTE_LIST, 0);
+                break;
+            case PATIENT:
+                openCommonOpenUpActivity(CommonOpenUpFragmentType.SETTINGS_PATIENT, itemType.ordinal());
+                break;
+            case CLINICAL_NOTES:
+                openCommonOpenUpActivity(CommonOpenUpFragmentType.SETTINGS_CLINICAL_NOTES, itemType.ordinal());
+                break;
+            case HISTORY:
+                openCommonOpenUpActivity(CommonOpenUpFragmentType.SETTINGS_HISTORY, itemType.ordinal());
+                break;
+            case PRESCRIPTION:
+                openCommonOpenUpActivity(CommonOpenUpFragmentType.SETTINGS_PRESCRIPTION, itemType.ordinal());
+                break;
+            case TEMPLATE:
+                openCommonOpenUpActivity(CommonOpenUpFragmentType.SETTINGS_TEMPLATE, itemType.ordinal());
+                break;*/
             case UI_PERMISSION:
                 openCommonOpenUpActivity(CommonOpenUpFragmentType.SETTING_UI_PERMISSION, itemType.ordinal());
                 break;
             case SYNC:
                 openCommonOpenUpActivity(CommonOpenUpFragmentType.SYNC, itemType.ordinal());
                 break;
-//            case BILLING:
-////                openCommonOpenUpActivity(CommonOpenUpFragmentType.SETTINGS_BILLING, itemType.ordinal());
+      /*      case BILLING:
+                openCommonOpenUpActivity(CommonOpenUpFragmentType.SETTINGS_BILLING, itemType.ordinal());
+                break;
+            case SMS:
+                openCommonOpenUpActivity(CommonOpenUpFragmentType.SETTING_SMS, itemType.ordinal());
+                break;
+            case EMAIL:
+                break;
+            case PRINT:
+                break;
+            case ID_CREATION:
+                break;*/
+            case HELP_IMPROVE:
+                openCommonOpenUpActivity(CommonOpenUpFragmentType.FEEDBACK, null, 0);
+                break;
+//            case SYNC_CONTACT:
+//                openCommonOpenUpActivity(CommonOpenUpFragmentType.SYNC_CONTACT, null, 0);
 //                break;
-//            case SMS:
-////                openCommonOpenUpActivity(CommonOpenUpFragmentType.SETTING_SMS, itemType.ordinal());
-//                break;
-//            case EMAIL:
-//                break;
-//            case PRINT:
-//                break;
-//            case ID_CREATION:
+//            case RATE_US:
+//                openRateUsDialogFragment();
 //                break;
             case ABOUT:
                 openCommonOpenUpActivity(CommonOpenUpFragmentType.SETTING_ABOUT_US, itemType.ordinal());

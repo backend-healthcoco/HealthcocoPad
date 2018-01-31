@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <include layout="@layout/layout_edit_search" />
+
+    <com.healthcoco.healthcocopad.views.CustomAutoCompleteTextView
+        android:id="@+id/autotv_clinic_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@android:color/transparent"
+        android:clickable="true"
+        android:drawableLeft="@drawable/icon_clinic_profile_normal"
+        android:drawablePadding="5dp"
+        android:drawableRight="@drawable/arrow_down_drug"
+        android:editable="false"
+        android:focusable="false"
+        android:gravity="center|start"
+        android:padding="10dp"
+        android:text="@string/no_text_dash"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size_clinic_profile_clinic_name"
+        android:visibility="gone" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="6dp"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/toolbar_drop_shadow" />
+
+    <ListView
+        android:id="@+id/lv_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:cacheColorHint="@android:color/transparent"
+        android:clipToPadding="false"
+        android:divider="@null"
+        android:listSelector="@android:color/transparent"
+        android:scrollbarStyle="outsideOverlay"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/tv_no_results_found"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="@string/no_groups"
+        android:textSize="@dimen/text_size_no_results"
+        android:textStyle="bold"
+        android:visibility="visible" />
+
+</LinearLayout>

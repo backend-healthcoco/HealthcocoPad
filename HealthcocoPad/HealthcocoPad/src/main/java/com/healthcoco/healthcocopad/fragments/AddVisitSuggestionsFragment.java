@@ -30,20 +30,30 @@ import com.healthcoco.healthcocopad.bean.server.ComplaintSuggestions;
 import com.healthcoco.healthcocopad.bean.server.DiagnosisSuggestions;
 import com.healthcoco.healthcocopad.bean.server.DiagnosticTest;
 import com.healthcoco.healthcocopad.bean.server.DrugsListSolrResponse;
+import com.healthcoco.healthcocopad.bean.server.EarsExamSuggestions;
 import com.healthcoco.healthcocopad.bean.server.EcgDetailSuggestions;
 import com.healthcoco.healthcocopad.bean.server.EchoSuggestions;
 import com.healthcoco.healthcocopad.bean.server.GeneralExaminationSuggestions;
 import com.healthcoco.healthcocopad.bean.server.HistoryPresentComplaintSuggestions;
 import com.healthcoco.healthcocopad.bean.server.HolterSuggestions;
 import com.healthcoco.healthcocopad.bean.server.IndicationOfUsgSuggestions;
+import com.healthcoco.healthcocopad.bean.server.IndirectLarygoscopyExamSuggestions;
 import com.healthcoco.healthcocopad.bean.server.InvestigationSuggestions;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.MenstrualHistorySuggestions;
+import com.healthcoco.healthcocopad.bean.server.NeckExamSuggestions;
+import com.healthcoco.healthcocopad.bean.server.NoseExamSuggestions;
 import com.healthcoco.healthcocopad.bean.server.NotesSuggestions;
 import com.healthcoco.healthcocopad.bean.server.ObservationSuggestions;
 import com.healthcoco.healthcocopad.bean.server.ObstetricHistorySuggestions;
+import com.healthcoco.healthcocopad.bean.server.OralCavityThroatExamSuggestions;
 import com.healthcoco.healthcocopad.bean.server.PaSuggestions;
+import com.healthcoco.healthcocopad.bean.server.PcEarsSuggestions;
+import com.healthcoco.healthcocopad.bean.server.PcNoseSuggestions;
+import com.healthcoco.healthcocopad.bean.server.PcOralCavitySuggestions;
+import com.healthcoco.healthcocopad.bean.server.PcThroatSuggestions;
 import com.healthcoco.healthcocopad.bean.server.PresentComplaintSuggestions;
+import com.healthcoco.healthcocopad.bean.server.ProcedureNoteSuggestions;
 import com.healthcoco.healthcocopad.bean.server.ProvisionalDiagnosisSuggestions;
 import com.healthcoco.healthcocopad.bean.server.PsSuggestions;
 import com.healthcoco.healthcocopad.bean.server.PvSuggestions;
@@ -268,6 +278,16 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements T
                 case GET_PS_SUGGESTIONS:
                 case GET_INDICATION_OF_USG_SUGGESTIONS:
                 case GET_NOTES_SUGGESTIONS:
+                case GET_EAR_EXAM_SUGGESTIONS:
+                case GET_NECK_EXAM_SUGGESTIONS:
+                case GET_NOSE_EXAM_SUGGESTIONS:
+                case GET_INDIRECT_LARYGOSCOPY_EXAM_SUGGESTIONS:
+                case GET_ORAL_CAVITY_THROAT_EXAM_SUGGESTIONS:
+                case GET_PC_EARS_SUGGESTIONS:
+                case GET_PC_NOSE_SUGGESTIONS:
+                case GET_PC_ORAL_CAVITY_SUGGESTIONS:
+                case GET_PC_THROAT_SUGGESTIONS:
+                case GET_PROCEDURE_NOTE_SUGGESTIONS:
                 case GET_DRUGS_LIST_SOLR:
                 case GET_DIAGNOSTIC_TESTS_SOLR:
                 case GET_SEARCH_ADVICE_SOLR:
@@ -413,6 +433,47 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements T
                 volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getSuggestionsListAsResponse(WebServiceType.GET_NOTES_SUGGESTIONS,
                         NotesSuggestions.class, suggestionType, searchedTerm, PAGE_NUMBER, MAX_SIZE, null, null);
                 break;
+            case GET_EAR_EXAM_SUGGESTIONS:
+                volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getSuggestionsListAsResponse(WebServiceType.GET_EAR_EXAM_SUGGESTIONS,
+                        EarsExamSuggestions.class, suggestionType, searchedTerm, PAGE_NUMBER, MAX_SIZE, null, null);
+                break;
+            case GET_NECK_EXAM_SUGGESTIONS:
+                volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getSuggestionsListAsResponse(WebServiceType.GET_NECK_EXAM_SUGGESTIONS,
+                        NeckExamSuggestions.class, suggestionType, searchedTerm, PAGE_NUMBER, MAX_SIZE, null, null);
+                break;
+            case GET_NOSE_EXAM_SUGGESTIONS:
+                volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getSuggestionsListAsResponse(WebServiceType.GET_NOSE_EXAM_SUGGESTIONS,
+                        NoseExamSuggestions.class, suggestionType, searchedTerm, PAGE_NUMBER, MAX_SIZE, null, null);
+                break;
+            case GET_INDIRECT_LARYGOSCOPY_EXAM_SUGGESTIONS:
+                volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getSuggestionsListAsResponse(WebServiceType.GET_INDIRECT_LARYGOSCOPY_EXAM_SUGGESTIONS,
+                        IndirectLarygoscopyExamSuggestions.class, suggestionType, searchedTerm, PAGE_NUMBER, MAX_SIZE, null, null);
+                break;
+            case GET_ORAL_CAVITY_THROAT_EXAM_SUGGESTIONS:
+                volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getSuggestionsListAsResponse(WebServiceType.GET_ORAL_CAVITY_THROAT_EXAM_SUGGESTIONS,
+                        OralCavityThroatExamSuggestions.class, suggestionType, searchedTerm, PAGE_NUMBER, MAX_SIZE, null, null);
+                break;
+            case GET_PC_EARS_SUGGESTIONS:
+                volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getSuggestionsListAsResponse(WebServiceType.GET_PC_EARS_SUGGESTIONS,
+                        PcEarsSuggestions.class, suggestionType, searchedTerm, PAGE_NUMBER, MAX_SIZE, null, null);
+                break;
+            case GET_PC_NOSE_SUGGESTIONS:
+                volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getSuggestionsListAsResponse(WebServiceType.GET_PC_NOSE_SUGGESTIONS,
+                        PcNoseSuggestions.class, suggestionType, searchedTerm, PAGE_NUMBER, MAX_SIZE, null, null);
+                break;
+            case GET_PC_ORAL_CAVITY_SUGGESTIONS:
+                volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getSuggestionsListAsResponse(WebServiceType.GET_PC_ORAL_CAVITY_SUGGESTIONS,
+                        PcOralCavitySuggestions.class, suggestionType, searchedTerm, PAGE_NUMBER, MAX_SIZE, null, null);
+                break;
+            case GET_PC_THROAT_SUGGESTIONS:
+                volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getSuggestionsListAsResponse(WebServiceType.GET_PC_THROAT_SUGGESTIONS,
+                        PcThroatSuggestions.class, suggestionType, searchedTerm, PAGE_NUMBER, MAX_SIZE, null, null);
+                break;
+            case GET_PROCEDURE_NOTE_SUGGESTIONS:
+                volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getSuggestionsListAsResponse(WebServiceType.GET_PROCEDURE_NOTE_SUGGESTIONS,
+                        ProcedureNoteSuggestions.class, suggestionType, searchedTerm, PAGE_NUMBER, MAX_SIZE, null, null);
+                break;
+
             case GET_SEARCH_ADVICE_SOLR:
                 volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getSuggestionsListAsResponse(WebServiceType.GET_SEARCH_ADVICE_SOLR,
                         AdviceSuggestion.class, suggestionType, searchedTerm, PAGE_NUMBER, MAX_SIZE, null, null);
@@ -483,6 +544,16 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements T
                         case PS:
                         case PV:
                         case INDICATION_OF_USG:
+                        case EARS_EXAM:
+                        case NOSE_EXAM:
+                        case ORAL_CAVITY_THROAT_EXAM:
+                        case INDIRECT_LARYGOSCOPY_EXAM:
+                        case NECK_EXAM:
+                        case PC_EARS:
+                        case PC_NOSE:
+                        case PC_ORAL_CAVITY:
+                        case PC_THROAT:
+                        case PROCEDURES:
                         case ADVICE:
                             openAddNewSuggestionDailogFragment();
                             break;
@@ -661,6 +732,36 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements T
                 break;
             case INDICATION_OF_USG:
                 new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_INDICATION_OF_USG_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                break;
+            case EARS_EXAM:
+                new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_EAR_EXAM_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                break;
+            case NOSE_EXAM:
+                new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_NOSE_EXAM_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                break;
+            case INDIRECT_LARYGOSCOPY_EXAM:
+                new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_INDIRECT_LARYGOSCOPY_EXAM_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                break;
+            case NECK_EXAM:
+                new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_NECK_EXAM_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                break;
+            case ORAL_CAVITY_THROAT_EXAM:
+                new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_ORAL_CAVITY_THROAT_EXAM_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                break;
+            case PC_EARS:
+                new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_PC_EARS_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                break;
+            case PC_NOSE:
+                new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_PC_NOSE_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                break;
+            case PC_ORAL_CAVITY:
+                new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_PC_ORAL_CAVITY_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                break;
+            case PC_THROAT:
+                new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_PC_THROAT_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                break;
+            case PROCEDURES:
+                new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_PROCEDURE_NOTE_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 break;
             case ADVICE:
                 new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_SEARCH_ADVICE_SOLR, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);

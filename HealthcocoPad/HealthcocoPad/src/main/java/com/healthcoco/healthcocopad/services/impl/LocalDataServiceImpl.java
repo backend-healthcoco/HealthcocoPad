@@ -253,6 +253,10 @@ public class LocalDataServiceImpl {
         Reference.saveInTx(list);
     }
 
+    public void addReference(Reference reference) {
+        reference.save();
+    }
+
     public void addBloodGroups(List<BloodGroup> list) {
         BloodGroup.saveInTx(list);
     }
@@ -426,6 +430,66 @@ public class LocalDataServiceImpl {
             showErrorLocal(volleyResponseBean, errorListener);
         }
     }
+
+    public VolleyResponseBean getDosageDurationDirectionList(WebServiceType webServiceType, LocalBackgroundTaskType localBackgroundTaskType, RecordType recordType, BooleanTypeValues isDiscarded, String doctorId, Boolean discarded, long updatedTime, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
+        volleyResponseBean.setWebServiceType(webServiceType);
+        volleyResponseBean.setIsDataFromLocal(true);
+        volleyResponseBean.setIsUserOnline(HealthCocoConstants.isNetworkOnline);
+        volleyResponseBean.setLocalBackgroundTaskType(localBackgroundTaskType);
+        try {
+            String key = LocalDatabaseUtils.KEY_UNIQUE_ID;
+            Class<?> class1 = null;
+            switch (webServiceType) {
+                case GET_DRUG_DOSAGE:
+                    class1 = DrugDosage.class;
+                    key = LocalDatabaseUtils.KEY_DOSAGE;
+                    break;
+                case GET_DURATION_UNIT:
+                    class1 = DrugDurationUnit.class;
+                    key = LocalDatabaseUtils.KEY_UNIT;
+                    break;
+                case GET_DIRECTION:
+                    class1 = DrugDirection.class;
+                    key = LocalDatabaseUtils.KEY_DIRECTION;
+                    break;
+            }
+            String whereCondition = "";
+            switch (recordType) {
+                case CUSTOM:
+                    whereCondition = "Select * from " + StringUtil.toSQLName(class1.getSimpleName()) + " where "
+                            + LocalDatabaseUtils.KEY_DOCTOR_ID + "=\"" + doctorId + "\"";
+                    break;
+                case BOTH:
+                    whereCondition = "Select * from " + StringUtil.toSQLName(class1.getSimpleName()) + " where " +
+                            "(" + LocalDatabaseUtils.KEY_DOCTOR_ID + " is null"
+                            + " OR "
+                            + LocalDatabaseUtils.KEY_DOCTOR_ID + "=\"" + "\""
+                            + " OR "
+                            + LocalDatabaseUtils.KEY_DOCTOR_ID + "=\"" + doctorId + "\""
+                            + ")";
+                    break;
+            }
+            if (!Util.isNullOrBlank(whereCondition)) {
+                whereCondition = whereCondition
+                        + " AND " + "(" + key + " is NOT null"
+                        + " OR "
+                        + key + "!=\"" + "\""
+                        + ")"
+                        + " AND " + LocalDatabaseUtils.KEY_DISCARDED + " =" + isDiscarded.getBooleanIntValue();
+            }
+            LogUtils.LOGD(TAG, "Select Query " + whereCondition);
+            List<?> list = SugarRecord.findWithQuery(class1, whereCondition);
+            volleyResponseBean.setDataList(getObjectsListFromMap(list));
+            if (responseListener != null)
+                responseListener.onResponse(volleyResponseBean);
+        } catch (Exception e) {
+            e.printStackTrace();
+            showErrorLocal(volleyResponseBean, errorListener);
+        }
+        return volleyResponseBean;
+    }
+
 //
 //    public UserPermissionsResponse getUserUiPermissionsObject(String doctorId) {
 //        UserPermissionsResponse userPermissions = Select.from(UserPermissionsResponse.class)
@@ -485,6 +549,13 @@ public class LocalDataServiceImpl {
         }
         return volleyResponseBean;
     }
+
+    public void deleteUserGroup(UserGroups userGroup) {
+        if (userGroup != null) {
+            UserGroups.deleteAll(UserGroups.class, LocalDatabaseUtils.KEY_UNIQUE_ID + "= ?", userGroup.getUniqueId());
+        }
+    }
+
 
     public VolleyResponseBean getClinicDetailsResponse(WebServiceType webServiceType, String locationId, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
@@ -1347,6 +1418,46 @@ public class LocalDataServiceImpl {
                     ArrayList<IndicationOfUsgSuggestions> indicationOfUsgSuggestionses = (ArrayList<IndicationOfUsgSuggestions>) (ArrayList<?>) list;
                     IndicationOfUsgSuggestions.saveInTx(indicationOfUsgSuggestionses);
                     break;
+                case PC_NOSE_SUGGESTIONS:
+                    ArrayList<PcNoseSuggestions> pcNoseSuggestions = (ArrayList<PcNoseSuggestions>) list;
+                    PcNoseSuggestions.saveInTx(pcNoseSuggestions);
+                    break;
+                case PC_EARS_SUGGESTIONS:
+                    ArrayList<PcEarsSuggestions> pcEarsSuggestions = (ArrayList<PcEarsSuggestions>) list;
+                    PcEarsSuggestions.saveInTx(pcEarsSuggestions);
+                    break;
+                case PC_ORAL_CAVITY_SUGGESTIONS:
+                    ArrayList<PcOralCavitySuggestions> pcOralCavitySuggestions = (ArrayList<PcOralCavitySuggestions>) list;
+                    PcOralCavitySuggestions.saveInTx(pcOralCavitySuggestions);
+                    break;
+                case PC_THROAT_SUGGESTIONS:
+                    ArrayList<PcThroatSuggestions> pcThroatSuggestions = (ArrayList<PcThroatSuggestions>) list;
+                    PcThroatSuggestions.saveInTx(pcThroatSuggestions);
+                    break;
+                case EAR_EXAM_SUGGESTIONS:
+                    ArrayList<EarsExamSuggestions> earsExamSuggestions = (ArrayList<EarsExamSuggestions>) list;
+                    EarsExamSuggestions.saveInTx(earsExamSuggestions);
+                    break;
+                case NECK_EXAM_SUGGESTIONS:
+                    ArrayList<NeckExamSuggestions> neckExamSuggestions = (ArrayList<NeckExamSuggestions>) list;
+                    NeckExamSuggestions.saveInTx(neckExamSuggestions);
+                    break;
+                case NOSE_EXAM_SUGGESTIONS:
+                    ArrayList<NoseExamSuggestions> noseExamSuggestions = (ArrayList<NoseExamSuggestions>) list;
+                    NoseExamSuggestions.saveInTx(noseExamSuggestions);
+                    break;
+                case INDIRECT_LARYGOSCOPY_EXAM_SUGGESTIONS:
+                    ArrayList<IndirectLarygoscopyExamSuggestions> indirectLarygoscopyExamSuggestions = (ArrayList<IndirectLarygoscopyExamSuggestions>) list;
+                    IndirectLarygoscopyExamSuggestions.saveInTx(indirectLarygoscopyExamSuggestions);
+                    break;
+                case ORAL_CAVITY_THROAT_EXAM_SUGGESTIONS:
+                    ArrayList<OralCavityThroatExamSuggestions> oralCavityThroatExamSuggestions = (ArrayList<OralCavityThroatExamSuggestions>) list;
+                    OralCavityThroatExamSuggestions.saveInTx(oralCavityThroatExamSuggestions);
+                    break;
+                case PROCEDURE_NOTE_SUGGESTIONS:
+                    ArrayList<ProcedureNoteSuggestions> procedureNoteSuggestions = (ArrayList<ProcedureNoteSuggestions>) list;
+                    ProcedureNoteSuggestions.saveInTx(procedureNoteSuggestions);
+                    break;
                 case ADVICE_SUGGESTIONS:
                     ArrayList<AdviceSuggestion> adviceSuggestions = (ArrayList<AdviceSuggestion>) (ArrayList<?>) list;
                     AdviceSuggestion.saveInTx(adviceSuggestions);
@@ -1447,6 +1558,46 @@ public class LocalDataServiceImpl {
                 case INDICATION_OF_USG_SUGGESTIONS:
                     IndicationOfUsgSuggestions indicationOfUsgSuggestions = (IndicationOfUsgSuggestions) response;
                     IndicationOfUsgSuggestions.save(indicationOfUsgSuggestions);
+                    break;
+                case PC_NOSE_SUGGESTIONS:
+                    PcNoseSuggestions pcNoseSuggestions = (PcNoseSuggestions) response;
+                    PcNoseSuggestions.save(pcNoseSuggestions);
+                    break;
+                case PC_EARS_SUGGESTIONS:
+                    PcEarsSuggestions pcEarsSuggestions = (PcEarsSuggestions) response;
+                    PcEarsSuggestions.save(pcEarsSuggestions);
+                    break;
+                case PC_ORAL_CAVITY_SUGGESTIONS:
+                    PcOralCavitySuggestions pcOralCavitySuggestions = (PcOralCavitySuggestions) response;
+                    PcOralCavitySuggestions.save(pcOralCavitySuggestions);
+                    break;
+                case PC_THROAT_SUGGESTIONS:
+                    PcThroatSuggestions pcThroatSuggestions = (PcThroatSuggestions) response;
+                    PcThroatSuggestions.save(pcThroatSuggestions);
+                    break;
+                case EAR_EXAM_SUGGESTIONS:
+                    EarsExamSuggestions earsExamSuggestions = (EarsExamSuggestions) response;
+                    EarsExamSuggestions.save(earsExamSuggestions);
+                    break;
+                case NECK_EXAM_SUGGESTIONS:
+                    NeckExamSuggestions neckExamSuggestions = (NeckExamSuggestions) response;
+                    NeckExamSuggestions.save(neckExamSuggestions);
+                    break;
+                case NOSE_EXAM_SUGGESTIONS:
+                    NoseExamSuggestions noseExamSuggestions = (NoseExamSuggestions) response;
+                    NoseExamSuggestions.save(noseExamSuggestions);
+                    break;
+                case INDIRECT_LARYGOSCOPY_EXAM_SUGGESTIONS:
+                    IndirectLarygoscopyExamSuggestions indirectLarygoscopyExamSuggestions = (IndirectLarygoscopyExamSuggestions) response;
+                    IndirectLarygoscopyExamSuggestions.save(indirectLarygoscopyExamSuggestions);
+                    break;
+                case ORAL_CAVITY_THROAT_EXAM_SUGGESTIONS:
+                    OralCavityThroatExamSuggestions oralCavityThroatExamSuggestions = (OralCavityThroatExamSuggestions) response;
+                    OralCavityThroatExamSuggestions.save(oralCavityThroatExamSuggestions);
+                    break;
+                case PROCEDURE_NOTE_SUGGESTIONS:
+                    ProcedureNoteSuggestions procedureNoteSuggestions = (ProcedureNoteSuggestions) response;
+                    ProcedureNoteSuggestions.save(procedureNoteSuggestions);
                     break;
                 case ADVICE_SUGGESTIONS:
                     AdviceSuggestion adviceSuggestion = (AdviceSuggestion) response;
@@ -2239,6 +2390,80 @@ public class LocalDataServiceImpl {
         historyDetailsResponse.setDrugsAndAllergies(getDrugsAndAllergies(historyDetailsResponse.getPatientId()));
     }
 
+    /**
+     * @param webServiceType
+     * @param doctorId
+     * @param discarded        : pass null to get true+false drugsList
+     * @param updatedTime      :  pass 0 to get all drugs list
+     * @param responseListener
+     * @param errorListener
+     * @return
+     */
+    public VolleyResponseBean getDrugsList(WebServiceType webServiceType, String doctorId, boolean discarded, long updatedTime, Response.Listener<VolleyResponseBean> responseListener,
+                                           GsonRequest.ErrorListener errorListener) {
+        VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
+        volleyResponseBean.setWebServiceType(webServiceType);
+        volleyResponseBean.setIsDataFromLocal(true);
+        volleyResponseBean.setIsUserOnline(HealthCocoConstants.isNetworkOnline);
+        try {
+            Integer discardedValue = null;
+            if (discarded) {
+                discardedValue = LocalDatabaseUtils.BOOLEAN_TRUE_VALUE;
+                volleyResponseBean.setLocalBackgroundTaskType(LocalBackgroundTaskType.GET_DRUG_HIDDEN_LIST);
+            } else {
+                volleyResponseBean.setLocalBackgroundTaskType(LocalBackgroundTaskType.GET_DRUG_ACTIVATED_LIST);
+
+                discardedValue = LocalDatabaseUtils.BOOLEAN_FALSE_VALUE;
+            }
+
+            //forming where condition query
+            String whereCondition = "Select * from " + StringUtil.toSQLName(Drug.class.getSimpleName())
+                    + " where "
+                    + LocalDatabaseUtils.KEY_DOCTOR_ID + "=\"" + doctorId + "\""
+                    + " AND ";
+            if (discarded) {
+                whereCondition = whereCondition + LocalDatabaseUtils.KEY_DISCARDED + "=" + discardedValue;
+            } else {
+                whereCondition = whereCondition
+                        + "(" + LocalDatabaseUtils.KEY_DISCARDED + " is null"
+                        + " OR "
+                        + LocalDatabaseUtils.KEY_DISCARDED + "=" + discardedValue
+                        + ")";
+            }
+
+            //specifying order by limit and offset query
+            String conditionsLimit = " ORDER BY " + LocalDatabaseUtils.KEY_CREATED_TIME + " DESC ";
+
+            whereCondition = whereCondition + conditionsLimit;
+            LogUtils.LOGD(TAG, "Select Query " + whereCondition);
+            List<Drug> list = SugarRecord.findWithQuery(Drug.class, whereCondition);
+//            if (discardedValue != null) {
+//                list = Select.from(Drug.class)
+//                        .where(Condition.prop(LocalDatabaseUtils.KEY_DOCTOR_ID).eq(doctorId),
+//                                Condition.prop(LocalDatabaseUtils.KEY_DISCARDED).eq(discardedValue),
+//                                Condition.prop(LocalDatabaseUtils.KEY_UPDATED_TIME).gt(updatedTime)).list();
+//            } else {
+//                list = Select.from(Drug.class)
+//                        .where(Condition.prop(LocalDatabaseUtils.KEY_DOCTOR_ID).eq(doctorId),
+//                                Condition.prop(LocalDatabaseUtils.KEY_UPDATED_TIME).gt(updatedTime)).list();
+//            }
+            if (!Util.isNullOrEmptyList(list)) {
+                for (Drug drug :
+                        list) {
+                    drug.setDrugType(getDrugType(drug.getForeignDrugTypeId()));
+                }
+            }
+            volleyResponseBean.setDataList(getObjectsListFromMap(list));
+            if (responseListener != null)
+                responseListener.onResponse(volleyResponseBean);
+        } catch (Exception e) {
+            e.printStackTrace();
+            showErrorLocal(volleyResponseBean, errorListener);
+        }
+        return volleyResponseBean;
+    }
+
+
     private DrugsAndAllergies getDrugsAndAllergies(String patientId) {
         DrugsAndAllergies drugsAndAllergies = Select.from(DrugsAndAllergies.class)
                 .where(Condition.prop(LocalDatabaseUtils.KEY_PATIENT_ID).eq(patientId)).first();
@@ -2247,6 +2472,7 @@ public class LocalDataServiceImpl {
         }
         return drugsAndAllergies;
     }
+
 
     private List<Drug> getDrugsList(ArrayList<String> drugIdsList) {
         if (!Util.isNullOrEmptyList(drugIdsList)) {
@@ -2392,6 +2618,10 @@ public class LocalDataServiceImpl {
                     disease.getUniqueId() + " Name : " + disease.getDisease() + " Disease : " + disease.getDoctorId());
         }
         Disease.saveInTx(diseaseList);
+    }
+
+    public void addDisease(Disease disease) {
+        disease.save();
     }
 
     public long getLastGeneratedOtpTime(String patientId) {
@@ -3423,6 +3653,46 @@ public class LocalDataServiceImpl {
         return volleyResponseBean;
     }
 
+    public VolleyResponseBean getClinicalNotesSuggestionList(WebServiceType webServiceType, Class<?> class1, LocalBackgroundTaskType localBackgroundTaskTypeHidden, LocalBackgroundTaskType localBackgroundTaskTypeActivated, String doctorId, BooleanTypeValues discarded, ArrayList<String> diseaseIds, long updatedTime, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
+        volleyResponseBean.setWebServiceType(webServiceType);
+        volleyResponseBean.setIsDataFromLocal(true);
+        volleyResponseBean.setIsUserOnline(HealthCocoConstants.isNetworkOnline);
+        try {
+            String whereCondition = "";
+            switch (discarded) {
+                case TRUE:
+                    volleyResponseBean.setLocalBackgroundTaskType(localBackgroundTaskTypeHidden);
+                    whereCondition = "Select * from " + StringUtil.toSQLName(class1.getSimpleName()) + " where "
+                            + LocalDatabaseUtils.KEY_DISCARDED + "=" + discarded.getBooleanIntValue();
+                    break;
+                case FALSE:
+                    volleyResponseBean.setLocalBackgroundTaskType(localBackgroundTaskTypeActivated);
+                    whereCondition = "Select * from " + StringUtil.toSQLName(class1.getSimpleName()) + " where "
+                            + "(" + LocalDatabaseUtils.KEY_DISCARDED + " is null"
+                            + " OR "
+                            + LocalDatabaseUtils.KEY_DISCARDED + "=" + discarded.getBooleanIntValue()
+                            + ")";
+                    break;
+            }
+            whereCondition = whereCondition
+                    + " AND " + LocalDatabaseUtils.KEY_UPDATED_TIME + ">=" + updatedTime;
+            if (!Util.isNullOrBlank(doctorId)) {
+                whereCondition = whereCondition
+                        + " AND " + LocalDatabaseUtils.KEY_DOCTOR_ID + "=\"" + doctorId + "\"";
+            }
+            LogUtils.LOGD(TAG, "Select Query " + whereCondition);
+            List<?> savedDiseaseList = SugarRecord.findWithQuery(class1, whereCondition);
+            volleyResponseBean.setDataList(getObjectsListFromMap(savedDiseaseList));
+            if (responseListener != null)
+                responseListener.onResponse(volleyResponseBean);
+        } catch (Exception e) {
+            e.printStackTrace();
+            showErrorLocal(volleyResponseBean, errorListener);
+        }
+        return volleyResponseBean;
+    }
+
     public ArrayList<Object> getSuggestionsList(Class<?> class1, SuggestionType suggestionType, String searchTerm, int pageNum, int maxSize) {
         //forming where condition query
         String whereCondition = "Select * from " + StringUtil.toSQLName(class1.getSimpleName());
@@ -4395,6 +4665,7 @@ public class LocalDataServiceImpl {
         }
         return volleyResponseBean;
     }
+
 
     private enum FromTableType {
         ADD_TEMPLATES, ADD_TREATMENT, ADD_PRESCRIPTION
