@@ -89,6 +89,7 @@ import com.healthcoco.healthcocopad.bean.server.UserGroups;
 import com.healthcoco.healthcocopad.bean.server.XrayDetailSuggestions;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocopad.dialogFragment.AddNewDrugDialogFragment;
+import com.healthcoco.healthcocopad.dialogFragment.AddNewSuggestionDialogFragment;
 import com.healthcoco.healthcocopad.dialogFragment.AddUpdateNameDialogFragment;
 import com.healthcoco.healthcocopad.dialogFragment.EnlargedImageViewDialogFragment;
 import com.healthcoco.healthcocopad.enums.AddUpdateNameDialogType;
@@ -98,6 +99,7 @@ import com.healthcoco.healthcocopad.enums.DefaultSyncServiceType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.LocalTabelType;
 import com.healthcoco.healthcocopad.enums.PopupWindowType;
+import com.healthcoco.healthcocopad.enums.SuggestionType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.fragments.DoctorProfileFragment;
 import com.healthcoco.healthcocopad.fragments.InitialSyncFragment;
@@ -1690,6 +1692,13 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
         newDrugDialogFragment.setTargetFragment(fragment, requestCode);
         newDrugDialogFragment.show(getSupportFragmentManager(),
                 newDrugDialogFragment.getClass().getSimpleName());
+    }
+
+    public void openAddNewSuggestionsFragment(Fragment fragment, int requestCode, SuggestionType suggestionType) {
+        AddNewSuggestionDialogFragment addNewSuggestionDialogFragment = new AddNewSuggestionDialogFragment(suggestionType);
+        addNewSuggestionDialogFragment.setTargetFragment(fragment, requestCode);
+        addNewSuggestionDialogFragment.show(getSupportFragmentManager(),
+                addNewSuggestionDialogFragment.getClass().getSimpleName());
     }
 
     @TargetApi(Build.VERSION_CODES.KITKAT)

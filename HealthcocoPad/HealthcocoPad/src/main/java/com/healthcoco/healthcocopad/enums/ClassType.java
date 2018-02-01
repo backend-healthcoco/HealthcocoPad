@@ -19,6 +19,8 @@ import com.healthcoco.healthcocopad.bean.server.NotesSuggestions;
 import com.healthcoco.healthcocopad.bean.server.ObservationSuggestions;
 import com.healthcoco.healthcocopad.bean.server.ObstetricHistorySuggestions;
 import com.healthcoco.healthcocopad.bean.server.PaSuggestions;
+import com.healthcoco.healthcocopad.bean.server.Patient;
+import com.healthcoco.healthcocopad.bean.server.Prescription;
 import com.healthcoco.healthcocopad.bean.server.PresentComplaintSuggestions;
 import com.healthcoco.healthcocopad.bean.server.ProvisionalDiagnosisSuggestions;
 import com.healthcoco.healthcocopad.bean.server.PsSuggestions;
@@ -43,12 +45,12 @@ public enum ClassType {
     DIRECTIONS(DrugDirection.class),
     FREQUENCY_DOSAGE(DrugDosage.class),
     TREATMENT(Treatments.class),
-    PATIENT(null),
-    CLINICAL_NOTES(null),
-    PRESCRIPTION(null),
+    PATIENT(Patient.class),
+    CLINICAL_NOTES(ClinicalNotes.class),
+    PRESCRIPTION(Prescription.class),
     BILLING(null),
 
-    CLINICAL_NOTE(ClinicalNotes.class),
+//    CLINICAL_NOTE(ClinicalNotes.class),
 
     PRESENT_COMPLAINT(PresentComplaintSuggestions.class),
 

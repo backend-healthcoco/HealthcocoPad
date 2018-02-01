@@ -44,9 +44,9 @@ import com.healthcoco.healthcocopad.fragments.NotificationResponseDataFragment;
 import com.healthcoco.healthcocopad.fragments.PatientRegistrationFragment;
 import com.healthcoco.healthcocopad.fragments.SelectedDiagramDetailFragment;
 import com.healthcoco.healthcocopad.fragments.SettingUIPermissionsFragment;
-import com.healthcoco.healthcocopad.fragments.SettingsNameEditDeleteFragment;
 import com.healthcoco.healthcocopad.fragments.SettingsNameHideActivateFragment;
 import com.healthcoco.healthcocopad.fragments.SyncFragment;
+import com.healthcoco.healthcocopad.fragments.SettingsNameHideActivateTabFragment;
 import com.healthcoco.healthcocopad.fragments.TemplateListFragment;
 import com.healthcoco.healthcocopad.fragments.WebViewFragments;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
@@ -108,14 +108,14 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
             case ADD_EDIT_CLINIC_IMAGE:
                 openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_DONE, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, R.string.clinic_photos, new AddEditClinicImageFragment());
                 break;
-            case SETTINGS_PATIENT:
-//                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, R.string.patient, new SettingUIPermissionsFragment());
+            case SETTINGS_GROUPS:
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, R.string.patient, new SettingsNameHideActivateTabFragment());
                 break;
             case SETTINGS_CLINICAL_NOTES:
-//                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, R.string.clinical_notes, new SettingUIPermissionsFragment());
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, R.string.clinical_notes, new SettingsNameHideActivateTabFragment());
                 break;
             case SETTINGS_PRESCRIPTION:
-//                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, R.string.prescriptions, new SettingUIPermissionsFragment());
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, R.string.prescriptions, new SettingsNameHideActivateTabFragment());
                 break;
             case SETTINGS_TEMPLATE:
 //                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, R.string.templates, new SettingUIPermissionsFragment());
@@ -129,16 +129,17 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
             case SETTING_SMS:
 //                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, R.string.sms, new SettingUIPermissionsFragment());
                 break;
-            case SETTINGS_GROUPS:
+          /*  case SETTINGS_GROUPS:
                 openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, R.string.groups, new SettingsNameEditDeleteFragment());
                 break;
             case SETTINGS_REFERENCE:
                 openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, R.string.referred_by_settings, new SettingsNameHideActivateFragment());
                 break;
+           */
             case SETTINGS_HISTORY:
                 openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, R.string.history_small, new SettingsNameHideActivateFragment());
                 break;
-            case SETTINGS_DISEASE:
+          /*  case SETTINGS_DISEASE:
                 openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, R.string.direction, new SettingsNameHideActivateFragment());
                 break;
             case SETTINGS_FREQUENCY:
@@ -147,6 +148,7 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
             case SETTINGS_DRUG:
                 openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, R.string.drug, new SettingsNameHideActivateFragment());
                 break;
+          */
             case TEMPLATE_LIST:
                 openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, R.string.templates, new TemplateListFragment());
                 break;

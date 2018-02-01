@@ -5,24 +5,47 @@ import android.text.TextUtils;
 import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
 import com.healthcoco.healthcocopad.bean.server.CityResponse;
 import com.healthcoco.healthcocopad.bean.server.ClinicalNotes;
+import com.healthcoco.healthcocopad.bean.server.Complaint;
+import com.healthcoco.healthcocopad.bean.server.ComplaintSuggestions;
+import com.healthcoco.healthcocopad.bean.server.DiagnosisSuggestions;
 import com.healthcoco.healthcocopad.bean.server.Disease;
 import com.healthcoco.healthcocopad.bean.server.Drug;
 import com.healthcoco.healthcocopad.bean.server.DrugDirection;
 import com.healthcoco.healthcocopad.bean.server.DrugDosage;
 import com.healthcoco.healthcocopad.bean.server.DrugDurationUnit;
+import com.healthcoco.healthcocopad.bean.server.EcgDetailSuggestions;
+import com.healthcoco.healthcocopad.bean.server.EchoSuggestions;
+import com.healthcoco.healthcocopad.bean.server.GeneralExaminationSuggestions;
 import com.healthcoco.healthcocopad.bean.server.HistoryDetailsResponse;
+import com.healthcoco.healthcocopad.bean.server.HistoryPresentComplaintSuggestions;
+import com.healthcoco.healthcocopad.bean.server.HolterSuggestions;
+import com.healthcoco.healthcocopad.bean.server.IndicationOfUsgSuggestions;
+import com.healthcoco.healthcocopad.bean.server.Investigation;
+import com.healthcoco.healthcocopad.bean.server.InvestigationSuggestions;
 import com.healthcoco.healthcocopad.bean.server.Invoice;
+import com.healthcoco.healthcocopad.bean.server.MenstrualHistorySuggestions;
+import com.healthcoco.healthcocopad.bean.server.NotesSuggestions;
+import com.healthcoco.healthcocopad.bean.server.Observation;
+import com.healthcoco.healthcocopad.bean.server.ObservationSuggestions;
+import com.healthcoco.healthcocopad.bean.server.ObstetricHistorySuggestions;
+import com.healthcoco.healthcocopad.bean.server.PaSuggestions;
 import com.healthcoco.healthcocopad.bean.server.Prescription;
+import com.healthcoco.healthcocopad.bean.server.PresentComplaintSuggestions;
+import com.healthcoco.healthcocopad.bean.server.ProvisionalDiagnosisSuggestions;
+import com.healthcoco.healthcocopad.bean.server.PsSuggestions;
+import com.healthcoco.healthcocopad.bean.server.PvSuggestions;
 import com.healthcoco.healthcocopad.bean.server.ReceiptResponse;
 import com.healthcoco.healthcocopad.bean.server.Records;
 import com.healthcoco.healthcocopad.bean.server.Reference;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.Specialities;
 import com.healthcoco.healthcocopad.bean.server.SyncAll;
+import com.healthcoco.healthcocopad.bean.server.SystemicExaminationSuggestions;
 import com.healthcoco.healthcocopad.bean.server.TempTemplate;
 import com.healthcoco.healthcocopad.bean.server.Treatments;
 import com.healthcoco.healthcocopad.bean.server.UserGroups;
 import com.healthcoco.healthcocopad.bean.server.VisitDetails;
+import com.healthcoco.healthcocopad.bean.server.XrayDetailSuggestions;
 import com.healthcoco.healthcocopad.enums.ClassType;
 
 import java.sql.Date;
@@ -365,6 +388,96 @@ public class ComparatorUtil {
                             date1 = new Date(((DrugDosage) object1).getCreatedTime());
                             date2 = new Date(((DrugDosage) object2).getCreatedTime());
                             break;
+                        case COMPLAINT:
+                            date1 = new Date(((ComplaintSuggestions) object1).getCreatedTime());
+                            date2 = new Date(((ComplaintSuggestions) object2).getCreatedTime());
+                            break;
+                        case PA:
+                            date1 = new Date(((PaSuggestions) object1).getCreatedTime());
+                            date2 = new Date(((PaSuggestions) object2).getCreatedTime());
+                            break;
+                        case PRESENT_COMPLAINT:
+                            date1 = new Date(((PresentComplaintSuggestions) object1).getCreatedTime());
+                            date2 = new Date(((PresentComplaintSuggestions) object2).getCreatedTime());
+                            break;
+                        case ECG:
+                            date1 = new Date(((EcgDetailSuggestions) object1).getCreatedTime());
+                            date2 = new Date(((EcgDetailSuggestions) object2).getCreatedTime());
+                            break;
+                        case DIAGNOSIS:
+                            date1 = new Date(((DiagnosisSuggestions) object1).getCreatedTime());
+                            date2 = new Date(((DiagnosisSuggestions) object2).getCreatedTime());
+                            break;
+                        case ECHO:
+                            date1 = new Date(((EchoSuggestions) object1).getCreatedTime());
+                            date2 = new Date(((EchoSuggestions) object2).getCreatedTime());
+                            break;
+                        case HISTORY_OF_PRESENT_COMPLAINT:
+                            date1 = new Date(((HistoryPresentComplaintSuggestions) object1).getCreatedTime());
+                            date2 = new Date(((HistoryPresentComplaintSuggestions) object2).getCreatedTime());
+                            break;
+                        case GENERAL_EXAMINATION:
+                            date1 = new Date(((GeneralExaminationSuggestions) object1).getCreatedTime());
+                            date2 = new Date(((GeneralExaminationSuggestions) object2).getCreatedTime());
+                            break;
+                        case HOLTER:
+                            date1 = new Date(((HolterSuggestions) object1).getCreatedTime());
+                            date2 = new Date(((HolterSuggestions) object2).getCreatedTime());
+                            break;
+                        case INDICATION_OF_USG:
+                            date1 = new Date(((IndicationOfUsgSuggestions) object1).getCreatedTime());
+                            date2 = new Date(((IndicationOfUsgSuggestions) object2).getCreatedTime());
+                            break;
+                        case INVESTIGATIONS:
+                            date1 = new Date(((InvestigationSuggestions) object1).getCreatedTime());
+                            date2 = new Date(((InvestigationSuggestions) object2).getCreatedTime());
+                            break;
+                        case MENSTRUAL_HISTORY:
+                            date1 = new Date(((MenstrualHistorySuggestions) object1).getCreatedTime());
+                            date2 = new Date(((MenstrualHistorySuggestions) object2).getCreatedTime());
+                            break;
+                        case OBSERVATION:
+                            date1 = new Date(((ObservationSuggestions) object1).getCreatedTime());
+                            date2 = new Date(((ObservationSuggestions) object2).getCreatedTime());
+                            break;
+                        case NOTES:
+                            date1 = new Date(((NotesSuggestions) object1).getCreatedTime());
+                            date2 = new Date(((NotesSuggestions) object2).getCreatedTime());
+                            break;
+                        case OBSTETRIC_HISTORY:
+                            date1 = new Date(((ObstetricHistorySuggestions) object1).getCreatedTime());
+                            date2 = new Date(((ObstetricHistorySuggestions) object2).getCreatedTime());
+                            break;
+                        case PROVISIONAL_DIAGNOSIS:
+                            date1 = new Date(((ProvisionalDiagnosisSuggestions) object1).getCreatedTime());
+                            date2 = new Date(((ProvisionalDiagnosisSuggestions) object2).getCreatedTime());
+                            break;
+                        case PS:
+                            date1 = new Date(((PsSuggestions) object1).getCreatedTime());
+                            date2 = new Date(((PsSuggestions) object2).getCreatedTime());
+                            break;
+                        case PV:
+                            date1 = new Date(((PvSuggestions) object1).getCreatedTime());
+                            date2 = new Date(((PvSuggestions) object2).getCreatedTime());
+                            break;
+                        case SYSTEMIC_EXAMINATION:
+                            date1 = new Date(((SystemicExaminationSuggestions) object1).getCreatedTime());
+                            date2 = new Date(((SystemicExaminationSuggestions) object2).getCreatedTime());
+                            break;
+                        case TREATMENT:
+                            date1 = new Date(((Treatments) object1).getCreatedTime());
+                            date2 = new Date(((Treatments) object2).getCreatedTime());
+                            break;
+                        case XRAY:
+                            date1 = new Date(((XrayDetailSuggestions) object1).getCreatedTime());
+                            date2 = new Date(((XrayDetailSuggestions) object2).getCreatedTime());
+                            break;
+                        case GROUPS:
+                            date1 = new Date(((UserGroups) object1).getCreatedTime());
+                            date2 = new Date(((UserGroups) object2).getCreatedTime());
+                            break;
+
+
                     }
                     return date2.compareTo(date1);
                 } catch (Exception e) {

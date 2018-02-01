@@ -25,12 +25,14 @@ public class TemplatesListViewHolder extends HealthCocoViewHolder implements OnC
     private LinearLayout btEdit;
     private LinearLayout btDelete;
     private LinearLayout containerTemplate;
+    private Boolean isFromSettingsScreen = false;
 
-    public TemplatesListViewHolder(HealthCocoActivity mActivity, TemplateListItemListener templateListItemListener, boolean isFromAddNewPrescriptionScreen) {
+    public TemplatesListViewHolder(HealthCocoActivity mActivity, TemplateListItemListener templateListItemListener, boolean isFromAddNewPrescriptionScreen, boolean isFromSettingsScreen) {
         super(mActivity);
         this.mActivity = mActivity;
         this.templateListItemListener = templateListItemListener;
         this.isFromAddNewPrescriptionScreen = isFromAddNewPrescriptionScreen;
+        this.isFromSettingsScreen = isFromSettingsScreen;
     }
 
     @Override
@@ -72,6 +74,7 @@ public class TemplatesListViewHolder extends HealthCocoViewHolder implements OnC
         if (!Util.isNullOrEmptyList(template.getItems()))
             LocalDataServiceImpl.getInstance(mApp).addTemplate(template);
         template.save();
-        templateListItemListener.onItemClicked(template);
+        if (!isFromSettingsScreen)
+            templateListItemListener.onItemClicked(template);
     }
 }

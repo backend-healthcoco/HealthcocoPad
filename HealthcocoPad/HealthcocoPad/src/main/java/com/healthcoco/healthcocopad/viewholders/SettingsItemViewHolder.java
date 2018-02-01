@@ -2,6 +2,8 @@ package com.healthcoco.healthcocopad.viewholders;
 
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 
 import com.healthcoco.healthcocopad.HealthCocoActivity;
@@ -19,6 +21,8 @@ public class SettingsItemViewHolder extends HealthCocoViewHolder {
     private UIPermissionsItemType permissionsItemType;
     private TextView tvName;
     private TextView tvVersionName;
+    private RelativeLayout layoutItemSetting;
+    private View bottomView;
 
     public SettingsItemViewHolder(HealthCocoActivity mActivity) {
         super(mActivity);
@@ -43,6 +47,21 @@ public class SettingsItemViewHolder extends HealthCocoViewHolder {
                     tvVersionName.setVisibility(View.VISIBLE);
                     tvVersionName.setText(mActivity.getFormattedVersionName());
                     break;
+                case TEMPLATES:
+                case UI_PERMISSION:
+                case SYNC:
+                case HELP_IMPROVE:
+                case SIGN_OUT:
+                case GROUPS:
+                    bottomView.setVisibility(View.GONE);
+                    LayoutParams params = new LayoutParams(
+                            LayoutParams.MATCH_PARENT,
+                            LayoutParams.WRAP_CONTENT
+                    );
+                    params.setMargins(0, 0, 0, 30);
+                    layoutItemSetting.setLayoutParams(params);
+
+                    break;
                 default:
                     tvVersionName.setVisibility(View.GONE);
                     break;
@@ -54,9 +73,13 @@ public class SettingsItemViewHolder extends HealthCocoViewHolder {
 
     @Override
     public View getContentView() {
-        LinearLayout view = (LinearLayout) inflater.inflate(R.layout.item_settings, null);
+        RelativeLayout view = (RelativeLayout) inflater.inflate(R.layout.item_settings, null);
         tvName = (TextView) view.findViewById(R.id.tv_name);
         tvVersionName = (TextView) view.findViewById(R.id.tv_version_name);
+        bottomView = view.findViewById(R.id.view_bottom);
+        layoutItemSetting = (RelativeLayout) view.findViewById(R.id.layout_item_setting);
+
+
         return view;
     }
 }

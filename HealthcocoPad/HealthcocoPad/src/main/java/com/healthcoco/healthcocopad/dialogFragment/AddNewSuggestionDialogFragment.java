@@ -51,6 +51,7 @@ import com.healthcoco.healthcocopad.listeners.AddNewSuggestionListener;
 import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
+import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.Util;
 
 import java.util.ArrayList;
@@ -66,6 +67,11 @@ public class AddNewSuggestionDialogFragment extends HealthCocoDialogFragment imp
     private AddNewSuggestionListener addNewSuggestionListener;
     private User user;
     private SuggestionType suggestionType;
+
+
+    public AddNewSuggestionDialogFragment(SuggestionType suggestionType) {
+        this.suggestionType = suggestionType;
+    }
 
     public AddNewSuggestionDialogFragment(AddNewSuggestionListener addNewSuggestionListener) {
         this.addNewSuggestionListener = addNewSuggestionListener;
@@ -756,8 +762,16 @@ public class AddNewSuggestionDialogFragment extends HealthCocoDialogFragment imp
                 break;
         }
         mActivity.hideLoading();
-        addNewSuggestionListener.onSaveClicked(null);
+       /* addNewSuggestionListener.onSaveClicked(null);
         dismiss();
+*/
+        if (addNewSuggestionListener != null) {
+            addNewSuggestionListener.onSaveClicked(null);
+        } else {
+            getTargetFragment().onActivityResult(HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, HealthCocoConstants.RESULT_CODE_REFERENCE_LIST, null);
+        }
+        dismiss();
+
     }
 
 

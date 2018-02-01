@@ -59,13 +59,18 @@ public class TemplateListFragment extends HealthCocoFragment implements View.OnC
     public static final int MAX_SIZE = 10;
     public static final String TAG_IS_FROM_SETTINGS = "isFromSettings";
     private static final int REQUEST_CODE_TEMPLATE_LIST = 121;
+    BroadcastReceiver templatesListReceiverLocal = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, final Intent intent) {
+
+        }
+    };
     private int PAGE_NUMBER = 0;
     private boolean isEndOfListAchieved;
     private int currentPageNumber;
     private boolean isLoadingFromSearch;
     private boolean isInitialLoading;
     private TemplateListItemListener templateListItemListener;
-
     //other variables
     private ProgressBar progressLoading;
     private ListViewLoadMore lvTemplates;
@@ -136,7 +141,7 @@ public class TemplateListFragment extends HealthCocoFragment implements View.OnC
     }
 
     private void initAdapters() {
-        adapter = new TemplatesListAdapter(mActivity, templateListItemListener);
+        adapter = new TemplatesListAdapter(mActivity, templateListItemListener, isFromSettingsScreen);
         lvTemplates.setAdapter(adapter);
     }
 
@@ -301,13 +306,6 @@ public class TemplateListFragment extends HealthCocoFragment implements View.OnC
     public void onRefresh() {
         initTemplatesList(false);
     }
-
-    BroadcastReceiver templatesListReceiverLocal = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, final Intent intent) {
-
-        }
-    };
 
     @Override
     public void onClick(View v) {

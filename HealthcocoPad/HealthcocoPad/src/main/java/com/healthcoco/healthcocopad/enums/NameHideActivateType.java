@@ -9,8 +9,8 @@ import com.healthcoco.healthcocopad.R;
 public enum NameHideActivateType {
     GROUPS(R.string.groups, R.string.search_group_name, R.string.settings_no_groups_added, ClassType.GROUPS),
     REFERENCE(R.string.referred_by_settings, R.string.search_referred_by, R.string.settings_no_reffered_by_added, ClassType.REFERENCE),
-    TEMPLATES(R.string.templates, R.string.search_template, R.string.no_templates_added, ClassType.TEMPLATE),
     HISTORY(R.string.history_small, R.string.search_history, R.string.settings_no_history_added, ClassType.HISTORY),
+    TEMPLATES(R.string.templates, R.string.search_template, R.string.no_templates_added, ClassType.TEMPLATE),
     DIRECTION(R.string.direction, R.string.search_disease, R.string.settings_no_direction_added, ClassType.DIRECTIONS),
     FREQUENCY(R.string.frequency, R.string.search_frequency, R.string.settings_no_frequency_added, ClassType.FREQUENCY_DOSAGE),
     DRUG(R.string.drug, R.string.search_drug, R.string.settings_no_drug_added, ClassType.DRUG),

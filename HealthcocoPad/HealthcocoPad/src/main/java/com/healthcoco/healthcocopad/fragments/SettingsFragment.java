@@ -79,21 +79,21 @@ public class SettingsFragment extends HealthCocoFragment implements AdapterView.
             case GROUPS:
                 openCommonOpenUpActivity(CommonOpenUpFragmentType.SETTINGS_GROUPS, itemType.ordinal());
                 break;
-            case REFERENCE:
-                openCommonOpenUpActivity(CommonOpenUpFragmentType.SETTINGS_REFERENCE, itemType.ordinal());
-                break;
+//            case REFERENCE:
+//                openCommonOpenUpActivity(CommonOpenUpFragmentType.SETTINGS_REFERENCE, itemType.ordinal());
+//                break;
             case HISTORY:
                 openCommonOpenUpActivity(CommonOpenUpFragmentType.SETTINGS_HISTORY, itemType.ordinal());
                 break;
-            case DIRECTION:
-                openCommonOpenUpActivity(CommonOpenUpFragmentType.SETTINGS_DISEASE, itemType.ordinal());
+            case CLINICAL_NOTE:
+                openCommonOpenUpActivity(CommonOpenUpFragmentType.SETTINGS_CLINICAL_NOTES, itemType.ordinal());
                 break;
-            case FREQUENCY:
-                openCommonOpenUpActivity(CommonOpenUpFragmentType.SETTINGS_FREQUENCY, itemType.ordinal());
+            case PRESCRIPTION:
+                openCommonOpenUpActivity(CommonOpenUpFragmentType.SETTINGS_PRESCRIPTION, itemType.ordinal());
                 break;
-            case DRUG:
-                openCommonOpenUpActivity(CommonOpenUpFragmentType.SETTINGS_DRUG, itemType.ordinal());
-                break;
+//            case DRUG:
+//                openCommonOpenUpActivity(CommonOpenUpFragmentType.SETTINGS_DRUG, itemType.ordinal());
+//                break;
             case TEMPLATES:
                 openCommonOpenUpActivity(CommonOpenUpFragmentType.TEMPLATE_LIST, TemplateListFragment.TAG_IS_FROM_SETTINGS, true, 0);
                 break;

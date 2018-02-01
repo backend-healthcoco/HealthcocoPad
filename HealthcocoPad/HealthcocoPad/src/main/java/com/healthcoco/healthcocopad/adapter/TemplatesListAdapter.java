@@ -18,13 +18,15 @@ public class TemplatesListAdapter extends BaseAdapter {
     private ArrayList<TempTemplate> list;
     private HealthCocoActivity mActivity;
     private TemplatesListViewHolder holder;
+    private boolean isFromSettingsScreen;
 
     public TemplatesListAdapter() {
     }
 
-    public TemplatesListAdapter(HealthCocoActivity activity, TemplateListItemListener templateListItemListener) {
+    public TemplatesListAdapter(HealthCocoActivity activity, TemplateListItemListener templateListItemListener, boolean isFromSettingsScreen) {
         this.mActivity = activity;
         this.templateListItemListener = templateListItemListener;
+        this.isFromSettingsScreen = isFromSettingsScreen;
     }
 
     @Override
@@ -47,7 +49,7 @@ public class TemplatesListAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            holder = new TemplatesListViewHolder(mActivity, templateListItemListener, isFromAddNewPrescriptionScreen);
+            holder = new TemplatesListViewHolder(mActivity, templateListItemListener, isFromAddNewPrescriptionScreen, isFromSettingsScreen);
             convertView = holder.getContentView();
             convertView.setTag(holder);
         } else

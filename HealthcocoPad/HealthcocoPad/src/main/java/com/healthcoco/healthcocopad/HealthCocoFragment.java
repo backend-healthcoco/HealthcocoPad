@@ -337,6 +337,17 @@ public abstract class HealthCocoFragment extends Fragment implements GsonRequest
             startActivityForResult(intent, requestCode);
     }
 
+    protected void openCommonOpenUpActivity(CommonOpenUpFragmentType fragmentType, String tag, Boolean intentData, int requestCode) {
+        Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
+        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, fragmentType.ordinal());
+        if (!Util.isNullOrBlank(tag) && intentData != null)
+            intent.putExtra(tag, intentData);
+        if (requestCode == 0)
+            startActivity(intent);
+        else
+            startActivityForResult(intent, requestCode);
+    }
+
     protected CommonListSolarDialogFragment openCommonListSolarDialogFragment(CommonListDialogItemClickListener listener, CommonListDialogType popupType) {
         Util.checkNetworkStatus(mActivity);
         if (HealthCocoConstants.isNetworkOnline) {

@@ -388,6 +388,7 @@
     <string name="settings_no_reffered_by_added">No Referred By Added</string>
     <string name="settings_no_frequency_added">No Frequency Added</string>
     <string name="settings_no_drug_added">No Drug Added</string>
+    <string name="settings_no_clinical_notes_added">No Clinical Notes Added</string>
     <string name="settings_no_treatment_added">No Treatment Added</string>
     <string name="search_disease">Search Direction</string>
     <string name="search_group_name">Search Group name</string>
