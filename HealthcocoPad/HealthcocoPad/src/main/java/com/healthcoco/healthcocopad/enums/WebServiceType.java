@@ -29,6 +29,8 @@ public enum WebServiceType {
 
     ADD_TREATMENT_SERVICE(Method.POST, "treatment/service/add"),
 
+    GET_VIDEO(Method.GET, "video/get"),
+
     GET_PRESCRIPTION(Method.GET, "prescription/"),
     GET_REPORTS_UPDATED(Method.GET, "records/"),
     GET_CLINICAL_NOTES(Method.GET, "clinicalNotes/"),
@@ -346,6 +348,7 @@ public enum WebServiceType {
 
 
     DELETE_DISEASE(Method.DELETE, "history/disease/"),
+    DELETE_TREATMENT(Method.DELETE, "treatment/service/"),
 
     DELETE_COMPLAINT(Method.DELETE, "clinicalNotes/complaint/"),
     DELETE_PRESENT_COMPLAINT(Method.DELETE, "clinicalNotes/presentComplaint/"),

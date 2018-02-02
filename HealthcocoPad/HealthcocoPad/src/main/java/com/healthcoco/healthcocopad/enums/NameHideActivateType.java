@@ -12,9 +12,9 @@ public enum NameHideActivateType {
     HISTORY(R.string.history_small, R.string.search_history, R.string.settings_no_history_added, ClassType.HISTORY),
     TEMPLATES(R.string.templates, R.string.search_template, R.string.no_templates_added, ClassType.TEMPLATE),
     DIRECTION(R.string.direction, R.string.search_disease, R.string.settings_no_direction_added, ClassType.DIRECTIONS),
+    TREATMENT(R.string.treatment, R.string.search_treatment, R.string.settings_no_treatment_added, ClassType.TREATMENT),
     FREQUENCY(R.string.frequency, R.string.search_frequency, R.string.settings_no_frequency_added, ClassType.FREQUENCY_DOSAGE),
     DRUG(R.string.drug, R.string.search_drug, R.string.settings_no_drug_added, ClassType.DRUG),
-    TREATMENT(R.string.treatment, R.string.search_treatment, R.string.settings_no_treatment_added, ClassType.TREATMENT),
 
     PRESENT_COMPLAINT(R.string.present_complaint, R.string.search_present_complaint, R.string.settings_no_present_complaint_added, ClassType.PRESENT_COMPLAINT),
     COMPLAINT(R.string.complaints, R.string.search_complaints, R.string.settings_no_complaints_added, ClassType.COMPLAINT),

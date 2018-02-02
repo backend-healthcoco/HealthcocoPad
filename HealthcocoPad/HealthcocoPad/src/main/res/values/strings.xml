@@ -1035,4 +1035,8 @@
     <string name="hidden">Hidden</string>
     <string name="add_new">Add New</string>
 
+    <!--Videos texts-->
+    <string name="no_videos">No Videos</string>
+    <string name="search_videos">Search Videos</string>
+
 </resources>

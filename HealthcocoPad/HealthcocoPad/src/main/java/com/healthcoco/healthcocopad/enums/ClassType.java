@@ -28,6 +28,7 @@ import com.healthcoco.healthcocopad.bean.server.PvSuggestions;
 import com.healthcoco.healthcocopad.bean.server.Reference;
 import com.healthcoco.healthcocopad.bean.server.SystemicExaminationSuggestions;
 import com.healthcoco.healthcocopad.bean.server.TempTemplate;
+import com.healthcoco.healthcocopad.bean.server.TreatmentService;
 import com.healthcoco.healthcocopad.bean.server.Treatments;
 import com.healthcoco.healthcocopad.bean.server.UserGroups;
 import com.healthcoco.healthcocopad.bean.server.XrayDetailSuggestions;
@@ -44,7 +45,7 @@ public enum ClassType {
     TEMPLATE(TempTemplate.class),
     DIRECTIONS(DrugDirection.class),
     FREQUENCY_DOSAGE(DrugDosage.class),
-    TREATMENT(Treatments.class),
+    TREATMENT(TreatmentService.class),
     PATIENT(Patient.class),
     CLINICAL_NOTES(ClinicalNotes.class),
     PRESCRIPTION(Prescription.class),

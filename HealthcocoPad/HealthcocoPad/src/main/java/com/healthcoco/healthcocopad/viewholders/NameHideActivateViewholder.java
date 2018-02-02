@@ -29,6 +29,7 @@ import com.healthcoco.healthcocopad.bean.server.PsSuggestions;
 import com.healthcoco.healthcocopad.bean.server.PvSuggestions;
 import com.healthcoco.healthcocopad.bean.server.Reference;
 import com.healthcoco.healthcocopad.bean.server.SystemicExaminationSuggestions;
+import com.healthcoco.healthcocopad.bean.server.TreatmentService;
 import com.healthcoco.healthcocopad.bean.server.XrayDetailSuggestions;
 import com.healthcoco.healthcocopad.enums.NameHideActivateType;
 import com.healthcoco.healthcocopad.listeners.NameHideActivateListener;
@@ -45,6 +46,7 @@ public class NameHideActivateViewholder extends HealthCocoViewHolder implements 
     private HealthCocoActivity mActivity;
     private Object objData;
     private TextView tvName;
+    private TextView tvAmount;
     private TextView btHide;
     private TextView btActivate;
 
@@ -65,6 +67,7 @@ public class NameHideActivateViewholder extends HealthCocoViewHolder implements 
     @Override
     public void applyData() {
         String text = "";
+        String amount = "";
         String uniqueId = "";
         boolean isDiscarded = false;
         switch (nameHideActivateType) {
@@ -270,10 +273,20 @@ public class NameHideActivateViewholder extends HealthCocoViewHolder implements 
                     uniqueId = pvSuggestions.getUniqueId();
                 }
                 break;
+            case TREATMENT:
+                if (objData instanceof TreatmentService) {
+                    TreatmentService treatmentService = (TreatmentService) objData;
+                    text = treatmentService.getName();
+                    isDiscarded = Util.getValidatedBooleanValue(treatmentService.getDiscarded());
+                    uniqueId = treatmentService.getUniqueId();
+                    amount = Util.getFormattedDoubleNumber(treatmentService.getCost());
+                }
+                break;
         }
         setHideActivateVisibility(adapterType);
         tvName.setTag(uniqueId);
         tvName.setText(text);
+        tvAmount.setText(amount);
     }
 
     private void setHideActivateVisibility(int adapterType) {
@@ -299,6 +312,7 @@ public class NameHideActivateViewholder extends HealthCocoViewHolder implements 
     public View getContentView() {
         View contentView = inflater.inflate(R.layout.list_item_hide_activate, null);
         tvName = (TextView) contentView.findViewById(R.id.tv_name);
+        tvAmount = (TextView) contentView.findViewById(R.id.tv_amount);
         btHide = (TextView) contentView.findViewById(R.id.bt_hide);
         btActivate = (TextView) contentView.findViewById(R.id.bt_activate);
         btHide.setOnClickListener(this);

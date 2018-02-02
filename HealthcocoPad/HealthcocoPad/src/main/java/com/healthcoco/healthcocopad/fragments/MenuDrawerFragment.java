@@ -51,7 +51,12 @@ import java.util.List;
 public class MenuDrawerFragment extends HealthCocoFragment implements View.OnClickListener, AdapterView.OnItemClickListener, GsonRequest.ErrorListener, LocalDoInBackgroundListenerOptimised, Response.Listener<VolleyResponseBean> {
     public static final String INTENT_REFRESH_DOCTOR_PROFILE = "com.healthcoco.healthcocopad.fragments.REFRESH_DOCTOR_PROFILE";
     public static String SELECTED_LOCATION_ID = "";
-
+    BroadcastReceiver refreshDoctorReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, final Intent intent) {
+            getDoctorProfile();
+        }
+    };
     private LinearLayout itemProfileHeader;
     private ListView lvMenuList;
     private ArrayList<FragmentType> list;
@@ -93,13 +98,6 @@ public class MenuDrawerFragment extends HealthCocoFragment implements View.OnCli
         }
     }
 
-    BroadcastReceiver refreshDoctorReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, final Intent intent) {
-            getDoctorProfile();
-        }
-    };
-
     private void getDoctorProfile() {
         new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_DOCTOR_PROFILE, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
@@ -114,7 +112,7 @@ public class MenuDrawerFragment extends HealthCocoFragment implements View.OnCli
     public void init() {
         initViews();
         initListeners();
-        initMenuListAdapter();
+//        initMenuListAdapter();
 //        openFragment(FragmentType.CONTACTS);
 //        ((HomeActivity) mActivity).initContactsFragment();
     }
@@ -146,6 +144,7 @@ public class MenuDrawerFragment extends HealthCocoFragment implements View.OnCli
     }
 
     private void initMenuListAdapter() {
+
         list = new ArrayList<>();
         list.add(FragmentType.CONTACTS);
 //        list.add(FragmentType.CALENDAR);
@@ -155,6 +154,10 @@ public class MenuDrawerFragment extends HealthCocoFragment implements View.OnCli
 //        list.add(FragmentType.SYNC);
         list.add(FragmentType.HELP_IMPROVE);
         list.add(FragmentType.SETTINGS);
+        if (doctorProfile != null) {
+            if (doctorProfile.getSpecialities().contains("Dentist"))
+                list.add(FragmentType.VIDEOS);
+        }
         menuListAdapter = new MenuListAdapter(mActivity);
         menuListAdapter.setListData(list);
         lvMenuList.setAdapter(menuListAdapter);
@@ -219,6 +222,8 @@ public class MenuDrawerFragment extends HealthCocoFragment implements View.OnCli
             lvMenuList.setItemChecked(selectedPosition, true);
             if (clinicProfile.size() == 1)
                 tvClinicName.setCompoundDrawables(null, null, null, null);
+
+            initMenuListAdapter();
         }
 //        swipeRefreshLayout.setRefreshing(false);
     }

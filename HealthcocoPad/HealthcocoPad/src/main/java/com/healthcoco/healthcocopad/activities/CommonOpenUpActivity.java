@@ -48,6 +48,7 @@ import com.healthcoco.healthcocopad.fragments.SettingsNameHideActivateFragment;
 import com.healthcoco.healthcocopad.fragments.SyncFragment;
 import com.healthcoco.healthcocopad.fragments.SettingsNameHideActivateTabFragment;
 import com.healthcoco.healthcocopad.fragments.TemplateListFragment;
+import com.healthcoco.healthcocopad.fragments.VideoFragment;
 import com.healthcoco.healthcocopad.fragments.WebViewFragments;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
@@ -139,6 +140,9 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
             case SETTINGS_HISTORY:
                 openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, R.string.history_small, new SettingsNameHideActivateFragment());
                 break;
+            case SETTINGS_TREATMENT:
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, R.string.treatment, new SettingsNameHideActivateFragment());
+                break;
           /*  case SETTINGS_DISEASE:
                 openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, R.string.direction, new SettingsNameHideActivateFragment());
                 break;
@@ -219,6 +223,10 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
             case SYNC:
                 openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, R.string.sync, new SyncFragment());
                 break;
+            case PLAY_VIDEO:
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, fragmentType.getTitleId(), new VideoFragment());
+                break;
+
         }
     }
 

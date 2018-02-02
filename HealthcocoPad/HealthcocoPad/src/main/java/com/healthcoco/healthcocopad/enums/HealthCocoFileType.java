@@ -18,7 +18,8 @@ public enum HealthCocoFileType {
     DOCTOR_COVER_IMAGE("Doctor Cover Image", ImageUtil.DEFAULT_IMAGE_EXTENSION),
     DOCTOR_PROFILE_IMAGE_THUMBNAIL("Doctor Thumbnai Images", ImageUtil.DEFAULT_IMAGE_EXTENSION),
     ENLARGED_IMAGE("Enlarged Images", ImageUtil.DEFAULT_IMAGE_EXTENSION),
-    DIAGRAMS_THUMBNAIL("Diagram Thumbnails", ImageUtil.DEFAULT_IMAGE_EXTENSION);
+    DIAGRAMS_THUMBNAIL("Diagram Thumbnails", ImageUtil.DEFAULT_IMAGE_EXTENSION),
+    DOCTOR_VIDEO("Doctor Video", "mp4");
 
     private final String folderName;
     private ArrayList<Integer> optionIdsList;

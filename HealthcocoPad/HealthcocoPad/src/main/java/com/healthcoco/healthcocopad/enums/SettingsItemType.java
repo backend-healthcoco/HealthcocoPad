@@ -17,6 +17,7 @@ public enum SettingsItemType {
 //    DRUG(R.string.prescriptions, R.string.search_drug, R.string.settings_no_drug_added, ClassType.DRUG),
     PRESCRIPTION(R.string.prescriptions, R.string.search_prescription, R.string.settings_no_prescription, ClassType.PRESCRIPTION),
     TEMPLATES(R.string.templates, R.string.search_template, R.string.no_templates_added, ClassType.TEMPLATE),
+    TREATMENT(R.string.treatment, R.string.search_treatment, R.string.no_treatment_added, ClassType.TREATMENT),
     //    HELP(R.string.help, 0, 0, null),
 //    RATE_US(R.string.rate_us, 0, 0, null),
     //    PATIENT(R.string.patient, R.string.search_patient, R.string.settings_no_patient_added, ClassType.PATIENT),

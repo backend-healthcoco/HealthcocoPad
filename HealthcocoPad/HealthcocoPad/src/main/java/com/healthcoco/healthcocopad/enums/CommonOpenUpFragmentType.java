@@ -26,6 +26,7 @@ public enum CommonOpenUpFragmentType {
     ADD_EDIT_PROFESSSIONAL_STATEMENT_DETAIL(R.string.professional_statement), ADD_EDIT_CLINIC_ADDRESS(R.string.address_details), SETTING_UI_PERMISSION(R.string.ui_permission),
     SETTINGS_PATIENT(R.string.patient), SETTINGS_CLINICAL_NOTES(R.string.clinical_notes),
     SETTINGS_HISTORY(R.string.history_small), SETTINGS_PRESCRIPTION(R.string.prescriptions), SETTINGS_TEMPLATE(R.string.templates),
+    SETTINGS_TREATMENT(R.string.treatment),
     SETTINGS_BILLING(R.string.billing), SETTING_SMS(R.string.sms), SETTING_ABOUT_US(R.string.about_us),
     SETTINGS_UI_PERMISSION_PRESCRIPTION(R.string.prescription_ui_permission_details),
     SETTINGS_UI_PERMISSION_CLINICAL_NOTES(R.string.clinical_notes_ui_permission_details),
@@ -59,6 +60,7 @@ public enum CommonOpenUpFragmentType {
     SELECT_DIAGRAM(R.string.diagrams),
     SELECTED_DIAGRAM_DETAIL(0), BOOK_APPOINTMENT(R.string.book),
     CONTACTS_LIST(R.string.my_patients),
+    PLAY_VIDEO(R.string.videos),
     ENLARGED_MAP_VIEW_FRAGMENT(R.string.location),
     ADD_CLINICAL_NOTE(R.string.edit_clinical_note),
     SYNC(R.string.sync);

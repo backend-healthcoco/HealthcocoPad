@@ -122,6 +122,8 @@ public class HealthCocoConstants {
     public static final String TAG_DRUG_DETAILS = "drugDetails";
     public static final String TAG_IS_FROM_NEW_TEMPLATE_FRAGMENT = "isFromNewtemplateFragment";
     public static final String PARAM_VISIT_FOR = "&visitFor=";
+    public static final String TAG_DOCTOR_VIDEO_DATA = "doctorVideo";
+    public static final int REQUEST_CODE_PLAY_VIDEO = 205;
     public static boolean isNetworkOnline;
     public static String SELECTED_PATIENTS_USER_ID = null;
     public static String VISIT_ID_TO_SEND = null;

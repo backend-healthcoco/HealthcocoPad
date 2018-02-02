@@ -49,6 +49,8 @@ import com.healthcoco.healthcocopad.bean.server.PsSuggestions;
 import com.healthcoco.healthcocopad.bean.server.PvSuggestions;
 import com.healthcoco.healthcocopad.bean.server.Reference;
 import com.healthcoco.healthcocopad.bean.server.SystemicExaminationSuggestions;
+import com.healthcoco.healthcocopad.bean.server.TreatmentService;
+import com.healthcoco.healthcocopad.bean.server.Treatments;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.bean.server.XrayDetailSuggestions;
 import com.healthcoco.healthcocopad.custom.AutoCompleteTextViewAdapter;
@@ -296,6 +298,11 @@ public class SettingsNameHideActivateFragment extends HealthCocoFragment impleme
                 new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_DISEASE_HIDDEN_LIST, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
                 new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_DISEASE_ACTIVATED_LIST, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
                 break;
+            case TREATMENT:
+//                new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_REFERENCE_LIST_ALL, this, this, this).execute();
+                new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_TREATMENT_HIDDEN_LIST, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_TREATMENT_ACTIVATED_LIST, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                break;
 
         }
     }
@@ -348,6 +355,18 @@ public class SettingsNameHideActivateFragment extends HealthCocoFragment impleme
                             disease.getHospitalId(), disease.getUniqueId(), true, this, this);
                 }
                 break;
+            case TREATMENT:
+                if (object instanceof TreatmentService) {
+                    TreatmentService treatmentService = (TreatmentService) object;
+                    isHideClicked = true;
+                    clickedObject = object;
+                    mActivity.showLoading(false);
+                    WebDataServiceImpl.getInstance(mApp).deleteData(WebServiceType.DELETE_TREATMENT,
+                            HistoryPresentComplaintSuggestions.class, user.getUniqueId(), treatmentService.getLocationId(),
+                            treatmentService.getHospitalId(), treatmentService.getUniqueId(), true, this, this);
+                }
+                break;
+
 
         }
     }
@@ -371,6 +390,17 @@ public class SettingsNameHideActivateFragment extends HealthCocoFragment impleme
                                     disease.getHospitalId(), disease.getUniqueId(), false, this, this);
                         }
                         break;
+                    case TREATMENT:
+                        if (object instanceof TreatmentService) {
+                            TreatmentService treatmentService = (TreatmentService) object;
+                            isHideClicked = false;
+                            clickedObject = object;
+                            mActivity.showLoading(false);
+                            WebDataServiceImpl.getInstance(mApp).deleteData(WebServiceType.DELETE_TREATMENT,
+                                    HistoryPresentComplaintSuggestions.class, user.getUniqueId(), treatmentService.getLocationId(),
+                                    treatmentService.getHospitalId(), treatmentService.getUniqueId(), false, this, this);
+                        }
+                        break;
 
                 }
         } else onNetworkUnavailable(null);
@@ -390,6 +420,10 @@ public class SettingsNameHideActivateFragment extends HealthCocoFragment impleme
                 switch (nameHideActivateType) {
 
                     case HISTORY:
+                        mActivity.openAddUpdateNameDialogFragment(WebServiceType.ADD_CUSTOM_HISTORY, AddUpdateNameDialogType.HISTORY, this, user, "", HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST);
+                        break;
+
+                    case TREATMENT:
                         mActivity.openAddUpdateNameDialogFragment(WebServiceType.ADD_CUSTOM_HISTORY, AddUpdateNameDialogType.HISTORY, this, user, "", HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST);
                         break;
 
@@ -431,6 +465,16 @@ public class SettingsNameHideActivateFragment extends HealthCocoFragment impleme
                             if (object instanceof Disease) {
                                 Disease disease = (Disease) object;
                                 if (!Util.isNullOrBlank(disease.getDisease()) && disease.getDisease().toUpperCase(Locale.ENGLISH)
+                                        .contains(search)) {
+                                    tempList.add(object);
+                                }
+                            }
+                            break;
+
+                        case TREATMENT:
+                            if (object instanceof TreatmentService) {
+                                TreatmentService treatmentService = (TreatmentService) object;
+                                if (!Util.isNullOrBlank(treatmentService.getName()) && treatmentService.getName().toUpperCase(Locale.ENGLISH)
                                         .contains(search)) {
                                     tempList.add(object);
                                 }
@@ -480,12 +524,14 @@ public class SettingsNameHideActivateFragment extends HealthCocoFragment impleme
                     break;
                 case GET_DISEASE_LIST:
                 case GET_HISTORY_LIST:
+                case GET_TREATMENT_LIST_BOTH_SOLR:
 
                     if (response.isDataFromLocal()) {
                         if (response.getLocalBackgroundTaskType() != null) {
                             switch (response.getLocalBackgroundTaskType()) {
 
                                 case GET_DISEASE_HIDDEN_LIST:
+                                case GET_TREATMENT_HIDDEN_LIST:
 
                                     listHidden = (ArrayList<Object>) (ArrayList<?>) response.getDataList();
                                     setSearchEditTextValue(getSearchEditTextValue());
@@ -493,6 +539,7 @@ public class SettingsNameHideActivateFragment extends HealthCocoFragment impleme
                                     break;
 
                                 case GET_DISEASE_ACTIVATED_LIST:
+                                case GET_TREATMENT_ACTIVATED_LIST:
 
                                     listActivated = (ArrayList<Object>) (ArrayList<?>) response.getDataList();
                                     setSearchEditTextValue("");
@@ -520,6 +567,7 @@ public class SettingsNameHideActivateFragment extends HealthCocoFragment impleme
                     break;
 
                 case DELETE_DISEASE:
+                case DELETE_TREATMENT:
 
                     if (isHideClicked) {
                         listHidden.add(clickedObject);
@@ -550,6 +598,9 @@ public class SettingsNameHideActivateFragment extends HealthCocoFragment impleme
             case HISTORY:
                 new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_DISEASE_LIST, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
                 break;
+            case TREATMENT:
+                new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_TREATMENT_LIST, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                break;
 
         }
     }
@@ -562,6 +613,13 @@ public class SettingsNameHideActivateFragment extends HealthCocoFragment impleme
                     Disease disease = (Disease) clickedObject;
                     disease.setDiscarded(!disease.getDiscarded());
                     clickedObject = disease;
+                }
+                break;
+            case TREATMENT:
+                if (clickedObject != null && clickedObject instanceof TreatmentService) {
+                    TreatmentService treatmentService = (TreatmentService) clickedObject;
+                    treatmentService.setDiscarded(!treatmentService.getDiscarded());
+                    clickedObject = treatmentService;
                 }
                 break;
 
@@ -602,6 +660,23 @@ public class SettingsNameHideActivateFragment extends HealthCocoFragment impleme
                     return null;
                 }
 
+            case GET_TREATMENT_HIDDEN_LIST:
+                volleyResponseBean = LocalDataServiceImpl.getInstance(mApp)
+                        .getTreatmentServiceList(WebServiceType.GET_TREATMENT_LIST_BOTH_SOLR, user.getUniqueId(), BooleanTypeValues.TRUE, null, 0, null, null);
+                break;
+            case GET_TREATMENT_ACTIVATED_LIST:
+                volleyResponseBean = LocalDataServiceImpl.getInstance(mApp)
+                        .getTreatmentServiceList(WebServiceType.GET_TREATMENT_LIST_BOTH_SOLR, user.getUniqueId(), BooleanTypeValues.FALSE, null, 0, null, null);
+                break;
+            case ADD_TREATMENT_LIST:
+                LocalDataServiceImpl.getInstance(mApp).addTreatmentSericeList((ArrayList<TreatmentService>) (ArrayList<?>) response.getDataList());
+                if (response.isBreakAfterAddRequest()) {
+                    break;
+                } else {
+                    getListFromLocal(false, response);
+                    return null;
+                }
+
         }
         if (volleyResponseBean == null)
             volleyResponseBean = new VolleyResponseBean();
@@ -635,6 +710,11 @@ public class SettingsNameHideActivateFragment extends HealthCocoFragment impleme
             case HISTORY:
                 Long latestUpdatedTimeDisease = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.DISEASE);
                 WebDataServiceImpl.getInstance(mApp).getDiseaseList(Disease.class, user.getUniqueId(), latestUpdatedTimeDisease, null, this, this);
+                break;
+
+            case TREATMENT:
+                Long latestUpdatedTimeTreatentService = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.TREATMENT_SERVICE);
+                WebDataServiceImpl.getInstance(mApp).getTreatmentsServiceList(TreatmentService.class, WebServiceType.GET_TREATMENT_LIST_BOTH_SOLR, user.getUniqueId(), user.getForeignHospitalId(), user.getForeignLocationId(), latestUpdatedTimeTreatentService, this, this);
                 break;
 
         }

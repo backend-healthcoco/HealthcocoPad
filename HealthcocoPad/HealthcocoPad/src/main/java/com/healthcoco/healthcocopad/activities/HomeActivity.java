@@ -47,6 +47,7 @@ import com.healthcoco.healthcocopad.fragments.CalendarFragment;
 import com.healthcoco.healthcocopad.fragments.ClinicalProfileFragment;
 import com.healthcoco.healthcocopad.fragments.ContactsListFragment;
 import com.healthcoco.healthcocopad.fragments.DoctorProfileFragment;
+import com.healthcoco.healthcocopad.fragments.DoctorVideoListFragment;
 import com.healthcoco.healthcocopad.fragments.FilterFragment;
 import com.healthcoco.healthcocopad.fragments.IssueTrackerFragment;
 import com.healthcoco.healthcocopad.fragments.MenuDrawerFragment;
@@ -182,6 +183,9 @@ public class HomeActivity extends HealthCocoActivity implements View.OnClickList
                 break;
             case SETTINGS:
                 fragment = new SettingsFragment();
+                break;
+            case VIDEOS:
+                fragment = new DoctorVideoListFragment();
                 break;
             case HELP_IMPROVE:
                 openCommonOpenUpActivity(CommonOpenUpFragmentType.FEEDBACK, null, 0);

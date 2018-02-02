@@ -1208,6 +1208,32 @@ public class WebDataServiceImpl implements GCMRefreshListener {
         }
     }
 
+
+    public void getTreatmentsServiceList(Class<?> class1, WebServiceType webServiceType, String doctorId, String hospitalId, String locationId, Long updatedTime, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        checkNetworkStatus(mApp.getApplicationContext());
+        String url = null;
+        if (HealthCocoConstants.isNetworkOnline) {
+            switch (webServiceType) {
+                case GET_TREATMENT_LIST_BOTH_SOLR:
+                    url = webServiceType.getUrl()
+                            + HealthCocoConstants.PARAM_DISCARDED_FALSE
+
+                            + HealthCocoConstants.PARAM_DOCTOR_ID + doctorId
+                            + HealthCocoConstants.PARAM_HOSPITAL_ID + hospitalId
+                            + HealthCocoConstants.PARAM_LOCATION_ID + locationId
+                            + HealthCocoConstants.PARAM_UPDATED_TIME + updatedTime;
+                    break;
+                case GET_TREATMENT_LIST_FEATURED:
+                    url = webServiceType.getUrl()
+                            + HealthCocoConstants.PARAM_SPECIALITY + "Dentist";
+                    break;
+            }
+            getResponse(webServiceType, class1, url, null, null, responseListener, errorListener);
+        } else {
+            showUserOffline(webServiceType, responseListener);
+        }
+    }
+
     public void discardTreatment(Class<?> class1, String treatmentId, String doctorId, String locationId, String hospitalId, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         String url = WebServiceType.DISCARD_TREATMENT.getUrl()
                 + treatmentId
@@ -1402,6 +1428,7 @@ public class WebDataServiceImpl implements GCMRefreshListener {
             case DELETE_DRUG_DOSAGE:
             case DELETE_DIRECTION:
             case DELETE_DISEASE:
+            case DELETE_TREATMENT:
             case DELETE_PRESENT_COMPLAINT:
             case DELETE_COMPLAINT:
             case DELETE_HISTORY_OF_PRESENT_COMPLAINT:
@@ -1440,5 +1467,18 @@ public class WebDataServiceImpl implements GCMRefreshListener {
         getResponse(webServiceType, class1, url, null, null, responseListener,
                 errorListener);
     }
+
+    public void getVideos(Class<?> class1, WebServiceType webServiceType, String doctorId,
+                          Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        if (HealthCocoConstants.isNetworkOnline) {
+            String url = webServiceType.getUrl() + "?"
+                    + HealthCocoConstants.PARAM_DOCTOR_ID + doctorId;
+            getResponse(webServiceType, class1, url, null, null, responseListener,
+                    errorListener);
+        } else {
+            showUserOffline(webServiceType, responseListener);
+        }
+    }
+
 
 }

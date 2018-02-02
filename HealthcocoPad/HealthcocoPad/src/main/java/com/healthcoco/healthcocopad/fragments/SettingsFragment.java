@@ -97,6 +97,10 @@ public class SettingsFragment extends HealthCocoFragment implements AdapterView.
             case TEMPLATES:
                 openCommonOpenUpActivity(CommonOpenUpFragmentType.TEMPLATE_LIST, TemplateListFragment.TAG_IS_FROM_SETTINGS, true, 0);
                 break;
+            case TREATMENT:
+                openCommonOpenUpActivity(CommonOpenUpFragmentType.SETTINGS_TREATMENT, itemType.ordinal());
+                break;
+
       /*      case CLINICAL_NOTE:
                 openCommonOpenUpActivity(CommonOpenUpFragmentType.CLINICAL_NOTE_LIST, 0);
                 break;

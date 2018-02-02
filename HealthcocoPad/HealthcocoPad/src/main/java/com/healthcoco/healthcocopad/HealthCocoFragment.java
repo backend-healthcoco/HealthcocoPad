@@ -612,4 +612,11 @@ public abstract class HealthCocoFragment extends Fragment implements GsonRequest
         healthcocoPopupWindow.setContentView(healthcocoPopupWindow.getPopupView());
     }
 
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        if (savedInstanceState != null) {
+            LogUtils.LOGD(TAG, "onSaveInstanceState");
+            savedInstanceState.putString(HealthCocoConstants.TAG_SELECTED_USER_ID, HealthCocoConstants.SELECTED_PATIENTS_USER_ID);
+        }
+    }
 }

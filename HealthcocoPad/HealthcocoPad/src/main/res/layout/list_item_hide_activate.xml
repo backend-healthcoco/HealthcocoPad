@@ -19,6 +19,14 @@
             android:text="Diesase Name"
             android:textColor="@color/black" />
 
+        <TextView
+            android:id="@+id/tv_amount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:text=""
+            android:textColor="@color/black" />
+
         <com.healthcoco.healthcocopad.views.TextViewFontAwesome
             android:id="@+id/bt_hide"
             android:layout_width="wrap_content"

@@ -42,6 +42,7 @@ import com.healthcoco.healthcocopad.bean.server.Specialities;
 import com.healthcoco.healthcocopad.bean.server.SyncAll;
 import com.healthcoco.healthcocopad.bean.server.SystemicExaminationSuggestions;
 import com.healthcoco.healthcocopad.bean.server.TempTemplate;
+import com.healthcoco.healthcocopad.bean.server.TreatmentService;
 import com.healthcoco.healthcocopad.bean.server.Treatments;
 import com.healthcoco.healthcocopad.bean.server.UserGroups;
 import com.healthcoco.healthcocopad.bean.server.VisitDetails;
@@ -465,8 +466,8 @@ public class ComparatorUtil {
                             date2 = new Date(((SystemicExaminationSuggestions) object2).getCreatedTime());
                             break;
                         case TREATMENT:
-                            date1 = new Date(((Treatments) object1).getCreatedTime());
-                            date2 = new Date(((Treatments) object2).getCreatedTime());
+                            date1 = new Date(((TreatmentService) object1).getCreatedTime());
+                            date2 = new Date(((TreatmentService) object2).getCreatedTime());
                             break;
                         case XRAY:
                             date1 = new Date(((XrayDetailSuggestions) object1).getCreatedTime());

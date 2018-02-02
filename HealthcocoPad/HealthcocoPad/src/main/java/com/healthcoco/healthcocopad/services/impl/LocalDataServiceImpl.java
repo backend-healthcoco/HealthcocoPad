@@ -769,6 +769,49 @@ public class LocalDataServiceImpl {
         return volleyResponseBean;
     }
 
+    public VolleyResponseBean getTreatmentServiceList(WebServiceType webServiceType, String doctorId, BooleanTypeValues discarded, ArrayList<String> diseaseIds, long updatedTime, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
+        volleyResponseBean.setWebServiceType(webServiceType);
+        volleyResponseBean.setIsDataFromLocal(true);
+        volleyResponseBean.setIsUserOnline(HealthCocoConstants.isNetworkOnline);
+        try {
+            String whereCondition = "";
+            Class<?> class1 = TreatmentService.class;
+            switch (discarded) {
+                case TRUE:
+                    volleyResponseBean.setLocalBackgroundTaskType(LocalBackgroundTaskType.GET_TREATMENT_HIDDEN_LIST);
+                    whereCondition = "Select * from " + StringUtil.toSQLName(class1.getSimpleName()) + " where "
+                            + LocalDatabaseUtils.KEY_DISCARDED + "=" + discarded.getBooleanIntValue();
+                    break;
+                case FALSE:
+                    volleyResponseBean.setLocalBackgroundTaskType(LocalBackgroundTaskType.GET_TREATMENT_ACTIVATED_LIST);
+                    whereCondition = "Select * from " + StringUtil.toSQLName(class1.getSimpleName()) + " where "
+                            + "(" + LocalDatabaseUtils.KEY_DISCARDED + " is null"
+                            + " OR "
+                            + LocalDatabaseUtils.KEY_DISCARDED + "=" + discarded.getBooleanIntValue()
+                            + ")";
+                    break;
+            }
+            whereCondition = whereCondition
+                    + " AND " + LocalDatabaseUtils.KEY_UPDATED_TIME + ">=" + updatedTime;
+            if (!Util.isNullOrBlank(doctorId)) {
+                whereCondition = whereCondition
+                        + " AND " + LocalDatabaseUtils.KEY_DOCTOR_ID + "=\"" + doctorId + "\"";
+            }
+            LogUtils.LOGD(TAG, "Select Query " + whereCondition);
+//            List<?> list = null;
+//            list = SugarRecord.findWithQuery(class1, whereCondition);
+            List<?> savedTreatmentServiceList = SugarRecord.findWithQuery(class1, whereCondition);
+            volleyResponseBean.setDataList(getObjectsListFromMap(savedTreatmentServiceList));
+            if (responseListener != null)
+                responseListener.onResponse(volleyResponseBean);
+        } catch (Exception e) {
+            e.printStackTrace();
+            showErrorLocal(volleyResponseBean, errorListener);
+        }
+        return volleyResponseBean;
+    }
+
     public void updateLatestTime(APILatestUpdatedTimes apiLatestUpdatedTimes) {
         apiLatestUpdatedTimes.save();
     }
@@ -802,6 +845,11 @@ public class LocalDataServiceImpl {
                 List<Disease> tempDiseaseList = Disease.find(Disease.class, null, null, null, "updated_time DESC", "1");
                 if (!Util.isNullOrEmptyList(tempDiseaseList))
                     latestUpdatedTime = tempDiseaseList.get(0).getUpdatedTime();
+                break;
+            case TREATMENT_SERVICE:
+                List<TreatmentService> temptTreatmentList = TreatmentService.find(TreatmentService.class, null, null, null, "updated_time DESC", "1");
+                if (!Util.isNullOrEmptyList(temptTreatmentList))
+                    latestUpdatedTime = temptTreatmentList.get(0).getUpdatedTime();
                 break;
             case TEMP_DRUG:
                 List<Drug> drugsList = Drug.find(Drug.class, LocalDatabaseUtils.IS_DRUG_FROM_GET_DRUGS_LIST + "= ?", new String[]{"" + LocalDatabaseUtils.BOOLEAN_TRUE_VALUE}, null, "updated_time DESC", "1");
@@ -2618,6 +2666,14 @@ public class LocalDataServiceImpl {
                     disease.getUniqueId() + " Name : " + disease.getDisease() + " Disease : " + disease.getDoctorId());
         }
         Disease.saveInTx(diseaseList);
+    }
+
+    public void addTreatmentSericeList(ArrayList<TreatmentService> treatmentServiceList) {
+        for (TreatmentService treatmentService : treatmentServiceList) {
+            LogUtils.LOGD(TAG, "Unique ID : " +
+                    treatmentService.getUniqueId() + " Name : " + treatmentService.getName() + " TreatmentService : " + treatmentService.getDoctorId());
+        }
+        TreatmentService.saveInTx(treatmentServiceList);
     }
 
     public void addDisease(Disease disease) {
@@ -4657,6 +4713,43 @@ public class LocalDataServiceImpl {
             LogUtils.LOGD(TAG, "Select Query " + whereCondition);
             List<Records> list = SugarRecord.findWithQuery(Records.class, whereCondition);
             volleyResponseBean.setDataList(getObjectsListFromMap(list));
+            if (responseListener != null)
+                responseListener.onResponse(volleyResponseBean);
+        } catch (Exception e) {
+            e.printStackTrace();
+            showErrorLocal(volleyResponseBean, errorListener);
+        }
+        return volleyResponseBean;
+    }
+
+    public void addVideos(String doctorId, ArrayList<DoctorVideos> videosArrayList) {
+        try {
+            for (DoctorVideos doctorVideos : videosArrayList) {
+                addDoctorVideos(doctorVideos, doctorId);
+            }
+        } catch (Exception e) {
+            Log.i(TAG, "Error in saving in transaction " + e.getMessage());
+        }
+    }
+
+    private void addDoctorVideos(DoctorVideos doctorVideos, String doctorId) {
+        doctorVideos.setCustomUniqueId(doctorId);
+        doctorVideos.save();
+    }
+
+    public VolleyResponseBean getVideosResponse(WebServiceType webServiceType, String doctorId, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
+        volleyResponseBean.setWebServiceType(webServiceType);
+        volleyResponseBean.setIsDataFromLocal(true);
+        volleyResponseBean.setIsUserOnline(HealthCocoConstants.isNetworkOnline);
+        try {
+            String whereCondition = "Select * from " + StringUtil.toSQLName(DoctorVideos.class.getSimpleName())
+                    + " where "
+                    + LocalDatabaseUtils.KEY_CUSTOM_UNIQUE_ID + "=\"" + doctorId + "\"";
+
+            LogUtils.LOGD(TAG, "Select Query " + whereCondition);
+            List<DoctorVideos> videosList = SugarRecord.findWithQuery(DoctorVideos.class, whereCondition);
+            volleyResponseBean.setDataList(getObjectsListFromMap(videosList));
             if (responseListener != null)
                 responseListener.onResponse(volleyResponseBean);
         } catch (Exception e) {
