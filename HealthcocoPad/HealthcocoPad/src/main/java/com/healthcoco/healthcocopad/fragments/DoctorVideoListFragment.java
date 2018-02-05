@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.GridView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -47,10 +48,11 @@ public class DoctorVideoListFragment extends HealthCocoFragment implements View.
         LocalDoInBackgroundListenerOptimised, TextWatcher, SwipeRefreshLayout.OnRefreshListener, LoadMorePageListener, AdapterView.OnItemClickListener {
 
     private ListViewLoadMore lvVideos;
+    private GridView gvVideos;
     private User user;
     private ArrayList<DoctorVideos> doctorVideosList;
     private TextView tvNoVideos;
-    private SwipeRefreshLayout swipeRefreshLayout;
+    //    private SwipeRefreshLayout swipeRefreshLayout;
     private ProgressBar progressLoading;
     private DoctorVideosListAdapter adapter;
     private boolean isEndOfListAchieved;
@@ -82,24 +84,26 @@ public class DoctorVideoListFragment extends HealthCocoFragment implements View.
     @Override
     public void initViews() {
         lvVideos = (ListViewLoadMore) view.findViewById(R.id.lv_videos);
+        gvVideos = (GridView) view.findViewById(R.id.gv_videos);
         tvNoVideos = (TextView) view.findViewById(R.id.tv_no_videos);
-        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
-        swipeRefreshLayout.setColorSchemeResources(R.color.blue_action_bar);
+//        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
+//        swipeRefreshLayout.setColorSchemeResources(R.color.blue_action_bar);
         progressLoading = (ProgressBar) view.findViewById(R.id.progress_loading);
         initEditSearchView(R.string.search_videos, this, this);
+        view.findViewById(R.id.bt_advance_search).setVisibility(View.GONE);
     }
 
     @Override
     public void initListeners() {
-        lvVideos.setLoadMoreListener(this);
-        lvVideos.setOnItemClickListener(this);
-        swipeRefreshLayout.setOnRefreshListener(this);
-        lvVideos.setSwipeRefreshLayout(swipeRefreshLayout);
+//        lvVideos.setLoadMoreListener(this);
+        gvVideos.setOnItemClickListener(this);
+//        swipeRefreshLayout.setOnRefreshListener(this);
+//        lvVideos.setSwipeRefreshLayout(swipeRefreshLayout);
     }
 
     private void initAdapters() {
         adapter = new DoctorVideosListAdapter(mActivity);
-        lvVideos.setAdapter(adapter);
+        gvVideos.setAdapter(adapter);
     }
 
     private void getDataFromLocal() {
@@ -168,7 +172,7 @@ public class DoctorVideoListFragment extends HealthCocoFragment implements View.
             }
         }
         mActivity.hideLoading();
-        swipeRefreshLayout.setRefreshing(false);
+//        swipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
@@ -197,10 +201,10 @@ public class DoctorVideoListFragment extends HealthCocoFragment implements View.
 
     private void notifyAdapter(ArrayList<DoctorVideos> list) {
         if (!Util.isNullOrEmptyList(list)) {
-            lvVideos.setVisibility(View.VISIBLE);
+            gvVideos.setVisibility(View.VISIBLE);
             tvNoVideos.setVisibility(View.GONE);
         } else {
-            lvVideos.setVisibility(View.GONE);
+            gvVideos.setVisibility(View.GONE);
             tvNoVideos.setVisibility(View.VISIBLE);
         }
         adapter.setListData(list);

@@ -5,8 +5,11 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
 import com.healthcoco.healthcocopad.HealthCocoActivity;
+import com.healthcoco.healthcocopad.bean.server.Diagram;
 import com.healthcoco.healthcocopad.bean.server.DoctorVideos;
+import com.healthcoco.healthcocopad.listeners.DiagramsGridItemListener;
 import com.healthcoco.healthcocopad.utilities.Util;
+import com.healthcoco.healthcocopad.viewholders.DiagramGridViewHolder;
 import com.healthcoco.healthcocopad.viewholders.DoctorVideosListViewHolder;
 
 import java.util.ArrayList;
@@ -27,23 +30,32 @@ public class DoctorVideosListAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        if (!Util.isNullOrEmptyList(list))
-            return list.size();
-        return 0;
+        if (list == null)
+            return 0;
+        return list.size();
+    }
+
+
+    @Override
+    public Object getItem(int position) {
+        return list.get(position);
     }
 
     @Override
-    public Object getItem(int arg0) {
-        return list.get(arg0);
-    }
-
-    @Override
-    public long getItemId(int arg0) {
+    public long getItemId(int position) {
         return 0;
     }
+
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        holder = new DoctorVideosListViewHolder(mActivity);
+        convertView = holder.getContentView();
+        convertView.setTag(holder);
+        holder.setData(getItem(position));
+        holder.applyData();
+        return convertView;
+/*
         if (convertView == null) {
             holder = new DoctorVideosListViewHolder(mActivity);
             convertView = holder.getContentView();
@@ -52,8 +64,9 @@ public class DoctorVideosListAdapter extends BaseAdapter {
             holder = (DoctorVideosListViewHolder) convertView.getTag();
         holder.setData(getItem(position));
         holder.applyData();
-        return convertView;
+        return convertView;*/
     }
+
 
     public void setListData(ArrayList<DoctorVideos> list) {
         this.list = list;

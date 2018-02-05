@@ -12,7 +12,7 @@
     <dimen name="widget_enter_icon_size">80px</dimen>
     <dimen name="treatment_tooth_height">110px</dimen>
     <dimen name="treatment_tooth_width">60px</dimen>
-    <dimen name="video_placeholder_height">235px</dimen>
+    <dimen name="video_placeholder_height">300px</dimen>
 
     <dimen name="visits_icon_notes">108px</dimen>
     <dimen name="visits_icon_drugs">108px</dimen>

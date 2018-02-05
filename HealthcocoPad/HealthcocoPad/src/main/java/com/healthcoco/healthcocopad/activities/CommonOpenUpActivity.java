@@ -224,7 +224,7 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
                 openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, R.string.sync, new SyncFragment());
                 break;
             case PLAY_VIDEO:
-                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, fragmentType.getTitleId(), new VideoFragment());
+                openFragment(ActionbarType.HIDDEN, new VideoFragment());
                 break;
 
         }

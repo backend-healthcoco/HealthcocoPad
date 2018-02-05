@@ -3189,6 +3189,7 @@ public class LocalDataServiceImpl {
     public void addVisit(VisitDetails details) {
         try {
             deleteVisitDetails(details);
+            details.setVisitedTime(details.getCreatedTime());
             List<VisitedForType> visitForTypesList = details.getVisitedFor();
             if (!Util.isNullOrEmptyList(visitForTypesList)) {
                 for (VisitedForType type :
@@ -4225,14 +4226,14 @@ public class LocalDataServiceImpl {
                 + LocalDatabaseUtils.KEY_HOSPITAL_ID + "=\"" + hospitalId + "\""
                 + " AND "
                 + LocalDatabaseUtils.KEY_LOCATION_ID + "=\"" + locationId + "\"";
+        if (!Util.isNullOrEmptyList(clinicDoctorProfileList))
+            for (int i = 0; i < clinicDoctorProfileList.size(); i++) {
+                if (i == 0)
+                    whereCondition = whereCondition + " AND " + LocalDatabaseUtils.KEY_DOCTOR_ID + "=\"" + clinicDoctorProfileList.get(i).getUniqueId() + "\"";
+                else
+                    whereCondition = whereCondition + " OR " + LocalDatabaseUtils.KEY_DOCTOR_ID + "=\"" + clinicDoctorProfileList.get(i).getUniqueId() + "\"";
 
-        for (int i = 0; i < clinicDoctorProfileList.size(); i++) {
-            if (i == 0)
-                whereCondition = whereCondition + " AND " + LocalDatabaseUtils.KEY_DOCTOR_ID + "=\"" + clinicDoctorProfileList.get(i).getUniqueId() + "\"";
-            else
-                whereCondition = whereCondition + " OR " + LocalDatabaseUtils.KEY_DOCTOR_ID + "=\"" + clinicDoctorProfileList.get(i).getUniqueId() + "\"";
-
-        }
+            }
 
         String conditionsLimit = " ORDER BY " + LocalDatabaseUtils.KEY_CREATED_TIME + " DESC "
                 + " LIMIT " + maxSize

@@ -1,6 +1,7 @@
 package com.healthcoco.healthcocopad.fragments;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -13,6 +14,7 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.TabHost;
 import android.widget.TabWidget;
@@ -66,6 +68,8 @@ import com.myscript.atk.core.Line;
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -86,6 +90,7 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
     private static final int REQUEST_CODE_NEXT_REVIEW = 111;
     private static final int TAB_POSITION_PRESCRIPTION = 1;
     private static final int TAB_POSITION_TREATMENT = 2;
+    private final int LIST_INDEX = 0;
     private ViewPager viewPager;
     private TabHost tabhost;
     private ArrayList<Fragment> fragmentsList;
@@ -103,6 +108,7 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
     private AppointmentRequest appointmentRequest;
     private TextView tvNextReviewDate;
     private TextView tvDoctorName;
+    private TextView tvDate;
     private TextView tvNextReviewTime;
     private LinearLayout lvDoctorName;
     private VisitDetails visit;
@@ -118,6 +124,7 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
     private ClinicDetailResponse selectedClinicProfile;
     private DoctorProfile doctorProfile;
     private HealthcocoPopupWindow doctorsListPopupWindow;
+    private long selectedFromDateTimeMillis;
 
 
     private boolean isPrescriptionTabClicked = false;
@@ -166,6 +173,7 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
         layoutNextReview = (LinearLayout) view.findViewById(R.id.layout_next_review);
         containerDateTime = (LinearLayout) view.findViewById(R.id.container_date_time);
         tvDoctorName = (TextView) view.findViewById(R.id.tv_doctor_name);
+        tvDate = (TextView) view.findViewById(R.id.tv_date);
         lvDoctorName = (LinearLayout) view.findViewById(R.id.lv_doctor_name);
         tvNextReviewDate = (TextView) view.findViewById(R.id.tv_next_review_data);
         tvNextReviewTime = (TextView) view.findViewById(R.id.tv_next_review_time);
@@ -178,6 +186,7 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
         viewPager.addOnPageChangeListener(this);
         flBtSwap.setOnClickListener(this);
         layoutNextReview.setOnClickListener(this);
+        tvDate.setOnClickListener(this);
 
         ((CommonOpenUpActivity) mActivity).initRightActionView(ActionbarLeftRightActionTypeDrawables.WITH_SAVE, view);
         btSave = ((CommonOpenUpActivity) mActivity).initActionbarRightAction(this);
@@ -206,6 +215,7 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
             case PATIENT_DETAIL_VISIT:
                 if (visitDetails != null) {
                     bundle.putParcelable(AddEditNormalVisitPrescriptionFragment.TAG_PRESCRIPTION_DATA, Parcels.wrap(visitDetails.getPrescriptions()));
+                    tvDate.setText(DateTimeUtil.getFormatedDate(visitDetails.getCreatedTime()));
                 }
                 bundle.putParcelable(HealthCocoConstants.TAG_IS_FROM_VISIT, Parcels.wrap(true));
                 addEditNormalVisitPrescriptionFragment.setArguments(bundle);
@@ -225,6 +235,9 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
                 break;
 
             case PATIENT_DETAIL_CLINICAL_NOTES:
+                if (visitDetails != null) {
+                    tvDate.setText(DateTimeUtil.getFormatedDate(visitDetails.getClinicalNotes().get(LIST_INDEX).getCreatedTime()));
+                }
                 addFragment(addClinicalNotesVisitNormalFragment, R.string.clinical_notes, true);
                 tabs.setVisibility(View.GONE);
                 flBtSwap.setVisibility(View.GONE);
@@ -232,6 +245,7 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
             case PATIENT_DETAIL_PRESCRIPTION:
                 if (visitDetails != null) {
                     bundle.putParcelable(AddEditNormalVisitPrescriptionFragment.TAG_PRESCRIPTION_DATA, Parcels.wrap(visitDetails.getPrescriptions()));
+                    tvDate.setText(DateTimeUtil.getFormatedDate(visitDetails.getPrescriptions().get(LIST_INDEX).getCreatedTime()));
                 }
                 addEditNormalVisitPrescriptionFragment.setArguments(bundle);
                 addFragment(addEditNormalVisitPrescriptionFragment, R.string.prescriptions, true);
@@ -242,6 +256,7 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
             case PATIENT_DETAIL_TREATMENT:
                 if (!Util.isNullOrEmptyList(treatment)) {
                     bundle.putParcelable(PatientTreatmentDetailFragment.TAG_TREATMENT_DATA, Parcels.wrap(treatment));
+                    tvDate.setText(DateTimeUtil.getFormatedDate(treatment.get(LIST_INDEX).getCreatedTime()));
                 }
                 addNewTreatmentFragment.setArguments(bundle);
                 addFragment(addNewTreatmentFragment, R.string.treatment, true);
@@ -503,6 +518,9 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
             case R.id.fl_bt_swap:
                 showToggleConfirmationAlert();
                 break;
+            case R.id.tv_date:
+                openDatePickerDialog();
+                break;
             case R.id.layout_next_review:
                 if (visit != null && visit.getAppointmentRequest() != null && visit.getAppointmentId() != null) {
                     showNextReviewReschedulealert();
@@ -562,6 +580,8 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
         LogUtils.LOGD(TAG, "Selected patient " + selectedPatient.getLocalPatientName());
         if (msgId == 0) {
             TreatmentRequest treatmentRequest = addNewTreatmentFragment.getTreatmentRequestDetails(false);
+            if (selectedFromDateTimeMillis > 1)
+                treatmentRequest.setCreatedTime(selectedFromDateTimeMillis);
             if (Util.isNullOrBlank(treatmentId) && !isFromClone) {
                 treatmentRequest.setDoctorId(user.getUniqueId());
                 treatmentRequest.setVisitId(Util.getVisitId(VisitIdType.TREATMENT));
@@ -577,6 +597,8 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
         LogUtils.LOGD(TAG, "Selected patient " + selectedPatient.getLocalPatientName());
         if (prescriptionMsg == 0) {
             PrescriptionRequest prescription = addEditNormalVisitPrescriptionFragment.getPrescriptionRequestDetails();
+            if (selectedFromDateTimeMillis > 1)
+                prescription.setCreatedTime(selectedFromDateTimeMillis);
             if (Util.isNullOrBlank(prescriptionId)) {
                 prescription.setDoctorId(user.getUniqueId());
                 prescription.setVisitId(Util.getVisitId(VisitIdType.PRESCRIPTION));
@@ -591,6 +613,8 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
         mActivity.showLoading(false);
         if (noteMsgId == 0) {
             ClinicalNoteToSend clinicalNotes = addClinicalNotesVisitNormalFragment.getClinicalNoteToSendDetails();
+            if (selectedFromDateTimeMillis > 1)
+                clinicalNotes.setCreatedTime(selectedFromDateTimeMillis);
             if (!Util.isNullOrBlank(clinicalNoteId)) {
                 clinicalNotes.setUniqueId(clinicalNoteId);
                 WebDataServiceImpl.getInstance(mApp).updateClinicalNote(ClinicalNotes.class, clinicalNotes, this, this);
@@ -660,6 +684,8 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
     private void addVisit(int blankClinicalNoteMsgId, int blankPrescriptionMsgId, int blankTreatmentMsgId) {
         mActivity.showLoading(false);
         VisitDetails visitDetails = new VisitDetails();
+        if (selectedFromDateTimeMillis > 1)
+            visitDetails.setCreatedTime(selectedFromDateTimeMillis);
         visitDetails.setLocationId(user.getForeignLocationId());
         visitDetails.setHospitalId(user.getForeignHospitalId());
         visitDetails.setDoctorId(user.getUniqueId());
@@ -712,20 +738,20 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
                 tvDoctorName.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                 tvDoctorName.setEnabled(false);
                 tvDoctorName.setClickable(false);
-                lvDoctorName.setVisibility(View.VISIBLE);
+                tvDoctorName.setVisibility(View.VISIBLE);
                 if (visit != null)
                     tvDoctorName.setText(Util.getValidatedValue(visit.getCreatedBy()));
             } else if (!Util.isNullOrBlank(treatmentId)) {
                 tvDoctorName.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                 tvDoctorName.setEnabled(false);
                 tvDoctorName.setClickable(false);
-                lvDoctorName.setVisibility(View.VISIBLE);
+                tvDoctorName.setVisibility(View.VISIBLE);
                 if (treatment != null)
                     tvDoctorName.setText(Util.getValidatedValue(treatment.get(0).getCreatedBy()));
             } else {
                 tvDoctorName.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                 tvDoctorName.setEnabled(false);
-                lvDoctorName.setVisibility(View.VISIBLE);
+                tvDoctorName.setVisibility(View.VISIBLE);
                 refreshDoctorsList();
             }
         }
@@ -778,6 +804,33 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
 
     private void refreshDoctorClinicText() {
         tvDoctorName.setText(Util.getValidatedValue(doctorProfile.getFirstNameWithTitle()));
+    }
+
+    private void openDatePickerDialog() {
+        Calendar calendar = Calendar.getInstance();
+
+        calendar = DateTimeUtil.setCalendarDefaultvalue(DateTimeUtil.DATE_FORMAT_DAY_MONTH_YEAR_SLASH, calendar, tvDate);
+        DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+//                tvDate.setText(DateTimeUtil.getFormattedTime(DateTimeUtil.DATE_FORMAT_DAY_MONTH_YEAR_SLASH, year, monthOfYear, dayOfMonth, 0, 0, 0));
+                int msg = 0;
+                selectedFromDateTimeMillis = getSelectedFromDateTime(year, monthOfYear, dayOfMonth);
+                tvDate.setText(DateTimeUtil.getFormatedDate(selectedFromDateTimeMillis));
+
+            }
+        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+        datePickerDialog.getDatePicker().setMaxDate(new Date().getTime());
+        datePickerDialog.show();
+    }
+
+    private long getSelectedFromDateTime(int year, int month, int day) {
+        Calendar calendar1 = DateTimeUtil.getCalendarInstance();
+        calendar1.set(Calendar.YEAR, year);
+        calendar1.set(Calendar.MONTH, month);
+        calendar1.set(Calendar.DAY_OF_MONTH, day);
+        return calendar1.getTimeInMillis();
     }
 
 }

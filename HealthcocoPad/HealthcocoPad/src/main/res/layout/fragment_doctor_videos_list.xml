@@ -12,12 +12,12 @@
         android:layout_height="5dp"
         android:background="@drawable/shadow_bottom" />
 
-    <android.support.v4.widget.SwipeRefreshLayout
+    <!--<android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh_layout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
-
+-->
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -36,6 +36,17 @@
                 android:paddingTop="@dimen/list_margin_templates_list"
                 android:scrollbarStyle="outsideOverlay"
                 android:visibility="gone" />
+
+            <GridView
+                android:id="@+id/gv_videos"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:horizontalSpacing="@dimen/diagram_list_grid_item_spacing"
+                android:numColumns="3"
+                android:padding="@dimen/diagram_list_grid_item_spacing"
+                android:scrollbarStyle="outsideOverlay"
+                android:verticalSpacing="@dimen/diagram_list_grid_item_spacing"
+                android:visibility="gone"></GridView>
 
             <TextView
                 android:id="@+id/tv_no_videos"
@@ -58,5 +69,5 @@
                 android:visibility="gone" />
         </FrameLayout>
 
-    </android.support.v4.widget.SwipeRefreshLayout>
+    <!--    </android.support.v4.widget.SwipeRefreshLayout>-->
 </LinearLayout>

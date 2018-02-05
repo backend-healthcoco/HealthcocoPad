@@ -12,6 +12,7 @@ import com.healthcoco.healthcocopad.bean.server.ComplaintSuggestions;
 import com.healthcoco.healthcocopad.bean.server.DiagnosisSuggestions;
 import com.healthcoco.healthcocopad.bean.server.DiagnosticTest;
 import com.healthcoco.healthcocopad.bean.server.DrugsListSolrResponse;
+import com.healthcoco.healthcocopad.bean.server.EarsExamSuggestions;
 import com.healthcoco.healthcocopad.bean.server.EcgDetailSuggestions;
 import com.healthcoco.healthcocopad.bean.server.EchoSuggestions;
 import com.healthcoco.healthcocopad.bean.server.GeneralExaminationSuggestions;
@@ -19,13 +20,22 @@ import com.healthcoco.healthcocopad.bean.server.GenericName;
 import com.healthcoco.healthcocopad.bean.server.HistoryPresentComplaintSuggestions;
 import com.healthcoco.healthcocopad.bean.server.HolterSuggestions;
 import com.healthcoco.healthcocopad.bean.server.IndicationOfUsgSuggestions;
+import com.healthcoco.healthcocopad.bean.server.IndirectLarygoscopyExamSuggestions;
 import com.healthcoco.healthcocopad.bean.server.InvestigationSuggestions;
 import com.healthcoco.healthcocopad.bean.server.MenstrualHistorySuggestions;
+import com.healthcoco.healthcocopad.bean.server.NeckExamSuggestions;
+import com.healthcoco.healthcocopad.bean.server.NoseExamSuggestions;
 import com.healthcoco.healthcocopad.bean.server.NotesSuggestions;
 import com.healthcoco.healthcocopad.bean.server.ObservationSuggestions;
 import com.healthcoco.healthcocopad.bean.server.ObstetricHistorySuggestions;
+import com.healthcoco.healthcocopad.bean.server.OralCavityThroatExamSuggestions;
 import com.healthcoco.healthcocopad.bean.server.PaSuggestions;
+import com.healthcoco.healthcocopad.bean.server.PcEarsSuggestions;
+import com.healthcoco.healthcocopad.bean.server.PcNoseSuggestions;
+import com.healthcoco.healthcocopad.bean.server.PcOralCavitySuggestions;
+import com.healthcoco.healthcocopad.bean.server.PcThroatSuggestions;
 import com.healthcoco.healthcocopad.bean.server.PresentComplaintSuggestions;
+import com.healthcoco.healthcocopad.bean.server.ProcedureNoteSuggestions;
 import com.healthcoco.healthcocopad.bean.server.ProvisionalDiagnosisSuggestions;
 import com.healthcoco.healthcocopad.bean.server.PsSuggestions;
 import com.healthcoco.healthcocopad.bean.server.PvSuggestions;
@@ -38,10 +48,10 @@ import com.healthcoco.healthcocopad.utilities.Util;
  */
 
 public class AddVisitSuggestionsListViewHolder extends HealthCocoViewHolder {
+    private static final String GENERIC_NAME_SEPARATOR = ",";
     private Object objData;
     private TextView tvName;
     private TextView tvGenericName;
-    private static final String GENERIC_NAME_SEPARATOR = ",";
 
     public AddVisitSuggestionsListViewHolder(HealthCocoActivity mActivity) {
         super(mActivity);
@@ -100,6 +110,27 @@ public class AddVisitSuggestionsListViewHolder extends HealthCocoViewHolder {
             text = ((IndicationOfUsgSuggestions) objData).getIndicationOfUSG();
         else if (objData instanceof HolterSuggestions)
             text = ((HolterSuggestions) objData).getHolter();
+        else if (objData instanceof PcThroatSuggestions)
+            text = ((PcThroatSuggestions) objData).getPcThroat();
+        else if (objData instanceof PcOralCavitySuggestions)
+            text = ((PcOralCavitySuggestions) objData).getPcOralCavity();
+        else if (objData instanceof PcNoseSuggestions)
+            text = ((PcNoseSuggestions) objData).getPcNose();
+        else if (objData instanceof PcEarsSuggestions)
+            text = ((PcEarsSuggestions) objData).getPcEars();
+        else if (objData instanceof NoseExamSuggestions)
+            text = ((NoseExamSuggestions) objData).getNoseExam();
+        else if (objData instanceof EarsExamSuggestions)
+            text = ((EarsExamSuggestions) objData).getEarsExam();
+        else if (objData instanceof NeckExamSuggestions)
+            text = ((NeckExamSuggestions) objData).getNeckExam();
+        else if (objData instanceof OralCavityThroatExamSuggestions)
+            text = ((OralCavityThroatExamSuggestions) objData).getOralCavityThroatExam();
+        else if (objData instanceof IndirectLarygoscopyExamSuggestions)
+            text = ((IndirectLarygoscopyExamSuggestions) objData).getIndirectLarygoscopyExam();
+        else if (objData instanceof ProcedureNoteSuggestions)
+            text = ((ProcedureNoteSuggestions) objData).getProcedureNote();
+
         else if (objData instanceof AdviceSuggestion)
             text = ((AdviceSuggestion) objData).getAdvice();
         tvName.setText(text);

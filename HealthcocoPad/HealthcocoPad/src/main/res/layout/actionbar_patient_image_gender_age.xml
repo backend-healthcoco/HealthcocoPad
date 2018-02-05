@@ -86,7 +86,26 @@
             android:singleLine="true"
             android:textColor="@color/white"
             android:textColorHint="@color/grey_light_text"
+            android:textSize="@dimen/text_size_patient_name_visit_fragment"
+            android:visibility="invisible" />
+
+        <TextView
+            android:id="@+id/tv_date"
+            android:layout_width="@dimen/video_placeholder_height"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/text_size_visits_close_text"
+            android:background="@drawable/shape_rounded_corners_white_border_solid_blue"
+            android:drawableEnd="@drawable/arrow_menu_down"
+            android:hint="@string/date"
+            android:paddingBottom="@dimen/dotor_profile_edit_text_top_padding"
+            android:paddingLeft="@dimen/item_contact_padding"
+            android:paddingRight="@dimen/dotor_profile_edit_text_top_padding"
+            android:paddingTop="@dimen/dotor_profile_edit_text_top_padding"
+            android:singleLine="true"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white"
             android:textSize="@dimen/text_size_patient_name_visit_fragment" />
+
 
     </LinearLayout>
 

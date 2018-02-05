@@ -9,6 +9,7 @@
         android:layout_marginBottom="@dimen/list_item_padding"
         android:layout_marginLeft="@dimen/emr_item_margin"
         android:layout_marginRight="@dimen/emr_item_margin"
+        android:layout_marginTop="@dimen/emr_item_margin"
         android:background="@drawable/shape_emr_item_background"
         android:orientation="vertical">
 
@@ -16,6 +17,7 @@
             android:id="@+id/iv_thumbnail"
             android:layout_width="match_parent"
             android:layout_height="@dimen/video_placeholder_height"
+            android:layout_marginTop="@dimen/list_item_padding"
             android:padding="@dimen/layout_padding_5dp"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_video_thumbnail" />

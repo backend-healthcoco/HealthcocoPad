@@ -27,7 +27,7 @@ import org.parceler.Parcels;
  * Created by Shreshtha on 01-08-2017.
  */
 
-public class VideoFragment extends HealthCocoFragment implements MediaPlayer.OnPreparedListener, DownloadFileFromUrlListener {
+public class VideoFragment extends HealthCocoFragment implements MediaPlayer.OnPreparedListener, DownloadFileFromUrlListener, MediaPlayer.OnCompletionListener {
 
     private VideoView videoView;
     private int position = 0;
@@ -79,6 +79,7 @@ public class VideoFragment extends HealthCocoFragment implements MediaPlayer.OnP
     @Override
     public void initListeners() {
         videoView.setOnPreparedListener(this);
+        videoView.setOnCompletionListener(this);
     }
 
     @Override
@@ -116,6 +117,7 @@ public class VideoFragment extends HealthCocoFragment implements MediaPlayer.OnP
             videoView.requestFocus();
             videoView.start();
         }
+
     }
 
     @Override
@@ -141,5 +143,15 @@ public class VideoFragment extends HealthCocoFragment implements MediaPlayer.OnP
         // Get saved position.
         position = savedInstanceState.getInt("CurrentPosition");
         videoView.seekTo(position);
+    }
+
+    @Override
+    public void onCompletion(MediaPlayer mp) {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        mActivity.finish();
     }
 }

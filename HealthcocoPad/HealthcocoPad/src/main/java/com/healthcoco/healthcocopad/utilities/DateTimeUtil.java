@@ -28,8 +28,8 @@ public class DateTimeUtil {
     public static final String DATE_FORMAT_WEEKDAY_DAY_MONTH_AS_TEXT_YEAR_DASH = "EEE, MMM dd,yyyy";
     public static final String DATE_TIME_FORMAT_WEEKDAY_DAY_MONTH_AS_TEXT_YEAR_DASH = "EEE, MMM dd,yyyy hh:mm aaa";
     public static final String TIME_FORMAT_24_HOUR = "H:mm";
+    public static final String DATE_FORMAT_DAY_MONTH_YEAR_SLASH = "dd/MM/yyyy";
     protected static final String TAG = CalendarEvents.class.getSimpleName();
-    private static final String DATE_FORMAT_DAY_MONTH_YEAR_SLASH = "dd/MM/yyyy";
 
     /**
      * in YY format for year
