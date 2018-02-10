@@ -7,12 +7,12 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/fab_margin_bottom"
-        android:layout_marginLeft="@dimen/margin_add_vital_signs_layout"
-        android:layout_marginRight="@dimen/margin_add_vital_signs_layout"
-        android:layout_marginTop="@dimen/margin_add_vital_signs_layout"
-        android:background="@drawable/shape_rounded_corners_item_background"
-        android:padding="@dimen/doctor_profile_layout_padding">
+        android:layout_marginBottom="@dimen/image_patient_detail_layout"
+        android:layout_marginLeft="@dimen/margin_left_right_add_vital_signs"
+        android:layout_marginRight="@dimen/margin_left_right_add_vital_signs"
+        android:layout_marginTop="@dimen/margin_left_right_add_vital_signs"
+        android:background="@color/white"
+        android:padding="@dimen/item_contact_padding">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -53,7 +53,7 @@
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="2"
+                            android:layout_weight="3"
                             android:text="@string/include_patient_name"
                             android:textColor="@color/black_greyish"
                             android:textSize="@dimen/text_size_add_clinical_note_points" />
@@ -64,6 +64,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/layout_padding_5dp"
                             android:layout_weight="1"
+                            android:text="@string/no"
                             android:textSize="@dimen/text_size_add_clinical_note_points" />
                     </LinearLayout>
 
@@ -76,17 +77,19 @@
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="2"
+                            android:layout_weight="3"
                             android:text="@string/include_patient_id"
                             android:textColor="@color/black_greyish"
                             android:textSize="@dimen/text_size_add_clinical_note_points" />
 
                         <TextView
+
                             android:id="@+id/tv_include_patient_id"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/layout_padding_5dp"
                             android:layout_weight="1"
+                            android:text="@string/no"
                             android:textSize="@dimen/text_size_add_clinical_note_points" />
                     </LinearLayout>
 
@@ -99,17 +102,19 @@
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="2"
+                            android:layout_weight="3"
                             android:text="@string/include_age"
                             android:textColor="@color/black_greyish"
                             android:textSize="@dimen/text_size_add_clinical_note_points" />
 
                         <TextView
                             android:id="@+id/tv_include_age"
+
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/layout_padding_5dp"
                             android:layout_weight="1"
+                            android:text="@string/no"
                             android:textSize="@dimen/text_size_add_clinical_note_points" />
                     </LinearLayout>
 
@@ -122,7 +127,7 @@
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="2"
+                            android:layout_weight="3"
                             android:text="@string/include_gender"
                             android:textColor="@color/black_greyish"
                             android:textSize="@dimen/text_size_add_clinical_note_points" />
@@ -133,6 +138,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/layout_padding_5dp"
                             android:layout_weight="1"
+                            android:text="@string/no"
                             android:textSize="@dimen/text_size_add_clinical_note_points" />
                     </LinearLayout>
 
@@ -145,7 +151,7 @@
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="2"
+                            android:layout_weight="3"
                             android:text="@string/include_mobile_number"
                             android:textColor="@color/black_greyish"
                             android:textSize="@dimen/text_size_add_clinical_note_points" />
@@ -156,6 +162,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/layout_padding_5dp"
                             android:layout_weight="1"
+                            android:text="@string/no"
                             android:textSize="@dimen/text_size_add_clinical_note_points" />
                     </LinearLayout>
 
@@ -168,7 +175,7 @@
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="2"
+                            android:layout_weight="3"
                             android:text="@string/include_hospital_id"
                             android:textColor="@color/black_greyish"
                             android:textSize="@dimen/text_size_add_clinical_note_points" />
@@ -179,6 +186,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/layout_padding_5dp"
                             android:layout_weight="1"
+                            android:text="@string/no"
                             android:textSize="@dimen/text_size_add_clinical_note_points" />
                     </LinearLayout>
 
@@ -199,7 +207,7 @@
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="2"
+                            android:layout_weight="3"
                             android:text="@string/include_referred_by"
                             android:textColor="@color/black_greyish"
                             android:textSize="@dimen/text_size_add_clinical_note_points" />
@@ -210,6 +218,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/layout_padding_5dp"
                             android:layout_weight="1"
+                            android:text="@string/no"
                             android:textSize="@dimen/text_size_add_clinical_note_points" />
                     </LinearLayout>
 
@@ -222,7 +231,7 @@
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="2"
+                            android:layout_weight="3"
                             android:text="@string/include_blood_group"
                             android:textColor="@color/black_greyish"
                             android:textSize="@dimen/text_size_add_clinical_note_points" />
@@ -233,6 +242,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/layout_padding_5dp"
                             android:layout_weight="1"
+                            android:text="@string/no"
                             android:textSize="@dimen/text_size_add_clinical_note_points" />
                     </LinearLayout>
 
@@ -245,7 +255,7 @@
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="2"
+                            android:layout_weight="3"
                             android:text="@string/include_record_id"
                             android:textColor="@color/black_greyish"
                             android:textSize="@dimen/text_size_add_clinical_note_points" />
@@ -256,6 +266,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/layout_padding_5dp"
                             android:layout_weight="1"
+                            android:text="@string/no"
                             android:textSize="@dimen/text_size_add_clinical_note_points" />
                     </LinearLayout>
 
@@ -268,7 +279,7 @@
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="2"
+                            android:layout_weight="3"
                             android:text="@string/include_date"
                             android:textColor="@color/black_greyish"
                             android:textSize="@dimen/text_size_add_clinical_note_points" />
@@ -279,6 +290,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/layout_padding_5dp"
                             android:layout_weight="1"
+                            android:text="@string/no"
                             android:textSize="@dimen/text_size_add_clinical_note_points" />
                     </LinearLayout>
 
@@ -291,7 +303,7 @@
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="2"
+                            android:layout_weight="3"
                             android:text="@string/include_city"
                             android:textColor="@color/black_greyish"
                             android:textSize="@dimen/text_size_add_clinical_note_points" />
@@ -302,6 +314,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/layout_padding_5dp"
                             android:layout_weight="1"
+                            android:text="@string/no"
                             android:textSize="@dimen/text_size_add_clinical_note_points" />
                     </LinearLayout>
 

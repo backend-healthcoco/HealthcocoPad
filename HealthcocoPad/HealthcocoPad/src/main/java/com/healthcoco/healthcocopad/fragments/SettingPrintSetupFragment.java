@@ -1,0 +1,430 @@
+package com.healthcoco.healthcocopad.fragments;
+
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
+import com.android.volley.Response;
+import com.healthcoco.healthcocopad.HealthCocoFragment;
+import com.healthcoco.healthcocopad.R;
+import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
+import com.healthcoco.healthcocopad.bean.server.FooterSetup;
+import com.healthcoco.healthcocopad.bean.server.LoginResponse;
+import com.healthcoco.healthcocopad.bean.server.PageSetup;
+import com.healthcoco.healthcocopad.bean.server.PatientDetails;
+import com.healthcoco.healthcocopad.bean.server.PrintSettings;
+import com.healthcoco.healthcocopad.bean.server.Style;
+import com.healthcoco.healthcocopad.bean.server.User;
+import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
+import com.healthcoco.healthcocopad.dialogFragment.EditContentSetupDialogFragment;
+import com.healthcoco.healthcocopad.dialogFragment.EditFooterSetupDialogFragment;
+import com.healthcoco.healthcocopad.dialogFragment.EditPageSetupDialogFragment;
+import com.healthcoco.healthcocopad.dialogFragment.EditPatientDetailsSetupDialogFragment;
+import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
+import com.healthcoco.healthcocopad.enums.WebServiceType;
+import com.healthcoco.healthcocopad.listeners.AddPrintSettingsListener;
+import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
+import com.healthcoco.healthcocopad.services.GsonRequest;
+import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
+import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
+import com.healthcoco.healthcocopad.utilities.Util;
+import com.healthcoco.healthcocopad.views.TextViewFontAwesome;
+
+import java.util.ArrayList;
+
+/**
+ * Created by Prashant on 05/02/2018.
+ */
+
+public class SettingPrintSetupFragment extends HealthCocoFragment implements GsonRequest.ErrorListener,
+        LocalDoInBackgroundListenerOptimised, Response.Listener<VolleyResponseBean>, View.OnClickListener, AddPrintSettingsListener {
+
+    private TextView tvPageSize;
+    private TextView tvBottomMargin;
+    private TextView tvTopMargin;
+    private TextView tvLeftMargin;
+    private TextView tvRightMargin;
+    private TextView tvFontsize;
+    private TextView tvShowDrugGenericNames;
+    private TextView tvLineSpace;
+    private TextView tvShowTreatmentCost;
+    private TextView tvShowInstructionAlign;
+    private TextView tvIncludeHeader;
+    private TextView tvIncludeLogo;
+    private TextView tvTopleftFirst;
+    private TextView tvTopleftSecond;
+    private TextView tvTopleftThird;
+    private TextView tvTopleftFourth;
+    private TextView tvTopRightFirst;
+    private TextView tvTopRightSecond;
+    private TextView tvTopRightThird;
+    private TextView tvTopRightFourth;
+    private TextView tvIncludeFooter;
+    private TextView tvIncludeSignature;
+    private TextView tvIncludeSignatureText;
+    private TextView tvBottomSignatureText;
+    private TextView tvBottomText;
+    private TextView tvIncludePatientName;
+    private TextView tvIncludePatientID;
+    private TextView tvIncludeAge;
+    private TextView tvIncludeGender;
+    private TextView tvIncludeMobileNumber;
+    private TextView tvIncludeHospitalId;
+    private TextView tvIncludeRefferedBy;
+    private TextView tvIncludeBloodGroup;
+    private TextView tvIncludeRecordId;
+    private TextView tvIncludeDate;
+    private TextView tvIncludeCity;
+    private TextViewFontAwesome btEditPageSetup;
+    private TextViewFontAwesome btEditContentSetup;
+    private TextViewFontAwesome btEditHeader;
+    private TextViewFontAwesome btEditFooter;
+    private TextViewFontAwesome btEditPatirntDetails;
+
+    private PrintSettings printSettings;
+
+    private User user;
+    private boolean isInitialLoading = true;
+
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        view = inflater.inflate(R.layout.fragment_setting_print_set_up, container, false);
+        super.onCreateView(inflater, container, savedInstanceState);
+        return view;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Util.checkNetworkStatus(mActivity);
+        init();
+    }
+
+    @Override
+    public void init() {
+        initViews();
+        initListeners();
+        mActivity.showLoading(false);
+        new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_FRAGMENT_INITIALISATION_DATA, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
+    }
+
+    @Override
+    public void initViews() {
+        tvPageSize = (TextView) view.findViewById(R.id.tv_page_size);
+        tvBottomMargin = (TextView) view.findViewById(R.id.tv_bottom_margin);
+        tvTopMargin = (TextView) view.findViewById(R.id.tv_top_margin);
+        tvLeftMargin = (TextView) view.findViewById(R.id.tv_left_margin);
+        tvRightMargin = (TextView) view.findViewById(R.id.tv_right_margin);
+        tvFontsize = (TextView) view.findViewById(R.id.tv_font_size);
+        tvShowDrugGenericNames = (TextView) view.findViewById(R.id.tv_show_drug_generic_namesn);
+        tvLineSpace = (TextView) view.findViewById(R.id.tv_line_space);
+        tvShowTreatmentCost = (TextView) view.findViewById(R.id.tv_show_treatment_cost);
+        tvShowInstructionAlign = (TextView) view.findViewById(R.id.tv_show_instruction_align);
+        tvIncludeHeader = (TextView) view.findViewById(R.id.tv_include_header);
+        tvIncludeLogo = (TextView) view.findViewById(R.id.tv_include_logo);
+        tvTopleftFirst = (TextView) view.findViewById(R.id.tv_topleft_first);
+        tvTopleftSecond = (TextView) view.findViewById(R.id.tv_topleft_second);
+        tvTopleftThird = (TextView) view.findViewById(R.id.tv_topleft_third);
+        tvTopleftFourth = (TextView) view.findViewById(R.id.tv_topleft_forth);
+        tvTopRightFirst = (TextView) view.findViewById(R.id.tv_topright_first);
+        tvTopRightSecond = (TextView) view.findViewById(R.id.tv_topright_second);
+        tvTopRightThird = (TextView) view.findViewById(R.id.tv_topright_third);
+        tvTopRightFourth = (TextView) view.findViewById(R.id.tv_topright_forth);
+        tvIncludeFooter = (TextView) view.findViewById(R.id.tv_include_footer);
+        tvIncludeSignature = (TextView) view.findViewById(R.id.tv_include_signature);
+        tvIncludeSignatureText = (TextView) view.findViewById(R.id.tv_include_signature_text);
+        tvBottomSignatureText = (TextView) view.findViewById(R.id.tv_bottom_signature_text);
+        tvBottomText = (TextView) view.findViewById(R.id.tv_bottom_text);
+        tvIncludePatientName = (TextView) view.findViewById(R.id.tv_include_patient_name);
+        tvIncludePatientID = (TextView) view.findViewById(R.id.tv_include_patient_id);
+        tvIncludeAge = (TextView) view.findViewById(R.id.tv_include_age);
+        tvIncludeGender = (TextView) view.findViewById(R.id.tv_include_gender);
+        tvIncludeMobileNumber = (TextView) view.findViewById(R.id.tv_include_mobile_number);
+        tvIncludeHospitalId = (TextView) view.findViewById(R.id.tv_include_hospital_id);
+        tvIncludeRefferedBy = (TextView) view.findViewById(R.id.tv_include_referred_by);
+        tvIncludeBloodGroup = (TextView) view.findViewById(R.id.tv_include_blood_group);
+        tvIncludeRecordId = (TextView) view.findViewById(R.id.tv_include_record_id);
+        tvIncludeDate = (TextView) view.findViewById(R.id.tv_include_date);
+        tvIncludeCity = (TextView) view.findViewById(R.id.tv_include_city);
+
+        btEditPageSetup = (TextViewFontAwesome) view.findViewById(R.id.bt_edit_page_setup);
+        btEditContentSetup = (TextViewFontAwesome) view.findViewById(R.id.bt_edit_content_setup);
+        btEditHeader = (TextViewFontAwesome) view.findViewById(R.id.bt_edit_header_setup);
+        btEditFooter = (TextViewFontAwesome) view.findViewById(R.id.bt_edit_footer_setup);
+        btEditPatirntDetails = (TextViewFontAwesome) view.findViewById(R.id.bt_edit_patient_details);
+    }
+
+    @Override
+    public void initListeners() {
+        btEditPageSetup.setOnClickListener(this);
+        btEditContentSetup.setOnClickListener(this);
+        btEditHeader.setOnClickListener(this);
+        btEditFooter.setOnClickListener(this);
+        btEditPatirntDetails.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.bt_edit_page_setup:
+                EditPageSetupDialogFragment editPageSetupDialogFragment = new EditPageSetupDialogFragment(this);
+                editPageSetupDialogFragment.show(mActivity.getSupportFragmentManager(),
+                        editPageSetupDialogFragment.getClass().getSimpleName());
+                break;
+            case R.id.bt_edit_content_setup:
+                EditContentSetupDialogFragment editContentSetupDialogFragment = new EditContentSetupDialogFragment(this);
+                editContentSetupDialogFragment.show(mActivity.getSupportFragmentManager(),
+                        editContentSetupDialogFragment.getClass().getSimpleName());
+                break;
+
+            case R.id.bt_edit_header_setup:
+                break;
+
+            case R.id.bt_edit_footer_setup:
+                EditFooterSetupDialogFragment editFooterSetupDialogFragment = new EditFooterSetupDialogFragment(this);
+                editFooterSetupDialogFragment.show(mActivity.getSupportFragmentManager(),
+                        editFooterSetupDialogFragment.getClass().getSimpleName());
+                break;
+
+            case R.id.bt_edit_patient_details:
+                EditPatientDetailsSetupDialogFragment editPatientDetailsSetupDialogFragment = new EditPatientDetailsSetupDialogFragment(this);
+                editPatientDetailsSetupDialogFragment.show(mActivity.getSupportFragmentManager(),
+                        editPatientDetailsSetupDialogFragment.getClass().getSimpleName());
+                break;
+        }
+
+    }
+
+    @Override
+    public VolleyResponseBean doInBackground(VolleyResponseBean response) {
+        VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
+        switch (response.getLocalBackgroundTaskType()) {
+            case GET_FRAGMENT_INITIALISATION_DATA:
+                volleyResponseBean = new VolleyResponseBean();
+                volleyResponseBean.setWebServiceType(WebServiceType.FRAGMENT_INITIALISATION);
+                LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
+                if (doctor != null && doctor.getUser() != null && !Util.isNullOrBlank(doctor.getUser().getUniqueId())) {
+                    user = doctor.getUser();
+                }
+                return volleyResponseBean;
+            case ADD_PRINT_SETTINGS:
+                LocalDataServiceImpl.getInstance(mApp).
+                        addPrintSettings((ArrayList) response.getDataList());
+            case GET_PRINT_SETTINGS:
+                volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getPrintSettingsResponse(WebServiceType.GET_PRINT_SETTINGS, user.getUniqueId(), null, null);
+                break;
+
+
+        }
+        return volleyResponseBean;
+    }
+
+    @Override
+    public void onPostExecute(VolleyResponseBean aVoid) {
+
+    }
+
+    @Override
+    public void onResponse(VolleyResponseBean response) {
+        if (response != null && response.getWebServiceType() != null) {
+            switch (response.getWebServiceType()) {
+                case FRAGMENT_INITIALISATION:
+                    if (user != null) {
+                        getPrintSetupFromLocal();
+                        return;
+                    }
+                    break;
+                case GET_PRINT_SETTINGS:
+                    if (response.isDataFromLocal()) {
+                        if (response.getData() != null) {
+                            printSettings = (PrintSettings) response.getData();
+                            initData(printSettings);
+                        }
+
+                        if (isInitialLoading && response.isUserOnline()) {
+                            isInitialLoading = false;
+                            WebDataServiceImpl.getInstance(mApp).getPrintSettings(PrintSettings.class, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(), this, this);
+                            return;
+                        }
+                    } else {
+                        isInitialLoading = false;
+                        new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_PRINT_SETTINGS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                    }
+                    break;
+            }
+        }
+        mActivity.hideLoading();
+    }
+
+    private void initData(PrintSettings printSettings) {
+        if (printSettings != null) {
+            refreshPageSetupDetails(printSettings);
+            refreshContentSetupDetails(printSettings);
+            refreshHeaderDetails(printSettings);
+            refreshFooterDetails(printSettings);
+            refreshPatientDetails(printSettings);
+        }
+    }
+
+    private void refreshPatientDetails(PrintSettings printSettings) {
+        if (printSettings.getHeaderSetup() != null) {
+            if (printSettings.getHeaderSetup().getPatientDetails() != null) {
+                PatientDetails patientDetails = printSettings.getHeaderSetup().getPatientDetails();
+
+                if (patientDetails.getShowName())
+                    tvIncludePatientName.setText(R.string.yes);
+                else
+                    tvIncludePatientName.setText(R.string.no);
+
+                if (patientDetails.getShowPID())
+                    tvIncludePatientID.setText(R.string.yes);
+                else
+                    tvIncludePatientID.setText(R.string.no);
+
+                if (patientDetails.getShowDOB())
+                    tvIncludeAge.setText(R.string.yes);
+                else
+                    tvIncludeAge.setText(R.string.no);
+
+                if (patientDetails.getShowGender())
+                    tvIncludeGender.setText(R.string.yes);
+                else
+                    tvIncludeGender.setText(R.string.no);
+
+                if (patientDetails.getShowMobileNumber())
+                    tvIncludeMobileNumber.setText(R.string.yes);
+                else
+                    tvIncludeMobileNumber.setText(R.string.no);
+
+                if (patientDetails.getShowHospitalId())
+                    tvIncludeHospitalId.setText(R.string.yes);
+                else
+                    tvIncludeHospitalId.setText(R.string.no);
+
+                if (patientDetails.getShowReferedBy())
+                    tvIncludeRefferedBy.setText(R.string.yes);
+                else
+                    tvIncludeRefferedBy.setText(R.string.no);
+
+                if (patientDetails.getShowBloodGroup())
+                    tvIncludeBloodGroup.setText(R.string.yes);
+                else
+                    tvIncludeBloodGroup.setText(R.string.no);
+
+                if (patientDetails.getShowResourceId())
+                    tvIncludeRecordId.setText(R.string.yes);
+                else
+                    tvIncludeRecordId.setText(R.string.no);
+
+                if (patientDetails.getShowDate())
+                    tvIncludeDate.setText(R.string.yes);
+                else
+                    tvIncludeDate.setText(R.string.no);
+
+                if (patientDetails.getShowCity())
+                    tvIncludeCity.setText(R.string.yes);
+                else
+                    tvIncludeCity.setText(R.string.no);
+            }
+        }
+    }
+
+    private void refreshFooterDetails(PrintSettings printSettings) {
+        if (printSettings.getFooterSetup() != null) {
+            FooterSetup footerSetup = printSettings.getFooterSetup();
+            if (footerSetup.getCustomFooter())
+                tvIncludeFooter.setText(R.string.yes);
+            else
+                tvIncludeFooter.setText(R.string.no);
+
+            if (footerSetup.getShowBottomSignText())
+                tvIncludeSignatureText.setText(R.string.yes);
+            else
+                tvIncludeSignatureText.setText(R.string.no);
+
+            if (footerSetup.getShowSignature())
+                tvIncludeSignature.setText(R.string.yes);
+            else
+                tvIncludeSignature.setText(R.string.no);
+
+            if (!Util.isNullOrBlank(footerSetup.getBottomSignText()))
+                tvBottomSignatureText.setText(footerSetup.getBottomSignText());
+            if (!Util.isNullOrEmptyList(footerSetup.getBottomText())) {
+                for (Style style : footerSetup.getBottomText()) {
+                    if (Util.isNullOrBlank(style.getText()))
+                        tvBottomText.setText(style.getText());
+                }
+            }
+        }
+    }
+
+    private void refreshHeaderDetails(PrintSettings printSettings) {
+
+    }
+
+    private void refreshContentSetupDetails(PrintSettings printSettings) {
+        if (printSettings.getContentSetup() != null) {
+            Style contentSetup = printSettings.getContentSetup();
+
+            tvFontsize.setText(contentSetup.getFontSize());
+            tvLineSpace.setText(printSettings.getContentLineSpace());
+            tvShowInstructionAlign.setText(contentSetup.getInstructionAlign());
+            if (contentSetup.getShowTreatmentcost())
+                tvShowTreatmentCost.setText(R.string.yes);
+            else
+                tvShowTreatmentCost.setText(R.string.no);
+
+            if (printSettings.getShowDrugGenericNames())
+                tvShowDrugGenericNames.setText(R.string.yes);
+            else
+                tvShowDrugGenericNames.setText(R.string.no);
+
+        }
+
+    }
+
+    private void refreshPageSetupDetails(PrintSettings printSettings) {
+        if (printSettings.getPageSetup() != null) {
+            PageSetup pageSetup = printSettings.getPageSetup();
+
+            if (!Util.isNullOrBlank(pageSetup.getPageSize()))
+                tvPageSize.setText(pageSetup.getPageSize());
+
+            if (!Util.isNullOrZeroNumber(pageSetup.getBottomMargin()))
+                tvBottomMargin.setText(pageSetup.getBottomMargin() + getString(R.string.px));
+
+            if (!Util.isNullOrZeroNumber(pageSetup.getTopMargin()))
+                tvTopMargin.setText(pageSetup.getTopMargin() + getString(R.string.px));
+
+            if (!Util.isNullOrZeroNumber(pageSetup.getLeftMargin()))
+                tvLeftMargin.setText(pageSetup.getLeftMargin() + getString(R.string.px));
+
+            if (!Util.isNullOrZeroNumber(pageSetup.getRightMargin()))
+                tvRightMargin.setText(pageSetup.getRightMargin() + getString(R.string.px));
+        }
+    }
+
+
+    private void getPrintSetupFromLocal() {
+        mActivity.showLoading(false);
+        new LocalDataBackgroundtaskOptimised
+                (mActivity, LocalBackgroundTaskType.GET_PRINT_SETTINGS, this,
+                        this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+    @Override
+    public void onSaveClicked(Object object) {
+        printSettings = (PrintSettings) object;
+        initData(printSettings);
+    }
+
+    @Override
+    public Object getPrintSettings() {
+        return printSettings;
+    }
+}

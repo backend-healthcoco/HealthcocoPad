@@ -25,6 +25,7 @@ public enum SettingsItemType {
 //    HISTORY(R.string.history_small, R.string.search_history, R.string.settings_no_history_added, ClassType.HISTORY),
 //    TEMPLATE(R.string.templates, R.string.search_template, R.string.no_templates, ClassType.TEMPLATE),
     UI_PERMISSION(R.string.ui_permission, R.string.search_ui_permission, R.string.settings_no_ui_permission, ClassType.UI_PERMISSION),
+    PRINT(R.string.print, 0, 0, null),
     SYNC(R.string.sync, 0, 0, null),
     //    BILLING(R.string.billing, R.string.search_billing, R.string.settings_no_billing, ClassType.BILLING),
     //    SMS(R.string.sms, 0, R.string.settings_no_sms, null),

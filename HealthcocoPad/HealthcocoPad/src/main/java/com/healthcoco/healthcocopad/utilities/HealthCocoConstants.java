@@ -107,6 +107,7 @@ public class HealthCocoConstants {
     public static final String TAG_SELECTED_USER_ID = "selectedPatientId";
     public static final String TAG_MOBILE_NUMBER = "mobileNo";
     public static final String PARAM_TAG_DELETE = "/delete/";
+    public static final String PARAM_TAG_ALL = "/ALL/";
     public static final String TAG_ORDINAL_DIALOG_TYPE = "dialogTypeOrdinal";
     public static final String TAG_ORDINAL_WEB_SERVICE_TYPE = "webServiceTypeOrdinal";
     public static final String TAG_HISTORY_FILTER_TYPE = "historyFilterType";

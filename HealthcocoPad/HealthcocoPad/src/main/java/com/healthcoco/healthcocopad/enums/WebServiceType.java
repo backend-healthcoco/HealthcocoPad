@@ -422,6 +422,12 @@ public enum WebServiceType {
     // DELETEhttp://example.com/api/v1/register/settings/clinicImage/locationId/counter/delete/
     DELETE_CLINIC_IMAGE(Method.DELETE, "register/settings/clinicImage/"),
 
+
+    ADD_PRINT_SETTINGS(Method.POST, "printSettings/add/"),
+
+    GET_PRINT_SETTINGS(Method.GET, "printSettings"),
+
+
     //    GET http://example.com/api/v1/register/patientStatus/patientId/doctorId/locationId/hospitalId/
     GET_PATIENT_STATUS(Method.GET, "register/patientStatus/"),
 

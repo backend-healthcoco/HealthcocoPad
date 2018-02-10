@@ -288,6 +288,12 @@ public class Util {
                 || Integer.valueOf(text.trim()) == 0) ? true : false;
     }
 
+    public static boolean isNullOrZeroNumber(Integer i) {
+        String text = getValidatedValue(i);
+        return (text == null || text.trim().equalsIgnoreCase("") || text.trim().equalsIgnoreCase("null")
+                || Integer.valueOf(text.trim()) == 0) ? true : false;
+    }
+
     public static boolean isNullOrBlank(String text) {
         return (text == null || text.trim().equalsIgnoreCase("") || text.trim().equalsIgnoreCase("null")) ? true
                 : false;

@@ -4760,8 +4760,101 @@ public class LocalDataServiceImpl {
         return volleyResponseBean;
     }
 
+    public VolleyResponseBean getPrintSettingsResponse(WebServiceType webServiceType, String doctorId, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
+        volleyResponseBean.setWebServiceType(webServiceType);
+        volleyResponseBean.setIsDataFromLocal(true);
+        volleyResponseBean.setIsUserOnline(HealthCocoConstants.isNetworkOnline);
+        try {
+            PrintSettings printSettings = Select.from(PrintSettings.class).where(Condition.prop(LocalDatabaseUtils.KEY_DOCTOR_ID).eq(doctorId)).first();
+            if (printSettings != null) {
+                printSettings.setHeaderSetup(getHeaderSetup());
+                printSettings.setFooterSetup(getFooterSetup());
+                printSettings.setContentSetup(getContentSetup());
+                printSettings.setPageSetup(getPageSetup());
+            }
+            volleyResponseBean.setData(printSettings);
+            if (responseListener != null)
+                responseListener.onResponse(volleyResponseBean);
+        } catch (Exception e) {
+            e.printStackTrace();
+            showErrorLocal(volleyResponseBean, errorListener);
+        }
+        return volleyResponseBean;
+    }
+
+    private PageSetup getPageSetup() {
+        PageSetup pageSetup = Select.from(PageSetup.class).first();
+
+        return pageSetup;
+    }
+
+    private Style getContentSetup() {
+        Style contentSetup = Select.from(Style.class).first();
+
+        return contentSetup;
+    }
+
+    private FooterSetup getFooterSetup() {
+        FooterSetup footerSetup = Select.from(FooterSetup.class).first();
+
+        return footerSetup;
+    }
+
+    private HeaderSetup getHeaderSetup() {
+        HeaderSetup headerSetup = Select.from(HeaderSetup.class).first();
+        headerSetup.setPatientDetails(getPatientDetailsSetup());
+
+        return headerSetup;
+    }
+
+    private PatientDetails getPatientDetailsSetup() {
+        PatientDetails patientDetails = Select.from(PatientDetails.class).first();
+
+        return patientDetails;
+    }
+
+    public void addPrintSettings(ArrayList<PrintSettings> printSettings) {
+
+        for (PrintSettings printSetting : printSettings) {
+            addPageSetup(printSetting.getPageSetup());
+            addFooterSetup(printSetting.getFooterSetup());
+            addContentSetup(printSetting.getContentSetup());
+            addHeaderSetup(printSetting.getHeaderSetup());
+            printSetting.save();
+        }
+//        PrintSettings.saveInTx(printSettings);
+
+    }
+
+    private void addHeaderSetup(HeaderSetup headerSetup) {
+        if (headerSetup != null) {
+            addPatientDetails(headerSetup.getPatientDetails());
+
+            headerSetup.save();
+        }
+    }
+
+    private void addPatientDetails(PatientDetails patientDetails) {
+        if (patientDetails != null) patientDetails.save();
+    }
+
+    private void addContentSetup(Style contentSetup) {
+        if (contentSetup != null) contentSetup.save();
+    }
+
+    private void addFooterSetup(FooterSetup footerSetup) {
+        if (footerSetup != null)
+            footerSetup.save();
+    }
+
+    private void addPageSetup(PageSetup pageSetup) {
+        if (pageSetup != null)
+            pageSetup.save();
+    }
 
     private enum FromTableType {
         ADD_TEMPLATES, ADD_TREATMENT, ADD_PRESCRIPTION
     }
+
 }

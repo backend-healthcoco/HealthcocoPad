@@ -43,6 +43,7 @@ import com.healthcoco.healthcocopad.fragments.LoginSignupFragment;
 import com.healthcoco.healthcocopad.fragments.NotificationResponseDataFragment;
 import com.healthcoco.healthcocopad.fragments.PatientRegistrationFragment;
 import com.healthcoco.healthcocopad.fragments.SelectedDiagramDetailFragment;
+import com.healthcoco.healthcocopad.fragments.SettingPrintSetupFragment;
 import com.healthcoco.healthcocopad.fragments.SettingUIPermissionsFragment;
 import com.healthcoco.healthcocopad.fragments.SettingsNameHideActivateFragment;
 import com.healthcoco.healthcocopad.fragments.SyncFragment;
@@ -124,8 +125,8 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
             case SETTING_UI_PERMISSION:
                 openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.WITH_SYNC, R.string.ui_permission, new SettingUIPermissionsFragment());
                 break;
-            case SETTINGS_BILLING:
-//                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, R.string.billing, new SettingUIPermissionsFragment());
+            case SETTING_PRINT:
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.WITH_SAVE, R.string.print_setting, new SettingPrintSetupFragment());
                 break;
             case SETTING_SMS:
 //                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, R.string.sms, new SettingUIPermissionsFragment());

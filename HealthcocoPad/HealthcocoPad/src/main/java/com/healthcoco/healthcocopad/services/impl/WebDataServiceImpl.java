@@ -1480,5 +1480,23 @@ public class WebDataServiceImpl implements GCMRefreshListener {
         }
     }
 
+    public void getPrintSettings(Class<?> class1, String doctorId, String locationId, String hospitalId, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        WebServiceType webServiceType = WebServiceType.GET_PRINT_SETTINGS;
+        String url = webServiceType.getUrl();
+        url = url + HealthCocoConstants.PARAM_TAG_ALL
+                + doctorId
+                + "/" + locationId
+                + "/" + hospitalId;
+
+        checkNetworkStatus(mApp);
+        if (HealthCocoConstants.isNetworkOnline) {
+            getResponse(webServiceType, class1, url, null, null, responseListener,
+                    errorListener);
+        } else {
+            showUserOffline(webServiceType, responseListener);
+            LocalDataServiceImpl.getInstance(mApp).getPrintSettingsResponse(webServiceType, doctorId, responseListener, errorListener);
+        }
+    }
+
 
 }

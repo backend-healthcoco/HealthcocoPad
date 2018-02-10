@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_light"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical">
+
+    <include layout="@layout/action_bar_title_save" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="15dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/list_item_padding">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/page_size"
+                        android:textColor="@color/black_greyish"
+                        android:textSize="@dimen/text_size_add_clinical_note_points" />
+
+                    <com.healthcoco.healthcocopad.views.CustomAutoCompleteTextView
+                        android:id="@+id/et_page_size"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/list_item_padding"
+                        android:layout_weight="0.8"
+                        android:background="@drawable/shape_rounded_corners_item_background_dark_grey"
+                        android:clickable="true"
+                        android:cursorVisible="true"
+                        android:drawableRight="@drawable/arrow_down_drug"
+                        android:editable="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="true"
+                        android:gravity="start"
+                        android:padding="@dimen/list_item_padding"
+                        android:text="@string/select"
+                        android:textColorHint="@color/grey_translucent"
+                        android:textSize="@dimen/text_size_add_visits_lable" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/layout_padding_5dp"
+                        android:layout_weight="0.7"
+                        android:textSize="@dimen/text_size_add_clinical_note_points" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/list_item_padding">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/bottom_margin"
+                        android:textColor="@color/black_greyish"
+                        android:textSize="@dimen/text_size_add_clinical_note_points" />
+
+                    <EditText
+                        android:id="@+id/et_bottom_margin"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/list_item_padding"
+                        android:layout_weight="1"
+                        android:background="@drawable/shape_rounded_corners_item_background_dark_grey"
+                        android:cursorVisible="true"
+                        android:digits="0123456789"
+                        android:focusableInTouchMode="true"
+                        android:gravity="start"
+                        android:inputType="number"
+                        android:padding="@dimen/list_item_padding"
+                        android:textColorHint="@color/grey_light_text"
+                        android:textSize="@dimen/text_size_add_visits_lable" />
+
+                    <TextView
+                        android:id="@+id/tv_bottom_margin"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/layout_padding_5dp"
+                        android:layout_weight="0.5"
+                        android:text="@string/px"
+                        android:textSize="@dimen/text_size_add_clinical_note_points" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/list_item_padding">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/top_margin"
+                        android:textColor="@color/black_greyish"
+                        android:textSize="@dimen/text_size_add_clinical_note_points" />
+
+                    <EditText
+                        android:id="@+id/et_top_margin"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/list_item_padding"
+                        android:layout_weight="1"
+                        android:background="@drawable/shape_rounded_corners_item_background_dark_grey"
+                        android:cursorVisible="true"
+                        android:digits="0123456789"
+                        android:focusableInTouchMode="true"
+                        android:gravity="start"
+                        android:inputType="number"
+                        android:padding="@dimen/list_item_padding"
+                        android:textColorHint="@color/grey_light_text"
+                        android:textSize="@dimen/text_size_add_visits_lable" />
+
+                    <TextView
+                        android:id="@+id/tv_top_margin"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/layout_padding_5dp"
+                        android:layout_weight="0.5"
+                        android:text="@string/px"
+                        android:textSize="@dimen/text_size_add_clinical_note_points" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/list_item_padding">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/left_margin"
+                        android:textColor="@color/black_greyish"
+                        android:textSize="@dimen/text_size_add_clinical_note_points" />
+
+                    <EditText
+                        android:id="@+id/et_left_margin"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/list_item_padding"
+                        android:layout_weight="1"
+                        android:background="@drawable/shape_rounded_corners_item_background_dark_grey"
+                        android:cursorVisible="true"
+                        android:digits="0123456789"
+                        android:focusableInTouchMode="true"
+                        android:gravity="start"
+                        android:inputType="number"
+                        android:padding="@dimen/list_item_padding"
+                        android:textColorHint="@color/grey_light_text"
+                        android:textSize="@dimen/text_size_add_visits_lable" />
+
+                    <TextView
+                        android:id="@+id/tv_left_margin"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/layout_padding_5dp"
+                        android:layout_weight="0.5"
+                        android:text="@string/px"
+                        android:textSize="@dimen/text_size_add_clinical_note_points" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/list_item_padding">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/right_margin"
+                        android:textColor="@color/black_greyish"
+                        android:textSize="@dimen/text_size_add_clinical_note_points" />
+
+                    <EditText
+                        android:id="@+id/et_right_margin"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/list_item_padding"
+                        android:layout_weight="1"
+                        android:background="@drawable/shape_rounded_corners_item_background_dark_grey"
+                        android:cursorVisible="true"
+                        android:digits="0123456789"
+                        android:focusableInTouchMode="true"
+                        android:gravity="start"
+                        android:inputType="number"
+                        android:padding="@dimen/list_item_padding"
+                        android:textColorHint="@color/grey_light_text"
+                        android:textSize="@dimen/text_size_add_visits_lable" />
+
+                    <TextView
+                        android:id="@+id/tv_right_margin"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/layout_padding_5dp"
+                        android:layout_weight="0.5"
+                        android:text="@string/px"
+                        android:textSize="@dimen/text_size_add_clinical_note_points" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</LinearLayout>

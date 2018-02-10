@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_light"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical">
+
+    <include layout="@layout/action_bar_title_save" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="15dp">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="@dimen/list_item_padding">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.6"
+                android:text="@string/font_size"
+                android:textColor="@color/black_greyish"
+                android:textSize="@dimen/text_size_add_clinical_note_points" />
+
+            <com.healthcoco.healthcocopad.views.CustomAutoCompleteTextView
+                android:id="@+id/et_font_size"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/list_item_padding"
+                android:layout_weight="1"
+                android:background="@drawable/shape_rounded_corners_item_background_dark_grey"
+                android:clickable="true"
+                android:cursorVisible="true"
+                android:drawableRight="@drawable/arrow_down_drug"
+                android:editable="false"
+                android:focusable="false"
+                android:focusableInTouchMode="true"
+                android:gravity="start"
+                android:padding="@dimen/list_item_padding"
+                android:text="@string/font_value"
+                android:textColorHint="@color/grey_translucent"
+                android:textSize="@dimen/text_size_add_visits_lable" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/layout_padding_5dp"
+                android:layout_weight="1"
+                android:textSize="@dimen/text_size_add_clinical_note_points" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="@dimen/list_item_padding">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.6"
+                android:text="@string/line_space"
+                android:textColor="@color/black_greyish"
+                android:textSize="@dimen/text_size_add_clinical_note_points" />
+
+            <com.healthcoco.healthcocopad.views.CustomAutoCompleteTextView
+                android:id="@+id/et_line_space"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/list_item_padding"
+                android:layout_weight="1"
+                android:background="@drawable/shape_rounded_corners_item_background_dark_grey"
+                android:clickable="true"
+                android:cursorVisible="true"
+                android:drawableRight="@drawable/arrow_down_drug"
+                android:editable="false"
+                android:focusable="false"
+                android:focusableInTouchMode="true"
+                android:gravity="start"
+                android:padding="@dimen/list_item_padding"
+                android:text="@string/small"
+                android:textColorHint="@color/grey_translucent"
+                android:textSize="@dimen/text_size_add_visits_lable" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/layout_padding_5dp"
+                android:layout_weight="1"
+                android:textSize="@dimen/text_size_add_clinical_note_points" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="@dimen/list_item_padding">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.6"
+                android:text="@string/show_drug_generic_names"
+                android:textColor="@color/black_greyish"
+                android:textSize="@dimen/text_size_add_clinical_note_points" />
+
+            <RadioGroup
+                android:id="@+id/rg_drug_generic_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1.1"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/list_item_padding"
+                android:paddingTop="@dimen/list_item_padding">
+
+                <com.healthcoco.healthcocopad.views.FontAwesomeRadioButton
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:background="@android:color/transparent"
+                    android:button="@android:color/transparent"
+                    android:paddingLeft="1dp"
+                    android:tag="@string/yes_capital"
+                    android:text="@string/text_check_yes"
+                    android:textColor="@drawable/text_light_grey_normal_blue_selected"
+                    android:textSize="@dimen/text_size_registration_title" />
+
+                <com.healthcoco.healthcocopad.views.FontAwesomeRadioButton
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:background="@android:color/transparent"
+                    android:button="@android:color/transparent"
+                    android:checked="false"
+                    android:paddingLeft="1dp"
+                    android:tag="@string/no_capital"
+                    android:text="@string/text_check_no"
+                    android:textColor="@drawable/text_light_grey_normal_blue_selected"
+                    android:textSize="@dimen/text_size_registration_title" />
+            </RadioGroup>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/layout_padding_5dp"
+                android:layout_weight="0.8"
+                android:textSize="@dimen/text_size_add_clinical_note_points" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="@dimen/list_item_padding">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.6"
+                android:text="@string/show_treatment_cost"
+                android:textColor="@color/black_greyish"
+                android:textSize="@dimen/text_size_add_clinical_note_points" />
+
+            <RadioGroup
+                android:id="@+id/rg_treatment_cost"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1.1"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/list_item_padding"
+                android:paddingTop="@dimen/list_item_padding">
+
+                <com.healthcoco.healthcocopad.views.FontAwesomeRadioButton
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:background="@android:color/transparent"
+                    android:button="@android:color/transparent"
+                    android:paddingLeft="1dp"
+                    android:tag="@string/yes_capital"
+                    android:text="@string/text_check_yes"
+                    android:textColor="@drawable/text_light_grey_normal_blue_selected"
+                    android:textSize="@dimen/text_size_registration_title" />
+
+                <com.healthcoco.healthcocopad.views.FontAwesomeRadioButton
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:background="@android:color/transparent"
+                    android:button="@android:color/transparent"
+                    android:checked="false"
+                    android:paddingLeft="1dp"
+                    android:tag="@string/no_capital"
+                    android:text="@string/text_check_no"
+                    android:textColor="@drawable/text_light_grey_normal_blue_selected"
+                    android:textSize="@dimen/text_size_registration_title" />
+            </RadioGroup>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/layout_padding_5dp"
+                android:layout_weight="0.8"
+                android:textSize="@dimen/text_size_add_clinical_note_points" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="@dimen/list_item_padding">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.6"
+                android:text="@string/show_instruction_align"
+                android:textColor="@color/black_greyish"
+                android:textSize="@dimen/text_size_add_clinical_note_points" />
+
+            <com.healthcoco.healthcocopad.views.CustomAutoCompleteTextView
+                android:id="@+id/et_instruction_align"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/list_item_padding"
+                android:layout_weight="1"
+                android:background="@drawable/shape_rounded_corners_item_background_dark_grey"
+                android:clickable="true"
+                android:cursorVisible="true"
+                android:drawableRight="@drawable/arrow_down_drug"
+                android:editable="false"
+                android:focusable="false"
+                android:focusableInTouchMode="true"
+                android:gravity="start"
+                android:padding="@dimen/list_item_padding"
+                android:text="@string/vertical"
+                android:textColorHint="@color/grey_translucent"
+                android:textSize="@dimen/text_size_add_visits_lable" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/layout_padding_5dp"
+                android:layout_weight="1"
+                android:textSize="@dimen/text_size_add_clinical_note_points" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
+
