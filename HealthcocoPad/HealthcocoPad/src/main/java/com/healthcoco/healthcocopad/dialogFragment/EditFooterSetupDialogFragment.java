@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.healthcoco.healthcocopad.HealthCocoDialogFragment;
 import com.healthcoco.healthcocopad.R;
+import com.healthcoco.healthcocopad.bean.server.BottomTextStyle;
 import com.healthcoco.healthcocopad.bean.server.FooterSetup;
 import com.healthcoco.healthcocopad.bean.server.PrintSettings;
 import com.healthcoco.healthcocopad.bean.server.Style;
@@ -159,8 +160,8 @@ public class EditFooterSetupDialogFragment extends HealthCocoDialogFragment
             }
 
             if (!Util.isNullOrEmptyList(footerSetup.getBottomText())) {
-                List<Style> bottomTextList = footerSetup.getBottomText();
-                for (Style style : bottomTextList) {
+                List<BottomTextStyle> bottomTextList = footerSetup.getBottomText();
+                for (BottomTextStyle style : bottomTextList) {
                     if (!Util.isNullOrBlank(style.getText())) {
                         etBottomText.setText(style.getText());
                         if (!Util.isNullOrBlank(style.getFontSize()))
@@ -237,23 +238,28 @@ public class EditFooterSetupDialogFragment extends HealthCocoDialogFragment
             footerSetup.setShowSignature(false);
 
         if (!Util.isNullOrBlank(bottomText)) {
-            List<Style> styles = new ArrayList<>();
-            Style style = new Style();
+            List<BottomTextStyle> styles = new ArrayList<>();
+            BottomTextStyle bottomTextStyle = new BottomTextStyle();
             String[] fontStyle;
 
-            style.setText(bottomText);
+            bottomTextStyle.setText(bottomText);
             if (tvTextStyleIttalic.isSelected()) {
                 if (tvTextStyleBold.isSelected())
                     fontStyle = new String[]{"BOLD", "ITALIC"};
                 else
                     fontStyle = new String[]{"ITALIC"};
-                style.setFontStyle(fontStyle);
-            }
+                bottomTextStyle.setFontStyle(fontStyle);
+            } else if (tvTextStyleBold.isSelected()) {
+                fontStyle = new String[]{"BOLD"};
+                bottomTextStyle.setFontStyle(fontStyle);
+            } else
+                bottomTextStyle.setFontStyle(new String[]{});
+
 
             if (!fontSize.equals(getString(R.string.font_value)))
-                style.setFontSize(fontSize);
+                bottomTextStyle.setFontSize(fontSize);
 
-            styles.add(style);
+            styles.add(bottomTextStyle);
             footerSetup.setBottomText(styles);
         }
 

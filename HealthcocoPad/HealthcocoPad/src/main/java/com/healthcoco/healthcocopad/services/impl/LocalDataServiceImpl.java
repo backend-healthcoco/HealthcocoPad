@@ -4789,23 +4789,36 @@ public class LocalDataServiceImpl {
         return pageSetup;
     }
 
-    private Style getContentSetup() {
-        Style contentSetup = Select.from(Style.class).first();
+    private ContentSetup getContentSetup() {
+        ContentSetup contentSetup = Select.from(ContentSetup.class).first();
 
         return contentSetup;
     }
 
     private FooterSetup getFooterSetup() {
         FooterSetup footerSetup = Select.from(FooterSetup.class).first();
-
+        footerSetup.setBottomText(getBottomText());
         return footerSetup;
+    }
+
+    private List<BottomTextStyle> getBottomText() {
+        return Select.from(BottomTextStyle.class).list();
     }
 
     private HeaderSetup getHeaderSetup() {
         HeaderSetup headerSetup = Select.from(HeaderSetup.class).first();
         headerSetup.setPatientDetails(getPatientDetailsSetup());
-
+        headerSetup.setTopLeftText(getTopLeftText());
+        headerSetup.setTopRightText(getTopRightText());
         return headerSetup;
+    }
+
+    private List<RightText> getTopRightText() {
+        return Select.from(RightText.class).list();
+    }
+
+    private List<LeftText> getTopLeftText() {
+        return Select.from(LeftText.class).list();
     }
 
     private PatientDetails getPatientDetailsSetup() {
@@ -4830,27 +4843,61 @@ public class LocalDataServiceImpl {
     private void addHeaderSetup(HeaderSetup headerSetup) {
         if (headerSetup != null) {
             addPatientDetails(headerSetup.getPatientDetails());
-
+            if (!Util.isNullOrEmptyList(headerSetup.getTopLeftText()))
+                addLeftTopText(headerSetup.getTopLeftText());
+            if (!Util.isNullOrEmptyList(headerSetup.getTopRightText()))
+                addRightTopText(headerSetup.getTopRightText());
             headerSetup.save();
         }
+    }
+
+    private void addRightTopText(List<RightText> topRightText) {
+        RightText.deleteAll(RightText.class);
+        RightText.saveInTx(topRightText);
+    }
+
+    private void addLeftTopText(List<LeftText> topLeftText) {
+        LeftText.deleteAll(LeftText.class);
+        LeftText.saveInTx(topLeftText);
     }
 
     private void addPatientDetails(PatientDetails patientDetails) {
         if (patientDetails != null) patientDetails.save();
     }
 
-    private void addContentSetup(Style contentSetup) {
+    private void addContentSetup(ContentSetup contentSetup) {
         if (contentSetup != null) contentSetup.save();
     }
 
     private void addFooterSetup(FooterSetup footerSetup) {
-        if (footerSetup != null)
+        if (footerSetup != null) {
+            if (!Util.isNullOrEmptyList(footerSetup.getBottomText()))
+                addBottomText(footerSetup.getBottomText());
             footerSetup.save();
+        }
+    }
+
+    private void addBottomText(List<BottomTextStyle> bottomText) {
+        BottomTextStyle.deleteAll(BottomTextStyle.class);
+        BottomTextStyle.saveInTx(bottomText);
     }
 
     private void addPageSetup(PageSetup pageSetup) {
         if (pageSetup != null)
             pageSetup.save();
+    }
+
+    public void addPrintSetting(PrintSettings printSetting) {
+
+        if (printSetting != null) {
+            addPageSetup(printSetting.getPageSetup());
+            addFooterSetup(printSetting.getFooterSetup());
+            addContentSetup(printSetting.getContentSetup());
+            addHeaderSetup(printSetting.getHeaderSetup());
+            printSetting.save();
+        }
+//        PrintSettings.saveInTx(printSettings);
+
     }
 
     private enum FromTableType {

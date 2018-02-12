@@ -74,44 +74,13 @@
                         android:textSize="@dimen/text_size_add_clinical_note_points" />
 
                     <LinearLayout
+                        android:id="@+id/layout_topleft_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/list_item_padding"
                         android:background="@drawable/shape_rounded_corners_item_background_grey"
                         android:orientation="vertical"
                         android:padding="@dimen/list_item_padding">
-
-                        <TextView
-                            android:id="@+id/tv_topleft_first"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:padding="@dimen/list_item_padding"
-                            android:text="Text 1"
-                            android:textSize="@dimen/text_size_add_clinical_note_points" />
-
-                        <TextView
-                            android:id="@+id/tv_topleft_second"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:padding="@dimen/list_item_padding"
-                            android:text="Text 2"
-                            android:textSize="@dimen/text_size_add_clinical_note_points" />
-
-                        <TextView
-                            android:id="@+id/tv_topleft_third"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:padding="@dimen/list_item_padding"
-                            android:text="Text 3"
-                            android:textSize="@dimen/text_size_add_clinical_note_points" />
-
-                        <TextView
-                            android:id="@+id/tv_topleft_forth"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:padding="@dimen/list_item_padding"
-                            android:text="Text 4"
-                            android:textSize="@dimen/text_size_add_clinical_note_points" />
 
                     </LinearLayout>
                 </LinearLayout>
@@ -152,46 +121,13 @@
                         android:textSize="@dimen/text_size_add_clinical_note_points" />
 
                     <LinearLayout
+                        android:id="@+id/layout_topright_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/list_item_padding"
                         android:background="@drawable/shape_rounded_corners_item_background_grey"
                         android:orientation="vertical"
-                        android:padding="@dimen/list_item_padding">
-
-                        <TextView
-                            android:id="@+id/tv_topright_first"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:padding="@dimen/list_item_padding"
-                            android:text="Text 1"
-                            android:textSize="@dimen/text_size_add_clinical_note_points" />
-
-                        <TextView
-                            android:id="@+id/tv_topright_second"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:padding="@dimen/list_item_padding"
-                            android:text="Text 2"
-                            android:textSize="@dimen/text_size_add_clinical_note_points" />
-
-                        <TextView
-                            android:id="@+id/tv_topright_third"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:padding="@dimen/list_item_padding"
-                            android:text="Text 3"
-                            android:textSize="@dimen/text_size_add_clinical_note_points" />
-
-                        <TextView
-                            android:id="@+id/tv_topright_forth"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:padding="@dimen/list_item_padding"
-                            android:text="Text 4"
-                            android:textSize="@dimen/text_size_add_clinical_note_points" />
-
-                    </LinearLayout>
+                        android:padding="@dimen/list_item_padding"></LinearLayout>
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

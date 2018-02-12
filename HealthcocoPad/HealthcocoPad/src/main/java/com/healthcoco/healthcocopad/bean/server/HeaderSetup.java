@@ -21,9 +21,9 @@ public class HeaderSetup extends SugarRecord {
     @Ignore
     private PatientDetails patientDetails;
     @Ignore
-    private List<Style> topLeftText;
+    private List<LeftText> topLeftText;
     @Ignore
-    private List<Style> topRightText;
+    private List<RightText> topRightText;
 
     public String getLogoType() {
         return logoType;
@@ -65,19 +65,19 @@ public class HeaderSetup extends SugarRecord {
         this.patientDetails = patientDetails;
     }
 
-    public List<Style> getTopLeftText() {
+    public List<LeftText> getTopLeftText() {
         return topLeftText;
     }
 
-    public void setTopLeftText(List<Style> topLeftText) {
+    public void setTopLeftText(List<LeftText> topLeftText) {
         this.topLeftText = topLeftText;
     }
 
-    public List<Style> getTopRightText() {
+    public List<RightText> getTopRightText() {
         return topRightText;
     }
 
-    public void setTopRightText(List<Style> topRightText) {
+    public void setTopRightText(List<RightText> topRightText) {
         this.topRightText = topRightText;
     }
 }

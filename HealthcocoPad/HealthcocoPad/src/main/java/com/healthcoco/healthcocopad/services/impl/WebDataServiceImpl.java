@@ -50,6 +50,7 @@ import com.healthcoco.healthcocopad.bean.server.GCMRequest;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.NotificationResponse;
 import com.healthcoco.healthcocopad.bean.server.Prescription;
+import com.healthcoco.healthcocopad.bean.server.PrintSettings;
 import com.healthcoco.healthcocopad.bean.server.Profession;
 import com.healthcoco.healthcocopad.bean.server.Records;
 import com.healthcoco.healthcocopad.bean.server.Reference;
@@ -1495,6 +1496,15 @@ public class WebDataServiceImpl implements GCMRefreshListener {
         } else {
             showUserOffline(webServiceType, responseListener);
             LocalDataServiceImpl.getInstance(mApp).getPrintSettingsResponse(webServiceType, doctorId, responseListener, errorListener);
+        }
+    }
+
+    public void addPrintSettings(Class<?> class1, PrintSettings printSettings, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        checkNetworkStatus(mApp);
+        if (HealthCocoConstants.isNetworkOnline) {
+            WebServiceType webServiceType = WebServiceType.ADD_PRINT_SETTINGS;
+            getResponse(webServiceType, class1, webServiceType.getUrl(), printSettings, null, responseListener,
+                    errorListener);
         }
     }
 

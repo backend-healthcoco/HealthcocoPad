@@ -1,26 +1,37 @@
 package com.healthcoco.healthcocopad.fragments;
 
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.Response;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
+import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
+import com.healthcoco.healthcocopad.bean.UserPermissionsResponse;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
+import com.healthcoco.healthcocopad.bean.server.BottomTextStyle;
+import com.healthcoco.healthcocopad.bean.server.ContentSetup;
 import com.healthcoco.healthcocopad.bean.server.FooterSetup;
+import com.healthcoco.healthcocopad.bean.server.HeaderSetup;
+import com.healthcoco.healthcocopad.bean.server.LeftText;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.PageSetup;
 import com.healthcoco.healthcocopad.bean.server.PatientDetails;
 import com.healthcoco.healthcocopad.bean.server.PrintSettings;
+import com.healthcoco.healthcocopad.bean.server.RightText;
 import com.healthcoco.healthcocopad.bean.server.Style;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocopad.dialogFragment.EditContentSetupDialogFragment;
 import com.healthcoco.healthcocopad.dialogFragment.EditFooterSetupDialogFragment;
+import com.healthcoco.healthcocopad.dialogFragment.EditHeaderSetupDialogFragment;
 import com.healthcoco.healthcocopad.dialogFragment.EditPageSetupDialogFragment;
 import com.healthcoco.healthcocopad.dialogFragment.EditPatientDetailsSetupDialogFragment;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
@@ -34,6 +45,8 @@ import com.healthcoco.healthcocopad.utilities.Util;
 import com.healthcoco.healthcocopad.views.TextViewFontAwesome;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by Prashant on 05/02/2018.
@@ -52,16 +65,10 @@ public class SettingPrintSetupFragment extends HealthCocoFragment implements Gso
     private TextView tvLineSpace;
     private TextView tvShowTreatmentCost;
     private TextView tvShowInstructionAlign;
+    private LinearLayout layoutTopRightText;
+    private LinearLayout layoutTopLeftText;
+    private TextView tvIncludelogo;
     private TextView tvIncludeHeader;
-    private TextView tvIncludeLogo;
-    private TextView tvTopleftFirst;
-    private TextView tvTopleftSecond;
-    private TextView tvTopleftThird;
-    private TextView tvTopleftFourth;
-    private TextView tvTopRightFirst;
-    private TextView tvTopRightSecond;
-    private TextView tvTopRightThird;
-    private TextView tvTopRightFourth;
     private TextView tvIncludeFooter;
     private TextView tvIncludeSignature;
     private TextView tvIncludeSignatureText;
@@ -125,16 +132,10 @@ public class SettingPrintSetupFragment extends HealthCocoFragment implements Gso
         tvLineSpace = (TextView) view.findViewById(R.id.tv_line_space);
         tvShowTreatmentCost = (TextView) view.findViewById(R.id.tv_show_treatment_cost);
         tvShowInstructionAlign = (TextView) view.findViewById(R.id.tv_show_instruction_align);
+        layoutTopLeftText = (LinearLayout) view.findViewById(R.id.layout_topleft_text);
+        layoutTopRightText = (LinearLayout) view.findViewById(R.id.layout_topright_text);
+        tvIncludelogo = (TextView) view.findViewById(R.id.tv_include_logo);
         tvIncludeHeader = (TextView) view.findViewById(R.id.tv_include_header);
-        tvIncludeLogo = (TextView) view.findViewById(R.id.tv_include_logo);
-        tvTopleftFirst = (TextView) view.findViewById(R.id.tv_topleft_first);
-        tvTopleftSecond = (TextView) view.findViewById(R.id.tv_topleft_second);
-        tvTopleftThird = (TextView) view.findViewById(R.id.tv_topleft_third);
-        tvTopleftFourth = (TextView) view.findViewById(R.id.tv_topleft_forth);
-        tvTopRightFirst = (TextView) view.findViewById(R.id.tv_topright_first);
-        tvTopRightSecond = (TextView) view.findViewById(R.id.tv_topright_second);
-        tvTopRightThird = (TextView) view.findViewById(R.id.tv_topright_third);
-        tvTopRightFourth = (TextView) view.findViewById(R.id.tv_topright_forth);
         tvIncludeFooter = (TextView) view.findViewById(R.id.tv_include_footer);
         tvIncludeSignature = (TextView) view.findViewById(R.id.tv_include_signature);
         tvIncludeSignatureText = (TextView) view.findViewById(R.id.tv_include_signature_text);
@@ -161,6 +162,8 @@ public class SettingPrintSetupFragment extends HealthCocoFragment implements Gso
 
     @Override
     public void initListeners() {
+        ((CommonOpenUpActivity) mActivity).initActionbarRightAction(this);
+
         btEditPageSetup.setOnClickListener(this);
         btEditContentSetup.setOnClickListener(this);
         btEditHeader.setOnClickListener(this);
@@ -183,6 +186,9 @@ public class SettingPrintSetupFragment extends HealthCocoFragment implements Gso
                 break;
 
             case R.id.bt_edit_header_setup:
+                EditHeaderSetupDialogFragment editHeaderSetupDialogFragment = new EditHeaderSetupDialogFragment(this);
+                editHeaderSetupDialogFragment.show(mActivity.getSupportFragmentManager(),
+                        editHeaderSetupDialogFragment.getClass().getSimpleName());
                 break;
 
             case R.id.bt_edit_footer_setup:
@@ -196,8 +202,23 @@ public class SettingPrintSetupFragment extends HealthCocoFragment implements Gso
                 editPatientDetailsSetupDialogFragment.show(mActivity.getSupportFragmentManager(),
                         editPatientDetailsSetupDialogFragment.getClass().getSimpleName());
                 break;
+
+            case R.id.container_right_action:
+                addPrintSettings();
+                break;
+
         }
 
+    }
+
+    private void addPrintSettings() {
+        try {
+            mActivity.showLoading(false);
+            WebDataServiceImpl.getInstance(mApp).addPrintSettings(PrintSettings.class, printSettings, this, this);
+        } catch (Exception e) {
+            e.printStackTrace();
+            mActivity.hideLoading();
+        }
     }
 
     @Override
@@ -255,6 +276,11 @@ public class SettingPrintSetupFragment extends HealthCocoFragment implements Gso
                         isInitialLoading = false;
                         new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_PRINT_SETTINGS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
                     }
+                    break;
+                case ADD_PRINT_SETTINGS:
+                    LocalDataServiceImpl.getInstance(mApp).
+                            addPrintSetting((PrintSettings) response.getData());
+                    mActivity.finish();
                     break;
             }
         }
@@ -354,22 +380,128 @@ public class SettingPrintSetupFragment extends HealthCocoFragment implements Gso
 
             if (!Util.isNullOrBlank(footerSetup.getBottomSignText()))
                 tvBottomSignatureText.setText(footerSetup.getBottomSignText());
+
             if (!Util.isNullOrEmptyList(footerSetup.getBottomText())) {
-                for (Style style : footerSetup.getBottomText()) {
-                    if (Util.isNullOrBlank(style.getText()))
+                List<BottomTextStyle> bottomTextList = footerSetup.getBottomText();
+                for (BottomTextStyle style : bottomTextList) {
+                    if (!Util.isNullOrBlank(style.getText())) {
                         tvBottomText.setText(style.getText());
+                        if (!Util.isNullOrBlank(style.getFontSize())) {
+                            int textsize = Integer.parseInt(style.getFontSize().substring(0, style.getFontSize().length() - 2));
+                            tvBottomText.setTextSize(TypedValue.COMPLEX_UNIT_PT, textsize);
+                        }
+                        if (style.getFontStyle() != null) {
+                            ArrayList<String> styleList = new ArrayList<String>(Arrays.asList(style.getFontStyle()));
+
+                            if (styleList.contains(getString(R.string.bold))) {
+                                if (styleList.contains(getString(R.string.italic)))
+                                    tvBottomText.setTypeface(tvBottomText.getTypeface(), Typeface.BOLD_ITALIC);
+                                else
+                                    tvBottomText.setTypeface(tvBottomText.getTypeface(), Typeface.BOLD);
+                            } else if (styleList.contains(getString(R.string.italic)))
+                                tvBottomText.setTypeface(tvBottomText.getTypeface(), Typeface.ITALIC);
+                            else
+                                tvBottomText.setTypeface(tvBottomText.getTypeface(), Typeface.NORMAL);
+
+                        }
+                    }
                 }
             }
+
+
         }
+
     }
 
     private void refreshHeaderDetails(PrintSettings printSettings) {
 
+        if (printSettings.getHeaderSetup() != null) {
+            HeaderSetup headerSetup = printSettings.getHeaderSetup();
+            if (headerSetup.getCustomHeader())
+                tvIncludeHeader.setText(R.string.yes);
+            else
+                tvIncludeHeader.setText(R.string.no);
+
+            if (headerSetup.getCustomLogo())
+                tvIncludelogo.setText(R.string.yes);
+            else
+                tvIncludelogo.setText(R.string.no);
+
+            layoutTopRightText.removeAllViews();
+            layoutTopLeftText.removeAllViews();
+            if (!Util.isNullOrEmptyList(headerSetup.getTopRightText())) {
+                List<RightText> rightTextList = headerSetup.getTopRightText();
+                for (RightText rightText : rightTextList) {
+                    if (!Util.isNullOrBlank(rightText.getText())) {
+
+                        LinearLayout linearLayout = (LinearLayout) mActivity.getLayoutInflater().inflate(R.layout.layout_item_top_right_text, null);
+                        TextView tvTopText = (TextView) linearLayout.findViewById(R.id.tv_top_left_text);
+
+                        tvTopText.setText(rightText.getText());
+                        if (!Util.isNullOrBlank(rightText.getFontSize())) {
+                            int textsize = Integer.parseInt(rightText.getFontSize().substring(0, rightText.getFontSize().length() - 2));
+                            tvTopText.setTextSize(TypedValue.COMPLEX_UNIT_PT, textsize);
+                        }
+                        if (rightText.getFontStyle() != null) {
+                            ArrayList<String> styleList = new ArrayList<String>(Arrays.asList(rightText.getFontStyle()));
+
+                            if (styleList.contains(getString(R.string.bold))) {
+                                if (styleList.contains(getString(R.string.italic)))
+                                    tvTopText.setTypeface(tvTopText.getTypeface(), Typeface.BOLD_ITALIC);
+                                else
+                                    tvTopText.setTypeface(tvTopText.getTypeface(), Typeface.BOLD);
+                            } else if (styleList.contains(getString(R.string.italic)))
+                                tvTopText.setTypeface(tvTopText.getTypeface(), Typeface.ITALIC);
+                            else
+                                tvTopText.setTypeface(tvTopText.getTypeface(), Typeface.NORMAL);
+
+                        }
+
+                        layoutTopRightText.addView(linearLayout);
+                    }
+                }
+            }
+
+
+            if (!Util.isNullOrEmptyList(headerSetup.getTopLeftText())) {
+                List<LeftText> leftTextList = headerSetup.getTopLeftText();
+                for (LeftText leftText : leftTextList) {
+                    if (!Util.isNullOrBlank(leftText.getText())) {
+
+                        LinearLayout linearLayout = (LinearLayout) mActivity.getLayoutInflater().inflate(R.layout.layout_item_top_right_text, null);
+                        TextView tvTopText = (TextView) linearLayout.findViewById(R.id.tv_top_left_text);
+
+                        tvTopText.setText(leftText.getText());
+                        if (!Util.isNullOrBlank(leftText.getFontSize())) {
+                            int textsize = Integer.parseInt(leftText.getFontSize().substring(0, leftText.getFontSize().length() - 2));
+                            tvTopText.setTextSize(TypedValue.COMPLEX_UNIT_PT, textsize);
+                        }
+                        if (leftText.getFontStyle() != null) {
+                            ArrayList<String> styleList = new ArrayList<String>(Arrays.asList(leftText.getFontStyle()));
+
+                            if (styleList.contains(getString(R.string.bold))) {
+                                if (styleList.contains(getString(R.string.italic)))
+                                    tvTopText.setTypeface(tvTopText.getTypeface(), Typeface.BOLD_ITALIC);
+                                else
+                                    tvTopText.setTypeface(tvTopText.getTypeface(), Typeface.BOLD);
+                            } else if (styleList.contains(getString(R.string.italic)))
+                                tvTopText.setTypeface(tvTopText.getTypeface(), Typeface.ITALIC);
+                            else
+                                tvTopText.setTypeface(tvTopText.getTypeface(), Typeface.NORMAL);
+
+                        }
+
+                        layoutTopLeftText.addView(linearLayout);
+                    }
+                }
+            }
+
+        }
     }
 
     private void refreshContentSetupDetails(PrintSettings printSettings) {
         if (printSettings.getContentSetup() != null) {
-            Style contentSetup = printSettings.getContentSetup();
+            ContentSetup contentSetup = printSettings.getContentSetup();
 
             tvFontsize.setText(contentSetup.getFontSize());
             tvLineSpace.setText(printSettings.getContentLineSpace());

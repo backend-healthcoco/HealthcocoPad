@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.healthcoco.healthcocopad.HealthCocoDialogFragment;
 import com.healthcoco.healthcocopad.R;
+import com.healthcoco.healthcocopad.bean.server.ContentSetup;
 import com.healthcoco.healthcocopad.bean.server.PageSetup;
 import com.healthcoco.healthcocopad.bean.server.PrintSettings;
 import com.healthcoco.healthcocopad.bean.server.Style;
@@ -54,7 +55,7 @@ public class EditContentSetupDialogFragment extends HealthCocoDialogFragment
         add("VERTICAL");
         add("HORIZONTAL");
     }};
-    Style contentSetup = new Style();
+    ContentSetup contentSetup = new ContentSetup();
     PrintSettings printSettings;
     private CustomAutoCompleteTextView autotvFontSize;
     private CustomAutoCompleteTextView autotvLineSpace;

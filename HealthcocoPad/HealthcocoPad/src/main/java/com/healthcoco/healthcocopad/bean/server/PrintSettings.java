@@ -31,7 +31,7 @@ public class PrintSettings extends SugarRecord {
     @Ignore
     private FooterSetup footerSetup;
     @Ignore
-    private Style contentSetup;
+    private ContentSetup contentSetup;
 
     private Boolean discarded;
     private String clinicLogoUrl;
@@ -129,11 +129,11 @@ public class PrintSettings extends SugarRecord {
         this.footerSetup = footerSetup;
     }
 
-    public Style getContentSetup() {
+    public ContentSetup getContentSetup() {
         return contentSetup;
     }
 
-    public void setContentSetup(Style contentSetup) {
+    public void setContentSetup(ContentSetup contentSetup) {
         this.contentSetup = contentSetup;
     }
 

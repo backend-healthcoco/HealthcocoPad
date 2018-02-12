@@ -20,7 +20,7 @@ public class FooterSetup extends SugarRecord {
     private String bottomSignText;
 
     @Ignore
-    private List<Style> bottomText;
+    private List<BottomTextStyle> bottomText;
 
     public Boolean getCustomFooter() {
         return customFooter;
@@ -62,11 +62,11 @@ public class FooterSetup extends SugarRecord {
         this.bottomSignText = bottomSignText;
     }
 
-    public List<Style> getBottomText() {
+    public List<BottomTextStyle> getBottomText() {
         return bottomText;
     }
 
-    public void setBottomText(List<Style> bottomText) {
+    public void setBottomText(List<BottomTextStyle> bottomText) {
         this.bottomText = bottomText;
     }
 }

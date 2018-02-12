@@ -33,12 +33,12 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/include_footer"
+                    android:text="@string/include_header"
                     android:textColor="@color/black_greyish"
                     android:textSize="@dimen/text_size_add_clinical_note_points" />
 
                 <RadioGroup
-                    android:id="@+id/rg_include_footer"
+                    android:id="@+id/rg_include_header"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -85,12 +85,12 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/include_signature"
+                    android:text="@string/include_logo"
                     android:textColor="@color/black_greyish"
                     android:textSize="@dimen/text_size_add_clinical_note_points" />
 
                 <RadioGroup
-                    android:id="@+id/rg_include_signature"
+                    android:id="@+id/rg_include_logo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -129,134 +129,40 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="left"
+            android:layout_marginTop="@dimen/list_item_padding"
+            android:gravity="center"
             android:orientation="horizontal"
             android:padding="@dimen/list_item_padding">
 
             <TextView
+                android:id="@+id/tv_top_left_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/include_signature_text"
-                android:textColor="@color/black_greyish"
+                android:layout_marginLeft="@dimen/list_item_padding"
+                android:layout_marginRight="@dimen/margin_left_right_add_vital_signs"
+                android:background="@drawable/selector_solid_gray_dark_gray_border"
+                android:clickable="true"
+                android:gravity="center"
+                android:padding="@dimen/list_item_padding"
+                android:text="@string/topleft_text"
+                android:textColor="@drawable/text_selector_grey_blue"
                 android:textSize="@dimen/text_size_add_clinical_note_points" />
 
-            <RadioGroup
-                android:id="@+id/rg_include_signature_text"
+            <TextView
+                android:id="@+id/tv_top_right_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="@dimen/list_item_padding"
-                android:orientation="horizontal"
-                android:paddingBottom="@dimen/list_item_padding">
-
-                <com.healthcoco.healthcocopad.views.FontAwesomeRadioButton
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.5"
-                    android:background="@android:color/transparent"
-                    android:button="@android:color/transparent"
-                    android:paddingLeft="@dimen/list_item_padding"
-                    android:paddingRight="@dimen/list_item_padding"
-                    android:tag="@string/yes_capital"
-                    android:text="@string/text_check_yes"
-                    android:textColor="@drawable/text_light_grey_normal_blue_selected"
-                    android:textSize="@dimen/text_size_registration_title" />
-
-                <com.healthcoco.healthcocopad.views.FontAwesomeRadioButton
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.5"
-                    android:background="@android:color/transparent"
-                    android:button="@android:color/transparent"
-                    android:checked="false"
-                    android:paddingLeft="@dimen/list_item_padding"
-                    android:paddingRight="@dimen/list_item_padding"
-                    android:tag="@string/no_capital"
-                    android:text="@string/text_check_no"
-                    android:textColor="@drawable/text_light_grey_normal_blue_selected"
-                    android:textSize="@dimen/text_size_registration_title" />
-            </RadioGroup>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="left"
-            android:orientation="horizontal"
-            android:padding="@dimen/list_item_padding">
-
-            <EditText
-                android:id="@+id/et_bottom_text"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_left_right_add_vital_signs"
                 android:layout_marginRight="@dimen/list_item_padding"
-                android:layout_weight="0.6"
-                android:background="@drawable/shape_rounded_corners_item_background_dark_grey"
-                android:cursorVisible="true"
-                android:focusableInTouchMode="true"
-                android:gravity="start"
-                android:padding="@dimen/list_item_padding"
-                android:singleLine="true"
-                android:textColorHint="@color/grey_light_text"
-                android:textSize="@dimen/text_size_add_visits_lable" />
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="left"
-                android:layout_weight="0.2"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/tv_text_style_ittalic"
-                    android:layout_width="@dimen/toggle_width"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="@dimen/list_item_padding"
-                    android:layout_marginRight="@dimen/list_item_padding"
-                    android:background="@drawable/selector_solid_gray_dark_gray_border"
-                    android:clickable="true"
-                    android:gravity="center"
-                    android:text="I"
-                    android:textSize="27sp"
-                    android:textStyle="italic" />
-
-                <TextView
-                    android:id="@+id/tv_text_style_bold"
-                    android:layout_width="@dimen/toggle_width"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="@dimen/list_item_padding"
-                    android:layout_marginRight="@dimen/list_item_padding"
-                    android:background="@drawable/selector_solid_gray_dark_gray_border"
-                    android:clickable="true"
-                    android:gravity="center"
-                    android:text="B"
-                    android:textSize="27sp" />
-
-            </LinearLayout>
-
-
-            <com.healthcoco.healthcocopad.views.CustomAutoCompleteTextView
-                android:id="@+id/et_font_size"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/list_item_padding"
-                android:layout_weight="0.22"
-                android:background="@drawable/shape_rounded_corners_item_background_dark_grey"
+                android:background="@drawable/selector_solid_gray_dark_gray_border"
                 android:clickable="true"
-                android:cursorVisible="true"
-                android:drawableRight="@drawable/arrow_down_drug"
-                android:editable="false"
-                android:focusable="false"
-                android:focusableInTouchMode="true"
-                android:gravity="start"
+                android:gravity="center"
                 android:padding="@dimen/list_item_padding"
-                android:text="@string/font_value"
-                android:textColorHint="@color/grey_translucent"
-                android:textSize="@dimen/text_size_add_visits_lable" />
-
+                android:text="@string/topright_text"
+                android:textColor="@drawable/text_selector_grey_blue"
+                android:textSize="@dimen/text_size_add_clinical_note_points" />
 
         </LinearLayout>
 
@@ -267,26 +173,18 @@
             android:orientation="vertical"
             android:padding="@dimen/list_item_padding">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingBottom="@dimen/list_item_padding"
-                android:text="@string/signature_text"
-                android:textColor="@color/black_greyish"
-                android:textSize="@dimen/text_size_add_clinical_note_points" />
-
-            <EditText
-                android:id="@+id/et_signature_text"
+            <ListView
+                android:id="@+id/lv_top_left_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="@dimen/list_item_padding"
-                android:background="@drawable/shape_rounded_corners_item_background_dark_grey"
-                android:cursorVisible="true"
-                android:focusableInTouchMode="true"
-                android:gravity="start"
-                android:padding="@dimen/list_item_padding"
-                android:textColorHint="@color/grey_light_text"
-                android:textSize="@dimen/text_size_add_visits_lable" />
+                android:visibility="visible" />
+
+            <ListView
+                android:id="@+id/lv_top_right_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
+
 
         </LinearLayout>
 
