@@ -34,5 +34,72 @@
 
             <include layout="@layout/item_drug_name" />
         </LinearLayout>
+
+        <include layout="@layout/divider_horizontal_grey" />
+
+        <LinearLayout
+            android:id="@+id/layout_bottom_buttons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/text_between_padding"
+            android:baselineAligned="false"
+            android:clickable="false"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/bt_edit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/item_visits_button_padding_left_right_20dp"
+                android:background="@drawable/shape_rounded_corners_item_background_dark_grey"
+                android:gravity="center"
+                android:padding="5dp"
+                android:visibility="visible">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="5dp"
+                    android:background="@color/white"
+                    android:drawableLeft="@drawable/icon_edit_selector"
+                    android:drawablePadding="5dp"
+                    android:gravity="center|start"
+                    android:paddingLeft="@dimen/item_visits_button_padding_left_right_20dp"
+                    android:paddingRight="@dimen/item_visits_button_padding_left_right_20dp"
+                    android:text="@string/edit"
+                    android:textColor="@drawable/text_selector_grey_blue"
+                    android:textSize="@dimen/text_size_bt_history_edit_sms_email" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/bt_delete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/item_visits_button_padding_left_right_20dp"
+                android:background="@drawable/shape_rounded_corners_item_background_dark_grey"
+                android:clickable="true"
+                android:gravity="center"
+                android:padding="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="5dp"
+                    android:background="@color/white"
+                    android:drawableLeft="@drawable/discard_selector"
+                    android:drawablePadding="5dp"
+                    android:gravity="center|start"
+                    android:paddingLeft="@dimen/item_visits_button_padding_left_right_20dp"
+                    android:paddingRight="@dimen/item_visits_button_padding_left_right_20dp"
+                    android:text="@string/delete_button"
+                    android:textColor="@drawable/text_selector_grey_blue"
+                    android:textSize="@dimen/text_size_bt_history_edit_sms_email" />
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
     </LinearLayout>
 </FrameLayout>

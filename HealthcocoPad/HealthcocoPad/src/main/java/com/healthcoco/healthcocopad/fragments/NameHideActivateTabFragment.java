@@ -22,6 +22,7 @@ import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.adapter.NameHideActivateAdapter;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
+import com.healthcoco.healthcocopad.bean.server.Complaint;
 import com.healthcoco.healthcocopad.bean.server.ComplaintSuggestions;
 import com.healthcoco.healthcocopad.bean.server.DiagnosisSuggestions;
 import com.healthcoco.healthcocopad.bean.server.Disease;
@@ -32,6 +33,7 @@ import com.healthcoco.healthcocopad.bean.server.DrugDosage;
 import com.healthcoco.healthcocopad.bean.server.EcgDetailSuggestions;
 import com.healthcoco.healthcocopad.bean.server.EchoSuggestions;
 import com.healthcoco.healthcocopad.bean.server.GeneralExaminationSuggestions;
+import com.healthcoco.healthcocopad.bean.server.HistoryDetailsResponse;
 import com.healthcoco.healthcocopad.bean.server.HistoryPresentComplaintSuggestions;
 import com.healthcoco.healthcocopad.bean.server.HolterSuggestions;
 import com.healthcoco.healthcocopad.bean.server.IndicationOfUsgSuggestions;
@@ -39,6 +41,7 @@ import com.healthcoco.healthcocopad.bean.server.InvestigationSuggestions;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.MenstrualHistorySuggestions;
 import com.healthcoco.healthcocopad.bean.server.NotesSuggestions;
+import com.healthcoco.healthcocopad.bean.server.Observation;
 import com.healthcoco.healthcocopad.bean.server.ObservationSuggestions;
 import com.healthcoco.healthcocopad.bean.server.ObstetricHistorySuggestions;
 import com.healthcoco.healthcocopad.bean.server.PaSuggestions;
@@ -48,6 +51,7 @@ import com.healthcoco.healthcocopad.bean.server.PsSuggestions;
 import com.healthcoco.healthcocopad.bean.server.PvSuggestions;
 import com.healthcoco.healthcocopad.bean.server.Reference;
 import com.healthcoco.healthcocopad.bean.server.SystemicExaminationSuggestions;
+import com.healthcoco.healthcocopad.bean.server.TreatmentService;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.bean.server.XrayDetailSuggestions;
 import com.healthcoco.healthcocopad.custom.AutoCompleteTextViewAdapter;
@@ -1009,6 +1013,112 @@ public class NameHideActivateTabFragment extends HealthCocoFragment implements
         return false;
     }
 
+    @Override
+    public void onEditClicked(NameHideActivateType itemType, Object object) {
+        if (object != null)
+            switch (nameHideActivateType) {
+                case REFERENCE:
+                    mActivity.openAddUpdateNameDialogFragment(WebServiceType.ADD_REFERENCE, AddUpdateNameDialogType.REFERENCE, this, user, ((Reference) object).getUniqueId(), ((Reference) object).getReference(), HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST);
+                    break;
+                case DIRECTION:
+                    mActivity.openAddUpdateNameDialogFragment(WebServiceType.ADD_DIRECTION, AddUpdateNameDialogType.DIRECTION, this, user, ((DrugDirection) object).getUniqueId(), ((DrugDirection) object).getDirection(), HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST);
+                    break;
+                case FREQUENCY:
+                    mActivity.openAddUpdateNameDialogFragment(WebServiceType.ADD_DOSAGE, AddUpdateNameDialogType.FREQUENCY, this, user, ((DrugDosage) object).getUniqueId(), ((DrugDosage) object).getDosage(), HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST);
+                    break;
+                case HISTORY:
+                    mActivity.openAddUpdateNameDialogFragment(WebServiceType.ADD_CUSTOM_HISTORY, AddUpdateNameDialogType.HISTORY, this, user, ((Disease) object).getUniqueId(), ((Disease) object).getDisease(), HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST);
+                    break;
+                case DRUG:
+                    mActivity.openAddNewDrugFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST);
+                    break;
+                case TREATMENT:
+                    mActivity.openAddNewTreatmentsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, ((TreatmentService) object).getUniqueId());
+                    break;
+                case PRESENT_COMPLAINT:
+                    PresentComplaintSuggestions presentComplaintSuggestions = (PresentComplaintSuggestions) object;
+                    mActivity.openAddNewSuggestionsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, SuggestionType.PRESENT_COMPLAINT, presentComplaintSuggestions.getPresentComplaint(), presentComplaintSuggestions.getUniqueId());
+                    break;
+                case COMPLAINT:
+                    ComplaintSuggestions complaint = (ComplaintSuggestions) object;
+                    mActivity.openAddNewSuggestionsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, SuggestionType.COMPLAINTS, complaint.getComplaint(), complaint.getUniqueId());
+                    break;
+                case HISTORY_OF_PRESENT_COMPLAINT:
+                    HistoryPresentComplaintSuggestions historyPresentComplaintSuggestions = (HistoryPresentComplaintSuggestions) object;
+                    mActivity.openAddNewSuggestionsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, SuggestionType.HISTORY_OF_PRESENT_COMPLAINT, historyPresentComplaintSuggestions.getPresentComplaintHistory(), historyPresentComplaintSuggestions.getUniqueId());
+                    break;
+                case MENSTRUAL_HISTORY:
+                    MenstrualHistorySuggestions menstrualHistorySuggestions = (MenstrualHistorySuggestions) object;
+                    mActivity.openAddNewSuggestionsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, SuggestionType.MENSTRUAL_HISTORY, menstrualHistorySuggestions.getMenstrualHistory(), menstrualHistorySuggestions.getUniqueId());
+                    break;
+                case OBSTETRIC_HISTORY:
+                    ObstetricHistorySuggestions obstetricHistorySuggestions = (ObstetricHistorySuggestions) object;
+                    mActivity.openAddNewSuggestionsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, SuggestionType.OBSTETRIC_HISTORY, obstetricHistorySuggestions.getObstetricHistory(), obstetricHistorySuggestions.getUniqueId());
+                    break;
+                case GENERAL_EXAMINATION:
+                    GeneralExaminationSuggestions generalExaminationSuggestions = (GeneralExaminationSuggestions) object;
+                    mActivity.openAddNewSuggestionsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, SuggestionType.GENERAL_EXAMINATION, generalExaminationSuggestions.getGeneralExam(), generalExaminationSuggestions.getUniqueId());
+                    break;
+                case SYSTEMIC_EXAMINATION:
+                    SystemicExaminationSuggestions systemicExaminationSuggestions = (SystemicExaminationSuggestions) object;
+                    mActivity.openAddNewSuggestionsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, SuggestionType.SYSTEMIC_EXAMINATION, systemicExaminationSuggestions.getSystemExam(), systemicExaminationSuggestions.getUniqueId());
+                    break;
+                case OBSERVATION:
+                    ObservationSuggestions observation = (ObservationSuggestions) object;
+                    mActivity.openAddNewSuggestionsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, SuggestionType.OBSERVATION, observation.getObservation(), observation.getUniqueId());
+                    break;
+                case INVESTIGATIONS:
+                    InvestigationSuggestions investigationSuggestions = (InvestigationSuggestions) object;
+                    mActivity.openAddNewSuggestionsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, SuggestionType.INVESTIGATION, investigationSuggestions.getInvestigation(), investigationSuggestions.getUniqueId());
+                    break;
+                case PROVISIONAL_DIAGNOSIS:
+                    ProvisionalDiagnosisSuggestions provisionalDiagnosisSuggestions = (ProvisionalDiagnosisSuggestions) object;
+                    mActivity.openAddNewSuggestionsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, SuggestionType.PROVISIONAL_DIAGNOSIS, provisionalDiagnosisSuggestions.getProvisionalDiagnosis(), provisionalDiagnosisSuggestions.getUniqueId());
+                    break;
+                case DIAGNOSIS:
+                    DiagnosisSuggestions diagnosisSuggestions = (DiagnosisSuggestions) object;
+                    mActivity.openAddNewSuggestionsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, SuggestionType.DIAGNOSIS, diagnosisSuggestions.getDiagnosis(), diagnosisSuggestions.getUniqueId());
+                    break;
+                case ECG:
+                    EcgDetailSuggestions ecgDetailSuggestions = (EcgDetailSuggestions) object;
+                    mActivity.openAddNewSuggestionsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, SuggestionType.ECG_DETAILS, ecgDetailSuggestions.getEcgDetails(), ecgDetailSuggestions.getUniqueId());
+                    break;
+                case ECHO:
+                    EchoSuggestions echoSuggestions = (EchoSuggestions) object;
+                    mActivity.openAddNewSuggestionsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, SuggestionType.ECHO, echoSuggestions.getEcho(), echoSuggestions.getUniqueId());
+                    break;
+                case XRAY:
+                    XrayDetailSuggestions xrayDetailSuggestions = (XrayDetailSuggestions) object;
+                    mActivity.openAddNewSuggestionsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, SuggestionType.X_RAY_DETAILS, xrayDetailSuggestions.getxRayDetails(), xrayDetailSuggestions.getUniqueId());
+                    break;
+                case HOLTER:
+                    HolterSuggestions holterSuggestions = (HolterSuggestions) object;
+                    mActivity.openAddNewSuggestionsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, SuggestionType.HOLTER, holterSuggestions.getHolter(), holterSuggestions.getUniqueId());
+                    break;
+                case INDICATION_OF_USG:
+                    IndicationOfUsgSuggestions indicationOfUsgSuggestions = (IndicationOfUsgSuggestions) object;
+                    mActivity.openAddNewSuggestionsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, SuggestionType.INDICATION_OF_USG, indicationOfUsgSuggestions.getIndicationOfUSG(), indicationOfUsgSuggestions.getUniqueId());
+                    break;
+                case NOTES:
+                    NotesSuggestions notesSuggestions = (NotesSuggestions) object;
+                    mActivity.openAddNewSuggestionsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, SuggestionType.NOTES, notesSuggestions.getNote(), notesSuggestions.getUniqueId());
+                    break;
+                case PA:
+                    PaSuggestions paSuggestions = (PaSuggestions) object;
+                    mActivity.openAddNewSuggestionsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, SuggestionType.PA, paSuggestions.getPa(), paSuggestions.getUniqueId());
+                    break;
+                case PS:
+                    PsSuggestions psSuggestions = (PsSuggestions) object;
+                    mActivity.openAddNewSuggestionsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, SuggestionType.PS, psSuggestions.getPs(), psSuggestions.getUniqueId());
+                    break;
+                case PV:
+                    PvSuggestions pvSuggestions = (PvSuggestions) object;
+                    mActivity.openAddNewSuggestionsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, SuggestionType.PV, pvSuggestions.getPv(), pvSuggestions.getUniqueId());
+                    break;
+
+            }
+
+    }
 
     @Override
     public void onClick(View v) {
@@ -1031,7 +1141,7 @@ public class NameHideActivateTabFragment extends HealthCocoFragment implements
                         mActivity.openAddNewDrugFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST);
                         break;
                     case TREATMENT:
-                        mActivity.openAddNewDrugFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST);
+                        mActivity.openAddNewTreatmentsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, null);
                         break;
                     case PRESENT_COMPLAINT:
                         mActivity.openAddNewSuggestionsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, SuggestionType.PRESENT_COMPLAINT);

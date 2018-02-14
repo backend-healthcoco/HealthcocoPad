@@ -412,6 +412,18 @@ public class SettingsNameHideActivateFragment extends HealthCocoFragment impleme
         return false;
     }
 
+    @Override
+    public void onEditClicked(NameHideActivateType itemType, Object object) {
+        if (object != null)
+            switch (nameHideActivateType) {
+                case TREATMENT:
+                    mActivity.openAddNewTreatmentsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, ((TreatmentService) object).getUniqueId());
+                    break;
+                case HISTORY:
+                    mActivity.openAddUpdateNameDialogFragment(WebServiceType.ADD_CUSTOM_HISTORY, AddUpdateNameDialogType.HISTORY, this, user, ((Disease) object).getUniqueId(), ((Disease) object).getDisease(), HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST);
+                    break;
+            }
+    }
 
     @Override
     public void onClick(View v) {
@@ -424,7 +436,7 @@ public class SettingsNameHideActivateFragment extends HealthCocoFragment impleme
                         break;
 
                     case TREATMENT:
-                        mActivity.openAddUpdateNameDialogFragment(WebServiceType.ADD_CUSTOM_HISTORY, AddUpdateNameDialogType.HISTORY, this, user, "", HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST);
+                        mActivity.openAddNewTreatmentsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, null);
                         break;
 
                 }

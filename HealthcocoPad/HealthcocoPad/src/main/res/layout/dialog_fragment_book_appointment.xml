@@ -21,7 +21,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/grey_background"
-                android:padding="@dimen/patient_profile_image_padding">
+                android:paddingBottom="@dimen/list_item_padding"
+                android:paddingLeft="@dimen/patient_profile_image_padding"
+                android:paddingRight="@dimen/patient_profile_image_padding"
+                android:paddingTop="@dimen/list_item_padding">
 
                 <com.healthcoco.healthcocopad.views.TextViewFontAwesome
                     android:id="@+id/clinic_icon"
@@ -72,7 +75,10 @@
                         android:layout_height="wrap_content"
                         android:background="@color/white"
                         android:orientation="vertical"
-                        android:padding="@dimen/patient_profile_image_padding"
+                        android:paddingBottom="@dimen/list_item_padding"
+                        android:paddingLeft="@dimen/patient_profile_image_padding"
+                        android:paddingRight="@dimen/patient_profile_image_padding"
+                        android:paddingTop="@dimen/list_item_padding"
                         android:visibility="visible">
 
                         <TextView
@@ -279,7 +285,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@color/grey_background"
-                        android:padding="@dimen/patient_profile_image_padding"
+                        android:paddingBottom="@dimen/list_item_padding"
+                        android:paddingLeft="@dimen/patient_profile_image_padding"
+                        android:paddingRight="@dimen/patient_profile_image_padding"
+                        android:paddingTop="@dimen/list_item_padding"
                         android:text="@string/pick_time_slot"
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_size_report_detail_title_description" />
@@ -297,7 +306,10 @@
                             android:layout_height="wrap_content"
                             android:background="@color/white"
                             android:orientation="horizontal"
-                            android:padding="@dimen/patient_profile_image_padding">
+                            android:paddingBottom="@dimen/list_item_padding"
+                            android:paddingLeft="@dimen/patient_profile_image_padding"
+                            android:paddingRight="@dimen/patient_profile_image_padding"
+                            android:paddingTop="@dimen/list_item_padding">
 
                             <TextView
                                 android:layout_width="0dp"
@@ -338,7 +350,10 @@
                             android:layout_height="wrap_content"
                             android:background="@color/white"
                             android:orientation="horizontal"
-                            android:padding="@dimen/patient_profile_image_padding"
+                            android:paddingBottom="@dimen/list_item_padding"
+                            android:paddingLeft="@dimen/patient_profile_image_padding"
+                            android:paddingRight="@dimen/patient_profile_image_padding"
+                            android:paddingTop="@dimen/list_item_padding"
                             android:visibility="visible">
 
                             <TextView
@@ -414,7 +429,7 @@
                         android:background="@color/grey_background"
                         android:gravity="start"
                         android:hint="@string/write_a_note"
-                        android:minLines="5"
+                        android:minLines="4"
                         android:padding="10dp"
                         android:textColorHint="@color/black"
                         android:textSize="@dimen/text_size_report_detail_title_description" />

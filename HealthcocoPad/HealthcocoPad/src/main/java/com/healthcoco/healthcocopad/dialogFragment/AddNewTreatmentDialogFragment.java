@@ -19,6 +19,7 @@ import com.healthcoco.healthcocopad.listeners.AddNewDrugListener;
 import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
+import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.Util;
 
 /**
@@ -32,6 +33,12 @@ public class AddNewTreatmentDialogFragment extends HealthCocoDialogFragment impl
     private LoginResponse doctor;
     private AddNewDrugListener addNewDrugListener;
     private User user;
+    private String uniqueId;
+    private Bundle bundle;
+    private TreatmentService treatmentService;
+
+    public AddNewTreatmentDialogFragment() {
+    }
 
     public AddNewTreatmentDialogFragment(AddNewDrugListener addNewDrugListener) {
         this.addNewDrugListener = addNewDrugListener;
@@ -48,6 +55,12 @@ public class AddNewTreatmentDialogFragment extends HealthCocoDialogFragment impl
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        bundle = getArguments();
+        uniqueId = bundle.getString(HealthCocoConstants.TAG_UNIQUE_ID);
+        if (!Util.isNullOrBlank(uniqueId))
+            treatmentService = LocalDataServiceImpl.getInstance(mApp).getTreatmentService(uniqueId);
+
         init();
     }
 
@@ -68,6 +81,11 @@ public class AddNewTreatmentDialogFragment extends HealthCocoDialogFragment impl
         titleTextView = (TextView) view.findViewById(R.id.tv_title);
 
         titleTextView.setText(R.string.new_treatment);
+
+        if (treatmentService != null) {
+            editTreatmentName.setText(treatmentService.getName());
+            editTreatmentCost.setText(Util.getFormattedDoubleNumber(treatmentService.getCost()));
+        }
     }
 
     @Override
@@ -103,6 +121,8 @@ public class AddNewTreatmentDialogFragment extends HealthCocoDialogFragment impl
 
     private void addTreatment(String treatmentName) {
         TreatmentService treatmentListSolrResponse = new TreatmentService();
+        if (!Util.isNullOrBlank(uniqueId))
+            treatmentListSolrResponse.setUniqueId(uniqueId);
         treatmentListSolrResponse.setName(treatmentName);
         treatmentListSolrResponse.setDoctorId(user.getUniqueId());
         treatmentListSolrResponse.setHospitalId(user.getForeignHospitalId());
@@ -142,7 +162,12 @@ public class AddNewTreatmentDialogFragment extends HealthCocoDialogFragment impl
                     TreatmentService treatmentListSolrResponse = (TreatmentService) response.getData();
                     Util.showToast(mActivity, String.format(getResources().getString(R.string.success_treatment_added), Util.getValidatedValueOrBlankWithoutTrimming(editTreatmentName)));
 //                    mActivity.setResult(HealthCocoConstants.RESULT_CODE_ADD_NEW_TREATMENT_DETAIL, null);
-                    addNewDrugListener.onSaveClicked(treatmentListSolrResponse);
+                    if (addNewDrugListener != null)
+                        addNewDrugListener.onSaveClicked(treatmentListSolrResponse);
+                    else {
+                        LocalDataServiceImpl.getInstance(mApp).addTreatmentSerice((TreatmentService) response.getData());
+                        getTargetFragment().onActivityResult(HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, HealthCocoConstants.RESULT_CODE_REFERENCE_LIST, null);
+                    }
                     dismiss();
                 }
                 break;

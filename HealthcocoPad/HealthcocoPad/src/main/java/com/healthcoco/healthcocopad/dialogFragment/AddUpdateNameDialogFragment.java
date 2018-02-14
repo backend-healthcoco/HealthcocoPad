@@ -51,9 +51,12 @@ public class AddUpdateNameDialogFragment extends HealthCocoDialogFragment implem
     public static final String TAG_DOCTOR_ID = "doctorId";
     public static final String TAG_LOCATION_ID = "locationId";
     public static final String TAG_HOSPITAL_ID = "hospitalId";
+    public static final String TAG_SGGESTION = "suggestionTag";
+
     private AutoCompleteTextView editName;
     private AddUpdateNameDialogType addUpdateDialogType;
     private String uniqueId;
+    private String suggestion;
     private RegisteredPatientDetailsUpdated selectedPatient;
     private Bundle bundle;
     private WebServiceType webserviceType;
@@ -83,6 +86,7 @@ public class AddUpdateNameDialogFragment extends HealthCocoDialogFragment implem
         int ordinalWebserviceType = bundle.getInt(HealthCocoConstants.TAG_ORDINAL_WEB_SERVICE_TYPE);
         webserviceType = WebServiceType.values()[ordinalWebserviceType];
         uniqueId = bundle.getString(HealthCocoConstants.TAG_UNIQUE_ID);
+        suggestion = bundle.getString(TAG_SGGESTION);
         doctorId = bundle.getString(TAG_DOCTOR_ID);
 
         selectedLocationId = bundle.getString(TAG_LOCATION_ID);
@@ -106,6 +110,9 @@ public class AddUpdateNameDialogFragment extends HealthCocoDialogFragment implem
         editName = (AutoCompleteTextView) view.findViewById(R.id.edit_name);
         initActionbarTitle(getResources().getString(addUpdateDialogType.getTitleId()));
         editName.setHint(addUpdateDialogType.getHintId());
+        if (!Util.isNullOrBlank(suggestion))
+            editName.setText(suggestion);
+
         try {
             switch (addUpdateDialogType) {
                 case EMAIL:
@@ -261,6 +268,8 @@ public class AddUpdateNameDialogFragment extends HealthCocoDialogFragment implem
         diagnosticTest.setTestName(name);
         diagnosticTest.setLocationId(selectedPatient.getLocationId());
         diagnosticTest.setHospitalId(selectedPatient.getHospitalId());
+        if (!Util.isNullOrBlank(uniqueId))
+            diagnosticTest.setUniqueId(uniqueId);
         WebDataServiceImpl.getInstance(mApp).addUpdateCommonMethod(WebServiceType.ADD_DIAGNOSTIC_TESTS, DiagnosticTest.class, diagnosticTest, this, this);
 
     }
@@ -310,6 +319,8 @@ public class AddUpdateNameDialogFragment extends HealthCocoDialogFragment implem
         disease.setDoctorId(doctorId);
         disease.setHospitalId(selectedHospitalId);
         disease.setLocationId(selectedLocationId);
+        if (!Util.isNullOrBlank(uniqueId))
+            disease.setUniqueId(uniqueId);
         diseasesList.add(disease);
         WebDataServiceImpl.getInstance(mApp).addDisease(Disease.class, diseasesList, this, this);
     }
@@ -321,6 +332,8 @@ public class AddUpdateNameDialogFragment extends HealthCocoDialogFragment implem
         disease.setDoctorId(doctorId);
         disease.setHospitalId(selectedHospitalId);
         disease.setLocationId(selectedLocationId);
+        if (!Util.isNullOrBlank(uniqueId))
+            disease.setUniqueId(uniqueId);
         list.add(disease);
         WebDataServiceImpl.getInstance(mApp).addUpdateReference(WebServiceType.ADD_CUSTOM_HISTORY, Disease.class, list, this, this);
     }
@@ -331,6 +344,8 @@ public class AddUpdateNameDialogFragment extends HealthCocoDialogFragment implem
         direction.setDoctorId(doctorId);
         direction.setHospitalId(selectedHospitalId);
         direction.setLocationId(selectedLocationId);
+        if (!Util.isNullOrBlank(uniqueId))
+            direction.setUniqueId(uniqueId);
         WebDataServiceImpl.getInstance(mApp).addUpdateReference(WebServiceType.ADD_DIRECTION, DrugDirection.class, direction, this, this);
     }
 
@@ -340,6 +355,8 @@ public class AddUpdateNameDialogFragment extends HealthCocoDialogFragment implem
         dosage.setDoctorId(doctorId);
         dosage.setHospitalId(selectedHospitalId);
         dosage.setLocationId(selectedLocationId);
+        if (!Util.isNullOrBlank(uniqueId))
+            dosage.setUniqueId(uniqueId);
         WebDataServiceImpl.getInstance(mApp).addUpdateReference(WebServiceType.ADD_DOSAGE, DrugDosage.class, dosage, this, this);
     }
 

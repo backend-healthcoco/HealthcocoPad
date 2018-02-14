@@ -444,6 +444,12 @@ public class WebDataServiceImpl implements GCMRefreshListener {
         }
     }
 
+    public void deleteTemplate(Class<?> class1, String templateId, String doctorId, String locationId, String hospitalId, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        String url = WebServiceType.DELETE_TEMPLATE.getUrl() + templateId + "/" + doctorId + "/" + locationId + "/" + hospitalId + HealthCocoConstants.PARAM_TAG_DELETE;
+        getResponse(WebServiceType.DELETE_TEMPLATE, class1, url, null, null, responseListener,
+                errorListener);
+    }
+
     public void getCities(Class<?> class1, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         checkNetworkStatus(mApp.getApplicationContext());
         if (HealthCocoConstants.isNetworkOnline) {

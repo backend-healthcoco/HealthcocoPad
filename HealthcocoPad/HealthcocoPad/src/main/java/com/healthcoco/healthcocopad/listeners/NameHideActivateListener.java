@@ -12,4 +12,5 @@ public interface NameHideActivateListener {
 
     public boolean isInitialLoading();
 
+    public void onEditClicked(NameHideActivateType itemType, Object object);
 }

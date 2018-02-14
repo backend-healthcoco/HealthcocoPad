@@ -38,6 +38,7 @@ import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.SelectDrugItemType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.AddNewPrescriptionListener;
+import com.healthcoco.healthcocopad.listeners.AddTemplatesListener;
 import com.healthcoco.healthcocopad.listeners.HealthcocoTextWatcherListener;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
 import com.healthcoco.healthcocopad.listeners.SelectDrugItemClickListener;
@@ -64,7 +65,7 @@ import static com.healthcoco.healthcocopad.fragments.AddEditNormalVisitPrescript
  */
 public class AddNewTemplateFragment extends HealthCocoFragment implements TabHost.OnTabChangeListener,
         ViewPager.OnPageChangeListener, View.OnClickListener, SelectDrugItemClickListener,
-        SelectedDrugsListItemListener, TemplateListItemListener, GsonRequest.ErrorListener,
+        SelectedDrugsListItemListener, AddTemplatesListener, GsonRequest.ErrorListener,
         Response.Listener<VolleyResponseBean>, LocalDoInBackgroundListenerOptimised,
         AddNewPrescriptionListener, HealthcocoTextWatcherListener {
 
@@ -101,13 +102,13 @@ public class AddNewTemplateFragment extends HealthCocoFragment implements TabHos
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        init();
         Intent intent = mActivity.getIntent();
         templateId = intent.getStringExtra(HealthCocoConstants.TAG_TEMPLATE_ID);
         Bundle bundle = getArguments();
         if (bundle != null && bundle.containsKey(TAG_PRESCRIPTION_DATA)) {
             prescriptionList = Parcels.unwrap(bundle.getParcelable(TAG_PRESCRIPTION_DATA));
         }
+        init();
         showLoadingOverlay(true);
         new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_FRAGMENT_INITIALISATION_DATA, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
@@ -417,20 +418,6 @@ public class AddNewTemplateFragment extends HealthCocoFragment implements TabHos
         return null;
     }
 
-    @Override
-    public void onPrescriptionClicked(TempTemplate template) {
-
-    }
-
-    @Override
-    public void onEditClicked(TempTemplate template) {
-
-    }
-
-    @Override
-    public void onDeleteClicked(TempTemplate template) {
-
-    }
 
     @Override
     public void onItemClicked(TempTemplate template) {
@@ -449,11 +436,6 @@ public class AddNewTemplateFragment extends HealthCocoFragment implements TabHos
         }
     }
 
-    @Override
-    public boolean isFromSettingsScreen() {
-        return false;
-    }
-
 
     @Override
     public VolleyResponseBean doInBackground(VolleyResponseBean response) {
@@ -464,7 +446,7 @@ public class AddNewTemplateFragment extends HealthCocoFragment implements TabHos
                 volleyResponseBean.setWebServiceType(WebServiceType.FRAGMENT_INITIALISATION);
                 selectedPatient = LocalDataServiceImpl.getInstance(mApp).getPatient(HealthCocoConstants.SELECTED_PATIENTS_USER_ID);
                 LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
-                if (doctor != null && doctor.getUser() != null && !Util.isNullOrBlank(doctor.getUser().getUniqueId()) && selectedPatient != null && !Util.isNullOrBlank(selectedPatient.getUserId())) {
+                if (doctor != null && doctor.getUser() != null && !Util.isNullOrBlank(doctor.getUser().getUniqueId())) {
                     user = doctor.getUser();
                 }
                 break;

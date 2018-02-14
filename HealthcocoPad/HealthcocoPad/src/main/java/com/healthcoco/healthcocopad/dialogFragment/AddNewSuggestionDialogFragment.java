@@ -61,12 +61,16 @@ import java.util.ArrayList;
  */
 
 public class AddNewSuggestionDialogFragment extends HealthCocoDialogFragment implements View.OnClickListener, Response.Listener<VolleyResponseBean>, GsonRequest.ErrorListener {
+    public static final String TAG_SGGESTION = "suggestionTag";
     private EditText editSuggestion;
     private TextView titleTextView;
     private LoginResponse doctor;
     private AddNewSuggestionListener addNewSuggestionListener;
+    private Bundle bundle;
     private User user;
+    private String uniqueId;
     private SuggestionType suggestionType;
+    private String editedSuggestion;
 
 
     public AddNewSuggestionDialogFragment(SuggestionType suggestionType) {
@@ -89,6 +93,10 @@ public class AddNewSuggestionDialogFragment extends HealthCocoDialogFragment imp
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        bundle = getArguments();
+        uniqueId = bundle.getString(HealthCocoConstants.TAG_UNIQUE_ID);
+        editedSuggestion = bundle.getString(TAG_SGGESTION);
+
         init();
     }
 
@@ -108,6 +116,9 @@ public class AddNewSuggestionDialogFragment extends HealthCocoDialogFragment imp
         titleTextView = (TextView) view.findViewById(R.id.tv_title);
 
         titleTextView.setText(suggestionType.getHeaderTitleId());
+
+        if (!Util.isNullOrBlank(editedSuggestion))
+            editSuggestion.setText(editedSuggestion);
     }
 
     @Override
@@ -243,6 +254,8 @@ public class AddNewSuggestionDialogFragment extends HealthCocoDialogFragment imp
 
     private void addPcEarsSuggestion(String suggestion) {
         PcEarsSuggestions pcEarsSuggestions = new PcEarsSuggestions();
+        if (!Util.isNullOrBlank(uniqueId))
+            pcEarsSuggestions.setUniqueId(uniqueId);
         pcEarsSuggestions.setPcEars(suggestion);
         pcEarsSuggestions.setDoctorId(user.getUniqueId());
         pcEarsSuggestions.setHospitalId(user.getForeignHospitalId());
@@ -253,6 +266,8 @@ public class AddNewSuggestionDialogFragment extends HealthCocoDialogFragment imp
 
     private void addPcNoseSuggestion(String suggestion) {
         PcNoseSuggestions pcNoseSuggestions = new PcNoseSuggestions();
+        if (!Util.isNullOrBlank(uniqueId))
+            pcNoseSuggestions.setUniqueId(uniqueId);
         pcNoseSuggestions.setPcNose(suggestion);
         pcNoseSuggestions.setDoctorId(user.getUniqueId());
         pcNoseSuggestions.setHospitalId(user.getForeignHospitalId());
@@ -263,6 +278,8 @@ public class AddNewSuggestionDialogFragment extends HealthCocoDialogFragment imp
 
     private void addPcOralCavitySuggestion(String suggestion) {
         PcOralCavitySuggestions pcOralCavitySuggestions = new PcOralCavitySuggestions();
+        if (!Util.isNullOrBlank(uniqueId))
+            pcOralCavitySuggestions.setUniqueId(uniqueId);
         pcOralCavitySuggestions.setPcOralCavity(suggestion);
         pcOralCavitySuggestions.setDoctorId(user.getUniqueId());
         pcOralCavitySuggestions.setHospitalId(user.getForeignHospitalId());
@@ -273,6 +290,8 @@ public class AddNewSuggestionDialogFragment extends HealthCocoDialogFragment imp
 
     private void addPcThroatSuggestion(String suggestion) {
         PcThroatSuggestions pcThroatSuggestions = new PcThroatSuggestions();
+        if (!Util.isNullOrBlank(uniqueId))
+            pcThroatSuggestions.setUniqueId(uniqueId);
         pcThroatSuggestions.setPcThroat(suggestion);
         pcThroatSuggestions.setDoctorId(user.getUniqueId());
         pcThroatSuggestions.setHospitalId(user.getForeignHospitalId());
@@ -283,6 +302,8 @@ public class AddNewSuggestionDialogFragment extends HealthCocoDialogFragment imp
 
     private void addEarsExamSuggestion(String suggestion) {
         EarsExamSuggestions earsExamSuggestions = new EarsExamSuggestions();
+        if (!Util.isNullOrBlank(uniqueId))
+            earsExamSuggestions.setUniqueId(uniqueId);
         earsExamSuggestions.setEarsExam(suggestion);
         earsExamSuggestions.setDoctorId(user.getUniqueId());
         earsExamSuggestions.setHospitalId(user.getForeignHospitalId());
@@ -293,6 +314,8 @@ public class AddNewSuggestionDialogFragment extends HealthCocoDialogFragment imp
 
     private void addNoseExamSuggestion(String suggestion) {
         NoseExamSuggestions noseExamSuggestions = new NoseExamSuggestions();
+        if (!Util.isNullOrBlank(uniqueId))
+            noseExamSuggestions.setUniqueId(uniqueId);
         noseExamSuggestions.setNoseExam(suggestion);
         noseExamSuggestions.setDoctorId(user.getUniqueId());
         noseExamSuggestions.setHospitalId(user.getForeignHospitalId());
@@ -303,6 +326,8 @@ public class AddNewSuggestionDialogFragment extends HealthCocoDialogFragment imp
 
     private void addOralCavityThroatExamSuggestion(String suggestion) {
         OralCavityThroatExamSuggestions oralCavityThroatExamSuggestions = new OralCavityThroatExamSuggestions();
+        if (!Util.isNullOrBlank(uniqueId))
+            oralCavityThroatExamSuggestions.setUniqueId(uniqueId);
         oralCavityThroatExamSuggestions.setOralCavityThroatExam(suggestion);
         oralCavityThroatExamSuggestions.setDoctorId(user.getUniqueId());
         oralCavityThroatExamSuggestions.setHospitalId(user.getForeignHospitalId());
@@ -313,6 +338,8 @@ public class AddNewSuggestionDialogFragment extends HealthCocoDialogFragment imp
 
     private void addIndirectLarygoscopyExamSuggestion(String suggestion) {
         IndirectLarygoscopyExamSuggestions indirectLarygoscopyExamSuggestions = new IndirectLarygoscopyExamSuggestions();
+        if (!Util.isNullOrBlank(uniqueId))
+            indirectLarygoscopyExamSuggestions.setUniqueId(uniqueId);
         indirectLarygoscopyExamSuggestions.setIndirectLarygoscopyExam(suggestion);
         indirectLarygoscopyExamSuggestions.setDoctorId(user.getUniqueId());
         indirectLarygoscopyExamSuggestions.setHospitalId(user.getForeignHospitalId());
@@ -323,6 +350,8 @@ public class AddNewSuggestionDialogFragment extends HealthCocoDialogFragment imp
 
     private void addNeckExamSuggestion(String suggestion) {
         NeckExamSuggestions neckExamSuggestions = new NeckExamSuggestions();
+        if (!Util.isNullOrBlank(uniqueId))
+            neckExamSuggestions.setUniqueId(uniqueId);
         neckExamSuggestions.setNeckExam(suggestion);
         neckExamSuggestions.setDoctorId(user.getUniqueId());
         neckExamSuggestions.setHospitalId(user.getForeignHospitalId());
@@ -333,6 +362,8 @@ public class AddNewSuggestionDialogFragment extends HealthCocoDialogFragment imp
 
     private void addProcedureSuggestion(String suggestion) {
         ProcedureNoteSuggestions procedureNoteSuggestions = new ProcedureNoteSuggestions();
+        if (!Util.isNullOrBlank(uniqueId))
+            procedureNoteSuggestions.setUniqueId(uniqueId);
         procedureNoteSuggestions.setProcedureNote(suggestion);
         procedureNoteSuggestions.setDoctorId(user.getUniqueId());
         procedureNoteSuggestions.setHospitalId(user.getForeignHospitalId());
@@ -343,6 +374,8 @@ public class AddNewSuggestionDialogFragment extends HealthCocoDialogFragment imp
 
     private void addAdviceSuggestion(String suggestion) {
         AdviceSuggestion adviceSuggestion = new AdviceSuggestion();
+        if (!Util.isNullOrBlank(uniqueId))
+            adviceSuggestion.setUniqueId(uniqueId);
         adviceSuggestion.setAdvice(suggestion);
         adviceSuggestion.setDoctorId(user.getUniqueId());
         adviceSuggestion.setHospitalId(user.getForeignHospitalId());
@@ -353,6 +386,8 @@ public class AddNewSuggestionDialogFragment extends HealthCocoDialogFragment imp
 
     private void addInvestigationSuggestions(String suggestion) {
         InvestigationSuggestions investigationSuggestions = new InvestigationSuggestions();
+        if (!Util.isNullOrBlank(uniqueId))
+            investigationSuggestions.setUniqueId(uniqueId);
         investigationSuggestions.setInvestigation(suggestion);
         investigationSuggestions.setDoctorId(user.getUniqueId());
         investigationSuggestions.setHospitalId(user.getForeignHospitalId());
@@ -363,6 +398,8 @@ public class AddNewSuggestionDialogFragment extends HealthCocoDialogFragment imp
 
     private void addDiagnosisSuggestions(String suggestion) {
         DiagnosisSuggestions diagnosisSuggestions = new DiagnosisSuggestions();
+        if (!Util.isNullOrBlank(uniqueId))
+            diagnosisSuggestions.setUniqueId(uniqueId);
         diagnosisSuggestions.setDiagnosis(suggestion);
         diagnosisSuggestions.setDoctorId(user.getUniqueId());
         diagnosisSuggestions.setHospitalId(user.getForeignHospitalId());
@@ -373,6 +410,8 @@ public class AddNewSuggestionDialogFragment extends HealthCocoDialogFragment imp
 
     private void addPresentComplaintSuggestions(String suggestion) {
         PresentComplaintSuggestions presentComplaintSuggestions = new PresentComplaintSuggestions();
+        if (!Util.isNullOrBlank(uniqueId))
+            presentComplaintSuggestions.setUniqueId(uniqueId);
         presentComplaintSuggestions.setPresentComplaint(suggestion);
         presentComplaintSuggestions.setDoctorId(user.getUniqueId());
         presentComplaintSuggestions.setHospitalId(user.getForeignHospitalId());
@@ -383,6 +422,8 @@ public class AddNewSuggestionDialogFragment extends HealthCocoDialogFragment imp
 
     private void addHistoryPresentComplaintSuggestions(String suggestion) {
         HistoryPresentComplaintSuggestions historyPresentComplaintSuggestions = new HistoryPresentComplaintSuggestions();
+        if (!Util.isNullOrBlank(uniqueId))
+            historyPresentComplaintSuggestions.setUniqueId(uniqueId);
         historyPresentComplaintSuggestions.setPresentComplaintHistory(suggestion);
         historyPresentComplaintSuggestions.setDoctorId(user.getUniqueId());
         historyPresentComplaintSuggestions.setHospitalId(user.getForeignHospitalId());
@@ -393,6 +434,8 @@ public class AddNewSuggestionDialogFragment extends HealthCocoDialogFragment imp
 
     private void addMenstrualHistorySuggestions(String suggestion) {
         MenstrualHistorySuggestions menstrualHistorySuggestions = new MenstrualHistorySuggestions();
+        if (!Util.isNullOrBlank(uniqueId))
+            menstrualHistorySuggestions.setUniqueId(uniqueId);
         menstrualHistorySuggestions.setMenstrualHistory(suggestion);
         menstrualHistorySuggestions.setDoctorId(user.getUniqueId());
         menstrualHistorySuggestions.setHospitalId(user.getForeignHospitalId());
@@ -403,6 +446,8 @@ public class AddNewSuggestionDialogFragment extends HealthCocoDialogFragment imp
 
     private void addObstetricHistorySuggestions(String suggestion) {
         ObstetricHistorySuggestions obstetricHistorySuggestions = new ObstetricHistorySuggestions();
+        if (!Util.isNullOrBlank(uniqueId))
+            obstetricHistorySuggestions.setUniqueId(uniqueId);
         obstetricHistorySuggestions.setObstetricHistory(suggestion);
         obstetricHistorySuggestions.setDoctorId(user.getUniqueId());
         obstetricHistorySuggestions.setHospitalId(user.getForeignHospitalId());
@@ -413,6 +458,8 @@ public class AddNewSuggestionDialogFragment extends HealthCocoDialogFragment imp
 
     private void addProvisionalDiagnosisSuggestions(String suggestion) {
         ProvisionalDiagnosisSuggestions provisionalDiagnosisSuggestions = new ProvisionalDiagnosisSuggestions();
+        if (!Util.isNullOrBlank(uniqueId))
+            provisionalDiagnosisSuggestions.setUniqueId(uniqueId);
         provisionalDiagnosisSuggestions.setProvisionalDiagnosis(suggestion);
         provisionalDiagnosisSuggestions.setDoctorId(user.getUniqueId());
         provisionalDiagnosisSuggestions.setHospitalId(user.getForeignHospitalId());
@@ -423,6 +470,8 @@ public class AddNewSuggestionDialogFragment extends HealthCocoDialogFragment imp
 
     private void addGeneralExaminationSuggestions(String suggestion) {
         GeneralExaminationSuggestions generalExaminationSuggestions = new GeneralExaminationSuggestions();
+        if (!Util.isNullOrBlank(uniqueId))
+            generalExaminationSuggestions.setUniqueId(uniqueId);
         generalExaminationSuggestions.setGeneralExam(suggestion);
         generalExaminationSuggestions.setDoctorId(user.getUniqueId());
         generalExaminationSuggestions.setHospitalId(user.getForeignHospitalId());
@@ -433,6 +482,8 @@ public class AddNewSuggestionDialogFragment extends HealthCocoDialogFragment imp
 
     private void addSystemicExaminationSuggestions(String suggestion) {
         SystemicExaminationSuggestions systemicExaminationSuggestions = new SystemicExaminationSuggestions();
+        if (!Util.isNullOrBlank(uniqueId))
+            systemicExaminationSuggestions.setUniqueId(uniqueId);
         systemicExaminationSuggestions.setSystemExam(suggestion);
         systemicExaminationSuggestions.setDoctorId(user.getUniqueId());
         systemicExaminationSuggestions.setHospitalId(user.getForeignHospitalId());
@@ -443,6 +494,8 @@ public class AddNewSuggestionDialogFragment extends HealthCocoDialogFragment imp
 
     private void addNotesSuggestions(String suggestion) {
         NotesSuggestions notesSuggestions = new NotesSuggestions();
+        if (!Util.isNullOrBlank(uniqueId))
+            notesSuggestions.setUniqueId(uniqueId);
         notesSuggestions.setNote(suggestion);
         notesSuggestions.setDoctorId(user.getUniqueId());
         notesSuggestions.setHospitalId(user.getForeignHospitalId());
@@ -453,6 +506,8 @@ public class AddNewSuggestionDialogFragment extends HealthCocoDialogFragment imp
 
     private void addEcgDetailSuggestions(String suggestion) {
         EcgDetailSuggestions ecgDetailSuggestions = new EcgDetailSuggestions();
+        if (!Util.isNullOrBlank(uniqueId))
+            ecgDetailSuggestions.setUniqueId(uniqueId);
         ecgDetailSuggestions.setEcgDetails(suggestion);
         ecgDetailSuggestions.setDoctorId(user.getUniqueId());
         ecgDetailSuggestions.setHospitalId(user.getForeignHospitalId());
@@ -463,6 +518,8 @@ public class AddNewSuggestionDialogFragment extends HealthCocoDialogFragment imp
 
     private void addEchoSuggestions(String suggestion) {
         EchoSuggestions echoSuggestions = new EchoSuggestions();
+        if (!Util.isNullOrBlank(uniqueId))
+            echoSuggestions.setUniqueId(uniqueId);
         echoSuggestions.setEcho(suggestion);
         echoSuggestions.setDoctorId(user.getUniqueId());
         echoSuggestions.setHospitalId(user.getForeignHospitalId());
@@ -473,6 +530,8 @@ public class AddNewSuggestionDialogFragment extends HealthCocoDialogFragment imp
 
     private void addXrayDetailsSuggestion(String suggestion) {
         XrayDetailSuggestions xrayDetailSuggestions = new XrayDetailSuggestions();
+        if (!Util.isNullOrBlank(uniqueId))
+            xrayDetailSuggestions.setUniqueId(uniqueId);
         xrayDetailSuggestions.setxRayDetails(suggestion);
         xrayDetailSuggestions.setDoctorId(user.getUniqueId());
         xrayDetailSuggestions.setHospitalId(user.getForeignHospitalId());
@@ -483,6 +542,8 @@ public class AddNewSuggestionDialogFragment extends HealthCocoDialogFragment imp
 
     private void addHolterSuggestion(String suggestion) {
         HolterSuggestions holterSuggestions = new HolterSuggestions();
+        if (!Util.isNullOrBlank(uniqueId))
+            holterSuggestions.setUniqueId(uniqueId);
         holterSuggestions.setHolter(suggestion);
         holterSuggestions.setDoctorId(user.getUniqueId());
         holterSuggestions.setHospitalId(user.getForeignHospitalId());
@@ -493,6 +554,8 @@ public class AddNewSuggestionDialogFragment extends HealthCocoDialogFragment imp
 
     private void addPaSuggestion(String suggestion) {
         PaSuggestions paSuggestions = new PaSuggestions();
+        if (!Util.isNullOrBlank(uniqueId))
+            paSuggestions.setUniqueId(uniqueId);
         paSuggestions.setPa(suggestion);
         paSuggestions.setDoctorId(user.getUniqueId());
         paSuggestions.setHospitalId(user.getForeignHospitalId());
@@ -503,6 +566,8 @@ public class AddNewSuggestionDialogFragment extends HealthCocoDialogFragment imp
 
     private void addPsSuggestion(String suggestion) {
         PsSuggestions psSuggestions = new PsSuggestions();
+        if (!Util.isNullOrBlank(uniqueId))
+            psSuggestions.setUniqueId(uniqueId);
         psSuggestions.setPs(suggestion);
         psSuggestions.setDoctorId(user.getUniqueId());
         psSuggestions.setHospitalId(user.getForeignHospitalId());
@@ -513,6 +578,8 @@ public class AddNewSuggestionDialogFragment extends HealthCocoDialogFragment imp
 
     private void addPvSuggestion(String suggestion) {
         PvSuggestions pvSuggestions = new PvSuggestions();
+        if (!Util.isNullOrBlank(uniqueId))
+            pvSuggestions.setUniqueId(uniqueId);
         pvSuggestions.setPv(suggestion);
         pvSuggestions.setDoctorId(user.getUniqueId());
         pvSuggestions.setHospitalId(user.getForeignHospitalId());
@@ -523,6 +590,8 @@ public class AddNewSuggestionDialogFragment extends HealthCocoDialogFragment imp
 
     private void addIndicationUsgSuggestions(String suggestion) {
         IndicationOfUsgSuggestions indicationOfUsgSuggestions = new IndicationOfUsgSuggestions();
+        if (!Util.isNullOrBlank(uniqueId))
+            indicationOfUsgSuggestions.setUniqueId(uniqueId);
         indicationOfUsgSuggestions.setIndicationOfUSG(suggestion);
         indicationOfUsgSuggestions.setDoctorId(user.getUniqueId());
         indicationOfUsgSuggestions.setHospitalId(user.getForeignHospitalId());
@@ -533,6 +602,8 @@ public class AddNewSuggestionDialogFragment extends HealthCocoDialogFragment imp
 
     private void addObservationSuggestions(String suggestion) {
         ObservationSuggestions observationSuggestions = new ObservationSuggestions();
+        if (!Util.isNullOrBlank(uniqueId))
+            observationSuggestions.setUniqueId(uniqueId);
         observationSuggestions.setObservation(suggestion);
         observationSuggestions.setDoctorId(user.getUniqueId());
         observationSuggestions.setHospitalId(user.getForeignHospitalId());
@@ -543,6 +614,8 @@ public class AddNewSuggestionDialogFragment extends HealthCocoDialogFragment imp
 
     private void addComplaintSuggestions(String suggestion) {
         ComplaintSuggestions complaintSuggestions = new ComplaintSuggestions();
+        if (!Util.isNullOrBlank(uniqueId))
+            complaintSuggestions.setUniqueId(uniqueId);
         complaintSuggestions.setComplaint(suggestion);
         complaintSuggestions.setDoctorId(user.getUniqueId());
         complaintSuggestions.setHospitalId(user.getForeignHospitalId());

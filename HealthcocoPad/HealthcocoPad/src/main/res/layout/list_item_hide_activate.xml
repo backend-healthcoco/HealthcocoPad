@@ -28,6 +28,22 @@
             android:textColor="@color/black" />
 
         <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+            android:id="@+id/bt_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/margin_left_right_add_vital_signs"
+            android:background="@android:color/transparent"
+            android:clickable="true"
+            android:gravity="right"
+            android:minHeight="0dp"
+            android:minWidth="0dp"
+            android:paddingRight="20dp"
+            android:text="@string/icon_edit"
+            android:textColor="@drawable/text_blue_dark_grey_selector"
+            android:textSize="@dimen/text_size_reports_item_label" />
+
+
+        <com.healthcoco.healthcocopad.views.TextViewFontAwesome
             android:id="@+id/bt_hide"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

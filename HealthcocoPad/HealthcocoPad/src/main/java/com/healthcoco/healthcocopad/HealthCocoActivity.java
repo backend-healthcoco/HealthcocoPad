@@ -90,6 +90,7 @@ import com.healthcoco.healthcocopad.bean.server.XrayDetailSuggestions;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocopad.dialogFragment.AddNewDrugDialogFragment;
 import com.healthcoco.healthcocopad.dialogFragment.AddNewSuggestionDialogFragment;
+import com.healthcoco.healthcocopad.dialogFragment.AddNewTreatmentDialogFragment;
 import com.healthcoco.healthcocopad.dialogFragment.AddUpdateNameDialogFragment;
 import com.healthcoco.healthcocopad.dialogFragment.EnlargedImageViewDialogFragment;
 import com.healthcoco.healthcocopad.enums.AddUpdateNameDialogType;
@@ -1687,6 +1688,28 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
                 addUpdateNameDialogFragment.getClass().getSimpleName());
     }
 
+    public void openAddUpdateNameDialogFragment(WebServiceType webServiceType, AddUpdateNameDialogType dialogType,
+                                                Fragment fragment, User user, String uniqueId, String suggestion, int requestCode) {
+        Bundle bundle = new Bundle();
+        bundle.putString(HealthCocoConstants.TAG_UNIQUE_ID, uniqueId);
+        bundle.putString(AddUpdateNameDialogFragment.TAG_SGGESTION, suggestion);
+
+        if (webServiceType != null)
+            bundle.putInt(HealthCocoConstants.TAG_ORDINAL_WEB_SERVICE_TYPE, webServiceType.ordinal());
+        bundle.putInt(HealthCocoConstants.TAG_ORDINAL_DIALOG_TYPE, dialogType.ordinal());
+        if (user != null) {
+            bundle.putString(AddUpdateNameDialogFragment.TAG_DOCTOR_ID, user.getUniqueId());
+            bundle.putString(AddUpdateNameDialogFragment.TAG_LOCATION_ID, user.getForeignLocationId());
+            bundle.putString(AddUpdateNameDialogFragment.TAG_HOSPITAL_ID, user.getForeignHospitalId());
+        }
+        AddUpdateNameDialogFragment addUpdateNameDialogFragment = new AddUpdateNameDialogFragment();
+        addUpdateNameDialogFragment.setArguments(bundle);
+        addUpdateNameDialogFragment.setTargetFragment(fragment, requestCode);
+        addUpdateNameDialogFragment.show(getSupportFragmentManager(),
+                addUpdateNameDialogFragment.getClass().getSimpleName());
+    }
+
+
     public void openAddNewDrugFragment(Fragment fragment, int requestCode) {
         AddNewDrugDialogFragment newDrugDialogFragment = new AddNewDrugDialogFragment();
         newDrugDialogFragment.setTargetFragment(fragment, requestCode);
@@ -1694,8 +1717,33 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
                 newDrugDialogFragment.getClass().getSimpleName());
     }
 
+    public void openAddNewTreatmentsFragment(Fragment fragment, int requestCode, String uniqueId) {
+        AddNewTreatmentDialogFragment addNewTreatmentDetailFragment = new AddNewTreatmentDialogFragment();
+        if (!Util.isNullOrBlank(uniqueId)) {
+            Bundle bundle = new Bundle();
+            bundle.putString(HealthCocoConstants.TAG_UNIQUE_ID, uniqueId);
+            addNewTreatmentDetailFragment.setArguments(bundle);
+        }
+        addNewTreatmentDetailFragment.setTargetFragment(fragment, requestCode);
+        addNewTreatmentDetailFragment.show(getSupportFragmentManager(),
+                addNewTreatmentDetailFragment.getClass().getSimpleName());
+
+    }
+
     public void openAddNewSuggestionsFragment(Fragment fragment, int requestCode, SuggestionType suggestionType) {
         AddNewSuggestionDialogFragment addNewSuggestionDialogFragment = new AddNewSuggestionDialogFragment(suggestionType);
+        addNewSuggestionDialogFragment.setTargetFragment(fragment, requestCode);
+        addNewSuggestionDialogFragment.show(getSupportFragmentManager(),
+                addNewSuggestionDialogFragment.getClass().getSimpleName());
+    }
+
+    public void openAddNewSuggestionsFragment(Fragment fragment, int requestCode, SuggestionType suggestionType, String suggestion, String uniqueId) {
+        Bundle bundle = new Bundle();
+        bundle.putString(HealthCocoConstants.TAG_UNIQUE_ID, uniqueId);
+        bundle.putString(AddNewSuggestionDialogFragment.TAG_SGGESTION, suggestion);
+
+        AddNewSuggestionDialogFragment addNewSuggestionDialogFragment = new AddNewSuggestionDialogFragment(suggestionType);
+        addNewSuggestionDialogFragment.setArguments(bundle);
         addNewSuggestionDialogFragment.setTargetFragment(fragment, requestCode);
         addNewSuggestionDialogFragment.show(getSupportFragmentManager(),
                 addNewSuggestionDialogFragment.getClass().getSimpleName());

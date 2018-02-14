@@ -54,6 +54,7 @@ import com.healthcoco.healthcocopad.enums.SuggestionType;
 import com.healthcoco.healthcocopad.enums.VisitIdType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.AddNewPrescriptionListener;
+import com.healthcoco.healthcocopad.listeners.AddTemplatesListener;
 import com.healthcoco.healthcocopad.listeners.DiagnosticTestItemListener;
 import com.healthcoco.healthcocopad.listeners.HealthcocoTextWatcherListener;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
@@ -86,7 +87,7 @@ import static com.healthcoco.healthcocopad.fragments.MyScriptAddVisitsFragment.T
  */
 public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment implements
         TabHost.OnTabChangeListener, ViewPager.OnPageChangeListener, View.OnClickListener,
-        SelectDrugItemClickListener, SelectedDrugsListItemListener, TemplateListItemListener,
+        SelectDrugItemClickListener, SelectedDrugsListItemListener, AddTemplatesListener,
         DiagnosticTestItemListener, AddNewPrescriptionListener, LocalDoInBackgroundListenerOptimised,
         View.OnTouchListener, HealthcocoTextWatcherListener {
     public static final String INTENT_ON_SUGGESTION_ITEM_CLICK = "com.healthcoco.healthcocopad.fragments.AddEditNormalVisitPrescriptionFragment.ON_SUGGESTION_ITEM_CLICK";
@@ -558,20 +559,6 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
         return null;
     }
 
-    @Override
-    public void onPrescriptionClicked(TempTemplate template) {
-        System.out.println("onPrescriptionClicked" + template);
-    }
-
-    @Override
-    public void onEditClicked(TempTemplate template) {
-        System.out.println("onEditClicked" + template);
-    }
-
-    @Override
-    public void onDeleteClicked(TempTemplate template) {
-        System.out.println("onDeleteClicked" + template);
-    }
 
     @Override
     public void onItemClicked(TempTemplate template) {
@@ -590,10 +577,6 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
         }
     }
 
-    @Override
-    public boolean isFromSettingsScreen() {
-        return false;
-    }
 
     @Override
     public void onAddClicked(DiagnosticTest diagnosticTest) {

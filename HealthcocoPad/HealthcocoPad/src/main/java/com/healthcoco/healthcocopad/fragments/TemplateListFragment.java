@@ -1,7 +1,9 @@
 package com.healthcoco.healthcocopad.fragments;
 
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -29,6 +31,7 @@ import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.LocalTabelType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
+import com.healthcoco.healthcocopad.listeners.AddTemplatesListener;
 import com.healthcoco.healthcocopad.listeners.LoadMorePageListener;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
 import com.healthcoco.healthcocopad.listeners.TemplateListItemListener;
@@ -51,7 +54,7 @@ import java.util.LinkedHashMap;
 public class TemplateListFragment extends HealthCocoFragment implements View.OnClickListener,
         Response.Listener<VolleyResponseBean>, GsonRequest.ErrorListener,
         TextWatcher, LocalDoInBackgroundListenerOptimised,
-        LoadMorePageListener, SwipeRefreshLayout.OnRefreshListener {
+        LoadMorePageListener, SwipeRefreshLayout.OnRefreshListener, TemplateListItemListener {
 
     public static final String TAG_TEMPLATE_ID = "templateId";
     public static final String INTENT_GET_TEMPLATES_LIST_LOCAL = "com.healthcoco.TEMPLATES_LIST_LOCAL";
@@ -70,7 +73,7 @@ public class TemplateListFragment extends HealthCocoFragment implements View.OnC
     private int currentPageNumber;
     private boolean isLoadingFromSearch;
     private boolean isInitialLoading;
-    private TemplateListItemListener templateListItemListener;
+    private AddTemplatesListener addTemplatesListener;
     //other variables
     private ProgressBar progressLoading;
     private ListViewLoadMore lvTemplates;
@@ -81,13 +84,14 @@ public class TemplateListFragment extends HealthCocoFragment implements View.OnC
     private SwipeRefreshLayout swipeRefreshLayout;
     private ImageButton btAddNewTemplate;
     private boolean isFromAddNewTemplateFragment;
+    private String deletedTemplatesUniqueId;
     private boolean isFromSettingsScreen;
 
     public TemplateListFragment() {
     }
 
-    public TemplateListFragment(TemplateListItemListener templateListItemListener) {
-        this.templateListItemListener = templateListItemListener;
+    public TemplateListFragment(AddTemplatesListener addTemplatesListener) {
+        this.addTemplatesListener = addTemplatesListener;
     }
 
     @Override
@@ -141,7 +145,7 @@ public class TemplateListFragment extends HealthCocoFragment implements View.OnC
     }
 
     private void initAdapters() {
-        adapter = new TemplatesListAdapter(mActivity, templateListItemListener, isFromSettingsScreen);
+        adapter = new TemplatesListAdapter(mActivity, this);
         lvTemplates.setAdapter(adapter);
     }
 
@@ -213,6 +217,17 @@ public class TemplateListFragment extends HealthCocoFragment implements View.OnC
                 swipeRefreshLayout.setRefreshing(false);
                 progressLoading.setVisibility(View.GONE);
                 mActivity.hideLoading();
+                break;
+            case DELETE_TEMPLATE:
+                LogUtils.LOGD(TAG, "Success DELETE_TEMPLATE");
+                if (templatesList.get(deletedTemplatesUniqueId) != null) {
+                    LocalDataServiceImpl.getInstance(mApp).deleteTemplate(deletedTemplatesUniqueId);
+                    templatesList.remove(deletedTemplatesUniqueId);
+                    notifyAdapter(new ArrayList<TempTemplate>(templatesList.values()));
+                }
+                initTemplatesList(true);
+                mActivity.hideLoading();
+//                clearSearchEditText();
                 break;
             default:
                 break;
@@ -340,5 +355,56 @@ public class TemplateListFragment extends HealthCocoFragment implements View.OnC
                 }
             }
         }
+    }
+
+    @Override
+    public void onPrescriptionClicked(TempTemplate template) {
+
+    }
+
+    @Override
+    public void onEditClicked(TempTemplate template) {
+        openAddNewTemplatesFragment(template.getUniqueId());
+    }
+
+    @Override
+    public void onDeleteClicked(TempTemplate template) {
+        showConfirmationAlert(template);
+
+    }
+
+    @Override
+    public void onItemClicked(TempTemplate template) {
+        addTemplatesListener.onItemClicked(template);
+    }
+
+    @Override
+    public boolean isFromSettingsScreen() {
+        return isFromSettingsScreen;
+    }
+
+    private void showConfirmationAlert(final TempTemplate template) {
+        final AlertDialog.Builder alertBuilder = new AlertDialog.Builder(mActivity);
+        alertBuilder.setTitle(R.string.confirm);
+        alertBuilder.setMessage(getResources().getString(
+                R.string.confirm_delete_template) + template.getName() + "?");
+        alertBuilder.setCancelable(false);
+        alertBuilder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                deletedTemplatesUniqueId = template.getUniqueId();
+                mActivity.showLoading(false);
+                WebDataServiceImpl.getInstance(mApp).deleteTemplate(TempTemplate.class, template.getUniqueId(), user.getUniqueId(), template.getLocationId(), template.getHospitalId(), TemplateListFragment.this, TemplateListFragment.this);
+            }
+        });
+        alertBuilder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+        alertBuilder.create();
+        alertBuilder.show();
     }
 }

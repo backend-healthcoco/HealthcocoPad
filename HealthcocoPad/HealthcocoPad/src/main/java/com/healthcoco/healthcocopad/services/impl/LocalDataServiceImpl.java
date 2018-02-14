@@ -812,6 +812,12 @@ public class LocalDataServiceImpl {
         return volleyResponseBean;
     }
 
+    public TreatmentService getTreatmentService(String uniqueId) {
+
+        return Select.from(TreatmentService.class).where(Condition.prop(LocalDatabaseUtils.KEY_UNIQUE_ID).eq(uniqueId)).first();
+
+    }
+
     public void updateLatestTime(APILatestUpdatedTimes apiLatestUpdatedTimes) {
         apiLatestUpdatedTimes.save();
     }
@@ -2674,6 +2680,10 @@ public class LocalDataServiceImpl {
                     treatmentService.getUniqueId() + " Name : " + treatmentService.getName() + " TreatmentService : " + treatmentService.getDoctorId());
         }
         TreatmentService.saveInTx(treatmentServiceList);
+    }
+
+    public void addTreatmentSerice(TreatmentService treatmentService) {
+        treatmentService.save();
     }
 
     public void addDisease(Disease disease) {

@@ -16,7 +16,6 @@ import com.healthcoco.healthcocopad.utilities.Util;
 
 public class TemplatesListViewHolder extends HealthCocoViewHolder implements OnClickListener {
 
-    private boolean isFromAddNewPrescriptionScreen;
     private TemplateListItemListener templateListItemListener;
     private HealthCocoActivity mActivity;
     private TempTemplate template;
@@ -25,14 +24,14 @@ public class TemplatesListViewHolder extends HealthCocoViewHolder implements OnC
     private LinearLayout btEdit;
     private LinearLayout btDelete;
     private LinearLayout containerTemplate;
+    private LinearLayout layoutBottomButtons;
     private Boolean isFromSettingsScreen = false;
 
-    public TemplatesListViewHolder(HealthCocoActivity mActivity, TemplateListItemListener templateListItemListener, boolean isFromAddNewPrescriptionScreen, boolean isFromSettingsScreen) {
+    public TemplatesListViewHolder(HealthCocoActivity mActivity, TemplateListItemListener templateListItemListener) {
         super(mActivity);
         this.mActivity = mActivity;
         this.templateListItemListener = templateListItemListener;
-        this.isFromAddNewPrescriptionScreen = isFromAddNewPrescriptionScreen;
-        this.isFromSettingsScreen = isFromSettingsScreen;
+        this.isFromSettingsScreen = templateListItemListener.isFromSettingsScreen();
     }
 
     @Override
@@ -63,18 +62,34 @@ public class TemplatesListViewHolder extends HealthCocoViewHolder implements OnC
         tvTemplateName = (TextView) view.findViewById(R.id.tv_template_name);
         containerDoses = (LinearLayout) view.findViewById(R.id.container_drug_names);
         containerTemplate = (LinearLayout) view.findViewById(R.id.container_template);
+        btEdit = (LinearLayout) view.findViewById(R.id.bt_edit);
+        btDelete = (LinearLayout) view.findViewById(R.id.bt_delete);
+        layoutBottomButtons = (LinearLayout) view.findViewById(R.id.layout_bottom_buttons);
+        if (!isFromSettingsScreen)
+            layoutBottomButtons.setVisibility(View.GONE);
     }
 
     private void initListeners() {
         containerTemplate.setOnClickListener(this);
+        btDelete.setOnClickListener(this);
+        btEdit.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
-        if (!Util.isNullOrEmptyList(template.getItems()))
-            LocalDataServiceImpl.getInstance(mApp).addTemplate(template);
-        template.save();
-        if (!isFromSettingsScreen)
-            templateListItemListener.onItemClicked(template);
+        switch (v.getId()) {
+            case R.id.container_template:
+                if (!isFromSettingsScreen)
+                    templateListItemListener.onItemClicked(template);
+                break;
+            case R.id.bt_edit:
+                templateListItemListener.onEditClicked(template);
+                break;
+            case R.id.bt_delete:
+                templateListItemListener.onDeleteClicked(template);
+                break;
+            default:
+                break;
+        }
     }
 }

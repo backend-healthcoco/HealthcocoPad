@@ -49,6 +49,7 @@ public class NameHideActivateViewholder extends HealthCocoViewHolder implements 
     private TextView tvAmount;
     private TextView btHide;
     private TextView btActivate;
+    private TextView btEdit;
 
     public NameHideActivateViewholder(HealthCocoActivity mActivity, NameHideActivateListener hideActivateListener, NameHideActivateType nameHideActivateType, int position, int adapterType) {
         super(mActivity);
@@ -315,10 +316,12 @@ public class NameHideActivateViewholder extends HealthCocoViewHolder implements 
         tvAmount = (TextView) contentView.findViewById(R.id.tv_amount);
         btHide = (TextView) contentView.findViewById(R.id.bt_hide);
         btActivate = (TextView) contentView.findViewById(R.id.bt_activate);
+        btEdit = (TextView) contentView.findViewById(R.id.bt_edit);
         btHide.setOnClickListener(this);
         btActivate.setOnClickListener(this);
         btActivate.setSelected(true);
         btHide.setSelected(false);
+        btEdit.setOnClickListener(this);
         return contentView;
     }
 
@@ -330,6 +333,9 @@ public class NameHideActivateViewholder extends HealthCocoViewHolder implements 
                 break;
             case R.id.bt_activate:
                 hideActivateListener.onActivateClicked(nameHideActivateType, objData);
+                break;
+            case R.id.bt_edit:
+                hideActivateListener.onEditClicked(nameHideActivateType, objData);
                 break;
         }
     }

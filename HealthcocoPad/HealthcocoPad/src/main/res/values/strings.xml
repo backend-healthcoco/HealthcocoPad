@@ -763,6 +763,7 @@
     <string name="confirm_remove_prescription_from_history">Do you want to remove this Prescription from History?</string>
     <string name="confirm_discard_prescription_title">Are you sure you want to discard this Prescription?</string>
     <string name="confirm_discard_prescription_message">Patient will be requested to discontinue this Prescription.</string>
+    <string name="confirm_delete_template">Are you sure you want to delete Template&#160;</string>
     <string name="confirm_sms_prescription">Are you sure you want to send this Prescription to Mobile number&#160;</string>
     <string name="are_you_sure_you_Want_to_hide_this">Are you sure you want to hide this&#160;</string>
     <string name="confirm_sms_visit">Are you sure you want to send this Visit\'s Detail to Mobile number&#160;</string>
@@ -876,6 +877,7 @@
     <string name="feedback_sent_successfully">Feedback sent Successfully</string>
     <string name="space">Space</string>
     <string name="delete">Del</string>
+    <string name="delete_button">Delete</string>
     <string name="enter">Enter</string>
 
     <!--visits alert messages-->
