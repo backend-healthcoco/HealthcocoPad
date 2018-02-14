@@ -578,7 +578,7 @@ public class LocalDataServiceImpl {
                 .where(Condition.prop(LocalDatabaseUtils.KEY_UNIQUE_ID).eq(locationId));
         ClinicDetailResponse clinicDetailResponse = selectQuery.first();
         if (clinicDetailResponse != null) {
-            clinicDetailResponse.setDoctors(getClinicDoctorsList(ClinicalProfileFragment.MAX_DOCTORS_LIST_COUNT, locationId));
+            clinicDetailResponse.setDoctors(getClinicDoctorsList(0, locationId));
             clinicDetailResponse.setLocation(getLocation(locationId));
         }
         return clinicDetailResponse;

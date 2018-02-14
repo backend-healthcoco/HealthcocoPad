@@ -28,6 +28,7 @@ import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.activities.HomeActivity;
 import com.healthcoco.healthcocopad.adapter.ContactsListAdapter;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
+import com.healthcoco.healthcocopad.bean.server.ClinicDetailResponse;
 import com.healthcoco.healthcocopad.bean.server.DoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.Profession;
@@ -90,14 +91,21 @@ public class ContactsListFragment extends HealthCocoFragment implements
     public static final String INTENT_GET_CONTACT_LIST_LOCAL = "com.healthcoco.CONTACT_LIST_LOCAL";
     public static final String INTENT_REFRESH_CONTACTS_LIST_FROM_SERVER = "com.healthcoco.healthcocopad.fragments.ContactsListFragment.REFRESH_CONTACTS_LIST_FROM_SERVER";
     public static final String INTENT_REFRESH_GROUPS_LIST_FROM_SERVER = "com.healthcoco.healthcocopad.fragments.ContactsListFragment.REFRESH_GROUPS_LIST_FROM_SERVER";
+    public static final String INTENT_GET_CLINIC_PROFILE = "com.healthcoco.REFRESH_CLINIC_PROFILE_DETAILS";
 
     //variables need for pagination
     public static final int MAX_SIZE = 16;
     private static final String TAG_RECEIVERS_REGISTERED = "tagReceiversRegistered";
+    private static Integer REQUEST_CODE_CONTACTS_DETAIL = 101;
+    BroadcastReceiver finishContactsListReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, final Intent intent) {
+            mActivity.finish();
+        }
+    };
     private int PAGE_NUMBER = 0;
     private boolean isEndOfListAchieved;
     private boolean isInitialLoading = true;
-    private static Integer REQUEST_CODE_CONTACTS_DETAIL = 101;
     //other variables
     private ProgressBar progressLoading;
     private GridViewLoadMore gvContacts;
@@ -106,6 +114,22 @@ public class ContactsListFragment extends HealthCocoFragment implements
     private TextView tvNoPatients;
     private LinkedHashMap<String, RegisteredPatientDetailsUpdated> patientsListHashMap = new LinkedHashMap<>();
     private User user;
+    BroadcastReceiver refreshGroupsListFromServerReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, final Intent intent) {
+            getGroupsListFromServer();
+        }
+    };
+    BroadcastReceiver refreshClinicProfileReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, final Intent intent) {
+            LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
+            if (doctor != null && doctor.getUser() != null && !Util.isNullOrBlank(doctor.getUser().getUniqueId())) {
+                user = doctor.getUser();
+                getClinicDetails();
+            }
+        }
+    };
     private SwipeRefreshLayout swipeRefreshLayout;
     private FloatingActionButton btAddNewPatient;
     private AsyncTask<VolleyResponseBean, VolleyResponseBean, VolleyResponseBean> asynTaskGetPatients;
@@ -117,6 +141,26 @@ public class ContactsListFragment extends HealthCocoFragment implements
     private boolean isEditTextSearching;
     private LinearLayout containerFilterFragment;
     private ChangeViewType changeViewType = ChangeViewType.GRID_VIEW;
+    BroadcastReceiver contactsListLocalReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, final Intent intent) {
+            resetListAndPagingAttributes();
+            getListFromLocal(false);
+        }
+    };
+    BroadcastReceiver contactsListFromServerReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, final Intent intent) {
+            LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
+            if (doctor != null && doctor.getUser() != null && !Util.isNullOrBlank(doctor.getUser().getUniqueId())) {
+                clearSearchEditText();
+                user = doctor.getUser();
+                resetListAndPagingAttributes();
+                filterType = FilterItemType.ALL_PATIENTS;
+                getListFromLocal(true);
+            }
+        }
+    };
     private ArrayList<UserGroups> groupsList;
     private FontAwesomeButton btAdvanceSearch;
     private LinearLayout parentEditSearch;
@@ -128,9 +172,27 @@ public class ContactsListFragment extends HealthCocoFragment implements
     private boolean isOnLoadMore = false;
     private EditText editAdvanceSearchText;
     private CustomAutoCompleteTextView autoTvAdvanceSearchText;
+    BroadcastReceiver filterReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, final Intent intent) {
+            if (intent != null) {
+                onClick(btCancel);
+                int filterItemTypeOrdinal = intent.getIntExtra(HealthCocoConstants.TAG_ORDINAL, 0);
+                final FilterItemType itemType = FilterItemType.values()[filterItemTypeOrdinal];
+                if (itemType != null) {
+                    if (itemType == FilterItemType.REFRESH_CONTACTS) {
+                        getContactsList(true);
+                    } else {
+                        sortList(intent, itemType);
+                    }
+                }
+            }
+        }
+    };
     private AdvanceSearchOptionsType selectedSearchType;
     private List<Profession> professionsList;
     private List<Reference> referenceList;
+    private ClinicDetailResponse selectedClinicProfile;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -230,6 +292,10 @@ public class ContactsListFragment extends HealthCocoFragment implements
             contactsListLocal.addAction(INTENT_GET_CONTACT_LIST_LOCAL);
             LocalBroadcastManager.getInstance(mActivity).registerReceiver(contactsListLocalReceiver, contactsListLocal);
 
+            IntentFilter filterClinicProfile = new IntentFilter();
+            filterClinicProfile.addAction(INTENT_GET_CLINIC_PROFILE);
+            LocalBroadcastManager.getInstance(mActivity).registerReceiver(refreshClinicProfileReceiver, filterClinicProfile);
+
 
 //            broadcast to finish this activity
             IntentFilter finishContactIntentFilter = new IntentFilter();
@@ -262,6 +328,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
         LocalBroadcastManager.getInstance(mActivity).unregisterReceiver(finishContactsListReceiver);
         LocalBroadcastManager.getInstance(mActivity).unregisterReceiver(contactsListFromServerReceiver);
         LocalBroadcastManager.getInstance(mActivity).unregisterReceiver(refreshGroupsListFromServerReceiver);
+        LocalBroadcastManager.getInstance(mActivity).unregisterReceiver(refreshClinicProfileReceiver);
         LogUtils.LOGD(TAG, "onDestroy " + receiversRegistered);
     }
 
@@ -628,6 +695,12 @@ public class ContactsListFragment extends HealthCocoFragment implements
                     }
                     Util.sendBroadcast(mApp, FilterFragment.INTENT_REFRESH_GROUPS_LIST_LOCAL);
                     break;
+                case GET_CLINIC_PROFILE:
+                    if (response.getData() != null) {
+                        selectedClinicProfile = (ClinicDetailResponse) response.getData();
+                        new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_CLINIC_PROFILE, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+
+                    }
                 default:
                     break;
             }
@@ -696,56 +769,6 @@ public class ContactsListFragment extends HealthCocoFragment implements
         Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.USER_GROUP);
         WebDataServiceImpl.getInstance(mApp).getGroupsList(WebServiceType.GET_GROUPS, UserGroups.class, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(), latestUpdatedTime, null, this, this);
     }
-
-    BroadcastReceiver filterReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, final Intent intent) {
-            if (intent != null) {
-                onClick(btCancel);
-                int filterItemTypeOrdinal = intent.getIntExtra(HealthCocoConstants.TAG_ORDINAL, 0);
-                final FilterItemType itemType = FilterItemType.values()[filterItemTypeOrdinal];
-                if (itemType != null) {
-                    if (itemType == FilterItemType.REFRESH_CONTACTS) {
-                        getContactsList(true);
-                    } else {
-                        sortList(intent, itemType);
-                    }
-                }
-            }
-        }
-    };
-    BroadcastReceiver contactsListLocalReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, final Intent intent) {
-            resetListAndPagingAttributes();
-            getListFromLocal(false);
-        }
-    };
-    BroadcastReceiver contactsListFromServerReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, final Intent intent) {
-            LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
-            if (doctor != null && doctor.getUser() != null && !Util.isNullOrBlank(doctor.getUser().getUniqueId())) {
-                clearSearchEditText();
-                user = doctor.getUser();
-                resetListAndPagingAttributes();
-                filterType = FilterItemType.ALL_PATIENTS;
-                getListFromLocal(true);
-            }
-        }
-    };
-    BroadcastReceiver finishContactsListReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, final Intent intent) {
-            mActivity.finish();
-        }
-    };
-    BroadcastReceiver refreshGroupsListFromServerReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, final Intent intent) {
-            getGroupsListFromServer();
-        }
-    };
 
     private void sortList(Intent intent, FilterItemType itemType) {
         selectedGroupId = null;
@@ -899,6 +922,10 @@ public class ContactsListFragment extends HealthCocoFragment implements
             case GET_BLOOD_GROUP:
                 volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getHardcodedBloodGroupsList(null, null);
                 break;
+            case ADD_CLINIC_PROFILE:
+                LocalDataServiceImpl.getInstance(mApp).addClinicDetailResponse((ClinicDetailResponse) response.getData());
+                break;
+
         }
         if (volleyResponseBean == null)
             volleyResponseBean = new VolleyResponseBean();
@@ -948,4 +975,10 @@ public class ContactsListFragment extends HealthCocoFragment implements
         Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.USER_GROUP);
         WebDataServiceImpl.getInstance(mApp).getGroupsList(WebServiceType.GET_GROUPS, UserGroups.class, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(), latestUpdatedTime, null, this, this);
     }
+
+    private void getClinicDetails() {
+        mActivity.showLoading(false);
+        WebDataServiceImpl.getInstance(mApp).getClinicDetails(ClinicDetailResponse.class, user.getForeignLocationId(), this, this);
+    }
+
 }

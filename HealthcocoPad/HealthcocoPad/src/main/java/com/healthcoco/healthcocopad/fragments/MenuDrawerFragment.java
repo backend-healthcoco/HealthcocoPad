@@ -274,7 +274,7 @@ public class MenuDrawerFragment extends HealthCocoFragment implements View.OnCli
         if (requestCode == HealthCocoConstants.REQUEST_CODE_MENU_CLINIC_LIST) {
             if (resultCode == Activity.RESULT_OK) {
                 Util.sendBroadcast(mApp, ContactsListFragment.INTENT_REFRESH_CONTACTS_LIST_FROM_SERVER, true);
-                Util.sendBroadcast(mApp, ClinicalProfileFragment.INTENT_GET_CLINIC_PROFILE_DETAILS, true);
+                Util.sendBroadcast(mApp, ContactsListFragment.INTENT_GET_CLINIC_PROFILE, true);
                 Util.sendBroadcast(mApp, MyClinicFragment.INTENT_GET_DOCTOR_CLINIC_PROFILE, true);
                 openFragment(FragmentType.CONTACTS);
                 initSelectedLocationId(SELECTED_LOCATION_ID);

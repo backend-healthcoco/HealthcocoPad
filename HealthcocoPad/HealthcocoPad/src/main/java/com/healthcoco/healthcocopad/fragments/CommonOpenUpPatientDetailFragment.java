@@ -227,6 +227,8 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                     break;
             }
             if (healthcocoFragment != null)
+
+//                if (user.getUiPermissions().getTabPermissions().contains(detailTabType) || (detailTabType == PatientDetailTabType.PATIENT_DETAIL_VISIT))
                 tabhost.addTab(getTabSpec(detailTabType, healthcocoFragment));
         }
     }
@@ -523,7 +525,12 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                     selectedClinicProfile = LocalDataServiceImpl.getInstance(mApp).getClinicResponseDetails(user.getForeignLocationId());
                 }
                 break;
+            case ADD_CLINIC_PROFILE:
+                LocalDataServiceImpl.getInstance(mApp).addClinicDetailResponse((ClinicDetailResponse) response.getData());
+                break;
         }
+        if (volleyResponseBean == null)
+            volleyResponseBean = new VolleyResponseBean();
         volleyResponseBean.setIsFromLocalAfterApiSuccess(response.isFromLocalAfterApiSuccess());
         return volleyResponseBean;
     }
@@ -541,7 +548,10 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                 case FRAGMENT_INITIALISATION:
                     if (selectedPatient != null) {
                         checkPatientStatus(user, selectedPatient);
-                        refreshDoctorsList();
+                        if (selectedClinicProfile != null)
+                            formHashMapAndRefresh(selectedClinicProfile.getDoctors());
+                        else
+                            refreshDoctorsList();
                         initTabs();
                         initViewPagerAdapter();
                         initData();
@@ -566,6 +576,8 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                         selectedClinicProfile = (ClinicDetailResponse) response.getData();
                         formHashMapAndRefresh(selectedClinicProfile.getDoctors());
 //                        initSelectedDoctorClinicData();
+                        new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_CLINIC_PROFILE, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+
                     }
                     if (!response.isUserOnline())
                         onNetworkUnavailable(response.getWebServiceType());
@@ -711,6 +723,10 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
             filter.addAction(INTENT_REFRESH_AMOUNT_DETAILS);
             LocalBroadcastManager.getInstance(mActivity).registerReceiver(refreshAmountDetailsReceiver, filter);
             receiversRegistered = true;
+
+
         }
+
     }
+
 }

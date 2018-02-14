@@ -125,18 +125,18 @@ public class SettingUIPermissionsFragment extends HealthCocoFragment implements 
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         UIPermissionsItemType itemType = permissionTypesList.get(position);
         switch (itemType) {
-//            case PRESCRIPTION_UI_PERMISSION:
-//                openCommonOpenUpActivity(SETTINGS_UI_PERMISSION_PRESCRIPTION, itemType.ordinal());
-//                break;
+            case PRESCRIPTION_UI_PERMISSION:
+                openCommonOpenUpActivity(SETTINGS_UI_PERMISSION_PRESCRIPTION, itemType.ordinal());
+                break;
             case CLINICAL_NOTES:
                 openCommonOpenUpActivity(SETTINGS_UI_PERMISSION_CLINICAL_NOTES, itemType.ordinal());
                 break;
-//            case VISITS:
-//                openCommonOpenUpActivity(SETTINGS_UI_PERMISSION_VISITS, itemType.ordinal());
-//                break;
-//            case PATIENT_TAB_PERMISSION:
-//                openCommonOpenUpActivity(CommonOpenUpFragmentType.SETTINGS_UI_PERMISSION_PATIENT_TAB, itemType.ordinal());
-//                break;
+            case VISITS:
+                openCommonOpenUpActivity(SETTINGS_UI_PERMISSION_VISITS, itemType.ordinal());
+                break;
+            case PATIENT_TAB_PERMISSION:
+                openCommonOpenUpActivity(CommonOpenUpFragmentType.SETTINGS_UI_PERMISSION_PATIENT_TAB, itemType.ordinal());
+                break;
         }
     }
 

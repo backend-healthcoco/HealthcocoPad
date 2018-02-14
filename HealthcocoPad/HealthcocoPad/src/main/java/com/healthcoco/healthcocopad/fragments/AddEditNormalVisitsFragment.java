@@ -426,6 +426,7 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
                     if (response.getData() != null) {
                         selectedClinicProfile = (ClinicDetailResponse) response.getData();
                         formHashMapAndRefresh(selectedClinicProfile.getDoctors());
+                        new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_CLINIC_PROFILE, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
                     }
                     if (!response.isUserOnline())
                         onNetworkUnavailable(response.getWebServiceType());
@@ -496,6 +497,9 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
                 break;
             case GET_VISIT_DETAILS:
                 volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getVisitDetailResponse(WebServiceType.GET_PATIENT_VISIT_DETAIL, visitId, null, null);
+                break;
+            case ADD_CLINIC_PROFILE:
+                LocalDataServiceImpl.getInstance(mApp).addClinicDetailResponse((ClinicDetailResponse) response.getData());
                 break;
         }
         if (volleyResponseBean == null)
@@ -752,7 +756,10 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
                 tvDoctorName.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                 tvDoctorName.setEnabled(false);
                 tvDoctorName.setVisibility(View.VISIBLE);
-                refreshDoctorsList();
+                if (selectedClinicProfile != null)
+                    formHashMapAndRefresh(selectedClinicProfile.getDoctors());
+                else
+                    refreshDoctorsList();
             }
         }
     }
