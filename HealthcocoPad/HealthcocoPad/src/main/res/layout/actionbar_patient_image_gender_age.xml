@@ -91,7 +91,7 @@
 
         <TextView
             android:id="@+id/tv_date"
-            android:layout_width="@dimen/video_placeholder_height"
+            android:layout_width="@dimen/date_textview_width"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/text_size_visits_close_text"
             android:background="@drawable/shape_rounded_corners_white_border_solid_blue"

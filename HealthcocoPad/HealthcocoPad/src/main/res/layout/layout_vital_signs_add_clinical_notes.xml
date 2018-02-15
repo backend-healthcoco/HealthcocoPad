@@ -5,7 +5,8 @@
     android:layout_height="wrap_content"
     android:background="@color/white"
     android:clickable="true"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/list_item_padding">
 
     <LinearLayout
         android:id="@+id/layout_vital_signs"

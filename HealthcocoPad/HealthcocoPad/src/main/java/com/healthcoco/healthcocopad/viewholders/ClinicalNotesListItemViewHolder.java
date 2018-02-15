@@ -128,6 +128,51 @@ public class ClinicalNotesListItemViewHolder extends HealthCocoViewHolder implem
     private LinearLayout btDiscard;
     private TextView textViewNextReviewDate;
     private LinearLayout layoutNextReviewDetail;
+    private LinearLayout layoutEntComplaints;
+    private LinearLayout layoutPcNose;
+    private LinearLayout layoutPcEars;
+    private LinearLayout layoutPcThroat;
+    private LinearLayout layoutPcOralCavity;
+    private LinearLayout layoutPersonalHistory;
+    private LinearLayout layoutTobacco;
+    private LinearLayout layoutAlcohol;
+    private LinearLayout layoutSmoking;
+    private LinearLayout layoutDiet;
+    private LinearLayout layoutOccupation;
+    private LinearLayout layoutGeneralHistory;
+    private LinearLayout layoutDrugs;
+    private LinearLayout layoutAllergies;
+    private LinearLayout layoutMedical;
+    private LinearLayout layoutSurgical;
+    private LinearLayout layoutEntExamination;
+    private LinearLayout layoutNoseExam;
+    private LinearLayout layoutOralCavityThroatExam;
+    private LinearLayout layoutIndirectLarygoscopyExam;
+    private LinearLayout layoutNeckExam;
+    private LinearLayout layoutEarsExam;
+    private LinearLayout layoutPastHistory;
+    private LinearLayout layoutFamilyHistory;
+
+    private TextView tvPcNose;
+    private TextView tvPcEars;
+    private TextView tvPcThroat;
+    private TextView tvPcOralCavity;
+    private TextView tvTobacco;
+    private TextView tvAlcohol;
+    private TextView tvSmoking;
+    private TextView tvDiet;
+    private TextView tvOccupation;
+    private TextView tvDrugs;
+    private TextView tvAllergies;
+    private TextView tvMedical;
+    private TextView tvSurgical;
+    private TextView tvNoseExam;
+    private TextView tvOralCavityThroatExam;
+    private TextView tvIndirectLarygoscopyExam;
+    private TextView tvNeckExam;
+    private TextView tvEarsExam;
+    private TextView tvPastHistory;
+    private TextView tvFamilyHistory;
 
     public ClinicalNotesListItemViewHolder(HealthCocoActivity mActivity,
                                            Object listenerObject, boolean isInEmrList) {
@@ -264,6 +309,96 @@ public class ClinicalNotesListItemViewHolder extends HealthCocoViewHolder implem
             layoutNotes.setVisibility(View.VISIBLE);
             initSuggestionsText(ClinicalNotesPermissionType.NOTES, clinicalNote.getNote());
         }
+        if (!Util.isNullOrBlank(clinicalNote.getPcNose())) {
+            layoutEntComplaints.setVisibility(View.VISIBLE);
+            layoutNoseExam.setVisibility(View.VISIBLE);
+            initSuggestionsText(ClinicalNotesPermissionType.PC_NOSE, clinicalNote.getPcNose());
+        }
+        if (!Util.isNullOrBlank(clinicalNote.getPcOralCavity())) {
+            layoutEntComplaints.setVisibility(View.VISIBLE);
+            layoutPcOralCavity.setVisibility(View.VISIBLE);
+            initSuggestionsText(ClinicalNotesPermissionType.PC_ORAL_CAVITY, clinicalNote.getPcOralCavity());
+        }
+        if (!Util.isNullOrBlank(clinicalNote.getPcThroat())) {
+            layoutEntComplaints.setVisibility(View.VISIBLE);
+            layoutPcThroat.setVisibility(View.VISIBLE);
+            initSuggestionsText(ClinicalNotesPermissionType.PC_THROAT, clinicalNote.getPcThroat());
+        }
+        if (!Util.isNullOrBlank(clinicalNote.getPcEars())) {
+            layoutEntComplaints.setVisibility(View.VISIBLE);
+            layoutPcEars.setVisibility(View.VISIBLE);
+            initSuggestionsText(ClinicalNotesPermissionType.PC_EARS, clinicalNote.getPcEars());
+        }
+        if (!Util.isNullOrBlank(clinicalNote.getPersonalHistoryAlcohol())) {
+            layoutAlcohol.setVisibility(View.VISIBLE);
+            layoutPersonalHistory.setVisibility(View.VISIBLE);
+            initSuggestionsText(ClinicalNotesPermissionType.ALCOHOL, clinicalNote.getPersonalHistoryAlcohol());
+        }
+        if (!Util.isNullOrBlank(clinicalNote.getPersonalHistoryOccupation())) {
+            layoutOccupation.setVisibility(View.VISIBLE);
+            layoutPersonalHistory.setVisibility(View.VISIBLE);
+            initSuggestionsText(ClinicalNotesPermissionType.OCCUPATION, clinicalNote.getPersonalHistoryOccupation());
+        }
+        if (!Util.isNullOrBlank(clinicalNote.getPersonalHistoryTobacco())) {
+            layoutTobacco.setVisibility(View.VISIBLE);
+            layoutPersonalHistory.setVisibility(View.VISIBLE);
+            initSuggestionsText(ClinicalNotesPermissionType.TOBACCO, clinicalNote.getPersonalHistoryTobacco());
+        }
+        if (!Util.isNullOrBlank(clinicalNote.getPersonalHistoryDiet())) {
+            layoutDiet.setVisibility(View.VISIBLE);
+            layoutPersonalHistory.setVisibility(View.VISIBLE);
+            initSuggestionsText(ClinicalNotesPermissionType.DIET, clinicalNote.getPersonalHistoryDiet());
+        }
+        if (!Util.isNullOrBlank(clinicalNote.getPersonalHistorySmoking())) {
+            layoutSmoking.setVisibility(View.VISIBLE);
+            layoutPersonalHistory.setVisibility(View.VISIBLE);
+            initSuggestionsText(ClinicalNotesPermissionType.SMOKING, clinicalNote.getPersonalHistorySmoking());
+        }
+        if (!Util.isNullOrBlank(clinicalNote.getGeneralHistoryDrugs())) {
+            layoutGeneralHistory.setVisibility(View.VISIBLE);
+            layoutDrugs.setVisibility(View.VISIBLE);
+            initSuggestionsText(ClinicalNotesPermissionType.DRUGS, clinicalNote.getGeneralHistoryDrugs());
+        }
+        if (!Util.isNullOrBlank(clinicalNote.getGeneralHistoryAllergies())) {
+            layoutGeneralHistory.setVisibility(View.VISIBLE);
+            layoutAllergies.setVisibility(View.VISIBLE);
+            initSuggestionsText(ClinicalNotesPermissionType.ALLERGIES, clinicalNote.getGeneralHistoryAllergies());
+        }
+        if (!Util.isNullOrBlank(clinicalNote.getGeneralHistorySurgical())) {
+            layoutGeneralHistory.setVisibility(View.VISIBLE);
+            layoutSurgical.setVisibility(View.VISIBLE);
+            initSuggestionsText(ClinicalNotesPermissionType.SURGICAL, clinicalNote.getGeneralHistorySurgical());
+        }
+        if (!Util.isNullOrBlank(clinicalNote.getGeneralHistoryMedicine())) {
+            layoutGeneralHistory.setVisibility(View.VISIBLE);
+            layoutMedical.setVisibility(View.VISIBLE);
+            initSuggestionsText(ClinicalNotesPermissionType.MEDICINE, clinicalNote.getGeneralHistoryMedicine());
+        }
+        if (!Util.isNullOrBlank(clinicalNote.getNoseExam())) {
+            layoutEntExamination.setVisibility(View.VISIBLE);
+            layoutNoseExam.setVisibility(View.VISIBLE);
+            initSuggestionsText(ClinicalNotesPermissionType.NOSE_EXAM, clinicalNote.getNoseExam());
+        }
+        if (!Util.isNullOrBlank(clinicalNote.getOralCavityThroatExam())) {
+            layoutEntExamination.setVisibility(View.VISIBLE);
+            layoutOralCavityThroatExam.setVisibility(View.VISIBLE);
+            initSuggestionsText(ClinicalNotesPermissionType.ORAL_CAVITY_THROAT_EXAM, clinicalNote.getOralCavityThroatExam());
+        }
+        if (!Util.isNullOrBlank(clinicalNote.getIndirectLarygoscopyExam())) {
+            layoutEntExamination.setVisibility(View.VISIBLE);
+            layoutIndirectLarygoscopyExam.setVisibility(View.VISIBLE);
+            initSuggestionsText(ClinicalNotesPermissionType.INDIRECT_LARYGOSCOPY_EXAM, clinicalNote.getIndirectLarygoscopyExam());
+        }
+        if (!Util.isNullOrBlank(clinicalNote.getNeckExam())) {
+            layoutEntExamination.setVisibility(View.VISIBLE);
+            layoutNeckExam.setVisibility(View.VISIBLE);
+            initSuggestionsText(ClinicalNotesPermissionType.NECK_EXAM, clinicalNote.getNeckExam());
+        }
+        if (!Util.isNullOrBlank(clinicalNote.getEarsExam())) {
+            layoutEntExamination.setVisibility(View.VISIBLE);
+            layoutNeckExam.setVisibility(View.VISIBLE);
+            initSuggestionsText(ClinicalNotesPermissionType.NECK_EXAM, clinicalNote.getNeckExam());
+        }
         if (!Util.isNullOrEmptyList(clinicalNote.getDiagrams())) {
             layoutDiagrams.setVisibility(View.VISIBLE);
             initDiagramsPagerAdapter(clinicalNote.getDiagrams());
@@ -380,6 +515,67 @@ public class ClinicalNotesListItemViewHolder extends HealthCocoViewHolder implem
             case NOTES:
                 tvNotes.setText(text);
                 break;
+            case PC_ORAL_CAVITY:
+                tvPcOralCavity.setText(text);
+                break;
+            case PC_NOSE:
+                tvPcNose.setText(text);
+                break;
+            case PC_EARS:
+                tvPcEars.setText(text);
+                break;
+            case PC_THROAT:
+                tvPcThroat.setText(text);
+                break;
+            case TOBACCO:
+                tvTobacco.setText(text);
+                break;
+            case ALCOHOL:
+                tvAlcohol.setText(text);
+                break;
+            case SMOKING:
+                tvSmoking.setText(text);
+                break;
+            case DIET:
+                tvDiet.setText(text);
+                break;
+            case OCCUPATION:
+                tvOccupation.setText(text);
+                break;
+            case ALLERGIES:
+                tvAllergies.setText(text);
+                break;
+            case DRUGS:
+                tvDrugs.setText(text);
+                break;
+            case MEDICINE:
+                tvMedical.setText(text);
+                break;
+            case SURGICAL:
+                tvSurgical.setText(text);
+                break;
+            case INDIRECT_LARYGOSCOPY_EXAM:
+                tvIndirectLarygoscopyExam.setText(text);
+                break;
+            case NOSE_EXAM:
+                tvNoseExam.setText(text);
+                break;
+            case NECK_EXAM:
+                tvNeckExam.setText(text);
+                break;
+            case EARS_EXAM:
+                tvEarsExam.setText(text);
+                break;
+            case ORAL_CAVITY_THROAT_EXAM:
+                tvOralCavityThroatExam.setText(text);
+                break;
+            case PAST_HISTORY:
+                tvPastHistory.setText(text);
+                break;
+            case FAMILY_HISTORY:
+                tvFamilyHistory.setText(text);
+                break;
+
         }
     }
 
@@ -463,6 +659,52 @@ public class ClinicalNotesListItemViewHolder extends HealthCocoViewHolder implem
         tvRespiratoryRate = (TextViewFontAwesome) contentView.findViewById(R.id.tv_respiratory_rate);
         tvSpo2 = (TextViewFontAwesome) contentView.findViewById(R.id.tv_spo2);
 
+        layoutEntComplaints = (LinearLayout) contentView.findViewById(R.id.layout_ent_complaints);
+        layoutPcNose = (LinearLayout) contentView.findViewById(R.id.layout_pc_nose);
+        layoutPcEars = (LinearLayout) contentView.findViewById(R.id.layout_pc_ears);
+        layoutPcThroat = (LinearLayout) contentView.findViewById(R.id.layout_pc_throat);
+        layoutPcOralCavity = (LinearLayout) contentView.findViewById(R.id.layout_pc_oral_cavity);
+        layoutPersonalHistory = (LinearLayout) contentView.findViewById(R.id.layout_personal_history);
+        layoutTobacco = (LinearLayout) contentView.findViewById(R.id.layout_tobacco);
+        layoutAlcohol = (LinearLayout) contentView.findViewById(R.id.layout_alcohol);
+        layoutSmoking = (LinearLayout) contentView.findViewById(R.id.layout_smoking);
+        layoutDiet = (LinearLayout) contentView.findViewById(R.id.layout_diet);
+        layoutOccupation = (LinearLayout) contentView.findViewById(R.id.layout_occupation);
+        layoutGeneralHistory = (LinearLayout) contentView.findViewById(R.id.layout_general_history);
+        layoutDrugs = (LinearLayout) contentView.findViewById(R.id.layout_drugs);
+        layoutAllergies = (LinearLayout) contentView.findViewById(R.id.layout_allergies);
+        layoutMedical = (LinearLayout) contentView.findViewById(R.id.layout_medicine);
+        layoutSurgical = (LinearLayout) contentView.findViewById(R.id.layout_surgical);
+        layoutEntExamination = (LinearLayout) contentView.findViewById(R.id.layout_ent_examinatin);
+        layoutNoseExam = (LinearLayout) contentView.findViewById(R.id.layout_nose_exam);
+        layoutOralCavityThroatExam = (LinearLayout) contentView.findViewById(R.id.layout_oral_cavity_throat_exam);
+        layoutIndirectLarygoscopyExam = (LinearLayout) contentView.findViewById(R.id.layout_indirect_larygoscopy_exam);
+        layoutNeckExam = (LinearLayout) contentView.findViewById(R.id.layout_neck_exam);
+        layoutEarsExam = (LinearLayout) contentView.findViewById(R.id.layout_ears_exam);
+        layoutPastHistory = (LinearLayout) contentView.findViewById(R.id.layout_past_history);
+        layoutFamilyHistory = (LinearLayout) contentView.findViewById(R.id.layout_family_history);
+
+        tvPcNose = (TextView) contentView.findViewById(R.id.tv_text_pc_nose);
+        tvPcEars = (TextView) contentView.findViewById(R.id.tv_text_pc_ears);
+        tvPcThroat = (TextView) contentView.findViewById(R.id.tv_text_pc_throat);
+        tvPcOralCavity = (TextView) contentView.findViewById(R.id.tv_text_pc_oral_cavity);
+        tvTobacco = (TextView) contentView.findViewById(R.id.tv_text_tobacco);
+        tvAlcohol = (TextView) contentView.findViewById(R.id.tv_text_alcohol);
+        tvSmoking = (TextView) contentView.findViewById(R.id.tv_text_smoking);
+        tvDiet = (TextView) contentView.findViewById(R.id.tv_text_diet);
+        tvOccupation = (TextView) contentView.findViewById(R.id.tv_text_occupation);
+        tvDrugs = (TextView) contentView.findViewById(R.id.tv_text_drugs);
+        tvAllergies = (TextView) contentView.findViewById(R.id.tv_text_allergies);
+        tvMedical = (TextView) contentView.findViewById(R.id.tv_text_medicine);
+        tvSurgical = (TextView) contentView.findViewById(R.id.tv_text_surgical);
+        tvNoseExam = (TextView) contentView.findViewById(R.id.tv_text_nose_exam);
+        tvOralCavityThroatExam = (TextView) contentView.findViewById(R.id.tv_text_oral_cavity_throat_exam);
+        tvIndirectLarygoscopyExam = (TextView) contentView.findViewById(R.id.tv_text_indirect_larygoscopy_exam);
+        tvNeckExam = (TextView) contentView.findViewById(R.id.tv_text_neck_exam);
+        tvEarsExam = (TextView) contentView.findViewById(R.id.tv_text_ears_exam);
+        tvPastHistory = (TextView) contentView.findViewById(R.id.tv_text_past_history);
+        tvFamilyHistory = (TextView) contentView.findViewById(R.id.tv_text_family_history);
+
         View headerCreatedByClinicalNote = contentView.findViewById(R.id.container_header_created_by_clinical_note);
         View containerPrescribedBy = contentView.findViewById(R.id.container_prescribed_by);
         if (detailCombinedItemListener != null) {
@@ -512,6 +754,26 @@ public class ClinicalNotesListItemViewHolder extends HealthCocoViewHolder implem
         tvPS.setText("");
         tvIndicationOfUSG.setText("");
         tvNotes.setText("");
+        tvPcNose.setText("");
+        tvPcEars.setText("");
+        tvPcThroat.setText("");
+        tvPcOralCavity.setText("");
+        tvTobacco.setText("");
+        tvAlcohol.setText("");
+        tvSmoking.setText("");
+        tvDiet.setText("");
+        tvOccupation.setText("");
+        tvDrugs.setText("");
+        tvAllergies.setText("");
+        tvMedical.setText("");
+        tvSurgical.setText("");
+        tvNoseExam.setText("");
+        tvOralCavityThroatExam.setText("");
+        tvIndirectLarygoscopyExam.setText("");
+        tvNeckExam.setText("");
+        tvEarsExam.setText("");
+        tvFamilyHistory.setText("");
+        tvPastHistory.setText("");
         containerDiagrams.removeAllViews();
 
         layoutPresentComplaints.setVisibility(View.GONE);
@@ -536,6 +798,30 @@ public class ClinicalNotesListItemViewHolder extends HealthCocoViewHolder implem
         layoutNotes.setVisibility(View.GONE);
         layoutDiagrams.setVisibility(View.GONE);
         layoutVitalSigns.setVisibility(View.GONE);
+        layoutEntComplaints.setVisibility(View.GONE);
+        layoutPcNose.setVisibility(View.GONE);
+        layoutPcEars.setVisibility(View.GONE);
+        layoutPcThroat.setVisibility(View.GONE);
+        layoutPcOralCavity.setVisibility(View.GONE);
+        layoutPersonalHistory.setVisibility(View.GONE);
+        layoutTobacco.setVisibility(View.GONE);
+        layoutAlcohol.setVisibility(View.GONE);
+        layoutSmoking.setVisibility(View.GONE);
+        layoutDiet.setVisibility(View.GONE);
+        layoutOccupation.setVisibility(View.GONE);
+        layoutGeneralHistory.setVisibility(View.GONE);
+        layoutDrugs.setVisibility(View.GONE);
+        layoutAllergies.setVisibility(View.GONE);
+        layoutMedical.setVisibility(View.GONE);
+        layoutSurgical.setVisibility(View.GONE);
+        layoutEntExamination.setVisibility(View.GONE);
+        layoutNoseExam.setVisibility(View.GONE);
+        layoutOralCavityThroatExam.setVisibility(View.GONE);
+        layoutIndirectLarygoscopyExam.setVisibility(View.GONE);
+        layoutNeckExam.setVisibility(View.GONE);
+        layoutEarsExam.setVisibility(View.GONE);
+        layoutPastHistory.setVisibility(View.GONE);
+        layoutFamilyHistory.setVisibility(View.GONE);
     }
 
     /**

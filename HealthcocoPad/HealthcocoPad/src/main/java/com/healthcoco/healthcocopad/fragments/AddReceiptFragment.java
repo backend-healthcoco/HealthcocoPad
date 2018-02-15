@@ -148,6 +148,8 @@ public class AddReceiptFragment extends HealthCocoFragment implements LocalDoInB
         layoutPayFromAdvance.setVisibility(View.GONE);
         layoutDueAfterAdvance.setVisibility(View.GONE);
         layoutAdvanceLeft.setVisibility(View.GONE);
+        view.findViewById(R.id.tv_date).setVisibility(View.GONE);
+
 
         ((CommonOpenUpActivity) mActivity).initRightActionView(ActionbarLeftRightActionTypeDrawables.WITH_SAVE, view);
         btSave = ((CommonOpenUpActivity) mActivity).initActionbarRightAction(this);

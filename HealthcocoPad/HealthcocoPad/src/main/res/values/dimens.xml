@@ -122,6 +122,8 @@
     <dimen name="text_size_drug_dose_item_dosage_direction_instruction">17sp</dimen>
     <dimen name="header_text_size">16sp</dimen>
     <dimen name="text_size_add_clinical_note_vital_signs_label">20sp</dimen>
+    <dimen name="text_size_add_clinical_note_vital_signs_label_19sp">19sp</dimen>
+    <dimen name="text_size_add_clinical_note_headings">20sp</dimen>
     <dimen name="text_size_add_clinical_note_vital_signs_label_child">17sp</dimen>
     <dimen name="item_padding">8dp</dimen>
     <dimen name="text_size_prescription_diagnostic_label">17sp</dimen>

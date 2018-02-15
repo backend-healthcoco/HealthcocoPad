@@ -148,6 +148,7 @@ public class AddInvoiceFragment extends HealthCocoFragment implements LocalDoInB
         svContainer = (ScrollViewWithHeaderNewPrescriptionLayout) view.findViewById(R.id.sv_container);
         layoutNextReviewOn = (LinearLayout) view.findViewById(R.id.layout_next_review);
         layoutNextReviewOn.setVisibility(View.INVISIBLE);
+        view.findViewById(R.id.tv_date).setVisibility(View.GONE);
     }
 
     @Override
