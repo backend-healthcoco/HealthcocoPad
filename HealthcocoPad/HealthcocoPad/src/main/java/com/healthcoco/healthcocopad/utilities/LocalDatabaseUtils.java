@@ -93,6 +93,16 @@ public class LocalDatabaseUtils {
     public static final String KEY_PA = "pa";
     public static final String KEY_PV = "pv";
     public static final String KEY_PS = "ps";
+    public static final String KEY_PC_EARS = "pc_ears";
+    public static final String KEY_PC_NOSE = "pc_nose";
+    public static final String KEY_PC_ORAL_CAVITY = "pc_oral_cavity";
+    public static final String KEY_PC_THROAT = "pc_throat";
+    public static final String KEY_EARS_EXAM = "ears_exam";
+    public static final String KEY_INDIRECT_LARYGOSCOPY_EXAM = "indirect_larygoscopy_exam";
+    public static final String KEY_NECK_EXAM = "neck_exam";
+    public static final String KEY_NOSE_EXAM = "nose_exam";
+    public static final String KEY_ORAL_CAVITY_THROAT_EXAM = "oral_cavity_throat_exam";
+    public static final String KEY_PROCEDURES = "procedures";
     public static final String KEY_INDICATION_OF_USG = "indication_of_usg";
     public static final String KEY_ADVICE = "advice";
     public static final String KEY_FOREIGN_MEDICAL_HISTORY_ID = "foreign_medical_history_id";

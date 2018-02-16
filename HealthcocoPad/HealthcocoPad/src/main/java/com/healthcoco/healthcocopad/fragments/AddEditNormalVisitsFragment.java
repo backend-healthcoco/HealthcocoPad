@@ -125,6 +125,7 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
     private DoctorProfile doctorProfile;
     private HealthcocoPopupWindow doctorsListPopupWindow;
     private long selectedFromDateTimeMillis;
+    private boolean isSingleDoctor = false;
 
 
     private boolean isPrescriptionTabClicked = false;
@@ -736,7 +737,12 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
     }
 
     private void initSelectedDoctorClinicData() {
-        if (user != null && RoleType.isAdmin(user.getRoleTypes())) {
+        if (selectedClinicProfile != null)
+            formHashMapAndRefresh(selectedClinicProfile.getDoctors());
+        else
+            refreshDoctorsList();
+
+        if (user != null && RoleType.isAdmin(user.getRoleTypes()) && !isSingleDoctor) {
 
             if ((!Util.isNullOrBlank(visitId)) || (!Util.isNullOrBlank(prescriptionId))) {
                 tvDoctorName.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
@@ -756,10 +762,6 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
                 tvDoctorName.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                 tvDoctorName.setEnabled(false);
                 tvDoctorName.setVisibility(View.VISIBLE);
-                if (selectedClinicProfile != null)
-                    formHashMapAndRefresh(selectedClinicProfile.getDoctors());
-                else
-                    refreshDoctorsList();
             }
         }
     }
@@ -788,6 +790,9 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
             else
                 mActivity.initPopupWindows(tvDoctorName, PopupWindowType.DOCTOR_LIST, new ArrayList<Object>(clinicDoctorListHashMap.values()), this);
 
+        } else {
+            tvDoctorName.setVisibility(View.INVISIBLE);
+            isSingleDoctor = true;
         }
     }
 

@@ -3826,6 +3826,36 @@ public class LocalDataServiceImpl {
                 case INDICATION_OF_USG:
                     key = LocalDatabaseUtils.KEY_INDICATION_OF_USG;
                     break;
+                case PC_EARS:
+                    key = LocalDatabaseUtils.KEY_PC_EARS;
+                    break;
+                case PC_NOSE:
+                    key = LocalDatabaseUtils.KEY_PC_NOSE;
+                    break;
+                case PC_ORAL_CAVITY:
+                    key = LocalDatabaseUtils.KEY_PC_ORAL_CAVITY;
+                    break;
+                case PC_THROAT:
+                    key = LocalDatabaseUtils.KEY_PC_THROAT;
+                    break;
+                case EARS_EXAM:
+                    key = LocalDatabaseUtils.KEY_EARS_EXAM;
+                    break;
+                case INDIRECT_LARYGOSCOPY_EXAM:
+                    key = LocalDatabaseUtils.KEY_INDIRECT_LARYGOSCOPY_EXAM;
+                    break;
+                case NECK_EXAM:
+                    key = LocalDatabaseUtils.KEY_NECK_EXAM;
+                    break;
+                case NOSE_EXAM:
+                    key = LocalDatabaseUtils.KEY_NOSE_EXAM;
+                    break;
+                case ORAL_CAVITY_THROAT_EXAM:
+                    key = LocalDatabaseUtils.KEY_ORAL_CAVITY_THROAT_EXAM;
+                    break;
+                case PROCEDURES:
+                    key = LocalDatabaseUtils.KEY_PROCEDURES;
+                    break;
                 case ADVICE:
                     key = LocalDatabaseUtils.KEY_ADVICE;
                     break;

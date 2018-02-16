@@ -132,6 +132,7 @@
     <dimen name="item_visits_button_padding_left_right_20dp">12dp</dimen>
     <dimen name="item_visits_button_padding_top_bottom_8dp">8dp</dimen>
     <dimen name="text_size_drug_lable">20sp</dimen>
+    <dimen name="text_size_treatment_list_title">19sp</dimen>
     <dimen name="text_size_drug_child_lable">17sp</dimen>
     <dimen name="width_height_clinical_note_item_diagram">120dp</dimen>
     <dimen name="text_size_clinical_notes_item_diagram_tags">13sp</dimen>
