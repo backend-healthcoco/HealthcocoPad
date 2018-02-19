@@ -126,12 +126,42 @@ public class MyScriptAddVisitsFragment extends HealthCocoFragment implements Vie
     private static final float WIDGET_TEXT_SIZE = 40;
     private static final float WIDGET_INT_WIDTH = 4;
     private static final int WIDGET_TEXT_COLOR = 0xFF0077b5;
-
+    SuggestionType selectedSuggestionType = null;
     private LinearLayout btClose;
     private ImageButton btClinicalNote;
+    BroadcastReceiver clinicalNoteButtonVisibilityReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, final Intent intent) {
+            if (intent != null && intent.hasExtra(TAG_VISIBILITY)) {
+                boolean showVisibility = intent.getBooleanExtra(TAG_VISIBILITY, false);
+                if (showVisibility) {
+//                    addVisibileUiType(VisitsUiType.CLINICAL_NOTES);
+                    btClinicalNote.setVisibility(View.VISIBLE);
+                } else {
+//                    removeVisibileUiType(VisitsUiType.CLINICAL_NOTES);
+                    btClinicalNote.setVisibility(View.GONE);
+                }
+            }
+        }
+    };
     private ImageButton btPrescription;
     private ImageButton btLabTests;
     private ImageButton btDiagrams;
+    BroadcastReceiver diagramButtonVisibilityReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, final Intent intent) {
+            if (intent != null && intent.hasExtra(TAG_VISIBILITY)) {
+                boolean showVisibility = intent.getBooleanExtra(TAG_VISIBILITY, false);
+                if (showVisibility) {
+//                    addVisibileUiType(VisitsUiType.DIAGRAMS);
+                    btDiagrams.setVisibility(View.VISIBLE);
+                } else {
+//                    removeVisibileUiType(VisitsUiType.DIAGRAMS);
+                    btDiagrams.setVisibility(View.GONE);
+                }
+            }
+        }
+    };
     private ImageButton btAdvice;
     private LinearLayout btSave;
     private TextView tvHeaderText;
@@ -151,7 +181,6 @@ public class MyScriptAddVisitsFragment extends HealthCocoFragment implements Vie
     private ClinicalNotes clinicalNotes;
     private SingleLineWidget mWidget;
     private int isCorrectionMode;
-
     private MyScriptEditText etAdvice;
     private LinearLayout layoutWidget;
     private ImageButton btKeyboard;
@@ -162,12 +191,76 @@ public class MyScriptAddVisitsFragment extends HealthCocoFragment implements Vie
     private TextView tvCandidateTwo;
     private TextView tvCandidateThree;
     private ArrayList<VisitsUiType> visibleViews = new ArrayList<>();
-
+    BroadcastReceiver diagramLayoutVisibilityReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, final Intent intent) {
+            if (intent != null && intent.hasExtra(TAG_VISIBILITY)) {
+                boolean showVisibility = intent.getBooleanExtra(TAG_VISIBILITY, false);
+                if (showVisibility) {
+                    addVisibileUiType(VisitsUiType.DIAGRAMS);
+                    parentDiagrams.setVisibility(View.VISIBLE);
+                } else {
+                    removeVisibileUiType(VisitsUiType.DIAGRAMS);
+                    parentDiagrams.setVisibility(View.GONE);
+                }
+            }
+        }
+    };
+    BroadcastReceiver clinicalNoteLayoutVisibilityReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, final Intent intent) {
+            if (intent != null && intent.hasExtra(TAG_VISIBILITY)) {
+                boolean showVisibility = intent.getBooleanExtra(TAG_VISIBILITY, false);
+                if (showVisibility) {
+                    addVisibileUiType(VisitsUiType.CLINICAL_NOTES);
+                    parentClinicalNote.setVisibility(View.VISIBLE);
+                } else {
+                    removeVisibileUiType(VisitsUiType.CLINICAL_NOTES);
+                    parentClinicalNote.setVisibility(View.GONE);
+                }
+            }
+        }
+    };
+    BroadcastReceiver labTestLayoutVisibilityReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, final Intent intent) {
+            if (intent != null && intent.hasExtra(TAG_VISIBILITY)) {
+                boolean showVisibility = intent.getBooleanExtra(TAG_VISIBILITY, false);
+                if (showVisibility) {
+                    addVisibileUiType(VisitsUiType.LAB_TEST);
+                    parentDiagnosticTests.setVisibility(View.VISIBLE);
+                } else {
+                    removeVisibileUiType(VisitsUiType.LAB_TEST);
+                    parentDiagnosticTests.setVisibility(View.GONE);
+                }
+            }
+        }
+    };
     private String visitId;
     //shift this to addClinicNoteFragment after seperate implementation of addCLinicalNotes
     private String clinicalNoteId;
     private String prescriptionId;
-
+    BroadcastReceiver adviceButtonVisibilityReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, final Intent intent) {
+            if (intent != null && intent.hasExtra(TAG_VISIBILITY)) {
+                Util.enableAllChildViews(btSave, true);
+                boolean showVisibility = intent.getBooleanExtra(TAG_VISIBILITY, false);
+                if (showVisibility) {
+                    addVisibileUiType(VisitsUiType.PRESCRIPTION);
+                    parentPrescription.setVisibility(View.VISIBLE);
+                    btAdvice.setVisibility(View.VISIBLE);
+                } else {
+                    if (!Util.isNullOrBlank(prescriptionId))
+                        Util.enableAllChildViews(btSave, false);
+                    removeVisibileUiType(VisitsUiType.PRESCRIPTION);
+                    parentPrescription.setVisibility(View.GONE);
+                    btAdvice.setVisibility(View.GONE);
+                    parentAdvice.setVisibility(View.GONE);
+                }
+            }
+        }
+    };
     private LinearLayout mCandidateBar;
     private TextViewFontAwesome tvPreviousArrow;
     private TextViewFontAwesome tvNextArrow;
@@ -176,13 +269,24 @@ public class MyScriptAddVisitsFragment extends HealthCocoFragment implements Vie
     private View selectedViewForSuggestionsList;
     private LinearLayout parentWidgetSuggestions;
     private boolean isOnItemClick;
-
     private AddPrescriptionVisitFragment addPrescriptionVisitFragment;
     private AddVisitSuggestionsFragment addVisitSuggestionsFragment;
-    SuggestionType selectedSuggestionType = null;
     private AddLabTestsVisitFragment addLabTestVisitFragment;
     private boolean mKeyboardStatus = false;
     private AddClinicalNotesVisitMyScriptFragment addClinicalNotesFragment;
+    BroadcastReceiver onSuggestionItemClickReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, final Intent intent) {
+            if (intent != null && intent.hasExtra(TAG_SUGGESTIONS_TYPE) && intent.hasExtra(TAG_SELECTED_SUGGESTION_OBJECT)) {
+                int ordinal = intent.getIntExtra(TAG_SUGGESTIONS_TYPE, -1);
+                SuggestionType suggestionType = SuggestionType.values()[ordinal];
+                Object selectedSuggestionObject = Parcels.unwrap(intent.getParcelableExtra(TAG_SELECTED_SUGGESTION_OBJECT));
+                if (suggestionType != null && selectedSuggestionObject != null) {
+                    handleSelectedSugestionObject(suggestionType, selectedSuggestionObject);
+                }
+            }
+        }
+    };
     private boolean isFromClone;
     private FloatingActionButton flBtSwap;
 
@@ -242,6 +346,7 @@ public class MyScriptAddVisitsFragment extends HealthCocoFragment implements Vie
         FragmentTransaction transaction = mFragmentManager.beginTransaction();
         transaction.add(R.id.parent_clinical_note, addClinicalNotesFragment, addClinicalNotesFragment.getClass().getSimpleName());
         transaction.commit();
+        showHideClinicalNotesLayout();
     }
 
     private void initSuggestionsFragment() {
@@ -515,7 +620,6 @@ public class MyScriptAddVisitsFragment extends HealthCocoFragment implements Vie
         }
     }
 
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -662,13 +766,11 @@ public class MyScriptAddVisitsFragment extends HealthCocoFragment implements Vie
         }
     }
 
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
     }
-
 
     private void showHideAdviceLayout() {
         if (parentAdvice.getVisibility() == View.GONE) {
@@ -805,6 +907,10 @@ public class MyScriptAddVisitsFragment extends HealthCocoFragment implements Vie
         containerSuggestionsList.setVisibility(View.GONE);
     }
 
+
+    //--------------------------------------------------------------------------------
+    // Widget callbacks
+
     private String getLastTextAfterCharacterToBeReplaced(String searchTerm) {
         Pattern p = Pattern.compile(".*" + AddClinicalNotesVisitMyScriptFragment.CHARACTER_TO_BE_REPLACED + "\\s*(.*)");
         Matcher m = p.matcher(searchTerm.trim());
@@ -813,7 +919,6 @@ public class MyScriptAddVisitsFragment extends HealthCocoFragment implements Vie
             return m.group(1);
         return searchTerm;
     }
-
 
     private void showHideDiagramsLayout(int visibility) {
         if (visibility == View.GONE)
@@ -900,10 +1005,6 @@ public class MyScriptAddVisitsFragment extends HealthCocoFragment implements Vie
         Util.showToast(mActivity, R.string.user_offline);
         mActivity.hideLoading();
     }
-
-
-    //--------------------------------------------------------------------------------
-    // Widget callbacks
 
     @Override
     public void onConfigured(View view, SingleLineWidgetApi w, boolean success) {
@@ -1038,6 +1139,9 @@ public class MyScriptAddVisitsFragment extends HealthCocoFragment implements Vie
 
     }
 
+    //--------------------------------------------------------------------------------
+    // UI callbacks
+
     @Override
     public void onSelectionChanged(EditText editText, int selStart, int selEnd) {
         Log.d(TAG, "Selection changed to [" + selStart + "-" + selEnd + "]");
@@ -1089,15 +1193,6 @@ public class MyScriptAddVisitsFragment extends HealthCocoFragment implements Vie
 
     public LinearLayout getDiagramContainer() {
         return (LinearLayout) view.findViewById(R.id.container_diagrams);
-    }
-
-    //--------------------------------------------------------------------------------
-    // UI callbacks
-
-    private class CandidateTag {
-        int start;
-        int end;
-        String text;
     }
 
     public void onEnterClick() {
@@ -1157,7 +1252,6 @@ public class MyScriptAddVisitsFragment extends HealthCocoFragment implements Vie
             e.printStackTrace();
         }
     }
-
 
     // update candidates bar
     private void updateCandidateBar() {
@@ -1371,117 +1465,6 @@ public class MyScriptAddVisitsFragment extends HealthCocoFragment implements Vie
         LocalBroadcastManager.getInstance(mActivity).unregisterReceiver(clinicalNoteButtonVisibilityReceiver);
         LocalBroadcastManager.getInstance(mActivity).unregisterReceiver(diagramButtonVisibilityReceiver);
     }
-
-
-    BroadcastReceiver onSuggestionItemClickReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, final Intent intent) {
-            if (intent != null && intent.hasExtra(TAG_SUGGESTIONS_TYPE) && intent.hasExtra(TAG_SELECTED_SUGGESTION_OBJECT)) {
-                int ordinal = intent.getIntExtra(TAG_SUGGESTIONS_TYPE, -1);
-                SuggestionType suggestionType = SuggestionType.values()[ordinal];
-                Object selectedSuggestionObject = Parcels.unwrap(intent.getParcelableExtra(TAG_SELECTED_SUGGESTION_OBJECT));
-                if (suggestionType != null && selectedSuggestionObject != null) {
-                    handleSelectedSugestionObject(suggestionType, selectedSuggestionObject);
-                }
-            }
-        }
-    };
-    BroadcastReceiver adviceButtonVisibilityReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, final Intent intent) {
-            if (intent != null && intent.hasExtra(TAG_VISIBILITY)) {
-                Util.enableAllChildViews(btSave, true);
-                boolean showVisibility = intent.getBooleanExtra(TAG_VISIBILITY, false);
-                if (showVisibility) {
-                    addVisibileUiType(VisitsUiType.PRESCRIPTION);
-                    parentPrescription.setVisibility(View.VISIBLE);
-                    btAdvice.setVisibility(View.VISIBLE);
-                } else {
-                    if (!Util.isNullOrBlank(prescriptionId))
-                        Util.enableAllChildViews(btSave, false);
-                    removeVisibileUiType(VisitsUiType.PRESCRIPTION);
-                    parentPrescription.setVisibility(View.GONE);
-                    btAdvice.setVisibility(View.GONE);
-                    parentAdvice.setVisibility(View.GONE);
-                }
-            }
-        }
-    };
-    BroadcastReceiver diagramLayoutVisibilityReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, final Intent intent) {
-            if (intent != null && intent.hasExtra(TAG_VISIBILITY)) {
-                boolean showVisibility = intent.getBooleanExtra(TAG_VISIBILITY, false);
-                if (showVisibility) {
-                    addVisibileUiType(VisitsUiType.DIAGRAMS);
-                    parentDiagrams.setVisibility(View.VISIBLE);
-                } else {
-                    removeVisibileUiType(VisitsUiType.DIAGRAMS);
-                    parentDiagrams.setVisibility(View.GONE);
-                }
-            }
-        }
-    };
-    BroadcastReceiver diagramButtonVisibilityReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, final Intent intent) {
-            if (intent != null && intent.hasExtra(TAG_VISIBILITY)) {
-                boolean showVisibility = intent.getBooleanExtra(TAG_VISIBILITY, false);
-                if (showVisibility) {
-//                    addVisibileUiType(VisitsUiType.DIAGRAMS);
-                    btDiagrams.setVisibility(View.VISIBLE);
-                } else {
-//                    removeVisibileUiType(VisitsUiType.DIAGRAMS);
-                    btDiagrams.setVisibility(View.GONE);
-                }
-            }
-        }
-    };
-    BroadcastReceiver clinicalNoteLayoutVisibilityReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, final Intent intent) {
-            if (intent != null && intent.hasExtra(TAG_VISIBILITY)) {
-                boolean showVisibility = intent.getBooleanExtra(TAG_VISIBILITY, false);
-                if (showVisibility) {
-                    addVisibileUiType(VisitsUiType.CLINICAL_NOTES);
-                    parentClinicalNote.setVisibility(View.VISIBLE);
-                } else {
-                    removeVisibileUiType(VisitsUiType.CLINICAL_NOTES);
-                    parentClinicalNote.setVisibility(View.GONE);
-                }
-            }
-        }
-    };
-    BroadcastReceiver clinicalNoteButtonVisibilityReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, final Intent intent) {
-            if (intent != null && intent.hasExtra(TAG_VISIBILITY)) {
-                boolean showVisibility = intent.getBooleanExtra(TAG_VISIBILITY, false);
-                if (showVisibility) {
-//                    addVisibileUiType(VisitsUiType.CLINICAL_NOTES);
-                    btClinicalNote.setVisibility(View.VISIBLE);
-                } else {
-//                    removeVisibileUiType(VisitsUiType.CLINICAL_NOTES);
-                    btClinicalNote.setVisibility(View.GONE);
-                }
-            }
-        }
-    };
-    BroadcastReceiver labTestLayoutVisibilityReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, final Intent intent) {
-            if (intent != null && intent.hasExtra(TAG_VISIBILITY)) {
-                boolean showVisibility = intent.getBooleanExtra(TAG_VISIBILITY, false);
-                if (showVisibility) {
-                    addVisibileUiType(VisitsUiType.LAB_TEST);
-                    parentDiagnosticTests.setVisibility(View.VISIBLE);
-                } else {
-                    removeVisibileUiType(VisitsUiType.LAB_TEST);
-                    parentDiagnosticTests.setVisibility(View.GONE);
-                }
-            }
-        }
-    };
 
     private void addVisibileUiType(VisitsUiType visitsUiType) {
         if (!visibleViews.contains(visitsUiType))
@@ -1702,5 +1685,11 @@ public class MyScriptAddVisitsFragment extends HealthCocoFragment implements Vie
             hideBoth();
         }
         return wasKeyboardOrWidgetVisible;
+    }
+
+    private class CandidateTag {
+        int start;
+        int end;
+        String text;
     }
 }

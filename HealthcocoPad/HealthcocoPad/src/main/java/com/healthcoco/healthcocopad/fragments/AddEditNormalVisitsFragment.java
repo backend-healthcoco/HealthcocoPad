@@ -221,7 +221,7 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
                 addFragment(addEditNormalVisitPrescriptionFragment, R.string.prescriptions, false);
                 addFragment(addNewTreatmentFragment, R.string.treatment, true);
                 tabs.setVisibility(View.VISIBLE);
-//                flBtSwap.setVisibility(View.VISIBLE);
+                flBtSwap.setVisibility(View.VISIBLE);
                 break;
 
             case PATIENT_DETAIL_CLINICAL_NOTES:

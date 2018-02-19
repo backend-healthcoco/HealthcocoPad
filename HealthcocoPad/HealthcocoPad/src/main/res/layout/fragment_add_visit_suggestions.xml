@@ -15,7 +15,7 @@
         android:gravity="center"
         android:orientation="horizontal">
 
-        <EditText
+        <com.healthcoco.healthcocopad.custom.MyScriptEditText
             android:id="@+id/edit_search"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
