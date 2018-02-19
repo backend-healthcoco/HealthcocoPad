@@ -956,4 +956,22 @@ public class Util {
         return false;
     }
 
+    public static String getFormattedFloatNumber(float number) {
+        NumberFormat formatter = new DecimalFormat("##.##");
+        if (number != 0)
+            return formatter.format(number);
+        return "0";
+    }
+
+    //Calculate BMI
+    public static float calculateBMI(float weight, float height) {
+        return (float) (weight / (height * height));
+    }
+
+
+    //Calculate BSA  = squareroot of (weight X height / 3600)
+    public static float calculateBSA(float weight, float height) {
+        return (float) Math.sqrt(((weight * height) / 3600));
+    }
+
 }

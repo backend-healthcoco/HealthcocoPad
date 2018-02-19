@@ -33,11 +33,13 @@ import com.healthcoco.healthcocopad.bean.server.Diagram;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.bean.server.VitalSigns;
+import com.healthcoco.healthcocopad.custom.HealthcocoTextWatcher;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocopad.enums.ClinicalNotesPermissionType;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
+import com.healthcoco.healthcocopad.listeners.HealthcocoTextWatcherListener;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.DownloadImageFromUrlUtil;
@@ -63,7 +65,7 @@ import static com.healthcoco.healthcocopad.utilities.HealthCocoConstants.REQUEST
  */
 
 public class AddClinicalNotesSubFragment extends HealthCocoFragment implements View.OnClickListener,
-        LocalDoInBackgroundListenerOptimised {
+        LocalDoInBackgroundListenerOptimised, HealthcocoTextWatcherListener, View.OnFocusChangeListener {
     public static final String CHARACTER_TO_REPLACE_COMMA_WITH_SPACES = " , ";
     public static final String CHARACTER_TO_BE_REPLACED = ",";
     public static final String TAG_CLINICAL_NOTES_DATA = "clinicaNotesData";
@@ -77,6 +79,10 @@ public class AddClinicalNotesSubFragment extends HealthCocoFragment implements V
     private TextView editRespRate;
     private TextView editSpo2;
     private TextView editWeight;
+    private TextView editHeight;
+    private TextView editBmi;
+    private TextView editBsa;
+    private TextView labelBloodPressure;
     private TextView editHeartRate;
     private ClinicalNotes clinicalNotes;
     private ArrayList<String> clinicalNotesUiPermissionsList;
@@ -139,6 +145,10 @@ public class AddClinicalNotesSubFragment extends HealthCocoFragment implements V
         editHeartRate = (TextView) view.findViewById(R.id.edit_heart_rate);
         editSpo2 = (TextView) view.findViewById(R.id.edit_spo2);
         editWeight = (TextView) view.findViewById(R.id.edit_weight);
+        editBmi = (TextView) view.findViewById(R.id.edit_bmi);
+        editBsa = (TextView) view.findViewById(R.id.edit_bsa);
+        labelBloodPressure = (TextView) view.findViewById(R.id.tv_blood_pressure);
+        editHeight = (TextView) view.findViewById(R.id.edit_height);
         containerDiagrams = (LinearLayout) view.findViewById(R.id.container_diagrams);
         svScrollView = (ScrollView) view.findViewById(R.id.sv_scrollview);
 
@@ -156,6 +166,10 @@ public class AddClinicalNotesSubFragment extends HealthCocoFragment implements V
     @Override
     public void initListeners() {
         btSelectDiagram.setOnClickListener(this);
+        editSystolic.setOnFocusChangeListener(this);
+        editHeight.addTextChangedListener(new HealthcocoTextWatcher(editHeight, this));
+        editWeight.addTextChangedListener(new HealthcocoTextWatcher(editWeight, this));
+
     }
 
     private void initVitalSigns(VitalSigns vitalSigns) {
@@ -172,6 +186,10 @@ public class AddClinicalNotesSubFragment extends HealthCocoFragment implements V
             }
             editRespRate.setText(Util.getValidatedValue(vitalSigns.getBreathing()));
             editSpo2.setText(Util.getValidatedValue(vitalSigns.getSpo2()));
+            editHeight.setText(Util.getValidatedValue(vitalSigns.getHeight()));
+            editBsa.setText(Util.getValidatedValue(vitalSigns.getBsa()));
+            editBmi.setText(Util.getValidatedValue(vitalSigns.getBmi()));
+
         }
     }
 
@@ -629,12 +647,18 @@ public class AddClinicalNotesSubFragment extends HealthCocoFragment implements V
         String diastolic = Util.getValidatedValueOrNull(editDiastolic);
         String respiratory = Util.getValidatedValueOrNull(editRespRate);
         String spO2 = Util.getValidatedValueOrNull(editSpo2);
+        String bmi = Util.getValidatedValueOrNull(editBmi);
+        String bsa = Util.getValidatedValueOrNull(editBsa);
+        String height = Util.getValidatedValueOrNull(editHeight);
         return Util.isNullOrBlank(heartRate)
                 && Util.isNullOrBlank(bodyTemprature)
                 && Util.isNullOrBlank(weight)
                 && (Util.isNullOrBlank(systolic)
                 && Util.isNullOrBlank(diastolic))
                 && Util.isNullOrBlank(respiratory)
+                && Util.isNullOrBlank(bmi)
+                && Util.isNullOrBlank(bsa)
+                && Util.isNullOrBlank(height)
                 && Util.isNullOrBlank(spO2);
     }
 
@@ -805,6 +829,9 @@ public class AddClinicalNotesSubFragment extends HealthCocoFragment implements V
             vitalSigns.setBloodPressure(vitalSigns.getBloodPressure(systolic, diastolic));
         vitalSigns.setBreathing(Util.getValidatedValueOrNull(editRespRate));
         vitalSigns.setSpo2(Util.getValidatedValueOrNull(editSpo2));
+        vitalSigns.setBmi(Util.getValidatedValueOrNull(editBmi));
+        vitalSigns.setBsa(Util.getValidatedValueOrNull(editBsa));
+        vitalSigns.setHeight(Util.getValidatedValueOrNull(editHeight));
         return vitalSigns;
     }
 
@@ -988,5 +1015,59 @@ public class AddClinicalNotesSubFragment extends HealthCocoFragment implements V
 
     public boolean isInitialLoading() {
         return isInitialLoading;
+    }
+
+    @Override
+    public void afterTextChange(View v, String s) {
+        switch (v.getId()) {
+            case R.id.edit_height:
+                if (!Util.isNullOrBlank(s)
+                        && !Util.isNullOrBlank(editWeight.getText().toString())
+                        && !Util.isNullOrBlank(s)) {
+                    float weight = Float.parseFloat(editWeight.getText().toString());
+                    float height = Float.parseFloat(s);
+                    //BMI = weight in KG / square of (height in metre)
+                    float bmiValue = Util.calculateBMI(weight, Float.parseFloat(s) / 100);
+
+                    editBmi.setText(Util.getFormattedFloatNumber(bmiValue));
+
+                    // BSA = squareroot of (weight X height / 3600)
+                    float bsaValue = Util.calculateBSA(weight, height);
+                    editBsa.setText(Util.getFormattedFloatNumber(bsaValue));
+                } else {
+                    editBmi.setText("");
+                    editBsa.setText("");
+                }
+                break;
+            case R.id.edit_weight:
+                if (!Util.isNullOrBlank(s)
+                        && !Util.isNullOrBlank(editHeight.getText().toString())
+                        && !Util.isNullOrBlank(s)) {
+                    float weight = Float.parseFloat(s);
+                    float height = Float.parseFloat(editHeight.getText().toString());
+                    //BMI = weight in KG / square of (height in metre)
+                    float bmiValue = Util.calculateBMI(weight, height / 100);
+                    editBmi.setText(Util.getFormattedFloatNumber(bmiValue));
+
+                    // BSA = squareroot of (weight X height / 3600)
+                    float bsaValue = Util.calculateBSA(weight, height);
+                    editBsa.setText(Util.getFormattedFloatNumber(bsaValue));
+                } else {
+                    editBmi.setText("");
+                    editBsa.setText("");
+                }
+                break;
+        }
+
+    }
+
+    @Override
+    public void onFocusChange(View v, boolean hasFocus) {
+        switch (v.getId()) {
+            case R.id.edit_systolic:
+            case R.id.edit_diastolic:
+                labelBloodPressure.setFocusable(hasFocus);
+                break;
+        }
     }
 }

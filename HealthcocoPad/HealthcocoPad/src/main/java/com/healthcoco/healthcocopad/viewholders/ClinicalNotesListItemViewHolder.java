@@ -124,6 +124,9 @@ public class ClinicalNotesListItemViewHolder extends HealthCocoViewHolder implem
     private TextView tvBloodPressure;
     private TextView tvRespiratoryRate;
     private TextView tvSpo2;
+    private TextView tvBsa;
+    private TextView tvBmi;
+    private TextView tvHeight;
     private ImageView imageView;
     private LinearLayout btDiscard;
     private TextView textViewNextReviewDate;
@@ -152,7 +155,9 @@ public class ClinicalNotesListItemViewHolder extends HealthCocoViewHolder implem
     private LinearLayout layoutEarsExam;
     private LinearLayout layoutPastHistory;
     private LinearLayout layoutFamilyHistory;
+    private LinearLayout layoutProcedures;
 
+    private TextView tvProcedures;
     private TextView tvPcNose;
     private TextView tvPcEars;
     private TextView tvPcThroat;
@@ -228,6 +233,12 @@ public class ClinicalNotesListItemViewHolder extends HealthCocoViewHolder implem
                 tvRespiratoryRate.setText(vitalSigns.getFormattedBreathing(mActivity, vitalSigns.getBreathing()));
             if (!Util.isNullOrBlank(vitalSigns.getSpo2()))
                 tvSpo2.setText(vitalSigns.getFormattedSpo2(mActivity, vitalSigns.getSpo2()));
+            if (!Util.isNullOrBlank(vitalSigns.getBmi()))
+                tvBmi.setText(vitalSigns.getFormattedBmi(mActivity, vitalSigns.getBmi()));
+            if (!Util.isNullOrBlank(vitalSigns.getBsa()))
+                tvBsa.setText(vitalSigns.getFormattedBsa(mActivity, vitalSigns.getBsa()));
+            if (!Util.isNullOrBlank(vitalSigns.getHeight()))
+                tvHeight.setText(vitalSigns.getFormattedHeight(mActivity, vitalSigns.getHeight()));
         }
         if (!Util.isNullOrBlank(clinicalNote.getPresentComplaint())) {
             layoutPresentComplaints.setVisibility(View.VISIBLE);
@@ -311,7 +322,7 @@ public class ClinicalNotesListItemViewHolder extends HealthCocoViewHolder implem
         }
         if (!Util.isNullOrBlank(clinicalNote.getPcNose())) {
             layoutEntComplaints.setVisibility(View.VISIBLE);
-            layoutNoseExam.setVisibility(View.VISIBLE);
+            layoutPcNose.setVisibility(View.VISIBLE);
             initSuggestionsText(ClinicalNotesPermissionType.PC_NOSE, clinicalNote.getPcNose());
         }
         if (!Util.isNullOrBlank(clinicalNote.getPcOralCavity())) {
@@ -396,8 +407,20 @@ public class ClinicalNotesListItemViewHolder extends HealthCocoViewHolder implem
         }
         if (!Util.isNullOrBlank(clinicalNote.getEarsExam())) {
             layoutEntExamination.setVisibility(View.VISIBLE);
-            layoutNeckExam.setVisibility(View.VISIBLE);
-            initSuggestionsText(ClinicalNotesPermissionType.NECK_EXAM, clinicalNote.getNeckExam());
+            layoutEarsExam.setVisibility(View.VISIBLE);
+            initSuggestionsText(ClinicalNotesPermissionType.EARS_EXAM, clinicalNote.getEarsExam());
+        }
+        if (!Util.isNullOrBlank(clinicalNote.getPastHistory())) {
+            layoutPastHistory.setVisibility(View.VISIBLE);
+            initSuggestionsText(ClinicalNotesPermissionType.PAST_HISTORY, clinicalNote.getPastHistory());
+        }
+        if (!Util.isNullOrBlank(clinicalNote.getFamilyHistory())) {
+            layoutFamilyHistory.setVisibility(View.VISIBLE);
+            initSuggestionsText(ClinicalNotesPermissionType.FAMILY_HISTORY, clinicalNote.getFamilyHistory());
+        }
+        if (!Util.isNullOrBlank(clinicalNote.getProcedureNote())) {
+            layoutProcedures.setVisibility(View.VISIBLE);
+            initSuggestionsText(ClinicalNotesPermissionType.PROCEDURES, clinicalNote.getProcedureNote());
         }
         if (!Util.isNullOrEmptyList(clinicalNote.getDiagrams())) {
             layoutDiagrams.setVisibility(View.VISIBLE);
@@ -575,6 +598,9 @@ public class ClinicalNotesListItemViewHolder extends HealthCocoViewHolder implem
             case FAMILY_HISTORY:
                 tvFamilyHistory.setText(text);
                 break;
+            case PROCEDURES:
+                tvProcedures.setText(text);
+                break;
 
         }
     }
@@ -658,6 +684,9 @@ public class ClinicalNotesListItemViewHolder extends HealthCocoViewHolder implem
         tvBloodPressure = (TextViewFontAwesome) contentView.findViewById(R.id.tv_blood_pressure);
         tvRespiratoryRate = (TextViewFontAwesome) contentView.findViewById(R.id.tv_respiratory_rate);
         tvSpo2 = (TextViewFontAwesome) contentView.findViewById(R.id.tv_spo2);
+        tvBmi = (TextViewFontAwesome) contentView.findViewById(R.id.tv_bmi);
+        tvBsa = (TextViewFontAwesome) contentView.findViewById(R.id.tv_bsa);
+        tvHeight = (TextViewFontAwesome) contentView.findViewById(R.id.tv_height);
 
         layoutEntComplaints = (LinearLayout) contentView.findViewById(R.id.layout_ent_complaints);
         layoutPcNose = (LinearLayout) contentView.findViewById(R.id.layout_pc_nose);
@@ -683,7 +712,9 @@ public class ClinicalNotesListItemViewHolder extends HealthCocoViewHolder implem
         layoutEarsExam = (LinearLayout) contentView.findViewById(R.id.layout_ears_exam);
         layoutPastHistory = (LinearLayout) contentView.findViewById(R.id.layout_past_history);
         layoutFamilyHistory = (LinearLayout) contentView.findViewById(R.id.layout_family_history);
+        layoutProcedures = (LinearLayout) contentView.findViewById(R.id.layout_procedure_notes);
 
+        tvProcedures = (TextView) contentView.findViewById(R.id.tv_text_procedure_notes);
         tvPcNose = (TextView) contentView.findViewById(R.id.tv_text_pc_nose);
         tvPcEars = (TextView) contentView.findViewById(R.id.tv_text_pc_ears);
         tvPcThroat = (TextView) contentView.findViewById(R.id.tv_text_pc_throat);
@@ -755,6 +786,7 @@ public class ClinicalNotesListItemViewHolder extends HealthCocoViewHolder implem
         tvIndicationOfUSG.setText("");
         tvNotes.setText("");
         tvPcNose.setText("");
+        tvProcedures.setText("");
         tvPcEars.setText("");
         tvPcThroat.setText("");
         tvPcOralCavity.setText("");
@@ -822,6 +854,7 @@ public class ClinicalNotesListItemViewHolder extends HealthCocoViewHolder implem
         layoutEarsExam.setVisibility(View.GONE);
         layoutPastHistory.setVisibility(View.GONE);
         layoutFamilyHistory.setVisibility(View.GONE);
+        layoutProcedures.setVisibility(View.GONE);
     }
 
     /**

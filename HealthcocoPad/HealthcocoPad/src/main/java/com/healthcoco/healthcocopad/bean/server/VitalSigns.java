@@ -24,6 +24,8 @@ public class VitalSigns extends SugarRecord {
     private String temperature;
     private String breathing;
     private String height;
+    private String bmi;
+    private String bsa;
     @Ignore
     private BloodPressure bloodPressure;
     private String bloodPressureJsonString;
@@ -82,15 +84,15 @@ public class VitalSigns extends SugarRecord {
         return bloodPressure;
     }
 
+    public void setBloodPressure(BloodPressure bloodPressure) {
+        this.bloodPressure = bloodPressure;
+    }
+
     public BloodPressure getBloodPressure(String systolic, String diastolic) {
         BloodPressure bloodPressure = new BloodPressure();
         bloodPressure.setSystolic(systolic);
         bloodPressure.setDiastolic(diastolic);
         return bloodPressure;
-    }
-
-    public void setBloodPressure(BloodPressure bloodPressure) {
-        this.bloodPressure = bloodPressure;
     }
 
     public boolean areAllFieldsNull() {
@@ -99,6 +101,9 @@ public class VitalSigns extends SugarRecord {
                 && Util.isNullOrBlank(breathing)
                 && Util.isNullOrBlank(height)
                 && Util.isNullOrBlank(weight)
+                && Util.isNullOrBlank(bsa)
+                && Util.isNullOrBlank(pulse)
+                && Util.isNullOrBlank(bmi)
                 && (bloodPressure == null || (bloodPressure != null && bloodPressure.areAllFieldsNull())))
                 && Util.isNullOrBlank(spo2))
             return true;
@@ -114,28 +119,48 @@ public class VitalSigns extends SugarRecord {
     }
 
     public String getFormattedBreathing(HealthCocoActivity mActivity, String breathing) {
-        return breathing + "(" + mActivity.getResources().getString(R.string.breaths_per_min) + ")";
+        return breathing;
     }
 
     public String getFormattedPulse(HealthCocoActivity mActivity, String pulse) {
-        return pulse + "(" + mActivity.getResources().getString(R.string.bmp) + ")";
+        return pulse;
     }
 
     public String getFormattedTemprature(HealthCocoActivity mActivity, String temperature) {
-        return temperature + "(" + mActivity.getResources().getString(R.string.fahrenheit) + ")";
+        return temperature;
     }
 
     public String getFormattedWeight(HealthCocoActivity mActivity, String weight) {
-        return weight + "(" + mActivity.getResources().getString(R.string.kg) + ")";
+        return weight;
+    }
+
+    public String getFormattedHeight(HealthCocoActivity mActivity, String height) {
+        return height;
+    }
+
+    public String getFormattedBmi(HealthCocoActivity mActivity, String value) {
+        return value;
+    }
+
+    public String getFormattedBsa(HealthCocoActivity mActivity, String value) {
+        return value;
     }
 
     public String getFormattedSpo2(HealthCocoActivity mActivity, String spo2) {
-        return spo2 + "(" + mActivity.getResources().getString(R.string.percentage) + ")";
+        return spo2;
     }
 
     public String getFormattedBloodPressureValue(HealthCocoActivity mActivity, BloodPressure bloodPressure) {
-        return mActivity.getResources().getString(R.string.fa_angle_down_thin) + " " + bloodPressure.getSystolic()
-                + "/" + " " + mActivity.getResources().getString(R.string.fa_angle_up_thin) + bloodPressure.getDiastolic() + "(" + mActivity.getResources().getString(R.string.mm_hg) + ")";
+        return bloodPressure.getSystolic()
+                + "/" + " " + bloodPressure.getDiastolic() + "(" + mActivity.getResources().getString(R.string.mm_hg) + ")";
+    }
+
+    public String getBmi() {
+        return bmi;
+    }
+
+    public void setBmi(String bmi) {
+        this.bmi = bmi;
     }
 
     public String getBloodPressureJsonString() {
@@ -145,4 +170,14 @@ public class VitalSigns extends SugarRecord {
     public void setBloodPressureJsonString(String bloodPressureJsonString) {
         this.bloodPressureJsonString = bloodPressureJsonString;
     }
+
+    public String getBsa() {
+        return bsa;
+    }
+
+    public void setBsa(String bsa) {
+        this.bsa = bsa;
+    }
+
+
 }
