@@ -94,9 +94,10 @@ public class AddNewSuggestionDialogFragment extends HealthCocoDialogFragment imp
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         bundle = getArguments();
-        uniqueId = bundle.getString(HealthCocoConstants.TAG_UNIQUE_ID);
-        editedSuggestion = bundle.getString(TAG_SGGESTION);
-
+        if (bundle != null) {
+            uniqueId = bundle.getString(HealthCocoConstants.TAG_UNIQUE_ID);
+            editedSuggestion = bundle.getString(TAG_SGGESTION);
+        }
         init();
     }
 

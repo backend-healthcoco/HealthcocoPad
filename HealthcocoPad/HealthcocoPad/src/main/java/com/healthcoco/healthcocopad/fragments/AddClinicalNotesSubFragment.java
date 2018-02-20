@@ -323,6 +323,8 @@ public class AddClinicalNotesSubFragment extends HealthCocoFragment implements V
         TextView tvTitle = (TextView) layoutItemPermission.findViewById(R.id.tv_title);
         EditText autotvPermission = (EditText) layoutItemPermission.findViewById(R.id.edit_permission_text);
         tvTitle.setText(clinicalNotesPermissionType.getTextId());
+        View viewTopLine = (View) layoutItemPermission.findViewById(R.id.view_top_line);
+        viewTopLine.setVisibility(View.GONE);
         autotvPermission.setId(clinicalNotesPermissionType.getAutotvId());
         autotvPermission.setHint(clinicalNotesPermissionType.getHintId());
         autotvPermission.setTag(String.valueOf(clinicalNotesPermissionType));
@@ -336,6 +338,7 @@ public class AddClinicalNotesSubFragment extends HealthCocoFragment implements V
                     break;
                 case COMPLAINT:
                     text = clinicalNotes.getComplaint();
+                    viewTopLine.setVisibility(View.VISIBLE);
                     break;
                 case HISTORY_OF_PRESENT_COMPLAINT:
                     text = clinicalNotes.getPresentComplaintHistory();
@@ -399,12 +402,26 @@ public class AddClinicalNotesSubFragment extends HealthCocoFragment implements V
                     break;
                 case PAST_HISTORY:
                     text = clinicalNotes.getPastHistory();
+                    viewTopLine.setVisibility(View.VISIBLE);
                     break;
                 case FAMILY_HISTORY:
                     text = clinicalNotes.getFamilyHistory();
+                    viewTopLine.setVisibility(View.VISIBLE);
                     break;
             }
             autotvPermission.setText(Util.getValidatedValue(text));
+        } else {
+            switch (clinicalNotesPermissionType) {
+                case COMPLAINT:
+                    viewTopLine.setVisibility(View.VISIBLE);
+                    break;
+                case PAST_HISTORY:
+                    viewTopLine.setVisibility(View.VISIBLE);
+                    break;
+                case FAMILY_HISTORY:
+                    viewTopLine.setVisibility(View.VISIBLE);
+                    break;
+            }
         }
         parentPermissionItems.addView(layoutItemPermission);
     }
@@ -414,6 +431,8 @@ public class AddClinicalNotesSubFragment extends HealthCocoFragment implements V
         LinearLayout layoutSubItemPermission = (LinearLayout) mActivity.getLayoutInflater().inflate(R.layout.layout_item_add_clinical_note_ent_compalints, null);
         LinearLayout layout = (LinearLayout) layoutSubItemPermission.findViewById(R.id.layout_clinical_notes_field);
         TextView tvItemTitle = (TextView) layoutSubItemPermission.findViewById(R.id.tv_title_clinical_notes);
+        View viewBottomLine = (View) layoutSubItemPermission.findViewById(R.id.view_bottom_line);
+        viewBottomLine.setVisibility(View.GONE);
         tvItemTitle.setText(R.string.ent_compaints);
 
         if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.PC_NOSE.getValue())
@@ -443,6 +462,8 @@ public class AddClinicalNotesSubFragment extends HealthCocoFragment implements V
         LinearLayout layoutSubItemPermission = (LinearLayout) mActivity.getLayoutInflater().inflate(R.layout.layout_item_add_clinical_note_ent_compalints, null);
         LinearLayout layout = (LinearLayout) layoutSubItemPermission.findViewById(R.id.layout_clinical_notes_field);
         TextView tvItemTitle = (TextView) layoutSubItemPermission.findViewById(R.id.tv_title_clinical_notes);
+        View viewBottomLine = (View) layoutSubItemPermission.findViewById(R.id.view_bottom_line);
+        viewBottomLine.setVisibility(View.GONE);
         tvItemTitle.setText(R.string.personal_history_colon);
 
 
@@ -478,6 +499,8 @@ public class AddClinicalNotesSubFragment extends HealthCocoFragment implements V
         LinearLayout layoutSubItemPermission = (LinearLayout) mActivity.getLayoutInflater().inflate(R.layout.layout_item_add_clinical_note_ent_compalints, null);
         LinearLayout layout = (LinearLayout) layoutSubItemPermission.findViewById(R.id.layout_clinical_notes_field);
         TextView tvItemTitle = (TextView) layoutSubItemPermission.findViewById(R.id.tv_title_clinical_notes);
+        View viewBottomLine = (View) layoutSubItemPermission.findViewById(R.id.view_bottom_line);
+        viewBottomLine.setVisibility(View.GONE);
         tvItemTitle.setText(R.string.general_history_colon);
 
 
@@ -508,6 +531,8 @@ public class AddClinicalNotesSubFragment extends HealthCocoFragment implements V
         LinearLayout layoutSubItemPermission = (LinearLayout) mActivity.getLayoutInflater().inflate(R.layout.layout_item_add_clinical_note_ent_compalints, null);
         LinearLayout layout = (LinearLayout) layoutSubItemPermission.findViewById(R.id.layout_clinical_notes_field);
         TextView tvItemTitle = (TextView) layoutSubItemPermission.findViewById(R.id.tv_title_clinical_notes);
+        View viewBottomLine = (View) layoutSubItemPermission.findViewById(R.id.view_bottom_line);
+        viewBottomLine.setVisibility(View.VISIBLE);
         tvItemTitle.setText(R.string.ent_examinations);
 
         if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.NOSE_EXAM.getValue())

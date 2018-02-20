@@ -55,6 +55,7 @@
     <dimen name="text_size_initial_alphabet_doctor_profile">20sp</dimen>
     <dimen name="text_size_initial_alphabet_add_edit_doctor_profile">18sp</dimen>
     <dimen name="dialog_action_bar_size">50dp</dimen>
+    <dimen name="margin_left_clinical_notes_item_title">23dp</dimen>
     <dimen name="text_size_doctor_profile_item_header">18sp</dimen>
     <dimen name="text_size_doctor_profile_item_header_child">16sp</dimen>
     <dimen name="text_size_fontawesome_edit_icon">15sp</dimen>

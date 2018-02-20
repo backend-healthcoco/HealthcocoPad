@@ -18,8 +18,10 @@
         android:id="@+id/tv_title_clinical_notes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/item_padding"
-        android:padding="@dimen/item_contact_padding"
+        android:layout_marginLeft="@dimen/margin_left_clinical_notes_item_title"
+        android:paddingBottom="@dimen/item_contact_padding"
+        android:paddingRight="@dimen/item_contact_padding"
+        android:paddingTop="@dimen/item_contact_padding"
         android:text="Title"
         android:textColor="@color/black"
         android:textSize="@dimen/text_size_patient_deatil_fragment" />
@@ -33,9 +35,11 @@
     </LinearLayout>
 
     <View
+        android:id="@+id/view_bottom_line"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="15dp"
-        android:background="@color/grey_hint_color" />
+        android:background="@color/grey_hint_color"
+        android:visibility="gone" />
 
 </LinearLayout>

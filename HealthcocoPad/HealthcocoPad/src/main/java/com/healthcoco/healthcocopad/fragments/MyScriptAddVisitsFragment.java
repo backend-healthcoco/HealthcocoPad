@@ -41,6 +41,7 @@ import com.healthcoco.healthcocopad.bean.server.Drug;
 import com.healthcoco.healthcocopad.bean.server.DrugItem;
 import com.healthcoco.healthcocopad.bean.server.DrugType;
 import com.healthcoco.healthcocopad.bean.server.DrugsListSolrResponse;
+import com.healthcoco.healthcocopad.bean.server.EarsExamSuggestions;
 import com.healthcoco.healthcocopad.bean.server.EcgDetailSuggestions;
 import com.healthcoco.healthcocopad.bean.server.EchoSuggestions;
 import com.healthcoco.healthcocopad.bean.server.GeneralExaminationSuggestions;
@@ -48,15 +49,24 @@ import com.healthcoco.healthcocopad.bean.server.GenericName;
 import com.healthcoco.healthcocopad.bean.server.HistoryPresentComplaintSuggestions;
 import com.healthcoco.healthcocopad.bean.server.HolterSuggestions;
 import com.healthcoco.healthcocopad.bean.server.IndicationOfUsgSuggestions;
+import com.healthcoco.healthcocopad.bean.server.IndirectLarygoscopyExamSuggestions;
 import com.healthcoco.healthcocopad.bean.server.InvestigationSuggestions;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.MenstrualHistorySuggestions;
+import com.healthcoco.healthcocopad.bean.server.NeckExamSuggestions;
+import com.healthcoco.healthcocopad.bean.server.NoseExamSuggestions;
 import com.healthcoco.healthcocopad.bean.server.NotesSuggestions;
 import com.healthcoco.healthcocopad.bean.server.ObservationSuggestions;
 import com.healthcoco.healthcocopad.bean.server.ObstetricHistorySuggestions;
+import com.healthcoco.healthcocopad.bean.server.OralCavityThroatExamSuggestions;
 import com.healthcoco.healthcocopad.bean.server.PaSuggestions;
+import com.healthcoco.healthcocopad.bean.server.PcEarsSuggestions;
+import com.healthcoco.healthcocopad.bean.server.PcNoseSuggestions;
+import com.healthcoco.healthcocopad.bean.server.PcOralCavitySuggestions;
+import com.healthcoco.healthcocopad.bean.server.PcThroatSuggestions;
 import com.healthcoco.healthcocopad.bean.server.Prescription;
 import com.healthcoco.healthcocopad.bean.server.PresentComplaintSuggestions;
+import com.healthcoco.healthcocopad.bean.server.ProcedureNoteSuggestions;
 import com.healthcoco.healthcocopad.bean.server.ProvisionalDiagnosisSuggestions;
 import com.healthcoco.healthcocopad.bean.server.PsSuggestions;
 import com.healthcoco.healthcocopad.bean.server.PvSuggestions;
@@ -883,6 +893,46 @@ public class MyScriptAddVisitsFragment extends HealthCocoFragment implements Vie
                             selectedSuggestionType = SuggestionType.INDICATION_OF_USG;
                             searchTerm = getLastTextAfterCharacterToBeReplaced(searchTerm);
                             break;
+                        case PC_EARS:
+                            selectedSuggestionType = SuggestionType.PC_EARS;
+                            searchTerm = getLastTextAfterCharacterToBeReplaced(searchTerm);
+                            break;
+                        case PC_NOSE:
+                            selectedSuggestionType = SuggestionType.PC_NOSE;
+                            searchTerm = getLastTextAfterCharacterToBeReplaced(searchTerm);
+                            break;
+                        case PC_ORAL_CAVITY:
+                            selectedSuggestionType = SuggestionType.PC_ORAL_CAVITY;
+                            searchTerm = getLastTextAfterCharacterToBeReplaced(searchTerm);
+                            break;
+                        case PC_THROAT:
+                            selectedSuggestionType = SuggestionType.PC_THROAT;
+                            searchTerm = getLastTextAfterCharacterToBeReplaced(searchTerm);
+                            break;
+                        case EARS_EXAM:
+                            selectedSuggestionType = SuggestionType.EARS_EXAM;
+                            searchTerm = getLastTextAfterCharacterToBeReplaced(searchTerm);
+                            break;
+                        case INDIRECT_LARYGOSCOPY_EXAM:
+                            selectedSuggestionType = SuggestionType.INDIRECT_LARYGOSCOPY_EXAM;
+                            searchTerm = getLastTextAfterCharacterToBeReplaced(searchTerm);
+                            break;
+                        case NECK_EXAM:
+                            selectedSuggestionType = SuggestionType.NECK_EXAM;
+                            searchTerm = getLastTextAfterCharacterToBeReplaced(searchTerm);
+                            break;
+                        case NOSE_EXAM:
+                            selectedSuggestionType = SuggestionType.NOSE_EXAM;
+                            searchTerm = getLastTextAfterCharacterToBeReplaced(searchTerm);
+                            break;
+                        case ORAL_CAVITY_THROAT_EXAM:
+                            selectedSuggestionType = SuggestionType.ORAL_CAVITY_THROAT_EXAM;
+                            searchTerm = getLastTextAfterCharacterToBeReplaced(searchTerm);
+                            break;
+                        case PROCEDURES:
+                            selectedSuggestionType = SuggestionType.PROCEDURES;
+                            searchTerm = getLastTextAfterCharacterToBeReplaced(searchTerm);
+                            break;
                         default:
                             selectedSuggestionType = null;
                     }
@@ -1662,6 +1712,69 @@ public class MyScriptAddVisitsFragment extends HealthCocoFragment implements Vie
                     text = complaint.getIndicationOfUSG() + AddClinicalNotesVisitMyScriptFragment.CHARACTER_TO_REPLACE_COMMA_WITH_SPACES;
                 }
                 break;
+
+            case PC_EARS:
+                if (selectedSuggestionObject instanceof PcEarsSuggestions) {
+                    PcEarsSuggestions complaint = (PcEarsSuggestions) selectedSuggestionObject;
+                    text = complaint.getPcEars() + AddClinicalNotesSubFragment.CHARACTER_TO_REPLACE_COMMA_WITH_SPACES;
+                }
+                break;
+            case PC_NOSE:
+                if (selectedSuggestionObject instanceof PcNoseSuggestions) {
+                    PcNoseSuggestions complaint = (PcNoseSuggestions) selectedSuggestionObject;
+                    text = complaint.getPcNose() + AddClinicalNotesSubFragment.CHARACTER_TO_REPLACE_COMMA_WITH_SPACES;
+                }
+                break;
+            case PC_ORAL_CAVITY:
+                if (selectedSuggestionObject instanceof PcOralCavitySuggestions) {
+                    PcOralCavitySuggestions complaint = (PcOralCavitySuggestions) selectedSuggestionObject;
+                    text = complaint.getPcOralCavity() + AddClinicalNotesSubFragment.CHARACTER_TO_REPLACE_COMMA_WITH_SPACES;
+                }
+                break;
+            case PC_THROAT:
+                if (selectedSuggestionObject instanceof PcThroatSuggestions) {
+                    PcThroatSuggestions complaint = (PcThroatSuggestions) selectedSuggestionObject;
+                    text = complaint.getPcThroat() + AddClinicalNotesSubFragment.CHARACTER_TO_REPLACE_COMMA_WITH_SPACES;
+                }
+                break;
+            case EARS_EXAM:
+                if (selectedSuggestionObject instanceof EarsExamSuggestions) {
+                    EarsExamSuggestions complaint = (EarsExamSuggestions) selectedSuggestionObject;
+                    text = complaint.getEarsExam() + AddClinicalNotesSubFragment.CHARACTER_TO_REPLACE_COMMA_WITH_SPACES;
+                }
+                break;
+            case INDIRECT_LARYGOSCOPY_EXAM:
+                if (selectedSuggestionObject instanceof IndirectLarygoscopyExamSuggestions) {
+                    IndirectLarygoscopyExamSuggestions complaint = (IndirectLarygoscopyExamSuggestions) selectedSuggestionObject;
+                    text = complaint.getIndirectLarygoscopyExam() + AddClinicalNotesSubFragment.CHARACTER_TO_REPLACE_COMMA_WITH_SPACES;
+                }
+                break;
+            case NECK_EXAM:
+                if (selectedSuggestionObject instanceof NeckExamSuggestions) {
+                    NeckExamSuggestions complaint = (NeckExamSuggestions) selectedSuggestionObject;
+                    text = complaint.getNeckExam() + AddClinicalNotesSubFragment.CHARACTER_TO_REPLACE_COMMA_WITH_SPACES;
+                }
+                break;
+            case NOSE_EXAM:
+                if (selectedSuggestionObject instanceof NoseExamSuggestions) {
+                    NoseExamSuggestions complaint = (NoseExamSuggestions) selectedSuggestionObject;
+                    text = complaint.getNoseExam() + AddClinicalNotesSubFragment.CHARACTER_TO_REPLACE_COMMA_WITH_SPACES;
+                }
+                break;
+            case ORAL_CAVITY_THROAT_EXAM:
+                if (selectedSuggestionObject instanceof OralCavityThroatExamSuggestions) {
+                    OralCavityThroatExamSuggestions complaint = (OralCavityThroatExamSuggestions) selectedSuggestionObject;
+                    text = complaint.getOralCavityThroatExam() + AddClinicalNotesSubFragment.CHARACTER_TO_REPLACE_COMMA_WITH_SPACES;
+                }
+                break;
+            case PROCEDURES:
+                if (selectedSuggestionObject instanceof ProcedureNoteSuggestions) {
+                    ProcedureNoteSuggestions complaint = (ProcedureNoteSuggestions) selectedSuggestionObject;
+                    text = complaint.getProcedureNote() + AddClinicalNotesSubFragment.CHARACTER_TO_REPLACE_COMMA_WITH_SPACES;
+                }
+                break;
+
+
         }
 
         if (selectedViewForSuggestionsList != null && selectedViewForSuggestionsList instanceof EditText && !Util.isNullOrBlank(text)) {

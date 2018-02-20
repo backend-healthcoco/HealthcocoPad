@@ -13,6 +13,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -194,6 +195,24 @@ public class AddClinicalNotesVisitMyScriptFragment extends HealthCocoFragment im
                     if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.PRESENT_COMPLAINT.getValue())
                             || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getPresentComplaint())))
                         addPermissionItem(PRESENT_COMPLAINT);
+                    if ((clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.PC_NOSE.getValue())
+                            || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getPcNose()))) || (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.PC_ORAL_CAVITY.getValue())
+                            || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getPcOralCavity()))) || (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.PC_THROAT.getValue())
+                            || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getPcThroat()))) || (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.PC_EARS.getValue())
+                            || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getPcEars()))))
+                        addEntPermissionItem();
+                    if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.PAST_HISTORY.getValue())
+                            || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getPastHistory())))
+                        addPermissionItem(ClinicalNotesPermissionType.PAST_HISTORY);
+                    if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.PERSONAL_HISTORY.getValue())
+                            || (clinicalNotes != null))
+                        addPersonalHistoryPermissionItem();
+                    if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.FAMILY_HISTORY.getValue())
+                            || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getFamilyHistory())))
+                        addPermissionItem(ClinicalNotesPermissionType.FAMILY_HISTORY);
+                    if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.GENERAL_HISTORY.getValue())
+                            || (clinicalNotes != null))
+                        addGeneralHistoryPermissionItem();
                     if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.COMPLAINT.getValue())
                             || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getComplaint())))
                         addPermissionItem(ClinicalNotesPermissionType.COMPLAINT);
@@ -209,9 +228,28 @@ public class AddClinicalNotesVisitMyScriptFragment extends HealthCocoFragment im
                     if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.GENERAL_EXAMINATION.getValue())
                             || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getGeneralExam())))
                         addPermissionItem(ClinicalNotesPermissionType.GENERAL_EXAMINATION);
+                    if ((clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.NOSE_EXAM.getValue())
+                            || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getNoseExam()))) || (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.ORAL_CAVITY_THROAT_EXAM.getValue())
+                            || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getOralCavityThroatExam()))) || (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.INDIRECT_LARYGOSCOPY_EXAM.getValue())
+                            || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getIndirectLarygoscopyExam()))) || (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.NECK_EXAM.getValue())
+                            || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getNeckExam()))) || (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.EARS_EXAM.getValue())
+                            || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getEarsExam()))))
+                        addEntExaminationPermissionItem();
                     if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.SYSTEMIC_EXAMINATION.getValue())
                             || (clinicalNotes != null && clinicalNotes.getSystemExam() != null))
                         addPermissionItem(ClinicalNotesPermissionType.SYSTEMIC_EXAMINATION);
+                    if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.INDICATION_OF_USG.getValue())
+                            || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getIndicationOfUSG())))
+                        addPermissionItem(ClinicalNotesPermissionType.INDICATION_OF_USG);
+                    if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.PA.getValue())
+                            || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getPa())))
+                        addPermissionItem(ClinicalNotesPermissionType.PA);
+                    if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.PS.getValue())
+                            || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getPs())))
+                        addPermissionItem(ClinicalNotesPermissionType.PS);
+                    if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.PV.getValue())
+                            || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getPv())))
+                        addPermissionItem(ClinicalNotesPermissionType.PV);
                     if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.OBSERVATION.getValue())
                             || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getObservation())))
                         addPermissionItem(ClinicalNotesPermissionType.OBSERVATION);
@@ -239,18 +277,9 @@ public class AddClinicalNotesVisitMyScriptFragment extends HealthCocoFragment im
                     if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.NOTES.getValue())
                             || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getNote())))
                         addPermissionItem(ClinicalNotesPermissionType.NOTES);
-                    if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.INDICATION_OF_USG.getValue())
-                            || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getIndicationOfUSG())))
-                        addPermissionItem(ClinicalNotesPermissionType.INDICATION_OF_USG);
-                    if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.PA.getValue())
-                            || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getPa())))
-                        addPermissionItem(ClinicalNotesPermissionType.PA);
-                    if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.PS.getValue())
-                            || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getPs())))
-                        addPermissionItem(ClinicalNotesPermissionType.PS);
-                    if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.PV.getValue())
-                            || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getPv())))
-                        addPermissionItem(ClinicalNotesPermissionType.PV);
+                    if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.PROCEDURES.getValue())
+                            || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getProcedureNote())))
+                        addPermissionItem(ClinicalNotesPermissionType.PROCEDURES);
                     initialiseDiagramsView();
                 }
                 return;
@@ -319,6 +348,8 @@ public class AddClinicalNotesVisitMyScriptFragment extends HealthCocoFragment im
         TextView tvTitle = (TextView) layoutItemPermission.findViewById(R.id.tv_title);
         MyScriptEditText autotvPermission = (MyScriptEditText) layoutItemPermission.findViewById(R.id.edit_permission_text);
 //        autotvPermission.setOnFocusChangeListener(this);
+        View viewTopLine = (View) layoutItemPermission.findViewById(R.id.view_top_line);
+        viewTopLine.setVisibility(View.GONE);
         tvTitle.setText(clinicalNotesPermissionType.getTextId());
         autotvPermission.setId(clinicalNotesPermissionType.getAutotvId());
         autotvPermission.setHint(clinicalNotesPermissionType.getHintId());
@@ -393,8 +424,247 @@ public class AddClinicalNotesVisitMyScriptFragment extends HealthCocoFragment im
             sendBroadcastForClinicalNoteLayoutVisibility(true);
             autotvPermission.setText(Util.getValidatedValue(text));
         }
+
+        switch (clinicalNotesPermissionType) {
+            case COMPLAINT:
+                viewTopLine.setVisibility(View.VISIBLE);
+                break;
+            case PAST_HISTORY:
+                viewTopLine.setVisibility(View.VISIBLE);
+                break;
+            case FAMILY_HISTORY:
+                viewTopLine.setVisibility(View.VISIBLE);
+                break;
+        }
         parentPermissionItems.addView(layoutItemPermission);
     }
+
+
+    private void addEntPermissionItem() {
+        LinearLayout layoutSubItemPermission = (LinearLayout) mActivity.getLayoutInflater().inflate(R.layout.layout_item_add_clinical_note_ent_compalints, null);
+        LinearLayout layout = (LinearLayout) layoutSubItemPermission.findViewById(R.id.layout_clinical_notes_field);
+        TextView tvItemTitle = (TextView) layoutSubItemPermission.findViewById(R.id.tv_title_clinical_notes);
+        LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        llp.setMargins(0, 0, 0, 0); // llp.setMargins(left, top, right, bottom);
+        tvItemTitle.setLayoutParams(llp);
+        View viewBottomLine = (View) layoutSubItemPermission.findViewById(R.id.view_bottom_line);
+        viewBottomLine.setVisibility(View.GONE);
+        tvItemTitle.setText(R.string.ent_compaints);
+
+        if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.PC_NOSE.getValue())
+                || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getPcNose()))) {
+            LinearLayout layoutItemPermission = addEntSubPermissionItem(ClinicalNotesPermissionType.PC_NOSE);
+            layout.addView(layoutItemPermission);
+        }
+        if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.PC_ORAL_CAVITY.getValue())
+                || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getPcOralCavity()))) {
+            LinearLayout layoutItemPermission = addEntSubPermissionItem(ClinicalNotesPermissionType.PC_ORAL_CAVITY);
+            layout.addView(layoutItemPermission);
+        }
+        if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.PC_THROAT.getValue())
+                || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getPcThroat()))) {
+            LinearLayout layoutItemPermission = addEntSubPermissionItem(ClinicalNotesPermissionType.PC_THROAT);
+            layout.addView(layoutItemPermission);
+        }
+        if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.PC_EARS.getValue())
+                || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getPcEars()))) {
+            LinearLayout layoutItemPermission = addEntSubPermissionItem(ClinicalNotesPermissionType.PC_EARS);
+            layout.addView(layoutItemPermission);
+        }
+        parentPermissionItems.addView(layoutSubItemPermission);
+    }
+
+    private void addPersonalHistoryPermissionItem() {
+        LinearLayout layoutSubItemPermission = (LinearLayout) mActivity.getLayoutInflater().inflate(R.layout.layout_item_add_clinical_note_ent_compalints, null);
+        LinearLayout layout = (LinearLayout) layoutSubItemPermission.findViewById(R.id.layout_clinical_notes_field);
+        TextView tvItemTitle = (TextView) layoutSubItemPermission.findViewById(R.id.tv_title_clinical_notes);
+        LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        llp.setMargins(0, 0, 0, 0); // llp.setMargins(left, top, right, bottom);
+        tvItemTitle.setLayoutParams(llp);
+        View viewBottomLine = (View) layoutSubItemPermission.findViewById(R.id.view_bottom_line);
+        viewBottomLine.setVisibility(View.GONE);
+        tvItemTitle.setText(R.string.personal_history_colon);
+
+
+        if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.PERSONAL_HISTORY.getValue())
+                || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getPersonalHistoryTobacco()))) {
+            LinearLayout layoutItemPermission = addEntSubPermissionItem(ClinicalNotesPermissionType.TOBACCO);
+            layout.addView(layoutItemPermission);
+        }
+        if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.PERSONAL_HISTORY.getValue())
+                || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getPersonalHistoryAlcohol()))) {
+            LinearLayout layoutItemPermission = addEntSubPermissionItem(ClinicalNotesPermissionType.ALCOHOL);
+            layout.addView(layoutItemPermission);
+        }
+        if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.PERSONAL_HISTORY.getValue())
+                || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getPersonalHistorySmoking()))) {
+            LinearLayout layoutItemPermission = addEntSubPermissionItem(ClinicalNotesPermissionType.SMOKING);
+            layout.addView(layoutItemPermission);
+        }
+        if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.PERSONAL_HISTORY.getValue())
+                || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getPersonalHistoryDiet()))) {
+            LinearLayout layoutItemPermission = addEntSubPermissionItem(ClinicalNotesPermissionType.DIET);
+            layout.addView(layoutItemPermission);
+        }
+        if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.PERSONAL_HISTORY.getValue())
+                || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getPersonalHistoryOccupation()))) {
+            LinearLayout layoutItemPermission = addEntSubPermissionItem(ClinicalNotesPermissionType.OCCUPATION);
+            layout.addView(layoutItemPermission);
+        }
+        parentPermissionItems.addView(layoutSubItemPermission);
+    }
+
+    private void addGeneralHistoryPermissionItem() {
+        LinearLayout layoutSubItemPermission = (LinearLayout) mActivity.getLayoutInflater().inflate(R.layout.layout_item_add_clinical_note_ent_compalints, null);
+        LinearLayout layout = (LinearLayout) layoutSubItemPermission.findViewById(R.id.layout_clinical_notes_field);
+        TextView tvItemTitle = (TextView) layoutSubItemPermission.findViewById(R.id.tv_title_clinical_notes);
+        LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        llp.setMargins(0, 0, 0, 0); // llp.setMargins(left, top, right, bottom);
+        tvItemTitle.setLayoutParams(llp);
+        View viewBottomLine = (View) layoutSubItemPermission.findViewById(R.id.view_bottom_line);
+        viewBottomLine.setVisibility(View.GONE);
+        tvItemTitle.setText(R.string.general_history_colon);
+
+
+        if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.GENERAL_HISTORY.getValue())
+                || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getGeneralHistoryDrugs()))) {
+            LinearLayout layoutItemPermission = addEntSubPermissionItem(ClinicalNotesPermissionType.DRUGS);
+            layout.addView(layoutItemPermission);
+        }
+        if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.GENERAL_HISTORY.getValue())
+                || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getGeneralHistoryAllergies()))) {
+            LinearLayout layoutItemPermission = addEntSubPermissionItem(ClinicalNotesPermissionType.ALLERGIES);
+            layout.addView(layoutItemPermission);
+        }
+        if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.GENERAL_HISTORY.getValue())
+                || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getGeneralHistoryMedicine()))) {
+            LinearLayout layoutItemPermission = addEntSubPermissionItem(ClinicalNotesPermissionType.MEDICINE);
+            layout.addView(layoutItemPermission);
+        }
+        if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.GENERAL_HISTORY.getValue())
+                || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getGeneralHistorySurgical()))) {
+            LinearLayout layoutItemPermission = addEntSubPermissionItem(ClinicalNotesPermissionType.SURGICAL);
+            layout.addView(layoutItemPermission);
+        }
+        parentPermissionItems.addView(layoutSubItemPermission);
+    }
+
+    private void addEntExaminationPermissionItem() {
+        LinearLayout layoutSubItemPermission = (LinearLayout) mActivity.getLayoutInflater().inflate(R.layout.layout_item_add_clinical_note_ent_compalints, null);
+        LinearLayout layout = (LinearLayout) layoutSubItemPermission.findViewById(R.id.layout_clinical_notes_field);
+        TextView tvItemTitle = (TextView) layoutSubItemPermission.findViewById(R.id.tv_title_clinical_notes);
+        LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        llp.setMargins(0, 0, 0, 0); // llp.setMargins(left, top, right, bottom);
+        tvItemTitle.setLayoutParams(llp);
+        View viewBottomLine = (View) layoutSubItemPermission.findViewById(R.id.view_bottom_line);
+        viewBottomLine.setVisibility(View.VISIBLE);
+        tvItemTitle.setText(R.string.ent_examinations);
+
+        if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.NOSE_EXAM.getValue())
+                || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getNoseExam()))) {
+            LinearLayout layoutItemPermission = addEntSubPermissionItem(ClinicalNotesPermissionType.NOSE_EXAM);
+            layout.addView(layoutItemPermission);
+        }
+        if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.ORAL_CAVITY_THROAT_EXAM.getValue())
+                || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getOralCavityThroatExam()))) {
+            LinearLayout layoutItemPermission = addEntSubPermissionItem(ClinicalNotesPermissionType.ORAL_CAVITY_THROAT_EXAM);
+            layout.addView(layoutItemPermission);
+        }
+        if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.INDIRECT_LARYGOSCOPY_EXAM.getValue())
+                || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getIndirectLarygoscopyExam()))) {
+            LinearLayout layoutItemPermission = addEntSubPermissionItem(ClinicalNotesPermissionType.INDIRECT_LARYGOSCOPY_EXAM);
+            layout.addView(layoutItemPermission);
+        }
+        if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.NECK_EXAM.getValue())
+                || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getNeckExam()))) {
+            LinearLayout layoutItemPermission = addEntSubPermissionItem(ClinicalNotesPermissionType.NECK_EXAM);
+            layout.addView(layoutItemPermission);
+        }
+        if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.EARS_EXAM.getValue())
+                || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getEarsExam()))) {
+            LinearLayout layoutItemPermission = addEntSubPermissionItem(ClinicalNotesPermissionType.EARS_EXAM);
+            layout.addView(layoutItemPermission);
+        }
+
+        parentPermissionItems.addView(layoutSubItemPermission);
+    }
+
+
+    private LinearLayout addEntSubPermissionItem(ClinicalNotesPermissionType clinicalNotesPermissionType) {
+        LinearLayout layoutItemPermission = (LinearLayout) mActivity.getLayoutInflater().inflate(R.layout.layout_item_add_myscript_clinical_note_permision, null);
+        TextView tvTitle = (TextView) layoutItemPermission.findViewById(R.id.tv_title);
+        MyScriptEditText autotvPermission = (MyScriptEditText) layoutItemPermission.findViewById(R.id.edit_permission_text);
+//        autotvPermission.setOnFocusChangeListener(this);
+        tvTitle.setText(clinicalNotesPermissionType.getTextId());
+        autotvPermission.setId(clinicalNotesPermissionType.getAutotvId());
+        autotvPermission.setHint(clinicalNotesPermissionType.getHintId());
+        autotvPermission.setTag(String.valueOf(clinicalNotesPermissionType));
+        if (myScriptAddVisitsFragment != null) {
+            autotvPermission.setOnTouchListener(myScriptAddVisitsFragment.getOnTouchListener());
+        }
+        String text = "";
+        if (clinicalNotes != null) {
+            switch (clinicalNotesPermissionType) {
+                case PC_ORAL_CAVITY:
+                    text = clinicalNotes.getPcOralCavity();
+                    break;
+                case PC_NOSE:
+                    text = clinicalNotes.getPcNose();
+                    break;
+                case PC_EARS:
+                    text = clinicalNotes.getPcEars();
+                    break;
+                case PC_THROAT:
+                    text = clinicalNotes.getPcThroat();
+                    break;
+                case TOBACCO:
+                    text = clinicalNotes.getPersonalHistoryTobacco();
+                    break;
+                case ALCOHOL:
+                    text = clinicalNotes.getPersonalHistoryAlcohol();
+                    break;
+                case SMOKING:
+                    text = clinicalNotes.getPersonalHistorySmoking();
+                    break;
+                case DIET:
+                    text = clinicalNotes.getPersonalHistoryDiet();
+                    break;
+                case OCCUPATION:
+                    text = clinicalNotes.getPersonalHistoryOccupation();
+                    break;
+                case ALLERGIES:
+                    text = clinicalNotes.getGeneralHistoryAllergies();
+                    break;
+                case DRUGS:
+                    text = clinicalNotes.getGeneralHistoryDrugs();
+                    break;
+                case MEDICINE:
+                    text = clinicalNotes.getGeneralHistoryMedicine();
+                    break;
+                case SURGICAL:
+                    text = clinicalNotes.getGeneralHistorySurgical();
+                    break;
+                case INDIRECT_LARYGOSCOPY_EXAM:
+                    text = clinicalNotes.getIndirectLarygoscopyExam();
+                    break;
+                case NOSE_EXAM:
+                    text = clinicalNotes.getNoseExam();
+                    break;
+                case NECK_EXAM:
+                    text = clinicalNotes.getNeckExam();
+                    break;
+                case EARS_EXAM:
+                    text = clinicalNotes.getEarsExam();
+                    break;
+                case ORAL_CAVITY_THROAT_EXAM:
+                    text = clinicalNotes.getOralCavityThroatExam();
+                    break;
+            }
+            autotvPermission.setText(Util.getValidatedValue(text));
+        }
+        return layoutItemPermission;
+    }
+
 
     public int getValidatedMsgId() {
         String systolic = Util.getValidatedValueOrBlankTrimming(editSystolic);
@@ -510,6 +780,58 @@ public class AddClinicalNotesVisitMyScriptFragment extends HealthCocoFragment im
                         case NOTES:
                             clinicalNoteToSend.setNote(getFormattedText(Util.getValidatedValueOrBlankWithoutTrimming((MyScriptEditText) parentPermissionItems.findViewWithTag(ClinicalNotesPermissionType.NOTES.getValue()))));
                             break;
+                        case PERSONAL_HISTORY:
+                            clinicalNoteToSend.setPersonalHistoryAlcohol(getFormattedText(Util.getValidatedValueOrBlankWithoutTrimming((TextView) parentPermissionItems.findViewWithTag(ClinicalNotesPermissionType.ALCOHOL.getValue()))));
+                            clinicalNoteToSend.setPersonalHistoryDiet(getFormattedText(Util.getValidatedValueOrBlankWithoutTrimming((TextView) parentPermissionItems.findViewWithTag(ClinicalNotesPermissionType.DIET.getValue()))));
+                            clinicalNoteToSend.setPersonalHistoryOccupation(getFormattedText(Util.getValidatedValueOrBlankWithoutTrimming((TextView) parentPermissionItems.findViewWithTag(ClinicalNotesPermissionType.OCCUPATION.getValue()))));
+                            clinicalNoteToSend.setPersonalHistorySmoking(getFormattedText(Util.getValidatedValueOrBlankWithoutTrimming((TextView) parentPermissionItems.findViewWithTag(ClinicalNotesPermissionType.SMOKING.getValue()))));
+                            clinicalNoteToSend.setPersonalHistoryTobacco(getFormattedText(Util.getValidatedValueOrBlankWithoutTrimming((TextView) parentPermissionItems.findViewWithTag(ClinicalNotesPermissionType.TOBACCO.getValue()))));
+                            break;
+                        case PC_ORAL_CAVITY:
+                            clinicalNoteToSend.setPcOralCavity(getFormattedText(Util.getValidatedValueOrBlankWithoutTrimming((TextView) parentPermissionItems.findViewWithTag(ClinicalNotesPermissionType.PC_ORAL_CAVITY.getValue()))));
+                            break;
+                        case PC_NOSE:
+                            clinicalNoteToSend.setPcNose(getFormattedText(Util.getValidatedValueOrBlankWithoutTrimming((TextView) parentPermissionItems.findViewWithTag(ClinicalNotesPermissionType.PC_NOSE.getValue()))));
+                            break;
+                        case PC_EARS:
+                            clinicalNoteToSend.setPcEars(getFormattedText(Util.getValidatedValueOrBlankWithoutTrimming((TextView) parentPermissionItems.findViewWithTag(ClinicalNotesPermissionType.PC_EARS.getValue()))));
+                            break;
+                        case GENERAL_HISTORY:
+                            clinicalNoteToSend.setGeneralHistoryAllergies(getFormattedText(Util.getValidatedValueOrBlankWithoutTrimming((TextView) parentPermissionItems.findViewWithTag(ClinicalNotesPermissionType.ALLERGIES.getValue()))));
+                            clinicalNoteToSend.setGeneralHistoryDrugs(getFormattedText(Util.getValidatedValueOrBlankWithoutTrimming((TextView) parentPermissionItems.findViewWithTag(ClinicalNotesPermissionType.DRUGS.getValue()))));
+                            clinicalNoteToSend.setGeneralHistoryMedicine(getFormattedText(Util.getValidatedValueOrBlankWithoutTrimming((TextView) parentPermissionItems.findViewWithTag(ClinicalNotesPermissionType.MEDICINE.getValue()))));
+                            clinicalNoteToSend.setGeneralHistorySurgical(getFormattedText(Util.getValidatedValueOrBlankWithoutTrimming((TextView) parentPermissionItems.findViewWithTag(ClinicalNotesPermissionType.SURGICAL.getValue()))));
+                            break;
+                        case NOSE_EXAM:
+                            clinicalNoteToSend.setNoseExam(getFormattedText(Util.getValidatedValueOrBlankWithoutTrimming((TextView) parentPermissionItems.findViewWithTag(ClinicalNotesPermissionType.NOSE_EXAM.getValue()))));
+                            break;
+
+                        case NECK_EXAM:
+                            clinicalNoteToSend.setNeckExam(getFormattedText(Util.getValidatedValueOrBlankWithoutTrimming((TextView) parentPermissionItems.findViewWithTag(ClinicalNotesPermissionType.NECK_EXAM.getValue()))));
+                            break;
+                        case EARS_EXAM:
+                            clinicalNoteToSend.setEarsExam(getFormattedText(Util.getValidatedValueOrBlankWithoutTrimming((TextView) parentPermissionItems.findViewWithTag(ClinicalNotesPermissionType.EARS_EXAM.getValue()))));
+                            break;
+                        case ORAL_CAVITY_THROAT_EXAM:
+                            clinicalNoteToSend.setOralCavityThroatExam(getFormattedText(Util.getValidatedValueOrBlankWithoutTrimming((TextView) parentPermissionItems.findViewWithTag(ClinicalNotesPermissionType.ORAL_CAVITY_THROAT_EXAM.getValue()))));
+                            break;
+                        case PROCEDURES:
+                            clinicalNoteToSend.setProcedureNote(getFormattedText(Util.getValidatedValueOrBlankWithoutTrimming((TextView) parentPermissionItems.findViewWithTag(ClinicalNotesPermissionType.PROCEDURES.getValue()))));
+                            break;
+
+                        case PAST_HISTORY:
+                            clinicalNoteToSend.setPastHistory(getFormattedText(Util.getValidatedValueOrBlankWithoutTrimming((TextView) parentPermissionItems.findViewWithTag(ClinicalNotesPermissionType.PAST_HISTORY.getValue()))));
+                            break;
+                        case PC_THROAT:
+                            clinicalNoteToSend.setPcThroat(getFormattedText(Util.getValidatedValueOrBlankWithoutTrimming((TextView) parentPermissionItems.findViewWithTag(ClinicalNotesPermissionType.PC_THROAT.getValue()))));
+                            break;
+                        case FAMILY_HISTORY:
+                            clinicalNoteToSend.setFamilyHistory(getFormattedText(Util.getValidatedValueOrBlankWithoutTrimming((TextView) parentPermissionItems.findViewWithTag(ClinicalNotesPermissionType.FAMILY_HISTORY.getValue()))));
+                            break;
+                        case INDIRECT_LARYGOSCOPY_EXAM:
+                            clinicalNoteToSend.setIndirectLarygoscopyExam(getFormattedText(Util.getValidatedValueOrBlankWithoutTrimming((TextView) parentPermissionItems.findViewWithTag(ClinicalNotesPermissionType.INDIRECT_LARYGOSCOPY_EXAM.getValue()))));
+                            break;
+
                     }
                 }
             }

@@ -57,7 +57,8 @@ public class AddNewTreatmentDialogFragment extends HealthCocoDialogFragment impl
         super.onActivityCreated(savedInstanceState);
 
         bundle = getArguments();
-        uniqueId = bundle.getString(HealthCocoConstants.TAG_UNIQUE_ID);
+        if (bundle != null)
+            uniqueId = bundle.getString(HealthCocoConstants.TAG_UNIQUE_ID);
         if (!Util.isNullOrBlank(uniqueId))
             treatmentService = LocalDataServiceImpl.getInstance(mApp).getTreatmentService(uniqueId);
 
