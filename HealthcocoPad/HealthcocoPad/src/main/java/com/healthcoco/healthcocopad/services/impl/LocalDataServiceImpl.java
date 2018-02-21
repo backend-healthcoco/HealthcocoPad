@@ -54,6 +54,8 @@ import java.util.List;
 
 import static android.R.id.list;
 import static com.orm.util.ReflectionUtil.getDomainClasses;
+import static java.lang.Boolean.FALSE;
+import static java.lang.Boolean.TRUE;
 
 /**
  * Created by Shreshtha on 23-01-2017.
@@ -3710,7 +3712,7 @@ public class LocalDataServiceImpl {
         volleyResponseBean.setIsDataFromLocal(true);
         volleyResponseBean.setIsUserOnline(HealthCocoConstants.isNetworkOnline);
         try {
-            volleyResponseBean.setDataList(getSuggestionsList(class1, suggestionType, searchTerm, pageNum, maxSize));
+            volleyResponseBean.setDataList(getSuggestionsList(class1, suggestionType, searchTerm, pageNum, maxSize, BooleanTypeValues.FALSE));
             if (responseListener != null)
                 responseListener.onResponse(volleyResponseBean);
         } catch (Exception e) {
@@ -3760,7 +3762,7 @@ public class LocalDataServiceImpl {
         return volleyResponseBean;
     }
 
-    public ArrayList<Object> getSuggestionsList(Class<?> class1, SuggestionType suggestionType, String searchTerm, int pageNum, int maxSize) {
+    public ArrayList<Object> getSuggestionsList(Class<?> class1, SuggestionType suggestionType, String searchTerm, int pageNum, int maxSize, BooleanTypeValues discarded) {
         //forming where condition query
         String whereCondition = "Select * from " + StringUtil.toSQLName(class1.getSimpleName());
         if (suggestionType != null && !Util.isNullOrBlank(searchTerm)) {
@@ -3862,11 +3864,42 @@ public class LocalDataServiceImpl {
                 default:
                     break;
             }
+
             if (!Util.isNullOrBlank(key))
                 whereCondition = whereCondition + " where "
-                        + LocalDatabaseUtils.getSearchTermEqualsIgnoreCaseQuery(key, searchTerm) + " LIMIT " + maxSize
-                        + " OFFSET " + (pageNum * maxSize);
-        }
+                        + LocalDatabaseUtils.getSearchTermEqualsIgnoreCaseQuery(key, searchTerm);
+            switch (discarded) {
+                case TRUE:
+                    whereCondition = whereCondition
+                            + " AND " + LocalDatabaseUtils.KEY_DISCARDED + "=" + discarded.getBooleanIntValue();
+                    break;
+                case FALSE:
+                    whereCondition = whereCondition + " AND " + " (" + LocalDatabaseUtils.KEY_DISCARDED + " is null "
+                            + " OR "
+                            + LocalDatabaseUtils.KEY_DISCARDED + "=" + discarded.getBooleanIntValue()
+                            + ")";
+
+                    break;
+            }
+            whereCondition = whereCondition + " LIMIT " + maxSize
+                    + " OFFSET " + (pageNum * maxSize);
+
+        } else
+            switch (discarded) {
+                case TRUE:
+                    whereCondition = whereCondition
+                            + " where " + LocalDatabaseUtils.KEY_DISCARDED + "=" + discarded.getBooleanIntValue();
+                    break;
+                case FALSE:
+                    whereCondition = whereCondition
+                            + " where " + "(" + LocalDatabaseUtils.KEY_DISCARDED + " is null"
+                            + " OR "
+                            + LocalDatabaseUtils.KEY_DISCARDED + "=" + discarded.getBooleanIntValue()
+                            + ")";
+
+                    break;
+            }
+
 
         LogUtils.LOGD(TAG, "Select Query " + whereCondition);
         ArrayList<Object> list = (ArrayList<Object>) (Object) SugarRecord.findWithQuery(class1, whereCondition);

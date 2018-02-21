@@ -71,7 +71,7 @@ public class PatientNumberSearchDialogFragment extends HealthCocoDialogFragment 
     public void initListeners() {
         btProceed.setOnClickListener(this);
         initCrossButton();
-        initActionbarTitle(getResources().getString(R.string.patient_search));
+        initActionbarTitle(getResources().getString(R.string.add_new_patient));
     }
 
     public void initData() {

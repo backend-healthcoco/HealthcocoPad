@@ -94,8 +94,8 @@ public class SettingsNameHideActivateTabFragment extends HealthCocoFragment impl
             switch (settingsItemType) {
                 case GROUPS:
 
-                    NameHideActivateTabFragment groupNameHideActivateTabFragment = new NameHideActivateTabFragment(NameHideActivateType.GROUPS.ordinal());
-                    addFragment(groupNameHideActivateTabFragment, R.string.groups, false);
+                    SettingsNameEditDeleteFragment groupSettingsNameEditDeleteFragment = new SettingsNameEditDeleteFragment();
+                    addFragment(groupSettingsNameEditDeleteFragment, R.string.groups, false);
 
                     NameHideActivateTabFragment referenceNameHideActivateTabFragment = new NameHideActivateTabFragment(NameHideActivateType.REFERENCE.ordinal());
                     addFragment(referenceNameHideActivateTabFragment, R.string.reference, false);

@@ -47,8 +47,8 @@ public class SettingsItemViewHolder extends HealthCocoViewHolder {
                     tvVersionName.setVisibility(View.VISIBLE);
                     tvVersionName.setText(mActivity.getFormattedVersionName());
                     break;
-                case TEMPLATES:
-                case UI_PERMISSION:
+                case TREATMENT:
+                case PRINT:
                 case SYNC:
                 case HELP_IMPROVE:
                 case SIGN_OUT:
