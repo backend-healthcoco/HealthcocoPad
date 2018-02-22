@@ -10,46 +10,52 @@ public enum SyncAllType {
     CONTACT(R.string.sync_contact, 1, true) {
         @Override
         public SyncAllType getNextSyncType(SyncAllType syncAllType) {
+            return SyncAllType.DATA_PERMISSIONS;
+        }
+    },
+    DATA_PERMISSIONS(R.string.data_permission, 2, true) {
+        @Override
+        public SyncAllType getNextSyncType(SyncAllType syncAllType) {
             return SyncAllType.GROUP;
         }
     },
-    GROUP(R.string.sync_group, 2, true) {
+    GROUP(R.string.sync_group, 3, true) {
         @Override
         public SyncAllType getNextSyncType(SyncAllType syncAllType) {
             return SyncAllType.HISTORY;
         }
     },
-    HISTORY(R.string.sync_history, 3, true) {
+    HISTORY(R.string.sync_history, 4, true) {
         @Override
         public SyncAllType getNextSyncType(SyncAllType syncAllType) {
             return SyncAllType.DRUG_CUSTOM;
         }
     },
-    DRUG_CUSTOM(R.string.sync_drug, 4, true) {
+    DRUG_CUSTOM(R.string.sync_drug, 5, true) {
         @Override
         public SyncAllType getNextSyncType(SyncAllType syncAllType) {
             return SyncAllType.FREQUENCY;
         }
     },
-    FREQUENCY(R.string.sync_frequency, 5, true) {
+    FREQUENCY(R.string.sync_frequency, 6, true) {
         @Override
         public SyncAllType getNextSyncType(SyncAllType syncAllType) {
             return SyncAllType.DIRECTION;
         }
     },
-    DIRECTION(R.string.sync_direction, 6, true) {
+    DIRECTION(R.string.sync_direction, 7, true) {
         @Override
         public SyncAllType getNextSyncType(SyncAllType syncAllType) {
             return SyncAllType.NOTES_DIAGRAM;
         }
     },
-    NOTES_DIAGRAM(R.string.sync_notes_diagram, 7, true) {
+    NOTES_DIAGRAM(R.string.sync_notes_diagram, 8, true) {
         @Override
         public SyncAllType getNextSyncType(SyncAllType syncAllType) {
             return SyncAllType.CLINICAL_NOTES_DATA;
         }
     },
-    CLINICAL_NOTES_DATA(R.string.sync_clinical_notes_data, 8, true) {
+    CLINICAL_NOTES_DATA(R.string.sync_clinical_notes_data, 9, true) {
         @Override
         public SyncAllType getNextSyncType(SyncAllType syncAllType) {
             return SyncAllType.REFERENCES;
@@ -235,25 +241,25 @@ public enum SyncAllType {
         }
     },
 
-    REFERENCES(R.string.sync_referred_by, 9, true) {
+    REFERENCES(R.string.sync_referred_by, 10, true) {
         @Override
         public SyncAllType getNextSyncType(SyncAllType syncAllType) {
             return SyncAllType.DRUG_TYPE;
         }
     },
-    DRUG_TYPE(R.string.sync_drug_type, 10, true) {
+    DRUG_TYPE(R.string.sync_drug_type, 11, true) {
         @Override
         public SyncAllType getNextSyncType(SyncAllType syncAllType) {
             return SyncAllType.DRUG_DURATION_UNIT;
         }
     },
-    DRUG_DURATION_UNIT(R.string.sync_drug_duration_unit, 11, true) {
+    DRUG_DURATION_UNIT(R.string.sync_drug_duration_unit, 12, true) {
         @Override
         public SyncAllType getNextSyncType(SyncAllType syncAllType) {
             return UI_PERMISSIONS;
         }
     },
-    UI_PERMISSIONS(R.string.sync_ui_permissions, 12, true) {
+    UI_PERMISSIONS(R.string.sync_ui_permissions, 13, true) {
         @Override
         public SyncAllType getNextSyncType(SyncAllType syncAllType) {
             return null;

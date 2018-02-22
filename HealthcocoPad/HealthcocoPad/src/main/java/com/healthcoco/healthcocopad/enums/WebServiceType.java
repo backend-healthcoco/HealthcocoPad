@@ -212,65 +212,65 @@ public enum WebServiceType {
 
     ADD_ADVICE_SUGGESTIONS(Method.POST, "prescription/advice/"),
 
-    GET_PRESENT_COMPLAINT_SUGGESTIONS(Method.GET, "clinicalNotes/PRESENT_COMPLAINT/BOTH/" + HealthCocoConstants.PARAM_DISCARDED_TRUE),
+    GET_PRESENT_COMPLAINT_SUGGESTIONS(Method.GET, "clinicalNotes/PRESENT_COMPLAINT/"),
 
-    GET_COMPLAINT_SUGGESTIONS(Method.GET, "clinicalNotes/COMPLAINTS/BOTH/" + HealthCocoConstants.PARAM_DISCARDED_TRUE),
+    GET_COMPLAINT_SUGGESTIONS(Method.GET, "clinicalNotes/COMPLAINTS/"),
 
-    GET_HISTORY_OF_PRESENT_COMPLAINT_SUGGESTIONS(Method.GET, "clinicalNotes/HISTORY_OF_PRESENT_COMPLAINT/BOTH/" + HealthCocoConstants.PARAM_DISCARDED_TRUE),
+    GET_HISTORY_OF_PRESENT_COMPLAINT_SUGGESTIONS(Method.GET, "clinicalNotes/HISTORY_OF_PRESENT_COMPLAINT/"),
 
-    GET_MENSTRUAL_HISTORY_SUGGESTIONS(Method.GET, "clinicalNotes/MENSTRUAL_HISTORY/BOTH/" + HealthCocoConstants.PARAM_DISCARDED_TRUE),
+    GET_MENSTRUAL_HISTORY_SUGGESTIONS(Method.GET, "clinicalNotes/MENSTRUAL_HISTORY/"),
 
-    GET_OBSTETRIC_HISTORY_SUGGESTIONS(Method.GET, "clinicalNotes/OBSTETRIC_HISTORY/BOTH/" + HealthCocoConstants.PARAM_DISCARDED_TRUE),
+    GET_OBSTETRIC_HISTORY_SUGGESTIONS(Method.GET, "clinicalNotes/OBSTETRIC_HISTORY/"),
 
-    GET_GENERAL_EXAMINATION_SUGGESTIONS(Method.GET, "clinicalNotes/GENERAL_EXAMINATION/BOTH/" + HealthCocoConstants.PARAM_DISCARDED_TRUE),
+    GET_GENERAL_EXAMINATION_SUGGESTIONS(Method.GET, "clinicalNotes/GENERAL_EXAMINATION/"),
 
-    GET_SYSTEMIC_EXAMINATION_SUGGESTIONS(Method.GET, "clinicalNotes/SYSTEMIC_EXAMINATION/BOTH/" + HealthCocoConstants.PARAM_DISCARDED_TRUE),
+    GET_SYSTEMIC_EXAMINATION_SUGGESTIONS(Method.GET, "clinicalNotes/SYSTEMIC_EXAMINATION/"),
 
-    GET_OBSERVATION_SUGGESTIONS(Method.GET, "clinicalNotes/OBSERVATIONS/BOTH/" + HealthCocoConstants.PARAM_DISCARDED_TRUE),
+    GET_OBSERVATION_SUGGESTIONS(Method.GET, "clinicalNotes/OBSERVATIONS/"),
 
-    GET_INVESTIGATION_SUGGESTIONS(Method.GET, "clinicalNotes/INVESTIGATIONS/BOTH/" + HealthCocoConstants.PARAM_DISCARDED_TRUE),
+    GET_INVESTIGATION_SUGGESTIONS(Method.GET, "clinicalNotes/INVESTIGATIONS/"),
 
-    GET_PROVISIONAL_DIAGNOSIS_SUGGESTIONS(Method.GET, "clinicalNotes/PROVISIONAL_DIAGNOSIS/BOTH/" + HealthCocoConstants.PARAM_DISCARDED_TRUE),
+    GET_PROVISIONAL_DIAGNOSIS_SUGGESTIONS(Method.GET, "clinicalNotes/PROVISIONAL_DIAGNOSIS/"),
 
-    GET_DIAGNOSIS_SUGGESTIONS(Method.GET, "clinicalNotes/DIAGNOSIS/BOTH/" + HealthCocoConstants.PARAM_DISCARDED_TRUE),
+    GET_DIAGNOSIS_SUGGESTIONS(Method.GET, "clinicalNotes/DIAGNOSIS/"),
 
-    GET_ECG_SUGGESTIONS(Method.GET, "clinicalNotes/ECG/BOTH/" + HealthCocoConstants.PARAM_DISCARDED_TRUE),
+    GET_ECG_SUGGESTIONS(Method.GET, "clinicalNotes/ECG/"),
 
-    GET_ECHO_SUGGESTIONS(Method.GET, "clinicalNotes/ECHO/BOTH/" + HealthCocoConstants.PARAM_DISCARDED_TRUE),
+    GET_ECHO_SUGGESTIONS(Method.GET, "clinicalNotes/ECHO/"),
 
-    GET_XRAY_SUGGESTIONS(Method.GET, "clinicalNotes/XRAY/BOTH/" + HealthCocoConstants.PARAM_DISCARDED_TRUE),
+    GET_XRAY_SUGGESTIONS(Method.GET, "clinicalNotes/XRAY/"),
 
-    GET_HOLTER_SUGGESTIONS(Method.GET, "clinicalNotes/HOLTER/BOTH/" + HealthCocoConstants.PARAM_DISCARDED_TRUE),
+    GET_HOLTER_SUGGESTIONS(Method.GET, "clinicalNotes/HOLTER/"),
 
-    GET_PA_SUGGESTIONS(Method.GET, "clinicalNotes/PA/BOTH/" + HealthCocoConstants.PARAM_DISCARDED_TRUE),
+    GET_PA_SUGGESTIONS(Method.GET, "clinicalNotes/PA/"),
 
-    GET_PS_SUGGESTIONS(Method.GET, "clinicalNotes/PS/BOTH/" + HealthCocoConstants.PARAM_DISCARDED_TRUE),
+    GET_PS_SUGGESTIONS(Method.GET, "clinicalNotes/PS/"),
 
-    GET_PV_SUGGESTIONS(Method.GET, "clinicalNotes/PV/BOTH/" + HealthCocoConstants.PARAM_DISCARDED_TRUE),
+    GET_PV_SUGGESTIONS(Method.GET, "clinicalNotes/PV/"),
 
-    GET_INDICATION_OF_USG_SUGGESTIONS(Method.GET, "clinicalNotes/INDICATION_OF_USG/BOTH/" + HealthCocoConstants.PARAM_DISCARDED_TRUE),
+    GET_INDICATION_OF_USG_SUGGESTIONS(Method.GET, "clinicalNotes/INDICATION_OF_USG/"),
 
-    GET_NOTES_SUGGESTIONS(Method.GET, "clinicalNotes/NOTES/BOTH/" + HealthCocoConstants.PARAM_DISCARDED_TRUE),
+    GET_NOTES_SUGGESTIONS(Method.GET, "clinicalNotes/NOTES/"),
 
-    GET_EAR_EXAM_SUGGESTIONS(Method.GET, "clinicalNotes/EARS_EXAM/BOTH/" + HealthCocoConstants.PARAM_DISCARDED_TRUE),
+    GET_EAR_EXAM_SUGGESTIONS(Method.GET, "clinicalNotes/EARS_EXAM/"),
 
-    GET_INDIRECT_LARYGOSCOPY_EXAM_SUGGESTIONS(Method.GET, "clinicalNotes/INDIRECT_LAGYROSCOPY_EXAM/BOTH/" + HealthCocoConstants.PARAM_DISCARDED_TRUE),
+    GET_INDIRECT_LARYGOSCOPY_EXAM_SUGGESTIONS(Method.GET, "clinicalNotes/INDIRECT_LAGYROSCOPY_EXAM/"),
 
-    GET_NECK_EXAM_SUGGESTIONS(Method.GET, "clinicalNotes/NECK_EXAM/BOTH/" + HealthCocoConstants.PARAM_DISCARDED_TRUE),
+    GET_NECK_EXAM_SUGGESTIONS(Method.GET, "clinicalNotes/NECK_EXAM/"),
 
-    GET_NOSE_EXAM_SUGGESTIONS(Method.GET, "clinicalNotes/NOSE_EXAM/BOTH/" + HealthCocoConstants.PARAM_DISCARDED_TRUE),
+    GET_NOSE_EXAM_SUGGESTIONS(Method.GET, "clinicalNotes/NOSE_EXAM/"),
 
-    GET_ORAL_CAVITY_THROAT_EXAM_SUGGESTIONS(Method.GET, "clinicalNotes/ORAL_CAVITY_THROAT_EXAM/BOTH/" + HealthCocoConstants.PARAM_DISCARDED_TRUE),
+    GET_ORAL_CAVITY_THROAT_EXAM_SUGGESTIONS(Method.GET, "clinicalNotes/ORAL_CAVITY_THROAT_EXAM/"),
 
-    GET_PC_EARS_SUGGESTIONS(Method.GET, "clinicalNotes/PC_EARS/BOTH/" + HealthCocoConstants.PARAM_DISCARDED_TRUE),
+    GET_PC_EARS_SUGGESTIONS(Method.GET, "clinicalNotes/PC_EARS/"),
 
-    GET_PC_NOSE_SUGGESTIONS(Method.GET, "clinicalNotes/PC_NOSE/BOTH/" + HealthCocoConstants.PARAM_DISCARDED_TRUE),
+    GET_PC_NOSE_SUGGESTIONS(Method.GET, "clinicalNotes/PC_NOSE/"),
 
-    GET_PC_ORAL_CAVITY_SUGGESTIONS(Method.GET, "clinicalNotes/PC_ORAL_CAVITY/BOTH/" + HealthCocoConstants.PARAM_DISCARDED_TRUE),
+    GET_PC_ORAL_CAVITY_SUGGESTIONS(Method.GET, "clinicalNotes/PC_ORAL_CAVITY/"),
 
-    GET_PC_THROAT_SUGGESTIONS(Method.GET, "clinicalNotes/PC_THROAT/BOTH/" + HealthCocoConstants.PARAM_DISCARDED_TRUE),
+    GET_PC_THROAT_SUGGESTIONS(Method.GET, "clinicalNotes/PC_THROAT/"),
 
-    GET_PROCEDURE_NOTE_SUGGESTIONS(Method.GET, "clinicalNotes/PROCEDURE_NOTE/BOTH/" + HealthCocoConstants.PARAM_DISCARDED_TRUE),
+    GET_PROCEDURE_NOTE_SUGGESTIONS(Method.GET, "clinicalNotes/PROCEDURE_NOTE/"),
 
     GET_DISEASE_LIST(Method.GET, "history/diseases/BOTH/"),
 
@@ -427,6 +427,8 @@ public enum WebServiceType {
 
     GET_PRINT_SETTINGS(Method.GET, "printSettings"),
 
+    //    GET http://example.com/api/v1/dynamicUI/getDataPermissionForDoctor/doctorId/
+    GET_DATA_PERMISSION(Method.GET, "dynamicUI/getDataPermissionForDoctor/"),
 
     //    GET http://example.com/api/v1/register/patientStatus/patientId/doctorId/locationId/hospitalId/
     GET_PATIENT_STATUS(Method.GET, "register/patientStatus/"),

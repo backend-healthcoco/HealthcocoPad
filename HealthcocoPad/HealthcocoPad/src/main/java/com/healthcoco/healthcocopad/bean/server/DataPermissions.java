@@ -1,5 +1,7 @@
 package com.healthcoco.healthcocopad.bean.server;
 
+import com.healthcoco.healthcocopad.utilities.StringUtil;
+import com.orm.SugarRecord;
 import com.orm.annotation.Ignore;
 import com.orm.annotation.Unique;
 
@@ -9,13 +11,17 @@ import org.parceler.Parcel;
  * Created by Prashant on 21/02/2018.
  */
 @Parcel
-public class DataPermissions {
+public class DataPermissions extends SugarRecord {
+    public static String TABLE_NAME = " " + StringUtil.toSQLName(DataPermissions.class.getSimpleName());
 
+    @Ignore
     private Long adminCreatedTime;
+    @Ignore
     private Long createdTime;
     private Long updatedTime;
+    @Ignore
     private String createdBy;
-    @Unique
+    @Ignore
     private String uniqueId;
     @Ignore
     private DataDynamicField dataDynamicField;
@@ -76,4 +82,6 @@ public class DataPermissions {
     public void setUniqueId(String uniqueId) {
         this.uniqueId = uniqueId;
     }
+
+
 }

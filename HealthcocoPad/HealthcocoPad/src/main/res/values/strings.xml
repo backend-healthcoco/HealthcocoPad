@@ -305,6 +305,7 @@
     <!--Sync All texts-->
     <string name="sync_contact">Contact</string>
     <string name="sync_group">Group</string>
+    <string name="data_permission">Data Permission</string>
     <string name="sync_history">History</string>
     <string name="sync_drug">Drug</string>
     <string name="sync_frequency">Frequency</string>

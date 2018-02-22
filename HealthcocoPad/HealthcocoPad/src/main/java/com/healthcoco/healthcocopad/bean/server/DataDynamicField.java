@@ -1,16 +1,22 @@
 package com.healthcoco.healthcocopad.bean.server;
 
+import com.orm.SugarRecord;
+import com.orm.annotation.Ignore;
+
 import org.parceler.Parcel;
 
 /**
  * Created by Prashant on 21/02/2018.
  */
 @Parcel
-public class DataDynamicField {
-
+public class DataDynamicField extends SugarRecord {
+    @Ignore
     private PrescriptionDynamicField prescriptionDynamicField;
+    @Ignore
     private ClinicalNotesDynamicField clinicalNotesDynamicField;
+    @Ignore
     private DischargeSummaryDynamicFields dischargeSummaryDynamicFields;
+    @Ignore
     private TreatmentDynamicFields treatmentDynamicFields;
 
     public PrescriptionDynamicField getPrescriptionDynamicField() {

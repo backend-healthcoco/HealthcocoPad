@@ -1,12 +1,14 @@
 package com.healthcoco.healthcocopad.bean.server;
 
+import com.orm.SugarRecord;
+
 import org.parceler.Parcel;
 
 /**
  * Created by Prashant on 21/02/2018.
  */
 @Parcel
-public class PrescriptionDynamicField {
+public class PrescriptionDynamicField extends SugarRecord {
     private String services;
 
     private String drug;

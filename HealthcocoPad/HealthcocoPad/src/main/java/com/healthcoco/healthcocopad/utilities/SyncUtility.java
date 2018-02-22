@@ -9,6 +9,7 @@ import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.BloodGroup;
 import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
 import com.healthcoco.healthcocopad.bean.server.CityResponse;
+import com.healthcoco.healthcocopad.bean.server.ClinicalNotesDynamicField;
 import com.healthcoco.healthcocopad.bean.server.ComplaintSuggestions;
 import com.healthcoco.healthcocopad.bean.server.DoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.DrugDirection;
@@ -61,8 +62,9 @@ public class SyncUtility implements Response.Listener<VolleyResponseBean>, GsonR
 
     private void getComplaintSuggestions() {
         if (user != null) {
+            ClinicalNotesDynamicField clinicalNotesDynamicField = LocalDataServiceImpl.getInstance(mApp).getClinicalNotesDynamicField();
             Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.COMPLAINT_SUGGESTIONS);
-            WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(ComplaintSuggestions.class, WebServiceType.GET_COMPLAINT_SUGGESTIONS, user.getUniqueId(),
+            WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(ComplaintSuggestions.class, WebServiceType.GET_COMPLAINT_SUGGESTIONS, clinicalNotesDynamicField.getComplaint(), user.getUniqueId(),
                     latestUpdatedTime, this, this);
         }
     }

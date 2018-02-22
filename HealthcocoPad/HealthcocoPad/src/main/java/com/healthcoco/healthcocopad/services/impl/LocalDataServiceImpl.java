@@ -4973,6 +4973,105 @@ public class LocalDataServiceImpl {
 
     }
 
+
+    public VolleyResponseBean getDataPermission(WebServiceType webServiceType, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
+        volleyResponseBean.setWebServiceType(webServiceType);
+        volleyResponseBean.setIsDataFromLocal(true);
+        volleyResponseBean.setIsUserOnline(HealthCocoConstants.isNetworkOnline);
+        try {
+            DataPermissions dataPermissions = Select.from(DataPermissions.class).first();
+            if (dataPermissions != null) {
+                dataPermissions.setDataDynamicField(getDataDynamicField());
+            }
+            volleyResponseBean.setData(dataPermissions);
+            if (responseListener != null)
+                responseListener.onResponse(volleyResponseBean);
+        } catch (Exception e) {
+            e.printStackTrace();
+            showErrorLocal(volleyResponseBean, errorListener);
+        }
+        return volleyResponseBean;
+    }
+
+    public DataDynamicField getDataDynamicField() {
+        DataDynamicField dataDynamicField = Select.from(DataDynamicField.class).first();
+        dataDynamicField.setClinicalNotesDynamicField(getClinicalNotesDynamicField());
+        dataDynamicField.setDischargeSummaryDynamicFields(getDischargeSummaryDynamicFields());
+        dataDynamicField.setPrescriptionDynamicField(getPrescriptionDynamicField());
+        dataDynamicField.setTreatmentDynamicFields(getTreatmentDynamicFields());
+
+        return dataDynamicField;
+
+    }
+
+    public TreatmentDynamicFields getTreatmentDynamicFields() {
+        return Select.from(TreatmentDynamicFields.class).first();
+    }
+
+    public PrescriptionDynamicField getPrescriptionDynamicField() {
+        return Select.from(PrescriptionDynamicField.class).first();
+    }
+
+    public DischargeSummaryDynamicFields getDischargeSummaryDynamicFields() {
+        return Select.from(DischargeSummaryDynamicFields.class).first();
+    }
+
+    public ClinicalNotesDynamicField getClinicalNotesDynamicField() {
+        return Select.from(ClinicalNotesDynamicField.class).first();
+    }
+
+
+    public void addDataPermission(DataPermissions dataPermissions) {
+
+        if (dataPermissions != null) {
+            DataPermissions.deleteAll(DataPermissions.class);
+
+            addDataDynamicField(dataPermissions.getDataDynamicField());
+            dataPermissions.save();
+        }
+
+    }
+
+    public void addDataDynamicField(DataDynamicField dataDynamicField) {
+
+        if (dataDynamicField != null) {
+            DataDynamicField.deleteAll(DataDynamicField.class);
+
+            if (dataDynamicField.getClinicalNotesDynamicField() != null)
+                addClinicalNotesDynamicField(dataDynamicField.getClinicalNotesDynamicField());
+            if (dataDynamicField.getDischargeSummaryDynamicFields() != null)
+                addDischargeSummaryDynamicFields(dataDynamicField.getDischargeSummaryDynamicFields());
+            if (dataDynamicField.getPrescriptionDynamicField() != null)
+                addPrescriptionDynamicField(dataDynamicField.getPrescriptionDynamicField());
+            if (dataDynamicField.getTreatmentDynamicFields() != null)
+                addTreatmentDynamicFields(dataDynamicField.getTreatmentDynamicFields());
+            dataDynamicField.save();
+        }
+
+    }
+
+    public void addTreatmentDynamicFields(TreatmentDynamicFields treatmentDynamicFields) {
+        TreatmentDynamicFields.deleteAll(TreatmentDynamicFields.class);
+        treatmentDynamicFields.save();
+    }
+
+    public void addPrescriptionDynamicField(PrescriptionDynamicField prescriptionDynamicField) {
+        PrescriptionDynamicField.deleteAll(PrescriptionDynamicField.class);
+        prescriptionDynamicField.save();
+
+    }
+
+    public void addDischargeSummaryDynamicFields(DischargeSummaryDynamicFields dischargeSummaryDynamicFields) {
+        DischargeSummaryDynamicFields.deleteAll(DischargeSummaryDynamicFields.class);
+        dischargeSummaryDynamicFields.save();
+    }
+
+    public void addClinicalNotesDynamicField(ClinicalNotesDynamicField clinicalNotesDynamicField) {
+        ClinicalNotesDynamicField.deleteAll(ClinicalNotesDynamicField.class);
+        clinicalNotesDynamicField.save();
+    }
+
     private enum FromTableType {
         ADD_TEMPLATES, ADD_TREATMENT, ADD_PRESCRIPTION
     }

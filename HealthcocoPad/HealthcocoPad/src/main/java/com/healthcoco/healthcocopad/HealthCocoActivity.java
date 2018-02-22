@@ -42,7 +42,9 @@ import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
 import com.healthcoco.healthcocopad.bean.server.CityResponse;
 import com.healthcoco.healthcocopad.bean.server.ClinicDetailResponse;
 import com.healthcoco.healthcocopad.bean.server.ClinicDoctorProfile;
+import com.healthcoco.healthcocopad.bean.server.ClinicalNotesDynamicField;
 import com.healthcoco.healthcocopad.bean.server.ComplaintSuggestions;
+import com.healthcoco.healthcocopad.bean.server.DataPermissions;
 import com.healthcoco.healthcocopad.bean.server.DiagnosisSuggestions;
 import com.healthcoco.healthcocopad.bean.server.Disease;
 import com.healthcoco.healthcocopad.bean.server.DoctorProfile;
@@ -73,6 +75,7 @@ import com.healthcoco.healthcocopad.bean.server.PcEarsSuggestions;
 import com.healthcoco.healthcocopad.bean.server.PcNoseSuggestions;
 import com.healthcoco.healthcocopad.bean.server.PcOralCavitySuggestions;
 import com.healthcoco.healthcocopad.bean.server.PcThroatSuggestions;
+import com.healthcoco.healthcocopad.bean.server.PrescriptionDynamicField;
 import com.healthcoco.healthcocopad.bean.server.PresentComplaintSuggestions;
 import com.healthcoco.healthcocopad.bean.server.ProcedureNoteSuggestions;
 import com.healthcoco.healthcocopad.bean.server.Profession;
@@ -137,6 +140,7 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
     private static final long DEFAULT_LOADING_TIME = 20000;
     public static long GCM_WAIT_TIME = 2000;
     protected HealthCocoApplication mApp;
+    ClinicalNotesDynamicField clinicalNotesDynamicField;
     private Dialog alertDialog;
     private Handler mHandler;
     private Runnable runnable;
@@ -246,6 +250,9 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
                         Long latestUpdatedTimeDosage = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.DRUG_DOSAGE);
                         WebDataServiceImpl.getInstance(mApp)
                                 .getDosageDirection(WebServiceType.GET_DRUG_DOSAGE, DrugDosage.class, true, this.user.getUniqueId(), latestUpdatedTimeDosage, this, this);
+                        WebDataServiceImpl.getInstance(mApp)
+                                .getDataPermission(DataPermissions.class, this.user.getUniqueId(), this, this);
+
                         defaultWebServicesList.add(syncServiceType);
                         break;
                     case GET_CONTACTS:
@@ -311,6 +318,7 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
                         defaultWebServicesList.add(syncServiceType);
                         break;
                     case GET_PRESENT_COMPLAINT_SUGGESTIONS:
+                        clinicalNotesDynamicField = LocalDataServiceImpl.getInstance(mApp).getClinicalNotesDynamicField();
                         getPresentComplaintSuggestions(user);
                         defaultWebServicesList.add(syncServiceType);
                         break;
@@ -463,163 +471,164 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
 
     private void getAdviceSuggestions(User user) {
         Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.ADVICE_SUGGESTIONS);
-        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(AdviceSuggestion.class, WebServiceType.GET_SEARCH_ADVICE_SOLR, user.getUniqueId(),
+        PrescriptionDynamicField prescriptionDynamicField = LocalDataServiceImpl.getInstance(mApp).getPrescriptionDynamicField();
+        WebDataServiceImpl.getInstance(mApp).getAdviceSuggestionsList(AdviceSuggestion.class, WebServiceType.GET_SEARCH_ADVICE_SOLR, user.getUniqueId(),
                 latestUpdatedTime, this, this);
     }
 
     private void getEchoSuggestions(User user) {
         Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.ECHO_SUGGESTIONS);
-        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(EchoSuggestions.class, WebServiceType.GET_ECHO_SUGGESTIONS, user.getUniqueId(),
+        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(EchoSuggestions.class, WebServiceType.GET_ECHO_SUGGESTIONS, clinicalNotesDynamicField.getEcho(), user.getUniqueId(),
                 latestUpdatedTime, this, this);
     }
 
     private void getEcgDetailSuggestions(User user) {
         Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.ECG_DETAILS_SUGGESTIONS);
-        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(EcgDetailSuggestions.class, WebServiceType.GET_ECG_SUGGESTIONS, user.getUniqueId(),
+        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(EcgDetailSuggestions.class, WebServiceType.GET_ECG_SUGGESTIONS, clinicalNotesDynamicField.getEcgDetails(), user.getUniqueId(),
                 latestUpdatedTime, this, this);
     }
 
     private void getXraySuggestions(User user) {
         Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.X_RAY_DETAILS_SUGGESTIONS);
-        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(XrayDetailSuggestions.class, WebServiceType.GET_XRAY_SUGGESTIONS, user.getUniqueId(),
+        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(XrayDetailSuggestions.class, WebServiceType.GET_XRAY_SUGGESTIONS, clinicalNotesDynamicField.getGetxRayDetails(), user.getUniqueId(),
                 latestUpdatedTime, this, this);
     }
 
     private void getHolterSuggestions(User user) {
         Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.HOLTER_SUGGESTIONS);
-        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(HolterSuggestions.class, WebServiceType.GET_HOLTER_SUGGESTIONS, user.getUniqueId(),
+        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(HolterSuggestions.class, WebServiceType.GET_HOLTER_SUGGESTIONS, clinicalNotesDynamicField.getHolter(), user.getUniqueId(),
                 latestUpdatedTime, this, this);
     }
 
     private void getPaSuggestions(User user) {
         Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.PA_SUGGESTIONS);
-        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(PaSuggestions.class, WebServiceType.GET_PA_SUGGESTIONS, user.getUniqueId(),
+        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(PaSuggestions.class, WebServiceType.GET_PA_SUGGESTIONS, clinicalNotesDynamicField.getPa(), user.getUniqueId(),
                 latestUpdatedTime, this, this);
     }
 
     private void getPvSuggestions(User user) {
         Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.PV_SUGGESTIONS);
-        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(PvSuggestions.class, WebServiceType.GET_PV_SUGGESTIONS, user.getUniqueId(),
+        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(PvSuggestions.class, WebServiceType.GET_PV_SUGGESTIONS, clinicalNotesDynamicField.getPv(), user.getUniqueId(),
                 latestUpdatedTime, this, this);
     }
 
     private void getPsSuggestions(User user) {
         Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.PS_SUGGESTIONS);
-        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(PsSuggestions.class, WebServiceType.GET_PS_SUGGESTIONS, user.getUniqueId(),
+        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(PsSuggestions.class, WebServiceType.GET_PS_SUGGESTIONS, clinicalNotesDynamicField.getPs(), user.getUniqueId(),
                 latestUpdatedTime, this, this);
     }
 
     private void getIndicationOfUsgSuggestions(User user) {
         Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.INDICATION_OF_USG_SUGGESTIONS);
-        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(IndicationOfUsgSuggestions.class, WebServiceType.GET_INDICATION_OF_USG_SUGGESTIONS, user.getUniqueId(),
+        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(IndicationOfUsgSuggestions.class, WebServiceType.GET_INDICATION_OF_USG_SUGGESTIONS, clinicalNotesDynamicField.getIndicationOfUSG(), user.getUniqueId(),
                 latestUpdatedTime, this, this);
     }
 
     private void getPresentComplaintSuggestions(User user) {
         Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.PRESENT_COMPLAINT_SUGGESTIONS);
-        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(PresentComplaintSuggestions.class, WebServiceType.GET_PRESENT_COMPLAINT_SUGGESTIONS, user.getUniqueId(),
+        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(PresentComplaintSuggestions.class, WebServiceType.GET_PRESENT_COMPLAINT_SUGGESTIONS, clinicalNotesDynamicField.getPresentComplaint(), user.getUniqueId(),
                 latestUpdatedTime, this, this);
     }
 
     private void getHistoryOfPresentComplaintSuggestions(User user) {
         Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.HISTORY_OF_PRESENT_COMPLAINT_SUGGESTIONS);
-        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(HistoryPresentComplaintSuggestions.class, WebServiceType.GET_HISTORY_OF_PRESENT_COMPLAINT_SUGGESTIONS, user.getUniqueId(),
+        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(HistoryPresentComplaintSuggestions.class, WebServiceType.GET_HISTORY_OF_PRESENT_COMPLAINT_SUGGESTIONS, clinicalNotesDynamicField.getPresentComplaintHistory(), user.getUniqueId(),
                 latestUpdatedTime, this, this);
     }
 
     private void getMenstrualHistorySuggestions(User user) {
         Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.MENSTRUAL_HISTORY_SUGGESTIONS);
-        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(MenstrualHistorySuggestions.class, WebServiceType.GET_MENSTRUAL_HISTORY_SUGGESTIONS, user.getUniqueId(),
+        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(MenstrualHistorySuggestions.class, WebServiceType.GET_MENSTRUAL_HISTORY_SUGGESTIONS, clinicalNotesDynamicField.getMenstrualHistory(), user.getUniqueId(),
                 latestUpdatedTime, this, this);
     }
 
     private void getObstetricHistorySuggestions(User user) {
         Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.OBSTETRIC_HISTORY_SUGGESTIONS);
-        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(ObstetricHistorySuggestions.class, WebServiceType.GET_OBSTETRIC_HISTORY_SUGGESTIONS, user.getUniqueId(),
+        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(ObstetricHistorySuggestions.class, WebServiceType.GET_OBSTETRIC_HISTORY_SUGGESTIONS, clinicalNotesDynamicField.getObstetricHistory(), user.getUniqueId(),
                 latestUpdatedTime, this, this);
     }
 
     private void getGeneralExaminationSuggestions(User user) {
         Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.GENERAL_EXAMINATION_SUGGESTIONS);
-        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(GeneralExaminationSuggestions.class, WebServiceType.GET_GENERAL_EXAMINATION_SUGGESTIONS, user.getUniqueId(),
+        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(GeneralExaminationSuggestions.class, WebServiceType.GET_GENERAL_EXAMINATION_SUGGESTIONS, clinicalNotesDynamicField.getGeneralExam(), user.getUniqueId(),
                 latestUpdatedTime, this, this);
     }
 
     private void getSystemicExaminationSuggestions(User user) {
         Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.SYSTEMIC_EXAMINATION_SUGGESTIONS);
-        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(SystemicExaminationSuggestions.class, WebServiceType.GET_SYSTEMIC_EXAMINATION_SUGGESTIONS, user.getUniqueId(),
+        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(SystemicExaminationSuggestions.class, WebServiceType.GET_SYSTEMIC_EXAMINATION_SUGGESTIONS, clinicalNotesDynamicField.getSystemExam(), user.getUniqueId(),
                 latestUpdatedTime, this, this);
     }
 
     private void getProvisionalDiagnosisSuggestions(User user) {
         Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.PROVISIONAL_DIAGNOSIS_SUGGESTIONS);
-        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(ProvisionalDiagnosisSuggestions.class, WebServiceType.GET_PROVISIONAL_DIAGNOSIS_SUGGESTIONS, user.getUniqueId(),
+        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(ProvisionalDiagnosisSuggestions.class, WebServiceType.GET_PROVISIONAL_DIAGNOSIS_SUGGESTIONS, clinicalNotesDynamicField.getProvisionalDiagnosis(), user.getUniqueId(),
                 latestUpdatedTime, this, this);
     }
 
     private void getEarExamSuggestions(User user) {
         Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.EAR_EXAM_SUGGESTIONS);
-        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(EarsExamSuggestions.class, WebServiceType.GET_EAR_EXAM_SUGGESTIONS, user.getUniqueId(),
+        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(EarsExamSuggestions.class, WebServiceType.GET_EAR_EXAM_SUGGESTIONS, clinicalNotesDynamicField.getEarsExam(), user.getUniqueId(),
                 latestUpdatedTime, this, this);
     }
 
     private void getNoseEaxmSuggestions(User user) {
         Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.NOSE_EXAM_SUGGESTIONS);
-        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(NoseExamSuggestions.class, WebServiceType.GET_NOSE_EXAM_SUGGESTIONS, user.getUniqueId(),
+        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(NoseExamSuggestions.class, WebServiceType.GET_NOSE_EXAM_SUGGESTIONS, clinicalNotesDynamicField.getNoseExam(), user.getUniqueId(),
                 latestUpdatedTime, this, this);
     }
 
     private void getNeckExamSuggestions(User user) {
         Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.NECK_EXAM_SUGGESTIONS);
-        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(NeckExamSuggestions.class, WebServiceType.GET_NECK_EXAM_SUGGESTIONS, user.getUniqueId(),
+        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(NeckExamSuggestions.class, WebServiceType.GET_NECK_EXAM_SUGGESTIONS, clinicalNotesDynamicField.getNeckExam(), user.getUniqueId(),
                 latestUpdatedTime, this, this);
     }
 
     private void getOralCavityExamSuggestions(User user) {
         Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.ORAL_CAVITY_THROAT_EXAM_SUGGESTIONS);
-        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(OralCavityThroatExamSuggestions.class, WebServiceType.GET_ORAL_CAVITY_THROAT_EXAM_SUGGESTIONS, user.getUniqueId(),
+        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(OralCavityThroatExamSuggestions.class, WebServiceType.GET_ORAL_CAVITY_THROAT_EXAM_SUGGESTIONS, clinicalNotesDynamicField.getOralCavityThroatExam(), user.getUniqueId(),
                 latestUpdatedTime, this, this);
     }
 
     private void getIndirectLarygoscopyExamSuggestions(User user) {
         Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.INDIRECT_LARYGOSCOPY_EXAM_SUGGESTIONS);
-        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(IndirectLarygoscopyExamSuggestions.class, WebServiceType.GET_INDIRECT_LARYGOSCOPY_EXAM_SUGGESTIONS, user.getUniqueId(),
+        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(IndirectLarygoscopyExamSuggestions.class, WebServiceType.GET_INDIRECT_LARYGOSCOPY_EXAM_SUGGESTIONS, clinicalNotesDynamicField.getIndirectLarygoscopyExam(), user.getUniqueId(),
                 latestUpdatedTime, this, this);
     }
 
     private void getPcEarsSuggestions(User user) {
         Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.PC_EARS_SUGGESTIONS);
-        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(PcEarsSuggestions.class, WebServiceType.GET_PC_EARS_SUGGESTIONS, user.getUniqueId(),
+        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(PcEarsSuggestions.class, WebServiceType.GET_PC_EARS_SUGGESTIONS, clinicalNotesDynamicField.getPcEars(), user.getUniqueId(),
                 latestUpdatedTime, this, this);
     }
 
     private void getPcNoseSuggestions(User user) {
         Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.PC_NOSE_SUGGESTIONS);
-        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(PcNoseSuggestions.class, WebServiceType.GET_PC_NOSE_SUGGESTIONS, user.getUniqueId(),
+        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(PcNoseSuggestions.class, WebServiceType.GET_PC_NOSE_SUGGESTIONS, clinicalNotesDynamicField.getPcNose(), user.getUniqueId(),
                 latestUpdatedTime, this, this);
     }
 
     private void getPcOralCavitySuggestions(User user) {
         Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.PC_ORAL_CAVITY_SUGGESTIONS);
-        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(PcOralCavitySuggestions.class, WebServiceType.GET_PC_ORAL_CAVITY_SUGGESTIONS, user.getUniqueId(),
+        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(PcOralCavitySuggestions.class, WebServiceType.GET_PC_ORAL_CAVITY_SUGGESTIONS, clinicalNotesDynamicField.getPcOralCavity(), user.getUniqueId(),
                 latestUpdatedTime, this, this);
     }
 
     private void getPcThroatSuggestions(User user) {
         Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.PC_THROAT_SUGGESTIONS);
-        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(PcThroatSuggestions.class, WebServiceType.GET_PC_THROAT_SUGGESTIONS, user.getUniqueId(),
+        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(PcThroatSuggestions.class, WebServiceType.GET_PC_THROAT_SUGGESTIONS, clinicalNotesDynamicField.getPcThroat(), user.getUniqueId(),
                 latestUpdatedTime, this, this);
     }
 
     private void getProcedureSuggestions(User user) {
         Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.PROCEDURE_NOTE_SUGGESTIONS);
-        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(ProcedureNoteSuggestions.class, WebServiceType.GET_PROCEDURE_NOTE_SUGGESTIONS, user.getUniqueId(),
+        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(ProcedureNoteSuggestions.class, WebServiceType.GET_PROCEDURE_NOTE_SUGGESTIONS, clinicalNotesDynamicField.getProcedureNote(), user.getUniqueId(),
                 latestUpdatedTime, this, this);
     }
 
     private void getNotesSuggestions(User user) {
         Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.NOTES_SUGGESTIONS);
-        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(NotesSuggestions.class, WebServiceType.GET_NOTES_SUGGESTIONS, user.getUniqueId(),
+        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(NotesSuggestions.class, WebServiceType.GET_NOTES_SUGGESTIONS, clinicalNotesDynamicField.getNote(), user.getUniqueId(),
                 latestUpdatedTime, this, this);
     }
 
@@ -906,6 +915,9 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
                     case GET_DRUG_DOSAGE:
                         new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_DRUG_DOSAGE, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
                         return;
+                    case GET_DATA_PERMISSION:
+                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_DATA_PERMISSIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                        return;
                     case GET_CONTACTS:
                         new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_PATIENTS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
                         break;
@@ -1071,6 +1083,12 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
                 if (!Util.isNullOrEmptyList(response.getDataList()))
                     LocalDataServiceImpl.getInstance(mApp)
                             .addDrugDosageList((ArrayList<DrugDosage>) (ArrayList<?>) response.getDataList());
+                break;
+            case ADD_DATA_PERMISSIONS:
+                if (response.getData() != null)
+                    LocalDataServiceImpl.getInstance(mApp)
+                            .addDataPermission((DataPermissions) response.getData());
+
                 break;
             case ADD_DOCTOR_PROFILE:
                 if (response.getData() != null)
@@ -1372,27 +1390,27 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
 
     private void getComplaintSuggestions(User user) {
         Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.COMPLAINT);
-        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(ComplaintSuggestions.class, WebServiceType.GET_COMPLAINT_SUGGESTIONS, user.getUniqueId(),
+        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(ComplaintSuggestions.class, WebServiceType.GET_COMPLAINT_SUGGESTIONS, clinicalNotesDynamicField.getComplaint(), user.getUniqueId(),
                 latestUpdatedTime, this, this);
     }
 
     private void getObservationSuggestions(User user) {
         Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.OBSERVATION);
-        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(ObservationSuggestions.class, WebServiceType.GET_OBSERVATION_SUGGESTIONS, user.getUniqueId(),
+        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(ObservationSuggestions.class, WebServiceType.GET_OBSERVATION_SUGGESTIONS, clinicalNotesDynamicField.getObservation(), user.getUniqueId(),
                 latestUpdatedTime, this, this);
 
     }
 
     private void getInvestigationSuggestions(User user) {
         Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.INVESTIGATION);
-        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(InvestigationSuggestions.class, WebServiceType.GET_INVESTIGATION_SUGGESTIONS, user.getUniqueId(),
+        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(InvestigationSuggestions.class, WebServiceType.GET_INVESTIGATION_SUGGESTIONS, clinicalNotesDynamicField.getInvestigation(), user.getUniqueId(),
                 latestUpdatedTime, this, this);
 
     }
 
     private void getDiagnosisSuggestions(User user) {
         Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.DIAGNOSIS);
-        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(DiagnosisSuggestions.class, WebServiceType.GET_DIAGNOSIS_SUGGESTIONS, user.getUniqueId(),
+        WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(DiagnosisSuggestions.class, WebServiceType.GET_DIAGNOSIS_SUGGESTIONS, clinicalNotesDynamicField.getDiagnosis(), user.getUniqueId(),
                 latestUpdatedTime, this, this);
 
     }

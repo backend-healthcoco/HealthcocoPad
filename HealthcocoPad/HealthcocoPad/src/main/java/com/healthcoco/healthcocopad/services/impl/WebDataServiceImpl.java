@@ -398,10 +398,22 @@ public class WebDataServiceImpl implements GCMRefreshListener {
         }
     }
 
-    public void getClinicalNoteSuggestionsList(Class<?> class1, WebServiceType webServiceType, String doctorId, Long latestUpdatedTime, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+    public void getClinicalNoteSuggestionsList(Class<?> class1, WebServiceType webServiceType, String dataTpe, String doctorId, Long latestUpdatedTime, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        String dataPermission;
+        dataPermission = dataTpe;
+        if (Util.isNullOrBlank(dataPermission)) {
+            dataPermission = HealthCocoConstants.PARAM_TAG_BOTH;
+        }
+        String url = webServiceType.getUrl() + dataPermission + "/" + HealthCocoConstants.PARAM_DISCARDED_TRUE + HealthCocoConstants.PARAM_DOCTOR_ID + doctorId + HealthCocoConstants.PARAM_UPDATED_TIME + latestUpdatedTime;
+        getResponse(webServiceType, class1, url, null, null, responseListener, errorListener);
+    }
+
+
+    public void getAdviceSuggestionsList(Class<?> class1, WebServiceType webServiceType, String doctorId, Long latestUpdatedTime, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         String url = webServiceType.getUrl() + HealthCocoConstants.PARAM_DOCTOR_ID + doctorId + HealthCocoConstants.PARAM_UPDATED_TIME + latestUpdatedTime;
         getResponse(webServiceType, class1, url, null, null, responseListener, errorListener);
     }
+
 
     public void getBloodGroup(Class<?> class1, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         WebServiceType webServiceType = WebServiceType.GET_BLOOD_GROUP;
@@ -1514,5 +1526,19 @@ public class WebDataServiceImpl implements GCMRefreshListener {
         }
     }
 
+    public void getDataPermission(Class<?> class1, String doctorId, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        WebServiceType webServiceType = WebServiceType.GET_DATA_PERMISSION;
+        String url = webServiceType.getUrl();
+        url = url + doctorId;
+
+        checkNetworkStatus(mApp);
+        if (HealthCocoConstants.isNetworkOnline) {
+            getResponse(webServiceType, class1, url, null, null, responseListener,
+                    errorListener);
+        } else {
+            showUserOffline(webServiceType, responseListener);
+            LocalDataServiceImpl.getInstance(mApp).getDataPermission(webServiceType, responseListener, errorListener);
+        }
+    }
 
 }
