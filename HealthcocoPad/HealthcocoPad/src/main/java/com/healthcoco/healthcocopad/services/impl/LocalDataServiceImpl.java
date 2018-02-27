@@ -3262,7 +3262,23 @@ public class LocalDataServiceImpl {
         }
     }
 
+    public void updateAppointment(CalendarEvents appointment) {
+
+        deleteWorkingHoursIfAlreadyPresent(LocalDatabaseUtils.KEY_FOREIGN_TABLE_ID, appointment.getUniqueId());
+        if (appointment.getTime() != null) {
+            addWorkingHour(CalendarEvents.class.getSimpleName(), appointment.getUniqueId(), appointment.getTime());
+//            addWorkingHour(CalendarEvents.class.getSimpleName() + appointment.getUniqueId(), LocalDatabaseUtils.KEY_FOREIGN_TABLE_ID, appointment.getUniqueId(), appointment.getTime());
+        }
+        if (appointment.getPatient() != null) {
+            appointment.setPatientId(appointment.getPatient().getUserId());
+//            addPatient(appointment.getPatient());
+        }
+        appointment.save();
+    }
+
+
     private void addAppointmentRequest(AppointmentRequest appointmentRequest) {
+        SugarRecord.deleteAll(AppointmentRequest.class, LocalDatabaseUtils.KEY_UNIQUE_ID + "= ?", appointmentRequest.getUniqueId());
         appointmentRequest.setWorkingHoursJson(getJsonFromObject(appointmentRequest.getTime()));
         appointmentRequest.save();
     }

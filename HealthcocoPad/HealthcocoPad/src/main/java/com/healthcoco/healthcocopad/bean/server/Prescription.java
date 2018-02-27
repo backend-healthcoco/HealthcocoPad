@@ -37,8 +37,23 @@ public class Prescription extends SugarRecord {
     private String visitId;
     private String uniqueEmrId;
     private String advice;
+    private String appointmentId;
     @Ignore
     private AppointmentRequest appointmentRequest;
+
+    public static ArrayList<DiagnosticTest> getDiagnosticTestsList(List<DiagnosticTestsPrescription> list) {
+        ArrayList<DiagnosticTest> diagnosticTestsList = null;
+        if (!Util.isNullOrEmptyList(list)) {
+            for (DiagnosticTestsPrescription diagnosticTestPrescription : list) {
+                if (diagnosticTestPrescription.getTest() != null) {
+                    if (diagnosticTestsList == null)
+                        diagnosticTestsList = new ArrayList<>();
+                    diagnosticTestsList.add(diagnosticTestPrescription.getTest());
+                }
+            }
+        }
+        return diagnosticTestsList;
+    }
 
     public AppointmentRequest getAppointmentRequest() {
         return appointmentRequest;
@@ -46,6 +61,14 @@ public class Prescription extends SugarRecord {
 
     public void setAppointmentRequest(AppointmentRequest appointmentRequest) {
         this.appointmentRequest = appointmentRequest;
+    }
+
+    public String getAppointmentId() {
+        return appointmentId;
+    }
+
+    public void setAppointmentId(String appointmentId) {
+        this.appointmentId = appointmentId;
     }
 
     public Long getCreatedTime() {
@@ -196,19 +219,5 @@ public class Prescription extends SugarRecord {
 
     public void setDiagnosticTestsIdsJsonString(String diagnosticTestsIdsJsonString) {
         this.diagnosticTestsIdsJsonString = diagnosticTestsIdsJsonString;
-    }
-
-    public static ArrayList<DiagnosticTest> getDiagnosticTestsList(List<DiagnosticTestsPrescription> list) {
-        ArrayList<DiagnosticTest> diagnosticTestsList = null;
-        if (!Util.isNullOrEmptyList(list)) {
-            for (DiagnosticTestsPrescription diagnosticTestPrescription : list) {
-                if (diagnosticTestPrescription.getTest() != null) {
-                    if (diagnosticTestsList == null)
-                        diagnosticTestsList = new ArrayList<>();
-                    diagnosticTestsList.add(diagnosticTestPrescription.getTest());
-                }
-            }
-        }
-        return diagnosticTestsList;
     }
 }

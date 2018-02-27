@@ -454,7 +454,7 @@ public class ClinicalNotesListItemViewHolder extends HealthCocoViewHolder implem
                 tvNotedBy.setVisibility(View.VISIBLE);
             }
             imageView.setVisibility(View.VISIBLE);
-            if (clinicalNote.getAppointmentRequest() != null && clinicalNote.getAppointmentRequest().getAppointmentId() != null) {
+            if (clinicalNote.getAppointmentRequest() != null && clinicalNote.getAppointmentId() != null) {
                 AppointmentRequest appointmentRequest = clinicalNote.getAppointmentRequest();
                 String formattedTime = DateTimeUtil.getFormattedTime(0, Math.round(appointmentRequest.getTime().getFromTime()));
                 String formattedDate = DateTimeUtil.getFormattedDateTime(DATE_FORMAT_USED_IN_THIS_SCREEN, appointmentRequest.getFromDate());

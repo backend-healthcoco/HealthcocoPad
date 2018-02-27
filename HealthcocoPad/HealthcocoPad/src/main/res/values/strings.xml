@@ -661,6 +661,7 @@
     <string name="present_complaint">Present Complaint</string>
     <string name="complaints">Complaints</string>
     <string name="history_of_present_complaints">History of Present Complaint</string>
+    <string name="allergie">Allergies</string>
     <string name="menstrual_history">Menstrual History</string>
     <string name="obstetric_history">Obstetric History</string>
     <string name="general_examination">General Examination</string>

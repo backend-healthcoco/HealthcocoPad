@@ -337,7 +337,14 @@ public class AddReceiptFragment extends HealthCocoFragment implements LocalDoInB
                         add(PatientInvoiceDetailFragment.INTENT_GET_INVOICE_LIST_LOCAL);
                         add(CommonOpenUpPatientDetailFragment.INTENT_REFRESH_AMOUNT_DETAILS);
                     }});
-                    mActivity.setResult(HealthCocoConstants.RESULT_CODE_ADD_RECEIPT, null);
+                    String msg;
+                    if (receiptServerResponse.getInvoice() != null)
+                        msg = "Receipt Saved";
+                    else msg = "Adavance Amount Added";
+
+                    Intent resultIntent = new Intent();
+                    resultIntent.putExtra(HealthCocoConstants.TAG_RESULT_MESSAGE, msg);
+                    mActivity.setResult(HealthCocoConstants.RESULT_CODE_ADD_RECEIPT, resultIntent);
                     ((CommonOpenUpActivity) mActivity).finish();
                 }
                 break;

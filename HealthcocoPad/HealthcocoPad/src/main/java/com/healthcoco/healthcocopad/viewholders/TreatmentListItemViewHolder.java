@@ -138,14 +138,13 @@ public class TreatmentListItemViewHolder extends HealthCocoViewHolder implements
         else
             tvGrandTotal.setText(mActivity.getResources().getString(R.string.no_text_dash));
 
-        if (!Util.isNullOrBlank(treatments.getAppointmentId())) {
-            if (treatments.getAppointmentRequest() != null) {
-                layoutNextReviewDetail.setVisibility(View.VISIBLE);
-                AppointmentRequest appointmentRequest = treatments.getAppointmentRequest();
-                String formattedTime = DateTimeUtil.getFormattedTime(0, Math.round(appointmentRequest.getTime().getFromTime()));
-                String formattedDate = DateTimeUtil.getFormattedDateTime(DATE_FORMAT_USED_IN_THIS_SCREEN, appointmentRequest.getFromDate());
-                textViewNextReviewDate.setText(formattedDate + " " + formattedTime);
-            }
+        if (treatments.getAppointmentRequest() != null) {
+            layoutNextReviewDetail.setVisibility(View.VISIBLE);
+            AppointmentRequest appointmentRequest = treatments.getAppointmentRequest();
+            String formattedTime = DateTimeUtil.getFormattedTime(0, Math.round(appointmentRequest.getTime().getFromTime()));
+            String formattedDate = DateTimeUtil.getFormattedDateTime(DATE_FORMAT_USED_IN_THIS_SCREEN, appointmentRequest.getFromDate());
+            textViewNextReviewDate.setText(formattedDate + " " + formattedTime);
+
         } else {
             layoutNextReviewDetail.setVisibility(View.GONE);
         }

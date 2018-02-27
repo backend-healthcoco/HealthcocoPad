@@ -50,7 +50,7 @@ public enum ClinicalNotesPermissionType {
     OCCUPATION("OCCUPATION", R.string.occupation, R.string.occupation, false, R.layout.layout_item_add_myscript_clinical_note_permision),
     DRUGS("DRUGS", R.string.drugs, R.string.drugs, false, R.layout.layout_item_add_myscript_clinical_note_permision),
     MEDICINE("MEDICINE", R.string.medicine, R.string.medicine, false, R.layout.layout_item_add_myscript_clinical_note_permision),
-    ALLERGIES("ALLERGIES", R.string.allergies, R.string.allergies, false, R.layout.layout_item_add_myscript_clinical_note_permision),
+    ALLERGIES("ALLERGIES", R.string.allergie, R.string.allergies, false, R.layout.layout_item_add_myscript_clinical_note_permision),
     SURGICAL("SURGICAL", R.string.surgical, R.string.surgical, false, R.layout.layout_item_add_myscript_clinical_note_permision);
     private final boolean isDifferentView;
     private final int layoutId;

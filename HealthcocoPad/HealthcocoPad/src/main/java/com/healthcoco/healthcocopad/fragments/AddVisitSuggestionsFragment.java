@@ -641,12 +641,13 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements T
             default:
                 if (visitToggleStateFromPreferences) {
                     parentEditSearchView.setVisibility(View.GONE);
-                    btAddNew.setVisibility(View.GONE);
+                    btAddNew.setVisibility(View.VISIBLE);
                 } else {
                     parentEditSearchView.setVisibility(View.VISIBLE);
 //                    btAddNew.setVisibility(View.VISIBLE);
                     switch (suggestionType) {
                         case LAB_TESTS:
+                            break;
                         case DRUGS:
                             btAddNew.setVisibility(View.VISIBLE);
                             break;

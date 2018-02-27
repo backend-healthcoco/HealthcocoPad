@@ -122,6 +122,7 @@ public class HealthCocoConstants {
     public static final String TAG_PRESCRIPTION_ID = "prescriptionId";
     public static final String TAG_TEMPLATE_ID = "templateId";
     public static final String TAG_DRUG_DETAILS = "drugDetails";
+    public static final String TAG_RESULT_MESSAGE = "msg";
     public static final String TAG_IS_FROM_NEW_TEMPLATE_FRAGMENT = "isFromNewtemplateFragment";
     public static final String PARAM_VISIT_FOR = "&visitFor=";
     public static final String TAG_DOCTOR_VIDEO_DATA = "doctorVideo";

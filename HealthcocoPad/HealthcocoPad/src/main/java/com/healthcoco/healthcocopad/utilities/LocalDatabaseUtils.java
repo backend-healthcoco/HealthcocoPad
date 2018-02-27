@@ -102,7 +102,7 @@ public class LocalDatabaseUtils {
     public static final String KEY_NECK_EXAM = "neck_exam";
     public static final String KEY_NOSE_EXAM = "nose_exam";
     public static final String KEY_ORAL_CAVITY_THROAT_EXAM = "oral_cavity_throat_exam";
-    public static final String KEY_PROCEDURES = "procedures";
+    public static final String KEY_PROCEDURES = "procedure_note";
     public static final String KEY_INDICATION_OF_USG = "indication_of_usg";
     public static final String KEY_ADVICE = "advice";
     public static final String KEY_FOREIGN_MEDICAL_HISTORY_ID = "foreign_medical_history_id";

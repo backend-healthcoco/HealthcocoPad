@@ -482,7 +482,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/list_item_padding"
-                android:text="@string/allergies"
+                android:text="@string/allergie"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label_19sp" />
 

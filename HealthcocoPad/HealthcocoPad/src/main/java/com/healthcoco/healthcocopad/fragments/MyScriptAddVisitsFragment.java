@@ -281,6 +281,7 @@ public class MyScriptAddVisitsFragment extends HealthCocoFragment implements Vie
     private boolean isOnItemClick;
     private AddPrescriptionVisitFragment addPrescriptionVisitFragment;
     private AddVisitSuggestionsFragment addVisitSuggestionsFragment;
+    private TemplateListFragment templateListFragment;
     private AddLabTestsVisitFragment addLabTestVisitFragment;
     private boolean mKeyboardStatus = false;
     private AddClinicalNotesVisitMyScriptFragment addClinicalNotesFragment;
@@ -334,6 +335,7 @@ public class MyScriptAddVisitsFragment extends HealthCocoFragment implements Vie
         initClinicalNotesFragment();
         initPrescriptionFragment();
         initSuggestionsFragment();
+        initTemplateFragment();
         initLabTestsFragment();
     }
 
@@ -361,6 +363,13 @@ public class MyScriptAddVisitsFragment extends HealthCocoFragment implements Vie
 
     private void initSuggestionsFragment() {
         addVisitSuggestionsFragment = new AddVisitSuggestionsFragment();
+        FragmentTransaction transaction = mFragmentManager.beginTransaction();
+        transaction.add(R.id.container_suggestions_list, addVisitSuggestionsFragment, addVisitSuggestionsFragment.getClass().getSimpleName());
+        transaction.commit();
+    }
+
+    private void initTemplateFragment() {
+        templateListFragment = new TemplateListFragment();
         FragmentTransaction transaction = mFragmentManager.beginTransaction();
         transaction.add(R.id.container_suggestions_list, addVisitSuggestionsFragment, addVisitSuggestionsFragment.getClass().getSimpleName());
         transaction.commit();
@@ -640,10 +649,17 @@ public class MyScriptAddVisitsFragment extends HealthCocoFragment implements Vie
                 hideKeyboardOrWidgetIfVisible();
                 showHideClinicalNotesLayout();
                 break;
-            case R.id.bt_prescription:
+           /* case R.id.bt_prescription:
                 svScrollView.requestChildFocus(parentPrescription, parentPrescription);
                 if (selectedSuggestionType == null || selectedSuggestionType != SuggestionType.DRUGS) {
                     addVisitSuggestionsFragment.refreshTagOfEditText(SuggestionType.DRUGS);
+                }
+                break;*/
+            case R.id.bt_prescription:
+                svScrollView.requestChildFocus(parentPrescription, parentPrescription);
+                if (selectedSuggestionType == null || selectedSuggestionType != SuggestionType.DRUGS) {
+                    addVisibileUiType(VisitsUiType.LAB_TEST);
+                    addVisitSuggestionsFragment.refreshTagOfEditText(SuggestionType.LAB_TESTS);
                 }
                 break;
             case R.id.bt_lab_tests:

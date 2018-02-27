@@ -368,8 +368,9 @@ public enum WebServiceType {
     DELETE_PA(Method.DELETE, "clinicalNotes/pa/"),
     DELETE_PS(Method.DELETE, "clinicalNotes/ps/"),
     DELETE_PV(Method.DELETE, "clinicalNotes/pv/"),
-    DELETE_INDICATION_OF_USG(Method.DELETE, "clinicalNotes/indicationOfUSG/"),
+    DELETE_INDICATION_OF_USG(Method.DELETE, "clinicalNotes/presentIndicationOfUSG/"),
     DELETE_NOTES(Method.DELETE, "clinicalNotes/notes/"),
+    DELETE_PROCEDURE_NOTE(Method.DELETE, "clinicalNotes/procedureNote/"),
 
     ADD_DIRECTION(Method.POST, "prescription/drugDirection/add/"),
 

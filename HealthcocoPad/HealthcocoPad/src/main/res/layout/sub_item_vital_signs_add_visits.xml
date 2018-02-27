@@ -32,6 +32,40 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/margin_left_right_add_vital_signs"
+                android:layout_weight="1"
+                android:gravity="center|start"
+                android:orientation="vertical">
+
+                <com.healthcoco.healthcocopad.custom.AutoFitTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center|start"
+                    android:text="@string/heart_rate"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_add_visits_lable" />
+
+                <com.healthcoco.healthcocopad.custom.MyScriptEditText
+                    android:id="@+id/edit_heart_rate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/margin_add_vital_signs_layout"
+                    android:background="@drawable/shape_rounded_corners_item_background"
+                    android:gravity="center"
+                    android:hint="@string/beats_per_min"
+                    android:inputType="numberDecimal"
+                    android:maxLines="1"
+                    android:nextFocusDown="@+id/edit_body_temperature"
+                    android:padding="10dp"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_add_visits_lable" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center|start"
                 android:orientation="vertical">
@@ -56,7 +90,8 @@
                     android:hint="@string/faranheit"
                     android:inputType="numberDecimal"
                     android:maxLines="1"
-                    android:nextFocusDown="@+id/edit_weight"
+                    android:nextFocusDown="@+id/edit_systolic"
+                    android:nextFocusUp="@+id/edit_heart_rate"
                     android:padding="10dp"
                     android:textColor="@color/black"
                     android:textSize="@dimen/text_size_add_visits_lable" />
@@ -67,87 +102,12 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/margin_left_right_add_vital_signs"
-                android:layout_marginRight="@dimen/margin_left_right_add_vital_signs"
                 android:layout_weight="1"
                 android:gravity="center|start"
                 android:orientation="vertical">
 
                 <com.healthcoco.healthcocopad.custom.AutoFitTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center|start"
-                    android:text="@string/weight"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/text_size_add_visits_lable" />
-
-                <com.healthcoco.healthcocopad.custom.MyScriptEditText
-                    android:id="@+id/edit_weight"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="@dimen/margin_add_vital_signs_layout"
-                    android:background="@drawable/shape_rounded_corners_item_background"
-                    android:gravity="center"
-                    android:hint="@string/kilograms"
-                    android:inputType="numberDecimal"
-                    android:maxLines="1"
-                    android:nextFocusDown="@+id/edit_heart_rate"
-                    android:nextFocusUp="@+id/edit_body_temperature"
-                    android:padding="10dp"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/text_size_add_visits_lable" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center|start"
-                android:orientation="vertical">
-
-                <com.healthcoco.healthcocopad.custom.AutoFitTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center|start"
-                    android:text="@string/heart_rate"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/text_size_add_visits_lable" />
-
-                <com.healthcoco.healthcocopad.custom.MyScriptEditText
-                    android:id="@+id/edit_heart_rate"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="@dimen/margin_add_vital_signs_layout"
-                    android:background="@drawable/shape_rounded_corners_item_background"
-                    android:gravity="center"
-                    android:hint="@string/beats_per_min"
-                    android:inputType="numberDecimal"
-                    android:maxLines="1"
-                    android:nextFocusDown="@+id/edit_systolic"
-                    android:nextFocusUp="@+id/edit_weight"
-                    android:padding="10dp"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/text_size_add_visits_lable" />
-
-            </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_add_vital_signs_layout"
-            android:orientation="horizontal"
-            android:weightSum="3">
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center|start"
-                android:orientation="vertical">
-
-                <com.healthcoco.healthcocopad.custom.AutoFitTextView
+                    android:id="@+id/tv_blood_pressure"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center|start"
@@ -175,7 +135,7 @@
                         android:inputType="numberDecimal"
                         android:maxLines="1"
                         android:nextFocusDown="@+id/edit_diastolic"
-                        android:nextFocusUp="@+id/edit_heart_rate"
+                        android:nextFocusUp="@+id/edit_body_temperature"
                         android:padding="10dp"
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_size_add_visits_lable" />
@@ -201,12 +161,166 @@
                         android:hint="@string/diastolic"
                         android:inputType="numberDecimal"
                         android:maxLines="1"
-                        android:nextFocusDown="@+id/edit_resp_rate"
+                        android:nextFocusDown="@+id/edit_weight"
                         android:nextFocusUp="@+id/edit_systolic"
                         android:padding="10dp"
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_size_add_visits_lable" />
                 </LinearLayout>
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_add_vital_signs_layout"
+            android:orientation="horizontal"
+            android:weightSum="3">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center|start"
+                android:orientation="vertical">
+
+                <com.healthcoco.healthcocopad.custom.AutoFitTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center|start"
+                    android:text="@string/weight"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_add_visits_lable" />
+
+                <com.healthcoco.healthcocopad.custom.MyScriptEditText
+                    android:id="@+id/edit_weight"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/margin_add_vital_signs_layout"
+                    android:background="@drawable/shape_rounded_corners_item_background"
+                    android:gravity="center"
+                    android:hint="@string/kilograms"
+                    android:inputType="numberDecimal"
+                    android:maxLines="1"
+                    android:nextFocusDown="@+id/edit_height"
+                    android:nextFocusUp="@+id/edit_diastolic"
+                    android:padding="10dp"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_add_visits_lable" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_left_right_add_vital_signs"
+                android:layout_marginRight="@dimen/margin_left_right_add_vital_signs"
+                android:layout_weight="1"
+                android:gravity="center|start"
+                android:orientation="vertical">
+
+                <com.healthcoco.healthcocopad.custom.AutoFitTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center|start"
+                    android:text="@string/height"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_add_visits_lable" />
+
+                <com.healthcoco.healthcocopad.custom.MyScriptEditText
+                    android:id="@+id/edit_height"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/margin_add_vital_signs_layout"
+                    android:background="@drawable/shape_rounded_corners_item_background"
+                    android:gravity="center"
+                    android:hint="@string/centimeter"
+                    android:inputType="numberDecimal"
+                    android:maxLines="1"
+                    android:nextFocusDown="@+id/edit_resp_rate"
+                    android:nextFocusUp="@+id/edit_weight"
+                    android:padding="10dp"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_add_visits_lable" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center|start"
+                android:orientation="vertical">
+
+                <com.healthcoco.healthcocopad.custom.AutoFitTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center|start"
+                    android:text="@string/bmi"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_add_visits_lable" />
+
+                <com.healthcoco.healthcocopad.custom.MyScriptEditText
+                    android:id="@+id/edit_bmi"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/margin_add_vital_signs_layout"
+                    android:background="@drawable/shape_rounded_corners_item_background"
+                    android:enabled="false"
+                    android:gravity="center"
+                    android:hint="@string/bmi_kg_mg"
+                    android:inputType="none"
+                    android:maxLines="1"
+                    android:padding="10dp"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_add_visits_lable" />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_add_vital_signs_layout"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center|start"
+                android:orientation="vertical">
+
+                <com.healthcoco.healthcocopad.custom.AutoFitTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center|start"
+                    android:text="@string/bsa"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_add_visits_lable" />
+
+                <com.healthcoco.healthcocopad.custom.MyScriptEditText
+                    android:id="@+id/edit_bsa"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/margin_add_vital_signs_layout"
+                    android:background="@drawable/shape_rounded_corners_item_background"
+                    android:enabled="false"
+                    android:gravity="center"
+                    android:hint="@string/bsa_m"
+                    android:inputType="none"
+                    android:maxLines="1"
+                    android:padding="10dp"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_add_visits_lable" />
 
             </LinearLayout>
 
@@ -239,7 +353,7 @@
                     android:inputType="numberDecimal"
                     android:maxLines="1"
                     android:nextFocusDown="@+id/edit_spo2"
-                    android:nextFocusUp="@+id/edit_diastolic"
+                    android:nextFocusUp="@+id/edit_height"
                     android:padding="10dp"
                     android:textColor="@color/black"
                     android:textSize="@dimen/text_size_add_visits_lable" />
@@ -278,6 +392,8 @@
                     android:textSize="@dimen/text_size_add_visits_lable" />
 
             </LinearLayout>
+
         </LinearLayout>
+
     </LinearLayout>
 </LinearLayout>

@@ -165,6 +165,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center"
+                    android:text="@string/no_text_dash"
                     android:textColor="@color/black_greyish"
                     android:textSize="@dimen/text_size_drug_child_lable" />
 

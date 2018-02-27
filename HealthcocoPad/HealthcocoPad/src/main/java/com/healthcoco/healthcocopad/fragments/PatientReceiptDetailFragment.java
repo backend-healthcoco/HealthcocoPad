@@ -206,7 +206,8 @@ public class PatientReceiptDetailFragment extends HealthCocoFragment implements 
             if (resultCode == HealthCocoConstants.RESULT_CODE_ADD_RECEIPT) {
                 lvReceipt.smoothScrollToPosition(0);
                 getReceipt(true);
-                Util.showToast(mActivity, "Receipt Saved");
+                String msg = data.getStringExtra(HealthCocoConstants.TAG_RESULT_MESSAGE);
+                Util.showToast(mActivity, msg);
             }
         }
     }

@@ -652,6 +652,7 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
     }
 
     private void addAppointment(String selecetdDate) {
+        mActivity.hideLoading();
         mActivity.showLoading(false);
         Float selectedFromTimeInMinutes = 0f;
         if (tvSelectedTime.getTag() != null)

@@ -21,9 +21,13 @@ import com.healthcoco.healthcocopad.bean.server.HolterSuggestions;
 import com.healthcoco.healthcocopad.bean.server.IndicationOfUsgSuggestions;
 import com.healthcoco.healthcocopad.bean.server.InvestigationSuggestions;
 import com.healthcoco.healthcocopad.bean.server.MenstrualHistorySuggestions;
+import com.healthcoco.healthcocopad.bean.server.Notes;
+import com.healthcoco.healthcocopad.bean.server.NotesSuggestions;
+import com.healthcoco.healthcocopad.bean.server.ObservationSuggestions;
 import com.healthcoco.healthcocopad.bean.server.ObstetricHistorySuggestions;
 import com.healthcoco.healthcocopad.bean.server.PaSuggestions;
 import com.healthcoco.healthcocopad.bean.server.PresentComplaintSuggestions;
+import com.healthcoco.healthcocopad.bean.server.ProcedureNoteSuggestions;
 import com.healthcoco.healthcocopad.bean.server.ProvisionalDiagnosisSuggestions;
 import com.healthcoco.healthcocopad.bean.server.PsSuggestions;
 import com.healthcoco.healthcocopad.bean.server.PvSuggestions;
@@ -171,11 +175,11 @@ public class NameHideActivateViewholder extends HealthCocoViewHolder implements 
                 }
                 break;
             case OBSERVATION:
-                if (objData instanceof ObstetricHistorySuggestions) {
-                    ObstetricHistorySuggestions obstetricHistorySuggestions = (ObstetricHistorySuggestions) objData;
-                    text = obstetricHistorySuggestions.getObstetricHistory();
-                    isDiscarded = Util.getValidatedBooleanValue(obstetricHistorySuggestions.getDiscarded());
-                    uniqueId = obstetricHistorySuggestions.getUniqueId();
+                if (objData instanceof ObservationSuggestions) {
+                    ObservationSuggestions observationSuggestions = (ObservationSuggestions) objData;
+                    text = observationSuggestions.getObservation();
+                    isDiscarded = Util.getValidatedBooleanValue(observationSuggestions.getDiscarded());
+                    uniqueId = observationSuggestions.getUniqueId();
                 }
                 break;
             case INVESTIGATIONS:
@@ -235,11 +239,11 @@ public class NameHideActivateViewholder extends HealthCocoViewHolder implements 
                 }
                 break;
             case NOTES:
-                if (objData instanceof ComplaintSuggestions) {
-                    ComplaintSuggestions complaintSuggestions = (ComplaintSuggestions) objData;
-                    text = complaintSuggestions.getComplaint();
-                    isDiscarded = Util.getValidatedBooleanValue(complaintSuggestions.getDiscarded());
-                    uniqueId = complaintSuggestions.getUniqueId();
+                if (objData instanceof NotesSuggestions) {
+                    NotesSuggestions notesSuggestions = (NotesSuggestions) objData;
+                    text = notesSuggestions.getNote();
+                    isDiscarded = Util.getValidatedBooleanValue(notesSuggestions.getDiscarded());
+                    uniqueId = notesSuggestions.getUniqueId();
                 }
                 break;
             case INDICATION_OF_USG:
@@ -272,6 +276,14 @@ public class NameHideActivateViewholder extends HealthCocoViewHolder implements 
                     text = pvSuggestions.getPv();
                     isDiscarded = Util.getValidatedBooleanValue(pvSuggestions.getDiscarded());
                     uniqueId = pvSuggestions.getUniqueId();
+                }
+                break;
+            case PROCEDURE_NOTE:
+                if (objData instanceof ProcedureNoteSuggestions) {
+                    ProcedureNoteSuggestions procedureNoteSuggestions = (ProcedureNoteSuggestions) objData;
+                    text = procedureNoteSuggestions.getProcedureNote();
+                    isDiscarded = Util.getValidatedBooleanValue(procedureNoteSuggestions.getDiscarded());
+                    uniqueId = procedureNoteSuggestions.getUniqueId();
                 }
                 break;
             case TREATMENT:

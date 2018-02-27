@@ -47,6 +47,7 @@ import com.healthcoco.healthcocopad.bean.server.ObservationSuggestions;
 import com.healthcoco.healthcocopad.bean.server.ObstetricHistorySuggestions;
 import com.healthcoco.healthcocopad.bean.server.PaSuggestions;
 import com.healthcoco.healthcocopad.bean.server.PresentComplaintSuggestions;
+import com.healthcoco.healthcocopad.bean.server.ProcedureNoteSuggestions;
 import com.healthcoco.healthcocopad.bean.server.ProvisionalDiagnosisSuggestions;
 import com.healthcoco.healthcocopad.bean.server.PsSuggestions;
 import com.healthcoco.healthcocopad.bean.server.PvSuggestions;
@@ -405,6 +406,10 @@ public class NameHideActivateTabFragment extends HealthCocoFragment implements
                 new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_PV_HIDDEN_LIST, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
                 new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_PV_ACTIVATED_LIST, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
                 break;
+            case PROCEDURE_NOTE:
+                new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_PROCEDURE_HIDDEN_LIST, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_PROCEDURES_ACTIVATED_LIST, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                break;
         }
     }
 
@@ -615,7 +620,7 @@ public class NameHideActivateTabFragment extends HealthCocoFragment implements
                     isHideClicked = true;
                     clickedObject = object;
                     mActivity.showLoading(false);
-                    WebDataServiceImpl.getInstance(mApp).deleteData(WebServiceType.DELETE_PROVISIONAL_DIAGNOSIS,
+                    WebDataServiceImpl.getInstance(mApp).deleteData(WebServiceType.DELETE_DIAGNOSIS,
                             DiagnosisSuggestions.class, user.getUniqueId(), diagnosisSuggestions.getLocationId(),
                             diagnosisSuggestions.getHospitalId(), diagnosisSuggestions.getUniqueId(), true, this, this);
                 }
@@ -719,6 +724,17 @@ public class NameHideActivateTabFragment extends HealthCocoFragment implements
                             pvSuggestions.getHospitalId(), pvSuggestions.getUniqueId(), true, this, this);
                 }
                 break;
+            case PROCEDURE_NOTE:
+                if (object instanceof ProcedureNoteSuggestions) {
+                    ProcedureNoteSuggestions procedureNoteSuggestions = (ProcedureNoteSuggestions) object;
+                    isHideClicked = true;
+                    clickedObject = object;
+                    mActivity.showLoading(false);
+                    WebDataServiceImpl.getInstance(mApp).deleteData(WebServiceType.DELETE_PROCEDURE_NOTE,
+                            PvSuggestions.class, user.getUniqueId(), procedureNoteSuggestions.getLocationId(),
+                            procedureNoteSuggestions.getHospitalId(), procedureNoteSuggestions.getUniqueId(), true, this, this);
+                }
+                break;
         }
     }
 
@@ -787,7 +803,7 @@ public class NameHideActivateTabFragment extends HealthCocoFragment implements
                     case PRESENT_COMPLAINT:
                         if (object instanceof PresentComplaintSuggestions) {
                             PresentComplaintSuggestions presentComplaintSuggestions = (PresentComplaintSuggestions) object;
-                            isHideClicked = true;
+                            isHideClicked = false;
                             clickedObject = object;
                             mActivity.showLoading(false);
                             WebDataServiceImpl.getInstance(mApp).deleteData(WebServiceType.DELETE_PRESENT_COMPLAINT,
@@ -798,7 +814,7 @@ public class NameHideActivateTabFragment extends HealthCocoFragment implements
                     case COMPLAINT:
                         if (object instanceof ComplaintSuggestions) {
                             ComplaintSuggestions complaintSuggestions = (ComplaintSuggestions) object;
-                            isHideClicked = true;
+                            isHideClicked = false;
                             clickedObject = object;
                             mActivity.showLoading(false);
                             WebDataServiceImpl.getInstance(mApp).deleteData(WebServiceType.DELETE_COMPLAINT,
@@ -809,7 +825,7 @@ public class NameHideActivateTabFragment extends HealthCocoFragment implements
                     case HISTORY_OF_PRESENT_COMPLAINT:
                         if (object instanceof HistoryPresentComplaintSuggestions) {
                             HistoryPresentComplaintSuggestions historyDetailsResponse = (HistoryPresentComplaintSuggestions) object;
-                            isHideClicked = true;
+                            isHideClicked = false;
                             clickedObject = object;
                             mActivity.showLoading(false);
                             WebDataServiceImpl.getInstance(mApp).deleteData(WebServiceType.DELETE_HISTORY_OF_PRESENT_COMPLAINT,
@@ -820,7 +836,7 @@ public class NameHideActivateTabFragment extends HealthCocoFragment implements
                     case MENSTRUAL_HISTORY:
                         if (object instanceof MenstrualHistorySuggestions) {
                             MenstrualHistorySuggestions menstrualHistorySuggestions = (MenstrualHistorySuggestions) object;
-                            isHideClicked = true;
+                            isHideClicked = false;
                             clickedObject = object;
                             mActivity.showLoading(false);
                             WebDataServiceImpl.getInstance(mApp).deleteData(WebServiceType.DELETE_MENSTRUAL_HISTORY,
@@ -831,7 +847,7 @@ public class NameHideActivateTabFragment extends HealthCocoFragment implements
                     case OBSTETRIC_HISTORY:
                         if (object instanceof ObstetricHistorySuggestions) {
                             ObstetricHistorySuggestions obstetricHistorySuggestions = (ObstetricHistorySuggestions) object;
-                            isHideClicked = true;
+                            isHideClicked = false;
                             clickedObject = object;
                             mActivity.showLoading(false);
                             WebDataServiceImpl.getInstance(mApp).deleteData(WebServiceType.DELETE_OBSTETRIC_HISTORY,
@@ -842,7 +858,7 @@ public class NameHideActivateTabFragment extends HealthCocoFragment implements
                     case GENERAL_EXAMINATION:
                         if (object instanceof GeneralExaminationSuggestions) {
                             GeneralExaminationSuggestions generalExaminationSuggestions = (GeneralExaminationSuggestions) object;
-                            isHideClicked = true;
+                            isHideClicked = false;
                             clickedObject = object;
                             mActivity.showLoading(false);
                             WebDataServiceImpl.getInstance(mApp).deleteData(WebServiceType.DELETE_GENERAL_EXAMINATION,
@@ -853,7 +869,7 @@ public class NameHideActivateTabFragment extends HealthCocoFragment implements
                     case SYSTEMIC_EXAMINATION:
                         if (object instanceof SystemicExaminationSuggestions) {
                             SystemicExaminationSuggestions systemicExaminationSuggestions = (SystemicExaminationSuggestions) object;
-                            isHideClicked = true;
+                            isHideClicked = false;
                             clickedObject = object;
                             mActivity.showLoading(false);
                             WebDataServiceImpl.getInstance(mApp).deleteData(WebServiceType.DELETE_SYSTEMIC_EXAMINATION,
@@ -864,7 +880,7 @@ public class NameHideActivateTabFragment extends HealthCocoFragment implements
                     case OBSERVATION:
                         if (object instanceof ObservationSuggestions) {
                             ObservationSuggestions observationSuggestions = (ObservationSuggestions) object;
-                            isHideClicked = true;
+                            isHideClicked = false;
                             clickedObject = object;
                             mActivity.showLoading(false);
                             WebDataServiceImpl.getInstance(mApp).deleteData(WebServiceType.DELETE_OBSERVATION,
@@ -875,7 +891,7 @@ public class NameHideActivateTabFragment extends HealthCocoFragment implements
                     case INVESTIGATIONS:
                         if (object instanceof InvestigationSuggestions) {
                             InvestigationSuggestions investigationSuggestions = (InvestigationSuggestions) object;
-                            isHideClicked = true;
+                            isHideClicked = false;
                             clickedObject = object;
                             mActivity.showLoading(false);
                             WebDataServiceImpl.getInstance(mApp).deleteData(WebServiceType.DELETE_INVESTIGATION,
@@ -886,7 +902,7 @@ public class NameHideActivateTabFragment extends HealthCocoFragment implements
                     case PROVISIONAL_DIAGNOSIS:
                         if (object instanceof ProvisionalDiagnosisSuggestions) {
                             ProvisionalDiagnosisSuggestions provisionalDiagnosisSuggestions = (ProvisionalDiagnosisSuggestions) object;
-                            isHideClicked = true;
+                            isHideClicked = false;
                             clickedObject = object;
                             mActivity.showLoading(false);
                             WebDataServiceImpl.getInstance(mApp).deleteData(WebServiceType.DELETE_PROVISIONAL_DIAGNOSIS,
@@ -897,10 +913,10 @@ public class NameHideActivateTabFragment extends HealthCocoFragment implements
                     case DIAGNOSIS:
                         if (object instanceof DiagnosisSuggestions) {
                             DiagnosisSuggestions diagnosisSuggestions = (DiagnosisSuggestions) object;
-                            isHideClicked = true;
+                            isHideClicked = false;
                             clickedObject = object;
                             mActivity.showLoading(false);
-                            WebDataServiceImpl.getInstance(mApp).deleteData(WebServiceType.DELETE_PROVISIONAL_DIAGNOSIS,
+                            WebDataServiceImpl.getInstance(mApp).deleteData(WebServiceType.DELETE_DIAGNOSIS,
                                     DiagnosisSuggestions.class, user.getUniqueId(), diagnosisSuggestions.getLocationId(),
                                     diagnosisSuggestions.getHospitalId(), diagnosisSuggestions.getUniqueId(), false, this, this);
                         }
@@ -908,7 +924,7 @@ public class NameHideActivateTabFragment extends HealthCocoFragment implements
                     case ECG:
                         if (object instanceof EcgDetailSuggestions) {
                             EcgDetailSuggestions ecgDetailSuggestions = (EcgDetailSuggestions) object;
-                            isHideClicked = true;
+                            isHideClicked = false;
                             clickedObject = object;
                             mActivity.showLoading(false);
                             WebDataServiceImpl.getInstance(mApp).deleteData(WebServiceType.DELETE_ECG,
@@ -919,7 +935,7 @@ public class NameHideActivateTabFragment extends HealthCocoFragment implements
                     case ECHO:
                         if (object instanceof EchoSuggestions) {
                             EchoSuggestions echoSuggestions = (EchoSuggestions) object;
-                            isHideClicked = true;
+                            isHideClicked = false;
                             clickedObject = object;
                             mActivity.showLoading(false);
                             WebDataServiceImpl.getInstance(mApp).deleteData(WebServiceType.DELETE_ECHO,
@@ -930,7 +946,7 @@ public class NameHideActivateTabFragment extends HealthCocoFragment implements
                     case XRAY:
                         if (object instanceof XrayDetailSuggestions) {
                             XrayDetailSuggestions xrayDetailSuggestions = (XrayDetailSuggestions) object;
-                            isHideClicked = true;
+                            isHideClicked = false;
                             clickedObject = object;
                             mActivity.showLoading(false);
                             WebDataServiceImpl.getInstance(mApp).deleteData(WebServiceType.DELETE_XRAY,
@@ -941,7 +957,7 @@ public class NameHideActivateTabFragment extends HealthCocoFragment implements
                     case HOLTER:
                         if (object instanceof HolterSuggestions) {
                             HolterSuggestions holterSuggestions = (HolterSuggestions) object;
-                            isHideClicked = true;
+                            isHideClicked = false;
                             clickedObject = object;
                             mActivity.showLoading(false);
                             WebDataServiceImpl.getInstance(mApp).deleteData(WebServiceType.DELETE_HOLTER,
@@ -952,7 +968,7 @@ public class NameHideActivateTabFragment extends HealthCocoFragment implements
                     case NOTES:
                         if (object instanceof NotesSuggestions) {
                             NotesSuggestions notesSuggestions = (NotesSuggestions) object;
-                            isHideClicked = true;
+                            isHideClicked = false;
                             clickedObject = object;
                             mActivity.showLoading(false);
                             WebDataServiceImpl.getInstance(mApp).deleteData(WebServiceType.DELETE_NOTES,
@@ -963,7 +979,7 @@ public class NameHideActivateTabFragment extends HealthCocoFragment implements
                     case INDICATION_OF_USG:
                         if (object instanceof IndicationOfUsgSuggestions) {
                             IndicationOfUsgSuggestions indicationOfUsgSuggestions = (IndicationOfUsgSuggestions) object;
-                            isHideClicked = true;
+                            isHideClicked = false;
                             clickedObject = object;
                             mActivity.showLoading(false);
                             WebDataServiceImpl.getInstance(mApp).deleteData(WebServiceType.DELETE_INDICATION_OF_USG,
@@ -974,7 +990,7 @@ public class NameHideActivateTabFragment extends HealthCocoFragment implements
                     case PA:
                         if (object instanceof PaSuggestions) {
                             PaSuggestions paSuggestions = (PaSuggestions) object;
-                            isHideClicked = true;
+                            isHideClicked = false;
                             clickedObject = object;
                             mActivity.showLoading(false);
                             WebDataServiceImpl.getInstance(mApp).deleteData(WebServiceType.DELETE_PA,
@@ -985,7 +1001,7 @@ public class NameHideActivateTabFragment extends HealthCocoFragment implements
                     case PS:
                         if (object instanceof PsSuggestions) {
                             PsSuggestions psSuggestions = (PsSuggestions) object;
-                            isHideClicked = true;
+                            isHideClicked = false;
                             clickedObject = object;
                             mActivity.showLoading(false);
                             WebDataServiceImpl.getInstance(mApp).deleteData(WebServiceType.DELETE_PS,
@@ -996,12 +1012,23 @@ public class NameHideActivateTabFragment extends HealthCocoFragment implements
                     case PV:
                         if (object instanceof PvSuggestions) {
                             PvSuggestions pvSuggestions = (PvSuggestions) object;
-                            isHideClicked = true;
+                            isHideClicked = false;
                             clickedObject = object;
                             mActivity.showLoading(false);
                             WebDataServiceImpl.getInstance(mApp).deleteData(WebServiceType.DELETE_PV,
                                     PvSuggestions.class, user.getUniqueId(), pvSuggestions.getLocationId(),
                                     pvSuggestions.getHospitalId(), pvSuggestions.getUniqueId(), false, this, this);
+                        }
+                        break;
+                    case PROCEDURE_NOTE:
+                        if (object instanceof ProcedureNoteSuggestions) {
+                            ProcedureNoteSuggestions procedureNoteSuggestions = (ProcedureNoteSuggestions) object;
+                            isHideClicked = false;
+                            clickedObject = object;
+                            mActivity.showLoading(false);
+                            WebDataServiceImpl.getInstance(mApp).deleteData(WebServiceType.DELETE_PROCEDURE_NOTE,
+                                    PvSuggestions.class, user.getUniqueId(), procedureNoteSuggestions.getLocationId(),
+                                    procedureNoteSuggestions.getHospitalId(), procedureNoteSuggestions.getUniqueId(), false, this, this);
                         }
                         break;
                 }
@@ -1116,6 +1143,10 @@ public class NameHideActivateTabFragment extends HealthCocoFragment implements
                     PvSuggestions pvSuggestions = (PvSuggestions) object;
                     mActivity.openAddNewSuggestionsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, SuggestionType.PV, pvSuggestions.getPv(), pvSuggestions.getUniqueId());
                     break;
+                case PROCEDURE_NOTE:
+                    ProcedureNoteSuggestions procedureNoteSuggestions = (ProcedureNoteSuggestions) object;
+                    mActivity.openAddNewSuggestionsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, SuggestionType.PROCEDURES, procedureNoteSuggestions.getProcedureNote(), procedureNoteSuggestions.getUniqueId());
+                    break;
 
             }
 
@@ -1203,6 +1234,9 @@ public class NameHideActivateTabFragment extends HealthCocoFragment implements
                         break;
                     case PV:
                         mActivity.openAddNewSuggestionsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, SuggestionType.PV);
+                        break;
+                    case PROCEDURE_NOTE:
+                        mActivity.openAddNewSuggestionsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, SuggestionType.PROCEDURES);
                         break;
                 }
                 break;
@@ -1462,6 +1496,15 @@ public class NameHideActivateTabFragment extends HealthCocoFragment implements
                                 }
                             }
                             break;
+                        case PROCEDURE_NOTE:
+                            if (object instanceof ProcedureNoteSuggestions) {
+                                ProcedureNoteSuggestions procedureNoteSuggestions = (ProcedureNoteSuggestions) object;
+                                if (!Util.isNullOrBlank(procedureNoteSuggestions.getProcedureNote()) && procedureNoteSuggestions.getProcedureNote().toUpperCase(Locale.ENGLISH)
+                                        .contains(search)) {
+                                    tempList.add(object);
+                                }
+                            }
+                            break;
                     }
                 }
             }
@@ -1529,6 +1572,7 @@ public class NameHideActivateTabFragment extends HealthCocoFragment implements
                 case GET_PA_SUGGESTIONS:
                 case GET_PS_SUGGESTIONS:
                 case GET_PV_SUGGESTIONS:
+                case GET_PROCEDURE_NOTE_SUGGESTIONS:
                     if (response.isDataFromLocal()) {
                         if (response.getLocalBackgroundTaskType() != null) {
                             switch (response.getLocalBackgroundTaskType()) {
@@ -1557,6 +1601,7 @@ public class NameHideActivateTabFragment extends HealthCocoFragment implements
                                 case GET_PA_HIDDEN_LIST:
                                 case GET_PS_HIDDEN_LIST:
                                 case GET_PV_HIDDEN_LIST:
+                                case GET_PROCEDURE_HIDDEN_LIST:
                                     listHidden = (ArrayList<Object>) (ArrayList<?>) response.getDataList();
                                     setSearchEditTextValue(getSearchEditTextValue());
                                     isHiddenListLoaded = true;
@@ -1586,6 +1631,7 @@ public class NameHideActivateTabFragment extends HealthCocoFragment implements
                                 case GET_PA_ACTIVATED_LIST:
                                 case GET_PS_ACTIVATED_LIST:
                                 case GET_PV_ACTIVATED_LIST:
+                                case GET_PROCEDURES_ACTIVATED_LIST:
                                     listActivated = (ArrayList<Object>) (ArrayList<?>) response.getDataList();
                                     setSearchEditTextValue("");
                                     isActivatedListLoaded = true;
@@ -1635,6 +1681,7 @@ public class NameHideActivateTabFragment extends HealthCocoFragment implements
                 case DELETE_PA:
                 case DELETE_PS:
                 case DELETE_PV:
+                case DELETE_PROCEDURE_NOTE:
                     if (isHideClicked) {
                         listHidden.add(clickedObject);
                         listActivated.remove(clickedObject);
@@ -1734,6 +1781,9 @@ public class NameHideActivateTabFragment extends HealthCocoFragment implements
                 break;
             case PV:
                 new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_PV_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                break;
+            case PROCEDURE_NOTE:
+                new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_PROCEDURE_NOTE_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
                 break;
         }
     }
@@ -1913,6 +1963,13 @@ public class NameHideActivateTabFragment extends HealthCocoFragment implements
                     PvSuggestions pvSuggestions = (PvSuggestions) clickedObject;
                     pvSuggestions.setDiscarded(!pvSuggestions.getDiscarded());
                     clickedObject = pvSuggestions;
+                }
+                break;
+            case PROCEDURE_NOTE:
+                if (clickedObject != null && clickedObject instanceof ProcedureNoteSuggestions) {
+                    ProcedureNoteSuggestions procedureNoteSuggestions = (ProcedureNoteSuggestions) clickedObject;
+                    procedureNoteSuggestions.setDiscarded(!procedureNoteSuggestions.getDiscarded());
+                    clickedObject = procedureNoteSuggestions;
                 }
                 break;
         }
@@ -2396,6 +2453,24 @@ public class NameHideActivateTabFragment extends HealthCocoFragment implements
                     getListFromLocal(false, response);
                     return null;
                 }
+            case GET_PROCEDURE_HIDDEN_LIST:
+                volleyResponseBean = LocalDataServiceImpl.getInstance(mApp)
+                        .getClinicalNotesSuggestionList(WebServiceType.GET_PROCEDURE_NOTE_SUGGESTIONS, ProcedureNoteSuggestions.class, LocalBackgroundTaskType.GET_PROCEDURE_HIDDEN_LIST, null, user.getUniqueId(), BooleanTypeValues.TRUE, null, 0, null, null);
+                break;
+            case GET_PROCEDURES_ACTIVATED_LIST:
+                volleyResponseBean = LocalDataServiceImpl.getInstance(mApp)
+                        .getClinicalNotesSuggestionList(WebServiceType.GET_PROCEDURE_NOTE_SUGGESTIONS, ProcedureNoteSuggestions.class, null, LocalBackgroundTaskType.GET_PROCEDURES_ACTIVATED_LIST, user.getUniqueId(), BooleanTypeValues.FALSE, null, 0, null, null);
+                break;
+            case ADD_PROCEDURE_NOTE_SUGGESTIONS:
+                LocalDataServiceImpl.getInstance(mApp).
+                        addSuggestionsList(WebServiceType.GET_PROCEDURE_NOTE_SUGGESTIONS, LocalTabelType.PROCEDURE_NOTE_SUGGESTIONS,
+                                response.getDataList(), null, null);
+                if (response.isBreakAfterAddRequest()) {
+                    break;
+                } else {
+                    getListFromLocal(false, response);
+                    return null;
+                }
         }
         if (volleyResponseBean == null)
             volleyResponseBean = new VolleyResponseBean();
@@ -2530,6 +2605,10 @@ public class NameHideActivateTabFragment extends HealthCocoFragment implements
             case PV:
                 Long latestUpdatedTimePv = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.PV_SUGGESTIONS);
                 WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(PvSuggestions.class, WebServiceType.GET_PV_SUGGESTIONS, clinicalNotesDynamicField.getPv(), user.getUniqueId(), latestUpdatedTimePv, this, this);
+                break;
+            case PROCEDURE_NOTE:
+                Long latestUpdatedTimeProcedure = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.PROCEDURE_NOTE_SUGGESTIONS);
+                WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(ProcedureNoteSuggestions.class, WebServiceType.GET_PROCEDURE_NOTE_SUGGESTIONS, clinicalNotesDynamicField.getProcedureNote(), user.getUniqueId(), latestUpdatedTimeProcedure, this, this);
                 break;
         }
     }

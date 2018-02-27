@@ -1467,6 +1467,8 @@ public class WebDataServiceImpl implements GCMRefreshListener {
             case DELETE_PA:
             case DELETE_PS:
             case DELETE_PV:
+            case DELETE_PROCEDURE_NOTE:
+            case DELETE_HOLTER:
                 url = url + uniqueId
                         + "/" + doctorId
                         + "/" + locationId

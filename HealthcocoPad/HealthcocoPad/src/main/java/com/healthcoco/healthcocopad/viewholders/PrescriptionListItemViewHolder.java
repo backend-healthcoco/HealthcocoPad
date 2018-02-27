@@ -160,7 +160,7 @@ public class PrescriptionListItemViewHolder extends HealthCocoViewHolder impleme
                 tvPrescribedBy.setVisibility(View.VISIBLE);
             }
             imageView.setVisibility(View.VISIBLE);
-            if (prescription.getAppointmentRequest() != null && prescription.getAppointmentRequest().getAppointmentId() != null) {
+            if (prescription.getAppointmentRequest() != null && prescription.getAppointmentId() != null) {
                 layoutNextReviewDetail.setVisibility(View.VISIBLE);
                 AppointmentRequest appointmentRequest = prescription.getAppointmentRequest();
                 String formattedTime = DateTimeUtil.getFormattedTime(0, Math.round(appointmentRequest.getTime().getFromTime()));

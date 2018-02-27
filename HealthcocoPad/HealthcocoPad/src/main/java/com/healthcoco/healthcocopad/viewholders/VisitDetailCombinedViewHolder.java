@@ -21,6 +21,8 @@ import com.healthcoco.healthcocopad.bean.server.VisitDetails;
 import com.healthcoco.healthcocopad.enums.RoleType;
 import com.healthcoco.healthcocopad.enums.VisitedForType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
+import com.healthcoco.healthcocopad.fragments.PatientClinicalNotesDetailFragment;
+import com.healthcoco.healthcocopad.fragments.PatientVisitDetailFragment;
 import com.healthcoco.healthcocopad.listeners.VisitDetailCombinedItemListener;
 import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
@@ -362,6 +364,8 @@ public class VisitDetailCombinedViewHolder extends HealthCocoViewHolder implemen
                         applyData();
                         mActivity.hideLoading();
                         LocalDataServiceImpl.getInstance(mApp).updateDiscardedValueInVisit(visitDetail);
+                        sendBroadcasts();
+
                     }
                     break;
                 default:
@@ -369,6 +373,13 @@ public class VisitDetailCombinedViewHolder extends HealthCocoViewHolder implemen
             }
         }
 
+    }
+
+
+    private void sendBroadcasts() {
+        Util.sendBroadcasts(mApp, new ArrayList<String>() {{
+            add(PatientVisitDetailFragment.INTENT_GET_VISITS_LIST_FROM_LOCAL);
+        }});
     }
 
     @Override

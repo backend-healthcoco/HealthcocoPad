@@ -373,6 +373,7 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
                         Intent intent = new Intent();
                         intent.putExtra(HealthCocoConstants.TAG_VISIT_ID, visit.getUniqueId());
                         mActivity.setResult(HealthCocoConstants.RESULT_CODE_ADD_VISIT, intent);
+                        sendBroadcasts(visit.getUniqueId());
                     }
                     mActivity.finish();
                     break;
@@ -446,20 +447,29 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
         try {
             Intent intent = null;
             switch (detailTabType) {
+                case PATIENT_DETAIL_VISIT:
+                    Util.sendBroadcasts(mApp, new ArrayList<String>() {{
+                        add(PatientClinicalNotesDetailFragment.INTENT_GET_CLINICAL_NOTES_LIST_LOCAL);
+                        add(PatientPrescriptionDetailFragment.INTENT_GET_PRESCRIPTION_LIST_LOCAL);
+                        add(PatientTreatmentDetailFragment.INTENT_GET_TREATMENT_LIST_LOCAL);
+                    }});
+                    break;
                 case PATIENT_DETAIL_CLINICAL_NOTES:
                     intent = new Intent(PatientClinicalNotesDetailFragment.INTENT_GET_CLINICAL_NOTES_LIST_LOCAL);
                     intent.putExtra(TAG_CLINICAL_NOTE_ID, uniqueId);
+                    LocalBroadcastManager.getInstance(mApp.getApplicationContext()).sendBroadcast(intent);
                     break;
                 case PATIENT_DETAIL_PRESCRIPTION:
                     intent = new Intent(PatientPrescriptionDetailFragment.INTENT_GET_PRESCRIPTION_LIST_LOCAL);
                     intent.putExtra(TAG_PRESCRIPTION_ID, prescriptionId);
+                    LocalBroadcastManager.getInstance(mApp.getApplicationContext()).sendBroadcast(intent);
                     break;
                 case PATIENT_DETAIL_TREATMENT:
                     intent = new Intent(PatientTreatmentDetailFragment.INTENT_GET_TREATMENT_LIST_LOCAL);
                     intent.putExtra(TAG_TREATMENT_ID, treatmentId);
+                    LocalBroadcastManager.getInstance(mApp.getApplicationContext()).sendBroadcast(intent);
                     break;
             }
-            LocalBroadcastManager.getInstance(mApp.getApplicationContext()).sendBroadcast(intent);
         } catch (Exception e) {
             e.printStackTrace();
         }
