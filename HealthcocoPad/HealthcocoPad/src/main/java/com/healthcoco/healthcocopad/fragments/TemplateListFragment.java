@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -30,6 +31,7 @@ import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.LocalTabelType;
+import com.healthcoco.healthcocopad.enums.SuggestionType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.AddTemplatesListener;
 import com.healthcoco.healthcocopad.listeners.LoadMorePageListener;
@@ -44,6 +46,8 @@ import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.healthcoco.healthcocopad.views.ListViewLoadMore;
 
+import org.parceler.Parcels;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -57,6 +61,8 @@ public class TemplateListFragment extends HealthCocoFragment implements View.OnC
         LoadMorePageListener, SwipeRefreshLayout.OnRefreshListener, TemplateListItemListener {
 
     public static final String TAG_TEMPLATE_ID = "templateId";
+    public static final String TAG_SUGGESTIONS_TYPE = "suggestionType";
+
     public static final String INTENT_GET_TEMPLATES_LIST_LOCAL = "com.healthcoco.TEMPLATES_LIST_LOCAL";
     //variables need for pagination
     public static final int MAX_SIZE = 10;
@@ -86,6 +92,7 @@ public class TemplateListFragment extends HealthCocoFragment implements View.OnC
     private boolean isFromAddNewTemplateFragment;
     private String deletedTemplatesUniqueId;
     private boolean isFromSettingsScreen;
+    private boolean visitToggleStateFromPreferences;
 
     public TemplateListFragment() {
     }
@@ -121,6 +128,9 @@ public class TemplateListFragment extends HealthCocoFragment implements View.OnC
             initAdapters();
             getListFromLocal(true, 0, false);
         }
+
+        visitToggleStateFromPreferences = Util.getVisitToggleStateFromPreferences(mActivity);
+
     }
 
     @Override
@@ -375,7 +385,16 @@ public class TemplateListFragment extends HealthCocoFragment implements View.OnC
 
     @Override
     public void onItemClicked(TempTemplate template) {
-        addTemplatesListener.onItemClicked(template);
+
+        if (visitToggleStateFromPreferences && addTemplatesListener == null) {
+            Intent intent = new Intent(MyScriptAddVisitsFragment.INTENT_ON_SUGGESTION_ITEM_CLICK);
+
+            intent.putExtra(TAG_SUGGESTIONS_TYPE, SuggestionType.TEMPLATE.ordinal());
+            intent.putExtra(MyScriptAddVisitsFragment.TAG_SELECTED_SUGGESTION_OBJECT, Parcels.wrap(template));
+            LocalBroadcastManager.getInstance(mApp).sendBroadcast(intent);
+            mActivity.finish();
+        } else
+            addTemplatesListener.onItemClicked(template);
     }
 
     @Override

@@ -5,5 +5,5 @@ package com.healthcoco.healthcocopad.enums;
  */
 
 public enum VisitsUiType {
-    CLINICAL_NOTES, PRESCRIPTION, LAB_TEST, DIAGRAMS, ADVICE, TEMPLATES
+    CLINICAL_NOTES, PRESCRIPTION, LAB_TEST, DIAGRAMS, ADVICE
 }

@@ -12,4 +12,5 @@ public interface AddTemplatesListener {
 
     public void onItemClicked(TempTemplate template);
 
+
 }

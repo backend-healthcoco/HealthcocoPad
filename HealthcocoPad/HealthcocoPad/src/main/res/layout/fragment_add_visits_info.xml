@@ -75,6 +75,14 @@
                     android:src="@drawable/ic_drugs_visits" />
 
                 <ImageButton
+                    android:id="@+id/bt_templates"
+                    android:layout_width="@dimen/visits_icon_drugs"
+                    android:layout_height="@dimen/visits_icon_drugs"
+                    android:background="@android:color/transparent"
+                    android:padding="@dimen/padding_visits_header_icons"
+                    android:src="@drawable/ic_templates_visits" />
+
+                <ImageButton
                     android:id="@+id/bt_lab_tests"
                     android:layout_width="@dimen/visits_icon_test"
                     android:layout_height="@dimen/visits_icon_test"

@@ -1035,6 +1035,10 @@ public class AddClinicalNotesVisitMyScriptFragment extends HealthCocoFragment im
         openCommonOpenUpVisitActivity(CommonOpenUpFragmentType.SELECT_DIAGRAM, REQUEST_CODE_ADD_CLINICAL_NOTES);
     }
 
+    public void openTemplatesListFragment() {
+        openCommonOpenUpVisitActivity(CommonOpenUpFragmentType.TEMPLATE_LIST, REQUEST_CODE_ADD_CLINICAL_NOTES);
+    }
+
     @Override
     public void onResponse(VolleyResponseBean response) {
         LogUtils.LOGD(TAG, "Success " + String.valueOf(response.getWebServiceType()));

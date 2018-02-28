@@ -72,6 +72,7 @@ import com.healthcoco.healthcocopad.bean.server.PsSuggestions;
 import com.healthcoco.healthcocopad.bean.server.PvSuggestions;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.SystemicExaminationSuggestions;
+import com.healthcoco.healthcocopad.bean.server.TempTemplate;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.bean.server.VisitDetails;
 import com.healthcoco.healthcocopad.bean.server.XrayDetailSuggestions;
@@ -155,6 +156,7 @@ public class MyScriptAddVisitsFragment extends HealthCocoFragment implements Vie
         }
     };
     private ImageButton btPrescription;
+    private ImageButton btTemplates;
     private ImageButton btLabTests;
     private ImageButton btDiagrams;
     BroadcastReceiver diagramButtonVisibilityReceiver = new BroadcastReceiver() {
@@ -335,7 +337,6 @@ public class MyScriptAddVisitsFragment extends HealthCocoFragment implements Vie
         initClinicalNotesFragment();
         initPrescriptionFragment();
         initSuggestionsFragment();
-        initTemplateFragment();
         initLabTestsFragment();
     }
 
@@ -368,12 +369,6 @@ public class MyScriptAddVisitsFragment extends HealthCocoFragment implements Vie
         transaction.commit();
     }
 
-    private void initTemplateFragment() {
-        templateListFragment = new TemplateListFragment();
-        FragmentTransaction transaction = mFragmentManager.beginTransaction();
-        transaction.add(R.id.container_suggestions_list, addVisitSuggestionsFragment, addVisitSuggestionsFragment.getClass().getSimpleName());
-        transaction.commit();
-    }
 
     private void validateCertificate() {
         if (!mWidget.registerCertificate(MyCertificate.getBytes())) {
@@ -470,6 +465,7 @@ public class MyScriptAddVisitsFragment extends HealthCocoFragment implements Vie
         btLabTests = (ImageButton) view.findViewById(R.id.bt_lab_tests);
         btLabTests.setTag(SuggestionType.LAB_TESTS);
         btDiagrams = (ImageButton) view.findViewById(R.id.bt_diagrams);
+        btTemplates = (ImageButton) view.findViewById(R.id.bt_templates);
         btAdvice = (ImageButton) view.findViewById(R.id.bt_advice);
         btAdvice.setVisibility(View.GONE);
         btSave = (LinearLayout) view.findViewById(R.id.bt_save);
@@ -491,6 +487,7 @@ public class MyScriptAddVisitsFragment extends HealthCocoFragment implements Vie
         btPrescription.setOnClickListener(this);
         btLabTests.setOnClickListener(this);
         btDiagrams.setOnClickListener(this);
+        btTemplates.setOnClickListener(this);
         btAdvice.setOnClickListener(this);
         btSave.setOnClickListener(this);
         btKeyboard.setOnClickListener(this);
@@ -649,25 +646,28 @@ public class MyScriptAddVisitsFragment extends HealthCocoFragment implements Vie
                 hideKeyboardOrWidgetIfVisible();
                 showHideClinicalNotesLayout();
                 break;
-           /* case R.id.bt_prescription:
+            case R.id.bt_prescription:
                 svScrollView.requestChildFocus(parentPrescription, parentPrescription);
                 if (selectedSuggestionType == null || selectedSuggestionType != SuggestionType.DRUGS) {
                     addVisitSuggestionsFragment.refreshTagOfEditText(SuggestionType.DRUGS);
                 }
-                break;*/
-            case R.id.bt_prescription:
+                break;
+          /*  case R.id.bt_prescription:
                 svScrollView.requestChildFocus(parentPrescription, parentPrescription);
                 if (selectedSuggestionType == null || selectedSuggestionType != SuggestionType.DRUGS) {
-                    addVisibileUiType(VisitsUiType.LAB_TEST);
-                    addVisitSuggestionsFragment.refreshTagOfEditText(SuggestionType.LAB_TESTS);
+                    addVisibileUiType(VisitsUiType.TEMPLATES);
+//                    templateListFragment.refreshTagOfEditText(SuggestionType.LAB_TESTS);
                 }
-                break;
+                break;*/
             case R.id.bt_lab_tests:
                 svScrollView.requestChildFocus(parentDiagnosticTests, parentDiagnosticTests);
                 if (selectedSuggestionType == null || selectedSuggestionType != SuggestionType.LAB_TESTS) {
                     addVisibileUiType(VisitsUiType.LAB_TEST);
                     addVisitSuggestionsFragment.refreshTagOfEditText(SuggestionType.LAB_TESTS);
                 }
+                break;
+            case R.id.bt_templates:
+                addClinicalNotesFragment.openTemplatesListFragment();
                 break;
             case R.id.bt_diagrams:
                 addClinicalNotesFragment.openDiagramsListFragment();
@@ -1545,6 +1545,25 @@ public class MyScriptAddVisitsFragment extends HealthCocoFragment implements Vie
     private void handleSelectedSugestionObject(SuggestionType suggestionType, Object selectedSuggestionObject) {
         String text = "";
         switch (suggestionType) {
+            case TEMPLATE:
+                TempTemplate tempTemplate = (TempTemplate) selectedSuggestionObject;
+                for (DrugItem selectedDrug : tempTemplate.getItems()) {
+
+                    if (selectedDrug != null && addPrescriptionVisitFragment != null) {
+                        svScrollView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+                            @Override
+                            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                                svScrollView.removeOnLayoutChangeListener(this);
+                                Log.d(TAG, "list got updated, do what ever u want");
+                                svScrollView.requestChildFocus(addPrescriptionVisitFragment.getLastChildView(), addPrescriptionVisitFragment.getLastChildView());
+
+                            }
+                        });
+                        addPrescriptionVisitFragment.addDrug(selectedDrug);
+                        mWidget.clear();
+                    }
+                }
+                break;
             case DRUGS:
                 DrugItem selectedDrug = new DrugItem();
                 String drugId = "";
@@ -1589,6 +1608,7 @@ public class MyScriptAddVisitsFragment extends HealthCocoFragment implements Vie
                     mWidget.clear();
                 }
                 return;
+
             case LAB_TESTS:
                 if (selectedSuggestionObject instanceof DiagnosticTest) {
                     DiagnosticTest diagnosticTest = (DiagnosticTest) selectedSuggestionObject;

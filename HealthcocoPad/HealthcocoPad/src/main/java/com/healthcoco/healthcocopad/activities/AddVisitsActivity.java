@@ -24,6 +24,7 @@ import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.fragments.DiagramsListFragment;
 import com.healthcoco.healthcocopad.fragments.MyScriptAddVisitsFragment;
 import com.healthcoco.healthcocopad.fragments.SelectedDiagramDetailFragment;
+import com.healthcoco.healthcocopad.fragments.TemplateListFragment;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.ScreenDimensions;
@@ -68,6 +69,9 @@ public class AddVisitsActivity extends HealthCocoActivity {
                 break;
             case SELECT_DIAGRAM:
                 openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, fragmentType.getTitleId(), new DiagramsListFragment());
+                break;
+            case TEMPLATE_LIST:
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, fragmentType.getTitleId(), new TemplateListFragment());
                 break;
             case SELECTED_DIAGRAM_DETAIL:
                 openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_CROSS, ActionbarLeftRightActionTypeDrawables.WITH_SAVE, fragmentType.getTitleId(), new SelectedDiagramDetailFragment());

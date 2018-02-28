@@ -50,7 +50,8 @@ public enum SuggestionType {
     NOTES(false, R.string.notes),
 
 
-    ADVICE(false, R.string.advice_tag);
+    ADVICE(false, R.string.advice_tag),
+    TEMPLATE(false, R.string.templates);
 
     private final boolean isFromServerList;
     private final int headerTitleId;
