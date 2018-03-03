@@ -769,8 +769,8 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
                 if (treatment != null)
                     tvDoctorName.setText(Util.getValidatedValue(treatment.get(0).getCreatedBy()));
             } else {
-                tvDoctorName.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-                tvDoctorName.setEnabled(false);
+                tvDoctorName.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.arrow_menu_down, 0);
+                tvDoctorName.setEnabled(true);
                 tvDoctorName.setVisibility(View.VISIBLE);
             }
         }
