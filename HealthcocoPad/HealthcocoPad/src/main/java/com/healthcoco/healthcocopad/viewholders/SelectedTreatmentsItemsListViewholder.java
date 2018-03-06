@@ -226,6 +226,7 @@ public class SelectedTreatmentsItemsListViewholder extends HealthCocoViewHolder 
                 if (object instanceof UnitType) {
                     UnitType discountUnit = (UnitType) object;
                     etDiscount.setText("");
+                    etDiscount.requestFocus();
                     if (discountUnit == UnitType.INR)
                         etDiscount.setFilters(new InputFilter[]{new InputFilter.LengthFilter(etCost.getText().length())});
                     if (discountUnit == UnitType.PERCENT)

@@ -39,6 +39,7 @@
                     android:layout_weight="1"
                     android:background="@android:color/transparent"
                     android:drawableRight="@drawable/arrow_down_drug"
+                    android:editable="false"
                     android:gravity="center|start"
                     android:hint="@string/drug_type"
                     android:paddingBottom="10dp"
