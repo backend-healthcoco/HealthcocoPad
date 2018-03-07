@@ -68,6 +68,7 @@ import com.healthcoco.healthcocopad.enums.VisitedForType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.GCMRefreshListener;
 import com.healthcoco.healthcocopad.services.GsonRequest;
+import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.LocalDatabaseUtils;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
@@ -1540,6 +1541,25 @@ public class WebDataServiceImpl implements GCMRefreshListener {
         } else {
             showUserOffline(webServiceType, responseListener);
             LocalDataServiceImpl.getInstance(mApp).getDataPermission(webServiceType, responseListener, errorListener);
+        }
+    }
+
+    public void getCalendarEvents(Class<?> class1, String doctorId, String locationId, String foreignHospitalId, long selectedDate, long updatedTime,
+                                  Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        WebServiceType webServiceType = WebServiceType.GET_CALENDAR_EVENTS;
+        checkNetworkStatus(mApp);
+        if (HealthCocoConstants.isNetworkOnline) {
+            String url = webServiceType.getUrl()
+                    + HealthCocoConstants.PARAM_MATRIX_DOCTOR_ID + doctorId
+                    + HealthCocoConstants.PARAM_MATRIX_LOCATION_ID + locationId + "?"
+                    + HealthCocoConstants.PARAM_MATRIX_HOSPITAL_ID + foreignHospitalId + "?"
+                    + HealthCocoConstants.PARAM_FROM + DateTimeUtil.getFirstDayOfMonthMilli(selectedDate)
+                    + HealthCocoConstants.PARAM_TO + DateTimeUtil.getLastDayOfMonthMilli(selectedDate)
+                    + HealthCocoConstants.PARAM_UPDATED_TIME + +updatedTime;
+            getResponse(webServiceType, class1, url, null, null, responseListener,
+                    errorListener);
+        } else {
+            showUserOffline(webServiceType, responseListener);
         }
     }
 

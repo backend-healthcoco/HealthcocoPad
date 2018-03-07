@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:padding="@dimen/list_item_padding">
 
@@ -55,7 +55,80 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
+        android:gravity="center"
         android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/bt_check_in"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shape_rounded_corners_item_background_dark_grey"
+            android:clickable="true"
+            android:gravity="center"
+            android:padding="5dp"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:drawablePadding="5dp"
+                android:drawableRight="@drawable/email_selector"
+                android:gravity="center|start"
+                android:paddingLeft="@dimen/item_visits_button_padding_left_right_20dp"
+                android:paddingRight="@dimen/item_visits_button_padding_left_right_20dp"
+                android:text="@string/check_in"
+                android:textColor="@drawable/text_selector_grey_blue"
+                android:textSize="@dimen/text_size_bt_history_edit_sms_email" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/bt_engage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shape_rounded_corners_item_background_dark_grey"
+            android:clickable="true"
+            android:gravity="center"
+            android:padding="5dp"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:drawablePadding="5dp"
+                android:drawableRight="@drawable/email_selector"
+                android:gravity="center|start"
+                android:paddingLeft="@dimen/item_visits_button_padding_left_right_20dp"
+                android:paddingRight="@dimen/item_visits_button_padding_left_right_20dp"
+                android:text="@string/engage"
+                android:textColor="@drawable/text_selector_grey_blue"
+                android:textSize="@dimen/text_size_bt_history_edit_sms_email" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/bt_check_out"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shape_rounded_corners_item_background_dark_grey"
+            android:clickable="true"
+            android:gravity="center"
+            android:padding="5dp"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:drawablePadding="5dp"
+                android:drawableRight="@drawable/email_selector"
+                android:gravity="center|start"
+                android:paddingLeft="@dimen/item_visits_button_padding_left_right_20dp"
+                android:paddingRight="@dimen/item_visits_button_padding_left_right_20dp"
+                android:text="@string/check_out"
+                android:textColor="@drawable/text_selector_grey_blue"
+                android:textSize="@dimen/text_size_bt_history_edit_sms_email" />
+        </LinearLayout>
 
     </LinearLayout>
 </LinearLayout>

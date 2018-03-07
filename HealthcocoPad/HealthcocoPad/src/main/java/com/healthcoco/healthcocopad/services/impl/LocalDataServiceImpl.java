@@ -22,6 +22,7 @@ import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.WorkingHours;
 import com.healthcoco.healthcocopad.bean.server.*;
 import com.healthcoco.healthcocopad.enums.AdvanceSearchOptionsType;
+import com.healthcoco.healthcocopad.enums.AppointmentStatusType;
 import com.healthcoco.healthcocopad.enums.BooleanTypeValues;
 import com.healthcoco.healthcocopad.enums.FilterItemType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
@@ -37,11 +38,13 @@ import com.healthcoco.healthcocopad.fragments.CalendarFragment;
 import com.healthcoco.healthcocopad.fragments.ClinicalProfileFragment;
 import com.healthcoco.healthcocopad.fragments.MenuDrawerFragment;
 import com.healthcoco.healthcocopad.fragments.PatientRegistrationFragment;
+import com.healthcoco.healthcocopad.fragments.QueueFragment;
 import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.LocalDatabaseUtils;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
+import com.healthcoco.healthcocopad.utilities.ReflectionUtil;
 import com.healthcoco.healthcocopad.utilities.StringUtil;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.orm.SugarRecord;
@@ -267,7 +270,7 @@ public class LocalDataServiceImpl {
         if (!Util.isNullOrEmptyList(list))
             for (CalendarEvents calendarEvents :
                     list) {
-//                addCalendarEventsUpdated(calendarEvents);
+                addCalendarEventsUpdated(calendarEvents);
             }
     }
 
@@ -4056,18 +4059,17 @@ public class LocalDataServiceImpl {
         }
         return calendarEvents;
     }
-
     public void addCalendarEventsUpdated(CalendarEvents calendarEvents) {
         calendarEvents.setIsFromCalendarAPI(true);
         if (calendarEvents.getFromDate() != null)
-            calendarEvents.setFromDateFormattedMillis(DateTimeUtil.getLongFromFormattedDayMonthYearFormatString(CalendarFragment.MONTH_FORMAT_FOR_THIS_SCREEN,
-                    DateTimeUtil.getFormattedDateTime(CalendarFragment.MONTH_FORMAT_FOR_THIS_SCREEN, calendarEvents.getFromDate())));
+            calendarEvents.setFromDateFormattedMillis(DateTimeUtil.getFirstDayOfMonthMilli(calendarEvents.getFromDate()));
         if (calendarEvents.getToDate() != null)
-            calendarEvents.setToDateFormattedMillis(DateTimeUtil.getLongFromFormattedDayMonthYearFormatString(CalendarFragment.MONTH_FORMAT_FOR_THIS_SCREEN,
-                    DateTimeUtil.getFormattedDateTime(CalendarFragment.MONTH_FORMAT_FOR_THIS_SCREEN, calendarEvents.getToDate())));
+            calendarEvents.setToDateFormattedMillis(DateTimeUtil.getLastDayOfMonthMilli(calendarEvents.getToDate()));
         if (calendarEvents.getFromDate() != null && calendarEvents.getToDate() != null && !(calendarEvents.getFromDate().equals(calendarEvents.getToDate()))) {
             addMultipledayEvent(calendarEvents);
         }
+
+        deleteWorkingHoursIfAlreadyPresent(LocalDatabaseUtils.KEY_FOREIGN_TABLE_ID, calendarEvents.getUniqueId());
         if (calendarEvents.getTime() != null) {
             addWorkingHour(CalendarEvents.class.getSimpleName(), calendarEvents.getUniqueId(), calendarEvents.getTime());
         }
@@ -4076,6 +4078,107 @@ public class LocalDataServiceImpl {
             addPatientCard(calendarEvents.getPatient());
         }
         calendarEvents.save();
+    }
+
+
+    public VolleyResponseBean getCalendarEventsListResponsePageWise(WebServiceType webServiceType, AppointmentStatusType appointmentStatusType, String doctorId, String hospitalId, String locationId, long selectedDate,
+                                                                    int pageNum, int maxSize, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
+        volleyResponseBean.setWebServiceType(webServiceType);
+        volleyResponseBean.setIsDataFromLocal(true);
+        volleyResponseBean.setIsUserOnline(HealthCocoConstants.isNetworkOnline);
+        try {
+            List<CalendarEvents> list = getCalendarEventsListPageWise(appointmentStatusType, doctorId, locationId, hospitalId, selectedDate);
+            volleyResponseBean.setDataList(getObjectsListFromMap(list));
+            if (responseListener != null)
+                responseListener.onResponse(volleyResponseBean);
+        } catch (Exception e) {
+            e.printStackTrace();
+            showErrorLocal(volleyResponseBean, errorListener);
+        }
+        return volleyResponseBean;
+    }
+
+    private List<CalendarEvents> getCalendarEventsListPageWise(AppointmentStatusType appointmentStatusType, String doctorId, String locationId, String hospitalId, long selectedDate) {
+        String whereCondition = "Select * from " + StringUtil.toSQLName(CalendarEvents.class.getSimpleName())
+                + " where "
+                + LocalDatabaseUtils.KEY_DOCTOR_ID + "=\"" + doctorId + "\""
+                + " AND " + LocalDatabaseUtils.KEY_LOCATION_ID + "=\"" + locationId + "\""
+                + " AND " + LocalDatabaseUtils.KEY_HOSPITAL_ID + "=\"" + hospitalId + "\""
+                + " AND " + LocalDatabaseUtils.KEY_FROM_DATE
+                + " BETWEEN " + DateTimeUtil.getStartTimeOfDayMilli(selectedDate)
+                + " AND " + DateTimeUtil.getEndTimeOfDayMilli(selectedDate);
+//                + " BETWEEN " + DateTimeUtil.getFirstDayOfMonthMilli(selectedDate)
+//                + " AND " + DateTimeUtil.getLastDayOfMonthMilli(selectedDate);
+//                + " AND (" + selectedDate + " BETWEEN " + LocalDatabaseUtils.KEY_FROM_DATE_FORMATTED_MILLIS
+//                + " AND " + LocalDatabaseUtils.KEY_TO_DATE_FORMATTED_MILLIS + ")";
+        if (appointmentStatusType != null && appointmentStatusType != AppointmentStatusType.ALL)
+            whereCondition = whereCondition + " AND " + LocalDatabaseUtils.KEY_STATE + "=\"" + appointmentStatusType + "\"";
+
+        //specifying order by limit and offset query
+        String conditionsLimit = " ORDER BY " + LocalDatabaseUtils.KEY_FROM_DATE + " ASC ";
+
+        whereCondition = whereCondition + conditionsLimit;
+        LogUtils.LOGD(TAG, "Select Query " + whereCondition);
+        List<CalendarEvents> list = SugarRecord.findWithQuery(CalendarEvents.class, whereCondition);
+        if (!Util.isNullOrEmptyList(list)) {
+            List<CalendarEvents> mergedFinalList = new ArrayList<>();
+            mergedFinalList.addAll(list);
+            for (CalendarEvents calendarEvents : list) {
+                LogUtils.LOGD(TAG, "From Date CalendarEvents appointment ID : " + calendarEvents.getAppointmentId() + " Date :" + DateTimeUtil.getFormattedDateTime(QueueFragment.DATE_FORMAT_FOR_HEADER_IN_THIS_SCREEN, calendarEvents.getFromDate()));
+                getCalendarEventDetail(calendarEvents);
+                //getting multiple day events data
+                if (calendarEvents.getFromDate() != null && calendarEvents.getToDate() != null && !(calendarEvents.getFromDate().equals(calendarEvents.getToDate()))) {
+//                        List<MultipleDayEventTable> listMultipleDayEventTables = (List<MultipleDayEventTable>) getObjectsList(MultipleDayEventTable.class, LocalDatabaseUtils.KEY_FOREIGN_TABLE_ID, calendarEvents.getUniqueId());
+                    List<MultipleDayEventTable> listMultipleDayEventTables = getMultipleDayEventsList(calendarEvents.getAppointmentId(), selectedDate);
+                    if (!Util.isNullOrEmptyList(listMultipleDayEventTables)) {
+                        int position = 0;
+                        for (MultipleDayEventTable multipleDayEventTable : listMultipleDayEventTables) {
+                            try {
+                                String formattedSelectedMonth = DateTimeUtil.getFormattedDateTime(CalendarFragment.MONTH_FORMAT_FOR_THIS_SCREEN, selectedDate);
+                                String formattedToMonth = DateTimeUtil.getFormattedDateTime(CalendarFragment.MONTH_FORMAT_FOR_THIS_SCREEN, calendarEvents.getToDate());
+
+                                position = listMultipleDayEventTables.indexOf(multipleDayEventTable);
+                                CalendarEvents itemCalendarEvent = new CalendarEvents();
+                                ReflectionUtil.copy(itemCalendarEvent, calendarEvents);
+                                itemCalendarEvent.setFromDate(multipleDayEventTable.getFromDate());
+                                if (position == listMultipleDayEventTables.size() - 1 && formattedSelectedMonth.equalsIgnoreCase(formattedToMonth))
+                                    itemCalendarEvent.setIsEndDate(true);
+                                if (!itemCalendarEvent.getIsStartDate() && !itemCalendarEvent.getIsEndDate())
+                                    itemCalendarEvent.setIsAllDayEvent(true);
+                                LogUtils.LOGD(TAG, "From Date MultipleDayEventTable appointment ID : " + itemCalendarEvent.getAppointmentId() + " Date :" + DateTimeUtil.getFormattedDateTime(QueueFragment.DATE_FORMAT_FOR_HEADER_IN_THIS_SCREEN, itemCalendarEvent.getFromDate()));
+                                mergedFinalList.add(itemCalendarEvent);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        calendarEvents.setIsStartDate(true);
+                    }
+                }
+            }
+            return mergedFinalList;
+        }
+        return null;
+    }
+
+    private List<MultipleDayEventTable> getMultipleDayEventsList(String calendarEventId, long selectedDate) {
+        String formattedSelectedDate = DateTimeUtil.getFormattedDateTime(CalendarFragment.MONTH_FORMAT_FOR_THIS_SCREEN, selectedDate);
+        String whereCondition = "Select * from " + StringUtil.toSQLName(MultipleDayEventTable.class.getSimpleName())
+                + " where "
+                + LocalDatabaseUtils.KEY_FORMATTED_FROM_DATE + "=\"" + formattedSelectedDate + "\""
+                + " AND " + LocalDatabaseUtils.KEY_FOREIGN_TABLE_ID + "=\"" + calendarEventId + "\"";
+        String conditionsLimit = " ORDER BY " + LocalDatabaseUtils.KEY_FROM_DATE + " ASC ";
+
+        whereCondition = whereCondition + conditionsLimit;
+        LogUtils.LOGD(TAG, "Select Query " + whereCondition);
+        List<MultipleDayEventTable> list = SugarRecord.findWithQuery(MultipleDayEventTable.class, whereCondition);
+        return list;
+    }
+
+    private void getCalendarEventDetail(CalendarEvents calendarEvent) {
+        calendarEvent.setTime((WorkingHours) getObject(WorkingHours.class, LocalDatabaseUtils.KEY_FOREIGN_TABLE_ID, calendarEvent.getUniqueId()));
+        if (!Util.isNullOrBlank(calendarEvent.getPatientId()))
+            calendarEvent.setPatient(getPatientCard(calendarEvent.getPatientId()));
     }
 
     private void addPatientCard(PatientCard patient) {

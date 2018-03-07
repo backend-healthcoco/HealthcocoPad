@@ -61,10 +61,12 @@ public class LocalDatabaseUtils {
     public static final String KEY_DISCARDED = "discarded";
     public static final String KEY_DOSAGE = "dosage";
     public static final String KEY_UNIT = "unit";
+    public static final String KEY_STATE = "state";
     public static final String KEY_DIRECTION = "direction";
     public static final int BOOLEAN_FALSE_VALUE = 0;
     public static final int BOOLEAN_TRUE_VALUE = 1;
     public static final String KEY_NAME = "name";
+    public static final String KEY_FORMATTED_FROM_DATE = "formatted_from_date";
     public static final String KEY_FROM_DATE = "from_date";
     public static final String KEY_UPDATED_TIME = "updated_time";
     public static final String IS_DRUG_FROM_GET_DRUGS_LIST = "is_drug_from_get_drugs_list";

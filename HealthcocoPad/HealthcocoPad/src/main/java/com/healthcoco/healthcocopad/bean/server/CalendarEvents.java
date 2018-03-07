@@ -4,6 +4,7 @@ import com.healthcoco.healthcocopad.bean.WorkingHours;
 import com.healthcoco.healthcocopad.dialogFragment.BookAppointmentDialogFragment;
 import com.healthcoco.healthcocopad.enums.AppointmentStatusType;
 import com.healthcoco.healthcocopad.enums.AppointmentType;
+import com.healthcoco.healthcocopad.enums.CalendarStatus;
 import com.healthcoco.healthcocopad.fragments.PatientAppointmentDetailFragment;
 import com.healthcoco.healthcocopad.skscustomclasses.CustomListData;
 import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
@@ -71,7 +72,12 @@ public class CalendarEvents extends SugarRecord {
     @Ignore
     private String localPatientName;
     private String mobileNumber;
-    private String status;
+    private CalendarStatus status;
+    private long waitedFor;
+    private long engagedFor;
+    private long engagedAt;
+    private long checkedInAt;
+    private long checkedOutAt;
 
     public static ArrayList<CustomListData> getSectionedDataAppointment(List<CalendarEvents> list) {
         ArrayList<CustomListData> sksListData = new ArrayList<CustomListData>();
@@ -600,11 +606,51 @@ public class CalendarEvents extends SugarRecord {
         return calendar.getTimeInMillis();
     }
 
-    public String getStatus() {
+    public CalendarStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(CalendarStatus status) {
         this.status = status;
+    }
+
+    public long getWaitedFor() {
+        return waitedFor;
+    }
+
+    public void setWaitedFor(long waitedFor) {
+        this.waitedFor = waitedFor;
+    }
+
+    public long getEngagedFor() {
+        return engagedFor;
+    }
+
+    public void setEngagedFor(long engagedFor) {
+        this.engagedFor = engagedFor;
+    }
+
+    public long getEngagedAt() {
+        return engagedAt;
+    }
+
+    public void setEngagedAt(long engagedAt) {
+        this.engagedAt = engagedAt;
+    }
+
+    public long getCheckedInAt() {
+        return checkedInAt;
+    }
+
+    public void setCheckedInAt(long checkedInAt) {
+        this.checkedInAt = checkedInAt;
+    }
+
+    public long getCheckedOutAt() {
+        return checkedOutAt;
+    }
+
+    public void setCheckedOutAt(long checkedOutAt) {
+        this.checkedOutAt = checkedOutAt;
     }
 }

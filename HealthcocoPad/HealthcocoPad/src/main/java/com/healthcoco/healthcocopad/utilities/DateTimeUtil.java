@@ -498,6 +498,13 @@ public class DateTimeUtil {
         return calendar.getTimeInMillis();
     }
 
+    public static String getFormttedTime(long date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(date);
+        return String.valueOf(calendar.getTime());
+    }
+
+
     public static long getPreviousDate(long date) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(date);
@@ -532,6 +539,52 @@ public class DateTimeUtil {
             }
         }
         return 0;
+    }
+
+    public static Long getFirstDayOfMonthMilli(long milliseconds) {
+        Date today = new Date(milliseconds);
+        Calendar calendar = getCalendarInstance();
+        calendar.setTime(today);
+        LogUtils.LOGD(TAG, "Milliseconds FirstDay of Month  " + calendar.getActualMinimum(Calendar.DAY_OF_MONTH));
+        calendar.set(Calendar.DATE, calendar.getActualMinimum(Calendar.DATE));
+        LogUtils.LOGD(TAG, "Milliseconds FirstDay " + calendar.getTimeInMillis());
+        return calendar.getTimeInMillis();
+    }
+
+    public static Long getLastDayOfMonthMilli(long milliseconds) {
+        Date today = new Date(milliseconds);
+        Calendar calendar = getCalendarInstance();
+        calendar.setTime(today);
+        LogUtils.LOGD(TAG, "Milliseconds LastDay of Month  " + calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+        calendar.set(Calendar.DATE, calendar.getActualMaximum(Calendar.DATE));
+        LogUtils.LOGD(TAG, "Milliseconds Last Day " + calendar.getTimeInMillis());
+        return calendar.getTimeInMillis();
+    }
+
+    public static Long getStartTimeOfDayMilli(long milliseconds) {
+        Date today = new Date(milliseconds);
+        Calendar cal = getCalendarInstance();
+        cal.setTime(today);
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+
+        LogUtils.LOGD(TAG, "Milliseconds Start Time Of Day " + cal.getTimeInMillis());
+        return cal.getTimeInMillis();
+    }
+
+    public static Long getEndTimeOfDayMilli(long milliseconds) {
+        Date today = new Date(milliseconds);
+        Calendar cal = getCalendarInstance();
+        cal.setTime(today);
+        cal.set(Calendar.HOUR_OF_DAY, 23);
+        cal.set(Calendar.MINUTE, 59);
+        cal.set(Calendar.SECOND, 59);
+        cal.set(Calendar.MILLISECOND, 999);
+
+        LogUtils.LOGD(TAG, "Milliseconds Last Day " + cal.getTimeInMillis());
+        return cal.getTimeInMillis();
     }
 
 }
