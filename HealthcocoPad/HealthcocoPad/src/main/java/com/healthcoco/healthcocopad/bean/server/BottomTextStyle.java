@@ -5,19 +5,22 @@ import com.orm.annotation.Ignore;
 
 import org.parceler.Parcel;
 
+import java.util.ArrayList;
+
 /**
  * Created by Prashant on 06/02/2018.
  */
 @Parcel
 public class BottomTextStyle extends SugarRecord {
 
+    protected String fontStyleString;
     private String text;
     private String fontColor;
     private String fontSize;
     private Boolean showTreatmentcost;
     private String instructionAlign;
     @Ignore
-    private String[] fontStyle;
+    private ArrayList<String> fontStyle;
 
     public String getText() {
         return text;
@@ -59,11 +62,19 @@ public class BottomTextStyle extends SugarRecord {
         this.instructionAlign = instructionAlign;
     }
 
-    public String[] getFontStyle() {
+    public ArrayList<String> getFontStyle() {
         return fontStyle;
     }
 
-    public void setFontStyle(String[] fontStyle) {
+    public void setFontStyle(ArrayList<String> fontStyle) {
         this.fontStyle = fontStyle;
+    }
+
+    public String getFontStyleString() {
+        return fontStyleString;
+    }
+
+    public void setFontStyleString(String fontStyleString) {
+        this.fontStyleString = fontStyleString;
     }
 }

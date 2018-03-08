@@ -28,6 +28,9 @@ import com.healthcoco.healthcocopad.views.CustomAutoCompleteTextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.healthcoco.healthcocopad.enums.FontStyleType.BOLD;
+import static com.healthcoco.healthcocopad.enums.FontStyleType.ITALIC;
+
 /**
  * Created by Prashant on 07-02-2018.
  */
@@ -240,20 +243,22 @@ public class EditFooterSetupDialogFragment extends HealthCocoDialogFragment
         if (!Util.isNullOrBlank(bottomText)) {
             List<BottomTextStyle> styles = new ArrayList<>();
             BottomTextStyle bottomTextStyle = new BottomTextStyle();
-            String[] fontStyle;
+            ArrayList<String> fontStyle = new ArrayList<>();
 
             bottomTextStyle.setText(bottomText);
             if (tvTextStyleIttalic.isSelected()) {
-                if (tvTextStyleBold.isSelected())
-                    fontStyle = new String[]{"BOLD", "ITALIC"};
-                else
-                    fontStyle = new String[]{"ITALIC"};
+                if (tvTextStyleBold.isSelected()) {
+                    fontStyle.add(BOLD.getType());
+                    fontStyle.add(ITALIC.getType());
+                } else {
+                    fontStyle.add(ITALIC.getType());
+                }
                 bottomTextStyle.setFontStyle(fontStyle);
             } else if (tvTextStyleBold.isSelected()) {
-                fontStyle = new String[]{"BOLD"};
+                fontStyle.add(BOLD.getType());
                 bottomTextStyle.setFontStyle(fontStyle);
             } else
-                bottomTextStyle.setFontStyle(new String[]{});
+                bottomTextStyle.setFontStyle(fontStyle);
 
 
             if (!fontSize.equals(getString(R.string.font_value)))

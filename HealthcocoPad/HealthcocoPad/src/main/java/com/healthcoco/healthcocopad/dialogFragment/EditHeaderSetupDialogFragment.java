@@ -27,12 +27,16 @@ import com.healthcoco.healthcocopad.bean.server.RightText;
 import com.healthcoco.healthcocopad.bean.server.Style;
 import com.healthcoco.healthcocopad.custom.AutoCompleteTextViewAdapter;
 import com.healthcoco.healthcocopad.enums.AutoCompleteTextViewType;
+import com.healthcoco.healthcocopad.enums.FontStyleType;
 import com.healthcoco.healthcocopad.listeners.AddPrintSettingsListener;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.healthcoco.healthcocopad.views.CustomAutoCompleteTextView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.healthcoco.healthcocopad.enums.FontStyleType.BOLD;
+import static com.healthcoco.healthcocopad.enums.FontStyleType.ITALIC;
 
 /**
  * Created by Prashant on 07-02-2018.
@@ -245,23 +249,24 @@ public class EditHeaderSetupDialogFragment extends HealthCocoDialogFragment
             tvTextStyleIttalic = (TextView) childView.findViewById(R.id.tv_text_style_ittalic);
 
             LeftText leftText = new LeftText();
-            String[] fontStyle;
+            ArrayList<String> fontStyle = new ArrayList<>();
 
             String fontSize = String.valueOf(autotvFontSize.getText());
             String bottomText = String.valueOf(etBottomText.getText());
 
             leftText.setText(bottomText);
             if (tvTextStyleIttalic.isSelected()) {
-                if (tvTextStyleBold.isSelected())
-                    fontStyle = new String[]{"BOLD", "ITALIC"};
-                else
-                    fontStyle = new String[]{"ITALIC"};
+                if (tvTextStyleBold.isSelected()) {
+                    fontStyle.add(BOLD.getType());
+                    fontStyle.add(ITALIC.getType());
+                } else
+                    fontStyle.add(ITALIC.getType());
                 leftText.setFontStyle(fontStyle);
             } else if (tvTextStyleBold.isSelected()) {
-                fontStyle = new String[]{"BOLD"};
+                fontStyle.add(BOLD.getType());
                 leftText.setFontStyle(fontStyle);
             } else
-                leftText.setFontStyle(new String[]{});
+                leftText.setFontStyle(fontStyle);
 
 
             if (!fontSize.equals(getString(R.string.font_value)))
@@ -292,23 +297,24 @@ public class EditHeaderSetupDialogFragment extends HealthCocoDialogFragment
             tvTextStyleIttalic = (TextView) childView.findViewById(R.id.tv_text_style_ittalic);
 
             RightText rightText = new RightText();
-            String[] fontStyle;
+            ArrayList<String> fontStyle = new ArrayList<>();
 
             String fontSize = String.valueOf(autotvFontSize.getText());
             String bottomText = String.valueOf(etBottomText.getText());
 
             rightText.setText(bottomText);
             if (tvTextStyleIttalic.isSelected()) {
-                if (tvTextStyleBold.isSelected())
-                    fontStyle = new String[]{"BOLD", "ITALIC"};
-                else
-                    fontStyle = new String[]{"ITALIC"};
+                if (tvTextStyleBold.isSelected()) {
+                    fontStyle.add(BOLD.getType());
+                    fontStyle.add(ITALIC.getType());
+                } else
+                    fontStyle.add(ITALIC.getType());
                 rightText.setFontStyle(fontStyle);
             } else if (tvTextStyleBold.isSelected()) {
-                fontStyle = new String[]{"BOLD"};
+                fontStyle.add(BOLD.getType());
                 rightText.setFontStyle(fontStyle);
             } else
-                rightText.setFontStyle(new String[]{});
+                rightText.setFontStyle(fontStyle);
 
             if (!fontSize.equals(getString(R.string.font_value)))
                 rightText.setFontSize(fontSize);

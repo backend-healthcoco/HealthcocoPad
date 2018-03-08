@@ -52,7 +52,7 @@ import java.util.List;
  * Created by Prashant on 05/02/2018.
  */
 
-public class SettingPrintSetupFragment extends HealthCocoFragment implements GsonRequest.ErrorListener,
+public class PrintSettingFragment extends HealthCocoFragment implements GsonRequest.ErrorListener,
         LocalDoInBackgroundListenerOptimised, Response.Listener<VolleyResponseBean>, View.OnClickListener, AddPrintSettingsListener {
 
     private TextView tvPageSize;
@@ -391,7 +391,7 @@ public class SettingPrintSetupFragment extends HealthCocoFragment implements Gso
                             tvBottomText.setTextSize(TypedValue.COMPLEX_UNIT_PT, textsize);
                         }
                         if (style.getFontStyle() != null) {
-                            ArrayList<String> styleList = new ArrayList<String>(Arrays.asList(style.getFontStyle()));
+                            ArrayList<String> styleList = style.getFontStyle();
 
                             if (styleList.contains(getString(R.string.bold))) {
                                 if (styleList.contains(getString(R.string.italic)))
@@ -443,7 +443,7 @@ public class SettingPrintSetupFragment extends HealthCocoFragment implements Gso
                             tvTopText.setTextSize(TypedValue.COMPLEX_UNIT_PT, textsize);
                         }
                         if (rightText.getFontStyle() != null) {
-                            ArrayList<String> styleList = new ArrayList<String>(Arrays.asList(rightText.getFontStyle()));
+                            ArrayList<String> styleList = rightText.getFontStyle();
 
                             if (styleList.contains(getString(R.string.bold))) {
                                 if (styleList.contains(getString(R.string.italic)))
@@ -477,7 +477,7 @@ public class SettingPrintSetupFragment extends HealthCocoFragment implements Gso
                             tvTopText.setTextSize(TypedValue.COMPLEX_UNIT_PT, textsize);
                         }
                         if (leftText.getFontStyle() != null) {
-                            ArrayList<String> styleList = new ArrayList<String>(Arrays.asList(leftText.getFontStyle()));
+                            ArrayList<String> styleList = leftText.getFontStyle();
 
                             if (styleList.contains(getString(R.string.bold))) {
                                 if (styleList.contains(getString(R.string.italic)))

@@ -1100,8 +1100,8 @@
     <string name="compulsory">Compulsory</string>
     <string name="signature_text">Signature Text&#160;:</string>
     <string name="footer">Footer</string>
-    <string name="bold">BOLD</string>
-    <string name="italic">ITALIC</string>
+    <string name="bold">bold</string>
+    <string name="italic">italic</string>
 
 
 </resources>

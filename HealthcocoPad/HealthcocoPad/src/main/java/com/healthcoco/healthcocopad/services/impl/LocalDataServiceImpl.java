@@ -4891,7 +4891,12 @@ public class LocalDataServiceImpl {
     }
 
     private List<BottomTextStyle> getBottomText() {
-        return Select.from(BottomTextStyle.class).list();
+//        assignedUserUiPermissions.setClinicalNotesPermissions((ArrayList<String>) (Object) getObjectsListFronJson(assignedUserUiPermissions.getClinicalNotesPermissionsString()));
+        List<BottomTextStyle> bottomTextStyleList = Select.from(BottomTextStyle.class).list();
+        for (BottomTextStyle bottomTextStyle : bottomTextStyleList) {
+            bottomTextStyle.setFontStyle((ArrayList<String>) (Object) getObjectsListFronJson(bottomTextStyle.getFontStyleString()));
+        }
+        return bottomTextStyleList;
     }
 
     private HeaderSetup getHeaderSetup() {
@@ -4903,11 +4908,19 @@ public class LocalDataServiceImpl {
     }
 
     private List<RightText> getTopRightText() {
-        return Select.from(RightText.class).list();
+        List<RightText> rightTextList = Select.from(RightText.class).list();
+        for (RightText rightText : rightTextList) {
+            rightText.setFontStyle((ArrayList<String>) (Object) getObjectsListFronJson(rightText.getFontStyleString()));
+        }
+        return rightTextList;
     }
 
     private List<LeftText> getTopLeftText() {
-        return Select.from(LeftText.class).list();
+        List<LeftText> leftTextList = Select.from(LeftText.class).list();
+        for (LeftText leftText : leftTextList) {
+            leftText.setFontStyle((ArrayList<String>) (Object) getObjectsListFronJson(leftText.getFontStyleString()));
+        }
+        return leftTextList;
     }
 
     private PatientDetails getPatientDetailsSetup() {
@@ -4942,12 +4955,20 @@ public class LocalDataServiceImpl {
 
     private void addRightTopText(List<RightText> topRightText) {
         RightText.deleteAll(RightText.class);
-        RightText.saveInTx(topRightText);
+        for (RightText rightText : topRightText) {
+            rightText.setFontStyleString(getJsonFromObject(rightText.getFontStyle()));
+            rightText.save();
+        }
+//        RightText.saveInTx(topRightText);
     }
 
     private void addLeftTopText(List<LeftText> topLeftText) {
         LeftText.deleteAll(LeftText.class);
-        LeftText.saveInTx(topLeftText);
+        for (LeftText leftText : topLeftText) {
+            leftText.setFontStyleString(getJsonFromObject(leftText.getFontStyle()));
+            leftText.save();
+        }
+//        LeftText.saveInTx(topLeftText);
     }
 
     private void addPatientDetails(PatientDetails patientDetails) {
@@ -4968,7 +4989,13 @@ public class LocalDataServiceImpl {
 
     private void addBottomText(List<BottomTextStyle> bottomText) {
         BottomTextStyle.deleteAll(BottomTextStyle.class);
-        BottomTextStyle.saveInTx(bottomText);
+        for (BottomTextStyle bottomTextStyle : bottomText) {
+            if (!Util.isNullOrBlank(bottomTextStyle.getText())) {
+                bottomTextStyle.setFontStyleString(getJsonFromObject(bottomTextStyle.getFontStyle()));
+                bottomTextStyle.save();
+            }
+        }
+//        BottomTextStyle.saveInTx(bottomText);
     }
 
     private void addPageSetup(PageSetup pageSetup) {
