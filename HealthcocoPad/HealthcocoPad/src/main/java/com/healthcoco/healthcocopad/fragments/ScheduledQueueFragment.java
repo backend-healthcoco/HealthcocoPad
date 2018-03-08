@@ -1,6 +1,7 @@
 package com.healthcoco.healthcocopad.fragments;
 
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,7 +13,11 @@ import android.view.ViewGroup;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.adapter.QueueRecyclerViewAdapter;
+import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
+import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
+import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
+import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +27,7 @@ import java.util.List;
  */
 
 
-public class ScheduledQueueFragment extends HealthCocoFragment {
+public class ScheduledQueueFragment extends HealthCocoFragment implements LocalDoInBackgroundListenerOptimised {
     private List<CalendarEvents> calendarEventsList = new ArrayList<>();
     private RecyclerView ScheduledQueueRecyclerView;
 
@@ -44,6 +49,7 @@ public class ScheduledQueueFragment extends HealthCocoFragment {
         initViews();
         initListeners();
         initAdapter();
+        new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_FRAGMENT_INITIALISATION_DATA, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     private void initAdapter() {
@@ -64,4 +70,13 @@ public class ScheduledQueueFragment extends HealthCocoFragment {
     public void initListeners() {
     }
 
+    @Override
+    public VolleyResponseBean doInBackground(VolleyResponseBean response) {
+        return null;
+    }
+
+    @Override
+    public void onPostExecute(VolleyResponseBean aVoid) {
+
+    }
 }

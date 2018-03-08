@@ -25,6 +25,7 @@ import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
+import com.healthcoco.healthcocopad.utilities.ReflectionUtil;
 import com.healthcoco.healthcocopad.utilities.Util;
 
 import java.util.ArrayList;
@@ -47,6 +48,7 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
     private int PAGE_NUMBER = 0;
     private boolean isEndOfListAchieved;
     private User user;
+    private User loggedInUser;
     private long selectedMonthDayYearInMillis;
 
     private ProgressBar progressLoading;
@@ -107,7 +109,7 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
                 case FRAGMENT_INITIALISATION:
                     if (user != null) {
                         Calendar calendar = DateTimeUtil.getCalendarInstance();
-//                        onDateSet(null, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+//                        onDateSetonDateSet(null, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
                         return;
                     }
                     break;
@@ -151,25 +153,16 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
                 volleyResponseBean.setWebServiceType(WebServiceType.FRAGMENT_INITIALISATION);
                 LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
                 if (doctor != null && doctor.getUser() != null) {
-//                    try {
-//                        loggedInUser = new User();
-//                        ReflectionUtil.copy(loggedInUser, doctor.getUser());
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                        loggedInUser = doctor.getUser();
-//                    }
-//                    user = doctor.getUser();
-//                    getSelectedDoctorClinic();
-//                    clinicProfileList = doctorProfile.getClinicProfile();
-//                    selectedClinicProfile = LocalDataServiceImpl.getInstance(mApp).getClinicResponseDetails(0, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId());
+                    try {
+                        loggedInUser = new User();
+                        ReflectionUtil.copy(loggedInUser, doctor.getUser());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        loggedInUser = doctor.getUser();
+                    }
+                    user = doctor.getUser();
                 }
                 return volleyResponseBean;
-//            case ADD_CLINIC_PROFILE:
-//                LocalDataServiceImpl.getInstance(mApp).
-//                        addClinicDetailResponse((ClinicDetailResponse) response.getData());
-//            case GET_CLINIC_PROFILE:
-//                volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getClinicDetailsResponse(WebServiceType.GET_CLINIC_PROFILE, 0, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(), null, null);
-//                break;
             case ADD_CALENDAR_EVENTS:
                 LocalDataServiceImpl.getInstance(mApp).addCalendarEventsList(
                         (ArrayList<CalendarEvents>) (ArrayList<?>) response
