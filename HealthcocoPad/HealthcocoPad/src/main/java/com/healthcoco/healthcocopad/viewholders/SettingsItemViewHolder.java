@@ -53,6 +53,7 @@ public class SettingsItemViewHolder extends HealthCocoViewHolder {
                 case HELP_IMPROVE:
                 case SIGN_OUT:
                 case GROUPS:
+                    tvVersionName.setVisibility(View.GONE);
                     bottomView.setVisibility(View.GONE);
                     LayoutParams params = new LayoutParams(
                             LayoutParams.MATCH_PARENT,
@@ -60,6 +61,21 @@ public class SettingsItemViewHolder extends HealthCocoViewHolder {
                     );
                     params.setMargins(0, 0, 0, 30);
                     layoutItemSetting.setLayoutParams(params);
+
+                    break;
+                case CLINICAL_NOTE:
+                case HISTORY:
+                case PRESCRIPTION:
+                case TEMPLATES:
+                case UI_PERMISSION:
+                    tvVersionName.setVisibility(View.GONE);
+                    bottomView.setVisibility(View.VISIBLE);
+                    LayoutParams layoutParams = new LayoutParams(
+                            LayoutParams.MATCH_PARENT,
+                            LayoutParams.WRAP_CONTENT
+                    );
+                    layoutParams.setMargins(0, 0, 0, 0);
+                    layoutItemSetting.setLayoutParams(layoutParams);
 
                     break;
                 default:
