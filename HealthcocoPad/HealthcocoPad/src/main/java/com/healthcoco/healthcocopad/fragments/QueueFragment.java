@@ -31,6 +31,8 @@ import com.healthcoco.healthcocopad.utilities.Util;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import static com.healthcoco.healthcocopad.enums.AppointmentStatusType.ALL;
+
 /**
  * Created by Prashant on 01-03-2018.
  */
@@ -53,7 +55,7 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
 
     private ProgressBar progressLoading;
     private ArrayList<CalendarEvents> calenderEventList = null;
-    private AppointmentStatusType appointmentStatusType = AppointmentStatusType.ALL;
+    private AppointmentStatusType appointmentStatusType = ALL;
 
 
     @Override
@@ -114,7 +116,7 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
                     }
                     break;
                 case GET_CALENDAR_EVENTS:
-                    if (response.isDataFromLocal()) {
+                   /* if (response.isDataFromLocal()) {
                         calenderEventList = (ArrayList<CalendarEvents>) (ArrayList<?>) response.getDataList();
                         LogUtils.LOGD(TAG, "getSectionedDataListCalendar  loading onResponse");
                         if (Util.isNullOrEmptyList(calenderEventList) || calenderEventList.size() < MAX_SIZE || Util.isNullOrEmptyList(calenderEventList))
@@ -128,7 +130,8 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
 //                        }
 //                        refreshList(false, calenderEventList);
                         return;
-                    } else if (!Util.isNullOrEmptyList(response.getDataList())) {
+                    } else*/
+                    if (!Util.isNullOrEmptyList(response.getDataList())) {
                         new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_CALENDAR_EVENTS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
                         response.setIsFromLocalAfterApiSuccess(true);
                         return;
@@ -167,7 +170,7 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
                 LocalDataServiceImpl.getInstance(mApp).addCalendarEventsList(
                         (ArrayList<CalendarEvents>) (ArrayList<?>) response
                                 .getDataList());
-            case GET_CALENDAR_EVENTS:
+            /*case GET_CALENDAR_EVENTS:
                 long selectedMonthInMillis = DateTimeUtil.getLongFromFormattedDayMonthYearFormatString(DATE_FORMAT_FOR_THIS_SCREEN, DateTimeUtil.getFormattedDateTime(DATE_FORMAT_FOR_THIS_SCREEN, selectedMonthDayYearInMillis));
                 volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).
                         getCalendarEventsListResponsePageWise(WebServiceType.GET_CALENDAR_EVENTS, appointmentStatusType,
@@ -175,6 +178,7 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
                                 user.getForeignLocationId(), selectedMonthInMillis,
                                 PAGE_NUMBER, MAX_SIZE, null, null);
                 break;
+        */
         }
         if (volleyResponseBean == null)
             volleyResponseBean = new VolleyResponseBean();
