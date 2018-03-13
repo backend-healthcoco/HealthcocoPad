@@ -4,9 +4,41 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view_scheduled_queue"
+    <com.healthcoco.healthcocopad.views.CustomSwipeRefreshLayout
+        android:id="@+id/swipe_refresh_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
 
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:visibility="visible">
+
+            <ProgressBar
+                android:id="@+id/progress_loading"
+                style="?android:attr/progressBarStyleSmall"
+                android:layout_width="@dimen/round_progress_bar_size"
+                android:layout_height="@dimen/round_progress_bar_size"
+                android:layout_gravity="center"
+                android:progressDrawable="@drawable/progress_loading"
+                android:visibility="visible" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_view_scheduled_queue"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <TextView
+                android:id="@+id/tv_no_events_found"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="@string/no_appointments_found"
+                android:textSize="@dimen/text_size_no_results"
+                android:textStyle="bold"
+                android:visibility="gone" />
+
+        </FrameLayout>
+    </com.healthcoco.healthcocopad.views.CustomSwipeRefreshLayout>
 </LinearLayout>

@@ -13,12 +13,14 @@ import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
 import com.healthcoco.healthcocopad.bean.server.ClinicDetailResponse;
+import com.healthcoco.healthcocopad.bean.server.ClinicDoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocopad.enums.AppointmentStatusType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.LocalTabelType;
+import com.healthcoco.healthcocopad.enums.PopupWindowType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
@@ -30,6 +32,8 @@ import com.healthcoco.healthcocopad.utilities.Util;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 import static com.healthcoco.healthcocopad.enums.AppointmentStatusType.ALL;
 
@@ -47,16 +51,18 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
 
     public static final int MAX_SIZE = 10;
     public static final int MAX_NUMBER_OF_EVENTS = 30;
+    public ArrayList<ClinicDoctorProfile> clinicDoctorProfileList;
     private int PAGE_NUMBER = 0;
     private boolean isEndOfListAchieved;
     private User user;
     private User loggedInUser;
     private long selectedMonthDayYearInMillis;
-
-    private ProgressBar progressLoading;
     private ArrayList<CalendarEvents> calenderEventList = null;
     private AppointmentStatusType appointmentStatusType = ALL;
+    private LinkedHashMap<String, ClinicDoctorProfile> clinicDoctorListHashMap = new LinkedHashMap<>();
+    private ClinicDetailResponse selectedClinicProfile;
 
+    private ScheduledQueueFragment scheduledQueueFragment;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -75,13 +81,18 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
     public void init() {
         initViews();
         initListeners();
+        initFragments();
         new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_FRAGMENT_INITIALISATION_DATA, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+    private void initFragments() {
+        scheduledQueueFragment = new ScheduledQueueFragment();
+        mFragmentManager.beginTransaction().add(R.id.layout_scheduled_queue, scheduledQueueFragment, scheduledQueueFragment.getClass().getSimpleName()).commit();
     }
 
 
     @Override
     public void initViews() {
-        progressLoading = (ProgressBar) view.findViewById(R.id.progress_loading);
     }
 
     @Override
@@ -99,7 +110,6 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
     @Override
     public void onNetworkUnavailable(WebServiceType webServiceType) {
         Util.showToast(mActivity, R.string.user_offline);
-        progressLoading.setVisibility(View.GONE);
         showLoadingOverlay(false);
     }
 
@@ -111,40 +121,46 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
                 case FRAGMENT_INITIALISATION:
                     if (user != null) {
                         Calendar calendar = DateTimeUtil.getCalendarInstance();
+                        selectedMonthDayYearInMillis = calendar.getTimeInMillis();
+                        if (selectedClinicProfile != null)
+                            formHashMapAndRefresh(selectedClinicProfile.getDoctors());
+                        else
+                            refreshDoctorsList();
 //                        onDateSetonDateSet(null, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+                        getCalendarEventsList(true);
+
                         return;
                     }
                     break;
                 case GET_CALENDAR_EVENTS:
-                   /* if (response.isDataFromLocal()) {
-                        calenderEventList = (ArrayList<CalendarEvents>) (ArrayList<?>) response.getDataList();
-                        LogUtils.LOGD(TAG, "getSectionedDataListCalendar  loading onResponse");
-                        if (Util.isNullOrEmptyList(calenderEventList) || calenderEventList.size() < MAX_SIZE || Util.isNullOrEmptyList(calenderEventList))
-                            isEndOfListAchieved = true;
-                        else isEndOfListAchieved = false;
-//                        if (isInitialLoading && !response.isFromLocalAfterApiSuccess() && response.isUserOnline()) {
-//                            LogUtils.LOGD(TAG, "getSectionedDataListCalendar  loading Complete");
-//                            isInitialLoading = false;
-//                            refreshList(true, calenderEventList);
-//                            return;
-//                        }
-//                        refreshList(false, calenderEventList);
-                        return;
-                    } else*/
                     if (!Util.isNullOrEmptyList(response.getDataList())) {
                         new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_CALENDAR_EVENTS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
                         response.setIsFromLocalAfterApiSuccess(true);
+                        refreshData();
                         return;
-                    } else {
-//                        getListFromLocal(false);
                     }
                     break;
+                case GET_CLINIC_PROFILE:
+                    if (response.getData() != null) {
+                        selectedClinicProfile = (ClinicDetailResponse) response.getData();
+                        formHashMapAndRefresh(selectedClinicProfile.getDoctors());
+//                        initSelectedDoctorClinicData();
+                        new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_CLINIC_PROFILE, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
 
+                    }
+                    if (!response.isUserOnline())
+                        onNetworkUnavailable(response.getWebServiceType());
+                    break;
                 default:
                     break;
             }
         }
 
+    }
+
+    private void refreshDoctorsList() {
+        showLoadingOverlay(true);
+        WebDataServiceImpl.getInstance(mApp).getClinicDetails(ClinicDetailResponse.class, user.getForeignLocationId(), this, this);
     }
 
     @Override
@@ -164,21 +180,15 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
                         loggedInUser = doctor.getUser();
                     }
                     user = doctor.getUser();
+                    selectedClinicProfile = LocalDataServiceImpl.getInstance(mApp).getClinicResponseDetails(user.getForeignLocationId());
                 }
                 return volleyResponseBean;
             case ADD_CALENDAR_EVENTS:
+
                 LocalDataServiceImpl.getInstance(mApp).addCalendarEventsList(
                         (ArrayList<CalendarEvents>) (ArrayList<?>) response
                                 .getDataList());
-            /*case GET_CALENDAR_EVENTS:
-                long selectedMonthInMillis = DateTimeUtil.getLongFromFormattedDayMonthYearFormatString(DATE_FORMAT_FOR_THIS_SCREEN, DateTimeUtil.getFormattedDateTime(DATE_FORMAT_FOR_THIS_SCREEN, selectedMonthDayYearInMillis));
-                volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).
-                        getCalendarEventsListResponsePageWise(WebServiceType.GET_CALENDAR_EVENTS, appointmentStatusType,
-                                user.getUniqueId(), user.getForeignHospitalId(),
-                                user.getForeignLocationId(), selectedMonthInMillis,
-                                PAGE_NUMBER, MAX_SIZE, null, null);
                 break;
-        */
         }
         if (volleyResponseBean == null)
             volleyResponseBean = new VolleyResponseBean();
@@ -186,8 +196,32 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
         return volleyResponseBean;
     }
 
+    private void refreshData() {
+        scheduledQueueFragment.reFreshQueue(selectedMonthDayYearInMillis, clinicDoctorProfileList);
+    }
+
     @Override
     public void onPostExecute(VolleyResponseBean aVoid) {
 
+    }
+
+    private void formHashMapAndRefresh(List<ClinicDoctorProfile> responseList) {
+        clinicDoctorProfileList = (ArrayList<ClinicDoctorProfile>) responseList;
+        if (responseList.size() > 1) {
+            if (!Util.isNullOrEmptyList(responseList)) {
+                for (ClinicDoctorProfile clinicDoctorProfile :
+                        responseList) {
+                    clinicDoctorListHashMap.put(clinicDoctorProfile.getUniqueId(), clinicDoctorProfile);
+                }
+            }
+//        notifyAdapter(new ArrayList<ClinicDoctorProfile>(clinicDoctorListHashMap.values()));
+          /*  if (doctorsListPopupWindow != null)
+                doctorsListPopupWindow.notifyAdapter(new ArrayList<Object>(clinicDoctorListHashMap.values()));
+            else
+                mActivity.initDoctorListPopupWindows(tvDoctorName, PopupWindowType.DOCTOR_LIST, new ArrayList<Object>(clinicDoctorListHashMap.values()), this);
+        } else {
+            doctorNameLayout.setVisibility(View.INVISIBLE);
+            isSingleDoctor = true;*/
+        }
     }
 }

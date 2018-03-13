@@ -4059,6 +4059,7 @@ public class LocalDataServiceImpl {
         }
         return calendarEvents;
     }
+
     public void addCalendarEventsUpdated(CalendarEvents calendarEvents) {
         calendarEvents.setIsFromCalendarAPI(true);
         if (calendarEvents.getFromDate() != null)
@@ -4081,14 +4082,14 @@ public class LocalDataServiceImpl {
     }
 
 
-    public VolleyResponseBean getCalendarEventsListResponsePageWise(WebServiceType webServiceType, AppointmentStatusType appointmentStatusType, String doctorId, String hospitalId, String locationId, long selectedDate,
+    public VolleyResponseBean getCalendarEventsListResponsePageWise(WebServiceType webServiceType, AppointmentStatusType appointmentStatusType, ArrayList<ClinicDoctorProfile> clinicDoctorProfileList, String hospitalId, String locationId, String status, long selectedDate,
                                                                     int pageNum, int maxSize, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
         volleyResponseBean.setWebServiceType(webServiceType);
         volleyResponseBean.setIsDataFromLocal(true);
         volleyResponseBean.setIsUserOnline(HealthCocoConstants.isNetworkOnline);
         try {
-            List<CalendarEvents> list = getCalendarEventsListPageWise(appointmentStatusType, doctorId, locationId, hospitalId, selectedDate);
+            List<CalendarEvents> list = getCalendarEventsListPageWise(appointmentStatusType, clinicDoctorProfileList, locationId, hospitalId, status, selectedDate);
             volleyResponseBean.setDataList(getObjectsListFromMap(list));
             if (responseListener != null)
                 responseListener.onResponse(volleyResponseBean);
@@ -4099,12 +4100,14 @@ public class LocalDataServiceImpl {
         return volleyResponseBean;
     }
 
-    private List<CalendarEvents> getCalendarEventsListPageWise(AppointmentStatusType appointmentStatusType, String doctorId, String locationId, String hospitalId, long selectedDate) {
+    private List<CalendarEvents> getCalendarEventsListPageWise(AppointmentStatusType appointmentStatusType, ArrayList<ClinicDoctorProfile> clinicDoctorProfileList, String locationId, String hospitalId, String status, long selectedDate) {
         String whereCondition = "Select * from " + StringUtil.toSQLName(CalendarEvents.class.getSimpleName())
                 + " where "
-                + LocalDatabaseUtils.KEY_DOCTOR_ID + "=\"" + doctorId + "\""
-                + " AND " + LocalDatabaseUtils.KEY_LOCATION_ID + "=\"" + locationId + "\""
+               /* + LocalDatabaseUtils.KEY_DOCTOR_ID + "=\"" + doctorId + "\""
+                + " AND "*/
+                + LocalDatabaseUtils.KEY_LOCATION_ID + "=\"" + locationId + "\""
                 + " AND " + LocalDatabaseUtils.KEY_HOSPITAL_ID + "=\"" + hospitalId + "\""
+                + " AND " + LocalDatabaseUtils.KEY_STATUS + "=\"" + status + "\""
                 + " AND " + LocalDatabaseUtils.KEY_FROM_DATE
                 + " BETWEEN " + DateTimeUtil.getStartTimeOfDayMilli(selectedDate)
                 + " AND " + DateTimeUtil.getEndTimeOfDayMilli(selectedDate);
@@ -4114,6 +4117,14 @@ public class LocalDataServiceImpl {
 //                + " AND " + LocalDatabaseUtils.KEY_TO_DATE_FORMATTED_MILLIS + ")";
         if (appointmentStatusType != null && appointmentStatusType != AppointmentStatusType.ALL)
             whereCondition = whereCondition + " AND " + LocalDatabaseUtils.KEY_STATE + "=\"" + appointmentStatusType + "\"";
+
+        if (!Util.isNullOrEmptyList(clinicDoctorProfileList))
+            for (int i = 0; i < clinicDoctorProfileList.size(); i++) {
+                if (i == 0)
+                    whereCondition = whereCondition + " AND " + LocalDatabaseUtils.KEY_DOCTOR_ID + "=\"" + clinicDoctorProfileList.get(i).getUniqueId() + "\"";
+                else
+                    whereCondition = whereCondition + " OR " + LocalDatabaseUtils.KEY_DOCTOR_ID + "=\"" + clinicDoctorProfileList.get(i).getUniqueId() + "\"";
+            }
 
         //specifying order by limit and offset query
         String conditionsLimit = " ORDER BY " + LocalDatabaseUtils.KEY_FROM_DATE + " ASC ";

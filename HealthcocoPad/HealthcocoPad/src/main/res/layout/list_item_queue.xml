@@ -2,133 +2,135 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:padding="@dimen/list_item_padding">
+    android:orientation="vertical">
 
     <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:gravity="right"
-        android:orientation="vertical"
-        android:paddingRight="@dimen/list_item_padding">
-
-        <TextView
-            android:id="@+id/tv_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="00:00" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="AM" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="3"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/tv_patient_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="@string/patient_name" />
-
-        <TextView
-            android:id="@+id/tv_mobile_number"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="@string/mobile_number" />
-
-        <TextView
-            android:id="@+id/tv_doctor_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="@string/mobile_number" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:orientation="vertical">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingBottom="@dimen/margin_padding_add_drug_detail"
+        android:paddingLeft="@dimen/list_item_padding"
+        android:paddingRight="@dimen/list_item_padding"
+        android:paddingTop="@dimen/margin_padding_add_drug_detail">
 
         <LinearLayout
-            android:id="@+id/bt_check_in"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/shape_rounded_corners_item_background_dark_grey"
-            android:clickable="true"
-            android:gravity="center"
-            android:padding="5dp"
-            android:visibility="gone">
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:orientation="vertical"
+            android:paddingRight="@dimen/list_item_padding">
 
             <TextView
+                android:id="@+id/tv_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:drawablePadding="5dp"
-                android:drawableRight="@drawable/email_selector"
-                android:gravity="center|start"
-                android:paddingLeft="@dimen/item_visits_button_padding_left_right_20dp"
-                android:paddingRight="@dimen/item_visits_button_padding_left_right_20dp"
-                android:text="@string/check_in"
-                android:textColor="@drawable/text_selector_grey_blue"
-                android:textSize="@dimen/text_size_bt_history_edit_sms_email" />
+                android:gravity="right"
+                android:hint="00:00" />
+
+            <!--  <TextView
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:hint="AM" />-->
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/bt_engage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/shape_rounded_corners_item_background_dark_grey"
-            android:clickable="true"
-            android:gravity="center"
-            android:padding="5dp"
-            android:visibility="gone">
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:orientation="vertical">
 
             <TextView
+                android:id="@+id/tv_patient_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:drawablePadding="5dp"
-                android:drawableRight="@drawable/email_selector"
-                android:gravity="center|start"
-                android:paddingLeft="@dimen/item_visits_button_padding_left_right_20dp"
-                android:paddingRight="@dimen/item_visits_button_padding_left_right_20dp"
-                android:text="@string/engage"
-                android:textColor="@drawable/text_selector_grey_blue"
-                android:textSize="@dimen/text_size_bt_history_edit_sms_email" />
+                android:hint="@string/patient_name" />
+
+            <TextView
+                android:id="@+id/tv_mobile_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="@string/mobile_number" />
+
+            <TextView
+                android:id="@+id/tv_doctor_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="@string/mobile_number" />
+
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/bt_check_out"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/shape_rounded_corners_item_background_dark_grey"
-            android:clickable="true"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
             android:gravity="center"
-            android:padding="5dp"
-            android:visibility="gone">
+            android:orientation="vertical">
 
-            <TextView
+            <LinearLayout
+                android:id="@+id/bt_check_in"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:drawablePadding="5dp"
-                android:drawableRight="@drawable/email_selector"
-                android:gravity="center|start"
-                android:paddingLeft="@dimen/item_visits_button_padding_left_right_20dp"
-                android:paddingRight="@dimen/item_visits_button_padding_left_right_20dp"
-                android:text="@string/check_out"
-                android:textColor="@drawable/text_selector_grey_blue"
-                android:textSize="@dimen/text_size_bt_history_edit_sms_email" />
+                android:background="@drawable/shape_rounded_corners_item_background_dark_grey"
+                android:clickable="true"
+                android:gravity="center"
+                android:padding="5dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:drawablePadding="5dp"
+                    android:gravity="center|start"
+                    android:text="@string/check_in"
+                    android:textColor="@drawable/text_selector_grey_blue" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/bt_engage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shape_rounded_corners_item_background_dark_grey"
+                android:clickable="true"
+                android:gravity="center"
+                android:padding="5dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:drawablePadding="5dp"
+                    android:gravity="center|start"
+                    android:text="@string/engage"
+                    android:textColor="@drawable/text_selector_grey_blue" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/bt_check_out"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shape_rounded_corners_item_background_dark_grey"
+                android:clickable="true"
+                android:gravity="center"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:gravity="center|start"
+                    android:text="@string/check_out"
+                    android:textColor="@drawable/text_selector_grey_blue" />
+            </LinearLayout>
+
         </LinearLayout>
 
     </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/grey_item_border" />
 </LinearLayout>

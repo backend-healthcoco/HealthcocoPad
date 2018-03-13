@@ -3,26 +3,37 @@ package com.healthcoco.healthcocopad.fragments;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.adapter.QueueRecyclerViewAdapter;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
+import com.healthcoco.healthcocopad.bean.server.ClinicDoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
+import com.healthcoco.healthcocopad.enums.AdapterType;
 import com.healthcoco.healthcocopad.enums.AppointmentStatusType;
+import com.healthcoco.healthcocopad.enums.CalendarStatus;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
+import com.healthcoco.healthcocopad.listeners.QueueListitemlistener;
+import com.healthcoco.healthcocopad.recyclerview.EndlessRecyclerViewScrollListener;
+import com.healthcoco.healthcocopad.recyclerview.HealthcocoRecyclerViewAdapter;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
+import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.ComparatorUtil;
 import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
@@ -34,21 +45,26 @@ import java.util.Collections;
 import java.util.List;
 
 import static com.healthcoco.healthcocopad.enums.AppointmentStatusType.ALL;
+import static com.healthcoco.healthcocopad.enums.CalendarStatus.SCHEDULED;
 
 /**
  * Created by Prashant on 01-03-2018.
  */
 
 
-public class ScheduledQueueFragment extends HealthCocoFragment implements LocalDoInBackgroundListenerOptimised {
+public class ScheduledQueueFragment extends HealthCocoFragment implements LocalDoInBackgroundListenerOptimised, SwipeRefreshLayout.OnRefreshListener, QueueListitemlistener {
     public static final int MAX_SIZE = 10;
     public static final int MAX_NUMBER_OF_EVENTS = 30;
-    private List<CalendarEvents> calendarEventsList = new ArrayList<>();
+    public ArrayList<ClinicDoctorProfile> clinicDoctorProfileList;
+    private ArrayList<CalendarEvents> calendarEventsList = new ArrayList<>();
     private RecyclerView scheduledQueueRecyclerView;
-    private QueueRecyclerViewAdapter mAdapter;
+    private TextView tvNoEventsFound;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private HealthcocoRecyclerViewAdapter mAdapter;
     private int PAGE_NUMBER = 0;
     private boolean isEndOfListAchieved;
     private boolean isInitialLoading = true;
+    private ProgressBar progressLoading;
 
     private AppointmentStatusType appointmentStatusType = ALL;
     private User user;
@@ -79,41 +95,65 @@ public class ScheduledQueueFragment extends HealthCocoFragment implements LocalD
     @Override
     public void initViews() {
         scheduledQueueRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view_scheduled_queue);
+        tvNoEventsFound = (TextView) view.findViewById(R.id.tv_no_events_found);
+        progressLoading = (ProgressBar) view.findViewById(R.id.progress_loading);
+        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
+
     }
 
     @Override
     public void initListeners() {
+        swipeRefreshLayout.setOnRefreshListener(this);
+
     }
 
     private void initAdapter() {
-        mAdapter = new QueueRecyclerViewAdapter(mActivity, calendarEventsList);
         LinearLayoutManager layoutManager = new LinearLayoutManager(mActivity, LinearLayoutManager.VERTICAL, false);
         scheduledQueueRecyclerView.setLayoutManager(layoutManager);
         scheduledQueueRecyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        mAdapter = new HealthcocoRecyclerViewAdapter(mActivity, AdapterType.APOINTMENT_QUEUE, this);
+        mAdapter.setListData((ArrayList<Object>) (Object) calendarEventsList);
         scheduledQueueRecyclerView.setAdapter(mAdapter);
+
+        scheduledQueueRecyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(layoutManager) {
+            @Override
+            public void onLoadMore(int current_page) {
+                loadMore(current_page);
+            }
+        });
+    }
+
+    private void loadMore(int current_page) {
+        current_page--;
+        PAGE_NUMBER = current_page;
+        if (!isEndOfListAchieved)
+            getListFromLocal(false);
     }
 
     private void notifyAdapter(ArrayList<CalendarEvents> responseList) {
+        swipeRefreshLayout.setRefreshing(false);
         if (!Util.isNullOrEmptyList(responseList)) {
             scheduledQueueRecyclerView.setVisibility(View.VISIBLE);
-//            tvNoEventsFound.setVisibility(View.GONE);
+            tvNoEventsFound.setVisibility(View.GONE);
             Collections.sort(responseList, ComparatorUtil.calendarEventsFromToTimeComparator);
+
+            calendarEventsList.addAll(responseList);
+            progressLoading.setVisibility(View.GONE);
+            mAdapter.notifyDataSetChanged();
         } else {
             scheduledQueueRecyclerView.setVisibility(View.GONE);
-//            tvNoEventsFound.setVisibility(View.VISIBLE);
+            tvNoEventsFound.setVisibility(View.VISIBLE);
         }
-        calendarEventsList.addAll(responseList);
-//        progressLoading.setVisibility(View.GONE);
-        mAdapter.notifyDataSetChanged();
     }
 
     private void getListFromLocal(boolean initialLoading) {
         if (isInitialLoading) {
-//            swipeRefreshLayout.setRefreshing(false);
+            swipeRefreshLayout.setRefreshing(false);
             showLoadingOverlay(true);
             resetListAndPagingAttributes();
         } else {
-//            swipeRefreshLayout.setRefreshing(true);
+            swipeRefreshLayout.setRefreshing(true);
             showLoadingOverlay(false);
         }
         new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_CALENDAR_EVENTS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
@@ -123,7 +163,8 @@ public class ScheduledQueueFragment extends HealthCocoFragment implements LocalD
         isInitialLoading = true;
         PAGE_NUMBER = 0;
         isEndOfListAchieved = false;
-//        scheduledQueueRecyclerView.resetPreLastPosition(0);
+        scheduledQueueRecyclerView.invalidate();
+//        mAdapter.notifyItemRangeChanged(0, mAdapter.getItemCount());
     }
 
     @Override
@@ -131,10 +172,6 @@ public class ScheduledQueueFragment extends HealthCocoFragment implements LocalD
         LogUtils.LOGD(TAG, "Success " + String.valueOf(response.getWebServiceType()));
         if (response != null && response.getWebServiceType() != null) {
             switch (response.getWebServiceType()) {
-                case FRAGMENT_INITIALISATION:
-                    if (user != null) {
-                    }
-                    break;
                 case GET_CALENDAR_EVENTS:
                     if (response.isDataFromLocal()) {
                         ArrayList<CalendarEvents> responseDataList = (ArrayList<CalendarEvents>) (ArrayList<?>) response.getDataList();
@@ -144,6 +181,7 @@ public class ScheduledQueueFragment extends HealthCocoFragment implements LocalD
                         else isEndOfListAchieved = false;
                         if (isInitialLoading && !response.isFromLocalAfterApiSuccess() && response.isUserOnline()) {
                             LogUtils.LOGD(TAG, "getSectionedDataListCalendar  loading Complete");
+                            progressLoading.setVisibility(View.GONE);
                             isInitialLoading = false;
                             notifyAdapter(responseDataList);
                             return;
@@ -160,8 +198,7 @@ public class ScheduledQueueFragment extends HealthCocoFragment implements LocalD
         }
 
         isInitialLoading = false;
-//        swipeRefreshLayout.setRefreshing(false);
-//        progressLoading.setVisibility(View.GONE);
+        swipeRefreshLayout.setRefreshing(false);
 
         showLoadingOverlay(false);
 
@@ -172,8 +209,6 @@ public class ScheduledQueueFragment extends HealthCocoFragment implements LocalD
         VolleyResponseBean volleyResponseBean = null;
         switch (response.getLocalBackgroundTaskType()) {
             case GET_FRAGMENT_INITIALISATION_DATA:
-                volleyResponseBean = new VolleyResponseBean();
-                volleyResponseBean.setWebServiceType(WebServiceType.FRAGMENT_INITIALISATION);
                 LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
                 if (doctor != null && doctor.getUser() != null) {
                     user = doctor.getUser();
@@ -183,8 +218,8 @@ public class ScheduledQueueFragment extends HealthCocoFragment implements LocalD
                 long selectedMonthInMillis = DateTimeUtil.getLongFromFormattedDayMonthYearFormatString(QueueFragment.DATE_FORMAT_FOR_THIS_SCREEN, DateTimeUtil.getFormattedDateTime(QueueFragment.DATE_FORMAT_FOR_THIS_SCREEN, selectedMonthDayYearInMillis));
                 volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).
                         getCalendarEventsListResponsePageWise(WebServiceType.GET_CALENDAR_EVENTS, appointmentStatusType,
-                                user.getUniqueId(), user.getForeignHospitalId(),
-                                user.getForeignLocationId(), selectedMonthInMillis,
+                                clinicDoctorProfileList, user.getForeignHospitalId(),
+                                user.getForeignLocationId(), SCHEDULED.getValue(), selectedMonthInMillis,
                                 PAGE_NUMBER, MAX_SIZE, null, null);
                 break;
         }
@@ -196,6 +231,32 @@ public class ScheduledQueueFragment extends HealthCocoFragment implements LocalD
 
     @Override
     public void onPostExecute(VolleyResponseBean aVoid) {
+
+    }
+
+    public void reFreshQueue(long selectedMonthDayYearInMillis, ArrayList<ClinicDoctorProfile> clinicDoctorProfileList) {
+        this.selectedMonthDayYearInMillis = selectedMonthDayYearInMillis;
+        this.clinicDoctorProfileList = clinicDoctorProfileList;
+        getListFromLocal(true);
+    }
+
+    @Override
+    public void onRefresh() {
+        getListFromLocal(true);
+    }
+
+    @Override
+    public void onCheckInClicked(Object object) {
+//        WebDataServiceImpl.getInstance(mApp).getCalendarEvents(CalendarEvents.class, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(), selectedMonthDayYearInMillis, latestUpdatedTime, this, this);
+    }
+
+    @Override
+    public void onEngageClicked(Object object) {
+
+    }
+
+    @Override
+    public void onCheckOutClicked(Object object) {
 
     }
 }

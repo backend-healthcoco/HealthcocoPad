@@ -50,6 +50,7 @@ public class LocalDatabaseUtils {
     public static final String KEY_HOSPITAL_ID = "hospital_id";
     public static final String KEY_LOCATION_ID = "location_id";
     public static final String KEY_PATIENT_ID = "patient_id";
+    public static final String KEY_STATUS = "status";
     public static final String KEY_FOREIGN_PRESCRIPTION_ID = "foreign_prescription_id";
     public static final String KEY_FOREIGN_DURATION_ID = "foreign_duration_id";
     public static final String KEY_FOREIGN_GROUP_ID = "foreign_group_id";

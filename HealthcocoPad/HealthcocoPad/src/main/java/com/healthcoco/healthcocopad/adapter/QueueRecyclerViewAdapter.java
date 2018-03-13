@@ -9,6 +9,7 @@ import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
 import com.healthcoco.healthcocopad.viewholders.QueueItemViewHolder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,28 +18,38 @@ import java.util.List;
 
 public class QueueRecyclerViewAdapter extends RecyclerView.Adapter<QueueItemViewHolder> {
     private final HealthCocoActivity mActivity;
-    private List<CalendarEvents> calendarEventsList;
+    private ArrayList<CalendarEvents> list;
 
-    public QueueRecyclerViewAdapter(HealthCocoActivity mActivity, List<CalendarEvents> calendarEventsList) {
-        this.calendarEventsList = calendarEventsList;
+    public QueueRecyclerViewAdapter(HealthCocoActivity mActivity) {
         this.mActivity = mActivity;
     }
 
     @Override
     public QueueItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        QueueItemViewHolder holder = new QueueItemViewHolder(mActivity, LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.list_item_queue, parent, false));
-        return holder;
+//        QueueItemViewHolder holder = new QueueItemViewHolder(mActivity, LayoutInflater.from(parent.getContext())
+//                .inflate(R.layout.list_item_queue, parent, false));
+        return null;
+
     }
 
     @Override
     public void onBindViewHolder(QueueItemViewHolder holder, int position) {
-        holder.setData(calendarEventsList.get(position));
-        holder.applyData();
+//        holder.setData(list.get(position));
+//        holder.applyData();
     }
 
     @Override
     public int getItemCount() {
-        return calendarEventsList.size();
+        return list.size();
+    }
+
+
+    public void setListData(ArrayList<CalendarEvents> list) {
+        this.list = list;
+    }
+
+
+    public Object getItem(int position) {
+        return list.get(position);
     }
 }

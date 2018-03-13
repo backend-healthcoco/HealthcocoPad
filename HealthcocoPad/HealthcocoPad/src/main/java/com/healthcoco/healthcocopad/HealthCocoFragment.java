@@ -619,4 +619,5 @@ public abstract class HealthCocoFragment extends Fragment implements GsonRequest
             savedInstanceState.putString(HealthCocoConstants.TAG_SELECTED_USER_ID, HealthCocoConstants.SELECTED_PATIENTS_USER_ID);
         }
     }
+
 }
