@@ -1,8 +1,13 @@
 package com.healthcoco.healthcocopad.fragments;
 
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,11 +17,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
-import com.healthcoco.healthcocopad.adapter.QueueRecyclerViewAdapter;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
 import com.healthcoco.healthcocopad.bean.server.ClinicDoctorProfile;
@@ -25,7 +28,6 @@ import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocopad.enums.AdapterType;
 import com.healthcoco.healthcocopad.enums.AppointmentStatusType;
-import com.healthcoco.healthcocopad.enums.CalendarStatus;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
@@ -37,24 +39,24 @@ import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.ComparatorUtil;
 import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
-import com.healthcoco.healthcocopad.utilities.ReflectionUtil;
 import com.healthcoco.healthcocopad.utilities.Util;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 import static com.healthcoco.healthcocopad.enums.AppointmentStatusType.ALL;
-import static com.healthcoco.healthcocopad.enums.CalendarStatus.SCHEDULED;
+import static com.healthcoco.healthcocopad.enums.CalendarStatus.CHECKED_OUT;
+import static com.healthcoco.healthcocopad.enums.CalendarStatus.ENGAGED;
 import static com.healthcoco.healthcocopad.enums.CalendarStatus.WAITING;
-import static com.healthcoco.healthcocopad.fragments.WaitingQueueFragment.INTENT_REFRESH_WAITING_QUEUE_DATA;
 
 /**
  * Created by Prashant on 01-03-2018.
  */
 
 
-public class ScheduledQueueFragment extends HealthCocoFragment implements LocalDoInBackgroundListenerOptimised, SwipeRefreshLayout.OnRefreshListener, QueueListitemlistener {
+public class EngagedQueueFragment extends HealthCocoFragment implements LocalDoInBackgroundListenerOptimised, SwipeRefreshLayout.OnRefreshListener, QueueListitemlistener {
+    public static final String INTENT_REFRESH_ENGAGED_QUEUE_DATA = "com.healthcoco.REFRESH_ENGAGED_QUEUE_DATA";
+
     public static final int MAX_SIZE = 10;
     public static final int MAX_NUMBER_OF_EVENTS = 30;
     public ArrayList<ClinicDoctorProfile> clinicDoctorProfileList = null;
@@ -67,11 +69,17 @@ public class ScheduledQueueFragment extends HealthCocoFragment implements LocalD
     private int PAGE_NUMBER = 0;
     private boolean isEndOfListAchieved;
     private boolean isInitialLoading = true;
+    BroadcastReceiver refreshQueueDetailsReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, final Intent intent) {
+            getListFromLocal(false);
+        }
+    };
     private ProgressBar progressLoading;
     private AppointmentStatusType appointmentStatusType = ALL;
     private User user;
     private long selectedMonthDayYearInMillis;
-
+    private boolean receiversRegistered;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -202,7 +210,6 @@ public class ScheduledQueueFragment extends HealthCocoFragment implements LocalD
                     if (data) {
                         calendarEventsList.remove(calendarEvents);
                         mAdapter.notifyDataSetChanged();
-                        Util.sendBroadcast(mApp, INTENT_REFRESH_WAITING_QUEUE_DATA);
                     }
                     break;
                 default:
@@ -232,7 +239,7 @@ public class ScheduledQueueFragment extends HealthCocoFragment implements LocalD
                 volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).
                         getCalendarEventsListResponsePageWise(WebServiceType.GET_CALENDAR_EVENTS, appointmentStatusType,
                                 clinicDoctorProfileList, user.getForeignHospitalId(),
-                                user.getForeignLocationId(), SCHEDULED.getValue(), selectedMonthInMillis,
+                                user.getForeignLocationId(), ENGAGED.getValue(), selectedMonthInMillis,
                                 PAGE_NUMBER, MAX_SIZE, null, null);
                 break;
         }
@@ -261,11 +268,33 @@ public class ScheduledQueueFragment extends HealthCocoFragment implements LocalD
 
     @Override
     public void onCheckInClicked(Object object) {
-
         calendarEvents = (CalendarEvents) object;
         if (calendarEvents != null) {
             mActivity.showLoading(false);
-            WebDataServiceImpl.getInstance(mApp).changeAppointmentStatus(CalendarEvents.class, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(), calendarEvents.getPatientId(), calendarEvents.getAppointmentId(), WAITING.getValue(), this, this);
+            WebDataServiceImpl.getInstance(mApp).changeAppointmentStatus(CalendarEvents.class, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(), calendarEvents.getPatientId(), calendarEvents.getAppointmentId(), CHECKED_OUT.getValue(), this, this);
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (!receiversRegistered) {
+            //receiver for prescription list refresh
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(INTENT_REFRESH_ENGAGED_QUEUE_DATA);
+            LocalBroadcastManager.getInstance(mActivity).registerReceiver(refreshQueueDetailsReceiver, filter);
+            receiversRegistered = true;
+
+
+        }
+
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+//        sendBroadcasts(null);
+        mActivity.hideLoading();
+        LocalBroadcastManager.getInstance(mActivity).unregisterReceiver(refreshQueueDetailsReceiver);
     }
 }

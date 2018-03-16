@@ -452,7 +452,7 @@ public enum WebServiceType {
     ADD_EVENT(Method.POST, "appointment/event/"),
     ADD_APPOINTMENT(Method.POST, "appointment/"),
     SEND_REMINDER(Method.GET, "appointment/sendReminder/patient/"),
-
+    CHANGE_APPOINTMENT_STATUS(Method.GET, "appointment/changeStatus/"),
 
     //    post /v1/notification/device/add
     SEND_GCM_REGISTRATION_ID(Method.POST, "notification/device/add"),

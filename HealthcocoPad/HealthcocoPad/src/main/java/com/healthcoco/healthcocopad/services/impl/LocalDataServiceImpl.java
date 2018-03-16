@@ -1079,6 +1079,22 @@ public class LocalDataServiceImpl {
                     latestUpdatedTime = treatmentsList.get(0).getUpdatedTime();
                 break;
 
+            case CALENDAR_EVENTS:
+               /* List<CalendarEvents> tempAppointmentsList = CalendarEvents.find(CalendarEvents.class,
+                        LocalDatabaseUtils.KEY_DOCTOR_ID + "= ?",
+                        new String[]{doctorId},
+                        null, "updated_time DESC", "1");
+                if (!Util.isNullOrEmptyList(tempAppointmentsList))
+                    latestUpdatedTime = tempAppointmentsList.get(0).getUpdatedTime();
+                break;*/
+                List<CalendarEvents> tempCalendarEventsList = CalendarEvents.find(CalendarEvents.class,
+                        LocalDatabaseUtils.KEY_DOCTOR_ID + "= ? AND " + LocalDatabaseUtils.KEY_IS_FROM_CALENDAR_API + "= ? AND " + LocalDatabaseUtils.KEY_IS_ADDED_ON_SUCCESS + "= ?",
+                        new String[]{doctorId, "" + BooleanTypeValues.TRUE.getBooleanIntValue(), "" + BooleanTypeValues.FALSE.getBooleanIntValue()},
+                        null, "updated_time DESC", "1");
+                if (!Util.isNullOrEmptyList(tempCalendarEventsList))
+                    latestUpdatedTime = tempCalendarEventsList.get(0).getUpdatedTime();
+                break;
+
         }
         if (latestUpdatedTime == null)
             latestUpdatedTime = 0l;

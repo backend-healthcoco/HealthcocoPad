@@ -48,6 +48,8 @@ public class QueueItemViewHolder extends HealthcocoComonRecylcerViewHolder imple
         btEngage = (LinearLayout) itemView.findViewById(R.id.bt_engage);
 
         btCheckIn.setOnClickListener(this);
+        btEngage.setOnClickListener(this);
+        btCheckOut.setOnClickListener(this);
 
         btEngage.setVisibility(View.GONE);
         btCheckOut.setVisibility(View.GONE);
@@ -120,10 +122,6 @@ public class QueueItemViewHolder extends HealthcocoComonRecylcerViewHolder imple
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bt_check_in:
-                queueListitemlistener.onCheckInClicked(calendarEvents);
-                break;
-        }
+        queueListitemlistener.onCheckInClicked(calendarEvents);
     }
 }

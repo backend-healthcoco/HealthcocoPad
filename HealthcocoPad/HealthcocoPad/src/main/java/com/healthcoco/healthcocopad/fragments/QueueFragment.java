@@ -63,6 +63,8 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
     private ClinicDetailResponse selectedClinicProfile;
 
     private ScheduledQueueFragment scheduledQueueFragment;
+    private WaitingQueueFragment waitingQueueFragment;
+    private EngagedQueueFragment engagedQueueFragment;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -88,6 +90,13 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
     private void initFragments() {
         scheduledQueueFragment = new ScheduledQueueFragment();
         mFragmentManager.beginTransaction().add(R.id.layout_scheduled_queue, scheduledQueueFragment, scheduledQueueFragment.getClass().getSimpleName()).commit();
+
+        waitingQueueFragment = new WaitingQueueFragment();
+        mFragmentManager.beginTransaction().add(R.id.layout_waiting_queue, waitingQueueFragment, waitingQueueFragment.getClass().getSimpleName()).commit();
+
+        engagedQueueFragment = new EngagedQueueFragment();
+        mFragmentManager.beginTransaction().add(R.id.layout_engaged_queue, engagedQueueFragment, engagedQueueFragment.getClass().getSimpleName()).commit();
+
     }
 
 
@@ -136,9 +145,12 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
                     if (!Util.isNullOrEmptyList(response.getDataList())) {
                         new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_CALENDAR_EVENTS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
                         response.setIsFromLocalAfterApiSuccess(true);
-                        refreshData();
+//                        refreshData();
                         return;
                     }
+                    break;
+                case ADD_APPOINTMENT:
+                    refreshData();
                     break;
                 case GET_CLINIC_PROFILE:
                     if (response.getData() != null) {
@@ -184,11 +196,13 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
                 }
                 return volleyResponseBean;
             case ADD_CALENDAR_EVENTS:
+                volleyResponseBean = new VolleyResponseBean();
+                volleyResponseBean.setWebServiceType(WebServiceType.ADD_APPOINTMENT);
 
                 LocalDataServiceImpl.getInstance(mApp).addCalendarEventsList(
                         (ArrayList<CalendarEvents>) (ArrayList<?>) response
                                 .getDataList());
-                break;
+                return volleyResponseBean;
         }
         if (volleyResponseBean == null)
             volleyResponseBean = new VolleyResponseBean();
@@ -197,7 +211,10 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
     }
 
     private void refreshData() {
-        scheduledQueueFragment.reFreshQueue(selectedMonthDayYearInMillis, clinicDoctorProfileList);
+        scheduledQueueFragment.reFreshQueue(selectedMonthDayYearInMillis, null);
+        waitingQueueFragment.reFreshQueue(selectedMonthDayYearInMillis, null);
+        engagedQueueFragment.reFreshQueue(selectedMonthDayYearInMillis, null);
+
     }
 
     @Override

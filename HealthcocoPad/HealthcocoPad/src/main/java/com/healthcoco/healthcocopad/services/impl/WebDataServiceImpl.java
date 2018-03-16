@@ -1563,4 +1563,23 @@ public class WebDataServiceImpl implements GCMRefreshListener {
         }
     }
 
+    public void changeAppointmentStatus(Class<?> class1, String doctorId, String locationId, String hospitalId, String patientId, String appointmentId, String status, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        WebServiceType webServiceType = WebServiceType.CHANGE_APPOINTMENT_STATUS;
+        checkNetworkStatus(mApp);
+        if (HealthCocoConstants.isNetworkOnline) {
+            String url = webServiceType.getUrl()
+                    + doctorId
+                    + "/" + locationId
+                    + "/" + hospitalId
+                    + "/" + patientId
+                    + "/" + appointmentId
+                    + "/" + status;
+
+            getResponse(webServiceType, class1, url, null, null, responseListener,
+                    errorListener);
+        } else {
+            showUserOffline(webServiceType, responseListener);
+        }
+    }
+
 }

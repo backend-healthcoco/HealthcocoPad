@@ -8,7 +8,4 @@ public interface QueueListitemlistener {
 
     public void onCheckInClicked(Object object);
 
-    public void onEngageClicked(Object object);
-
-    public void onCheckOutClicked(Object object);
 }

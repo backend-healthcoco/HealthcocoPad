@@ -499,9 +499,11 @@ public class DateTimeUtil {
     }
 
     public static String getFormttedTime(long date) {
+        String delegate = "hh:mm aaa";
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(date);
-        return String.valueOf(calendar.getTime());
+        return (String) DateFormat.format(delegate, calendar.getTime());
+
     }
 
 
