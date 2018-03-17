@@ -639,7 +639,8 @@ public class LocalDataServiceImpl {
         volleyResponseBean.setIsDataFromLocal(true);
         volleyResponseBean.setIsUserOnline(HealthCocoConstants.isNetworkOnline);
         try {
-            volleyResponseBean.setDataList(getObjectsListFromMap(DrugType.listAll(DrugType.class)));
+            volleyResponseBean.setDataList(getDrugTypeList());
+//            volleyResponseBean.setDataList((ArrayList<Object>) (Object) DrugType.listAll(DrugType.class));
             if (responseListener != null)
                 responseListener.onResponse(volleyResponseBean);
         } catch (Exception e) {
@@ -647,6 +648,21 @@ public class LocalDataServiceImpl {
             showErrorLocal(volleyResponseBean, errorListener);
         }
         return volleyResponseBean;
+    }
+
+    private ArrayList<Object> getDrugTypeList() {
+
+        //forming where condition query
+        String whereCondition = "Select * from " + StringUtil.toSQLName(DrugType.class.getSimpleName());
+
+        //specifying order by limit and offset query
+        String conditionsLimit = " ORDER BY " + LocalDatabaseUtils.KEY_CREATED_TIME + " DESC ";
+
+        whereCondition = whereCondition + conditionsLimit;
+        LogUtils.LOGD(TAG, "Select Query " + whereCondition);
+        List<DrugType> drugTypeList = SugarRecord.findWithQuery(DrugType.class, whereCondition);
+        return (ArrayList<Object>) (Object) drugTypeList;
+
     }
 
     public VolleyResponseBean getUserGroups(WebServiceType webServiceType, ArrayList<String> patientsAssignedGroupIdList, String doctorId, String locationID, String hospitalId, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
