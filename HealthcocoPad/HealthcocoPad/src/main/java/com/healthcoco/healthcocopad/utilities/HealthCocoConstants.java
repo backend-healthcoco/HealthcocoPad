@@ -32,6 +32,7 @@ public class HealthCocoConstants {
     public static final String TAG_DIAGRAM_TAG = "diagramTag";
     public static final String TAG_SELECTED_DIAGRAM = "selectedDiagram";
     public static final String TAG_MAP_TYPE = "mapType";
+    public static final String PARAM_IS_OBJECT_REQUIRED = "?isObjectRequired=true";
 
     public static final String TAG_INTENT_DATA = "intentData";
     public static final String TAG_PATIENT_PROFILE = "patientProfile";

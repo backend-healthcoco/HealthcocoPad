@@ -62,6 +62,8 @@ public class ScheduledQueueFragment extends HealthCocoFragment implements LocalD
     private ArrayList<CalendarEvents> calendarEventsList = new ArrayList<>();
     private RecyclerView scheduledQueueRecyclerView;
     private TextView tvNoEventsFound;
+    private TextView tvTitle;
+    private TextView tvCount;
     private SwipeRefreshLayout swipeRefreshLayout;
     private HealthcocoRecyclerViewAdapter mAdapter;
     private int PAGE_NUMBER = 0;
@@ -100,7 +102,10 @@ public class ScheduledQueueFragment extends HealthCocoFragment implements LocalD
         tvNoEventsFound = (TextView) view.findViewById(R.id.tv_no_events_found);
         progressLoading = (ProgressBar) view.findViewById(R.id.progress_loading);
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
+        tvTitle = (TextView) view.findViewById(R.id.tv_title);
+        tvCount = (TextView) view.findViewById(R.id.tv_count);
 
+        tvTitle.setText(R.string.schedule);
     }
 
     @Override
@@ -143,14 +148,17 @@ public class ScheduledQueueFragment extends HealthCocoFragment implements LocalD
             calendarEventsList.addAll(responseList);
             progressLoading.setVisibility(View.GONE);
             mAdapter.notifyDataSetChanged();
+            tvCount.setText(responseList.size());
         } else {
             scheduledQueueRecyclerView.setVisibility(View.GONE);
             tvNoEventsFound.setVisibility(View.VISIBLE);
+            tvCount.setText("0");
+
         }
     }
 
     private void getListFromLocal(boolean initialLoading) {
-        if (isInitialLoading) {
+        if (initialLoading) {
             swipeRefreshLayout.setRefreshing(false);
             showLoadingOverlay(true);
             resetListAndPagingAttributes();
@@ -166,6 +174,7 @@ public class ScheduledQueueFragment extends HealthCocoFragment implements LocalD
         PAGE_NUMBER = 0;
         isEndOfListAchieved = false;
         scheduledQueueRecyclerView.invalidate();
+        calendarEventsList.clear();
         //        mAdapter.notifyItemRangeChanged(0, mAdapter.getItemCount());
     }
 
@@ -196,12 +205,12 @@ public class ScheduledQueueFragment extends HealthCocoFragment implements LocalD
                     break;
                 case CHANGE_APPOINTMENT_STATUS:
                     mActivity.hideLoading();
-                    boolean data = false;
-                    if (response.getData() != null)
-                        data = (boolean) response.getData();
-                    if (data) {
+                    if (response.getData() != null) {
+                        CalendarEvents responseData = (CalendarEvents) response.getData();
+                        LocalDataServiceImpl.getInstance(mApp).addCalendarEventsUpdated(responseData);
                         calendarEventsList.remove(calendarEvents);
-                        mAdapter.notifyDataSetChanged();
+//                        mAdapter.notifyDataSetChanged();
+                        notifyAdapter(calendarEventsList);
                         Util.sendBroadcast(mApp, INTENT_REFRESH_WAITING_QUEUE_DATA);
                     }
                     break;
@@ -228,11 +237,11 @@ public class ScheduledQueueFragment extends HealthCocoFragment implements LocalD
                 }
                 return volleyResponseBean;
             case GET_CALENDAR_EVENTS:
-                long selectedMonthInMillis = DateTimeUtil.getLongFromFormattedDayMonthYearFormatString(QueueFragment.DATE_FORMAT_FOR_THIS_SCREEN, DateTimeUtil.getFormattedDateTime(QueueFragment.DATE_FORMAT_FOR_THIS_SCREEN, selectedMonthDayYearInMillis));
+//                long selectedMonthInMillis = DateTimeUtil.getLongFromFormattedDayMonthYearFormatString(QueueFragment.DATE_FORMAT_FOR_THIS_SCREEN, DateTimeUtil.getFormattedDateTime(QueueFragment.DATE_FORMAT_FOR_THIS_SCREEN, selectedMonthDayYearInMillis));
                 volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).
                         getCalendarEventsListResponsePageWise(WebServiceType.GET_CALENDAR_EVENTS, appointmentStatusType,
                                 clinicDoctorProfileList, user.getForeignHospitalId(),
-                                user.getForeignLocationId(), SCHEDULED.getValue(), selectedMonthInMillis,
+                                user.getForeignLocationId(), SCHEDULED.getValue(), selectedMonthDayYearInMillis,
                                 PAGE_NUMBER, MAX_SIZE, null, null);
                 break;
         }

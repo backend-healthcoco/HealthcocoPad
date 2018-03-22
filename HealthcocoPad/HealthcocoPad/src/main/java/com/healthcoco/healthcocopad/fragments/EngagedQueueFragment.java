@@ -48,6 +48,8 @@ import static com.healthcoco.healthcocopad.enums.AppointmentStatusType.ALL;
 import static com.healthcoco.healthcocopad.enums.CalendarStatus.CHECKED_OUT;
 import static com.healthcoco.healthcocopad.enums.CalendarStatus.ENGAGED;
 import static com.healthcoco.healthcocopad.enums.CalendarStatus.WAITING;
+import static com.healthcoco.healthcocopad.fragments.CheckedOutQueueFragment.INTENT_REFRESH_CHECKED_OUT_QUEUE_DATA;
+import static com.healthcoco.healthcocopad.fragments.WaitingQueueFragment.INTENT_REFRESH_WAITING_QUEUE_DATA;
 
 /**
  * Created by Prashant on 01-03-2018.
@@ -64,6 +66,9 @@ public class EngagedQueueFragment extends HealthCocoFragment implements LocalDoI
     private ArrayList<CalendarEvents> calendarEventsList = new ArrayList<>();
     private RecyclerView scheduledQueueRecyclerView;
     private TextView tvNoEventsFound;
+    private TextView tvTitle;
+    private TextView tvCount;
+
     private SwipeRefreshLayout swipeRefreshLayout;
     private HealthcocoRecyclerViewAdapter mAdapter;
     private int PAGE_NUMBER = 0;
@@ -108,6 +113,10 @@ public class EngagedQueueFragment extends HealthCocoFragment implements LocalDoI
         tvNoEventsFound = (TextView) view.findViewById(R.id.tv_no_events_found);
         progressLoading = (ProgressBar) view.findViewById(R.id.progress_loading);
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
+        tvTitle = (TextView) view.findViewById(R.id.tv_title);
+        tvCount = (TextView) view.findViewById(R.id.tv_count);
+
+        tvTitle.setText(R.string.reschedule);
 
     }
 
@@ -158,7 +167,7 @@ public class EngagedQueueFragment extends HealthCocoFragment implements LocalDoI
     }
 
     private void getListFromLocal(boolean initialLoading) {
-        if (isInitialLoading) {
+        if (initialLoading) {
             swipeRefreshLayout.setRefreshing(false);
             showLoadingOverlay(true);
             resetListAndPagingAttributes();
@@ -174,6 +183,7 @@ public class EngagedQueueFragment extends HealthCocoFragment implements LocalDoI
         PAGE_NUMBER = 0;
         isEndOfListAchieved = false;
         scheduledQueueRecyclerView.invalidate();
+        calendarEventsList.clear();
         //        mAdapter.notifyItemRangeChanged(0, mAdapter.getItemCount());
     }
 
@@ -204,12 +214,13 @@ public class EngagedQueueFragment extends HealthCocoFragment implements LocalDoI
                     break;
                 case CHANGE_APPOINTMENT_STATUS:
                     mActivity.hideLoading();
-                    boolean data = false;
-                    if (response.getData() != null)
-                        data = (boolean) response.getData();
-                    if (data) {
+                    if (response.getData() != null) {
+                        CalendarEvents responseData = (CalendarEvents) response.getData();
+                        LocalDataServiceImpl.getInstance(mApp).addCalendarEventsUpdated(responseData);
                         calendarEventsList.remove(calendarEvents);
-                        mAdapter.notifyDataSetChanged();
+//                        mAdapter.notifyDataSetChanged();
+                        notifyAdapter(calendarEventsList);
+                        Util.sendBroadcast(mApp, INTENT_REFRESH_CHECKED_OUT_QUEUE_DATA);
                     }
                     break;
                 default:

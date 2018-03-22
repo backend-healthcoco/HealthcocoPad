@@ -22,6 +22,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.Response;
@@ -51,6 +52,7 @@ import com.healthcoco.healthcocopad.fragments.DoctorVideoListFragment;
 import com.healthcoco.healthcocopad.fragments.FilterFragment;
 import com.healthcoco.healthcocopad.fragments.IssueTrackerFragment;
 import com.healthcoco.healthcocopad.fragments.MenuDrawerFragment;
+import com.healthcoco.healthcocopad.fragments.QueueFragment;
 import com.healthcoco.healthcocopad.fragments.SettingsFragment;
 import com.healthcoco.healthcocopad.fragments.SyncFragment;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
@@ -77,6 +79,7 @@ public class HomeActivity extends HealthCocoActivity implements View.OnClickList
     private boolean receiversRegistered;
     private LinearLayout containerRightActionType;
     private LinearLayout containerMiddleAction;
+    private RelativeLayout actionBarNormal;
     private User user;
     private SlidingPaneDrawerLayout sliding_pane_layout;
     private FragmentType selectedFramentType;
@@ -154,13 +157,16 @@ public class HomeActivity extends HealthCocoActivity implements View.OnClickList
         containerMiddleAction = (LinearLayout) findViewById(R.id.container_middle_action);
         layoutContactsFragment = (LinearLayout) findViewById(R.id.layout_contacts_fragment);
         layoutOtherFragments = (LinearLayout) findViewById(R.id.layout_right_detail);
+        actionBarNormal = (RelativeLayout) findViewById(R.id.action_bar_home_normal);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawerLayout.setScrimColor(getResources().getColor(R.color.black_translucent));
         btMenu = (ImageButton) findViewById(R.id.bt_menu);
         tvTitle = (TextView) findViewById(R.id.tv_title);
+
     }
 
     public void initFragment(FragmentType fragmentType) {
+        actionBarNormal.setVisibility(View.VISIBLE);
         HealthCocoFragment fragment = null;
         switch (fragmentType) {
             case PROFILE:
@@ -168,6 +174,10 @@ public class HomeActivity extends HealthCocoActivity implements View.OnClickList
                 break;
             case CLINIC_PROFILE:
                 fragment = new ClinicalProfileFragment();
+                break;
+            case QUEUE:
+                actionBarNormal.setVisibility(View.GONE);
+                fragment = new QueueFragment();
                 break;
             case SYNC:
                 fragment = new SyncFragment();

@@ -1108,5 +1108,10 @@
     <string name="check_out">Check Out</string>
     <string name="engage">Engage</string>
     <string name="no_appointments_found">No Appointments found</string>
-
+    <string name="queue">Queue</string>
+    <string name="today">Today</string>
+    <string name="schedule">Scheduled</string>
+    <string name="waiting">Waiting</string>
+    <string name="engaged">Engaged</string>
+    <string name="checked_out">Checked Out</string>
 </resources>

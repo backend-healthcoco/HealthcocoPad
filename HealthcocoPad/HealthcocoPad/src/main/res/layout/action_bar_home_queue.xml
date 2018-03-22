@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/action_bar_home_for_queue"
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize"
+    android:background="@color/blue_action_bar"
+    android:gravity="center"
+    android:orientation="horizontal">
+
+    <ImageButton
+        android:id="@+id/bt_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_centerInParent="true"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/content_description"
+        android:paddingLeft="10dp"
+        android:paddingRight="150dp"
+        android:src="@drawable/icon_menu_selector" />
+
+    <TextView
+        android:id="@+id/tv_title"
+        style="@style/ActionBarTitleStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:fontFamily="sans-serif-light"
+        android:gravity="center"
+        android:paddingLeft="60dp"
+        android:paddingRight="50dp"
+        android:singleLine="true"
+        android:text="@string/calendar" />
+
+    <LinearLayout
+        android:id="@+id/lv_doctor_name"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/list_item_clinic_profile_padding"
+        android:layout_marginRight="@dimen/list_item_clinic_profile_padding"
+        android:layout_toEndOf="@+id/tv_title"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:visibility="visible">
+
+
+        <TextView
+            android:id="@+id/tv_doctor_name"
+            android:layout_width="@dimen/doctor_name_textview_width"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/padding_item_drug_dosage_top_bottom"
+            android:background="@drawable/shape_rounded_corners_white_border_solid_blue"
+            android:drawableEnd="@drawable/arrow_menu_down"
+            android:drawablePadding="@dimen/patient_profile_image_padding"
+            android:hint="@string/doctors"
+            android:paddingBottom="@dimen/dotor_profile_edit_text_top_padding"
+            android:paddingLeft="@dimen/item_contact_padding"
+            android:paddingRight="@dimen/dotor_profile_edit_text_top_padding"
+            android:paddingTop="@dimen/dotor_profile_edit_text_top_padding"
+            android:singleLine="true"
+            android:textColor="@color/white"
+            android:textColorHint="@color/grey_light_text"
+            android:textSize="@dimen/text_size_patient_name_visit_fragment"
+            android:visibility="visible" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginLeft="@dimen/image_doctor_in_clinic_profile"
+        android:layout_toEndOf="@+id/lv_doctor_name"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/bt_previuos_date"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_centerInParent="true"
+            android:background="@android:color/transparent"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:src="@drawable/ic_previous" />
+
+        <TextView
+            android:id="@+id/tv_selected_date"
+            android:layout_width="@dimen/doctor_name_textview_width"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:minHeight="0dp"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_book_appointment_dialog_fragment" />
+
+        <ImageButton
+            android:id="@+id/bt_next_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerInParent="true"
+            android:background="@android:color/transparent"
+            android:paddingBottom="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="10dp"
+            android:src="@drawable/ic_next" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/container_right_action"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerInParent="true"
+        android:clickable="true"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingLeft="40dp"
+        android:paddingRight="10dp"></LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/container_middle_action"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:layout_toLeftOf="@+id/container_right_action"
+        android:clickable="true"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingLeft="40dp"
+        android:paddingRight="10dp"></LinearLayout>
+</RelativeLayout>
