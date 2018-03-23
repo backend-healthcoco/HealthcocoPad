@@ -12,11 +12,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
-import com.healthcoco.healthcocopad.adapter.QueueRecyclerViewAdapter;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
 import com.healthcoco.healthcocopad.bean.server.ClinicDoctorProfile;
@@ -25,7 +23,6 @@ import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocopad.enums.AdapterType;
 import com.healthcoco.healthcocopad.enums.AppointmentStatusType;
-import com.healthcoco.healthcocopad.enums.CalendarStatus;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
@@ -35,14 +32,12 @@ import com.healthcoco.healthcocopad.recyclerview.HealthcocoRecyclerViewAdapter;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.ComparatorUtil;
-import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
-import com.healthcoco.healthcocopad.utilities.ReflectionUtil;
 import com.healthcoco.healthcocopad.utilities.Util;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
+import java.util.HashMap;
 
 import static com.healthcoco.healthcocopad.enums.AppointmentStatusType.ALL;
 import static com.healthcoco.healthcocopad.enums.CalendarStatus.SCHEDULED;
@@ -60,6 +55,7 @@ public class ScheduledQueueFragment extends HealthCocoFragment implements LocalD
     public ArrayList<ClinicDoctorProfile> clinicDoctorProfileList = null;
     CalendarEvents calendarEvents;
     private ArrayList<CalendarEvents> calendarEventsList = new ArrayList<>();
+    private HashMap<String, CalendarEvents> calendarEventsHashMap = new HashMap<>();
     private RecyclerView scheduledQueueRecyclerView;
     private TextView tvNoEventsFound;
     private TextView tvTitle;
@@ -138,21 +134,32 @@ public class ScheduledQueueFragment extends HealthCocoFragment implements LocalD
             getListFromLocal(false);
     }
 
-    private void notifyAdapter(ArrayList<CalendarEvents> responseList) {
-        swipeRefreshLayout.setRefreshing(false);
+
+    private void fromHashMapAndRefresh(ArrayList<CalendarEvents> responseList) {
         if (!Util.isNullOrEmptyList(responseList)) {
+            for (CalendarEvents calendarEvent :
+                    responseList) {
+                calendarEventsHashMap.put(calendarEvent.getUniqueId(), calendarEvent);
+            }
+        }
+        notifyAdapter(new ArrayList<>(calendarEventsHashMap.values()));
+    }
+
+    private void notifyAdapter(ArrayList<CalendarEvents> calendarEventsArrayList) {
+        swipeRefreshLayout.setRefreshing(false);
+        if (!Util.isNullOrEmptyList(calendarEventsArrayList)) {
             scheduledQueueRecyclerView.setVisibility(View.VISIBLE);
             tvNoEventsFound.setVisibility(View.GONE);
-            Collections.sort(responseList, ComparatorUtil.calendarEventsFromToTimeComparator);
-
-            calendarEventsList.addAll(responseList);
+            Collections.sort(calendarEventsArrayList, ComparatorUtil.calendarEventsFromToTimeComparator);
+            calendarEventsList.clear();
+            calendarEventsList.addAll(calendarEventsArrayList);
             progressLoading.setVisibility(View.GONE);
             mAdapter.notifyDataSetChanged();
-            tvCount.setText(responseList.size());
+            tvCount.setText(Util.getValidatedValue(calendarEventsArrayList.size()));
         } else {
             scheduledQueueRecyclerView.setVisibility(View.GONE);
             tvNoEventsFound.setVisibility(View.VISIBLE);
-            tvCount.setText("0");
+            tvCount.setText(R.string.zero);
 
         }
     }
@@ -174,6 +181,7 @@ public class ScheduledQueueFragment extends HealthCocoFragment implements LocalD
         PAGE_NUMBER = 0;
         isEndOfListAchieved = false;
         scheduledQueueRecyclerView.invalidate();
+        calendarEventsHashMap.clear();
         calendarEventsList.clear();
         //        mAdapter.notifyItemRangeChanged(0, mAdapter.getItemCount());
     }
@@ -194,10 +202,10 @@ public class ScheduledQueueFragment extends HealthCocoFragment implements LocalD
                             LogUtils.LOGD(TAG, "getSectionedDataListCalendar  loading Complete");
                             progressLoading.setVisibility(View.GONE);
                             isInitialLoading = false;
-                            notifyAdapter(responseDataList);
+                            fromHashMapAndRefresh(responseDataList);
                             return;
                         }
-                        notifyAdapter(responseDataList);
+                        fromHashMapAndRefresh(responseDataList);
                         return;
                     } else {
                         getListFromLocal(false);
@@ -209,8 +217,9 @@ public class ScheduledQueueFragment extends HealthCocoFragment implements LocalD
                         CalendarEvents responseData = (CalendarEvents) response.getData();
                         LocalDataServiceImpl.getInstance(mApp).addCalendarEventsUpdated(responseData);
                         calendarEventsList.remove(calendarEvents);
+                        calendarEventsHashMap.remove(calendarEvents.getUniqueId());
 //                        mAdapter.notifyDataSetChanged();
-                        notifyAdapter(calendarEventsList);
+                        fromHashMapAndRefresh(calendarEventsList);
                         Util.sendBroadcast(mApp, INTENT_REFRESH_WAITING_QUEUE_DATA);
                     }
                     break;

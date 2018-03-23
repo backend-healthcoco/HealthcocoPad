@@ -70,6 +70,7 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
     private ClinicDetailResponse selectedClinicProfile;
     private HealthcocoPopupWindow doctorsListPopupWindow;
     private boolean isSingleDoctor = false;
+    private boolean isInitialLoading = true;
 
     private TextView tvDoctorName;
     private LinearLayout lvDoctorName;
@@ -182,6 +183,7 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
                     break;
                 case ADD_APPOINTMENT:
                     refreshData();
+                    isInitialLoading = false;
                     break;
                 case GET_CLINIC_PROFILE:
                     if (response.getData() != null) {
@@ -278,14 +280,12 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.bt_next_date:
-                long nextDateTimeInMillis = DateTimeUtil.getNextDate(DateTimeUtil.getLongFromFormattedDayMonthYearFormatString(DATE_FORMAT_USED_IN_THIS_SCREEN,
-                        DateTimeUtil.getFormattedDateTime(DATE_FORMAT_USED_IN_THIS_SCREEN, selectedMonthDayYearInMillis)));
+                long nextDateTimeInMillis = DateTimeUtil.getNextDate(selectedMonthDayYearInMillis);
                 selectedMonthDayYearInMillis = nextDateTimeInMillis;
                 tvSelectedDate.setText(DateTimeUtil.getFormattedDateTime(DATE_FORMAT_USED_IN_THIS_SCREEN, nextDateTimeInMillis));
                 break;
             case R.id.bt_previuos_date:
-                long previousDateTimeInMillis = DateTimeUtil.getPreviousDate(DateTimeUtil.getLongFromFormattedDayMonthYearFormatString(DATE_FORMAT_USED_IN_THIS_SCREEN,
-                        DateTimeUtil.getFormattedDateTime(DATE_FORMAT_USED_IN_THIS_SCREEN, selectedMonthDayYearInMillis)));
+                long previousDateTimeInMillis = DateTimeUtil.getPreviousDate(selectedMonthDayYearInMillis);
                 selectedMonthDayYearInMillis = previousDateTimeInMillis;
                 tvSelectedDate.setText(DateTimeUtil.getFormattedDateTime(DATE_FORMAT_USED_IN_THIS_SCREEN, previousDateTimeInMillis));
                 break;
@@ -302,10 +302,11 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
         switch (v.getId()) {
             case R.id.tv_selected_date:
                 LogUtils.LOGD(TAG, "TextVieew Selected Date ");
-//                if (!isInitialLoading)
+
                 if (!DateTimeUtil.isCurrentDateSelected(DATE_FORMAT_USED_IN_THIS_SCREEN,
-                        Util.getValidatedValueOrNull(tvSelectedDate)) && (Util.getValidatedValueOrNull(tvSelectedDate).equalsIgnoreCase(getString(R.string.today)))) {
-                    refreshData();
+                        Util.getValidatedValueOrNull(tvSelectedDate))) {
+                    if (!isInitialLoading)
+                        refreshData();
                 } else
                     tvSelectedDate.setText(R.string.today);
                 break;

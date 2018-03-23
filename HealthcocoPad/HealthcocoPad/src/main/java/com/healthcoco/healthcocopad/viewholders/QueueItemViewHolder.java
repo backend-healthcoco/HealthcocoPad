@@ -7,19 +7,24 @@ import android.widget.TextView;
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
+import com.healthcoco.healthcocopad.bean.server.ClinicDoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.PatientCard;
 import com.healthcoco.healthcocopad.enums.CalendarStatus;
+import com.healthcoco.healthcocopad.enums.PopupWindowType;
+import com.healthcoco.healthcocopad.listeners.DoctorListPopupWindowListener;
 import com.healthcoco.healthcocopad.listeners.QueueListitemlistener;
 import com.healthcoco.healthcocopad.recyclerview.HealthcocoComonRecylcerViewHolder;
 import com.healthcoco.healthcocopad.recyclerview.HealthcocoRecyclerViewItemClickListener;
 import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
 import com.healthcoco.healthcocopad.utilities.Util;
 
+import java.util.ArrayList;
+
 /**
  * Created by Prashant on 07/03/2018.
  */
 
-public class QueueItemViewHolder extends HealthcocoComonRecylcerViewHolder implements View.OnClickListener {
+public class QueueItemViewHolder extends HealthcocoComonRecylcerViewHolder implements View.OnClickListener, DoctorListPopupWindowListener {
     private HealthCocoActivity mActivity;
     private CalendarEvents calendarEvents;
 
@@ -30,10 +35,12 @@ public class QueueItemViewHolder extends HealthcocoComonRecylcerViewHolder imple
     private LinearLayout btCheckIn;
     private LinearLayout btCheckOut;
     private LinearLayout btEngage;
+    private LinearLayout layoutListItem;
     private QueueListitemlistener queueListitemlistener;
 
     public QueueItemViewHolder(HealthCocoActivity mActivity, View itemView, HealthcocoRecyclerViewItemClickListener itemClickListener, Object listenerObject) {
         super(mActivity, itemView, itemClickListener);
+        this.mActivity = mActivity;
         this.queueListitemlistener = (QueueListitemlistener) listenerObject;
     }
 
@@ -46,6 +53,7 @@ public class QueueItemViewHolder extends HealthcocoComonRecylcerViewHolder imple
         btCheckIn = (LinearLayout) itemView.findViewById(R.id.bt_check_in);
         btCheckOut = (LinearLayout) itemView.findViewById(R.id.bt_check_out);
         btEngage = (LinearLayout) itemView.findViewById(R.id.bt_engage);
+        layoutListItem = (LinearLayout) itemView.findViewById(R.id.layout_item_queue);
 
         btCheckIn.setOnClickListener(this);
         btEngage.setOnClickListener(this);
@@ -62,11 +70,14 @@ public class QueueItemViewHolder extends HealthcocoComonRecylcerViewHolder imple
                     onItemClickListener.onItemClicked(calendarEvents);
                 }
             });
+
     }
 
 
     @Override
     public void applyData(Object object) {
+        mActivity.initDoctorListPopupWindows(layoutListItem, this);
+
         this.calendarEvents = (CalendarEvents) object;
         if (calendarEvents != null) {
             String doctorName = "";
@@ -123,5 +134,15 @@ public class QueueItemViewHolder extends HealthcocoComonRecylcerViewHolder imple
     @Override
     public void onClick(View v) {
         queueListitemlistener.onCheckInClicked(calendarEvents);
+    }
+
+    @Override
+    public void onDoctorSelected(ArrayList<ClinicDoctorProfile> objects) {
+
+    }
+
+    @Override
+    public void onEmptyListFound() {
+
     }
 }

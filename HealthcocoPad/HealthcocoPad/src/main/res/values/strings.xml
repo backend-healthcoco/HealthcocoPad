@@ -1114,4 +1114,5 @@
     <string name="waiting">Waiting</string>
     <string name="engaged">Engaged</string>
     <string name="checked_out">Checked Out</string>
+    <string name="zero">0</string>
 </resources>

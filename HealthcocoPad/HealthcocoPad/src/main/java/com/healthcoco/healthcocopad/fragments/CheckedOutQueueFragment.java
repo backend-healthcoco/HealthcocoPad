@@ -43,6 +43,7 @@ import com.healthcoco.healthcocopad.utilities.Util;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 
 import static com.healthcoco.healthcocopad.enums.AppointmentStatusType.ALL;
 import static com.healthcoco.healthcocopad.enums.CalendarStatus.CHECKED_OUT;
@@ -60,6 +61,7 @@ public class CheckedOutQueueFragment extends HealthCocoFragment implements Local
     public static final int MAX_NUMBER_OF_EVENTS = 30;
     public ArrayList<ClinicDoctorProfile> clinicDoctorProfileList = null;
     CalendarEvents calendarEvents;
+    private HashMap<String, CalendarEvents> calendarEventsHashMap = new HashMap<>();
     private ArrayList<CalendarEvents> calendarEventsList = new ArrayList<>();
     private RecyclerView scheduledQueueRecyclerView;
     private TextView tvNoEventsFound;
@@ -113,7 +115,7 @@ public class CheckedOutQueueFragment extends HealthCocoFragment implements Local
         tvTitle = (TextView) view.findViewById(R.id.tv_title);
         tvCount = (TextView) view.findViewById(R.id.tv_count);
 
-        tvTitle.setText(R.string.reschedule);
+        tvTitle.setText(R.string.checked_out);
 
     }
 
@@ -147,21 +149,35 @@ public class CheckedOutQueueFragment extends HealthCocoFragment implements Local
             getListFromLocal(false);
     }
 
-    private void notifyAdapter(ArrayList<CalendarEvents> responseList) {
-        swipeRefreshLayout.setRefreshing(false);
+    private void fromHashMapAndRefresh(ArrayList<CalendarEvents> responseList) {
         if (!Util.isNullOrEmptyList(responseList)) {
+            for (CalendarEvents calendarEvent :
+                    responseList) {
+                calendarEventsHashMap.put(calendarEvent.getUniqueId(), calendarEvent);
+            }
+        }
+        notifyAdapter(new ArrayList<>(calendarEventsHashMap.values()));
+    }
+
+    private void notifyAdapter(ArrayList<CalendarEvents> calendarEventsArrayList) {
+        swipeRefreshLayout.setRefreshing(false);
+        if (!Util.isNullOrEmptyList(calendarEventsArrayList)) {
             scheduledQueueRecyclerView.setVisibility(View.VISIBLE);
             tvNoEventsFound.setVisibility(View.GONE);
-            Collections.sort(responseList, ComparatorUtil.calendarEventsFromToTimeComparator);
-
-            calendarEventsList.addAll(responseList);
+            Collections.sort(calendarEventsArrayList, ComparatorUtil.calendarEventsFromToTimeComparator);
+            calendarEventsList.clear();
+            calendarEventsList.addAll(calendarEventsArrayList);
             progressLoading.setVisibility(View.GONE);
             mAdapter.notifyDataSetChanged();
+            tvCount.setText(Util.getValidatedValue(calendarEventsArrayList.size()));
         } else {
             scheduledQueueRecyclerView.setVisibility(View.GONE);
             tvNoEventsFound.setVisibility(View.VISIBLE);
+            tvCount.setText(R.string.zero);
+
         }
     }
+
 
     private void getListFromLocal(boolean initialLoading) {
         if (initialLoading) {
@@ -180,6 +196,7 @@ public class CheckedOutQueueFragment extends HealthCocoFragment implements Local
         PAGE_NUMBER = 0;
         isEndOfListAchieved = false;
         scheduledQueueRecyclerView.invalidate();
+        calendarEventsHashMap.clear();
         calendarEventsList.clear();
         //        mAdapter.notifyItemRangeChanged(0, mAdapter.getItemCount());
     }
@@ -200,10 +217,10 @@ public class CheckedOutQueueFragment extends HealthCocoFragment implements Local
                             LogUtils.LOGD(TAG, "getSectionedDataListCalendar  loading Complete");
                             progressLoading.setVisibility(View.GONE);
                             isInitialLoading = false;
-                            notifyAdapter(responseDataList);
+                            fromHashMapAndRefresh(responseDataList);
                             return;
                         }
-                        notifyAdapter(responseDataList);
+                        fromHashMapAndRefresh(responseDataList);
                         return;
                     } else {
                         getListFromLocal(false);

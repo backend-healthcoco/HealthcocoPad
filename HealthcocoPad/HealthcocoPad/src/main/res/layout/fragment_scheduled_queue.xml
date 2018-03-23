@@ -7,7 +7,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <TextView
@@ -24,10 +24,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:paddingBottom="@dimen/list_item_padding"
             android:textSize="@dimen/about_us_social_icon_size"
             android:textStyle="bold" />
 
     </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/grey_light_text" />
 
     <com.healthcoco.healthcocopad.views.CustomSwipeRefreshLayout
         android:id="@+id/swipe_refresh_layout"

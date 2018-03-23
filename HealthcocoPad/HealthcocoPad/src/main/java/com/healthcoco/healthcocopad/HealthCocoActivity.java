@@ -41,7 +41,6 @@ import com.healthcoco.healthcocopad.bean.server.BloodGroup;
 import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
 import com.healthcoco.healthcocopad.bean.server.CityResponse;
 import com.healthcoco.healthcocopad.bean.server.ClinicDetailResponse;
-import com.healthcoco.healthcocopad.bean.server.ClinicDoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.ClinicalNotesDynamicField;
 import com.healthcoco.healthcocopad.bean.server.ComplaintSuggestions;
 import com.healthcoco.healthcocopad.bean.server.DataPermissions;
@@ -110,6 +109,7 @@ import com.healthcoco.healthcocopad.fragments.InitialSyncFragment;
 import com.healthcoco.healthcocopad.fragments.MenuDrawerFragment;
 import com.healthcoco.healthcocopad.listeners.DoctorListPopupWindowListener;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
+import com.healthcoco.healthcocopad.popupwindow.AppointmentDetailsPopupWindow;
 import com.healthcoco.healthcocopad.popupwindow.DoctorListPopupWindow;
 import com.healthcoco.healthcocopad.popupwindow.HealthcocoPopupWindow;
 import com.healthcoco.healthcocopad.popupwindow.PopupWindowListener;
@@ -1801,6 +1801,12 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
     public void initDoctorListPopupWindows(View anchorView, PopupWindowType
             popupWindowType, List<Object> list, DoctorListPopupWindowListener popupWindowListener) {
         DoctorListPopupWindow doctorListPopupWindow = new DoctorListPopupWindow(this, anchorView, popupWindowType, list, popupWindowListener);
+        doctorListPopupWindow.setOutsideTouchable(true);
+        doctorListPopupWindow.setContentView(doctorListPopupWindow.getPopupView());
+    }
+
+    public void initDoctorListPopupWindows(View anchorView, DoctorListPopupWindowListener popupWindowListener) {
+        AppointmentDetailsPopupWindow doctorListPopupWindow = new AppointmentDetailsPopupWindow(this, anchorView, popupWindowListener);
         doctorListPopupWindow.setOutsideTouchable(true);
         doctorListPopupWindow.setContentView(doctorListPopupWindow.getPopupView());
     }

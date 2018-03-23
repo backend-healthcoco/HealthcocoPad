@@ -43,6 +43,7 @@ import com.healthcoco.healthcocopad.utilities.Util;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 
 import static com.healthcoco.healthcocopad.enums.AppointmentStatusType.ALL;
 import static com.healthcoco.healthcocopad.enums.CalendarStatus.ENGAGED;
@@ -63,6 +64,7 @@ public class WaitingQueueFragment extends HealthCocoFragment implements LocalDoI
     public ArrayList<ClinicDoctorProfile> clinicDoctorProfileList = null;
     CalendarEvents calendarEvents;
     private ArrayList<CalendarEvents> calendarEventsList = new ArrayList<>();
+    private HashMap<String, CalendarEvents> calendarEventsHashMap = new HashMap<>();
     private RecyclerView scheduledQueueRecyclerView;
     private TextView tvNoEventsFound;
     private TextView tvTitle;
@@ -115,7 +117,7 @@ public class WaitingQueueFragment extends HealthCocoFragment implements LocalDoI
         tvTitle = (TextView) view.findViewById(R.id.tv_title);
         tvCount = (TextView) view.findViewById(R.id.tv_count);
 
-        tvTitle.setText(R.string.reschedule);
+        tvTitle.setText(R.string.waiting);
 
     }
 
@@ -149,19 +151,32 @@ public class WaitingQueueFragment extends HealthCocoFragment implements LocalDoI
             getListFromLocal(false);
     }
 
-    private void notifyAdapter(ArrayList<CalendarEvents> responseList) {
-        swipeRefreshLayout.setRefreshing(false);
+    private void fromHashMapAndRefresh(ArrayList<CalendarEvents> responseList) {
         if (!Util.isNullOrEmptyList(responseList)) {
+            for (CalendarEvents calendarEvent :
+                    responseList) {
+                calendarEventsHashMap.put(calendarEvent.getUniqueId(), calendarEvent);
+            }
+        }
+        notifyAdapter(new ArrayList<>(calendarEventsHashMap.values()));
+    }
+
+    private void notifyAdapter(ArrayList<CalendarEvents> calendarEventsArrayList) {
+        swipeRefreshLayout.setRefreshing(false);
+        if (!Util.isNullOrEmptyList(calendarEventsArrayList)) {
             scheduledQueueRecyclerView.setVisibility(View.VISIBLE);
             tvNoEventsFound.setVisibility(View.GONE);
-            Collections.sort(responseList, ComparatorUtil.calendarEventsFromToTimeComparator);
-
-            calendarEventsList.addAll(responseList);
+            Collections.sort(calendarEventsArrayList, ComparatorUtil.calendarEventsFromToTimeComparator);
+            calendarEventsList.clear();
+            calendarEventsList.addAll(calendarEventsArrayList);
             progressLoading.setVisibility(View.GONE);
             mAdapter.notifyDataSetChanged();
+            tvCount.setText(Util.getValidatedValue(calendarEventsArrayList.size()));
         } else {
             scheduledQueueRecyclerView.setVisibility(View.GONE);
             tvNoEventsFound.setVisibility(View.VISIBLE);
+            tvCount.setText(R.string.zero);
+
         }
     }
 
@@ -183,6 +198,7 @@ public class WaitingQueueFragment extends HealthCocoFragment implements LocalDoI
         isEndOfListAchieved = false;
         scheduledQueueRecyclerView.invalidate();
         calendarEventsList.clear();
+        calendarEventsHashMap.clear();
         //        mAdapter.notifyItemRangeChanged(0, mAdapter.getItemCount());
     }
 
@@ -202,10 +218,10 @@ public class WaitingQueueFragment extends HealthCocoFragment implements LocalDoI
                             LogUtils.LOGD(TAG, "getSectionedDataListCalendar  loading Complete");
                             progressLoading.setVisibility(View.GONE);
                             isInitialLoading = false;
-                            notifyAdapter(responseDataList);
+                            fromHashMapAndRefresh(responseDataList);
                             return;
                         }
-                        notifyAdapter(responseDataList);
+                        fromHashMapAndRefresh(responseDataList);
                         return;
                     } else {
                         getListFromLocal(false);
@@ -217,8 +233,8 @@ public class WaitingQueueFragment extends HealthCocoFragment implements LocalDoI
                         CalendarEvents responseData = (CalendarEvents) response.getData();
                         LocalDataServiceImpl.getInstance(mApp).addCalendarEventsUpdated(responseData);
                         calendarEventsList.remove(calendarEvents);
-//                        mAdapter.notifyDataSetChanged();
-                        notifyAdapter(calendarEventsList);
+                        calendarEventsHashMap.remove(calendarEvents.getUniqueId());
+                        fromHashMapAndRefresh(calendarEventsList);
                         Util.sendBroadcast(mApp, INTENT_REFRESH_ENGAGED_QUEUE_DATA);
                     }
                     break;
