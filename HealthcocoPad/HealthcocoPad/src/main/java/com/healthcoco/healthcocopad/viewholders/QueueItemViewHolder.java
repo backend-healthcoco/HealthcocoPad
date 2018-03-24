@@ -76,7 +76,7 @@ public class QueueItemViewHolder extends HealthcocoComonRecylcerViewHolder imple
 
     @Override
     public void applyData(Object object) {
-        mActivity.initDoctorListPopupWindows(layoutListItem, this);
+        mActivity.initDoctorListPopupWindows(layoutListItem, object, this);
 
         this.calendarEvents = (CalendarEvents) object;
         if (calendarEvents != null) {

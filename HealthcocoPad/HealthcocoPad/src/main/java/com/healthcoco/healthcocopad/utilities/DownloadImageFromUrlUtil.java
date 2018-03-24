@@ -19,6 +19,7 @@ import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.server.AlreadyRegisteredPatientsResponse;
 import com.healthcoco.healthcocopad.bean.server.ClinicDoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.DoctorProfile;
+import com.healthcoco.healthcocopad.bean.server.PatientCard;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.custom.CircularImageView;
 import com.healthcoco.healthcocopad.enums.PatientProfileScreenType;
@@ -37,8 +38,8 @@ import java.util.HashMap;
  */
 public class DownloadImageFromUrlUtil {
     private static final String TAG = DownloadImageFromUrlUtil.class.getSimpleName();
-    private ImageView ivImage;
     private static HashMap<String, ArrayList<ImageView>> imagesLoadingHashmap = new HashMap<>();
+    private ImageView ivImage;
 
     public static void setAlphabetBackground(int imageSize, String colorCode, char firstCharacter, TextView tvInitialAlphabet, ImageView ivContactProfile) {
         tvInitialAlphabet.setVisibility(View.VISIBLE);
@@ -81,6 +82,11 @@ public class DownloadImageFromUrlUtil {
                 url = clinicDoctorProfile.getThumbnailUrl();
                 colorCode = clinicDoctorProfile.getColorCode();
                 name = clinicDoctorProfile.getFirstName();
+            } else if (object instanceof PatientCard) {
+                PatientCard patientCard = (PatientCard) object;
+                url = patientCard.getThumbnailUrl();
+                colorCode = patientCard.getColorCode();
+                name = patientCard.getFirstName();
             }
             int imageSize = context.getResources().getDimensionPixelOffset(patientProfileScreenType.getImageViewSize());
             int textSize = context.getResources().getDimensionPixelOffset(patientProfileScreenType.getTextSize());

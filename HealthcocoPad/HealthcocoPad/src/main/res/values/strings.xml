@@ -1115,4 +1115,10 @@
     <string name="engaged">Engaged</string>
     <string name="checked_out">Checked Out</string>
     <string name="zero">0</string>
+    <string name="check_in_colon">Check In :</string>
+    <string name="waited_for_colon">Waited For :</string>
+    <string name="engaged_at_colon">Engaged At :</string>
+    <string name="engaged_for_colon">Engaged For :</string>
+    <string name="total_time_colon">Total Time :</string>
+    <string name="check_out_colon">Check Out :</string>
 </resources>
