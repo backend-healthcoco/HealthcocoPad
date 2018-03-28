@@ -506,6 +506,13 @@ public class DateTimeUtil {
 
     }
 
+    public static String getFormttedTimeInMin(long date) {
+        String delegate = "hh:mm:ss";
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(date);
+        return (String) DateFormat.format(delegate, calendar.getTime());
+
+    }
 
     public static long getPreviousDate(long date) {
         Calendar calendar = Calendar.getInstance();

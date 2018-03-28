@@ -1,30 +1,38 @@
 package com.healthcoco.healthcocopad.viewholders;
 
+import android.content.Intent;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.R;
+import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
 import com.healthcoco.healthcocopad.bean.server.ClinicDoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.PatientCard;
 import com.healthcoco.healthcocopad.enums.CalendarStatus;
+import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
+import com.healthcoco.healthcocopad.enums.PatientDetailTabType;
 import com.healthcoco.healthcocopad.enums.PopupWindowType;
+import com.healthcoco.healthcocopad.listeners.AppointmentDetailsPopupListener;
 import com.healthcoco.healthcocopad.listeners.DoctorListPopupWindowListener;
 import com.healthcoco.healthcocopad.listeners.QueueListitemlistener;
 import com.healthcoco.healthcocopad.recyclerview.HealthcocoComonRecylcerViewHolder;
 import com.healthcoco.healthcocopad.recyclerview.HealthcocoRecyclerViewItemClickListener;
 import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
+import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.Util;
 
 import java.util.ArrayList;
+
+import static android.support.v4.app.ActivityCompat.startActivityForResult;
 
 /**
  * Created by Prashant on 07/03/2018.
  */
 
-public class QueueItemViewHolder extends HealthcocoComonRecylcerViewHolder implements View.OnClickListener, DoctorListPopupWindowListener {
+public class QueueItemViewHolder extends HealthcocoComonRecylcerViewHolder implements View.OnClickListener, AppointmentDetailsPopupListener {
     private HealthCocoActivity mActivity;
     private CalendarEvents calendarEvents;
 
@@ -136,13 +144,50 @@ public class QueueItemViewHolder extends HealthcocoComonRecylcerViewHolder imple
         queueListitemlistener.onCheckInClicked(calendarEvents);
     }
 
+
     @Override
-    public void onDoctorSelected(ArrayList<ClinicDoctorProfile> objects) {
+    public void onVisitClicked(Object object) {
+
+        HealthCocoConstants.SELECTED_PATIENTS_USER_ID = calendarEvents.getPatient().getUserId();
+        Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
+        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.PATIENT_DETAIL.ordinal());
+        intent.putExtra(HealthCocoConstants.TAG_TAB_TYPE, PatientDetailTabType.PATIENT_DETAIL_VISIT.ordinal());
+        startActivityForResult(mActivity, intent, 0, null);
 
     }
 
     @Override
-    public void onEmptyListFound() {
+    public void onInvoiceClicked(Object object) {
+        HealthCocoConstants.SELECTED_PATIENTS_USER_ID = calendarEvents.getPatient().getUserId();
+        Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
+        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.PATIENT_DETAIL.ordinal());
+        intent.putExtra(HealthCocoConstants.TAG_TAB_TYPE, PatientDetailTabType.PATIENT_DETAIL_INVOICE.ordinal());
+        startActivityForResult(mActivity, intent, 0, null);
+
+    }
+
+    @Override
+    public void onReceiptClicked(Object object) {
+        HealthCocoConstants.SELECTED_PATIENTS_USER_ID = calendarEvents.getPatient().getUserId();
+        Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
+        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.PATIENT_DETAIL.ordinal());
+        intent.putExtra(HealthCocoConstants.TAG_TAB_TYPE, PatientDetailTabType.PATIENT_DETAIL_RECEIPT.ordinal());
+        startActivityForResult(mActivity, intent, 0, null);
+
+    }
+
+    @Override
+    public void onEditClicked(Object object) {
+
+    }
+
+    @Override
+    public void onRescheduleClicked(Object object) {
+
+    }
+
+    @Override
+    public void onCancelClicked(Object object) {
 
     }
 }

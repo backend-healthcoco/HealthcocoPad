@@ -107,6 +107,7 @@ import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.fragments.DoctorProfileFragment;
 import com.healthcoco.healthcocopad.fragments.InitialSyncFragment;
 import com.healthcoco.healthcocopad.fragments.MenuDrawerFragment;
+import com.healthcoco.healthcocopad.listeners.AppointmentDetailsPopupListener;
 import com.healthcoco.healthcocopad.listeners.DoctorListPopupWindowListener;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
 import com.healthcoco.healthcocopad.popupwindow.AppointmentDetailsPopupWindow;
@@ -1805,7 +1806,7 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
         doctorListPopupWindow.setContentView(doctorListPopupWindow.getPopupView());
     }
 
-    public void initDoctorListPopupWindows(View anchorView, Object object, DoctorListPopupWindowListener popupWindowListener) {
+    public void initDoctorListPopupWindows(View anchorView, Object object, AppointmentDetailsPopupListener popupWindowListener) {
         AppointmentDetailsPopupWindow doctorListPopupWindow = new AppointmentDetailsPopupWindow(this, anchorView, object, popupWindowListener);
         doctorListPopupWindow.setOutsideTouchable(true);
         doctorListPopupWindow.setContentView(doctorListPopupWindow.getPopupView());

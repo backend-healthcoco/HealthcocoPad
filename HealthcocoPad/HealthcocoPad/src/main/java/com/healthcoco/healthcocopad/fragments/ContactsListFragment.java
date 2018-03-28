@@ -473,7 +473,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
     @Override
     public void onQueueClicked(RegisteredPatientDetailsUpdated selecetdPatient) {
 //        mActivity.showLoading(false);
-//        WebDataServiceImpl.getInstance(mApp).addPatientToQueue(WebServiceType.ADD_PATIENT_TO_QUEUE, RegisteredPatientDetailsUpdated.class, selecetdPatient, this, this);
+        WebDataServiceImpl.getInstance(mApp).addPatientToQueue(WebServiceType.ADD_PATIENT_TO_QUEUE, RegisteredPatientDetailsUpdated.class, selecetdPatient, this, this);
     }
 
     @Override

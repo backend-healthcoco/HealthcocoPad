@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -60,6 +61,7 @@ public class ScheduledQueueFragment extends HealthCocoFragment implements LocalD
     private TextView tvNoEventsFound;
     private TextView tvTitle;
     private TextView tvCount;
+    private LinearLayout layoutTitle;
     private SwipeRefreshLayout swipeRefreshLayout;
     private HealthcocoRecyclerViewAdapter mAdapter;
     private int PAGE_NUMBER = 0;
@@ -100,8 +102,12 @@ public class ScheduledQueueFragment extends HealthCocoFragment implements LocalD
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
         tvTitle = (TextView) view.findViewById(R.id.tv_title);
         tvCount = (TextView) view.findViewById(R.id.tv_count);
+        layoutTitle = (LinearLayout) view.findViewById(R.id.layout_title);
 
         tvTitle.setText(R.string.schedule);
+//        layoutTitle.setBackgroundResource(R.color.orange_translucent);
+        tvCount.setTextColor(getResources().getColor(R.color.orange_translucent));
+
     }
 
     @Override

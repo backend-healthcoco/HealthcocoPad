@@ -27,5 +27,6 @@
     <dimen name="image_height_manage_clinic">45px</dimen>
     <dimen name="list_item_image_size">87px</dimen>
     <dimen name="doctor_name_textview_width">500px</dimen>
+    <dimen name="calendar_date_textview_width">300px</dimen>
     <dimen name="date_textview_width">250px</dimen>
 </resources>

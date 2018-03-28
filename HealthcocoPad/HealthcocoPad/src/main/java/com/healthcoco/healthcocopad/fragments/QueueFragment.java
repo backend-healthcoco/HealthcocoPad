@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -77,7 +78,7 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
     private ImageButton btPreviousDate;
     private ImageButton btNextDate;
     private TextView tvSelectedDate;
-
+    private HorizontalScrollView horizontalScrollView;
 
     private ScheduledQueueFragment scheduledQueueFragment;
     private WaitingQueueFragment waitingQueueFragment;
@@ -128,6 +129,8 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
         btPreviousDate = (ImageButton) view.findViewById(R.id.bt_previuos_date);
         btNextDate = (ImageButton) view.findViewById(R.id.bt_next_date);
         tvSelectedDate = (TextView) view.findViewById(R.id.tv_selected_date);
+        horizontalScrollView = (HorizontalScrollView) view.findViewById(R.id.scrollview_horizontal);
+        horizontalScrollView.scrollTo(0, 0); // scroll to application top
 
     }
 

@@ -5,380 +5,406 @@
     android:background="@drawable/shadow_popup_new"
     android:orientation="vertical">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/white"
-        android:orientation="vertical"
-        android:padding="@dimen/list_item_padding">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/grey_background"
-            android:orientation="horizontal"
-            android:padding="@dimen/list_item_padding">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_margin="@dimen/list_item_clinic_profile_padding">
-
-                <include layout="@layout/layout_image_patient_profile" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/tv_contact_name"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/layout_padding_5dp"
-                        android:fontFamily="sans-serif"
-                        android:maxLines="1"
-                        android:text="Name"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/text_size_contact_list_mobile" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/layout_padding_5dp"
-                        android:layout_weight="1"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/tv_patient_id"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:maxLines="1"
-                            android:text="P103456790"
-                            android:textSize="@dimen/edit_text_size_dialog" />
-
-                        <TextView
-                            android:id="@+id/tv_patient_gender"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:maxLines="1"
-                            android:textSize="@dimen/edit_text_size_dialog" />
-                    </LinearLayout>
-
-                    <TextView
-                        android:id="@+id/tv_contact_number"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/layout_padding_5dp"
-                        android:layout_marginTop="@dimen/layout_padding_5dp"
-                        android:maxLines="1"
-                        android:text="1234567890"
-                        android:textSize="@dimen/edit_text_size_dialog" />
-                </LinearLayout>
-            </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/layout_padding_5dp"
-            android:orientation="horizontal"
-            android:padding="@dimen/list_item_padding">
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <com.healthcoco.healthcocopad.views.TextViewFontAwesome
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="3dp"
-                    android:text="@string/fa_watch"
-                    android:textColor="@color/black_translucent_more"
-                    android:textSize="@dimen/text_size_reports_item_label" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="7"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/tv_from_time"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="05:00 AM"
-                        android:textColor="@color/black" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginRight="20dp"
-                        android:text="@string/text_dash"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/text_size_emr_date" />
-
-                    <TextView
-                        android:id="@+id/tv_to_time"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="07:30 AM"
-                        android:textColor="@color/black" />
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/tv_doctor_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/doctors" />
-
-            </LinearLayout>
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/grey_item_border" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@color/white"
             android:orientation="vertical"
             android:padding="@dimen/list_item_padding">
 
             <LinearLayout
-                android:id="@+id/layout_check_in"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@color/grey_background"
                 android:orientation="horizontal"
-                android:padding="@dimen/layout_padding_5dp">
+                android:padding="@dimen/list_item_padding">
 
-                <TextView
+                <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/check_in_colon"
-                    android:textColor="@color/black" />
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/list_item_clinic_profile_padding">
 
-                <TextView
-                    android:id="@+id/tv_check_in"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/list_item_padding" />
+                    <include layout="@layout/layout_image_patient_profile" />
+                </LinearLayout>
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tv_contact_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/layout_padding_5dp"
+                            android:fontFamily="sans-serif"
+                            android:maxLines="1"
+                            android:text="Name"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/text_size_contact_list_mobile" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/layout_padding_5dp"
+                            android:layout_weight="1"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/tv_patient_id"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:maxLines="1"
+                                android:text="P103456790"
+                                android:textSize="@dimen/edit_text_size_dialog" />
+
+                            <TextView
+                                android:id="@+id/tv_patient_gender"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:maxLines="1"
+                                android:textSize="@dimen/edit_text_size_dialog" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/tv_contact_number"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/layout_padding_5dp"
+                            android:layout_marginTop="@dimen/layout_padding_5dp"
+                            android:maxLines="1"
+                            android:text="1234567890"
+                            android:textSize="@dimen/edit_text_size_dialog" />
+                    </LinearLayout>
+                </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/layout_waited_for"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/layout_padding_5dp"
                 android:orientation="horizontal"
-                android:padding="@dimen/layout_padding_5dp">
+                android:padding="@dimen/list_item_padding">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="@string/waited_for_colon"
-                    android:textColor="@color/black" />
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/tv_waited_for"
-                    android:layout_width="wrap_content"
+                    <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="3dp"
+                        android:text="@string/fa_watch"
+                        android:textColor="@color/black_translucent_more"
+                        android:textSize="@dimen/text_size_reports_item_label" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/list_item_padding" />
+                    android:layout_weight="7"
+                    android:orientation="vertical">
 
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tv_from_time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="05:00 AM"
+                            android:textColor="@color/black" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginRight="20dp"
+                            android:text="@string/text_dash"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/text_size_emr_date" />
+
+                        <TextView
+                            android:id="@+id/tv_to_time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="07:30 AM"
+                            android:textColor="@color/black" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/tv_doctor_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/doctors" />
+
+                </LinearLayout>
             </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/grey_item_border" />
 
             <LinearLayout
-                android:id="@+id/layout_engaged_at"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="@dimen/layout_padding_5dp">
+                android:orientation="vertical"
+                android:padding="@dimen/list_item_padding">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:id="@+id/layout_scheduled_at"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/engaged_at_colon"
-                    android:textColor="@color/black" />
+                    android:orientation="horizontal"
+                    android:padding="@dimen/layout_padding_5dp">
 
-                <TextView
-                    android:id="@+id/tv_engaged_at"
-                    android:layout_width="wrap_content"
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/schedeuled_at_colon"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        android:id="@+id/tv_scheduled_at"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/list_item_padding" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_check_in"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/list_item_padding" />
+                    android:orientation="horizontal"
+                    android:padding="@dimen/layout_padding_5dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/check_in_colon"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        android:id="@+id/tv_check_in"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/list_item_padding" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_waited_for"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/layout_padding_5dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/waited_for_colon"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        android:id="@+id/tv_waited_for"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/list_item_padding" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_engaged_at"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/layout_padding_5dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/engaged_at_colon"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        android:id="@+id/tv_engaged_at"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/list_item_padding" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_engaged_for"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/layout_padding_5dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/engaged_for_colon"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        android:id="@+id/tv_engaged_for"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/list_item_padding" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_total_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/layout_padding_5dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/total_time_colon"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        android:id="@+id/tv_total_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/list_item_padding" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_check_out"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/layout_padding_5dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/check_out_colon"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        android:id="@+id/tv_check_out"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/list_item_padding" />
+
+                </LinearLayout>
 
             </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/grey_item_border" />
 
             <LinearLayout
-                android:id="@+id/layout_engaged_for"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/layout_padding_5dp"
                 android:orientation="horizontal"
-                android:padding="@dimen/layout_padding_5dp">
+                android:paddingBottom="@dimen/list_item_padding"
+                android:paddingTop="@dimen/list_item_padding">
 
-                <TextView
+                <LinearLayout
+                    android:id="@+id/bt_add_visit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/engaged_for_colon"
-                    android:textColor="@color/black" />
+                    android:layout_marginLeft="@dimen/item_visits_button_margin_8dp"
+                    android:layout_marginRight="@dimen/item_visits_button_margin_8dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/shape_rounded_corners_item_background_dark_grey"
+                    android:clickable="true"
+                    android:gravity="center"
+                    android:padding="5dp">
 
-                <TextView
-                    android:id="@+id/tv_engaged_for"
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:drawablePadding="5dp"
+                        android:gravity="center|start"
+                        android:paddingLeft="@dimen/item_visits_button_padding_left_right_20dp"
+                        android:paddingRight="@dimen/item_visits_button_padding_left_right_20dp"
+                        android:text="@string/visits"
+                        android:textColor="@drawable/text_selector_grey_blue" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/bt_add_invoice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/list_item_padding" />
+                    android:layout_marginLeft="@dimen/item_visits_button_margin_8dp"
+                    android:layout_marginRight="@dimen/item_visits_button_margin_8dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/shape_rounded_corners_item_background_dark_grey"
+                    android:clickable="true"
+                    android:gravity="center"
+                    android:padding="5dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:drawablePadding="5dp"
+                        android:gravity="center|start"
+                        android:paddingLeft="@dimen/item_visits_button_padding_left_right_20dp"
+                        android:paddingRight="@dimen/item_visits_button_padding_left_right_20dp"
+                        android:text="@string/invoice"
+                        android:textColor="@drawable/text_selector_grey_blue" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/bt_add_receipt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/item_visits_button_margin_8dp"
+                    android:layout_marginRight="@dimen/item_visits_button_margin_8dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/shape_rounded_corners_item_background_dark_grey"
+                    android:clickable="true"
+                    android:gravity="center"
+                    android:padding="5dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:drawablePadding="5dp"
+                        android:gravity="center|start"
+                        android:paddingLeft="@dimen/item_visits_button_padding_left_right_20dp"
+                        android:paddingRight="@dimen/item_visits_button_padding_left_right_20dp"
+                        android:text="@string/receipt"
+                        android:textColor="@drawable/text_selector_grey_blue" />
+                </LinearLayout>
 
             </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/layout_total_time"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="@dimen/layout_padding_5dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/total_time_colon"
-                    android:textColor="@color/black" />
-
-                <TextView
-                    android:id="@+id/tv_total_time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/list_item_padding" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/layout_check_out"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="@dimen/layout_padding_5dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/check_out_colon"
-                    android:textColor="@color/black" />
-
-                <TextView
-                    android:id="@+id/tv_check_out"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/list_item_padding" />
-
-            </LinearLayout>
-
         </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/grey_item_border" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/layout_padding_5dp"
-            android:orientation="horizontal"
-            android:paddingBottom="@dimen/list_item_padding"
-            android:paddingTop="@dimen/list_item_padding">
-
-            <LinearLayout
-                android:id="@+id/bt_add_visit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/item_visits_button_margin_8dp"
-                android:layout_marginRight="@dimen/item_visits_button_margin_8dp"
-                android:layout_weight="1"
-                android:background="@drawable/shape_rounded_corners_item_background_dark_grey"
-                android:clickable="true"
-                android:gravity="center"
-                android:padding="5dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@color/white"
-                    android:drawablePadding="5dp"
-                    android:gravity="center|start"
-                    android:paddingLeft="@dimen/item_visits_button_padding_left_right_20dp"
-                    android:paddingRight="@dimen/item_visits_button_padding_left_right_20dp"
-                    android:text="@string/visits"
-                    android:textColor="@drawable/text_selector_grey_blue" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/bt_add_invoice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/item_visits_button_margin_8dp"
-                android:layout_marginRight="@dimen/item_visits_button_margin_8dp"
-                android:layout_weight="1"
-                android:background="@drawable/shape_rounded_corners_item_background_dark_grey"
-                android:clickable="true"
-                android:gravity="center"
-                android:padding="5dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@color/white"
-                    android:drawablePadding="5dp"
-                    android:gravity="center|start"
-                    android:paddingLeft="@dimen/item_visits_button_padding_left_right_20dp"
-                    android:paddingRight="@dimen/item_visits_button_padding_left_right_20dp"
-                    android:text="@string/invoice"
-                    android:textColor="@drawable/text_selector_grey_blue" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/bt_add_receipt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/item_visits_button_margin_8dp"
-                android:layout_marginRight="@dimen/item_visits_button_margin_8dp"
-                android:layout_weight="1"
-                android:background="@drawable/shape_rounded_corners_item_background_dark_grey"
-                android:clickable="true"
-                android:gravity="center"
-                android:padding="5dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@color/white"
-                    android:drawablePadding="5dp"
-                    android:gravity="center|start"
-                    android:paddingLeft="@dimen/item_visits_button_padding_left_right_20dp"
-                    android:paddingRight="@dimen/item_visits_button_padding_left_right_20dp"
-                    android:text="@string/receipt"
-                    android:textColor="@drawable/text_selector_grey_blue" />
-            </LinearLayout>
-
-        </LinearLayout>
-    </LinearLayout>
+    </ScrollView>
 </LinearLayout>

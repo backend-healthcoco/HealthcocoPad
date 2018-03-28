@@ -40,6 +40,7 @@ import com.healthcoco.healthcocopad.bean.request.TreatmentRequest;
 import com.healthcoco.healthcocopad.bean.request.UserPermissionsRequest;
 import com.healthcoco.healthcocopad.bean.server.AdviceSuggestion;
 import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
+import com.healthcoco.healthcocopad.bean.server.ClinicDoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.Diagram;
 import com.healthcoco.healthcocopad.bean.server.Disease;
 import com.healthcoco.healthcocopad.bean.server.DoctorClinicProfile;
@@ -1544,13 +1545,22 @@ public class WebDataServiceImpl implements GCMRefreshListener {
         }
     }
 
-    public void getCalendarEvents(Class<?> class1, String doctorId, String locationId, String foreignHospitalId, long selectedDate, long updatedTime,
+    public void getCalendarEvents(Class<?> class1, String doctorID, String locationId, String foreignHospitalId, long selectedDate, long updatedTime,
                                   Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         WebServiceType webServiceType = WebServiceType.GET_CALENDAR_EVENTS;
         checkNetworkStatus(mApp);
         if (HealthCocoConstants.isNetworkOnline) {
+
+          /*  String url = webServiceType.getUrl();
+
+            if (!Util.isNullOrEmptyList(clinicDoctorProfileList))
+                for (ClinicDoctorProfile doctorProfile : clinicDoctorProfileList) {
+
+                    url = url + HealthCocoConstants.PARAM_MATRIX_DOCTOR_ID + doctorProfile.getUniqueId();
+                }
+            url = url*/
             String url = webServiceType.getUrl()
-                    + HealthCocoConstants.PARAM_MATRIX_DOCTOR_ID + doctorId
+                  /*  + HealthCocoConstants.PARAM_MATRIX_DOCTOR_ID + doctorID*/
                     + HealthCocoConstants.PARAM_MATRIX_LOCATION_ID + locationId + "?"
                     + HealthCocoConstants.PARAM_MATRIX_HOSPITAL_ID + foreignHospitalId + "?"
                     + HealthCocoConstants.PARAM_FROM + DateTimeUtil.getFirstDayOfMonthMilli(selectedDate)

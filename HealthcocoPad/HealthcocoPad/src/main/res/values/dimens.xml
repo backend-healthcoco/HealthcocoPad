@@ -203,5 +203,6 @@
     <dimen name="text_size_upload_record_dialog">17sp</dimen>
     <dimen name="image_width_height_upload_record">80dp</dimen>
     <dimen name="layout_add_treatment_title_padding_10dp">10dp</dimen>
+    <dimen name="queue_layout_width">350dp</dimen>
 
 </resources>

@@ -15,6 +15,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -69,6 +70,7 @@ public class WaitingQueueFragment extends HealthCocoFragment implements LocalDoI
     private TextView tvNoEventsFound;
     private TextView tvTitle;
     private TextView tvCount;
+    private LinearLayout layoutTitle;
 
     private SwipeRefreshLayout swipeRefreshLayout;
     private HealthcocoRecyclerViewAdapter mAdapter;
@@ -116,8 +118,11 @@ public class WaitingQueueFragment extends HealthCocoFragment implements LocalDoI
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
         tvTitle = (TextView) view.findViewById(R.id.tv_title);
         tvCount = (TextView) view.findViewById(R.id.tv_count);
+        layoutTitle = (LinearLayout) view.findViewById(R.id.layout_title);
 
         tvTitle.setText(R.string.waiting);
+//        layoutTitle.setBackgroundResource(R.color.red_translucent);
+        tvCount.setTextColor(getResources().getColor(R.color.red_translucent));
 
     }
 
@@ -261,11 +266,11 @@ public class WaitingQueueFragment extends HealthCocoFragment implements LocalDoI
                 }
                 return volleyResponseBean;
             case GET_CALENDAR_EVENTS:
-                long selectedMonthInMillis = DateTimeUtil.getLongFromFormattedDayMonthYearFormatString(QueueFragment.DATE_FORMAT_FOR_THIS_SCREEN, DateTimeUtil.getFormattedDateTime(QueueFragment.DATE_FORMAT_FOR_THIS_SCREEN, selectedMonthDayYearInMillis));
+//                long selectedMonthInMillis = DateTimeUtil.getLongFromFormattedDayMonthYearFormatString(QueueFragment.DATE_FORMAT_FOR_THIS_SCREEN, DateTimeUtil.getFormattedDateTime(QueueFragment.DATE_FORMAT_FOR_THIS_SCREEN, selectedMonthDayYearInMillis));
                 volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).
                         getCalendarEventsListResponsePageWise(WebServiceType.GET_CALENDAR_EVENTS, appointmentStatusType,
                                 clinicDoctorProfileList, user.getForeignHospitalId(),
-                                user.getForeignLocationId(), WAITING.getValue(), selectedMonthInMillis,
+                                user.getForeignLocationId(), WAITING.getValue(), selectedMonthDayYearInMillis,
                                 PAGE_NUMBER, MAX_SIZE, null, null);
                 break;
         }

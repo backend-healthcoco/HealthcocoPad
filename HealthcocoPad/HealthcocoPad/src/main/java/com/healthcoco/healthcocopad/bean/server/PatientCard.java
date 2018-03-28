@@ -29,7 +29,7 @@ public class PatientCard extends SugarRecord {
 
     private String bloodGroup;
 
-    private String PID;
+    private String pid;
 
     private String gender;
 
@@ -66,6 +66,14 @@ public class PatientCard extends SugarRecord {
     private String profession;
     @Ignore
     private List<Relations> relations;
+    private String addressId;
+    private String secMobile;
+    private String adhaarId;
+    private String panCardNumber;
+    private String drivingLicenseId;
+    private String insuranceId;
+    private String insuranceName;
+    private List<String> notes;
 
     public String getPatientId() {
         return patientId;
@@ -155,22 +163,6 @@ public class PatientCard extends SugarRecord {
         this.notes = notes;
     }
 
-    private String addressId;
-
-    private String secMobile;
-
-    private String adhaarId;
-
-    private String panCardNumber;
-
-    private String drivingLicenseId;
-
-    private String insuranceId;
-
-    private String insuranceName;
-
-    private List<String> notes;
-
     public String getLocalPatientName() {
         return localPatientName;
     }
@@ -219,12 +211,12 @@ public class PatientCard extends SugarRecord {
         this.bloodGroup = bloodGroup;
     }
 
-    public String getPID() {
-        return PID;
+    public String getPid() {
+        return pid;
     }
 
-    public void setPID(String pID) {
-        PID = pID;
+    public void setPid(String pid) {
+        this.pid = pid;
     }
 
     public String getGender() {

@@ -653,4 +653,33 @@ public class CalendarEvents extends SugarRecord {
     public void setCheckedOutAt(long checkedOutAt) {
         this.checkedOutAt = checkedOutAt;
     }
+
+
+    public String getWaitedForInMin() {
+
+        int hours = (int) (waitedFor / (1000 * 60 * 60));
+        int mins = (int) ((waitedFor / (1000 * 60)) % 60);
+
+        return mins + " min";
+    }
+
+    public String getEngagedForInMin() {
+
+        int hours = (int) (engagedFor / (1000 * 60 * 60));
+        int mins = (int) ((engagedFor / (1000 * 60)) % 60);
+
+        return mins + " min";
+    }
+
+    public String getTotalTimeInMin() {
+
+        long totalTime = waitedFor + engagedFor;
+        int hours = (int) (totalTime / (1000 * 60 * 60));
+        int mins = (int) ((totalTime / (1000 * 60)) % 60);
+
+        return mins + " min";
+    }
+
+
+
 }
