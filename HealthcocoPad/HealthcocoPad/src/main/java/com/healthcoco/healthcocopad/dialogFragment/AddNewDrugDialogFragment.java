@@ -52,6 +52,7 @@ public class AddNewDrugDialogFragment extends HealthCocoDialogFragment
     private AutoCompleteTextView autoTvDrugType;
     private EditText editName;
     private EditText etDuration;
+    private EditText etGenericName;
     private TextView tvFrequency;
     private TextView tvDrugDurationUnit;
 
@@ -117,6 +118,7 @@ public class AddNewDrugDialogFragment extends HealthCocoDialogFragment
         initActionbarTitle(getResources().getString(R.string.add_drug));
         autoTvDrugType = (AutoCompleteTextView) view.findViewById(R.id.autotv_drug_type);
         editName = (EditText) view.findViewById(R.id.edit_drug_name);
+        etGenericName = (EditText) view.findViewById(R.id.edit_generic_name);
         etDuration = (EditText) view.findViewById(R.id.edit_duration);
         tvFrequency = (TextView) view.findViewById(R.id.tv_drug_dosage);
         tvDirection = (TextView) view.findViewById(R.id.tv_drug_direction);
@@ -174,6 +176,7 @@ public class AddNewDrugDialogFragment extends HealthCocoDialogFragment
     private void validateData() {
         String msg = null;
         String name = String.valueOf(editName.getText());
+        String genericName = String.valueOf(etGenericName.getText());
         Util.showToast(mActivity, msg);
         if (selectedDirection != null) {
             ArrayList<DrugDirection> directionsList = new ArrayList<DrugDirection>();
@@ -188,11 +191,13 @@ public class AddNewDrugDialogFragment extends HealthCocoDialogFragment
         }
         if (Util.isNullOrBlank(name))
             msg = getResources().getString(R.string.please_enter_drug_name);
-        if (Util.isNullOrBlank(msg)) {
-            addDrug(name);
-        } else {
-            Util.showToast(mActivity, msg);
-        }
+        if (!Util.isNullOrBlank(name))
+
+            if (Util.isNullOrBlank(msg)) {
+                addDrug(name);
+            } else {
+                Util.showToast(mActivity, msg);
+            }
     }
 
     private DrugDirection getDirection(DrugDirection selectedDirection) {
