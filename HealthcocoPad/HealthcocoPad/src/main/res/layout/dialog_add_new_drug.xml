@@ -12,7 +12,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
         android:layout_marginTop="20dp"
         android:gravity="center"
         android:orientation="horizontal"
@@ -115,6 +114,29 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="15dp">
+
+        <EditText
+            android:id="@+id/edit_generic_name"
+            android:layout_width="@dimen/doctor_name_textview_width"
+            android:layout_height="match_parent"
+            android:background="@drawable/edit_text_bottom_line_grey_solid_transparent"
+            android:hint="@string/generic_name"
+            android:inputType="textCapSentences"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:textColorHint="@color/grey_light_text"
+            android:textSize="@dimen/text_size_add_new_drug_name" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
         android:gravity="center"
         android:orientation="horizontal"
@@ -162,8 +184,9 @@
                 android:layout_marginLeft="10dp"
                 android:layout_weight="0.40"
                 android:background="@drawable/edit_text_bottom_line_grey_solid_transparent"
+                android:digits="0123456789"
                 android:hint="@string/duration"
-                android:inputType="textCapSentences"
+                android:inputType="numberDecimal"
                 android:maxLines="1"
                 android:paddingBottom="10dp"
                 android:paddingTop="10dp"

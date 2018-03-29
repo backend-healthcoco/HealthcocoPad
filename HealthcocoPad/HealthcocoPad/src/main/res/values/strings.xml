@@ -746,6 +746,7 @@
     <string name="advice">Advice&#160;:&#160;</string>
     <string name="advice_tag">Advice</string>
     <string name="drug_name">Drug Name</string>
+    <string name="generic_name">Generic Name</string>
     <string name="frequency">Dosage</string>
     <string name="duration">Duration</string>
     <string name="direction">Direction</string>
