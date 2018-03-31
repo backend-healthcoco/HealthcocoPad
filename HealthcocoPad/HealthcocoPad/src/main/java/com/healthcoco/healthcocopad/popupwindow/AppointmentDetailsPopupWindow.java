@@ -4,9 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.support.design.widget.FloatingActionButton;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -68,6 +70,10 @@ public class AppointmentDetailsPopupWindow extends PopupWindow implements View.O
     private LinearLayout btAddVisit;
     private LinearLayout btAddInvoice;
     private LinearLayout btAddReceipt;
+    private ImageView btEdit;
+    private ImageView btDiscard;
+    private FloatingActionButton btPrint;
+    private ImageView btDismiss;
     private AppointmentDetailsPopupListener popupListener;
 
 
@@ -81,7 +87,7 @@ public class AppointmentDetailsPopupWindow extends PopupWindow implements View.O
     }
 
     public View getPopupView() {
-        LinearLayout linearLayout = (LinearLayout) mActivity.getLayoutInflater().inflate(R.layout.popup_window_patient_appointment_details, null);
+        FrameLayout linearLayout = (FrameLayout) mActivity.getLayoutInflater().inflate(R.layout.popup_window_patient_appointment_details, null);
 
         tvPatientName = (TextView) linearLayout.findViewById(R.id.tv_contact_name);
         tvContactNumber = (TextView) linearLayout.findViewById(R.id.tv_contact_number);
@@ -112,6 +118,11 @@ public class AppointmentDetailsPopupWindow extends PopupWindow implements View.O
         btAddInvoice = (LinearLayout) linearLayout.findViewById(R.id.bt_add_invoice);
         btAddReceipt = (LinearLayout) linearLayout.findViewById(R.id.bt_add_receipt);
 
+        btEdit = (ImageView) linearLayout.findViewById(R.id.bt_edit_appointment);
+        btDiscard = (ImageView) linearLayout.findViewById(R.id.bt_discard_appointment);
+        btPrint = (FloatingActionButton) linearLayout.findViewById(R.id.fl_bt_print);
+        btDismiss = (ImageView) linearLayout.findViewById(R.id.bt_dismiss);
+
         layoutScheduledAt.setVisibility(View.GONE);
         layoutCheckIn.setVisibility(View.GONE);
         layoutWaitedFor.setVisibility(View.GONE);
@@ -141,6 +152,10 @@ public class AppointmentDetailsPopupWindow extends PopupWindow implements View.O
         btAddInvoice.setOnClickListener(this);
         btAddReceipt.setOnClickListener(this);
 
+        btPrint.setOnClickListener(this);
+        btDiscard.setOnClickListener(this);
+        btEdit.setOnClickListener(this);
+        btDismiss.setOnClickListener(this);
     }
 
     public void showOptionsWindow(View v) {
@@ -150,7 +165,7 @@ public class AppointmentDetailsPopupWindow extends PopupWindow implements View.O
 
     public void showOptionsWindowAtLeftCenter(View v) {
         showAtLocation(v, Gravity.LEFT, 0, 0);
-        update(v, -(int) mActivity.getResources().getDimension(R.dimen.queue_layout_width), -v.getHeight() * 2, (int) mActivity.getResources().getDimension(R.dimen.queue_layout_width), LinearLayout.LayoutParams.WRAP_CONTENT);
+        update(v, -(int) mActivity.getResources().getDimension(R.dimen.queue_layout_width), -v.getHeight() * (5 / 2), (int) mActivity.getResources().getDimension(R.dimen.queue_layout_width), LinearLayout.LayoutParams.WRAP_CONTENT);
 
     }
 
@@ -175,6 +190,24 @@ public class AppointmentDetailsPopupWindow extends PopupWindow implements View.O
                 dismiss();
                 break;
 
+            case R.id.bt_edit_appointment:
+                popupListener.onEditClicked(calendarEvents);
+                dismiss();
+                break;
+
+            case R.id.bt_discard_appointment:
+                popupListener.onCancelClicked(calendarEvents);
+                dismiss();
+                break;
+
+            case R.id.fl_bt_print:
+                mActivity.openPatientCardFragment(calendarEvents);
+                dismiss();
+                break;
+
+            case R.id.bt_dismiss:
+                dismiss();
+                break;
 
         }
     }

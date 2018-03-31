@@ -53,9 +53,6 @@ import static com.healthcoco.healthcocopad.enums.AppointmentStatusType.ALL;
 public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgroundListenerOptimised, View.OnClickListener, HealthcocoTextWatcherListener, DoctorListPopupWindowListener {
 
     public static final String DATE_FORMAT_FOR_HEADER_IN_THIS_SCREEN = "EEE, MMM dd,yyyy";
-    public static final String DATE_FORMAT_SELECTED_FOR_THIS_SCREEN = "MMM yyyy";
-    public static final String MONTH_FORMAT_FOR_THIS_SCREEN = "MMM yyyy";
-    public static final String DATE_FORMAT_FOR_THIS_SCREEN = "dd MMM yyyy";
     public static final int MAX_SIZE = 10;
     public static final int MAX_NUMBER_OF_EVENTS = 30;
     private static final String DATE_FORMAT_USED_IN_THIS_SCREEN = "EEE, MMM dd,yyyy";

@@ -106,7 +106,7 @@ public class ScheduledQueueFragment extends HealthCocoFragment implements LocalD
 
         tvTitle.setText(R.string.schedule);
 //        layoutTitle.setBackgroundResource(R.color.orange_translucent);
-        tvCount.setTextColor(getResources().getColor(R.color.orange_translucent));
+        tvCount.setTextColor(getResources().getColor(R.color.orange));
 
     }
 

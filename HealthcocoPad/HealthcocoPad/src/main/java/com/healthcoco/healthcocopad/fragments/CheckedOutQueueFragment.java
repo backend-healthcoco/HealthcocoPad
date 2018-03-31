@@ -120,7 +120,7 @@ public class CheckedOutQueueFragment extends HealthCocoFragment implements Local
 
         tvTitle.setText(R.string.checked_out);
 //        layoutTitle.setBackgroundResource(R.color.blue_light);
-        tvCount.setTextColor(getResources().getColor(R.color.green_translucent));
+        tvCount.setTextColor(getResources().getColor(R.color.blue));
 
     }
 

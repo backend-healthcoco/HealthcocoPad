@@ -33,6 +33,7 @@ import com.healthcoco.healthcocopad.bean.request.DrugInteractionRequest;
 import com.healthcoco.healthcocopad.bean.request.Feedback;
 import com.healthcoco.healthcocopad.bean.request.InvoiceRequest;
 import com.healthcoco.healthcocopad.bean.request.PrescriptionRequest;
+import com.healthcoco.healthcocopad.bean.request.PrintPatientCardRequest;
 import com.healthcoco.healthcocopad.bean.request.ProfessionalMembershipRequest;
 import com.healthcoco.healthcocopad.bean.request.ProfessionalStatementRequest;
 import com.healthcoco.healthcocopad.bean.request.RegisterNewPatientRequest;
@@ -1587,6 +1588,19 @@ public class WebDataServiceImpl implements GCMRefreshListener {
                     + HealthCocoConstants.PARAM_IS_OBJECT_REQUIRED;
 
             getResponse(webServiceType, class1, url, null, null, responseListener,
+                    errorListener);
+        } else {
+            showUserOffline(webServiceType, responseListener);
+        }
+    }
+
+    public void getPatientCardPdf(Class<?> class1, PrintPatientCardRequest printPatientCardRequest,
+                                  Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        WebServiceType webServiceType = WebServiceType.GET_PATIENT_CARD_PDF_URL;
+        checkNetworkStatus(mApp);
+        if (HealthCocoConstants.isNetworkOnline) {
+            String url = webServiceType.getUrl();
+            getResponse(webServiceType, class1, url, printPatientCardRequest, null, responseListener,
                     errorListener);
         } else {
             showUserOffline(webServiceType, responseListener);

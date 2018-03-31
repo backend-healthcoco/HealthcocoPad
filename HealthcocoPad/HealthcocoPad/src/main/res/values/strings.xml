@@ -351,6 +351,7 @@
     <string name="organization">Organization</string>
 
     <string name="gender">Gender</string>
+    <string name="gender_colon">Gender :</string>
     <string name="birthday">Birthday</string>
     <string name="select">Select</string>
 
@@ -583,6 +584,7 @@
 
     <string name="alert_nine_patients_already_registered">9 Patients already registered on this number</string>
     <string name="age">Age</string>
+    <string name="age_colon">Age :</string>
     <string name="or">or</string>
     <string name="blood_group">Blood Group</string>
     <string name="profession">Profession</string>
@@ -1116,10 +1118,15 @@
     <string name="checked_out">Checked Out</string>
     <string name="zero">0</string>
     <string name="schedeuled_at_colon">Scheduled At :</string>
-    <string name="check_in_colon">Check In :</string>
-    <string name="waited_for_colon">Waited For :</string>
-    <string name="engaged_at_colon">Engaged At :</string>
-    <string name="engaged_for_colon">Engaged For :</string>
-    <string name="total_time_colon">Total Time :</string>
-    <string name="check_out_colon">Check Out :</string>
+    <string name="check_in_colon">Check In&#160;:</string>
+    <string name="waited_for_colon">Waited For&#160;:</string>
+    <string name="engaged_at_colon">Engaged At&#160;:</string>
+    <string name="engaged_for_colon">Engaged For&#160;:</string>
+    <string name="total_time_colon">Total Time&#160;:</string>
+    <string name="check_out_colon">Check Out&#160;:</string>
+    <string name="print_patient_card">Print Patient Card</string>
+    <string name="starts_colon">Starts&#160;:</string>
+    <string name="ends_colon">Ends&#160;:</string>
+    <string name="general_note_colon">General Notes&#160;:</string>
+
 </resources>

@@ -122,7 +122,7 @@ public class WaitingQueueFragment extends HealthCocoFragment implements LocalDoI
 
         tvTitle.setText(R.string.waiting);
 //        layoutTitle.setBackgroundResource(R.color.red_translucent);
-        tvCount.setTextColor(getResources().getColor(R.color.red_translucent));
+        tvCount.setTextColor(getResources().getColor(R.color.red_error));
 
     }
 

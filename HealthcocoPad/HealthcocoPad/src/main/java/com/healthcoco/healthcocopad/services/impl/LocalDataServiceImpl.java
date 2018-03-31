@@ -4134,13 +4134,15 @@ public class LocalDataServiceImpl {
         if (appointmentStatusType != null && appointmentStatusType != AppointmentStatusType.ALL)
             whereCondition = whereCondition + " AND " + LocalDatabaseUtils.KEY_STATE + "=\"" + appointmentStatusType + "\"";
 
-        if (!Util.isNullOrEmptyList(clinicDoctorProfileList))
-            for (int i = 0; i < clinicDoctorProfileList.size(); i++) {
-                if (i == 0)
-                    whereCondition = whereCondition + " AND " + LocalDatabaseUtils.KEY_DOCTOR_ID + "=\"" + clinicDoctorProfileList.get(i).getUniqueId() + "\"";
-                else
-                    whereCondition = whereCondition + " OR " + LocalDatabaseUtils.KEY_DOCTOR_ID + "=\"" + clinicDoctorProfileList.get(i).getUniqueId() + "\"";
+        if (!Util.isNullOrEmptyList(clinicDoctorProfileList)) {
+            whereCondition = whereCondition + " AND " + LocalDatabaseUtils.KEY_DOCTOR_ID + " in(";
+            for (ClinicDoctorProfile doctorProfile : clinicDoctorProfileList) {
+                whereCondition = whereCondition + "\"" + doctorProfile.getUniqueId() + "\",";
             }
+            whereCondition = whereCondition.substring(0, whereCondition.length() - 1);
+            whereCondition = whereCondition + ")";
+
+        }
 
         //specifying order by limit and offset query
         String conditionsLimit = " ORDER BY " + LocalDatabaseUtils.KEY_FROM_DATE + " ASC ";

@@ -454,6 +454,8 @@ public enum WebServiceType {
     SEND_REMINDER(Method.GET, "appointment/sendReminder/patient/"),
     CHANGE_APPOINTMENT_STATUS(Method.GET, "appointment/changeStatus/"),
 
+    GET_PATIENT_CARD_PDF_URL(Method.POST, "appointment/downloadpatientCard"),
+
     //    post /v1/notification/device/add
     SEND_GCM_REGISTRATION_ID(Method.POST, "notification/device/add"),
 

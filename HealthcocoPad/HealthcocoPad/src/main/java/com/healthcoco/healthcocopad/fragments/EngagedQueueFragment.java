@@ -123,7 +123,7 @@ public class EngagedQueueFragment extends HealthCocoFragment implements LocalDoI
 
         tvTitle.setText(R.string.engaged);
 //        layoutTitle.setBackgroundResource(R.color.green_translucent);
-        tvCount.setTextColor(getResources().getColor(R.color.green_translucent));
+        tvCount.setTextColor(getResources().getColor(R.color.green_logo));
 
     }
 

@@ -95,6 +95,7 @@ import com.healthcoco.healthcocopad.dialogFragment.AddNewSuggestionDialogFragmen
 import com.healthcoco.healthcocopad.dialogFragment.AddNewTreatmentDialogFragment;
 import com.healthcoco.healthcocopad.dialogFragment.AddUpdateNameDialogFragment;
 import com.healthcoco.healthcocopad.dialogFragment.EnlargedImageViewDialogFragment;
+import com.healthcoco.healthcocopad.dialogFragment.PatientCardDialogFragment;
 import com.healthcoco.healthcocopad.enums.AddUpdateNameDialogType;
 import com.healthcoco.healthcocopad.enums.BooleanTypeValues;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
@@ -1746,6 +1747,18 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
         addNewTreatmentDetailFragment.setTargetFragment(fragment, requestCode);
         addNewTreatmentDetailFragment.show(getSupportFragmentManager(),
                 addNewTreatmentDetailFragment.getClass().getSimpleName());
+
+    }
+
+    public void openPatientCardFragment(CalendarEvents calendarEvents) {
+        PatientCardDialogFragment patientCardDialogFragment = new PatientCardDialogFragment();
+        if (calendarEvents != null) {
+            Bundle bundle = new Bundle();
+            bundle.putParcelable(patientCardDialogFragment.TAG_CALENDAR_EVENTS_DETAIL, Parcels.wrap(calendarEvents));
+            patientCardDialogFragment.setArguments(bundle);
+        }
+        patientCardDialogFragment.show(getSupportFragmentManager(),
+                patientCardDialogFragment.getClass().getSimpleName());
 
     }
 
