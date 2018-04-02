@@ -176,27 +176,27 @@ public class AppointmentDetailsPopupWindow extends PopupWindow implements View.O
         }
         switch (v.getId()) {
             case R.id.bt_add_visit:
-                popupListener.onVisitClicked(calendarEvents);
+                popupListener.onVisitClicked();
                 dismiss();
                 break;
 
             case R.id.bt_add_invoice:
-                popupListener.onInvoiceClicked(calendarEvents);
+                popupListener.onInvoiceClicked();
                 dismiss();
                 break;
 
             case R.id.bt_add_receipt:
-                popupListener.onReceiptClicked(calendarEvents);
+                popupListener.onReceiptClicked();
                 dismiss();
                 break;
 
             case R.id.bt_edit_appointment:
-                popupListener.onEditClicked(calendarEvents);
+                popupListener.onEditClicked();
                 dismiss();
                 break;
 
             case R.id.bt_discard_appointment:
-                popupListener.onCancelClicked(calendarEvents);
+                popupListener.onCancelClicked();
                 dismiss();
                 break;
 

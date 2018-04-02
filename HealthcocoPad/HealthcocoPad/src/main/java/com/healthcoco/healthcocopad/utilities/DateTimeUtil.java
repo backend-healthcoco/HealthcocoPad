@@ -596,4 +596,16 @@ public class DateTimeUtil {
         return cal.getTimeInMillis();
     }
 
+    public static boolean isCurrentMonthSelected(long curentMonthDayYearInMillis, long selectedMonthDayYearInMillis) {
+        Calendar cal = getCalendarInstance();
+        cal.setTimeInMillis(curentMonthDayYearInMillis);
+        int currentMonth = cal.get(Calendar.MONTH);
+        cal.setTimeInMillis(selectedMonthDayYearInMillis);
+        int selectedMonth = cal.get(Calendar.MONTH);
+
+        if (currentMonth == selectedMonth)
+            return true;
+        else
+            return false;
+    }
 }

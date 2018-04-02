@@ -955,6 +955,7 @@
     <string name="alert_add_treatment">Blank treatment cannot be saved.Add Treatments</string>
     <string name="alert_add_invoice">Blank invoice cannot be saved.Add Services</string>
     <string name="please_reschedule_appointment">Please Reschedule Appointment</string>
+    <string name="reschedule_appointment">Reschedule Appointment</string>
     <string name="change_next_review_date_from_calender">Change next review date from Calender.\n Appointment ID:</string>
     <string name="edit_clinical_note">Edit Clinical Note</string>
     <string name="alert_blank_clinical_note">Blank Clinical Note cannot be created</string>

@@ -62,6 +62,7 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
     private User user;
     private User loggedInUser;
     private long selectedMonthDayYearInMillis;
+    private long curentMonthDayYearInMillis;
     private ArrayList<CalendarEvents> calenderEventList = null;
     private AppointmentStatusType appointmentStatusType = ALL;
     private LinkedHashMap<String, ClinicDoctorProfile> clinicDoctorListHashMap = new LinkedHashMap<>();
@@ -141,8 +142,8 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
 
     public void getCalendarEventsList(boolean showLoading) {
         if (showLoading)
-            showLoadingOverlay(true);
-        Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(user, LocalTabelType.CALENDAR_EVENTS);
+            mActivity.showLoading(false);
+        Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(user, LocalTabelType.CALENDAR_EVENTS, selectedMonthDayYearInMillis);
         WebDataServiceImpl.getInstance(mApp).getCalendarEvents(CalendarEvents.class, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(), selectedMonthDayYearInMillis, latestUpdatedTime, this, this);
     }
 
@@ -150,7 +151,7 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
     @Override
     public void onNetworkUnavailable(WebServiceType webServiceType) {
         Util.showToast(mActivity, R.string.user_offline);
-        showLoadingOverlay(false);
+        mActivity.hideLoading();
     }
 
     @Override
@@ -168,9 +169,9 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
 //                        onDateSetonDateSet(null, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
                         refreshDoctorClinicText();
                         selectedMonthDayYearInMillis = calendar.getTimeInMillis();
+                        curentMonthDayYearInMillis = selectedMonthDayYearInMillis;
                         tvSelectedDate.setText(DateTimeUtil.getCurrentFormattedDate(DATE_FORMAT_USED_IN_THIS_SCREEN));
                         getCalendarEventsList(true);
-
                         return;
                     }
                     break;
@@ -179,11 +180,16 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
                         new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_CALENDAR_EVENTS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
                         response.setIsFromLocalAfterApiSuccess(true);
                         return;
+                    } else {
+                        refreshData();
+                        isInitialLoading = false;
+                        mActivity.hideLoading();
                     }
                     break;
                 case ADD_APPOINTMENT:
                     refreshData();
                     isInitialLoading = false;
+                    mActivity.hideLoading();
                     break;
                 case GET_CLINIC_PROFILE:
                     if (response.getData() != null) {
@@ -191,7 +197,7 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
                         formHashMapAndRefresh(selectedClinicProfile.getDoctors());
 //                        initSelectedDoctorClinicData();
                         new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_CLINIC_PROFILE, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
-
+                        mActivity.hideLoading();
                     }
                     if (!response.isUserOnline())
                         onNetworkUnavailable(response.getWebServiceType());
@@ -204,7 +210,7 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
     }
 
     private void refreshDoctorsList() {
-        showLoadingOverlay(true);
+        mActivity.showLoading(true);
         WebDataServiceImpl.getInstance(mApp).getClinicDetails(ClinicDetailResponse.class, user.getForeignLocationId(), this, this);
     }
 
@@ -228,6 +234,9 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
                     selectedClinicProfile = LocalDataServiceImpl.getInstance(mApp).getClinicResponseDetails(user.getForeignLocationId());
                 }
                 return volleyResponseBean;
+            case ADD_CLINIC_PROFILE:
+                LocalDataServiceImpl.getInstance(mApp).addClinicDetailResponse((ClinicDetailResponse) response.getData());
+                break;
             case ADD_CALENDAR_EVENTS:
                 volleyResponseBean = new VolleyResponseBean();
                 volleyResponseBean.setWebServiceType(WebServiceType.ADD_APPOINTMENT);
@@ -248,6 +257,7 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
         waitingQueueFragment.reFreshQueue(selectedMonthDayYearInMillis, clinicDoctorProfileList);
         engagedQueueFragment.reFreshQueue(selectedMonthDayYearInMillis, clinicDoctorProfileList);
         checkedOutQueueFragment.reFreshQueue(selectedMonthDayYearInMillis, clinicDoctorProfileList);
+
 
     }
 
@@ -306,7 +316,12 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
                 if (!DateTimeUtil.isCurrentDateSelected(DATE_FORMAT_USED_IN_THIS_SCREEN,
                         Util.getValidatedValueOrNull(tvSelectedDate))) {
                     if (!isInitialLoading)
-                        refreshData();
+                        if (DateTimeUtil.isCurrentMonthSelected(curentMonthDayYearInMillis, selectedMonthDayYearInMillis))
+                            refreshData();
+                        else {
+                            curentMonthDayYearInMillis = selectedMonthDayYearInMillis;
+                            getCalendarEventsList(true);
+                        }
                 } else
                     tvSelectedDate.setText(R.string.today);
                 break;

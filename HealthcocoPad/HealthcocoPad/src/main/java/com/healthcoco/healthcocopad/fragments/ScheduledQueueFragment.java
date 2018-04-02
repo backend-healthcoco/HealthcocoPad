@@ -41,6 +41,7 @@ import java.util.Collections;
 import java.util.HashMap;
 
 import static com.healthcoco.healthcocopad.enums.AppointmentStatusType.ALL;
+import static com.healthcoco.healthcocopad.enums.AppointmentStatusType.CONFIRM;
 import static com.healthcoco.healthcocopad.enums.CalendarStatus.SCHEDULED;
 import static com.healthcoco.healthcocopad.enums.CalendarStatus.WAITING;
 import static com.healthcoco.healthcocopad.fragments.WaitingQueueFragment.INTENT_REFRESH_WAITING_QUEUE_DATA;
@@ -68,7 +69,7 @@ public class ScheduledQueueFragment extends HealthCocoFragment implements LocalD
     private boolean isEndOfListAchieved;
     private boolean isInitialLoading = true;
     private ProgressBar progressLoading;
-    private AppointmentStatusType appointmentStatusType = ALL;
+    private AppointmentStatusType appointmentStatusType = CONFIRM;
     private User user;
     private long selectedMonthDayYearInMillis;
 

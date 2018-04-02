@@ -47,6 +47,7 @@ import java.util.Collections;
 import java.util.HashMap;
 
 import static com.healthcoco.healthcocopad.enums.AppointmentStatusType.ALL;
+import static com.healthcoco.healthcocopad.enums.AppointmentStatusType.CONFIRM;
 import static com.healthcoco.healthcocopad.enums.CalendarStatus.CHECKED_OUT;
 import static com.healthcoco.healthcocopad.enums.CalendarStatus.ENGAGED;
 
@@ -82,7 +83,7 @@ public class CheckedOutQueueFragment extends HealthCocoFragment implements Local
         }
     };
     private ProgressBar progressLoading;
-    private AppointmentStatusType appointmentStatusType = ALL;
+    private AppointmentStatusType appointmentStatusType = CONFIRM;
     private User user;
     private long selectedMonthDayYearInMillis;
     private boolean receiversRegistered;

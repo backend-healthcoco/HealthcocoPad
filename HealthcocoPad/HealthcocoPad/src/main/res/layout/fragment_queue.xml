@@ -7,48 +7,54 @@
 
     <include layout="@layout/action_bar_home_queue" />
 
-    <HorizontalScrollView
-        android:id="@+id/scrollview_horizontal"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
 
-        <LinearLayout
+        <HorizontalScrollView
+            android:id="@+id/scrollview_horizontal"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:layout_height="match_parent">
 
             <LinearLayout
-                android:id="@+id/layout_scheduled_queue"
-                android:layout_width="@dimen/queue_layout_width"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:orientation="horizontal">
 
+                <LinearLayout
+                    android:id="@+id/layout_scheduled_queue"
+                    android:layout_width="@dimen/queue_layout_width"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_waiting_queue"
+                    android:layout_width="@dimen/queue_layout_width"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_engaged_queue"
+                    android:layout_width="@dimen/queue_layout_width"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_checked_out_queue"
+                    android:layout_width="@dimen/queue_layout_width"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                </LinearLayout>
             </LinearLayout>
+        </HorizontalScrollView>
 
-            <LinearLayout
-                android:id="@+id/layout_waiting_queue"
-                android:layout_width="@dimen/queue_layout_width"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/layout_engaged_queue"
-                android:layout_width="@dimen/queue_layout_width"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/layout_checked_out_queue"
-                android:layout_width="@dimen/queue_layout_width"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-            </LinearLayout>
-        </LinearLayout>
-    </HorizontalScrollView>
-
+    </FrameLayout>
 </LinearLayout>

@@ -1,38 +1,57 @@
 package com.healthcoco.healthcocopad.viewholders;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.android.volley.Response;
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
+import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
+import com.healthcoco.healthcocopad.bean.request.AppointmentRequestToSend;
 import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
 import com.healthcoco.healthcocopad.bean.server.ClinicDoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.PatientCard;
+import com.healthcoco.healthcocopad.dialogFragment.BookAppointmentDialogFragment;
+import com.healthcoco.healthcocopad.enums.AppointmentStatusType;
+import com.healthcoco.healthcocopad.enums.BookAppointmentFromScreenType;
 import com.healthcoco.healthcocopad.enums.CalendarStatus;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
+import com.healthcoco.healthcocopad.enums.CreatedByType;
 import com.healthcoco.healthcocopad.enums.PatientDetailTabType;
 import com.healthcoco.healthcocopad.enums.PopupWindowType;
+import com.healthcoco.healthcocopad.enums.WebServiceType;
+import com.healthcoco.healthcocopad.fragments.PatientAppointmentDetailFragment;
 import com.healthcoco.healthcocopad.listeners.AppointmentDetailsPopupListener;
 import com.healthcoco.healthcocopad.listeners.DoctorListPopupWindowListener;
 import com.healthcoco.healthcocopad.listeners.QueueListitemlistener;
 import com.healthcoco.healthcocopad.recyclerview.HealthcocoComonRecylcerViewHolder;
 import com.healthcoco.healthcocopad.recyclerview.HealthcocoRecyclerViewItemClickListener;
+import com.healthcoco.healthcocopad.services.GsonRequest;
+import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
+import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
+import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
+
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 
 import static android.support.v4.app.ActivityCompat.startActivityForResult;
+import static com.healthcoco.healthcocopad.enums.BookAppointmentFromScreenType.APPOINTMENTS_LIST_RESCHEDULE;
 
 /**
  * Created by Prashant on 07/03/2018.
  */
 
-public class QueueItemViewHolder extends HealthcocoComonRecylcerViewHolder implements View.OnClickListener, AppointmentDetailsPopupListener {
+public class QueueItemViewHolder extends HealthcocoComonRecylcerViewHolder implements View.OnClickListener, AppointmentDetailsPopupListener, Response.Listener<VolleyResponseBean>, GsonRequest.ErrorListener {
     private HealthCocoActivity mActivity;
     private CalendarEvents calendarEvents;
 
@@ -45,6 +64,7 @@ public class QueueItemViewHolder extends HealthcocoComonRecylcerViewHolder imple
     private LinearLayout btEngage;
     private LinearLayout layoutListItem;
     private QueueListitemlistener queueListitemlistener;
+    private BookAppointmentFromScreenType screenType = APPOINTMENTS_LIST_RESCHEDULE;
 
     public QueueItemViewHolder(HealthCocoActivity mActivity, View itemView, HealthcocoRecyclerViewItemClickListener itemClickListener, Object listenerObject) {
         super(mActivity, itemView, itemClickListener);
@@ -146,7 +166,7 @@ public class QueueItemViewHolder extends HealthcocoComonRecylcerViewHolder imple
 
 
     @Override
-    public void onVisitClicked(Object object) {
+    public void onVisitClicked() {
 
         HealthCocoConstants.SELECTED_PATIENTS_USER_ID = calendarEvents.getPatient().getUserId();
         Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
@@ -157,7 +177,7 @@ public class QueueItemViewHolder extends HealthcocoComonRecylcerViewHolder imple
     }
 
     @Override
-    public void onInvoiceClicked(Object object) {
+    public void onInvoiceClicked() {
         HealthCocoConstants.SELECTED_PATIENTS_USER_ID = calendarEvents.getPatient().getUserId();
         Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
         intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.PATIENT_DETAIL.ordinal());
@@ -167,7 +187,7 @@ public class QueueItemViewHolder extends HealthcocoComonRecylcerViewHolder imple
     }
 
     @Override
-    public void onReceiptClicked(Object object) {
+    public void onReceiptClicked() {
         HealthCocoConstants.SELECTED_PATIENTS_USER_ID = calendarEvents.getPatient().getUserId();
         Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
         intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.PATIENT_DETAIL.ordinal());
@@ -177,17 +197,93 @@ public class QueueItemViewHolder extends HealthcocoComonRecylcerViewHolder imple
     }
 
     @Override
-    public void onEditClicked(Object object) {
+    public void onEditClicked() {
+        BookAppointmentDialogFragment dialogFragment = new BookAppointmentDialogFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString(HealthCocoConstants.TAG_UNIQUE_ID, calendarEvents.getAppointmentId());
+        bundle.putParcelable(BookAppointmentDialogFragment.TAG_FROM_SCREEN_TYPE, Parcels.wrap(screenType.ordinal()));
+        dialogFragment.setArguments(bundle);
+        dialogFragment.setTargetFragment(dialogFragment, PatientAppointmentDetailFragment.REQUEST_CODE_APPOINTMENTS_LIST);
+        dialogFragment.show(mActivity.getSupportFragmentManager(), dialogFragment.getClass().getSimpleName());
 
     }
 
     @Override
-    public void onRescheduleClicked(Object object) {
+    public void onCancelClicked() {
+        showConfirmationAlert(null, mActivity.getResources().getString(R.string.confirm_cancel_appointment));
+    }
+
+    public void cancelAppointment() {
+
+        mActivity.showLoading(false);
+        AppointmentRequestToSend appointmentRequestToSend = new AppointmentRequestToSend();
+        appointmentRequestToSend.setDoctorId(calendarEvents.getDoctorId());
+        appointmentRequestToSend.setHospitalId(calendarEvents.getHospitalId());
+        appointmentRequestToSend.setLocationId(calendarEvents.getLocationId());
+        appointmentRequestToSend.setPatientId(calendarEvents.getPatientId());
+        appointmentRequestToSend.setState(AppointmentStatusType.CANCEL);
+        appointmentRequestToSend.setCancelledBy(CreatedByType.DOCTOR);
+        appointmentRequestToSend.setNotifyDoctorByEmail(true);
+        appointmentRequestToSend.setNotifyDoctorBySms(true);
+        appointmentRequestToSend.setNotifyPatientByEmail(true);
+        appointmentRequestToSend.setNotifyPatientBySms(true);
+        appointmentRequestToSend.setAppointmentId(calendarEvents.getAppointmentId());
+        WebDataServiceImpl.getInstance(mApp).addAppointment(CalendarEvents.class, appointmentRequestToSend, this, this);
+    }
+
+    @Override
+    public void onResponse(VolleyResponseBean response) {
+        if (response.getWebServiceType() != null) {
+            LogUtils.LOGD(TAG, "Success " + String.valueOf(response.getWebServiceType()));
+            switch (response.getWebServiceType()) {
+                case ADD_APPOINTMENT:
+                    if (response.isValidData(response) && response.getData() instanceof CalendarEvents) {
+                        calendarEvents = (CalendarEvents) response.getData();
+                        calendarEvents.setIsAddedOnSuccess(true);
+                        LocalDataServiceImpl.getInstance(mApp).addAppointment(calendarEvents);
+                    }
+                    break;
+                case SEND_REMINDER:
+                    Util.showToast(mActivity, R.string.reminder_sent);
+                    break;
+                default:
+                    break;
+            }
+        }
+        mActivity.hideLoading();
+    }
+
+    @Override
+    public void onErrorResponse(VolleyResponseBean volleyResponseBean, String errorMessage) {
 
     }
 
     @Override
-    public void onCancelClicked(Object object) {
+    public void onNetworkUnavailable(WebServiceType webServiceType) {
 
+    }
+
+    private void showConfirmationAlert(String title, String msg) {
+        if (Util.isNullOrBlank(title))
+            title = mActivity.getResources().getString(R.string.confirm);
+        final AlertDialog.Builder alertBuilder = new AlertDialog.Builder(mActivity);
+        alertBuilder.setTitle(title);
+        alertBuilder.setMessage(msg);
+        alertBuilder.setCancelable(false);
+        alertBuilder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                cancelAppointment();
+            }
+        });
+        alertBuilder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+        alertBuilder.create();
+        alertBuilder.show();
     }
 }

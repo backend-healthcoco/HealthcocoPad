@@ -6,15 +6,13 @@ package com.healthcoco.healthcocopad.listeners;
 
 public interface AppointmentDetailsPopupListener {
 
-    public void onVisitClicked(Object object);
+    public void onVisitClicked();
 
-    public void onInvoiceClicked(Object object);
+    public void onInvoiceClicked();
 
-    public void onReceiptClicked(Object object);
+    public void onReceiptClicked();
 
-    public void onEditClicked(Object object);
+    public void onEditClicked();
 
-    public void onRescheduleClicked(Object object);
-
-    public void onCancelClicked(Object object);
+    public void onCancelClicked();
 }

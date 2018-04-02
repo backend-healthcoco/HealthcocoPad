@@ -70,6 +70,8 @@ public class LocalDataServiceImpl {
     private static LocalDataServiceImpl mInstance;
     private static HealthCocoApplication mApp;
     private static Gson gson;
+    private static long selectedDate;
+
 
     private LocalDataServiceImpl() {
     }
@@ -843,6 +845,11 @@ public class LocalDataServiceImpl {
         apiLatestUpdatedTimes.save();
     }
 
+    public Long getLatestUpdatedTime(User user, LocalTabelType localTabelType, long selectedDate) {
+        this.selectedDate = selectedDate;
+        return getLatestUpdatedTime(user, localTabelType);
+    }
+
     public Long getLatestUpdatedTime(User user, LocalTabelType localTabelType) {
         Long latestUpdatedTime = 0l;
         String doctorId = "";
@@ -1096,16 +1103,14 @@ public class LocalDataServiceImpl {
                 break;
 
             case CALENDAR_EVENTS:
-               /* List<CalendarEvents> tempAppointmentsList = CalendarEvents.find(CalendarEvents.class,
-                        LocalDatabaseUtils.KEY_DOCTOR_ID + "= ?",
-                        new String[]{doctorId},
-                        null, "updated_time DESC", "1");
-                if (!Util.isNullOrEmptyList(tempAppointmentsList))
-                    latestUpdatedTime = tempAppointmentsList.get(0).getUpdatedTime();
-                break;*/
                 List<CalendarEvents> tempCalendarEventsList = CalendarEvents.find(CalendarEvents.class,
-                        LocalDatabaseUtils.KEY_DOCTOR_ID + "= ? AND " + LocalDatabaseUtils.KEY_IS_FROM_CALENDAR_API + "= ? AND " + LocalDatabaseUtils.KEY_IS_ADDED_ON_SUCCESS + "= ?",
-                        new String[]{doctorId, "" + BooleanTypeValues.TRUE.getBooleanIntValue(), "" + BooleanTypeValues.FALSE.getBooleanIntValue()},
+                        LocalDatabaseUtils.KEY_DOCTOR_ID + "= ? AND " +
+                                LocalDatabaseUtils.KEY_IS_FROM_CALENDAR_API + "= ? AND " +
+                                LocalDatabaseUtils.KEY_IS_ADDED_ON_SUCCESS + "= ? AND " + LocalDatabaseUtils.KEY_FROM_DATE
+                                + " BETWEEN " + DateTimeUtil.getStartTimeOfDayMilli(selectedDate)
+                                + " AND " + DateTimeUtil.getEndTimeOfDayMilli(selectedDate),
+                        new String[]{doctorId, "" + BooleanTypeValues.TRUE.getBooleanIntValue(),
+                                "" + BooleanTypeValues.FALSE.getBooleanIntValue()},
                         null, "updated_time DESC", "1");
                 if (!Util.isNullOrEmptyList(tempCalendarEventsList))
                     latestUpdatedTime = tempCalendarEventsList.get(0).getUpdatedTime();
@@ -1117,6 +1122,7 @@ public class LocalDataServiceImpl {
         LogUtils.LOGD(TAG, "Latest Updated Time for " + localTabelType + " : " + DateTimeUtil.getFormatedDateAndTime(latestUpdatedTime) + " , " + latestUpdatedTime);
         return latestUpdatedTime;
     }
+
 
     public void addDoctorProfile(DoctorProfile doctorProfile) {
         // setting DOB
