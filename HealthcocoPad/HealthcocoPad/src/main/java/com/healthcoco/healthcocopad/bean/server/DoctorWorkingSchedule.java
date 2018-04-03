@@ -1,9 +1,5 @@
 package com.healthcoco.healthcocopad.bean.server;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
-import com.healthcoco.healthcocopad.bean.WorkingHours;
 import com.healthcoco.healthcocopad.enums.WeekDayNameType;
 import com.orm.SugarRecord;
 import com.orm.annotation.Ignore;

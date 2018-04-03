@@ -12,16 +12,6 @@
         android:background="@color/grey_background"
         android:clickable="true">
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fl_bt_add_treatment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|right"
-            android:layout_marginBottom="@dimen/fab_margin_bottom"
-            android:layout_marginRight="@dimen/fab_margin_right"
-            android:scaleType="center"
-            android:src="@drawable/actionbar_add_me"
-            app:layout_anchorGravity="bottom|right|end" />
 
         <com.healthcoco.healthcocopad.views.CustomSwipeRefreshLayout
             android:id="@+id/swipe_refresh_layout"
@@ -68,6 +58,18 @@
                     android:visibility="visible" />
             </RelativeLayout>
         </com.healthcoco.healthcocopad.views.CustomSwipeRefreshLayout>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fl_bt_add_treatment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_marginBottom="@dimen/fab_margin_bottom"
+            android:layout_marginRight="@dimen/fab_margin_right"
+            android:scaleType="center"
+            android:src="@drawable/actionbar_add_me"
+            app:layout_anchorGravity="bottom|right|end" />
+
     </android.support.design.widget.CoordinatorLayout>
 
     <include layout="@layout/loading_healthcoco_overlay" />

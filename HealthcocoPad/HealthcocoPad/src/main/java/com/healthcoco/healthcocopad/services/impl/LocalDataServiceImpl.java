@@ -16,10 +16,10 @@ import com.healthcoco.healthcocopad.bean.DOB;
 import com.healthcoco.healthcocopad.bean.DoctorExperience;
 import com.healthcoco.healthcocopad.bean.Duration;
 import com.healthcoco.healthcocopad.bean.PersonalHistory;
-import com.healthcoco.healthcocopad.bean.UIPermissions;
+import com.healthcoco.healthcocopad.bean.server.UIPermissions;
 import com.healthcoco.healthcocopad.bean.UiPermissionsBoth;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
-import com.healthcoco.healthcocopad.bean.WorkingHours;
+import com.healthcoco.healthcocopad.bean.server.WorkingHours;
 import com.healthcoco.healthcocopad.bean.server.*;
 import com.healthcoco.healthcocopad.enums.AdvanceSearchOptionsType;
 import com.healthcoco.healthcocopad.enums.AppointmentStatusType;
@@ -35,7 +35,6 @@ import com.healthcoco.healthcocopad.enums.VisitedForType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.enums.WeekDayNameType;
 import com.healthcoco.healthcocopad.fragments.CalendarFragment;
-import com.healthcoco.healthcocopad.fragments.ClinicalProfileFragment;
 import com.healthcoco.healthcocopad.fragments.MenuDrawerFragment;
 import com.healthcoco.healthcocopad.fragments.PatientRegistrationFragment;
 import com.healthcoco.healthcocopad.fragments.QueueFragment;
@@ -55,10 +54,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static android.R.id.list;
 import static com.orm.util.ReflectionUtil.getDomainClasses;
-import static java.lang.Boolean.FALSE;
-import static java.lang.Boolean.TRUE;
 
 /**
  * Created by Shreshtha on 23-01-2017.

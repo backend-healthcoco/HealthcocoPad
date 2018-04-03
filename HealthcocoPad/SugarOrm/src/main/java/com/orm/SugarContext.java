@@ -47,6 +47,10 @@ public class SugarContext {
         ContextUtil.terminate();
     }
 
+    public static SugarDbConfiguration getDbConfiguration() {
+        return dbConfiguration;
+    }
+
     /*
      * Per issue #106 on Github, this method won't be called in
      * any real Android device. This method is used purely in
@@ -57,10 +61,6 @@ public class SugarContext {
         if (this.sugarDb != null) {
             this.sugarDb.getDB().close();
         }
-    }
-
-    public static SugarDbConfiguration getDbConfiguration() {
-        return dbConfiguration;
     }
 
     public SugarDb getSugarDb() {

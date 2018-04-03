@@ -1,6 +1,6 @@
 package com.healthcoco.healthcocopad.bean.request;
 
-import com.healthcoco.healthcocopad.bean.WorkingHours;
+import com.healthcoco.healthcocopad.bean.server.WorkingHours;
 import com.healthcoco.healthcocopad.bean.server.AppointmentRequest;
 import com.healthcoco.healthcocopad.bean.server.UnitValue;
 

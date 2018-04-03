@@ -31,7 +31,8 @@ import java.util.Map;
 public final class ReflectionUtil {
 
     //Prevent instantiation..
-    private ReflectionUtil() { }
+    private ReflectionUtil() {
+    }
 
     public static List<Field> getTableFields(Class table) {
         List<Field> fieldList = SugarConfig.getFields(table);
@@ -78,8 +79,8 @@ public final class ReflectionUtil {
                 try {
                     field = columnType.getDeclaredField("id");
                     field.setAccessible(true);
-                    if(columnValue != null) {
-                        values.put(columnName,String.valueOf(field.get(columnValue)));
+                    if (columnValue != null) {
+                        values.put(columnName, String.valueOf(field.get(columnValue)));
                     } else {
                         values.putNull(columnName);
                     }
@@ -274,7 +275,7 @@ public final class ReflectionUtil {
                 Class domainClass = getDomainClass(className);
                 if (domainClass != null) domainClasses.add(domainClass);
             }
-        } catch (IOException | PackageManager.NameNotFoundException  e) {
+        } catch (IOException | PackageManager.NameNotFoundException e) {
             if (ManifestHelper.isDebugEnabled()) {
                 Log.e("Sugar", e.getMessage());
             }
@@ -287,7 +288,7 @@ public final class ReflectionUtil {
     private static Class getDomainClass(String className) {
         Class<?> discoveredClass = null;
         try {
-            discoveredClass = Class.forName(className, true, Thread.currentThread().getContextClassLoader());
+            discoveredClass = Class.forName(className);
         } catch (Throwable e) {
             String error = (e.getMessage() == null) ? "getDomainClass " + className + " error" : e.getMessage();
             if (ManifestHelper.isDebugEnabled()) {

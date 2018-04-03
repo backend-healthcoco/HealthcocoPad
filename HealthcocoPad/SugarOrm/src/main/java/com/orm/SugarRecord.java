@@ -437,22 +437,6 @@ public class SugarRecord {
         return objectClass.isAnnotationPresent(Table.class) || SugarRecord.class.isAssignableFrom(objectClass);
     }
 
-    public boolean delete() {
-        Long id = getId();
-        Class<?> type = getClass();
-        if (id != null && id > 0L) {
-            if (ManifestHelper.isDebugEnabled()) {
-                Log.i(SUGAR, type.getSimpleName() + " deleted : " + id);
-            }
-            return getSugarDataBase().delete(NamingHelper.toTableName(type), "Id=?", new String[]{id.toString()}) == 1;
-        } else {
-            if (ManifestHelper.isDebugEnabled()) {
-                Log.i(SUGAR, "Cannot delete object: " + type.getSimpleName() + " - object has not been saved");
-            }
-            return false;
-        }
-    }
-
     public static boolean delete(Object object) {
         Class<?> type = object.getClass();
         if (type.isAnnotationPresent(Table.class)) {
@@ -488,6 +472,35 @@ public class SugarRecord {
         } else {
             if (ManifestHelper.isDebugEnabled()) {
                 Log.i(SUGAR, "Cannot delete object: " + object.getClass().getSimpleName() + " - not persisted");
+            }
+            return false;
+        }
+    }
+
+    public static String[] replaceArgs(String[] args) {
+
+        String[] replace = new String[args.length];
+        for (int i = 0; i < args.length; i++) {
+
+            replace[i] = (args[i].equals("true")) ? replace[i] = "1" : (args[i].equals("false")) ? replace[i] = "0" : args[i];
+
+        }
+
+        return replace;
+
+    }
+
+    public boolean delete() {
+        Long id = getId();
+        Class<?> type = getClass();
+        if (id != null && id > 0L) {
+            if (ManifestHelper.isDebugEnabled()) {
+                Log.i(SUGAR, type.getSimpleName() + " deleted : " + id);
+            }
+            return getSugarDataBase().delete(NamingHelper.toTableName(type), "Id=?", new String[]{id.toString()}) == 1;
+        } else {
+            if (ManifestHelper.isDebugEnabled()) {
+                Log.i(SUGAR, "Cannot delete object: " + type.getSimpleName() + " - object has not been saved");
             }
             return false;
         }
@@ -566,19 +579,6 @@ public class SugarRecord {
         public void remove() {
             throw new UnsupportedOperationException();
         }
-    }
-
-    public static String[] replaceArgs(String[] args) {
-
-        String[] replace = new String[args.length];
-        for (int i = 0; i < args.length; i++) {
-
-            replace[i] = (args[i].equals("true")) ? replace[i] = "1" : (args[i].equals("false")) ? replace[i] = "0" : args[i];
-
-        }
-
-        return replace;
-
     }
 
 }

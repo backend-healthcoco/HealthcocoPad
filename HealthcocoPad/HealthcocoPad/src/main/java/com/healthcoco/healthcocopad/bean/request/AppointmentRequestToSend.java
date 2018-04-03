@@ -1,7 +1,7 @@
 package com.healthcoco.healthcocopad.bean.request;
 
 
-import com.healthcoco.healthcocopad.bean.WorkingHours;
+import com.healthcoco.healthcocopad.bean.server.WorkingHours;
 import com.healthcoco.healthcocopad.enums.AppointmentStatusType;
 import com.healthcoco.healthcocopad.enums.CreatedByType;
 
@@ -12,22 +12,20 @@ import org.parceler.Parcel;
  */
 @Parcel
 public class AppointmentRequestToSend {
+    protected boolean isAddedOnSuccess;
+    protected Long createdTime;
+    protected Long updatedTime;
     private String locationId;
     private String hospitalId;
     private String doctorId;
     private String patientId;
-
     private Boolean notifyDoctorByEmail;
     private Boolean notifyDoctorBySms;
     private Boolean notifyPatientByEmail;
     private Boolean notifyPatientBySms;
     private String localPatientName;
     private String mobileNumber;
-
     private String uniqueId;
-    protected boolean isAddedOnSuccess;
-    protected Long createdTime;
-    protected Long updatedTime;
     private String explanation;
     private CreatedByType createdBy;
     private CreatedByType cancelledBy;

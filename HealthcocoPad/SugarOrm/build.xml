@@ -12,7 +12,7 @@
   </patternset>
 
   <property name="jdk.bin.1.6" value="${jdk.home.1.6}/bin"/>
-  <dirname property="module.sugar.basedir" file="${ant.file}"/>
+  <dirname file="${ant.file}" property="module.sugar.basedir"/>
 
   <property name="sugar.output.dir" value="${module.sugar.basedir}/out/"/>
 
@@ -36,26 +36,26 @@
  
   <target name="compile" description="Compile module sugar; production classes">
     <mkdir dir="${sugar.output.dir}"/>
-    <javac destdir="${sugar.output.dir}" fork="false" executable="${jdk.bin.1.6}/javac">
+    <javac destdir="${sugar.output.dir}" executable="${jdk.bin.1.6}/javac" fork="false">
       <classpath refid="sugar.classpath"/>
       <src refid="sugar.module.sourcepath"/>
       <patternset refid="excluded.from.compilation.sugar"/>
     </javac>
 
-      <jar destfile="${sugar.output.dir}/sugar.jar" basedir="${sugar.output.dir}"/>
+      <jar basedir="${sugar.output.dir}" destfile="${sugar.output.dir}/sugar.jar"/>
 
   </target>
 
   <target name="compile-travis" description="Compile module sugar for travis-cl">
 
     <mkdir dir="${sugar.output.dir}"/>
-    <javac destdir="${sugar.output.dir}" fork="false" executable="${jdk.bin.1.6}/javac">
+    <javac destdir="${sugar.output.dir}" executable="${jdk.bin.1.6}/javac" fork="false">
       <classpath refid="sugar.travis.classpath"/>
       <src refid="sugar.module.sourcepath"/>
       <patternset refid="excluded.from.compilation.sugar"/>
     </javac>
 
-      <jar destfile="${sugar.output.dir}/sugar.jar" basedir="${sugar.output.dir}"/>
+      <jar basedir="${sugar.output.dir}" destfile="${sugar.output.dir}/sugar.jar"/>
 
   </target>
 

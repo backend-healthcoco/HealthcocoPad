@@ -32,7 +32,7 @@ import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.adapter.ContactsDetailViewPagerAdapter;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
-import com.healthcoco.healthcocopad.bean.WorkingHours;
+import com.healthcoco.healthcocopad.bean.server.WorkingHours;
 import com.healthcoco.healthcocopad.bean.request.ClinicImageToSend;
 import com.healthcoco.healthcocopad.bean.server.ClinicDetailResponse;
 import com.healthcoco.healthcocopad.bean.server.ClinicImage;
@@ -89,6 +89,16 @@ public class ClinicalProfileFragment extends HealthCocoFragment
     private TextViewFontAwesome btEditClinicAddress;
     private TextViewFontAwesome btEditContact;
     private User user;
+    BroadcastReceiver refreshClinicProfileReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, final Intent intent) {
+            LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
+            if (doctor != null && doctor.getUser() != null && !Util.isNullOrBlank(doctor.getUser().getUniqueId())) {
+                user = doctor.getUser();
+                getClinicDetails();
+            }
+        }
+    };
     private ClinicDetailResponse clinicDetailResponse;
     private TextView tvClinicAddress;
     private LinearLayout containerFromToTimeMon;
@@ -695,15 +705,4 @@ public class ClinicalProfileFragment extends HealthCocoFragment
         super.onDestroy();
         LocalBroadcastManager.getInstance(mActivity).unregisterReceiver(refreshClinicProfileReceiver);
     }
-
-    BroadcastReceiver refreshClinicProfileReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, final Intent intent) {
-            LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
-            if (doctor != null && doctor.getUser() != null && !Util.isNullOrBlank(doctor.getUser().getUniqueId())) {
-                user = doctor.getUser();
-                getClinicDetails();
-            }
-        }
-    };
 }

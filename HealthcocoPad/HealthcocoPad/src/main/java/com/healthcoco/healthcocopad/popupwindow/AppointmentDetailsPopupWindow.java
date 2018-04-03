@@ -1,7 +1,6 @@
 package com.healthcoco.healthcocopad.popupwindow;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.design.widget.FloatingActionButton;
@@ -16,22 +15,16 @@ import android.widget.TextView;
 
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.R;
-import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
-import com.healthcoco.healthcocopad.bean.WorkingHours;
+import com.healthcoco.healthcocopad.bean.server.WorkingHours;
 import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
 import com.healthcoco.healthcocopad.bean.server.PatientCard;
 import com.healthcoco.healthcocopad.enums.CalendarStatus;
-import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
-import com.healthcoco.healthcocopad.enums.PatientDetailTabType;
 import com.healthcoco.healthcocopad.enums.PatientProfileScreenType;
 import com.healthcoco.healthcocopad.listeners.AppointmentDetailsPopupListener;
-import com.healthcoco.healthcocopad.listeners.DoctorListPopupWindowListener;
 import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
 import com.healthcoco.healthcocopad.utilities.DownloadImageFromUrlUtil;
-import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
-import com.healthcoco.healthcocopad.viewholders.ContactsGridViewHolder;
 
 /**
  * Created by neha on 03/05/17.

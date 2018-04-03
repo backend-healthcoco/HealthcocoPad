@@ -1,7 +1,5 @@
 package com.healthcoco.healthcocopad.bean.server;
 
-import com.healthcoco.healthcocopad.bean.WorkingHours;
-import com.healthcoco.healthcocopad.dialogFragment.BookAppointmentDialogFragment;
 import com.healthcoco.healthcocopad.enums.AppointmentStatusType;
 import com.healthcoco.healthcocopad.enums.AppointmentType;
 import com.healthcoco.healthcocopad.enums.CalendarStatus;

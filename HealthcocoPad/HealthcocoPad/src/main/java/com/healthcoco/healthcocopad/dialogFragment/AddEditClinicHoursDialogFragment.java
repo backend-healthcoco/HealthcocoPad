@@ -24,7 +24,7 @@ import com.healthcoco.healthcocopad.bean.server.ClinicWorkingSchedule;
 import com.healthcoco.healthcocopad.bean.server.DoctorClinicProfile;
 import com.healthcoco.healthcocopad.bean.server.DoctorWorkingSchedule;
 import com.healthcoco.healthcocopad.bean.server.Location;
-import com.healthcoco.healthcocopad.bean.WorkingHours;
+import com.healthcoco.healthcocopad.bean.server.WorkingHours;
 import com.healthcoco.healthcocopad.bean.server.WorkingSchedule;
 import com.healthcoco.healthcocopad.custom.CustomTimePickerDialog;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
@@ -50,8 +50,8 @@ import java.util.List;
  */
 public class AddEditClinicHoursDialogFragment extends HealthCocoDialogFragment implements View.OnClickListener, GsonRequest.ErrorListener, Response.Listener<VolleyResponseBean> {
     public static final int DEFAULT_TIME_INTERVAL = 15;
-    private static final String TIME_FORMAT = "hh:mm aaa";
     public static final String TAG_CLINIC_HOURS = "clinicHours";
+    private static final String TIME_FORMAT = "hh:mm aaa";
     private LinearLayout containerWeekDays;
     private ToggleButton toggleButton247;
     private List<?> workingScheduleList;

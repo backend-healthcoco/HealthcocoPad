@@ -1,6 +1,5 @@
 package com.healthcoco.healthcocopad.bean.server;
 
-import com.healthcoco.healthcocopad.bean.WorkingHours;
 import com.healthcoco.healthcocopad.enums.WeekDayNameType;
 import com.orm.SugarRecord;
 import com.orm.annotation.Ignore;

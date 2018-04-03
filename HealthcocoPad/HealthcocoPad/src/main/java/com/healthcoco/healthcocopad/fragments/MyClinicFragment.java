@@ -21,7 +21,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
-import com.healthcoco.healthcocopad.bean.WorkingHours;
+import com.healthcoco.healthcocopad.bean.server.WorkingHours;
 import com.healthcoco.healthcocopad.bean.server.DoctorClinicProfile;
 import com.healthcoco.healthcocopad.bean.server.DoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.DoctorWorkingSchedule;
@@ -81,6 +81,19 @@ public class MyClinicFragment extends HealthCocoFragment implements View.OnClick
     private LinearLayout containerClinicHours;
     private SupportMapFragment mapFragment;
     private GoogleMap googleMap;
+    BroadcastReceiver refreshDoctorClinicProfileReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, final Intent intent) {
+            LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
+            if (doctor != null && doctor.getUser() != null && !Util.isNullOrBlank(doctor.getUser().getUniqueId())) {
+                user = doctor.getUser();
+                DoctorClinicProfile doctorClinicProfile = LocalDataServiceImpl.getInstance(mApp).
+                        getDoctorClinicProfile(user.getUniqueId(), user.getForeignLocationId());
+                if (doctorClinicProfile != null)
+                    refreshSelectedClinicProfileData(doctorClinicProfile);
+            }
+        }
+    };
     private View btEnlargedMap;
     private boolean receiversRegistered;
 
@@ -379,18 +392,4 @@ public class MyClinicFragment extends HealthCocoFragment implements View.OnClick
         super.onDestroy();
         LocalBroadcastManager.getInstance(mActivity).unregisterReceiver(refreshDoctorClinicProfileReceiver);
     }
-
-    BroadcastReceiver refreshDoctorClinicProfileReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, final Intent intent) {
-            LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
-            if (doctor != null && doctor.getUser() != null && !Util.isNullOrBlank(doctor.getUser().getUniqueId())) {
-                user = doctor.getUser();
-                DoctorClinicProfile doctorClinicProfile = LocalDataServiceImpl.getInstance(mApp).
-                        getDoctorClinicProfile(user.getUniqueId(), user.getForeignLocationId());
-                if (doctorClinicProfile != null)
-                    refreshSelectedClinicProfileData(doctorClinicProfile);
-            }
-        }
-    };
 }

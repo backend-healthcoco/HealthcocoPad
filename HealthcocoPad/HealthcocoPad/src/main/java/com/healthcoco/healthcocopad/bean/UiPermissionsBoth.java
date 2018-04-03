@@ -1,6 +1,7 @@
 package com.healthcoco.healthcocopad.bean;
 
 import com.healthcoco.healthcocopad.bean.server.AssignedUserUiPermissions;
+import com.healthcoco.healthcocopad.bean.server.UIPermissions;
 
 import org.parceler.Parcel;
 

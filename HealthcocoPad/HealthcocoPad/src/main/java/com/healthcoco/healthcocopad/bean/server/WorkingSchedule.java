@@ -1,6 +1,5 @@
 package com.healthcoco.healthcocopad.bean.server;
 
-import com.healthcoco.healthcocopad.bean.WorkingHours;
 import com.healthcoco.healthcocopad.enums.WeekDayNameType;
 import com.orm.SugarRecord;
 import com.orm.annotation.Ignore;
@@ -12,15 +11,13 @@ import java.util.List;
 
 @Parcel
 public class WorkingSchedule extends SugarRecord {
-    private WeekDayNameType workingDay;
-
-    @Ignore
-    private List<WorkingHours> workingHours;
-
     protected String foreignLocationId;
     protected String doctorId;
     @Unique
     protected String customUniqueId;
+    private WeekDayNameType workingDay;
+    @Ignore
+    private List<WorkingHours> workingHours;
 
     public String getCustomUniqueId() {
         return customUniqueId;

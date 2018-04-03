@@ -18,16 +18,14 @@ import com.android.volley.Response;
 import com.healthcoco.healthcocopad.HealthCocoDialogFragment;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
-import com.healthcoco.healthcocopad.bean.request.AppointmentRequestToSend;
 import com.healthcoco.healthcocopad.bean.server.AppointmentRequest;
 import com.healthcoco.healthcocopad.bean.server.AppointmentTimeSlotDetails;
 import com.healthcoco.healthcocopad.bean.server.AvailableTimeSlots;
-import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
 import com.healthcoco.healthcocopad.bean.server.DoctorClinicProfile;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.User;
-import com.healthcoco.healthcocopad.bean.WorkingHours;
+import com.healthcoco.healthcocopad.bean.server.WorkingHours;
 import com.healthcoco.healthcocopad.custom.HealthcocoTextWatcher;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocopad.enums.AppointmentSlotsType;
@@ -53,8 +51,6 @@ import org.parceler.Parcels;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-
-import static com.healthcoco.healthcocopad.dialogFragment.BookAppointmentDialogFragment.TIME_SLOT_FORMAT_USED_IN_THIS_SCREEN;
 
 /**
  * Created by Shreshtha on 03-06-2017.
