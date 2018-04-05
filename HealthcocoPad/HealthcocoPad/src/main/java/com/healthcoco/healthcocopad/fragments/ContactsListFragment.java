@@ -39,6 +39,7 @@ import com.healthcoco.healthcocopad.bean.server.UserGroups;
 import com.healthcoco.healthcocopad.custom.AutoCompleteTextViewAdapter;
 import com.healthcoco.healthcocopad.custom.HealthcocoTextWatcher;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
+import com.healthcoco.healthcocopad.dialogFragment.BookAppointmentDialogFragment;
 import com.healthcoco.healthcocopad.dialogFragment.GroupsListDialogFragment;
 import com.healthcoco.healthcocopad.dialogFragment.PatientNumberSearchDialogFragment;
 import com.healthcoco.healthcocopad.enums.AddUpdateNameDialogType;
@@ -74,6 +75,8 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
+
+import static com.healthcoco.healthcocopad.dialogFragment.BookAppointmentDialogFragment.TAG_SELECTED_USER_DATA;
 
 /**
  * Created by Shreshtha on 31-01-2017.
@@ -213,6 +216,12 @@ public class ContactsListFragment extends HealthCocoFragment implements
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        Intent intent = mActivity.getIntent();
+        if (intent != null) {
+            isInHomeActivity = intent.getBooleanExtra(TAG_IS_IN_HOME_ACTIVITY, true);
+            user = Parcels.unwrap(intent.getParcelableExtra(TAG_SELECTED_USER_DATA));
+        }
         init();
         mActivity.showLoading(false);
         new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_FRAGMENT_INITIALISATION_DATA, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
@@ -267,9 +276,10 @@ public class ContactsListFragment extends HealthCocoFragment implements
         lvContacts.setSwipeRefreshLayout(swipeRefreshLayout);
         swipeRefreshLayout.setOnRefreshListener(this);
         btAddNewPatient.setOnClickListener(this);
-        mActivity.initChangeViewButton(this);
         editAdvanceSearchText.addTextChangedListener(new HealthcocoTextWatcher(editAdvanceSearchText, this));
         autoTvAdvanceSearchText.addTextChangedListener(new HealthcocoTextWatcher(autoTvAdvanceSearchText, this));
+        if (isInHomeActivity)
+            mActivity.initChangeViewButton(this);
 
         //For Filter Layout
         btAdvanceSearch.setOnClickListener(this);
@@ -448,8 +458,8 @@ public class ContactsListFragment extends HealthCocoFragment implements
                 openCommonOpenUpActivity(CommonOpenUpFragmentType.PATIENT_DETAIL, null, REQUEST_CODE_CONTACTS_DETAIL);
                 contactsListAdapter.notifyDataSetChanged();
             } else {
-//                Util.sendBroadcast(mApp, BookAppointmentDialogFragment.INTENT_REFRESH_SELECTED_PATIENT);
-//                ((CommonOpenUpActivity) mActivity).setResult(HealthCocoConstants.RESULT_CODE_CONTACTS_LIST);
+                Util.sendBroadcast(mApp, BookAppointmentDialogFragment.INTENT_REFRESH_SELECTED_PATIENT);
+                ((CommonOpenUpActivity) mActivity).setResult(HealthCocoConstants.RESULT_CODE_CONTACTS_LIST);
                 ((CommonOpenUpActivity) mActivity).finish();
             }
         }

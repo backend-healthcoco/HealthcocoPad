@@ -1,8 +1,14 @@
 package com.healthcoco.healthcocopad.fragments;
 
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +28,9 @@ import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.custom.HealthcocoTextWatcher;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
+import com.healthcoco.healthcocopad.dialogFragment.BookAppointmentDialogFragment;
 import com.healthcoco.healthcocopad.enums.AppointmentStatusType;
+import com.healthcoco.healthcocopad.enums.BookAppointmentFromScreenType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.LocalTabelType;
 import com.healthcoco.healthcocopad.enums.PopupWindowType;
@@ -34,9 +42,12 @@ import com.healthcoco.healthcocopad.popupwindow.HealthcocoPopupWindow;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
+import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.ReflectionUtil;
 import com.healthcoco.healthcocopad.utilities.Util;
+
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -44,6 +55,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import static com.healthcoco.healthcocopad.enums.AppointmentStatusType.ALL;
+import static com.healthcoco.healthcocopad.enums.BookAppointmentFromScreenType.APPOINTMENTS_LIST_ADD_NEW;
+import static com.healthcoco.healthcocopad.enums.BookAppointmentFromScreenType.APPOINTMENTS_QUEUE_ADD_NEW;
 
 /**
  * Created by Prashant on 01-03-2018.
@@ -51,6 +64,8 @@ import static com.healthcoco.healthcocopad.enums.AppointmentStatusType.ALL;
 
 
 public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgroundListenerOptimised, View.OnClickListener, HealthcocoTextWatcherListener, DoctorListPopupWindowListener {
+
+    public static final String INTENT_GET_APPOINTMENT_LIST_LOCAL = "com.healthcoco.APPOINTMENT_LIST_LOCAL";
 
     public static final String DATE_FORMAT_FOR_HEADER_IN_THIS_SCREEN = "EEE, MMM dd,yyyy";
     public static final int MAX_SIZE = 10;
@@ -70,18 +85,29 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
     private HealthcocoPopupWindow doctorsListPopupWindow;
     private boolean isSingleDoctor = false;
     private boolean isInitialLoading = true;
+    private boolean receiversRegistered;
 
     private TextView tvDoctorName;
     private LinearLayout lvDoctorName;
     private ImageButton btPreviousDate;
     private ImageButton btNextDate;
     private TextView tvSelectedDate;
+    private FloatingActionButton floatingActionButton;
     private HorizontalScrollView horizontalScrollView;
 
     private ScheduledQueueFragment scheduledQueueFragment;
     private WaitingQueueFragment waitingQueueFragment;
     private EngagedQueueFragment engagedQueueFragment;
     private CheckedOutQueueFragment checkedOutQueueFragment;
+    BroadcastReceiver appointmentListReceiverLocal = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, final Intent intent) {
+            if (intent != null) {
+                refreshData();
+            }
+        }
+    };
+    private BookAppointmentFromScreenType screenType = APPOINTMENTS_QUEUE_ADD_NEW;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -127,6 +153,7 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
         btPreviousDate = (ImageButton) view.findViewById(R.id.bt_previuos_date);
         btNextDate = (ImageButton) view.findViewById(R.id.bt_next_date);
         tvSelectedDate = (TextView) view.findViewById(R.id.tv_selected_date);
+        floatingActionButton = (FloatingActionButton) view.findViewById(R.id.fl_bt_add_appointment);
         horizontalScrollView = (HorizontalScrollView) view.findViewById(R.id.scrollview_horizontal);
         horizontalScrollView.scrollTo(0, 0); // scroll to application top
 
@@ -136,6 +163,7 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
     public void initListeners() {
         btPreviousDate.setOnClickListener(this);
         btNextDate.setOnClickListener(this);
+        floatingActionButton.setOnClickListener(this);
         tvSelectedDate.addTextChangedListener(new HealthcocoTextWatcher(tvSelectedDate, this));
 
     }
@@ -299,6 +327,9 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
                 selectedMonthDayYearInMillis = previousDateTimeInMillis;
                 tvSelectedDate.setText(DateTimeUtil.getFormattedDateTime(DATE_FORMAT_USED_IN_THIS_SCREEN, previousDateTimeInMillis));
                 break;
+            case R.id.fl_bt_add_appointment:
+                bookWalkInAppointment();
+                break;
         }
     }
 
@@ -350,4 +381,36 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
     public void onEmptyListFound() {
 
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (!receiversRegistered) {
+            //receiver for appointment list refresh
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(INTENT_GET_APPOINTMENT_LIST_LOCAL);
+            LocalBroadcastManager.getInstance(mActivity).registerReceiver(appointmentListReceiverLocal, filter);
+            receiversRegistered = true;
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        LocalBroadcastManager.getInstance(mActivity).unregisterReceiver(appointmentListReceiverLocal);
+    }
+
+
+    public void bookWalkInAppointment() {
+        BookAppointmentDialogFragment dialogFragment = new BookAppointmentDialogFragment();
+        Bundle bundle = new Bundle();
+//        bundle.putString(HealthCocoConstants.TAG_UNIQUE_ID, calendarEvents.getAppointmentId());
+        bundle.putParcelable(BookAppointmentDialogFragment.TAG_FROM_SCREEN_TYPE, Parcels.wrap(screenType.ordinal()));
+        dialogFragment.setArguments(bundle);
+        dialogFragment.setTargetFragment(dialogFragment, PatientAppointmentDetailFragment.REQUEST_CODE_APPOINTMENTS_LIST);
+        dialogFragment.show(mActivity.getSupportFragmentManager(), dialogFragment.getClass().getSimpleName());
+
+    }
+
+
 }

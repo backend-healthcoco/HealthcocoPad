@@ -27,6 +27,7 @@ import android.widget.TimePicker;
 import com.android.volley.Response;
 import com.healthcoco.healthcocopad.HealthCocoDialogFragment;
 import com.healthcoco.healthcocopad.R;
+import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.adapter.AppointmentSlotAdapter;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.request.AppointmentRequestToSend;
@@ -57,6 +58,7 @@ import com.healthcoco.healthcocopad.fragments.CommonOpenUpPatientDetailFragment;
 import com.healthcoco.healthcocopad.fragments.ContactsListFragment;
 import com.healthcoco.healthcocopad.fragments.NotificationResponseDataFragment;
 import com.healthcoco.healthcocopad.fragments.PatientAppointmentDetailFragment;
+import com.healthcoco.healthcocopad.fragments.QueueFragment;
 import com.healthcoco.healthcocopad.listeners.AutoCompleteTextViewListener;
 import com.healthcoco.healthcocopad.listeners.HealthcocoTextWatcherListener;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
@@ -89,6 +91,7 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
     public static final int DEFAULT_TIME_INTERVAL = 15;
     public static final String TIME_FORMAT = "hh:mm aaa";
     public static final String TAG_FROM_SCREEN_TYPE = "isFromCalendarFragment";
+    public static final String TAG_SELECTED_USER_DATA = "clinicDataObject";
     public static final String TAG_APPOINTMENT_ID = "appointmentId";
     private static final String DATE_FORMAT_USED_IN_THIS_SCREEN = "EEE, MMM dd,yyyy";
     private static final int REQUEST_CODE_BOOK_APPOINTMENT = 101;
@@ -172,9 +175,11 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Bundle bundle = getArguments();
-        int ordinal = Parcels.unwrap(bundle.getParcelable(TAG_FROM_SCREEN_TYPE));
-        appointmentId = bundle.getString(HealthCocoConstants.TAG_UNIQUE_ID);
-        bookAppointmentFromScreenType = BookAppointmentFromScreenType.values()[ordinal];
+        if (bundle != null) {
+            int ordinal = Parcels.unwrap(bundle.getParcelable(TAG_FROM_SCREEN_TYPE));
+            appointmentId = bundle.getString(HealthCocoConstants.TAG_UNIQUE_ID);
+            bookAppointmentFromScreenType = BookAppointmentFromScreenType.values()[ordinal];
+        }
         if (bookAppointmentFromScreenType != null)
             init();
         setWidthHeight(0.80, 0.90);
@@ -233,6 +238,9 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
         tvSelectedTime.setOnClickListener(this);
         switch (bookAppointmentFromScreenType) {
             case CALENDAR_LIST_ADD_NEW:
+                containerPatientProfileHeader.setOnClickListener(this);
+                break;
+            case APPOINTMENTS_QUEUE_ADD_NEW:
                 containerPatientProfileHeader.setOnClickListener(this);
                 break;
             default:
@@ -487,6 +495,9 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
             case NOTIFICATION_APPOINTMENTS_LIST_RESCHEDULE:
                 intent.setAction(NotificationResponseDataFragment.INTENT_GET_NOTIFICATION_APPOINTMENT_LIST_LOCAL);
                 break;
+            case APPOINTMENTS_QUEUE_RESCHEDULE:
+                intent.setAction(QueueFragment.INTENT_GET_APPOINTMENT_LIST_LOCAL);
+                break;
             default:
                 intent.setAction(PatientAppointmentDetailFragment.INTENT_GET_APPOINTMENT_LIST_LOCAL);
                 break;
@@ -519,10 +530,13 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
                 LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
                 if (doctor != null && doctor.getUser() != null) {
                     user = doctor.getUser();
+                    if (!Util.isNullOrBlank(appointmentId)) {
+                        selectedAppointment = LocalDataServiceImpl.getInstance(mApp).getAppointment(appointmentId);
+                        if (!Util.isNullOrBlank(selectedAppointment.getPatientId()))
+                            HealthCocoConstants.SELECTED_PATIENTS_USER_ID = selectedAppointment.getPatientId();
+                    }
                     selectedPatient = LocalDataServiceImpl.getInstance(mApp).getPatient(HealthCocoConstants.SELECTED_PATIENTS_USER_ID);
                     doctorClinicProfile = LocalDataServiceImpl.getInstance(mApp).getDoctorClinicProfile(user.getUniqueId(), user.getForeignLocationId());
-                    if (!Util.isNullOrBlank(appointmentId))
-                        selectedAppointment = LocalDataServiceImpl.getInstance(mApp).getAppointment(appointmentId);
                 }
                 break;
         }
@@ -588,7 +602,12 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
     }
 
     private void openContactsListScreen() {
-        openCommonOpenUpActivity(CommonOpenUpFragmentType.CONTACTS_LIST, ContactsListFragment.TAG_IS_IN_HOME_ACTIVITY, false, REQUEST_CODE_BOOK_APPOINTMENT);
+        Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
+        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.CONTACTS_LIST.ordinal());
+        intent.putExtra(ContactsListFragment.TAG_IS_IN_HOME_ACTIVITY, false);
+        intent.putExtra(TAG_SELECTED_USER_DATA, Parcels.wrap(user));
+        mActivity.startActivityForResult(intent, REQUEST_CODE_BOOK_APPOINTMENT);
+//        openCommonOpenUpActivity(CommonOpenUpFragmentType.CONTACTS_LIST, ContactsListFragment.TAG_IS_IN_HOME_ACTIVITY, false, REQUEST_CODE_BOOK_APPOINTMENT);
     }
 
     private void validateData() {
@@ -658,6 +677,7 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
             case CALENDAR_LIST_RESCHEDULE:
             case APPOINTMENTS_LIST_RESCHEDULE:
             case NOTIFICATION_APPOINTMENTS_LIST_RESCHEDULE:
+            case APPOINTMENTS_QUEUE_RESCHEDULE:
                 appointment.setState(AppointmentStatusType.RESCHEDULE);
                 break;
             default:
@@ -698,7 +718,9 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
         super.onDestroy();
 //        sendBroadcasts(null);
         mActivity.hideLoading();
-        if (bookAppointmentFromScreenType == BookAppointmentFromScreenType.CALENDAR_LIST_ADD_NEW || bookAppointmentFromScreenType == BookAppointmentFromScreenType.CALENDAR_LIST_RESCHEDULE)
+        if (bookAppointmentFromScreenType == BookAppointmentFromScreenType.CALENDAR_LIST_ADD_NEW
+                || bookAppointmentFromScreenType == BookAppointmentFromScreenType.CALENDAR_LIST_RESCHEDULE
+                || bookAppointmentFromScreenType == BookAppointmentFromScreenType.APPOINTMENTS_QUEUE_RESCHEDULE)
             HealthCocoConstants.SELECTED_PATIENTS_USER_ID = null;
         LocalBroadcastManager.getInstance(mActivity).unregisterReceiver(refreshSelectedContactReceiver);
         LocalBroadcastManager.getInstance(mActivity).unregisterReceiver(refreshPatientProfileReceiver);
@@ -773,4 +795,5 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
     public void onEmptyListFound() {
 
     }
+
 }

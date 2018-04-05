@@ -6,6 +6,7 @@ import android.view.View.OnClickListener;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.healthcoco.healthcocopad.HealthCocoActivity;
@@ -23,6 +24,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 public class ContactsGridViewHolder extends HealthCocoViewHolder implements OnClickListener, ImageLoadedListener {
     private final String TAG = ContactsGridViewHolder.class.getSimpleName();
     private final ImageLoader imageLoader;
+    public TextView tvHeaderView;
     private HealthCocoActivity mActivity;
     private View convertView;
     private ImageButton btAddToGroup;
@@ -34,9 +36,9 @@ public class ContactsGridViewHolder extends HealthCocoViewHolder implements OnCl
     private ImageView ivContactProfile;
     private ImageButton btMail;
     private ImageButton btCall;
-    public TextView tvHeaderView;
     private TextView tvInitialAlphabet;
     private LinearLayout containerTop;
+    private RelativeLayout containerBottom;
     private TextView tvCreatedTime;
     private TextView tvPatientId;
     private ImageButton btEdit;
@@ -90,6 +92,7 @@ public class ContactsGridViewHolder extends HealthCocoViewHolder implements OnCl
         tvInitialAlphabet = (TextView) convertView.findViewById(R.id.tv_initial_aplhabet);
         ivContactProfile = (ImageView) convertView.findViewById(R.id.iv_image);
         containerTop = (LinearLayout) convertView.findViewById(R.id.container_top);
+        containerBottom = (RelativeLayout) convertView.findViewById(R.id.container_call_rx);
 
         btEdit.setOnClickListener(this);
         btQueue.setOnClickListener(this);
@@ -97,6 +100,9 @@ public class ContactsGridViewHolder extends HealthCocoViewHolder implements OnCl
         btGroup.setOnClickListener(this);
         btPrescription.setOnClickListener(this);
         containerTop.setOnClickListener(this);
+
+        if (!optionsListener.isInHomeActivity())
+            containerBottom.setVisibility(View.GONE);
 
         return convertView;
     }

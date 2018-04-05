@@ -95,6 +95,8 @@ public class HealthCocoConstants {
     public static final int REQUEST_CODE_INVOICE = 187;
     public static final int REQUEST_CODE_TREATMENT_LIST = 197;
     public static final int RESULT_CODE_ADD_NEW_TREATMENT_DETAIL = 198;
+    public static final int RESULT_CODE_CONTACTS_LIST = 119;
+
 
 
     public static final String PARAM_UPDATED_TIME = "&updatedTime=";

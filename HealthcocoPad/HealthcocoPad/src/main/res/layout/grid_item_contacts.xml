@@ -78,6 +78,10 @@
                     android:text="1234567890"
                     android:textSize="@dimen/text_size_contact_list_mobile" />
             </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/layout_margin" />
         </LinearLayout>
     </LinearLayout>
 
@@ -86,7 +90,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="10dp"
+        android:paddingBottom="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:visibility="visible">
 
         <ImageButton

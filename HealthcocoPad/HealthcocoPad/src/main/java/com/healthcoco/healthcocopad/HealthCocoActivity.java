@@ -1819,8 +1819,8 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
         doctorListPopupWindow.setContentView(doctorListPopupWindow.getPopupView());
     }
 
-    public void initDoctorListPopupWindows(View anchorView, Object object, AppointmentDetailsPopupListener popupWindowListener) {
-        AppointmentDetailsPopupWindow doctorListPopupWindow = new AppointmentDetailsPopupWindow(this, anchorView, object, popupWindowListener);
+    public void initAppointmentDetailsPopupWindows(View anchorView, Object object) {
+        AppointmentDetailsPopupWindow doctorListPopupWindow = new AppointmentDetailsPopupWindow(this, anchorView, object);
         doctorListPopupWindow.setOutsideTouchable(true);
         doctorListPopupWindow.setContentView(doctorListPopupWindow.getPopupView());
     }

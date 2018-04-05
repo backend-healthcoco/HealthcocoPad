@@ -34,6 +34,7 @@ import com.healthcoco.healthcocopad.fragments.AddNewTreatmentFragment;
 import com.healthcoco.healthcocopad.fragments.AddReceiptFragment;
 import com.healthcoco.healthcocopad.fragments.CommonOpenUpPatientDetailFragment;
 import com.healthcoco.healthcocopad.fragments.CommonUiPermissionsFragment;
+import com.healthcoco.healthcocopad.fragments.ContactsListFragment;
 import com.healthcoco.healthcocopad.fragments.DiagramsListFragment;
 import com.healthcoco.healthcocopad.fragments.DiseaseListFragment;
 import com.healthcoco.healthcocopad.fragments.EnlargedMapViewFragment;
@@ -107,6 +108,9 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
                 break;
             case FEEDBACK:
                 openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_CROSS, ActionbarLeftRightActionTypeDrawables.WITH_SEND, R.string.help_us_to_improve, new FeedbackFragment());
+                break;
+            case CONTACTS_LIST:
+                openFragment(ActionbarType.HIDDEN, 0, new ContactsListFragment());
                 break;
             case ADD_EDIT_CLINIC_IMAGE:
                 openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_DONE, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, R.string.clinic_photos, new AddEditClinicImageFragment());
