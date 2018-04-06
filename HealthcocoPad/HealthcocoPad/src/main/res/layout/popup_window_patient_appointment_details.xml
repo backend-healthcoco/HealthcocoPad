@@ -23,6 +23,13 @@
             android:paddingTop="@dimen/list_item_padding">
 
             <ImageView
+                android:id="@+id/bt_print_patient_card"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/patient_profile_image_padding"
+                android:src="@drawable/icon_print_selector" />
+
+            <ImageView
                 android:id="@+id/bt_edit_appointment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -452,14 +459,16 @@
         </ScrollView>
     </LinearLayout>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fl_bt_print"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|right"
-        android:layout_marginBottom="@dimen/report_thumbnail"
-        android:layout_marginRight="@dimen/margin_left_right_add_vital_signs"
-        android:scaleType="center"
-        android:src="@drawable/icon_print" />
+    <!--
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fl_bt_print"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_marginBottom="@dimen/report_thumbnail"
+            android:layout_marginRight="@dimen/margin_left_right_add_vital_signs"
+            android:scaleType="center"
+            android:src="@drawable/icon_print" />
+    -->
 
 </FrameLayout>

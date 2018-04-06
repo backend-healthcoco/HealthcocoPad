@@ -123,13 +123,14 @@ public class QueueItemViewHolder extends HealthcocoComonRecylcerViewHolder imple
             }
             if (!Util.isNullOrBlank(patientName)) {
                 tvPatientName.setText(patientName);
-            }
+            } else tvPatientName.setText(calendarEvents.getPatient().getFirstName());
             if (!Util.isNullOrBlank(mobileNumber)) {
                 tvMobileNumber.setText(mobileNumber);
             }
             if (!Util.isNullOrBlank(doctorName)) {
                 tvDoctorName.setText(doctorName);
-            }
+            } else tvDoctorName.setText(calendarEvents.getCreatedBy());
+
 
             CalendarStatus calendarEventsStatus = calendarEvents.getStatus();
             if (calendarEventsStatus != null) {
@@ -150,6 +151,7 @@ public class QueueItemViewHolder extends HealthcocoComonRecylcerViewHolder imple
                         break;
                     case CHECKED_OUT:
                         tvTime.setText(DateTimeUtil.getFormttedTime(calendarEvents.getCheckedOutAt()));
+                        btEngage.setVisibility(View.INVISIBLE);
                         break;
                 }
             }

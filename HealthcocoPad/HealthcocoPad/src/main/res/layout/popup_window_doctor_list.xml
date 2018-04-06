@@ -5,80 +5,89 @@
     android:background="@drawable/shadow_popup_new"
     android:orientation="vertical">
 
-
-    <LinearLayout
-        android:id="@+id/layout_select_all"
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/white"
-        android:gravity="center"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/tv_name"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/patient_profile_image_padding"
-            android:layout_weight="1"
-            android:gravity="center|start"
-            android:padding="@dimen/patient_profile_image_padding"
-            android:text="@string/select_all"
-            android:textColor="@color/black" />
-
-        <CheckBox
-            android:id="@+id/cb_select_all"
-            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginRight="@dimen/patient_profile_image_padding"
-            android:clickable="false" />
+            android:orientation="vertical">
 
-    </LinearLayout>
+            <LinearLayout
+                android:id="@+id/layout_select_all"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:gravity="center"
+                android:orientation="horizontal">
 
-    <View
-        android:layout_width="wrap_content"
-        android:layout_height="1dp"
-        android:background="@color/grey_item_border" />
+                <TextView
+                    android:id="@+id/tv_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/patient_profile_image_padding"
+                    android:layout_weight="1"
+                    android:gravity="center|start"
+                    android:padding="@dimen/patient_profile_image_padding"
+                    android:text="@string/select_all"
+                    android:textColor="@color/black" />
 
-    <ListView
-        android:id="@+id/lv_popup_options"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:divider="@color/grey_item_border"
-        android:dividerHeight="1dp"
-        android:scrollbars="none" />
+                <CheckBox
+                    android:id="@+id/cb_select_all"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="@dimen/patient_profile_image_padding"
+                    android:clickable="false" />
 
-    <View
-        android:layout_width="wrap_content"
-        android:layout_height="1dp"
-        android:background="@color/grey_item_border" />
+            </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/white"
-        android:gravity="right"
-        android:orientation="horizontal">
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="1dp"
+                android:background="@color/grey_item_border" />
 
-        <TextView
-            android:id="@+id/tv_clear_all"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/text_padding_appointment"
-            android:gravity="center|start"
-            android:padding="@dimen/patient_profile_image_padding"
-            android:text="@string/clear_all"
-            android:textColor="@color/black" />
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/lv_popup_options"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:divider="@color/grey_item_border"
+                android:dividerHeight="1dp"
+                android:scrollbars="none" />
 
-        <TextView
-            android:id="@+id/tv_apply"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/text_padding_appointment"
-            android:gravity="center|start"
-            android:padding="@dimen/patient_profile_image_padding"
-            android:text="@string/apply"
-            android:textColor="@color/black" />
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="1dp"
+                android:background="@color/grey_item_border" />
 
-    </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:gravity="right"
+                android:orientation="horizontal">
 
+                <TextView
+                    android:id="@+id/tv_clear_all"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/text_padding_appointment"
+                    android:gravity="center|start"
+                    android:padding="@dimen/patient_profile_image_padding"
+                    android:text="@string/clear_all"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:id="@+id/tv_apply"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/text_padding_appointment"
+                    android:gravity="center|start"
+                    android:padding="@dimen/patient_profile_image_padding"
+                    android:text="@string/apply"
+                    android:textColor="@color/black" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
 </LinearLayout>

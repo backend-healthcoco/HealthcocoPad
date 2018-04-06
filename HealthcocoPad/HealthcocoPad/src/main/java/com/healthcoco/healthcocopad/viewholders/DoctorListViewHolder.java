@@ -16,17 +16,18 @@ import com.healthcoco.healthcocopad.bean.server.UserGroups;
 import com.healthcoco.healthcocopad.enums.PatientProfileScreenType;
 import com.healthcoco.healthcocopad.listeners.AssignGroupListener;
 import com.healthcoco.healthcocopad.listeners.CBSelectedItemTypeListener;
+import com.healthcoco.healthcocopad.recyclerview.HealthcocoComonRecylcerViewHolder;
 import com.healthcoco.healthcocopad.utilities.DownloadImageFromUrlUtil;
 import com.healthcoco.healthcocopad.utilities.Util;
 
 /**
  * Created by neha on 23/11/15.
  */
-public class DoctorListViewHolder extends HealthCocoViewHolder implements CompoundButton.OnCheckedChangeListener, View.OnClickListener {
+public class DoctorListViewHolder extends HealthcocoComonRecylcerViewHolder implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
     CBSelectedItemTypeListener cbSelectedItemTypeListener;
     private HealthCocoActivity mActivity;
-    private ClinicDoctorProfile objData;
+    private ClinicDoctorProfile clinicDoctorProfile;
     private LinearLayout layoutImage;
     private LinearLayout layoutDoctorList;
     private TextView tvName;
@@ -35,41 +36,37 @@ public class DoctorListViewHolder extends HealthCocoViewHolder implements Compou
     private ImageView ivContactProfile;
     private CheckBox cbSelectDoctor;
 
-    public DoctorListViewHolder(HealthCocoActivity mActivity, CBSelectedItemTypeListener cbSelectedItemTypeListener) {
-        super(mActivity);
+    public DoctorListViewHolder(HealthCocoActivity mActivity, View itemView, Object listenerObject) {
+        super(mActivity, itemView);
         this.mActivity = mActivity;
-        this.cbSelectedItemTypeListener = cbSelectedItemTypeListener;
+        this.cbSelectedItemTypeListener = (CBSelectedItemTypeListener) listenerObject;
     }
 
-    @Override
-    public void setData(Object object) {
-        this.objData = (ClinicDoctorProfile) object;
-    }
 
     @Override
-    public void applyData() {
-        ClinicDoctorProfile clinicDoctorProfile = null;
-        if (objData instanceof ClinicDoctorProfile)
-            clinicDoctorProfile = (ClinicDoctorProfile) objData;
+    public void applyData(Object object) {
+        clinicDoctorProfile = null;
+        if (object instanceof ClinicDoctorProfile)
+            clinicDoctorProfile = (ClinicDoctorProfile) object;
         if (clinicDoctorProfile != null) {
             tvName.setText(Util.getValidatedValue(clinicDoctorProfile.getFirstNameWithTitle()));
             DownloadImageFromUrlUtil.loadImageWithInitialAlphabet(mActivity, PatientProfileScreenType.IN_EMR_HEADER, clinicDoctorProfile, progressLoading, ivContactProfile, tvInitialAlphabet);
         }
         if (cbSelectedItemTypeListener.isInitialLaunch()) {
-            if (cbSelectedItemTypeListener.getDoctorProfileArrayList().contains(clinicDoctorProfile.getUniqueId())) {
-                cbSelectDoctor.setChecked(true);
-                cbSelectedItemTypeListener.onCBSelectedItemTypeCheckClicked(true, objData);
-            }
+            if (!Util.isNullOrEmptyList(cbSelectedItemTypeListener.getDoctorProfileArrayList()))
+                if (cbSelectedItemTypeListener.getDoctorProfileArrayList().contains(clinicDoctorProfile.getUniqueId())) {
+                    cbSelectDoctor.setChecked(true);
+                    cbSelectedItemTypeListener.onCBSelectedItemTypeCheckClicked(true, clinicDoctorProfile);
+                }
         } else {
-            cbSelectedItemTypeListener.onCBSelectedItemTypeCheckClicked(cbSelectedItemTypeListener.isSelectAll(), objData);
+            cbSelectedItemTypeListener.onCBSelectedItemTypeCheckClicked(cbSelectedItemTypeListener.isSelectAll(), clinicDoctorProfile);
             cbSelectDoctor.setChecked(cbSelectedItemTypeListener.isSelectAll());
         }
         layoutImage.setVisibility(View.VISIBLE);
     }
 
     @Override
-    public View getContentView() {
-        View convertView = inflater.inflate(R.layout.item_doctor_popup_list, null);
+    public void initViews(View convertView) {
         layoutImage = (LinearLayout) convertView.findViewById(R.id.layout_image);
         layoutDoctorList = (LinearLayout) convertView.findViewById(R.id.layout_doctor_list);
         tvName = (TextView) convertView.findViewById(R.id.tv_name);
@@ -81,13 +78,11 @@ public class DoctorListViewHolder extends HealthCocoViewHolder implements Compou
 
         cbSelectDoctor.setOnCheckedChangeListener(this);
         convertView.setOnClickListener(this);
-
-        return convertView;
     }
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        cbSelectedItemTypeListener.onCBSelectedItemTypeCheckClicked(isChecked, objData);
+        cbSelectedItemTypeListener.onCBSelectedItemTypeCheckClicked(isChecked, clinicDoctorProfile);
     }
 
     @Override

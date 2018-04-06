@@ -6,5 +6,5 @@ package com.healthcoco.healthcocopad.enums;
 
 public enum AdapterType {
 
-    APOINTMENT_QUEUE;
+    APOINTMENT_QUEUE, DOCTOR_POPUP_LIST;
 }

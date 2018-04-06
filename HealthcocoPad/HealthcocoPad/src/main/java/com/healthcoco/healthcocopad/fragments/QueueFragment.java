@@ -1,6 +1,7 @@
 package com.healthcoco.healthcocopad.fragments;
 
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -20,6 +21,7 @@ import android.widget.TextView;
 
 import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
+import com.healthcoco.healthcocopad.activities.HomeActivity;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
 import com.healthcoco.healthcocopad.bean.server.ClinicDetailResponse;
@@ -91,10 +93,11 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
     private LinearLayout lvDoctorName;
     private ImageButton btPreviousDate;
     private ImageButton btNextDate;
+    private ImageButton btMenu;
     private TextView tvSelectedDate;
     private FloatingActionButton floatingActionButton;
     private HorizontalScrollView horizontalScrollView;
-
+    private View.OnClickListener clickListener;
     private ScheduledQueueFragment scheduledQueueFragment;
     private WaitingQueueFragment waitingQueueFragment;
     private EngagedQueueFragment engagedQueueFragment;
@@ -108,6 +111,12 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
         }
     };
     private BookAppointmentFromScreenType screenType = APPOINTMENTS_QUEUE_ADD_NEW;
+
+    public QueueFragment(Activity activity) {
+        super();
+        clickListener = (View.OnClickListener) activity;
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -148,6 +157,7 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
 
     @Override
     public void initViews() {
+        btMenu = (ImageButton) view.findViewById(R.id.bt_menu);
         tvDoctorName = (TextView) view.findViewById(R.id.tv_doctor_name);
         lvDoctorName = (LinearLayout) view.findViewById(R.id.lv_doctor_name);
         btPreviousDate = (ImageButton) view.findViewById(R.id.bt_previuos_date);
@@ -156,7 +166,6 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
         floatingActionButton = (FloatingActionButton) view.findViewById(R.id.fl_bt_add_appointment);
         horizontalScrollView = (HorizontalScrollView) view.findViewById(R.id.scrollview_horizontal);
         horizontalScrollView.scrollTo(0, 0); // scroll to application top
-
     }
 
     @Override
@@ -165,6 +174,8 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
         btNextDate.setOnClickListener(this);
         floatingActionButton.setOnClickListener(this);
         tvSelectedDate.addTextChangedListener(new HealthcocoTextWatcher(tvSelectedDate, this));
+
+        btMenu.setOnClickListener(clickListener);
 
     }
 

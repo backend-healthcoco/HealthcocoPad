@@ -72,14 +72,14 @@ public class DoctorPopupListViewAdapter extends BaseAdapter {
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        if (convertView == null) {
-            holder = new DoctorListViewHolder(mActivity, cbSelectedItemTypeListener);
+//        if (convertView == null) {
+         /*   holder = new DoctorListViewHolder(mActivity, cbSelectedItemTypeListener);
             convertView = holder.getContentView();
             convertView.setTag(holder);
         } else
             holder = (DoctorListViewHolder) convertView.getTag();
         holder.setData(getItem(position));
-        holder.applyData();
+        holder.applyData();*/
         return convertView;
     }
 

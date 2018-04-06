@@ -120,10 +120,15 @@ public class PatientCardDialogFragment extends HealthCocoDialogFragment implemen
         if (calendarEvents.getPatient() != null) {
             patient = calendarEvents.getPatient();
             LogUtils.LOGD(TAG, "Unique Id " + patient.getUniqueId());
-            tvPatientName.setText(Util.getValidatedValue(patient.getLocalPatientName()));
             tvContactNumber.setText(Util.getValidatedValue(patient.getMobileNumber()));
             tvPatientId.setText("(" + Util.getValidatedValue(patient.getPid()) + ")");
             String formattedGenderAge = Util.getFormattedGenderAge(patient);
+
+            String patientName = Util.getValidatedValue(patient.getLocalPatientName());
+            if (!Util.isNullOrBlank(patientName)) {
+                tvPatientName.setText(patientName);
+            } else tvPatientName.setText(calendarEvents.getPatient().getFirstName());
+
             if (!Util.isNullOrBlank(formattedGenderAge)) {
                 tvGender.setVisibility(View.VISIBLE);
                 tvGender.setText(formattedGenderAge);
@@ -134,7 +139,10 @@ public class PatientCardDialogFragment extends HealthCocoDialogFragment implemen
             DownloadImageFromUrlUtil.loadImageWithInitialAlphabet(mActivity, PatientProfileScreenType.IN_PATIENTS_LIST, patient, null, ivContactProfile, tvInitialAlphabet);
         }
 
-        tvDoctorName.setText(Util.getValidatedValue(calendarEvents.getDoctorName()));
+        String doctorName = Util.getValidatedValueOrNull(calendarEvents.getDoctorName());
+        if (!Util.isNullOrBlank(doctorName)) {
+            tvDoctorName.setText(doctorName);
+        } else tvDoctorName.setText(calendarEvents.getCreatedBy());
 
         if (calendarEvents.getTime() != null && calendarEvents.getTime().getFromTime() != null && calendarEvents.getTime().getToTime() != null) {
             WorkingHours workingHours = calendarEvents.getTime();

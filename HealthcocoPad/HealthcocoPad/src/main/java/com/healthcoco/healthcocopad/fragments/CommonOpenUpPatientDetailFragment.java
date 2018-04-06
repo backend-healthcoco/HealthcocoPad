@@ -40,6 +40,7 @@ import com.healthcoco.healthcocopad.enums.ActionbarLeftRightActionTypeDrawables;
 import com.healthcoco.healthcocopad.enums.ActionbarType;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
+import com.healthcoco.healthcocopad.enums.LocalTabelType;
 import com.healthcoco.healthcocopad.enums.PatientDetailTabType;
 import com.healthcoco.healthcocopad.enums.PatientProfileScreenType;
 import com.healthcoco.healthcocopad.enums.PopupWindowType;
@@ -575,7 +576,9 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                         initData();
                         refreshDoctorClinicText();
                         getPatientAmountDetails();
-                        visitsFragment.refreshData(PatientDetailTabType.PATIENT_DETAIL_VISIT, clinicDoctorProfileList);
+                        Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(user, LocalTabelType.VISIT_DETAILS);
+                        if (latestUpdatedTime < 1)
+                            visitsFragment.refreshData(PatientDetailTabType.PATIENT_DETAIL_VISIT, clinicDoctorProfileList);
                         if (ordinal != 0) {
                             mViewPager.setCurrentItem(ordinal);
 //                            prescriptionDetailFragment.refreshData(PatientDetailTabType.PATIENT_DETAIL_PRESCRIPTION);

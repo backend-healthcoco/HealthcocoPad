@@ -94,8 +94,9 @@ public class AppointmentDetailsPopupWindow extends PopupWindow implements View.O
     private LinearLayout btAddInvoice;
     private LinearLayout btAddReceipt;
     private ImageView btEdit;
+    private ImageView btPrint;
     private ImageView btDiscard;
-    private FloatingActionButton btPrint;
+    //    private FloatingActionButton btPrint;
     private ImageView btDismiss;
     private BookAppointmentFromScreenType screenType = APPOINTMENTS_QUEUE_RESCHEDULE;
 
@@ -143,7 +144,7 @@ public class AppointmentDetailsPopupWindow extends PopupWindow implements View.O
 
         btEdit = (ImageView) linearLayout.findViewById(R.id.bt_edit_appointment);
         btDiscard = (ImageView) linearLayout.findViewById(R.id.bt_discard_appointment);
-        btPrint = (FloatingActionButton) linearLayout.findViewById(R.id.fl_bt_print);
+        btPrint = (ImageView) linearLayout.findViewById(R.id.bt_print_patient_card);
         btDismiss = (ImageView) linearLayout.findViewById(R.id.bt_dismiss);
 
         layoutScheduledAt.setVisibility(View.GONE);
@@ -223,7 +224,7 @@ public class AppointmentDetailsPopupWindow extends PopupWindow implements View.O
 //                dismiss();
                 break;
 
-            case R.id.fl_bt_print:
+            case R.id.bt_print_patient_card:
                 mActivity.openPatientCardFragment(calendarEvents);
                 dismiss();
                 break;
@@ -240,10 +241,15 @@ public class AppointmentDetailsPopupWindow extends PopupWindow implements View.O
         if (calendarEvents.getPatient() != null) {
             PatientCard patient = calendarEvents.getPatient();
             LogUtils.LOGD(TAG, "Unique Id " + patient.getUniqueId());
-            tvPatientName.setText(Util.getValidatedValue(patient.getLocalPatientName()));
             tvContactNumber.setText(Util.getValidatedValue(patient.getMobileNumber()));
             tvPatientId.setText(Util.getValidatedValue(patient.getPid()));
             String formattedGenderAge = Util.getFormattedGenderAge(patient);
+            String patientName = Util.getValidatedValue(patient.getLocalPatientName());
+
+            if (!Util.isNullOrBlank(patientName)) {
+                tvPatientName.setText(patientName);
+            } else tvPatientName.setText(calendarEvents.getPatient().getFirstName());
+
             if (!Util.isNullOrBlank(formattedGenderAge)) {
                 tvGender.setVisibility(View.VISIBLE);
                 tvGender.setText(formattedGenderAge);
@@ -254,12 +260,20 @@ public class AppointmentDetailsPopupWindow extends PopupWindow implements View.O
             DownloadImageFromUrlUtil.loadImageWithInitialAlphabet(mActivity, PatientProfileScreenType.IN_PATIENTS_LIST, patient, null, ivContactProfile, tvInitialAlphabet);
         }
 
-        tvDoctorName.setText(Util.getValidatedValue(calendarEvents.getDoctorName()));
+        String doctorName = Util.getValidatedValueOrNull(calendarEvents.getDoctorName());
+        if (!Util.isNullOrBlank(doctorName)) {
+            tvDoctorName.setText(doctorName);
+        } else tvDoctorName.setText(calendarEvents.getCreatedBy());
 
         if (calendarEvents.getTime() != null && calendarEvents.getTime().getFromTime() != null && calendarEvents.getTime().getToTime() != null) {
             WorkingHours workingHours = calendarEvents.getTime();
             tvFromTime.setText(DateTimeUtil.getFormattedTime(0, Math.round(workingHours.getFromTime())));
             tvToTime.setText(DateTimeUtil.getFormattedTime(0, Math.round(workingHours.getToTime())));
+        }
+
+        if (DateTimeUtil.getStartTimeOfDayMilli(DateTimeUtil.getCurrentDateLong()) > calendarEvents.getFromDate()) {
+            btEdit.setVisibility(View.GONE);
+            btDiscard.setVisibility(View.GONE);
         }
 
         CalendarStatus calendarEventsStatus = calendarEvents.getStatus();
@@ -286,6 +300,8 @@ public class AppointmentDetailsPopupWindow extends PopupWindow implements View.O
                     layoutWaitedFor.setVisibility(View.VISIBLE);
                     layoutEngagedAt.setVisibility(View.VISIBLE);
                     layoutEngagedFor.setVisibility(View.VISIBLE);
+                    btEdit.setVisibility(View.GONE);
+                    btDiscard.setVisibility(View.GONE);
                     break;
                 case CHECKED_OUT:
                     tvTotalTime.setText(calendarEvents.getTotalTimeInMin());
@@ -299,6 +315,8 @@ public class AppointmentDetailsPopupWindow extends PopupWindow implements View.O
                     layoutTotalTime.setVisibility(View.VISIBLE);
                     layoutCheckOut.setVisibility(View.VISIBLE);
                     btAddVisit.setVisibility(View.INVISIBLE);
+                    btEdit.setVisibility(View.GONE);
+                    btDiscard.setVisibility(View.GONE);
                     break;
 
             }

@@ -3,6 +3,9 @@ package com.healthcoco.healthcocopad.popupwindow;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,9 +19,11 @@ import android.widget.TextView;
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.server.ClinicDoctorProfile;
+import com.healthcoco.healthcocopad.enums.AdapterType;
 import com.healthcoco.healthcocopad.enums.PopupWindowType;
 import com.healthcoco.healthcocopad.listeners.CBSelectedItemTypeListener;
 import com.healthcoco.healthcocopad.listeners.DoctorListPopupWindowListener;
+import com.healthcoco.healthcocopad.recyclerview.HealthcocoRecyclerViewAdapter;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -30,7 +35,7 @@ import java.util.List;
 
 public class DoctorListPopupWindow extends PopupWindow implements View.OnClickListener, AdapterView.OnItemClickListener, CBSelectedItemTypeListener {
     private final View anchorView;
-    DoctorPopupListViewAdapter popupListViewAdapter;
+    HealthcocoRecyclerViewAdapter popupViewAdapter;
     private List<Object> list;
     private DoctorListPopupWindowListener doctorListPopupWindowListener;
     private HealthCocoActivity mActivity;
@@ -64,11 +69,20 @@ public class DoctorListPopupWindow extends PopupWindow implements View.OnClickLi
         layoutSelectAll = (LinearLayout) linearLayout.findViewById(R.id.layout_select_all);
         tvClearAll = (TextView) linearLayout.findViewById(R.id.tv_clear_all);
         tvApply = (TextView) linearLayout.findViewById(R.id.tv_apply);
-        ListView lvList = (ListView) linearLayout.findViewById(R.id.lv_popup_options);
-        popupListViewAdapter = new DoctorPopupListViewAdapter(mActivity, popupWindowType, dropDownLayoutId, this);
-        popupListViewAdapter.setListData(list);
-        lvList.setAdapter(popupListViewAdapter);
-        lvList.setOnItemClickListener(this);
+        RecyclerView recyclerView = (RecyclerView) linearLayout.findViewById(R.id.lv_popup_options);
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(mActivity, LinearLayoutManager.VERTICAL, false);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        popupViewAdapter = new HealthcocoRecyclerViewAdapter(mActivity, AdapterType.DOCTOR_POPUP_LIST, this);
+        popupViewAdapter.setListData((ArrayList<Object>) (Object) list);
+        recyclerView.setAdapter(popupViewAdapter);
+
+//        popupListViewAdapter = new DoctorPopupListViewAdapter(mActivity, popupWindowType, dropDownLayoutId, this);
+//        popupListViewAdapter.setListData(list);
+//        lvList.setAdapter(popupListViewAdapter);
+//        lvList.setOnItemClickListener(this);
         tvClearAll.setOnClickListener(this);
         tvApply.setOnClickListener(this);
         layoutSelectAll.setOnClickListener(this);
@@ -121,14 +135,14 @@ public class DoctorListPopupWindow extends PopupWindow implements View.OnClickLi
             case R.id.layout_select_all:
                 selectAll = (!cbSelectAll.isChecked());
 //                setSelectAllSelected(!cbSelectAll.isChecked());
-                popupListViewAdapter.notifyDataSetChanged();
+                popupViewAdapter.notifyDataSetChanged();
                 isInitialLaunch = false;
                 break;
             case R.id.tv_clear_all:
                 selectAll = false;
 //                setSelectAllSelected(false);
                 isInitialLaunch = false;
-                popupListViewAdapter.notifyDataSetChanged();
+                popupViewAdapter.notifyDataSetChanged();
                 break;
             case R.id.tv_apply:
                 doctorListPopupWindowListener.onDoctorSelected(new ArrayList<ClinicDoctorProfile>(requestLinkedHashMapForValidate.values()));
@@ -141,8 +155,8 @@ public class DoctorListPopupWindow extends PopupWindow implements View.OnClickLi
 
     public void notifyAdapter(ArrayList<Object> list) {
         this.list = list;
-        popupListViewAdapter.setListData(list);
-        popupListViewAdapter.notifyDataSetChanged();
+        popupViewAdapter.setListData(list);
+        popupViewAdapter.notifyDataSetChanged();
     }
 
     @Override

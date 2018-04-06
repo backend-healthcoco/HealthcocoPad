@@ -8,7 +8,9 @@ import android.view.ViewGroup;
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
+import com.healthcoco.healthcocopad.bean.server.ClinicDoctorProfile;
 import com.healthcoco.healthcocopad.enums.AdapterType;
+import com.healthcoco.healthcocopad.viewholders.DoctorListViewHolder;
 import com.healthcoco.healthcocopad.viewholders.QueueItemViewHolder;
 
 import java.util.ArrayList;
@@ -69,6 +71,11 @@ public class HealthcocoRecyclerViewAdapter extends RecyclerView.Adapter<Healthco
                 convertView = mInflater.inflate(R.layout.list_item_queue, null);
                 viewHolder = new QueueItemViewHolder(mActivity, convertView, onItemClickListener, listenerObject);
                 break;
+            case DOCTOR_POPUP_LIST:
+
+                convertView = mInflater.inflate(R.layout.item_doctor_popup_list, parent, false);
+                viewHolder = new DoctorListViewHolder(mActivity, convertView, listenerObject);
+                break;
         }
         return viewHolder;
     }
@@ -83,7 +90,14 @@ public class HealthcocoRecyclerViewAdapter extends RecyclerView.Adapter<Healthco
                     queueItemViewHolder.applyData(object);
                 }
                 break;
+            case DOCTOR_POPUP_LIST:
+                if (holder instanceof DoctorListViewHolder && object instanceof ClinicDoctorProfile) {
+                    DoctorListViewHolder doctorListViewHolder = ((DoctorListViewHolder) holder);
+                    holder.applyData(object);
+                }
+                break;
         }
+
     }
 
     @Override

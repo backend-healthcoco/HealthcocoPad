@@ -36,7 +36,6 @@
             android:clickable="false"
             android:gravity="center|start"
             android:padding="10dp"
-            android:text="AA"
             android:textColor="@color/black" />
 
         <CheckBox

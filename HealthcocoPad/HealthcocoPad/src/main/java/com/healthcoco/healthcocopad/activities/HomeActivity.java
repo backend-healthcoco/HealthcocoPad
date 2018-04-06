@@ -177,7 +177,7 @@ public class HomeActivity extends HealthCocoActivity implements View.OnClickList
                 break;
             case QUEUE:
                 actionBarNormal.setVisibility(View.GONE);
-                fragment = new QueueFragment();
+                fragment = new QueueFragment(this);
                 break;
             case SYNC:
                 fragment = new SyncFragment();
