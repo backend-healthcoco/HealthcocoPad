@@ -1730,8 +1730,13 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
     }
 
 
-    public void openAddNewDrugFragment(Fragment fragment, int requestCode) {
+    public void openAddNewDrugFragment(Fragment fragment, int requestCode, String uniqueId) {
         AddNewDrugDialogFragment newDrugDialogFragment = new AddNewDrugDialogFragment();
+        if (!Util.isNullOrBlank(uniqueId)) {
+            Bundle bundle = new Bundle();
+            bundle.putString(HealthCocoConstants.TAG_UNIQUE_ID, uniqueId);
+            newDrugDialogFragment.setArguments(bundle);
+        }
         newDrugDialogFragment.setTargetFragment(fragment, requestCode);
         newDrugDialogFragment.show(getSupportFragmentManager(),
                 newDrugDialogFragment.getClass().getSimpleName());

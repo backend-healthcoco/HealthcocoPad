@@ -2829,6 +2829,8 @@ public class LocalDataServiceImpl {
 
 
     public void addDrug(Drug drug) {
+        deleteDrugIfAlreadyExists(LocalDatabaseUtils.KEY_UNIQUE_ID, drug.getUniqueId());
+
         if (drug.getDrugType() != null) {
             if (!Util.isNullOrEmptyList(drug.getGenericNames()))
                 drug.setGenericNamesJsonString(new Gson().toJson(drug.getGenericNames()));
@@ -2836,6 +2838,10 @@ public class LocalDataServiceImpl {
             drug.getDrugType().save();
         }
         drug.save();
+    }
+
+    private void deleteDrugIfAlreadyExists(String key, String value) {
+        Invoice.deleteAll(Drug.class, key + "= ?", value);
     }
 
     private void addLinkedDirectionsList(String foreignTableKey, String foreignTableId, String drugId, List<DrugDirection> directionsList) {
@@ -2951,8 +2957,8 @@ public class LocalDataServiceImpl {
     }
 
     private void getDrugRestDetails(Drug drug) {
-//        if (!Util.isNullOrBlank(drug.getGenericNamesJsonString()))
-//            drug.setGenericNames((ArrayList<GenericName>) (Object) getObjectsListFronJson(drug.getGenericNamesJsonString()));
+        if (!Util.isNullOrBlank(drug.getGenericNamesJsonString()))
+            drug.setGenericNames((ArrayList<GenericName>) (Object) getObjectsListFronJson(GenericName.class, drug.getGenericNamesJsonString()));
 
         if (drug != null)
             drug.setDrugType(getDrugType(drug.getForeignDrugTypeId()));

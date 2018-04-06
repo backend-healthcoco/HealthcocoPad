@@ -23,6 +23,7 @@ import com.healthcoco.healthcocopad.bean.server.DrugDurationUnit;
 import com.healthcoco.healthcocopad.bean.server.DrugItem;
 import com.healthcoco.healthcocopad.bean.server.DrugType;
 import com.healthcoco.healthcocopad.bean.Duration;
+import com.healthcoco.healthcocopad.bean.server.GenericName;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.custom.AutoCompleteTextViewAdapter;
@@ -61,6 +62,7 @@ public class AddNewDrugDialogFragment extends HealthCocoDialogFragment
     private ArrayList<DrugDurationUnit> receivedDurationUnitList;
     private ArrayList<DrugDosage> receivedFrequencyDosageList;
     private ArrayList<DrugDirection> receivedDirectionsList;
+    private ArrayList<GenericName> genericNames = new ArrayList<>();
     private boolean isDurationUnitLoaded;
     private boolean isDirectionLoaded;
     private boolean isFrequencyDosageLoaded;
@@ -71,7 +73,9 @@ public class AddNewDrugDialogFragment extends HealthCocoDialogFragment
     private AddNewDrugListener addNewDrugListener;
     private User user;
     private DrugType selectedDrugType;
-
+    private Bundle bundle;
+    private String uniqueId;
+    private Drug drug;
 
     public AddNewDrugDialogFragment() {
     }
@@ -90,6 +94,14 @@ public class AddNewDrugDialogFragment extends HealthCocoDialogFragment
     @Override
     public void onActivityCreated(Bundle arg0) {
         super.onActivityCreated(arg0);
+
+        bundle = getArguments();
+        if (bundle != null)
+            uniqueId = bundle.getString(HealthCocoConstants.TAG_UNIQUE_ID);
+        if (!Util.isNullOrBlank(uniqueId)) {
+            drug = LocalDataServiceImpl.getInstance(mApp).getDrug(uniqueId);
+        }
+
         init();
         setWidthHeight(0.55, 0.60);
     }
@@ -97,6 +109,7 @@ public class AddNewDrugDialogFragment extends HealthCocoDialogFragment
     @Override
     public void init() {
         initViews();
+        initData();
         initListeners();
         mActivity.showLoading(false);
         new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_FRAGMENT_INITIALISATION_DATA, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
@@ -150,7 +163,39 @@ public class AddNewDrugDialogFragment extends HealthCocoDialogFragment
 
     @Override
     public void initData() {
+        if (drug != null) {
+            if (drug.getDrugType() != null)
+                if (!Util.isNullOrBlank(drug.getDrugType().getType()))
+                    autoTvDrugType.setText(Util.getValidatedValue(drug.getDrugType().getType()));
 
+            if (!Util.isNullOrBlank(drug.getDrugName()))
+                editName.setText(Util.getValidatedValue(drug.getDrugName()));
+
+            if (drug.getDosageTime() != null)
+                if (!Util.isNullOrBlank(drug.getDosageTime().getDosage()))
+                    tvFrequency.setText(Util.getValidatedValue(drug.getDosageTime().getDosage()));
+
+
+            if (drug.getDuration() != null) {
+                if (!Util.isNullOrBlank(drug.getDuration().getValue()))
+                    etDuration.setText(Util.getValidatedValue(drug.getDuration().getValue()));
+                if (!Util.isNullOrBlank(drug.getDuration().getDurationUnit().getUnit()))
+                    tvDrugDurationUnit.setText(Util.getValidatedValue(drug.getDuration().getDurationUnit().getUnit()));
+            }
+
+            if (!Util.isNullOrEmptyList(drug.getDirection()))
+                for (DrugDirection drugDirection : drug.getDirection()) {
+                    if (!Util.isNullOrBlank(drugDirection.getDirection()))
+                        tvDirection.setText(Util.getValidatedValue(drugDirection.getDirection()));
+                }
+
+            if (!Util.isNullOrEmptyList(drug.getGenericNames()))
+                for (GenericName gName : drug.getGenericNames()) {
+                    if (!Util.isNullOrBlank(gName.getName()))
+                        etGenericName.setText(Util.getValidatedValue(gName.getName()));
+                }
+
+        }
     }
 
     @Override
@@ -176,8 +221,10 @@ public class AddNewDrugDialogFragment extends HealthCocoDialogFragment
     private void validateData() {
         String msg = null;
         String name = String.valueOf(editName.getText());
-        String genericName = String.valueOf(etGenericName.getText());
-        Util.showToast(mActivity, msg);
+        String generic = String.valueOf(etGenericName.getText());
+        GenericName genericName = new GenericName();
+
+//        Util.showToast(mActivity, msg);
         if (selectedDirection != null) {
             ArrayList<DrugDirection> directionsList = new ArrayList<DrugDirection>();
             directionsList.add(getDirection(selectedDirection));
@@ -189,15 +236,17 @@ public class AddNewDrugDialogFragment extends HealthCocoDialogFragment
         if (selectedDosage != null) {
             selectedDrug.setDosage(Util.getValidatedValueOrNull(selectedDosage.getDosage()));
         }
+        if (!Util.isNullOrBlank(generic)) {
+            genericName.setName(generic);
+            genericNames.add(genericName);
+        }
         if (Util.isNullOrBlank(name))
             msg = getResources().getString(R.string.please_enter_drug_name);
-        if (!Util.isNullOrBlank(name))
-
-            if (Util.isNullOrBlank(msg)) {
-                addDrug(name);
-            } else {
-                Util.showToast(mActivity, msg);
-            }
+        if (Util.isNullOrBlank(msg)) {
+            addDrug(name);
+        } else {
+            Util.showToast(mActivity, msg);
+        }
     }
 
     private DrugDirection getDirection(DrugDirection selectedDirection) {
@@ -238,7 +287,12 @@ public class AddNewDrugDialogFragment extends HealthCocoDialogFragment
             drugType.setDoctorId("globalDoctor");
             addDrugRequest.setDrugType(drugType);
         }
+        if (genericNames != null)
+            addDrugRequest.setGenericNames(genericNames);
         addDrugRequest.setDrugName(name);
+        if (drug != null)
+            addDrugRequest.setUniqueId(drug.getUniqueId()
+            );
 //        addDrugRequest.setDrugId(selectedDrugType.getUniqueId());
         addDrugRequest.setDosage(selectedDrug.getDosage());
         addDrugRequest.setDirection(selectedDrug.getDirection());

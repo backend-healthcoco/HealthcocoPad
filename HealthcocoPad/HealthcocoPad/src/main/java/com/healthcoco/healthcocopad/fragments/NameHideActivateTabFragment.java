@@ -1058,7 +1058,7 @@ public class NameHideActivateTabFragment extends HealthCocoFragment implements
                     mActivity.openAddUpdateNameDialogFragment(WebServiceType.ADD_CUSTOM_HISTORY, AddUpdateNameDialogType.HISTORY, this, user, ((Disease) object).getUniqueId(), ((Disease) object).getDisease(), HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST);
                     break;
                 case DRUG:
-                    mActivity.openAddNewDrugFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST);
+                    mActivity.openAddNewDrugFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, ((Drug) object).getUniqueId());
                     break;
                 case TREATMENT:
                     mActivity.openAddNewTreatmentsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, ((TreatmentService) object).getUniqueId());
@@ -1170,7 +1170,7 @@ public class NameHideActivateTabFragment extends HealthCocoFragment implements
                         mActivity.openAddUpdateNameDialogFragment(WebServiceType.ADD_CUSTOM_HISTORY, AddUpdateNameDialogType.HISTORY, this, user, "", HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST);
                         break;
                     case DRUG:
-                        mActivity.openAddNewDrugFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST);
+                        mActivity.openAddNewDrugFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, null);
                         break;
                     case TREATMENT:
                         mActivity.openAddNewTreatmentsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, null);

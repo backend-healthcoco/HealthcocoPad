@@ -4,6 +4,7 @@ import com.healthcoco.healthcocopad.bean.server.DrugDirection;
 import com.healthcoco.healthcocopad.bean.server.DrugDosage;
 import com.healthcoco.healthcocopad.bean.server.DrugType;
 import com.healthcoco.healthcocopad.bean.Duration;
+import com.healthcoco.healthcocopad.bean.server.GenericName;
 
 import java.util.List;
 
@@ -24,6 +25,7 @@ public class AddDrugRequest {
     private DrugType drugType;
     private DrugDosage dosageTime;
     private List<DrugDirection> direction;
+    private List<GenericName> genericNames;
     private String dosage;
     private Duration duration;
     private List<String> categories;
@@ -146,5 +148,13 @@ public class AddDrugRequest {
 
     public void setCategories(List<String> categories) {
         this.categories = categories;
+    }
+
+    public List<GenericName> getGenericNames() {
+        return genericNames;
+    }
+
+    public void setGenericNames(List<GenericName> genericNames) {
+        this.genericNames = genericNames;
     }
 }
