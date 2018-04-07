@@ -122,7 +122,21 @@
         android:gravity="center"
         android:orientation="horizontal"
         android:paddingLeft="40dp"
-        android:paddingRight="10dp"></LinearLayout>
+        android:paddingRight="10dp">
+
+        <ImageButton
+            android:id="@+id/bt_refresh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerInParent="true"
+            android:background="@android:color/transparent"
+            android:paddingBottom="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="10dp"
+            android:src="@drawable/ic_refresh" />
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/container_middle_action"

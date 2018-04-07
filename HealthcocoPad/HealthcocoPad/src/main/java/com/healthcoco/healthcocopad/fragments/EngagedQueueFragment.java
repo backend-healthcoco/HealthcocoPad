@@ -123,8 +123,9 @@ public class EngagedQueueFragment extends HealthCocoFragment implements LocalDoI
         layoutTitle = (LinearLayout) view.findViewById(R.id.layout_title);
 
         tvTitle.setText(R.string.engaged);
+        tvNoEventsFound.setText(R.string.no_engaged_patients);
 //        layoutTitle.setBackgroundResource(R.color.green_translucent);
-        tvCount.setTextColor(getResources().getColor(R.color.green_logo));
+//        tvCount.setTextColor(getResources().getColor(R.color.green_logo));
 
     }
 

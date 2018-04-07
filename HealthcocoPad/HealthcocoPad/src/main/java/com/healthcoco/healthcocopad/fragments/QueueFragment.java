@@ -2,6 +2,7 @@ package com.healthcoco.healthcocopad.fragments;
 
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -13,6 +14,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -53,6 +55,7 @@ import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -93,6 +96,7 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
     private LinearLayout lvDoctorName;
     private ImageButton btPreviousDate;
     private ImageButton btNextDate;
+    private ImageButton btRefresh;
     private ImageButton btMenu;
     private TextView tvSelectedDate;
     private FloatingActionButton floatingActionButton;
@@ -162,6 +166,7 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
         lvDoctorName = (LinearLayout) view.findViewById(R.id.lv_doctor_name);
         btPreviousDate = (ImageButton) view.findViewById(R.id.bt_previuos_date);
         btNextDate = (ImageButton) view.findViewById(R.id.bt_next_date);
+        btRefresh = (ImageButton) view.findViewById(R.id.bt_refresh);
         tvSelectedDate = (TextView) view.findViewById(R.id.tv_selected_date);
         floatingActionButton = (FloatingActionButton) view.findViewById(R.id.fl_bt_add_appointment);
         horizontalScrollView = (HorizontalScrollView) view.findViewById(R.id.scrollview_horizontal);
@@ -173,6 +178,8 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
         btPreviousDate.setOnClickListener(this);
         btNextDate.setOnClickListener(this);
         floatingActionButton.setOnClickListener(this);
+        btRefresh.setOnClickListener(this);
+        tvSelectedDate.setOnClickListener(this);
         tvSelectedDate.addTextChangedListener(new HealthcocoTextWatcher(tvSelectedDate, this));
 
         btMenu.setOnClickListener(clickListener);
@@ -341,6 +348,12 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
             case R.id.fl_bt_add_appointment:
                 bookWalkInAppointment();
                 break;
+            case R.id.bt_refresh:
+                getCalendarEventsList(true);
+                break;
+            case R.id.tv_selected_date:
+                openDatePickerDialog(tvSelectedDate);
+                break;
         }
     }
 
@@ -421,6 +434,22 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
         dialogFragment.setTargetFragment(dialogFragment, PatientAppointmentDetailFragment.REQUEST_CODE_APPOINTMENTS_LIST);
         dialogFragment.show(mActivity.getSupportFragmentManager(), dialogFragment.getClass().getSimpleName());
 
+    }
+
+    private void openDatePickerDialog(final TextView textView) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(selectedMonthDayYearInMillis);
+        calendar = DateTimeUtil.setCalendarDefaultvalue(DateTimeUtil.DATE_FORMAT_WEEKDAY_DAY_MONTH_AS_TEXT_YEAR_DASH, calendar, textView);
+        DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                selectedMonthDayYearInMillis = DateTimeUtil.getSelectedDate(year, monthOfYear, dayOfMonth, 0, 0, 0);
+                textView.setText(DateTimeUtil.getFormattedTime(DATE_FORMAT_USED_IN_THIS_SCREEN, year, monthOfYear, dayOfMonth, 0, 0, 0));
+            }
+        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+        datePickerDialog.getDatePicker();
+        datePickerDialog.show();
     }
 
 

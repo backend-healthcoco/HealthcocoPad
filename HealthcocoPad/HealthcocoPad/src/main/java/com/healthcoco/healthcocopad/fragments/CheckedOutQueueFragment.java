@@ -120,8 +120,9 @@ public class CheckedOutQueueFragment extends HealthCocoFragment implements Local
         layoutTitle = (LinearLayout) view.findViewById(R.id.layout_title);
 
         tvTitle.setText(R.string.checked_out);
+        tvNoEventsFound.setText(R.string.no_checked_out_patients);
 //        layoutTitle.setBackgroundResource(R.color.blue_light);
-        tvCount.setTextColor(getResources().getColor(R.color.blue));
+//        tvCount.setTextColor(getResources().getColor(R.color.blue));
 
     }
 

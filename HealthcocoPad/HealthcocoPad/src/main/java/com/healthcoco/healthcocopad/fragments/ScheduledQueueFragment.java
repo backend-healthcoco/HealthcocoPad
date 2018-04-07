@@ -106,8 +106,9 @@ public class ScheduledQueueFragment extends HealthCocoFragment implements LocalD
         layoutTitle = (LinearLayout) view.findViewById(R.id.layout_title);
 
         tvTitle.setText(R.string.schedule);
+        tvNoEventsFound.setText(R.string.no_scheduled_patients);
 //        layoutTitle.setBackgroundResource(R.color.orange_translucent);
-        tvCount.setTextColor(getResources().getColor(R.color.orange));
+//        tvCount.setTextColor(getResources().getColor(R.color.orange));
 
     }
 

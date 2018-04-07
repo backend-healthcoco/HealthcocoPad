@@ -1130,5 +1130,10 @@
     <string name="starts_colon">Starts&#160;:</string>
     <string name="ends_colon">Ends&#160;:</string>
     <string name="general_note_colon">General Notes&#160;:</string>
+    <string name="no_scheduled_patients">No Scheduled Patients</string>
+    <string name="no_waiting_patients">No Waiting Patients</string>
+    <string name="no_engaged_patients">No Engaged Patients</string>
+    <string name="no_checked_out_patients">No Checked Out Patients</string>
+
 
 </resources>

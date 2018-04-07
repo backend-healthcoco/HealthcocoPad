@@ -122,8 +122,9 @@ public class WaitingQueueFragment extends HealthCocoFragment implements LocalDoI
         layoutTitle = (LinearLayout) view.findViewById(R.id.layout_title);
 
         tvTitle.setText(R.string.waiting);
+        tvNoEventsFound.setText(R.string.no_waiting_patients);
 //        layoutTitle.setBackgroundResource(R.color.red_translucent);
-        tvCount.setTextColor(getResources().getColor(R.color.red_error));
+//        tvCount.setTextColor(getResources().getColor(R.color.red_error));
 
     }
 

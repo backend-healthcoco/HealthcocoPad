@@ -608,4 +608,12 @@ public class DateTimeUtil {
         else
             return false;
     }
+
+    public static long getSelectedDate(int year, int monthOfYear, int dayOfMonth, int hour, int minute, int seconds) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, monthOfYear, dayOfMonth, hour, minute, seconds);
+        return calendar.getTimeInMillis();
+    }
+
+
 }

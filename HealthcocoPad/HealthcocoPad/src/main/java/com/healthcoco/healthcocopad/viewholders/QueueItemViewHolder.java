@@ -123,13 +123,19 @@ public class QueueItemViewHolder extends HealthcocoComonRecylcerViewHolder imple
             }
             if (!Util.isNullOrBlank(patientName)) {
                 tvPatientName.setText(patientName);
-            } else tvPatientName.setText(calendarEvents.getPatient().getFirstName());
+            } else {
+                if (!Util.isNullOrBlank(calendarEvents.getPatient().getFirstName()))
+                    tvPatientName.setText(calendarEvents.getPatient().getFirstName());
+            }
             if (!Util.isNullOrBlank(mobileNumber)) {
                 tvMobileNumber.setText(mobileNumber);
-            }
+            } else tvMobileNumber.setText("");
             if (!Util.isNullOrBlank(doctorName)) {
                 tvDoctorName.setText(doctorName);
-            } else tvDoctorName.setText(calendarEvents.getCreatedBy());
+            } else {
+                if (!Util.isNullOrBlank(calendarEvents.getCreatedBy()))
+                    tvDoctorName.setText(calendarEvents.getCreatedBy());
+            }
 
 
             CalendarStatus calendarEventsStatus = calendarEvents.getStatus();

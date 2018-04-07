@@ -248,8 +248,10 @@ public class AppointmentDetailsPopupWindow extends PopupWindow implements View.O
 
             if (!Util.isNullOrBlank(patientName)) {
                 tvPatientName.setText(patientName);
-            } else tvPatientName.setText(calendarEvents.getPatient().getFirstName());
-
+            } else {
+                if (!Util.isNullOrBlank(calendarEvents.getPatient().getFirstName()))
+                    tvPatientName.setText(calendarEvents.getPatient().getFirstName());
+            }
             if (!Util.isNullOrBlank(formattedGenderAge)) {
                 tvGender.setVisibility(View.VISIBLE);
                 tvGender.setText(formattedGenderAge);
@@ -263,7 +265,10 @@ public class AppointmentDetailsPopupWindow extends PopupWindow implements View.O
         String doctorName = Util.getValidatedValueOrNull(calendarEvents.getDoctorName());
         if (!Util.isNullOrBlank(doctorName)) {
             tvDoctorName.setText(doctorName);
-        } else tvDoctorName.setText(calendarEvents.getCreatedBy());
+        } else {
+            if (!Util.isNullOrBlank(calendarEvents.getCreatedBy()))
+                tvDoctorName.setText(calendarEvents.getCreatedBy());
+        }
 
         if (calendarEvents.getTime() != null && calendarEvents.getTime().getFromTime() != null && calendarEvents.getTime().getToTime() != null) {
             WorkingHours workingHours = calendarEvents.getTime();
