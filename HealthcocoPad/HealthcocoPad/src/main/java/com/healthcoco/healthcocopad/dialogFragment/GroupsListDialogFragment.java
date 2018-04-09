@@ -206,7 +206,7 @@ public class GroupsListDialogFragment extends HealthCocoDialogFragment implement
                 LocalDataServiceImpl.getInstance(mApp).addPatient(selectedPatient);
                 getTargetFragment().onActivityResult(getTargetRequestCode(), HealthCocoConstants.RESULT_CODE_GROUPS_LIST, new Intent());
                 dismiss();
-                mActivity.syncContacts(user);
+                mActivity.syncContacts(false, user);
                 break;
             default:
                 break;

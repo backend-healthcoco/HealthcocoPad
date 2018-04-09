@@ -252,7 +252,8 @@ public class SyncFragment extends HealthCocoFragment implements View.OnClickList
                 //getting contacts data
                 Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(user, LocalTabelType.REGISTERED_PATIENTS_DETAILS);
                 WebDataServiceImpl.getInstance(mApp).getContactsList(RegisteredPatientDetailsUpdated.class, user.getUniqueId(),
-                        user.getForeignHospitalId(), user.getForeignLocationId(), latestUpdatedTime, this, this);
+                        user.getForeignHospitalId(), user.getForeignLocationId(), latestUpdatedTime, user,
+                        this, this);
 
                 break;
             case DATA_PERMISSIONS:

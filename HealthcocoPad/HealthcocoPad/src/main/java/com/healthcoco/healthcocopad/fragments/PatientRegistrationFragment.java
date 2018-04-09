@@ -96,6 +96,8 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
         GsonRequest.ErrorListener, Response.Listener<VolleyResponseBean>, LocalDoInBackgroundListenerOptimised,
         CommonOptionsDialogItemClickListener, DownloadFileFromUrlListener, PatientRegistrationListener {
     private static final int REQUEST_CODE_REGISTER_PATIENT = 101;
+    private static final String SEPARATOR_GROUP_NOTES = "; ";
+    private static final int PIC_CROP = 2;
     public static ArrayList<Object> BLOOD_GROUPS = new ArrayList<Object>() {{
         add("O-");
         add("O+");
@@ -116,8 +118,6 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
         add("B1-");
         add("B1+");
     }};
-    private static final String SEPARATOR_GROUP_NOTES = "; ";
-    private static final int PIC_CROP = 2;
     private EditText editName;
     private RadioGroup radioGroupGender;
     private TextView tvBirthDay;
@@ -407,7 +407,7 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
 
         if (!Util.isNullOrBlank(birthday)) {
             containerAge.setVisibility(View.GONE);
-        tvBirthDay.setText(birthday);
+            tvBirthDay.setText(birthday);
         } else containerAge.setVisibility(View.VISIBLE);
         editEmail.setText(emailAddress);
 
@@ -742,7 +742,7 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
 
     private void refreshContactsData(RegisteredPatientDetailsUpdated patientDetails) {
         LocalDataServiceImpl.getInstance(mApp).addPatient(patientDetails);
-        mActivity.syncContacts(user);
+        mActivity.syncContacts(false, user);
         Util.sendBroadcast(mApp, ContactsListFragment.INTENT_GET_CONTACT_LIST_LOCAL);
     }
 

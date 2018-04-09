@@ -27,11 +27,36 @@ import com.healthcoco.healthcocopad.utilities.Util;
  * Created by Shreshtha on 25-01-2017.
  */
 public class InitialSyncFragment extends HealthCocoFragment {
+    public static final int MAX_SIZE = 100;
+    public static final String INTENT_ACTION_INITIAL_SYNC = "com.healthcoco.INTENT_ACTION_INITIAL_SYNC";
+    public static int PAGE_NUMBER = 0;
+    public static boolean isPageLoading = false;
+    public static long MAX_COUNT = 0;
     private boolean isFromLoginSignup;
     private TextView tvLoadingTitle;
     private ProgressBar progressLoading;
     private int progressUpdateValue;
-    public static final String INTENT_ACTION_INITIAL_SYNC = "com.healthcoco.INTENT_ACTION_INITIAL_SYNC";
+    BroadcastReceiver updateProgressReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, final Intent intent) {
+            if (intent != null) {
+                int syncServiceTypeOrdinal = intent.getIntExtra(HealthCocoConstants.TAG_SYNC_SERVICE_TYPE, -1);
+                if (syncServiceTypeOrdinal != -1) {
+                    DefaultSyncServiceType syncServiceType = DefaultSyncServiceType.values()[syncServiceTypeOrdinal];
+                    LogUtils.LOGD(TAG, "Initial Sync service " + syncServiceType);
+                    setProgress(syncServiceType);
+                    if (syncServiceType == DefaultSyncServiceType.SYNC_COMPLETE) {
+//                        ContactsListFragment tempContactsListFragment = (ContactsListFragment) mFragmentManager.findFragmentByTag(TemplatesListFragment.class.getSimpleName());
+//                        if (tempContactsListFragment != null) {
+//                            tempContactsListFragment.getHistoryListFromLocal(true, 0);
+//                        } else
+                        mActivity.finish();
+                        Util.sendBroadcast(mApp, HomeActivity.INTENT_SYNC_SUCCESS);
+                    }
+                }
+            }
+        }
+    };
     private int totalSyncServices;
     private LinearLayout parent;
 
@@ -107,14 +132,36 @@ public class InitialSyncFragment extends HealthCocoFragment {
 
     }
 
-    public int setProgress(int title) {
+    public int setProgress(DefaultSyncServiceType syncServiceType) {
         int finalProgress = 0;
         try {
-            finalProgress = (int) (progressLoading.getProgress() + progressUpdateValue);
-            progressLoading.setProgress(finalProgress);
-            tvLoadingTitle.setText(title);
-            LogUtils.LOGD(TAG, "Initial Sync finalProgress " + finalProgress);
-
+            switch (syncServiceType) {
+                case GET_CONTACTS:
+//                case GET_GROUPS:
+                    int percentage = 0;
+                    if (MAX_COUNT > 0) {
+                        float receivedData = (PAGE_NUMBER * MAX_SIZE);
+                        float amount = receivedData / MAX_COUNT;
+                        percentage = (int) (amount * 100);
+                        if (receivedData > (MAX_COUNT - MAX_SIZE))
+                            percentage = 100;
+                        LogUtils.LOGD(TAG, "RecievedData : " + receivedData + " Amount : " + amount + " Precentage : " + percentage);
+                    }
+                    tvLoadingTitle.setText(String.format(getResources().getString(syncServiceType.getLoadingTitle(), String.valueOf(percentage) + "%%")));
+                    return finalProgress;
+            }
+            if (!isPageLoading) {
+                finalProgress = progressLoading.getProgress() + progressUpdateValue;
+                progressLoading.setProgress(finalProgress);
+                try {
+                    // if %s is present
+                    tvLoadingTitle.setText(String.format(getResources().getString(syncServiceType.getLoadingTitle(), "")));
+                } catch (Exception e) {
+                    //otherwise will setText directly
+                    tvLoadingTitle.setText(syncServiceType.getLoadingTitle());
+                }
+                LogUtils.LOGD(TAG, "Initial Sync finalProgress " + finalProgress);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -131,26 +178,4 @@ public class InitialSyncFragment extends HealthCocoFragment {
             return progressLoading.getProgress();
         return 0;
     }
-
-    BroadcastReceiver updateProgressReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, final Intent intent) {
-            if (intent != null) {
-                int syncServiceTypeOrdinal = intent.getIntExtra(HealthCocoConstants.TAG_SYNC_SERVICE_TYPE, -1);
-                if (syncServiceTypeOrdinal != -1) {
-                    DefaultSyncServiceType syncServiceType = DefaultSyncServiceType.values()[syncServiceTypeOrdinal];
-                    LogUtils.LOGD(TAG, "Initial Sync service " + syncServiceType);
-                    setProgress(syncServiceType.getLoadingTitle());
-                    if (syncServiceType == DefaultSyncServiceType.SYNC_COMPLETE) {
-//                        ContactsListFragment tempContactsListFragment = (ContactsListFragment) mFragmentManager.findFragmentByTag(TemplatesListFragment.class.getSimpleName());
-//                        if (tempContactsListFragment != null) {
-//                            tempContactsListFragment.getHistoryListFromLocal(true, 0);
-//                        } else
-                        mActivity.finish();
-                        Util.sendBroadcast(mApp, HomeActivity.INTENT_SYNC_SUCCESS);
-                    }
-                }
-            }
-        }
-    };
 }

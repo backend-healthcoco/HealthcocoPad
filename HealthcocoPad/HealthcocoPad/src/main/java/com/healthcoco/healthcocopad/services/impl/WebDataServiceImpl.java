@@ -282,19 +282,41 @@ public class WebDataServiceImpl implements GCMRefreshListener {
 
 
     public void getContactsList(Class<RegisteredPatientDetailsUpdated> class1, String doctorId,
-                                String hospitalId, String locationId, long updatedTime, Response.Listener<VolleyResponseBean> responseListener,
+                                String hospitalId, String locationId, long updatedTime, User user, Response.Listener<VolleyResponseBean> responseListener,
+                                GsonRequest.ErrorListener errorListener) {
+        getContactsList(class1, doctorId, hospitalId, locationId, updatedTime, user, 0, 0, null, responseListener, errorListener);
+    }
+
+    public void getContactsList(Class<RegisteredPatientDetailsUpdated> class1, String doctorId,
+                                String hospitalId, String locationId, long updatedTime, User user, int pageNo, int size, String searchTerm, Response.Listener<VolleyResponseBean> responseListener,
                                 GsonRequest.ErrorListener errorListener) {
         WebServiceType webServiceType = WebServiceType.GET_CONTACTS;
         checkNetworkStatus(mApp.getApplicationContext());
         if (HealthCocoConstants.isNetworkOnline) {
-            String url = webServiceType.getUrl() + HealthCocoConstants.PARAM_HOSPITAL_ID
-                    + hospitalId + HealthCocoConstants.PARAM_LOCATION_ID + locationId
+            String url = webServiceType.getUrl()
+                    + HealthCocoConstants.PARAM_HOSPITAL_ID + hospitalId
+                    + HealthCocoConstants.PARAM_LOCATION_ID + locationId
                     + HealthCocoConstants.PARAM_UPDATED_TIME + updatedTime;
+
+            if (RoleType.isOnlyConsultantOrIsOnlyDoctorOrBoth(user.getRoleTypes())) {
+                url = url + HealthCocoConstants.PARAM_ROLE + RoleType.CONSULTANT_DOCTOR
+                        + HealthCocoConstants.PARAM_DOCTOR_ID + doctorId;
+            }
+
+            if (pageNo >= 0 && size > 0) {
+                url = url + HealthCocoConstants.PARAM_PAGE + pageNo + HealthCocoConstants.PARAM_SIZE + size;
+            }
+            if (!Util.isNullOrBlank(searchTerm))
+                url = url + HealthCocoConstants.PARAM_SEARCH_TERM + searchTerm;
             getResponse(Request.Priority.HIGH, WebServiceType.GET_CONTACTS, class1, url, null, null, responseListener, errorListener);
         } else {
             errorListener.onNetworkUnavailable(webServiceType);
+//            errorListener.onErrorResponse(null, mApp.getResources().getString(R.string.user_offline));
+//            LocalDataServiceImpl.getInstance(mApp)
+//                    .getPatientsList(WebServiceType.GET_CONTACTS, doctorId, hospitalId, locationId, responseListener, errorListener);
         }
     }
+
 
     /**
      * TO get speciality list

@@ -258,10 +258,12 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
                         defaultWebServicesList.add(syncServiceType);
                         break;
                     case GET_CONTACTS:
-                        Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.REGISTERED_PATIENTS_DETAILS);
+                        syncContacts(true, user);
+                      /* Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.REGISTERED_PATIENTS_DETAILS);
                         WebDataServiceImpl.getInstance(mApp)
                                 .getContactsList(RegisteredPatientDetailsUpdated.class, user.getUniqueId(),
                                         user.getForeignHospitalId(), user.getForeignLocationId(), latestUpdatedTime, this, this);
+                       */
                         break;
                     case GET_DOCTOR_PROFILE:
                         WebDataServiceImpl.getInstance(mApp).getDoctorProfile(DoctorProfile.class, user.getUniqueId(), null, null, this, this);
@@ -910,56 +912,64 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
     public void onResponse(VolleyResponseBean response) {
         if (response != null) {
             LogUtils.LOGD(TAG, "Success " + response.getWebServiceType());
+            boolean isPagingRequired = false;
             if (response.isDataFromLocal()) {
-                deleteFromSyncListAndUpdateProgress(response.getWebServiceType());
-            } else {
-                switch (response.getWebServiceType()) {
-                    case GET_DRUG_DOSAGE:
-                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_DRUG_DOSAGE, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
-                        return;
-                    case GET_DATA_PERMISSION:
-                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_DATA_PERMISSIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
-                        return;
-                    case GET_CONTACTS:
+                isPagingRequired = isPagingRequired(response);
+                if (!isPagingRequired) {
+                    deleteFromSyncListAndUpdateProgress(response.getWebServiceType());
+                    return;
+                }
+            }
+            switch (response.getWebServiceType()) {
+                case GET_DRUG_DOSAGE:
+                    new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_DRUG_DOSAGE, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                    return;
+                case GET_DATA_PERMISSION:
+                    new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_DATA_PERMISSIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                    return;
+                case GET_CONTACTS:
+                    if (isPagingRequired)
+                        updateProgress(DefaultSyncServiceType.GET_CONTACTS);
+                    else
                         new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_PATIENTS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
-                        break;
-                    case GET_DOCTOR_PROFILE:
-                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_DOCTOR_PROFILE, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
-                        return;
-                    case GET_CLINIC_PROFILE:
-                        if (response.getData() != null && response.getData() instanceof ClinicDetailResponse)
-                            new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_LOCATION, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
-                        break;
-                    case GET_DURATION_UNIT:
-                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_DURATION_UNIT, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
-                        return;
-                    case GET_DIRECTION:
-                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_DIRECTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
-                        break;
-                    case GET_DRUG_TYPE:
-                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_DRUG_TYPE, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
-                        break;
-                    case GET_GROUPS:
-                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_GROUPS_LIST, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
-                        break;
-                    case GET_CITIES:
-                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_CITIES, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
-                        break;
-                    case GET_SPECIALITIES:
-                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_SPECIALITIES, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
-                        break;
-                    case GET_PROFESSION:
-                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_PROFESSION, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
-                        break;
-                    case GET_REFERENCE:
-                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_REFERENCE, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
-                        break;
-                    case GET_BLOOD_GROUP:
-                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_BLOOD_GROUPS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
-                        break;
-                    case GET_CALENDAR_EVENTS:
-                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_CALENDAR_EVENTS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
-                        break;
+                    break;
+                case GET_DOCTOR_PROFILE:
+                    new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_DOCTOR_PROFILE, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                    return;
+                case GET_CLINIC_PROFILE:
+                    if (response.getData() != null && response.getData() instanceof ClinicDetailResponse)
+                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_LOCATION, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                    break;
+                case GET_DURATION_UNIT:
+                    new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_DURATION_UNIT, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                    return;
+                case GET_DIRECTION:
+                    new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_DIRECTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                    break;
+                case GET_DRUG_TYPE:
+                    new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_DRUG_TYPE, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                    break;
+                case GET_GROUPS:
+                    new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_GROUPS_LIST, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                    break;
+                case GET_CITIES:
+                    new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_CITIES, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                    break;
+                case GET_SPECIALITIES:
+                    new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_SPECIALITIES, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                    break;
+                case GET_PROFESSION:
+                    new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_PROFESSION, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                    break;
+                case GET_REFERENCE:
+                    new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_REFERENCE, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                    break;
+                case GET_BLOOD_GROUP:
+                    new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_BLOOD_GROUPS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                    break;
+                case GET_CALENDAR_EVENTS:
+                    new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_CALENDAR_EVENTS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                    break;
 //                    case GET_EDUCATION_QUALIFICATION:
 //                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_EDUCATION_QUALIFICATION, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
 //                        break;
@@ -969,113 +979,147 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
 //                    case GET_MEDICAL_COUNCILS:
 //                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_MEDICAL_COUNCILS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
 //                        break;
-                    case GET_PRESENT_COMPLAINT_SUGGESTIONS:
-                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_PRESENT_COMPLAINT_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
-                        break;
-                    case GET_COMPLAINT_SUGGESTIONS:
-                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_COMPLAINT_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
-                        break;
-                    case GET_HISTORY_OF_PRESENT_COMPLAINT_SUGGESTIONS:
-                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_HISTORY_OF_PRESENT_COMPLAINT_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
-                        break;
-                    case GET_MENSTRUAL_HISTORY_SUGGESTIONS:
-                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_MENSTRUAL_HISTORY_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
-                        break;
-                    case GET_OBSTETRIC_HISTORY_SUGGESTIONS:
-                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_OBSTETRIC_HISTORY_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
-                        break;
-                    case GET_GENERAL_EXAMINATION_SUGGESTIONS:
-                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_GENERAL_EXAMINATION_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
-                        break;
-                    case GET_SYSTEMIC_EXAMINATION_SUGGESTIONS:
-                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_SYSTEMIC_EXAMINATION_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
-                        break;
-                    case GET_OBSERVATION_SUGGESTIONS:
-                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_OBSERVATION_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
-                        break;
-                    case GET_INVESTIGATION_SUGGESTIONS:
-                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_INVESTIGATION_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
-                        break;
-                    case GET_PROVISIONAL_DIAGNOSIS_SUGGESTIONS:
-                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_PROVISIONAL_DIAGNOSIS_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
-                        break;
-                    case GET_DIAGNOSIS_SUGGESTIONS:
-                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_DIAGNOSIS_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
-                        break;
-                    case GET_ECG_SUGGESTIONS:
-                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_ECG_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
-                        break;
-                    case GET_ECHO_SUGGESTIONS:
-                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_ECHO_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
-                        break;
-                    case GET_XRAY_SUGGESTIONS:
-                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_XRAY_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
-                        break;
-                    case GET_HOLTER_SUGGESTIONS:
-                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_HOLTER_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
-                        break;
-                    case GET_PA_SUGGESTIONS:
-                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_PA_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
-                        break;
-                    case GET_PV_SUGGESTIONS:
-                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_PV_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
-                        break;
-                    case GET_PS_SUGGESTIONS:
-                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_PS_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
-                        break;
-                    case GET_EAR_EXAM_SUGGESTIONS:
-                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_PC_EARS_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
-                        break;
-                    case GET_NECK_EXAM_SUGGESTIONS:
-                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_NECK_EXAM_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
-                        break;
-                    case GET_NOSE_EXAM_SUGGESTIONS:
-                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_NOSE_EXAM_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
-                        break;
-                    case GET_INDIRECT_LARYGOSCOPY_EXAM_SUGGESTIONS:
-                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_INDIRECT_LARYGOSCOPY_EXAM_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
-                        break;
-                    case GET_ORAL_CAVITY_THROAT_EXAM_SUGGESTIONS:
-                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_ORAL_CAVITY_THROAT_EXAM_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
-                        break;
-                    case GET_PC_EARS_SUGGESTIONS:
-                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_PC_EARS_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
-                        break;
-                    case GET_PC_NOSE_SUGGESTIONS:
-                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_PC_NOSE_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
-                        break;
-                    case GET_PC_ORAL_CAVITY_SUGGESTIONS:
-                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_PC_ORAL_CAVITY_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
-                        break;
-                    case GET_PC_THROAT_SUGGESTIONS:
-                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_PC_THROAT_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
-                        break;
-                    case GET_PROCEDURE_NOTE_SUGGESTIONS:
-                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_PROCEDURE_NOTE_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
-                        break;
-                    case GET_INDICATION_OF_USG_SUGGESTIONS:
-                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_INDICATION_OF_USG_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
-                        break;
-                    case GET_NOTES_SUGGESTIONS:
-                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_NOTES_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
-                        break;
-                    case GET_SEARCH_ADVICE_SOLR:
-                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_ADVICE_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
-                        break;
-                    case GET_DISEASE_LIST:
-                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_DISEASE_LIST, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
-                        break;
-                    case GET_TEMPLATES_LIST:
-                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_TEMPLATES, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
-                        break;
-                    case GET_BOTH_PERMISSIONS_FOR_DOCTOR:
-                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_BOTH_USER_UI_PERMISSIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
-                        break;
-                    default:
-                        break;
-                }
+                case GET_PRESENT_COMPLAINT_SUGGESTIONS:
+                    new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_PRESENT_COMPLAINT_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                    break;
+                case GET_COMPLAINT_SUGGESTIONS:
+                    new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_COMPLAINT_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                    break;
+                case GET_HISTORY_OF_PRESENT_COMPLAINT_SUGGESTIONS:
+                    new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_HISTORY_OF_PRESENT_COMPLAINT_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                    break;
+                case GET_MENSTRUAL_HISTORY_SUGGESTIONS:
+                    new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_MENSTRUAL_HISTORY_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                    break;
+                case GET_OBSTETRIC_HISTORY_SUGGESTIONS:
+                    new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_OBSTETRIC_HISTORY_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                    break;
+                case GET_GENERAL_EXAMINATION_SUGGESTIONS:
+                    new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_GENERAL_EXAMINATION_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                    break;
+                case GET_SYSTEMIC_EXAMINATION_SUGGESTIONS:
+                    new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_SYSTEMIC_EXAMINATION_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                    break;
+                case GET_OBSERVATION_SUGGESTIONS:
+                    new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_OBSERVATION_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                    break;
+                case GET_INVESTIGATION_SUGGESTIONS:
+                    new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_INVESTIGATION_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                    break;
+                case GET_PROVISIONAL_DIAGNOSIS_SUGGESTIONS:
+                    new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_PROVISIONAL_DIAGNOSIS_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                    break;
+                case GET_DIAGNOSIS_SUGGESTIONS:
+                    new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_DIAGNOSIS_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                    break;
+                case GET_ECG_SUGGESTIONS:
+                    new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_ECG_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                    break;
+                case GET_ECHO_SUGGESTIONS:
+                    new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_ECHO_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                    break;
+                case GET_XRAY_SUGGESTIONS:
+                    new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_XRAY_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                    break;
+                case GET_HOLTER_SUGGESTIONS:
+                    new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_HOLTER_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                    break;
+                case GET_PA_SUGGESTIONS:
+                    new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_PA_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                    break;
+                case GET_PV_SUGGESTIONS:
+                    new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_PV_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                    break;
+                case GET_PS_SUGGESTIONS:
+                    new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_PS_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                    break;
+                case GET_EAR_EXAM_SUGGESTIONS:
+                    new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_PC_EARS_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                    break;
+                case GET_NECK_EXAM_SUGGESTIONS:
+                    new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_NECK_EXAM_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                    break;
+                case GET_NOSE_EXAM_SUGGESTIONS:
+                    new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_NOSE_EXAM_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                    break;
+                case GET_INDIRECT_LARYGOSCOPY_EXAM_SUGGESTIONS:
+                    new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_INDIRECT_LARYGOSCOPY_EXAM_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                    break;
+                case GET_ORAL_CAVITY_THROAT_EXAM_SUGGESTIONS:
+                    new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_ORAL_CAVITY_THROAT_EXAM_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                    break;
+                case GET_PC_EARS_SUGGESTIONS:
+                    new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_PC_EARS_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                    break;
+                case GET_PC_NOSE_SUGGESTIONS:
+                    new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_PC_NOSE_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                    break;
+                case GET_PC_ORAL_CAVITY_SUGGESTIONS:
+                    new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_PC_ORAL_CAVITY_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                    break;
+                case GET_PC_THROAT_SUGGESTIONS:
+                    new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_PC_THROAT_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                    break;
+                case GET_PROCEDURE_NOTE_SUGGESTIONS:
+                    new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_PROCEDURE_NOTE_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                    break;
+                case GET_INDICATION_OF_USG_SUGGESTIONS:
+                    new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_INDICATION_OF_USG_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                    break;
+                case GET_NOTES_SUGGESTIONS:
+                    new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_NOTES_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                    break;
+                case GET_SEARCH_ADVICE_SOLR:
+                    new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_ADVICE_SUGGESTIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                    break;
+                case GET_DISEASE_LIST:
+                    new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_DISEASE_LIST, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                    break;
+                case GET_TEMPLATES_LIST:
+                    new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_TEMPLATES, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                    break;
+                case GET_BOTH_PERMISSIONS_FOR_DOCTOR:
+                    new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_BOTH_USER_UI_PERMISSIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                    break;
+                default:
+                    break;
+
             }
         }
+
+    }
+
+    private boolean isPagingRequired(VolleyResponseBean response) {
+        ArrayList<Object> responseList = response.getDataList();
+        int maxCount = 0;
+        switch (response.getWebServiceType()) {
+            case GET_CONTACTS:
+                boolean isEndOfListAchieved = false;
+                if (Util.isNullOrEmptyList(responseList)
+                        || responseList.size() < InitialSyncFragment.MAX_SIZE
+                        || responseList.size() > InitialSyncFragment.MAX_SIZE)
+                    isEndOfListAchieved = true;
+                if (!isEndOfListAchieved) {
+                    InitialSyncFragment.PAGE_NUMBER = InitialSyncFragment.PAGE_NUMBER + 1;
+                    InitialSyncFragment.isPageLoading = true;
+                    if (response.getData() instanceof Long)
+                        InitialSyncFragment.MAX_COUNT = (long) response.getData();
+                    else if (response.getData() instanceof Double) {
+                        Double data = (Double) response.getData();
+                        InitialSyncFragment.MAX_COUNT = Math.round(data);
+                    } else InitialSyncFragment.MAX_COUNT = maxCount;
+                    return true;
+                } else resetInitialSyncPaginationAttributes();
+                return false;
+            default:
+                resetInitialSyncPaginationAttributes();
+        }
+        return false;
+    }
+
+    private void resetInitialSyncPaginationAttributes() {
+        InitialSyncFragment.PAGE_NUMBER = 0;
+        InitialSyncFragment.isPageLoading = false;
     }
 
     @Override
@@ -1146,9 +1190,12 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
                                     .getDataList());
                 break;
             case ADD_PATIENTS:
-                if (!Util.isNullOrEmptyList(response.getDataList()))
-                    LocalDataServiceImpl.getInstance(mApp).
-                            addPatientsList((ArrayList<RegisteredPatientDetailsUpdated>) (ArrayList<?>) response.getDataList());
+                ArrayList<RegisteredPatientDetailsUpdated> patientsList = null;
+                if (!Util.isNullOrEmptyList(response.getDataList())) {
+                    patientsList = (ArrayList<RegisteredPatientDetailsUpdated>) (ArrayList<?>) response.getDataList();
+                    if (!Util.isNullOrEmptyList(patientsList))
+                        LocalDataServiceImpl.getInstance(mApp).addPatientsList(patientsList);
+                }
                 break;
 //            case ADD_EDUCATION_QUALIFICATION:
 //                if (!Util.isNullOrEmptyList(response.getDataList()))
@@ -1371,6 +1418,8 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
         }
         VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
         volleyResponseBean.setWebServiceType(response.getWebServiceType());
+        volleyResponseBean.setDataList(response.getDataList());
+        volleyResponseBean.setData(response.getData());
         volleyResponseBean.setIsDataFromLocal(true);
         return volleyResponseBean;
     }
@@ -1656,10 +1705,19 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
         }
     }
 
-    public void syncContacts(User user) {
-        Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(user, LocalTabelType.REGISTERED_PATIENTS_DETAILS);
-        WebDataServiceImpl.getInstance(mApp).getContactsList(RegisteredPatientDetailsUpdated.class, user.getUniqueId(),
-                user.getForeignHospitalId(), user.getForeignLocationId(), latestUpdatedTime, this, this);
+    public void syncContacts(boolean isPageWiseLoading, User user) {
+        Long latestUpdatedTime = 0l;
+        if (!isPageWiseLoading) {
+            latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(user, LocalTabelType.REGISTERED_PATIENTS_DETAILS);
+            WebDataServiceImpl.getInstance(mApp).getContactsList(RegisteredPatientDetailsUpdated.class, user.getUniqueId(),
+                    user.getForeignHospitalId(), user.getForeignLocationId(), latestUpdatedTime, user, this, this);
+        } else {
+            WebDataServiceImpl.getInstance(mApp).getContactsList(RegisteredPatientDetailsUpdated.class, user.getUniqueId(),
+                    user.getForeignHospitalId(), user.getForeignLocationId(), 0l, user, InitialSyncFragment.PAGE_NUMBER, InitialSyncFragment.MAX_SIZE, null, this, this);
+        }
+//        Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(user, LocalTabelType.REGISTERED_PATIENTS_DETAILS);
+//        WebDataServiceImpl.getInstance(mApp).getContactsList(RegisteredPatientDetailsUpdated.class, user.getUniqueId(),
+//                user.getForeignHospitalId(), user.getForeignLocationId(), latestUpdatedTime, this, this);
 
     }
 

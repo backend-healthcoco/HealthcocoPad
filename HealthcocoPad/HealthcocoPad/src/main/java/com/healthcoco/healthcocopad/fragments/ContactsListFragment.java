@@ -97,7 +97,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
     public static final String INTENT_GET_CLINIC_PROFILE = "com.healthcoco.REFRESH_CLINIC_PROFILE_DETAILS";
 
     //variables need for pagination
-    public static final int MAX_SIZE = 16;
+    public static final int MAX_SIZE = 22;
     private static final String TAG_RECEIVERS_REGISTERED = "tagReceiversRegistered";
     private static Integer REQUEST_CODE_CONTACTS_DETAIL = 101;
     BroadcastReceiver finishContactsListReceiver = new BroadcastReceiver() {
@@ -401,7 +401,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
             mActivity.showLoading(false);
         Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(user, LocalTabelType.REGISTERED_PATIENTS_DETAILS);
         WebDataServiceImpl.getInstance(mApp).getContactsList(RegisteredPatientDetailsUpdated.class, user.getUniqueId(),
-                user.getForeignHospitalId(), user.getForeignLocationId(), latestUpdatedTime, this, this);
+                user.getForeignHospitalId(), user.getForeignLocationId(), latestUpdatedTime, user, this, this);
     }
 
     private void initFilterFragment() {

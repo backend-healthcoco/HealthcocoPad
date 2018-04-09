@@ -141,7 +141,7 @@
     <string name="syncing_profession">Syncing Profession&#8230;</string>
     <string name="syncing_reffered_by">Syncing Referred By&#8230;</string>
     <string name="syncing_blood_groups">Syncing Bloud Groups&#8230;</string>
-    <string name="syncing_contacts">Syncing Contacts&#8230;</string>
+    <string name="syncing_contacts">Syncing Contacts %s&#8230;</string>
     <string name="syncing_education_qualification">Syncing Education Qualification&#8230;</string>
     <string name="syncing_institutes">Syncing Institutes&#8230;</string>
     <string name="syncing_present_complaint_suggestions">Syncing Present Complaint Suggestions&#8230;</string>

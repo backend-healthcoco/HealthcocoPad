@@ -34,6 +34,17 @@ public enum RoleType {
         return false;
     }
 
+    public static boolean isOnlyConsultantOrIsOnlyDoctorOrBoth(ArrayList<RoleType> roleTypes) {
+        if (!Util.isNullOrEmptyList(roleTypes)
+                && !roleTypes.contains(RoleType.SUPER_ADMIN)
+                && !roleTypes.contains(RoleType.ADMIN)
+                && !roleTypes.contains(RoleType.HOSPITAL_ADMIN)
+                && !roleTypes.contains(RoleType.LOCATION_ADMIN)
+                && (roleTypes.contains(RoleType.CONSULTANT_DOCTOR) || roleTypes.contains(RoleType.DOCTOR)))
+            return true;
+        return false;
+    }
+
     public static boolean isAdmin(ArrayList<RoleType> roleTypes) {
         if (!Util.isNullOrEmptyList(roleTypes)
                 && (roleTypes.contains(RoleType.HOSPITAL_ADMIN)
