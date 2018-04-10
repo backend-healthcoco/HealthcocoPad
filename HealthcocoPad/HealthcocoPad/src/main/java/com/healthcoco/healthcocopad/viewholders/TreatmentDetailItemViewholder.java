@@ -92,9 +92,11 @@ public class TreatmentDetailItemViewholder extends LinearLayout {
                 tvName.setText(getResources().getString(R.string.no_text_dash));
         }
         //set Quantity Per Day
-        if (treatmentItem.getQuantity().getValue() != 0)
-            tvQtyPerDay.setText(treatmentItem.getQuantity().getValue() + "");
-        else tvQtyPerDay.setText(getResources().getString(R.string.no_text_dash));
+        if (treatmentItem.getQuantity() != null) {
+            if (treatmentItem.getQuantity().getValue() != 0)
+                tvQtyPerDay.setText(treatmentItem.getQuantity().getValue() + "");
+            else tvQtyPerDay.setText(getResources().getString(R.string.no_text_dash));
+        } else tvQtyPerDay.setText(getResources().getString(R.string.no_text_dash));
 
         //set Duration
         double cost = treatmentItem.getCost();

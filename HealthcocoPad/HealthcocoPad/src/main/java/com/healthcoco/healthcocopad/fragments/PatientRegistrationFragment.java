@@ -49,6 +49,8 @@ import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.bean.server.UserGroups;
 import com.healthcoco.healthcocopad.custom.AutoCompleteTextViewAdapter;
+import com.healthcoco.healthcocopad.custom.ExistingPatientAutoCompleteAdapter;
+import com.healthcoco.healthcocopad.custom.HealthcocoTextWatcher;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocopad.enums.AddUpdateNameDialogType;
 import com.healthcoco.healthcocopad.enums.AutoCompleteTextViewType;
@@ -59,11 +61,13 @@ import com.healthcoco.healthcocopad.enums.DialogType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.LocalTabelType;
 import com.healthcoco.healthcocopad.enums.OptionsType;
+import com.healthcoco.healthcocopad.enums.PatientProfileScreenType;
 import com.healthcoco.healthcocopad.enums.RecordType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.CommonListDialogItemClickListener;
 import com.healthcoco.healthcocopad.listeners.CommonOptionsDialogItemClickListener;
 import com.healthcoco.healthcocopad.listeners.DownloadFileFromUrlListener;
+import com.healthcoco.healthcocopad.listeners.HealthcocoTextWatcherListener;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
 import com.healthcoco.healthcocopad.listeners.PatientRegistrationListener;
 import com.healthcoco.healthcocopad.services.GsonRequest;
@@ -94,7 +98,7 @@ import java.util.List;
  */
 public class PatientRegistrationFragment extends HealthCocoFragment implements View.OnClickListener, CommonListDialogItemClickListener,
         GsonRequest.ErrorListener, Response.Listener<VolleyResponseBean>, LocalDoInBackgroundListenerOptimised,
-        CommonOptionsDialogItemClickListener, DownloadFileFromUrlListener, PatientRegistrationListener {
+        CommonOptionsDialogItemClickListener, DownloadFileFromUrlListener, PatientRegistrationListener, HealthcocoTextWatcherListener {
     private static final int REQUEST_CODE_REGISTER_PATIENT = 101;
     private static final String SEPARATOR_GROUP_NOTES = "; ";
     private static final int PIC_CROP = 2;
@@ -118,7 +122,7 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
         add("B1-");
         add("B1+");
     }};
-    private EditText editName;
+    private AutoCompleteTextView editName;
     private RadioGroup radioGroupGender;
     private TextView tvBirthDay;
     private EditText editEmail;
@@ -129,13 +133,15 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
     private EditText editStreetAddress;
     private AutoCompleteTextView autotvCountry;
     private EditText editPincode;
-    private TextView tvMobileNumber;
+    private EditText editMobileNumber;
     private User user;
     private String mobileNumber;
     private DialogFragment commonListDialog;
     private RegisteredPatientDetailsUpdated selectedPatient;
     private boolean isEditPatient;
 
+    private LinearLayout loadingExistingPatientsList;
+    private ExistingPatientAutoCompleteAdapter existingPatientAutotvAdapter;
     private List<Reference> referenceList;
     private Reference selectedReference;
     private CityResponse selectedCity;
@@ -211,8 +217,8 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
 
     @Override
     public void initViews() {
-        tvMobileNumber = (TextView) view.findViewById(R.id.tv_mobile_number);
-        editName = (EditText) view.findViewById(R.id.edit_name);
+        editMobileNumber = (EditText) view.findViewById(R.id.edit_mobile_number);
+        editName = (AutoCompleteTextView) view.findViewById(R.id.autotv_patient_name);
         containerEditName = (LinearLayout) view.findViewById(R.id.container_edit_name);
         radioGroupGender = (RadioGroup) view.findViewById(R.id.rg_gender_select);
         tvBirthDay = (TextView) view.findViewById(R.id.tv_birthday);
@@ -240,6 +246,8 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
         tvNoNotes = (TextView) view.findViewById(R.id.tv_no_notes);
         tvNoGroups = (TextView) view.findViewById(R.id.tv_no_groups);
         gvGroups = (GridView) view.findViewById(R.id.gv_groups);
+        loadingExistingPatientsList = (LinearLayout) view.findViewById(R.id.loading_existing_patients_list);
+
     }
 
     @Override
@@ -251,6 +259,8 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
         btDeleteBloodGroup.setOnClickListener(this);
         btDeleteReferredBy.setOnClickListener(this);
         btAddNote.setOnClickListener(this);
+        editMobileNumber.addTextChangedListener(new HealthcocoTextWatcher(editMobileNumber, this));
+
     }
 
     private void initDefaultData() {
@@ -314,7 +324,7 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
             }
         }
         if (!Util.isNullOrBlank(mobileNumber))
-            tvMobileNumber.setText(mobileNumber);
+            editMobileNumber.setText(mobileNumber);
     }
 
     private void initPatientDetails(Object patientDetails) {
@@ -388,7 +398,7 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
         containerEditName.setBackgroundResource(android.R.color.transparent);
         editName.setText(name);
 
-        tvMobileNumber.setText(mobileNumber);
+        editMobileNumber.setText(mobileNumber);
         autotvCity.setText(city);
         editLocality.setText(locality);
         editPincode.setText(pincode);
@@ -506,7 +516,7 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
         mActivity.showLoading(false);
         RegisterNewPatientRequest patientDetails = new RegisterNewPatientRequest();
         patientDetails.setLocalPatientName(name);
-        patientDetails.setMobileNumber(String.valueOf(tvMobileNumber.getText()));
+        patientDetails.setMobileNumber(String.valueOf(editMobileNumber.getText()));
         patientDetails.setDoctorId(user.getUniqueId());
         patientDetails.setLocationId(user.getForeignLocationId());
         patientDetails.setHospitalId(user.getForeignHospitalId());
@@ -621,11 +631,12 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
         String errorMsg = errorMessage;
         if (volleyResponseBean != null && !Util.isNullOrBlank(volleyResponseBean.getErrMsg())) {
             errorMsg = volleyResponseBean.getErrMsg();
-        }
-        if (volleyResponseBean.getWebServiceType() != null) {
-            mActivity.hideLoading();
-            Util.showToast(mActivity, volleyResponseBean.getWebServiceType() + errorMsg);
-            return;
+
+            if (volleyResponseBean.getWebServiceType() != null) {
+                mActivity.hideLoading();
+                Util.showToast(mActivity, volleyResponseBean.getWebServiceType() + errorMsg);
+                return;
+            }
         }
         mActivity.hideLoading();
         Util.showToast(mActivity, errorMsg);
@@ -705,6 +716,17 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
                 }
                 mActivity.hideLoading();
                 break;
+            case SEARCH_PATIENTS:
+                if (!Util.isNullOrEmptyList(response.getDataList())) {
+                    ArrayList<AlreadyRegisteredPatientsResponse> list = (ArrayList<AlreadyRegisteredPatientsResponse>) (ArrayList<?>) response
+                            .getDataList();
+                    LocalDataServiceImpl.getInstance(mApp).addAlreadyRegisteredPatients(list);
+                    showSearchedPatientsListPopUp(list);
+                } else {
+                    editName.setAdapter(null);
+                }
+                loadingExistingPatientsList.setVisibility(View.GONE);
+                return;
         }
         mActivity.hideLoading();
     }
@@ -966,4 +988,74 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
     public boolean isGroupAssigned(String groupId) {
         return groupIdsToAssign.contains(groupId);
     }
+
+    @Override
+    public void afterTextChange(View v, String s) {
+        switch (v.getId()) {
+            case R.id.edit_mobile_number:
+                LogUtils.LOGD(TAG, "Edit Mobile Number");
+//                editName.setText("");
+//                HealthCocoConstants.SELECTED_PATIENTS_USER_ID = null;
+                if (Util.isValidMobileNo(s)) {
+                    getExistingPatientsList(s);
+                }
+                break;
+        }
+
+    }
+
+    private void getExistingPatientsList(String mobileNo) {
+        loadingExistingPatientsList.setVisibility(View.VISIBLE);
+        WebDataServiceImpl.getInstance(mApp).getAlreadyRegisteredPatients(AlreadyRegisteredPatientsResponse.class, mobileNo, user, this, this);
+    }
+
+    private void showSearchedPatientsListPopUp(List<AlreadyRegisteredPatientsResponse> list) {
+        try {
+            if (!Util.isNullOrEmptyList(list)) {
+                existingPatientAutotvAdapter = new ExistingPatientAutoCompleteAdapter(mActivity, R.layout.autocomplete_existing_patient,
+                        list);
+                editName.setThreshold(0);
+                editName.setAdapter(existingPatientAutotvAdapter);
+                editName.setDropDownAnchor(editName.getId());
+                editName.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        editName.setText("");
+                        AlreadyRegisteredPatientsResponse existingPatient = existingPatientAutotvAdapter.getSelectedObject(position);
+//                        HealthCocoConstants.SELECTED_PATIENTS_USER_ID = existingPatient.getUserId();
+                        if (existingPatient != null) {
+                            if (existingPatient.getIsPartOfClinic()) {
+                                editName.setText(existingPatient.getFirstName());
+                                editName.setVisibility(View.VISIBLE);
+                            } else {
+                                LogUtils.LOGD(TAG, "SELECTED_PATIENTS_USER_ID selected " + HealthCocoConstants.SELECTED_PATIENTS_USER_ID);
+//                                showSelectedPatientHeader(false);
+                                editName.setText(existingPatient.getFirstName());
+                                editName.setVisibility(View.VISIBLE);
+                            }
+                        }
+                    }
+                });
+//                Util.setFocusToEditText(mActivity, editName);
+//                editName.setSelection(editName.getText().length());
+                editName.showDropDown();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void getAndRefreshSelectedPatient(boolean isExistingPatientPartOfClinic) {
+        /*LogUtils.LOGD(TAG, "SELECTED_PATIENTS_USER_ID selected " + HealthCocoConstants.SELECTED_PATIENTS_USER_ID);
+        selectedPatient = LocalDataServiceImpl.getInstance(mApp).getPatient(HealthCocoConstants.SELECTED_PATIENTS_USER_ID);
+        if (isExistingPatientPartOfClinic && selectedPatient == null) {
+            mActivity.showLoading(false);
+            Util.sendBroadcast(mApp, ContactsListFragment.INTENT_REFRESH_CONTACTS_LIST_FROM_SERVER);
+            return;
+        } else
+            mActivity.hideLoading();
+        editMobileNumber.setText("");
+        editName.setText("");*/
+    }
+
 }

@@ -419,7 +419,8 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
                         CalendarEvents calendarEvents = (CalendarEvents) response.getData();
                         calendarEvents.setIsAddedOnSuccess(true);
                         if (bookAppointmentFromScreenType == BookAppointmentFromScreenType.CALENDAR_LIST_ADD_NEW
-                                || bookAppointmentFromScreenType == BookAppointmentFromScreenType.CALENDAR_LIST_RESCHEDULE)
+                                || bookAppointmentFromScreenType == BookAppointmentFromScreenType.CALENDAR_LIST_RESCHEDULE ||
+                                bookAppointmentFromScreenType == BookAppointmentFromScreenType.APPOINTMENTS_QUEUE_ADD_NEW)
                             LocalDataServiceImpl.getInstance(mApp).addCalendarEventsUpdated(calendarEvents);
                         else
                             LocalDataServiceImpl.getInstance(mApp).addAppointment(calendarEvents);

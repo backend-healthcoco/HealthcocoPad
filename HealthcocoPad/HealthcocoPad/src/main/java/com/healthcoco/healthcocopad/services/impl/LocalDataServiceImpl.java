@@ -375,10 +375,23 @@ public class LocalDataServiceImpl {
         List<Hospital> hospitalsList = (List<Hospital>) getListBySelectQuery(Hospital.class, key, uniqueId);
         if (!Util.isNullOrEmptyList(hospitalsList)) {
             for (Hospital hospital : hospitalsList) {
-//                hospital.setLocationsAndAccessControl(getLocationAndAccessControl(LocalDatabaseUtils.KEY_FOREIGN_HOSPITAL_ID, hospital.getUniqueId()));
+                hospital.setLocationsAndAccessControl(getLocationAndAccessControl(LocalDatabaseUtils.KEY_FOREIGN_HOSPITAL_ID, hospital.getUniqueId()));
             }
         }
         return hospitalsList;
+    }
+
+    private List<LocationAndAccessControl> getLocationAndAccessControl(String key, String uniqueId) {
+        List<LocationAndAccessControl> list = (List<LocationAndAccessControl>) getListBySelectQuery(LocationAndAccessControl.class,
+                key, uniqueId);
+        if (!Util.isNullOrEmptyList(list)) {
+            for (LocationAndAccessControl locationAndAccessControl :
+                    list) {
+                locationAndAccessControl.setImages((List<ClinicImage>) getListByKeyValue(ClinicImage.class, LocalDatabaseUtils.KEY_FOREIGN_LOCATION_ID, locationAndAccessControl.getUniqueId()));
+                locationAndAccessControl.setWorkingSchedules(getWorkingSchedulesForDoctor(locationAndAccessControl.getDoctorId(), locationAndAccessControl.getUniqueId()));
+            }
+        }
+        return list;
     }
 
     private List<?> getListBySelectQuery(Class<?> class1, String key, String value) {

@@ -7,7 +7,7 @@ public enum FragmentType {
     CONTACTS(MenuType.SEPARATOR, R.string.patients, R.drawable.ic_action_call, ActionbarLeftRightActionTypeDrawables.WITH_FILTER, ActionbarLeftRightActionTypeDrawables.WITH_CHAMGE_VIEW),
     CLINIC_PROFILE(MenuType.SEPARATOR, R.string.clinic_proifle, R.drawable.ic_action_clinic, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION),
     PROFILE(MenuType.SEPARATOR, R.string.profile, R.drawable.ic_action_profileicon, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION),
-    QUEUE(MenuType.SEPARATOR, R.string.calendar, R.drawable.ic_action_calender, ActionbarLeftRightActionTypeDrawables.WITH_ADD, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION),
+    QUEUE(MenuType.SEPARATOR, R.string.calendar, R.drawable.ic_action_appointmnt, ActionbarLeftRightActionTypeDrawables.WITH_ADD, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION),
     CALENDAR(MenuType.SEPARATOR, R.string.calendar, R.drawable.ic_action_calender, ActionbarLeftRightActionTypeDrawables.WITH_ADD, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION),
     MAIL(MenuType.SEPARATOR, R.string.mail, R.drawable.menu_mail_selector, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION),
     ISSUE_TRACKER(MenuType.SEPARATOR, R.string.issue_tracker, R.drawable.ic_action_issue_tracker, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION),

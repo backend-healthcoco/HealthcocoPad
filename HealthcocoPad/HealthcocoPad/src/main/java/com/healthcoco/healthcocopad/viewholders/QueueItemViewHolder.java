@@ -105,7 +105,7 @@ public class QueueItemViewHolder extends HealthcocoComonRecylcerViewHolder imple
     public void applyData(Object object) {
         mActivity.initAppointmentDetailsPopupWindows(layoutListItem, object);
 
-        this.calendarEvents = (CalendarEvents) object;
+        calendarEvents = (CalendarEvents) object;
         if (calendarEvents != null) {
             String doctorName = "";
             String mobileNumber = "";
@@ -118,25 +118,26 @@ public class QueueItemViewHolder extends HealthcocoComonRecylcerViewHolder imple
                         patientName = Util.getValidatedValueOrNull(patient.getLocalPatientName());
                         mobileNumber = Util.getValidatedValueOrNull(patient.getMobileNumber());
                         doctorName = Util.getValidatedValueOrNull(calendarEvents.getDoctorName());
+
+
+                        if (!Util.isNullOrBlank(patientName)) {
+                            tvPatientName.setText(patientName);
+                        } else {
+                            if (!Util.isNullOrBlank(calendarEvents.getPatient().getFirstName()))
+                                tvPatientName.setText(calendarEvents.getPatient().getFirstName());
+                        }
+                        if (!Util.isNullOrBlank(mobileNumber)) {
+                            tvMobileNumber.setText(mobileNumber);
+                        } else tvMobileNumber.setText("");
+                        if (!Util.isNullOrBlank(doctorName)) {
+                            tvDoctorName.setText(doctorName);
+                        } else {
+                            if (!Util.isNullOrBlank(calendarEvents.getCreatedBy()))
+                                tvDoctorName.setText(calendarEvents.getCreatedBy());
+                        }
                     }
                     break;
             }
-            if (!Util.isNullOrBlank(patientName)) {
-                tvPatientName.setText(patientName);
-            } else {
-                if (!Util.isNullOrBlank(calendarEvents.getPatient().getFirstName()))
-                    tvPatientName.setText(calendarEvents.getPatient().getFirstName());
-            }
-            if (!Util.isNullOrBlank(mobileNumber)) {
-                tvMobileNumber.setText(mobileNumber);
-            } else tvMobileNumber.setText("");
-            if (!Util.isNullOrBlank(doctorName)) {
-                tvDoctorName.setText(doctorName);
-            } else {
-                if (!Util.isNullOrBlank(calendarEvents.getCreatedBy()))
-                    tvDoctorName.setText(calendarEvents.getCreatedBy());
-            }
-
 
             CalendarStatus calendarEventsStatus = calendarEvents.getStatus();
             if (calendarEventsStatus != null) {

@@ -14,6 +14,8 @@ import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.AlreadyRegisteredPatientsResponse;
+import com.healthcoco.healthcocopad.bean.server.Hospital;
+import com.healthcoco.healthcocopad.bean.server.LocationAndAccessControl;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
@@ -34,6 +36,7 @@ public class PatientNumberSearchDialogFragment extends HealthCocoDialogFragment 
     private EditText editMobileNumber;
     private Button btProceed;
     private User user;
+    private boolean isMobileNumberOptional;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -48,9 +51,22 @@ public class PatientNumberSearchDialogFragment extends HealthCocoDialogFragment 
         LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
         if (doctor != null && doctor.getUser() != null && !Util.isNullOrBlank(doctor.getUser().getUniqueId())) {
             user = doctor.getUser();
+            isMobileNumberOptional = getIsMobileNumberOptional(doctor);
             init();
             setWidthHeight(0.50, 0.52);
         }
+    }
+
+    private boolean getIsMobileNumberOptional(LoginResponse doctor) {
+        for (Hospital hospital : doctor.getHospitals()) {
+            if (hospital != null && (!Util.isNullOrEmptyList(hospital.getLocationsAndAccessControl()))) {
+                for (LocationAndAccessControl locationAndAccessControl : hospital.getLocationsAndAccessControl()) {
+                    if (locationAndAccessControl != null)
+                        return locationAndAccessControl.getMobileNumberOptional();
+                }
+            }
+        }
+        return false;
     }
 
     @Override
@@ -89,15 +105,19 @@ public class PatientNumberSearchDialogFragment extends HealthCocoDialogFragment 
     private void validateData() {
         String mobileNo = (String.valueOf(editMobileNumber.getText()));
         String msg = null;
-        if (Util.isNullOrBlank(mobileNo))
+        if (Util.isNullOrBlank(mobileNo)) {
+            if (isMobileNumberOptional)
+                openRegistrationFragment(null);
             msg = getResources().getString(R.string.please_enter_mobile_no);
-        else if (!Util.isValidMobileNo(mobileNo))
+        } else if (!Util.isValidMobileNo(mobileNo))
             msg = getResources().getString(R.string.please_enter_valid_mobile_no);
 
         if (Util.isNullOrBlank(msg)) {
             searchPatients(mobileNo);
-        } else
-            Util.showAlert(mActivity, msg);
+        } else {
+            if (!isMobileNumberOptional)
+                Util.showAlert(mActivity, msg);
+        }
     }
 
     private void searchPatients(String mobileNo) {
@@ -145,7 +165,8 @@ public class PatientNumberSearchDialogFragment extends HealthCocoDialogFragment 
     private void openRegistrationFragment(String mobileNumber) {
         Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
         intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.PATIENT_REGISTRATION.ordinal());
-        intent.putExtra(HealthCocoConstants.TAG_MOBILE_NUMBER, mobileNumber);
+        if (!Util.isNullOrBlank(mobileNumber))
+            intent.putExtra(HealthCocoConstants.TAG_MOBILE_NUMBER, mobileNumber);
         startActivityForResult(intent, REQUEST_CODE_PATIENT_NUMBER_SERACH);
     }
 

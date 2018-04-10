@@ -58,6 +58,8 @@ public class LocationAndAccessControl extends SugarRecord {
     private boolean isTwentyFourSevenOpen;
 
     private Boolean isLab = false;
+
+    private Boolean isMobileNumberOptional = false;
     @Ignore
     private ArrayList<Role> roles;
 
@@ -286,6 +288,14 @@ public class LocationAndAccessControl extends SugarRecord {
 
     public void setIsLab(Boolean isLab) {
         this.isLab = isLab;
+    }
+
+    public Boolean getMobileNumberOptional() {
+        return isMobileNumberOptional;
+    }
+
+    public void setMobileNumberOptional(Boolean mobileNumberOptional) {
+        isMobileNumberOptional = mobileNumberOptional;
     }
 
     public ArrayList<Role> getRoles() {

@@ -96,8 +96,8 @@
                                 android:layout_weight="1"
                                 android:text="Patient Name:" />
 
-                            <EditText
-                                android:id="@+id/edit_name"
+                            <AutoCompleteTextView
+                                android:id="@+id/autotv_patient_name"
                                 style="@style/registration_edittext"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
@@ -105,7 +105,21 @@
                                 android:digits=" abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
                                 android:hint="@string/full_name"
                                 android:inputType="textPersonName|textNoSuggestions|textCapWords"
-                                android:maxLines="1" />
+                                android:maxLines="1"
+                                android:singleLine="true" />
+
+                            <!--
+                                                        <EditText
+                                                            android:id="@+id/edit_name"
+                                                            style="@style/registration_edittext"
+                                                            android:layout_width="0dp"
+                                                            android:layout_height="wrap_content"
+                                                            android:layout_weight="1"
+                                                            android:digits=" abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                                                            android:hint="@string/full_name"
+                                                            android:inputType="textPersonName|textNoSuggestions|textCapWords"
+                                                            android:maxLines="1" />
+                            -->
                         </LinearLayout>
 
                         <LinearLayout
@@ -121,15 +135,48 @@
                                 android:maxLines="1"
                                 android:text="Patient Mobile:" />
 
-                            <TextView
-                                android:id="@+id/tv_mobile_number"
-                                style="@style/registration_edittext"
+                            <FrameLayout
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:maxLength="@integer/max_mobile_number"
-                                android:maxLines="1"
-                                android:text="9584425255" />
+                                android:layout_weight="1">
+
+                                <EditText
+                                    android:id="@+id/edit_mobile_number"
+                                    style="@style/registration_edittext"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:digits="0123456789"
+                                    android:hint="@string/mobile_number"
+                                    android:inputType="numberDecimal"
+                                    android:maxLength="@integer/max_mobile_number"
+                                    android:maxLines="1" />
+
+                                <LinearLayout
+                                    android:id="@+id/loading_existing_patients_list"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="right|center_vertical"
+                                    android:layout_marginRight="@dimen/patient_profile_image_padding"
+                                    android:visibility="gone">
+
+                                    <ProgressBar
+                                        style="?android:attr/progressBarStyleSmall"
+                                        android:layout_width="@dimen/round_progress_bar_size"
+                                        android:layout_height="@dimen/round_progress_bar_size"
+                                        android:layout_gravity="right|bottom"
+                                        android:progressDrawable="@drawable/progress_loading" />
+                                </LinearLayout>
+
+                            </FrameLayout>
+                            <!-- <TextView
+                                 android:id="@+id/tv_mobile_number"
+                                 style="@style/registration_edittext"
+                                 android:layout_width="0dp"
+                                 android:layout_height="wrap_content"
+                                 android:layout_weight="1"
+                                 android:maxLength="@integer/max_mobile_number"
+                                 android:maxLines="1"
+                                 android:text="" />-->
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
