@@ -38,6 +38,38 @@ public class ExistingPatientAutoCompleteAdapter extends ArrayAdapter<AlreadyRegi
     private List<AlreadyRegisteredPatientsResponse> items;
     private List<AlreadyRegisteredPatientsResponse> itemsAll = new ArrayList<>();
     private List<AlreadyRegisteredPatientsResponse> suggestions;
+    Filter nameFilter = new Filter() {
+
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            try {
+                suggestions.clear();
+                if (constraint != null) {
+                    for (AlreadyRegisteredPatientsResponse object : itemsAll) {
+                        String text = object.getFirstName();
+                        if (text.toLowerCase().contains(constraint.toString().toLowerCase()))
+                            suggestions.add(object);
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            FilterResults filterResults = new FilterResults();
+            filterResults.values = suggestions;
+            filterResults.count = suggestions.size();
+            return filterResults;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            try {
+                items = (List<AlreadyRegisteredPatientsResponse>) results.values;
+                notifyDataSetChanged();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    };
     private int viewResourceId;
     private PatientNumberSearchViewholder holder;
 
@@ -73,12 +105,18 @@ public class ExistingPatientAutoCompleteAdapter extends ArrayAdapter<AlreadyRegi
             ImageView ivContactProfile = (ImageView) convertView.findViewById(R.id.iv_image);
 
             AlreadyRegisteredPatientsResponse objData = getItem(position);
-            tvName.setText(Util.getValidatedValue(objData.getFirstName()));
             if (objData.getIsPartOfClinic()) {
+                tvName.setText(Util.getValidatedValue(objData.getLocalPatientName()));
+                ivIcon.setText(R.string.fa_hospital);
+            } else {
+                tvName.setText(Util.getValidatedValue(objData.getFirstName()));
+                ivIcon.setText(R.string.fa_globe);
+            }
+           /* if (objData.getIsPartOfClinic()) {
                 ivIcon.setText(R.string.fa_hospital);
             } else {
                 ivIcon.setText(R.string.fa_hospital);
-            }
+            }*/
             if (!Util.isNullOrBlank(objData.getImageUrl()))
                 objData.setImageFilePath(ImageUtil.getPathToSaveFile(HealthCocoFileType.PATIENT_PROFILE, Util.getFileNameFromUrl(objData.getImageUrl()), Util.getFileExtension(objData.getImageUrl())));
 
@@ -103,40 +141,6 @@ public class ExistingPatientAutoCompleteAdapter extends ArrayAdapter<AlreadyRegi
     public Filter getFilter() {
         return nameFilter;
     }
-
-    Filter nameFilter = new Filter() {
-
-        @Override
-        protected FilterResults performFiltering(CharSequence constraint) {
-            try {
-                suggestions.clear();
-                if (constraint != null) {
-                    for (AlreadyRegisteredPatientsResponse object : itemsAll) {
-                        String text = object.getFirstName();
-                        if (text.toLowerCase().contains(constraint.toString().toLowerCase()))
-                            suggestions.add(object);
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            FilterResults filterResults = new FilterResults();
-            filterResults.values = suggestions;
-            filterResults.count = suggestions.size();
-            return filterResults;
-        }
-
-        @Override
-        protected void publishResults(CharSequence constraint, FilterResults results) {
-            try {
-                items = (List<AlreadyRegisteredPatientsResponse>) results.values;
-                notifyDataSetChanged();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    };
-
 
     public AlreadyRegisteredPatientsResponse getSelectedObject(int position) {
         if (suggestions != null)

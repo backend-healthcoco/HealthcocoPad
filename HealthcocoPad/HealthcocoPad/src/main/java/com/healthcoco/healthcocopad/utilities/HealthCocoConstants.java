@@ -98,7 +98,6 @@ public class HealthCocoConstants {
     public static final int RESULT_CODE_CONTACTS_LIST = 119;
 
 
-
     public static final String PARAM_UPDATED_TIME = "&updatedTime=";
     public static final String PARAM_DISCARDED_AMPERCENT = "&discarded=";
     public static final String PARAM_DOCTOR_ID = "&doctorId=";

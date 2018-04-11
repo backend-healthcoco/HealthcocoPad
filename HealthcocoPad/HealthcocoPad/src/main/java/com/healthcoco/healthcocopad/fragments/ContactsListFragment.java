@@ -1,7 +1,9 @@
 package com.healthcoco.healthcocopad.fragments;
 
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
@@ -123,16 +125,6 @@ public class ContactsListFragment extends HealthCocoFragment implements
             getGroupsListFromServer();
         }
     };
-    BroadcastReceiver refreshClinicProfileReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, final Intent intent) {
-            LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
-            if (doctor != null && doctor.getUser() != null && !Util.isNullOrBlank(doctor.getUser().getUniqueId())) {
-                user = doctor.getUser();
-                getClinicDetails();
-            }
-        }
-    };
     private SwipeRefreshLayout swipeRefreshLayout;
     private FloatingActionButton btAddNewPatient;
     private AsyncTask<VolleyResponseBean, VolleyResponseBean, VolleyResponseBean> asynTaskGetPatients;
@@ -149,19 +141,6 @@ public class ContactsListFragment extends HealthCocoFragment implements
         public void onReceive(Context context, final Intent intent) {
             resetListAndPagingAttributes();
             getListFromLocal(false);
-        }
-    };
-    BroadcastReceiver contactsListFromServerReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, final Intent intent) {
-            LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
-            if (doctor != null && doctor.getUser() != null && !Util.isNullOrBlank(doctor.getUser().getUniqueId())) {
-                clearSearchEditText();
-                user = doctor.getUser();
-                resetListAndPagingAttributes();
-                filterType = FilterItemType.ALL_PATIENTS;
-                getListFromLocal(true);
-            }
         }
     };
     private ArrayList<UserGroups> groupsList;
@@ -196,6 +175,32 @@ public class ContactsListFragment extends HealthCocoFragment implements
     private List<Profession> professionsList;
     private List<Reference> referenceList;
     private ClinicDetailResponse selectedClinicProfile;
+    private boolean mobileNumberOptional;
+    BroadcastReceiver refreshClinicProfileReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, final Intent intent) {
+            LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
+            if (doctor != null && doctor.getUser() != null && !Util.isNullOrBlank(doctor.getUser().getUniqueId())) {
+                user = doctor.getUser();
+                mobileNumberOptional = Util.getIsMobileNumberOptional(doctor);
+                getClinicDetails();
+            }
+        }
+    };
+    BroadcastReceiver contactsListFromServerReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, final Intent intent) {
+            LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
+            if (doctor != null && doctor.getUser() != null && !Util.isNullOrBlank(doctor.getUser().getUniqueId())) {
+                clearSearchEditText();
+                user = doctor.getUser();
+                mobileNumberOptional = Util.getIsMobileNumberOptional(doctor);
+                resetListAndPagingAttributes();
+                filterType = FilterItemType.ALL_PATIENTS;
+                getListFromLocal(true);
+            }
+        }
+    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -476,8 +481,18 @@ public class ContactsListFragment extends HealthCocoFragment implements
     }
 
     @Override
+    public boolean isMobileNumberOptional() {
+        return mobileNumberOptional;
+    }
+
+    @Override
     public void onEditClicked(RegisteredPatientDetailsUpdated patientDetailsUpdated) {
         openRegistrationFragment(patientDetailsUpdated.getForeignPatientId(), REQUEST_CODE_CONTACTS_DETAIL, true);
+    }
+
+    @Override
+    public void onDiscardClicked(RegisteredPatientDetailsUpdated patientDetailsUpdated) {
+        showConfirmationAlert(null, mActivity.getResources().getString(R.string.confirm_discard_patient), patientDetailsUpdated);
     }
 
     @Override
@@ -711,6 +726,12 @@ public class ContactsListFragment extends HealthCocoFragment implements
                         new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_CLINIC_PROFILE, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
 
                     }
+                case DISCARD_PATIENT:
+                    if (response.getData() != null) {
+                        boolean data = (boolean) response.getData();
+                        mActivity.hideLoading();
+                        getContactsList(true);
+                    }
                 default:
                     break;
             }
@@ -773,8 +794,10 @@ public class ContactsListFragment extends HealthCocoFragment implements
     public void onRefresh() {
         getContactsList(false);
         LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
-        if (doctor != null)
+        if (doctor != null) {
             user = doctor.getUser();
+            mobileNumberOptional = Util.getIsMobileNumberOptional(doctor);
+        }
         //Get groupsList
         Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.USER_GROUP);
         WebDataServiceImpl.getInstance(mApp).getGroupsList(WebServiceType.GET_GROUPS, UserGroups.class, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(), latestUpdatedTime, null, this, this);
@@ -893,6 +916,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
                 LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
                 if (doctor != null && doctor.getUser() != null && !Util.isNullOrBlank(doctor.getUser().getUniqueId())) {
                     user = doctor.getUser();
+                    mobileNumberOptional = Util.getIsMobileNumberOptional(doctor);
                 }
                 break;
             case ADD_GROUPS_LIST:
@@ -989,6 +1013,35 @@ public class ContactsListFragment extends HealthCocoFragment implements
     private void getClinicDetails() {
         mActivity.showLoading(false);
         WebDataServiceImpl.getInstance(mApp).getClinicDetails(ClinicDetailResponse.class, user.getForeignLocationId(), this, this);
+    }
+
+    private void showConfirmationAlert(String title, String msg, final RegisteredPatientDetailsUpdated patientDetailsUpdated) {
+        if (Util.isNullOrBlank(title))
+            title = mActivity.getResources().getString(R.string.confirm);
+        final AlertDialog.Builder alertBuilder = new AlertDialog.Builder(mActivity);
+        alertBuilder.setTitle(title);
+        alertBuilder.setMessage(msg);
+        alertBuilder.setCancelable(false);
+        alertBuilder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                discardPatient(patientDetailsUpdated);
+            }
+        });
+        alertBuilder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+        alertBuilder.create();
+        alertBuilder.show();
+    }
+
+    private void discardPatient(RegisteredPatientDetailsUpdated patientDetailsUpdated) {
+        mActivity.showLoading(false);
+        WebDataServiceImpl.getInstance(mApp).discardPatient(WebServiceType.DISCARD_PATIENT, RegisteredPatientDetailsUpdated.class, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(), patientDetailsUpdated.getForeignPatientId(), this, this);
     }
 
 }

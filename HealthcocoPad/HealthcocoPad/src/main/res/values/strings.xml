@@ -907,6 +907,7 @@
     <string name="aid">AID :&#160;</string>
     <string name="remind">Remind</string>
     <string name="confirm_cancel_appointment">Are you sure you want to cancel Appointment?</string>
+    <string name="confirm_discard_patient">Are you sure you want to Discard Patient?</string>
     <string name="are_you_sure_confirm_appointment">Confirm Appointment&#160;</string>
     <string name="reminder_sent">Reminder to Patient has been sent Successfully</string>
     <string name="no_appointment_found">No Appointment Found</string>

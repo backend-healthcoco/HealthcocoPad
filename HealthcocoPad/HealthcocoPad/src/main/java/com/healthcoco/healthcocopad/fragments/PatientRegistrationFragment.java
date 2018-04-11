@@ -259,11 +259,12 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
         btDeleteBloodGroup.setOnClickListener(this);
         btDeleteReferredBy.setOnClickListener(this);
         btAddNote.setOnClickListener(this);
-        editMobileNumber.addTextChangedListener(new HealthcocoTextWatcher(editMobileNumber, this));
+//        editMobileNumber.addTextChangedListener(new HealthcocoTextWatcher(editMobileNumber, this));
 
     }
 
     private void initDefaultData() {
+        editMobileNumber.addTextChangedListener(new HealthcocoTextWatcher(editMobileNumber, this));
         mActivity.showLoading(false);
         getCitiesList(false);
         getReferenceList(false);

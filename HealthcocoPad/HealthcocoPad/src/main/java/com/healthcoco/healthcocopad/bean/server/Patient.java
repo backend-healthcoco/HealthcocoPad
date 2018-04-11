@@ -11,35 +11,25 @@ import java.util.List;
 
 @Parcel
 public class Patient extends SugarRecord {
+    protected String notesJsonString;
     @Unique
     private String patientId;
-
     private String bloodGroup;
-
     private String profession;
     @Ignore
     private List<Relations> relations;
-
     private String emailAddress;
-
     private String doctorId;
-
     private String addressId;
-
     private String secMobile;
-
     private String adhaarId;
-
     private String panCardNumber;
-
     private String drivingLicenseId;
-
     private String insuranceId;
-
+    private boolean isPatientDiscarded;
     private String insuranceName;
     @Ignore
     private ArrayList<String> notes;
-    protected String notesJsonString;
 
     public String getPatientId() {
         return patientId;
@@ -159,5 +149,13 @@ public class Patient extends SugarRecord {
 
     public void setNotesJsonString(String notesJsonString) {
         this.notesJsonString = notesJsonString;
+    }
+
+    public boolean isPatientDiscarded() {
+        return isPatientDiscarded;
+    }
+
+    public void setPatientDiscarded(boolean patientDiscarded) {
+        isPatientDiscarded = patientDiscarded;
     }
 }

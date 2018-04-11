@@ -735,6 +735,24 @@ public class WebDataServiceImpl implements GCMRefreshListener {
         }
     }
 
+    public void discardPatient(WebServiceType webServiceType, Class<?> class1, String doctorId, String locationId, String hospitalId, String patientId, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        checkNetworkStatus(mApp);
+        if (HealthCocoConstants.isNetworkOnline) {
+            String url = webServiceType.getUrl()
+                    + doctorId
+                    + "/" + locationId
+                    + "/" + hospitalId
+                    + "/" + patientId
+                    + HealthCocoConstants.PARAM_TAG_DELETE
+                    + HealthCocoConstants.PARAM_DISCARDED_TRUE;
+            getResponse(webServiceType, class1, url, null, null, responseListener,
+                    errorListener);
+        } else {
+            showUserOffline(webServiceType, responseListener);
+        }
+    }
+
+
     public void assignGroup(Class<AssignGroupRequest> class1, AssignGroupRequest assignGroupRequest, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         WebServiceType webServiceType = WebServiceType.ASSIGN_GROUP;
         checkNetworkStatus(mApp.getApplicationContext());

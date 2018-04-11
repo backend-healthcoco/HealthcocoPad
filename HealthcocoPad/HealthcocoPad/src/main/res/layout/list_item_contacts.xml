@@ -1,102 +1,120 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@android:color/white"
     android:orientation="vertical">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
             <LinearLayout
-                android:id="@+id/container_top"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:tag="front">
-
-                <include
-                    layout="@layout/layout_image_patient_profile"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/item_contact_padding"
-                    android:layout_marginLeft="@dimen/item_contact_padding"
-                    android:layout_marginTop="@dimen/item_contact_padding" />
+                android:orientation="horizontal">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:id="@+id/container_top"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:orientation="vertical">
+                    android:orientation="horizontal"
+                    android:tag="front">
 
-                    <TextView
-                        android:id="@+id/tv_contact_name"
-                        android:layout_width="match_parent"
+                    <include
+                        layout="@layout/layout_image_patient_profile"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:maxLines="1"
-                        android:text="Name"
-                        android:fontFamily="sans-serif"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/text_size_contact_list_name" />
+                        android:layout_marginBottom="@dimen/item_contact_padding"
+                        android:layout_marginLeft="@dimen/item_contact_padding"
+                        android:layout_marginTop="@dimen/item_contact_padding" />
 
-                    <TextView
-                        android:id="@+id/tv_contact_number"
-                        android:layout_width="match_parent"
+                    <LinearLayout
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:maxLines="1"
-                        android:text="1234567890"
-                        android:textSize="@dimen/text_size_contact_list_mobile" />
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tv_contact_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="10dp"
+                            android:fontFamily="sans-serif"
+                            android:maxLines="1"
+                            android:text="Name"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/text_size_contact_list_name" />
+
+                        <TextView
+                            android:id="@+id/tv_contact_number"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:maxLines="1"
+                            android:text="1234567890"
+                            android:textSize="@dimen/text_size_contact_list_mobile" />
+                    </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/container_call_rx"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:orientation="horizontal"
-            android:padding="10dp">
-
-            <ImageButton
-                android:id="@+id/bt_call"
+            <LinearLayout
+                android:id="@+id/container_call_rx"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
-                android:background="@drawable/tab_call_contact_list_selector"
-                android:padding="10dp" />
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:orientation="horizontal"
+                android:padding="10dp">
 
-            <ImageButton
-                android:id="@+id/bt_group"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
-                android:background="@drawable/tab_add_group_contact_list_selector"
-                android:padding="10dp" />
+                <ImageButton
+                    android:id="@+id/bt_discard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/tab_discard_contact_list_selector"
+                    android:padding="10dp" />
 
-            <ImageButton
-                android:id="@+id/bt_prescription"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="10dp"
-                android:background="@drawable/tab_rx_contact_list_selector" />
-        </LinearLayout>
-    </RelativeLayout>
+                <ImageButton
+                    android:id="@+id/bt_call"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/tab_call_contact_list_selector"
+                    android:padding="10dp" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/grey_light_divider" />
+                <ImageButton
+                    android:id="@+id/bt_group"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/tab_add_group_contact_list_selector"
+                    android:padding="10dp" />
 
-</LinearLayout>
+                <ImageButton
+                    android:id="@+id/bt_prescription"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/tab_rx_contact_list_selector" />
+            </LinearLayout>
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/grey_light_divider" />
+
+    </LinearLayout>
+
+    <include layout="@layout/layout_cantact_discarded" />
+
+</FrameLayout>

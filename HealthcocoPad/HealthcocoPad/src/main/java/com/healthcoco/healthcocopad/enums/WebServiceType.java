@@ -315,6 +315,8 @@ public enum WebServiceType {
 
     GET_SPECIALITIES(Method.GET, "doctorProfile/getSpecialities/?"),
 
+    DISCARD_PATIENT(Method.DELETE, "register/patient/"),
+
     REGISTER_PATIENT(Method.POST, "register/patient/"),
 
     UPDATE_PATIENT(Method.PUT, "register/patient/"),

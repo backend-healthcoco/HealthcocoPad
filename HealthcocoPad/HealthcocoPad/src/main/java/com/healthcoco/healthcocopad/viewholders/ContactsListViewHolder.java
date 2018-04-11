@@ -34,15 +34,20 @@ public class ContactsListViewHolder extends HealthCocoViewHolder implements OnCl
     private TextView tvContactNumber;
     private ImageView ivContactProfile;
     private ImageButton btPrescription;
+    private ImageButton btDiscard;
     private ImageButton btCall;
     private TextView tvInitialAlphabet;
     private LinearLayout containerTop;
+    private boolean mobileNumberOptional;
+    private LinearLayout layoutDiscarded;
+
 
     public ContactsListViewHolder(HealthCocoActivity mActivity, ContactsItemOptionsListener optionsListener, int position) {
         this.mActivity = mActivity;
         this.optionsListener = optionsListener;
         this.position = position;
         imageLoader = ImageLoader.getInstance();
+        mobileNumberOptional = optionsListener.isMobileNumberOptional();
     }
 
     @Override
@@ -57,6 +62,7 @@ public class ContactsListViewHolder extends HealthCocoViewHolder implements OnCl
         tvContactName.setText(Util.getValidatedValue(objData.getLocalPatientName()));
         tvContactNumber.setText(Util.getValidatedValue(objData.getMobileNumber()));
         DownloadImageFromUrlUtil.loadImageWithInitialAlphabet(mActivity, PatientProfileScreenType.IN_PATIENTS_LIST, objData, null, ivContactProfile, tvInitialAlphabet);
+        checkIsDiscarded(objData.isPatientDiscarded());
     }
 
     @Override
@@ -68,16 +74,23 @@ public class ContactsListViewHolder extends HealthCocoViewHolder implements OnCl
         tvContactName = (TextView) convertView.findViewById(R.id.tv_contact_name);
         tvContactNumber = (TextView) convertView.findViewById(R.id.tv_contact_number);
         btCall = (ImageButton) convertView.findViewById(R.id.bt_call);
+        btDiscard = (ImageButton) convertView.findViewById(R.id.bt_discard);
         btPrescription = (ImageButton) convertView.findViewById(R.id.bt_prescription);
         btAddToGroup = (ImageButton) convertView.findViewById(R.id.bt_group);
         tvInitialAlphabet = (TextView) convertView.findViewById(R.id.tv_initial_aplhabet);
         ivContactProfile = (ImageView) convertView.findViewById(R.id.iv_image);
+        layoutDiscarded = (LinearLayout) convertView.findViewById(R.id.layout_cantact_discarded);
 
         btAddToGroup.setTag(position);
+        btDiscard.setOnClickListener(this);
         btCall.setOnClickListener(this);
         btPrescription.setOnClickListener(this);
         btAddToGroup.setOnClickListener(this);
         containerTop.setOnClickListener(this);
+
+        if (mobileNumberOptional)
+            btDiscard.setVisibility(View.VISIBLE);
+
 //        scrollViewContactsItems.setSwipeRefreshLayout(optionsListener.getSwipeRefreshLayout());
 //        containerTop.setOnTouchListener(new ContactsListScollViewTouchListener(mActivity));
 
@@ -89,6 +102,9 @@ public class ContactsListViewHolder extends HealthCocoViewHolder implements OnCl
         switch (v.getId()) {
             case R.id.bt_call:
                 optionsListener.onCallClicked(objData);
+                break;
+            case R.id.bt_discard:
+                optionsListener.onDiscardClicked(objData);
                 break;
             case R.id.bt_group:
                 optionsListener.onAddToGroupClicked(objData);
@@ -103,6 +119,13 @@ public class ContactsListViewHolder extends HealthCocoViewHolder implements OnCl
                 break;
         }
     }
+
+    private void checkIsDiscarded(boolean isDiscarded) {
+        if (isDiscarded)
+            layoutDiscarded.setVisibility(View.VISIBLE);
+        else layoutDiscarded.setVisibility(View.GONE);
+    }
+
 
     @Override
     public void onImageLoaded(Bitmap bitmap) {

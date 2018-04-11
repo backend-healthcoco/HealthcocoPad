@@ -20,7 +20,11 @@ public interface ContactsItemOptionsListener {
 
     public boolean isInHomeActivity();
 
+    public boolean isMobileNumberOptional();
+
     public void onEditClicked(RegisteredPatientDetailsUpdated patientDetailsUpdated);
+
+    public void onDiscardClicked(RegisteredPatientDetailsUpdated patientDetailsUpdated);
 
     void onQueueClicked(RegisteredPatientDetailsUpdated objData);
 

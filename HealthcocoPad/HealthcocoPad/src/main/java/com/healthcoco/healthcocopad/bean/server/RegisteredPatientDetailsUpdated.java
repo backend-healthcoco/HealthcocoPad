@@ -63,6 +63,7 @@ public class RegisteredPatientDetailsUpdated extends SugarRecord {
     private String thumbnailUrl;
     private Boolean discarded;
     private String emailAddress;
+    private boolean isPatientDiscarded;
     private boolean isPartOfConsultantDoctor;
     @Ignore
     private ArrayList<String> consultantDoctorIds;
@@ -403,5 +404,13 @@ public class RegisteredPatientDetailsUpdated extends SugarRecord {
 
     public void setTotalRemainingAdvanceAmount(double totalRemainingAdvanceAmount) {
         this.totalRemainingAdvanceAmount = totalRemainingAdvanceAmount;
+    }
+
+    public boolean isPatientDiscarded() {
+        return isPatientDiscarded;
+    }
+
+    public void setPatientDiscarded(boolean patientDiscarded) {
+        isPatientDiscarded = patientDiscarded;
     }
 }

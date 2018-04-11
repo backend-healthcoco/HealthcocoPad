@@ -40,6 +40,9 @@ import com.healthcoco.healthcocopad.bean.DOB;
 import com.healthcoco.healthcocopad.bean.DoctorExperience;
 import com.healthcoco.healthcocopad.bean.server.AppointmentSlot;
 import com.healthcoco.healthcocopad.bean.server.DoctorProfile;
+import com.healthcoco.healthcocopad.bean.server.Hospital;
+import com.healthcoco.healthcocopad.bean.server.LocationAndAccessControl;
+import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.enums.DoctorExperienceUnit;
 import com.healthcoco.healthcocopad.enums.VisitIdType;
@@ -973,5 +976,18 @@ public class Util {
     public static float calculateBSA(float weight, float height) {
         return (float) Math.sqrt(((weight * height) / 3600));
     }
+
+    public static boolean getIsMobileNumberOptional(LoginResponse doctor) {
+        for (Hospital hospital : doctor.getHospitals()) {
+            if (hospital != null && (!Util.isNullOrEmptyList(hospital.getLocationsAndAccessControl()))) {
+                for (LocationAndAccessControl locationAndAccessControl : hospital.getLocationsAndAccessControl()) {
+                    if (locationAndAccessControl != null)
+                        return locationAndAccessControl.getMobileNumberOptional();
+                }
+            }
+        }
+        return false;
+    }
+
 
 }

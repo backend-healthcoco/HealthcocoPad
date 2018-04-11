@@ -51,22 +51,10 @@ public class PatientNumberSearchDialogFragment extends HealthCocoDialogFragment 
         LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
         if (doctor != null && doctor.getUser() != null && !Util.isNullOrBlank(doctor.getUser().getUniqueId())) {
             user = doctor.getUser();
-            isMobileNumberOptional = getIsMobileNumberOptional(doctor);
+            isMobileNumberOptional = Util.getIsMobileNumberOptional(doctor);
             init();
             setWidthHeight(0.50, 0.52);
         }
-    }
-
-    private boolean getIsMobileNumberOptional(LoginResponse doctor) {
-        for (Hospital hospital : doctor.getHospitals()) {
-            if (hospital != null && (!Util.isNullOrEmptyList(hospital.getLocationsAndAccessControl()))) {
-                for (LocationAndAccessControl locationAndAccessControl : hospital.getLocationsAndAccessControl()) {
-                    if (locationAndAccessControl != null)
-                        return locationAndAccessControl.getMobileNumberOptional();
-                }
-            }
-        }
-        return false;
     }
 
     @Override

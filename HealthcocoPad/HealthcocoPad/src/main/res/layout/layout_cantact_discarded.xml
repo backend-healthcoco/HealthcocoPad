@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_cantact_discarded"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/shape_rounded_corners_rect_discarded"
+    android:clickable="true"
+    android:orientation="horizontal"
+    android:padding="20dp"
+    android:visibility="gone">
+
+    <TextView
+        android:id="@+id/tv_discarded"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center|end"
+        android:text="@string/discarded"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_size_discarded"
+        android:textStyle="bold" />
+</LinearLayout>

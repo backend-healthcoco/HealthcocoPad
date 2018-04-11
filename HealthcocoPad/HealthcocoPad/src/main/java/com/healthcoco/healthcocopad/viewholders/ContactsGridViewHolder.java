@@ -42,17 +42,22 @@ public class ContactsGridViewHolder extends HealthCocoViewHolder implements OnCl
     private TextView tvCreatedTime;
     private TextView tvPatientId;
     private ImageButton btEdit;
+    private ImageButton btDiscard;
     private ImageButton btQueue;
     private ImageButton btGroup;
     private ImageButton btPrescription;
     private TextView tvGenderDate;
     private TextView tvPatientAge;
+    private boolean mobileNumberOptional;
+    private LinearLayout layoutDiscarded;
+
 
     public ContactsGridViewHolder(HealthCocoActivity mActivity, ContactsItemOptionsListener optionsListener, int position) {
         this.mActivity = mActivity;
         this.optionsListener = optionsListener;
         this.position = position;
         imageLoader = ImageLoader.getInstance();
+        mobileNumberOptional = optionsListener.isMobileNumberOptional();
     }
 
     @Override
@@ -75,7 +80,9 @@ public class ContactsGridViewHolder extends HealthCocoViewHolder implements OnCl
             tvGenderDate.setText("");
         }
         DownloadImageFromUrlUtil.loadImageWithInitialAlphabet(mActivity, PatientProfileScreenType.IN_PATIENTS_LIST, objData, null, ivContactProfile, tvInitialAlphabet);
+        checkIsDiscarded(objData.isPatientDiscarded());
     }
+
 
     @Override
     public View getContentView() {
@@ -85,6 +92,7 @@ public class ContactsGridViewHolder extends HealthCocoViewHolder implements OnCl
         tvPatientId = (TextView) convertView.findViewById(R.id.tv_patient_id);
         tvGenderDate = (TextView) convertView.findViewById(R.id.tv_patient_gender);
         btEdit = (ImageButton) convertView.findViewById(R.id.bt_edit);
+        btDiscard = (ImageButton) convertView.findViewById(R.id.bt_discard);
         btQueue = (ImageButton) convertView.findViewById(R.id.bt_queue);
         btCall = (ImageButton) convertView.findViewById(R.id.bt_call);
         btGroup = (ImageButton) convertView.findViewById(R.id.bt_group);
@@ -93,8 +101,10 @@ public class ContactsGridViewHolder extends HealthCocoViewHolder implements OnCl
         ivContactProfile = (ImageView) convertView.findViewById(R.id.iv_image);
         containerTop = (LinearLayout) convertView.findViewById(R.id.container_top);
         containerBottom = (RelativeLayout) convertView.findViewById(R.id.container_call_rx);
+        layoutDiscarded = (LinearLayout) convertView.findViewById(R.id.layout_cantact_discarded);
 
         btEdit.setOnClickListener(this);
+        btDiscard.setOnClickListener(this);
         btQueue.setOnClickListener(this);
         btCall.setOnClickListener(this);
         btGroup.setOnClickListener(this);
@@ -103,7 +113,8 @@ public class ContactsGridViewHolder extends HealthCocoViewHolder implements OnCl
 
         if (!optionsListener.isInHomeActivity())
             containerBottom.setVisibility(View.GONE);
-
+        if (mobileNumberOptional)
+            btDiscard.setVisibility(View.VISIBLE);
         return convertView;
     }
 
@@ -112,6 +123,9 @@ public class ContactsGridViewHolder extends HealthCocoViewHolder implements OnCl
         switch (v.getId()) {
             case R.id.bt_edit:
                 optionsListener.onEditClicked(objData);
+                break;
+            case R.id.bt_discard:
+                optionsListener.onDiscardClicked(objData);
                 break;
             case R.id.bt_queue:
                 optionsListener.onQueueClicked(objData);
@@ -132,6 +146,13 @@ public class ContactsGridViewHolder extends HealthCocoViewHolder implements OnCl
                 break;
         }
     }
+
+    private void checkIsDiscarded(boolean isDiscarded) {
+        if (isDiscarded)
+            layoutDiscarded.setVisibility(View.VISIBLE);
+        else layoutDiscarded.setVisibility(View.GONE);
+    }
+
 
     @Override
     public void onImageLoaded(Bitmap bitmap) {
