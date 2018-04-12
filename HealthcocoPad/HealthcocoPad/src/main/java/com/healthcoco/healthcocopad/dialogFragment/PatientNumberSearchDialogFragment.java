@@ -35,6 +35,7 @@ public class PatientNumberSearchDialogFragment extends HealthCocoDialogFragment 
     private static final int REQUEST_CODE_PATIENT_NUMBER_SERACH = 101;
     private EditText editMobileNumber;
     private Button btProceed;
+    private Button btSkip;
     private User user;
     private boolean isMobileNumberOptional;
 
@@ -67,13 +68,19 @@ public class PatientNumberSearchDialogFragment extends HealthCocoDialogFragment 
     public void initViews() {
         editMobileNumber = (EditText) view.findViewById(R.id.edit_mobile_number);
         btProceed = (Button) view.findViewById(R.id.bt_proceed);
+        btSkip = (Button) view.findViewById(R.id.bt_skip);
         mActivity.showSoftKeyboard(editMobileNumber);
         Util.setFocusToEditText(mActivity, editMobileNumber);
+
+        if (isMobileNumberOptional) {
+            btSkip.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
     public void initListeners() {
         btProceed.setOnClickListener(this);
+        btSkip.setOnClickListener(this);
         initCrossButton();
         initActionbarTitle(getResources().getString(R.string.add_new_patient));
     }
@@ -87,6 +94,9 @@ public class PatientNumberSearchDialogFragment extends HealthCocoDialogFragment 
             case R.id.bt_proceed:
                 validateData();
                 break;
+            case R.id.bt_skip:
+                openRegistrationFragment(null);
+                break;
         }
     }
 
@@ -94,8 +104,8 @@ public class PatientNumberSearchDialogFragment extends HealthCocoDialogFragment 
         String mobileNo = (String.valueOf(editMobileNumber.getText()));
         String msg = null;
         if (Util.isNullOrBlank(mobileNo)) {
-            if (isMobileNumberOptional)
-                openRegistrationFragment(null);
+//            if (isMobileNumberOptional)
+//                openRegistrationFragment(null);
             msg = getResources().getString(R.string.please_enter_mobile_no);
         } else if (!Util.isValidMobileNo(mobileNo))
             msg = getResources().getString(R.string.please_enter_valid_mobile_no);
@@ -103,8 +113,8 @@ public class PatientNumberSearchDialogFragment extends HealthCocoDialogFragment 
         if (Util.isNullOrBlank(msg)) {
             searchPatients(mobileNo);
         } else {
-            if (!isMobileNumberOptional)
-                Util.showAlert(mActivity, msg);
+//            if (!isMobileNumberOptional)
+            Util.showAlert(mActivity, msg);
         }
     }
 

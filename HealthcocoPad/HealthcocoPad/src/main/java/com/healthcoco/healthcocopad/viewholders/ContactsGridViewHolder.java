@@ -80,7 +80,7 @@ public class ContactsGridViewHolder extends HealthCocoViewHolder implements OnCl
             tvGenderDate.setText("");
         }
         DownloadImageFromUrlUtil.loadImageWithInitialAlphabet(mActivity, PatientProfileScreenType.IN_PATIENTS_LIST, objData, null, ivContactProfile, tvInitialAlphabet);
-        checkIsDiscarded(objData.isPatientDiscarded());
+//        checkIsDiscarded(objData.isPatientDiscarded());
     }
 
 
@@ -113,8 +113,8 @@ public class ContactsGridViewHolder extends HealthCocoViewHolder implements OnCl
 
         if (!optionsListener.isInHomeActivity())
             containerBottom.setVisibility(View.GONE);
-        if (mobileNumberOptional)
-            btDiscard.setVisibility(View.VISIBLE);
+//        if (mobileNumberOptional)
+//            btDiscard.setVisibility(View.VISIBLE);
         return convertView;
     }
 

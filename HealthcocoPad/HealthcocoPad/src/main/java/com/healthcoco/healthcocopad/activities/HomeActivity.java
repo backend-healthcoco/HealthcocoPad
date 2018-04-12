@@ -1,7 +1,9 @@
 package com.healthcoco.healthcocopad.activities;
 
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
@@ -414,13 +416,39 @@ public class HomeActivity extends HealthCocoActivity implements View.OnClickList
                     closePaneLayout(FragmentType.CONTACTS);
                 } else {
                     mApp.cancelAllPendingRequests();
-                    super.onBackPressed();
+                    showFinishConfirmationAlert();
+//                    super.onBackPressed();
                 }
             }
         } catch (Exception e) {
             mApp.cancelAllPendingRequests();
             super.onBackPressed();
         }
+    }
+
+    private void showFinishConfirmationAlert() {
+        final AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
+        alertBuilder.setTitle(R.string.alert);
+        alertBuilder.setMessage(R.string.are_you_want_to_exit);
+        alertBuilder.setCancelable(false);
+        alertBuilder.setPositiveButton(R.string.leave, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                finish();
+            }
+        });
+        alertBuilder.setNegativeButton(R.string.stay, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                dialog.dismiss();
+            }
+        });
+        alertBuilder.create();
+        alertBuilder.show();
     }
 
     public void enableFilterButton() {

@@ -52,18 +52,46 @@
                 android:textSize="@dimen/texrt_size_patient_mobile_search_number" />
         </LinearLayout>
 
-        <Button
-            android:id="@+id/bt_proceed"
-            android:layout_width="wrap_content"
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:background="@drawable/shape_rounded_corners_solid_blue"
+            android:layout_margin="10dp"
             android:gravity="center"
-            android:minHeight="0dp"
-            android:padding="8dp"
-            android:text="@string/proceed"
-            android:textAllCaps="false"
-            android:textColor="@color/color_selector_white_translucent"
-            android:textSize="18sp" />
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/bt_proceed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/layout_margin"
+                android:layout_marginRight="@dimen/layout_margin"
+                android:background="@drawable/shape_rounded_corners_solid_blue"
+                android:gravity="center"
+                android:minHeight="0dp"
+                android:padding="8dp"
+                android:text="@string/proceed"
+                android:textAllCaps="false"
+                android:textColor="@color/color_selector_white_translucent"
+                android:textSize="18sp" />
+
+            <Button
+                android:id="@+id/bt_skip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/layout_margin"
+                android:layout_marginRight="@dimen/layout_margin"
+                android:background="@drawable/shape_rounded_corners_solid_blue"
+                android:gravity="center"
+                android:minHeight="0dp"
+                android:padding="8dp"
+                android:text="@string/skip"
+                android:textAllCaps="false"
+                android:textColor="@color/color_selector_white_translucent"
+                android:textSize="18sp"
+                android:visibility="gone" />
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>

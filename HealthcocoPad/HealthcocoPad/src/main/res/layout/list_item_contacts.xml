@@ -80,7 +80,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"
                     android:background="@drawable/tab_discard_contact_list_selector"
-                    android:padding="10dp" />
+                    android:padding="10dp"
+                    android:visibility="gone" />
 
                 <ImageButton
                     android:id="@+id/bt_call"

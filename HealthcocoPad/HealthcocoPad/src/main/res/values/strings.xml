@@ -525,6 +525,7 @@
     <string name="new_prescription">New Prescription</string>
 
     <string name="your_changes_will_not_be_saved">Your changes will not be saved.\nAre you sure you want to leave this page ?</string>
+    <string name="are_you_want_to_exit">Are you sure you want to Exit ?</string>
     <string name="alert">Alert</string>
     <string name="leave">Leave</string>
     <string name="stay">Stay</string>
@@ -579,6 +580,7 @@
     <string name="new_note">New Note</string>
     <string name="write_a_note">Write a Note</string>
     <string name="proceed">Proceed</string>
+    <string name="skip">Skip</string>
     <string name="please_enter_patient_mobile_number_to_register">Please Enter Patient Mobile Number To Register</string>
     <string name="patient_search">Patient Search</string>
 
@@ -1135,6 +1137,7 @@
     <string name="no_waiting_patients">No Waiting Patients</string>
     <string name="no_engaged_patients">No Engaged Patients</string>
     <string name="no_checked_out_patients">No Checked Out Patients</string>
+    <string name="no_mobile_number">No Mobile Number</string>
 
 
 </resources>

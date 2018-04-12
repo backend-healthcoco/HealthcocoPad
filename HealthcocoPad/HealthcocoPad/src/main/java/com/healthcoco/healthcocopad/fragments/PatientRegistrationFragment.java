@@ -7,6 +7,7 @@ import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -218,6 +219,7 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
     @Override
     public void initViews() {
         editMobileNumber = (EditText) view.findViewById(R.id.edit_mobile_number);
+        editMobileNumber.setEnabled(false);
         editName = (AutoCompleteTextView) view.findViewById(R.id.autotv_patient_name);
         containerEditName = (LinearLayout) view.findViewById(R.id.container_edit_name);
         radioGroupGender = (RadioGroup) view.findViewById(R.id.rg_gender_select);
@@ -313,6 +315,12 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
         String patientUniqueId = intent.getStringExtra(HealthCocoConstants.TAG_UNIQUE_ID);
         mobileNumber = intent.getStringExtra(HealthCocoConstants.TAG_MOBILE_NUMBER);
         isEditPatient = intent.getBooleanExtra(HealthCocoConstants.TAG_IS_EDIT_PATIENT, false);
+        if (!Util.isNullOrBlank(mobileNumber))
+            editMobileNumber.setText(mobileNumber);
+        else {
+            editMobileNumber.setText(R.string.no_mobile_number);
+            editMobileNumber.setTextColor(Color.RED);
+        }
         if (!Util.isNullOrBlank(patientUniqueId)) {
             if (isEditPatient) {
                 selectedPatient = LocalDataServiceImpl.getInstance(mApp).getPatient(patientUniqueId);
@@ -324,8 +332,7 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
                 }
             }
         }
-        if (!Util.isNullOrBlank(mobileNumber))
-            editMobileNumber.setText(mobileNumber);
+
     }
 
     private void initPatientDetails(Object patientDetails) {
@@ -399,7 +406,11 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
         containerEditName.setBackgroundResource(android.R.color.transparent);
         editName.setText(name);
 
-        editMobileNumber.setText(mobileNumber);
+        if (!Util.isNullOrBlank(mobileNumber)) {
+            editMobileNumber.setText(mobileNumber);
+            editMobileNumber.setTextColor(Color.BLACK);
+        }
+
         autotvCity.setText(city);
         editLocality.setText(locality);
         editPincode.setText(pincode);

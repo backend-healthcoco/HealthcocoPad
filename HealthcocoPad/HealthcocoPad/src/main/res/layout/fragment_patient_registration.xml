@@ -145,10 +145,11 @@
                                     style="@style/registration_edittext"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
+                                    android:clickable="false"
                                     android:digits="0123456789"
+                                    android:editable="false"
+                                    android:focusable="false"
                                     android:hint="@string/mobile_number"
-                                    android:inputType="numberDecimal"
-                                    android:maxLength="@integer/max_mobile_number"
                                     android:maxLines="1" />
 
                                 <LinearLayout

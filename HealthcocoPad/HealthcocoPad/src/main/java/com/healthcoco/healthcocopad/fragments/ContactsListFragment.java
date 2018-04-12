@@ -631,6 +631,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
                     return;
             }
         }
+        isInitialLoading = false;
         mActivity.hideLoading();
         swipeRefreshLayout.setRefreshing(false);
     }
@@ -667,6 +668,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
                     if (response.isDataFromLocal()) {
                         ArrayList<RegisteredPatientDetailsUpdated> responseList = (ArrayList<RegisteredPatientDetailsUpdated>) (ArrayList<?>) response
                                 .getDataList();
+                        isInitialLoading = false;
                         formHashMapAndRefresh(responseList);
                         if (Util.isNullOrEmptyList(responseList) || responseList.size() < MAX_SIZE || Util.isNullOrEmptyList(responseList))
                             isEndOfListAchieved = true;
@@ -931,6 +933,9 @@ public class ContactsListFragment extends HealthCocoFragment implements
             case ADD_PATIENTS:
                 volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).
                         addPatientsList((ArrayList<RegisteredPatientDetailsUpdated>) (ArrayList<?>) response.getDataList());
+                volleyResponseBean.setWebServiceType(WebServiceType.GET_CONTACTS);
+                volleyResponseBean.setDataList(response.getDataList());
+                break;
             case GET_PATIENTS:
             case SORT_LIST_BY_RECENTLY_ADDED:
             case SEARCH_PATIENTS:

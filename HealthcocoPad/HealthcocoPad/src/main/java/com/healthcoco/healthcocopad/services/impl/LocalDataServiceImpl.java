@@ -1113,13 +1113,13 @@ public class LocalDataServiceImpl {
 
             case CALENDAR_EVENTS:
                 List<CalendarEvents> tempCalendarEventsList = CalendarEvents.find(CalendarEvents.class,
-                        LocalDatabaseUtils.KEY_DOCTOR_ID + "= ? AND " +
+                        LocalDatabaseUtils.KEY_DOCTOR_ID + "= ? AND " /*+
                                 LocalDatabaseUtils.KEY_IS_FROM_CALENDAR_API + "= ? AND " +
-                                LocalDatabaseUtils.KEY_IS_ADDED_ON_SUCCESS + "= ? AND " + LocalDatabaseUtils.KEY_FROM_DATE
-                                + " BETWEEN " + DateTimeUtil.getStartTimeOfDayMilli(selectedDate)
-                                + " AND " + DateTimeUtil.getEndTimeOfDayMilli(selectedDate),
-                        new String[]{doctorId, "" + BooleanTypeValues.TRUE.getBooleanIntValue(),
-                                "" + BooleanTypeValues.FALSE.getBooleanIntValue()},
+                                LocalDatabaseUtils.KEY_IS_ADDED_ON_SUCCESS + "= ? AND "*/ + LocalDatabaseUtils.KEY_FROM_DATE
+                                + " BETWEEN " + DateTimeUtil.getFirstDayOfMonthMilli(selectedDate)
+                                + " AND " + DateTimeUtil.getLastDayOfMonthMilli(selectedDate),
+                        new String[]{doctorId/*, "" + BooleanTypeValues.TRUE.getBooleanIntValue(),
+                                "" + BooleanTypeValues.FALSE.getBooleanIntValue()*/},
                         null, "updated_time DESC", "1");
                 if (!Util.isNullOrEmptyList(tempCalendarEventsList))
                     latestUpdatedTime = tempCalendarEventsList.get(0).getUpdatedTime();

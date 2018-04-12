@@ -62,7 +62,7 @@ public class ContactsListViewHolder extends HealthCocoViewHolder implements OnCl
         tvContactName.setText(Util.getValidatedValue(objData.getLocalPatientName()));
         tvContactNumber.setText(Util.getValidatedValue(objData.getMobileNumber()));
         DownloadImageFromUrlUtil.loadImageWithInitialAlphabet(mActivity, PatientProfileScreenType.IN_PATIENTS_LIST, objData, null, ivContactProfile, tvInitialAlphabet);
-        checkIsDiscarded(objData.isPatientDiscarded());
+//        checkIsDiscarded(objData.isPatientDiscarded());
     }
 
     @Override
@@ -88,8 +88,8 @@ public class ContactsListViewHolder extends HealthCocoViewHolder implements OnCl
         btAddToGroup.setOnClickListener(this);
         containerTop.setOnClickListener(this);
 
-        if (mobileNumberOptional)
-            btDiscard.setVisibility(View.VISIBLE);
+//        if (mobileNumberOptional)
+//            btDiscard.setVisibility(View.VISIBLE);
 
 //        scrollViewContactsItems.setSwipeRefreshLayout(optionsListener.getSwipeRefreshLayout());
 //        containerTop.setOnTouchListener(new ContactsListScollViewTouchListener(mActivity));
