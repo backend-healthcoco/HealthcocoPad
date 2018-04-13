@@ -249,7 +249,8 @@ public class SelectedDrugItemsListFragment extends HealthCocoFragment implements
         if (drug != null) {
             if (drug.getDuration() == null || (drug.getDuration() != null && Util.isNullOrBlank(drug.getDuration().getValue())))
                 drug.setDuration(LocalDataServiceImpl.getInstance(mApp).getDefaultDuration());
-            drugsList.put(drug.getDrug().getUniqueId(), drug);
+            if (drug.getDrug() != null)
+                drugsList.put(drug.getDrug().getUniqueId(), drug);
             notifyAdapter(drugsList);
             lvDrugsList.setSelection(adapter.getCount());
         }

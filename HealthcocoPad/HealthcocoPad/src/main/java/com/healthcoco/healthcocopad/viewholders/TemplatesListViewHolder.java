@@ -46,7 +46,8 @@ public class TemplatesListViewHolder extends HealthCocoViewHolder implements OnC
         for (DrugItem drug : template.getItems()) {
             DrugNameItemViewholder view = new DrugNameItemViewholder(mActivity);
             view.setData(drug);
-            containerDoses.addView(view);
+            if (drug.getDrug() != null)
+                containerDoses.addView(view);
         }
     }
 

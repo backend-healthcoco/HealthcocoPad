@@ -27,7 +27,7 @@ import com.healthcoco.healthcocopad.utilities.Util;
  * Created by Shreshtha on 25-01-2017.
  */
 public class InitialSyncFragment extends HealthCocoFragment {
-    public static final int MAX_SIZE = 100;
+    public static final int MAX_SIZE = 50;
     public static final String INTENT_ACTION_INITIAL_SYNC = "com.healthcoco.INTENT_ACTION_INITIAL_SYNC";
     public static int PAGE_NUMBER = 0;
     public static boolean isPageLoading = false;

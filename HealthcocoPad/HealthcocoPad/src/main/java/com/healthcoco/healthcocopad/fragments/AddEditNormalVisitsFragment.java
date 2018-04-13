@@ -537,7 +537,7 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
                 openDatePickerDialog();
                 break;
             case R.id.layout_next_review:
-                if (visit != null && visit.getAppointmentRequest() != null && visit.getAppointmentId() != null) {
+                if (visit != null && visit.getAppointmentRequest() != null && visit.getAppointmentId() != null && !isFromClone) {
                     showNextReviewReschedulealert();
                 } else
                     openDialogFragment(new NextReviewOnDialogFragment(), REQUEST_CODE_NEXT_REVIEW);
@@ -754,14 +754,14 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
 
         if (user != null && RoleType.isAdmin(user.getRoleTypes()) && !isSingleDoctor) {
 
-            if ((!Util.isNullOrBlank(visitId)) || (!Util.isNullOrBlank(prescriptionId))) {
+            if (((!Util.isNullOrBlank(visitId)) || (!Util.isNullOrBlank(prescriptionId))) && !isFromClone) {
                 tvDoctorName.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                 tvDoctorName.setEnabled(false);
                 tvDoctorName.setClickable(false);
                 tvDoctorName.setVisibility(View.VISIBLE);
                 if (visit != null)
                     tvDoctorName.setText(Util.getValidatedValue(visit.getCreatedBy()));
-            } else if (!Util.isNullOrBlank(treatmentId)) {
+            } else if (!Util.isNullOrBlank(treatmentId) && !isFromClone) {
                 tvDoctorName.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                 tvDoctorName.setEnabled(false);
                 tvDoctorName.setClickable(false);
@@ -769,7 +769,7 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
                 if (treatment != null)
                     tvDoctorName.setText(Util.getValidatedValue(treatment.get(0).getCreatedBy()));
             } else {
-                tvDoctorName.setCompoundDrawablesWithIntrinsicBounds(0, 0,  R.drawable.arrow_menu_down, 0);
+                tvDoctorName.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.arrow_menu_down, 0);
                 tvDoctorName.setEnabled(true);
                 tvDoctorName.setVisibility(View.VISIBLE);
             }

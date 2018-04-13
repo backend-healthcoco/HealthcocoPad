@@ -439,7 +439,7 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
     private void openDatePickerDialog(final TextView textView) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(selectedMonthDayYearInMillis);
-        calendar = DateTimeUtil.setCalendarDefaultvalue(DateTimeUtil.DATE_FORMAT_WEEKDAY_DAY_MONTH_AS_TEXT_YEAR_DASH, calendar, textView);
+//        calendar = DateTimeUtil.setCalendarDefaultvalue(DateTimeUtil.DATE_FORMAT_WEEKDAY_DAY_MONTH_AS_TEXT_YEAR_DASH, calendar, textView);
         DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
 
             @Override
