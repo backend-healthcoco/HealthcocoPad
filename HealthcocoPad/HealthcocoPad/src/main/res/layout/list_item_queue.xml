@@ -50,9 +50,15 @@
                 android:textColor="@color/blue_action_bar" />
 
             <TextView
-                android:id="@+id/tv_mobile_number"
+                android:id="@+id/tv_patient_id"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/tv_mobile_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black_greyish" />
 
             <TextView
                 android:id="@+id/tv_doctor_name"
@@ -87,7 +93,7 @@
                     android:gravity="center|start"
                     android:singleLine="true"
                     android:text="@string/check_in"
-                    android:textColor="@drawable/text_selector_grey_blue" />
+                    android:textColor="@drawable/text_selector_orange_black" />
             </LinearLayout>
 
             <LinearLayout
@@ -108,7 +114,7 @@
                     android:gravity="center|start"
                     android:singleLine="true"
                     android:text="@string/engage"
-                    android:textColor="@drawable/text_selector_grey_blue" />
+                    android:textColor="@drawable/text_selector_orange_black" />
             </LinearLayout>
 
             <LinearLayout
@@ -128,7 +134,7 @@
                     android:gravity="center|start"
                     android:singleLine="true"
                     android:text="@string/check_out"
-                    android:textColor="@drawable/text_selector_grey_blue" />
+                    android:textColor="@drawable/text_selector_orange_black" />
             </LinearLayout>
 
         </LinearLayout>

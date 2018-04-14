@@ -71,6 +71,7 @@ import static com.healthcoco.healthcocopad.enums.BookAppointmentFromScreenType.A
 public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgroundListenerOptimised, View.OnClickListener, HealthcocoTextWatcherListener, DoctorListPopupWindowListener {
 
     public static final String INTENT_GET_APPOINTMENT_LIST_LOCAL = "com.healthcoco.APPOINTMENT_LIST_LOCAL";
+    public static final String INTENT_GET_APPOINTMENT_LIST_SERVER = "com.healthcoco.APPOINTMENT_LIST_SERVER";
 
     public static final String DATE_FORMAT_FOR_HEADER_IN_THIS_SCREEN = "EEE, MMM dd,yyyy";
     public static final int MAX_SIZE = 10;
@@ -82,6 +83,14 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
     private User user;
     private User loggedInUser;
     private long selectedMonthDayYearInMillis;
+    BroadcastReceiver appointmentListReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, final Intent intent) {
+            if (intent != null) {
+                getCalendarEventsList(true);
+            }
+        }
+    };
     private long curentMonthDayYearInMillis;
     private ArrayList<CalendarEvents> calenderEventList = null;
     private AppointmentStatusType appointmentStatusType = ALL;
@@ -91,7 +100,6 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
     private boolean isSingleDoctor = false;
     private boolean isInitialLoading = true;
     private boolean receiversRegistered;
-
     private TextView tvDoctorName;
     private LinearLayout lvDoctorName;
     private ImageButton btPreviousDate;
@@ -414,6 +422,9 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
             IntentFilter filter = new IntentFilter();
             filter.addAction(INTENT_GET_APPOINTMENT_LIST_LOCAL);
             LocalBroadcastManager.getInstance(mActivity).registerReceiver(appointmentListReceiverLocal, filter);
+            IntentFilter filter2 = new IntentFilter();
+            filter.addAction(INTENT_GET_APPOINTMENT_LIST_SERVER);
+            LocalBroadcastManager.getInstance(mActivity).registerReceiver(appointmentListReceiver, filter);
             receiversRegistered = true;
         }
     }
@@ -421,6 +432,7 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
     @Override
     public void onDestroy() {
         super.onDestroy();
+        LocalBroadcastManager.getInstance(mActivity).unregisterReceiver(appointmentListReceiver);
         LocalBroadcastManager.getInstance(mActivity).unregisterReceiver(appointmentListReceiverLocal);
     }
 

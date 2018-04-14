@@ -222,13 +222,14 @@ public class ScheduledQueueFragment extends HealthCocoFragment implements LocalD
                 case CHANGE_APPOINTMENT_STATUS:
                     mActivity.hideLoading();
                     if (response.getData() != null) {
-                        CalendarEvents responseData = (CalendarEvents) response.getData();
+                        boolean data = (boolean) response.getData();
+                      /*  CalendarEvents responseData = (CalendarEvents) response.getData();
                         LocalDataServiceImpl.getInstance(mApp).addCalendarEventsUpdated(responseData);
                         calendarEventsList.remove(calendarEvents);
                         calendarEventsHashMap.remove(calendarEvents.getUniqueId());
 //                        mAdapter.notifyDataSetChanged();
                         fromHashMapAndRefresh(calendarEventsList);
-                        Util.sendBroadcast(mApp, INTENT_REFRESH_WAITING_QUEUE_DATA);
+                        Util.sendBroadcast(mApp, INTENT_REFRESH_WAITING_QUEUE_DATA);*/
                     }
                     break;
                 default:

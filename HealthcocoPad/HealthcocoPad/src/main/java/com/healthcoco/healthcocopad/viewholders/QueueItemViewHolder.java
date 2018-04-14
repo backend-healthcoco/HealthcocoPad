@@ -57,6 +57,7 @@ public class QueueItemViewHolder extends HealthcocoComonRecylcerViewHolder imple
 
     private TextView tvTime;
     private TextView tvPatientName;
+    private TextView tvPatientId;
     private TextView tvMobileNumber;
     private TextView tvDoctorName;
     private LinearLayout btCheckIn;
@@ -75,6 +76,7 @@ public class QueueItemViewHolder extends HealthcocoComonRecylcerViewHolder imple
     public void initViews(View itemView) {
         tvTime = (TextView) itemView.findViewById(R.id.tv_time);
         tvPatientName = (TextView) itemView.findViewById(R.id.tv_patient_name);
+        tvPatientId = (TextView) itemView.findViewById(R.id.tv_patient_id);
         tvMobileNumber = (TextView) itemView.findViewById(R.id.tv_mobile_number);
         tvDoctorName = (TextView) itemView.findViewById(R.id.tv_doctor_name);
         btCheckIn = (LinearLayout) itemView.findViewById(R.id.bt_check_in);
@@ -110,12 +112,14 @@ public class QueueItemViewHolder extends HealthcocoComonRecylcerViewHolder imple
             String doctorName = "";
             String mobileNumber = "";
             String patientName = "";
+            String patientId = "";
 
             switch (calendarEvents.getType()) {
                 case APPOINTMENT:
                     if (calendarEvents.getPatient() != null) {
                         PatientCard patient = calendarEvents.getPatient();
                         patientName = Util.getValidatedValueOrNull(patient.getLocalPatientName());
+                        patientId = Util.getValidatedValueOrNull(patient.getPid());
                         mobileNumber = Util.getValidatedValueOrNull(patient.getMobileNumber());
                         doctorName = Util.getValidatedValueOrNull(calendarEvents.getDoctorName());
 
@@ -126,9 +130,14 @@ public class QueueItemViewHolder extends HealthcocoComonRecylcerViewHolder imple
                             if (!Util.isNullOrBlank(calendarEvents.getPatient().getFirstName()))
                                 tvPatientName.setText(calendarEvents.getPatient().getFirstName());
                         }
+                        if (!Util.isNullOrBlank(patientId)) {
+                            tvPatientId.setText(patientId);
+                        } else {
+                            tvPatientId.setText("");
+                        }
                         if (!Util.isNullOrBlank(mobileNumber)) {
                             tvMobileNumber.setText(mobileNumber);
-                        } else tvMobileNumber.setText("");
+                        } else tvMobileNumber.setVisibility(View.GONE);
                         if (!Util.isNullOrBlank(doctorName)) {
                             tvDoctorName.setText(doctorName);
                         } else {

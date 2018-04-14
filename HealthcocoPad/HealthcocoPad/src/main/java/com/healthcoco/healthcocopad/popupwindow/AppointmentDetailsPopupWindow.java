@@ -83,6 +83,7 @@ public class AppointmentDetailsPopupWindow extends PopupWindow implements View.O
     private TextView tvTotalTime;
     private TextView tvCheckOut;
     private TextView tvScheduledAt;
+    private LinearLayout layoutPatientDetails;
     private LinearLayout layoutScheduledAt;
     private LinearLayout layoutCheckIn;
     private LinearLayout layoutWaitedFor;
@@ -131,6 +132,7 @@ public class AppointmentDetailsPopupWindow extends PopupWindow implements View.O
         tvCheckOut = (TextView) linearLayout.findViewById(R.id.tv_check_out);
         tvScheduledAt = (TextView) linearLayout.findViewById(R.id.tv_scheduled_at);
 
+        layoutPatientDetails = (LinearLayout) linearLayout.findViewById(R.id.layout_patient_details);
         layoutScheduledAt = (LinearLayout) linearLayout.findViewById(R.id.layout_scheduled_at);
         layoutCheckIn = (LinearLayout) linearLayout.findViewById(R.id.layout_check_in);
         layoutWaitedFor = (LinearLayout) linearLayout.findViewById(R.id.layout_waited_for);
@@ -180,6 +182,7 @@ public class AppointmentDetailsPopupWindow extends PopupWindow implements View.O
         btDiscard.setOnClickListener(this);
         btEdit.setOnClickListener(this);
         btDismiss.setOnClickListener(this);
+        layoutPatientDetails.setOnClickListener(this);
     }
 
     public void showOptionsWindow(View v) {
@@ -206,6 +209,11 @@ public class AppointmentDetailsPopupWindow extends PopupWindow implements View.O
 
             case R.id.bt_add_invoice:
                 onInvoiceClicked();
+//                dismiss();
+                break;
+
+            case R.id.layout_patient_details:
+                onPatientDatailsClicked();
 //                dismiss();
                 break;
 
@@ -351,6 +359,15 @@ public class AppointmentDetailsPopupWindow extends PopupWindow implements View.O
         Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
         intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.PATIENT_DETAIL.ordinal());
         intent.putExtra(HealthCocoConstants.TAG_TAB_TYPE, PatientDetailTabType.PATIENT_DETAIL_INVOICE.ordinal());
+        startActivityForResult(mActivity, intent, 0, null);
+
+    }
+
+    public void onPatientDatailsClicked() {
+        HealthCocoConstants.SELECTED_PATIENTS_USER_ID = calendarEvents.getPatient().getUserId();
+        Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
+        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.PATIENT_DETAIL.ordinal());
+        intent.putExtra(HealthCocoConstants.TAG_TAB_TYPE, PatientDetailTabType.PATIENT_DETAIL_PROFILE.ordinal());
         startActivityForResult(mActivity, intent, 0, null);
 
     }

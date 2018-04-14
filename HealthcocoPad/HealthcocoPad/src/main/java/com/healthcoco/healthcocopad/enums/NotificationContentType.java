@@ -9,6 +9,8 @@ import com.healthcoco.healthcocopad.R;
 public enum NotificationContentType {
     REPORTS(R.string.report_details, WebServiceType.GET_RECORD_BY_RECORD_ID),
     APPOINTMENT(R.string.appointment_details, WebServiceType.GET_APPOINTMENT_BY_APPOINTMENT_ID),
+    APPOINTMENT_STATUS_CHANGE(R.string.appointment_details, null),
+    PATIENT_REFRESH(R.string.appointment_details, null),
     CALENDAR_REMINDER;
 
     private final int titleId;

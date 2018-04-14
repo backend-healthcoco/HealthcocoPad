@@ -93,6 +93,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
 
     //required to receive an event when filter is selected
     public static final String INTENT_FILTER_TYPE = "com.healthcoco.FILTER_TYPE";
+    public static final String INTENT_GET_CONTACT_LIST_SERVER = "com.healthcoco.CONTACT_LIST_SERVER";
     public static final String INTENT_GET_CONTACT_LIST_LOCAL = "com.healthcoco.CONTACT_LIST_LOCAL";
     public static final String INTENT_REFRESH_CONTACTS_LIST_FROM_SERVER = "com.healthcoco.healthcocopad.fragments.ContactsListFragment.REFRESH_CONTACTS_LIST_FROM_SERVER";
     public static final String INTENT_REFRESH_GROUPS_LIST_FROM_SERVER = "com.healthcoco.healthcocopad.fragments.ContactsListFragment.REFRESH_GROUPS_LIST_FROM_SERVER";
@@ -123,6 +124,14 @@ public class ContactsListFragment extends HealthCocoFragment implements
         @Override
         public void onReceive(Context context, final Intent intent) {
             getGroupsListFromServer();
+        }
+    };
+    BroadcastReceiver contactsListServerReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, final Intent intent) {
+            if (intent != null) {
+                getContactsList(false);
+            }
         }
     };
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -302,6 +311,10 @@ public class ContactsListFragment extends HealthCocoFragment implements
             filter.addAction(INTENT_FILTER_TYPE);
             LocalBroadcastManager.getInstance(mActivity).registerReceiver(filterReceiver, filter);
 
+            IntentFilter contactListServer = new IntentFilter();
+            filter.addAction(INTENT_GET_CONTACT_LIST_SERVER);
+            LocalBroadcastManager.getInstance(mActivity).registerReceiver(contactsListServerReceiver, filter);
+
             //receiver for contacts list refresh
             IntentFilter contactsListLocal = new IntentFilter();
             contactsListLocal.addAction(INTENT_GET_CONTACT_LIST_LOCAL);
@@ -339,6 +352,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
     public void onDestroy() {
         super.onDestroy();
         LocalBroadcastManager.getInstance(mActivity).unregisterReceiver(filterReceiver);
+        LocalBroadcastManager.getInstance(mActivity).unregisterReceiver(contactsListServerReceiver);
         LocalBroadcastManager.getInstance(mActivity).unregisterReceiver(contactsListLocalReceiver);
         LocalBroadcastManager.getInstance(mActivity).unregisterReceiver(finishContactsListReceiver);
         LocalBroadcastManager.getInstance(mActivity).unregisterReceiver(contactsListFromServerReceiver);

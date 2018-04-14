@@ -8,6 +8,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v4.app.NotificationCompat;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -15,6 +17,8 @@ import com.google.firebase.messaging.RemoteMessage;
 import com.google.gson.Gson;
 import com.healthcoco.healthcocopad.activities.SplashScreenActivity;
 import com.healthcoco.healthcocopad.bean.server.NotificationResponse;
+import com.healthcoco.healthcocopad.fragments.ContactsListFragment;
+import com.healthcoco.healthcocopad.fragments.QueueFragment;
 import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
@@ -22,12 +26,15 @@ import com.healthcoco.healthcocopad.utilities.Util;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Map;
 
 /**
  * Created by neha on 02/04/16.
  */
 public class HealthcocoFCMListener extends FirebaseMessagingService {
+    public static final String TAG_NOTIFICATION_RESPONSE = "notificationResponse";
+    private static final String TAG = "HealthcocoFCMListener";
     String KEY = "message";
 
     @Override
@@ -42,12 +49,23 @@ public class HealthcocoFCMListener extends FirebaseMessagingService {
         }
     }
 
-    private static final String TAG = "HealthcocoFCMListener";
-    public static final String TAG_NOTIFICATION_RESPONSE = "notificationResponse";
-
     private void generateNotification(String message) {
         NotificationResponse notificationResponse = new Gson().fromJson(message, NotificationResponse.class);
         if (notificationResponse != null) {
+            if (notificationResponse.getNotificationType() != null) {
+                switch (notificationResponse.getNotificationType()) {
+                    case APPOINTMENT:
+                        Util.sendBroadcast((HealthCocoApplication) getApplicationContext(), QueueFragment.INTENT_GET_APPOINTMENT_LIST_SERVER);
+                        break;
+                    case APPOINTMENT_STATUS_CHANGE:
+                        Util.sendBroadcast((HealthCocoApplication) getApplicationContext(), QueueFragment.INTENT_GET_APPOINTMENT_LIST_SERVER);
+                        return;
+                    case PATIENT_REFRESH:
+                        Util.sendBroadcast((HealthCocoApplication) getApplicationContext(), ContactsListFragment.INTENT_GET_CONTACT_LIST_SERVER);
+                        return;
+                }
+            }
+
             //setting title
             String title = Util.getValidatedValue(notificationResponse.getTitle());
             String text = Util.getValidatedValue(notificationResponse.getText());
