@@ -146,12 +146,18 @@ public class PrescriptionListItemViewHolder extends HealthCocoViewHolder impleme
             imageView.setVisibility(View.GONE);
             layoutNextReviewDetail.setVisibility(View.GONE);
         } else {
-            if (!user.getUniqueId().equalsIgnoreCase(prescription.getDoctorId())) {
+            if (!user.getForeignLocationId().equalsIgnoreCase(prescription.getLocationId())) {
                 btOptions.setVisibility(View.GONE);
                 containerBottomButtons.setVisibility(View.GONE);
                 tvLabelGlobalRecord.setVisibility(View.VISIBLE);
                 tvLabelPrescribedBy.setVisibility(View.GONE);
                 tvPrescribedBy.setVisibility(View.GONE);
+            } else if (user != null && (RoleType.isAdmin(user.getRoleTypes()))) {
+                btOptions.setVisibility(View.VISIBLE);
+                containerBottomButtons.setVisibility(View.VISIBLE);
+                tvLabelGlobalRecord.setVisibility(View.GONE);
+                tvLabelPrescribedBy.setVisibility(View.VISIBLE);
+                tvPrescribedBy.setVisibility(View.VISIBLE);
             } else {
                 btOptions.setVisibility(View.VISIBLE);
                 containerBottomButtons.setVisibility(View.VISIBLE);
@@ -159,6 +165,7 @@ public class PrescriptionListItemViewHolder extends HealthCocoViewHolder impleme
                 tvLabelPrescribedBy.setVisibility(View.VISIBLE);
                 tvPrescribedBy.setVisibility(View.VISIBLE);
             }
+
             imageView.setVisibility(View.VISIBLE);
             if (prescription.getAppointmentRequest() != null && prescription.getAppointmentId() != null) {
                 layoutNextReviewDetail.setVisibility(View.VISIBLE);
@@ -317,7 +324,9 @@ public class PrescriptionListItemViewHolder extends HealthCocoViewHolder impleme
                     if (detailCombinedItemListener != null)
                         detailCombinedItemListener.sendEmail("");
                     else
-                        mActivity.openAddUpdateNameDialogFragment(WebServiceType.SEND_EMAIL_PRESCRIPTION, AddUpdateNameDialogType.EMAIL, prescription.getUniqueId());
+                        mActivity.openAddUpdateNameDialogFragment(WebServiceType.SEND_EMAIL_PRESCRIPTION,
+                                AddUpdateNameDialogType.EMAIL, prescription.getUniqueId(), prescription.getDoctorId(),
+                                prescription.getLocationId(), prescription.getHospitalId());
                 else onNetworkUnavailable(null);
                 break;
             case R.id.bt_options:

@@ -977,7 +977,7 @@ public class Util {
         return (float) Math.sqrt(((weight * height) / 3600));
     }
 
-    public static boolean getIsMobileNumberOptional(LoginResponse doctor) {
+   /* public static boolean getIsMobileNumberOptional(LoginResponse doctor) {
         for (Hospital hospital : doctor.getHospitals()) {
             if (hospital != null && (!Util.isNullOrEmptyList(hospital.getLocationsAndAccessControl()))) {
                 for (LocationAndAccessControl locationAndAccessControl : hospital.getLocationsAndAccessControl()) {
@@ -988,6 +988,6 @@ public class Util {
         }
         return false;
     }
-
+*/
 
 }

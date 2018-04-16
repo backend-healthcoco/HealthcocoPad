@@ -14,6 +14,7 @@ import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.AlreadyRegisteredPatientsResponse;
+import com.healthcoco.healthcocopad.bean.server.DoctorClinicProfile;
 import com.healthcoco.healthcocopad.bean.server.Hospital;
 import com.healthcoco.healthcocopad.bean.server.LocationAndAccessControl;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
@@ -52,7 +53,9 @@ public class PatientNumberSearchDialogFragment extends HealthCocoDialogFragment 
         LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
         if (doctor != null && doctor.getUser() != null && !Util.isNullOrBlank(doctor.getUser().getUniqueId())) {
             user = doctor.getUser();
-            isMobileNumberOptional = Util.getIsMobileNumberOptional(doctor);
+            DoctorClinicProfile doctorClinicProfile = LocalDataServiceImpl.getInstance(mApp).getDoctorClinicProfile(user.getUniqueId(), user.getForeignLocationId());
+            isMobileNumberOptional = doctorClinicProfile.getMobileNumberOptional();
+//            isMobileNumberOptional = Util.getIsMobileNumberOptional(doctor);
             init();
             setWidthHeight(0.50, 0.52);
         }

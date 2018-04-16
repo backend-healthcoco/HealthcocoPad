@@ -241,7 +241,8 @@ public class TreatmentListItemViewHolder extends HealthCocoViewHolder implements
                     if (detailCombinedItemListener != null)
                         detailCombinedItemListener.sendEmail("");
                     else
-                        mActivity.openAddUpdateNameDialogFragment(WebServiceType.SEND_EMAIL_TREATMENT, AddUpdateNameDialogType.EMAIL, treatments.getUniqueId());
+                        mActivity.openAddUpdateNameDialogFragment(WebServiceType.SEND_EMAIL_TREATMENT, AddUpdateNameDialogType.EMAIL,
+                                treatments.getUniqueId(), treatments.getDoctorId(), treatments.getLocationId(), treatments.getHospitalId());
                 else onNetworkUnavailable(null);
                 break;
 

@@ -14,6 +14,7 @@ import com.orm.annotation.Unique;
 
 import java.util.ArrayList;
 import java.util.List;
+
 @org.parceler.Parcel
 public class DoctorClinicProfile extends SugarRecord {
     protected String appointmentBookingNumberJsonString;
@@ -58,6 +59,8 @@ public class DoctorClinicProfile extends SugarRecord {
     private String hospitalId;
     @Ignore
     private ArrayList<Role> roles;
+    private Boolean isMobileNumberOptional;
+
 
     public DoctorClinicProfile() {
     }
@@ -343,5 +346,13 @@ public class DoctorClinicProfile extends SugarRecord {
 
     public void setAppointmentSlotJsonString(String appointmentSlotJsonString) {
         this.appointmentSlotJsonString = appointmentSlotJsonString;
+    }
+
+    public Boolean getMobileNumberOptional() {
+        return isMobileNumberOptional;
+    }
+
+    public void setMobileNumberOptional(Boolean mobileNumberOptional) {
+        isMobileNumberOptional = mobileNumberOptional;
     }
 }

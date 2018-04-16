@@ -442,17 +442,23 @@ public class ClinicalNotesListItemViewHolder extends HealthCocoViewHolder implem
             imageView.setVisibility(View.GONE);
             layoutNextReviewDetail.setVisibility(View.GONE);
         } else {
-            if (!user.getUniqueId().equalsIgnoreCase(clinicalNote.getDoctorId())) {
+            if (!user.getForeignLocationId().equalsIgnoreCase(clinicalNote.getLocationId())) {
                 containerBottomButtons.setVisibility(View.GONE);
                 tvLabelGlobalRecord.setVisibility(View.VISIBLE);
                 tvLabelNotedBy.setVisibility(View.GONE);
                 tvNotedBy.setVisibility(View.GONE);
+            } else if (user != null && (RoleType.isAdmin(user.getRoleTypes()))) {
+                containerBottomButtons.setVisibility(View.VISIBLE);
+                tvLabelGlobalRecord.setVisibility(View.GONE);
+                tvLabelNotedBy.setVisibility(View.VISIBLE);
+                tvNotedBy.setVisibility(View.VISIBLE);
             } else {
                 containerBottomButtons.setVisibility(View.VISIBLE);
                 tvLabelGlobalRecord.setVisibility(View.GONE);
                 tvLabelNotedBy.setVisibility(View.VISIBLE);
                 tvNotedBy.setVisibility(View.VISIBLE);
             }
+
             imageView.setVisibility(View.VISIBLE);
             if (clinicalNote.getAppointmentRequest() != null && clinicalNote.getAppointmentId() != null) {
                 AppointmentRequest appointmentRequest = clinicalNote.getAppointmentRequest();
@@ -918,7 +924,9 @@ public class ClinicalNotesListItemViewHolder extends HealthCocoViewHolder implem
                     if (detailCombinedItemListener != null)
                         detailCombinedItemListener.sendEmail("");
                     else
-                        mActivity.openAddUpdateNameDialogFragment(WebServiceType.SEND_EMAIL_CLINICAL_NOTES, AddUpdateNameDialogType.EMAIL, clinicalNote.getUniqueId());
+                        mActivity.openAddUpdateNameDialogFragment(WebServiceType.SEND_EMAIL_CLINICAL_NOTES,
+                                AddUpdateNameDialogType.EMAIL, clinicalNote.getUniqueId(), clinicalNote.getDoctorId(),
+                                clinicalNote.getLocationId(), clinicalNote.getHospitalId());
                 } else onNetworkUnavailable(null);
                 break;
             case R.id.bt_discard:

@@ -209,6 +209,13 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
     }
 
     @Override
+    public void onErrorResponse(VolleyResponseBean volleyResponseBean, String errorMessage) {
+        super.onErrorResponse(volleyResponseBean, errorMessage);
+        refreshData();
+        isInitialLoading = false;
+    }
+
+    @Override
     public void onResponse(VolleyResponseBean response) {
         LogUtils.LOGD(TAG, "Success " + String.valueOf(response.getWebServiceType()));
         if (response != null && response.getWebServiceType() != null) {

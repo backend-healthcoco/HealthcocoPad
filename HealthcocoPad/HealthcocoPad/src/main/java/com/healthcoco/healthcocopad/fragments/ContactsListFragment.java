@@ -31,6 +31,7 @@ import com.healthcoco.healthcocopad.activities.HomeActivity;
 import com.healthcoco.healthcocopad.adapter.ContactsListAdapter;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.ClinicDetailResponse;
+import com.healthcoco.healthcocopad.bean.server.DoctorClinicProfile;
 import com.healthcoco.healthcocopad.bean.server.DoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.Profession;
@@ -134,6 +135,17 @@ public class ContactsListFragment extends HealthCocoFragment implements
             }
         }
     };
+    BroadcastReceiver refreshClinicProfileReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, final Intent intent) {
+            LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
+            if (doctor != null && doctor.getUser() != null && !Util.isNullOrBlank(doctor.getUser().getUniqueId())) {
+                user = doctor.getUser();
+//                mobileNumberOptional = Util.getIsMobileNumberOptional(doctor);
+                getClinicDetails();
+            }
+        }
+    };
     private SwipeRefreshLayout swipeRefreshLayout;
     private FloatingActionButton btAddNewPatient;
     private AsyncTask<VolleyResponseBean, VolleyResponseBean, VolleyResponseBean> asynTaskGetPatients;
@@ -150,6 +162,20 @@ public class ContactsListFragment extends HealthCocoFragment implements
         public void onReceive(Context context, final Intent intent) {
             resetListAndPagingAttributes();
             getListFromLocal(false);
+        }
+    };
+    BroadcastReceiver contactsListFromServerReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, final Intent intent) {
+            LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
+            if (doctor != null && doctor.getUser() != null && !Util.isNullOrBlank(doctor.getUser().getUniqueId())) {
+                clearSearchEditText();
+                user = doctor.getUser();
+//                mobileNumberOptional = Util.getIsMobileNumberOptional(doctor);
+                resetListAndPagingAttributes();
+                filterType = FilterItemType.ALL_PATIENTS;
+                getListFromLocal(true);
+            }
         }
     };
     private ArrayList<UserGroups> groupsList;
@@ -185,31 +211,6 @@ public class ContactsListFragment extends HealthCocoFragment implements
     private List<Reference> referenceList;
     private ClinicDetailResponse selectedClinicProfile;
     private boolean mobileNumberOptional;
-    BroadcastReceiver refreshClinicProfileReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, final Intent intent) {
-            LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
-            if (doctor != null && doctor.getUser() != null && !Util.isNullOrBlank(doctor.getUser().getUniqueId())) {
-                user = doctor.getUser();
-                mobileNumberOptional = Util.getIsMobileNumberOptional(doctor);
-                getClinicDetails();
-            }
-        }
-    };
-    BroadcastReceiver contactsListFromServerReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, final Intent intent) {
-            LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
-            if (doctor != null && doctor.getUser() != null && !Util.isNullOrBlank(doctor.getUser().getUniqueId())) {
-                clearSearchEditText();
-                user = doctor.getUser();
-                mobileNumberOptional = Util.getIsMobileNumberOptional(doctor);
-                resetListAndPagingAttributes();
-                filterType = FilterItemType.ALL_PATIENTS;
-                getListFromLocal(true);
-            }
-        }
-    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -812,7 +813,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
         LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
         if (doctor != null) {
             user = doctor.getUser();
-            mobileNumberOptional = Util.getIsMobileNumberOptional(doctor);
+//            mobileNumberOptional = Util.getIsMobileNumberOptional(doctor);
         }
         //Get groupsList
         Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.USER_GROUP);
@@ -932,7 +933,9 @@ public class ContactsListFragment extends HealthCocoFragment implements
                 LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
                 if (doctor != null && doctor.getUser() != null && !Util.isNullOrBlank(doctor.getUser().getUniqueId())) {
                     user = doctor.getUser();
-                    mobileNumberOptional = Util.getIsMobileNumberOptional(doctor);
+                    DoctorClinicProfile doctorClinicProfile = LocalDataServiceImpl.getInstance(mApp).getDoctorClinicProfile(user.getUniqueId(), user.getForeignLocationId());
+                    mobileNumberOptional = doctorClinicProfile.getMobileNumberOptional();
+//                    mobileNumberOptional = Util.getIsMobileNumberOptional(doctor);
                 }
                 break;
             case ADD_GROUPS_LIST:

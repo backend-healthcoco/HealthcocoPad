@@ -528,7 +528,8 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
         mActivity.showLoading(false);
         RegisterNewPatientRequest patientDetails = new RegisterNewPatientRequest();
         patientDetails.setLocalPatientName(name);
-        patientDetails.setMobileNumber(String.valueOf(editMobileNumber.getText()));
+        if (Util.isValidMobileNo(String.valueOf(editMobileNumber.getText())))
+            patientDetails.setMobileNumber(String.valueOf(editMobileNumber.getText()));
         patientDetails.setDoctorId(user.getUniqueId());
         patientDetails.setLocationId(user.getForeignLocationId());
         patientDetails.setHospitalId(user.getForeignHospitalId());

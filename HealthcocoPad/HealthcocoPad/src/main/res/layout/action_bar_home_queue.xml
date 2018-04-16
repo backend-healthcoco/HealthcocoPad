@@ -52,7 +52,6 @@
             android:background="@drawable/shape_rounded_corners_white_border_solid_blue"
             android:drawableEnd="@drawable/arrow_menu_down"
             android:drawablePadding="@dimen/patient_profile_image_padding"
-            android:hint="@string/doctors"
             android:paddingBottom="@dimen/dotor_profile_edit_text_top_padding"
             android:paddingLeft="@dimen/item_contact_padding"
             android:paddingRight="@dimen/dotor_profile_edit_text_top_padding"

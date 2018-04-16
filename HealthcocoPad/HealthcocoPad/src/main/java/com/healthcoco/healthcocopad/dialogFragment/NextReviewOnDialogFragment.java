@@ -90,7 +90,7 @@ public class NextReviewOnDialogFragment extends HealthCocoDialogFragment impleme
         showLoadingOverlay(true);
         new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_FRAGMENT_INITIALISATION_DATA, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         init();
-        setWidthHeight(0.40, 0.60);
+        setWidthHeight(0.60, 0.60);
     }
 
     @Override

@@ -7,179 +7,184 @@
 
     <include layout="@layout/action_bar_title_cross"></include>
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/white"
-        android:orientation="vertical"
-        android:padding="20dp">
-
+        android:layout_height="wrap_content">
 
         <LinearLayout
-            android:id="@+id/header_one"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/grey_background"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:orientation="horizontal"
-                android:padding="@dimen/list_item_padding">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center|start"
-                    android:layout_weight="1"
-                    android:gravity="center|start"
-                    android:paddingLeft="10dp"
-                    android:text="@string/date"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/text_size_book_appointment_dialog_fragment" />
-
-                <TextView
-                    android:id="@+id/tv_selected_date"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center|start"
-                    android:layout_weight="1"
-                    android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
-                    android:drawableEnd="@drawable/arrow_down_drug"
-                    android:gravity="center|start"
-                    android:minHeight="0dp"
-                    android:padding="10dp"
-                    android:text="Thu, 10 May,2016"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/text_size_book_appointment_dialog_fragment" />
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/grey_light_divider" />
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:orientation="vertical"
+            android:padding="20dp">
 
 
             <LinearLayout
-                android:id="@+id/layout_select_time_slot"
+                android:id="@+id/header_one"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:orientation="horizontal"
-                android:padding="@dimen/list_item_padding"
-                android:visibility="visible">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center|start"
-                    android:layout_weight="20"
-                    android:gravity="center|start"
-                    android:paddingLeft="10dp"
-                    android:text="@string/time"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/text_size_book_appointment_dialog_fragment" />
+                android:background="@color/grey_background"
+                android:gravity="center"
+                android:orientation="vertical">
 
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="70"
-                    android:orientation="horizontal">
+                    android:background="@color/white"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/list_item_padding">
 
                     <TextView
-                        android:id="@+id/tv_selected_time"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="@dimen/patient_profile_image_padding"
-                        android:layout_weight="50"
-                        android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
-                        android:drawableEnd="@drawable/arrow_down_drug"
-                        android:gravity="center"
-                        android:hint="@string/select_time"
-                        android:maxLines="1"
-                        android:padding="10dp"
-                        android:textColor="@drawable/text_black_normal_red_error_selector"
-                        android:textColorHint="@drawable/text_grey_hint_normal_red_error_selector"
+                        android:layout_gravity="center|start"
+                        android:layout_weight="1"
+                        android:gravity="center|start"
+                        android:paddingLeft="10dp"
+                        android:text="@string/date"
+                        android:textColor="@color/black"
                         android:textSize="@dimen/text_size_book_appointment_dialog_fragment" />
 
                     <TextView
-                        android:id="@+id/tv_appointment_slot"
+                        android:id="@+id/tv_selected_date"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="40"
+                        android:layout_gravity="center|start"
+                        android:layout_weight="1"
                         android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
                         android:drawableEnd="@drawable/arrow_down_drug"
-                        android:gravity="center"
-                        android:hint="@string/select_slot"
+                        android:gravity="center|start"
+                        android:minHeight="0dp"
                         android:padding="10dp"
+                        android:text="Thu, 10 May,2016"
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_size_book_appointment_dialog_fragment" />
                 </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/grey_light_divider" />
+
+
+                <LinearLayout
+                    android:id="@+id/layout_select_time_slot"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/list_item_padding"
+                    android:visibility="visible">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center|start"
+                        android:layout_weight="20"
+                        android:gravity="center|start"
+                        android:paddingLeft="10dp"
+                        android:text="@string/time"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_book_appointment_dialog_fragment" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="70"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tv_selected_time"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="@dimen/patient_profile_image_padding"
+                            android:layout_weight="50"
+                            android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
+                            android:drawableEnd="@drawable/arrow_down_drug"
+                            android:gravity="center"
+                            android:hint="@string/select_time"
+                            android:maxLines="1"
+                            android:padding="10dp"
+                            android:textColor="@drawable/text_black_normal_red_error_selector"
+                            android:textColorHint="@drawable/text_grey_hint_normal_red_error_selector"
+                            android:textSize="@dimen/text_size_book_appointment_dialog_fragment" />
+
+                        <TextView
+                            android:id="@+id/tv_appointment_slot"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="40"
+                            android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
+                            android:drawableEnd="@drawable/arrow_down_drug"
+                            android:gravity="center"
+                            android:hint="@string/select_slot"
+                            android:padding="10dp"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/text_size_book_appointment_dialog_fragment" />
+                    </LinearLayout>
+                </LinearLayout>
+
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingBottom="20dp"
+                android:paddingTop="20dp">
+
+                <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="1"
+                    android:drawablePadding="5dp"
+                    android:gravity="center|start"
+                    android:text="@string/notify_patient_via"
+                    android:textColor="@color/black_greyish"
+                    android:textSize="@dimen/text_size_book_appointment_dialog_fragment" />
+
+                <com.healthcoco.healthcocopad.views.FontAwesomeCheckbox
+                    android:id="@+id/cb_sms_patient"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:button="@android:color/transparent"
+                    android:paddingLeft="1dp"
+                    android:text="@string/text_check_in_square_sms"
+                    android:textColor="@drawable/text_light_grey_normal_blue_selected"
+                    android:textSize="@dimen/text_size_book_appointment_dialog_fragment" />
+
+                <com.healthcoco.healthcocopad.views.FontAwesomeCheckbox
+                    android:id="@+id/cb_email_patient"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:background="@android:color/transparent"
+                    android:button="@android:color/transparent"
+                    android:checked="false"
+                    android:paddingLeft="1dp"
+                    android:text="@string/text_check_in_sqaure_email"
+                    android:textColor="@drawable/text_light_grey_normal_blue_selected"
+                    android:textSize="@dimen/text_size_book_appointment_dialog_fragment" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/bt_done"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/shape_rounded_corners_solid_blue"
+                android:gravity="center|bottom"
+                android:minHeight="0dp"
+                android:padding="8dp"
+                android:text="@string/done"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
         </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:paddingBottom="20dp"
-            android:paddingTop="20dp">
-
-            <com.healthcoco.healthcocopad.views.TextViewFontAwesome
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
-                android:layout_weight="1"
-                android:drawablePadding="5dp"
-                android:gravity="center|start"
-                android:text="@string/notify_patient_via"
-                android:textColor="@color/black_greyish"
-                android:textSize="@dimen/text_size_book_appointment_dialog_fragment" />
-
-            <com.healthcoco.healthcocopad.views.FontAwesomeCheckbox
-                android:id="@+id/cb_sms_patient"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:button="@android:color/transparent"
-                android:paddingLeft="1dp"
-                android:text="@string/text_check_in_square_sms"
-                android:textColor="@drawable/text_light_grey_normal_blue_selected"
-                android:textSize="@dimen/text_size_book_appointment_dialog_fragment" />
-
-            <com.healthcoco.healthcocopad.views.FontAwesomeCheckbox
-                android:id="@+id/cb_email_patient"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:background="@android:color/transparent"
-                android:button="@android:color/transparent"
-                android:checked="false"
-                android:paddingLeft="1dp"
-                android:text="@string/text_check_in_sqaure_email"
-                android:textColor="@drawable/text_light_grey_normal_blue_selected"
-                android:textSize="@dimen/text_size_book_appointment_dialog_fragment" />
-        </LinearLayout>
-
-        <Button
-            android:id="@+id/bt_done"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/shape_rounded_corners_solid_blue"
-            android:gravity="center|bottom"
-            android:minHeight="0dp"
-            android:padding="8dp"
-            android:text="@string/done"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            android:textSize="18sp" />
-    </LinearLayout>
+    </ScrollView>
 </LinearLayout>

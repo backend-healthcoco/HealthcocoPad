@@ -216,7 +216,8 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
             case PATIENT_DETAIL_VISIT:
                 if (visitDetails != null) {
                     bundle.putParcelable(AddEditNormalVisitPrescriptionFragment.TAG_PRESCRIPTION_DATA, Parcels.wrap(visitDetails.getPrescriptions()));
-                    tvDate.setText(DateTimeUtil.getFormatedDate(visitDetails.getCreatedTime()));
+                    if (!isFromClone)
+                        tvDate.setText(DateTimeUtil.getFormatedDate(visitDetails.getCreatedTime()));
                 }
                 bundle.putParcelable(HealthCocoConstants.TAG_IS_FROM_VISIT, Parcels.wrap(true));
                 addEditNormalVisitPrescriptionFragment.setArguments(bundle);
@@ -237,7 +238,8 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
 
             case PATIENT_DETAIL_CLINICAL_NOTES:
                 if (visitDetails != null) {
-                    tvDate.setText(DateTimeUtil.getFormatedDate(visitDetails.getClinicalNotes().get(LIST_INDEX).getCreatedTime()));
+                    if (!isFromClone)
+                        tvDate.setText(DateTimeUtil.getFormatedDate(visitDetails.getClinicalNotes().get(LIST_INDEX).getCreatedTime()));
                 }
                 addFragment(addClinicalNotesVisitNormalFragment, R.string.clinical_notes, true);
                 tabs.setVisibility(View.GONE);
@@ -246,7 +248,8 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
             case PATIENT_DETAIL_PRESCRIPTION:
                 if (visitDetails != null) {
                     bundle.putParcelable(AddEditNormalVisitPrescriptionFragment.TAG_PRESCRIPTION_DATA, Parcels.wrap(visitDetails.getPrescriptions()));
-                    tvDate.setText(DateTimeUtil.getFormatedDate(visitDetails.getPrescriptions().get(LIST_INDEX).getCreatedTime()));
+                    if (!isFromClone)
+                        tvDate.setText(DateTimeUtil.getFormatedDate(visitDetails.getPrescriptions().get(LIST_INDEX).getCreatedTime()));
                 }
                 addEditNormalVisitPrescriptionFragment.setArguments(bundle);
                 addFragment(addEditNormalVisitPrescriptionFragment, R.string.prescriptions, true);
@@ -257,7 +260,8 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
             case PATIENT_DETAIL_TREATMENT:
                 if (!Util.isNullOrEmptyList(treatment)) {
                     bundle.putParcelable(PatientTreatmentDetailFragment.TAG_TREATMENT_DATA, Parcels.wrap(treatment));
-                    tvDate.setText(DateTimeUtil.getFormatedDate(treatment.get(LIST_INDEX).getCreatedTime()));
+                    if (!isFromClone)
+                        tvDate.setText(DateTimeUtil.getFormatedDate(treatment.get(LIST_INDEX).getCreatedTime()));
                 }
                 addNewTreatmentFragment.setArguments(bundle);
                 addFragment(addNewTreatmentFragment, R.string.treatment, true);
@@ -480,12 +484,13 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
         initViewPagerAdapter();
         if (visitDetails != null) {
             appointmentId = visitDetails.getAppointmentId();
-            initNextReviewData(visitDetails.getAppointmentRequest());
+            if (!isFromClone)
+                initNextReviewData(visitDetails.getAppointmentRequest());
         }
     }
 
     private void initNextReviewData(AppointmentRequest appointmentRequest) {
-        if (appointmentRequest != null && !isFromClone) {
+        if (appointmentRequest != null) {
             containerDateTime.setVisibility(View.VISIBLE);
             tvNextReviewDate.setText(DateTimeUtil.getFormattedDateTime(DATE_FORMAT_USED_IN_THIS_SCREEN, appointmentRequest.getFromDate()));
             tvNextReviewTime.setText(DateTimeUtil.getFormattedTime(0, Math.round(appointmentRequest.getTime().getFromTime())));

@@ -144,6 +144,7 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
 //    private ImageButton btNextDate;
     private TextView tvClinicClosed;
     private AppointmentSlot selectedAppointmentSlot;
+    private boolean isMobileNumberOptional;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -531,6 +532,7 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
                 LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
                 if (doctor != null && doctor.getUser() != null) {
                     user = doctor.getUser();
+//                    isMobileNumberOptional = Util.getIsMobileNumberOptional(doctor);
                     if (!Util.isNullOrBlank(appointmentId)) {
                         selectedAppointment = LocalDataServiceImpl.getInstance(mApp).getAppointment(appointmentId);
                         if (!Util.isNullOrBlank(selectedAppointment.getPatientId()))
@@ -539,6 +541,7 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
                     if (bookAppointmentFromScreenType != BookAppointmentFromScreenType.APPOINTMENTS_QUEUE_ADD_NEW)
                         selectedPatient = LocalDataServiceImpl.getInstance(mApp).getPatient(HealthCocoConstants.SELECTED_PATIENTS_USER_ID);
                     doctorClinicProfile = LocalDataServiceImpl.getInstance(mApp).getDoctorClinicProfile(user.getUniqueId(), user.getForeignLocationId());
+                    isMobileNumberOptional = doctorClinicProfile.getMobileNumberOptional();
                 }
                 break;
         }
@@ -624,6 +627,9 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
 
         if (selectedPatient == null && Util.isNullOrBlank(mobileNumber) && Util.isNullOrBlank(patientName)) {
             msg = getResources().getString(R.string.please_select_patient_or_add_new);
+        }
+        if (selectedPatient == null && !isMobileNumberOptional && Util.isNullOrBlank(mobileNumber)) {
+            msg = getResources().getString(R.string.enter_patient_mobile_number);
         } else if (!Util.isNullOrBlank(mobileNumber) && !Util.isValidMobileNo(mobileNumber)) {
             msg = getResources().getString(R.string.please_enter_valid_mobile_no_or_select_existing_patient);
         } else if (!Util.isNullOrBlank(mobileNumber) && Util.isNullOrBlank(patientName)) {

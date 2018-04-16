@@ -137,6 +137,7 @@ public class QueueItemViewHolder extends HealthcocoComonRecylcerViewHolder imple
                         }
                         if (!Util.isNullOrBlank(mobileNumber)) {
                             tvMobileNumber.setText(mobileNumber);
+                            tvMobileNumber.setVisibility(View.VISIBLE);
                         } else tvMobileNumber.setVisibility(View.GONE);
                         if (!Util.isNullOrBlank(doctorName)) {
                             tvDoctorName.setText(doctorName);
