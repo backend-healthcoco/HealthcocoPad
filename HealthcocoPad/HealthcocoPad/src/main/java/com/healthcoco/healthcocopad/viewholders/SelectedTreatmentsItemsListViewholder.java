@@ -144,7 +144,7 @@ public class SelectedTreatmentsItemsListViewholder extends HealthCocoViewHolder 
             etTextTreatmentNote.setText(objData.getNote());
             etTextTreatmentNote.setVisibility(View.VISIBLE);
         } else {
-//            etTextTreatmentNote.setText("");
+            etTextTreatmentNote.setText("");
         }
 
     }
@@ -179,6 +179,7 @@ public class SelectedTreatmentsItemsListViewholder extends HealthCocoViewHolder 
         etQtyPerDay.addTextChangedListener(new HealthcocoTextWatcher(etQtyPerDay, this));
         etCost.addTextChangedListener(new HealthcocoTextWatcher(etCost, this));
         etDiscount.addTextChangedListener(new HealthcocoTextWatcher(etDiscount, this));
+        etTextTreatmentNote.addTextChangedListener(new HealthcocoTextWatcher(etTextTreatmentNote, this));
     }
 
     private void initListeners() {
@@ -372,6 +373,9 @@ public class SelectedTreatmentsItemsListViewholder extends HealthCocoViewHolder 
                 break;
             case R.id.tv_discount_type:
                 setValidatedDoubleValue(tvDiscountType, s);
+                break;
+            case R.id.edit_text_treatment_note:
+                objData.setNote(s);
                 break;
         }
     }

@@ -29,11 +29,13 @@ public class TreatmentDetailItemViewholder extends LinearLayout {
     private TextView tvCost;
     private TreatmentItem treatmentItem;
     private TextView tvDiscount;
+    private TextView tvTreatmentNote;
     private TextView tvStatus;
     private View divider;
     private TextView tvTotalRupees;
     private LinearLayout layoutTreatmentToothNo;
     private LinearLayout layoutTreatmentMaterial;
+    private LinearLayout layoutTreatmentNote;
     private TextView tvTreatmentToothNo;
     private TextView tvTreatmentMaterial;
 
@@ -67,8 +69,10 @@ public class TreatmentDetailItemViewholder extends LinearLayout {
         tvTotalRupees = (TextView) findViewById(R.id.tv_total_rupees);
         tvTreatmentToothNo = (TextView) findViewById(R.id.tv_tooth_numbers);
         tvTreatmentMaterial = (TextView) findViewById(R.id.tv_tooth_material);
+        tvTreatmentNote = (TextView) findViewById(R.id.tv_treatment_note);
         layoutTreatmentToothNo = (LinearLayout) findViewById(R.id.layout_treatment_tooth_no);
         layoutTreatmentMaterial = (LinearLayout) findViewById(R.id.layout_treatment_material);
+        layoutTreatmentNote = (LinearLayout) findViewById(R.id.layout_treatment_note);
     }
 
     public void setData(TreatmentItem item) {
@@ -123,6 +127,11 @@ public class TreatmentDetailItemViewholder extends LinearLayout {
         if (finalCost != 0) {
             tvTotalRupees.setText(Util.getIntValue(finalCost) + "");
         } else tvTotalRupees.setText(getResources().getString(R.string.no_text_dash));
+
+        if (!Util.isNullOrBlank(treatmentItem.getNote())) {
+            tvTreatmentNote.setText(treatmentItem.getNote());
+            layoutTreatmentNote.setVisibility(VISIBLE);
+        } else layoutTreatmentNote.setVisibility(GONE);
 
         if (!Util.isNullOrEmptyList(treatmentItem.getTreatmentFields())) {
             List<TreatmentFields> treatmentFieldsList = treatmentItem.getTreatmentFields();

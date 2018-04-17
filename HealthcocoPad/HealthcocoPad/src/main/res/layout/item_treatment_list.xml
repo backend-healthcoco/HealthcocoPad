@@ -3,117 +3,148 @@
     android:id="@+id/container_treatment_detail_list"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     android:padding="10dp">
 
     <LinearLayout
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="2"
-        android:orientation="vertical">
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_treatment_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black_greyish"
+                android:textSize="@dimen/text_size_drug_child_lable" />
+
+            <LinearLayout
+                android:id="@+id/layout_treatment_tooth_no"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tooth_no_with_colon"
+                    android:textColor="@color/grey_dark_text"
+                    android:textSize="@dimen/text_size_menu_notif_no"
+                    android:textStyle="italic" />
+
+                <TextView
+                    android:id="@+id/tv_tooth_numbers"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/grey_dark_text"
+                    android:textSize="@dimen/text_size_menu_notif_no"
+                    android:textStyle="italic" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_treatment_material"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/material_with_colon"
+                    android:textColor="@color/grey_dark_text"
+                    android:textSize="@dimen/text_size_menu_notif_no"
+                    android:textStyle="italic" />
+
+                <TextView
+                    android:id="@+id/tv_tooth_material"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/grey_dark_text"
+                    android:textSize="@dimen/text_size_menu_notif_no"
+                    android:textStyle="italic" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
 
         <TextView
-            android:id="@+id/tv_treatment_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:id="@+id/tv_qty_per_day"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
             android:textColor="@color/black_greyish"
             android:textSize="@dimen/text_size_drug_child_lable" />
 
-        <LinearLayout
-            android:id="@+id/layout_treatment_tooth_no"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:visibility="gone">
+        <TextView
+            android:id="@+id/tv_cost"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textColor="@color/black_greyish"
+            android:textSize="@dimen/text_size_drug_child_lable" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/tooth_no_with_colon"
-                android:textColor="@color/grey_dark_text"
-                android:textSize="@dimen/text_size_menu_notif_no"
-                android:textStyle="italic" />
+        <TextView
+            android:id="@+id/tv_discount"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textColor="@color/black_greyish"
+            android:textSize="@dimen/text_size_drug_child_lable" />
 
-            <TextView
-                android:id="@+id/tv_tooth_numbers"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/grey_dark_text"
-                android:textSize="@dimen/text_size_menu_notif_no"
-                android:textStyle="italic" />
+        <TextView
+            android:id="@+id/tv_status"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textColor="@color/black_greyish"
+            android:textSize="@dimen/text_size_drug_child_lable" />
 
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/layout_treatment_material"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:visibility="gone">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/material_with_colon"
-                android:textColor="@color/grey_dark_text"
-                android:textSize="@dimen/text_size_menu_notif_no"
-                android:textStyle="italic" />
-
-            <TextView
-                android:id="@+id/tv_tooth_material"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/grey_dark_text"
-                android:textSize="@dimen/text_size_menu_notif_no"
-                android:textStyle="italic" />
-
-        </LinearLayout>
-
+        <TextView
+            android:id="@+id/tv_total_rupees"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textColor="@color/black_greyish"
+            android:textSize="@dimen/text_size_drug_child_lable" />
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/layout_treatment_note"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/layout_padding_5dp"
+        android:orientation="horizontal"
+        android:visibility="gone">
 
-    <TextView
-        android:id="@+id/tv_qty_per_day"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:textColor="@color/black_greyish"
-        android:textSize="@dimen/text_size_drug_child_lable" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Note :"
+            android:textColor="@color/black_greyish"
+            android:textSize="@dimen/text_size_add_clinical_note_points"
+            android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/tv_cost"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:textColor="@color/black_greyish"
-        android:textSize="@dimen/text_size_drug_child_lable" />
-
-    <TextView
-        android:id="@+id/tv_discount"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:textColor="@color/black_greyish"
-        android:textSize="@dimen/text_size_drug_child_lable" />
-
-    <TextView
-        android:id="@+id/tv_status"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:textColor="@color/black_greyish"
-        android:textSize="@dimen/text_size_drug_child_lable" />
-
-    <TextView
-        android:id="@+id/tv_total_rupees"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:textColor="@color/black_greyish"
-        android:textSize="@dimen/text_size_drug_child_lable" />
+        <TextView
+            android:id="@+id/tv_treatment_note"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/list_item_padding"
+            android:textColor="@color/black_greyish"
+            android:textSize="@dimen/text_size_drug_child_lable" />
+    </LinearLayout>
 </LinearLayout>

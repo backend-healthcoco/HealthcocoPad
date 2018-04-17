@@ -3432,14 +3432,14 @@ public class LocalDataServiceImpl {
                     + " AND "
                     + LocalDatabaseUtils.KEY_PATIENT_ID + "=\"" + patientId + "\"";
 //            if (!forAll) {
+            if (!Util.isNullOrEmptyList(clinicDoctorProfileArrayList))
+                for (int i = 0; i < clinicDoctorProfileArrayList.size(); i++) {
+                    if (i == 0)
+                        whereCondition = whereCondition + " AND " + LocalDatabaseUtils.KEY_DOCTOR_ID + "=\"" + clinicDoctorProfileArrayList.get(i).getUniqueId() + "\"";
+                    else
+                        whereCondition = whereCondition + " OR " + LocalDatabaseUtils.KEY_DOCTOR_ID + "=\"" + clinicDoctorProfileArrayList.get(i).getUniqueId() + "\"";
 
-            for (int i = 0; i < clinicDoctorProfileArrayList.size(); i++) {
-                if (i == 0)
-                    whereCondition = whereCondition + " AND " + LocalDatabaseUtils.KEY_DOCTOR_ID + "=\"" + clinicDoctorProfileArrayList.get(i).getUniqueId() + "\"";
-                else
-                    whereCondition = whereCondition + " OR " + LocalDatabaseUtils.KEY_DOCTOR_ID + "=\"" + clinicDoctorProfileArrayList.get(i).getUniqueId() + "\"";
-
-            }
+                }
 //            }
             //specifying order by limit and offset query
             String conditionsLimit = " ORDER BY " + LocalDatabaseUtils.KEY_VISITED_TIME + " DESC "

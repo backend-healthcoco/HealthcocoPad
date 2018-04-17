@@ -200,6 +200,7 @@ public class SelectedInvoiceItemsListViewholder extends HealthCocoViewHolder imp
         etQtyPerDay.addTextChangedListener(new HealthcocoTextWatcher(etQtyPerDay, this));
         etCost.addTextChangedListener(new HealthcocoTextWatcher(etCost, this));
         etDiscount.addTextChangedListener(new HealthcocoTextWatcher(etDiscount, this));
+//        etTextTreatmentNote.addTextChangedListener(new HealthcocoTextWatcher(etTextTreatmentNote, this));
     }
 
     private void initListeners() {
@@ -416,6 +417,8 @@ public class SelectedInvoiceItemsListViewholder extends HealthCocoViewHolder imp
                 break;
             case R.id.tv_discount_type:
                 setValidatedDoubleValue(tvDiscountType, s);
+                break;
+            case R.id.edit_text_treatment_note:
                 break;
 
         }
