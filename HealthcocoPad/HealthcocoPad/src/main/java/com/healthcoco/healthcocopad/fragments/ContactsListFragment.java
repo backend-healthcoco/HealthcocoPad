@@ -934,7 +934,8 @@ public class ContactsListFragment extends HealthCocoFragment implements
                 if (doctor != null && doctor.getUser() != null && !Util.isNullOrBlank(doctor.getUser().getUniqueId())) {
                     user = doctor.getUser();
                     DoctorClinicProfile doctorClinicProfile = LocalDataServiceImpl.getInstance(mApp).getDoctorClinicProfile(user.getUniqueId(), user.getForeignLocationId());
-                    mobileNumberOptional = doctorClinicProfile.getMobileNumberOptional();
+                    if (doctorClinicProfile != null && doctorClinicProfile.getMobileNumberOptional() != null)
+                        mobileNumberOptional = doctorClinicProfile.getMobileNumberOptional();
 //                    mobileNumberOptional = Util.getIsMobileNumberOptional(doctor);
                 }
                 break;

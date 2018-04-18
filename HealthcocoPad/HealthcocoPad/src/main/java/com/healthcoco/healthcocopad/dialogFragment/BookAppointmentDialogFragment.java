@@ -541,7 +541,8 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
                     if (bookAppointmentFromScreenType != BookAppointmentFromScreenType.APPOINTMENTS_QUEUE_ADD_NEW)
                         selectedPatient = LocalDataServiceImpl.getInstance(mApp).getPatient(HealthCocoConstants.SELECTED_PATIENTS_USER_ID);
                     doctorClinicProfile = LocalDataServiceImpl.getInstance(mApp).getDoctorClinicProfile(user.getUniqueId(), user.getForeignLocationId());
-                    isMobileNumberOptional = doctorClinicProfile.getMobileNumberOptional();
+                    if (doctorClinicProfile != null && doctorClinicProfile.getMobileNumberOptional() != null)
+                        isMobileNumberOptional = doctorClinicProfile.getMobileNumberOptional();
                 }
                 break;
         }
