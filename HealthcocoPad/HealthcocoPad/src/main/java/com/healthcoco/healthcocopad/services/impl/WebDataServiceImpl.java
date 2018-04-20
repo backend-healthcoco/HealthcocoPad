@@ -56,6 +56,7 @@ import com.healthcoco.healthcocopad.bean.server.PrintSettings;
 import com.healthcoco.healthcocopad.bean.server.Profession;
 import com.healthcoco.healthcocopad.bean.server.Records;
 import com.healthcoco.healthcocopad.bean.server.Reference;
+import com.healthcoco.healthcocopad.bean.server.RegisteredDoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.TempTemplate;
 import com.healthcoco.healthcocopad.bean.server.TreatmentService;
@@ -66,6 +67,7 @@ import com.healthcoco.healthcocopad.enums.BooleanTypeValues;
 import com.healthcoco.healthcocopad.enums.LocalTabelType;
 import com.healthcoco.healthcocopad.enums.RecordState;
 import com.healthcoco.healthcocopad.enums.RoleType;
+import com.healthcoco.healthcocopad.enums.UserState;
 import com.healthcoco.healthcocopad.enums.VisitedForType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.GCMRefreshListener;
@@ -79,6 +81,7 @@ import com.healthcoco.healthcocopad.utilities.Util;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import static com.healthcoco.healthcocopad.utilities.Util.checkNetworkStatus;
 
@@ -370,9 +373,14 @@ public class WebDataServiceImpl implements GCMRefreshListener {
 
     public void getRegisterDoctor(Class<?> class1, String locationId, String hospitalId, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         WebServiceType webServiceType = WebServiceType.GET_REGISTER_DOCTOR;
-        String url = webServiceType.getUrl() + locationId;
-        checkNetworkStatus(mApp.getApplicationContext());
+
         if (HealthCocoConstants.isNetworkOnline) {
+            String url = webServiceType.getUrl()
+                    + locationId
+                    + "/" + hospitalId
+                    + "/" + HealthCocoConstants.PARAM_ACTIVE_TRUE
+                    + HealthCocoConstants.PARAM_ROLE + RoleType.DOCTOR
+                    + HealthCocoConstants.PARAM_USER_STATE + UserState.COMPLETED;
             getResponse(webServiceType, class1, url, null, null, responseListener,
                     errorListener);
         } else {
@@ -1599,23 +1607,20 @@ public class WebDataServiceImpl implements GCMRefreshListener {
         }
     }
 
-    public void getCalendarEvents(Class<?> class1, String doctorID, String locationId, String foreignHospitalId, long selectedDate, long updatedTime,
+    public void getCalendarEvents(Class<?> class1, List<RegisteredDoctorProfile> registeredDoctorProfileList, String locationId, String foreignHospitalId, long selectedDate, long updatedTime,
                                   Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         WebServiceType webServiceType = WebServiceType.GET_CALENDAR_EVENTS;
         checkNetworkStatus(mApp);
         if (HealthCocoConstants.isNetworkOnline) {
 
-          /*  String url = webServiceType.getUrl();
+            String url = webServiceType.getUrl();
 
-            if (!Util.isNullOrEmptyList(clinicDoctorProfileList))
-                for (ClinicDoctorProfile doctorProfile : clinicDoctorProfileList) {
+            if (!Util.isNullOrEmptyList(registeredDoctorProfileList))
+                for (RegisteredDoctorProfile doctorProfile : registeredDoctorProfileList) {
 
-                    url = url + HealthCocoConstants.PARAM_MATRIX_DOCTOR_ID + doctorProfile.getUniqueId();
+                    url = url + HealthCocoConstants.PARAM_MATRIX_DOCTOR_ID + doctorProfile.getUserId();
                 }
-            url = url*/
-            String url = webServiceType.getUrl()
-                  /*  + HealthCocoConstants.PARAM_MATRIX_DOCTOR_ID + doctorID*/
-                    + HealthCocoConstants.PARAM_MATRIX_LOCATION_ID + locationId + "?"
+            url = url + HealthCocoConstants.PARAM_MATRIX_LOCATION_ID + locationId + "?"
                     + HealthCocoConstants.PARAM_MATRIX_HOSPITAL_ID + foreignHospitalId + "?"
                     + HealthCocoConstants.PARAM_FROM + DateTimeUtil.getFirstDayOfMonthMilli(selectedDate)
                     + HealthCocoConstants.PARAM_TO + DateTimeUtil.getLastDayOfMonthMilli(selectedDate)

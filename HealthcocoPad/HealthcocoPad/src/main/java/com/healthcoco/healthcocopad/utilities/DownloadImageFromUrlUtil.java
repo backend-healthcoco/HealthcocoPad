@@ -20,6 +20,7 @@ import com.healthcoco.healthcocopad.bean.server.AlreadyRegisteredPatientsRespons
 import com.healthcoco.healthcocopad.bean.server.ClinicDoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.DoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.PatientCard;
+import com.healthcoco.healthcocopad.bean.server.RegisteredDoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.custom.CircularImageView;
 import com.healthcoco.healthcocopad.enums.PatientProfileScreenType;
@@ -74,6 +75,11 @@ public class DownloadImageFromUrlUtil {
                 name = alreadyRegisteredPatientsResponse.getFirstName();
             } else if (object instanceof DoctorProfile) {
                 DoctorProfile doctor = (DoctorProfile) object;
+                url = doctor.getThumbnailUrl();
+                colorCode = doctor.getColorCode();
+                name = doctor.getFirstName();
+            } else if (object instanceof RegisteredDoctorProfile) {
+                RegisteredDoctorProfile doctor = (RegisteredDoctorProfile) object;
                 url = doctor.getThumbnailUrl();
                 colorCode = doctor.getColorCode();
                 name = doctor.getFirstName();

@@ -952,7 +952,7 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
                         new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_LOCATION, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
                     break;
                 case GET_REGISTER_DOCTOR:
-                    if (response.getData() != null && response.getData() instanceof ClinicDetailResponse)
+                    if (!Util.isNullOrEmptyList(response.getDataList()))
                         new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_REGISTER_DOCTOR, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
                     break;
                 case GET_DURATION_UNIT:
@@ -1162,7 +1162,7 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
                             addClinicDetailResponse((ClinicDetailResponse) response.getData());
                 break;
             case ADD_REGISTER_DOCTOR:
-                if (response.getData() != null)
+                if (!Util.isNullOrEmptyList(response.getDataList()))
                     LocalDataServiceImpl.getInstance(mApp).
                             addRegisterDoctorResponse((ArrayList<RegisteredDoctorProfile>) (ArrayList<?>) response.getDataList(), user.getForeignLocationId());
                 break;

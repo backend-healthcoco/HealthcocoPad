@@ -738,10 +738,10 @@ public class ContactsListFragment extends HealthCocoFragment implements
                     }
                     Util.sendBroadcast(mApp, FilterFragment.INTENT_REFRESH_GROUPS_LIST_LOCAL);
                     break;
-                case GET_CLINIC_PROFILE:
-                    if (response.getData() != null) {
+                case GET_REGISTER_DOCTOR:
+                    if (!Util.isNullOrEmptyList(response.getDataList())) {
                         selectedClinicProfile = (ClinicDetailResponse) response.getData();
-                        new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_CLINIC_PROFILE, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                        new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_REGISTER_DOCTOR, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
 
                     }
                 case DISCARD_PATIENT:
@@ -980,8 +980,8 @@ public class ContactsListFragment extends HealthCocoFragment implements
             case GET_BLOOD_GROUP:
                 volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getHardcodedBloodGroupsList(null, null);
                 break;
-            case ADD_CLINIC_PROFILE:
-                LocalDataServiceImpl.getInstance(mApp).addClinicDetailResponse((ClinicDetailResponse) response.getData());
+            case ADD_REGISTER_DOCTOR:
+                LocalDataServiceImpl.getInstance(mApp).addRegisterDoctorResponse((ArrayList<RegisteredDoctorProfile>) (ArrayList<?>) response.getDataList(), user.getForeignLocationId());
                 break;
 
         }
@@ -1036,7 +1036,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
 
     private void getClinicDetails() {
         mActivity.showLoading(false);
-        WebDataServiceImpl.getInstance(mApp).getRegisterDoctor(RegisteredDoctorProfile.class, user.getForeignLocationId(), this, this);
+        WebDataServiceImpl.getInstance(mApp).getRegisterDoctor(RegisteredDoctorProfile.class, user.getForeignLocationId(), user.getForeignHospitalId(), this, this);
     }
 
     private void showConfirmationAlert(String title, String msg, final RegisteredPatientDetailsUpdated patientDetailsUpdated) {

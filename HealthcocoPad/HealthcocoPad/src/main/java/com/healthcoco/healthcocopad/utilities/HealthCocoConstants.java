@@ -106,6 +106,7 @@ public class HealthCocoConstants {
     public static final String PARAM_LOCATION_ID = "&locationId=";
     public static final String PARAM_TAG_VIEW = "/view/?";
     public static final String PARAM_ROLE = "&role=";
+    public static final String PARAM_USER_STATE = "&userState=";
     public static final String TAG_SELECTED_USER_ID = "selectedPatientId";
     public static final String TAG_MOBILE_NUMBER = "mobileNo";
     public static final String PARAM_TAG_DELETE = "/delete/";
@@ -127,6 +128,7 @@ public class HealthCocoConstants {
     public static final String TAG_RESULT_MESSAGE = "msg";
     public static final String TAG_IS_FROM_NEW_TEMPLATE_FRAGMENT = "isFromNewtemplateFragment";
     public static final String PARAM_VISIT_FOR = "&visitFor=";
+    public static final String PARAM_ACTIVE_TRUE = "?active=true";
     public static final String TAG_DOCTOR_VIDEO_DATA = "doctorVideo";
     public static final int REQUEST_CODE_PLAY_VIDEO = 205;
     public static final String PARAM_MATRIX_DOCTOR_ID = ";doctorId=";

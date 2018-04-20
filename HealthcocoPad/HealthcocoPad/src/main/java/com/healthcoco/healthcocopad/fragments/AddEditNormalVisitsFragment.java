@@ -429,11 +429,11 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
                         ((CommonOpenUpActivity) mActivity).finish();
                     }
                     break;
-                case GET_CLINIC_PROFILE:
+                case GET_REGISTER_DOCTOR:
                     if (response.getData() != null) {
                         registeredDoctorProfileList = (ArrayList<RegisteredDoctorProfile>) (ArrayList) response.getDataList();
                         formHashMapAndRefresh(registeredDoctorProfileList);
-//                      new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_CLINIC_PROFILE, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                        new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_REGISTER_DOCTOR, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
                     }
                     if (!response.isUserOnline())
                         onNetworkUnavailable(response.getWebServiceType());
@@ -515,8 +515,8 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
             case GET_VISIT_DETAILS:
                 volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getVisitDetailResponse(WebServiceType.GET_PATIENT_VISIT_DETAIL, visitId, null, null);
                 break;
-            case ADD_CLINIC_PROFILE:
-                LocalDataServiceImpl.getInstance(mApp).addClinicDetailResponse((ClinicDetailResponse) response.getData());
+            case ADD_REGISTER_DOCTOR:
+                LocalDataServiceImpl.getInstance(mApp).addRegisterDoctorResponse((ArrayList<RegisteredDoctorProfile>) (ArrayList<?>) response.getDataList(), user.getForeignLocationId());
                 break;
         }
         if (volleyResponseBean == null)
@@ -816,10 +816,10 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
     public void onItemSelected(PopupWindowType popupWindowType, Object object) {
         switch (popupWindowType) {
             case DOCTOR_LIST:
-                if (object instanceof ClinicDoctorProfile) {
-                    ClinicDoctorProfile doctorProfile = (ClinicDoctorProfile) object;
+                if (object instanceof RegisteredDoctorProfile) {
+                    RegisteredDoctorProfile doctorProfile = (RegisteredDoctorProfile) object;
                     tvDoctorName.setText(doctorProfile.getFirstNameWithTitle());
-                    user.setUniqueId(doctorProfile.getUniqueId());
+                    user.setUniqueId(doctorProfile.getUserId());
                 }
                 break;
         }

@@ -545,8 +545,8 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                     doctorProfileList = LocalDataServiceImpl.getInstance(mApp).getRegisterDoctorDetails(user.getForeignLocationId());
                 }
                 break;
-            case ADD_CLINIC_PROFILE:
-                LocalDataServiceImpl.getInstance(mApp).addClinicDetailResponse((ClinicDetailResponse) response.getData());
+            case ADD_REGISTER_DOCTOR:
+                LocalDataServiceImpl.getInstance(mApp).addRegisterDoctorResponse((ArrayList<RegisteredDoctorProfile>) (ArrayList<?>) response.getDataList(), user.getForeignLocationId());
                 break;
         }
         if (volleyResponseBean == null)
@@ -594,11 +594,11 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                     }
                     break;
                 case GET_REGISTER_DOCTOR:
-                    if (response.getData() != null) {
+                    if (!Util.isNullOrEmptyList(response.getDataList())) {
                         doctorProfileList = (ArrayList<RegisteredDoctorProfile>) (ArrayList) response.getDataList();
                         formHashMapAndRefresh(doctorProfileList);
 //                        initSelectedDoctorClinicData();
-                        new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_CLINIC_PROFILE, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                        new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_REGISTER_DOCTOR, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
 
                     }
                     if (!response.isUserOnline())
