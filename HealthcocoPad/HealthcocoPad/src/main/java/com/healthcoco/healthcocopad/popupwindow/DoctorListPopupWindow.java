@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.server.ClinicDoctorProfile;
+import com.healthcoco.healthcocopad.bean.server.RegisteredDoctorProfile;
 import com.healthcoco.healthcocopad.enums.AdapterType;
 import com.healthcoco.healthcocopad.enums.PopupWindowType;
 import com.healthcoco.healthcocopad.listeners.CBSelectedItemTypeListener;
@@ -44,7 +45,7 @@ public class DoctorListPopupWindow extends PopupWindow implements View.OnClickLi
     private LinearLayout layoutSelectAll;
     private TextView tvClearAll;
     private TextView tvApply;
-    private LinkedHashMap<String, ClinicDoctorProfile> requestLinkedHashMapForValidate = new LinkedHashMap<String, ClinicDoctorProfile>();
+    private LinkedHashMap<String, RegisteredDoctorProfile> requestLinkedHashMapForValidate = new LinkedHashMap<String, RegisteredDoctorProfile>();
     private CheckBox cbSelectAll;
     private boolean selectAll;
     private boolean isInitialLaunch;
@@ -145,7 +146,7 @@ public class DoctorListPopupWindow extends PopupWindow implements View.OnClickLi
                 popupViewAdapter.notifyDataSetChanged();
                 break;
             case R.id.tv_apply:
-                doctorListPopupWindowListener.onDoctorSelected(new ArrayList<ClinicDoctorProfile>(requestLinkedHashMapForValidate.values()));
+                doctorListPopupWindowListener.onDoctorSelected(new ArrayList<RegisteredDoctorProfile>(requestLinkedHashMapForValidate.values()));
                 isInitialLaunch = false;
                 dismiss();
                 break;
@@ -161,11 +162,11 @@ public class DoctorListPopupWindow extends PopupWindow implements View.OnClickLi
 
     @Override
     public void onCBSelectedItemTypeCheckClicked(boolean isChecked, Object object) {
-        if (object instanceof ClinicDoctorProfile) {
-            ClinicDoctorProfile clinicDoctorProfile = ((ClinicDoctorProfile) object);
+        if (object instanceof RegisteredDoctorProfile) {
+            RegisteredDoctorProfile clinicDoctorProfile = ((RegisteredDoctorProfile) object);
             if (isChecked)
-                requestLinkedHashMapForValidate.put(clinicDoctorProfile.getUniqueId(), clinicDoctorProfile);
-            else requestLinkedHashMapForValidate.remove(clinicDoctorProfile.getUniqueId());
+                requestLinkedHashMapForValidate.put(clinicDoctorProfile.getUserId(), clinicDoctorProfile);
+            else requestLinkedHashMapForValidate.remove(clinicDoctorProfile.getUserId());
         }
         if (requestLinkedHashMapForValidate.size() == list.size()) {
             setSelectAllSelected(true);

@@ -2,6 +2,7 @@ package com.healthcoco.healthcocopad.listeners;
 
 
 import com.healthcoco.healthcocopad.bean.server.ClinicDoctorProfile;
+import com.healthcoco.healthcocopad.bean.server.RegisteredDoctorProfile;
 import com.healthcoco.healthcocopad.enums.PopupWindowType;
 
 import java.util.ArrayList;
@@ -11,7 +12,7 @@ import java.util.ArrayList;
  */
 
 public interface DoctorListPopupWindowListener {
-    public void onDoctorSelected(ArrayList<ClinicDoctorProfile> objects);
+    public void onDoctorSelected(ArrayList<RegisteredDoctorProfile> objects);
 
     public void onEmptyListFound();
 }

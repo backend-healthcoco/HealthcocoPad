@@ -28,6 +28,7 @@ import com.healthcoco.healthcocopad.adapter.ReportsListAdapter;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.ClinicDoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.Records;
+import com.healthcoco.healthcocopad.bean.server.RegisteredDoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
@@ -429,7 +430,7 @@ public class PatientReportsDetailFragment extends HealthCocoFragment implements 
         }});
     }
 
-    public void refreshData(PatientDetailTabType detailTabType, ArrayList<ClinicDoctorProfile> clinicDoctorProfileList) {
+    public void refreshData(PatientDetailTabType detailTabType, ArrayList<RegisteredDoctorProfile> clinicDoctorProfileList) {
         getListFromLocal(true, isOtpVerified(), user);
         this.detailTabType = detailTabType;
     }

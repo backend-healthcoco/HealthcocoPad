@@ -32,6 +32,7 @@ import com.healthcoco.healthcocopad.bean.server.ClinicDetailResponse;
 import com.healthcoco.healthcocopad.bean.server.ClinicDoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.DoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
+import com.healthcoco.healthcocopad.bean.server.RegisteredDoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.custom.DummyTabFactory;
@@ -70,7 +71,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
     public static final String INTENT_REFRESH_PATIENT_PROFILE = "com.healthcoco.REFRESH_PATIENT_PROFILE";
     public static final String TAG_PATIENT_DETAIL_TAB_TYPE = "detailTabType";
     public static final String INTENT_REFRESH_AMOUNT_DETAILS = "com.healthcoco.REFRESH_AMOUNT_DETAILS";
-    ArrayList<ClinicDoctorProfile> clinicDoctorProfileList = new ArrayList<>();
+    ArrayList<RegisteredDoctorProfile> clinicDoctorProfileList = new ArrayList<>();
     private TabHost tabhost;
     private ViewPager mViewPager;
     private ArrayList<Fragment> fragmentsList = new ArrayList<>();
@@ -96,8 +97,8 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
     };
     private AmountResponse amountResponse;
     private String loginedUser;
-    private ClinicDetailResponse selectedClinicProfile;
-    private LinkedHashMap<String, ClinicDoctorProfile> clinicDoctorListHashMap = new LinkedHashMap<>();
+    private List<RegisteredDoctorProfile> doctorProfileList;
+    private LinkedHashMap<String, RegisteredDoctorProfile> clinicDoctorListHashMap = new LinkedHashMap<>();
     private int tabOrdinal;
     //    private TabLayout tabLayout;
     private DoctorProfile doctorProfile;
@@ -541,7 +542,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                     user = doctor.getUser();
                     loginedUser = doctor.getUser().getUniqueId();
                     doctorProfile = LocalDataServiceImpl.getInstance(mApp).getDoctorProfileObject(user.getUniqueId());
-                    selectedClinicProfile = LocalDataServiceImpl.getInstance(mApp).getClinicResponseDetails(user.getForeignLocationId());
+                    doctorProfileList = LocalDataServiceImpl.getInstance(mApp).getRegisterDoctorDetails(user.getForeignLocationId());
                 }
                 break;
             case ADD_CLINIC_PROFILE:
@@ -567,8 +568,8 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                 case FRAGMENT_INITIALISATION:
                     if (selectedPatient != null) {
                         checkPatientStatus(user, selectedPatient);
-                        if (selectedClinicProfile != null)
-                            formHashMapAndRefresh(selectedClinicProfile.getDoctors());
+                        if (!Util.isNullOrEmptyList(doctorProfileList))
+                            formHashMapAndRefresh(doctorProfileList);
                         else
                             refreshDoctorsList();
                         initTabs();
@@ -592,10 +593,10 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                         initData();
                     }
                     break;
-                case GET_CLINIC_PROFILE:
+                case GET_REGISTER_DOCTOR:
                     if (response.getData() != null) {
-                        selectedClinicProfile = (ClinicDetailResponse) response.getData();
-                        formHashMapAndRefresh(selectedClinicProfile.getDoctors());
+                        doctorProfileList = (ArrayList<RegisteredDoctorProfile>) (ArrayList) response.getDataList();
+                        formHashMapAndRefresh(doctorProfileList);
 //                        initSelectedDoctorClinicData();
                         new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_CLINIC_PROFILE, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
 
@@ -659,15 +660,15 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
 
     private void refreshDoctorsList() {
         showLoadingOverlay(true);
-        WebDataServiceImpl.getInstance(mApp).getClinicDetails(ClinicDetailResponse.class, user.getForeignLocationId(), this, this);
+        WebDataServiceImpl.getInstance(mApp).getRegisterDoctor(RegisteredDoctorProfile.class, user.getForeignLocationId(), user.getForeignHospitalId(), this, this);
     }
 
-    private void formHashMapAndRefresh(List<ClinicDoctorProfile> responseList) {
+    private void formHashMapAndRefresh(List<RegisteredDoctorProfile> responseList) {
         if (responseList.size() > 1) {
             if (!Util.isNullOrEmptyList(responseList)) {
-                for (ClinicDoctorProfile clinicDoctorProfile :
+                for (RegisteredDoctorProfile clinicDoctorProfile :
                         responseList) {
-                    clinicDoctorListHashMap.put(clinicDoctorProfile.getUniqueId(), clinicDoctorProfile);
+                    clinicDoctorListHashMap.put(clinicDoctorProfile.getUserId(), clinicDoctorProfile);
                 }
             }
 //        notifyAdapter(new ArrayList<ClinicDoctorProfile>(clinicDoctorListHashMap.values()));
@@ -707,14 +708,14 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
     }
 
     @Override
-    public void onDoctorSelected(ArrayList<ClinicDoctorProfile> clinicDoctorProfileList) {
+    public void onDoctorSelected(ArrayList<RegisteredDoctorProfile> clinicDoctorProfileList) {
         this.clinicDoctorProfileList = clinicDoctorProfileList;
         String doctorName = "";
         if (!Util.isNullOrEmptyList(clinicDoctorProfileList)) {
             if (clinicDoctorProfileList.size() == clinicDoctorListHashMap.size())
                 tvDoctorName.setText(R.string.all_doctor);
             else {
-                for (ClinicDoctorProfile clinicDoctorProfile : clinicDoctorProfileList) {
+                for (RegisteredDoctorProfile clinicDoctorProfile : clinicDoctorProfileList) {
                     doctorName = doctorName + clinicDoctorProfile.getFirstNameWithTitle() + ", ";
                 }
                 doctorName = doctorName.substring(0, doctorName.length() - 2);

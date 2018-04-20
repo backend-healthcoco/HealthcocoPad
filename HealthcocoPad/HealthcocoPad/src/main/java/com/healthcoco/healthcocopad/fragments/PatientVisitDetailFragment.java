@@ -27,6 +27,7 @@ import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.ClinicDoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.Prescription;
 import com.healthcoco.healthcocopad.bean.server.Records;
+import com.healthcoco.healthcocopad.bean.server.RegisteredDoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.bean.server.VisitDetails;
@@ -109,7 +110,7 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
     };
     private PatientDetailTabType detailTabType;
     //    private boolean forAllDoctor = false;
-    private ArrayList<ClinicDoctorProfile> clinicDoctorProfileList;
+    private ArrayList<RegisteredDoctorProfile> clinicDoctorProfileList;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -153,7 +154,7 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
         lvVisits.setAdapter(patientsVisitAdapter);
     }
 
-    public void refreshData(PatientDetailTabType detailTabType, ArrayList<ClinicDoctorProfile> clinicDoctorProfileList) {
+    public void refreshData(PatientDetailTabType detailTabType, ArrayList<RegisteredDoctorProfile> clinicDoctorProfileList) {
 //        this.forAllDoctor = forAllDoctor;
         this.clinicDoctorProfileList = clinicDoctorProfileList;
         getListFromLocal(true, 0);

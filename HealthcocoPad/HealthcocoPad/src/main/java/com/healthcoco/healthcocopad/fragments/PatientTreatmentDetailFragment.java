@@ -21,6 +21,7 @@ import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.adapter.TreatmentListAdapter;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.ClinicDoctorProfile;
+import com.healthcoco.healthcocopad.bean.server.RegisteredDoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.Treatments;
 import com.healthcoco.healthcocopad.bean.server.User;
@@ -64,7 +65,7 @@ public class PatientTreatmentDetailFragment extends HealthCocoFragment implement
     //variables need for pagination
     public static final int MAX_SIZE = 10;
     private static final int REQUEST_CODE_TREATMENT_LIST = 129;
-    public ArrayList<ClinicDoctorProfile> clinicDoctorProfileList;
+    public ArrayList<RegisteredDoctorProfile> clinicDoctorProfileList;
     List<Treatments> treatmentsList;
     private int PAGE_NUMBER = 0;
     private boolean isEndOfListAchieved;
@@ -392,7 +393,7 @@ public class PatientTreatmentDetailFragment extends HealthCocoFragment implement
 
     }
 
-    public void refreshData(PatientDetailTabType detailTabType, ArrayList<ClinicDoctorProfile> clinicDoctorProfileList) {
+    public void refreshData(PatientDetailTabType detailTabType, ArrayList<RegisteredDoctorProfile> clinicDoctorProfileList) {
         this.clinicDoctorProfileList = clinicDoctorProfileList;
         getListFromLocal(true, isOtpVerified(), PAGE_NUMBER);
         this.detailTabType = detailTabType;

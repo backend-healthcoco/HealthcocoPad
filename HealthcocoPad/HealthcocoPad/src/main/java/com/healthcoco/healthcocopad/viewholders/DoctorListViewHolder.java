@@ -12,6 +12,7 @@ import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.HealthCocoViewHolder;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.server.ClinicDoctorProfile;
+import com.healthcoco.healthcocopad.bean.server.RegisteredDoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.UserGroups;
 import com.healthcoco.healthcocopad.enums.PatientProfileScreenType;
 import com.healthcoco.healthcocopad.listeners.AssignGroupListener;
@@ -27,7 +28,7 @@ public class DoctorListViewHolder extends HealthcocoComonRecylcerViewHolder impl
 
     CBSelectedItemTypeListener cbSelectedItemTypeListener;
     private HealthCocoActivity mActivity;
-    private ClinicDoctorProfile clinicDoctorProfile;
+    private RegisteredDoctorProfile clinicDoctorProfile;
     private LinearLayout layoutImage;
     private LinearLayout layoutDoctorList;
     private TextView tvName;
@@ -46,15 +47,15 @@ public class DoctorListViewHolder extends HealthcocoComonRecylcerViewHolder impl
     @Override
     public void applyData(Object object) {
         clinicDoctorProfile = null;
-        if (object instanceof ClinicDoctorProfile)
-            clinicDoctorProfile = (ClinicDoctorProfile) object;
+        if (object instanceof RegisteredDoctorProfile)
+            clinicDoctorProfile = (RegisteredDoctorProfile) object;
         if (clinicDoctorProfile != null) {
             tvName.setText(Util.getValidatedValue(clinicDoctorProfile.getFirstNameWithTitle()));
             DownloadImageFromUrlUtil.loadImageWithInitialAlphabet(mActivity, PatientProfileScreenType.IN_EMR_HEADER, clinicDoctorProfile, progressLoading, ivContactProfile, tvInitialAlphabet);
         }
         if (cbSelectedItemTypeListener.isInitialLaunch()) {
             if (!Util.isNullOrEmptyList(cbSelectedItemTypeListener.getDoctorProfileArrayList()))
-                if (cbSelectedItemTypeListener.getDoctorProfileArrayList().contains(clinicDoctorProfile.getUniqueId())) {
+                if (cbSelectedItemTypeListener.getDoctorProfileArrayList().contains(clinicDoctorProfile.getUserId())) {
                     cbSelectDoctor.setChecked(true);
                     cbSelectedItemTypeListener.onCBSelectedItemTypeCheckClicked(true, clinicDoctorProfile);
                 }

@@ -11,6 +11,7 @@ public enum DefaultSyncServiceType {
     GET_CONTACTS(R.string.syncing_contacts),
     GET_DOCTOR_PROFILE(R.string.syncing_doctor_profile),
     GET_CLINIC_PROFILE(R.string.syncing_clinic_profile),
+    GET_REGISTER_DOCTOR(R.string.syncing_clinic_profile),
     GET_DURATION_UNIT(R.string.syncing_duration_unit),
     GET_DIRECTION(R.string.syncing_direction),
     GET_DRUG_TYPE(R.string.syncing_drug_type),
