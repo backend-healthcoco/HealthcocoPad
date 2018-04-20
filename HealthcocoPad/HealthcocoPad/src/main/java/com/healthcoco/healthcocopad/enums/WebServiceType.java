@@ -384,6 +384,8 @@ public enum WebServiceType {
 
     GET_CLINIC_PROFILE(Method.GET, "appointment/clinic/"),
 
+    GET_REGISTER_DOCTOR(Method.GET, "register/users/"),
+
     ADD_UPDATE_CLINIC_ADDRESS(Method.POST, "register/settings/updateClinicAddress/"),
 
     ADD_UPDATE_CLINIC_CONTACT(Method.POST, "register/settings/updateClinicProfileHandheld/"),

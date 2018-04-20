@@ -37,6 +37,7 @@ import com.healthcoco.healthcocopad.bean.server.ClinicalNotes;
 import com.healthcoco.healthcocopad.bean.server.DoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.Prescription;
+import com.healthcoco.healthcocopad.bean.server.RegisteredDoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.Treatments;
 import com.healthcoco.healthcocopad.bean.server.User;
@@ -91,6 +92,7 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
     private static final int TAB_POSITION_PRESCRIPTION = 1;
     private static final int TAB_POSITION_TREATMENT = 2;
     private final int LIST_INDEX = 0;
+    public List<RegisteredDoctorProfile> registeredDoctorProfileList;
     private ViewPager viewPager;
     private TabHost tabhost;
     private ArrayList<Fragment> fragmentsList;
@@ -120,8 +122,7 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
     private String prescriptionId;
     private String treatmentId;
     private LinearLayout containerDateTime;
-    private LinkedHashMap<String, ClinicDoctorProfile> clinicDoctorListHashMap = new LinkedHashMap<>();
-    private ClinicDetailResponse selectedClinicProfile;
+    private LinkedHashMap<String, RegisteredDoctorProfile> clinicDoctorListHashMap = new LinkedHashMap<>();
     private DoctorProfile doctorProfile;
     private HealthcocoPopupWindow doctorsListPopupWindow;
     private long selectedFromDateTimeMillis;
@@ -430,9 +431,9 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
                     break;
                 case GET_CLINIC_PROFILE:
                     if (response.getData() != null) {
-                        selectedClinicProfile = (ClinicDetailResponse) response.getData();
-                        formHashMapAndRefresh(selectedClinicProfile.getDoctors());
-                        new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_CLINIC_PROFILE, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                        registeredDoctorProfileList = (ArrayList<RegisteredDoctorProfile>) (ArrayList) response.getDataList();
+                        formHashMapAndRefresh(registeredDoctorProfileList);
+//                      new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_CLINIC_PROFILE, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
                     }
                     if (!response.isUserOnline())
                         onNetworkUnavailable(response.getWebServiceType());
@@ -509,7 +510,7 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
                     user = doctor.getUser();
                 selectedPatient = LocalDataServiceImpl.getInstance(mApp).getPatient(HealthCocoConstants.SELECTED_PATIENTS_USER_ID);
                 doctorProfile = LocalDataServiceImpl.getInstance(mApp).getDoctorProfileObject(user.getUniqueId());
-                selectedClinicProfile = LocalDataServiceImpl.getInstance(mApp).getClinicResponseDetails(user.getForeignLocationId());
+                registeredDoctorProfileList = LocalDataServiceImpl.getInstance(mApp).getRegisterDoctorDetails(user.getForeignLocationId());
                 break;
             case GET_VISIT_DETAILS:
                 volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getVisitDetailResponse(WebServiceType.GET_PATIENT_VISIT_DETAIL, visitId, null, null);
@@ -752,8 +753,8 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
     }
 
     private void initSelectedDoctorClinicData() {
-        if (selectedClinicProfile != null)
-            formHashMapAndRefresh(selectedClinicProfile.getDoctors());
+        if (!Util.isNullOrEmptyList(registeredDoctorProfileList))
+            formHashMapAndRefresh(registeredDoctorProfileList);
         else
             refreshDoctorsList();
 
@@ -784,19 +785,19 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
 
     private void refreshDoctorsList() {
         showLoadingOverlay(true);
-        WebDataServiceImpl.getInstance(mApp).getClinicDetails(ClinicDetailResponse.class, user.getForeignLocationId(), this, this);
+        WebDataServiceImpl.getInstance(mApp).getRegisterDoctor(RegisteredDoctorProfile.class, user.getForeignLocationId(), user.getForeignHospitalId(), this, this);
     }
 
-    private void formHashMapAndRefresh(List<ClinicDoctorProfile> responseList) {
+    private void formHashMapAndRefresh(List<RegisteredDoctorProfile> responseList) {
         if (responseList.size() > 1) {
             tvDoctorName.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.arrow_menu_down, 0);
             tvDoctorName.setEnabled(true);
             lvDoctorName.setVisibility(View.VISIBLE);
 
             if (!Util.isNullOrEmptyList(responseList)) {
-                for (ClinicDoctorProfile clinicDoctorProfile :
+                for (RegisteredDoctorProfile clinicDoctorProfile :
                         responseList) {
-                    clinicDoctorListHashMap.put(clinicDoctorProfile.getUniqueId(), clinicDoctorProfile);
+                    clinicDoctorListHashMap.put(clinicDoctorProfile.getUserId(), clinicDoctorProfile);
                 }
             }
 //        notifyAdapter(new ArrayList<ClinicDoctorProfile>(clinicDoctorListHashMap.values()));

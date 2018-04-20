@@ -23,6 +23,7 @@ import com.healthcoco.healthcocopad.adapter.ClinicalNotesListAdapter;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.ClinicDoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.ClinicalNotes;
+import com.healthcoco.healthcocopad.bean.server.RegisteredDoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
@@ -111,7 +112,7 @@ public class PatientClinicalNotesDetailFragment extends HealthCocoFragment imple
         }
     };
     private String loginedUser;
-    private ArrayList<ClinicDoctorProfile> clinicDoctorProfileList = new ArrayList<>();
+    private ArrayList<RegisteredDoctorProfile> clinicDoctorProfileList = new ArrayList<>();
 
     public PatientClinicalNotesDetailFragment() {
     }
@@ -373,7 +374,7 @@ public class PatientClinicalNotesDetailFragment extends HealthCocoFragment imple
         }});
     }
 
-    public void refreshData(PatientDetailTabType detailTabType, ArrayList<ClinicDoctorProfile> clinicDoctorProfileList) {
+    public void refreshData(PatientDetailTabType detailTabType, ArrayList<RegisteredDoctorProfile> clinicDoctorProfileList) {
         this.clinicDoctorProfileList = clinicDoctorProfileList;
         getListFromLocal(true, isOtpVerified(), 0);
         this.detailTabType = detailTabType;

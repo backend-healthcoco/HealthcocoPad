@@ -25,6 +25,7 @@ import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
 import com.healthcoco.healthcocopad.bean.server.ClinicDoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
+import com.healthcoco.healthcocopad.bean.server.RegisteredDoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocopad.enums.AdapterType;
@@ -61,7 +62,7 @@ public class CheckedOutQueueFragment extends HealthCocoFragment implements Local
 
     public static final int MAX_SIZE = 10;
     public static final int MAX_NUMBER_OF_EVENTS = 30;
-    public ArrayList<ClinicDoctorProfile> clinicDoctorProfileList = null;
+    public ArrayList<RegisteredDoctorProfile> clinicDoctorProfileList = null;
     CalendarEvents calendarEvents;
     private HashMap<String, CalendarEvents> calendarEventsHashMap = new HashMap<>();
     private ArrayList<CalendarEvents> calendarEventsList = new ArrayList<>();
@@ -276,7 +277,7 @@ public class CheckedOutQueueFragment extends HealthCocoFragment implements Local
 
     }
 
-    public void reFreshQueue(long selectedMonthDayYearInMillis, ArrayList<ClinicDoctorProfile> clinicDoctorProfileList) {
+    public void reFreshQueue(long selectedMonthDayYearInMillis, ArrayList<RegisteredDoctorProfile> clinicDoctorProfileList) {
         this.selectedMonthDayYearInMillis = selectedMonthDayYearInMillis;
         this.clinicDoctorProfileList = clinicDoctorProfileList;
         getListFromLocal(true);

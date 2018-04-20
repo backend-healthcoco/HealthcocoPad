@@ -589,6 +589,22 @@ public class LocalDataServiceImpl {
         return volleyResponseBean;
     }
 
+    public VolleyResponseBean getRegisterDoctorResponse(WebServiceType webServiceType, String locationId, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
+        volleyResponseBean.setWebServiceType(webServiceType);
+        volleyResponseBean.setIsUserOnline(HealthCocoConstants.isNetworkOnline);
+        volleyResponseBean.setIsDataFromLocal(true);
+        try {
+            volleyResponseBean.setDataList((ArrayList<Object>) (Object) getRegisterDoctorDetails(locationId));
+            if (responseListener != null)
+                responseListener.onResponse(volleyResponseBean);
+        } catch (Exception e) {
+            e.printStackTrace();
+            showErrorLocal(volleyResponseBean, errorListener);
+        }
+        return volleyResponseBean;
+    }
+
     public ClinicDetailResponse getClinicResponseDetails(String locationId) {
         Select<ClinicDetailResponse> selectQuery = Select.from(ClinicDetailResponse.class)
                 .where(Condition.prop(LocalDatabaseUtils.KEY_UNIQUE_ID).eq(locationId));
@@ -598,6 +614,14 @@ public class LocalDataServiceImpl {
             clinicDetailResponse.setLocation(getLocation(locationId));
         }
         return clinicDetailResponse;
+    }
+
+    public List<RegisteredDoctorProfile> getRegisterDoctorDetails(String locationId) {
+
+        List<RegisteredDoctorProfile> registeredDoctorProfileList = Select.from(RegisteredDoctorProfile.class)
+                .where(Condition.prop(LocalDatabaseUtils.KEY_LOCATION_ID).eq(locationId)).list();
+
+        return registeredDoctorProfileList;
     }
 
     public List<ClinicWorkingSchedule> getClinicWorkingSchedules(String locationId) {
@@ -1731,6 +1755,18 @@ public class LocalDataServiceImpl {
             }
         }
         clinicDetailResponse.save();
+    }
+
+    public void addRegisterDoctorResponse(List<RegisteredDoctorProfile> registeredDoctorProfileList, String locationId) {
+        if (!Util.isNullOrEmptyList(registeredDoctorProfileList)) {
+            deleteAllFrom(RegisteredDoctorProfile.class, LocalDatabaseUtils.KEY_LOCATION_ID, locationId);
+//        adding doctors of this clinic
+            for (RegisteredDoctorProfile registeredDoctorProfile :
+                    registeredDoctorProfileList) {
+                registeredDoctorProfile.setLocationId(locationId);
+            }
+            DrugDurationUnit.saveInTx(registeredDoctorProfileList);
+        }
     }
 
     public void addClinicDocProfile(ClinicDoctorProfile clinicDoctorProfile) {
@@ -3408,14 +3444,14 @@ public class LocalDataServiceImpl {
     }
 
     //For Selected Doctors
-    public VolleyResponseBean getVisitsListPageWise(WebServiceType webServiceType, ArrayList<ClinicDoctorProfile> clinicDoctorProfileArrayList, String locationId, String hospitalId,
+    public VolleyResponseBean getVisitsListPageWise(WebServiceType webServiceType, ArrayList<RegisteredDoctorProfile> clinicDoctorProfileArrayList, String locationId, String hospitalId,
                                                     String patientId, int pageNum, int maxSize,
                                                     Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         return getVisitsListPageWise(webServiceType, false, clinicDoctorProfileArrayList, locationId, hospitalId, patientId, pageNum, maxSize, responseListener, errorListener);
     }
 
     //For All Doctors
-    public VolleyResponseBean getVisitsListPageWise(WebServiceType webServiceType, boolean forAll, ArrayList<ClinicDoctorProfile> clinicDoctorProfileArrayList, String locationId, String hospitalId,
+    public VolleyResponseBean getVisitsListPageWise(WebServiceType webServiceType, boolean forAll, ArrayList<RegisteredDoctorProfile> clinicDoctorProfileArrayList, String locationId, String hospitalId,
                                                     String patientId, int pageNum, int maxSize,
                                                     Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
@@ -3435,9 +3471,9 @@ public class LocalDataServiceImpl {
             if (!Util.isNullOrEmptyList(clinicDoctorProfileArrayList))
                 for (int i = 0; i < clinicDoctorProfileArrayList.size(); i++) {
                     if (i == 0)
-                        whereCondition = whereCondition + " AND " + LocalDatabaseUtils.KEY_DOCTOR_ID + "=\"" + clinicDoctorProfileArrayList.get(i).getUniqueId() + "\"";
+                        whereCondition = whereCondition + " AND " + LocalDatabaseUtils.KEY_DOCTOR_ID + "=\"" + clinicDoctorProfileArrayList.get(i).getUserId() + "\"";
                     else
-                        whereCondition = whereCondition + " OR " + LocalDatabaseUtils.KEY_DOCTOR_ID + "=\"" + clinicDoctorProfileArrayList.get(i).getUniqueId() + "\"";
+                        whereCondition = whereCondition + " OR " + LocalDatabaseUtils.KEY_DOCTOR_ID + "=\"" + clinicDoctorProfileArrayList.get(i).getUserId() + "\"";
 
                 }
 //            }
@@ -4135,7 +4171,7 @@ public class LocalDataServiceImpl {
     }
 
 
-    public VolleyResponseBean getCalendarEventsListResponsePageWise(WebServiceType webServiceType, AppointmentStatusType appointmentStatusType, ArrayList<ClinicDoctorProfile> clinicDoctorProfileList, String hospitalId, String locationId, String status, long selectedDate,
+    public VolleyResponseBean getCalendarEventsListResponsePageWise(WebServiceType webServiceType, AppointmentStatusType appointmentStatusType, ArrayList<RegisteredDoctorProfile> clinicDoctorProfileList, String hospitalId, String locationId, String status, long selectedDate,
                                                                     int pageNum, int maxSize, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
         volleyResponseBean.setWebServiceType(webServiceType);
@@ -4153,7 +4189,7 @@ public class LocalDataServiceImpl {
         return volleyResponseBean;
     }
 
-    private List<CalendarEvents> getCalendarEventsListPageWise(AppointmentStatusType appointmentStatusType, ArrayList<ClinicDoctorProfile> clinicDoctorProfileList, String locationId, String hospitalId, String status, long selectedDate) {
+    private List<CalendarEvents> getCalendarEventsListPageWise(AppointmentStatusType appointmentStatusType, ArrayList<RegisteredDoctorProfile> clinicDoctorProfileList, String locationId, String hospitalId, String status, long selectedDate) {
         String whereCondition = "Select * from " + StringUtil.toSQLName(CalendarEvents.class.getSimpleName())
                 + " where "
                /* + LocalDatabaseUtils.KEY_DOCTOR_ID + "=\"" + doctorId + "\""
@@ -4173,8 +4209,8 @@ public class LocalDataServiceImpl {
 
         if (!Util.isNullOrEmptyList(clinicDoctorProfileList)) {
             whereCondition = whereCondition + " AND " + LocalDatabaseUtils.KEY_DOCTOR_ID + " in(";
-            for (ClinicDoctorProfile doctorProfile : clinicDoctorProfileList) {
-                whereCondition = whereCondition + "\"" + doctorProfile.getUniqueId() + "\",";
+            for (RegisteredDoctorProfile doctorProfile : clinicDoctorProfileList) {
+                whereCondition = whereCondition + "\"" + doctorProfile.getUserId() + "\",";
             }
             whereCondition = whereCondition.substring(0, whereCondition.length() - 1);
             whereCondition = whereCondition + ")";
@@ -4315,7 +4351,7 @@ public class LocalDataServiceImpl {
         return list;
     }
 
-    public VolleyResponseBean getClinicalNotesList(WebServiceType webServiceType, boolean isOtpVerified, ArrayList<ClinicDoctorProfile> clinicDoctorProfileList, String locationId, String hospitalId, String selectedPatientId, int pageNum, int maxSize, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+    public VolleyResponseBean getClinicalNotesList(WebServiceType webServiceType, boolean isOtpVerified, ArrayList<RegisteredDoctorProfile> clinicDoctorProfileList, String locationId, String hospitalId, String selectedPatientId, int pageNum, int maxSize, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
 
         VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
         volleyResponseBean.setWebServiceType(webServiceType);
@@ -4336,9 +4372,9 @@ public class LocalDataServiceImpl {
 
                 for (int i = 0; i < clinicDoctorProfileList.size(); i++) {
                     if (i == 0)
-                        whereCondition = whereCondition + " AND " + LocalDatabaseUtils.KEY_DOCTOR_ID + "=\"" + clinicDoctorProfileList.get(i).getUniqueId() + "\"";
+                        whereCondition = whereCondition + " AND " + LocalDatabaseUtils.KEY_DOCTOR_ID + "=\"" + clinicDoctorProfileList.get(i).getUserId() + "\"";
                     else
-                        whereCondition = whereCondition + " OR " + LocalDatabaseUtils.KEY_DOCTOR_ID + "=\"" + clinicDoctorProfileList.get(i).getUniqueId() + "\"";
+                        whereCondition = whereCondition + " OR " + LocalDatabaseUtils.KEY_DOCTOR_ID + "=\"" + clinicDoctorProfileList.get(i).getUserId() + "\"";
                 }
                 //specifying order by limit and offset query
                 String conditionsLimit = " ORDER BY " + LocalDatabaseUtils.KEY_CREATED_TIME + " DESC "
@@ -4379,7 +4415,7 @@ public class LocalDataServiceImpl {
         addClinicalNote(clinicalNote);
     }
 
-    public VolleyResponseBean getPrescriptionsListResponse(WebServiceType webServiceType, boolean isOtpVerified, ArrayList<ClinicDoctorProfile> clinicDoctorProfileList, String locationId, String hospitald, String selectedPatientId, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+    public VolleyResponseBean getPrescriptionsListResponse(WebServiceType webServiceType, boolean isOtpVerified, ArrayList<RegisteredDoctorProfile> clinicDoctorProfileList, String locationId, String hospitald, String selectedPatientId, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
         volleyResponseBean.setWebServiceType(webServiceType);
         volleyResponseBean.setIsDataFromLocal(true);
@@ -4396,7 +4432,7 @@ public class LocalDataServiceImpl {
         return volleyResponseBean;
     }
 
-    private List<Prescription> getPrescriptionsListAsList(boolean isOtpVerified, ArrayList<ClinicDoctorProfile> clinicDoctorProfileList, String locationId, String hospitalId, String selectedPatientId) {
+    private List<Prescription> getPrescriptionsListAsList(boolean isOtpVerified, ArrayList<RegisteredDoctorProfile> clinicDoctorProfileList, String locationId, String hospitalId, String selectedPatientId) {
 
         List<Prescription> list;
         if (!isOtpVerified) {
@@ -4412,9 +4448,9 @@ public class LocalDataServiceImpl {
             if (!Util.isNullOrEmptyList(clinicDoctorProfileList))
                 for (int i = 0; i < clinicDoctorProfileList.size(); i++) {
                     if (i == 0)
-                        whereCondition = whereCondition + " AND " + LocalDatabaseUtils.KEY_DOCTOR_ID + "=\"" + clinicDoctorProfileList.get(i).getUniqueId() + "\"";
+                        whereCondition = whereCondition + " AND " + LocalDatabaseUtils.KEY_DOCTOR_ID + "=\"" + clinicDoctorProfileList.get(i).getUserId() + "\"";
                     else
-                        whereCondition = whereCondition + " OR " + LocalDatabaseUtils.KEY_DOCTOR_ID + "=\"" + clinicDoctorProfileList.get(i).getUniqueId() + "\"";
+                        whereCondition = whereCondition + " OR " + LocalDatabaseUtils.KEY_DOCTOR_ID + "=\"" + clinicDoctorProfileList.get(i).getUserId() + "\"";
                 }
             //specifying order by limit and offset query
             String conditionsLimit = " ORDER BY " + LocalDatabaseUtils.KEY_CREATED_TIME + " DESC ";
@@ -4452,7 +4488,7 @@ public class LocalDataServiceImpl {
         }
     }
 
-    public VolleyResponseBean getTreatmentList(WebServiceType webServiceType, ArrayList<ClinicDoctorProfile>
+    public VolleyResponseBean getTreatmentList(WebServiceType webServiceType, ArrayList<RegisteredDoctorProfile>
             clinicDoctorProfileList, String foreignLocationId,
                                                String foreignHospitalId, String selectedPatientId, int pageNum, int maxSize,
                                                Response.Listener<VolleyResponseBean> responseListener, GsonRequest.
@@ -4473,7 +4509,7 @@ public class LocalDataServiceImpl {
         return volleyResponseBean;
     }
 
-    private List<Treatments> getTreatmentListPageWise(ArrayList<ClinicDoctorProfile> clinicDoctorProfileList, String
+    private List<Treatments> getTreatmentListPageWise(ArrayList<RegisteredDoctorProfile> clinicDoctorProfileList, String
             locationId, String hospitalId, int pageNum, int maxSize, String
                                                               selectedPatientId) {
 
@@ -4487,9 +4523,9 @@ public class LocalDataServiceImpl {
         if (!Util.isNullOrEmptyList(clinicDoctorProfileList))
             for (int i = 0; i < clinicDoctorProfileList.size(); i++) {
                 if (i == 0)
-                    whereCondition = whereCondition + " AND " + LocalDatabaseUtils.KEY_DOCTOR_ID + "=\"" + clinicDoctorProfileList.get(i).getUniqueId() + "\"";
+                    whereCondition = whereCondition + " AND " + LocalDatabaseUtils.KEY_DOCTOR_ID + "=\"" + clinicDoctorProfileList.get(i).getUserId() + "\"";
                 else
-                    whereCondition = whereCondition + " OR " + LocalDatabaseUtils.KEY_DOCTOR_ID + "=\"" + clinicDoctorProfileList.get(i).getUniqueId() + "\"";
+                    whereCondition = whereCondition + " OR " + LocalDatabaseUtils.KEY_DOCTOR_ID + "=\"" + clinicDoctorProfileList.get(i).getUserId() + "\"";
 
             }
 

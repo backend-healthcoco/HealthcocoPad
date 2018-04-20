@@ -29,6 +29,7 @@ import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
 import com.healthcoco.healthcocopad.bean.server.ClinicDetailResponse;
 import com.healthcoco.healthcocopad.bean.server.ClinicDoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
+import com.healthcoco.healthcocopad.bean.server.RegisteredDoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.custom.HealthcocoTextWatcher;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
@@ -77,7 +78,8 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
     public static final int MAX_SIZE = 10;
     public static final int MAX_NUMBER_OF_EVENTS = 30;
     private static final String DATE_FORMAT_USED_IN_THIS_SCREEN = "EEE, MMM dd,yyyy";
-    public ArrayList<ClinicDoctorProfile> clinicDoctorProfileList;
+    public ArrayList<RegisteredDoctorProfile> clinicDoctorProfileList;
+    public List<RegisteredDoctorProfile> registeredDoctorProfileList;
     private int PAGE_NUMBER = 0;
     private boolean isEndOfListAchieved;
     private User user;
@@ -94,8 +96,7 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
     private long curentMonthDayYearInMillis;
     private ArrayList<CalendarEvents> calenderEventList = null;
     private AppointmentStatusType appointmentStatusType = ALL;
-    private LinkedHashMap<String, ClinicDoctorProfile> clinicDoctorListHashMap = new LinkedHashMap<>();
-    private ClinicDetailResponse selectedClinicProfile;
+    private LinkedHashMap<String, RegisteredDoctorProfile> clinicDoctorListHashMap = new LinkedHashMap<>();
     private HealthcocoPopupWindow doctorsListPopupWindow;
     private boolean isSingleDoctor = false;
     private boolean isInitialLoading = true;
@@ -223,8 +224,8 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
                 case FRAGMENT_INITIALISATION:
                     if (user != null) {
                         Calendar calendar = DateTimeUtil.getCalendarInstance();
-                        if (selectedClinicProfile != null)
-                            formHashMapAndRefresh(selectedClinicProfile.getDoctors());
+                        if (!Util.isNullOrEmptyList(registeredDoctorProfileList))
+                            formHashMapAndRefresh(registeredDoctorProfileList);
                         else
                             refreshDoctorsList();
 //                        onDateSetonDateSet(null, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
@@ -252,10 +253,10 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
                     isInitialLoading = false;
                     mActivity.hideLoading();
                     break;
-                case GET_CLINIC_PROFILE:
+                case GET_REGISTER_DOCTOR:
                     if (response.getData() != null) {
-                        selectedClinicProfile = (ClinicDetailResponse) response.getData();
-                        formHashMapAndRefresh(selectedClinicProfile.getDoctors());
+                        registeredDoctorProfileList = (ArrayList<RegisteredDoctorProfile>) (ArrayList) response.getDataList();
+                        formHashMapAndRefresh(registeredDoctorProfileList);
 //                        initSelectedDoctorClinicData();
                         new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_CLINIC_PROFILE, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
                         mActivity.hideLoading();
@@ -272,7 +273,7 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
 
     private void refreshDoctorsList() {
         mActivity.showLoading(true);
-        WebDataServiceImpl.getInstance(mApp).getClinicDetails(ClinicDetailResponse.class, user.getForeignLocationId(), this, this);
+        WebDataServiceImpl.getInstance(mApp).getRegisterDoctor(RegisteredDoctorProfile.class, user.getForeignLocationId(), user.getForeignHospitalId(), this, this);
     }
 
     @Override
@@ -292,7 +293,7 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
                         loggedInUser = doctor.getUser();
                     }
                     user = doctor.getUser();
-                    selectedClinicProfile = LocalDataServiceImpl.getInstance(mApp).getClinicResponseDetails(user.getForeignLocationId());
+                    registeredDoctorProfileList = LocalDataServiceImpl.getInstance(mApp).getRegisterDoctorDetails(user.getForeignLocationId());
                 }
                 return volleyResponseBean;
             case ADD_CLINIC_PROFILE:
@@ -327,13 +328,13 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
 
     }
 
-    private void formHashMapAndRefresh(List<ClinicDoctorProfile> responseList) {
-        clinicDoctorProfileList = (ArrayList<ClinicDoctorProfile>) responseList;
+    private void formHashMapAndRefresh(List<RegisteredDoctorProfile> responseList) {
+        clinicDoctorProfileList = (ArrayList<RegisteredDoctorProfile>) responseList;
         if (responseList.size() > 1) {
             if (!Util.isNullOrEmptyList(responseList)) {
-                for (ClinicDoctorProfile clinicDoctorProfile :
+                for (RegisteredDoctorProfile registeredDoctorProfile :
                         responseList) {
-                    clinicDoctorListHashMap.put(clinicDoctorProfile.getUniqueId(), clinicDoctorProfile);
+                    clinicDoctorListHashMap.put(registeredDoctorProfile.getUserId(), registeredDoctorProfile);
                 }
             }
 //            notifyAdapter(new ArrayList<ClinicDoctorProfile>(clinicDoctorListHashMap.values()));
@@ -399,14 +400,14 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
     }
 
     @Override
-    public void onDoctorSelected(ArrayList<ClinicDoctorProfile> clinicDoctorProfileList) {
+    public void onDoctorSelected(ArrayList<RegisteredDoctorProfile> clinicDoctorProfileList) {
         this.clinicDoctorProfileList = clinicDoctorProfileList;
         String doctorName = "";
         if (!Util.isNullOrEmptyList(clinicDoctorProfileList)) {
             if (clinicDoctorProfileList.size() == clinicDoctorListHashMap.size())
                 tvDoctorName.setText(R.string.all_doctor);
             else {
-                for (ClinicDoctorProfile clinicDoctorProfile : clinicDoctorProfileList) {
+                for (RegisteredDoctorProfile clinicDoctorProfile : clinicDoctorProfileList) {
                     doctorName = doctorName + clinicDoctorProfile.getFirstNameWithTitle() + ", ";
                 }
                 doctorName = doctorName.substring(0, doctorName.length() - 2);

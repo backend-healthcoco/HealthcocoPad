@@ -23,6 +23,7 @@ import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.ClinicDoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.Prescription;
+import com.healthcoco.healthcocopad.bean.server.RegisteredDoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
@@ -110,7 +111,7 @@ public class PatientPrescriptionDetailFragment extends HealthCocoFragment implem
         }
     };
     private String loginedUser;
-    private ArrayList<ClinicDoctorProfile> clinicDoctorProfileList;
+    private ArrayList<RegisteredDoctorProfile> clinicDoctorProfileList;
 
 
     @Override
@@ -394,7 +395,7 @@ public class PatientPrescriptionDetailFragment extends HealthCocoFragment implem
 
     }
 
-    public void refreshData(PatientDetailTabType detailTabType, ArrayList<ClinicDoctorProfile> clinicDoctorProfileList) {
+    public void refreshData(PatientDetailTabType detailTabType, ArrayList<RegisteredDoctorProfile> clinicDoctorProfileList) {
         this.clinicDoctorProfileList = clinicDoctorProfileList;
         getListFromLocal(true, isOtpVerified(), PAGE_NUMBER);
         this.detailTabType = detailTabType;

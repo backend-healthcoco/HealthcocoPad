@@ -82,6 +82,7 @@ import com.healthcoco.healthcocopad.bean.server.ProvisionalDiagnosisSuggestions;
 import com.healthcoco.healthcocopad.bean.server.PsSuggestions;
 import com.healthcoco.healthcocopad.bean.server.PvSuggestions;
 import com.healthcoco.healthcocopad.bean.server.Reference;
+import com.healthcoco.healthcocopad.bean.server.RegisteredDoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.Specialities;
 import com.healthcoco.healthcocopad.bean.server.SystemicExaminationSuggestions;
@@ -272,6 +273,11 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
                     case GET_CLINIC_PROFILE:
                         WebDataServiceImpl.getInstance(mApp)
                                 .getClinicDetails(ClinicDetailResponse.class, user.getForeignLocationId(), this, this);
+                        defaultWebServicesList.add(syncServiceType);
+                        break;
+                    case GET_REGISTER_DOCTOR:
+                        WebDataServiceImpl.getInstance(mApp)
+                                .getRegisterDoctor(RegisteredDoctorProfile.class, user.getForeignLocationId(), user.getForeignHospitalId(), this, this);
                         defaultWebServicesList.add(syncServiceType);
                         break;
                     case GET_DURATION_UNIT:
@@ -672,6 +678,11 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
                 case GET_CLINIC_PROFILE:
                     if (defaultWebServicesList.contains(DefaultSyncServiceType.getSyncType(webServiceType)))
                         defaultWebServicesList.remove(DefaultSyncServiceType.getSyncType(webServiceType));
+                    updateProgress(DefaultSyncServiceType.GET_REGISTER_DOCTOR);
+                    return;
+                case GET_REGISTER_DOCTOR:
+                    if (defaultWebServicesList.contains(DefaultSyncServiceType.getSyncType(webServiceType)))
+                        defaultWebServicesList.remove(DefaultSyncServiceType.getSyncType(webServiceType));
                     updateProgress(DefaultSyncServiceType.GET_DURATION_UNIT);
                     return;
                 case GET_DURATION_UNIT:
@@ -940,6 +951,10 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
                     if (response.getData() != null && response.getData() instanceof ClinicDetailResponse)
                         new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_LOCATION, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
                     break;
+                case GET_REGISTER_DOCTOR:
+                    if (response.getData() != null && response.getData() instanceof ClinicDetailResponse)
+                        new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_REGISTER_DOCTOR, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                    break;
                 case GET_DURATION_UNIT:
                     new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_DURATION_UNIT, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
                     return;
@@ -1145,6 +1160,11 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
                 if (response.getData() != null)
                     LocalDataServiceImpl.getInstance(mApp).
                             addClinicDetailResponse((ClinicDetailResponse) response.getData());
+                break;
+            case ADD_REGISTER_DOCTOR:
+                if (response.getData() != null)
+                    LocalDataServiceImpl.getInstance(mApp).
+                            addRegisterDoctorResponse((ArrayList<RegisteredDoctorProfile>) (ArrayList<?>) response.getDataList(), user.getForeignLocationId());
                 break;
             case ADD_DURATION_UNIT:
                 if (!Util.isNullOrEmptyList(response.getDataList()))
