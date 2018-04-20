@@ -199,7 +199,7 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
         if (showLoading)
             mActivity.showLoading(false);
         Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(user, LocalTabelType.CALENDAR_EVENTS, selectedMonthDayYearInMillis);
-        WebDataServiceImpl.getInstance(mApp).getCalendarEvents(CalendarEvents.class, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(), selectedMonthDayYearInMillis, latestUpdatedTime, this, this);
+        WebDataServiceImpl.getInstance(mApp).getCalendarEvents(CalendarEvents.class, registeredDoctorProfileList, user.getForeignLocationId(), user.getForeignHospitalId(), selectedMonthDayYearInMillis, latestUpdatedTime, this, this);
     }
 
 
@@ -254,11 +254,11 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
                     mActivity.hideLoading();
                     break;
                 case GET_REGISTER_DOCTOR:
-                    if (response.getData() != null) {
+                    if (!Util.isNullOrEmptyList(response.getDataList())) {
                         registeredDoctorProfileList = (ArrayList<RegisteredDoctorProfile>) (ArrayList) response.getDataList();
                         formHashMapAndRefresh(registeredDoctorProfileList);
 //                        initSelectedDoctorClinicData();
-                        new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_CLINIC_PROFILE, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                        new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_REGISTER_DOCTOR, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
                         mActivity.hideLoading();
                     }
                     if (!response.isUserOnline())
@@ -296,8 +296,8 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
                     registeredDoctorProfileList = LocalDataServiceImpl.getInstance(mApp).getRegisterDoctorDetails(user.getForeignLocationId());
                 }
                 return volleyResponseBean;
-            case ADD_CLINIC_PROFILE:
-                LocalDataServiceImpl.getInstance(mApp).addClinicDetailResponse((ClinicDetailResponse) response.getData());
+            case ADD_REGISTER_DOCTOR:
+                LocalDataServiceImpl.getInstance(mApp).addRegisterDoctorResponse((ArrayList<RegisteredDoctorProfile>) (ArrayList<?>) response.getDataList(), user.getForeignLocationId());
                 break;
             case ADD_CALENDAR_EVENTS:
                 volleyResponseBean = new VolleyResponseBean();
