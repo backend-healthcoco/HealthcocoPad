@@ -9,9 +9,10 @@ public enum UserState {
     USERSTATECOMPLETE("USERSTATECOMPLETE", R.string.userstate_verified),
     USERSTATEINCOMPLETE("USERSTATEINCOMPLETE", R.string.userstate_incomplete),
     NOTVERIFIED("NOTVERIFIED", R.string.userstate_not_verified),
-    NOTACTIVATED("NOTACTIVATED", R.string.userstate_not_activated);
-    private int msgId;
+    NOTACTIVATED("NOTACTIVATED", R.string.userstate_not_activated),
+    COMPLETED("COMPLETED", R.string.userstate_verified);
     String state;
+    private int msgId;
 
     UserState(String state, int msgId) {
         this.state = state;

@@ -13,6 +13,7 @@ import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.server.AppointmentSlot;
 import com.healthcoco.healthcocopad.bean.server.AvailableTimeSlots;
 import com.healthcoco.healthcocopad.bean.server.ClinicDoctorProfile;
+import com.healthcoco.healthcocopad.bean.server.RegisteredDoctorProfile;
 import com.healthcoco.healthcocopad.dialogFragment.BookAppointmentDialogFragment;
 import com.healthcoco.healthcocopad.enums.AppointmentSlotsType;
 import com.healthcoco.healthcocopad.enums.PatientProfileScreenType;
@@ -93,9 +94,9 @@ public class PopupListViewAdapter extends BaseAdapter {
                     ImageView ivContactProfile = (ImageView) convertView.findViewById(R.id.iv_image);
                     switch (popupWindowType) {
                         case DOCTOR_LIST:
-                            ClinicDoctorProfile clinicDoctorProfile = null;
-                            if (objData instanceof ClinicDoctorProfile)
-                                clinicDoctorProfile = (ClinicDoctorProfile) objData;
+                            RegisteredDoctorProfile clinicDoctorProfile = null;
+                            if (objData instanceof RegisteredDoctorProfile)
+                                clinicDoctorProfile = (RegisteredDoctorProfile) objData;
                             if (clinicDoctorProfile != null) {
                                 tvName.setText(Util.getValidatedValue(clinicDoctorProfile.getFirstNameWithTitle()));
                                 DownloadImageFromUrlUtil.loadImageWithInitialAlphabet(mActivity, PatientProfileScreenType.IN_EMR_HEADER, clinicDoctorProfile, progressLoading, ivContactProfile, tvInitialAlphabet);

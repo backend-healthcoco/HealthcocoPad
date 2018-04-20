@@ -9,6 +9,7 @@ import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
 import com.healthcoco.healthcocopad.bean.server.ClinicDoctorProfile;
+import com.healthcoco.healthcocopad.bean.server.RegisteredDoctorProfile;
 import com.healthcoco.healthcocopad.enums.AdapterType;
 import com.healthcoco.healthcocopad.viewholders.DoctorListViewHolder;
 import com.healthcoco.healthcocopad.viewholders.QueueItemViewHolder;
@@ -91,7 +92,7 @@ public class HealthcocoRecyclerViewAdapter extends RecyclerView.Adapter<Healthco
                 }
                 break;
             case DOCTOR_POPUP_LIST:
-                if (holder instanceof DoctorListViewHolder && object instanceof ClinicDoctorProfile) {
+                if (holder instanceof DoctorListViewHolder && object instanceof RegisteredDoctorProfile) {
                     DoctorListViewHolder doctorListViewHolder = ((DoctorListViewHolder) holder);
                     holder.applyData(object);
                 }
