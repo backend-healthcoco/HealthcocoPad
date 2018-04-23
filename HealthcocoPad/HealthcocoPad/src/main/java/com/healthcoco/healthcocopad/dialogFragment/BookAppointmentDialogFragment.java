@@ -661,9 +661,15 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
 
         AppointmentRequestToSend appointment = new AppointmentRequestToSend();
         appointment.setCreatedBy(CreatedByType.DOCTOR);
-        appointment.setDoctorId(user.getUniqueId());
-        appointment.setHospitalId(user.getForeignHospitalId());
-        appointment.setLocationId(user.getForeignLocationId());
+        if (!Util.isNullOrBlank(appointmentId)) {
+            appointment.setDoctorId(selectedAppointment.getDoctorId());
+            appointment.setHospitalId(selectedAppointment.getHospitalId());
+            appointment.setLocationId(selectedAppointment.getLocationId());
+        } else {
+            appointment.setDoctorId(user.getUniqueId());
+            appointment.setHospitalId(user.getForeignHospitalId());
+            appointment.setLocationId(user.getForeignLocationId());
+        }
         appointment.setPatientId(HealthCocoConstants.SELECTED_PATIENTS_USER_ID);
         appointment.setLocalPatientName(Util.getValidatedValueOrNull(autotvPatientName));
         appointment.setMobileNumber(Util.getValidatedValueOrNull(editMobileNumber));

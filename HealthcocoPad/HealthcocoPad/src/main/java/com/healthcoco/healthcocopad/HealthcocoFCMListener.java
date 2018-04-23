@@ -58,6 +58,7 @@ public class HealthcocoFCMListener extends FirebaseMessagingService {
                         Util.sendBroadcast((HealthCocoApplication) getApplicationContext(), QueueFragment.INTENT_GET_APPOINTMENT_LIST_SERVER);
                         break;
                     case APPOINTMENT_STATUS_CHANGE:
+                    case APPOINTMENT_REFRESH:
                         Util.sendBroadcast((HealthCocoApplication) getApplicationContext(), QueueFragment.INTENT_GET_APPOINTMENT_LIST_SERVER);
                         return;
                     case PATIENT_REFRESH:
