@@ -1,0 +1,30 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fff"
+    tools:context=".calendar.BaseFragment">
+
+    <com.healthcoco.healthcocopad.calendar.weekview.WeekView
+        android:id="@+id/weekView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:columnGap="3dp"
+        app:dayBackgroundColor="#05000000"
+        app:eventTextColor="@android:color/white"
+        app:headerColumnBackground="#ffffffff"
+        app:headerColumnPadding="8dp"
+        app:headerColumnTextColor="@color/toolbar_text"
+        app:headerRowBackgroundColor="@color/toolbar"
+        app:headerRowPadding="12dp"
+        app:hourHeight="250dp"
+        app:noOfVisibleDays="4"
+        app:nowLineColor="#ff0000"
+        app:nowLineThickness="2dp"
+        app:showNowLine="true"
+        app:textSize="12sp"
+        app:todayBackgroundColor="#1848adff"
+        app:todayHeaderTextColor="@color/accent" />
+
+</RelativeLayout>
