@@ -977,6 +977,15 @@ public class Util {
         return (float) Math.sqrt(((weight * height) / 3600));
     }
 
+    public static String getColorCode(String colorCode) {
+        String color = "#F2ffffff";
+
+        color = colorCode.substring(1, colorCode.length());
+        color = "#80" + color;
+
+        return color;
+    }
+
    /* public static boolean getIsMobileNumberOptional(LoginResponse doctor) {
         for (Hospital hospital : doctor.getHospitals()) {
             if (hospital != null && (!Util.isNullOrEmptyList(hospital.getLocationsAndAccessControl()))) {

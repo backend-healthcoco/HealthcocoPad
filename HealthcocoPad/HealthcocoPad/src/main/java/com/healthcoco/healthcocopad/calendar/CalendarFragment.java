@@ -116,12 +116,10 @@ public class CalendarFragment extends BaseFragment implements LocalDoInBackgroun
 
     @Override
     public void initViews() {
-
     }
 
     @Override
     public void initListeners() {
-
     }
 
 
@@ -193,7 +191,6 @@ public class CalendarFragment extends BaseFragment implements LocalDoInBackgroun
                     break;
             }
         }
-
     }
 
     private void refreshDoctorsList() {
@@ -239,8 +236,6 @@ public class CalendarFragment extends BaseFragment implements LocalDoInBackgroun
 
     @Override
     public void onPostExecute(VolleyResponseBean aVoid) {
-
-
     }
 
     private void refreshData(ArrayList<CalendarEvents> dataList) {
@@ -249,6 +244,7 @@ public class CalendarFragment extends BaseFragment implements LocalDoInBackgroun
             this.events.add(toWeekViewEvent(event));
         }
         getWeekView().notifyDatasetChanged();
+        getWeekView().goToHour(Calendar.getInstance().get(Calendar.HOUR_OF_DAY));
     }
 
     @Override
@@ -269,7 +265,7 @@ public class CalendarFragment extends BaseFragment implements LocalDoInBackgroun
                 weekViewEvent.setName(patientName);
             } else {
                 if (!Util.isNullOrBlank(event.getPatient().getFirstName()))
-                    weekViewEvent.setName(event.getPatient().getFirstName());
+                    patientName = event.getPatient().getFirstName();
             }
         }
         if (event.getTime() != null && event.getTime().getFromTime() != null && event.getTime().getToTime() != null) {
@@ -287,10 +283,13 @@ public class CalendarFragment extends BaseFragment implements LocalDoInBackgroun
             endTime.set(Calendar.MINUTE, Math.round(workingHours.getToTime()));
 
 
+            weekViewEvent.setId(event.getUniqueId());
+            weekViewEvent.setName(patientName);
             weekViewEvent.setStartTime(startTime);
             weekViewEvent.setEndTime(endTime);
-            weekViewEvent.setColor(Color.RED);
-
+            weekViewEvent.setColor(Color.parseColor(Util.getColorCode(event.getPatient().getColorCode())));
+            weekViewEvent.setStrokeColor(Color.parseColor(event.getPatient().getColorCode()));
+            events.add(weekViewEvent);
         }
 
 

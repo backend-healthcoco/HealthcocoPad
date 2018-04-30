@@ -12,12 +12,13 @@ import static com.healthcoco.healthcocopad.calendar.weekview.WeekViewUtil.isSame
  * Website: http://april-shower.com
  */
 public class WeekViewEvent {
-    private long mId;
+    private String mId;
     private Calendar mStartTime;
     private Calendar mEndTime;
     private String mName;
     private String mLocation;
     private int mColor;
+    private int mStrokeColor;
     private boolean mAllDay;
 
     public WeekViewEvent() {
@@ -40,7 +41,7 @@ public class WeekViewEvent {
      * @param endHour     Hour (in 24-hour format) when the event ends.
      * @param endMinute   Minute when the event ends.
      */
-    public WeekViewEvent(long id, String name, int startYear, int startMonth, int startDay, int startHour, int startMinute, int endYear, int endMonth, int endDay, int endHour, int endMinute) {
+    public WeekViewEvent(String id, String name, int startYear, int startMonth, int startDay, int startHour, int startMinute, int endYear, int endMonth, int endDay, int endHour, int endMinute) {
         this.mId = id;
 
         this.mStartTime = Calendar.getInstance();
@@ -70,7 +71,7 @@ public class WeekViewEvent {
      * @param endTime   The time when the event ends.
      * @param allDay    Is the event an all day event.
      */
-    public WeekViewEvent(long id, String name, String location, Calendar startTime, Calendar endTime, boolean allDay) {
+    public WeekViewEvent(String id, String name, String location, Calendar startTime, Calendar endTime, boolean allDay) {
         this.mId = id;
         this.mName = name;
         this.mLocation = location;
@@ -88,7 +89,7 @@ public class WeekViewEvent {
      * @param startTime The time when the event starts.
      * @param endTime   The time when the event ends.
      */
-    public WeekViewEvent(long id, String name, String location, Calendar startTime, Calendar endTime) {
+    public WeekViewEvent(String id, String name, String location, Calendar startTime, Calendar endTime) {
         this(id, name, location, startTime, endTime, false);
     }
 
@@ -100,7 +101,7 @@ public class WeekViewEvent {
      * @param startTime The time when the event starts.
      * @param endTime   The time when the event ends.
      */
-    public WeekViewEvent(long id, String name, Calendar startTime, Calendar endTime) {
+    public WeekViewEvent(String id, String name, Calendar startTime, Calendar endTime) {
         this(id, name, null, startTime, endTime);
     }
 
@@ -145,6 +146,14 @@ public class WeekViewEvent {
         this.mColor = color;
     }
 
+    public int getStrokeColor() {
+        return mStrokeColor;
+    }
+
+    public void setStrokeColor(int mStrokeColor) {
+        this.mStrokeColor = mStrokeColor;
+    }
+
     public boolean isAllDay() {
         return mAllDay;
     }
@@ -153,11 +162,11 @@ public class WeekViewEvent {
         this.mAllDay = allDay;
     }
 
-    public long getId() {
+    public String getId() {
         return mId;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.mId = id;
     }
 
@@ -171,11 +180,11 @@ public class WeekViewEvent {
         return mId == that.mId;
 
     }
-
+/*
     @Override
     public int hashCode() {
         return (int) (mId ^ (mId >>> 32));
-    }
+    }*/
 
     public List<WeekViewEvent> splitWeekViewEvents() {
         //This function splits the WeekViewEvent in WeekViewEvents by day
@@ -189,6 +198,7 @@ public class WeekViewEvent {
             endTime.set(Calendar.MINUTE, 59);
             WeekViewEvent event1 = new WeekViewEvent(this.getId(), this.getName(), this.getLocation(), this.getStartTime(), endTime, this.isAllDay());
             event1.setColor(this.getColor());
+            event1.setStrokeColor(this.getStrokeColor());
             events.add(event1);
 
             // Add other days.
@@ -203,6 +213,7 @@ public class WeekViewEvent {
                 endOfOverDay.set(Calendar.MINUTE, 59);
                 WeekViewEvent eventMore = new WeekViewEvent(this.getId(), this.getName(), null, overDay, endOfOverDay, this.isAllDay());
                 eventMore.setColor(this.getColor());
+                eventMore.setStrokeColor(this.getStrokeColor());
                 events.add(eventMore);
 
                 // Add next day.
@@ -215,6 +226,7 @@ public class WeekViewEvent {
             startTime.set(Calendar.MINUTE, 0);
             WeekViewEvent event2 = new WeekViewEvent(this.getId(), this.getName(), this.getLocation(), startTime, this.getEndTime(), this.isAllDay());
             event2.setColor(this.getColor());
+            event2.setStrokeColor(this.getStrokeColor());
             events.add(event2);
         } else {
             events.add(this);

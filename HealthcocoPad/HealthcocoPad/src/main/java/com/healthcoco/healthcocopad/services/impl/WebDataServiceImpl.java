@@ -1607,8 +1607,10 @@ public class WebDataServiceImpl implements GCMRefreshListener {
         }
     }
 
-    public void getCalendarEvents(Class<?> class1, List<RegisteredDoctorProfile> registeredDoctorProfileList, String locationId, String foreignHospitalId, long selectedDate, long updatedTime,
-                                  Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+    public void getCalendarEvents(Class<?> class1, List<RegisteredDoctorProfile> registeredDoctorProfileList,
+                                  String locationId, String foreignHospitalId, long selectedDate,
+                                  long updatedTime, Response.Listener<VolleyResponseBean> responseListener,
+                                  GsonRequest.ErrorListener errorListener) {
         WebServiceType webServiceType = WebServiceType.GET_CALENDAR_EVENTS;
         checkNetworkStatus(mApp);
         if (HealthCocoConstants.isNetworkOnline) {

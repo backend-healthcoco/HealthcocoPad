@@ -34,12 +34,14 @@ import android.view.ViewConfiguration;
 import android.widget.OverScroller;
 
 import com.healthcoco.healthcocopad.R;
+import com.healthcoco.healthcocopad.utilities.Util;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -80,8 +82,10 @@ public class WeekView extends View {
     private Paint mNowLinePaint;
     private Paint mTodayHeaderTextPaint;
     private Paint mEventBackgroundPaint;
+    private Paint mEventStokePaint;
     private float mHeaderColumnWidth;
     private List<EventRect> mEventRects;
+    private HashMap<String, EventRect> hashMap = new HashMap<>();
     private List<? extends WeekViewEvent> mPreviousPeriodEvents;
     private List<? extends WeekViewEvent> mCurrentPeriodEvents;
     private List<? extends WeekViewEvent> mNextPeriodEvents;
@@ -99,17 +103,17 @@ public class WeekView extends View {
     private int mMinimumFlingVelocity = 0;
     private int mScaledTouchSlop = 0;
     // Attributes and their default values.
-    private int mHourHeight = 250;
+    private int mHourHeight = 200;
     private int mNewHourHeight = -1;
-    private int mMinHourHeight = 0; //no minimum specified (will be dynamic, based on screen)
+    private int mMinHourHeight = 200; //no minimum specified (will be dynamic, based on screen)
     private int mEffectiveMinHourHeight = mMinHourHeight; //compensates for the fact that you can't keep zooming out.
-    private int mMaxHourHeight = 250;
+    private int mMaxHourHeight = 200;
     private int mColumnGap = 10;
     private int mFirstDayOfWeek = Calendar.MONDAY;
     private int mTextSize = 12;
     private int mHeaderColumnPadding = 10;
     private int mHeaderColumnTextColor = Color.BLACK;
-    private int mNumberOfVisibleDays = 4;
+    private int mNumberOfVisibleDays = 3;
     private int mHeaderRowPadding = 10;
     private int mHeaderRowBackgroundColor = Color.WHITE;
     private int mDayBackgroundColor = Color.rgb(245, 245, 245);
@@ -427,6 +431,9 @@ public class WeekView extends View {
         // Prepare event background color.
         mEventBackgroundPaint = new Paint();
         mEventBackgroundPaint.setColor(Color.rgb(174, 208, 238));
+
+        mEventStokePaint = new Paint();
+        mEventStokePaint.setColor(Color.rgb(110, 208, 238));
 
         // Prepare header column background color.
         mHeaderColumnBackgroundPaint = new Paint();
@@ -802,8 +809,16 @@ public class WeekView extends View {
                             bottom > mHeaderHeight + mHeaderRowPadding * 2 + mTimeTextHeight / 2 + mHeaderMarginBottom
                             ) {
                         mEventRects.get(i).rectF = new RectF(left, top, right, bottom);
+                        mEventBackgroundPaint.setStyle(Paint.Style.FILL);
                         mEventBackgroundPaint.setColor(mEventRects.get(i).event.getColor() == 0 ? mDefaultEventColor : mEventRects.get(i).event.getColor());
+
+                        mEventStokePaint.setStyle(Paint.Style.STROKE);
+                        mEventStokePaint.setColor(mEventRects.get(i).event.getStrokeColor() == 0 ? mDefaultEventColor : mEventRects.get(i).event.getStrokeColor());
+                        mEventStokePaint.setStrokeWidth(1);
+                        mEventStokePaint.setStrokeCap(Paint.Cap.ROUND);
+
                         canvas.drawRoundRect(mEventRects.get(i).rectF, mEventCornerRadius, mEventCornerRadius, mEventBackgroundPaint);
+                        canvas.drawRoundRect(mEventRects.get(i).rectF, mEventCornerRadius, mEventCornerRadius, mEventStokePaint);
                         drawEventTitle(mEventRects.get(i).event, mEventRects.get(i).rectF, canvas, top, left);
                     } else
                         mEventRects.get(i).rectF = null;
@@ -978,8 +993,13 @@ public class WeekView extends View {
         }
 
         // Prepare to calculate positions of each events.
-        List<EventRect> tempEvents = mEventRects;
-        mEventRects = new ArrayList<EventRect>();
+        if (!Util.isNullOrEmptyList(mEventRects))
+            for (EventRect rects : mEventRects) {
+                hashMap.put(rects.event.getId(), rects);
+            }
+        List<EventRect> tempEvents = new ArrayList<>();
+        tempEvents.addAll(hashMap.values());
+        this.mEventRects = new ArrayList<EventRect>();
 
         // Iterate through each day with events to calculate the position of the events.
         while (tempEvents.size() > 0) {
@@ -2077,5 +2097,6 @@ public class WeekView extends View {
             this.rectF = rectF;
             this.originalEvent = originalEvent;
         }
+
     }
 }
