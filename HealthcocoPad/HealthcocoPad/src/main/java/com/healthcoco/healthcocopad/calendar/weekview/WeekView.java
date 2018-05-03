@@ -21,6 +21,7 @@ import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
+import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
 import android.util.AttributeSet;
 import android.util.TypedValue;
@@ -129,7 +130,8 @@ public class WeekView extends View {
     private int mTodayHeaderTextColor = Color.rgb(39, 137, 228);
     private int mEventTextSize = 12;
     private int mEventTextColor = Color.BLACK;
-    private int mEventPadding = 8;
+    private int mEventPadding = 5;
+    private int mEventTopPadding = 22;
     private int mHeaderColumnBackgroundColor = Color.WHITE;
     private boolean mIsFirstDraw = true;
     private boolean mAreDimensionsInvalid = true;
@@ -812,14 +814,16 @@ public class WeekView extends View {
                         mEventBackgroundPaint.setStyle(Paint.Style.FILL);
                         mEventBackgroundPaint.setColor(mEventRects.get(i).event.getColor() == 0 ? mDefaultEventColor : mEventRects.get(i).event.getColor());
 
+//                        RectF f = new RectF(left, top, left+4f, bottom);
                         mEventStokePaint.setStyle(Paint.Style.STROKE);
                         mEventStokePaint.setColor(mEventRects.get(i).event.getStrokeColor() == 0 ? mDefaultEventColor : mEventRects.get(i).event.getStrokeColor());
-                        mEventStokePaint.setStrokeWidth(1);
+                        mEventStokePaint.setStrokeWidth(2);
                         mEventStokePaint.setStrokeCap(Paint.Cap.ROUND);
 
                         canvas.drawRoundRect(mEventRects.get(i).rectF, mEventCornerRadius, mEventCornerRadius, mEventBackgroundPaint);
                         canvas.drawRoundRect(mEventRects.get(i).rectF, mEventCornerRadius, mEventCornerRadius, mEventStokePaint);
-                        drawEventTitle(mEventRects.get(i).event, mEventRects.get(i).rectF, canvas, top, left);
+                        drawEventTitle(mEventRects.get(i).event.getTime(), mEventRects.get(i).rectF, canvas, top, left, mEventPadding, mEventPadding);
+                        drawEventTitle(mEventRects.get(i).event.getName(), mEventRects.get(i).rectF, canvas, top, left, mEventTopPadding, 10);
                     } else
                         mEventRects.get(i).rectF = null;
                 }
@@ -863,7 +867,7 @@ public class WeekView extends View {
                         mEventRects.get(i).rectF = new RectF(left, top, right, bottom);
                         mEventBackgroundPaint.setColor(mEventRects.get(i).event.getColor() == 0 ? mDefaultEventColor : mEventRects.get(i).event.getColor());
                         canvas.drawRoundRect(mEventRects.get(i).rectF, mEventCornerRadius, mEventCornerRadius, mEventBackgroundPaint);
-                        drawEventTitle(mEventRects.get(i).event, mEventRects.get(i).rectF, canvas, top, left);
+                        drawEventTitle(mEventRects.get(i).event.getName(), mEventRects.get(i).rectF, canvas, top, left, mEventPadding, mEventPadding);
                     } else
                         mEventRects.get(i).rectF = null;
                 }
@@ -874,30 +878,31 @@ public class WeekView extends View {
     /**
      * Draw the name of the event on top of the event rectangle.
      *
-     * @param event        The event of which the title (and location) should be drawn.
+     * @param title        The event of which the title (and location) should be drawn.
      * @param rect         The rectangle on which the text is to be drawn.
      * @param canvas       The canvas to draw upon.
      * @param originalTop  The original top position of the rectangle. The rectangle may have some of its portion outside of the visible area.
      * @param originalLeft The original left position of the rectangle. The rectangle may have some of its portion outside of the visible area.
      */
-    private void drawEventTitle(WeekViewEvent event, RectF rect, Canvas canvas, float originalTop, float originalLeft) {
-        if (rect.right - rect.left - mEventPadding * 2 < 0) return;
+    private void drawEventTitle(String title, RectF rect, Canvas canvas, float originalTop, float originalLeft, int topPadding, int minHeight) {
+        if (rect.right - rect.left - topPadding * 2 < 0) return;
         if (rect.bottom - rect.top - mEventPadding * 2 < 0) return;
 
         // Prepare the name of the event.
         SpannableStringBuilder bob = new SpannableStringBuilder();
-        if (event.getName() != null) {
-            bob.append(event.getName());
-            bob.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, bob.length(), 0);
+        if (!Util.isNullOrBlank(title)) {
+            bob.append(title);
+            if (minHeight != mEventPadding) {
+                bob.setSpan(new RelativeSizeSpan(1.22f), 0, bob.length(), 0); // set size
+                bob.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, bob.length(), 0);
+            } else
+                bob.setSpan(new RelativeSizeSpan(1.13f), 0, bob.length(), 0); // set size
+
             bob.append(' ');
         }
 
-        // Prepare the location of the event.
-        if (event.getLocation() != null) {
-            bob.append(event.getLocation());
-        }
 
-        int availableHeight = (int) (rect.bottom - originalTop - mEventPadding * 2);
+        int availableHeight = (int) (rect.bottom - originalTop - minHeight * 2);
         int availableWidth = (int) (rect.right - originalLeft - mEventPadding * 2);
 
         // Get text dimensions.
@@ -910,7 +915,7 @@ public class WeekView extends View {
             int availableLineCount = availableHeight / lineHeight;
             do {
                 // Ellipsize text to fit into event rect.
-                textLayout = new StaticLayout(TextUtils.ellipsize(bob, mEventTextPaint, availableLineCount * availableWidth, TextUtils.TruncateAt.END), mEventTextPaint, (int) (rect.right - originalLeft - mEventPadding * 2), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                textLayout = new StaticLayout(TextUtils.ellipsize(bob, mEventTextPaint, 1 * availableWidth, TextUtils.TruncateAt.END), mEventTextPaint, (int) (rect.right - originalLeft - mEventPadding * 2), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
 
                 // Reduce line count.
                 availableLineCount--;
@@ -920,9 +925,10 @@ public class WeekView extends View {
 
             // Draw text.
             canvas.save();
-            canvas.translate(originalLeft + mEventPadding, originalTop + mEventPadding);
+            canvas.translate(originalLeft + mEventPadding, originalTop + topPadding);
             textLayout.draw(canvas);
             canvas.restore();
+
         }
     }
 

@@ -238,6 +238,7 @@
     <string name="year">Year</string>
     <string name="no_text_dash">&#8211;</string>
     <string name="text_dash">-</string>
+    <string name="text_dash_with_space">&#160;-&#160;</string>
     <integer name="id_item_all">11</integer>
     <integer name="id_item_confirmed">12</integer>
     <integer name="id_item_cancelled">13</integer>

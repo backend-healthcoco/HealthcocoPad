@@ -30,7 +30,7 @@ import java.util.Locale;
  * Created by Raquib-ul-Alam Kanak on 1/3/2014.
  * Website: http://alamkanak.github.io
  */
-public abstract class BaseFragment extends HealthCocoFragment implements WeekView.EventClickListener, WeekView.EventLongPressListener, WeekView.EmptyViewLongPressListener, MonthLoader.MonthChangeListener {
+public abstract class BaseFragment extends HealthCocoFragment implements WeekView.EventClickListener, WeekView.EventLongPressListener, WeekView.EmptyViewLongPressListener, MonthLoader.MonthChangeListener, WeekView.ScrollListener {
     private static final int TYPE_DAY_VIEW = 1;
     private static final int TYPE_THREE_DAY_VIEW = 2;
     private static final int TYPE_WEEK_VIEW = 3;
@@ -57,6 +57,8 @@ public abstract class BaseFragment extends HealthCocoFragment implements WeekVie
 
         // Set long press listener for empty view
         mWeekView.setEmptyViewLongPressListener(this);
+
+        mWeekView.setScrollListener(this);
 
         // Set up a date time interpreter to interpret how the date and time will be formatted in
         // the week view. This is optional.
@@ -157,7 +159,8 @@ public abstract class BaseFragment extends HealthCocoFragment implements WeekVie
 
     @Override
     public void onEventClick(WeekViewEvent event, RectF eventRect) {
-        Toast.makeText(getActivity(), "Clicked " + event.getName(), Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getActivity(), "Clicked " + event.getName(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), "Clicked " + event.getCalendarEvent().getAppointmentId(), Toast.LENGTH_SHORT).show();
     }
 
     @Override

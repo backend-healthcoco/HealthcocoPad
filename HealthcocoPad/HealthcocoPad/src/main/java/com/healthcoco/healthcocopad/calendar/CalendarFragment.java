@@ -163,12 +163,14 @@ public class CalendarFragment extends BaseFragment implements LocalDoInBackgroun
                 case GET_CALENDAR_EVENTS:
                     if (!Util.isNullOrEmptyList(response.getDataList())) {
                         refreshData((ArrayList<CalendarEvents>) (ArrayList<?>) response.getDataList());
-                        new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_CALENDAR_EVENTS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
-                        response.setIsFromLocalAfterApiSuccess(true);
-                        return;
+//                        new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_CALENDAR_EVENTS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+//                        response.setIsFromLocalAfterApiSuccess(true);
+//                        return;
+                        isInitialLoading = false;
+                        mActivity.hideLoading();
                     } else {
 //                        refreshData();
-                        isInitialLoading = false;
+//                        isInitialLoading = false;
                         mActivity.hideLoading();
                     }
                     break;
@@ -239,7 +241,6 @@ public class CalendarFragment extends BaseFragment implements LocalDoInBackgroun
     }
 
     private void refreshData(ArrayList<CalendarEvents> dataList) {
-        this.events.clear();
         for (CalendarEvents event : dataList) {
             this.events.add(toWeekViewEvent(event));
         }
@@ -273,59 +274,39 @@ public class CalendarFragment extends BaseFragment implements LocalDoInBackgroun
 
             Calendar startTime = Calendar.getInstance();
             startTime.setTimeInMillis(event.getFromDate());
-//            startTime.set(0, 0, 0, 0, Math.round(workingHours.getFromTime()), 00);
             startTime.set(Calendar.MINUTE, Math.round(workingHours.getFromTime()));
-
 
             Calendar endTime = Calendar.getInstance();
             endTime.setTimeInMillis(event.getToDate());
-//            endTime.set(0, 0, 0, 0, Math.round(workingHours.getToTime()), 00);
             endTime.set(Calendar.MINUTE, Math.round(workingHours.getToTime()));
 
+            weekViewEvent.setTime((DateTimeUtil.getFormattedTime(0, Math.round(workingHours.getFromTime()))) + getString(R.string.text_dash_with_space) +
+                    (DateTimeUtil.getFormattedTime(0, Math.round(workingHours.getToTime()))));
 
+            for (RegisteredDoctorProfile registeredDoctorProfile : registeredDoctorProfileList) {
+                if (event.getDoctorId().equals(registeredDoctorProfile.getUserId())) {
+                    weekViewEvent.setColor(Color.parseColor(Util.getColorCode(registeredDoctorProfile.getColorCode())));
+                    weekViewEvent.setStrokeColor(Color.parseColor(registeredDoctorProfile.getColorCode()));
+                }
+            }
             weekViewEvent.setId(event.getUniqueId());
             weekViewEvent.setName(patientName);
             weekViewEvent.setStartTime(startTime);
             weekViewEvent.setEndTime(endTime);
-            weekViewEvent.setColor(Color.parseColor(Util.getColorCode(event.getPatient().getColorCode())));
-            weekViewEvent.setStrokeColor(Color.parseColor(event.getPatient().getColorCode()));
+            weekViewEvent.setCalendarEvent(event);
             events.add(weekViewEvent);
         }
 
-
-      /*  startTime = Calendar.getInstance();
-        startTime.set(Calendar.HOUR_OF_DAY, 5);
-        startTime.set(Calendar.MINUTE, 30);
-        startTime.set(Calendar.MONTH, newMonth - 1);
-        startTime.set(Calendar.YEAR, newYear);
-        endTime = (Calendar) startTime.clone();
-        endTime.add(Calendar.HOUR_OF_DAY, 2);
-        endTime.set(Calendar.MONTH, newMonth - 1);
-        event = new WeekViewEvent(2, getEventTitle(startTime), startTime, endTime);
-        event.setColor(getResources().getColor(R.color.event_color_02));
-        events.add(event);
-
-        // Initialize start and end time.
-        Calendar now = Calendar.getInstance();
-        Calendar startTime = (Calendar) now.clone();
-        startTime.setTimeInMillis(start.getTime());
-        startTime.set(Calendar.YEAR, now.get(Calendar.YEAR));
-        startTime.set(Calendar.MONTH, now.get(Calendar.MONTH));
-        startTime.set(Calendar.DAY_OF_MONTH, getDayOfMonth());
-        Calendar endTime = (Calendar) startTime.clone();
-        endTime.setTimeInMillis(end.getTime());
-        endTime.set(Calendar.YEAR, startTime.get(Calendar.YEAR));
-        endTime.set(Calendar.MONTH, startTime.get(Calendar.MONTH));
-        endTime.set(Calendar.DAY_OF_MONTH, startTime.get(Calendar.DAY_OF_MONTH));*/
-
-        // Create an week view event.
-       /* WeekViewEvent weekViewEvent = new WeekViewEvent();
-        weekViewEvent.setName(getName());
-        weekViewEvent.setStartTime(startTime);
-        weekViewEvent.setEndTime(endTime);
-        weekViewEvent.setColor(Color.parseColor(getColor()));
-*/
         return weekViewEvent;
+    }
+
+    @Override
+    public void onFirstVisibleDayChanged(Calendar newFirstVisibleDay, Calendar oldFirstVisibleDay) {
+        if ((newFirstVisibleDay != null) && (oldFirstVisibleDay != null))
+            if (!DateTimeUtil.isCurrentMonthSelected(newFirstVisibleDay.getTimeInMillis(), oldFirstVisibleDay.getTimeInMillis())) {
+                selectedMonthDayYearInMillis = newFirstVisibleDay.getTimeInMillis();
+                getCalendarEventsList(true);
+            }
     }
 
 }

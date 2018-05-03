@@ -1,5 +1,7 @@
 package com.healthcoco.healthcocopad.calendar.weekview;
 
+import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -15,11 +17,12 @@ public class WeekViewEvent {
     private String mId;
     private Calendar mStartTime;
     private Calendar mEndTime;
-    private String mName;
-    private String mLocation;
+    private String mPatientName;
+    private String mTime;
     private int mColor;
     private int mStrokeColor;
     private boolean mAllDay;
+    private CalendarEvents calendarEvent;
 
     public WeekViewEvent() {
 
@@ -58,23 +61,23 @@ public class WeekViewEvent {
         this.mEndTime.set(Calendar.HOUR_OF_DAY, endHour);
         this.mEndTime.set(Calendar.MINUTE, endMinute);
 
-        this.mName = name;
+        this.mPatientName = name;
     }
 
     /**
      * Initializes the event for week view.
      *
-     * @param id        The id of the event.
-     * @param name      Name of the event.
-     * @param location  The location of the event.
-     * @param startTime The time when the event starts.
-     * @param endTime   The time when the event ends.
-     * @param allDay    Is the event an all day event.
+     * @param id          The id of the event.
+     * @param patientName Name of the event.
+     * @param startTime   The location of the event.
+     * @param startTime   The time when the event starts.
+     * @param endTime     The time when the event ends.
+     * @param allDay      Is the event an all day event.
      */
-    public WeekViewEvent(String id, String name, String location, Calendar startTime, Calendar endTime, boolean allDay) {
+    public WeekViewEvent(String id, String patientName, String time, Calendar startTime, Calendar endTime, boolean allDay) {
         this.mId = id;
-        this.mName = name;
-        this.mLocation = location;
+        this.mPatientName = patientName;
+        this.mTime = time;
         this.mStartTime = startTime;
         this.mEndTime = endTime;
         this.mAllDay = allDay;
@@ -85,12 +88,12 @@ public class WeekViewEvent {
      *
      * @param id        The id of the event.
      * @param name      Name of the event.
-     * @param location  The location of the event.
+     * @param time  The location of the event.
      * @param startTime The time when the event starts.
      * @param endTime   The time when the event ends.
      */
-    public WeekViewEvent(String id, String name, String location, Calendar startTime, Calendar endTime) {
-        this(id, name, location, startTime, endTime, false);
+    public WeekViewEvent(String id, String name, String time, Calendar startTime, Calendar endTime) {
+        this(id, name, time, startTime, endTime, false);
     }
 
     /**
@@ -123,19 +126,19 @@ public class WeekViewEvent {
     }
 
     public String getName() {
-        return mName;
+        return mPatientName;
     }
 
-    public void setName(String name) {
-        this.mName = name;
+    public void setName(String mPatientName) {
+        this.mPatientName = mPatientName;
     }
 
-    public String getLocation() {
-        return mLocation;
+    public String getTime() {
+        return mTime;
     }
 
-    public void setLocation(String location) {
-        this.mLocation = location;
+    public void setTime(String mTime) {
+        this.mTime = mTime;
     }
 
     public int getColor() {
@@ -170,6 +173,15 @@ public class WeekViewEvent {
         this.mId = id;
     }
 
+
+    public CalendarEvents getCalendarEvent() {
+        return calendarEvent;
+    }
+
+    public void setCalendarEvent(CalendarEvents calendarEvent) {
+        this.calendarEvent = calendarEvent;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -196,7 +208,7 @@ public class WeekViewEvent {
             endTime = (Calendar) this.getStartTime().clone();
             endTime.set(Calendar.HOUR_OF_DAY, 23);
             endTime.set(Calendar.MINUTE, 59);
-            WeekViewEvent event1 = new WeekViewEvent(this.getId(), this.getName(), this.getLocation(), this.getStartTime(), endTime, this.isAllDay());
+            WeekViewEvent event1 = new WeekViewEvent(this.getId(), this.getName(), this.getTime(), this.getStartTime(), endTime, this.isAllDay());
             event1.setColor(this.getColor());
             event1.setStrokeColor(this.getStrokeColor());
             events.add(event1);
@@ -224,7 +236,7 @@ public class WeekViewEvent {
             Calendar startTime = (Calendar) this.getEndTime().clone();
             startTime.set(Calendar.HOUR_OF_DAY, 0);
             startTime.set(Calendar.MINUTE, 0);
-            WeekViewEvent event2 = new WeekViewEvent(this.getId(), this.getName(), this.getLocation(), startTime, this.getEndTime(), this.isAllDay());
+            WeekViewEvent event2 = new WeekViewEvent(this.getId(), this.getName(), this.getTime(), startTime, this.getEndTime(), this.isAllDay());
             event2.setColor(this.getColor());
             event2.setStrokeColor(this.getStrokeColor());
             events.add(event2);

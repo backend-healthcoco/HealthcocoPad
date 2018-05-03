@@ -12,7 +12,7 @@
         android:layout_height="match_parent"
         app:columnGap="3dp"
         app:dayBackgroundColor="#05000000"
-        app:eventCornerRadius="@dimen/border_profile_images"
+        app:eventCornerRadius="0dp"
         app:eventTextColor="@android:color/white"
         app:headerColumnBackground="#ffffffff"
         app:headerColumnPadding="8dp"
