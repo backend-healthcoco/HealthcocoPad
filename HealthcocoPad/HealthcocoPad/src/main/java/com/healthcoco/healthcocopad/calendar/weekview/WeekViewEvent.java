@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import static com.healthcoco.healthcocopad.calendar.weekview.WeekViewUtil.isSameDay;
+import static com.healthcoco.healthcocopad.utilities.DateTimeUtil.isSameDay;
 
 
 /**

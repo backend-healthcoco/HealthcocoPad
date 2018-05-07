@@ -1,24 +1,22 @@
 package com.healthcoco.healthcocopad.calendar;
 
-import android.app.Activity;
-import android.app.DatePickerDialog;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.Color;
+import android.graphics.RectF;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.content.LocalBroadcastManager;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.RecyclerView;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.DatePicker;
-import android.widget.HorizontalScrollView;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
@@ -29,79 +27,63 @@ import com.healthcoco.healthcocopad.bean.server.PatientCard;
 import com.healthcoco.healthcocopad.bean.server.RegisteredDoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.bean.server.WorkingHours;
+import com.healthcoco.healthcocopad.calendar.weekview.DateTimeInterpreter;
+import com.healthcoco.healthcocopad.calendar.weekview.MonthLoader;
+import com.healthcoco.healthcocopad.calendar.weekview.WeekView;
 import com.healthcoco.healthcocopad.calendar.weekview.WeekViewEvent;
-import com.healthcoco.healthcocopad.custom.HealthcocoTextWatcher;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
-import com.healthcoco.healthcocopad.dialogFragment.BookAppointmentDialogFragment;
 import com.healthcoco.healthcocopad.enums.AppointmentStatusType;
-import com.healthcoco.healthcocopad.enums.BookAppointmentFromScreenType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
-import com.healthcoco.healthcocopad.enums.LocalTabelType;
-import com.healthcoco.healthcocopad.enums.PopupWindowType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
-import com.healthcoco.healthcocopad.fragments.CheckedOutQueueFragment;
-import com.healthcoco.healthcocopad.fragments.EngagedQueueFragment;
-import com.healthcoco.healthcocopad.fragments.PatientAppointmentDetailFragment;
-import com.healthcoco.healthcocopad.fragments.ScheduledQueueFragment;
-import com.healthcoco.healthcocopad.fragments.WaitingQueueFragment;
-import com.healthcoco.healthcocopad.listeners.DoctorListPopupWindowListener;
-import com.healthcoco.healthcocopad.listeners.HealthcocoTextWatcherListener;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
-import com.healthcoco.healthcocopad.popupwindow.HealthcocoPopupWindow;
+import com.healthcoco.healthcocopad.recyclerview.HealthcocoRecyclerViewAdapter;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
-import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
-import com.healthcoco.healthcocopad.utilities.ReflectionUtil;
 import com.healthcoco.healthcocopad.utilities.Util;
 
-import org.parceler.Parcels;
-
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
-import static com.healthcoco.healthcocopad.enums.AppointmentStatusType.ALL;
-import static com.healthcoco.healthcocopad.enums.BookAppointmentFromScreenType.APPOINTMENTS_QUEUE_ADD_NEW;
+import static com.healthcoco.healthcocopad.enums.AppointmentStatusType.CONFIRM;
+import static com.healthcoco.healthcocopad.enums.CalendarStatus.SCHEDULED;
+
 
 /**
- * Created by Prashant on 24/04/2018.
+ * This is a base activity which contains week view and all the codes necessary to initialize the
+ * week view.
+ * Created by Raquib-ul-Alam Kanak on 1/3/2014.
+ * Website: http://alamkanak.github.io
  */
-
-public class CalendarFragment extends BaseFragment implements LocalDoInBackgroundListenerOptimised {
-
-    public static final String DATE_FORMAT_FOR_HEADER_IN_THIS_SCREEN = "EEE, MMM dd,yyyy";
-    public static final int MAX_SIZE = 10;
-    public static final int MAX_NUMBER_OF_EVENTS = 30;
-    private static final String DATE_FORMAT_USED_IN_THIS_SCREEN = "EEE, MMM dd,yyyy";
-    public ArrayList<RegisteredDoctorProfile> clinicDoctorProfileList;
-    public List<RegisteredDoctorProfile> registeredDoctorProfileList;
-    private int PAGE_NUMBER = 0;
+public class CalendarFragment extends HealthCocoFragment implements WeekView.EventClickListener, WeekView.EmptyViewLongPressListener, MonthLoader.MonthChangeListener, WeekView.ScrollListener, LocalDoInBackgroundListenerOptimised {
+    private static final int TYPE_DAY_VIEW = 1;
+    private static final int TYPE_THREE_DAY_VIEW = 2;
+    private static final int TYPE_WEEK_VIEW = 3;
+    public ArrayList<RegisteredDoctorProfile> clinicDoctorProfileList = null;
+    CalendarEvents calendarEvents;
+    private int mWeekViewType = TYPE_THREE_DAY_VIEW;
+    private WeekView mWeekView;
+    private ArrayList<CalendarEvents> calendarEventsList = new ArrayList<>();
+    private HashMap<String, CalendarEvents> calendarEventsHashMap = new HashMap<>();
     private boolean isEndOfListAchieved;
-    private User user;
-    private User loggedInUser;
-    private long selectedMonthDayYearInMillis;
-    private long curentMonthDayYearInMillis;
-    private ArrayList<CalendarEvents> calenderEventList = null;
-    private AppointmentStatusType appointmentStatusType = ALL;
-    private LinkedHashMap<String, RegisteredDoctorProfile> clinicDoctorListHashMap = new LinkedHashMap<>();
-    private HealthcocoPopupWindow doctorsListPopupWindow;
-    private boolean isSingleDoctor = false;
     private boolean isInitialLoading = true;
-    private boolean receiversRegistered;
-    private FloatingActionButton floatingActionButton;
-    private HorizontalScrollView horizontalScrollView;
-    private View.OnClickListener clickListener;
-    private ScheduledQueueFragment scheduledQueueFragment;
-    private WaitingQueueFragment waitingQueueFragment;
-    private EngagedQueueFragment engagedQueueFragment;
-    private CheckedOutQueueFragment checkedOutQueueFragment;
-
+    private AppointmentStatusType appointmentStatusType = CONFIRM;
+    private User user;
+    private long selectedMonthDayYearInMillis;
     private List<WeekViewEvent> events = new ArrayList<WeekViewEvent>();
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        view = inflater.inflate(R.layout.activity_base, container, false);
+        super.onCreateView(inflater, container, savedInstanceState);
+        return view;
+    }
+
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -111,93 +93,102 @@ public class CalendarFragment extends BaseFragment implements LocalDoInBackgroun
 
     @Override
     public void init() {
+        initViews();
+        initListeners();
         new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_FRAGMENT_INITIALISATION_DATA, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     @Override
     public void initViews() {
+        mWeekView = (WeekView) view.findViewById(R.id.weekView);
     }
 
     @Override
     public void initListeners() {
+        mWeekView.setOnEventClickListener(this);
+        mWeekView.setMonthChangeListener(this);
+        mWeekView.setEmptyViewLongPressListener(this);
+        mWeekView.setScrollListener(this);
+
+        // Set up a date time interpreter to interpret how the date and time will be formatted in
+        // the week view. This is optional.
+        setupDateTimeInterpreter(false);
     }
 
 
-    public void getCalendarEventsList(boolean showLoading) {
-        if (showLoading)
-            mActivity.showLoading(false);
-        Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(user, LocalTabelType.CALENDAR_EVENTS, selectedMonthDayYearInMillis);
-        WebDataServiceImpl.getInstance(mApp).getCalendarEvents(CalendarEvents.class, registeredDoctorProfileList, user.getForeignLocationId(), user.getForeignHospitalId(), selectedMonthDayYearInMillis, 0, this, this);
+    private void fromHashMapAndRefresh(ArrayList<CalendarEvents> responseList) {
+        if (!Util.isNullOrEmptyList(responseList)) {
+            for (CalendarEvents calendarEvent :
+                    responseList) {
+                calendarEventsHashMap.put(calendarEvent.getUniqueId(), calendarEvent);
+            }
+        }
+        notifyAdapter(new ArrayList<>(calendarEventsHashMap.values()));
     }
 
+    private void notifyAdapter(ArrayList<CalendarEvents> calendarEventsArrayList) {
+        for (CalendarEvents event : calendarEventsArrayList) {
+            this.events.add(toWeekViewEvent(event));
+        }
+        getWeekView().notifyDatasetChanged();
+        getWeekView().goToHour(Calendar.getInstance().get(Calendar.HOUR_OF_DAY));
 
-    @Override
-    public void onNetworkUnavailable(WebServiceType webServiceType) {
-        Util.showToast(mActivity, R.string.user_offline);
-        mActivity.hideLoading();
     }
 
-    @Override
-    public void onErrorResponse(VolleyResponseBean volleyResponseBean, String errorMessage) {
-        super.onErrorResponse(volleyResponseBean, errorMessage);
-//        refreshData();
-        isInitialLoading = false;
+    private void getListFromLocal(boolean initialLoading) {
+        if (initialLoading) {
+            showLoadingOverlay(true);
+//            resetListAndPagingAttributes();
+        } else {
+            showLoadingOverlay(false);
+        }
+        new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_CALENDAR_EVENTS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
+
 
     @Override
     public void onResponse(VolleyResponseBean response) {
         LogUtils.LOGD(TAG, "Success " + String.valueOf(response.getWebServiceType()));
         if (response != null && response.getWebServiceType() != null) {
             switch (response.getWebServiceType()) {
-                case FRAGMENT_INITIALISATION:
-                    if (user != null) {
-                        Calendar calendar = DateTimeUtil.getCalendarInstance();
-//                        onDateSetonDateSet(null, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
-                        selectedMonthDayYearInMillis = calendar.getTimeInMillis();
-                        curentMonthDayYearInMillis = selectedMonthDayYearInMillis;
-//                        tvSelectedDate.setText(DateTimeUtil.getCurrentFormattedDate(DATE_FORMAT_USED_IN_THIS_SCREEN));
-                        getCalendarEventsList(true);
-                        return;
-                    }
-                    break;
                 case GET_CALENDAR_EVENTS:
-                    if (!Util.isNullOrEmptyList(response.getDataList())) {
-                        refreshData((ArrayList<CalendarEvents>) (ArrayList<?>) response.getDataList());
-//                        new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_CALENDAR_EVENTS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
-//                        response.setIsFromLocalAfterApiSuccess(true);
-//                        return;
-                        isInitialLoading = false;
-                        mActivity.hideLoading();
+                    if (response.isDataFromLocal()) {
+                        ArrayList<CalendarEvents> responseDataList = (ArrayList<CalendarEvents>) (ArrayList<?>) response.getDataList();
+                        LogUtils.LOGD(TAG, "getSectionedDataListCalendar  loading onResponse");
+                        if (isInitialLoading && !response.isFromLocalAfterApiSuccess() && response.isUserOnline()) {
+                            LogUtils.LOGD(TAG, "getSectionedDataListCalendar  loading Complete");
+                            isInitialLoading = false;
+                            fromHashMapAndRefresh(responseDataList);
+                            return;
+                        }
+                        fromHashMapAndRefresh(responseDataList);
+                        return;
                     } else {
-//                        refreshData();
-//                        isInitialLoading = false;
-                        mActivity.hideLoading();
+                        getListFromLocal(false);
                     }
                     break;
-                case ADD_APPOINTMENT:
-//                    refreshData();
-                    isInitialLoading = false;
+                case CHANGE_APPOINTMENT_STATUS:
                     mActivity.hideLoading();
-                    break;
-                case GET_REGISTER_DOCTOR:
-                    if (!Util.isNullOrEmptyList(response.getDataList())) {
-                        registeredDoctorProfileList = (ArrayList<RegisteredDoctorProfile>) (ArrayList) response.getDataList();
-//                        initSelectedDoctorClinicData();
-                        new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_REGISTER_DOCTOR, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
-                        mActivity.hideLoading();
+                    if (response.getData() != null) {
+                        boolean data = (boolean) response.getData();
+                      /*  CalendarEvents responseData = (CalendarEvents) response.getData();
+                        LocalDataServiceImpl.getInstance(mApp).addCalendarEventsUpdated(responseData);
+                        calendarEventsList.remove(calendarEvents);
+                        calendarEventsHashMap.remove(calendarEvents.getUniqueId());
+//                        mAdapter.notifyDataSetChanged();
+                        fromHashMapAndRefresh(calendarEventsList);
+                        Util.sendBroadcast(mApp, INTENT_REFRESH_WAITING_QUEUE_DATA);*/
                     }
-                    if (!response.isUserOnline())
-                        onNetworkUnavailable(response.getWebServiceType());
                     break;
                 default:
                     break;
             }
         }
-    }
 
-    private void refreshDoctorsList() {
-        mActivity.showLoading(true);
-        WebDataServiceImpl.getInstance(mApp).getRegisterDoctor(RegisteredDoctorProfile.class, user.getForeignLocationId(), user.getForeignHospitalId(), this, this);
+        isInitialLoading = false;
+
+        showLoadingOverlay(false);
+
     }
 
     @Override
@@ -205,29 +196,19 @@ public class CalendarFragment extends BaseFragment implements LocalDoInBackgroun
         VolleyResponseBean volleyResponseBean = null;
         switch (response.getLocalBackgroundTaskType()) {
             case GET_FRAGMENT_INITIALISATION_DATA:
-                volleyResponseBean = new VolleyResponseBean();
-                volleyResponseBean.setWebServiceType(WebServiceType.FRAGMENT_INITIALISATION);
                 LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
                 if (doctor != null && doctor.getUser() != null) {
-                    try {
-                        loggedInUser = new User();
-                        ReflectionUtil.copy(loggedInUser, doctor.getUser());
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        loggedInUser = doctor.getUser();
-                    }
                     user = doctor.getUser();
-                    registeredDoctorProfileList = LocalDataServiceImpl.getInstance(mApp).getRegisterDoctorDetails(user.getForeignLocationId());
                 }
                 return volleyResponseBean;
-            case ADD_CALENDAR_EVENTS:
-                volleyResponseBean = new VolleyResponseBean();
-                volleyResponseBean.setWebServiceType(WebServiceType.ADD_APPOINTMENT);
-
-                LocalDataServiceImpl.getInstance(mApp).addCalendarEventsList(
-                        (ArrayList<CalendarEvents>) (ArrayList<?>) response
-                                .getDataList());
-                return volleyResponseBean;
+            case GET_CALENDAR_EVENTS:
+//                long selectedMonthInMillis = DateTimeUtil.getLongFromFormattedDayMonthYearFormatString(QueueFragment.DATE_FORMAT_FOR_THIS_SCREEN, DateTimeUtil.getFormattedDateTime(QueueFragment.DATE_FORMAT_FOR_THIS_SCREEN, selectedMonthDayYearInMillis));
+                volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).
+                        getCalendarEventsListResponseMonthWise(WebServiceType.GET_CALENDAR_EVENTS, appointmentStatusType,
+                                clinicDoctorProfileList, user.getForeignHospitalId(),
+                                user.getForeignLocationId(), null, selectedMonthDayYearInMillis,
+                                null, null);
+                break;
         }
         if (volleyResponseBean == null)
             volleyResponseBean = new VolleyResponseBean();
@@ -235,17 +216,35 @@ public class CalendarFragment extends BaseFragment implements LocalDoInBackgroun
         return volleyResponseBean;
     }
 
+    public void reFreshCalendar(long selectedMonthDayYearInMillis, ArrayList<RegisteredDoctorProfile> clinicDoctorProfileList) {
+        this.selectedMonthDayYearInMillis = selectedMonthDayYearInMillis;
+        this.clinicDoctorProfileList = clinicDoctorProfileList;
+        getListFromLocal(true);
+    }
 
     @Override
     public void onPostExecute(VolleyResponseBean aVoid) {
+
     }
 
-    private void refreshData(ArrayList<CalendarEvents> dataList) {
-        for (CalendarEvents event : dataList) {
-            this.events.add(toWeekViewEvent(event));
-        }
-        getWeekView().notifyDatasetChanged();
-        getWeekView().goToHour(Calendar.getInstance().get(Calendar.HOUR_OF_DAY));
+
+    protected String getEventTitle(Calendar time) {
+        return String.format("Event of %02d:%02d %s/%d", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), time.get(Calendar.MONTH) + 1, time.get(Calendar.DAY_OF_MONTH));
+    }
+
+    @Override
+    public void onEventClick(WeekViewEvent event, RectF eventRect) {
+        Toast.makeText(getActivity(), "Clicked " + event.getCalendarEvent().getAppointmentId(), Toast.LENGTH_SHORT).show();
+    }
+
+
+    @Override
+    public void onEmptyViewLongPress(Calendar time) {
+        Toast.makeText(getActivity(), "Empty view long pressed: " + getEventTitle(time), Toast.LENGTH_SHORT).show();
+    }
+
+    public WeekView getWeekView() {
+        return mWeekView;
     }
 
     @Override
@@ -253,8 +252,17 @@ public class CalendarFragment extends BaseFragment implements LocalDoInBackgroun
         return events;
     }
 
-    public WeekViewEvent toWeekViewEvent(CalendarEvents event) {
+    @Override
+    public void onFirstVisibleDayChanged(Calendar newFirstVisibleDay, Calendar oldFirstVisibleDay) {
+        if ((newFirstVisibleDay != null) && (oldFirstVisibleDay != null))
+            if (!DateTimeUtil.isCurrentMonthSelected(newFirstVisibleDay.getTimeInMillis(), oldFirstVisibleDay.getTimeInMillis())) {
+                selectedMonthDayYearInMillis = newFirstVisibleDay.getTimeInMillis();
+//                getCalendarEventsList(true);
+            }
+    }
 
+
+    public WeekViewEvent toWeekViewEvent(CalendarEvents event) {
         WeekViewEvent weekViewEvent = new WeekViewEvent();
         String patientName = "";
 
@@ -274,16 +282,18 @@ public class CalendarFragment extends BaseFragment implements LocalDoInBackgroun
 
             Calendar startTime = Calendar.getInstance();
             startTime.setTimeInMillis(event.getFromDate());
+            startTime.set(startTime.get(Calendar.YEAR), startTime.get(Calendar.MONTH), startTime.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
             startTime.set(Calendar.MINUTE, Math.round(workingHours.getFromTime()));
 
             Calendar endTime = Calendar.getInstance();
             endTime.setTimeInMillis(event.getToDate());
+            endTime.set(endTime.get(Calendar.YEAR), endTime.get(Calendar.MONTH), endTime.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
             endTime.set(Calendar.MINUTE, Math.round(workingHours.getToTime()));
 
             weekViewEvent.setTime((DateTimeUtil.getFormattedTime(0, Math.round(workingHours.getFromTime()))) + getString(R.string.text_dash_with_space) +
                     (DateTimeUtil.getFormattedTime(0, Math.round(workingHours.getToTime()))));
 
-            for (RegisteredDoctorProfile registeredDoctorProfile : registeredDoctorProfileList) {
+            for (RegisteredDoctorProfile registeredDoctorProfile : clinicDoctorProfileList) {
                 if (event.getDoctorId().equals(registeredDoctorProfile.getUserId())) {
                     weekViewEvent.setColor(Color.parseColor(Util.getColorCode(registeredDoctorProfile.getColorCode())));
                     weekViewEvent.setStrokeColor(Color.parseColor(registeredDoctorProfile.getColorCode()));
@@ -296,17 +306,28 @@ public class CalendarFragment extends BaseFragment implements LocalDoInBackgroun
             weekViewEvent.setCalendarEvent(event);
             events.add(weekViewEvent);
         }
-
         return weekViewEvent;
     }
 
-    @Override
-    public void onFirstVisibleDayChanged(Calendar newFirstVisibleDay, Calendar oldFirstVisibleDay) {
-        if ((newFirstVisibleDay != null) && (oldFirstVisibleDay != null))
-            if (!DateTimeUtil.isCurrentMonthSelected(newFirstVisibleDay.getTimeInMillis(), oldFirstVisibleDay.getTimeInMillis())) {
-                selectedMonthDayYearInMillis = newFirstVisibleDay.getTimeInMillis();
-                getCalendarEventsList(true);
+
+    private void setupDateTimeInterpreter(final boolean shortDate) {
+        mWeekView.setDateTimeInterpreter(new DateTimeInterpreter() {
+            @Override
+            public String interpretDate(Calendar date) {
+                SimpleDateFormat weekdayNameFormat = new SimpleDateFormat("EEE", Locale.getDefault());
+                String weekday = weekdayNameFormat.format(date.getTime());
+                SimpleDateFormat format = new SimpleDateFormat(" M/d", Locale.getDefault());
+
+                if (shortDate)
+                    weekday = String.valueOf(weekday.charAt(0));
+                return weekday.toUpperCase() + format.format(date.getTime());
             }
+
+            @Override
+            public String interpretTime(int hour) {
+                return hour > 12 ? (hour - 12) + ":00" + " PM" : (hour == 0 ? "12:00 AM" : hour + ":00" + " AM");
+            }
+        });
     }
 
 }

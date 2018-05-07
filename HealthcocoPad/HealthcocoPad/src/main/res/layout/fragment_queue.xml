@@ -69,6 +69,13 @@
             android:src="@drawable/actionbar_add_me"
             app:layout_anchorGravity="bottom|right|end" />
 
+        <FrameLayout
+            android:id="@+id/layout_weekview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"></FrameLayout>
 
     </FrameLayout>
+
+
 </LinearLayout>

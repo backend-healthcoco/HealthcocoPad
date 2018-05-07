@@ -15,19 +15,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
+import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
-import com.healthcoco.healthcocopad.activities.HomeActivity;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
-import com.healthcoco.healthcocopad.bean.server.ClinicDetailResponse;
-import com.healthcoco.healthcocopad.bean.server.ClinicDoctorProfile;
+import com.healthcoco.healthcocopad.calendar.CalendarFragment;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.RegisteredDoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.User;
@@ -47,7 +45,6 @@ import com.healthcoco.healthcocopad.popupwindow.HealthcocoPopupWindow;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
-import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.ReflectionUtil;
 import com.healthcoco.healthcocopad.utilities.Util;
@@ -56,12 +53,10 @@ import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 
 import static com.healthcoco.healthcocopad.enums.AppointmentStatusType.ALL;
-import static com.healthcoco.healthcocopad.enums.BookAppointmentFromScreenType.APPOINTMENTS_LIST_ADD_NEW;
 import static com.healthcoco.healthcocopad.enums.BookAppointmentFromScreenType.APPOINTMENTS_QUEUE_ADD_NEW;
 
 /**
@@ -110,6 +105,7 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
     private TextView tvSelectedDate;
     private FloatingActionButton floatingActionButton;
     private HorizontalScrollView horizontalScrollView;
+    private FrameLayout layoutWeekView;
     private View.OnClickListener clickListener;
     private ScheduledQueueFragment scheduledQueueFragment;
     private WaitingQueueFragment waitingQueueFragment;
@@ -119,10 +115,11 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
         @Override
         public void onReceive(Context context, final Intent intent) {
             if (intent != null) {
-                refreshData();
+                refreshQueueData();
             }
         }
     };
+    private CalendarFragment calendarFragment;
     private BookAppointmentFromScreenType screenType = APPOINTMENTS_QUEUE_ADD_NEW;
 
     public QueueFragment(Activity activity) {
@@ -165,6 +162,9 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
         checkedOutQueueFragment = new CheckedOutQueueFragment();
         mFragmentManager.beginTransaction().add(R.id.layout_checked_out_queue, checkedOutQueueFragment, checkedOutQueueFragment.getClass().getSimpleName()).commit();
 
+        calendarFragment = new CalendarFragment();
+        mFragmentManager.beginTransaction().add(R.id.layout_weekview, calendarFragment, calendarFragment.getClass().getSimpleName()).commit();
+
     }
 
 
@@ -178,8 +178,13 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
         btRefresh = (ImageButton) view.findViewById(R.id.bt_refresh);
         tvSelectedDate = (TextView) view.findViewById(R.id.tv_selected_date);
         floatingActionButton = (FloatingActionButton) view.findViewById(R.id.fl_bt_add_appointment);
+        layoutWeekView = (FrameLayout) view.findViewById(R.id.layout_weekview);
         horizontalScrollView = (HorizontalScrollView) view.findViewById(R.id.scrollview_horizontal);
         horizontalScrollView.scrollTo(0, 0); // scroll to application top
+
+
+        horizontalScrollView.setVisibility(View.VISIBLE);
+        layoutWeekView.setVisibility(View.GONE);
     }
 
     @Override
@@ -212,7 +217,8 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
     @Override
     public void onErrorResponse(VolleyResponseBean volleyResponseBean, String errorMessage) {
         super.onErrorResponse(volleyResponseBean, errorMessage);
-        refreshData();
+        refreshQueueData();
+        refreshCalendarData();
         isInitialLoading = false;
     }
 
@@ -243,13 +249,15 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
                         response.setIsFromLocalAfterApiSuccess(true);
                         return;
                     } else {
-                        refreshData();
+                        refreshQueueData();
+                        refreshCalendarData();
                         isInitialLoading = false;
                         mActivity.hideLoading();
                     }
                     break;
                 case ADD_APPOINTMENT:
-                    refreshData();
+                    refreshQueueData();
+                    refreshCalendarData();
                     isInitialLoading = false;
                     mActivity.hideLoading();
                     break;
@@ -314,13 +322,16 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
         return volleyResponseBean;
     }
 
-    private void refreshData() {
+    private void refreshQueueData() {
         scheduledQueueFragment.reFreshQueue(selectedMonthDayYearInMillis, clinicDoctorProfileList);
         waitingQueueFragment.reFreshQueue(selectedMonthDayYearInMillis, clinicDoctorProfileList);
         engagedQueueFragment.reFreshQueue(selectedMonthDayYearInMillis, clinicDoctorProfileList);
         checkedOutQueueFragment.reFreshQueue(selectedMonthDayYearInMillis, clinicDoctorProfileList);
 
+    }
 
+    private void refreshCalendarData() {
+        calendarFragment.reFreshCalendar(selectedMonthDayYearInMillis, clinicDoctorProfileList);
     }
 
     @Override
@@ -388,7 +399,7 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
                         Util.getValidatedValueOrNull(tvSelectedDate))) {
                     if (!isInitialLoading)
                         if (DateTimeUtil.isCurrentMonthSelected(curentMonthDayYearInMillis, selectedMonthDayYearInMillis))
-                            refreshData();
+                            refreshQueueData();
                         else {
                             curentMonthDayYearInMillis = selectedMonthDayYearInMillis;
                             getCalendarEventsList(true);
@@ -414,7 +425,8 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
                 tvDoctorName.setText(doctorName);
             }
         }
-        refreshData();
+        refreshQueueData();
+        refreshCalendarData();
     }
 
     @Override

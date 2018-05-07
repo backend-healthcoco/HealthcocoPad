@@ -46,8 +46,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
-import static com.healthcoco.healthcocopad.calendar.weekview.WeekViewUtil.isSameDay;
-import static com.healthcoco.healthcocopad.calendar.weekview.WeekViewUtil.today;
+import static com.healthcoco.healthcocopad.utilities.DateTimeUtil.isSameDay;
+import static com.healthcoco.healthcocopad.utilities.DateTimeUtil.today;
 
 /**
  * Created by Raquib-ul-Alam Kanak on 7/21/2014.
@@ -131,7 +131,7 @@ public class WeekView extends View {
     private int mEventTextSize = 12;
     private int mEventTextColor = Color.BLACK;
     private int mEventPadding = 5;
-    private int mEventTopPadding = 22;
+    private int mEventTopPadding = 20;
     private int mHeaderColumnBackgroundColor = Color.WHITE;
     private boolean mIsFirstDraw = true;
     private boolean mAreDimensionsInvalid = true;
