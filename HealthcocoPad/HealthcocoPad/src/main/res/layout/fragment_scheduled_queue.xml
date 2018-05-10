@@ -39,13 +39,7 @@
         android:layout_height="1dp"
         android:background="@color/grey_light_text" />
 
-    <com.healthcoco.healthcocopad.views.CustomSwipeRefreshLayout
-        android:id="@+id/swipe_refresh_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/white">
-
-        <FrameLayout
+    <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
@@ -76,5 +70,4 @@
                 android:visibility="gone" />
 
         </FrameLayout>
-    </com.healthcoco.healthcocopad.views.CustomSwipeRefreshLayout>
 </LinearLayout>

@@ -74,7 +74,6 @@ public class WaitingQueueFragment extends HealthCocoFragment implements LocalDoI
     private TextView tvCount;
     private LinearLayout layoutTitle;
 
-    private SwipeRefreshLayout swipeRefreshLayout;
     private HealthcocoRecyclerViewAdapter mAdapter;
     private int PAGE_NUMBER = 0;
     private boolean isEndOfListAchieved;
@@ -117,7 +116,6 @@ public class WaitingQueueFragment extends HealthCocoFragment implements LocalDoI
         scheduledQueueRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view_scheduled_queue);
         tvNoEventsFound = (TextView) view.findViewById(R.id.tv_no_events_found);
         progressLoading = (ProgressBar) view.findViewById(R.id.progress_loading);
-        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
         tvTitle = (TextView) view.findViewById(R.id.tv_title);
         tvCount = (TextView) view.findViewById(R.id.tv_count);
         layoutTitle = (LinearLayout) view.findViewById(R.id.layout_title);
@@ -131,7 +129,6 @@ public class WaitingQueueFragment extends HealthCocoFragment implements LocalDoI
 
     @Override
     public void initListeners() {
-        swipeRefreshLayout.setOnRefreshListener(this);
 
     }
 
@@ -170,7 +167,6 @@ public class WaitingQueueFragment extends HealthCocoFragment implements LocalDoI
     }
 
     private void notifyAdapter(ArrayList<CalendarEvents> calendarEventsArrayList) {
-        swipeRefreshLayout.setRefreshing(false);
         if (!Util.isNullOrEmptyList(calendarEventsArrayList)) {
             scheduledQueueRecyclerView.setVisibility(View.VISIBLE);
             tvNoEventsFound.setVisibility(View.GONE);
@@ -190,11 +186,9 @@ public class WaitingQueueFragment extends HealthCocoFragment implements LocalDoI
 
     private void getListFromLocal(boolean initialLoading) {
         if (initialLoading) {
-            swipeRefreshLayout.setRefreshing(false);
             showLoadingOverlay(true);
             resetListAndPagingAttributes();
         } else {
-            swipeRefreshLayout.setRefreshing(true);
             showLoadingOverlay(false);
         }
         new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_CALENDAR_EVENTS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
@@ -254,7 +248,6 @@ public class WaitingQueueFragment extends HealthCocoFragment implements LocalDoI
         }
 
         isInitialLoading = false;
-        swipeRefreshLayout.setRefreshing(false);
 
         showLoadingOverlay(false);
 
