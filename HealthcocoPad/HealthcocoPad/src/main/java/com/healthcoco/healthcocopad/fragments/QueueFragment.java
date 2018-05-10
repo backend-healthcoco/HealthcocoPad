@@ -10,7 +10,10 @@ import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +26,7 @@ import android.widget.TextView;
 
 import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
+import com.healthcoco.healthcocopad.activities.HomeActivity;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
 import com.healthcoco.healthcocopad.calendar.CalendarFragment;
@@ -34,6 +38,7 @@ import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocopad.dialogFragment.BookAppointmentDialogFragment;
 import com.healthcoco.healthcocopad.enums.AppointmentStatusType;
 import com.healthcoco.healthcocopad.enums.BookAppointmentFromScreenType;
+import com.healthcoco.healthcocopad.enums.FragmentType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.LocalTabelType;
 import com.healthcoco.healthcocopad.enums.PopupWindowType;
@@ -45,6 +50,7 @@ import com.healthcoco.healthcocopad.popupwindow.HealthcocoPopupWindow;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
+import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.ReflectionUtil;
 import com.healthcoco.healthcocopad.utilities.Util;
@@ -58,6 +64,7 @@ import java.util.List;
 
 import static com.healthcoco.healthcocopad.enums.AppointmentStatusType.ALL;
 import static com.healthcoco.healthcocopad.enums.BookAppointmentFromScreenType.APPOINTMENTS_QUEUE_ADD_NEW;
+import static com.healthcoco.healthcocopad.fragments.SelectViewFragment.INTENT_REFRESH_SELECTED_VIEW_TYPE;
 
 /**
  * Created by Prashant on 01-03-2018.
@@ -68,6 +75,10 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
 
     public static final String INTENT_GET_APPOINTMENT_LIST_LOCAL = "com.healthcoco.APPOINTMENT_LIST_LOCAL";
     public static final String INTENT_GET_APPOINTMENT_LIST_SERVER = "com.healthcoco.APPOINTMENT_LIST_SERVER";
+    public static final String INTENT_CHANGE_CALENDAR_DATE = "com.healthcoco.CHANGE_CALENDAR_DATE";
+
+    public static final String TAG_CHANGED_DATE = "changedDate";
+    public static final String TAG_IS_FROM_CALENDAR = "isFromCalendar";
 
     public static final String DATE_FORMAT_FOR_HEADER_IN_THIS_SCREEN = "EEE, MMM dd,yyyy";
     public static final int MAX_SIZE = 10;
@@ -101,6 +112,7 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
     private ImageButton btPreviousDate;
     private ImageButton btNextDate;
     private ImageButton btRefresh;
+    private ImageButton btFilter;
     private ImageButton btMenu;
     private TextView tvSelectedDate;
     private FloatingActionButton floatingActionButton;
@@ -111,16 +123,40 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
     private WaitingQueueFragment waitingQueueFragment;
     private EngagedQueueFragment engagedQueueFragment;
     private CheckedOutQueueFragment checkedOutQueueFragment;
+    private DrawerLayout drawerLayout;
+    private CalendarFragment calendarFragment;
     BroadcastReceiver appointmentListReceiverLocal = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, final Intent intent) {
             if (intent != null) {
-                refreshQueueData();
+                refreshCalendarData();
             }
         }
     };
-    private CalendarFragment calendarFragment;
+    BroadcastReceiver CalendarViewTypeReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, final Intent intent) {
+            if (intent != null) {
+                int calendarViewTypeOrdinal = intent.getIntExtra(HealthCocoConstants.TAG_ORDINAL, 0);
+                final CalendarViewType calendarViewType = CalendarViewType.values()[calendarViewTypeOrdinal];
+                resetCaledarView(calendarViewType);
+            }
+        }
+    };
+    private SelectViewFragment selectViewFragment;
     private BookAppointmentFromScreenType screenType = APPOINTMENTS_QUEUE_ADD_NEW;
+    private boolean isFromCalendar = false;
+    BroadcastReceiver changedDateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, final Intent intent) {
+            if (intent != null) {
+                isFromCalendar = intent.getBooleanExtra(TAG_IS_FROM_CALENDAR, false);
+                long newDate = intent.getLongExtra(TAG_CHANGED_DATE, selectedMonthDayYearInMillis);
+                selectedMonthDayYearInMillis = newDate;
+                tvSelectedDate.setText(DateTimeUtil.getFormattedDateTime(DATE_FORMAT_USED_IN_THIS_SCREEN, selectedMonthDayYearInMillis));
+            }
+        }
+    };
 
     public QueueFragment(Activity activity) {
         super();
@@ -165,6 +201,11 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
         calendarFragment = new CalendarFragment();
         mFragmentManager.beginTransaction().add(R.id.layout_weekview, calendarFragment, calendarFragment.getClass().getSimpleName()).commit();
 
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, GravityCompat.END);
+
+        selectViewFragment = new SelectViewFragment();
+        mFragmentManager.beginTransaction().add(R.id.layout_right_drawer, selectViewFragment, selectViewFragment.getClass().getSimpleName()).commitAllowingStateLoss();
+
     }
 
 
@@ -176,12 +217,13 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
         btPreviousDate = (ImageButton) view.findViewById(R.id.bt_previuos_date);
         btNextDate = (ImageButton) view.findViewById(R.id.bt_next_date);
         btRefresh = (ImageButton) view.findViewById(R.id.bt_refresh);
+        btFilter = (ImageButton) view.findViewById(R.id.bt_filter);
         tvSelectedDate = (TextView) view.findViewById(R.id.tv_selected_date);
         floatingActionButton = (FloatingActionButton) view.findViewById(R.id.fl_bt_add_appointment);
         layoutWeekView = (FrameLayout) view.findViewById(R.id.layout_weekview);
         horizontalScrollView = (HorizontalScrollView) view.findViewById(R.id.scrollview_horizontal);
-        horizontalScrollView.scrollTo(0, 0); // scroll to application top
-
+        drawerLayout = (DrawerLayout) view.findViewById(R.id.drawer_layout);
+//        drawerLayout.setScrimColor(getResources().getColor(R.color.black_translucent));
 
         horizontalScrollView.setVisibility(View.VISIBLE);
         layoutWeekView.setVisibility(View.GONE);
@@ -193,6 +235,7 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
         btNextDate.setOnClickListener(this);
         floatingActionButton.setOnClickListener(this);
         btRefresh.setOnClickListener(this);
+        btFilter.setOnClickListener(this);
         tvSelectedDate.setOnClickListener(this);
         tvSelectedDate.addTextChangedListener(new HealthcocoTextWatcher(tvSelectedDate, this));
 
@@ -217,7 +260,6 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
     @Override
     public void onErrorResponse(VolleyResponseBean volleyResponseBean, String errorMessage) {
         super.onErrorResponse(volleyResponseBean, errorMessage);
-        refreshQueueData();
         refreshCalendarData();
         isInitialLoading = false;
     }
@@ -249,14 +291,12 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
                         response.setIsFromLocalAfterApiSuccess(true);
                         return;
                     } else {
-                        refreshQueueData();
                         refreshCalendarData();
                         isInitialLoading = false;
                         mActivity.hideLoading();
                     }
                     break;
                 case ADD_APPOINTMENT:
-                    refreshQueueData();
                     refreshCalendarData();
                     isInitialLoading = false;
                     mActivity.hideLoading();
@@ -327,11 +367,11 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
         waitingQueueFragment.reFreshQueue(selectedMonthDayYearInMillis, clinicDoctorProfileList);
         engagedQueueFragment.reFreshQueue(selectedMonthDayYearInMillis, clinicDoctorProfileList);
         checkedOutQueueFragment.reFreshQueue(selectedMonthDayYearInMillis, clinicDoctorProfileList);
-
     }
 
     private void refreshCalendarData() {
         calendarFragment.reFreshCalendar(selectedMonthDayYearInMillis, clinicDoctorProfileList);
+        refreshQueueData();
     }
 
     @Override
@@ -363,14 +403,16 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.bt_next_date:
+                isFromCalendar = false;
                 long nextDateTimeInMillis = DateTimeUtil.getNextDate(selectedMonthDayYearInMillis);
                 selectedMonthDayYearInMillis = nextDateTimeInMillis;
-                tvSelectedDate.setText(DateTimeUtil.getFormattedDateTime(DATE_FORMAT_USED_IN_THIS_SCREEN, nextDateTimeInMillis));
+                tvSelectedDate.setText(DateTimeUtil.getFormattedDateTime(DATE_FORMAT_USED_IN_THIS_SCREEN, selectedMonthDayYearInMillis));
                 break;
             case R.id.bt_previuos_date:
+                isFromCalendar = false;
                 long previousDateTimeInMillis = DateTimeUtil.getPreviousDate(selectedMonthDayYearInMillis);
                 selectedMonthDayYearInMillis = previousDateTimeInMillis;
-                tvSelectedDate.setText(DateTimeUtil.getFormattedDateTime(DATE_FORMAT_USED_IN_THIS_SCREEN, previousDateTimeInMillis));
+                tvSelectedDate.setText(DateTimeUtil.getFormattedDateTime(DATE_FORMAT_USED_IN_THIS_SCREEN, selectedMonthDayYearInMillis));
                 break;
             case R.id.fl_bt_add_appointment:
                 bookWalkInAppointment();
@@ -381,6 +423,10 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
             case R.id.tv_selected_date:
                 openDatePickerDialog(tvSelectedDate);
                 break;
+            case R.id.bt_filter:
+                drawerLayout.openDrawer(GravityCompat.END);
+                break;
+
         }
     }
 
@@ -398,9 +444,9 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
                 if (!DateTimeUtil.isCurrentDateSelected(DATE_FORMAT_USED_IN_THIS_SCREEN,
                         Util.getValidatedValueOrNull(tvSelectedDate))) {
                     if (!isInitialLoading)
-                        if (DateTimeUtil.isCurrentMonthSelected(curentMonthDayYearInMillis, selectedMonthDayYearInMillis))
+                        if (DateTimeUtil.isCurrentMonthSelected(curentMonthDayYearInMillis, selectedMonthDayYearInMillis)) {
                             refreshQueueData();
-                        else {
+                        } else {
                             curentMonthDayYearInMillis = selectedMonthDayYearInMillis;
                             getCalendarEventsList(true);
                         }
@@ -408,6 +454,7 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
                     tvSelectedDate.setText(R.string.today);
                 break;
         }
+        calendarFragment.gotoDate(selectedMonthDayYearInMillis, isFromCalendar);
     }
 
     @Override
@@ -425,7 +472,6 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
                 tvDoctorName.setText(doctorName);
             }
         }
-        refreshQueueData();
         refreshCalendarData();
     }
 
@@ -439,12 +485,18 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
         super.onResume();
         if (!receiversRegistered) {
             //receiver for appointment list refresh
-            IntentFilter filter = new IntentFilter();
-            filter.addAction(INTENT_GET_APPOINTMENT_LIST_LOCAL);
-            LocalBroadcastManager.getInstance(mActivity).registerReceiver(appointmentListReceiverLocal, filter);
-            IntentFilter filter2 = new IntentFilter();
-            filter.addAction(INTENT_GET_APPOINTMENT_LIST_SERVER);
-            LocalBroadcastManager.getInstance(mActivity).registerReceiver(appointmentListReceiver, filter);
+            IntentFilter filterListLocal = new IntentFilter();
+            filterListLocal.addAction(INTENT_GET_APPOINTMENT_LIST_LOCAL);
+            LocalBroadcastManager.getInstance(mActivity).registerReceiver(appointmentListReceiverLocal, filterListLocal);
+            IntentFilter filterListServer = new IntentFilter();
+            filterListServer.addAction(INTENT_GET_APPOINTMENT_LIST_SERVER);
+            LocalBroadcastManager.getInstance(mActivity).registerReceiver(appointmentListReceiver, filterListServer);
+            IntentFilter filterChangeDate = new IntentFilter();
+            filterChangeDate.addAction(INTENT_CHANGE_CALENDAR_DATE);
+            LocalBroadcastManager.getInstance(mActivity).registerReceiver(changedDateReceiver, filterChangeDate);
+            IntentFilter filterViewType = new IntentFilter();
+            filterViewType.addAction(INTENT_REFRESH_SELECTED_VIEW_TYPE);
+            LocalBroadcastManager.getInstance(mActivity).registerReceiver(CalendarViewTypeReceiver, filterViewType);
             receiversRegistered = true;
         }
     }
@@ -454,6 +506,8 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
         super.onDestroy();
         LocalBroadcastManager.getInstance(mActivity).unregisterReceiver(appointmentListReceiver);
         LocalBroadcastManager.getInstance(mActivity).unregisterReceiver(appointmentListReceiverLocal);
+        LocalBroadcastManager.getInstance(mActivity).unregisterReceiver(changedDateReceiver);
+        LocalBroadcastManager.getInstance(mActivity).unregisterReceiver(CalendarViewTypeReceiver);
     }
 
 
@@ -471,12 +525,11 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
     private void openDatePickerDialog(final TextView textView) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(selectedMonthDayYearInMillis);
-//        calendar = DateTimeUtil.setCalendarDefaultvalue(DateTimeUtil.DATE_FORMAT_WEEKDAY_DAY_MONTH_AS_TEXT_YEAR_DASH, calendar, textView);
         DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
-
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 selectedMonthDayYearInMillis = DateTimeUtil.getSelectedDate(year, monthOfYear, dayOfMonth, 0, 0, 0);
+                isFromCalendar = false;
                 textView.setText(DateTimeUtil.getFormattedTime(DATE_FORMAT_USED_IN_THIS_SCREEN, year, monthOfYear, dayOfMonth, 0, 0, 0));
             }
         }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
@@ -484,5 +537,26 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
         datePickerDialog.show();
     }
 
+    public void closeDrawer() {
+        if (drawerLayout.isShown()) {
+            drawerLayout.closeDrawers();
+        }
+    }
 
+    private void resetCaledarView(CalendarViewType calendarViewType) {
+        closeDrawer();
+        switch (calendarViewType) {
+            case QUEUE:
+                horizontalScrollView.setVisibility(View.VISIBLE);
+                layoutWeekView.setVisibility(View.GONE);
+                break;
+            case ONE_DAY:
+            case THREE_DAY:
+                horizontalScrollView.setVisibility(View.GONE);
+                layoutWeekView.setVisibility(View.VISIBLE);
+                calendarFragment.changeCalendarViewType(calendarViewType);
+                break;
+        }
+
+    }
 }

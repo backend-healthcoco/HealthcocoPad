@@ -68,7 +68,7 @@ public class SettingsFragment extends HealthCocoFragment implements AdapterView.
         listType = Arrays.asList(SettingsItemType.values());
         adapter = new SettingsListAdapter(mActivity);
         lvSettings.setAdapter(adapter);
-        adapter.setListData(listType);
+        adapter.setListData((List<Object>) (List<?>) listType);
         adapter.notifyDataSetChanged();
     }
 

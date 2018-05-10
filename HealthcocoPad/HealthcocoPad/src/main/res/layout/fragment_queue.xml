@@ -1,81 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="horizontal">
 
-
-    <include layout="@layout/action_bar_home_queue" />
-
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
-        <HorizontalScrollView
-            android:id="@+id/scrollview_horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:descendantFocusability="blocksDescendants"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:id="@+id/layout_scheduled_queue"
-                    android:layout_width="@dimen/queue_layout_width"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/layout_waiting_queue"
-                    android:layout_width="@dimen/queue_layout_width"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/layout_engaged_queue"
-                    android:layout_width="@dimen/queue_layout_width"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/layout_checked_out_queue"
-                    android:layout_width="@dimen/queue_layout_width"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                </LinearLayout>
-            </LinearLayout>
-        </HorizontalScrollView>
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fl_bt_add_appointment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|right"
-            android:layout_marginBottom="@dimen/fab_margin_bottom"
-            android:layout_marginRight="@dimen/fab_margin_right"
-            android:scaleType="center"
-            android:src="@drawable/actionbar_add_me"
-            app:layout_anchorGravity="bottom|right|end" />
+        <include layout="@layout/action_bar_home_queue" />
 
         <FrameLayout
-            android:id="@+id/layout_weekview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal"></FrameLayout>
+            android:orientation="horizontal">
 
-    </FrameLayout>
+            <HorizontalScrollView
+                android:id="@+id/scrollview_horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:descendantFocusability="blocksDescendants"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:id="@+id/layout_scheduled_queue"
+                        android:layout_width="@dimen/queue_layout_width"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/layout_waiting_queue"
+                        android:layout_width="@dimen/queue_layout_width"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/layout_engaged_queue"
+                        android:layout_width="@dimen/queue_layout_width"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/layout_checked_out_queue"
+                        android:layout_width="@dimen/queue_layout_width"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                    </LinearLayout>
+                </LinearLayout>
+            </HorizontalScrollView>
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fl_bt_add_appointment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|right"
+                android:layout_marginBottom="@dimen/fab_margin_bottom"
+                android:layout_marginRight="@dimen/fab_margin_right"
+                android:scaleType="center"
+                android:src="@drawable/actionbar_add_me"
+                app:layout_anchorGravity="bottom|right|end" />
 
 
-</LinearLayout>
+            <FrameLayout
+                android:id="@+id/layout_weekview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"></FrameLayout>
+
+        </FrameLayout>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_right_drawer"
+        android:layout_width="300dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="end"
+        android:background="@android:color/white"
+        android:orientation="vertical"></LinearLayout>
+
+</android.support.v4.widget.DrawerLayout>

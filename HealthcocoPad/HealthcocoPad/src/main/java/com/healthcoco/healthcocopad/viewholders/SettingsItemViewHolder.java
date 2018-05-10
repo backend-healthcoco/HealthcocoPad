@@ -11,6 +11,7 @@ import com.healthcoco.healthcocopad.HealthCocoViewHolder;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.enums.SettingsItemType;
 import com.healthcoco.healthcocopad.enums.UIPermissionsItemType;
+import com.healthcoco.healthcocopad.fragments.CalendarViewType;
 
 /**
  * Created by neha on 15/01/16.
@@ -19,9 +20,12 @@ public class SettingsItemViewHolder extends HealthCocoViewHolder {
     private HealthCocoActivity mActivity;
     private SettingsItemType itemType;
     private UIPermissionsItemType permissionsItemType;
+    private CalendarViewType calendarViewType;
+    private TextView tvViewType;
     private TextView tvName;
     private TextView tvVersionName;
     private RelativeLayout layoutItemSetting;
+    private RelativeLayout layoutViewType;
     private View bottomView;
 
     public SettingsItemViewHolder(HealthCocoActivity mActivity) {
@@ -35,11 +39,14 @@ public class SettingsItemViewHolder extends HealthCocoViewHolder {
             this.itemType = (SettingsItemType) object;
         } else if (object instanceof UIPermissionsItemType) {
             this.permissionsItemType = (UIPermissionsItemType) object;
+        } else if (object instanceof CalendarViewType) {
+            this.calendarViewType = (CalendarViewType) object;
         }
     }
 
     @Override
     public void applyData() {
+        layoutViewType.setVisibility(View.GONE);
         if (itemType instanceof SettingsItemType) {
             tvName.setText(itemType.getTitleId());
             switch (itemType) {
@@ -84,6 +91,10 @@ public class SettingsItemViewHolder extends HealthCocoViewHolder {
             }
         } else if (permissionsItemType instanceof UIPermissionsItemType) {
             tvName.setText(permissionsItemType.getTitleId());
+        } else if (calendarViewType instanceof CalendarViewType) {
+            layoutItemSetting.setVisibility(View.GONE);
+            layoutViewType.setVisibility(View.VISIBLE);
+            tvViewType.setText(calendarViewType.getTitleId());
         }
     }
 
@@ -91,9 +102,11 @@ public class SettingsItemViewHolder extends HealthCocoViewHolder {
     public View getContentView() {
         RelativeLayout view = (RelativeLayout) inflater.inflate(R.layout.item_settings, null);
         tvName = (TextView) view.findViewById(R.id.tv_name);
+        tvViewType = (TextView) view.findViewById(R.id.tv_view_type);
         tvVersionName = (TextView) view.findViewById(R.id.tv_version_name);
         bottomView = view.findViewById(R.id.view_bottom);
         layoutItemSetting = (RelativeLayout) view.findViewById(R.id.layout_item_setting);
+        layoutViewType = (RelativeLayout) view.findViewById(R.id.layout_item_view_type);
 
 
         return view;

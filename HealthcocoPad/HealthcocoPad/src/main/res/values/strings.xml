@@ -1139,6 +1139,10 @@
     <string name="no_engaged_patients">No Engaged Patients</string>
     <string name="no_checked_out_patients">No Checked Out Patients</string>
     <string name="no_mobile_number">No Mobile Number</string>
+    <string name="calendar_queue">Calendar Queue</string>
+    <string name="one_day_view">One Day View</string>
+    <string name="three_day_view">Three Day View</string>
+    <string name="select_view">Select View</string>
 
 
 </resources>

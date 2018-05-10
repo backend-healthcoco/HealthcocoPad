@@ -1,11 +1,13 @@
 package com.healthcoco.healthcocopad.calendar;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.RectF;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
@@ -35,6 +37,8 @@ import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocopad.enums.AppointmentStatusType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
+import com.healthcoco.healthcocopad.fragments.CalendarViewType;
+import com.healthcoco.healthcocopad.fragments.QueueFragment;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
 import com.healthcoco.healthcocopad.recyclerview.HealthcocoRecyclerViewAdapter;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
@@ -49,8 +53,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
+import static com.healthcoco.healthcocopad.dialogFragment.BookAppointmentDialogFragment.TAG_APPOINTMENT_ID;
 import static com.healthcoco.healthcocopad.enums.AppointmentStatusType.CONFIRM;
 import static com.healthcoco.healthcocopad.enums.CalendarStatus.SCHEDULED;
+import static com.healthcoco.healthcocopad.fragments.QueueFragment.TAG_CHANGED_DATE;
+import static com.healthcoco.healthcocopad.fragments.QueueFragment.TAG_IS_FROM_CALENDAR;
 
 
 /**
@@ -69,7 +76,6 @@ public class CalendarFragment extends HealthCocoFragment implements WeekView.Eve
     private WeekView mWeekView;
     private ArrayList<CalendarEvents> calendarEventsList = new ArrayList<>();
     private HashMap<String, CalendarEvents> calendarEventsHashMap = new HashMap<>();
-    private boolean isEndOfListAchieved;
     private boolean isInitialLoading = true;
     private AppointmentStatusType appointmentStatusType = CONFIRM;
     private User user;
@@ -132,13 +138,11 @@ public class CalendarFragment extends HealthCocoFragment implements WeekView.Eve
         }
         getWeekView().notifyDatasetChanged();
         getWeekView().goToHour(Calendar.getInstance().get(Calendar.HOUR_OF_DAY));
-
     }
 
     private void getListFromLocal(boolean initialLoading) {
         if (initialLoading) {
             showLoadingOverlay(true);
-//            resetListAndPagingAttributes();
         } else {
             showLoadingOverlay(false);
         }
@@ -171,13 +175,6 @@ public class CalendarFragment extends HealthCocoFragment implements WeekView.Eve
                     mActivity.hideLoading();
                     if (response.getData() != null) {
                         boolean data = (boolean) response.getData();
-                      /*  CalendarEvents responseData = (CalendarEvents) response.getData();
-                        LocalDataServiceImpl.getInstance(mApp).addCalendarEventsUpdated(responseData);
-                        calendarEventsList.remove(calendarEvents);
-                        calendarEventsHashMap.remove(calendarEvents.getUniqueId());
-//                        mAdapter.notifyDataSetChanged();
-                        fromHashMapAndRefresh(calendarEventsList);
-                        Util.sendBroadcast(mApp, INTENT_REFRESH_WAITING_QUEUE_DATA);*/
                     }
                     break;
                 default:
@@ -254,11 +251,16 @@ public class CalendarFragment extends HealthCocoFragment implements WeekView.Eve
 
     @Override
     public void onFirstVisibleDayChanged(Calendar newFirstVisibleDay, Calendar oldFirstVisibleDay) {
-        if ((newFirstVisibleDay != null) && (oldFirstVisibleDay != null))
-            if (!DateTimeUtil.isCurrentMonthSelected(newFirstVisibleDay.getTimeInMillis(), oldFirstVisibleDay.getTimeInMillis())) {
-                selectedMonthDayYearInMillis = newFirstVisibleDay.getTimeInMillis();
-//                getCalendarEventsList(true);
-            }
+        if ((newFirstVisibleDay != null) && (oldFirstVisibleDay != null)) {
+            selectedMonthDayYearInMillis = newFirstVisibleDay.getTimeInMillis();
+
+            Intent intent = new Intent();
+            intent.setAction(QueueFragment.INTENT_CHANGE_CALENDAR_DATE);
+            intent.putExtra(TAG_CHANGED_DATE, selectedMonthDayYearInMillis);
+            intent.putExtra(TAG_IS_FROM_CALENDAR, true);
+            LocalBroadcastManager.getInstance(mApp.getApplicationContext()).sendBroadcast(intent);
+        }
+
     }
 
 
@@ -330,4 +332,40 @@ public class CalendarFragment extends HealthCocoFragment implements WeekView.Eve
         });
     }
 
+    public void gotoDate(long selectedMonthDayYearInMillis, boolean isFromCalendar) {
+        this.selectedMonthDayYearInMillis = selectedMonthDayYearInMillis;
+        if (!isFromCalendar) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(selectedMonthDayYearInMillis);
+            getWeekView().goToDate(calendar);
+        }
+    }
+
+
+    public void changeCalendarViewType(CalendarViewType calendarViewType) {
+        switch (calendarViewType) {
+            case ONE_DAY:
+                if (mWeekViewType != TYPE_DAY_VIEW) {
+                    mWeekViewType = TYPE_DAY_VIEW;
+                    mWeekView.setNumberOfVisibleDays(1);
+
+                    // Lets change some dimensions to best fit the view.
+                    mWeekView.setTextSize((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 12, getResources().getDisplayMetrics()));
+                    mWeekView.setEventTextSize((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 12, getResources().getDisplayMetrics()));
+                }
+                break;
+            case THREE_DAY:
+                if (mWeekViewType != TYPE_THREE_DAY_VIEW) {
+                    mWeekViewType = TYPE_THREE_DAY_VIEW;
+                    mWeekView.setNumberOfVisibleDays(3);
+
+                    // Lets change some dimensions to best fit the view.
+                    mWeekView.setTextSize((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 12, getResources().getDisplayMetrics()));
+                    mWeekView.setEventTextSize((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 12, getResources().getDisplayMetrics()));
+                }
+                break;
+        }
+        gotoDate(selectedMonthDayYearInMillis, false);
+        getWeekView().goToHour(Calendar.getInstance().get(Calendar.HOUR_OF_DAY));
+    }
 }

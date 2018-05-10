@@ -15,7 +15,7 @@ import java.util.List;
  * Created by neha on 15/01/16.
  */
 public class SettingsListAdapter extends BaseAdapter {
-    private List<SettingsItemType> list;
+    private List<Object> list;
     private HealthCocoActivity mActivity;
     private SettingsItemViewHolder holder;
 
@@ -57,7 +57,7 @@ public class SettingsListAdapter extends BaseAdapter {
         return convertView;
     }
 
-    public void setListData(List<SettingsItemType> list) {
+    public void setListData(List<Object> list) {
         this.list = list;
     }
 

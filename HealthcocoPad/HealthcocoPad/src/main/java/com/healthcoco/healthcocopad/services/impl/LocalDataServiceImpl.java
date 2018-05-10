@@ -4216,8 +4216,8 @@ public class LocalDataServiceImpl {
                 + " AND " + LocalDatabaseUtils.KEY_HOSPITAL_ID + "=\"" + hospitalId + "\""
                 + " AND " + LocalDatabaseUtils.KEY_STATUS + "=\"" + status + "\""
                 + " AND " + LocalDatabaseUtils.KEY_FROM_DATE
-                + " BETWEEN " + DateTimeUtil.getFirstDayOfMonthMilli(selectedDate)
-                + " AND " + DateTimeUtil.getFirstDayOfMonthMilli(selectedDate);
+                + " BETWEEN " + DateTimeUtil.getStartTimeOfDayMilli(selectedDate)
+                + " AND " + DateTimeUtil.getEndTimeOfDayMilli(selectedDate);
 //                + " BETWEEN " + DateTimeUtil.getFirstDayOfMonthMilli(selectedDate)
 //                + " AND " + DateTimeUtil.getLastDayOfMonthMilli(selectedDate);
 //                + " AND (" + selectedDate + " BETWEEN " + LocalDatabaseUtils.KEY_FROM_DATE_FORMATTED_MILLIS
@@ -4284,19 +4284,14 @@ public class LocalDataServiceImpl {
     private List<CalendarEvents> getCalendarEventsListMonthWise(AppointmentStatusType appointmentStatusType, ArrayList<RegisteredDoctorProfile> clinicDoctorProfileList, String locationId, String hospitalId, String status, long selectedDate) {
         String whereCondition = "Select * from " + StringUtil.toSQLName(CalendarEvents.class.getSimpleName())
                 + " where "
-               /* + LocalDatabaseUtils.KEY_DOCTOR_ID + "=\"" + doctorId + "\""
-                + " AND "*/
                 + LocalDatabaseUtils.KEY_LOCATION_ID + "=\"" + locationId + "\""
                 + " AND " + LocalDatabaseUtils.KEY_HOSPITAL_ID + "=\"" + hospitalId + "\"";
         if (!Util.isNullOrBlank(status))
             whereCondition = whereCondition + " AND " + LocalDatabaseUtils.KEY_STATUS + "=\"" + status + "\"";
         whereCondition = whereCondition + " AND " + LocalDatabaseUtils.KEY_FROM_DATE
-                + " BETWEEN " + DateTimeUtil.getStartTimeOfDayMilli(selectedDate)
-                + " AND " + DateTimeUtil.getEndTimeOfDayMilli(selectedDate);
-//                + " BETWEEN " + DateTimeUtil.getFirstDayOfMonthMilli(selectedDate)
-//                + " AND " + DateTimeUtil.getLastDayOfMonthMilli(selectedDate);
-//                + " AND (" + selectedDate + " BETWEEN " + LocalDatabaseUtils.KEY_FROM_DATE_FORMATTED_MILLIS
-//                + " AND " + LocalDatabaseUtils.KEY_TO_DATE_FORMATTED_MILLIS + ")";
+                + " BETWEEN " + DateTimeUtil.getFirstDayOfMonthMilli(selectedDate)
+                + " AND " + DateTimeUtil.getLastDayOfMonthMilli(selectedDate);
+
         if (appointmentStatusType != null && appointmentStatusType != AppointmentStatusType.ALL)
             whereCondition = whereCondition + " AND " + LocalDatabaseUtils.KEY_STATE + "=\"" + appointmentStatusType + "\"";
 

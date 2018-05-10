@@ -43,4 +43,29 @@
             android:layout_below="@id/tv_name"
             android:background="@color/grey_widget_background" />
     </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/layout_item_view_type"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/tv_view_type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center|start"
+            android:minHeight="0dp"
+            android:padding="10dp"
+            android:text="@string/patient"
+            android:textColor="@drawable/text_blue_black_selector" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/tv_view_type"
+            android:background="@color/grey_widget_background" />
+    </RelativeLayout>
 </RelativeLayout>

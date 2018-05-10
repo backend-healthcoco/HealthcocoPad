@@ -554,6 +554,10 @@ public class DateTimeUtil {
         Date today = new Date(milliseconds);
         Calendar calendar = getCalendarInstance();
         calendar.setTime(today);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
         LogUtils.LOGD(TAG, "Milliseconds FirstDay of Month  " + calendar.getActualMinimum(Calendar.DAY_OF_MONTH));
         calendar.set(Calendar.DATE, calendar.getActualMinimum(Calendar.DATE));
         LogUtils.LOGD(TAG, "Milliseconds FirstDay " + calendar.getTimeInMillis());
@@ -564,6 +568,10 @@ public class DateTimeUtil {
         Date today = new Date(milliseconds);
         Calendar calendar = getCalendarInstance();
         calendar.setTime(today);
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+        calendar.set(Calendar.MILLISECOND, 999);
         LogUtils.LOGD(TAG, "Milliseconds LastDay of Month  " + calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
         calendar.set(Calendar.DATE, calendar.getActualMaximum(Calendar.DATE));
         LogUtils.LOGD(TAG, "Milliseconds Last Day " + calendar.getTimeInMillis());
