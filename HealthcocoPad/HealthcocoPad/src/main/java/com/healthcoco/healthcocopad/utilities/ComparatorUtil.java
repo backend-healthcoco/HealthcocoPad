@@ -47,6 +47,7 @@ import com.healthcoco.healthcocopad.bean.server.Treatments;
 import com.healthcoco.healthcocopad.bean.server.UserGroups;
 import com.healthcoco.healthcocopad.bean.server.VisitDetails;
 import com.healthcoco.healthcocopad.bean.server.XrayDetailSuggestions;
+import com.healthcoco.healthcocopad.calendar.weekview.WeekViewEvent;
 import com.healthcoco.healthcocopad.enums.ClassType;
 
 import java.sql.Date;
@@ -328,6 +329,18 @@ public class ComparatorUtil {
             if (treatment1.getCreatedTime() != null && treatment2.getCreatedTime() != null) {
                 Date date1 = new Date(treatment1.getCreatedTime());
                 Date date2 = new Date(treatment2.getCreatedTime());
+                return date2.compareTo(date1);
+            }
+            return 0;
+        }
+    };
+    public static Comparator<WeekViewEvent> weekViewEventComparator = new Comparator<WeekViewEvent>() {
+
+        @Override
+        public int compare(WeekViewEvent weekViewEvent, WeekViewEvent weekViewEvent2) {
+            if (weekViewEvent.getStartTime() != null && weekViewEvent2.getStartTime() != null) {
+                Date date1 = new Date(weekViewEvent.getStartTime().getTimeInMillis());
+                Date date2 = new Date(weekViewEvent2.getStartTime().getTimeInMillis());
                 return date2.compareTo(date1);
             }
             return 0;

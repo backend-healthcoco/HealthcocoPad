@@ -178,7 +178,7 @@ public class CheckedOutQueueFragment extends HealthCocoFragment implements Local
             scheduledQueueRecyclerView.setVisibility(View.GONE);
             tvNoEventsFound.setVisibility(View.VISIBLE);
             tvCount.setText(R.string.zero);
-
+            progressLoading.setVisibility(View.GONE);
         }
     }
 
@@ -252,11 +252,12 @@ public class CheckedOutQueueFragment extends HealthCocoFragment implements Local
                 return volleyResponseBean;
             case GET_CALENDAR_EVENTS:
 //                long selectedMonthInMillis = DateTimeUtil.getLongFromFormattedDayMonthYearFormatString(QueueFragment.DATE_FORMAT_FOR_THIS_SCREEN, DateTimeUtil.getFormattedDateTime(QueueFragment.DATE_FORMAT_FOR_THIS_SCREEN, selectedMonthDayYearInMillis));
-                volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).
-                        getCalendarEventsListResponsePageWise(WebServiceType.GET_CALENDAR_EVENTS, appointmentStatusType,
-                                clinicDoctorProfileList, user.getForeignHospitalId(),
-                                user.getForeignLocationId(), CHECKED_OUT.getValue(), selectedMonthDayYearInMillis,
-                                PAGE_NUMBER, MAX_SIZE, null, null);
+                if (user != null)
+                    volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).
+                            getCalendarEventsListResponsePageWise(WebServiceType.GET_CALENDAR_EVENTS, appointmentStatusType,
+                                    clinicDoctorProfileList, user.getForeignHospitalId(),
+                                    user.getForeignLocationId(), CHECKED_OUT.getValue(), selectedMonthDayYearInMillis,
+                                    PAGE_NUMBER, MAX_SIZE, null, null);
                 break;
         }
         if (volleyResponseBean == null)

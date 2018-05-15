@@ -42,6 +42,7 @@
     <dimen name="text_size_menu_notif_no">15dp</dimen>
     <dimen name="fab_margin_bottom">30dp</dimen>
     <dimen name="fab_margin_right">30dp</dimen>
+    <dimen name="fab_margin_left">50dp</dimen>
     <dimen name="image_doctor_in_clinic_profile">40dp</dimen>
     <dimen name="text_size_initial_alphabet_emr_actionbar">30sp</dimen>
     <dimen name="text_size_initial_alphabet_patient_profile_menu">20sp</dimen>
@@ -127,12 +128,14 @@
     <dimen name="text_size_add_clinical_note_headings">20sp</dimen>
     <dimen name="text_size_add_clinical_note_vital_signs_label_child">17sp</dimen>
     <dimen name="item_padding">8dp</dimen>
+    <dimen name="item_padding_9dp">9dp</dimen>
     <dimen name="text_size_prescription_diagnostic_label">17sp</dimen>
     <dimen name="text_size_bt_history_edit_sms_email">17sp</dimen>
     <dimen name="item_visits_button_margin_8dp">8dp</dimen>
     <dimen name="item_visits_button_padding_left_right_20dp">12dp</dimen>
     <dimen name="item_visits_button_padding_top_bottom_8dp">8dp</dimen>
     <dimen name="text_size_drug_lable">20sp</dimen>
+    <dimen name="padding_12dp">12dp</dimen>
     <dimen name="text_size_treatment_list_title">19sp</dimen>
     <dimen name="text_size_drug_child_lable">17sp</dimen>
     <dimen name="width_height_clinical_note_item_diagram">120dp</dimen>

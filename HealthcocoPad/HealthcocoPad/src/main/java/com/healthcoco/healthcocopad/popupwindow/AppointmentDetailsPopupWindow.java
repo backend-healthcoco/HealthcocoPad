@@ -6,8 +6,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.Gravity;
 import android.view.View;
@@ -39,7 +39,6 @@ import com.healthcoco.healthcocopad.enums.PatientProfileScreenType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.fragments.PatientAppointmentDetailFragment;
 import com.healthcoco.healthcocopad.fragments.QueueFragment;
-import com.healthcoco.healthcocopad.listeners.AppointmentDetailsPopupListener;
 import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
@@ -83,6 +82,8 @@ public class AppointmentDetailsPopupWindow extends PopupWindow implements View.O
     private TextView tvTotalTime;
     private TextView tvCheckOut;
     private TextView tvScheduledAt;
+    private TextView tvAppointmentStatus;
+    private LinearLayout layoutAppointmentStatus;
     private LinearLayout layoutPatientDetails;
     private LinearLayout layoutScheduledAt;
     private LinearLayout layoutCheckIn;
@@ -131,6 +132,7 @@ public class AppointmentDetailsPopupWindow extends PopupWindow implements View.O
         tvTotalTime = (TextView) linearLayout.findViewById(R.id.tv_total_time);
         tvCheckOut = (TextView) linearLayout.findViewById(R.id.tv_check_out);
         tvScheduledAt = (TextView) linearLayout.findViewById(R.id.tv_scheduled_at);
+        tvAppointmentStatus = (TextView) linearLayout.findViewById(R.id.tv_appointment_status);
 
         layoutPatientDetails = (LinearLayout) linearLayout.findViewById(R.id.layout_patient_details);
         layoutScheduledAt = (LinearLayout) linearLayout.findViewById(R.id.layout_scheduled_at);
@@ -140,6 +142,8 @@ public class AppointmentDetailsPopupWindow extends PopupWindow implements View.O
         layoutEngagedFor = (LinearLayout) linearLayout.findViewById(R.id.layout_engaged_for);
         layoutTotalTime = (LinearLayout) linearLayout.findViewById(R.id.layout_total_time);
         layoutCheckOut = (LinearLayout) linearLayout.findViewById(R.id.layout_check_out);
+        layoutAppointmentStatus = (LinearLayout) linearLayout.findViewById(R.id.layout_appointment_status);
+
         btAddVisit = (LinearLayout) linearLayout.findViewById(R.id.bt_add_visit);
         btAddInvoice = (LinearLayout) linearLayout.findViewById(R.id.bt_add_invoice);
         btAddReceipt = (LinearLayout) linearLayout.findViewById(R.id.bt_add_receipt);
@@ -185,9 +189,16 @@ public class AppointmentDetailsPopupWindow extends PopupWindow implements View.O
         layoutPatientDetails.setOnClickListener(this);
     }
 
-    public void showOptionsWindow(View v) {
-        showAsDropDown(v);
-        update(v, 0, 0, anchorView.getWidth(), LinearLayout.LayoutParams.WRAP_CONTENT);
+    public void showOptionsWindow(View v, int x, int y) {
+//        showAsDropDown(v);
+        int verticalOffset;
+        showAtLocation(v, Gravity.LEFT | Gravity.TOP, 0, 0);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            verticalOffset = y;
+        } else
+            verticalOffset = -(v.getHeight() * 85) / 100;
+
+        update(v, x, verticalOffset, (int) mActivity.getResources().getDimension(R.dimen.queue_layout_width), LinearLayout.LayoutParams.WRAP_CONTENT);
     }
 
     public void showOptionsWindowAtLeftCenter(View v) {
@@ -291,18 +302,21 @@ public class AppointmentDetailsPopupWindow extends PopupWindow implements View.O
 
         CalendarStatus calendarEventsStatus = calendarEvents.getStatus();
         if (calendarEventsStatus != null) {
+            tvAppointmentStatus.setText(calendarEventsStatus.getValue());
             switch (calendarEventsStatus) {
                 case SCHEDULED:
                     if (calendarEvents.getTime() != null && calendarEvents.getTime().getFromTime() != null) {
                         tvScheduledAt.setText(DateTimeUtil.getFormattedTime(0, Math.round(calendarEvents.getTime().getFromTime())));
                     }
                     layoutScheduledAt.setVisibility(View.VISIBLE);
+                    tvAppointmentStatus.setTextColor(mActivity.getResources().getColor(R.color.orange));
                     break;
                 case WAITING:
                     tvCheckIn.setText(DateTimeUtil.getFormttedTime(calendarEvents.getCheckedInAt()));
                     tvWaitedFor.setText(calendarEvents.getWaitedForInMin());
                     layoutCheckIn.setVisibility(View.VISIBLE);
                     layoutWaitedFor.setVisibility(View.VISIBLE);
+                    tvAppointmentStatus.setTextColor(mActivity.getResources().getColor(R.color.red_error));
                     break;
                 case ENGAGED:
                     tvCheckIn.setText(DateTimeUtil.getFormttedTime(calendarEvents.getEngagedAt()));
@@ -315,6 +329,7 @@ public class AppointmentDetailsPopupWindow extends PopupWindow implements View.O
                     layoutEngagedFor.setVisibility(View.VISIBLE);
                     btEdit.setVisibility(View.GONE);
                     btDiscard.setVisibility(View.GONE);
+                    tvAppointmentStatus.setTextColor(mActivity.getResources().getColor(R.color.green_logo));
                     break;
                 case CHECKED_OUT:
                     tvTotalTime.setText(calendarEvents.getTotalTimeInMin());
@@ -330,6 +345,7 @@ public class AppointmentDetailsPopupWindow extends PopupWindow implements View.O
                     btAddVisit.setVisibility(View.INVISIBLE);
                     btEdit.setVisibility(View.GONE);
                     btDiscard.setVisibility(View.GONE);
+                    tvAppointmentStatus.setTextColor(mActivity.getResources().getColor(R.color.blue_action_bar));
                     break;
 
             }

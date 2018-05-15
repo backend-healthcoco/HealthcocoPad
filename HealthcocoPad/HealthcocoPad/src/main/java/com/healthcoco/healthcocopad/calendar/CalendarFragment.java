@@ -6,19 +6,12 @@ import android.graphics.RectF;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
@@ -34,28 +27,34 @@ import com.healthcoco.healthcocopad.calendar.weekview.MonthLoader;
 import com.healthcoco.healthcocopad.calendar.weekview.WeekView;
 import com.healthcoco.healthcocopad.calendar.weekview.WeekViewEvent;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
+import com.healthcoco.healthcocopad.dialogFragment.BookAppointmentDialogFragment;
 import com.healthcoco.healthcocopad.enums.AppointmentStatusType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.fragments.CalendarViewType;
+import com.healthcoco.healthcocopad.fragments.PatientAppointmentDetailFragment;
 import com.healthcoco.healthcocopad.fragments.QueueFragment;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
-import com.healthcoco.healthcocopad.recyclerview.HealthcocoRecyclerViewAdapter;
+import com.healthcoco.healthcocopad.popupwindow.AppointmentDetailsPopupWindow;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
+import com.healthcoco.healthcocopad.utilities.ComparatorUtil;
 import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
+import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
+
+import org.parceler.Parcels;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
-import static com.healthcoco.healthcocopad.dialogFragment.BookAppointmentDialogFragment.TAG_APPOINTMENT_ID;
 import static com.healthcoco.healthcocopad.enums.AppointmentStatusType.CONFIRM;
-import static com.healthcoco.healthcocopad.enums.CalendarStatus.SCHEDULED;
+import static com.healthcoco.healthcocopad.enums.BookAppointmentFromScreenType.APPOINTMENTS_QUEUE_ADD_NEW;
 import static com.healthcoco.healthcocopad.fragments.QueueFragment.TAG_CHANGED_DATE;
 import static com.healthcoco.healthcocopad.fragments.QueueFragment.TAG_IS_FROM_CALENDAR;
 
@@ -66,12 +65,13 @@ import static com.healthcoco.healthcocopad.fragments.QueueFragment.TAG_IS_FROM_C
  * Created by Raquib-ul-Alam Kanak on 1/3/2014.
  * Website: http://alamkanak.github.io
  */
-public class CalendarFragment extends HealthCocoFragment implements WeekView.EventClickListener, WeekView.EmptyViewLongPressListener, MonthLoader.MonthChangeListener, WeekView.ScrollListener, LocalDoInBackgroundListenerOptimised {
+public class CalendarFragment extends HealthCocoFragment implements WeekView.EventClickListener, MonthLoader.MonthChangeListener, WeekView.ScrollListener, LocalDoInBackgroundListenerOptimised, WeekView.EmptyViewLongPressListener {
     private static final int TYPE_DAY_VIEW = 1;
     private static final int TYPE_THREE_DAY_VIEW = 2;
-    private static final int TYPE_WEEK_VIEW = 3;
+    private static final int TYPE_WEEK_DAY = 3;
     public ArrayList<RegisteredDoctorProfile> clinicDoctorProfileList = null;
     CalendarEvents calendarEvents;
+    private int textSizeHeader = 16;
     private int mWeekViewType = TYPE_THREE_DAY_VIEW;
     private WeekView mWeekView;
     private ArrayList<CalendarEvents> calendarEventsList = new ArrayList<>();
@@ -82,10 +82,11 @@ public class CalendarFragment extends HealthCocoFragment implements WeekView.Eve
     private long selectedMonthDayYearInMillis;
     private List<WeekViewEvent> events = new ArrayList<WeekViewEvent>();
 
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.activity_base, container, false);
+        view = inflater.inflate(R.layout.fragment_calendar, container, false);
         super.onCreateView(inflater, container, savedInstanceState);
         return view;
     }
@@ -113,12 +114,20 @@ public class CalendarFragment extends HealthCocoFragment implements WeekView.Eve
     public void initListeners() {
         mWeekView.setOnEventClickListener(this);
         mWeekView.setMonthChangeListener(this);
-        mWeekView.setEmptyViewLongPressListener(this);
         mWeekView.setScrollListener(this);
+        mWeekView.setEmptyViewLongPressListener(this);
 
         // Set up a date time interpreter to interpret how the date and time will be formatted in
         // the week view. This is optional.
         setupDateTimeInterpreter(false);
+    }
+
+    private void mWeekViewOnTouch(View v, MotionEvent event) {
+//        AppointmentDetailsPopupWindow doctorListPopupWindow = new AppointmentDetailsPopupWindow(mActivity, null, events.get(0).getCalendarEvent());
+//        doctorListPopupWindow.setOutsideTouchable(true);
+//        doctorListPopupWindow.setContentView(doctorListPopupWindow.getPopupView());
+//
+//        doctorListPopupWindow.showOptionsWindow(v, event.getX(), event.getY());
     }
 
 
@@ -133,8 +142,11 @@ public class CalendarFragment extends HealthCocoFragment implements WeekView.Eve
     }
 
     private void notifyAdapter(ArrayList<CalendarEvents> calendarEventsArrayList) {
-        for (CalendarEvents event : calendarEventsArrayList) {
-            this.events.add(toWeekViewEvent(event));
+        if (!Util.isNullOrEmptyList(calendarEventsArrayList)) {
+            for (CalendarEvents event : calendarEventsArrayList) {
+                this.events.add(toWeekViewEvent(event));
+            }
+            Collections.sort(events, ComparatorUtil.weekViewEventComparator);
         }
         getWeekView().notifyDatasetChanged();
         getWeekView().goToHour(Calendar.getInstance().get(Calendar.HOUR_OF_DAY));
@@ -200,11 +212,12 @@ public class CalendarFragment extends HealthCocoFragment implements WeekView.Eve
                 return volleyResponseBean;
             case GET_CALENDAR_EVENTS:
 //                long selectedMonthInMillis = DateTimeUtil.getLongFromFormattedDayMonthYearFormatString(QueueFragment.DATE_FORMAT_FOR_THIS_SCREEN, DateTimeUtil.getFormattedDateTime(QueueFragment.DATE_FORMAT_FOR_THIS_SCREEN, selectedMonthDayYearInMillis));
-                volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).
-                        getCalendarEventsListResponseMonthWise(WebServiceType.GET_CALENDAR_EVENTS, appointmentStatusType,
-                                clinicDoctorProfileList, user.getForeignHospitalId(),
-                                user.getForeignLocationId(), null, selectedMonthDayYearInMillis,
-                                null, null);
+                if (user != null)
+                    volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).
+                            getCalendarEventsListResponseMonthWise(WebServiceType.GET_CALENDAR_EVENTS, appointmentStatusType,
+                                    clinicDoctorProfileList, user.getForeignHospitalId(),
+                                    user.getForeignLocationId(), null, selectedMonthDayYearInMillis,
+                                    null, null);
                 break;
         }
         if (volleyResponseBean == null)
@@ -225,20 +238,19 @@ public class CalendarFragment extends HealthCocoFragment implements WeekView.Eve
     }
 
 
-    protected String getEventTitle(Calendar time) {
-        return String.format("Event of %02d:%02d %s/%d", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), time.get(Calendar.MONTH) + 1, time.get(Calendar.DAY_OF_MONTH));
-    }
-
     @Override
     public void onEventClick(WeekViewEvent event, RectF eventRect) {
-        Toast.makeText(getActivity(), "Clicked " + event.getCalendarEvent().getAppointmentId(), Toast.LENGTH_SHORT).show();
+        int x = (int) eventRect.centerX();
+        int y = (int) eventRect.centerY();
+
+        AppointmentDetailsPopupWindow doctorListPopupWindow = new AppointmentDetailsPopupWindow(mActivity, null, event.getCalendarEvent());
+        doctorListPopupWindow.setOutsideTouchable(true);
+        doctorListPopupWindow.setContentView(doctorListPopupWindow.getPopupView());
+//        y = x + y;
+        doctorListPopupWindow.showOptionsWindow(mWeekView, x, y);
+//        Toast.makeText(getActivity(), "Clicked " + event.getCalendarEvent().getAppointmentId(), Toast.LENGTH_SHORT).show();
     }
 
-
-    @Override
-    public void onEmptyViewLongPress(Calendar time) {
-        Toast.makeText(getActivity(), "Empty view long pressed: " + getEventTitle(time), Toast.LENGTH_SHORT).show();
-    }
 
     public WeekView getWeekView() {
         return mWeekView;
@@ -299,8 +311,11 @@ public class CalendarFragment extends HealthCocoFragment implements WeekView.Eve
                 if (event.getDoctorId().equals(registeredDoctorProfile.getUserId())) {
                     weekViewEvent.setColor(Color.parseColor(Util.getColorCode(registeredDoctorProfile.getColorCode())));
                     weekViewEvent.setStrokeColor(Color.parseColor(registeredDoctorProfile.getColorCode()));
+                    weekViewEvent.setTextColor(Util.getTextColor(registeredDoctorProfile.getColorCode()));
                 }
             }
+
+
             weekViewEvent.setId(event.getUniqueId());
             weekViewEvent.setName(patientName);
             weekViewEvent.setStartTime(startTime);
@@ -350,22 +365,36 @@ public class CalendarFragment extends HealthCocoFragment implements WeekView.Eve
                     mWeekView.setNumberOfVisibleDays(1);
 
                     // Lets change some dimensions to best fit the view.
-                    mWeekView.setTextSize((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 12, getResources().getDisplayMetrics()));
-                    mWeekView.setEventTextSize((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 12, getResources().getDisplayMetrics()));
+                    mWeekView.setTextSize((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, textSizeHeader, getResources().getDisplayMetrics()));
                 }
                 break;
             case THREE_DAY:
                 if (mWeekViewType != TYPE_THREE_DAY_VIEW) {
                     mWeekViewType = TYPE_THREE_DAY_VIEW;
-                    mWeekView.setNumberOfVisibleDays(3);
+                    mWeekView.setNumberOfVisibleDays(TYPE_WEEK_DAY);
 
                     // Lets change some dimensions to best fit the view.
-                    mWeekView.setTextSize((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 12, getResources().getDisplayMetrics()));
-                    mWeekView.setEventTextSize((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 12, getResources().getDisplayMetrics()));
+                    mWeekView.setTextSize((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, textSizeHeader, getResources().getDisplayMetrics()));
                 }
                 break;
         }
         gotoDate(selectedMonthDayYearInMillis, false);
         getWeekView().goToHour(Calendar.getInstance().get(Calendar.HOUR_OF_DAY));
+    }
+
+    public void bookWalkInAppointment(Calendar time) {
+        BookAppointmentDialogFragment dialogFragment = new BookAppointmentDialogFragment();
+        Bundle bundle = new Bundle();
+        bundle.putLong(HealthCocoConstants.TAG_SELECTED_DATE_TIME_IN_MILLIS, time.getTimeInMillis());
+        bundle.putParcelable(BookAppointmentDialogFragment.TAG_FROM_SCREEN_TYPE, Parcels.wrap(APPOINTMENTS_QUEUE_ADD_NEW.ordinal()));
+        dialogFragment.setArguments(bundle);
+        dialogFragment.setTargetFragment(dialogFragment, PatientAppointmentDetailFragment.REQUEST_CODE_APPOINTMENTS_LIST);
+        dialogFragment.show(mActivity.getSupportFragmentManager(), dialogFragment.getClass().getSimpleName());
+
+    }
+
+    @Override
+    public void onEmptyViewLongPress(Calendar time) {
+        bookWalkInAppointment(time);
     }
 }

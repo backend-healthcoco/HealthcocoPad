@@ -107,6 +107,7 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
     private BookAppointmentFromScreenType bookAppointmentFromScreenType;
     private AvailableTimeSlots selectedTimeSlot;
     private String appointmentId;
+    private Long selectedTime;
     private CalendarEvents selectedAppointment;
     private EditText editNote;
     private boolean receiversRegistered;
@@ -179,11 +180,15 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
         if (bundle != null) {
             int ordinal = Parcels.unwrap(bundle.getParcelable(TAG_FROM_SCREEN_TYPE));
             appointmentId = bundle.getString(HealthCocoConstants.TAG_UNIQUE_ID);
+            selectedTime = bundle.getLong(HealthCocoConstants.TAG_SELECTED_DATE_TIME_IN_MILLIS);
             bookAppointmentFromScreenType = BookAppointmentFromScreenType.values()[ordinal];
         }
         if (bookAppointmentFromScreenType != null)
             init();
         setWidthHeight(0.80, 0.90);
+        if (!Util.isNullOrZeroNumber(selectedTime)) {
+            initData();
+        }
         mActivity.showLoading(false);
         if (!Util.isNullOrBlank(appointmentId))
             initActionbarTitle(getResources().getString(R.string.please_reschedule_appointment));
@@ -258,6 +263,10 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
     public void initData() {
 //        tvClinicName.setText(doctorClinicProfile.getLocationName());
 
+        if (!Util.isNullOrZeroNumber(selectedTime)) {
+            tvSelectedTime.setText(DateTimeUtil.getFormttedTime(selectedTime));
+            refreshSelectedDate(selectedTime);
+        }
         if (selectedAppointment != null && selectedAppointment.getTime() != null && selectedAppointment.getTime().getFromTime() != null)
             tvSelectedTime.setText(DateTimeUtil.getFormattedTime(0, Math.round(selectedAppointment.getTime().getFromTime())));
         if (doctorClinicProfile != null) {

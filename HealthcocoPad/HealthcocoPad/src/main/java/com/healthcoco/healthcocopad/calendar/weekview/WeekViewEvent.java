@@ -21,6 +21,7 @@ public class WeekViewEvent {
     private String mTime;
     private int mColor;
     private int mStrokeColor;
+    private int mTextColor;
     private boolean mAllDay;
     private CalendarEvents calendarEvent;
 
@@ -88,7 +89,7 @@ public class WeekViewEvent {
      *
      * @param id        The id of the event.
      * @param name      Name of the event.
-     * @param time  The location of the event.
+     * @param time      The location of the event.
      * @param startTime The time when the event starts.
      * @param endTime   The time when the event ends.
      */
@@ -155,6 +156,14 @@ public class WeekViewEvent {
 
     public void setStrokeColor(int mStrokeColor) {
         this.mStrokeColor = mStrokeColor;
+    }
+
+    public int getTextColor() {
+        return mTextColor;
+    }
+
+    public void setTextColor(int mTextColor) {
+        this.mTextColor = mTextColor;
     }
 
     public boolean isAllDay() {

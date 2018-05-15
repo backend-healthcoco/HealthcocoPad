@@ -104,11 +104,11 @@ public class WeekView extends View {
     private int mMinimumFlingVelocity = 0;
     private int mScaledTouchSlop = 0;
     // Attributes and their default values.
-    private int mHourHeight = 200;
+    private int mHourHeight = 250;
     private int mNewHourHeight = -1;
-    private int mMinHourHeight = 200; //no minimum specified (will be dynamic, based on screen)
+    private int mMinHourHeight = 300; //no minimum specified (will be dynamic, based on screen)
     private int mEffectiveMinHourHeight = mMinHourHeight; //compensates for the fact that you can't keep zooming out.
-    private int mMaxHourHeight = 200;
+    private int mMaxHourHeight = 300;
     private int mColumnGap = 10;
     private int mFirstDayOfWeek = Calendar.MONDAY;
     private int mTextSize = 12;
@@ -533,11 +533,11 @@ public class WeekView extends View {
     }
 
     private void drawTimeColumnAndAxes(Canvas canvas) {
-        // Draw the background color for the header column.
-        canvas.drawRect(0, mHeaderHeight + mHeaderRowPadding * 2, mHeaderColumnWidth, getHeight(), mHeaderColumnBackgroundPaint);
 
         // Clip to paint in left column only.
         canvas.clipRect(0, mHeaderHeight + mHeaderRowPadding * 2, mHeaderColumnWidth, getHeight(), Region.Op.REPLACE);
+        // Draw the background color for the header column.
+        canvas.drawRect(0, mHeaderHeight + mHeaderRowPadding * 2, mHeaderColumnWidth, getHeight(), mHeaderColumnBackgroundPaint);
 
         for (int i = 0; i < 24; i++) {
             float top = mHeaderHeight + mHeaderRowPadding * 2 + mCurrentOrigin.y + mHourHeight * i + mHeaderMarginBottom;
@@ -822,8 +822,8 @@ public class WeekView extends View {
 
                         canvas.drawRoundRect(mEventRects.get(i).rectF, mEventCornerRadius, mEventCornerRadius, mEventBackgroundPaint);
                         canvas.drawRoundRect(mEventRects.get(i).rectF, mEventCornerRadius, mEventCornerRadius, mEventStokePaint);
-                        drawEventTitle(mEventRects.get(i).event.getTime(), mEventRects.get(i).rectF, canvas, top, left, mEventPadding, mEventPadding);
-                        drawEventTitle(mEventRects.get(i).event.getName(), mEventRects.get(i).rectF, canvas, top, left, mEventTopPadding, 10);
+                        drawEventTitle(mEventRects.get(i).event.getTime(), mEventRects.get(i).event.getTextColor(), mEventRects.get(i).rectF, canvas, top, left, mEventPadding, mEventPadding);
+                        drawEventTitle(mEventRects.get(i).event.getName(), mEventRects.get(i).event.getTextColor(), mEventRects.get(i).rectF, canvas, top, left, mEventTopPadding, 10);
                     } else
                         mEventRects.get(i).rectF = null;
                 }
@@ -867,7 +867,7 @@ public class WeekView extends View {
                         mEventRects.get(i).rectF = new RectF(left, top, right, bottom);
                         mEventBackgroundPaint.setColor(mEventRects.get(i).event.getColor() == 0 ? mDefaultEventColor : mEventRects.get(i).event.getColor());
                         canvas.drawRoundRect(mEventRects.get(i).rectF, mEventCornerRadius, mEventCornerRadius, mEventBackgroundPaint);
-                        drawEventTitle(mEventRects.get(i).event.getName(), mEventRects.get(i).rectF, canvas, top, left, mEventPadding, mEventPadding);
+                        drawEventTitle(mEventRects.get(i).event.getName(), mEventRects.get(i).event.getTextColor(), mEventRects.get(i).rectF, canvas, top, left, mEventPadding, mEventPadding);
                     } else
                         mEventRects.get(i).rectF = null;
                 }
@@ -879,13 +879,14 @@ public class WeekView extends View {
      * Draw the name of the event on top of the event rectangle.
      *
      * @param title        The event of which the title (and location) should be drawn.
+     * @param textColor
      * @param rect         The rectangle on which the text is to be drawn.
      * @param canvas       The canvas to draw upon.
      * @param originalTop  The original top position of the rectangle. The rectangle may have some of its portion outside of the visible area.
      * @param originalLeft The original left position of the rectangle. The rectangle may have some of its portion outside of the visible area.
      */
-    private void drawEventTitle(String title, RectF rect, Canvas canvas, float originalTop, float originalLeft, int topPadding, int minHeight) {
-        if (rect.right - rect.left - topPadding * 2 < 0) return;
+    private void drawEventTitle(String title, int textColor, RectF rect, Canvas canvas, float originalTop, float originalLeft, int topPadding, int minHeight) {
+        if (rect.right - rect.left - mEventPadding * 2 < 0) return;
         if (rect.bottom - rect.top - mEventPadding * 2 < 0) return;
 
         // Prepare the name of the event.
@@ -901,10 +902,10 @@ public class WeekView extends View {
             bob.append(' ');
         }
 
-
-        int availableHeight = (int) (rect.bottom - originalTop - minHeight * 2);
+        int availableHeight = (int) (rect.bottom - originalTop - minHeight);
         int availableWidth = (int) (rect.right - originalLeft - mEventPadding * 2);
 
+        mEventTextPaint.setColor(textColor);
         // Get text dimensions.
         StaticLayout textLayout = new StaticLayout(bob, mEventTextPaint, availableWidth, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
 
@@ -1409,7 +1410,7 @@ public class WeekView extends View {
         mTextSize = textSize;
         mTodayHeaderTextPaint.setTextSize(mTextSize);
         mHeaderTextPaint.setTextSize(mTextSize);
-        mTimeTextPaint.setTextSize(mTextSize);
+//        mTimeTextPaint.setTextSize(mTextSize);
         invalidate();
     }
 
@@ -2016,8 +2017,8 @@ public class WeekView extends View {
         /**
          * Triggered when clicked on one existing event
          *
-         * @param event:     event clicked.
-         * @param eventRect: view containing the clicked event.
+         * @param event     :     event clicked.
+         * @param eventRect : view containing the clicked event.
          */
         void onEventClick(WeekViewEvent event, RectF eventRect);
     }

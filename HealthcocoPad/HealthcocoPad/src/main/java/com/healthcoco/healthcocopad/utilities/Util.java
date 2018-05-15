@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -295,6 +296,12 @@ public class Util {
         String text = getValidatedValue(i);
         return (text == null || text.trim().equalsIgnoreCase("") || text.trim().equalsIgnoreCase("null")
                 || Integer.valueOf(text.trim()) == 0) ? true : false;
+    }
+
+    public static boolean isNullOrZeroNumber(long l) {
+        String text = String.valueOf(l);
+        return (text == null || text.trim().equalsIgnoreCase("") || text.trim().equalsIgnoreCase("null")
+                || Long.valueOf(text.trim()) == 0) ? true : false;
     }
 
     public static boolean isNullOrBlank(String text) {
@@ -984,6 +991,26 @@ public class Util {
         color = "#80" + color;
 
         return color;
+    }
+
+    public static int getTextColor(String colorCode) {
+        int color = Color.parseColor(colorCode);
+        int red = (color >> 16) & 0xFF;
+        int green = (color >> 8) & 0xFF;
+        int blue = (color >> 0) & 0xFF;
+        float alpha = (color >> 24) & 0xFF;
+
+        float[] hsv = new float[3];
+        Color.RGBToHSV(red, green, blue, hsv);
+
+        float hue = hsv[0];
+        float sat = hsv[1];
+        float val = hsv[2];
+
+        if (val > 0.179)
+            return Color.BLACK;
+        else
+            return Color.WHITE;
     }
 
    /* public static boolean getIsMobileNumberOptional(LoginResponse doctor) {

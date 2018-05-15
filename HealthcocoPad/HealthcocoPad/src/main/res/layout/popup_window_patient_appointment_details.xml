@@ -367,6 +367,27 @@
 
                     </LinearLayout>
 
+                    <LinearLayout
+                        android:id="@+id/layout_appointment_status"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/layout_padding_5dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/status_colon"
+                            android:textColor="@color/black" />
+
+                        <TextView
+                            android:id="@+id/tv_appointment_status"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/list_item_padding" />
+
+                    </LinearLayout>
+
                 </LinearLayout>
 
                 <View

@@ -67,6 +67,8 @@ import com.healthcoco.healthcocopad.utilities.MyExceptionHandler;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.healthcoco.healthcocopad.views.SlidingPaneDrawerLayout;
 
+import java.util.List;
+
 public class HomeActivity extends HealthCocoActivity implements View.OnClickListener, GsonRequest.ErrorListener,
         LocalDoInBackgroundListenerOptimised, Response.Listener<VolleyResponseBean> {
     public static final String INTENT_SYNC_SUCCESS = "com.healthcoco.INITIAL_SYNC_SUCCESS";
@@ -404,25 +406,39 @@ public class HomeActivity extends HealthCocoActivity implements View.OnClickList
 
     @Override
     public void onBackPressed() {
-        try {
-            if (sliding_pane_layout.isOpen())
-                sliding_pane_layout.closePane();
-            else if (drawerLayout.isDrawerOpen(GravityCompat.END))
-                drawerLayout.closeDrawers();
-            else {
-                if (layoutOtherFragments.getVisibility() == View.VISIBLE) {
-                    menuFragment.setMenuSelection(FragmentType.CONTACTS);
-                    initFragment(FragmentType.CONTACTS);
-                    closePaneLayout(FragmentType.CONTACTS);
-                } else {
-                    mApp.cancelAllPendingRequests();
-                    showFinishConfirmationAlert();
-//                    super.onBackPressed();
+
+        List<Fragment> fragmentList = getSupportFragmentManager().getFragments();
+
+        boolean handled = false;
+        for (Fragment f : fragmentList) {
+            if (f instanceof QueueFragment) {
+                handled = ((QueueFragment) f).onBackPressed();
+                if (handled) {
+                    break;
                 }
             }
-        } catch (Exception e) {
-            mApp.cancelAllPendingRequests();
-            super.onBackPressed();
+        }
+        if (!handled) {
+            try {
+                if (sliding_pane_layout.isOpen())
+                    sliding_pane_layout.closePane();
+                else if (drawerLayout.isDrawerOpen(GravityCompat.END))
+                    drawerLayout.closeDrawers();
+                else {
+                    if (layoutOtherFragments.getVisibility() == View.VISIBLE) {
+                        menuFragment.setMenuSelection(FragmentType.CONTACTS);
+                        initFragment(FragmentType.CONTACTS);
+                        closePaneLayout(FragmentType.CONTACTS);
+                    } else {
+                        mApp.cancelAllPendingRequests();
+                        showFinishConfirmationAlert();
+//                    super.onBackPressed();
+                    }
+                }
+            } catch (Exception e) {
+                mApp.cancelAllPendingRequests();
+                super.onBackPressed();
+            }
         }
     }
 

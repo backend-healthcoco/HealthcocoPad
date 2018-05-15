@@ -21,6 +21,7 @@ import android.widget.DatePicker;
 import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -115,6 +116,12 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
     private ImageButton btFilter;
     private ImageButton btMenu;
     private TextView tvSelectedDate;
+    private TextView tvQueue;
+    private TextView tvOneDay;
+    private TextView tvThreeDay;
+    private LinearLayout btToday;
+    private ImageView ivNext;
+    private ImageView ivPrevious;
     private FloatingActionButton floatingActionButton;
     private HorizontalScrollView horizontalScrollView;
     private FrameLayout layoutWeekView;
@@ -219,14 +226,20 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
         btRefresh = (ImageButton) view.findViewById(R.id.bt_refresh);
         btFilter = (ImageButton) view.findViewById(R.id.bt_filter);
         tvSelectedDate = (TextView) view.findViewById(R.id.tv_selected_date);
+        tvQueue = (TextView) view.findViewById(R.id.bt_queue);
+        tvOneDay = (TextView) view.findViewById(R.id.bt_one_day);
+        tvThreeDay = (TextView) view.findViewById(R.id.bt_three_day);
         floatingActionButton = (FloatingActionButton) view.findViewById(R.id.fl_bt_add_appointment);
         layoutWeekView = (FrameLayout) view.findViewById(R.id.layout_weekview);
         horizontalScrollView = (HorizontalScrollView) view.findViewById(R.id.scrollview_horizontal);
         drawerLayout = (DrawerLayout) view.findViewById(R.id.drawer_layout);
+        btToday = (LinearLayout) view.findViewById(R.id.fl_bt_today);
+        ivNext = (ImageView) view.findViewById(R.id.iv_next);
+        ivPrevious = (ImageView) view.findViewById(R.id.iv_previous);
+
 //        drawerLayout.setScrimColor(getResources().getColor(R.color.black_translucent));
 
-        horizontalScrollView.setVisibility(View.VISIBLE);
-        layoutWeekView.setVisibility(View.GONE);
+        resetCaledarView(CalendarViewType.QUEUE);
     }
 
     @Override
@@ -237,6 +250,10 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
         btRefresh.setOnClickListener(this);
         btFilter.setOnClickListener(this);
         tvSelectedDate.setOnClickListener(this);
+        tvQueue.setOnClickListener(this);
+        tvOneDay.setOnClickListener(this);
+        tvThreeDay.setOnClickListener(this);
+        btToday.setOnClickListener(this);
         tvSelectedDate.addTextChangedListener(new HealthcocoTextWatcher(tvSelectedDate, this));
 
         btMenu.setOnClickListener(clickListener);
@@ -382,6 +399,7 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
     private void formHashMapAndRefresh(List<RegisteredDoctorProfile> responseList) {
         clinicDoctorProfileList = (ArrayList<RegisteredDoctorProfile>) responseList;
         if (responseList.size() > 1) {
+            lvDoctorName.setVisibility(View.VISIBLE);
             if (!Util.isNullOrEmptyList(responseList)) {
                 for (RegisteredDoctorProfile registeredDoctorProfile :
                         responseList) {
@@ -426,6 +444,20 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
             case R.id.bt_filter:
                 drawerLayout.openDrawer(GravityCompat.END);
                 break;
+            case R.id.bt_queue:
+                resetCaledarView(CalendarViewType.QUEUE);
+                break;
+            case R.id.bt_one_day:
+                resetCaledarView(CalendarViewType.ONE_DAY);
+                break;
+            case R.id.bt_three_day:
+                resetCaledarView(CalendarViewType.THREE_DAY);
+                break;
+            case R.id.fl_bt_today:
+                isFromCalendar = false;
+                selectedMonthDayYearInMillis = DateTimeUtil.getCurrentDateLong();
+                tvSelectedDate.setText(DateTimeUtil.getCurrentFormattedDate(DATE_FORMAT_USED_IN_THIS_SCREEN));
+                break;
 
         }
     }
@@ -443,18 +475,33 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
 
                 if (!DateTimeUtil.isCurrentDateSelected(DATE_FORMAT_USED_IN_THIS_SCREEN,
                         Util.getValidatedValueOrNull(tvSelectedDate))) {
-                    if (!isInitialLoading)
+                    if (!isInitialLoading) {
                         if (DateTimeUtil.isCurrentMonthSelected(curentMonthDayYearInMillis, selectedMonthDayYearInMillis)) {
                             refreshQueueData();
                         } else {
                             curentMonthDayYearInMillis = selectedMonthDayYearInMillis;
                             getCalendarEventsList(true);
                         }
-                } else
+                        changeFloatingButtonStatus(selectedMonthDayYearInMillis);
+                    }
+                } else {
                     tvSelectedDate.setText(R.string.today);
+                    btToday.setVisibility(View.GONE);
+                }
                 break;
         }
         calendarFragment.gotoDate(selectedMonthDayYearInMillis, isFromCalendar);
+    }
+
+    private void changeFloatingButtonStatus(long selectedMonthDayYearInMillis) {
+        btToday.setVisibility(View.VISIBLE);
+        if (selectedMonthDayYearInMillis > DateTimeUtil.getCurrentDateLong()) {
+            ivNext.setVisibility(View.GONE);
+            ivPrevious.setVisibility(View.VISIBLE);
+        } else if (selectedMonthDayYearInMillis < DateTimeUtil.getCurrentDateLong()) {
+            ivNext.setVisibility(View.VISIBLE);
+            ivPrevious.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -537,26 +584,46 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
         datePickerDialog.show();
     }
 
-    public void closeDrawer() {
-        if (drawerLayout.isShown()) {
+    public boolean closeDrawer() {
+        if (drawerLayout.isDrawerOpen(GravityCompat.END)) {
             drawerLayout.closeDrawers();
-        }
+            return true;
+        } else return false;
     }
 
     private void resetCaledarView(CalendarViewType calendarViewType) {
         closeDrawer();
         switch (calendarViewType) {
             case QUEUE:
+                tvQueue.setSelected(true);
+                tvOneDay.setSelected(false);
+                tvThreeDay.setSelected(false);
                 horizontalScrollView.setVisibility(View.VISIBLE);
                 layoutWeekView.setVisibility(View.GONE);
                 break;
+
             case ONE_DAY:
+                tvQueue.setSelected(false);
+                tvOneDay.setSelected(true);
+                tvThreeDay.setSelected(false);
+                horizontalScrollView.setVisibility(View.GONE);
+                layoutWeekView.setVisibility(View.VISIBLE);
+                calendarFragment.changeCalendarViewType(calendarViewType);
+                break;
+
             case THREE_DAY:
+                tvQueue.setSelected(false);
+                tvOneDay.setSelected(false);
+                tvThreeDay.setSelected(true);
                 horizontalScrollView.setVisibility(View.GONE);
                 layoutWeekView.setVisibility(View.VISIBLE);
                 calendarFragment.changeCalendarViewType(calendarViewType);
                 break;
         }
 
+    }
+
+    public boolean onBackPressed() {
+        return closeDrawer();
     }
 }

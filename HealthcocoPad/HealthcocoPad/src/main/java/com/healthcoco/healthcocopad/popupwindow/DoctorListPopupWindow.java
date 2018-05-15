@@ -91,7 +91,7 @@ public class DoctorListPopupWindow extends PopupWindow implements View.OnClickLi
         setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         setOutsideTouchable(false);
         setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
-        setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
+        setWidth((int) mActivity.getResources().getDimension(R.dimen.doctor_name_textview_width));
         setFocusable(true);
 //        setInputMethodMode(ListPopupWindow.INPUT_METHOD_NEEDED);
         if (anchorView != null)
@@ -105,12 +105,12 @@ public class DoctorListPopupWindow extends PopupWindow implements View.OnClickLi
         showAsDropDown(v);
         isInitialLaunch = true;
 //        showAsDropDown(v, 0, 0, Gravity.NO_GRAVITY);
-        update(v, 0, 0, anchorView.getWidth(), LinearLayout.LayoutParams.WRAP_CONTENT);
+        update(v, 0, 0, (int) mActivity.getResources().getDimension(R.dimen.doctor_name_textview_width), LinearLayout.LayoutParams.WRAP_CONTENT);
     }
 
     public void showOptionsWindowAtLeftCenter(View v) {
         showAtLocation(v, Gravity.LEFT | Gravity.CENTER, 0, 0);
-        update(v, 0, 0, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        update(v, 0, 0, (int) mActivity.getResources().getDimension(R.dimen.doctor_name_textview_width), LinearLayout.LayoutParams.WRAP_CONTENT);
     }
 
     @Override

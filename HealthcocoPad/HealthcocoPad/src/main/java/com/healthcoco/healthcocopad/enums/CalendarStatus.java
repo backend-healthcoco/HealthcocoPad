@@ -25,7 +25,7 @@ public enum CalendarStatus {
             add("WAITING");
             add("CHECKED OUT");
         }
-    }), CHECKED_OUT("CHECKED_OUT", new ArrayList<Object>() {
+    }), CHECKED_OUT("CHECKED OUT", new ArrayList<Object>() {
         {
             add("SCHEDULED");
             add("WAITING");
