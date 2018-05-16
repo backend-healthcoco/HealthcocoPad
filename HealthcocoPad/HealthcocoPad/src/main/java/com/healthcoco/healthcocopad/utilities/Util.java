@@ -1003,14 +1003,19 @@ public class Util {
         float[] hsv = new float[3];
         Color.RGBToHSV(red, green, blue, hsv);
 
-        float hue = hsv[0];
-        float sat = hsv[1];
-        float val = hsv[2];
-
-        if (val > 0.179)
+        if ((red * 0.299 + green * 0.587 + blue * 0.114) > 186)
             return Color.BLACK;
         else
             return Color.WHITE;
+
+      /*  float hue = hsv[0];
+        float sat = hsv[1];
+        float val = hsv[2];
+
+        if (val > 0.400)
+            return Color.BLACK;
+        else
+            return Color.WHITE;*/
     }
 
    /* public static boolean getIsMobileNumberOptional(LoginResponse doctor) {

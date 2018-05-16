@@ -25,6 +25,7 @@ import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.request.AppointmentRequestToSend;
+import com.healthcoco.healthcocopad.bean.server.TreatmentService;
 import com.healthcoco.healthcocopad.bean.server.WorkingHours;
 import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
 import com.healthcoco.healthcocopad.bean.server.PatientCard;
@@ -187,6 +188,7 @@ public class AppointmentDetailsPopupWindow extends PopupWindow implements View.O
         btEdit.setOnClickListener(this);
         btDismiss.setOnClickListener(this);
         layoutPatientDetails.setOnClickListener(this);
+        tvAppointmentStatus.setOnClickListener(this);
     }
 
     public void showOptionsWindow(View v, int x, int y) {
@@ -196,7 +198,7 @@ public class AppointmentDetailsPopupWindow extends PopupWindow implements View.O
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             verticalOffset = y;
         } else
-            verticalOffset = -(v.getHeight() * 85) / 100;
+            verticalOffset = -(v.getHeight() * 86) / 100;
 
         update(v, x, verticalOffset, (int) mActivity.getResources().getDimension(R.dimen.queue_layout_width), LinearLayout.LayoutParams.WRAP_CONTENT);
     }
@@ -250,6 +252,9 @@ public class AppointmentDetailsPopupWindow extends PopupWindow implements View.O
 
             case R.id.bt_dismiss:
                 dismiss();
+                break;
+            case R.id.tv_appointment_status:
+                mActivity.openChangeAppointmentStatusDialogFragment(calendarEvents.getAppointmentId());
                 break;
 
         }

@@ -108,6 +108,8 @@ public class CalendarFragment extends HealthCocoFragment implements WeekView.Eve
     @Override
     public void initViews() {
         mWeekView = (WeekView) view.findViewById(R.id.weekView);
+
+        getWeekView().goToHour(Calendar.getInstance().get(Calendar.HOUR_OF_DAY));
     }
 
     @Override
@@ -120,14 +122,6 @@ public class CalendarFragment extends HealthCocoFragment implements WeekView.Eve
         // Set up a date time interpreter to interpret how the date and time will be formatted in
         // the week view. This is optional.
         setupDateTimeInterpreter(false);
-    }
-
-    private void mWeekViewOnTouch(View v, MotionEvent event) {
-//        AppointmentDetailsPopupWindow doctorListPopupWindow = new AppointmentDetailsPopupWindow(mActivity, null, events.get(0).getCalendarEvent());
-//        doctorListPopupWindow.setOutsideTouchable(true);
-//        doctorListPopupWindow.setContentView(doctorListPopupWindow.getPopupView());
-//
-//        doctorListPopupWindow.showOptionsWindow(v, event.getX(), event.getY());
     }
 
 
@@ -149,7 +143,6 @@ public class CalendarFragment extends HealthCocoFragment implements WeekView.Eve
             Collections.sort(events, ComparatorUtil.weekViewEventComparator);
         }
         getWeekView().notifyDatasetChanged();
-        getWeekView().goToHour(Calendar.getInstance().get(Calendar.HOUR_OF_DAY));
     }
 
     private void getListFromLocal(boolean initialLoading) {
@@ -211,7 +204,6 @@ public class CalendarFragment extends HealthCocoFragment implements WeekView.Eve
                 }
                 return volleyResponseBean;
             case GET_CALENDAR_EVENTS:
-//                long selectedMonthInMillis = DateTimeUtil.getLongFromFormattedDayMonthYearFormatString(QueueFragment.DATE_FORMAT_FOR_THIS_SCREEN, DateTimeUtil.getFormattedDateTime(QueueFragment.DATE_FORMAT_FOR_THIS_SCREEN, selectedMonthDayYearInMillis));
                 if (user != null)
                     volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).
                             getCalendarEventsListResponseMonthWise(WebServiceType.GET_CALENDAR_EVENTS, appointmentStatusType,

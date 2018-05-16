@@ -21,6 +21,13 @@ public enum PopupWindowType {
         add(PatientTreatmentStatus.COMPLETED);
     }}),
 
+    APPOINTMENT_STATUS_TYPE(new ArrayList<Object>() {{
+        add(CalendarStatus.SCHEDULED.getValue());
+        add(CalendarStatus.WAITING.getValue());
+        add(CalendarStatus.ENGAGED.getValue());
+        add(CalendarStatus.CHECKED_OUT.getValue());
+    }}),
+
     DOCTOR_LIST,
 
     DISCOUNT_TYPE(new ArrayList<Object>() {{

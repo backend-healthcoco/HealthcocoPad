@@ -95,6 +95,7 @@ import com.healthcoco.healthcocopad.dialogFragment.AddNewDrugDialogFragment;
 import com.healthcoco.healthcocopad.dialogFragment.AddNewSuggestionDialogFragment;
 import com.healthcoco.healthcocopad.dialogFragment.AddNewTreatmentDialogFragment;
 import com.healthcoco.healthcocopad.dialogFragment.AddUpdateNameDialogFragment;
+import com.healthcoco.healthcocopad.dialogFragment.ChangeAppointmentStatusDialogFragment;
 import com.healthcoco.healthcocopad.dialogFragment.EnlargedImageViewDialogFragment;
 import com.healthcoco.healthcocopad.dialogFragment.PatientCardDialogFragment;
 import com.healthcoco.healthcocopad.enums.AddUpdateNameDialogType;
@@ -1846,6 +1847,30 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
         addNewTreatmentDetailFragment.setTargetFragment(fragment, requestCode);
         addNewTreatmentDetailFragment.show(getSupportFragmentManager(),
                 addNewTreatmentDetailFragment.getClass().getSimpleName());
+
+    }
+
+    public void openAddNewTreatmentsFragment(int requestCode, String uniqueId) {
+        AddNewTreatmentDialogFragment addNewTreatmentDetailFragment = new AddNewTreatmentDialogFragment();
+        if (!Util.isNullOrBlank(uniqueId)) {
+            Bundle bundle = new Bundle();
+            bundle.putString(HealthCocoConstants.TAG_UNIQUE_ID, uniqueId);
+            addNewTreatmentDetailFragment.setArguments(bundle);
+        }
+        addNewTreatmentDetailFragment.show(getSupportFragmentManager(),
+                addNewTreatmentDetailFragment.getClass().getSimpleName());
+
+    }
+
+    public void openChangeAppointmentStatusDialogFragment(String uniqueId) {
+        ChangeAppointmentStatusDialogFragment changeAppointmentStatusDialogFragment = new ChangeAppointmentStatusDialogFragment();
+        if (!Util.isNullOrBlank(uniqueId)) {
+            Bundle bundle = new Bundle();
+            bundle.putString(HealthCocoConstants.TAG_UNIQUE_ID, uniqueId);
+            changeAppointmentStatusDialogFragment.setArguments(bundle);
+        }
+        changeAppointmentStatusDialogFragment.show(getSupportFragmentManager(),
+                changeAppointmentStatusDialogFragment.getClass().getSimpleName());
 
     }
 

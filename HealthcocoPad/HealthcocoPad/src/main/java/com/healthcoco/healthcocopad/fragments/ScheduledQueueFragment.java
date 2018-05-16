@@ -56,7 +56,7 @@ public class ScheduledQueueFragment extends HealthCocoFragment implements LocalD
     public static final int MAX_SIZE = 10;
     public static final int MAX_NUMBER_OF_EVENTS = 30;
     public ArrayList<RegisteredDoctorProfile> clinicDoctorProfileList = null;
-    CalendarEvents calendarEvents;
+    private CalendarEvents calendarEvents;
     private ArrayList<CalendarEvents> calendarEventsList = new ArrayList<>();
     private HashMap<String, CalendarEvents> calendarEventsHashMap = new HashMap<>();
     private RecyclerView scheduledQueueRecyclerView;
