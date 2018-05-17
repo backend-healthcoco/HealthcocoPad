@@ -4066,6 +4066,10 @@ public class LocalDataServiceImpl {
     }
 
     private void addWorkingHour(String className, String foreignTableId, WorkingHours workingHour) {
+        if (workingHour.getToTime() == null) {
+            if (workingHour.getFromTime() != null)
+                workingHour.setToTime(workingHour.getFromTime() + 15);
+        }
         String customUniqueId = className + foreignTableId + workingHour.getFromTime() + workingHour.getToTime();
         workingHour.setCustomUniqueId(customUniqueId);
         workingHour.setForeignTableId(foreignTableId);

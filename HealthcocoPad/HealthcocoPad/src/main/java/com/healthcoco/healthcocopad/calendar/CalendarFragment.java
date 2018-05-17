@@ -136,6 +136,7 @@ public class CalendarFragment extends HealthCocoFragment implements WeekView.Eve
     }
 
     private void notifyAdapter(ArrayList<CalendarEvents> calendarEventsArrayList) {
+        events = new ArrayList<WeekViewEvent>();
         if (!Util.isNullOrEmptyList(calendarEventsArrayList)) {
             for (CalendarEvents event : calendarEventsArrayList) {
                 this.events.add(toWeekViewEvent(event));
@@ -313,7 +314,7 @@ public class CalendarFragment extends HealthCocoFragment implements WeekView.Eve
             weekViewEvent.setStartTime(startTime);
             weekViewEvent.setEndTime(endTime);
             weekViewEvent.setCalendarEvent(event);
-            events.add(weekViewEvent);
+//            events.add(weekViewEvent);
         }
         return weekViewEvent;
     }

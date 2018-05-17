@@ -796,10 +796,12 @@ public class ContactsListFragment extends HealthCocoFragment implements
         if (requestCode == REQUEST_CODE_CONTACTS_DETAIL) {
             LogUtils.LOGD(TAG, "Contacts List onActivityResult ");
             if (resultCode == HealthCocoConstants.RESULT_CODE_REGISTRATION) {
-                RegisteredPatientDetailsUpdated patientDetails = Parcels.unwrap(data.getParcelableExtra(HealthCocoConstants.TAG_PATIENT_PROFILE));
-                patientsListHashMap.put(patientDetails.getUserId(), patientDetails);
-                notifyAdapter(new ArrayList<RegisteredPatientDetailsUpdated>(patientsListHashMap.values()));
+                if (data != null && data.getParcelableExtra(HealthCocoConstants.TAG_PATIENT_PROFILE) != null) {
+                    RegisteredPatientDetailsUpdated patientDetails = Parcels.unwrap(data.getParcelableExtra(HealthCocoConstants.TAG_PATIENT_PROFILE));
+                    patientsListHashMap.put(patientDetails.getUserId(), patientDetails);
+                    notifyAdapter(new ArrayList<RegisteredPatientDetailsUpdated>(patientsListHashMap.values()));
 //                getListFromLocal(false);
+                }
             } else if (resultCode == HealthCocoConstants.RESULT_CODE_GROUPS_LIST) {
                 filterList(filterType);
             } else if (resultCode == HealthCocoConstants.RESULT_CODE_SEARCH_NUMBER_RESULTS) {
