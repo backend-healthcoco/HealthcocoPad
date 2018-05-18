@@ -125,12 +125,13 @@ public class TreatmentListItemViewHolder extends HealthCocoViewHolder implements
 
         //set TotalDiscount
         UnitValue totalDiscount = treatments.getTotalDiscount();
-        double value = totalDiscount.getValue();
-        if (totalDiscount != null && totalDiscount.getUnit() != null && value != 0)
-            tvTotalDiscount.setText(Util.getIntValue(value) + "");
-        else
-            tvTotalDiscount.setText(mActivity.getResources().getString(R.string.no_text_dash));
-
+        if (totalDiscount != null) {
+            double value = totalDiscount.getValue();
+            if (totalDiscount != null && totalDiscount.getUnit() != null && value != 0)
+                tvTotalDiscount.setText(Util.getIntValue(value) + "");
+            else
+                tvTotalDiscount.setText(mActivity.getResources().getString(R.string.no_text_dash));
+        }
         //set TotalGrandTotal
         double grandTotal = treatments.getGrandTotal();
         if (grandTotal != 0)
