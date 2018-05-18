@@ -9,10 +9,6 @@ import java.util.List;
 import static com.healthcoco.healthcocopad.utilities.DateTimeUtil.isSameDay;
 
 
-/**
- * Created by Raquib-ul-Alam Kanak on 7/21/2014.
- * Website: http://april-shower.com
- */
 public class WeekViewEvent {
     private String mId;
     private Calendar mStartTime;

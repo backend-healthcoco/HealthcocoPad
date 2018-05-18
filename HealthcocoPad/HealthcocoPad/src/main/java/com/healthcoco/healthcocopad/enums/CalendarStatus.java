@@ -11,21 +11,21 @@ public enum CalendarStatus {
         {
             add("WAITING");
             add("ENGAGED");
-            add("CHECKED OUT");
+            add("CHECKED_OUT");
         }
     }), WAITING("WAITING", new ArrayList<Object>() {
         {
             add("SCHEDULED");
             add("ENGAGED");
-            add("CHECKED OUT");
+            add("CHECKED_OUT");
         }
     }), ENGAGED("ENGAGED", new ArrayList<Object>() {
         {
             add("SCHEDULED");
             add("WAITING");
-            add("CHECKED OUT");
+            add("CHECKED_OUT");
         }
-    }), CHECKED_OUT("CHECKED OUT", new ArrayList<Object>() {
+    }), CHECKED_OUT("CHECKED_OUT", new ArrayList<Object>() {
         {
             add("SCHEDULED");
             add("WAITING");

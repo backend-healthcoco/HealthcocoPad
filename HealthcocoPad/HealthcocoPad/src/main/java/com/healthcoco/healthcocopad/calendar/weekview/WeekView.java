@@ -49,10 +49,7 @@ import java.util.Locale;
 import static com.healthcoco.healthcocopad.utilities.DateTimeUtil.isSameDay;
 import static com.healthcoco.healthcocopad.utilities.DateTimeUtil.today;
 
-/**
- * Created by Raquib-ul-Alam Kanak on 7/21/2014.
- * Website: http://alamkanak.github.io/
- */
+
 public class WeekView extends View {
 
     @Deprecated

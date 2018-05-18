@@ -59,12 +59,6 @@ import static com.healthcoco.healthcocopad.fragments.QueueFragment.TAG_CHANGED_D
 import static com.healthcoco.healthcocopad.fragments.QueueFragment.TAG_IS_FROM_CALENDAR;
 
 
-/**
- * This is a base activity which contains week view and all the codes necessary to initialize the
- * week view.
- * Created by Raquib-ul-Alam Kanak on 1/3/2014.
- * Website: http://alamkanak.github.io
- */
 public class CalendarFragment extends HealthCocoFragment implements WeekView.EventClickListener, MonthLoader.MonthChangeListener, WeekView.ScrollListener, LocalDoInBackgroundListenerOptimised, WeekView.EmptyViewLongPressListener {
     private static final int TYPE_DAY_VIEW = 1;
     private static final int TYPE_THREE_DAY_VIEW = 2;
