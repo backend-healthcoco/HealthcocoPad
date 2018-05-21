@@ -1611,6 +1611,15 @@ public class WebDataServiceImpl implements GCMRefreshListener {
                                   String locationId, String foreignHospitalId, long selectedDate,
                                   long updatedTime, Response.Listener<VolleyResponseBean> responseListener,
                                   GsonRequest.ErrorListener errorListener) {
+        getCalendarEvents(class1, registeredDoctorProfileList, locationId, foreignHospitalId,
+                DateTimeUtil.getFirstDayOfMonthMilli(selectedDate), DateTimeUtil.getLastDayOfMonthMilli(selectedDate),
+                updatedTime, responseListener, errorListener);
+    }
+
+    public void getCalendarEvents(Class<?> class1, List<RegisteredDoctorProfile> registeredDoctorProfileList,
+                                  String locationId, String foreignHospitalId, long startDate, long endDate,
+                                  long updatedTime, Response.Listener<VolleyResponseBean> responseListener,
+                                  GsonRequest.ErrorListener errorListener) {
         WebServiceType webServiceType = WebServiceType.GET_CALENDAR_EVENTS;
         checkNetworkStatus(mApp);
         if (HealthCocoConstants.isNetworkOnline) {
@@ -1624,8 +1633,8 @@ public class WebDataServiceImpl implements GCMRefreshListener {
                 }
             url = url + HealthCocoConstants.PARAM_MATRIX_LOCATION_ID + locationId + "?"
                     + HealthCocoConstants.PARAM_MATRIX_HOSPITAL_ID + foreignHospitalId + "?"
-                    + HealthCocoConstants.PARAM_FROM + DateTimeUtil.getFirstDayOfMonthMilli(selectedDate)
-                    + HealthCocoConstants.PARAM_TO + DateTimeUtil.getLastDayOfMonthMilli(selectedDate)
+                    + HealthCocoConstants.PARAM_FROM + startDate
+                    + HealthCocoConstants.PARAM_TO + endDate
                     + HealthCocoConstants.PARAM_UPDATED_TIME + +updatedTime;
             getResponse(webServiceType, class1, url, null, null, responseListener,
                     errorListener);
