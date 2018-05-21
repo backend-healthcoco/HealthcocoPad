@@ -498,6 +498,13 @@ public class DateTimeUtil {
         return calendar.getTimeInMillis();
     }
 
+    public static long getDateAfterFiveDays(long date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(date);
+        calendar.add(Calendar.DATE, 5);
+        return calendar.getTimeInMillis();
+    }
+
     public static String getFormttedTime(long date) {
         String delegate = "hh:mm aaa";
         Calendar calendar = Calendar.getInstance();
