@@ -498,10 +498,10 @@ public class DateTimeUtil {
         return calendar.getTimeInMillis();
     }
 
-    public static long getDateAfterFiveDays(long date) {
+    public static long getDateAfterDays(long date, int days) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(date);
-        calendar.add(Calendar.DATE, 5);
+        calendar.add(Calendar.DATE, days);
         return calendar.getTimeInMillis();
     }
 
