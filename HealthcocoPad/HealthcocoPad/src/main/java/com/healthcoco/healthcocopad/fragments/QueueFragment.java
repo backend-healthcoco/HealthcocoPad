@@ -83,17 +83,27 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
     public static final String TAG_IS_FROM_CALENDAR = "isFromCalendar";
 
     public static final String DATE_FORMAT_FOR_HEADER_IN_THIS_SCREEN = "EEE, MMM dd,yyyy";
-    public static final int MAX_SIZE = 10;
-    public static final int MAX_NUMBER_OF_EVENTS = 30;
+    //    public static final int MAX_SIZE = 10;
+    public static final int MAX_NUMBER_OF_EVENTS = 50;
     private static final String DATE_FORMAT_USED_IN_THIS_SCREEN = "EEE, MMM dd,yyyy";
     public ArrayList<RegisteredDoctorProfile> clinicDoctorProfileList;
     public List<RegisteredDoctorProfile> registeredDoctorProfileList;
+    Long latestUpdatedTime = 0l;
     private int PAGE_NUMBER = 0;
     private int noOfDay = 4;
-    private boolean isEndOfListAchieved;
+    private boolean isEndOfListAchieved = true;
     private User user;
     private User loggedInUser;
     private long selectedMonthDayYearInMillis;
+    BroadcastReceiver appointmentListReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, final Intent intent) {
+            if (intent != null) {
+                resetListAndPagingAttributes();
+                getCalendarEventsList(true);
+            }
+        }
+    };
     private long startDayInMillis;
     private long endDayInMillis;
     private long curentMonthDayYearInMillis;
@@ -104,14 +114,6 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
     private boolean isSingleDoctor = false;
     private boolean isInitialLoading = true;
     private boolean isPagingRequired = false;
-    BroadcastReceiver appointmentListReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, final Intent intent) {
-            if (intent != null) {
-                getCalendarEventsList(true);
-            }
-        }
-    };
     private boolean receiversRegistered;
     private TextView tvDoctorName;
     private LinearLayout lvDoctorName;
@@ -266,36 +268,28 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
     }
 
     public void getCalendarEventsList(boolean showLoading) {
-        Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(user, LocalTabelType.CALENDAR_EVENTS, selectedMonthDayYearInMillis);
-        if (latestUpdatedTime > 0l) {
-            if (showLoading)
-                mActivity.showLoading(false);
-            isPagingRequired = false;
-            WebDataServiceImpl.getInstance(mApp).getCalendarEvents(CalendarEvents.class, registeredDoctorProfileList, user.getForeignLocationId(), user.getForeignHospitalId(), selectedMonthDayYearInMillis, latestUpdatedTime, this, this);
 
-        } else {
-            isPagingRequired = true;
-            startDayInMillis = DateTimeUtil.getFirstDayOfMonthMilli(selectedMonthDayYearInMillis);
-            mActivity.showProgressDialog();
-            getCalendarEventsList(startDayInMillis);
+        if (isEndOfListAchieved) {
+            latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(user, LocalTabelType.CALENDAR_EVENTS, selectedMonthDayYearInMillis);
+            if (showLoading)
+                if (latestUpdatedTime > 0l) {
+                    mActivity.showLoading(false);
+                } else {
+                    mActivity.showProgressDialog();
+                }
         }
+        WebDataServiceImpl.getInstance(mApp).getCalendarEvents(CalendarEvents.class,
+                registeredDoctorProfileList, user.getForeignLocationId(), user.getForeignHospitalId(),
+                DateTimeUtil.getFirstDayOfMonthMilli(selectedMonthDayYearInMillis), DateTimeUtil.getLastDayOfMonthMilli(selectedMonthDayYearInMillis),
+                latestUpdatedTime, PAGE_NUMBER, MAX_NUMBER_OF_EVENTS, this, this);
+
+
     }
 
 
-    private void getCalendarEventsList(long startDayInMillis) {
-        if (isPagingRequired && DateTimeUtil.isCurrentMonthSelected(curentMonthDayYearInMillis, startDayInMillis)) {
-            endDayInMillis = DateTimeUtil.getDateAfterDays(startDayInMillis, noOfDay);
-            startDayInMillis = DateTimeUtil.getStartTimeOfDayMilli(startDayInMillis);
-            endDayInMillis = DateTimeUtil.getEndTimeOfDayMilli(endDayInMillis);
-            if (endDayInMillis >= DateTimeUtil.getLastDayOfMonthMilli(selectedMonthDayYearInMillis)) {
-                endDayInMillis = DateTimeUtil.getLastDayOfMonthMilli(selectedMonthDayYearInMillis);
-                isPagingRequired = false;
-            }
-            WebDataServiceImpl.getInstance(mApp).getCalendarEvents(CalendarEvents.class, registeredDoctorProfileList, user.getForeignLocationId(),
-                    user.getForeignHospitalId(), startDayInMillis, endDayInMillis,
-                    0, this, this);
-            mActivity.updateProgressDialog(30, noOfDay);
-        }
+    private void resetListAndPagingAttributes() {
+        PAGE_NUMBER = 0;
+        isEndOfListAchieved = true;
     }
 
 
@@ -339,9 +333,15 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
                     if (!Util.isNullOrEmptyList(response.getDataList())) {
                         new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_CALENDAR_EVENTS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
                         response.setIsFromLocalAfterApiSuccess(true);
+                        if (Util.isNullOrEmptyList(response.getDataList()) || response.getDataList().size() < MAX_NUMBER_OF_EVENTS || Util.isNullOrEmptyList(response.getDataList())) {
+                            isEndOfListAchieved = true;
+                            mActivity.updateProgressDialog(10, 10);
+                        } else {
+                            PAGE_NUMBER = PAGE_NUMBER + 1;
+                            isEndOfListAchieved = false;
+                            mActivity.updateProgressDialog(10, 1);
+                        }
                         return;
-                    } else if (isPagingRequired) {
-                        getCalendarEventsList(DateTimeUtil.getNextDate(endDayInMillis));
                     } else {
                         mActivity.hideProgressDialog();
                         refreshCalendarData();
@@ -350,9 +350,8 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
                     }
                     break;
                 case ADD_APPOINTMENT:
-                    if (isPagingRequired) {
-                        getCalendarEventsList(DateTimeUtil.getNextDate(endDayInMillis));
-
+                    if (!isEndOfListAchieved) {
+                        getCalendarEventsList(true);
                     } else {
                         mActivity.hideProgressDialog();
                         refreshCalendarData();
@@ -478,6 +477,7 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
                 bookWalkInAppointment();
                 break;
             case R.id.bt_refresh:
+                resetListAndPagingAttributes();
                 getCalendarEventsList(true);
                 break;
             case R.id.tv_selected_date:
@@ -522,6 +522,7 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
                             refreshQueueData();
                         } else {
                             curentMonthDayYearInMillis = selectedMonthDayYearInMillis;
+                            resetListAndPagingAttributes();
                             getCalendarEventsList(true);
                         }
                         changeFloatingButtonStatus(selectedMonthDayYearInMillis);

@@ -1613,12 +1613,12 @@ public class WebDataServiceImpl implements GCMRefreshListener {
                                   GsonRequest.ErrorListener errorListener) {
         getCalendarEvents(class1, registeredDoctorProfileList, locationId, foreignHospitalId,
                 DateTimeUtil.getFirstDayOfMonthMilli(selectedDate), DateTimeUtil.getLastDayOfMonthMilli(selectedDate),
-                updatedTime, responseListener, errorListener);
+                updatedTime, 0, 0, responseListener, errorListener);
     }
 
     public void getCalendarEvents(Class<?> class1, List<RegisteredDoctorProfile> registeredDoctorProfileList,
                                   String locationId, String foreignHospitalId, long startDate, long endDate,
-                                  long updatedTime, Response.Listener<VolleyResponseBean> responseListener,
+                                  long updatedTime, int pageNo, int size, Response.Listener<VolleyResponseBean> responseListener,
                                   GsonRequest.ErrorListener errorListener) {
         WebServiceType webServiceType = WebServiceType.GET_CALENDAR_EVENTS;
         checkNetworkStatus(mApp);
@@ -1631,11 +1631,14 @@ public class WebDataServiceImpl implements GCMRefreshListener {
 
                     url = url + HealthCocoConstants.PARAM_MATRIX_DOCTOR_ID + doctorProfile.getUserId();
                 }
-            url = url + HealthCocoConstants.PARAM_MATRIX_LOCATION_ID + locationId + "?"
-                    + HealthCocoConstants.PARAM_MATRIX_HOSPITAL_ID + foreignHospitalId + "?"
+            url = url + HealthCocoConstants.PARAM_MATRIX_LOCATION_ID + locationId
+                    + HealthCocoConstants.PARAM_HOSPITAL_ID + foreignHospitalId
                     + HealthCocoConstants.PARAM_FROM + startDate
                     + HealthCocoConstants.PARAM_TO + endDate
                     + HealthCocoConstants.PARAM_UPDATED_TIME + +updatedTime;
+            if (pageNo >= 0 && size > 0) {
+                url = url + HealthCocoConstants.PARAM_PAGE + pageNo + HealthCocoConstants.PARAM_SIZE + size;
+            }
             getResponse(webServiceType, class1, url, null, null, responseListener,
                     errorListener);
         } else {

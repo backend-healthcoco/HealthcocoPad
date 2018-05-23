@@ -233,7 +233,7 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
             progressDialog.setMax(100);
             progressDialog.setCancelable(true);
             progressDialog.setCanceledOnTouchOutside(false);
-            progressDialog.setMessage("Sync is in Progress, Please wait...");
+            progressDialog.setMessage("Please wait...");
 
             if (progressDialog != null && !progressDialog.isShowing()) {
                 progressDialog.show();
