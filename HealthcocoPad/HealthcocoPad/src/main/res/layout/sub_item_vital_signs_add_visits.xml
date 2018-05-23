@@ -239,13 +239,14 @@
                     android:background="@drawable/shape_rounded_corners_item_background"
                     android:gravity="center"
                     android:hint="@string/centimeter"
-                    android:inputType="numberDecimal"
+                    android:inputType="number"
                     android:maxLines="1"
                     android:nextFocusDown="@+id/edit_resp_rate"
                     android:nextFocusUp="@+id/edit_weight"
                     android:padding="10dp"
                     android:textColor="@color/black"
                     android:textSize="@dimen/text_size_add_visits_lable" />
+
             </LinearLayout>
 
             <LinearLayout

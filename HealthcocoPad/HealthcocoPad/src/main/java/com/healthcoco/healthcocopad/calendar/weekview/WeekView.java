@@ -128,7 +128,7 @@ public class WeekView extends View {
     private int mEventTextSize = 12;
     private int mEventTextColor = Color.BLACK;
     private int mEventPadding = 5;
-    private int mEventTopPadding = 20;
+    private int mEventTopPadding = 27;
     private int mHeaderColumnBackgroundColor = Color.WHITE;
     private boolean mIsFirstDraw = true;
     private boolean mAreDimensionsInvalid = true;
@@ -820,7 +820,7 @@ public class WeekView extends View {
                         canvas.drawRoundRect(mEventRects.get(i).rectF, mEventCornerRadius, mEventCornerRadius, mEventBackgroundPaint);
                         canvas.drawRoundRect(mEventRects.get(i).rectF, mEventCornerRadius, mEventCornerRadius, mEventStokePaint);
                         drawEventTitle(mEventRects.get(i).event.getTime(), mEventRects.get(i).event.getTextColor(), mEventRects.get(i).rectF, canvas, top, left, mEventPadding, mEventPadding);
-                        drawEventTitle(mEventRects.get(i).event.getName(), mEventRects.get(i).event.getTextColor(), mEventRects.get(i).rectF, canvas, top, left, mEventTopPadding, 10);
+                        drawEventTitle(mEventRects.get(i).event.getName(), mEventRects.get(i).event.getTextColor(), mEventRects.get(i).rectF, canvas, top, left, mEventTopPadding, 20);
                     } else
                         mEventRects.get(i).rectF = null;
                 }

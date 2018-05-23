@@ -1097,16 +1097,20 @@ public class AddClinicalNotesVisitMyScriptFragment extends HealthCocoFragment im
                 if (!Util.isNullOrBlank(s)
                         && !Util.isNullOrBlank(editWeight.getText().toString())
                         && !Util.isNullOrBlank(s)) {
-                    float weight = Float.parseFloat(editWeight.getText().toString());
-                    float height = Float.parseFloat(s);
-                    //BMI = weight in KG / square of (height in metre)
-                    float bmiValue = Util.calculateBMI(weight, Float.parseFloat(s) / 100);
+                    try {
+                        float weight = Float.parseFloat(editWeight.getText().toString());
+                        float height = Float.parseFloat(s);
+                        //BMI = weight in KG / square of (height in metre)
+                        float bmiValue = Util.calculateBMI(weight, Float.parseFloat(s) / 100);
 
-                    editBmi.setText(Util.getFormattedFloatNumber(bmiValue));
+                        editBmi.setText(Util.getFormattedFloatNumber(bmiValue));
 
-                    // BSA = squareroot of (weight X height / 3600)
-                    float bsaValue = Util.calculateBSA(weight, height);
-                    editBsa.setText(Util.getFormattedFloatNumber(bsaValue));
+                        // BSA = squareroot of (weight X height / 3600)
+                        float bsaValue = Util.calculateBSA(weight, height);
+                        editBsa.setText(Util.getFormattedFloatNumber(bsaValue));
+                    } catch (Exception e) {
+                        editHeight.setText(s.substring(0, s.length() - 1));
+                    }
                 } else {
                     editBmi.setText("");
                     editBsa.setText("");

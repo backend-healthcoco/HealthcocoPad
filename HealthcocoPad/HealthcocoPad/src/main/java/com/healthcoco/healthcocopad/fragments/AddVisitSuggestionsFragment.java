@@ -518,12 +518,12 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements T
             case R.id.bt_add_new:
                 if (suggestionType != null) {
                     switch (suggestionType) {
-                      /*  case DRUGS:
+                        case DRUGS:
                             AddNewDrugDialogFragment newDrugDialogFragment = new AddNewDrugDialogFragment(this);
                             newDrugDialogFragment.show(mActivity.getSupportFragmentManager(),
                                     newDrugDialogFragment.getClass().getSimpleName());
                             break;
-*/
+
                         case COMPLAINTS:
                         case OBSERVATION:
                         case INVESTIGATION:
@@ -635,7 +635,7 @@ public class AddVisitSuggestionsFragment extends HealthCocoFragment implements T
                 break;
             case DRUGS:
                 parentEditSearchView.setVisibility(View.VISIBLE);
-                btAddNew.setVisibility(View.VISIBLE);
+                btAddNew.setVisibility(View.GONE);
                 tvNoDrugs.setText(R.string.no_drug_history);
                 break;
             default:
