@@ -95,19 +95,21 @@ public class InvoiceListItemViewHolder extends HealthCocoViewHolder implements V
         tvTotalCost.setText(String.valueOf(Util.formatDoubleNumber(invoice.getTotalCost())));
 
         UnitValue totalDiscount = invoice.getTotalDiscount();
-        double value = totalDiscount.getValue();
-        if (totalDiscount != null && totalDiscount.getUnit() != null && value != 0)
-            tvTotalDiscount.setText(Util.getIntValue(value) + "");
-        else
-            tvTotalDiscount.setText(mActivity.getResources().getString(R.string.no_text_dash));
-
+        if (totalDiscount != null) {
+            double value = totalDiscount.getValue();
+            if (totalDiscount != null && totalDiscount.getUnit() != null && value != 0)
+                tvTotalDiscount.setText(Util.getIntValue(value) + "");
+            else
+                tvTotalDiscount.setText(mActivity.getResources().getString(R.string.no_text_dash));
+        }
         UnitValue totalTax = invoice.getTotalTax();
-        double valueTax = totalTax.getValue();
-        if (totalTax != null && totalTax.getUnit() != null && valueTax != 0)
-            tvTotalTax.setText(Util.getIntValue(valueTax) + "");
-        else
-            tvTotalTax.setText(mActivity.getResources().getString(R.string.no_text_dash));
-
+        if (totalTax != null) {
+            double valueTax = totalTax.getValue();
+            if (totalTax != null && totalTax.getUnit() != null && valueTax != 0)
+                tvTotalTax.setText(Util.getIntValue(valueTax) + "");
+            else
+                tvTotalTax.setText(mActivity.getResources().getString(R.string.no_text_dash));
+        }
 
         if (invoice.getBalanceAmount() <= 0) {
             btPay.setVisibility(View.GONE);

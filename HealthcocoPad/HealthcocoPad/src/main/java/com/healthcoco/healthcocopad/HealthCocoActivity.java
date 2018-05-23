@@ -3,6 +3,7 @@ package com.healthcoco.healthcocopad;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -146,6 +147,7 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
     protected HealthCocoApplication mApp;
     ClinicalNotesDynamicField clinicalNotesDynamicField;
     private Dialog alertDialog;
+    private ProgressDialog progressDialog;
     private Handler mHandler;
     private Runnable runnable;
     private ArrayList<DefaultSyncServiceType> defaultWebServicesList = new ArrayList<>();
@@ -220,8 +222,61 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
     }
 
     /**
+     * Show progress dialog
+     */
+
+    public void showProgressDialog() {
+        try {
+            LogUtils.LOGD(TAG, "Initialising Progress Dialog ");
+            progressDialog = new ProgressDialog(this);
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            progressDialog.setMax(100);
+            progressDialog.setCancelable(true);
+            progressDialog.setCanceledOnTouchOutside(false);
+            progressDialog.setMessage("Sync is in Progress, Please wait...");
+
+            if (progressDialog != null && !progressDialog.isShowing()) {
+                progressDialog.show();
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Update progress dialog
+     */
+
+    public void updateProgressDialog(float totalValue, float progressValue) {
+        try {
+            if (progressDialog != null && progressDialog.isShowing()) {
+                int progress = (int) ((progressValue / totalValue) * 100);
+                progressDialog.incrementProgressBy(progress);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Update progress dialog
+     */
+    public void hideProgressDialog() {
+        try {
+            if (progressDialog != null && progressDialog.isShowing()) {
+                progressDialog.dismiss();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    /**
      * Hides the soft keyboard
      */
+
     public void hideSoftKeyboard() {
         if (getCurrentFocus() != null) {
             InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);

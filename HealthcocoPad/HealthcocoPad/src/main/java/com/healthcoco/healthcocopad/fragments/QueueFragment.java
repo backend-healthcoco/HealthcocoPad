@@ -3,6 +3,7 @@ package com.healthcoco.healthcocopad.fragments;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -88,6 +89,7 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
     public ArrayList<RegisteredDoctorProfile> clinicDoctorProfileList;
     public List<RegisteredDoctorProfile> registeredDoctorProfileList;
     private int PAGE_NUMBER = 0;
+    private int noOfDay = 4;
     private boolean isEndOfListAchieved;
     private User user;
     private User loggedInUser;
@@ -264,23 +266,25 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
     }
 
     public void getCalendarEventsList(boolean showLoading) {
-        if (showLoading)
-            mActivity.showLoading(false);
         Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(user, LocalTabelType.CALENDAR_EVENTS, selectedMonthDayYearInMillis);
         if (latestUpdatedTime > 0l) {
+            if (showLoading)
+                mActivity.showLoading(false);
             isPagingRequired = false;
             WebDataServiceImpl.getInstance(mApp).getCalendarEvents(CalendarEvents.class, registeredDoctorProfileList, user.getForeignLocationId(), user.getForeignHospitalId(), selectedMonthDayYearInMillis, latestUpdatedTime, this, this);
 
         } else {
             isPagingRequired = true;
             startDayInMillis = DateTimeUtil.getFirstDayOfMonthMilli(selectedMonthDayYearInMillis);
+            mActivity.showProgressDialog();
             getCalendarEventsList(startDayInMillis);
         }
     }
 
+
     private void getCalendarEventsList(long startDayInMillis) {
         if (isPagingRequired && DateTimeUtil.isCurrentMonthSelected(curentMonthDayYearInMillis, startDayInMillis)) {
-            endDayInMillis = DateTimeUtil.getDateAfterFiveDays(startDayInMillis);
+            endDayInMillis = DateTimeUtil.getDateAfterDays(startDayInMillis, noOfDay);
             startDayInMillis = DateTimeUtil.getStartTimeOfDayMilli(startDayInMillis);
             endDayInMillis = DateTimeUtil.getEndTimeOfDayMilli(endDayInMillis);
             if (endDayInMillis >= DateTimeUtil.getLastDayOfMonthMilli(selectedMonthDayYearInMillis)) {
@@ -290,7 +294,7 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
             WebDataServiceImpl.getInstance(mApp).getCalendarEvents(CalendarEvents.class, registeredDoctorProfileList, user.getForeignLocationId(),
                     user.getForeignHospitalId(), startDayInMillis, endDayInMillis,
                     0, this, this);
-
+            mActivity.updateProgressDialog(30, noOfDay);
         }
     }
 
@@ -298,12 +302,14 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
     @Override
     public void onNetworkUnavailable(WebServiceType webServiceType) {
         Util.showToast(mActivity, R.string.user_offline);
+        mActivity.hideProgressDialog();
         mActivity.hideLoading();
     }
 
     @Override
     public void onErrorResponse(VolleyResponseBean volleyResponseBean, String errorMessage) {
         super.onErrorResponse(volleyResponseBean, errorMessage);
+        mActivity.hideProgressDialog();
         refreshCalendarData();
         isInitialLoading = false;
     }
@@ -337,6 +343,7 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
                     } else if (isPagingRequired) {
                         getCalendarEventsList(DateTimeUtil.getNextDate(endDayInMillis));
                     } else {
+                        mActivity.hideProgressDialog();
                         refreshCalendarData();
                         isInitialLoading = false;
                         mActivity.hideLoading();
@@ -347,6 +354,7 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
                         getCalendarEventsList(DateTimeUtil.getNextDate(endDayInMillis));
 
                     } else {
+                        mActivity.hideProgressDialog();
                         refreshCalendarData();
                         isInitialLoading = false;
                         mActivity.hideLoading();
