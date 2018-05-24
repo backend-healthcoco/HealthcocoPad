@@ -215,8 +215,8 @@ public class SelectedDrugItemsListFragment extends HealthCocoFragment implements
         if (!Util.isNullOrEmptyList(drugsList)) {
             LinkedHashMap<String, DrugItem> newHashMap = new LinkedHashMap<>();
             newHashMap.putAll(drugsList);
-            List<DrugItem> modifiedList = new ArrayList<DrugItem>();
-            modifiedList.addAll(newHashMap.values());
+            List<DrugItem> modifiedList = new ArrayList<DrugItem>(newHashMap.values());
+//            modifiedList.addAll();
             for (DrugItem drugItem :
                     modifiedList) {
                 if (drugItem.getDrug() != null) {
