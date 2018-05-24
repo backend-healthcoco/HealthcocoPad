@@ -98,9 +98,10 @@ public class CommonListDialogFragmentWithTitle extends HealthCocoDialogFragment 
     public void onActivityCreated(Bundle arg0) {
         super.onActivityCreated(arg0);
         boolean isMyScriptVisitToggleState = Util.getVisitToggleStateFromPreferences(mActivity);
-        if (isMyScriptVisitToggleState)
+       /* if (isMyScriptVisitToggleState)
             ((AddVisitsActivity) mActivity).setWidthHeight(getDialog(), 0.90, 0.90);
-        else setWidthHeight(0.90, 0.90);
+        else*/
+        setWidthHeight(0.90, 0.90);
         init();
     }
 
