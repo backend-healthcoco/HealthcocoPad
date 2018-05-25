@@ -49,6 +49,8 @@ public enum SuggestionType {
     INDICATION_OF_USG(false, R.string.indication_of_usg),
     NOTES(false, R.string.notes),
 
+    PASSWORD(false, R.string.password),
+
 
     ADVICE(false, R.string.advice_tag),
     TEMPLATE(false, R.string.templates);

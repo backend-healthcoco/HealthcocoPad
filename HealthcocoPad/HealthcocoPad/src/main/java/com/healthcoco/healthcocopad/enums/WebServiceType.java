@@ -69,6 +69,8 @@ public enum WebServiceType {
 
     LOGIN(Method.POST, "login/user?"),
 
+    IS_LOCATION_ADMIN(Method.POST, "login/isLocationAdmin"),
+
     GET_DRUG_UNIT(Method.GET, "prescription/DRUGSTRENGTHUNIT/BOTH/?discarded=false&doctorId="),
 
     GET_DRUG_TYPE(Method.GET, "prescription/DRUGTYPE/BOTH/?"),

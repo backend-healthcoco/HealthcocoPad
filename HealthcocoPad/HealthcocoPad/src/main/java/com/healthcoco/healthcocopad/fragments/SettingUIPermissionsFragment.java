@@ -24,6 +24,7 @@ import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
+import com.healthcoco.healthcocopad.enums.SuggestionType;
 import com.healthcoco.healthcocopad.enums.UIPermissionsItemType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
@@ -41,6 +42,7 @@ import java.util.List;
 import static com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType.SETTINGS_UI_PERMISSION_CLINICAL_NOTES;
 import static com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType.SETTINGS_UI_PERMISSION_PRESCRIPTION;
 import static com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType.SETTINGS_UI_PERMISSION_VISITS;
+import static com.healthcoco.healthcocopad.enums.UIPermissionsItemType.PATIENT_TAB_PERMISSION;
 
 /**
  * Created by Shreshtha on 27-02-2017.
@@ -135,7 +137,7 @@ public class SettingUIPermissionsFragment extends HealthCocoFragment implements 
 //                openCommonOpenUpActivity(SETTINGS_UI_PERMISSION_VISITS, itemType.ordinal());
 //                break;
             case PATIENT_TAB_PERMISSION:
-                openCommonOpenUpActivity(CommonOpenUpFragmentType.SETTINGS_UI_PERMISSION_PATIENT_TAB, itemType.ordinal());
+                mActivity.openAddNewSuggestionsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, SuggestionType.PASSWORD);
                 break;
         }
     }
@@ -226,4 +228,15 @@ public class SettingUIPermissionsFragment extends HealthCocoFragment implements 
                 break;
         }
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST) {
+            if (resultCode == HealthCocoConstants.RESULT_CODE_REFERENCE_LIST) {
+                openCommonOpenUpActivity(CommonOpenUpFragmentType.SETTINGS_UI_PERMISSION_PATIENT_TAB, PATIENT_TAB_PERMISSION.ordinal());
+            }
+        }
+    }
+
 }
