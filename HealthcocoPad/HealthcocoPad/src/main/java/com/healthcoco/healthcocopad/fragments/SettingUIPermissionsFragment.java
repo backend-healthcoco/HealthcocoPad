@@ -137,7 +137,8 @@ public class SettingUIPermissionsFragment extends HealthCocoFragment implements 
 //                openCommonOpenUpActivity(SETTINGS_UI_PERMISSION_VISITS, itemType.ordinal());
 //                break;
             case PATIENT_TAB_PERMISSION:
-                mActivity.openAddNewSuggestionsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, SuggestionType.PASSWORD);
+                openCommonOpenUpActivity(CommonOpenUpFragmentType.SETTINGS_UI_PERMISSION_PATIENT_TAB, PATIENT_TAB_PERMISSION.ordinal());
+//                mActivity.openAddNewSuggestionsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, SuggestionType.PASSWORD);
                 break;
         }
     }

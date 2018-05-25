@@ -1765,7 +1765,7 @@ public class LocalDataServiceImpl {
                     registeredDoctorProfileList) {
                 registeredDoctorProfile.setLocationId(locationId);
             }
-            DrugDurationUnit.saveInTx(registeredDoctorProfileList);
+            RegisteredDoctorProfile.saveInTx(registeredDoctorProfileList);
         }
     }
 

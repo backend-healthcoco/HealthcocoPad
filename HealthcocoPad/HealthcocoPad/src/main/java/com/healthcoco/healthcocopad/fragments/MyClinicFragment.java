@@ -221,6 +221,7 @@ public class MyClinicFragment extends HealthCocoFragment implements View.OnClick
                                 Object object = adapter.getSelectedObject(position);
                                 if (object != null && object instanceof DoctorClinicProfile)
                                     refreshSelectedClinicProfileData((DoctorClinicProfile) object);
+                                Util.sendBroadcast(mApp, ContactsListFragment.INTENT_GET_CLINIC_PROFILE, true);
                                 break;
                         }
                     }

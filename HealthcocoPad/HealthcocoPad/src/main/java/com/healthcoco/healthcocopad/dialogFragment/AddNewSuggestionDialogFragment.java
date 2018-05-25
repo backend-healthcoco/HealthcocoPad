@@ -269,7 +269,7 @@ public class AddNewSuggestionDialogFragment extends HealthCocoDialogFragment imp
                 addProcedureSuggestion(suggestion);
                 break;
             case PASSWORD:
-                checkIsLocationAdmin(doctor.getUser().getEmailAddress(), suggestion);
+                checkIsLocationAdmin(doctor.getUser().getEmailAddress(), suggestion, doctor.getUser().getForeignLocationId());
                 break;
         }
     }
@@ -647,11 +647,12 @@ public class AddNewSuggestionDialogFragment extends HealthCocoDialogFragment imp
 
     }
 
-    private void checkIsLocationAdmin(String userName, String password) {
+    private void checkIsLocationAdmin(String userName, String password, String locationId) {
         mActivity.showLoading(false);
         User user = new User();
         user.setUsername(userName);
         user.setPassword(Util.getSHA3SecurePassword(password));
+        user.setForeignLocationId(locationId);
         WebDataServiceImpl.getInstance(mApp).isLocationAdmin(LoginResponse.class, user, this, this);
     }
 

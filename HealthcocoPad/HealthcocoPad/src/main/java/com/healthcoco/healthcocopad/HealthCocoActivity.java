@@ -719,11 +719,6 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
                 case GET_DRUG_DOSAGE:
                     if (defaultWebServicesList.contains(DefaultSyncServiceType.getSyncType(webServiceType)))
                         defaultWebServicesList.remove(DefaultSyncServiceType.getSyncType(webServiceType));
-                    updateProgress(DefaultSyncServiceType.GET_CONTACTS);
-                    return;
-                case GET_CONTACTS:
-                    if (defaultWebServicesList.contains(DefaultSyncServiceType.getSyncType(webServiceType)))
-                        defaultWebServicesList.remove(DefaultSyncServiceType.getSyncType(webServiceType));
                     updateProgress(DefaultSyncServiceType.GET_DOCTOR_PROFILE);
                     return;
                 case GET_DOCTOR_PROFILE:
@@ -948,8 +943,13 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
                 case GET_TEMPLATES_LIST:
                     if (defaultWebServicesList.contains(DefaultSyncServiceType.getSyncType(webServiceType)))
                         defaultWebServicesList.remove(DefaultSyncServiceType.getSyncType(webServiceType));
-                    updateProgress(DefaultSyncServiceType.GET_BOTH_UI_PERMISSIONS);
+                    updateProgress(DefaultSyncServiceType.GET_CONTACTS);
                     break;
+                case GET_CONTACTS:
+                    if (defaultWebServicesList.contains(DefaultSyncServiceType.getSyncType(webServiceType)))
+                        defaultWebServicesList.remove(DefaultSyncServiceType.getSyncType(webServiceType));
+                    updateProgress(DefaultSyncServiceType.GET_BOTH_UI_PERMISSIONS);
+                    return;
                 case GET_BOTH_PERMISSIONS_FOR_DOCTOR:
                     if (defaultWebServicesList.contains(DefaultSyncServiceType.getSyncType(webServiceType)))
                         defaultWebServicesList.remove(DefaultSyncServiceType.getSyncType(webServiceType));

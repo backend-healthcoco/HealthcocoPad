@@ -44,6 +44,7 @@ public class InvoiceListItemViewHolder extends HealthCocoViewHolder implements V
     private LinearLayout btPrint;
     private LinearLayout btDiscard;
     private LinearLayout layoutDiscarded;
+    private LinearLayout btEmail;
     private LinearLayout containerInvoice;
     private TextView tvGrandTotal;
     private TextView tvTotalCost;
@@ -165,6 +166,7 @@ public class InvoiceListItemViewHolder extends HealthCocoViewHolder implements V
         tvInvoiceID = (TextView) contentView.findViewById(R.id.tv_invoice_id);
         tvCreatedBy = (TextView) contentView.findViewById(R.id.tv_created_by);
         tvGrandTotal = (TextView) contentView.findViewById(R.id.tv_text_grand_total);
+        btEmail = (LinearLayout) contentView.findViewById(R.id.bt_email);
         tvPaidAmount = (TextView) contentView.findViewById(R.id.tv_text_paid_amount);
         tvBalanceAmount = (TextView) contentView.findViewById(R.id.tv_text_balance_amount);
         tvTotalCost = (TextView) contentView.findViewById(R.id.tv_text_total_cost);
@@ -184,6 +186,7 @@ public class InvoiceListItemViewHolder extends HealthCocoViewHolder implements V
 
     private void initListeners() {
         btEdit.setOnClickListener(this);
+        btEmail.setOnClickListener(this);
         btPay.setOnClickListener(this);
         btPrint.setOnClickListener(this);
         btDiscard.setOnClickListener(this);
@@ -230,7 +233,10 @@ public class InvoiceListItemViewHolder extends HealthCocoViewHolder implements V
             case R.id.bt_email:
                 Util.checkNetworkStatus(mActivity);
                 if (HealthCocoConstants.isNetworkOnline)
-                    mActivity.openAddUpdateNameDialogFragment(WebServiceType.SEND_EMAIL_INVOICE, AddUpdateNameDialogType.EMAIL, invoice.getUniqueId());
+                    mActivity.openAddUpdateNameDialogFragment(WebServiceType.SEND_EMAIL_INVOICE, AddUpdateNameDialogType.EMAIL,
+                            invoice.getUniqueId(), invoice.getDoctorId(), invoice.getLocationId(), invoice.getHospitalId());
+
+//                mActivity.openAddUpdateNameDialogFragment(WebServiceType.SEND_EMAIL_INVOICE, AddUpdateNameDialogType.EMAIL, invoice.getUniqueId());
                 else onNetworkUnavailable(null);
                 break;
         }

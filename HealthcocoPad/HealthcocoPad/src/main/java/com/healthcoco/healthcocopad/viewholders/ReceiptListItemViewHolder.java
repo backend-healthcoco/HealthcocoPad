@@ -147,7 +147,9 @@ public class ReceiptListItemViewHolder extends HealthCocoViewHolder implements V
             case R.id.bt_email:
                 Util.checkNetworkStatus(mActivity);
                 if (HealthCocoConstants.isNetworkOnline)
-                    mActivity.openAddUpdateNameDialogFragment(WebServiceType.SEND_EMAIL_RECEIPT, AddUpdateNameDialogType.EMAIL, receiptResponse.getUniqueId());
+                    mActivity.openAddUpdateNameDialogFragment(WebServiceType.SEND_EMAIL_RECEIPT, AddUpdateNameDialogType.EMAIL,
+                            receiptResponse.getUniqueId(), receiptResponse.getDoctorId(), receiptResponse.getLocationId(), receiptResponse.getHospitalId());
+//                mActivity.openAddUpdateNameDialogFragment(WebServiceType.SEND_EMAIL_RECEIPT, AddUpdateNameDialogType.EMAIL, receiptResponse.getUniqueId());
                 else onNetworkUnavailable(null);
                 break;
             case R.id.bt_print:
