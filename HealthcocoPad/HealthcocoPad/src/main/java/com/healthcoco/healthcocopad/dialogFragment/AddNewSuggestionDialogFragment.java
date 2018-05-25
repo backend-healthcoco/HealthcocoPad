@@ -1,6 +1,7 @@
 package com.healthcoco.healthcocopad.dialogFragment;
 
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,6 +65,7 @@ public class AddNewSuggestionDialogFragment extends HealthCocoDialogFragment imp
     public static final String TAG_SGGESTION = "suggestionTag";
     private EditText editSuggestion;
     private TextView titleTextView;
+    private TextView suggessionTypeTextView;
     private LoginResponse doctor;
     private AddNewSuggestionListener addNewSuggestionListener;
     private Bundle bundle;
@@ -107,7 +109,7 @@ public class AddNewSuggestionDialogFragment extends HealthCocoDialogFragment imp
         if (doctor != null && doctor.getUser() != null && !Util.isNullOrBlank(doctor.getUser().getUniqueId())) {
             user = doctor.getUser();
             initViews();
-            initListeners();
+            initData();
         }
     }
 
@@ -115,6 +117,7 @@ public class AddNewSuggestionDialogFragment extends HealthCocoDialogFragment imp
     public void initViews() {
         editSuggestion = (EditText) view.findViewById(R.id.edit_suggestion);
         titleTextView = (TextView) view.findViewById(R.id.tv_title);
+        suggessionTypeTextView = (TextView) view.findViewById(R.id.tv_suggesion_type);
 
         titleTextView.setText(suggestionType.getHeaderTitleId());
 
@@ -124,12 +127,22 @@ public class AddNewSuggestionDialogFragment extends HealthCocoDialogFragment imp
 
     @Override
     public void initListeners() {
-        initSaveCancelButton(this);
+        initSaveCancelButton(this, getString(R.string.save));
     }
 
     @Override
     public void initData() {
-
+        switch (suggestionType) {
+            case PASSWORD:
+                suggessionTypeTextView.setText(R.string.password);
+                editSuggestion.setHint(R.string.please_enter_password);
+                editSuggestion.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                initSaveCancelButton(this, getString(R.string.submit));
+                break;
+            default:
+                initListeners();
+                break;
+        }
     }
 
     @Override
@@ -144,9 +157,16 @@ public class AddNewSuggestionDialogFragment extends HealthCocoDialogFragment imp
     private void validateData() {
         String msg = null;
         String suggestion = String.valueOf(editSuggestion.getText());
-        if (Util.isNullOrBlank(suggestion))
-            msg = getResources().getString((R.string.please_enter_suggestion));
-
+        if (Util.isNullOrBlank(suggestion)) {
+            switch (suggestionType) {
+                case PASSWORD:
+                    msg = getResources().getString(R.string.please_enter_password);
+                    break;
+                default:
+                    msg = getResources().getString(R.string.please_enter_suggestion);
+                    break;
+            }
+        }
         if (Util.isNullOrBlank(msg)) {
             addSuggestion(suggestion);
         } else
@@ -248,8 +268,9 @@ public class AddNewSuggestionDialogFragment extends HealthCocoDialogFragment imp
             case PROCEDURES:
                 addProcedureSuggestion(suggestion);
                 break;
-
-
+            case PASSWORD:
+                checkIsLocationAdmin(doctor.getUser().getEmailAddress(), suggestion);
+                break;
         }
     }
 
@@ -626,6 +647,15 @@ public class AddNewSuggestionDialogFragment extends HealthCocoDialogFragment imp
 
     }
 
+    private void checkIsLocationAdmin(String userName, String password) {
+        mActivity.showLoading(false);
+        User user = new User();
+        user.setUsername(userName);
+        user.setPassword(Util.getSHA3SecurePassword(password));
+        WebDataServiceImpl.getInstance(mApp).isLocationAdmin(LoginResponse.class, user, this, this);
+    }
+
+
     @Override
     public void onErrorResponse(VolleyResponseBean volleyResponseBean, String errorMessage) {
         String errorMsg = null;
@@ -833,6 +863,18 @@ public class AddNewSuggestionDialogFragment extends HealthCocoDialogFragment imp
                     LocalDataServiceImpl.getInstance(mApp).
                             addSuggestions(WebServiceType.GET_SEARCH_ADVICE_SOLR, LocalTabelType.ADVICE_SUGGESTIONS,
                                     response.getData(), null, null);
+                break;
+            case IS_LOCATION_ADMIN:
+                if (response.isValidData(response)) {
+                    boolean isAdmin = (boolean) response.getData();
+                    mActivity.hideLoading();
+                    if (isAdmin) {
+                        getTargetFragment().onActivityResult(HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, HealthCocoConstants.RESULT_CODE_REFERENCE_LIST, null);
+                        dismiss();
+                    } else {
+                        return;
+                    }
+                }
                 break;
         }
         mActivity.hideLoading();

@@ -32,6 +32,7 @@
 
     <string name="email">Email</string>
     <string name="password">Password</string>
+    <string name="password_colon">Password&#160;:</string>
     <string name="signin_accept_terms_and_conditions">By Signing in, you agree to Healthcoco Pad\'s &#160;</string>
 
     <string name="underlined_terms_of_service"><u>Terms of Service</u></string>
@@ -90,6 +91,7 @@
     <string name="thank_you">Thank You</string>
     <string name="loading_taking_time">Please wait&#8230;</string>
     <string name="save">Save</string>
+    <string name="submit">Submit</string>
     <string name="error">Error</string>
     <string name="email_sent_to">Email sent to&#160;</string>
     <string name="reset">Reset</string>

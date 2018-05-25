@@ -265,6 +265,19 @@ public class WebDataServiceImpl implements GCMRefreshListener {
         }
     }
 
+    public void isLocationAdmin(Class<LoginResponse> class1, User user, Response.Listener<VolleyResponseBean> responseListener,
+                                GsonRequest.ErrorListener errorListener) {
+        WebServiceType webServiceType = WebServiceType.IS_LOCATION_ADMIN;
+        checkNetworkStatus(mApp.getApplicationContext());
+        if (HealthCocoConstants.isNetworkOnline) {
+            String url = webServiceType.getUrl();
+            getResponse(webServiceType, class1, url, user, null, responseListener,
+                    errorListener);
+        } else {
+            showUserOffline(webServiceType, responseListener);
+        }
+    }
+
     /**
      * @param webServiceType
      * @param class1
