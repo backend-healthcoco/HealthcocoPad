@@ -83,7 +83,7 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
     public static final String TAG_IS_FROM_CALENDAR = "isFromCalendar";
 
     public static final String DATE_FORMAT_FOR_HEADER_IN_THIS_SCREEN = "EEE, MMM dd,yyyy";
-    //    public static final int MAX_SIZE = 10;
+    //    public static final int MAX_COUNT = 10;
     public static final int MAX_NUMBER_OF_EVENTS = 50;
     private static final String DATE_FORMAT_USED_IN_THIS_SCREEN = "EEE, MMM dd,yyyy";
     public ArrayList<RegisteredDoctorProfile> clinicDoctorProfileList;
@@ -331,8 +331,6 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
                     break;
                 case GET_CALENDAR_EVENTS:
                     if (!Util.isNullOrEmptyList(response.getDataList())) {
-                        new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_CALENDAR_EVENTS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
-                        response.setIsFromLocalAfterApiSuccess(true);
                         if (Util.isNullOrEmptyList(response.getDataList()) || response.getDataList().size() < MAX_NUMBER_OF_EVENTS || Util.isNullOrEmptyList(response.getDataList())) {
                             isEndOfListAchieved = true;
                             mActivity.updateProgressDialog(10, 10);
@@ -341,6 +339,8 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
                             isEndOfListAchieved = false;
                             mActivity.updateProgressDialog(10, 1);
                         }
+                        new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_CALENDAR_EVENTS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                        response.setIsFromLocalAfterApiSuccess(true);
                         return;
                     } else {
                         mActivity.hideProgressDialog();

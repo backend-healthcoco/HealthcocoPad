@@ -183,7 +183,7 @@ public class TreatmentListFragment extends HealthCocoFragment implements View.On
 //                isEndOfListAchieved = false;
 //                isLoadingFromSearch = false;
 //                clearSearchEditText();
-//                getTreatmentList(false, PAGE_NUMBER, MAX_SIZE, "");
+//                getTreatmentList(false, PAGE_NUMBER, MAX_COUNT, "");
 //            }
 //        }
     }

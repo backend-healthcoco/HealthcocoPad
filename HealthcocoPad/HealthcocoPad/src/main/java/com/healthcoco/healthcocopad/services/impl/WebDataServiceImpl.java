@@ -511,7 +511,7 @@ public class WebDataServiceImpl implements GCMRefreshListener {
         } else {
 //            LocalDataServiceImpl.getInstance(mApp)
 //                    .getTemplatesListPageWise(WebServiceType.GET_TEMPLATES_LIST, doctorId, false, 0l,
-//                            0, TemplatesListFragment.MAX_SIZE, "", responseListener, errorListener);
+//                            0, TemplatesListFragment.MAX_COUNT, "", responseListener, errorListener);
         }
     }
 

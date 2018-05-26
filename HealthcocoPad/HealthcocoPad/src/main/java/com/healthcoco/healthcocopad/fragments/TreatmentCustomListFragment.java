@@ -204,7 +204,7 @@ public class TreatmentCustomListFragment extends HealthCocoFragment implements V
 //                isEndOfListAchieved = false;
 //                isLoadingFromSearch = false;
 //                clearSearchEditText();
-//                getTreatmentList(false, PAGE_NUMBER, MAX_SIZE, "");
+//                getTreatmentList(false, PAGE_NUMBER, MAX_COUNT, "");
 //            }
 //        }
     }

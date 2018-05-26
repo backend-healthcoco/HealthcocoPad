@@ -30,6 +30,7 @@ import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.activities.HomeActivity;
 import com.healthcoco.healthcocopad.adapter.ContactsListAdapter;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
+import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
 import com.healthcoco.healthcocopad.bean.server.ClinicDetailResponse;
 import com.healthcoco.healthcocopad.bean.server.DoctorClinicProfile;
 import com.healthcoco.healthcocopad.bean.server.DoctorProfile;
@@ -65,6 +66,7 @@ import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimis
 import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
+import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
@@ -103,14 +105,19 @@ public class ContactsListFragment extends HealthCocoFragment implements
 
     //variables need for pagination
     public static final int MAX_SIZE = 22;
+    public static final int MAX_NUMBER_OF_CONTACT = 50;
     private static final String TAG_RECEIVERS_REGISTERED = "tagReceiversRegistered";
     private static Integer REQUEST_CODE_CONTACTS_DETAIL = 101;
+    public long MAX_COUNT;
     BroadcastReceiver finishContactsListReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, final Intent intent) {
             mActivity.finish();
         }
     };
+    Long latestUpdatedTime = 0l;
+    private boolean isEndOfListAchievedServer = true;
+    private int PAGE_NUMBER_SERVER = 0;
     private int PAGE_NUMBER = 0;
     private boolean isEndOfListAchieved;
     private boolean isInitialLoading = true;
@@ -132,6 +139,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
         @Override
         public void onReceive(Context context, final Intent intent) {
             if (intent != null) {
+                resetListAndPagingServer();
                 getContactsList(false);
             }
         }
@@ -199,6 +207,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
                 final FilterItemType itemType = FilterItemType.values()[filterItemTypeOrdinal];
                 if (itemType != null) {
                     if (itemType == FilterItemType.REFRESH_CONTACTS) {
+                        resetListAndPagingServer();
                         getContactsList(true);
                     } else {
                         sortList(intent, itemType);
@@ -418,11 +427,20 @@ public class ContactsListFragment extends HealthCocoFragment implements
     }
 
     public void getContactsList(boolean showLoading) {
-        if (showLoading)
-            mActivity.showLoading(false);
-        Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(user, LocalTabelType.REGISTERED_PATIENTS_DETAILS);
+        if (isEndOfListAchievedServer) {
+            latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(user, LocalTabelType.REGISTERED_PATIENTS_DETAILS);
+            if (showLoading)
+                if (latestUpdatedTime > 0l) {
+                    mActivity.showLoading(false);
+                } else {
+                    mActivity.showProgressDialog();
+                }
+        }
         WebDataServiceImpl.getInstance(mApp).getContactsList(RegisteredPatientDetailsUpdated.class, user.getUniqueId(),
-                user.getForeignHospitalId(), user.getForeignLocationId(), latestUpdatedTime, user, this, this);
+                user.getForeignHospitalId(), user.getForeignLocationId(), latestUpdatedTime, user, PAGE_NUMBER_SERVER, MAX_NUMBER_OF_CONTACT, null, this, this);
+
+//                WebDataServiceImpl.getInstance(mApp).getContactsList(RegisteredPatientDetailsUpdated.class, user.getUniqueId(),
+//                user.getForeignHospitalId(), user.getForeignLocationId(), latestUpdatedTime, user, this, this);
     }
 
     private void initFilterFragment() {
@@ -647,6 +665,8 @@ public class ContactsListFragment extends HealthCocoFragment implements
                     return;
             }
         }
+
+        mActivity.hideProgressDialog();
         isInitialLoading = false;
         mActivity.hideLoading();
         swipeRefreshLayout.setRefreshing(false);
@@ -661,6 +681,8 @@ public class ContactsListFragment extends HealthCocoFragment implements
                     return;
             }
         }
+
+        mActivity.hideProgressDialog();
         Util.showToast(mActivity, R.string.user_offline);
         mActivity.hideLoading();
         swipeRefreshLayout.setRefreshing(false);
@@ -685,15 +707,25 @@ public class ContactsListFragment extends HealthCocoFragment implements
                         ArrayList<RegisteredPatientDetailsUpdated> responseList = (ArrayList<RegisteredPatientDetailsUpdated>) (ArrayList<?>) response
                                 .getDataList();
                         isInitialLoading = false;
+                        mActivity.hideProgressDialog();
                         formHashMapAndRefresh(responseList);
                         if (Util.isNullOrEmptyList(responseList) || responseList.size() < MAX_SIZE || Util.isNullOrEmptyList(responseList))
                             isEndOfListAchieved = true;
                         else isEndOfListAchieved = false;
                         if (isInitialLoading && !isEditTextSearching && !response.isFromLocalAfterApiSuccess() && response.isUserOnline()) {
+                            resetListAndPagingServer();
                             getContactsList(true);
                             return;
                         }
                     } else if (!Util.isNullOrEmptyList(response.getDataList())) {
+                        if (Util.isNullOrEmptyList(response.getDataList()) || response.getDataList().size() < MAX_NUMBER_OF_CONTACT || Util.isNullOrEmptyList(response.getDataList())) {
+                            isEndOfListAchievedServer = true;
+                            mActivity.updateProgressDialog(100, 100);
+                        } else {
+                            PAGE_NUMBER_SERVER = PAGE_NUMBER_SERVER + 1;
+                            isEndOfListAchievedServer = false;
+                            mActivity.updateProgressDialog(100, 5);
+                        }
                         response.setIsFromLocalAfterApiSuccess(true);
                         new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_PATIENTS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
                         return;
@@ -748,6 +780,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
                     if (response.getData() != null) {
                         boolean data = (boolean) response.getData();
                         mActivity.hideLoading();
+                        resetListAndPagingServer();
                         getContactsList(true);
                     }
                 default:
@@ -812,7 +845,8 @@ public class ContactsListFragment extends HealthCocoFragment implements
 
     @Override
     public void onRefresh() {
-        getContactsList(false);
+        resetListAndPagingServer();
+        getContactsList(true);
         LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
         if (doctor != null) {
             user = doctor.getUser();
@@ -954,8 +988,13 @@ public class ContactsListFragment extends HealthCocoFragment implements
             case ADD_PATIENTS:
                 volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).
                         addPatientsList((ArrayList<RegisteredPatientDetailsUpdated>) (ArrayList<?>) response.getDataList());
-                volleyResponseBean.setWebServiceType(WebServiceType.GET_CONTACTS);
-                volleyResponseBean.setDataList(response.getDataList());
+                if (!isEndOfListAchievedServer) {
+                    getContactsList(true);
+                } else {
+                    mActivity.hideProgressDialog();
+                    volleyResponseBean.setWebServiceType(WebServiceType.GET_CONTACTS);
+                    volleyResponseBean.setDataList(response.getDataList());
+                }
                 break;
             case GET_PATIENTS:
             case SORT_LIST_BY_RECENTLY_ADDED:
@@ -991,6 +1030,12 @@ public class ContactsListFragment extends HealthCocoFragment implements
             volleyResponseBean = new VolleyResponseBean();
         volleyResponseBean.setIsFromLocalAfterApiSuccess(response.isFromLocalAfterApiSuccess());
         return volleyResponseBean;
+    }
+
+
+    private void resetListAndPagingServer() {
+        PAGE_NUMBER_SERVER = 0;
+        isEndOfListAchievedServer = true;
     }
 
     private String getSearchEditTextValue(AdvanceSearchOptionsType selectedSearchType) {

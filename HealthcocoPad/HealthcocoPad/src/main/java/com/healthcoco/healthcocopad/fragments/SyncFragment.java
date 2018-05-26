@@ -99,6 +99,9 @@ import java.util.List;
  */
 public class SyncFragment extends HealthCocoFragment implements View.OnClickListener, SyncAllItemListener, LocalDoInBackgroundListenerOptimised, Response.Listener<VolleyResponseBean>, GsonRequest.ErrorListener, DownloadFileFromUrlListener, AdapterView.OnItemClickListener {
     public static final String DATE_FORMAT = "dd/MM/yyyy hh:mm  aaa";
+    public static final int MAX_NUMBER_OF_EVENTS = 10;
+    public long MAX_COUNT;
+    Long latestUpdatedTimeContact = 0l;
     private TextView tvDoctorName;
     private LinearLayout btSyncAll;
     private TextView tvRefresh;
@@ -111,6 +114,8 @@ public class SyncFragment extends HealthCocoFragment implements View.OnClickList
     private DoctorProfile doctorProfile;
     private TextView tvInitialAlphabet;
     private ListView lvSyncAll;
+    private boolean isEndOfListAchieved = true;
+    private int PAGE_NUMBER = 0;
     private SyncAllAdapter adapter;
     private boolean isSyncAllClicked = false;
 
@@ -255,6 +260,15 @@ public class SyncFragment extends HealthCocoFragment implements View.OnClickList
                         user.getForeignHospitalId(), user.getForeignLocationId(), latestUpdatedTime, user,
                         this, this);
 
+          /*      if (isEndOfListAchieved) {
+                    latestUpdatedTimeContact = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(user, LocalTabelType.REGISTERED_PATIENTS_DETAILS);
+                }
+//                WebDataServiceImpl.getInstance(mApp).getContactsList(RegisteredPatientDetailsUpdated.class, user.getUniqueId(),
+//                        user.getForeignHospitalId(), user.getForeignLocationId(), latestUpdatedTimeContact, user, PAGE_NUMBER, MAX_NUMBER_OF_EVENTS, null, this, this);
+                WebDataServiceImpl.getInstance(mApp).getContactsList(RegisteredPatientDetailsUpdated.class, user.getUniqueId(),
+                        user.getForeignHospitalId(), user.getForeignLocationId(), latestUpdatedTimeContact, user,
+                        this, this);
+*/
                 break;
             case DATA_PERMISSIONS:
                 //getting contacts data
@@ -573,6 +587,18 @@ public class SyncFragment extends HealthCocoFragment implements View.OnClickList
                         new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_PATIENTS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
                         return;
                     }
+                    /*   if (!Util.isNullOrEmptyList(response.getDataList())) {
+                        if (Util.isNullOrEmptyList(response.getDataList()) || response.getDataList().size() < MAX_NUMBER_OF_EVENTS || Util.isNullOrEmptyList(response.getDataList())) {
+                            isEndOfListAchieved = true;
+                            mActivity.updateProgressDialog(10, 10);
+                        } else {
+                            showProgressDialog(response);
+                        }
+                        new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_PATIENTS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                        return;
+                    } else {
+                        mActivity.hideProgressDialog();
+                    }*/
                     break;
 
                 case GET_DATA_PERMISSION:
@@ -908,6 +934,23 @@ public class SyncFragment extends HealthCocoFragment implements View.OnClickList
         mActivity.hideLoading();
     }
 
+    private void showProgressDialog(VolleyResponseBean response) {
+        if (response.getData() instanceof Long)
+            MAX_COUNT = (long) response.getData();
+        else if (response.getData() instanceof Double) {
+            Double data = (Double) response.getData();
+            MAX_COUNT = Math.round(data);
+            if (MAX_COUNT > (2 * MAX_NUMBER_OF_EVENTS)) {
+                if (!mActivity.isProgressDialogShowing())
+                    mActivity.showProgressDialog();
+            }
+            PAGE_NUMBER = PAGE_NUMBER + 1;
+            isEndOfListAchieved = false;
+            int progess = (int) (((PAGE_NUMBER * MAX_NUMBER_OF_EVENTS) / MAX_COUNT) * 100);
+            mActivity.updateProgressDialog(MAX_COUNT, progess);
+        }
+    }
+
     private void stopAnimationAndStartNext(WebServiceType webServiceType) {
         SyncAllType syncAllType = getSyncAllType(webServiceType);
         if (syncAllType != null) {
@@ -993,6 +1036,15 @@ public class SyncFragment extends HealthCocoFragment implements View.OnClickList
                 LocalDataServiceImpl.getInstance(mApp).
                         addPatientsList((ArrayList<RegisteredPatientDetailsUpdated>) (ArrayList<?>) response.getDataList());
                 updateSyncObjectInHashMap(SyncAllType.CONTACT);
+
+              /*  if (!isEndOfListAchieved) {
+
+                    startSyning(SyncAllType.CONTACT);
+                } else {
+                    mActivity.hideProgressDialog();
+                    resetListAndPagingAttributes();
+                    updateSyncObjectInHashMap(SyncAllType.CONTACT);
+                }*/
                 break;
             case ADD_DATA_PERMISSIONS:
                 LocalDataServiceImpl.getInstance(mApp).
@@ -1261,6 +1313,11 @@ public class SyncFragment extends HealthCocoFragment implements View.OnClickList
     @Override
     public void onPreExecute() {
 
+    }
+
+    private void resetListAndPagingAttributes() {
+        PAGE_NUMBER = 0;
+        isEndOfListAchieved = true;
     }
 
     @Override

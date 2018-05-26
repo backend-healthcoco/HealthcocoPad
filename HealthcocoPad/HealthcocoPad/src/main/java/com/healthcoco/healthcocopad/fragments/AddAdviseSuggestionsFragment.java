@@ -332,83 +332,83 @@ public class AddAdviseSuggestionsFragment extends HealthCocoFragment implements 
                 break;
         /*    case GET_PRESENT_COMPLAINT_SUGGESTIONS:
                 volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getSuggestionsListAsResponse(WebServiceType.GET_PRESENT_COMPLAINT_SUGGESTIONS,
-                        PresentComplaintSuggestions.class, suggestionType, searchedTerm, PAGE_NUMBER, MAX_SIZE, null, null);
+                        PresentComplaintSuggestions.class, suggestionType, searchedTerm, PAGE_NUMBER, MAX_COUNT, null, null);
                 break;
             case GET_COMPLAINT_SUGGESTIONS:
                 volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getSuggestionsListAsResponse(WebServiceType.GET_COMPLAINT_SUGGESTIONS,
-                        ComplaintSuggestions.class, suggestionType, searchedTerm, PAGE_NUMBER, MAX_SIZE, null, null);
+                        ComplaintSuggestions.class, suggestionType, searchedTerm, PAGE_NUMBER, MAX_COUNT, null, null);
                 break;
             case GET_OBSERVATION_SUGGESTIONS:
                 volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getSuggestionsListAsResponse(WebServiceType.GET_OBSERVATION_SUGGESTIONS,
-                        ObservationSuggestions.class, suggestionType, searchedTerm, PAGE_NUMBER, MAX_SIZE, null, null);
+                        ObservationSuggestions.class, suggestionType, searchedTerm, PAGE_NUMBER, MAX_COUNT, null, null);
                 break;
             case GET_INVESTIGATION_SUGGESTIONS:
                 volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getSuggestionsListAsResponse(WebServiceType.GET_INVESTIGATION_SUGGESTIONS,
-                        InvestigationSuggestions.class, suggestionType, searchedTerm, PAGE_NUMBER, MAX_SIZE, null, null);
+                        InvestigationSuggestions.class, suggestionType, searchedTerm, PAGE_NUMBER, MAX_COUNT, null, null);
                 break;
             case GET_DIAGNOSIS_SUGGESTIONS:
                 volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getSuggestionsListAsResponse(WebServiceType.GET_DIAGNOSIS_SUGGESTIONS,
-                        DiagnosisSuggestions.class, suggestionType, searchedTerm, PAGE_NUMBER, MAX_SIZE, null, null);
+                        DiagnosisSuggestions.class, suggestionType, searchedTerm, PAGE_NUMBER, MAX_COUNT, null, null);
                 break;
             case GET_HISTORY_OF_PRESENT_COMPLAINT_SUGGESTIONS:
                 volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getSuggestionsListAsResponse(WebServiceType.GET_HISTORY_OF_PRESENT_COMPLAINT_SUGGESTIONS,
-                        HistoryPresentComplaintSuggestions.class, suggestionType, searchedTerm, PAGE_NUMBER, MAX_SIZE, null, null);
+                        HistoryPresentComplaintSuggestions.class, suggestionType, searchedTerm, PAGE_NUMBER, MAX_COUNT, null, null);
                 break;
             case GET_MENSTRUAL_HISTORY_SUGGESTIONS:
                 volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getSuggestionsListAsResponse(WebServiceType.GET_MENSTRUAL_HISTORY_SUGGESTIONS,
-                        MenstrualHistorySuggestions.class, suggestionType, searchedTerm, PAGE_NUMBER, MAX_SIZE, null, null);
+                        MenstrualHistorySuggestions.class, suggestionType, searchedTerm, PAGE_NUMBER, MAX_COUNT, null, null);
                 break;
             case GET_OBSTETRIC_HISTORY_SUGGESTIONS:
                 volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getSuggestionsListAsResponse(WebServiceType.GET_OBSTETRIC_HISTORY_SUGGESTIONS,
-                        ObstetricHistorySuggestions.class, suggestionType, searchedTerm, PAGE_NUMBER, MAX_SIZE, null, null);
+                        ObstetricHistorySuggestions.class, suggestionType, searchedTerm, PAGE_NUMBER, MAX_COUNT, null, null);
                 break;
             case GET_GENERAL_EXAMINATION_SUGGESTIONS:
                 volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getSuggestionsListAsResponse(WebServiceType.GET_GENERAL_EXAMINATION_SUGGESTIONS,
-                        GeneralExaminationSuggestions.class, suggestionType, searchedTerm, PAGE_NUMBER, MAX_SIZE, null, null);
+                        GeneralExaminationSuggestions.class, suggestionType, searchedTerm, PAGE_NUMBER, MAX_COUNT, null, null);
                 break;
             case GET_SYSTEMIC_EXAMINATION_SUGGESTIONS:
                 volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getSuggestionsListAsResponse(WebServiceType.GET_SYSTEMIC_EXAMINATION_SUGGESTIONS,
-                        SystemicExaminationSuggestions.class, suggestionType, searchedTerm, PAGE_NUMBER, MAX_SIZE, null, null);
+                        SystemicExaminationSuggestions.class, suggestionType, searchedTerm, PAGE_NUMBER, MAX_COUNT, null, null);
                 break;
             case GET_PROVISIONAL_DIAGNOSIS_SUGGESTIONS:
                 volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getSuggestionsListAsResponse(WebServiceType.GET_PROVISIONAL_DIAGNOSIS_SUGGESTIONS,
-                        ProvisionalDiagnosisSuggestions.class, suggestionType, searchedTerm, PAGE_NUMBER, MAX_SIZE, null, null);
+                        ProvisionalDiagnosisSuggestions.class, suggestionType, searchedTerm, PAGE_NUMBER, MAX_COUNT, null, null);
                 break;
             case GET_ECG_SUGGESTIONS:
                 volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getSuggestionsListAsResponse(WebServiceType.GET_ECG_SUGGESTIONS,
-                        EcgDetailSuggestions.class, suggestionType, searchedTerm, PAGE_NUMBER, MAX_SIZE, null, null);
+                        EcgDetailSuggestions.class, suggestionType, searchedTerm, PAGE_NUMBER, MAX_COUNT, null, null);
                 break;
             case GET_ECHO_SUGGESTIONS:
                 volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getSuggestionsListAsResponse(WebServiceType.GET_ECHO_SUGGESTIONS,
-                        EchoSuggestions.class, suggestionType, searchedTerm, PAGE_NUMBER, MAX_SIZE, null, null);
+                        EchoSuggestions.class, suggestionType, searchedTerm, PAGE_NUMBER, MAX_COUNT, null, null);
                 break;
             case GET_XRAY_SUGGESTIONS:
                 volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getSuggestionsListAsResponse(WebServiceType.GET_XRAY_SUGGESTIONS,
-                        XrayDetailSuggestions.class, suggestionType, searchedTerm, PAGE_NUMBER, MAX_SIZE, null, null);
+                        XrayDetailSuggestions.class, suggestionType, searchedTerm, PAGE_NUMBER, MAX_COUNT, null, null);
                 break;
             case GET_HOLTER_SUGGESTIONS:
                 volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getSuggestionsListAsResponse(WebServiceType.GET_HOLTER_SUGGESTIONS,
-                        HolterSuggestions.class, suggestionType, searchedTerm, PAGE_NUMBER, MAX_SIZE, null, null);
+                        HolterSuggestions.class, suggestionType, searchedTerm, PAGE_NUMBER, MAX_COUNT, null, null);
                 break;
             case GET_PA_SUGGESTIONS:
                 volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getSuggestionsListAsResponse(WebServiceType.GET_PA_SUGGESTIONS,
-                        PaSuggestions.class, suggestionType, searchedTerm, PAGE_NUMBER, MAX_SIZE, null, null);
+                        PaSuggestions.class, suggestionType, searchedTerm, PAGE_NUMBER, MAX_COUNT, null, null);
                 break;
             case GET_PV_SUGGESTIONS:
                 volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getSuggestionsListAsResponse(WebServiceType.GET_PV_SUGGESTIONS,
-                        PvSuggestions.class, suggestionType, searchedTerm, PAGE_NUMBER, MAX_SIZE, null, null);
+                        PvSuggestions.class, suggestionType, searchedTerm, PAGE_NUMBER, MAX_COUNT, null, null);
                 break;
             case GET_PS_SUGGESTIONS:
                 volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getSuggestionsListAsResponse(WebServiceType.GET_PS_SUGGESTIONS,
-                        PsSuggestions.class, suggestionType, searchedTerm, PAGE_NUMBER, MAX_SIZE, null, null);
+                        PsSuggestions.class, suggestionType, searchedTerm, PAGE_NUMBER, MAX_COUNT, null, null);
                 break;
             case GET_INDICATION_OF_USG_SUGGESTIONS:
                 volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getSuggestionsListAsResponse(WebServiceType.GET_INDICATION_OF_USG_SUGGESTIONS,
-                        IndicationOfUsgSuggestions.class, suggestionType, searchedTerm, PAGE_NUMBER, MAX_SIZE, null, null);
+                        IndicationOfUsgSuggestions.class, suggestionType, searchedTerm, PAGE_NUMBER, MAX_COUNT, null, null);
                 break;
             case GET_NOTES_SUGGESTION:
                 volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getSuggestionsListAsResponse(WebServiceType.GET_NOTES_SUGGESTIONS,
-                        NotesSuggestions.class, suggestionType, searchedTerm, PAGE_NUMBER, MAX_SIZE, null, null);
+                        NotesSuggestions.class, suggestionType, searchedTerm, PAGE_NUMBER, MAX_COUNT, null, null);
                 break;
          */
             case GET_SEARCH_ADVICE_SOLR:

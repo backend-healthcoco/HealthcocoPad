@@ -244,6 +244,12 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
         }
     }
 
+    public boolean isProgressDialogShowing() {
+        if (progressDialog != null)
+            return progressDialog.isShowing();
+        else return false;
+    }
+
     /**
      * Update progress dialog
      */

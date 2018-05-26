@@ -282,7 +282,7 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
             case GET_VISITS:
 //                if (forAllDoctor) {
 //                    volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getVisitsListPageWise(GET_PATIENT_VISIT, forAllDoctor, null, user.getForeignLocationId(), user.getForeignHospitalId(),
-//                            selectedPatient.getUserId(), PAGE_NUMBER, MAX_SIZE, null, null);
+//                            selectedPatient.getUserId(), PAGE_NUMBER, MAX_COUNT, null, null);
 //                } else {
                 volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getVisitsListPageWise(GET_PATIENT_VISIT, clinicDoctorProfileList, user.getForeignLocationId(), user.getForeignHospitalId(),
                         selectedPatient.getUserId(), PAGE_NUMBER, MAX_SIZE, null, null);
