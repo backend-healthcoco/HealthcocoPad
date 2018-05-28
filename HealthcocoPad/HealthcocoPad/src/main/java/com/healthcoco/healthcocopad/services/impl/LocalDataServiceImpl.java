@@ -883,6 +883,28 @@ public class LocalDataServiceImpl {
         return getLatestUpdatedTime(user, localTabelType);
     }
 
+    public long getLatestUpdatedTime(User user) {
+        Long count = 0l;
+        String doctorId = "";
+        String locationId = "";
+        String hospitalId = "";
+        if (user != null) {
+            doctorId = user.getUniqueId();
+            locationId = user.getForeignLocationId();
+            hospitalId = user.getForeignHospitalId();
+        }
+        List<RegisteredPatientDetailsUpdated> tempRegisteredPatientDetailUpdateds = null;
+        if (!Util.isNullOrBlank(doctorId) && !Util.isNullOrBlank(hospitalId) && !Util.isNullOrBlank(locationId)) {
+            count = RegisteredPatientDetailsUpdated.count(RegisteredPatientDetailsUpdated.class, LocalDatabaseUtils.KEY_LOCATION_ID + "= ? AND " + LocalDatabaseUtils.KEY_HOSPITAL_ID + "= ?",
+                    new String[]{locationId, hospitalId},
+                    null, "updated_time DESC", "null");
+        } else
+            count = RegisteredPatientDetailsUpdated.count(RegisteredPatientDetailsUpdated.class, null, null,
+                    null, "updated_time DESC", "null");
+
+        return count;
+    }
+
     public Long getLatestUpdatedTime(User user, LocalTabelType localTabelType) {
         Long latestUpdatedTime = 0l;
         String doctorId = "";
@@ -941,12 +963,16 @@ public class LocalDataServiceImpl {
                 if (!Util.isNullOrBlank(doctorId) && !Util.isNullOrBlank(hospitalId) && !Util.isNullOrBlank(locationId)) {
                     tempRegisteredPatientDetailUpdateds = RegisteredPatientDetailsUpdated.find(RegisteredPatientDetailsUpdated.class, LocalDatabaseUtils.KEY_LOCATION_ID + "= ? AND " + LocalDatabaseUtils.KEY_HOSPITAL_ID + "= ?",
                             new String[]{locationId, hospitalId},
-                            null, "updated_time DESC", "1");
+                            null, "updated_time DESC", "2");
                 } else
                     tempRegisteredPatientDetailUpdateds = RegisteredPatientDetailsUpdated.find(RegisteredPatientDetailsUpdated.class, null, null,
-                            null, "updated_time DESC", "1");
+                            null, "updated_time DESC", "2");
                 if (!Util.isNullOrEmptyList(tempRegisteredPatientDetailUpdateds))
-                    latestUpdatedTime = tempRegisteredPatientDetailUpdateds.get(0).getUpdatedTime();
+                    if (tempRegisteredPatientDetailUpdateds.size() > 1)
+                        latestUpdatedTime = tempRegisteredPatientDetailUpdateds.get(1).getUpdatedTime();
+                    else
+                        latestUpdatedTime = tempRegisteredPatientDetailUpdateds.get(0).getUpdatedTime();
+
                 break;
             case COMPLAINT:
                 List<Complaint> tempComplaintsLists = Complaint.find(Complaint.class, null, null, null, "updated_time DESC", "1");
