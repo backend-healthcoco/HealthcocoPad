@@ -429,9 +429,9 @@ public class ContactsListFragment extends HealthCocoFragment implements
     public void getContactsList(boolean showLoading) {
         if (isEndOfListAchievedServer) {
             latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(user, LocalTabelType.REGISTERED_PATIENTS_DETAILS);
-            if (showLoading)
                 if (latestUpdatedTime > 0l) {
-                    mActivity.showLoading(false);
+                    if (showLoading)
+                        mActivity.showLoading(false);
                 } else {
                     mActivity.showProgressDialog();
                 }
@@ -846,7 +846,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
     @Override
     public void onRefresh() {
         resetListAndPagingServer();
-        getContactsList(true);
+        getContactsList(false);
         LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
         if (doctor != null) {
             user = doctor.getUser();
