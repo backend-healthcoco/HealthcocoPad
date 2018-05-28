@@ -968,10 +968,23 @@ public class LocalDataServiceImpl {
                     tempRegisteredPatientDetailUpdateds = RegisteredPatientDetailsUpdated.find(RegisteredPatientDetailsUpdated.class, null, null,
                             null, "updated_time DESC", "2");
                 if (!Util.isNullOrEmptyList(tempRegisteredPatientDetailUpdateds))
-                    if (tempRegisteredPatientDetailUpdateds.size() > 1)
-                        latestUpdatedTime = tempRegisteredPatientDetailUpdateds.get(1).getUpdatedTime();
+                    latestUpdatedTime = tempRegisteredPatientDetailUpdateds.get(0).getUpdatedTime();
+
+                break;
+            case REGISTERED_PATIENTS_DETAILS_SYNC:
+                List<RegisteredPatientDetailsUpdated> tempRegisteredPatientDetails = null;
+                if (!Util.isNullOrBlank(doctorId) && !Util.isNullOrBlank(hospitalId) && !Util.isNullOrBlank(locationId)) {
+                    tempRegisteredPatientDetails = RegisteredPatientDetailsUpdated.find(RegisteredPatientDetailsUpdated.class, LocalDatabaseUtils.KEY_LOCATION_ID + "= ? AND " + LocalDatabaseUtils.KEY_HOSPITAL_ID + "= ?",
+                            new String[]{locationId, hospitalId},
+                            null, "updated_time DESC", "2");
+                } else
+                    tempRegisteredPatientDetails = RegisteredPatientDetailsUpdated.find(RegisteredPatientDetailsUpdated.class, null, null,
+                            null, "updated_time DESC", "2");
+                if (!Util.isNullOrEmptyList(tempRegisteredPatientDetails))
+                    if (tempRegisteredPatientDetails.size() > 1)
+                        latestUpdatedTime = tempRegisteredPatientDetails.get(1).getUpdatedTime();
                     else
-                        latestUpdatedTime = tempRegisteredPatientDetailUpdateds.get(0).getUpdatedTime();
+                        latestUpdatedTime = tempRegisteredPatientDetails.get(0).getUpdatedTime();
 
                 break;
             case COMPLAINT:

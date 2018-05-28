@@ -491,7 +491,7 @@ public class SyncFragment extends HealthCocoFragment implements View.OnClickList
 
     private void syncContact() {
         if (isEndOfListAchieved) {
-            latestUpdatedTimeContact = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(user, LocalTabelType.REGISTERED_PATIENTS_DETAILS);
+            latestUpdatedTimeContact = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(user, LocalTabelType.REGISTERED_PATIENTS_DETAILS_SYNC);
         }
         WebDataServiceImpl.getInstance(mApp).getContactsList(RegisteredPatientDetailsUpdated.class, user.getUniqueId(),
                 user.getForeignHospitalId(), user.getForeignLocationId(), latestUpdatedTimeContact, user, PAGE_NUMBER, MAX_NUMBER_OF_EVENTS, null, this, this);
