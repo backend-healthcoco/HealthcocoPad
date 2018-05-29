@@ -51,6 +51,7 @@ import com.healthcoco.healthcocopad.fragments.ClinicalProfileFragment;
 import com.healthcoco.healthcocopad.fragments.ContactsListFragment;
 import com.healthcoco.healthcocopad.fragments.DoctorProfileFragment;
 import com.healthcoco.healthcocopad.fragments.DoctorVideoListFragment;
+import com.healthcoco.healthcocopad.fragments.EventFragment;
 import com.healthcoco.healthcocopad.fragments.FilterFragment;
 import com.healthcoco.healthcocopad.fragments.IssueTrackerFragment;
 import com.healthcoco.healthcocopad.fragments.MenuDrawerFragment;
@@ -180,7 +181,7 @@ public class HomeActivity extends HealthCocoActivity implements View.OnClickList
                 fragment = new ClinicalProfileFragment();
                 break;
             case QUEUE:
-                fragment = new QueueFragment(this);
+                fragment = new EventFragment(this);
                 actionBarNormal.setVisibility(View.GONE);
                 break;
             case SYNC:

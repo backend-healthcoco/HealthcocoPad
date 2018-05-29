@@ -962,6 +962,8 @@
     <string name="alert_add_invoice">Blank invoice cannot be saved.Add Services</string>
     <string name="please_reschedule_appointment">Please Reschedule Appointment</string>
     <string name="reschedule_appointment">Reschedule Appointment</string>
+    <string name="reschedule_event">Reschedule Event</string>
+    <string name="new_event">New Event</string>
     <string name="change_next_review_date_from_calender">Change next review date from Calender.\n Appointment ID:</string>
     <string name="edit_clinical_note">Edit Clinical Note</string>
     <string name="alert_blank_clinical_note">Blank Clinical Note cannot be created</string>
@@ -1118,6 +1120,7 @@
     <string name="check_out">Check Out</string>
     <string name="engage">Engage</string>
     <string name="no_appointments_found">No Appointments found</string>
+    <string name="no_events_found">No Events found</string>
     <string name="queue">Queue</string>
     <string name="today">Today</string>
     <string name="schedule">Scheduled</string>

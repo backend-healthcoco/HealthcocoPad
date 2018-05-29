@@ -30,6 +30,7 @@ import com.healthcoco.healthcocopad.bean.request.ClinicImageToSend;
 import com.healthcoco.healthcocopad.bean.request.ClinicalNoteToSend;
 import com.healthcoco.healthcocopad.bean.request.DoctorSignupHandheldContinueRequest;
 import com.healthcoco.healthcocopad.bean.request.DrugInteractionRequest;
+import com.healthcoco.healthcocopad.bean.request.EventRequest;
 import com.healthcoco.healthcocopad.bean.request.Feedback;
 import com.healthcoco.healthcocopad.bean.request.InvoiceRequest;
 import com.healthcoco.healthcocopad.bean.request.PrescriptionRequest;
@@ -48,6 +49,7 @@ import com.healthcoco.healthcocopad.bean.server.DoctorClinicProfile;
 import com.healthcoco.healthcocopad.bean.server.DoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.Drug;
 import com.healthcoco.healthcocopad.bean.server.DrugType;
+import com.healthcoco.healthcocopad.bean.server.Events;
 import com.healthcoco.healthcocopad.bean.server.GCMRequest;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.NotificationResponse;
@@ -1193,6 +1195,19 @@ public class WebDataServiceImpl implements GCMRefreshListener {
         }
     }
 
+    public void addEvent(Class<?> class1, EventRequest eventRequest,
+                         Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        WebServiceType webServiceType = WebServiceType.ADD_EVENT;
+        checkNetworkStatus(mApp);
+        if (HealthCocoConstants.isNetworkOnline) {
+            String url = webServiceType.getUrl();
+            getResponse(webServiceType, class1, url, eventRequest, null, responseListener,
+                    errorListener);
+        } else {
+            showUserOffline(webServiceType, responseListener);
+        }
+    }
+
     public void sendReminder(Class<Boolean> class1, String appointmentId, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         WebServiceType webServiceType = WebServiceType.SEND_REMINDER;
         checkNetworkStatus(mApp);
@@ -1634,6 +1649,36 @@ public class WebDataServiceImpl implements GCMRefreshListener {
                                   long updatedTime, int pageNo, int size, Response.Listener<VolleyResponseBean> responseListener,
                                   GsonRequest.ErrorListener errorListener) {
         WebServiceType webServiceType = WebServiceType.GET_CALENDAR_EVENTS;
+        checkNetworkStatus(mApp);
+        if (HealthCocoConstants.isNetworkOnline) {
+
+            String url = webServiceType.getUrl();
+
+            if (!Util.isNullOrEmptyList(registeredDoctorProfileList))
+                for (RegisteredDoctorProfile doctorProfile : registeredDoctorProfileList) {
+
+                    url = url + HealthCocoConstants.PARAM_MATRIX_DOCTOR_ID + doctorProfile.getUserId();
+                }
+            url = url + HealthCocoConstants.PARAM_MATRIX_LOCATION_ID + locationId
+                    + HealthCocoConstants.PARAM_HOSPITAL_ID + foreignHospitalId
+                    + HealthCocoConstants.PARAM_FROM + startDate
+                    + HealthCocoConstants.PARAM_TO + endDate
+                    + HealthCocoConstants.PARAM_UPDATED_TIME + +updatedTime;
+            if (pageNo >= 0 && size > 0) {
+                url = url + HealthCocoConstants.PARAM_PAGE + pageNo + HealthCocoConstants.PARAM_SIZE + size;
+            }
+            getResponse(webServiceType, class1, url, null, null, responseListener,
+                    errorListener);
+        } else {
+            showUserOffline(webServiceType, responseListener);
+        }
+    }
+
+    public void getEvents(Class<?> class1, List<RegisteredDoctorProfile> registeredDoctorProfileList,
+                          String locationId, String foreignHospitalId, long startDate, long endDate,
+                          long updatedTime, int pageNo, int size, Response.Listener<VolleyResponseBean> responseListener,
+                          GsonRequest.ErrorListener errorListener) {
+        WebServiceType webServiceType = WebServiceType.GET_EVENTS;
         checkNetworkStatus(mApp);
         if (HealthCocoConstants.isNetworkOnline) {
 

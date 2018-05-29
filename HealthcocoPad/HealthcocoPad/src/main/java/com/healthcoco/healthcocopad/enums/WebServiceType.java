@@ -454,10 +454,17 @@ public enum WebServiceType {
 
     //    GET http://example.com/v1/appointment/getTimeSlots/doctorId/locationId/date/
     GET_APPOINTMENT_TIME_SLOTS(Method.GET, "appointment/getTimeSlots/"),
+
     GET_CALENDAR_EVENTS(Method.GET, "appointment"),
-    ADD_EVENT(Method.POST, "appointment/event/"),
+
     ADD_APPOINTMENT(Method.POST, "appointment/"),
+
+    GET_EVENTS(Method.GET, "appointment/event/get"),
+
+    ADD_EVENT(Method.POST, "appointment/event/"),
+
     SEND_REMINDER(Method.GET, "appointment/sendReminder/patient/"),
+
     CHANGE_APPOINTMENT_STATUS(Method.GET, "appointment/changeStatus/"),
 
     GET_PATIENT_CARD_PDF_URL(Method.POST, "appointment/downloadpatientCard"),
