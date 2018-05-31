@@ -8,7 +8,11 @@ import android.widget.TextView;
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.HealthCocoApplication;
 import com.healthcoco.healthcocopad.R;
+import com.healthcoco.healthcocopad.bean.server.LoginResponse;
+import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.enums.FragmentType;
+import com.healthcoco.healthcocopad.enums.LocalTabelType;
+import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 
 public class MenuListViewHolder {
     private HealthCocoApplication mApp;
@@ -34,7 +38,11 @@ public class MenuListViewHolder {
         String notifNo = "";
         switch (fragmentType) {
             case CONTACTS:
-//                notifNo = LocalDataServiceImpl.getInstance(mApp).getListSize(LocalTabelType.REGISTERED_PATIENTS_DETAILS);
+                LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
+                if (doctor != null) {
+                    User user = doctor.getUser();
+                    notifNo = LocalDataServiceImpl.getInstance(mApp).getListCount(user) + "";
+                }
                 break;
             default:
                 notifNo = "";

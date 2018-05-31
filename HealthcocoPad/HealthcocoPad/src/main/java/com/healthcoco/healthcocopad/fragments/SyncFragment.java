@@ -947,7 +947,7 @@ public class SyncFragment extends HealthCocoFragment implements View.OnClickList
             Double data = (Double) response.getData();
             MAX_COUNT = Math.round(data);
         }
-        long count = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(user);
+        long count = LocalDataServiceImpl.getInstance(mApp).getListCount(user);
 
         if (count < MAX_COUNT) {
             mActivity.showProgressDialog();

@@ -329,7 +329,10 @@ public class CalendarFragment extends HealthCocoFragment implements WeekView.Eve
 
             @Override
             public String interpretTime(int hour) {
-                return hour > 12 ? (hour - 12) + ":00" + " PM" : (hour == 0 ? "12:00 AM" : hour + ":00" + " AM");
+                if (hour == 12) {
+                    return "12:00 PM";
+                } else
+                    return hour > 12 ? (hour - 12) + ":00" + " PM" : (hour == 0 ? "12:00 AM" : hour + ":00" + " AM");
             }
         });
     }

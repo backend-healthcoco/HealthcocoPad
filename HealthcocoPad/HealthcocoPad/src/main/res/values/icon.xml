@@ -85,5 +85,7 @@
     <string name="icon_text_hide">&#xf068; Hide</string>
     <string name="icon_text_activate">&#xf067; Activate</string>
     <string name="icon_edit">&#xf044;</string>
+    <string name="icon_email">&#xf0e0;</string>
+    <string name="icon_calendar">&#xf073;</string>
 
 </resources>

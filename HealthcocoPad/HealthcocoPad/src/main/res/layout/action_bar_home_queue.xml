@@ -112,6 +112,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/layout_select_day"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
@@ -120,7 +121,8 @@
         android:layout_toEndOf="@+id/layout_select_date"
         android:background="@drawable/shape_rectangle_translucent_gray_border"
         android:gravity="center"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="visible">
 
 
         <TextView
@@ -178,6 +180,38 @@
             android:textColor="@drawable/text_selector_white_blue"
             android:textSize="@dimen/text_size_bt_history_edit_sms_email" />
 
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_day"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginLeft="@dimen/image_doctor_in_clinic_profile"
+        android:layout_marginRight="@dimen/margin_left_right_add_vital_signs"
+        android:layout_toEndOf="@+id/layout_select_date"
+        android:background="@drawable/shape_rectangle_translucent_gray_border"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+
+        <TextView
+            android:id="@+id/tv_view_type"
+            android:layout_width="@dimen/date_textview_width"
+            android:layout_height="wrap_content"
+            android:background="@drawable/selector_btn_blue_light_grey"
+            android:clickable="true"
+            android:drawableEnd="@drawable/arrow_menu_down"
+            android:gravity="center|start"
+            android:paddingBottom="@dimen/item_padding_9dp"
+            android:paddingLeft="@dimen/text_size_menu_email_address"
+            android:paddingRight="@dimen/text_size_menu_email_address"
+            android:paddingTop="@dimen/item_padding"
+            android:text="@string/queue"
+            android:textColor="@drawable/text_selector_white_blue"
+            android:textSize="@dimen/text_size_bt_history_edit_sms_email" />
 
     </LinearLayout>
 

@@ -20,7 +20,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
- * Created by neha on 11/05/16.
+ * Created by Prashant on 26/05/18.
  */
 @Parcel
 public class Events extends SugarRecord {
@@ -41,6 +41,7 @@ public class Events extends SugarRecord {
     private String locationId;
     private String hospitalId;
     private String doctorId;
+    private String doctorName;
 
     private String explanation;
 
@@ -299,5 +300,13 @@ public class Events extends SugarRecord {
 
     public void setToDateMonth(int toDateMonth) {
         this.toDateMonth = toDateMonth;
+    }
+
+    public String getDoctorName() {
+        return doctorName;
+    }
+
+    public void setDoctorName(String doctorName) {
+        this.doctorName = doctorName;
     }
 }

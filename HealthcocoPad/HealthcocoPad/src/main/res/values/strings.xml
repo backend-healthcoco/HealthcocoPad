@@ -641,6 +641,7 @@
     <string name="save_as_template">Save as Template</string>
     <string name="report_details">Report Details</string>
     <string name="event">Event</string>
+    <string name="events">Events</string>
     <string name="cancel_appointment">Cancel Appointment</string>
 
     <string name="bmp">bmp</string>
@@ -919,6 +920,8 @@
     <string name="time_to_should_be_greater_than_current_time">Time to should be greater than Current Time </string>
     <string name="appointment_created">Appointment Created</string>
     <string name="please_select_patient_or_add_new">Please select Patient or add New Patient</string>
+    <string name="please_add_title">Please add Event Title</string>
+    <string name="please_add_note">Please add Event Note</string>
     <string name="please_enter_valid_mobile_no_or_select_existing_patient">Please enter valid Mobile Number or Select existing Patient</string>
     <string name="please_enter_patient_name_or_select_existing_patient">Please enter Patient Name or Select existing Patient</string>
     <string name="please_select_time_slot">Please select Time Slot</string>
@@ -1151,6 +1154,12 @@
     <string name="select_view">Select View</string>
     <string name="today_capital">TODAY</string>
     <string name="appointment_status">Appointment Status</string>
+    <string name="subject">Subject</string>
+    <string name="clinic">CLINIC</string>
+    <string name="doctor_cap">DOCTOR</string>
+    <string name="add_title">Add Title</string>
+    <string name="title">Title</string>
+    <string name="event_created">Event Created</string>
 
 
 </resources>

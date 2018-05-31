@@ -1674,8 +1674,8 @@ public class WebDataServiceImpl implements GCMRefreshListener {
         }
     }
 
-    public void getEvents(Class<?> class1, List<RegisteredDoctorProfile> registeredDoctorProfileList,
-                          String locationId, String foreignHospitalId, long startDate, long endDate,
+    public void getEvents(Class<?> class1,
+                          String locationId, long startDate, long endDate,
                           long updatedTime, int pageNo, int size, Response.Listener<VolleyResponseBean> responseListener,
                           GsonRequest.ErrorListener errorListener) {
         WebServiceType webServiceType = WebServiceType.GET_EVENTS;
@@ -1684,13 +1684,12 @@ public class WebDataServiceImpl implements GCMRefreshListener {
 
             String url = webServiceType.getUrl();
 
-            if (!Util.isNullOrEmptyList(registeredDoctorProfileList))
+           /* if (!Util.isNullOrEmptyList(registeredDoctorProfileList))
                 for (RegisteredDoctorProfile doctorProfile : registeredDoctorProfileList) {
 
                     url = url + HealthCocoConstants.PARAM_MATRIX_DOCTOR_ID + doctorProfile.getUserId();
-                }
-            url = url + HealthCocoConstants.PARAM_MATRIX_LOCATION_ID + locationId
-                    + HealthCocoConstants.PARAM_HOSPITAL_ID + foreignHospitalId
+                }*/
+            url = url + HealthCocoConstants.TAG_LOCATION_ID + locationId
                     + HealthCocoConstants.PARAM_FROM + startDate
                     + HealthCocoConstants.PARAM_TO + endDate
                     + HealthCocoConstants.PARAM_UPDATED_TIME + +updatedTime;

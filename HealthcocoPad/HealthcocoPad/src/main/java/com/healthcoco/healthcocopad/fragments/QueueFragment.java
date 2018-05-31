@@ -85,7 +85,7 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
     public static final String DATE_FORMAT_FOR_HEADER_IN_THIS_SCREEN = "EEE, MMM dd,yyyy";
     //    public static final int MAX_COUNT = 10;
     public static final int MAX_NUMBER_OF_EVENTS = 50;
-    private static final String DATE_FORMAT_USED_IN_THIS_SCREEN = "EEE, MMM dd,yyyy";
+    public static final String DATE_FORMAT_USED_IN_THIS_SCREEN = "EEE, MMM dd,yyyy";
     public ArrayList<RegisteredDoctorProfile> clinicDoctorProfileList;
     public List<RegisteredDoctorProfile> registeredDoctorProfileList;
     Long latestUpdatedTime = 0l;

@@ -883,7 +883,7 @@ public class LocalDataServiceImpl {
         return getLatestUpdatedTime(user, localTabelType);
     }
 
-    public long getLatestUpdatedTime(User user) {
+    public long getListCount(User user) {
         Long count = 0l;
         String doctorId = "";
         String locationId = "";
@@ -4449,10 +4449,14 @@ public class LocalDataServiceImpl {
     }
 
 
-    public void addEventsList(ArrayList<Events> list) {
+    public void addEventsList(ArrayList<Events> list, List<RegisteredDoctorProfile> registeredDoctorProfileList) {
         if (!Util.isNullOrEmptyList(list))
             for (Events event :
                     list) {
+                for (RegisteredDoctorProfile registeredDoctorProfile : registeredDoctorProfileList) {
+                    if (registeredDoctorProfile.getUserId().equals(event.getDoctorId()))
+                        event.setDoctorName(registeredDoctorProfile.getFirstNameWithTitle());
+                }
                 addEventsUpdated(event);
             }
     }
@@ -4499,7 +4503,7 @@ public class LocalDataServiceImpl {
 
 
     private List<Events> getEventsListDayWise(AppointmentStatusType appointmentStatusType, ArrayList<RegisteredDoctorProfile> clinicDoctorProfileList, String locationId, String hospitalId, long selectedDate) {
-        String whereCondition = "Select * from " + StringUtil.toSQLName(CalendarEvents.class.getSimpleName())
+        String whereCondition = "Select * from " + StringUtil.toSQLName(Events.class.getSimpleName())
                 + " where "
                /* + LocalDatabaseUtils.KEY_DOCTOR_ID + "=\"" + doctorId + "\""
                 + " AND "*/

@@ -19,7 +19,7 @@ public class EventRequest {
     private String locationId;
     private String hospitalId;
     private String doctorId;
-    //    private String patientId;
+    private String patientId;
     private String localPatientName;
     private String mobileNumber;
     private String uniqueId;
@@ -34,6 +34,14 @@ public class EventRequest {
     private boolean isPatientRequired;
     private boolean isAllDayEvent;
 
+
+    public String getPatientId() {
+        return patientId;
+    }
+
+    public void setPatientId(String patientId) {
+        this.patientId = patientId;
+    }
 
     public boolean isAddedOnSuccess() {
         return isAddedOnSuccess;

@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/event_popup_width"
+    android:layout_height="wrap_content"
+    android:background="@drawable/shadow_popup_new"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:soundEffectsEnabled="false">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/padding_30_dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/blue_action_bar"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/drawable_text_padding"
+                        android:gravity="right"
+                        android:orientation="horizontal"
+                        android:paddingRight="@dimen/list_item_padding"
+                        android:paddingTop="@dimen/list_item_padding">
+
+                        <ImageView
+                            android:id="@+id/bt_discard_appointment"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="@dimen/patient_profile_image_padding"
+                            android:src="@drawable/discard_selector"
+                            android:visibility="gone" />
+
+                        <ImageView
+                            android:id="@+id/bt_print_patient_card"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="@dimen/patient_profile_image_padding"
+                            android:src="@drawable/icon_print_selector"
+                            android:visibility="gone" />
+
+
+                        <ImageView
+                            android:id="@+id/bt_edit_appointment"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="@dimen/patient_profile_image_padding"
+                            android:src="@drawable/icon_edit_selector"
+                            android:visibility="gone" />
+
+
+                        <ImageView
+                            android:id="@+id/bt_dismiss"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/icon_cross_white" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingBottom="@dimen/padding_20_dp"
+                        android:paddingLeft="@dimen/padding_20_dp"
+                        android:paddingRight="@dimen/padding_20_dp"
+                        android:paddingTop="@dimen/list_item_padding">
+
+                        <TextView
+                            android:id="@+id/tv_subject"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/white"
+                            android:textColorHint="@color/white"
+                            android:textSize="@dimen/actionbar_title_size"
+                            android:textStyle="bold" />
+
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/layout_padding_5dp"
+                    android:orientation="horizontal"
+                    android:paddingLeft="@dimen/padding_20_dp"
+                    android:paddingRight="@dimen/padding_20_dp"
+                    android:paddingTop="@dimen/list_item_padding">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="left|center_vertical"
+                        android:orientation="horizontal">
+
+                        <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/layout_padding_5dp"
+                            android:layout_marginTop="3dp"
+                            android:text="@string/fa_watch"
+                            android:textColor="@color/black_translucent_more"
+                            android:textSize="@dimen/text_size_reports_item_label" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="7"
+                        android:orientation="vertical">
+
+
+                        <TextView
+                            android:id="@+id/tv_date"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/date"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/text_size_contact_list_mobile" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/tv_from_time"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="05:00 AM" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="20dp"
+                                android:layout_marginRight="20dp"
+                                android:text="@string/text_dash"
+                                android:textSize="@dimen/text_size_emr_date" />
+
+                            <TextView
+                                android:id="@+id/tv_to_time"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="07:30 AM" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_explaination"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/layout_margin"
+                    android:orientation="horizontal"
+                    android:paddingLeft="@dimen/padding_20_dp"
+                    android:paddingRight="@dimen/padding_20_dp">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="left|center_vertical"
+                        android:orientation="horizontal">
+
+                        <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/layout_padding_5dp"
+                            android:text="@string/icon_email"
+                            android:textColor="@color/black_translucent_more"
+                            android:textSize="@dimen/text_size_reports_item_label" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/layout_margin"
+                        android:layout_marginTop="3dp"
+                        android:layout_weight="7"
+                        android:orientation="vertical">
+
+
+                        <TextView
+                            android:id="@+id/tv_explaination"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="sans-serif"
+                            android:text="Message"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/text_size_contact_list_mobile" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/note" />
+
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_patient_details"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/layout_margin"
+                    android:orientation="horizontal"
+                    android:paddingLeft="@dimen/padding_20_dp"
+                    android:paddingRight="@dimen/padding_20_dp">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="left|center_vertical"
+                        android:orientation="horizontal">
+
+                        <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/layout_padding_5dp"
+                            android:layout_marginTop="3dp"
+                            android:text="@string/fa_groups_icon"
+                            android:textColor="@color/black_translucent_more"
+                            android:textSize="@dimen/text_size_reports_item_label" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="7"
+                        android:orientation="vertical">
+
+
+                        <TextView
+                            android:id="@+id/tv_patient_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="sans-serif"
+                            android:maxLines="1"
+                            android:text="Name"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/text_size_contact_list_mobile" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/tv_patient_id"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:maxLines="1"
+                                android:text="P103456790" />
+
+                            <TextView
+                                android:id="@+id/tv_patient_gender"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:maxLines="1" />
+                        </LinearLayout>
+
+                        <!--  <TextView
+                              android:text="@string/patient_name"
+                              android:layout_width="match_parent"
+                              android:layout_height="wrap_content"
+                              android:maxLines="1" />
+  -->
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/layout_margin"
+                    android:orientation="horizontal"
+                    android:paddingLeft="@dimen/padding_20_dp"
+                    android:paddingRight="@dimen/padding_20_dp">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="left|center_vertical"
+                        android:orientation="horizontal">
+
+                        <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/border_profile_images"
+                            android:text="@string/icon_calendar"
+                            android:textColor="@color/black_translucent_more"
+                            android:textSize="@dimen/text_size_reports_item_label" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="7"
+                        android:orientation="vertical">
+
+
+                        <TextView
+                            android:id="@+id/tv_doctor_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="sans-serif"
+                            android:maxLines="1"
+                            android:text="Name"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/text_size_contact_list_mobile" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="sans-serif"
+                            android:maxLines="1"
+                            android:text="@string/created_by" />
+
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+        </ScrollView>
+    </LinearLayout>
+
+    <!--
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fl_bt_print"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_marginBottom="@dimen/report_thumbnail"
+            android:layout_marginRight="@dimen/margin_left_right_add_vital_signs"
+            android:scaleType="center"
+            android:src="@drawable/icon_print" />
+    -->
+
+</FrameLayout>

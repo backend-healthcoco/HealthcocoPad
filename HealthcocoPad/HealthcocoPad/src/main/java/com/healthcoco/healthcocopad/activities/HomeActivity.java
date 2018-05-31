@@ -181,6 +181,10 @@ public class HomeActivity extends HealthCocoActivity implements View.OnClickList
                 fragment = new ClinicalProfileFragment();
                 break;
             case QUEUE:
+                fragment = new QueueFragment(this);
+                actionBarNormal.setVisibility(View.GONE);
+                break;
+            case EVENTS:
                 fragment = new EventFragment(this);
                 actionBarNormal.setVisibility(View.GONE);
                 break;

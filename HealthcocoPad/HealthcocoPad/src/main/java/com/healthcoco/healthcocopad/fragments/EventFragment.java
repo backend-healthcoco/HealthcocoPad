@@ -3,9 +3,14 @@ package com.healthcoco.healthcocopad.fragments;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -40,11 +45,14 @@ import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.DoctorListPopupWindowListener;
 import com.healthcoco.healthcocopad.listeners.HealthcocoTextWatcherListener;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
+import com.healthcoco.healthcocopad.popupwindow.EventDetailsPopupWindow;
 import com.healthcoco.healthcocopad.popupwindow.HealthcocoPopupWindow;
 import com.healthcoco.healthcocopad.recyclerview.EndlessRecyclerViewScrollListener;
 import com.healthcoco.healthcocopad.recyclerview.HealthcocoRecyclerViewAdapter;
+import com.healthcoco.healthcocopad.recyclerview.HealthcocoRecyclerViewItemClickListener;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
+import com.healthcoco.healthcocopad.utilities.ComparatorUtil;
 import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.ReflectionUtil;
@@ -54,6 +62,7 @@ import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -66,17 +75,15 @@ import static com.healthcoco.healthcocopad.enums.AppointmentStatusType.CONFIRM;
  */
 
 
-public class EventFragment extends HealthCocoFragment implements LocalDoInBackgroundListenerOptimised, View.OnClickListener, HealthcocoTextWatcherListener, DoctorListPopupWindowListener {
+public class EventFragment extends HealthCocoFragment implements LocalDoInBackgroundListenerOptimised,
+        View.OnClickListener, HealthcocoTextWatcherListener, DoctorListPopupWindowListener {
 
     public static final int MAX_SIZE = 10;
 
-    public static final String INTENT_GET_EVENT_LIST_LOCAL = "com.healthcoco.APPOINTMENT_LIST_LOCAL";
-    public static final String INTENT_GET_EVENT_LIST_SERVER = "com.healthcoco.APPOINTMENT_LIST_SERVER";
+    public static final String INTENT_GET_EVENT_LIST_LOCAL = "com.healthcoco.EVENT_LIST_LOCAL";
+    public static final String INTENT_GET_EVENT_LIST_SERVER = "com.healthcoco.EVENT_LIST_SERVER";
 
-    public static final String TAG_CHANGED_DATE = "changedDate";
-    public static final String TAG_IS_FROM_CALENDAR = "isFromCalendar";
 
-    public static final String DATE_FORMAT_FOR_HEADER_IN_THIS_SCREEN = "EEE, MMM dd,yyyy";
     //    public static final int MAX_COUNT = 10;
     public static final int MAX_NUMBER_OF_EVENTS = 50;
     private static final String DATE_FORMAT_USED_IN_THIS_SCREEN = "EEE, MMM dd,yyyy";
@@ -97,11 +104,19 @@ public class EventFragment extends HealthCocoFragment implements LocalDoInBackgr
     private boolean receiversRegistered;
     private RecyclerView eventRecyclerView;
     private HealthcocoRecyclerViewAdapter mAdapter;
-    private ArrayList<CalendarEvents> calendarEventsList = new ArrayList<>();
+    private ArrayList<Events> eventsList = new ArrayList<>();
+    BroadcastReceiver eventListReceiverLocal = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, final Intent intent) {
+            if (intent != null) {
+                getListFromLocal(true);
+            }
+        }
+    };
     private TextView tvNoEventsFound;
-    private ProgressBar progressLoading;
     private TextView tvDoctorName;
     private LinearLayout lvDoctorName;
+    private LinearLayout layoutSwitchView;
     private ImageButton btPreviousDate;
     private ImageButton btNextDate;
     private ImageButton btRefresh;
@@ -113,7 +128,6 @@ public class EventFragment extends HealthCocoFragment implements LocalDoInBackgr
     private FloatingActionButton floatingActionButton;
     private View.OnClickListener clickListener;
     private AppointmentStatusType appointmentStatusType = CONFIRM;
-
     private AddEventsFromScreenType screenType = EVENTS_LIST_ADD_NEW;
 
 
@@ -140,6 +154,7 @@ public class EventFragment extends HealthCocoFragment implements LocalDoInBackgr
     public void init() {
         initViews();
         initListeners();
+        initAdapter();
         new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_FRAGMENT_INITIALISATION_DATA, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
@@ -148,21 +163,22 @@ public class EventFragment extends HealthCocoFragment implements LocalDoInBackgr
     public void initViews() {
         eventRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view_events);
         tvNoEventsFound = (TextView) view.findViewById(R.id.tv_no_events_found);
-        progressLoading = (ProgressBar) view.findViewById(R.id.progress_loading);
         btMenu = (ImageButton) view.findViewById(R.id.bt_menu);
         tvDoctorName = (TextView) view.findViewById(R.id.tv_doctor_name);
         lvDoctorName = (LinearLayout) view.findViewById(R.id.lv_doctor_name);
+        layoutSwitchView = (LinearLayout) view.findViewById(R.id.layout_select_day);
         btPreviousDate = (ImageButton) view.findViewById(R.id.bt_previuos_date);
         btNextDate = (ImageButton) view.findViewById(R.id.bt_next_date);
         btRefresh = (ImageButton) view.findViewById(R.id.bt_refresh);
         tvSelectedDate = (TextView) view.findViewById(R.id.tv_selected_date);
         tvQueue = (TextView) view.findViewById(R.id.bt_queue);
-        tvQueue.setVisibility(View.GONE);
         tvOneDay = (TextView) view.findViewById(R.id.bt_one_day);
         tvThreeDay = (TextView) view.findViewById(R.id.bt_three_day);
         floatingActionButton = (FloatingActionButton) view.findViewById(R.id.fl_bt_add_event);
 
-        resetCaledarView(CalendarViewType.QUEUE);
+        layoutSwitchView.setVisibility(View.GONE);
+
+//        resetCaledarView(CalendarViewType.QUEUE);
     }
 
     @Override
@@ -193,7 +209,7 @@ public class EventFragment extends HealthCocoFragment implements LocalDoInBackgr
                 }
         }
         WebDataServiceImpl.getInstance(mApp).getEvents(Events.class,
-                registeredDoctorProfileList, user.getForeignLocationId(), user.getForeignHospitalId(),
+                user.getForeignLocationId(),
                 DateTimeUtil.getFirstDayOfMonthMilli(selectedMonthDayYearInMillis), DateTimeUtil.getLastDayOfMonthMilli(selectedMonthDayYearInMillis),
                 latestUpdatedTime, PAGE_NUMBER, MAX_NUMBER_OF_EVENTS, this, this);
     }
@@ -202,6 +218,8 @@ public class EventFragment extends HealthCocoFragment implements LocalDoInBackgr
     private void resetListAndPagingAttributes() {
         PAGE_NUMBER = 0;
         isEndOfListAchieved = true;
+        eventsHashMap.clear();
+        eventsList.clear();
     }
 
     private void initAdapter() {
@@ -209,8 +227,8 @@ public class EventFragment extends HealthCocoFragment implements LocalDoInBackgr
         eventRecyclerView.setLayoutManager(layoutManager);
         eventRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        mAdapter = new HealthcocoRecyclerViewAdapter(mActivity, AdapterType.APOINTMENT_QUEUE, this);
-        mAdapter.setListData((ArrayList<Object>) (Object) calendarEventsList);
+        mAdapter = new HealthcocoRecyclerViewAdapter(mActivity, AdapterType.EVENT_LIST, this);
+        mAdapter.setListData((ArrayList<Object>) (Object) eventsList);
         eventRecyclerView.setAdapter(mAdapter);
 
         eventRecyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(layoutManager) {
@@ -226,10 +244,27 @@ public class EventFragment extends HealthCocoFragment implements LocalDoInBackgr
         if (!Util.isNullOrEmptyList(responseList)) {
             for (Events events :
                     responseList) {
+                if (!Util.isNullOrBlank(events.getDoctorName()))
+                    events.setDoctorName("Dr. " + user.getFirstName());
                 eventsHashMap.put(events.getUniqueId(), events);
             }
         }
-//        notifyAdapter(new ArrayList<>(eventsHashMap.values()));
+        notifyAdapter(new ArrayList<>(eventsHashMap.values()));
+    }
+
+    private void notifyAdapter(ArrayList<Events> eventsArrayList) {
+        if (!Util.isNullOrEmptyList(eventsArrayList)) {
+            eventRecyclerView.setVisibility(View.VISIBLE);
+            tvNoEventsFound.setVisibility(View.GONE);
+            eventsList.clear();
+            eventsList.addAll(eventsArrayList);
+            mAdapter.notifyDataSetChanged();
+//            tvCount.setText(Util.getValidatedValue(eventsArrayList.size()));
+        } else {
+            eventRecyclerView.setVisibility(View.GONE);
+            tvNoEventsFound.setVisibility(View.VISIBLE);
+//            tvCount.setText(R.string.zero);
+        }
     }
 
     @Override
@@ -269,42 +304,34 @@ public class EventFragment extends HealthCocoFragment implements LocalDoInBackgr
                     }
                     break;
                 case GET_EVENTS:
-                    if (!Util.isNullOrEmptyList(response.getDataList())) {
-                        if (response.isDataFromLocal()) {
-                            ArrayList<Events> responseDataList = (ArrayList<Events>) (ArrayList<?>) response.getDataList();
-                            LogUtils.LOGD(TAG, "getSectionedDataListCalendar  loading onResponse");
-                            if (Util.isNullOrEmptyList(responseDataList) || responseDataList.size() < MAX_SIZE || Util.isNullOrEmptyList(responseDataList))
-                                isEndOfListAchieved = true;
-                            else isEndOfListAchieved = false;
-                            if (isInitialLoading && !response.isFromLocalAfterApiSuccess() && response.isUserOnline()) {
-                                LogUtils.LOGD(TAG, "getSectionedDataListCalendar  loading Complete");
-                                progressLoading.setVisibility(View.GONE);
-                                isInitialLoading = false;
-                                fromHashMapAndRefresh(responseDataList);
-                                return;
-                            }
+                    if (response.isDataFromLocal()) {
+                        ArrayList<Events> responseDataList = (ArrayList<Events>) (ArrayList<?>) response.getDataList();
+                        LogUtils.LOGD(TAG, "getSectionedDataListCalendar  loading onResponse");
+                        if (Util.isNullOrEmptyList(responseDataList) || responseDataList.size() < MAX_SIZE || Util.isNullOrEmptyList(responseDataList))
+                            isEndOfListAchieved = true;
+                        else isEndOfListAchieved = false;
+                        if (isInitialLoading && !response.isFromLocalAfterApiSuccess() && response.isUserOnline()) {
+                            LogUtils.LOGD(TAG, "getSectionedDataListCalendar  loading Complete");
+                            isInitialLoading = false;
                             fromHashMapAndRefresh(responseDataList);
                             return;
-                        } else {
-                            if (Util.isNullOrEmptyList(response.getDataList()) || response.getDataList().size() < MAX_NUMBER_OF_EVENTS || Util.isNullOrEmptyList(response.getDataList())) {
-                                isEndOfListAchieved = true;
-                                mActivity.updateProgressDialog(10, 10);
-                            } else {
-                                PAGE_NUMBER = PAGE_NUMBER + 1;
-                                isEndOfListAchieved = false;
-                                mActivity.updateProgressDialog(10, 1);
-                            }
-                            new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_EVENTS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
-                            response.setIsFromLocalAfterApiSuccess(true);
-                            return;
                         }
+                        fromHashMapAndRefresh(responseDataList);
+                        return;
                     } else {
-                        mActivity.hideProgressDialog();
-                        getListFromLocal(true);
-                        isInitialLoading = false;
-                        mActivity.hideLoading();
+                        if (Util.isNullOrEmptyList(response.getDataList()) || response.getDataList().size() < MAX_NUMBER_OF_EVENTS || Util.isNullOrEmptyList(response.getDataList())) {
+                            isEndOfListAchieved = true;
+                            mActivity.updateProgressDialog(10, 10);
+                        } else {
+                            PAGE_NUMBER = PAGE_NUMBER + 1;
+                            isEndOfListAchieved = false;
+                            mActivity.updateProgressDialog(10, 1);
+                        }
+                        new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_EVENTS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                        response.setIsFromLocalAfterApiSuccess(true);
+                        return;
                     }
-                    break;
+
                 case ADD_EVENT:
                     if (!isEndOfListAchieved) {
                         getEventsList(true);
@@ -378,7 +405,7 @@ public class EventFragment extends HealthCocoFragment implements LocalDoInBackgr
 
                 LocalDataServiceImpl.getInstance(mApp).addEventsList(
                         (ArrayList<Events>) (ArrayList<?>) response
-                                .getDataList());
+                                .getDataList(), registeredDoctorProfileList);
                 return volleyResponseBean;
         }
         if (volleyResponseBean == null)
@@ -477,7 +504,7 @@ public class EventFragment extends HealthCocoFragment implements LocalDoInBackgr
                         Util.getValidatedValueOrNull(tvSelectedDate))) {
                     if (!isInitialLoading) {
                         if (DateTimeUtil.isCurrentMonthSelected(curentMonthDayYearInMillis, selectedMonthDayYearInMillis)) {
-                            getEventsList(true);
+                            getListFromLocal(true);
                         } else {
                             curentMonthDayYearInMillis = selectedMonthDayYearInMillis;
                             resetListAndPagingAttributes();
@@ -507,7 +534,7 @@ public class EventFragment extends HealthCocoFragment implements LocalDoInBackgr
                 tvDoctorName.setText(doctorName);
             }
         }
-        getEventsList(true);
+        getListFromLocal(true);
     }
 
     @Override
@@ -570,7 +597,25 @@ public class EventFragment extends HealthCocoFragment implements LocalDoInBackgr
         current_page--;
         PAGE_NUMBER = current_page;
         if (!isEndOfListAchieved)
-            getEventsList(false);
+            getListFromLocal(false);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (!receiversRegistered) {
+            //receiver for appointment list refresh
+            IntentFilter filterListLocal = new IntentFilter();
+            filterListLocal.addAction(INTENT_GET_EVENT_LIST_LOCAL);
+            LocalBroadcastManager.getInstance(mActivity).registerReceiver(eventListReceiverLocal, filterListLocal);
+            receiversRegistered = true;
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        LocalBroadcastManager.getInstance(mActivity).unregisterReceiver(eventListReceiverLocal);
     }
 
 }

@@ -9,9 +9,11 @@ import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
 import com.healthcoco.healthcocopad.bean.server.ClinicDoctorProfile;
+import com.healthcoco.healthcocopad.bean.server.Events;
 import com.healthcoco.healthcocopad.bean.server.RegisteredDoctorProfile;
 import com.healthcoco.healthcocopad.enums.AdapterType;
 import com.healthcoco.healthcocopad.viewholders.DoctorListViewHolder;
+import com.healthcoco.healthcocopad.viewholders.EventItemViewHolder;
 import com.healthcoco.healthcocopad.viewholders.QueueItemViewHolder;
 
 import java.util.ArrayList;
@@ -72,6 +74,11 @@ public class HealthcocoRecyclerViewAdapter extends RecyclerView.Adapter<Healthco
                 convertView = mInflater.inflate(R.layout.list_item_queue, null);
                 viewHolder = new QueueItemViewHolder(mActivity, convertView, onItemClickListener, listenerObject);
                 break;
+
+            case EVENT_LIST:
+                convertView = mInflater.inflate(R.layout.list_item_event, null);
+                viewHolder = new EventItemViewHolder(mActivity, convertView, onItemClickListener, listenerObject);
+                break;
             case DOCTOR_POPUP_LIST:
 
                 convertView = mInflater.inflate(R.layout.item_doctor_popup_list, parent, false);
@@ -89,6 +96,12 @@ public class HealthcocoRecyclerViewAdapter extends RecyclerView.Adapter<Healthco
                 if (holder instanceof QueueItemViewHolder && object instanceof CalendarEvents) {
                     QueueItemViewHolder queueItemViewHolder = ((QueueItemViewHolder) holder);
                     queueItemViewHolder.applyData(object);
+                }
+                break;
+            case EVENT_LIST:
+                if (holder instanceof EventItemViewHolder && object instanceof Events) {
+                    EventItemViewHolder eventItemViewHolder = ((EventItemViewHolder) holder);
+                    eventItemViewHolder.applyData(object);
                 }
                 break;
             case DOCTOR_POPUP_LIST:

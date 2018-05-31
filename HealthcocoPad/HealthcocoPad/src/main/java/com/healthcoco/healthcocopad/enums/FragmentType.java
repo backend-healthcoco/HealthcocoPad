@@ -9,6 +9,7 @@ public enum FragmentType {
     PROFILE(MenuType.SEPARATOR, R.string.profile, R.drawable.ic_action_profileicon, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION),
     QUEUE(MenuType.SEPARATOR, R.string.calendar, R.drawable.ic_action_appointmnt, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION),
     CALENDAR(MenuType.SEPARATOR, R.string.calendar, R.drawable.ic_action_calender, ActionbarLeftRightActionTypeDrawables.WITH_ADD, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION),
+    EVENTS(MenuType.SEPARATOR, R.string.events, R.drawable.ic_action_event, ActionbarLeftRightActionTypeDrawables.WITH_ADD, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION),
     MAIL(MenuType.SEPARATOR, R.string.mail, R.drawable.menu_mail_selector, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION),
     ISSUE_TRACKER(MenuType.SEPARATOR, R.string.issue_tracker, R.drawable.ic_action_issue_tracker, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION),
     SETTINGS(MenuType.SEPARATOR, R.string.settings, R.drawable.ic_action_setting, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION),
