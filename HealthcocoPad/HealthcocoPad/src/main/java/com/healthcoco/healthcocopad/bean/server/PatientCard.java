@@ -10,6 +10,7 @@ import java.util.List;
 
 @Parcel
 public class PatientCard extends SugarRecord {
+    protected String notesJsonString;
     @Unique
     private String uniqueId;
 
@@ -361,5 +362,13 @@ public class PatientCard extends SugarRecord {
 
     public void setUniqueId(String uniqueId) {
         this.uniqueId = uniqueId;
+    }
+
+    public String getNotesJsonString() {
+        return notesJsonString;
+    }
+
+    public void setNotesJsonString(String notesJsonString) {
+        this.notesJsonString = notesJsonString;
     }
 }

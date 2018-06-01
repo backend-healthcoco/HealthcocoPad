@@ -12,6 +12,7 @@ import com.android.volley.Response;
 import com.healthcoco.healthcocopad.HealthCocoDialogFragment;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
+import com.healthcoco.healthcocopad.bean.request.UserVerification;
 import com.healthcoco.healthcocopad.bean.server.AdviceSuggestion;
 import com.healthcoco.healthcocopad.bean.server.ComplaintSuggestions;
 import com.healthcoco.healthcocopad.bean.server.DiagnosisSuggestions;
@@ -649,11 +650,11 @@ public class AddNewSuggestionDialogFragment extends HealthCocoDialogFragment imp
 
     private void checkIsLocationAdmin(String userName, String password, String locationId) {
         mActivity.showLoading(false);
-        User user = new User();
-        user.setUsername(userName);
-        user.setPassword(Util.getSHA3SecurePassword(password));
-        user.setForeignLocationId(locationId);
-        WebDataServiceImpl.getInstance(mApp).isLocationAdmin(LoginResponse.class, user, this, this);
+        UserVerification userVerification = new UserVerification();
+        userVerification.setUsername(userName);
+        userVerification.setPassword(Util.getSHA3SecurePassword(password));
+        userVerification.setLocationId(locationId);
+        WebDataServiceImpl.getInstance(mApp).isLocationAdmin(UserVerification.class, userVerification, this, this);
     }
 
 

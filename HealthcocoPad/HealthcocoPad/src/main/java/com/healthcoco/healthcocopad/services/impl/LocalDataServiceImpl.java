@@ -1419,6 +1419,27 @@ public class LocalDataServiceImpl {
             patient.setNotesJsonString(getJsonFromObject(patient.getNotes()));
             registeredPatientDetailsUpdated.setForeignPatientId(registeredPatientDetailsUpdated.getPatient().getPatientId());
             registeredPatientDetailsUpdated.getPatient().save();
+
+            PatientCard patientCard = new PatientCard();
+            patientCard.setFirstName(registeredPatientDetailsUpdated.getFirstName());
+            patientCard.setLocalPatientName(registeredPatientDetailsUpdated.getLocalPatientName());
+            patientCard.setUserId(patient.getPatientId());
+            patientCard.setUniqueId(patient.getPatientId());
+            patientCard.setPatientId(patient.getPatientId());
+            patientCard.setProfession(patient.getProfession());
+            patientCard.setBloodGroup(patient.getBloodGroup());
+            patientCard.setEmailAddress(patient.getEmailAddress());
+            patientCard.setDoctorId(registeredPatientDetailsUpdated.getDoctorId());
+            patientCard.setHospitalId(registeredPatientDetailsUpdated.getHospitalId());
+            patientCard.setLocationId(registeredPatientDetailsUpdated.getLocationId());
+            patientCard.setColorCode(registeredPatientDetailsUpdated.getColorCode());
+            patientCard.setPid(registeredPatientDetailsUpdated.getPid());
+            if (registeredPatientDetailsUpdated.getImageUrl() != null)
+                patientCard.setImageUrl(registeredPatientDetailsUpdated.getImageUrl());
+            if (registeredPatientDetailsUpdated.getThumbnailUrl() != null)
+                patientCard.setThumbnailUrl(registeredPatientDetailsUpdated.getThumbnailUrl());
+
+            patientCard.save();
         }
         // setting address
         registeredPatientDetailsUpdated.setAddressJsonString(getJsonFromObject(registeredPatientDetailsUpdated.getAddress()));

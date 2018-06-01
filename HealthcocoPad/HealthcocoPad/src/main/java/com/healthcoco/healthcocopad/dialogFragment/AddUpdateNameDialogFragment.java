@@ -116,6 +116,7 @@ public class AddUpdateNameDialogFragment extends HealthCocoDialogFragment implem
         try {
             switch (addUpdateDialogType) {
                 case EMAIL:
+                    editName.setText("");
                     break;
                 case ADD_PATIENT_MOBILE_NUMBER:
                     int maxLength = 10;
@@ -406,6 +407,7 @@ public class AddUpdateNameDialogFragment extends HealthCocoDialogFragment implem
                 case SEND_EMAIL_REPORTS:
                 case SEND_EMAIL_PRESCRIPTION:
                 case SEND_EMAIL_TREATMENT:
+                case SEND_EMAIL_INVOICE:
                 case SEND_EMAIL_VISIT:
                     mActivity.hideLoading();
                     Util.showToast(mActivity, getResources().getString(R.string.email_sent_to) + String.valueOf(editName.getText()));

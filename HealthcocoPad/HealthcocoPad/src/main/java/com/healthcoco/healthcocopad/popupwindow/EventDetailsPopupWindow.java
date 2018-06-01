@@ -146,6 +146,18 @@ public class EventDetailsPopupWindow extends PopupWindow implements View.OnClick
 
     }
 
+    public void showOptionsWindow(View v) {
+//        showAsDropDown(v);
+        int verticalOffset;
+        showAtLocation(v, Gravity.LEFT | Gravity.TOP, 0, 0);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            verticalOffset = -(v.getHeight() * 89) / 100;
+        } else
+            verticalOffset = -(v.getHeight() * 89) / 100;
+
+        update(v, (int) (v.getWidth() * (3 / 2)), verticalOffset, (int) mActivity.getResources().getDimension(R.dimen.queue_layout_width), LinearLayout.LayoutParams.WRAP_CONTENT);
+    }
+
     public void showOptionsWindowAtRightCenter(View v) {
         int verticalOffset;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {

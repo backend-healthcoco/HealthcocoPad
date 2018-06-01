@@ -78,9 +78,9 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:paddingBottom="@dimen/padding_20_dp"
-                        android:paddingLeft="@dimen/padding_20_dp"
+                        android:paddingLeft="@dimen/padding_30_dp"
                         android:paddingRight="@dimen/padding_20_dp"
-                        android:paddingTop="@dimen/list_item_padding">
+                        android:paddingTop="@dimen/padding_20_dp">
 
                         <TextView
                             android:id="@+id/tv_subject"
@@ -247,6 +247,8 @@
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/layout_margin"
+                        android:layout_marginTop="3dp"
                         android:layout_weight="7"
                         android:orientation="vertical">
 

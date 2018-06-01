@@ -40,6 +40,7 @@ import com.healthcoco.healthcocopad.bean.request.ProfessionalStatementRequest;
 import com.healthcoco.healthcocopad.bean.request.RegisterNewPatientRequest;
 import com.healthcoco.healthcocopad.bean.request.TreatmentRequest;
 import com.healthcoco.healthcocopad.bean.request.UserPermissionsRequest;
+import com.healthcoco.healthcocopad.bean.request.UserVerification;
 import com.healthcoco.healthcocopad.bean.server.AdviceSuggestion;
 import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
 import com.healthcoco.healthcocopad.bean.server.ClinicDoctorProfile;
@@ -267,13 +268,13 @@ public class WebDataServiceImpl implements GCMRefreshListener {
         }
     }
 
-    public void isLocationAdmin(Class<LoginResponse> class1, User user, Response.Listener<VolleyResponseBean> responseListener,
+    public void isLocationAdmin(Class<?> class1, Object object, Response.Listener<VolleyResponseBean> responseListener,
                                 GsonRequest.ErrorListener errorListener) {
         WebServiceType webServiceType = WebServiceType.IS_LOCATION_ADMIN;
         checkNetworkStatus(mApp.getApplicationContext());
         if (HealthCocoConstants.isNetworkOnline) {
             String url = webServiceType.getUrl();
-            getResponse(webServiceType, class1, url, user, null, responseListener,
+            getResponse(webServiceType, class1, url, object, null, responseListener,
                     errorListener);
         } else {
             showUserOffline(webServiceType, responseListener);

@@ -15,6 +15,7 @@ import com.healthcoco.healthcocopad.bean.server.DrugDosage;
 import com.healthcoco.healthcocopad.bean.server.DrugDurationUnit;
 import com.healthcoco.healthcocopad.bean.server.EcgDetailSuggestions;
 import com.healthcoco.healthcocopad.bean.server.EchoSuggestions;
+import com.healthcoco.healthcocopad.bean.server.Events;
 import com.healthcoco.healthcocopad.bean.server.GeneralExaminationSuggestions;
 import com.healthcoco.healthcocopad.bean.server.HistoryDetailsResponse;
 import com.healthcoco.healthcocopad.bean.server.HistoryPresentComplaintSuggestions;
@@ -253,6 +254,32 @@ public class ComparatorUtil {
             try {
                 CalendarEvents calendarEvents1 = (CalendarEvents) object1;
                 CalendarEvents calendarEvents2 = (CalendarEvents) object2;
+                Float timeFrom1 = 0f;
+                Float timeFrom2 = 0f;
+                if (calendarEvents1.getTime() != null && calendarEvents1.getTime().getFromTime() != null) {
+                    timeFrom1 = calendarEvents1.getTime().getFromTime();
+                }
+                if (calendarEvents2.getTime() != null && calendarEvents2.getTime().getFromTime() != null) {
+                    timeFrom2 = calendarEvents2.getTime().getFromTime();
+                }
+                long timeInMillis1 = TimeUnit.MINUTES.toMillis(Math.round(timeFrom1));
+                long timeInMillis2 = TimeUnit.MINUTES.toMillis(Math.round(timeFrom2));
+                Date date1 = new Date(timeInMillis1);
+                Date date2 = new Date(timeInMillis2);
+                return date1.compareTo(date2);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return 0;
+        }
+    };
+    public static Comparator<Object> eventsFromToTimeComparator = new Comparator<Object>() {
+
+        @Override
+        public int compare(Object object1, Object object2) {
+            try {
+                Events calendarEvents1 = (Events) object1;
+                Events calendarEvents2 = (Events) object2;
                 Float timeFrom1 = 0f;
                 Float timeFrom2 = 0f;
                 if (calendarEvents1.getTime() != null && calendarEvents1.getTime().getFromTime() != null) {

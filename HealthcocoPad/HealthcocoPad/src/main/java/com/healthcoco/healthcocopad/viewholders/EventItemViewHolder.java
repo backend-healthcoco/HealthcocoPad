@@ -63,12 +63,12 @@ public class EventItemViewHolder extends HealthcocoComonRecylcerViewHolder {
                 }
             });
 
-        layoutEventDetails.setOnClickListener(new View.OnClickListener() {
+     /*   layoutEventDetails.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                eventDetailOnClick(v);
+                eventDetailOnClick(layoutEventDetails);
             }
-        });
+        });*/
     }
 
     @Override

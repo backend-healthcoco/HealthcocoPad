@@ -396,9 +396,9 @@ public class AddEventDialogFragment extends HealthCocoDialogFragment implements
                 case ADD_EVENT:
                     if (response.isValidData(response) && response.getData() instanceof Events) {
                         Events events = (Events) response.getData();
+                        events.setDoctorName(String.valueOf(tvDoctorName.getText()).trim());
                         LocalDataServiceImpl.getInstance(mApp).addEventsUpdated(events);
                         Util.showToast(mActivity, R.string.event_created);
-                        events.setDoctorName(String.valueOf(tvDoctorName.getText()).trim());
                         sendBroadcasts(events.getUniqueId());
                         getDialog().dismiss();
                     }

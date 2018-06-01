@@ -76,7 +76,7 @@ import static com.healthcoco.healthcocopad.enums.AppointmentStatusType.CONFIRM;
 
 
 public class EventFragment extends HealthCocoFragment implements LocalDoInBackgroundListenerOptimised,
-        View.OnClickListener, HealthcocoTextWatcherListener, DoctorListPopupWindowListener {
+        View.OnClickListener, HealthcocoTextWatcherListener, DoctorListPopupWindowListener, HealthcocoRecyclerViewItemClickListener {
 
     public static final int MAX_SIZE = 10;
 
@@ -244,7 +244,7 @@ public class EventFragment extends HealthCocoFragment implements LocalDoInBackgr
         if (!Util.isNullOrEmptyList(responseList)) {
             for (Events events :
                     responseList) {
-                if (!Util.isNullOrBlank(events.getDoctorName()))
+                if (Util.isNullOrBlank(events.getDoctorName()))
                     events.setDoctorName("Dr. " + user.getFirstName());
                 eventsHashMap.put(events.getUniqueId(), events);
             }
@@ -256,6 +256,7 @@ public class EventFragment extends HealthCocoFragment implements LocalDoInBackgr
         if (!Util.isNullOrEmptyList(eventsArrayList)) {
             eventRecyclerView.setVisibility(View.VISIBLE);
             tvNoEventsFound.setVisibility(View.GONE);
+            Collections.sort(eventsArrayList, ComparatorUtil.eventsFromToTimeComparator);
             eventsList.clear();
             eventsList.addAll(eventsArrayList);
             mAdapter.notifyDataSetChanged();
@@ -618,4 +619,14 @@ public class EventFragment extends HealthCocoFragment implements LocalDoInBackgr
         LocalBroadcastManager.getInstance(mActivity).unregisterReceiver(eventListReceiverLocal);
     }
 
+    @Override
+    public void onItemClicked(Object object) {
+        Events events = (Events) object;
+        EventDetailsPopupWindow eventDetailsPopupWindow = new EventDetailsPopupWindow(mActivity, null, events);
+        eventDetailsPopupWindow.setOutsideTouchable(true);
+        eventDetailsPopupWindow.setContentView(eventDetailsPopupWindow.getPopupView());
+//        y = x + y;
+        eventDetailsPopupWindow.showOptionsWindow(eventRecyclerView);
+
+    }
 }
