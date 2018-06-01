@@ -92,6 +92,8 @@ public class HealthCocoConstants {
     public static final int RESULT_CODE_ADD_INVOICE = 207;
     public static final int RESULT_CODE_ADD_RECEIPT = 208;
     public static final int RESULT_CODE_ADD_EVENT = 209;
+    public static final int REQUEST_CODE_LOCATION_ADMIN = 210;
+    public static final int RESULT_CODE_LOCATION_ADMIN = 211;
 
 
     public static final String PARAM_SIZE = "&size=";

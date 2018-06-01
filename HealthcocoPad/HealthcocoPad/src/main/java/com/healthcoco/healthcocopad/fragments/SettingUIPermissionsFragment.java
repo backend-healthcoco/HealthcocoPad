@@ -137,8 +137,8 @@ public class SettingUIPermissionsFragment extends HealthCocoFragment implements 
 //                openCommonOpenUpActivity(SETTINGS_UI_PERMISSION_VISITS, itemType.ordinal());
 //                break;
             case PATIENT_TAB_PERMISSION:
-                openCommonOpenUpActivity(CommonOpenUpFragmentType.SETTINGS_UI_PERMISSION_PATIENT_TAB, PATIENT_TAB_PERMISSION.ordinal());
-//                mActivity.openAddNewSuggestionsFragment(this, HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, SuggestionType.PASSWORD);
+//                openCommonOpenUpActivity(CommonOpenUpFragmentType.SETTINGS_UI_PERMISSION_PATIENT_TAB, PATIENT_TAB_PERMISSION.ordinal());
+                mActivity.openAddNewSuggestionsFragment(this, HealthCocoConstants.REQUEST_CODE_LOCATION_ADMIN, SuggestionType.PASSWORD);
                 break;
         }
     }
@@ -233,8 +233,8 @@ public class SettingUIPermissionsFragment extends HealthCocoFragment implements 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST) {
-            if (resultCode == HealthCocoConstants.RESULT_CODE_REFERENCE_LIST) {
+        if (requestCode == HealthCocoConstants.REQUEST_CODE_LOCATION_ADMIN) {
+            if (resultCode == HealthCocoConstants.RESULT_CODE_LOCATION_ADMIN) {
                 openCommonOpenUpActivity(CommonOpenUpFragmentType.SETTINGS_UI_PERMISSION_PATIENT_TAB, PATIENT_TAB_PERMISSION.ordinal());
             }
         }

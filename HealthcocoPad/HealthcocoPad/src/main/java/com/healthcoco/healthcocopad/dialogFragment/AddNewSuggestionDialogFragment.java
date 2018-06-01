@@ -135,9 +135,9 @@ public class AddNewSuggestionDialogFragment extends HealthCocoDialogFragment imp
     public void initData() {
         switch (suggestionType) {
             case PASSWORD:
+                editSuggestion.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
                 suggessionTypeTextView.setText(R.string.password);
                 editSuggestion.setHint(R.string.please_enter_password);
-                editSuggestion.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
                 initSaveCancelButton(this, getString(R.string.submit));
                 break;
             default:
@@ -654,7 +654,8 @@ public class AddNewSuggestionDialogFragment extends HealthCocoDialogFragment imp
         userVerification.setUsername(userName);
         userVerification.setPassword(Util.getSHA3SecurePassword(password));
         userVerification.setLocationId(locationId);
-        WebDataServiceImpl.getInstance(mApp).isLocationAdmin(UserVerification.class, userVerification, this, this);
+        WebDataServiceImpl.getInstance(mApp).addSuggestion(UserVerification.class, WebServiceType.IS_LOCATION_ADMIN, userVerification, this, this);
+//        isLocationAdmin(UserVerification.class, userVerification, this, this);
     }
 
 
@@ -871,9 +872,10 @@ public class AddNewSuggestionDialogFragment extends HealthCocoDialogFragment imp
                     boolean isAdmin = (boolean) response.getData();
                     mActivity.hideLoading();
                     if (isAdmin) {
-                        getTargetFragment().onActivityResult(HealthCocoConstants.REQUEST_CODE_REFERENCE_LIST, HealthCocoConstants.RESULT_CODE_REFERENCE_LIST, null);
+                        getTargetFragment().onActivityResult(HealthCocoConstants.REQUEST_CODE_LOCATION_ADMIN, HealthCocoConstants.RESULT_CODE_LOCATION_ADMIN, null);
                         dismiss();
                     } else {
+                        Util.showToast(mActivity, "Please contact Admin to change UI Persmission");
                         return;
                     }
                 }

@@ -913,6 +913,7 @@
     <string name="aid">AID :&#160;</string>
     <string name="remind">Remind</string>
     <string name="confirm_cancel_appointment">Are you sure you want to cancel Appointment?</string>
+    <string name="confirm_cancel_event">Are you sure you want to cancel Event?</string>
     <string name="confirm_discard_patient">Are you sure you want to Discard Patient?</string>
     <string name="are_you_sure_confirm_appointment">Confirm Appointment&#160;</string>
     <string name="reminder_sent">Reminder to Patient has been sent Successfully</string>
@@ -1160,6 +1161,7 @@
     <string name="add_title">Add Title</string>
     <string name="title">Title</string>
     <string name="event_created">Event Created</string>
+    <string name="event_discarded">Event Discarded</string>
 
 
 </resources>

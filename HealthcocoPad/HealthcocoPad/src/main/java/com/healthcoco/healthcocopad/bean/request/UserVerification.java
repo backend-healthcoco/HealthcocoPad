@@ -19,7 +19,7 @@ import java.util.List;
  */
 public class UserVerification {
 
-    protected String locationId;
+    private String locationId;
     private char[] password;
     private String username;
 

@@ -28,7 +28,6 @@ public class EventRequest {
     private Long fromDate;
     private Long toDate;
     private WorkingHours time;
-    private String appointmentId;
     private AppointmentStatusType state;
     private boolean isCalenderBlocked;
     private boolean isPatientRequired;
@@ -153,14 +152,6 @@ public class EventRequest {
 
     public void setTime(WorkingHours time) {
         this.time = time;
-    }
-
-    public String getAppointmentId() {
-        return appointmentId;
-    }
-
-    public void setAppointmentId(String appointmentId) {
-        this.appointmentId = appointmentId;
     }
 
     public AppointmentStatusType getState() {

@@ -44,8 +44,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginRight="@dimen/patient_profile_image_padding"
-                            android:src="@drawable/discard_selector"
-                            android:visibility="gone" />
+                            android:src="@drawable/icon_discard_white"
+                            android:visibility="visible" />
 
                         <ImageView
                             android:id="@+id/bt_print_patient_card"

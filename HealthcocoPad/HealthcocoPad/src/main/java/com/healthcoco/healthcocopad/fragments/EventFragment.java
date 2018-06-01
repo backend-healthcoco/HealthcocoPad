@@ -54,6 +54,7 @@ import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.ComparatorUtil;
 import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
+import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.ReflectionUtil;
 import com.healthcoco.healthcocopad.utilities.Util;
@@ -198,20 +199,24 @@ public class EventFragment extends HealthCocoFragment implements LocalDoInBackgr
     }
 
     public void getEventsList(boolean showLoading) {
+        if (HealthCocoConstants.isNetworkOnline) {
 
-        if (isEndOfListAchieved) {
-            latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(user, LocalTabelType.EVENTS, selectedMonthDayYearInMillis);
-            if (showLoading)
-                if (latestUpdatedTime > 0l) {
-                    mActivity.showLoading(false);
-                } else {
-                    mActivity.showProgressDialog();
-                }
+            if (isEndOfListAchieved) {
+                latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(user, LocalTabelType.EVENTS, selectedMonthDayYearInMillis);
+                if (showLoading)
+                    if (latestUpdatedTime > 0l) {
+                        mActivity.showLoading(false);
+                    } else {
+                        mActivity.showProgressDialog();
+                    }
+            }
+            WebDataServiceImpl.getInstance(mApp).getEvents(Events.class,
+                    user.getForeignLocationId(),
+                    DateTimeUtil.getFirstDayOfMonthMilli(selectedMonthDayYearInMillis), DateTimeUtil.getLastDayOfMonthMilli(selectedMonthDayYearInMillis),
+                    latestUpdatedTime, PAGE_NUMBER, MAX_NUMBER_OF_EVENTS, this, this);
+        } else {
+            Util.showToast(mActivity, R.string.user_offline);
         }
-        WebDataServiceImpl.getInstance(mApp).getEvents(Events.class,
-                user.getForeignLocationId(),
-                DateTimeUtil.getFirstDayOfMonthMilli(selectedMonthDayYearInMillis), DateTimeUtil.getLastDayOfMonthMilli(selectedMonthDayYearInMillis),
-                latestUpdatedTime, PAGE_NUMBER, MAX_NUMBER_OF_EVENTS, this, this);
     }
 
 

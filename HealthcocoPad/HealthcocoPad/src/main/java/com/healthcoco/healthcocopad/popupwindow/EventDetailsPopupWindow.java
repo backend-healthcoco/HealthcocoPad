@@ -25,6 +25,7 @@ import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.request.AppointmentRequestToSend;
+import com.healthcoco.healthcocopad.bean.request.EventRequest;
 import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
 import com.healthcoco.healthcocopad.bean.server.Events;
 import com.healthcoco.healthcocopad.bean.server.PatientCard;
@@ -38,6 +39,7 @@ import com.healthcoco.healthcocopad.enums.CreatedByType;
 import com.healthcoco.healthcocopad.enums.PatientDetailTabType;
 import com.healthcoco.healthcocopad.enums.PatientProfileScreenType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
+import com.healthcoco.healthcocopad.fragments.EventFragment;
 import com.healthcoco.healthcocopad.fragments.PatientAppointmentDetailFragment;
 import com.healthcoco.healthcocopad.fragments.QueueFragment;
 import com.healthcoco.healthcocopad.services.GsonRequest;
@@ -278,27 +280,25 @@ public class EventDetailsPopupWindow extends PopupWindow implements View.OnClick
     }
 
     public void onCancelClicked() {
-        showConfirmationAlert(null, mActivity.getResources().getString(R.string.confirm_cancel_appointment));
+        showConfirmationAlert(null, mActivity.getResources().getString(R.string.confirm_cancel_event));
     }
 
 
     public void cancelAppointment() {
 
-     /*   mActivity.showLoading(false);
-        AppointmentRequestToSend appointmentRequestToSend = new AppointmentRequestToSend();
-        appointmentRequestToSend.setDoctorId(events.getDoctorId());
-        appointmentRequestToSend.setHospitalId(calendarEvents.getHospitalId());
-        appointmentRequestToSend.setLocationId(calendarEvents.getLocationId());
-        appointmentRequestToSend.setPatientId(calendarEvents.getPatientId());
-        appointmentRequestToSend.setState(AppointmentStatusType.CANCEL);
-        appointmentRequestToSend.setCancelledBy(CreatedByType.DOCTOR);
-        appointmentRequestToSend.setNotifyDoctorByEmail(true);
-        appointmentRequestToSend.setNotifyDoctorBySms(true);
-        appointmentRequestToSend.setNotifyPatientByEmail(true);
-        appointmentRequestToSend.setNotifyPatientBySms(true);
-        appointmentRequestToSend.setAppointmentId(calendarEvents.getAppointmentId());
-        WebDataServiceImpl.getInstance(mApp).addAppointment(CalendarEvents.class, appointmentRequestToSend, this, this);
-  */
+        mActivity.showLoading(false);
+        EventRequest eventRequest = new EventRequest();
+        eventRequest.setDoctorId(events.getDoctorId());
+        eventRequest.setHospitalId(events.getHospitalId());
+        eventRequest.setLocationId(events.getLocationId());
+        eventRequest.setPatientId(events.getPatientId());
+        eventRequest.setState(AppointmentStatusType.CANCEL);
+        eventRequest.setUniqueId(events.getUniqueId());
+        eventRequest.setPatientRequired(true);
+
+        WebDataServiceImpl.getInstance(mApp).addEvent(Events.class, eventRequest, this, this);
+
+
     }
 
     @Override
@@ -306,13 +306,13 @@ public class EventDetailsPopupWindow extends PopupWindow implements View.OnClick
         if (response.getWebServiceType() != null) {
             LogUtils.LOGD(TAG, "Success " + String.valueOf(response.getWebServiceType()));
             switch (response.getWebServiceType()) {
-                case ADD_APPOINTMENT:
-                    if (response.isValidData(response) && response.getData() instanceof CalendarEvents) {
-                    /*     calendarEvents = (CalendarEvents) response.getData();
-                       calendarEvents.setIsAddedOnSuccess(true);
-                        LocalDataServiceImpl.getInstance(mApp).addAppointment(calendarEvents);
-                        sendBroadcasts(calendarEvents.getAppointmentId());
-                   */
+                case ADD_EVENT:
+                    if (response.isValidData(response) && response.getData() instanceof Events) {
+                        Events events = (Events) response.getData();
+                        events.setDoctorName(String.valueOf(tvDoctorName.getText()).trim());
+                        LocalDataServiceImpl.getInstance(mApp).addEventsUpdated(events);
+                        Util.showToast(mActivity, R.string.event_discarded);
+                        sendBroadcasts(events.getUniqueId());
                         dismiss();
                     }
                     break;
@@ -325,6 +325,14 @@ public class EventDetailsPopupWindow extends PopupWindow implements View.OnClick
         }
         mActivity.hideLoading();
     }
+
+    private void sendBroadcasts(String eventId) {
+        Intent intent = new Intent();
+        intent.setAction(EventFragment.INTENT_GET_EVENT_LIST_LOCAL);
+        intent.putExtra("eventId", eventId);
+        LocalBroadcastManager.getInstance(mApp.getApplicationContext()).sendBroadcast(intent);
+    }
+
 
     @Override
     public void onErrorResponse(VolleyResponseBean volleyResponseBean, String errorMessage) {
