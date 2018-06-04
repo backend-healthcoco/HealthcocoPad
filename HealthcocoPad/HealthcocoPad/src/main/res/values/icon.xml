@@ -87,5 +87,6 @@
     <string name="icon_edit">&#xf044;</string>
     <string name="icon_email">&#xf0e0;</string>
     <string name="icon_calendar">&#xf073;</string>
+    <string name="icon_user">&#xf007;</string>
 
 </resources>

@@ -1,1 +1,0 @@
-alter table GCM_REQUEST add USER_IDS_JSON_STRING TEXT;

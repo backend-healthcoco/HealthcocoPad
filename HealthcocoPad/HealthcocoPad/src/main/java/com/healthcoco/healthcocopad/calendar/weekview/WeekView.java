@@ -361,7 +361,7 @@ public class WeekView extends View {
         init();
     }
 
-    private void init() {
+    public void init() {
         // Scrolling initialization.
         mGestureDetector = new GestureDetectorCompat(mContext, mGestureListener);
         mScroller = new OverScroller(mContext, new FastOutLinearInInterpolator());

@@ -56,6 +56,55 @@
                 android:src="@drawable/actionbar_add_me"
                 app:layout_anchorGravity="bottom|right|end" />
 
+            <LinearLayout
+                android:id="@+id/fl_bt_today"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|left"
+                android:layout_marginBottom="@dimen/fab_margin_bottom"
+                android:layout_marginLeft="@dimen/fab_margin_left"
+                android:background="@drawable/background_rounded_corner"
+                android:clickable="true"
+                android:elevation="10dp"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/item_contact_padding"
+                android:paddingRight="@dimen/item_contact_padding"
+                android:visibility="gone"
+                app:layout_anchorGravity="bottom|left">
+
+                <ImageView
+                    android:id="@+id/iv_previous"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="@dimen/text_between_padding"
+                    android:paddingBottom="@dimen/padding_12dp"
+                    android:paddingTop="@dimen/padding_12dp"
+                    android:src="@drawable/icon_previous"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="@dimen/padding_12dp"
+                    android:paddingTop="@dimen/padding_12dp"
+                    android:text="@string/today_capital"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_size_emr_date"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/iv_next"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/text_between_padding"
+                    android:paddingBottom="@dimen/padding_12dp"
+                    android:paddingTop="@dimen/padding_12dp"
+                    android:src="@drawable/icon_next"
+                    android:visibility="gone" />
+            </LinearLayout>
+
         </FrameLayout>
 
 

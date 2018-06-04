@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.Response;
@@ -65,8 +66,10 @@ import java.util.ArrayList;
 public class AddNewSuggestionDialogFragment extends HealthCocoDialogFragment implements View.OnClickListener, Response.Listener<VolleyResponseBean>, GsonRequest.ErrorListener {
     public static final String TAG_SGGESTION = "suggestionTag";
     private EditText editSuggestion;
+    private EditText editPassword;
     private TextView titleTextView;
     private TextView suggessionTypeTextView;
+    private LinearLayout layoutPassword;
     private LoginResponse doctor;
     private AddNewSuggestionListener addNewSuggestionListener;
     private Bundle bundle;
@@ -117,8 +120,10 @@ public class AddNewSuggestionDialogFragment extends HealthCocoDialogFragment imp
     @Override
     public void initViews() {
         editSuggestion = (EditText) view.findViewById(R.id.edit_suggestion);
+        editPassword = (EditText) view.findViewById(R.id.edit_password);
         titleTextView = (TextView) view.findViewById(R.id.tv_title);
         suggessionTypeTextView = (TextView) view.findViewById(R.id.tv_suggesion_type);
+        layoutPassword = (LinearLayout) view.findViewById(R.id.layout_password);
 
         titleTextView.setText(suggestionType.getHeaderTitleId());
 
@@ -135,12 +140,15 @@ public class AddNewSuggestionDialogFragment extends HealthCocoDialogFragment imp
     public void initData() {
         switch (suggestionType) {
             case PASSWORD:
-                editSuggestion.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                suggessionTypeTextView.setText(R.string.password);
-                editSuggestion.setHint(R.string.please_enter_password);
+                layoutPassword.setVisibility(View.VISIBLE);
+                editSuggestion.setVisibility(View.GONE);
+                suggessionTypeTextView.setText(doctor.getUser().getEmailAddress());
                 initSaveCancelButton(this, getString(R.string.submit));
                 break;
             default:
+                suggessionTypeTextView.setText(R.string.suggestion);
+                editSuggestion.setVisibility(View.VISIBLE);
+                layoutPassword.setVisibility(View.GONE);
                 initListeners();
                 break;
         }
@@ -157,17 +165,23 @@ public class AddNewSuggestionDialogFragment extends HealthCocoDialogFragment imp
 
     private void validateData() {
         String msg = null;
-        String suggestion = String.valueOf(editSuggestion.getText());
-        if (Util.isNullOrBlank(suggestion)) {
-            switch (suggestionType) {
-                case PASSWORD:
+        String suggestion = "";
+        switch (suggestionType) {
+            case PASSWORD:
+                suggestion = String.valueOf(editPassword.getText());
+                if (Util.isNullOrBlank(suggestion)) {
                     msg = getResources().getString(R.string.please_enter_password);
-                    break;
-                default:
+                }
+                break;
+            default:
+                suggestion = String.valueOf(editSuggestion.getText());
+                if (Util.isNullOrBlank(suggestion)) {
                     msg = getResources().getString(R.string.please_enter_suggestion);
-                    break;
-            }
+                }
+                break;
         }
+
+
         if (Util.isNullOrBlank(msg)) {
             addSuggestion(suggestion);
         } else

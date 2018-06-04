@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -68,6 +69,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import static com.healthcoco.healthcocopad.dialogFragment.AddEventDialogFragment.TAG_FROM_SCREEN_TYPE;
 import static com.healthcoco.healthcocopad.enums.AddEventsFromScreenType.EVENTS_LIST_ADD_NEW;
 import static com.healthcoco.healthcocopad.enums.AppointmentStatusType.CONFIRM;
 
@@ -126,6 +128,9 @@ public class EventFragment extends HealthCocoFragment implements LocalDoInBackgr
     private TextView tvOneDay;
     private TextView tvThreeDay;
     private TextView tvSelectedDate;
+    private ImageView ivNext;
+    private ImageView ivPrevious;
+    private LinearLayout btToday;
     private FloatingActionButton floatingActionButton;
     private View.OnClickListener clickListener;
     private AppointmentStatusType appointmentStatusType = CONFIRM;
@@ -176,6 +181,9 @@ public class EventFragment extends HealthCocoFragment implements LocalDoInBackgr
         tvOneDay = (TextView) view.findViewById(R.id.bt_one_day);
         tvThreeDay = (TextView) view.findViewById(R.id.bt_three_day);
         floatingActionButton = (FloatingActionButton) view.findViewById(R.id.fl_bt_add_event);
+        btToday = (LinearLayout) view.findViewById(R.id.fl_bt_today);
+        ivNext = (ImageView) view.findViewById(R.id.iv_next);
+        ivPrevious = (ImageView) view.findViewById(R.id.iv_previous);
 
         layoutSwitchView.setVisibility(View.GONE);
 
@@ -192,6 +200,7 @@ public class EventFragment extends HealthCocoFragment implements LocalDoInBackgr
         tvQueue.setOnClickListener(this);
         tvOneDay.setOnClickListener(this);
         tvThreeDay.setOnClickListener(this);
+        btToday.setOnClickListener(this);
         tvSelectedDate.addTextChangedListener(new HealthcocoTextWatcher(tvSelectedDate, this));
 
         btMenu.setOnClickListener(clickListener);
@@ -516,9 +525,11 @@ public class EventFragment extends HealthCocoFragment implements LocalDoInBackgr
                             resetListAndPagingAttributes();
                             getEventsList(true);
                         }
+                        changeFloatingButtonStatus(selectedMonthDayYearInMillis);
                     }
                 } else {
                     tvSelectedDate.setText(R.string.today);
+                    btToday.setVisibility(View.GONE);
                 }
                 break;
         }
@@ -553,7 +564,7 @@ public class EventFragment extends HealthCocoFragment implements LocalDoInBackgr
         AddEventDialogFragment addEventDialogFragment = new AddEventDialogFragment();
         Bundle bundle = new Bundle();
 //        bundle.putString(HealthCocoConstants.TAG_UNIQUE_ID, calendarEvents.getAppointmentId());
-        bundle.putParcelable(BookAppointmentDialogFragment.TAG_FROM_SCREEN_TYPE, Parcels.wrap(screenType.ordinal()));
+        bundle.putParcelable(TAG_FROM_SCREEN_TYPE, Parcels.wrap(screenType.ordinal()));
         addEventDialogFragment.setArguments(bundle);
         addEventDialogFragment.setTargetFragment(addEventDialogFragment, PatientAppointmentDetailFragment.REQUEST_CODE_APPOINTMENTS_LIST);
         addEventDialogFragment.show(mActivity.getSupportFragmentManager(), addEventDialogFragment.getClass().getSimpleName());
@@ -634,4 +645,16 @@ public class EventFragment extends HealthCocoFragment implements LocalDoInBackgr
         eventDetailsPopupWindow.showOptionsWindow(eventRecyclerView);
 
     }
+
+    private void changeFloatingButtonStatus(long selectedMonthDayYearInMillis) {
+        btToday.setVisibility(View.VISIBLE);
+        if (selectedMonthDayYearInMillis > DateTimeUtil.getCurrentDateLong()) {
+            ivNext.setVisibility(View.GONE);
+            ivPrevious.setVisibility(View.VISIBLE);
+        } else if (selectedMonthDayYearInMillis < DateTimeUtil.getCurrentDateLong()) {
+            ivNext.setVisibility(View.VISIBLE);
+            ivPrevious.setVisibility(View.GONE);
+        }
+    }
+
 }

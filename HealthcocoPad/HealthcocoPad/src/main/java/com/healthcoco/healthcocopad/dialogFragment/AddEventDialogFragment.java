@@ -75,7 +75,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
- * Created by Shreshtha on 03-03-2017.
+ * Created by Prashant on 28-05-2018.
  */
 public class AddEventDialogFragment extends HealthCocoDialogFragment implements
         GsonRequest.ErrorListener, LocalDoInBackgroundListenerOptimised, Response.Listener<VolleyResponseBean>,
@@ -96,7 +96,7 @@ public class AddEventDialogFragment extends HealthCocoDialogFragment implements
     private Button btSelectPatient;
     private LinearLayout containerPatientProfileHeader;
     private AddEventsFromScreenType addEventsFromScreenType;
-    private String appointmentId;
+    private String eventId;
     private Long selectedTime;
     private Events selectedEvent;
     private EditText editNote;
@@ -166,7 +166,7 @@ public class AddEventDialogFragment extends HealthCocoDialogFragment implements
         Bundle bundle = getArguments();
         if (bundle != null) {
             int ordinal = Parcels.unwrap(bundle.getParcelable(TAG_FROM_SCREEN_TYPE));
-            appointmentId = bundle.getString(HealthCocoConstants.TAG_UNIQUE_ID);
+            eventId = bundle.getString(HealthCocoConstants.TAG_UNIQUE_ID);
             selectedTime = bundle.getLong(HealthCocoConstants.TAG_SELECTED_DATE_TIME_IN_MILLIS);
             addEventsFromScreenType = AddEventsFromScreenType.values()[ordinal];
         }
@@ -177,7 +177,7 @@ public class AddEventDialogFragment extends HealthCocoDialogFragment implements
             initData();
         }
         mActivity.showLoading(false);
-        if (!Util.isNullOrBlank(appointmentId))
+        if (!Util.isNullOrBlank(eventId))
             initActionbarTitle(getResources().getString(R.string.reschedule_event));
         else
             initActionbarTitle(getResources().getString(R.string.new_event));
@@ -233,6 +233,8 @@ public class AddEventDialogFragment extends HealthCocoDialogFragment implements
             case EVENTS_LIST_ADD_NEW:
                 containerPatientProfileHeader.setOnClickListener(this);
                 break;
+            case EVENTS_LIST_RESCHEDULE:
+                break;
             default:
                 parentAddSelectPatient.setVisibility(View.GONE);
                 break;
@@ -253,6 +255,12 @@ public class AddEventDialogFragment extends HealthCocoDialogFragment implements
         }
         if (selectedEvent != null && selectedEvent.getTime() != null && selectedEvent.getTime().getFromTime() != null)
             tvSelectedTime.setText(DateTimeUtil.getFormattedTime(0, Math.round(selectedEvent.getTime().getFromTime())));
+        if (selectedEvent != null && (!Util.isNullOrBlank(selectedEvent.getDoctorName()))) {
+            tvDoctorName.setText(selectedEvent.getDoctorName());
+            user.setUniqueId(selectedEvent.getDoctorId());
+        } else if (user != null)
+            tvDoctorName.setText("Dr. " + user.getFirstName());
+
         if (doctorClinicProfile != null) {
             tvClinicName.setText(Util.getValidatedValue(doctorClinicProfile.getLocationName()));
             if (doctorClinicProfile.getAppointmentSlot() != null) {
@@ -290,6 +298,7 @@ public class AddEventDialogFragment extends HealthCocoDialogFragment implements
             selectedPatient = null;
 //            clearActionPatientDetailActionBar(view);
             containerPatientProfileHeader.setVisibility(View.GONE);
+//            parentAddSelectPatient.setVisibility(View.VISIBLE);
             btSelectPatient.setVisibility(View.VISIBLE);
         }
 
@@ -385,11 +394,9 @@ public class AddEventDialogFragment extends HealthCocoDialogFragment implements
                     if (user != null && !Util.isNullOrBlank(user.getUniqueId())) {
                         tvSelectedDate.setText(DateTimeUtil.getCurrentFormattedDate(DATE_FORMAT_USED_IN_THIS_SCREEN));
                         initData();
-                        initSelectedAppointment();
-                        initPatientProfile();
+                        initSelectedEvent();
                         if (!Util.isNullOrEmptyList(registeredDoctorProfileList))
                             fromHashMapAndRefresh(registeredDoctorProfileList);
-                        tvDoctorName.setText("Dr. " + user.getFirstName());
                         return;
                     }
                     break;
@@ -457,11 +464,14 @@ public class AddEventDialogFragment extends HealthCocoDialogFragment implements
         }
     }
 
-    private void initSelectedAppointment() {
+    private void initSelectedEvent() {
         if (selectedEvent != null) {
             tvSelectedDate.setText(DateTimeUtil.getFormattedDateTime(DATE_FORMAT_USED_IN_THIS_SCREEN, selectedEvent.getFromDate()));
             editNote.setText(Util.getValidatedValue(selectedEvent.getExplanation()));
             editTitle.setText(Util.getValidatedValue(selectedEvent.getSubject()));
+            editTitle.setEnabled(false);
+            editTitle.setClickable(false);
+            getAndRefreshSelectedPatient(false);
         }
     }
 
@@ -469,6 +479,9 @@ public class AddEventDialogFragment extends HealthCocoDialogFragment implements
         Intent intent = new Intent();
         switch (addEventsFromScreenType) {
             case EVENTS_LIST_ADD_NEW:
+                intent.setAction(EventFragment.INTENT_GET_EVENT_LIST_LOCAL);
+                break;
+            case EVENTS_LIST_RESCHEDULE:
                 intent.setAction(EventFragment.INTENT_GET_EVENT_LIST_LOCAL);
                 break;
         }
@@ -489,11 +502,11 @@ public class AddEventDialogFragment extends HealthCocoDialogFragment implements
                 LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
                 if (doctor != null && doctor.getUser() != null) {
                     user = doctor.getUser();
-                   /* if (!Util.isNullOrBlank(appointmentId)) {
-                        selectedAppointment = LocalDataServiceImpl.getInstance(mApp).getAppointment(appointmentId);
-                        if (!Util.isNullOrBlank(selectedAppointment.getPatientId()))
-                            HealthCocoConstants.SELECTED_PATIENTS_USER_ID = selectedAppointment.getPatientId();
-                    }*/
+                    if (!Util.isNullOrBlank(eventId)) {
+                        selectedEvent = LocalDataServiceImpl.getInstance(mApp).getEvent(eventId);
+                        if (!Util.isNullOrBlank(selectedEvent.getPatientId()))
+                            HealthCocoConstants.SELECTED_PATIENTS_USER_ID = selectedEvent.getPatientId();
+                    }
 //                    if (bookAppointmentFromScreenType != BookAppointmentFromScreenType.APPOINTMENTS_QUEUE_ADD_NEW)
 //                        selectedPatient = LocalDataServiceImpl.getInstance(mApp).getPatient(HealthCocoConstants.SELECTED_PATIENTS_USER_ID);
                     registeredDoctorProfileList = LocalDataServiceImpl.getInstance(mApp).getRegisterDoctorDetails(user.getForeignLocationId());
@@ -585,15 +598,15 @@ public class AddEventDialogFragment extends HealthCocoDialogFragment implements
         String title = String.valueOf(editTitle.getText()).trim();
         String note = String.valueOf(editNote.getText()).trim();
 
-        if (selectedPatient == null && Util.isNullOrBlank(mobileNumber) && Util.isNullOrBlank(patientName)) {
+      /*  if (selectedPatient == null && Util.isNullOrBlank(mobileNumber) && Util.isNullOrBlank(patientName)) {
             msg = getResources().getString(R.string.please_select_patient_or_add_new);
-        }
+        }*/
         if (title == null || Util.isNullOrBlank(title)) {
             msg = getResources().getString(R.string.please_add_title);
         }
-        if (note == null || Util.isNullOrBlank(note)) {
+       /* if (note == null || Util.isNullOrBlank(note)) {
             msg = getResources().getString(R.string.please_add_note);
-        }
+        }*/
         if (selectedPatient == null && !isMobileNumberOptional && Util.isNullOrBlank(mobileNumber)) {
             msg = getResources().getString(R.string.enter_patient_mobile_number);
         } else if (!Util.isNullOrBlank(mobileNumber) && !Util.isValidMobileNo(mobileNumber)) {
@@ -626,7 +639,7 @@ public class AddEventDialogFragment extends HealthCocoDialogFragment implements
 
         EventRequest eventRequest = new EventRequest();
 //        appointment.setCreatedBy(CreatedByType.DOCTOR);
-        if (!Util.isNullOrBlank(appointmentId)) {
+        if (!Util.isNullOrBlank(eventId)) {
             eventRequest.setDoctorId(selectedEvent.getDoctorId());
             eventRequest.setHospitalId(selectedEvent.getHospitalId());
             eventRequest.setLocationId(selectedEvent.getLocationId());
@@ -635,10 +648,11 @@ public class AddEventDialogFragment extends HealthCocoDialogFragment implements
             eventRequest.setHospitalId(user.getForeignHospitalId());
             eventRequest.setLocationId(user.getForeignLocationId());
         }
-        eventRequest.setPatientId(HealthCocoConstants.SELECTED_PATIENTS_USER_ID);
         if (selectedPatient != null) {
+            eventRequest.setPatientId(HealthCocoConstants.SELECTED_PATIENTS_USER_ID);
             eventRequest.setLocalPatientName(selectedPatient.getFirstName());
             eventRequest.setMobileNumber(selectedPatient.getMobileNumber());
+            eventRequest.setPatientRequired(true);
         } else {
             eventRequest.setLocalPatientName(Util.getValidatedValueOrNull(autotvPatientName));
             eventRequest.setMobileNumber(Util.getValidatedValueOrNull(autotvPatientName));
@@ -648,10 +662,9 @@ public class AddEventDialogFragment extends HealthCocoDialogFragment implements
         eventRequest.setFromDate(DateTimeUtil.getLongFromFormattedDayMonthYearFormatString(DATE_FORMAT_USED_IN_THIS_SCREEN, selecetdDate));
         eventRequest.setToDate(DateTimeUtil.getLongFromFormattedDayMonthYearFormatString(DATE_FORMAT_USED_IN_THIS_SCREEN, selecetdDate));
         eventRequest.setTime(new WorkingHours(selectedFromTimeInMinutes, selectedFromTimeInMinutes + (float) tvAppointmentSlotDuration.getTag()));
-        eventRequest.setPatientRequired(true);
 
-        if (!Util.isNullOrBlank(appointmentId))
-            eventRequest.setUniqueId(appointmentId);
+        if (!Util.isNullOrBlank(eventId))
+            eventRequest.setUniqueId(eventId);
 
         switch (addEventsFromScreenType) {
             case EVENTS_LIST_RESCHEDULE:

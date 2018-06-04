@@ -17,40 +17,104 @@
             android:background="@color/grey_background"
             android:orientation="vertical">
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/grey_background"
-                android:paddingBottom="@dimen/list_item_padding"
-                android:paddingLeft="@dimen/patient_profile_image_padding"
-                android:paddingRight="@dimen/patient_profile_image_padding"
-                android:paddingTop="@dimen/list_item_padding">
+                android:layout_marginBottom="@dimen/layout_padding_5dp"
+                android:orientation="horizontal">
 
-                <com.healthcoco.healthcocopad.views.TextViewFontAwesome
-                    android:id="@+id/clinic_icon"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:background="@android:color/transparent"
-                    android:gravity="center_vertical"
-                    android:text="@string/clinic_icon"
-                    android:textColor="@color/blue_action_bar"
-                    android:textSize="@dimen/text_size_fontawesome_edit_icon_book_appointment" />
+                    android:layout_weight="1"
+                    android:background="@color/grey_background"
+                    android:orientation="vertical"
+                    android:paddingBottom="@dimen/list_item_padding"
+                    android:paddingLeft="@dimen/padding_30_dp"
+                    android:paddingRight="@dimen/patient_profile_image_padding"
+                    android:paddingTop="@dimen/list_item_padding">
 
-                <TextView
-                    android:id="@+id/tv_clinic_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_toRightOf="@+id/clinic_icon"
-                    android:background="@android:color/transparent"
-                    android:clickable="true"
-                    android:editable="false"
-                    android:focusable="false"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="@dimen/layout_add_treatment_title_padding_10dp"
-                    android:text="Clinic Name"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/text_size_book_appointment_clinic_name" />
-            </RelativeLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/layout_margin"
+                        android:layout_toRightOf="@+id/clinic_icon"
+                        android:background="@android:color/transparent"
+                        android:clickable="true"
+                        android:editable="false"
+                        android:focusable="false"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="@dimen/layout_add_treatment_title_padding_10dp"
+                        android:text="@string/clinic"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_book_appointment_dialog_fragment" />
+
+                    <TextView
+                        android:id="@+id/tv_clinic_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@+id/clinic_icon"
+                        android:background="@android:color/transparent"
+                        android:clickable="true"
+                        android:editable="false"
+                        android:focusable="false"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="@dimen/layout_add_treatment_title_padding_10dp"
+                        android:text="Clinic Name"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_book_appointment_dialog_fragment" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="0.5dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="@dimen/layout_margin"
+                    android:background="@color/grey_translucent" />
+
+                <LinearLayout
+                    android:id="@+id/layout_doctor_name"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/grey_background"
+                    android:orientation="vertical"
+                    android:paddingBottom="@dimen/list_item_padding"
+                    android:paddingLeft="@dimen/patient_profile_image_padding"
+                    android:paddingRight="@dimen/patient_profile_image_padding"
+                    android:paddingTop="@dimen/list_item_padding">
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/layout_margin"
+                        android:layout_toRightOf="@+id/clinic_icon"
+                        android:background="@android:color/transparent"
+                        android:clickable="true"
+                        android:editable="false"
+                        android:focusable="false"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="@dimen/layout_add_treatment_title_padding_10dp"
+                        android:text="@string/doctor_cap"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_book_appointment_dialog_fragment" />
+
+                    <TextView
+                        android:id="@+id/tv_doctor_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@+id/clinic_icon"
+                        android:background="@drawable/edit_text_bottom_line_grey_solid_transparent"
+                        android:clickable="true"
+                        android:editable="false"
+                        android:focusable="false"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="@dimen/layout_add_treatment_title_padding_10dp"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_book_appointment_dialog_fragment" />
+                </LinearLayout>
+            </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
@@ -327,7 +391,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center|start"
-                                android:layout_weight="1"
+                                android:layout_weight="2"
                                 android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
                                 android:drawableEnd="@drawable/arrow_down_drug"
                                 android:gravity="center|start"
@@ -360,7 +424,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center|start"
-                                android:layout_weight="30"
+                                android:layout_weight="1"
                                 android:gravity="center|start"
                                 android:paddingLeft="10dp"
                                 android:text="@string/time"
@@ -370,7 +434,7 @@
                             <LinearLayout
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="70"
+                                android:layout_weight="2"
                                 android:orientation="horizontal">
 
                                 <TextView

@@ -711,6 +711,7 @@
     <string name="diagrams">Diagrams</string>
 
     <string name="created_by">Created By&#160;</string>
+    <string name="organized_for">Organized For&#160;</string>
     <string name="vid"> | VID : </string>
     <string name="vital_signs">Vital Signs</string>
     <string name="hr">Heart Rate&#160;:&#160;</string>

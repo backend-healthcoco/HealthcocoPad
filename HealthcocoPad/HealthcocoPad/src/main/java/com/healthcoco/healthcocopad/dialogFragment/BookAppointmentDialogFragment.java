@@ -38,6 +38,7 @@ import com.healthcoco.healthcocopad.bean.server.AvailableTimeSlots;
 import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
 import com.healthcoco.healthcocopad.bean.server.DoctorClinicProfile;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
+import com.healthcoco.healthcocopad.bean.server.RegisteredDoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.bean.server.WorkingHours;
@@ -62,6 +63,7 @@ import com.healthcoco.healthcocopad.fragments.QueueFragment;
 import com.healthcoco.healthcocopad.listeners.AutoCompleteTextViewListener;
 import com.healthcoco.healthcocopad.listeners.HealthcocoTextWatcherListener;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
+import com.healthcoco.healthcocopad.popupwindow.HealthcocoPopupWindow;
 import com.healthcoco.healthcocopad.popupwindow.PopupWindowListener;
 import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
@@ -77,6 +79,7 @@ import org.parceler.Parcels;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
@@ -95,7 +98,7 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
     public static final String TAG_APPOINTMENT_ID = "appointmentId";
     private static final String DATE_FORMAT_USED_IN_THIS_SCREEN = "EEE, MMM dd,yyyy";
     private static final int REQUEST_CODE_BOOK_APPOINTMENT = 101;
-
+    public List<RegisteredDoctorProfile> registeredDoctorProfileList;
     private User user;
     private RegisteredPatientDetailsUpdated selectedPatient;
     private AppointmentTimeSlotDetails appointmentTimeSlotDetails;
@@ -105,6 +108,8 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
     private LinearLayout containerPatientProfileHeader;
     private LinearLayout layoutSelectTimeSlot;
     private BookAppointmentFromScreenType bookAppointmentFromScreenType;
+    private LinkedHashMap<String, RegisteredDoctorProfile> clinicDoctorListHashMap = new LinkedHashMap<>();
+    private HealthcocoPopupWindow doctorsListPopupWindow;
     private AvailableTimeSlots selectedTimeSlot;
     private String appointmentId;
     private Long selectedTime;
@@ -139,6 +144,8 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
     private LinearLayout loadingExistingPatientsList;
     private LinearLayout parentAddSelectPatient;
     private TextView tvClinicName;
+    private LinearLayout layoutDoctorName;
+    private TextView tvDoctorName;
     private DoctorClinicProfile doctorClinicProfile;
     //    private GridView gvTimeSlots;
 //    private ImageButton btPreviousDate;
@@ -225,6 +232,8 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
         loadingExistingPatientsList = (LinearLayout) view.findViewById(R.id.loading_existing_patients_list);
         parentAddSelectPatient = (LinearLayout) view.findViewById(R.id.parent_add_select_patient);
         tvClinicName = (TextView) view.findViewById(R.id.tv_clinic_name);
+        layoutDoctorName = (LinearLayout) view.findViewById(R.id.layout_doctor_name);
+        tvDoctorName = (TextView) view.findViewById(R.id.tv_doctor_name);
 
 
         tvSelectedTime = (TextView) view.findViewById(R.id.tv_selected_time);
@@ -269,6 +278,11 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
         }
         if (selectedAppointment != null && selectedAppointment.getTime() != null && selectedAppointment.getTime().getFromTime() != null)
             tvSelectedTime.setText(DateTimeUtil.getFormattedTime(0, Math.round(selectedAppointment.getTime().getFromTime())));
+        if (selectedAppointment != null && (!Util.isNullOrBlank(selectedAppointment.getDoctorName()))) {
+            tvDoctorName.setText(selectedAppointment.getDoctorName());
+            user.setUniqueId(selectedAppointment.getDoctorId());
+        } else if (user != null)
+            tvDoctorName.setText("Dr. " + user.getFirstName());
         if (doctorClinicProfile != null) {
             tvClinicName.setText(Util.getValidatedValue(doctorClinicProfile.getLocationName()));
             if (doctorClinicProfile.getAppointmentSlot() != null) {
@@ -421,6 +435,8 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
                         initData();
                         initSelectedAppointment();
                         initPatientProfile();
+                        if (!Util.isNullOrEmptyList(registeredDoctorProfileList))
+                            fromHashMapAndRefresh(registeredDoctorProfileList);
                         return;
                     }
                     break;
@@ -549,6 +565,7 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
                     }
                     if (bookAppointmentFromScreenType != BookAppointmentFromScreenType.APPOINTMENTS_QUEUE_ADD_NEW)
                         selectedPatient = LocalDataServiceImpl.getInstance(mApp).getPatient(HealthCocoConstants.SELECTED_PATIENTS_USER_ID);
+                    registeredDoctorProfileList = LocalDataServiceImpl.getInstance(mApp).getRegisterDoctorDetails(user.getForeignLocationId());
                     doctorClinicProfile = LocalDataServiceImpl.getInstance(mApp).getDoctorClinicProfile(user.getUniqueId(), user.getForeignLocationId());
                     if (doctorClinicProfile != null && doctorClinicProfile.getMobileNumberOptional() != null)
                         isMobileNumberOptional = doctorClinicProfile.getMobileNumberOptional();
@@ -812,6 +829,13 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
                     tvAppointmentSlotDuration.setTag(appointmentSlotsType.getTime());
                 }
                 break;
+            case DOCTOR_LIST:
+                if (object instanceof RegisteredDoctorProfile) {
+                    RegisteredDoctorProfile doctorProfile = (RegisteredDoctorProfile) object;
+                    tvDoctorName.setText(doctorProfile.getFirstNameWithTitle());
+                    user.setUniqueId(doctorProfile.getUserId());
+                }
+                break;
         }
     }
 
@@ -819,5 +843,30 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
     public void onEmptyListFound() {
 
     }
+
+
+    private void fromHashMapAndRefresh(List<RegisteredDoctorProfile> responseList) {
+        if (responseList.size() > 1) {
+            tvDoctorName.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.arrow_down_drug, 0);
+            tvDoctorName.setEnabled(true);
+
+            if (!Util.isNullOrEmptyList(responseList)) {
+                for (RegisteredDoctorProfile clinicDoctorProfile :
+                        responseList) {
+                    clinicDoctorListHashMap.put(clinicDoctorProfile.getUserId(), clinicDoctorProfile);
+                }
+            }
+//        notifyAdapter(new ArrayList<ClinicDoctorProfile>(clinicDoctorListHashMap.values()));
+            if (doctorsListPopupWindow != null)
+                doctorsListPopupWindow.notifyAdapter(new ArrayList<Object>(clinicDoctorListHashMap.values()));
+            else
+                mActivity.initPopupWindows(tvDoctorName, PopupWindowType.DOCTOR_LIST, new ArrayList<Object>(clinicDoctorListHashMap.values()), this);
+
+        } else {
+            tvDoctorName.setText("Dr. " + user.getFirstName());
+
+        }
+    }
+
 
 }

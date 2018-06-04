@@ -105,7 +105,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
 
     //variables need for pagination
     public static final int MAX_SIZE = 22;
-    public static final int MAX_NUMBER_OF_CONTACT = 5000;
+    public static final int MAX_NUMBER_OF_CONTACT = 50;
     private static final String TAG_RECEIVERS_REGISTERED = "tagReceiversRegistered";
     private static Integer REQUEST_CODE_CONTACTS_DETAIL = 101;
     public long MAX_COUNT;
@@ -433,14 +433,15 @@ public class ContactsListFragment extends HealthCocoFragment implements
                     if (showLoading)
                         mActivity.showLoading(false);
                 } else {
-//                    mActivity.showProgressDialog();
+                    mActivity.showProgressDialog();
                 }
         }
-    /*    WebDataServiceImpl.getInstance(mApp).getContactsList(RegisteredPatientDetailsUpdated.class, user.getUniqueId(),
-                user.getForeignHospitalId(), user.getForeignLocationId(), latestUpdatedTime, user, PAGE_NUMBER_SERVER, MAX_NUMBER_OF_CONTACT, null, this, this);
-*/
         WebDataServiceImpl.getInstance(mApp).getContactsList(RegisteredPatientDetailsUpdated.class, user.getUniqueId(),
+                user.getForeignHospitalId(), user.getForeignLocationId(), latestUpdatedTime, user, PAGE_NUMBER_SERVER, MAX_NUMBER_OF_CONTACT, null, this, this);
+
+ /*       WebDataServiceImpl.getInstance(mApp).getContactsList(RegisteredPatientDetailsUpdated.class, user.getUniqueId(),
                 user.getForeignHospitalId(), user.getForeignLocationId(), latestUpdatedTime, user, this, this);
+*/
     }
 
     private void initFilterFragment() {

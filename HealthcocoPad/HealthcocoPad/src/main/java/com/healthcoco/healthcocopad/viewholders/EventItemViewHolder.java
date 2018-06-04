@@ -35,6 +35,7 @@ public class EventItemViewHolder extends HealthcocoComonRecylcerViewHolder {
     private TextView tvTime;
     private TextView tvDate;
     private TextView tvSubject;
+    private TextView tvNote;
     private TextView tvDoctorName;
     private LinearLayout layoutListItem;
     private LinearLayout layoutEventDetails;
@@ -51,6 +52,7 @@ public class EventItemViewHolder extends HealthcocoComonRecylcerViewHolder {
         tvDate = (TextView) itemView.findViewById(R.id.tv_date);
         tvDoctorName = (TextView) itemView.findViewById(R.id.tv_doctor_name);
         tvSubject = (TextView) itemView.findViewById(R.id.tv_subject);
+        tvNote = (TextView) itemView.findViewById(R.id.tv_Note);
         layoutListItem = (LinearLayout) itemView.findViewById(R.id.layout_item_event);
         layoutEventDetails = (LinearLayout) itemView.findViewById(R.id.layout_event_details);
 
@@ -93,6 +95,15 @@ public class EventItemViewHolder extends HealthcocoComonRecylcerViewHolder {
                 tvSubject.setText(subject);
             } else
                 tvSubject.setText("");
+
+            if (events.getExplanation() != null) {
+                tvNote.setVisibility(View.VISIBLE);
+                if ((!Util.isNullOrBlank(events.getExplanation())))
+                    tvNote.setText(Util.getValidatedValueOrNull(events.getExplanation()));
+                else
+                    tvNote.setVisibility(View.GONE);
+            } else
+                tvNote.setVisibility(View.GONE);
 
             if (events.getTime() != null && events.getTime().getFromTime() != null) {
                 fromTime = DateTimeUtil.getFormattedTime(0, Math.round(events.getTime().getFromTime()));

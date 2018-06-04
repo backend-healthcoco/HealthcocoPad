@@ -4225,6 +4225,17 @@ public class LocalDataServiceImpl {
         return calendarEvents;
     }
 
+    public Events getEvent(String eventId) {
+        Select<Events> selectQuery;
+        selectQuery = Select.from(Events.class)
+                .where(Condition.prop(LocalDatabaseUtils.KEY_UNIQUE_ID).eq(eventId));
+        Events events = selectQuery.first();
+        if (events != null) {
+            getEventDetail(events);
+        }
+        return events;
+    }
+
     public void addCalendarEventsUpdated(CalendarEvents calendarEvents) {
         calendarEvents.setIsFromCalendarAPI(true);
         if (calendarEvents.getFromDate() != null)

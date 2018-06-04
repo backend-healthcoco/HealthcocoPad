@@ -71,12 +71,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black_greyish"
-                android:textSize="@dimen/edit_text_size" />
+                android:textSize="@dimen/text_size_feedback" />
+
+            <TextView
+                android:id="@+id/tv_Note"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/layout_padding_5dp"
+                android:textSize="@dimen/dialog_title_size" />
 
             <TextView
                 android:id="@+id/tv_doctor_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/layout_padding_5dp"
                 android:textColor="@color/black_greyish" />
 
         </LinearLayout>

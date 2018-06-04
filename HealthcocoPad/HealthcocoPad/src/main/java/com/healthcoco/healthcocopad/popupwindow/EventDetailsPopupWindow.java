@@ -30,7 +30,9 @@ import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
 import com.healthcoco.healthcocopad.bean.server.Events;
 import com.healthcoco.healthcocopad.bean.server.PatientCard;
 import com.healthcoco.healthcocopad.bean.server.WorkingHours;
+import com.healthcoco.healthcocopad.dialogFragment.AddEventDialogFragment;
 import com.healthcoco.healthcocopad.dialogFragment.BookAppointmentDialogFragment;
+import com.healthcoco.healthcocopad.enums.AddEventsFromScreenType;
 import com.healthcoco.healthcocopad.enums.AppointmentStatusType;
 import com.healthcoco.healthcocopad.enums.BookAppointmentFromScreenType;
 import com.healthcoco.healthcocopad.enums.CalendarStatus;
@@ -55,6 +57,7 @@ import org.parceler.Parcels;
 
 import static android.support.v4.app.ActivityCompat.startActivityForResult;
 import static com.healthcoco.healthcocopad.dialogFragment.BookAppointmentDialogFragment.TAG_APPOINTMENT_ID;
+import static com.healthcoco.healthcocopad.enums.AddEventsFromScreenType.EVENTS_LIST_RESCHEDULE;
 import static com.healthcoco.healthcocopad.enums.BookAppointmentFromScreenType.APPOINTMENTS_QUEUE_RESCHEDULE;
 
 /**
@@ -74,18 +77,20 @@ public class EventDetailsPopupWindow extends PopupWindow implements View.OnClick
     private TextView tvPatientId;
     private TextView tvGender;
     private TextView tvDoctorName;
+    private TextView tvCreatedBy;
     private TextView tvDate;
     private TextView tvFromTime;
     private TextView tvToTime;
     private TextView tvExplaination;
     private LinearLayout layoutExplaination;
+    private LinearLayout layoutCreatedBy;
     private LinearLayout layoutPatientDetails;
     private ImageView btEdit;
     private ImageView btPrint;
     private ImageView btDiscard;
     //    private FloatingActionButton btPrint;
     private ImageView btDismiss;
-    private BookAppointmentFromScreenType screenType = APPOINTMENTS_QUEUE_RESCHEDULE;
+    private AddEventsFromScreenType screenType = EVENTS_LIST_RESCHEDULE;
 
 
     public EventDetailsPopupWindow(Context context, View view, Object object) {
@@ -104,11 +109,13 @@ public class EventDetailsPopupWindow extends PopupWindow implements View.OnClick
         tvPatientId = (TextView) linearLayout.findViewById(R.id.tv_patient_id);
         tvGender = (TextView) linearLayout.findViewById(R.id.tv_patient_gender);
         tvDoctorName = (TextView) linearLayout.findViewById(R.id.tv_doctor_name);
+        tvCreatedBy = (TextView) linearLayout.findViewById(R.id.tv_created_by);
         tvFromTime = (TextView) linearLayout.findViewById(R.id.tv_from_time);
         tvToTime = (TextView) linearLayout.findViewById(R.id.tv_to_time);
         tvSubject = (TextView) linearLayout.findViewById(R.id.tv_subject);
         tvDate = (TextView) linearLayout.findViewById(R.id.tv_date);
         tvExplaination = (TextView) linearLayout.findViewById(R.id.tv_explaination);
+        layoutCreatedBy = (LinearLayout) linearLayout.findViewById(R.id.layout_created_by);
         layoutExplaination = (LinearLayout) linearLayout.findViewById(R.id.layout_explaination);
         layoutPatientDetails = (LinearLayout) linearLayout.findViewById(R.id.layout_patient_details);
 
@@ -144,7 +151,7 @@ public class EventDetailsPopupWindow extends PopupWindow implements View.OnClick
 
     public void showOptionsWindowAtLeftCenter(View v) {
         showAtLocation(v, Gravity.LEFT, 0, 0);
-        update(v, -(int) mActivity.getResources().getDimension(R.dimen.queue_layout_width), -v.getHeight() * (5 / 2), (int) mActivity.getResources().getDimension(R.dimen.queue_layout_width), LinearLayout.LayoutParams.WRAP_CONTENT);
+        update(v, -(int) mActivity.getResources().getDimension(R.dimen.queue_layout_width), -v.getHeight() * (5 / 2), (int) mActivity.getResources().getDimension(R.dimen.event_popup_width), LinearLayout.LayoutParams.WRAP_CONTENT);
 
     }
 
@@ -157,7 +164,7 @@ public class EventDetailsPopupWindow extends PopupWindow implements View.OnClick
         } else
             verticalOffset = -(v.getHeight() * 89) / 100;
 
-        update(v, (int) (v.getWidth() * (3 / 2)), verticalOffset, (int) mActivity.getResources().getDimension(R.dimen.queue_layout_width), LinearLayout.LayoutParams.WRAP_CONTENT);
+        update(v, (int) (v.getWidth() * (3 / 2)), verticalOffset, (int) mActivity.getResources().getDimension(R.dimen.event_popup_width), LinearLayout.LayoutParams.WRAP_CONTENT);
     }
 
     public void showOptionsWindowAtRightCenter(View v) {
@@ -168,7 +175,7 @@ public class EventDetailsPopupWindow extends PopupWindow implements View.OnClick
             verticalOffset = -v.getHeight() * (5 / 2);
 
         showAtLocation(v, Gravity.RIGHT, 0, 0);
-        update(v, (int) mActivity.getResources().getDimension(R.dimen.queue_layout_width), verticalOffset, (int) mActivity.getResources().getDimension(R.dimen.queue_layout_width), LinearLayout.LayoutParams.WRAP_CONTENT);
+        update(v, (int) mActivity.getResources().getDimension(R.dimen.queue_layout_width), verticalOffset, (int) mActivity.getResources().getDimension(R.dimen.event_popup_width), LinearLayout.LayoutParams.WRAP_CONTENT);
 
     }
 
@@ -237,6 +244,14 @@ public class EventDetailsPopupWindow extends PopupWindow implements View.OnClick
                 tvDoctorName.setText(events.getCreatedBy());
         }
 
+
+        String createdBy = Util.getValidatedValueOrNull(events.getCreatedBy());
+        if (!Util.isNullOrBlank(createdBy)) {
+            tvCreatedBy.setText(createdBy);
+        } else {
+            layoutCreatedBy.setVisibility(View.GONE);
+        }
+
         if (events.getTime() != null && events.getTime().getFromTime() != null && events.getTime().getToTime() != null) {
             WorkingHours workingHours = events.getTime();
             tvFromTime.setText(DateTimeUtil.getFormattedTime(0, Math.round(workingHours.getFromTime())));
@@ -269,14 +284,14 @@ public class EventDetailsPopupWindow extends PopupWindow implements View.OnClick
     }
 
     public void onEditClicked() {
-       /* BookAppointmentDialogFragment dialogFragment = new BookAppointmentDialogFragment();
+        AddEventDialogFragment addEventDialogFragment = new AddEventDialogFragment();
         Bundle bundle = new Bundle();
-        bundle.putString(HealthCocoConstants.TAG_UNIQUE_ID, calendarEvents.getAppointmentId());
-        bundle.putParcelable(BookAppointmentDialogFragment.TAG_FROM_SCREEN_TYPE, Parcels.wrap(screenType.ordinal()));
-        dialogFragment.setArguments(bundle);
-        dialogFragment.setTargetFragment(dialogFragment, PatientAppointmentDetailFragment.REQUEST_CODE_APPOINTMENTS_LIST);
-        dialogFragment.show(mActivity.getSupportFragmentManager(), dialogFragment.getClass().getSimpleName());
-*/
+        bundle.putString(HealthCocoConstants.TAG_UNIQUE_ID, events.getUniqueId());
+        bundle.putParcelable(AddEventDialogFragment.TAG_FROM_SCREEN_TYPE, Parcels.wrap(screenType.ordinal()));
+        addEventDialogFragment.setArguments(bundle);
+        addEventDialogFragment.setTargetFragment(addEventDialogFragment, PatientAppointmentDetailFragment.REQUEST_CODE_APPOINTMENTS_LIST);
+        addEventDialogFragment.show(mActivity.getSupportFragmentManager(), addEventDialogFragment.getClass().getSimpleName());
+        dismiss();
     }
 
     public void onCancelClicked() {

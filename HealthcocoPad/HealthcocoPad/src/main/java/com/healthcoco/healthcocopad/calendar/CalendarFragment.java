@@ -136,7 +136,10 @@ public class CalendarFragment extends HealthCocoFragment implements WeekView.Eve
                 this.events.add(toWeekViewEvent(event));
             }
             Collections.sort(events, ComparatorUtil.weekViewEventComparator);
-        }
+        }/*
+        Calendar calendar = DateTimeUtil.getCalendarInstance();
+        calendar.setTimeInMillis(selectedMonthDayYearInMillis);
+        onMonthChange(calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH)+1);*/
         getWeekView().notifyDatasetChanged();
     }
 
