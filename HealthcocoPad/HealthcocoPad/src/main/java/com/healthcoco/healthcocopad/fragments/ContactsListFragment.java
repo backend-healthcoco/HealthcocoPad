@@ -429,12 +429,13 @@ public class ContactsListFragment extends HealthCocoFragment implements
     public void getContactsList(boolean showLoading) {
         if (isEndOfListAchievedServer) {
             latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(user, LocalTabelType.REGISTERED_PATIENTS_DETAILS);
-                if (latestUpdatedTime > 0l) {
-                    if (showLoading)
-                        mActivity.showLoading(false);
-                } else {
+            if (latestUpdatedTime > 0l) {
+                if (showLoading)
+                    mActivity.showLoading(false);
+            } else {
+                if (!mActivity.isProgressDialogShowing())
                     mActivity.showProgressDialog();
-                }
+            }
         }
         WebDataServiceImpl.getInstance(mApp).getContactsList(RegisteredPatientDetailsUpdated.class, user.getUniqueId(),
                 user.getForeignHospitalId(), user.getForeignLocationId(), latestUpdatedTime, user, PAGE_NUMBER_SERVER, MAX_NUMBER_OF_CONTACT, null, this, this);
@@ -725,7 +726,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
                         } else {
                             PAGE_NUMBER_SERVER = PAGE_NUMBER_SERVER + 1;
                             isEndOfListAchievedServer = false;
-                            mActivity.updateProgressDialog(100, 5);
+                            mActivity.updateProgressDialog(100, getProgressCount(response));
                         }
                         response.setIsFromLocalAfterApiSuccess(true);
                         new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_PATIENTS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
@@ -791,6 +792,26 @@ public class ContactsListFragment extends HealthCocoFragment implements
         progressLoading.setVisibility(View.GONE);
         mActivity.hideLoading();
         swipeRefreshLayout.setRefreshing(false);
+    }
+
+    private int getProgressCount(VolleyResponseBean response) {
+        int progess = 5;
+        if (response.getData() instanceof Long)
+            MAX_COUNT = (long) response.getData();
+        else if (response.getData() instanceof Double) {
+            Double data = (Double) response.getData();
+            MAX_COUNT = Math.round(data);
+        }
+        long count = LocalDataServiceImpl.getInstance(mApp).getListCount(user);
+
+        if (count < MAX_COUNT) {
+//            mActivity.showProgressDialog();
+//            PAGE_NUMBER = (int) (count / MAX_NUMBER_OF_CONTACT);
+            progess = (int) ((MAX_NUMBER_OF_CONTACT * 100) / MAX_COUNT);
+            mActivity.updateProgressDialog(MAX_COUNT, progess);
+            isEndOfListAchieved = false;
+        } else progess = 100;
+        return progess;
     }
 
     private void formHashMapAndRefresh(ArrayList<RegisteredPatientDetailsUpdated> responseList) {

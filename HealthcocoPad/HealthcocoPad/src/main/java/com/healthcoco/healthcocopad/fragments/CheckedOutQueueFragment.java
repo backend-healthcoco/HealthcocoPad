@@ -289,6 +289,11 @@ public class CheckedOutQueueFragment extends HealthCocoFragment implements Local
     }
 
     @Override
+    public User getUser() {
+        return user;
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         if (!receiversRegistered) {

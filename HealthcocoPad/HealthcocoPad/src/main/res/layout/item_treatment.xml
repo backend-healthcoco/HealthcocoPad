@@ -259,18 +259,19 @@
                             android:background="@drawable/shape_rounded_corners_item_background_dark_grey"
                             android:gravity="center"
                             android:padding="5dp"
-                            android:visibility="gone">
+                            android:visibility="visible">
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginRight="5dp"
                                 android:background="@color/white"
+                                android:drawableLeft="@drawable/pay_selector"
                                 android:drawablePadding="5dp"
                                 android:gravity="center|start"
                                 android:paddingLeft="@dimen/item_visits_button_padding_left_right_20dp"
                                 android:paddingRight="@dimen/item_visits_button_padding_left_right_20dp"
-                                android:text="@string/generate_invoice"
+                                android:text="@string/invoice"
                                 android:textColor="@drawable/text_selector_grey_blue"
                                 android:textSize="@dimen/text_size_bt_history_edit_sms_email" />
                         </LinearLayout>

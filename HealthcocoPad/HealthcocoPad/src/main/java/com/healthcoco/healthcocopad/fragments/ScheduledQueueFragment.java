@@ -290,4 +290,9 @@ public class ScheduledQueueFragment extends HealthCocoFragment implements LocalD
             WebDataServiceImpl.getInstance(mApp).changeAppointmentStatus(CalendarEvents.class, calendarEvents.getDoctorId(), calendarEvents.getLocationId(), calendarEvents.getHospitalId(), calendarEvents.getPatientId(), calendarEvents.getAppointmentId(), WAITING.getValue(), this, this);
         }
     }
+
+    @Override
+    public User getUser() {
+        return user;
+    }
 }

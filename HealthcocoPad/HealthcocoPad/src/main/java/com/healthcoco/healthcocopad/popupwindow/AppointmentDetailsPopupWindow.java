@@ -25,7 +25,7 @@ import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.request.AppointmentRequestToSend;
-import com.healthcoco.healthcocopad.bean.server.TreatmentService;
+import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.bean.server.WorkingHours;
 import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
 import com.healthcoco.healthcocopad.bean.server.PatientCard;
@@ -40,6 +40,7 @@ import com.healthcoco.healthcocopad.enums.PatientProfileScreenType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.fragments.PatientAppointmentDetailFragment;
 import com.healthcoco.healthcocopad.fragments.QueueFragment;
+import com.healthcoco.healthcocopad.listeners.QueueListitemlistener;
 import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
@@ -54,6 +55,8 @@ import org.parceler.Parcels;
 import static android.support.v4.app.ActivityCompat.startActivityForResult;
 import static com.healthcoco.healthcocopad.dialogFragment.BookAppointmentDialogFragment.TAG_APPOINTMENT_ID;
 import static com.healthcoco.healthcocopad.enums.BookAppointmentFromScreenType.APPOINTMENTS_QUEUE_RESCHEDULE;
+import static com.healthcoco.healthcocopad.enums.PatientDetailTabType.PATIENT_DETAIL_INVOICE;
+import static com.healthcoco.healthcocopad.enums.PatientDetailTabType.PATIENT_DETAIL_RECEIPT;
 
 /**
  * Created by neha on 03/05/17.
@@ -101,16 +104,18 @@ public class AppointmentDetailsPopupWindow extends PopupWindow implements View.O
     private ImageView btDiscard;
     //    private FloatingActionButton btPrint;
     private ImageView btDismiss;
+    private QueueListitemlistener queueListitemlistener;
     private BookAppointmentFromScreenType screenType = APPOINTMENTS_QUEUE_RESCHEDULE;
 
 
-    public AppointmentDetailsPopupWindow(Context context, View view, Object object) {
+    public AppointmentDetailsPopupWindow(Context context, View view, Object object, QueueListitemlistener queueListitemlistener) {
         super(context);
         this.mActivity = (HealthCocoActivity) context;
         mApp = ((HealthCocoApplication) mActivity.getApplication());
         this.dropDownLayoutId = dropDownLayoutId;
         this.anchorView = view;
         calendarEvents = (CalendarEvents) object;
+        this.queueListitemlistener = queueListitemlistener;
     }
 
     public View getPopupView() {
@@ -347,7 +352,7 @@ public class AppointmentDetailsPopupWindow extends PopupWindow implements View.O
                     layoutEngagedFor.setVisibility(View.VISIBLE);
                     layoutTotalTime.setVisibility(View.VISIBLE);
                     layoutCheckOut.setVisibility(View.VISIBLE);
-                    btAddVisit.setVisibility(View.INVISIBLE);
+                    btAddVisit.setVisibility(View.VISIBLE);
                     btEdit.setVisibility(View.GONE);
                     btDiscard.setVisibility(View.GONE);
                     tvAppointmentStatus.setTextColor(mActivity.getResources().getColor(R.color.blue_action_bar));
@@ -355,13 +360,24 @@ public class AppointmentDetailsPopupWindow extends PopupWindow implements View.O
 
             }
         }
+        User user = queueListitemlistener.getUser();
+        if (user != null) {
+            if (user.getUiPermissions().getTabPermissions().contains(PATIENT_DETAIL_INVOICE.getValue()))
+                btAddInvoice.setVisibility(View.VISIBLE);
+            else btAddInvoice.setVisibility(View.INVISIBLE);
+
+            if (user.getUiPermissions().getTabPermissions().contains(PATIENT_DETAIL_RECEIPT.getValue()))
+                btAddReceipt.setVisibility(View.VISIBLE);
+            else btAddReceipt.setVisibility(View.INVISIBLE);
+        }
+
     }
 
     public void onReceiptClicked() {
         HealthCocoConstants.SELECTED_PATIENTS_USER_ID = calendarEvents.getPatient().getUserId();
         Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
         intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.PATIENT_DETAIL.ordinal());
-        intent.putExtra(HealthCocoConstants.TAG_TAB_TYPE, PatientDetailTabType.PATIENT_DETAIL_RECEIPT.ordinal());
+        intent.putExtra(HealthCocoConstants.TAG_TAB_TYPE, PATIENT_DETAIL_RECEIPT.ordinal());
         startActivityForResult(mActivity, intent, 0, null);
 
     }
@@ -379,7 +395,7 @@ public class AppointmentDetailsPopupWindow extends PopupWindow implements View.O
         HealthCocoConstants.SELECTED_PATIENTS_USER_ID = calendarEvents.getPatient().getUserId();
         Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
         intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.PATIENT_DETAIL.ordinal());
-        intent.putExtra(HealthCocoConstants.TAG_TAB_TYPE, PatientDetailTabType.PATIENT_DETAIL_INVOICE.ordinal());
+        intent.putExtra(HealthCocoConstants.TAG_TAB_TYPE, PATIENT_DETAIL_INVOICE.ordinal());
         startActivityForResult(mActivity, intent, 0, null);
 
     }

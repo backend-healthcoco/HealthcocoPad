@@ -81,6 +81,7 @@ public class SelectedTreatmentsItemsListViewholder extends HealthCocoViewHolder 
             tvTreatmentName.setText(String.valueOf(objData.getTreatmentService().getName()));
             if (doctorProfile != null) {
                 if (doctorProfile.getSpecialities().contains("Dentist")) {
+                    tvTreatmentMaterial.setVisibility(View.INVISIBLE);
                     if (!Util.isNullOrEmptyList(objData.getTreatmentService().getFieldsRequired())) {
                         ArrayList<String> fieldsRequired = objData.getTreatmentService().getFieldsRequired();
 
@@ -100,6 +101,7 @@ public class SelectedTreatmentsItemsListViewholder extends HealthCocoViewHolder 
                     } else {
                         layoutTreatmentToothNo.setVisibility(View.GONE);
                     }
+                    layoutTreatmentToothNo.setVisibility(View.VISIBLE);
                 } else {
                     layoutTreatmentToothNo.setVisibility(View.GONE);
                 }

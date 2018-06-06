@@ -307,6 +307,11 @@ public class EngagedQueueFragment extends HealthCocoFragment implements LocalDoI
     }
 
     @Override
+    public User getUser() {
+        return user;
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         if (!receiversRegistered) {

@@ -359,10 +359,6 @@ public class PatientTreatmentDetailFragment extends HealthCocoFragment implement
         return selectedPatient;
     }
 
-    @Override
-    public void onInvoiceClicked(Treatments treatment) {
-
-    }
 
     @Override
     public void onAddTreatmentClicked(Treatments treatment) {
@@ -427,5 +423,14 @@ public class PatientTreatmentDetailFragment extends HealthCocoFragment implement
         lvTreatment.resetPreLastPosition(0);
     }
 
+
+    @Override
+    public void onInvoiceClicked(Treatments treatment) {
+        Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
+        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.ADD_INVOICE.ordinal());
+        if (treatment != null)
+            intent.putExtra(TAG_TREATMENT_DATA, Parcels.wrap(treatment));
+        startActivityForResult(intent, HealthCocoConstants.REQUEST_CODE_TREATMENT);
+    }
 
 }

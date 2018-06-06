@@ -538,8 +538,9 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                 volleyResponseBean.setWebServiceType(WebServiceType.FRAGMENT_INITIALISATION);
                 selectedPatient = LocalDataServiceImpl.getInstance(mApp).getPatient(HealthCocoConstants.SELECTED_PATIENTS_USER_ID);
                 LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
-                if (doctor != null && doctor.getUser() != null && !Util.isNullOrBlank(doctor.getUser().getUniqueId()) && selectedPatient != null && !Util.isNullOrBlank(selectedPatient.getUserId())) {
+                if (doctor != null && doctor.getUser() != null && !Util.isNullOrBlank(doctor.getUser().getUniqueId()))
                     user = doctor.getUser();
+                if (doctor != null && doctor.getUser() != null && !Util.isNullOrBlank(doctor.getUser().getUniqueId()) && selectedPatient != null && !Util.isNullOrBlank(selectedPatient.getUserId())) {
                     loginedUser = doctor.getUser().getUniqueId();
                     doctorProfile = LocalDataServiceImpl.getInstance(mApp).getDoctorProfileObject(user.getUniqueId());
                     doctorProfileList = LocalDataServiceImpl.getInstance(mApp).getRegisterDoctorDetails(user.getForeignLocationId());
@@ -584,13 +585,15 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                             mViewPager.setCurrentItem(ordinal);
 //                            prescriptionDetailFragment.refreshData(PatientDetailTabType.PATIENT_DETAIL_PRESCRIPTION);
                         }
+                    } else {
+                        initData();
                     }
                     break;
                 case GET_PATIENT_PROFILE:
                     if (response.getData() != null && response.getData() instanceof RegisteredPatientDetailsUpdated) {
                         selectedPatient = (RegisteredPatientDetailsUpdated) response.getData();
                         LocalDataServiceImpl.getInstance(mApp).addPatient(selectedPatient);
-                        initData();
+                        new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_FRAGMENT_INITIALISATION_DATA, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                     }
                     break;
                 case GET_REGISTER_DOCTOR:
@@ -682,20 +685,6 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
         }
     }
 
-  /*  @Override
-    public void onItemSelected(PopupWindowType popupWindowType, Object object) {
-        switch (popupWindowType) {
-            case DOCTOR_LIST:
-                if (object instanceof ClinicDoctorProfile) {
-                    ClinicDoctorProfile doctorProfile = (ClinicDoctorProfile) object;
-                    tvDoctorName.setText(doctorProfile.getFirstNameWithTitle());
-                    user.setUniqueId(doctorProfile.getUniqueId());
-                    resetAllFlags();
-                    onTabChanged(null);
-                }
-                break;
-        }
-    }*/
 
     private void resetAllFlags() {
         isProfileTabClicked = false;

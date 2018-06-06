@@ -10,6 +10,9 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.InputFilter;
+import android.text.Spanned;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -141,6 +144,9 @@ public class AddClinicalNotesVisitMyScriptFragment extends HealthCocoFragment im
         editBsa = (MyScriptEditText) view.findViewById(R.id.edit_bsa);
         labelBloodPressure = (TextView) view.findViewById(R.id.tv_blood_pressure);
         editHeight = (MyScriptEditText) view.findViewById(R.id.edit_height);
+
+//        editHeight.setFilters(new InputFilter[]{filter});
+//        editWeight.setFilters(new InputFilter[]{filter});
 
         containerDiagrams = (LinearLayout) view.findViewById(R.id.container_diagrams);
         if (containerDiagrams == null && myScriptAddVisitsFragment != null)
@@ -1095,10 +1101,10 @@ public class AddClinicalNotesVisitMyScriptFragment extends HealthCocoFragment im
         switch (v.getId()) {
             case R.id.edit_height:
                 if (!Util.isNullOrBlank(s)
-                        && !Util.isNullOrBlank(editWeight.getText().toString())
+                        && !Util.isNullOrBlank(editWeight.getText().toString().trim())
                         && !Util.isNullOrBlank(s)) {
                     try {
-                        float weight = Float.parseFloat(editWeight.getText().toString());
+                        float weight = Float.parseFloat(editWeight.getText().toString().trim());
                         float height = Float.parseFloat(s);
                         //BMI = weight in KG / square of (height in metre)
                         float bmiValue = Util.calculateBMI(weight, Float.parseFloat(s) / 100);
@@ -1118,10 +1124,10 @@ public class AddClinicalNotesVisitMyScriptFragment extends HealthCocoFragment im
                 break;
             case R.id.edit_weight:
                 if (!Util.isNullOrBlank(s)
-                        && !Util.isNullOrBlank(editHeight.getText().toString())
+                        && !Util.isNullOrBlank(editHeight.getText().toString().trim())
                         && !Util.isNullOrBlank(s)) {
                     float weight = Float.parseFloat(s);
-                    float height = Float.parseFloat(editHeight.getText().toString());
+                    float height = Float.parseFloat(editHeight.getText().toString().trim());
                     //BMI = weight in KG / square of (height in metre)
                     float bmiValue = Util.calculateBMI(weight, height / 100);
                     editBmi.setText(Util.getFormattedFloatNumber(bmiValue));
@@ -1136,4 +1142,22 @@ public class AddClinicalNotesVisitMyScriptFragment extends HealthCocoFragment im
                 break;
         }
     }
+
+  /*  InputFilter filter = new InputFilter() {
+        @Override
+        public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+            for (int i = start; i < end; i++) {
+                String checkMe = String.valueOf(source.charAt(i));
+
+                Pattern pattern = Pattern.compile("[0123456789.]*");
+                Matcher matcher = pattern.matcher(checkMe);
+                boolean valid = matcher.matches();
+                if (!valid) {
+                    Log.d("Check Input Validation", "invalid");
+                    return "";
+                }
+            }
+            return null;
+        }
+    };*/
 }

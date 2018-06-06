@@ -33,6 +33,8 @@ import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
 
+import static com.healthcoco.healthcocopad.enums.PatientDetailTabType.PATIENT_DETAIL_INVOICE;
+
 /**
  * Created by Shreshtha on 25-03-2017.
  */
@@ -216,6 +218,10 @@ public class TreatmentListItemViewHolder extends HealthCocoViewHolder implements
         layoutNextReviewDetail = (LinearLayout) contentView.findViewById(R.id.layout_next_review_detail_for_treatment);
         layoutNextReviewDetail.setVisibility(View.GONE);
 
+        if (user.getUiPermissions().getTabPermissions().contains(PATIENT_DETAIL_INVOICE.getValue()))
+            btGenerateInvoice.setVisibility(View.VISIBLE);
+        else btGenerateInvoice.setVisibility(View.GONE);
+
     }
 
     private void initListeners() {
@@ -259,6 +265,10 @@ public class TreatmentListItemViewHolder extends HealthCocoViewHolder implements
                 }
                 break;
             case R.id.bt_generate_invoice:
+                Util.checkNetworkStatus(mActivity);
+                if (HealthCocoConstants.isNetworkOnline) {
+                    listItemClickListeners.onInvoiceClicked(treatments);
+                } else onNetworkUnavailable(null);
                 break;
             case R.id.bt_edit:
                 Util.checkNetworkStatus(mActivity);

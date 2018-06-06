@@ -102,6 +102,7 @@ public class AddInvoiceFragment extends HealthCocoFragment implements LocalDoInB
         }
 
     };
+    private Treatments treatment;
     private DoctorProfile doctorProfile;
     private TreatmentListFragment treatmentListFragment;
     private DiagnosticTestListFragment diagnosticTestListFragment;
@@ -122,8 +123,10 @@ public class AddInvoiceFragment extends HealthCocoFragment implements LocalDoInB
 
 
         Intent intent = mActivity.getIntent();
-        if (intent != null)
+        if (intent != null) {
             invoice = Parcels.unwrap(intent.getParcelableExtra(AddInvoiceFragment.TAG_INVOICE_ID));
+            treatment = Parcels.unwrap(intent.getParcelableExtra(PatientTreatmentDetailFragment.TAG_TREATMENT_DATA));
+        }
 
         init();
         mActivity.showLoading(false);
@@ -215,6 +218,19 @@ public class AddInvoiceFragment extends HealthCocoFragment implements LocalDoInB
         selectedInvoiceListFragment.setArguments(bundle);
         mFragmentManager.beginTransaction().add(R.id.layout_selected_service_list_fragment, selectedInvoiceListFragment, selectedInvoiceListFragment.getClass().getSimpleName()).commit();
     }
+
+    private void initTreatmentData() {
+        if (treatment != null) {
+            List<TreatmentItem> treatments = treatment.getTreatments();
+            for (TreatmentItem treatmentItem :
+                    treatments) {
+                TreatmentService treatmentService = treatmentItem.getTreatmentService();
+                if (treatmentService != null)
+                    onTreatmentItemClick(treatmentService);
+            }
+        }
+    }
+
 
     @Override
     public VolleyResponseBean doInBackground(VolleyResponseBean response) {
@@ -340,7 +356,7 @@ public class AddInvoiceFragment extends HealthCocoFragment implements LocalDoInB
         switch (response.getWebServiceType()) {
             case FRAGMENT_INITIALISATION:
                 if (user != null && selectedPatient != null) {
-
+                    initTreatmentData();
                     initTabsFragmentsList();
                     initViewPagerAdapter();
                     initActionPatientDetailActionBar(PatientProfileScreenType.IN_ADD_VISIT_HEADER, view, selectedPatient);

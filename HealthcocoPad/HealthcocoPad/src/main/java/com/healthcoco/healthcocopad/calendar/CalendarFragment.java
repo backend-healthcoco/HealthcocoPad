@@ -9,7 +9,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -35,6 +34,7 @@ import com.healthcoco.healthcocopad.fragments.CalendarViewType;
 import com.healthcoco.healthcocopad.fragments.PatientAppointmentDetailFragment;
 import com.healthcoco.healthcocopad.fragments.QueueFragment;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
+import com.healthcoco.healthcocopad.listeners.QueueListitemlistener;
 import com.healthcoco.healthcocopad.popupwindow.AppointmentDetailsPopupWindow;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.ComparatorUtil;
@@ -59,7 +59,7 @@ import static com.healthcoco.healthcocopad.fragments.QueueFragment.TAG_CHANGED_D
 import static com.healthcoco.healthcocopad.fragments.QueueFragment.TAG_IS_FROM_CALENDAR;
 
 
-public class CalendarFragment extends HealthCocoFragment implements WeekView.EventClickListener, MonthLoader.MonthChangeListener, WeekView.ScrollListener, LocalDoInBackgroundListenerOptimised, WeekView.EmptyViewLongPressListener {
+public class CalendarFragment extends HealthCocoFragment implements WeekView.EventClickListener, MonthLoader.MonthChangeListener, WeekView.ScrollListener, LocalDoInBackgroundListenerOptimised, WeekView.EmptyViewLongPressListener, QueueListitemlistener {
     private static final int TYPE_DAY_VIEW = 1;
     private static final int TYPE_THREE_DAY_VIEW = 2;
     private static final int TYPE_WEEK_DAY = 3;
@@ -233,7 +233,7 @@ public class CalendarFragment extends HealthCocoFragment implements WeekView.Eve
         int x = (int) eventRect.centerX();
         int y = (int) eventRect.centerY();
 
-        AppointmentDetailsPopupWindow doctorListPopupWindow = new AppointmentDetailsPopupWindow(mActivity, null, event.getCalendarEvent());
+        AppointmentDetailsPopupWindow doctorListPopupWindow = new AppointmentDetailsPopupWindow(mActivity, null, event.getCalendarEvent(), this);
         doctorListPopupWindow.setOutsideTouchable(true);
         doctorListPopupWindow.setContentView(doctorListPopupWindow.getPopupView());
 //        y = x + y;
@@ -389,5 +389,15 @@ public class CalendarFragment extends HealthCocoFragment implements WeekView.Eve
     @Override
     public void onEmptyViewLongPress(Calendar time) {
         bookWalkInAppointment(time);
+    }
+
+    @Override
+    public void onCheckInClicked(Object object) {
+
+    }
+
+    @Override
+    public User getUser() {
+        return user;
     }
 }

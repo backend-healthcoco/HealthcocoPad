@@ -237,6 +237,7 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="@dimen/margin_add_vital_signs_layout"
                     android:background="@drawable/shape_rounded_corners_item_background"
+                    android:digits="0123456789."
                     android:gravity="center"
                     android:hint="@string/centimeter"
                     android:inputType="number"
