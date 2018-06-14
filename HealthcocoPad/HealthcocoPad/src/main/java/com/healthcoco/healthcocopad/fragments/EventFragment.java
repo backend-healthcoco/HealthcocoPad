@@ -258,8 +258,23 @@ public class EventFragment extends HealthCocoFragment implements LocalDoInBackgr
         if (!Util.isNullOrEmptyList(responseList)) {
             for (Events events :
                     responseList) {
-                if (Util.isNullOrBlank(events.getDoctorName()))
-                    events.setDoctorName("Dr. " + user.getFirstName());
+                String doctorName = "";
+                if (!Util.isNullOrEmptyList(events.getDoctorIds())) {
+                    for (String doctorId : events.getDoctorIds()) {
+                        for (RegisteredDoctorProfile registeredDoctorProfile : registeredDoctorProfileList) {
+                            if (registeredDoctorProfile.getUserId().equals(doctorId))
+                                doctorName = doctorName + registeredDoctorProfile.getFirstNameWithTitle() + ", ";
+                        }
+                    }
+                } else {
+                    for (RegisteredDoctorProfile registeredDoctorProfile : registeredDoctorProfileList) {
+                        if (registeredDoctorProfile.getUserId().equals(events.getDoctorId()))
+                            doctorName = doctorName + registeredDoctorProfile.getFirstNameWithTitle() + ", ";
+                    }
+                }
+                doctorName = doctorName.substring(0, doctorName.length() - 2);
+                events.setForDoctor(doctorName);
+
                 eventsHashMap.put(events.getUniqueId(), events);
             }
         }
@@ -420,7 +435,7 @@ public class EventFragment extends HealthCocoFragment implements LocalDoInBackgr
 
                 LocalDataServiceImpl.getInstance(mApp).addEventsList(
                         (ArrayList<Events>) (ArrayList<?>) response
-                                .getDataList(), registeredDoctorProfileList);
+                                .getDataList());
                 return volleyResponseBean;
         }
         if (volleyResponseBean == null)
@@ -513,7 +528,7 @@ public class EventFragment extends HealthCocoFragment implements LocalDoInBackgr
     public void afterTextChange(View v, String s) {
         switch (v.getId()) {
             case R.id.tv_selected_date:
-                LogUtils.LOGD(TAG, "TextVieew Selected Date ");
+                LogUtils.LOGD(TAG, "TextView Selected Date ");
 
                 if (!DateTimeUtil.isCurrentDateSelected(DATE_FORMAT_USED_IN_THIS_SCREEN,
                         Util.getValidatedValueOrNull(tvSelectedDate))) {
@@ -613,8 +628,8 @@ public class EventFragment extends HealthCocoFragment implements LocalDoInBackgr
     private void loadMore(int current_page) {
         current_page--;
         PAGE_NUMBER = current_page;
-        if (!isEndOfListAchieved)
-            getListFromLocal(false);
+//        if (!isEndOfListAchieved)
+//            getListFromLocal(false);
     }
 
     @Override

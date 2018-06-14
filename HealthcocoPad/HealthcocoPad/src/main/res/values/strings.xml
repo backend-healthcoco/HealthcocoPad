@@ -194,6 +194,7 @@
     <string name="lab_test">Lab Test</string>
     <string name="lab_tests">Lab Tests</string>
     <string name="search_doctors">Search Doctors</string>
+    <string name="select_doctors">Select Doctors</string>
     <string name="search_lab_test">Search Lab Test</string>
     <string name="contacts">Contacts</string>
     <string name="my_patients">My Patients</string>
@@ -923,6 +924,7 @@
     <string name="appointment_created">Appointment Created</string>
     <string name="please_select_patient_or_add_new">Please select Patient or add New Patient</string>
     <string name="please_add_title">Please add Event Title</string>
+    <string name="please_select_doctor">Please select Doctor</string>
     <string name="please_add_note">Please add Event Note</string>
     <string name="please_enter_valid_mobile_no_or_select_existing_patient">Please enter valid Mobile Number or Select existing Patient</string>
     <string name="please_enter_patient_name_or_select_existing_patient">Please enter Patient Name or Select existing Patient</string>

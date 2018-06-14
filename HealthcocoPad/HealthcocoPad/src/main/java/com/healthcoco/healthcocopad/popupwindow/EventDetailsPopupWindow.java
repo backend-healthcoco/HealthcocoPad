@@ -236,7 +236,7 @@ public class EventDetailsPopupWindow extends PopupWindow implements View.OnClick
             }
         } else layoutPatientDetails.setVisibility(View.GONE);
 
-        String doctorName = Util.getValidatedValueOrNull(events.getDoctorName());
+        String doctorName = Util.getValidatedValueOrNull(events.getForDoctor());
         if (!Util.isNullOrBlank(doctorName)) {
             tvDoctorName.setText(doctorName);
         } else {
@@ -324,7 +324,6 @@ public class EventDetailsPopupWindow extends PopupWindow implements View.OnClick
                 case ADD_EVENT:
                     if (response.isValidData(response) && response.getData() instanceof Events) {
                         Events events = (Events) response.getData();
-                        events.setDoctorName(String.valueOf(tvDoctorName.getText()).trim());
                         LocalDataServiceImpl.getInstance(mApp).addEventsUpdated(events);
                         Util.showToast(mActivity, R.string.event_discarded);
                         sendBroadcasts(events.getUniqueId());

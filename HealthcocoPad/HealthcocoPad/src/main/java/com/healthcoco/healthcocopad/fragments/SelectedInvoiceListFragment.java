@@ -2,6 +2,7 @@ package com.healthcoco.healthcocopad.fragments;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,14 +18,18 @@ import com.healthcoco.healthcocopad.bean.TotalTreatmentCostDiscountValues;
 import com.healthcoco.healthcocopad.bean.request.InvoiceItemRequest;
 import com.healthcoco.healthcocopad.bean.request.TreatmentItemRequest;
 import com.healthcoco.healthcocopad.bean.request.TreatmentServiceRequest;
+import com.healthcoco.healthcocopad.bean.server.Discount;
 import com.healthcoco.healthcocopad.bean.server.DoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.Invoice;
 import com.healthcoco.healthcocopad.bean.server.InvoiceItem;
+import com.healthcoco.healthcocopad.bean.server.Quantity;
 import com.healthcoco.healthcocopad.bean.server.TreatmentItem;
 import com.healthcoco.healthcocopad.bean.server.TreatmentService;
 import com.healthcoco.healthcocopad.bean.server.Treatments;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.custom.ExpandableHeightListView;
+import com.healthcoco.healthcocopad.enums.InvoiceItemType;
+import com.healthcoco.healthcocopad.enums.QuantityEnum;
 import com.healthcoco.healthcocopad.listeners.SelectedInvoiceListItemListener;
 import com.healthcoco.healthcocopad.listeners.SelectedTreatmentsListItemListener;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
@@ -55,9 +60,16 @@ public class SelectedInvoiceListFragment extends HealthCocoFragment implements S
     private Invoice invoice;
     private DoctorProfile doctorProfile;
     private SelectedTreatmentsItemsListViewholder viewHolder;
+    private Treatments treatment;
+    private User user;
 
     public SelectedInvoiceListFragment() {
         super();
+    }
+
+
+    public SelectedInvoiceListFragment(User user) {
+        this.user = user;
     }
 
     @Override
@@ -95,6 +107,17 @@ public class SelectedInvoiceListFragment extends HealthCocoFragment implements S
                     invoiceItems) {
                 addInvoiceItem(invoiceItem);
                 Util.sendBroadcast(mApp, AddInvoiceFragment.INTENT_GET_MODIFIED_VALUE);
+            }
+        }
+        Intent intent = mActivity.getIntent();
+        treatment = Parcels.unwrap(intent.getParcelableExtra(PatientTreatmentDetailFragment.TAG_TREATMENT_DATA));
+        if (treatment != null) {
+            List<TreatmentItem> treatments = treatment.getTreatments();
+            for (TreatmentItem treatmentItem :
+                    treatments) {
+                TreatmentService treatmentService = treatmentItem.getTreatmentService();
+                if (treatmentService != null)
+                    addTreatmentService(treatmentService, treatmentItem);
             }
         }
     }
@@ -206,6 +229,36 @@ public class SelectedInvoiceListFragment extends HealthCocoFragment implements S
         adapter.setListData(list);
         adapter.notifyDataSetChanged();
     }
+
+
+    private void addTreatmentService(TreatmentService treatmentService, TreatmentItem treatmentItem) {
+        InvoiceItem invoiceItem = new InvoiceItem();
+        invoiceItem.setName(treatmentService.getName());
+        invoiceItem.setDoctorId(user.getUniqueId());
+        invoiceItem.setDoctorName(user.getFirstName());
+        invoiceItem.setType(InvoiceItemType.SERVICE);
+        invoiceItem.setTreatmentFields(treatmentItem.getTreatmentFields());
+        Discount discount = new Discount();
+        if (treatmentItem.getDiscount() != null) {
+            if (treatmentItem.getDiscount().getValue() > 0)
+                discount.setValue(treatmentItem.getDiscount().getValue());
+            if (treatmentItem.getDiscount().getUnit() != null)
+                discount.setUnit(treatmentItem.getDiscount().getUnit());
+            invoiceItem.setDiscount(discount);
+        }
+        Quantity quantity = new Quantity();
+        quantity.setType(QuantityEnum.QTY);
+        if (treatmentItem.getQuantity() != null && treatmentItem.getQuantity().getValue() > 0)
+            quantity.setValue(treatmentItem.getQuantity().getValue());
+        else quantity.setValue(1);
+        invoiceItem.setQuantity(quantity);
+        invoiceItem.setCost(treatmentItem.getCost());
+        invoiceItem.setFinalCost(treatmentItem.getFinalCost());
+        invoiceItem.setItemId(treatmentService.getUniqueId());
+        addInvoiceItem(invoiceItem);
+        Util.sendBroadcast(mApp, AddInvoiceFragment.INTENT_GET_MODIFIED_VALUE);
+    }
+
 
     public void addInvoiceItem(InvoiceItem invoiceItem) {
         if (invoiceItem != null) {

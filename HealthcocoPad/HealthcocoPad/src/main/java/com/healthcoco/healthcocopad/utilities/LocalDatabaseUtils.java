@@ -121,6 +121,7 @@ public class LocalDatabaseUtils {
     public static final String KEY_DIAGNOSIS = "diagnosis";
     public static final String KEY_BALANCE_AMOUNT = "balance_amount";
     public static final String KEY_DRUG_ID = "drug_id";
+    public static final String KEY_FOR_DOCTOR = "for_doctor";
     private static final String TAG = LocalDatabaseUtils.class.getSimpleName();
     public static String KEY_FOREIGN_ROLE_ID = "foreign_role_id";
 

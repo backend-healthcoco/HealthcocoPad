@@ -84,8 +84,8 @@ public class EventItemViewHolder extends HealthcocoComonRecylcerViewHolder {
             String toTime = "";
             String date = "";
 
-            if (events.getDoctorName() != null) {
-                doctorName = Util.getValidatedValueOrNull(events.getDoctorName());
+            if (events.getForDoctor() != null) {
+                doctorName = Util.getValidatedValueOrNull(events.getForDoctor());
                 tvDoctorName.setText(doctorName);
             } else
                 tvDoctorName.setText("");

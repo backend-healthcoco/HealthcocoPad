@@ -4,6 +4,7 @@ package com.healthcoco.healthcocopad.bean.request;
 import com.healthcoco.healthcocopad.bean.server.WorkingHours;
 import com.healthcoco.healthcocopad.enums.AppointmentStatusType;
 import com.healthcoco.healthcocopad.enums.CreatedByType;
+import com.orm.annotation.Ignore;
 
 import org.parceler.Parcel;
 
@@ -32,6 +33,7 @@ public class EventRequest {
     private boolean isCalenderBlocked;
     private boolean isPatientRequired;
     private boolean isAllDayEvent;
+    private String[] doctorIds;
 
 
     public String getPatientId() {
@@ -184,5 +186,13 @@ public class EventRequest {
 
     public void setAllDayEvent(boolean allDayEvent) {
         isAllDayEvent = allDayEvent;
+    }
+
+    public String[] getDoctorIds() {
+        return doctorIds;
+    }
+
+    public void setDoctorIds(String[] doctorIds) {
+        this.doctorIds = doctorIds;
     }
 }

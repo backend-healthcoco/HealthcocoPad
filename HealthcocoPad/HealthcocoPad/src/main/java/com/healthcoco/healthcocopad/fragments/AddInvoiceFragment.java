@@ -102,7 +102,7 @@ public class AddInvoiceFragment extends HealthCocoFragment implements LocalDoInB
         }
 
     };
-    private Treatments treatment;
+    //    private Treatments treatment;
     private DoctorProfile doctorProfile;
     private TreatmentListFragment treatmentListFragment;
     private DiagnosticTestListFragment diagnosticTestListFragment;
@@ -125,10 +125,9 @@ public class AddInvoiceFragment extends HealthCocoFragment implements LocalDoInB
         Intent intent = mActivity.getIntent();
         if (intent != null) {
             invoice = Parcels.unwrap(intent.getParcelableExtra(AddInvoiceFragment.TAG_INVOICE_ID));
-            treatment = Parcels.unwrap(intent.getParcelableExtra(PatientTreatmentDetailFragment.TAG_TREATMENT_DATA));
+//            treatment = Parcels.unwrap(intent.getParcelableExtra(PatientTreatmentDetailFragment.TAG_TREATMENT_DATA));
         }
 
-        init();
         mActivity.showLoading(false);
         new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_FRAGMENT_INITIALISATION_DATA, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
@@ -211,7 +210,7 @@ public class AddInvoiceFragment extends HealthCocoFragment implements LocalDoInB
 
     private void initSelectedInvoiceListFragment() {
         Bundle bundle = new Bundle();
-        selectedInvoiceListFragment = new SelectedInvoiceListFragment();
+        selectedInvoiceListFragment = new SelectedInvoiceListFragment(user);
         if (invoice != null)
             bundle.putParcelable(selectedInvoiceListFragment.TAG_INVOICE_ITEM_DETAIL, Parcels.wrap(invoice));
         bundle.putParcelable(SelectedTreatmentsListFragment.TAG_DOCTOR_PROFILE, Parcels.wrap(doctorProfile));
@@ -219,7 +218,7 @@ public class AddInvoiceFragment extends HealthCocoFragment implements LocalDoInB
         mFragmentManager.beginTransaction().add(R.id.layout_selected_service_list_fragment, selectedInvoiceListFragment, selectedInvoiceListFragment.getClass().getSimpleName()).commit();
     }
 
-    private void initTreatmentData() {
+  /*  private void initTreatmentData() {
         if (treatment != null) {
             List<TreatmentItem> treatments = treatment.getTreatments();
             for (TreatmentItem treatmentItem :
@@ -229,7 +228,7 @@ public class AddInvoiceFragment extends HealthCocoFragment implements LocalDoInB
                     onTreatmentItemClick(treatmentService);
             }
         }
-    }
+    }*/
 
 
     @Override
@@ -356,7 +355,8 @@ public class AddInvoiceFragment extends HealthCocoFragment implements LocalDoInB
         switch (response.getWebServiceType()) {
             case FRAGMENT_INITIALISATION:
                 if (user != null && selectedPatient != null) {
-                    initTreatmentData();
+//                    initTreatmentData();
+                    init();
                     initTabsFragmentsList();
                     initViewPagerAdapter();
                     initActionPatientDetailActionBar(PatientProfileScreenType.IN_ADD_VISIT_HEADER, view, selectedPatient);

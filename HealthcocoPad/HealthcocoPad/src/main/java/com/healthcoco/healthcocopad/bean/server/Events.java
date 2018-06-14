@@ -33,6 +33,7 @@ public class Events extends SugarRecord {
     //fields used in local
     protected Long fromDateFormattedMillis;
     protected Long toDateFormattedMillis;
+    protected String doctorIdsJsonString;
     @Unique
     private String uniqueId;
     private String createdBy;
@@ -41,29 +42,25 @@ public class Events extends SugarRecord {
     private String locationId;
     private String hospitalId;
     private String doctorId;
-    private String doctorName;
-
+    private String forDoctor;
     private String explanation;
-
     private Long fromDate;
     private Long toDate;
     private Boolean isAllDayEvent;
     private Boolean isCalenderBlocked;
-
     private String subject;
     private Boolean isRescheduled;
     @Ignore
     private PatientCard patientCard;
     private String patientId;
-
     @Ignore
     private String localPatientName;
-
     private int fromDateMonth;
     private int fromDateYear;
     private int toDateYear;
     private int toDateMonth;
-
+    @Ignore
+    private ArrayList<String> doctorIds;
 
     public String getLocalPatientName() {
         return localPatientName;
@@ -302,11 +299,27 @@ public class Events extends SugarRecord {
         this.toDateMonth = toDateMonth;
     }
 
-    public String getDoctorName() {
-        return doctorName;
+    public ArrayList<String> getDoctorIds() {
+        return doctorIds;
     }
 
-    public void setDoctorName(String doctorName) {
-        this.doctorName = doctorName;
+    public void setDoctorIds(ArrayList<String> doctorIds) {
+        this.doctorIds = doctorIds;
+    }
+
+    public String getDoctorIdsJsonString() {
+        return doctorIdsJsonString;
+    }
+
+    public void setDoctorIdsJsonString(String doctorIdsJsonString) {
+        this.doctorIdsJsonString = doctorIdsJsonString;
+    }
+
+    public String getForDoctor() {
+        return forDoctor;
+    }
+
+    public void setForDoctor(String forDoctor) {
+        this.forDoctor = forDoctor;
     }
 }

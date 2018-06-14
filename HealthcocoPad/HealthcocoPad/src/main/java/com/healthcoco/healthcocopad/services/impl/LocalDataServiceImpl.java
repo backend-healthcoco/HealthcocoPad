@@ -4481,27 +4481,30 @@ public class LocalDataServiceImpl {
     }
 
 
-    public void addEventsList(ArrayList<Events> list, List<RegisteredDoctorProfile> registeredDoctorProfileList) {
+    public void addEventsList(ArrayList<Events> list) {
         if (!Util.isNullOrEmptyList(list))
             for (Events event :
                     list) {
-                for (RegisteredDoctorProfile registeredDoctorProfile : registeredDoctorProfileList) {
-                    if (registeredDoctorProfile.getUserId().equals(event.getDoctorId()))
-                        event.setDoctorName(registeredDoctorProfile.getFirstNameWithTitle());
+                if (!Util.isNullOrEmptyList(event.getDoctorIds())) {
+                    for (String doctorId :
+                            event.getDoctorIds()) {
+                        event.setForDoctor(doctorId);
+                        addEventsUpdated(event);
+                    }
+                } else {
+                    event.setForDoctor(event.getDoctorId());
+                    addEventsUpdated(event);
                 }
-                addEventsUpdated(event);
             }
     }
 
 
     public void addEventsUpdated(Events events) {
+        addMultipleDoctorEvent(events);
         if (events.getFromDate() != null)
             events.setFromDateFormattedMillis(DateTimeUtil.getFirstDayOfMonthMilli(events.getFromDate()));
         if (events.getToDate() != null)
             events.setToDateFormattedMillis(DateTimeUtil.getLastDayOfMonthMilli(events.getToDate()));
-       /* if (events.getFromDate() != null && events.getToDate() != null && !(events.getFromDate().equals(events.getToDate()))) {
-            addMultipledayEvent(events);
-        }*/
 
         deleteWorkingHoursIfAlreadyPresent(LocalDatabaseUtils.KEY_FOREIGN_TABLE_ID, events.getUniqueId());
         if (events.getTime() != null) {
@@ -4512,7 +4515,19 @@ public class LocalDataServiceImpl {
             if (events.getPatientCard() != null)
                 addPatientCard(events.getPatientCard());
         }
+        events.setDoctorIdsJsonString(getJsonFromObject(events.getDoctorIds()));
+
         events.save();
+    }
+
+    private void addMultipleDoctorEvent(Events events) {
+        MultipleDoctorEvents doctorEvents = new MultipleDoctorEvents();
+        doctorEvents.setDoctorId(events.getForDoctor());
+        doctorEvents.setEventId(events.getUniqueId());
+        doctorEvents.setFromDate(events.getFromDate());
+        doctorEvents.setToDate(events.getToDate());
+
+        doctorEvents.save();
     }
 
     public VolleyResponseBean getEventsListResponseDayWise(WebServiceType webServiceType, AppointmentStatusType appointmentStatusType, ArrayList<RegisteredDoctorProfile> clinicDoctorProfileList, String hospitalId, String locationId, long selectedDate,
@@ -4522,7 +4537,8 @@ public class LocalDataServiceImpl {
         volleyResponseBean.setIsDataFromLocal(true);
         volleyResponseBean.setIsUserOnline(HealthCocoConstants.isNetworkOnline);
         try {
-            List<Events> list = getEventsListDayWise(appointmentStatusType, clinicDoctorProfileList, locationId, hospitalId, selectedDate);
+            List<MultipleDoctorEvents> multipleDoctorEventsList = getMultipleEventsListDayWise(clinicDoctorProfileList, selectedDate);
+            List<Events> list = getEventsListDayWise(appointmentStatusType, (ArrayList<MultipleDoctorEvents>) multipleDoctorEventsList, locationId, hospitalId, selectedDate);
             volleyResponseBean.setDataList(getObjectsListFromMap(list));
             if (responseListener != null)
                 responseListener.onResponse(volleyResponseBean);
@@ -4534,7 +4550,37 @@ public class LocalDataServiceImpl {
     }
 
 
-    private List<Events> getEventsListDayWise(AppointmentStatusType appointmentStatusType, ArrayList<RegisteredDoctorProfile> clinicDoctorProfileList, String locationId, String hospitalId, long selectedDate) {
+    private List<MultipleDoctorEvents> getMultipleEventsListDayWise(ArrayList<RegisteredDoctorProfile> clinicDoctorProfileList, long selectedDate) {
+        String whereCondition = "Select * from " + StringUtil.toSQLName(MultipleDoctorEvents.class.getSimpleName())
+                + " where "
+               /* + LocalDatabaseUtils.KEY_DOCTOR_ID + "=\"" + doctorId + "\""
+                + " AND "*/
+                + LocalDatabaseUtils.KEY_FROM_DATE
+                + " BETWEEN " + DateTimeUtil.getStartTimeOfDayMilli(selectedDate)
+                + " AND " + DateTimeUtil.getEndTimeOfDayMilli(selectedDate);
+//                + " BETWEEN " + DateTimeUtil.getFirstDayOfMonthMilli(selectedDate)
+//                + " AND " + DateTimeUtil.getLastDayOfMonthMilli(selectedDate);
+//                + " AND (" + selectedDate + " BETWEEN " + LocalDatabaseUtils.KEY_FROM_DATE_FORMATTED_MILLIS
+//                + " AND " + LocalDatabaseUtils.KEY_TO_DATE_FORMATTED_MILLIS + ")";
+        if (!Util.isNullOrEmptyList(clinicDoctorProfileList)) {
+            whereCondition = whereCondition + " AND " + LocalDatabaseUtils.KEY_DOCTOR_ID + " in(";
+            for (RegisteredDoctorProfile doctorProfile : clinicDoctorProfileList) {
+                whereCondition = whereCondition + "\"" + doctorProfile.getUserId() + "\",";
+            }
+            whereCondition = whereCondition.substring(0, whereCondition.length() - 1);
+            whereCondition = whereCondition + ")";
+
+        }
+
+        LogUtils.LOGD(TAG, "Select Query " + whereCondition);
+        List<MultipleDoctorEvents> list = SugarRecord.findWithQuery(MultipleDoctorEvents.class, whereCondition);
+        if (!Util.isNullOrEmptyList(list)) {
+
+        }
+        return list;
+    }
+
+    private List<Events> getEventsListDayWise(AppointmentStatusType appointmentStatusType, ArrayList<MultipleDoctorEvents> multipleDoctorEvents, String locationId, String hospitalId, long selectedDate) {
         String whereCondition = "Select * from " + StringUtil.toSQLName(Events.class.getSimpleName())
                 + " where "
                /* + LocalDatabaseUtils.KEY_DOCTOR_ID + "=\"" + doctorId + "\""
@@ -4551,14 +4597,13 @@ public class LocalDataServiceImpl {
         if (appointmentStatusType != null && appointmentStatusType != AppointmentStatusType.ALL)
             whereCondition = whereCondition + " AND " + LocalDatabaseUtils.KEY_STATE + "=\"" + appointmentStatusType + "\"";
 
-        if (!Util.isNullOrEmptyList(clinicDoctorProfileList)) {
-            whereCondition = whereCondition + " AND " + LocalDatabaseUtils.KEY_DOCTOR_ID + " in(";
-            for (RegisteredDoctorProfile doctorProfile : clinicDoctorProfileList) {
-                whereCondition = whereCondition + "\"" + doctorProfile.getUserId() + "\",";
+        if (!Util.isNullOrEmptyList(multipleDoctorEvents)) {
+            whereCondition = whereCondition + " AND " + LocalDatabaseUtils.KEY_UNIQUE_ID + " in(";
+            for (MultipleDoctorEvents doctorEvents : multipleDoctorEvents) {
+                whereCondition = whereCondition + "\"" + doctorEvents.getEventId() + "\",";
             }
             whereCondition = whereCondition.substring(0, whereCondition.length() - 1);
             whereCondition = whereCondition + ")";
-
         }
 
         //specifying order by limit and offset query
@@ -4571,6 +4616,7 @@ public class LocalDataServiceImpl {
             for (Events events : list) {
                 LogUtils.LOGD(TAG, "From Date Events ID : " + events.getUniqueId() + " Date :" + DateTimeUtil.getFormattedDateTime(QueueFragment.DATE_FORMAT_FOR_HEADER_IN_THIS_SCREEN, events.getFromDate()));
                 getEventDetail(events);
+                events.setDoctorIds((ArrayList<String>) (Object) getObjectsListFronJson(events.getDoctorIdsJsonString()));
             }
         }
         return list;

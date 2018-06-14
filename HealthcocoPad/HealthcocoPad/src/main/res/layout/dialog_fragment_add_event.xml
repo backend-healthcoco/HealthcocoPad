@@ -183,7 +183,7 @@
                         android:paddingLeft="@dimen/patient_profile_image_padding"
                         android:paddingRight="@dimen/patient_profile_image_padding"
                         android:paddingTop="@dimen/list_item_padding"
-                        android:visibility="visible">
+                        android:visibility="gone">
 
 
                         <LinearLayout
@@ -192,7 +192,7 @@
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
                             android:padding="10dp"
-                            android:visibility="visible">
+                            android:visibility="gone">
 
                             <TextView
                                 android:layout_width="0dp"
