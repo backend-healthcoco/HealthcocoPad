@@ -12,6 +12,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -483,6 +484,8 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
                 autotvPatientName.setThreshold(0);
                 autotvPatientName.setAdapter(existingPatientAutotvAdapter);
                 autotvPatientName.setDropDownAnchor(autotvPatientName.getId());
+                InputMethodManager imm = (InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                 autotvPatientName.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -501,7 +504,7 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
                         }
                     }
                 });
-                requestFocusOnEditText(autotvPatientName);
+//                requestFocusOnEditText(autotvPatientName);
                 autotvPatientName.showDropDown();
             }
         } catch (Exception e) {
@@ -807,6 +810,7 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
                 autotvPatientName.setText("");
                 HealthCocoConstants.SELECTED_PATIENTS_USER_ID = null;
                 if (Util.isValidMobileNo(s)) {
+                    mActivity.hideSoftKeyboard();
                     getExistingPatientsList(s);
                 }
                 break;
