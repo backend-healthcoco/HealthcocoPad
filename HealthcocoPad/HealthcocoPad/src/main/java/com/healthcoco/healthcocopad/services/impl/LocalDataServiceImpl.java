@@ -4232,7 +4232,9 @@ public class LocalDataServiceImpl {
         Events events = selectQuery.first();
         if (events != null) {
             getEventDetail(events);
+            events.setDoctorIds((ArrayList<String>) (Object) getObjectsListFronJson(events.getDoctorIdsJsonString()));
         }
+
         return events;
     }
 

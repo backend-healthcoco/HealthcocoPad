@@ -282,6 +282,8 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
         if (selectedAppointment != null && (!Util.isNullOrBlank(selectedAppointment.getDoctorName()))) {
             tvDoctorName.setText(selectedAppointment.getDoctorName());
             user.setUniqueId(selectedAppointment.getDoctorId());
+            tvDoctorName.setEnabled(false);
+            tvDoctorName.setClickable(false);
         } else if (user != null)
             tvDoctorName.setText("Dr. " + user.getFirstName());
         if (doctorClinicProfile != null) {
@@ -863,9 +865,11 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
 //        notifyAdapter(new ArrayList<ClinicDoctorProfile>(clinicDoctorListHashMap.values()));
             if (doctorsListPopupWindow != null)
                 doctorsListPopupWindow.notifyAdapter(new ArrayList<Object>(clinicDoctorListHashMap.values()));
-            else
-                mActivity.initPopupWindows(tvDoctorName, PopupWindowType.DOCTOR_LIST, new ArrayList<Object>(clinicDoctorListHashMap.values()), this);
+            else {
 
+                if (selectedAppointment == null)
+                    mActivity.initPopupWindows(tvDoctorName, PopupWindowType.DOCTOR_LIST, new ArrayList<Object>(clinicDoctorListHashMap.values()), this);
+            }
         } else {
             tvDoctorName.setText("Dr. " + user.getFirstName());
 

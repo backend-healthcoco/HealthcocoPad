@@ -258,8 +258,26 @@ public class AddEventDialogFragment extends HealthCocoDialogFragment implements
         }
         if (selectedEvent != null && selectedEvent.getTime() != null && selectedEvent.getTime().getFromTime() != null)
             tvSelectedTime.setText(DateTimeUtil.getFormattedTime(0, Math.round(selectedEvent.getTime().getFromTime())));
-        if (selectedEvent != null && (!Util.isNullOrBlank(selectedEvent.getForDoctor()))) {
-            tvDoctorName.setText(selectedEvent.getForDoctor());
+        if (selectedEvent != null && (!Util.isNullOrEmptyList(selectedEvent.getDoctorIds()))) {
+            String doctorName = "";
+            if (!Util.isNullOrEmptyList(selectedEvent.getDoctorIds())) {
+                for (String doctorId : selectedEvent.getDoctorIds()) {
+                    for (RegisteredDoctorProfile registeredDoctorProfile : registeredDoctorProfileList) {
+                        if (registeredDoctorProfile.getUserId().equals(doctorId))
+                            doctorName = doctorName + registeredDoctorProfile.getFirstNameWithTitle() + ", ";
+                    }
+                }
+            } else {
+                for (RegisteredDoctorProfile registeredDoctorProfile : registeredDoctorProfileList) {
+                    if (registeredDoctorProfile.getUserId().equals(selectedEvent.getDoctorId()))
+                        doctorName = doctorName + registeredDoctorProfile.getFirstNameWithTitle() + ", ";
+                }
+            }
+            doctorName = doctorName.substring(0, doctorName.length() - 2);
+            tvDoctorName.setText(doctorName);
+
+            tvDoctorName.setEnabled(false);
+            tvDoctorName.setClickable(false);
         } else if (user != null)
             tvDoctorName.setText(R.string.select_doctors);
 
@@ -398,7 +416,7 @@ public class AddEventDialogFragment extends HealthCocoDialogFragment implements
                         initData();
                         initSelectedEvent();
                         if (!Util.isNullOrEmptyList(registeredDoctorProfileList))
-                            formHashMapAndRefresh(registeredDoctorProfileList);
+                            fromHashMapAndRefresh(registeredDoctorProfileList);
                         return;
                     }
                     break;
@@ -823,7 +841,7 @@ public class AddEventDialogFragment extends HealthCocoDialogFragment implements
         return calendar1.getTimeInMillis();
     }
 
-    private void formHashMapAndRefresh(List<RegisteredDoctorProfile> responseList) {
+    private void fromHashMapAndRefresh(List<RegisteredDoctorProfile> responseList) {
 //        clinicDoctorProfileList = (ArrayList<RegisteredDoctorProfile>) responseList;
         if (responseList.size() > 1) {
             tvDoctorName.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.arrow_down_drug, 0);
@@ -838,35 +856,15 @@ public class AddEventDialogFragment extends HealthCocoDialogFragment implements
 //            notifyAdapter(new ArrayList<ClinicDoctorProfile>(clinicDoctorListHashMap.values()));
             if (doctorsListPopupWindow != null)
                 doctorsListPopupWindow.notifyAdapter(new ArrayList<Object>(clinicDoctorListHashMap.values()));
-            else
-                mActivity.initDoctorListPopupWindows(tvDoctorName, PopupWindowType.DOCTOR_LIST, new ArrayList<Object>(clinicDoctorListHashMap.values()), this);
+            else {
+                if (selectedEvent == null)
+                    mActivity.initDoctorListPopupWindows(tvDoctorName, PopupWindowType.DOCTOR_LIST, new ArrayList<Object>(clinicDoctorListHashMap.values()), this);
+            }
         } else {
             tvDoctorName.setText("Dr. " + user.getFirstName());
             tvDoctorName.setEnabled(false);
             isSingleDoctor = true;
         }
     }
-/*    private void fromHashMapAndRefresh(List<RegisteredDoctorProfile> responseList) {
-        if (responseList.size() > 1) {
-            tvDoctorName.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.arrow_down_drug, 0);
-            tvDoctorName.setEnabled(true);
-
-            if (!Util.isNullOrEmptyList(responseList)) {
-                for (RegisteredDoctorProfile clinicDoctorProfile :
-                        responseList) {
-                    clinicDoctorListHashMap.put(clinicDoctorProfile.getUserId(), clinicDoctorProfile);
-                }
-            }
-//        notifyAdapter(new ArrayList<ClinicDoctorProfile>(clinicDoctorListHashMap.values()));
-            if (doctorsListPopupWindow != null)
-                doctorsListPopupWindow.notifyAdapter(new ArrayList<Object>(clinicDoctorListHashMap.values()));
-            else
-                mActivity.initPopupWindows(tvDoctorName, PopupWindowType.DOCTOR_LIST, new ArrayList<Object>(clinicDoctorListHashMap.values()), this);
-
-        } else {
-            tvDoctorName.setText("Dr. " + user.getFirstName());
-
-        }
-    }*/
 
 }
