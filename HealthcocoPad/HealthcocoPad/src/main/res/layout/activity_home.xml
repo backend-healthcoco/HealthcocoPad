@@ -21,6 +21,7 @@
 
         <!--Detail layout -->
         <FrameLayout
+            android:id="@+id/layout_home_activity"
             class="com.healthcoco.healthcocopad.activities.HomeActivity"
             android:layout_width="1000dp"
             android:layout_height="match_parent"

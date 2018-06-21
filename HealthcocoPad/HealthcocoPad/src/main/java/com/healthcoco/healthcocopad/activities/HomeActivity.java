@@ -21,7 +21,9 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SlidingPaneLayout;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -81,6 +83,7 @@ public class HomeActivity extends HealthCocoActivity implements View.OnClickList
     private DrawerLayout drawerLayout;
     private LinearLayout layoutContactsFragment;
     private LinearLayout layoutOtherFragments;
+    private FrameLayout layoutHomeActivity;
     private boolean receiversRegistered;
     private LinearLayout containerRightActionType;
     private LinearLayout containerMiddleAction;
@@ -159,6 +162,7 @@ public class HomeActivity extends HealthCocoActivity implements View.OnClickList
     private void initViews() {
         sliding_pane_layout = (SlidingPaneDrawerLayout) findViewById(R.id.sliding_pane_layout);
         containerRightActionType = (LinearLayout) findViewById(R.id.container_right_action);
+        layoutHomeActivity = (FrameLayout) findViewById(R.id.layout_home_activity);
         containerMiddleAction = (LinearLayout) findViewById(R.id.container_middle_action);
         layoutContactsFragment = (LinearLayout) findViewById(R.id.layout_contacts_fragment);
         layoutOtherFragments = (LinearLayout) findViewById(R.id.layout_right_detail);
@@ -352,6 +356,13 @@ public class HomeActivity extends HealthCocoActivity implements View.OnClickList
     }
 
     public void initContactsFragment() {
+        SlidingPaneLayout.LayoutParams params = new SlidingPaneLayout.LayoutParams(
+                SlidingPaneLayout.LayoutParams.MATCH_PARENT,
+                SlidingPaneLayout.LayoutParams.MATCH_PARENT
+        );
+        params.setMargins((int) getResources().getDimension(R.dimen.drawer_left_margin), 0, 0, 0);
+        layoutHomeActivity.setLayoutParams(params);
+
         contactsFragment = new ContactsListFragment();
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.layout_contacts_fragment, contactsFragment, contactsFragment.getClass().getSimpleName());
