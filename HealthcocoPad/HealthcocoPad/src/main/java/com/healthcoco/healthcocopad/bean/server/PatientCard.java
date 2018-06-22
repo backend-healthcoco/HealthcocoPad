@@ -32,6 +32,8 @@ public class PatientCard extends SugarRecord {
 
     private String pid;
 
+    private String pnum;
+
     private String gender;
 
     private String countryCode;
@@ -370,5 +372,13 @@ public class PatientCard extends SugarRecord {
 
     public void setNotesJsonString(String notesJsonString) {
         this.notesJsonString = notesJsonString;
+    }
+
+    public String getPnum() {
+        return pnum;
+    }
+
+    public void setPnum(String pnum) {
+        this.pnum = pnum;
     }
 }

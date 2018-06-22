@@ -24,6 +24,7 @@ import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
 import com.healthcoco.healthcocopad.bean.server.ClinicDoctorProfile;
+import com.healthcoco.healthcocopad.bean.server.DoctorClinicProfile;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.RegisteredDoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.User;
@@ -89,6 +90,7 @@ public class WaitingQueueFragment extends HealthCocoFragment implements LocalDoI
     private User user;
     private long selectedMonthDayYearInMillis;
     private boolean receiversRegistered;
+    private boolean pidHasDate;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -262,6 +264,10 @@ public class WaitingQueueFragment extends HealthCocoFragment implements LocalDoI
                 if (doctor != null && doctor.getUser() != null) {
                     user = doctor.getUser();
                 }
+                DoctorClinicProfile doctorClinicProfile = LocalDataServiceImpl.getInstance(mApp).getDoctorClinicProfile(user.getUniqueId(), user.getForeignLocationId());
+                if (doctorClinicProfile != null && doctorClinicProfile.getPidHasDate() != null)
+                    pidHasDate = doctorClinicProfile.getPidHasDate();
+
                 return volleyResponseBean;
             case GET_CALENDAR_EVENTS:
 //                long selectedMonthInMillis = DateTimeUtil.getLongFromFormattedDayMonthYearFormatString(QueueFragment.DATE_FORMAT_FOR_THIS_SCREEN, DateTimeUtil.getFormattedDateTime(QueueFragment.DATE_FORMAT_FOR_THIS_SCREEN, selectedMonthDayYearInMillis));
@@ -308,6 +314,11 @@ public class WaitingQueueFragment extends HealthCocoFragment implements LocalDoI
     @Override
     public User getUser() {
         return user;
+    }
+
+    @Override
+    public boolean isPidHasDate() {
+        return pidHasDate;
     }
 
     @Override

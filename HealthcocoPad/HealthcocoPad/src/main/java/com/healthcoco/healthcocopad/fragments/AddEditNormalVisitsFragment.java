@@ -34,6 +34,7 @@ import com.healthcoco.healthcocopad.bean.server.AppointmentRequest;
 import com.healthcoco.healthcocopad.bean.server.ClinicDetailResponse;
 import com.healthcoco.healthcocopad.bean.server.ClinicDoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.ClinicalNotes;
+import com.healthcoco.healthcocopad.bean.server.DoctorClinicProfile;
 import com.healthcoco.healthcocopad.bean.server.DoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.Prescription;
@@ -132,6 +133,7 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
     private boolean isPrescriptionTabClicked = false;
     private boolean isClinicalNotesTabClicked = false;
     private boolean isTreatmentTabClicked = false;
+    private boolean pidHasDate;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -359,6 +361,8 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
                 case FRAGMENT_INITIALISATION:
                     if (user != null && selectedPatient != null) {
                         LogUtils.LOGD(TAG, "Selected patient " + selectedPatient.getLocalPatientName());
+                        if (pidHasDate && (!Util.isNullOrBlank(selectedPatient.getPnum())))
+                            selectedPatient.setPid(Util.getValidatedValue(selectedPatient.getPnum()));
                         initActionPatientDetailActionBar(PatientProfileScreenType.IN_ADD_VISIT_HEADER, view, selectedPatient);
                         if (!Util.isNullOrBlank(visitId)) {
                             new LocalDataBackgroundtaskOptimised(mActivity, GET_VISIT_DETAILS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
@@ -511,6 +515,9 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
                 selectedPatient = LocalDataServiceImpl.getInstance(mApp).getPatient(HealthCocoConstants.SELECTED_PATIENTS_USER_ID);
                 doctorProfile = LocalDataServiceImpl.getInstance(mApp).getDoctorProfileObject(user.getUniqueId());
                 registeredDoctorProfileList = LocalDataServiceImpl.getInstance(mApp).getRegisterDoctorDetails(user.getForeignLocationId());
+                DoctorClinicProfile doctorClinicProfile = LocalDataServiceImpl.getInstance(mApp).getDoctorClinicProfile(user.getUniqueId(), user.getForeignLocationId());
+                if (doctorClinicProfile != null && doctorClinicProfile.getPidHasDate() != null)
+                    pidHasDate = doctorClinicProfile.getPidHasDate();
                 break;
             case GET_VISIT_DETAILS:
                 volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getVisitDetailResponse(WebServiceType.GET_PATIENT_VISIT_DETAIL, visitId, null, null);

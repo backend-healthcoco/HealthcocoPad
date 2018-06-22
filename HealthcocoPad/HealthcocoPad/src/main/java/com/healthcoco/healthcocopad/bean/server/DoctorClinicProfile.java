@@ -60,6 +60,7 @@ public class DoctorClinicProfile extends SugarRecord {
     @Ignore
     private ArrayList<Role> roles;
     private Boolean isMobileNumberOptional;
+    private Boolean isPidHasDate;
 
 
     public DoctorClinicProfile() {
@@ -354,5 +355,13 @@ public class DoctorClinicProfile extends SugarRecord {
 
     public void setMobileNumberOptional(Boolean mobileNumberOptional) {
         isMobileNumberOptional = mobileNumberOptional;
+    }
+
+    public Boolean getPidHasDate() {
+        return isPidHasDate;
+    }
+
+    public void setPidHasDate(Boolean pidHasDate) {
+        isPidHasDate = pidHasDate;
     }
 }

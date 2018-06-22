@@ -30,6 +30,7 @@ import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.AmountResponse;
 import com.healthcoco.healthcocopad.bean.server.ClinicDetailResponse;
 import com.healthcoco.healthcocopad.bean.server.ClinicDoctorProfile;
+import com.healthcoco.healthcocopad.bean.server.DoctorClinicProfile;
 import com.healthcoco.healthcocopad.bean.server.DoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.RegisteredDoctorProfile;
@@ -126,6 +127,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
     private TextView tvGenderDate;
     private int ordinal;
     private boolean isOTPVerified;
+    private boolean pidHasDate;
     private boolean receiversRegistered;
 
     @Override
@@ -491,7 +493,10 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
             }
         });
         tvPatientName.setText(selectedPatient.getLocalPatientName());
-        tvPatientId.setText(selectedPatient.getPid());
+        if (pidHasDate && (!Util.isNullOrBlank(selectedPatient.getPnum())))
+            tvPatientId.setText(Util.getValidatedValue(selectedPatient.getPnum()));
+        else
+            tvPatientId.setText(Util.getValidatedValue(selectedPatient.getPid()));
         String formattedGenderAge = Util.getFormattedGenderAge(selectedPatient);
         if (!Util.isNullOrBlank(formattedGenderAge)) {
             tvGenderDate.setVisibility(View.VISIBLE);
@@ -545,6 +550,10 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                     doctorProfile = LocalDataServiceImpl.getInstance(mApp).getDoctorProfileObject(user.getUniqueId());
                     doctorProfileList = LocalDataServiceImpl.getInstance(mApp).getRegisterDoctorDetails(user.getForeignLocationId());
                 }
+                DoctorClinicProfile doctorClinicProfile = LocalDataServiceImpl.getInstance(mApp).getDoctorClinicProfile(user.getUniqueId(), user.getForeignLocationId());
+                if (doctorClinicProfile != null && doctorClinicProfile.getPidHasDate() != null)
+                    pidHasDate = doctorClinicProfile.getPidHasDate();
+
                 break;
             case ADD_REGISTER_DOCTOR:
                 LocalDataServiceImpl.getInstance(mApp).addRegisterDoctorResponse((ArrayList<RegisteredDoctorProfile>) (ArrayList<?>) response.getDataList(), user.getForeignLocationId());
@@ -659,6 +668,10 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
 
     public boolean isOtpVerified() {
         return isOTPVerified;
+    }
+
+    public boolean isPidHasDate() {
+        return pidHasDate;
     }
 
     private void refreshDoctorsList() {

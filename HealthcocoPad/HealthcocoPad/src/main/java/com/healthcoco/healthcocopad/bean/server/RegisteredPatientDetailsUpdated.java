@@ -55,6 +55,7 @@ public class RegisteredPatientDetailsUpdated extends SugarRecord {
     private String locationId;
     private String hospitalId;
     private String pid;
+    private String pnum;
     private String colorCode;
     private Long createdTime;
     private Long updatedTime;
@@ -412,5 +413,13 @@ public class RegisteredPatientDetailsUpdated extends SugarRecord {
 
     public void setPatientDiscarded(boolean patientDiscarded) {
         isPatientDiscarded = patientDiscarded;
+    }
+
+    public String getPnum() {
+        return pnum;
+    }
+
+    public void setPnum(String pnum) {
+        this.pnum = pnum;
     }
 }

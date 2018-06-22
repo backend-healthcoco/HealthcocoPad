@@ -221,6 +221,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
     private List<Reference> referenceList;
     private ClinicDetailResponse selectedClinicProfile;
     private boolean mobileNumberOptional;
+    private boolean pidHasDate;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -519,6 +520,11 @@ public class ContactsListFragment extends HealthCocoFragment implements
     @Override
     public boolean isMobileNumberOptional() {
         return mobileNumberOptional;
+    }
+
+    @Override
+    public boolean isPidHasDate() {
+        return pidHasDate;
     }
 
     @Override
@@ -995,6 +1001,10 @@ public class ContactsListFragment extends HealthCocoFragment implements
                     DoctorClinicProfile doctorClinicProfile = LocalDataServiceImpl.getInstance(mApp).getDoctorClinicProfile(user.getUniqueId(), user.getForeignLocationId());
                     if (doctorClinicProfile != null && doctorClinicProfile.getMobileNumberOptional() != null)
                         mobileNumberOptional = doctorClinicProfile.getMobileNumberOptional();
+
+                    if (doctorClinicProfile != null && doctorClinicProfile.getPidHasDate() != null)
+                        pidHasDate = doctorClinicProfile.getPidHasDate();
+
 //                    mobileNumberOptional = Util.getIsMobileNumberOptional(doctor);
                 }
                 break;

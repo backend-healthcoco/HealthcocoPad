@@ -49,6 +49,7 @@ public class ContactsGridViewHolder extends HealthCocoViewHolder implements OnCl
     private TextView tvGenderDate;
     private TextView tvPatientAge;
     private boolean mobileNumberOptional;
+    private boolean pidHasDate;
     private LinearLayout layoutDiscarded;
 
 
@@ -58,6 +59,7 @@ public class ContactsGridViewHolder extends HealthCocoViewHolder implements OnCl
         this.position = position;
         imageLoader = ImageLoader.getInstance();
         mobileNumberOptional = optionsListener.isMobileNumberOptional();
+        pidHasDate = optionsListener.isPidHasDate();
     }
 
     @Override
@@ -70,7 +72,12 @@ public class ContactsGridViewHolder extends HealthCocoViewHolder implements OnCl
         LogUtils.LOGD(TAG, "Unique Id " + objData.getUniqueId());
         tvContactName.setText(Util.getValidatedValue(objData.getLocalPatientName()));
         tvContactNumber.setText(Util.getValidatedValue(objData.getMobileNumber()));
-        tvPatientId.setText(Util.getValidatedValue(objData.getPid()));
+
+        if (pidHasDate && (!Util.isNullOrBlank(objData.getPnum())))
+            tvPatientId.setText(Util.getValidatedValue(objData.getPnum()));
+        else
+            tvPatientId.setText(Util.getValidatedValue(objData.getPid()));
+
         String formattedGenderAge = Util.getFormattedGenderAge(objData);
         if (!Util.isNullOrBlank(formattedGenderAge)) {
             tvGenderDate.setVisibility(View.VISIBLE);

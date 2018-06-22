@@ -11,4 +11,7 @@ public interface QueueListitemlistener {
     public void onCheckInClicked(Object object);
 
     public User getUser();
+
+    public boolean isPidHasDate();
+
 }
