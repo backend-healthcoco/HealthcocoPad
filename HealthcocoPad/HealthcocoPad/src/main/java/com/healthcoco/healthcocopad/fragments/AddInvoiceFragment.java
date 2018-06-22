@@ -27,6 +27,7 @@ import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.request.InvoiceRequest;
 import com.healthcoco.healthcocopad.bean.request.TreatmentRequest;
 import com.healthcoco.healthcocopad.bean.server.DiagnosticTest;
+import com.healthcoco.healthcocopad.bean.server.DoctorClinicProfile;
 import com.healthcoco.healthcocopad.bean.server.DoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.DrugsListSolrResponse;
 import com.healthcoco.healthcocopad.bean.server.Invoice;
@@ -109,6 +110,8 @@ public class AddInvoiceFragment extends HealthCocoFragment implements LocalDoInB
     private DrugListFragment drugListFragment;
     private ScrollViewWithHeaderNewPrescriptionLayout svContainer;
     private boolean isFromVisit;
+    private boolean pidHasDate;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -243,6 +246,9 @@ public class AddInvoiceFragment extends HealthCocoFragment implements LocalDoInB
                     user = doctor.getUser();
                 selectedPatient = LocalDataServiceImpl.getInstance(mApp).getPatient(HealthCocoConstants.SELECTED_PATIENTS_USER_ID);
                 doctorProfile = LocalDataServiceImpl.getInstance(mApp).getDoctorProfileObject(user.getUniqueId());
+                DoctorClinicProfile doctorClinicProfile = LocalDataServiceImpl.getInstance(mApp).getDoctorClinicProfile(user.getUniqueId(), user.getForeignLocationId());
+                if (doctorClinicProfile != null && doctorClinicProfile.getPidHasDate() != null)
+                    pidHasDate = doctorClinicProfile.getPidHasDate();
                 break;
         }
         if (volleyResponseBean == null)
@@ -359,6 +365,8 @@ public class AddInvoiceFragment extends HealthCocoFragment implements LocalDoInB
                     init();
                     initTabsFragmentsList();
                     initViewPagerAdapter();
+                    if (pidHasDate && (!Util.isNullOrBlank(selectedPatient.getPnum())))
+                        selectedPatient.setPid(Util.getValidatedValue(selectedPatient.getPnum()));
                     initActionPatientDetailActionBar(PatientProfileScreenType.IN_ADD_VISIT_HEADER, view, selectedPatient);
                 }
                 break;

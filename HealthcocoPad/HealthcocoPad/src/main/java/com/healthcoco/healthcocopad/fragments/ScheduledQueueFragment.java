@@ -19,6 +19,7 @@ import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
 import com.healthcoco.healthcocopad.bean.server.ClinicDoctorProfile;
+import com.healthcoco.healthcocopad.bean.server.DoctorClinicProfile;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.RegisteredDoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.User;
@@ -72,6 +73,7 @@ public class ScheduledQueueFragment extends HealthCocoFragment implements LocalD
     private AppointmentStatusType appointmentStatusType = CONFIRM;
     private User user;
     private long selectedMonthDayYearInMillis;
+    private boolean pidHasDate;
 
 
     @Override
@@ -247,6 +249,10 @@ public class ScheduledQueueFragment extends HealthCocoFragment implements LocalD
                 if (doctor != null && doctor.getUser() != null) {
                     user = doctor.getUser();
                 }
+                DoctorClinicProfile doctorClinicProfile = LocalDataServiceImpl.getInstance(mApp).getDoctorClinicProfile(user.getUniqueId(), user.getForeignLocationId());
+                if (doctorClinicProfile != null && doctorClinicProfile.getPidHasDate() != null)
+                    pidHasDate = doctorClinicProfile.getPidHasDate();
+
                 return volleyResponseBean;
             case GET_CALENDAR_EVENTS:
 //                long selectedMonthInMillis = DateTimeUtil.getLongFromFormattedDayMonthYearFormatString(QueueFragment.DATE_FORMAT_FOR_THIS_SCREEN, DateTimeUtil.getFormattedDateTime(QueueFragment.DATE_FORMAT_FOR_THIS_SCREEN, selectedMonthDayYearInMillis));
@@ -294,5 +300,10 @@ public class ScheduledQueueFragment extends HealthCocoFragment implements LocalD
     @Override
     public User getUser() {
         return user;
+    }
+
+    @Override
+    public boolean isPidHasDate() {
+        return pidHasDate;
     }
 }

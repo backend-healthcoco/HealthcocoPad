@@ -81,7 +81,14 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
     private LinearLayout mainContainerGroups;
     private LinearLayout mainContainerNotes;
     private RegisteredPatientDetailsUpdated selectedPatient;
+    private boolean pidHasDate;
     private User user;
+    BroadcastReceiver historyListReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, final Intent intent) {
+            getHistoryListFromServer(true);
+        }
+    };
     private TextView tvInitialAlphabet;
     private TextView tvPatientName;
     private TextView tvPatientId;
@@ -90,6 +97,12 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
     private ArrayList<String> medicalDiseaseIdsList = new ArrayList<String>();
     private ArrayList<String> familyDiseaseIdsList = new ArrayList<String>();
     private boolean isInitialLoading = true;
+    BroadcastReceiver historyListLocalReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, final Intent intent) {
+            getHistoryListFromLocal(false);
+        }
+    };
     private HistoryDetailsResponse historyDetailsResponse;
     private TextView tvDiet;
     private LinearLayout containerDiet;
@@ -159,6 +172,7 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
         patientDetailFragmentUpdated = (CommonOpenUpPatientDetailFragment) getFragmentManager().findFragmentByTag(CommonOpenUpPatientDetailFragment.class.getSimpleName());
         if (patientDetailFragmentUpdated != null) {
             selectedPatient = patientDetailFragmentUpdated.getSelectedPatientDetails();
+            pidHasDate = patientDetailFragmentUpdated.isPidHasDate();
             user = patientDetailFragmentUpdated.getUser();
         }
     }
@@ -290,7 +304,11 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
             }
         });
         tvPatientName.setText(selectedPatient.getLocalPatientName());
-        tvPatientId.setText(selectedPatient.getPid());
+        if (pidHasDate && (!Util.isNullOrBlank(selectedPatient.getPnum())))
+            tvPatientId.setText(Util.getValidatedValue(selectedPatient.getPnum()));
+        else
+            tvPatientId.setText(Util.getValidatedValue(selectedPatient.getPid()));
+
         String formattedGenderAge = Util.getFormattedGenderAge(selectedPatient);
         if (!Util.isNullOrBlank(formattedGenderAge)) {
             tvGenderDate.setVisibility(View.VISIBLE);
@@ -606,7 +624,6 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
         startActivityForResult(intent, REQUEST_CODE_PATIENT_PROFILE);
     }
 
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -756,20 +773,6 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
         LocalBroadcastManager.getInstance(mActivity).unregisterReceiver(historyListReceiver);
         LocalBroadcastManager.getInstance(mActivity).unregisterReceiver(historyListLocalReceiver);
     }
-
-    BroadcastReceiver historyListReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, final Intent intent) {
-            getHistoryListFromServer(true);
-        }
-    };
-
-    BroadcastReceiver historyListLocalReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, final Intent intent) {
-            getHistoryListFromLocal(false);
-        }
-    };
 
     public void getHistoryListFromLocal(boolean showLoading) {
         if (user != null) {

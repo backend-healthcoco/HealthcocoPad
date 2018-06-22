@@ -16,6 +16,7 @@ import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
+import com.healthcoco.healthcocopad.bean.server.DoctorClinicProfile;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.PatientCard;
 import com.healthcoco.healthcocopad.bean.server.RegisteredDoctorProfile;
@@ -75,6 +76,7 @@ public class CalendarFragment extends HealthCocoFragment implements WeekView.Eve
     private User user;
     private long selectedMonthDayYearInMillis;
     private List<WeekViewEvent> events = new ArrayList<WeekViewEvent>();
+    private boolean pidHasDate;
 
 
     @Nullable
@@ -200,6 +202,10 @@ public class CalendarFragment extends HealthCocoFragment implements WeekView.Eve
                 if (doctor != null && doctor.getUser() != null) {
                     user = doctor.getUser();
                 }
+                DoctorClinicProfile doctorClinicProfile = LocalDataServiceImpl.getInstance(mApp).getDoctorClinicProfile(user.getUniqueId(), user.getForeignLocationId());
+                if (doctorClinicProfile != null && doctorClinicProfile.getPidHasDate() != null)
+                    pidHasDate = doctorClinicProfile.getPidHasDate();
+
                 return volleyResponseBean;
             case GET_CALENDAR_EVENTS:
                 if (user != null)
@@ -399,5 +405,10 @@ public class CalendarFragment extends HealthCocoFragment implements WeekView.Eve
     @Override
     public User getUser() {
         return user;
+    }
+
+    @Override
+    public boolean isPidHasDate() {
+        return pidHasDate;
     }
 }

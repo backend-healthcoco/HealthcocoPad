@@ -106,6 +106,7 @@ public class AppointmentDetailsPopupWindow extends PopupWindow implements View.O
     private ImageView btDismiss;
     private QueueListitemlistener queueListitemlistener;
     private BookAppointmentFromScreenType screenType = APPOINTMENTS_QUEUE_RESCHEDULE;
+    private boolean pidHasDate;
 
 
     public AppointmentDetailsPopupWindow(Context context, View view, Object object, QueueListitemlistener queueListitemlistener) {
@@ -116,6 +117,8 @@ public class AppointmentDetailsPopupWindow extends PopupWindow implements View.O
         this.anchorView = view;
         calendarEvents = (CalendarEvents) object;
         this.queueListitemlistener = queueListitemlistener;
+        pidHasDate = queueListitemlistener.isPidHasDate();
+
     }
 
     public View getPopupView() {
@@ -251,6 +254,9 @@ public class AppointmentDetailsPopupWindow extends PopupWindow implements View.O
                 break;
 
             case R.id.bt_print_patient_card:
+                if (pidHasDate && (!Util.isNullOrBlank(calendarEvents.getPatient().getPnum())))
+                    calendarEvents.getPatient().setPid(Util.getValidatedValue(calendarEvents.getPatient().getPnum()));
+
                 mActivity.openPatientCardFragment(calendarEvents);
                 dismiss();
                 break;
@@ -271,7 +277,12 @@ public class AppointmentDetailsPopupWindow extends PopupWindow implements View.O
             PatientCard patient = calendarEvents.getPatient();
             LogUtils.LOGD(TAG, "Unique Id " + patient.getUniqueId());
             tvContactNumber.setText(Util.getValidatedValue(patient.getMobileNumber()));
-            tvPatientId.setText(Util.getValidatedValue(patient.getPid()));
+
+            if (pidHasDate && (!Util.isNullOrBlank(patient.getPnum())))
+                tvPatientId.setText(Util.getValidatedValue(patient.getPnum()));
+            else
+                tvPatientId.setText(Util.getValidatedValue(patient.getPid()));
+
             String formattedGenderAge = Util.getFormattedGenderAge(patient);
             String patientName = Util.getValidatedValue(patient.getLocalPatientName());
 

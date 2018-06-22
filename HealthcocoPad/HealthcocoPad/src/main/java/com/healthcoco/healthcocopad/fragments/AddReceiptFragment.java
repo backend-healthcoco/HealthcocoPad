@@ -21,6 +21,7 @@ import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.request.AddReceiptRequest;
+import com.healthcoco.healthcocopad.bean.server.DoctorClinicProfile;
 import com.healthcoco.healthcocopad.bean.server.Invoice;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.ReceiptServerResponse;
@@ -89,6 +90,7 @@ public class AddReceiptFragment extends HealthCocoFragment implements LocalDoInB
     private LinearLayout layoutNextReviewOn;
     private String modeOfPayment;
     private boolean isFromInvoiceScreen;
+    private boolean pidHasDate;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -181,6 +183,9 @@ public class AddReceiptFragment extends HealthCocoFragment implements LocalDoInB
                 if (doctor != null)
                     user = doctor.getUser();
                 selectedPatient = LocalDataServiceImpl.getInstance(mApp).getPatient(HealthCocoConstants.SELECTED_PATIENTS_USER_ID);
+                DoctorClinicProfile doctorClinicProfile = LocalDataServiceImpl.getInstance(mApp).getDoctorClinicProfile(user.getUniqueId(), user.getForeignLocationId());
+                if (doctorClinicProfile != null && doctorClinicProfile.getPidHasDate() != null)
+                    pidHasDate = doctorClinicProfile.getPidHasDate();
                 break;
         }
         if (volleyResponseBean == null)
@@ -321,6 +326,8 @@ public class AddReceiptFragment extends HealthCocoFragment implements LocalDoInB
         switch (response.getWebServiceType()) {
             case FRAGMENT_INITIALISATION:
                 if (user != null && selectedPatient != null) {
+                    if (pidHasDate && (!Util.isNullOrBlank(selectedPatient.getPnum())))
+                        selectedPatient.setPid(Util.getValidatedValue(selectedPatient.getPnum()));
                     initActionPatientDetailActionBar(PatientProfileScreenType.IN_ADD_VISIT_HEADER, view, selectedPatient);
                     initData();
                     getIntentData();

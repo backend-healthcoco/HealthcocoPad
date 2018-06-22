@@ -65,11 +65,15 @@ public class QueueItemViewHolder extends HealthcocoComonRecylcerViewHolder imple
     private LinearLayout btEngage;
     private LinearLayout layoutListItem;
     private QueueListitemlistener queueListitemlistener;
+    private boolean pidHasDate;
+
 
     public QueueItemViewHolder(HealthCocoActivity mActivity, View itemView, HealthcocoRecyclerViewItemClickListener itemClickListener, Object listenerObject) {
         super(mActivity, itemView, itemClickListener);
         this.mActivity = mActivity;
         this.queueListitemlistener = (QueueListitemlistener) listenerObject;
+        pidHasDate = queueListitemlistener.isPidHasDate();
+
     }
 
     @Override
@@ -119,7 +123,11 @@ public class QueueItemViewHolder extends HealthcocoComonRecylcerViewHolder imple
                     if (calendarEvents.getPatient() != null) {
                         PatientCard patient = calendarEvents.getPatient();
                         patientName = Util.getValidatedValueOrNull(patient.getLocalPatientName());
-                        patientId = Util.getValidatedValueOrNull(patient.getPid());
+                        if (pidHasDate && (!Util.isNullOrBlank(calendarEvents.getPatient().getPnum())))
+                            patientId = Util.getValidatedValue(calendarEvents.getPatient().getPnum());
+                        else
+                            patientId = Util.getValidatedValue(calendarEvents.getPatient().getPid());
+
                         mobileNumber = Util.getValidatedValueOrNull(patient.getMobileNumber());
                         doctorName = Util.getValidatedValueOrNull(calendarEvents.getDoctorName());
 
@@ -130,6 +138,7 @@ public class QueueItemViewHolder extends HealthcocoComonRecylcerViewHolder imple
                             if (!Util.isNullOrBlank(calendarEvents.getPatient().getFirstName()))
                                 tvPatientName.setText(calendarEvents.getPatient().getFirstName());
                         }
+
                         if (!Util.isNullOrBlank(patientId)) {
                             tvPatientId.setText(patientId);
                         } else {
