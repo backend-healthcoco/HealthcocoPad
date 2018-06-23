@@ -625,7 +625,7 @@ public class AddEventDialogFragment extends HealthCocoDialogFragment implements
         if (title == null || Util.isNullOrBlank(title)) {
             msg = getResources().getString(R.string.please_add_title);
         }
-        if (Util.isNullOrEmptyList(clinicDoctorProfileList)) {
+        if (Util.isNullOrEmptyList(clinicDoctorProfileList) && selectedEvent == null) {
             msg = getResources().getString(R.string.please_select_doctor);
         }
        /* if (note == null || Util.isNullOrBlank(note)) {
@@ -669,7 +669,7 @@ public class AddEventDialogFragment extends HealthCocoDialogFragment implements
             eventRequest.setHospitalId(selectedEvent.getHospitalId());
             eventRequest.setLocationId(selectedEvent.getLocationId());
             if (!Util.isNullOrEmptyList(selectedEvent.getDoctorIds()))
-                eventRequest.setDoctorIds(selectedEvent.getDoctorIds().toArray(eventRequest.getDoctorIds()));
+                eventRequest.setDoctorIds(selectedEvent.getDoctorIds().toArray(new String[selectedEvent.getDoctorIds().size()]));
         } else {
             if (!Util.isNullOrEmptyList(clinicDoctorProfileList)) {
                 String[] doctorIds = new String[clinicDoctorProfileList.size()];
