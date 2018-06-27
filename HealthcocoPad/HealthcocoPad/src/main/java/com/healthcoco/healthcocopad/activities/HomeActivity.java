@@ -56,6 +56,7 @@ import com.healthcoco.healthcocopad.fragments.DoctorVideoListFragment;
 import com.healthcoco.healthcocopad.fragments.EventFragment;
 import com.healthcoco.healthcocopad.fragments.FilterFragment;
 import com.healthcoco.healthcocopad.fragments.IssueTrackerFragment;
+import com.healthcoco.healthcocopad.fragments.KioskFragment;
 import com.healthcoco.healthcocopad.fragments.MenuDrawerFragment;
 import com.healthcoco.healthcocopad.fragments.QueueFragment;
 import com.healthcoco.healthcocopad.fragments.SettingsFragment;
@@ -209,6 +210,9 @@ public class HomeActivity extends HealthCocoActivity implements View.OnClickList
                 break;
             case VIDEOS:
                 fragment = new DoctorVideoListFragment();
+                break;
+            case REGISTER:
+                fragment = new KioskFragment();
                 break;
             case HELP_IMPROVE:
                 openCommonOpenUpActivity(CommonOpenUpFragmentType.FEEDBACK, null, 0);

@@ -44,6 +44,7 @@ import com.healthcoco.healthcocopad.fragments.InitialSyncFragment;
 import com.healthcoco.healthcocopad.fragments.LoginSignupFragment;
 import com.healthcoco.healthcocopad.fragments.NotificationResponseDataFragment;
 import com.healthcoco.healthcocopad.fragments.PatientRegistrationFragment;
+import com.healthcoco.healthcocopad.fragments.PatientRegistrationTabsFragment;
 import com.healthcoco.healthcocopad.fragments.QueueFragment;
 import com.healthcoco.healthcocopad.fragments.SelectedDiagramDetailFragment;
 import com.healthcoco.healthcocopad.fragments.SettingPrintSetupFragment;
@@ -232,6 +233,10 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
                 break;
             case PLAY_VIDEO:
                 openFragment(ActionbarType.HIDDEN, new VideoFragment());
+                break;
+            case PATIENT_REGISTRATION_TABS:
+                openFragment(ActionbarType.HIDDEN, new PatientRegistrationTabsFragment());
+//                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_CROSS, ActionbarLeftRightActionTypeDrawables.WITH_SAVE, R.string.prescription_ui_permission_details, new PatientRegistrationTabsFragment());
                 break;
 
         }

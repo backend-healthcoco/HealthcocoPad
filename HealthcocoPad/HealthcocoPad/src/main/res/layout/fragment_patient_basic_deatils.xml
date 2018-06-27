@@ -1,0 +1,657 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/grey_background"
+    android:fillViewport="true"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    android:overScrollMode="never">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="15dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="visible">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginRight="15dp"
+                android:layout_weight="1"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <FrameLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+                        android:padding="@dimen/layout_margin">
+
+                        <com.healthcoco.healthcocopad.custom.CircularImageView
+                            android:id="@+id/iv_image_view"
+                            android:layout_width="@dimen/image_patient_profile_basic_details"
+                            android:layout_height="@dimen/image_patient_profile_basic_details"
+                            android:layout_gravity="left"
+                            android:background="@drawable/shape_circle_solid_white_background_grey_border"
+                            android:clickable="false" />
+
+                        <ImageButton
+                            android:id="@+id/bt_contact_profile"
+                            android:layout_width="@dimen/image_patient_profile_basic_details"
+                            android:layout_height="@dimen/image_patient_profile_basic_details"
+                            android:layout_gravity="center"
+                            android:background="@android:color/transparent"
+                            android:minHeight="0dp"
+                            android:minWidth="0dp"
+                            android:padding="20dp"
+                            android:scaleType="centerInside"
+                            android:src="@drawable/img_report_normal" />
+
+                        <ProgressBar
+                            android:id="@+id/progress_loading_profile_image"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:indeterminate="false"
+                            android:indeterminateDrawable="@drawable/progress_loading"
+                            android:max="100"
+                            android:visibility="gone" />
+                    </FrameLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/image_patient_detail_layout"
+                        android:layout_marginTop="@dimen/round_progress_bar_size"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:id="@+id/container_edit_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+
+                            <AutoCompleteTextView
+                                android:id="@+id/autotv_patient_name"
+                                style="@style/registration_edittext"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:digits=" abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                                android:hint="@string/full_name"
+                                android:inputType="textPersonName|textNoSuggestions|textCapWords"
+                                android:maxLines="1"
+                                android:singleLine="true" />
+
+                            <!--
+                                                        <EditText
+                                                            android:id="@+id/edit_name"
+                                                            style="@style/registration_edittext"
+                                                            android:layout_width="0dp"
+                                                            android:layout_height="wrap_content"
+                                                            android:layout_weight="1"
+                                                            android:digits=" abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                                                            android:hint="@string/full_name"
+                                                            android:inputType="textPersonName|textNoSuggestions|textCapWords"
+                                                            android:maxLines="1" />
+                            -->
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+
+                            <FrameLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1">
+
+                                <EditText
+                                    android:id="@+id/edit_mobile_number"
+                                    style="@style/registration_edittext"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:clickable="false"
+                                    android:digits="0123456789"
+                                    android:editable="false"
+                                    android:focusable="false"
+                                    android:hint="@string/mobile_number"
+                                    android:maxLines="1" />
+
+                                <LinearLayout
+                                    android:id="@+id/loading_existing_patients_list"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="right|center_vertical"
+                                    android:layout_marginRight="@dimen/patient_profile_image_padding"
+                                    android:visibility="gone">
+
+                                    <ProgressBar
+                                        style="?android:attr/progressBarStyleSmall"
+                                        android:layout_width="@dimen/round_progress_bar_size"
+                                        android:layout_height="@dimen/round_progress_bar_size"
+                                        android:layout_gravity="right|bottom"
+                                        android:progressDrawable="@drawable/progress_loading" />
+                                </LinearLayout>
+
+                            </FrameLayout>
+                            <!-- <TextView
+                                 android:id="@+id/tv_mobile_number"
+                                 style="@style/registration_edittext"
+                                 android:layout_width="0dp"
+                                 android:layout_height="wrap_content"
+                                 android:layout_weight="1"
+                                 android:maxLength="@integer/max_mobile_number"
+                                 android:maxLines="1"
+                                 android:text="" />-->
+                        </LinearLayout>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                style="@style/registration_textview"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="@string/gender" />
+
+                            <TextView
+                                android:id="@+id/textView9"
+                                style="@style/registration_textview"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="@string/date_of_birth" />
+
+                            <TextView
+                                style="@style/registration_textview"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="@string/blood_group" />
+
+                            <TextView
+                                style="@style/registration_textview"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="@string/profession" />
+
+                            <TextView
+                                android:id="@+id/textView11"
+                                style="@style/registration_textview"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="@string/email" />
+
+                            <TextView
+                                style="@style/registration_textview"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:maxLines="1"
+                                android:text="@string/secondary_mobile_number" />
+
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <RadioGroup
+                                android:id="@+id/rg_gender_select"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_weight="1"
+                                android:orientation="horizontal"
+                                android:paddingBottom="@dimen/edit_text_patient_registration_padding"
+                                android:paddingTop="@dimen/edit_text_patient_registration_padding">
+
+                                <com.healthcoco.healthcocopad.views.FontAwesomeRadioButton
+                                    android:id="@+id/rb_male"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="0.5"
+                                    android:background="@android:color/transparent"
+                                    android:button="@android:color/transparent"
+                                    android:paddingLeft="1dp"
+                                    android:tag="@string/male"
+                                    android:text="@string/text_check_male"
+                                    android:textColor="@drawable/text_light_grey_normal_blue_selected"
+                                    android:textSize="@dimen/text_size_registration_title" />
+
+                                <com.healthcoco.healthcocopad.views.FontAwesomeRadioButton
+                                    android:id="@+id/rb_female"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="0.5"
+                                    android:background="@android:color/transparent"
+                                    android:button="@android:color/transparent"
+                                    android:checked="false"
+                                    android:paddingLeft="1dp"
+                                    android:tag="@string/female"
+                                    android:text="@string/text_check_female"
+                                    android:textColor="@drawable/text_light_grey_normal_blue_selected"
+                                    android:textSize="@dimen/text_size_registration_title" />
+                            </RadioGroup>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/tv_birthday"
+                                    style="@style/registration_edittext"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:drawableRight="@drawable/arrow_down_drug"
+                                    android:hint="@string/birthday" />
+
+                                <LinearLayout
+                                    android:id="@+id/container_age"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:layout_marginLeft="@dimen/edit_text_patient_registration_padding"
+                                    android:layout_weight="1"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center"
+                                        android:layout_marginLeft="@dimen/edit_text_patient_registration_padding"
+                                        android:text="@string/or"
+                                        android:textColor="@color/black"
+                                        android:textSize="@dimen/text_size_registration_title" />
+
+                                    <EditText
+                                        android:id="@+id/edit_age"
+                                        style="@style/registration_edittext"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="@dimen/edit_text_patient_registration_padding"
+                                        android:layout_weight="1"
+                                        android:digits="0123456789"
+                                        android:hint="@string/age"
+                                        android:inputType="phone"
+                                        android:maxLines="1" />
+                                </LinearLayout>
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+
+                                <com.healthcoco.healthcocopad.views.CustomAutoCompleteTextView
+                                    android:id="@+id/tv_blood_group"
+                                    style="@style/registration_edittext"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="2dp"
+                                    android:layout_weight="0.80"
+                                    android:clickable="true"
+                                    android:drawableRight="@drawable/arrow_down_drug"
+                                    android:editable="false"
+                                    android:focusable="false"
+                                    android:hint="@string/blood_group"
+                                    android:maxLines="1" />
+
+                                <ImageButton
+                                    android:id="@+id/bt_delete_blood_group"
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="0.20"
+                                    android:background="@android:color/transparent"
+                                    android:contentDescription="@string/content_description"
+                                    android:src="@android:drawable/presence_offline"
+                                    android:visibility="visible" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_horizontal"
+                                android:orientation="horizontal">
+
+
+                                <AutoCompleteTextView
+                                    android:id="@+id/autotv_profession"
+                                    style="@style/registration_edittext"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:drawableRight="@drawable/arrow_down_drug"
+                                    android:hint="@string/profession"
+                                    android:inputType="textCapSentences"
+                                    android:maxLines="1" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_horizontal"
+                                android:orientation="horizontal">
+
+
+                                <EditText
+                                    android:id="@+id/edit_email"
+                                    style="@style/registration_edittext"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:hint="@string/email_small"
+                                    android:inputType="textEmailAddress"
+                                    android:singleLine="true" />
+
+
+                            </LinearLayout>
+
+                            <EditText
+                                android:id="@+id/edit_secondary_mobile_number"
+                                style="@style/registration_edittext"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:digits="0123456789"
+                                android:hint="@string/secondary_mobile_number"
+                                android:inputType="phone"
+                                android:maxLength="10" />
+
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            style="@style/registration_textview"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/referred_by" />
+
+                        <TextView
+                            android:id="@+id/tv_referred_by"
+                            style="@style/registration_edittext"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.80"
+                            android:drawableRight="@drawable/arrow_down_drug"
+                            android:hint="@string/referred_by"
+                            android:maxLines="1" />
+
+                        <ImageButton
+                            android:id="@+id/bt_delete_referred_by"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.20"
+                            android:background="@android:color/transparent"
+                            android:contentDescription="@string/content_description"
+                            android:src="@android:drawable/presence_offline"
+                            android:visibility="visible" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            style="@style/registration_textview"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:inputType="text"
+                            android:text="@string/country" />
+
+                        <com.healthcoco.healthcocopad.views.CustomAutoCompleteTextView
+                            android:id="@+id/autotv_country"
+                            style="@style/registration_edittext"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:drawableRight="@drawable/arrow_down_drug"
+                            android:editable="false"
+                            android:hint="@string/country"
+                            android:maxLines="1" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            style="@style/registration_textview"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/city" />
+
+                        <AutoCompleteTextView
+                            android:id="@+id/autotv_city"
+                            style="@style/registration_edittext"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="start"
+                            android:hint="@string/city"
+                            android:inputType="textCapSentences"
+                            android:maxLines="1" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            style="@style/registration_textview"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/pincode"
+                            android:textColor="@android:color/black" />
+
+                        <EditText
+                            android:id="@+id/edit_pincode"
+                            style="@style/registration_edittext"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:digits="0123456789"
+                            android:hint="@string/pincode"
+                            android:inputType="phone"
+                            android:maxLength="@integer/max_pincode_length"
+                            android:maxLines="1" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            style="@style/registration_textview"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/street_address" />
+
+                        <EditText
+                            android:id="@+id/edit_street"
+                            style="@style/registration_edittext"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:hint="@string/street_address"
+                            android:maxLines="1" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/textView10"
+                            style="@style/registration_textview"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/locality" />
+
+                        <EditText
+                            android:id="@+id/edit_locality"
+                            style="@style/registration_edittext"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:hint="@string/locality"
+                            android:maxLength="50"
+                            android:maxLines="1" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            style="@style/registration_textview"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/aadhar_id" />
+
+                        <EditText
+                            android:id="@+id/edit_aadhar_id"
+                            style="@style/registration_edittext"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:digits="0123456789"
+                            android:hint="@string/aadhar_id"
+                            android:inputType="phone"
+                            android:maxLength="12"
+                            android:maxLines="1" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            style="@style/registration_textview"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/pan_number" />
+
+                        <EditText
+                            android:id="@+id/edit_pan_number"
+                            style="@style/registration_edittext"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+                            android:hint="@string/pan_number"
+                            android:maxLines="1" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            style="@style/registration_textview"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/driving_license" />
+
+                        <EditText
+                            android:id="@+id/edit_driving_license"
+                            style="@style/registration_edittext"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+                            android:hint="@string/driving_license"
+                            android:maxLines="1" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

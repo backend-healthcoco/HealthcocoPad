@@ -4,15 +4,15 @@ package com.healthcoco.healthcocopad.enums;
 import com.healthcoco.healthcocopad.R;
 
 /**
- * Created by neha on 14/01/16.
+ * Created by neha on 22/06/18.
  */
 public enum KioskSubItemType {
 
-    PATIENT_REGISTRATION("PATIENT_REGISTRATION", R.string.patient, R.drawable.ic_profile, R.string.settings_no_groups_added),
-    KNOW_YOUR_DOCTOR("KNOW_YOUR_DOCTOR", R.string.patient, R.drawable.ic_profile, R.string.settings_no_groups_added),
-    VIDEOS("VIDEOS", R.string.patient, R.drawable.ic_profile, R.string.settings_no_groups_added),
-    FEEDBACK("FEEDBACK", R.string.patient, R.drawable.ic_profile, R.string.settings_no_groups_added),
-    HEALTHCOCO_BLOG("HEALTHCOCO_BLOG", R.string.patient, R.drawable.ic_profile, R.string.settings_no_groups_added);
+    PATIENT_REGISTER("PATIENT_REGISTER", R.string.patient_registration, R.drawable.ic_profile, R.string.settings_no_groups_added),
+    DOCTOR_AND_CLINIC("DOCTOR_AND_CLINIC", R.string.about_doctor_and_clinic, R.drawable.ic_profile, R.string.settings_no_groups_added),
+    VIDEO("VIDEO", R.string.videos, R.drawable.ic_profile, R.string.settings_no_groups_added),
+    FEEDBACK("FEEDBACK", R.string.feedback, R.drawable.ic_profile, R.string.settings_no_groups_added),
+    BLOGS("BLOGS", R.string.blogs, R.drawable.ic_profile, R.string.settings_no_groups_added);
 
 
     private int titleId;

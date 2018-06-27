@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.android.volley.Response;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
@@ -17,11 +18,13 @@ import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocopad.enums.AdapterType;
+import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.KioskSubItemType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
 import com.healthcoco.healthcocopad.recyclerview.HealthcocoRecyclerViewAdapter;
+import com.healthcoco.healthcocopad.recyclerview.HealthcocoRecyclerViewItemClickListener;
 import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 
@@ -31,12 +34,13 @@ import java.util.ArrayList;
  * Created by Prashant on 23-06-18.
  */
 
-public class KioskHomeFragment extends HealthCocoFragment implements
-        View.OnClickListener, LocalDoInBackgroundListenerOptimised, GsonRequest.ErrorListener, Response.Listener<VolleyResponseBean> {
+public class KioskFragment extends HealthCocoFragment implements
+        View.OnClickListener, LocalDoInBackgroundListenerOptimised, GsonRequest.ErrorListener, Response.Listener<VolleyResponseBean>, HealthcocoRecyclerViewItemClickListener {
 
 
     private KioskSubItemType kioskSubItemType;
     private RecyclerView optionsRecyclerView;
+    private LinearLayout layoutLeft;
     private HealthcocoRecyclerViewAdapter mAdapter;
     private ArrayList<KioskSubItemType> subItemTypeArrayList = new ArrayList<>();
     private boolean receiversRegistered;
@@ -45,7 +49,7 @@ public class KioskHomeFragment extends HealthCocoFragment implements
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_kiosk_home, container, false);
+        view = inflater.inflate(R.layout.fragment_kiosk, container, false);
         super.onCreateView(inflater, container, savedInstanceState);
         return view;
     }
@@ -70,8 +74,6 @@ public class KioskHomeFragment extends HealthCocoFragment implements
     }
 
     private void initAdapter() {
-//        adapter = new CommTabContentGridAdapter(mActivity);
-//        gvOptions.setAdapter(adapter);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(mActivity, LinearLayoutManager.HORIZONTAL, false);
         optionsRecyclerView.setLayoutManager(layoutManager);
@@ -86,11 +88,12 @@ public class KioskHomeFragment extends HealthCocoFragment implements
     @Override
     public void initViews() {
         optionsRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerview_options);
+        layoutLeft = (LinearLayout) view.findViewById(R.id.layout_left);
     }
 
     @Override
     public void initListeners() {
-//        gvOptions.setOnItemClickListener(this);
+        layoutLeft.setOnClickListener(this);
     }
 
 
@@ -123,11 +126,11 @@ public class KioskHomeFragment extends HealthCocoFragment implements
             }
             adapter.notifyDataSetChanged();
         }*/
-        subItemTypeArrayList.add(KioskSubItemType.PATIENT_REGISTRATION);
-        subItemTypeArrayList.add(KioskSubItemType.KNOW_YOUR_DOCTOR);
-        subItemTypeArrayList.add(KioskSubItemType.VIDEOS);
+        subItemTypeArrayList.add(KioskSubItemType.PATIENT_REGISTER);
+        subItemTypeArrayList.add(KioskSubItemType.DOCTOR_AND_CLINIC);
+        subItemTypeArrayList.add(KioskSubItemType.VIDEO);
         subItemTypeArrayList.add(KioskSubItemType.FEEDBACK);
-        subItemTypeArrayList.add(KioskSubItemType.HEALTHCOCO_BLOG);
+        subItemTypeArrayList.add(KioskSubItemType.BLOGS);
 
         mAdapter.notifyDataSetChanged();
     }
@@ -172,6 +175,29 @@ public class KioskHomeFragment extends HealthCocoFragment implements
 
     @Override
     public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.layout_left:
+                break;
+        }
+    }
 
+    @Override
+    public void onItemClicked(Object object) {
+        if (object != null && object instanceof KioskSubItemType) {
+            KioskSubItemType subItemType = (KioskSubItemType) object;
+            switch (subItemType) {
+                case PATIENT_REGISTER:
+                    openCommonOpenUpActivity(CommonOpenUpFragmentType.PATIENT_REGISTRATION_TABS, "PATIENT", null);
+                    break;
+                case DOCTOR_AND_CLINIC:
+                    break;
+                case VIDEO:
+                    break;
+                case FEEDBACK:
+                    break;
+                case BLOGS:
+                    break;
+            }
+        }
     }
 }
