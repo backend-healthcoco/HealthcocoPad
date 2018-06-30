@@ -1,0 +1,384 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:gravity="center"
+    android:orientation="vertical">
+
+
+    <!--
+        <include layout="@layout/layout_header_patient_profile" />-->
+
+    <com.healthcoco.healthcocopad.views.MetricsMediumTextView
+        android:id="@+id/tv_name_for_feedback"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@color/white"
+        android:hint="@string/doctor_name"
+        android:padding="10dp"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size_blog_detail"
+        android:textStyle="bold" />
+
+
+  <!--  <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+-->
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            android:paddingBottom="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/parent_rating_five_star"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/shape_rounded_corners_item_background"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:theme="@style/TextLabelLayoutStyle">
+
+                        <com.healthcoco.healthcocopad.views.MetricsMediumTextView
+                            android:id="@+id/tv_title_overall_experience"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/layout_margin"
+                            android:layout_marginRight="5dp"
+                            android:layout_weight="1"
+                            android:paddingBottom="10dp"
+                            android:paddingTop="10dp"
+                            android:text="@string/how_was_your_overall_experience_with"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/text_size_feedback_doctor_lab_title" />
+
+                        <com.healthcoco.healthcocopad.views.MetricsMediumTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerInParent="true"
+                            android:gravity="center"
+                            android:text="*"
+                            android:textColor="@color/red_error"
+                            android:textSize="20sp" />
+
+                    </LinearLayout>
+
+                    <RatingBar
+                        android:id="@+id/rating_star_feedback"
+                        style="?android:attr/ratingBarStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:isIndicator="false"
+                        android:numStars="5"
+                        android:stepSize="0.5" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/parent_like_unlike"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/item_contact_padding"
+                    android:background="@drawable/shape_rounded_corners_item_background"
+                    android:orientation="vertical"
+                    android:padding="10dp"
+                    android:visibility="gone">
+
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:theme="@style/TextLabelLayoutStyle">
+
+                        <com.healthcoco.healthcocopad.views.MetricsMediumTextView
+                            android:id="@+id/tv_title_recommend"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/layout_margin"
+                            android:padding="10dp"
+                            android:text="@string/would_you_like_to_recommend_doctor"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/text_size_feedback_doctor_lab_title" />
+
+                        <com.healthcoco.healthcocopad.views.MetricsMediumTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerInParent="true"
+                            android:gravity="center"
+                            android:text="*"
+                            android:textColor="@color/red_error"
+                            android:textSize="20sp" />
+
+                    </RelativeLayout>
+
+                    <RadioGroup
+                        android:id="@+id/rg_like_unlike"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="@dimen/layout_margin"
+                        android:orientation="horizontal">
+
+                        <com.healthcoco.healthcocopad.views.CenterRadioButton
+                            android:id="@+id/rb_like"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.5"
+                            android:background="@color/white"
+                            android:padding="10dp"
+                            android:paddingLeft="1dp"
+                            android:tag="@string/confirm_like_message"
+                            android:textColor="@drawable/text_light_grey_normal_blue_selected_checked"
+                            app:crb_drawable="@drawable/ic_like_profile_selector" />
+
+                        <com.healthcoco.healthcocopad.views.CenterRadioButton
+                            android:id="@+id/rb_unlike"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_weight="0.5"
+                            android:background="@color/white"
+                            android:padding="10dp"
+                            android:paddingLeft="1dp"
+                            android:tag="@string/confirm_like_message"
+                            android:textColor="@drawable/text_light_grey_normal_blue_selected_checked"
+                            app:crb_drawable="@drawable/ic_unlike_profile_selector" />
+                    </RadioGroup>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/parent_clinic_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/item_contact_padding"
+                    android:background="@drawable/shape_rounded_corners_item_background"
+                    android:orientation="vertical"
+                    android:padding="10dp"
+                    android:visibility="visible">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:theme="@style/TextLabelLayoutStyle">
+
+                        <com.healthcoco.healthcocopad.views.MetricsMediumTextView
+                            android:id="@+id/tv_title_clinic_name"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/layout_margin"
+                            android:layout_marginRight="5dp"
+                            android:layout_weight="1"
+                            android:paddingBottom="10dp"
+                            android:paddingTop="10dp"
+                            android:text="@string/which_clinic_did_you_visit"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/text_size_feedback_doctor_lab_title" />
+
+                        <com.healthcoco.healthcocopad.views.MetricsMediumTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerInParent="true"
+                            android:gravity="center"
+                            android:text="*"
+                            android:textColor="@color/red_error"
+                            android:textSize="20sp" />
+
+                    </LinearLayout>
+
+                    <com.healthcoco.healthcocopad.views.MetricsMediumTextView
+                        android:id="@+id/tv_clinic_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/layout_margin"
+                        android:background="@color/grey_background_updated"
+                        android:gravity="start"
+                        android:hint="@string/clinic_name_visited"
+                        android:padding="10dp"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/grey_dark_text"
+                        android:textSize="@dimen/text_size_feedback_doctor_lab_title" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/parent_health_problem_treatment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/item_contact_padding"
+                    android:background="@drawable/shape_rounded_corners_item_background"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:theme="@style/TextLabelLayoutStyle">
+
+                        <com.healthcoco.healthcocopad.views.MetricsMediumTextView
+                            android:id="@+id/tv_title_for_which_health_problem"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/layout_margin"
+                            android:layout_marginRight="5dp"
+                            android:layout_weight="1"
+                            android:paddingBottom="10dp"
+                            android:paddingTop="10dp"
+                            android:text="@string/for_which_health_problem"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/text_size_feedback_doctor_lab_title" />
+
+                        <com.healthcoco.healthcocopad.views.MetricsMediumTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerInParent="true"
+                            android:gravity="center"
+                            android:text="*"
+                            android:textColor="@color/red_error"
+                            android:textSize="20sp" />
+
+                    </LinearLayout>
+
+                    <com.healthcoco.healthcocopad.views.MetricsMediumEditText
+                        android:id="@+id/edit_health_problem_detail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/layout_margin"
+                        android:background="@color/white"
+                        android:gravity="start"
+                        android:hint="@string/eg_stomach_body_pain"
+                        android:padding="10dp"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_feeds_created_by" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/parent_what_can_be_improved"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/item_contact_padding"
+                    android:background="@drawable/shape_rounded_corners_item_background"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:theme="@style/TextLabelLayoutStyle">
+
+                        <com.healthcoco.healthcocopad.views.MetricsMediumTextView
+                            android:id="@+id/tv_title_what_can_be_improved"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/layout_margin"
+                            android:layout_marginRight="5dp"
+                            android:layout_weight="1"
+                            android:paddingBottom="10dp"
+                            android:paddingTop="10dp"
+                            android:text="@string/what_can_be_improved"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/text_size_feedback_doctor_lab_title" />
+
+                        <com.healthcoco.healthcocopad.views.MetricsMediumTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerInParent="true"
+                            android:gravity="center"
+                            android:text="*"
+                            android:textColor="@color/red_error"
+                            android:textSize="20sp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/container_answers_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/layout_margin"
+                        android:background="@color/white"
+                        android:gravity="start"
+                        android:hint="@string/eg_stomach_body_pain"
+                        android:orientation="vertical"
+                        android:padding="10dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/parent_experience"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/item_contact_padding"
+                    android:background="@drawable/shape_rounded_corners_item_background"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:theme="@style/TextLabelLayoutStyle">
+
+                        <com.healthcoco.healthcocopad.views.MetricsMediumTextView
+                            android:id="@+id/tv_title_experience"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/layout_margin"
+                            android:layout_marginRight="5dp"
+                            android:layout_weight="1"
+                            android:paddingBottom="10dp"
+                            android:paddingTop="10dp"
+                            android:text="@string/share_your_experience_with"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/text_size_feedback_doctor_lab_title" />
+
+                        <com.healthcoco.healthcocopad.views.MetricsMediumTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerInParent="true"
+                            android:gravity="center"
+                            android:text="*"
+                            android:textColor="@color/red_error"
+                            android:textSize="20sp" />
+
+                    </LinearLayout>
+
+                    <com.healthcoco.healthcocopad.views.MetricsMediumEditText
+                        android:id="@+id/edit_experience_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/layout_margin"
+                        android:background="@color/white"
+                        android:gravity="start"
+                        android:hint="@string/hint_recommendation_experience_message"
+                        android:minLines="5"
+                        android:padding="10dp"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_feeds_created_by" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </ScrollView>
+    <!--</android.support.v7.widget.CardView>-->
+</LinearLayout>

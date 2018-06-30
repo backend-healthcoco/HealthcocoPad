@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+
+    <solid android:color="@color/my_health_blue" />
+
+    <corners
+        android:bottomLeftRadius="@dimen/radius_my_health_item_corners"
+        android:bottomRightRadius="@dimen/radius_my_health_item_corners"
+        android:topLeftRadius="@dimen/radius_my_health_item_corners"
+        android:topRightRadius="@dimen/radius_my_health_item_corners" />
+
+</shape>

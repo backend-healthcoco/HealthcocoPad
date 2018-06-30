@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/container_blog_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shadow_medicine_upload_options"
+        android:orientation="horizontal"
+        android:padding="20dp">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <com.healthcoco.healthcocopad.views.MetricsMediumTextView
+                android:id="@+id/tv_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Title of Feed"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_feeds_title" />
+
+            <com.healthcoco.healthcocopad.views.MetricsLightTextView
+                android:id="@+id/tv_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Desc of feed"
+                android:textColor="@color/grey_dark_text"
+                android:textSize="@dimen/text_size_feeds_desc" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingRight="10dp">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_logo"
+                    android:visibility="visible" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <com.healthcoco.healthcocopad.views.MetricsMediumTextView
+                        android:id="@+id/tv_created_by_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Healthcoco"
+                        android:textColor="@color/grey_darker"
+                        android:textSize="@dimen/text_size_item_feeds_created_by" />
+
+                    <com.healthcoco.healthcocopad.views.MetricsLightTextView
+                        android:id="@+id/tv_created_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="12th Sep"
+                        android:textColor="@color/grey_dark_text"
+                        android:textSize="@dimen/text_size_item_feeds_created_time" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <com.healthcoco.healthcocopad.views.MetricsLightTextView
+                        android:id="@+id/tv_total_likes"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical"
+                        android:gravity="center_vertical"
+                        android:text="12"
+                        android:textColor="@color/grey_dark_text"
+                        android:textSize="@dimen/text_size_item_feeds_created_time" />
+
+                    <ImageView
+                        android:id="@+id/bt_like"
+                        android:layout_width="@dimen/image_size_blogs_list_item_likes"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:layout_marginRight="10dp"
+                        android:paddingLeft="5dp"
+                        android:src="@drawable/ic_heart_selector" />
+
+                    <com.healthcoco.healthcocopad.views.MetricsLightTextView
+                        android:id="@+id/tv_total_share"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="12"
+                        android:textColor="@color/grey_dark_text"
+                        android:textSize="@dimen/text_size_item_feeds_created_time" />
+
+                    <ImageView
+                        android:id="@+id/bt_share"
+                        android:layout_width="@dimen/image_size_blogs_list_item_shares"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:paddingLeft="5dp"
+                        android:src="@drawable/ic_share_selector" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <FrameLayout
+            android:layout_width="@dimen/image_size_blogs_list_item_thumbnail"
+            android:layout_height="@dimen/image_size_blogs_list_item_thumbnail">
+
+            <ImageView
+                android:id="@+id/iv_title_image"
+                android:layout_width="@dimen/image_size_blogs_list_item_thumbnail"
+                android:layout_height="@dimen/image_size_blogs_list_item_thumbnail"
+                android:scaleType="centerCrop"
+                android:src="@drawable/bg_doctor_img" />
+
+            <ImageView
+                android:id="@+id/iv_fav"
+                android:layout_width="@dimen/height_width_like_button_feeds"
+                android:layout_height="@dimen/height_width_like_button_feeds"
+                android:layout_gravity="end"
+                android:padding="@dimen/padding_like_share_fav_button"
+                android:src="@drawable/ic_fav_white_yellow_selector"
+                android:textColor="@color/white_translucent"
+                android:textSize="@dimen/text_size_profile_name" />
+
+            <pl.droidsonroids.gif.GifImageView
+                android:id="@+id/loading_gif"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:src="@drawable/gif_loading_dual_ring"
+                android:visibility="gone" />
+        </FrameLayout>
+    </LinearLayout>
+</LinearLayout>
