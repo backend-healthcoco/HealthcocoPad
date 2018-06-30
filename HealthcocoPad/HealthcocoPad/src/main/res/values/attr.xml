@@ -61,4 +61,8 @@
         <attr name="allDayEventHeight" format="dimension" />
         <attr name="scrollDuration" format="integer" />
     </declare-styleable>
+
+    <declare-styleable name="CenterRadioButton">
+        <attr name="crb_drawable" format="reference" />
+    </declare-styleable>
 </resources>

@@ -1169,13 +1169,74 @@
 
     <!--Kiosk texts-->
     <string name="patient_registration">Patient Registration</string>
-    <string name="about_doctor_and_clinic">About Doctor and Clinic</string>
+    <string name="about_doctor_and_clinic">Doctors and Clinic</string>
     <string name="feedback">Feedback</string>
     <string name="blogs">Blogs</string>
     <string name="mobile_number_patient_registration">Mobile Number&#160;&#160;&#160;</string>
     <string name="basic_details">Basic Details</string>
     <string name="more_details">More Details</string>
     <string name="please_enter_mobile_number">Please Enter Mobile Number</string>
+    <string name="next">Next</string>
+    <string name="health">Health</string>
+    <string name="favorite">Favorite</string>
+    <string name="no_health_feeds_added">No Health Feeds Added</string>
+    <string name="no_fav_feeds_added">No Favorite Feeds Added</string>
+    <string name="health_feeds">Health Feeds</string>
+    <string name="my_articles">My Articles</string>
+    <string name="blog_detail">Blog Detail</string>
+
+    <!--doctor feedback texts-->
+    <string name="would_you_like_to_recommend_doctor">Would you like to Recommend %s?</string>
+    <string name="would_you_like_to_recommend_lab">Would you like to Recommend Clinic %s?</string>
+    <string name="would_you_like_to_recommend_pharmacy">Would you like to Recommend Pharmacy %s?</string>
+
+    <string name="share_your_experience_with">Share your experience with %s</string>
+    <string name="how_was_your_overall_experience_with">How was your overall experience with %s</string>
+    <string name="please_rate_your_experience_with">Please rate your Experinece with %s</string>
+
+    <string name="share_your_experience_at">Share your experience at %s</string>
+    <string name="how_was_your_overall_experience_at">How was your overall experience at %s</string>
+    <string name="please_rate_your_experience_at">Please rate your Experinece at %s</string>
+
+
+    <string name="which_clinic_did_you_visit">Which clinic did you visit?</string>
+    <string name="which_lab_did_you_visit">Which Lab did you visit?</string>
+    <string name="which_pharmacy_did_you_visit">Which pharmacy did you visit?</string>
+    <string name="for_which_health_problem">For which health problem/treatment did you visit?</string>
+    <string name="reason_for_visit">Reason for visit</string>
+    <string name="for_which_reason_for_visit">For which reason did you visit?</string>
+    <string name="what_can_be_improved">What do you think can be improved?</string>
+    <string name="what_were_you_happy_with">What were you most happy with?</string>
+    <string name="clinic_name_visited">Clinic name visited</string>
+    <string name="eg_stomach_body_pain">e.g. Stomach Ache, body pain</string>
+    <string name="hint_recommendation_experience_message">Please write at least 50 characters about your experience with the doctor.</string>
+    <string name="msg_share_some_experience">Share some Experience</string>
+    <string name="please_tell_us_the_problem_for_which_you_visited">Please tell us the problem for which you visited</string>
+    <string name="please_select_clinic_name_you_visited">Please select Clinic name you visited</string>
+    <string name="please_select_one_or_more_reasons_for_improvement">Please select one or more reasons for Improvement</string>
+    <string name="please_select_reasons_for_happy">Please select one or more reasons which made you Happy</string>
+    <string name="please_like_unlike">Please Like Unlike</string>
+    <string name="thanks_for_suggestion_clinic">Thanks for your Suggestion.we will on-board the Clinic soon.</string>
+    <string name="thanks_for_suggestion_doctor">Thanks for your Suggestion.We will on-board %s soon.</string>
+    <string name="doctor_name">Doctor Name</string>
+    <string name="hint_recommendation_experience_message_clinic">Please write at least 50 characters about your experience at clinic.</string>
+
+    <string name="confirm_like">Confirm Like</string>
+    <string name="confirm_like_message">Are you sure you like&#160;%s?</string>
+
+    <string name="confirm_unlike">Confirm Unlike</string>
+    <string name="confirm_unlike_message">Are you sure you want to unlike&#160;%s?</string>
+    <string name="no_data_found">No Data Found</string>
+    <string name="no_location_found">No Location Found</string>
+    <string name="no_service_found">No Service Found</string>
+    <string name="no_test_found">No Test Found</string>
+
+    <!--feedback question answers-->
+    <string name="doctor_friendliness">Doctor friendliness</string>
+    <string name="explanation_of_health_issue">Explanation of the health issue</string>
+    <string name="treatment_satisfaction">Treatment satisfaction</string>
+    <string name="value_of_money">Value for money</string>
+    <string name="wait_time">Wait time</string>
 
 
 </resources>

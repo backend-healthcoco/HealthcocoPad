@@ -19,6 +19,7 @@ import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocopad.enums.AdapterType;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
+import com.healthcoco.healthcocopad.enums.FeedbackType;
 import com.healthcoco.healthcocopad.enums.KioskSubItemType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
@@ -194,8 +195,10 @@ public class KioskFragment extends HealthCocoFragment implements
                 case VIDEO:
                     break;
                 case FEEDBACK:
+                    openCommonOpenUpActivity(CommonOpenUpFragmentType.FEEDBACK_DOCTOR, AppointmentFeedbackFragment.TAG_FEEDBACK_TYPE, FeedbackType.DOCTOR.ordinal(), 0);
                     break;
                 case BLOGS:
+                    openCommonOpenUpActivity(CommonOpenUpFragmentType.BLOGS, "BLOGS", null);
                     break;
             }
         }

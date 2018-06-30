@@ -376,6 +376,8 @@ public enum WebServiceType {
     DELETE_NOTES(Method.DELETE, "clinicalNotes/notes/"),
     DELETE_PROCEDURE_NOTE(Method.DELETE, "clinicalNotes/procedureNote/"),
 
+    ADD_PRESCRIPTION_APPOINTMENT_FEEDBACK(Method.POST, "feedback/addEditPatientFeedback"),
+
     ADD_DIRECTION(Method.POST, "prescription/drugDirection/add/"),
 
     ADD_DOSAGE(Method.POST, "prescription/drugDosage/add/"),
@@ -507,6 +509,18 @@ public enum WebServiceType {
 
     ADD_UPDATE_DRUGS_AND_ALLERGIES_DETAIL(Method.POST, "history/assignDrugsAndAllergies/"),
     GET_DRUG_INTERACTIONS(Method.POST, "prescription/drugs/interaction?"),
+
+    GET_All_HEALTH_BLOGS(Method.GET, "blogs/get?"),
+
+    GET_FAV_HEALTH_BLOGS(Method.GET, "blogs/getFovourite?"),
+
+    GET_HEALTH_BLOG_BY_ID(Method.GET, "blogs/getBlog/"),
+
+    ADD_TO_FAVORITE(Method.GET, "blogs/addTOFovourite/"),
+
+    LIKE_THE_BLOG(Method.GET, "blogs/likeTheBlog/"),
+
+    ADD_REMOVE_FAVORITE(Method.GET, "favourite/addRemove/"),
 
     GET_HARDCODED_BLOOD_GROUPS(0, "");
 

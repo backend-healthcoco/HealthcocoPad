@@ -9,6 +9,7 @@
     <color name="white">#ffffff</color>
     <color name="white_off">#fafafa</color>
     <color name="white_translucent">#80ffffff</color>
+    <color name="my_health_blue">#62aadc</color>
     <color name="grey_light_text">#9C9C9C</color>
     <color name="grey_dark_text">#656565</color>
     <color name="black_greyish">#282828</color>
@@ -52,6 +53,8 @@
     <color name="toolbar">#efefef</color>
     <color name="toolbar_text">#8f000000</color>
     <color name="accent">#2789e4</color>
+    <color name="yellow_text">#ffff00</color>
+    <color name="grey_background_updated">#f9f7f7</color>
 
 
 </resources>

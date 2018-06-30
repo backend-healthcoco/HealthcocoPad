@@ -10,7 +10,8 @@
     <!--LoginSignup button styles-->
     <style name="ButtonLoginSignupStyle" parent="Widget.AppCompat.Button.Borderless">
         <item name="android:textAllCaps">true</item>
-        <item name="android:background">@drawable/shape_rounded_corners_grey_border_solid_maroon</item>
+        <item name="android:background">@drawable/shape_rounded_corners_grey_border_solid_maroon
+        </item>
         <item name="android:textColor">@drawable/text_white_normal_translucent_selected</item>
         <item name="android:minHeight">0dp</item>
         <item name="android:padding">@dimen/btn_padding</item>
@@ -231,4 +232,16 @@
     </style>
 
 
+    <style name="MyCustomTabLayout" parent="Widget.Design.TabLayout">
+        <item name="tabTextAppearance">@style/MyCustomTextAppearance</item>
+    </style>
+
+    <style name="MyCustomTextAppearance" parent="TextAppearance.Design.Tab">
+        <item name="textAllCaps">false</item>
+        <item name="android:textSize">@dimen/text_size_doctor_profile_tab</item>
+    </style>
+
+    <style name="ToolbarColoredBackArrow" parent="AppTheme">
+        <item name="android:textColorSecondary">@color/white</item>
+    </style>
 </resources>

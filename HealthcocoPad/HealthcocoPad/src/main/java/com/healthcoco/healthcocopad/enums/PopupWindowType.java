@@ -30,6 +30,8 @@ public enum PopupWindowType {
 
     DOCTOR_LIST,
 
+    DOCTOR_CLINIC_PROFILE,
+
     DISCOUNT_TYPE(new ArrayList<Object>() {{
         add(UnitType.PERCENT);
         add(UnitType.INR);

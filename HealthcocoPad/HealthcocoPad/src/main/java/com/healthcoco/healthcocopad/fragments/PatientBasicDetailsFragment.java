@@ -249,7 +249,6 @@ public class PatientBasicDetailsFragment extends HealthCocoFragment implements V
     }
 
     private void initDefaultData() {
-        editMobileNumber.addTextChangedListener(new HealthcocoTextWatcher(editMobileNumber, this));
         mActivity.showLoading(false);
         getCitiesList(false);
         getReferenceList(false);
@@ -290,28 +289,35 @@ public class PatientBasicDetailsFragment extends HealthCocoFragment implements V
     }
 
     private void initData() {
-        Intent intent = mActivity.getIntent();
-        String patientUniqueId = intent.getStringExtra(HealthCocoConstants.TAG_UNIQUE_ID);
-        mobileNumber = intent.getStringExtra(HealthCocoConstants.TAG_MOBILE_NUMBER);
-        isEditPatient = intent.getBooleanExtra(HealthCocoConstants.TAG_IS_EDIT_PATIENT, false);
-        if (!Util.isNullOrBlank(mobileNumber))
-            editMobileNumber.setText(mobileNumber);
-        else {
-            editMobileNumber.setText(R.string.no_mobile_number);
-            editMobileNumber.setTextColor(Color.RED);
-        }
-        if (!Util.isNullOrBlank(patientUniqueId)) {
-            if (isEditPatient) {
-                selectedPatient = LocalDataServiceImpl.getInstance(mApp).getPatient(patientUniqueId);
-                initPatientDetails(selectedPatient);
-            } else {
-                alreadyRegisteredPatient = LocalDataServiceImpl.getInstance(mApp).getALreadyRegisteredPatient(patientUniqueId);
-                if (alreadyRegisteredPatient != null) {
-                    initPatientDetails(alreadyRegisteredPatient);
+
+    }
+
+    public void initDataFromPreviousFragment(Object object) {
+        RegisterNewPatientRequest patientRequest = (RegisterNewPatientRequest) object;
+        String patientUniqueId = "";
+        if (patientRequest != null) {
+            if (!Util.isNullOrBlank(patientRequest.getUserId()))
+                patientUniqueId = patientRequest.getUserId();
+            if (!Util.isNullOrBlank(patientRequest.getMobileNumber()))
+                mobileNumber = patientRequest.getMobileNumber();
+            if (!Util.isNullOrBlank(mobileNumber))
+                editMobileNumber.setText(mobileNumber);
+            else {
+                editMobileNumber.setText(R.string.no_mobile_number);
+                editMobileNumber.setTextColor(Color.RED);
+            }
+            if (!Util.isNullOrBlank(patientUniqueId)) {
+                if (isEditPatient) {
+                    selectedPatient = LocalDataServiceImpl.getInstance(mApp).getPatient(patientUniqueId);
+                    initPatientDetails(selectedPatient);
+                } else {
+                    alreadyRegisteredPatient = LocalDataServiceImpl.getInstance(mApp).getALreadyRegisteredPatient(patientUniqueId);
+                    if (alreadyRegisteredPatient != null) {
+                        initPatientDetails(alreadyRegisteredPatient);
+                    }
                 }
             }
         }
-
     }
 
     private void initPatientDetails(Object patientDetails) {
@@ -418,13 +424,6 @@ public class PatientBasicDetailsFragment extends HealthCocoFragment implements V
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.container_right_action:
-                Util.checkNetworkStatus(mActivity);
-                if (HealthCocoConstants.isNetworkOnline)
-                    validateData();
-                else
-                    onNetworkUnavailable(null);
-                break;
             case R.id.tv_birthday:
                 openBirthDatePickerDialog();
                 break;

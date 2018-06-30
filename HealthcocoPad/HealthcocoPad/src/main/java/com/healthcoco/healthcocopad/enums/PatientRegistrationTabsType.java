@@ -9,8 +9,8 @@ import com.healthcoco.healthcocopad.R;
 public enum PatientRegistrationTabsType {
 
     SEARCH_PATIENT(0, "Search Patient", R.string.search_patient, R.drawable.ic_profile),
-    BASIC_DETAILS(0, "Basic Details", R.string.basic_details, R.drawable.ic_profile),
-    MORE_DETAIlS(0, "More Details", R.string.more_details, R.drawable.ic_profile);;
+    BASIC_DETAILS(1, "Basic Details", R.string.basic_details, R.drawable.ic_profile),
+    MORE_DETAIlS(2, "More Details", R.string.more_details, R.drawable.ic_profile);
 
     private int textId = 0;
     private int drawableId = 0;

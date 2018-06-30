@@ -11,6 +11,7 @@ public enum ActionbarLeftRightActionTypeDrawables {
     WITH_DONE(false, AppCompatButton.class, R.string.done, R.layout.actionbar_button),
     WITH_SAVE(false, AppCompatButton.class, R.string.save, R.layout.actionbar_button),
     WITH_SEND(false, AppCompatButton.class, R.string.send, R.layout.actionbar_button),
+    WITH_SUBMIT(false, AppCompatButton.class, R.string.submit, R.layout.actionbar_button),
     WITH_SYNC(false, AppCompatButton.class, R.string.fa_sync, R.layout.actionbar_fontawesome_button),
     WITH_ADD(true, ImageButton.class, R.drawable.actionbar_add_selector, R.layout.actionbar_image_button),
     WITH_BACK(true, ImageButton.class, R.drawable.selector_actionbar_back, R.layout.actionbar_image_button),

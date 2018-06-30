@@ -210,5 +210,26 @@
     <dimen name="image_width_height_upload_record">80dp</dimen>
     <dimen name="layout_add_treatment_title_padding_10dp">10dp</dimen>
     <dimen name="queue_layout_width">350dp</dimen>
+    <dimen name="radius_my_health_item_corners">8dp</dimen>
+
+
+    <!--Healthcoco Blogs fargment-->
+    <dimen name="text_size_view_profile">15sp</dimen>
+    <dimen name="text_size_feeds_title">25sp</dimen>
+    <dimen name="text_size_feeds_desc">16sp</dimen>
+    <dimen name="text_size_feeds_created_by">15sp</dimen>
+    <dimen name="text_size_feeds_created_time">13sp</dimen>
+    <dimen name="text_size_item_feeds_created_by">15sp</dimen>
+    <dimen name="text_size_item_feeds_created_time">10sp</dimen>
+    <dimen name="image_size_blogs_list_item_thumbnail">100dp</dimen>
+    <dimen name="image_size_blogs_list_item_likes">20dp</dimen>
+    <dimen name="image_size_blogs_list_item_shares">20dp</dimen>
+    <dimen name="height_width_like_button_feeds">50dp</dimen>
+    <dimen name="text_size_profile_name">18sp</dimen>
+    <dimen name="image_width_feed_blog_image">280dp</dimen>
+    <dimen name="text_size_feeds_like_share">12sp</dimen>
+    <dimen name="padding_like_share_fav_button">12dp</dimen>
+    <dimen name="text_size_blog_detail">18sp</dimen>
+    <dimen name="text_size_feedback_doctor_lab_title">17sp</dimen>
 
 </resources>

@@ -11,6 +11,7 @@ import com.google.gson.GsonBuilder;
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.HealthCocoApplication;
 import com.healthcoco.healthcocopad.R;
+import com.healthcoco.healthcocopad.bean.AppointmentFeedback;
 import com.healthcoco.healthcocopad.bean.DoctorContactUs;
 import com.healthcoco.healthcocopad.bean.DoctorProfileToSend;
 import com.healthcoco.healthcocopad.bean.PersonalHistory;
@@ -1736,5 +1737,50 @@ public class WebDataServiceImpl implements GCMRefreshListener {
             showUserOffline(webServiceType, responseListener);
         }
     }
+
+    public void getBlogsList(WebServiceType webServiceType, Class<?> class1, String selectedPatientUserId, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        checkNetworkStatus(mApp);
+        if (HealthCocoConstants.isNetworkOnline) {
+            String url = webServiceType.getUrl();
+//                    + HealthCocoConstants.PARAM_PAGE_AND + pageNum
+//                    + HealthCocoConstants.PARAM_SIZE + maxSize;
+//            if (selectedPatientUserId != null)
+//                url = url + HealthCocoConstants.PARAM_USER_ID + selectedPatientUserId;
+            getResponse(webServiceType, class1, url, null, null, responseListener,
+                    errorListener);
+        } else {
+            showUserOffline(webServiceType, responseListener);
+        }
+    }
+
+    public void getHealthBlogDetail(Class<?> class1, String blogId, String selectedPatientUserId, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        WebServiceType webServiceType = WebServiceType.GET_HEALTH_BLOG_BY_ID;
+        checkNetworkStatus(mApp);
+        if (HealthCocoConstants.isNetworkOnline) {
+            String url = webServiceType.getUrl() + blogId;
+//            if (selectedPatientUserId != null)
+//                url = url
+//                        + "?"
+//                        + HealthCocoConstants.PARAM_USER_ID + selectedPatientUserId;
+            getResponse(webServiceType, class1, url, null, null, responseListener,
+                    errorListener);
+        } else {
+            showUserOffline(webServiceType, responseListener);
+        }
+    }
+
+    public void addAppointmentFeedback(Class<?> class1, AppointmentFeedback appointmentFeedback,
+                                       Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        WebServiceType webServiceType = WebServiceType.ADD_PRESCRIPTION_APPOINTMENT_FEEDBACK;
+        checkNetworkStatus(mApp);
+        if (HealthCocoConstants.isNetworkOnline) {
+            String url = webServiceType.getUrl();
+            getResponse(webServiceType, class1, url, appointmentFeedback, null, responseListener,
+                    errorListener);
+        } else {
+            showUserOffline(webServiceType, responseListener);
+        }
+    }
+
 
 }

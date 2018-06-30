@@ -33,6 +33,8 @@ import com.healthcoco.healthcocopad.fragments.AddInvoiceFragment;
 import com.healthcoco.healthcocopad.fragments.AddNewTemplateFragment;
 import com.healthcoco.healthcocopad.fragments.AddNewTreatmentFragment;
 import com.healthcoco.healthcocopad.fragments.AddReceiptFragment;
+import com.healthcoco.healthcocopad.fragments.AppointmentFeedbackFragment;
+import com.healthcoco.healthcocopad.fragments.BlogDetailFragment;
 import com.healthcoco.healthcocopad.fragments.CommonOpenUpPatientDetailFragment;
 import com.healthcoco.healthcocopad.fragments.CommonUiPermissionsFragment;
 import com.healthcoco.healthcocopad.fragments.ContactsListFragment;
@@ -40,6 +42,7 @@ import com.healthcoco.healthcocopad.fragments.DiagramsListFragment;
 import com.healthcoco.healthcocopad.fragments.DiseaseListFragment;
 import com.healthcoco.healthcocopad.fragments.EnlargedMapViewFragment;
 import com.healthcoco.healthcocopad.fragments.FeedbackFragment;
+import com.healthcoco.healthcocopad.fragments.FeedsFragment;
 import com.healthcoco.healthcocopad.fragments.InitialSyncFragment;
 import com.healthcoco.healthcocopad.fragments.LoginSignupFragment;
 import com.healthcoco.healthcocopad.fragments.NotificationResponseDataFragment;
@@ -236,9 +239,16 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
                 break;
             case PATIENT_REGISTRATION_TABS:
                 openFragment(ActionbarType.HIDDEN, new PatientRegistrationTabsFragment());
-//                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_CROSS, ActionbarLeftRightActionTypeDrawables.WITH_SAVE, R.string.prescription_ui_permission_details, new PatientRegistrationTabsFragment());
                 break;
-
+            case BLOGS:
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, R.string.blogs, new FeedsFragment());
+                break;
+            case BLOG_DETAIL:
+                openFragment(ActionbarType.HIDDEN, new BlogDetailFragment());
+                break;
+            case FEEDBACK_DOCTOR:
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.WITH_SUBMIT, fragmentType.getTitleId(), new AppointmentFeedbackFragment());
+                break;
         }
     }
 
@@ -395,6 +405,7 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
                 case ADD_INVOICE:
                 case ADD_RECEIPT:
                 case BOOK_APPOINTMENT:
+                case PATIENT_REGISTRATION_TABS:
                     showFinishConfirmationAlert();
                     break;
                 default:

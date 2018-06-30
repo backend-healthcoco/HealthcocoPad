@@ -177,6 +177,13 @@ public class HomeActivity extends HealthCocoActivity implements View.OnClickList
 
     public void initFragment(FragmentType fragmentType) {
         actionBarNormal.setVisibility(View.VISIBLE);
+        SlidingPaneLayout.LayoutParams params = new SlidingPaneLayout.LayoutParams(
+                SlidingPaneLayout.LayoutParams.MATCH_PARENT,
+                SlidingPaneLayout.LayoutParams.MATCH_PARENT
+        );
+        params.setMargins((int) getResources().getDimension(R.dimen.drawer_left_margin), 0, 0, 0);
+        layoutHomeActivity.setLayoutParams(params);
+
         HealthCocoFragment fragment = null;
         switch (fragmentType) {
             case PROFILE:
@@ -212,6 +219,14 @@ public class HomeActivity extends HealthCocoActivity implements View.OnClickList
                 fragment = new DoctorVideoListFragment();
                 break;
             case REGISTER:
+                actionBarNormal.setVisibility(View.GONE);
+                params = new SlidingPaneLayout.LayoutParams(
+                        SlidingPaneLayout.LayoutParams.MATCH_PARENT,
+                        SlidingPaneLayout.LayoutParams.MATCH_PARENT
+                );
+                params.setMargins(0, 0, 0, 0);
+                layoutHomeActivity.setLayoutParams(params);
+
                 fragment = new KioskFragment();
                 break;
             case HELP_IMPROVE:

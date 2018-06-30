@@ -65,7 +65,10 @@ public enum CommonOpenUpFragmentType {
     ENLARGED_MAP_VIEW_FRAGMENT(R.string.location),
     ADD_CLINICAL_NOTE(R.string.edit_clinical_note),
     SYNC(R.string.sync),
-    PATIENT_REGISTRATION_TABS(R.string.new_contact),;
+    PATIENT_REGISTRATION_TABS(R.string.new_contact),
+    BLOGS(R.string.blogs),
+    BLOG_DETAIL(R.string.blog_detail),
+    FEEDBACK_DOCTOR(R.string.feedback);
 
     private final int titleId;
 

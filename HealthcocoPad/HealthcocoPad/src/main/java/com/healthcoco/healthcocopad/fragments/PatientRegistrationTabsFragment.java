@@ -1,5 +1,6 @@
 package com.healthcoco.healthcocopad.fragments;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 
 import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
+import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.adapter.ContactsDetailViewPagerAdapter;
 import com.healthcoco.healthcocopad.custom.DummyTabFactory;
 import com.healthcoco.healthcocopad.enums.PatientRegistrationTabsType;
@@ -38,6 +40,7 @@ public class PatientRegistrationTabsFragment extends HealthCocoFragment implemen
     private Button btSave;
     private TextView tvTitle;
     private ArrayList<Fragment> fragmentsList = new ArrayList<>();
+
 
     @Nullable
     @Override
@@ -75,15 +78,9 @@ public class PatientRegistrationTabsFragment extends HealthCocoFragment implemen
     }
 
     public void initListeners() {
-//        tabhost.setOnTabChangedListener(this);
         mViewPager.addOnPageChangeListener(this);
         btSave.setOnClickListener(this);
-
-//        tabhost.getTabWidget().getChildTabViewAt(your_index).setEnabled(false);
-        tabhost.getTabWidget().setEnabled(false);
-
-        tabhost.setEnabled(false);
-//        tabhost.setOnTabChangedListener(null);
+        btCross.setOnClickListener(this);
     }
 
     private void initTabs() {
@@ -95,7 +92,7 @@ public class PatientRegistrationTabsFragment extends HealthCocoFragment implemen
                 PatientRegistrationTabsType.values()) {
             switch (registrationTabsType) {
                 case SEARCH_PATIENT:
-                    searchFragment = new PatientNumberSearchFragment();
+                    searchFragment = new PatientNumberSearchFragment(this);
                     addFragment(registrationTabsType, searchFragment);
                     break;
                 case BASIC_DETAILS:
@@ -114,6 +111,7 @@ public class PatientRegistrationTabsFragment extends HealthCocoFragment implemen
 
     private void addFragment(PatientRegistrationTabsType registrationTabsType, Fragment fragment) {
         tabhost.addTab(getTabSpec(registrationTabsType, fragment));
+        tabhost.getTabWidget().getChildTabViewAt(registrationTabsType.getTabPosition()).setEnabled(false);
     }
 
     private TabHost.TabSpec getTabSpec(PatientRegistrationTabsType registrationTabsType, Fragment fragment) {
@@ -133,7 +131,20 @@ public class PatientRegistrationTabsFragment extends HealthCocoFragment implemen
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
+        PatientRegistrationTabsType registrationTabsType = PatientRegistrationTabsType.values()[position];
+        switch (registrationTabsType) {
+            case SEARCH_PATIENT:
+                btSave.setVisibility(View.GONE);
+                break;
+            case BASIC_DETAILS:
+                btSave.setVisibility(View.VISIBLE);
+                btSave.setText(getString(R.string.next));
+                break;
+            case MORE_DETAIlS:
+                btSave.setVisibility(View.VISIBLE);
+                btSave.setText(getString(R.string.save));
+                break;
+        }
     }
 
     @Override
@@ -146,19 +157,17 @@ public class PatientRegistrationTabsFragment extends HealthCocoFragment implemen
 
     }
 
-//    @Override
-//    public void onTabChanged(String tabId) {
-////        mViewPager.setCurrentItem(tabhost.getCurrentTab());
-//    }
-
-    public void setCurrentItem(int tabPosition) {
-        if (mActivity != null)
-            mViewPager.setCurrentItem(tabPosition);
-    }
-
     @Override
     public void onClick(View v) {
-        nextButtonOnClick();
+        switch (v.getId()) {
+            case R.id.bt_save:
+                nextButtonOnClick();
+                break;
+            case R.id.bt_cross:
+                ((CommonOpenUpActivity) mActivity).onBackPressed();
+                break;
+
+        }
     }
 
     private void nextButtonOnClick() {
@@ -183,7 +192,17 @@ public class PatientRegistrationTabsFragment extends HealthCocoFragment implemen
 
     @Override
     public void readyToMoveNext(Object object) {
-        otherDeatilsFragment.initDataFromPreviousFragment(object);
+        int currentItem = mViewPager.getCurrentItem();
+        PatientRegistrationTabsType registrationTabsType = PatientRegistrationTabsType.values()[currentItem];
+        switch (registrationTabsType) {
+            case SEARCH_PATIENT:
+                basicDetailsFragment.initDataFromPreviousFragment(object);
+                break;
+            case BASIC_DETAILS:
+                otherDeatilsFragment.initDataFromPreviousFragment(object);
+                break;
+        }
         scrollToNext();
+
     }
 }

@@ -8,11 +8,11 @@ import com.healthcoco.healthcocopad.R;
  */
 public enum KioskSubItemType {
 
-    PATIENT_REGISTER("PATIENT_REGISTER", R.string.patient_registration, R.drawable.ic_profile, R.string.settings_no_groups_added),
-    DOCTOR_AND_CLINIC("DOCTOR_AND_CLINIC", R.string.about_doctor_and_clinic, R.drawable.ic_profile, R.string.settings_no_groups_added),
-    VIDEO("VIDEO", R.string.videos, R.drawable.ic_profile, R.string.settings_no_groups_added),
-    FEEDBACK("FEEDBACK", R.string.feedback, R.drawable.ic_profile, R.string.settings_no_groups_added),
-    BLOGS("BLOGS", R.string.blogs, R.drawable.ic_profile, R.string.settings_no_groups_added);
+    PATIENT_REGISTER("PATIENT_REGISTER", R.string.patient_registration, R.drawable.img_registration, R.string.settings_no_groups_added),
+    DOCTOR_AND_CLINIC("DOCTOR_AND_CLINIC", R.string.about_doctor_and_clinic, R.drawable.img_know, R.string.settings_no_groups_added),
+    VIDEO("VIDEO", R.string.videos, R.drawable.img_video, R.string.settings_no_groups_added),
+    FEEDBACK("FEEDBACK", R.string.feedback, R.drawable.img_feedback, R.string.settings_no_groups_added),
+    BLOGS("BLOGS", R.string.blogs, R.drawable.img_consent_form, R.string.settings_no_groups_added);
 
 
     private int titleId;
