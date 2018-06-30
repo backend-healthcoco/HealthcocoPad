@@ -1714,8 +1714,8 @@ public class WebDataServiceImpl implements GCMRefreshListener {
                     + "/" + hospitalId
                     + "/" + patientId
                     + "/" + appointmentId
-                    + "/" + status;/*
-                    + HealthCocoConstants.PARAM_IS_OBJECT_REQUIRED;*/
+                    + "/" + status
+                    + HealthCocoConstants.PARAM_IS_OBJECT_REQUIRED;
 
             getResponse(webServiceType, class1, url, null, null, responseListener,
                     errorListener);
