@@ -20,6 +20,9 @@ import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.Util;
 
+import static com.healthcoco.healthcocopad.fragments.QueueFragment.INTENT_GET_APPOINTMENT_LIST_LOCAL;
+import static com.healthcoco.healthcocopad.fragments.WaitingQueueFragment.INTENT_REFRESH_WAITING_QUEUE_DATA;
+
 /**
  * Created by Prashant on 12-05-2018.
  */
@@ -141,9 +144,13 @@ public class ChangeAppointmentStatusDialogFragment extends HealthCocoDialogFragm
             case CHANGE_APPOINTMENT_STATUS:
                 mActivity.hideLoading();
                 if (response.getData() != null) {
-                    boolean data = (boolean) response.getData();
-                    if (data)
-                        dismiss();
+                    CalendarEvents responseData = (CalendarEvents) response.getData();
+                    LocalDataServiceImpl.getInstance(mApp).addCalendarEventsUpdated(responseData);
+
+                    Util.sendBroadcast(mApp, INTENT_GET_APPOINTMENT_LIST_LOCAL);
+                   /* boolean data = (boolean) response.getData();
+                    if (data)*/
+                    dismiss();
                 }
                 break;
             default:

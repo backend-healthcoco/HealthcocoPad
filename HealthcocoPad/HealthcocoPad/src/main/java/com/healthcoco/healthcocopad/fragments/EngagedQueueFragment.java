@@ -236,14 +236,14 @@ public class EngagedQueueFragment extends HealthCocoFragment implements LocalDoI
                 case CHANGE_APPOINTMENT_STATUS:
                     mActivity.hideLoading();
                     if (response.getData() != null) {
-                        boolean data = (boolean) response.getData();
-                     /*   CalendarEvents responseData = (CalendarEvents) response.getData();
+//                        boolean data = (boolean) response.getData();
+                        CalendarEvents responseData = (CalendarEvents) response.getData();
                         LocalDataServiceImpl.getInstance(mApp).addCalendarEventsUpdated(responseData);
                         calendarEventsList.remove(calendarEvents);
                         calendarEventsHashMap.remove(calendarEvents.getUniqueId());
                         fromHashMapAndRefresh(calendarEventsList);
                         Util.sendBroadcast(mApp, INTENT_REFRESH_CHECKED_OUT_QUEUE_DATA);
-                */
+
                     }
                     break;
                 default:
