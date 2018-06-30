@@ -2,8 +2,7 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/white">
+    android:layout_height="match_parent">
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -11,14 +10,18 @@
         android:fillViewport="true"
         android:fitsSystemWindows="true"
         android:overScrollMode="never"
+        android:paddingBottom="@dimen/text_size_menu_notif_no"
+        android:paddingLeft="@dimen/image_width_height_upload_record"
+        android:paddingRight="@dimen/image_width_height_upload_record"
         android:scrollbars="none"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@drawable/shadow_popup_new"
             android:orientation="vertical"
-            android:padding="15dp">
+            android:padding="@dimen/report_thumbnail">
 
             <com.healthcoco.healthcocopad.views.MetricsLightTextView
                 android:id="@+id/tv_created_by_name"
@@ -26,22 +29,22 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:textColor="@color/black"
-                android:textSize="@dimen/text_size_feeds_created_time" />
+                android:textSize="@dimen/text_size_feeds_created_by" />
 
             <com.healthcoco.healthcocopad.views.MetricsLightTextView
                 android:id="@+id/tv_blog_article"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="20dp"
                 android:textColor="@color/black"
-                android:textSize="@dimen/text_size_blog_detail" />
+                android:textSize="@dimen/text_size_blog_detail_new" />
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="350dp"
         android:fitsSystemWindows="true"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 

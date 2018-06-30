@@ -226,10 +226,11 @@
     <dimen name="image_size_blogs_list_item_shares">20dp</dimen>
     <dimen name="height_width_like_button_feeds">50dp</dimen>
     <dimen name="text_size_profile_name">18sp</dimen>
-    <dimen name="image_width_feed_blog_image">280dp</dimen>
+    <dimen name="image_width_feed_blog_image">300dp</dimen>
     <dimen name="text_size_feeds_like_share">12sp</dimen>
     <dimen name="padding_like_share_fav_button">12dp</dimen>
     <dimen name="text_size_blog_detail">18sp</dimen>
+    <dimen name="text_size_blog_detail_new">20sp</dimen>
     <dimen name="text_size_feedback_doctor_lab_title">17sp</dimen>
 
 </resources>

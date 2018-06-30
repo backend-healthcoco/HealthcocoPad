@@ -13,6 +13,8 @@ import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.server.AppointmentSlot;
 import com.healthcoco.healthcocopad.bean.server.AvailableTimeSlots;
 import com.healthcoco.healthcocopad.bean.server.ClinicDoctorProfile;
+import com.healthcoco.healthcocopad.bean.server.DoctorClinicProfile;
+import com.healthcoco.healthcocopad.bean.server.DoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.RegisteredDoctorProfile;
 import com.healthcoco.healthcocopad.dialogFragment.BookAppointmentDialogFragment;
 import com.healthcoco.healthcocopad.enums.AppointmentSlotsType;
@@ -129,6 +131,12 @@ public class PopupListViewAdapter extends BaseAdapter {
                 if (object instanceof UnitType) {
                     UnitType unitType = (UnitType) object;
                     text = context.getResources().getString(unitType.getSymbolId());
+                }
+                break;
+            case DOCTOR_CLINIC_PROFILE:
+                if (object instanceof DoctorClinicProfile) {
+                    DoctorClinicProfile doctorClinicProfile = (DoctorClinicProfile) object;
+                    text = Util.getValidatedValue(doctorClinicProfile.getLocationName());
                 }
                 break;
             case STATUS_TYPE:
