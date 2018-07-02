@@ -408,7 +408,7 @@ public class CalendarFragment extends HealthCocoFragment implements WeekView.Eve
     }
 
     @Override
-    public boolean isPidHasDate() {
+    public Boolean isPidHasDate() {
         return pidHasDate;
     }
 }

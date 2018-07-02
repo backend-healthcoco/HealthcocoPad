@@ -81,7 +81,7 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
     private LinearLayout mainContainerGroups;
     private LinearLayout mainContainerNotes;
     private RegisteredPatientDetailsUpdated selectedPatient;
-    private boolean pidHasDate;
+    private Boolean pidHasDate;
     private User user;
     BroadcastReceiver historyListReceiver = new BroadcastReceiver() {
         @Override
@@ -304,7 +304,7 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
             }
         });
         tvPatientName.setText(selectedPatient.getLocalPatientName());
-        if (pidHasDate && (!Util.isNullOrBlank(selectedPatient.getPnum())))
+        if (!pidHasDate && (!Util.isNullOrBlank(selectedPatient.getPnum())))
             tvPatientId.setText(Util.getValidatedValue(selectedPatient.getPnum()));
         else
             tvPatientId.setText(Util.getValidatedValue(selectedPatient.getPid()));

@@ -106,7 +106,7 @@ public class AppointmentDetailsPopupWindow extends PopupWindow implements View.O
     private ImageView btDismiss;
     private QueueListitemlistener queueListitemlistener;
     private BookAppointmentFromScreenType screenType = APPOINTMENTS_QUEUE_RESCHEDULE;
-    private boolean pidHasDate;
+    private Boolean pidHasDate;
 
 
     public AppointmentDetailsPopupWindow(Context context, View view, Object object, QueueListitemlistener queueListitemlistener) {
@@ -254,7 +254,7 @@ public class AppointmentDetailsPopupWindow extends PopupWindow implements View.O
                 break;
 
             case R.id.bt_print_patient_card:
-                if (pidHasDate && (!Util.isNullOrBlank(calendarEvents.getPatient().getPnum())))
+                if (!pidHasDate && (!Util.isNullOrBlank(calendarEvents.getPatient().getPnum())))
                     calendarEvents.getPatient().setPid(Util.getValidatedValue(calendarEvents.getPatient().getPnum()));
 
                 mActivity.openPatientCardFragment(calendarEvents);
@@ -278,7 +278,7 @@ public class AppointmentDetailsPopupWindow extends PopupWindow implements View.O
             LogUtils.LOGD(TAG, "Unique Id " + patient.getUniqueId());
             tvContactNumber.setText(Util.getValidatedValue(patient.getMobileNumber()));
 
-            if (pidHasDate && (!Util.isNullOrBlank(patient.getPnum())))
+            if (!pidHasDate && (!Util.isNullOrBlank(patient.getPnum())))
                 tvPatientId.setText(Util.getValidatedValue(patient.getPnum()));
             else
                 tvPatientId.setText(Util.getValidatedValue(patient.getPid()));

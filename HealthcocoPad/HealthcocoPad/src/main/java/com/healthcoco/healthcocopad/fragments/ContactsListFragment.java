@@ -221,7 +221,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
     private List<Reference> referenceList;
     private ClinicDetailResponse selectedClinicProfile;
     private boolean mobileNumberOptional;
-    private boolean pidHasDate;
+    private Boolean pidHasDate;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -523,7 +523,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
     }
 
     @Override
-    public boolean isPidHasDate() {
+    public Boolean isPidHasDate() {
         return pidHasDate;
     }
 

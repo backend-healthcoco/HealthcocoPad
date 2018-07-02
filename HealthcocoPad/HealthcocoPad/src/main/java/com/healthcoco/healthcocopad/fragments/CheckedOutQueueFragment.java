@@ -88,7 +88,7 @@ public class CheckedOutQueueFragment extends HealthCocoFragment implements Local
     private User user;
     private long selectedMonthDayYearInMillis;
     private boolean receiversRegistered;
-    private boolean pidHasDate;
+    private Boolean pidHasDate;
 
 
     @Override
@@ -301,7 +301,7 @@ public class CheckedOutQueueFragment extends HealthCocoFragment implements Local
     }
 
     @Override
-    public boolean isPidHasDate() {
+    public Boolean isPidHasDate() {
         return pidHasDate;
     }
 

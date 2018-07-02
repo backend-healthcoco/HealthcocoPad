@@ -22,7 +22,7 @@ public interface ContactsItemOptionsListener {
 
     public boolean isMobileNumberOptional();
 
-    public boolean isPidHasDate();
+    public Boolean isPidHasDate();
 
     public void onEditClicked(RegisteredPatientDetailsUpdated patientDetailsUpdated);
 

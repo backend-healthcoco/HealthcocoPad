@@ -110,7 +110,7 @@ public class AddInvoiceFragment extends HealthCocoFragment implements LocalDoInB
     private DrugListFragment drugListFragment;
     private ScrollViewWithHeaderNewPrescriptionLayout svContainer;
     private boolean isFromVisit;
-    private boolean pidHasDate;
+    private Boolean pidHasDate;
 
 
     @Override
@@ -365,7 +365,7 @@ public class AddInvoiceFragment extends HealthCocoFragment implements LocalDoInB
                     init();
                     initTabsFragmentsList();
                     initViewPagerAdapter();
-                    if (pidHasDate && (!Util.isNullOrBlank(selectedPatient.getPnum())))
+                    if (!pidHasDate && (!Util.isNullOrBlank(selectedPatient.getPnum())))
                         selectedPatient.setPid(Util.getValidatedValue(selectedPatient.getPnum()));
                     initActionPatientDetailActionBar(PatientProfileScreenType.IN_ADD_VISIT_HEADER, view, selectedPatient);
                 }
