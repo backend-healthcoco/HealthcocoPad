@@ -127,7 +127,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
     private TextView tvGenderDate;
     private int ordinal;
     private boolean isOTPVerified;
-    private boolean pidHasDate;
+    private Boolean pidHasDate;
     private boolean receiversRegistered;
 
     @Override
@@ -493,7 +493,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
             }
         });
         tvPatientName.setText(selectedPatient.getLocalPatientName());
-        if (pidHasDate && (!Util.isNullOrBlank(selectedPatient.getPnum())))
+        if (!pidHasDate && (!Util.isNullOrBlank(selectedPatient.getPnum())))
             tvPatientId.setText(Util.getValidatedValue(selectedPatient.getPnum()));
         else
             tvPatientId.setText(Util.getValidatedValue(selectedPatient.getPid()));
@@ -670,7 +670,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
         return isOTPVerified;
     }
 
-    public boolean isPidHasDate() {
+    public Boolean isPidHasDate() {
         return pidHasDate;
     }
 

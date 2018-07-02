@@ -133,7 +133,7 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
     private boolean isPrescriptionTabClicked = false;
     private boolean isClinicalNotesTabClicked = false;
     private boolean isTreatmentTabClicked = false;
-    private boolean pidHasDate;
+    private Boolean pidHasDate;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -361,7 +361,7 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
                 case FRAGMENT_INITIALISATION:
                     if (user != null && selectedPatient != null) {
                         LogUtils.LOGD(TAG, "Selected patient " + selectedPatient.getLocalPatientName());
-                        if (pidHasDate && (!Util.isNullOrBlank(selectedPatient.getPnum())))
+                        if (!pidHasDate && (!Util.isNullOrBlank(selectedPatient.getPnum())))
                             selectedPatient.setPid(Util.getValidatedValue(selectedPatient.getPnum()));
                         initActionPatientDetailActionBar(PatientProfileScreenType.IN_ADD_VISIT_HEADER, view, selectedPatient);
                         if (!Util.isNullOrBlank(visitId)) {

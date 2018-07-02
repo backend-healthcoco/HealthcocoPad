@@ -73,7 +73,7 @@ public class ScheduledQueueFragment extends HealthCocoFragment implements LocalD
     private AppointmentStatusType appointmentStatusType = CONFIRM;
     private User user;
     private long selectedMonthDayYearInMillis;
-    private boolean pidHasDate;
+    private Boolean pidHasDate;
 
 
     @Override
@@ -303,7 +303,7 @@ public class ScheduledQueueFragment extends HealthCocoFragment implements LocalD
     }
 
     @Override
-    public boolean isPidHasDate() {
+    public Boolean isPidHasDate() {
         return pidHasDate;
     }
 }

@@ -90,7 +90,7 @@ public class WaitingQueueFragment extends HealthCocoFragment implements LocalDoI
     private User user;
     private long selectedMonthDayYearInMillis;
     private boolean receiversRegistered;
-    private boolean pidHasDate;
+    private Boolean pidHasDate;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -317,7 +317,7 @@ public class WaitingQueueFragment extends HealthCocoFragment implements LocalDoI
     }
 
     @Override
-    public boolean isPidHasDate() {
+    public Boolean isPidHasDate() {
         return pidHasDate;
     }
 

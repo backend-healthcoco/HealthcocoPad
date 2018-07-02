@@ -12,6 +12,6 @@ public interface QueueListitemlistener {
 
     public User getUser();
 
-    public boolean isPidHasDate();
+    public Boolean isPidHasDate();
 
 }

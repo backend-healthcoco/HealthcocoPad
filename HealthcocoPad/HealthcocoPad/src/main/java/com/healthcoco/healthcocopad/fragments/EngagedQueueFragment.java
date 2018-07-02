@@ -91,7 +91,7 @@ public class EngagedQueueFragment extends HealthCocoFragment implements LocalDoI
     private User user;
     private long selectedMonthDayYearInMillis;
     private boolean receiversRegistered;
-    private boolean pidHasDate;
+    private Boolean pidHasDate;
 
 
     @Override
@@ -319,7 +319,7 @@ public class EngagedQueueFragment extends HealthCocoFragment implements LocalDoI
     }
 
     @Override
-    public boolean isPidHasDate() {
+    public Boolean isPidHasDate() {
         return pidHasDate;
     }
 

@@ -65,7 +65,7 @@ public class QueueItemViewHolder extends HealthcocoComonRecylcerViewHolder imple
     private LinearLayout btEngage;
     private LinearLayout layoutListItem;
     private QueueListitemlistener queueListitemlistener;
-    private boolean pidHasDate;
+    private Boolean pidHasDate;
 
 
     public QueueItemViewHolder(HealthCocoActivity mActivity, View itemView, HealthcocoRecyclerViewItemClickListener itemClickListener, Object listenerObject) {
@@ -123,7 +123,7 @@ public class QueueItemViewHolder extends HealthcocoComonRecylcerViewHolder imple
                     if (calendarEvents.getPatient() != null) {
                         PatientCard patient = calendarEvents.getPatient();
                         patientName = Util.getValidatedValueOrNull(patient.getLocalPatientName());
-                        if (pidHasDate && (!Util.isNullOrBlank(calendarEvents.getPatient().getPnum())))
+                        if (!pidHasDate && (!Util.isNullOrBlank(calendarEvents.getPatient().getPnum())))
                             patientId = Util.getValidatedValue(calendarEvents.getPatient().getPnum());
                         else
                             patientId = Util.getValidatedValue(calendarEvents.getPatient().getPid());

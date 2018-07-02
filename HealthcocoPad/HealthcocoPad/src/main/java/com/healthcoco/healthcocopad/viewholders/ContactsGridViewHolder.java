@@ -49,7 +49,7 @@ public class ContactsGridViewHolder extends HealthCocoViewHolder implements OnCl
     private TextView tvGenderDate;
     private TextView tvPatientAge;
     private boolean mobileNumberOptional;
-    private boolean pidHasDate;
+    private Boolean pidHasDate;
     private LinearLayout layoutDiscarded;
 
 
@@ -73,7 +73,7 @@ public class ContactsGridViewHolder extends HealthCocoViewHolder implements OnCl
         tvContactName.setText(Util.getValidatedValue(objData.getLocalPatientName()));
         tvContactNumber.setText(Util.getValidatedValue(objData.getMobileNumber()));
 
-        if (pidHasDate && (!Util.isNullOrBlank(objData.getPnum())))
+        if (!pidHasDate && (!Util.isNullOrBlank(objData.getPnum())))
             tvPatientId.setText(Util.getValidatedValue(objData.getPnum()));
         else
             tvPatientId.setText(Util.getValidatedValue(objData.getPid()));
