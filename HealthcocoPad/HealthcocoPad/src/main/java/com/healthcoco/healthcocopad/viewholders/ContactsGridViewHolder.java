@@ -73,8 +73,11 @@ public class ContactsGridViewHolder extends HealthCocoViewHolder implements OnCl
         tvContactName.setText(Util.getValidatedValue(objData.getLocalPatientName()));
         tvContactNumber.setText(Util.getValidatedValue(objData.getMobileNumber()));
 
-        if (!pidHasDate && (!Util.isNullOrBlank(objData.getPnum())))
-            tvPatientId.setText(Util.getValidatedValue(objData.getPnum()));
+        if (pidHasDate != null)
+            if (!pidHasDate && (!Util.isNullOrBlank(objData.getPnum())))
+                tvPatientId.setText(Util.getValidatedValue(objData.getPnum()));
+            else
+                tvPatientId.setText(Util.getValidatedValue(objData.getPid()));
         else
             tvPatientId.setText(Util.getValidatedValue(objData.getPid()));
 

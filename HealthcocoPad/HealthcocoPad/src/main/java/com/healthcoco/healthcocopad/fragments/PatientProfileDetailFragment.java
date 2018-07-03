@@ -304,9 +304,12 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
             }
         });
         tvPatientName.setText(selectedPatient.getLocalPatientName());
-        if (!pidHasDate && (!Util.isNullOrBlank(selectedPatient.getPnum())))
-            tvPatientId.setText(Util.getValidatedValue(selectedPatient.getPnum()));
-        else
+        if (pidHasDate != null) {
+            if (!pidHasDate && (!Util.isNullOrBlank(selectedPatient.getPnum())))
+                tvPatientId.setText(Util.getValidatedValue(selectedPatient.getPnum()));
+            else
+                tvPatientId.setText(Util.getValidatedValue(selectedPatient.getPid()));
+        } else
             tvPatientId.setText(Util.getValidatedValue(selectedPatient.getPid()));
 
         String formattedGenderAge = Util.getFormattedGenderAge(selectedPatient);

@@ -326,8 +326,9 @@ public class AddReceiptFragment extends HealthCocoFragment implements LocalDoInB
         switch (response.getWebServiceType()) {
             case FRAGMENT_INITIALISATION:
                 if (user != null && selectedPatient != null) {
-                    if (!pidHasDate && (!Util.isNullOrBlank(selectedPatient.getPnum())))
-                        selectedPatient.setPid(Util.getValidatedValue(selectedPatient.getPnum()));
+                    if (pidHasDate != null)
+                        if (!pidHasDate && (!Util.isNullOrBlank(selectedPatient.getPnum())))
+                            selectedPatient.setPid(Util.getValidatedValue(selectedPatient.getPnum()));
                     initActionPatientDetailActionBar(PatientProfileScreenType.IN_ADD_VISIT_HEADER, view, selectedPatient);
                     initData();
                     getIntentData();

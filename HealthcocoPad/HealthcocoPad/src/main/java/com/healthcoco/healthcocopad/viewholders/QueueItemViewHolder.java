@@ -123,9 +123,12 @@ public class QueueItemViewHolder extends HealthcocoComonRecylcerViewHolder imple
                     if (calendarEvents.getPatient() != null) {
                         PatientCard patient = calendarEvents.getPatient();
                         patientName = Util.getValidatedValueOrNull(patient.getLocalPatientName());
-                        if (!pidHasDate && (!Util.isNullOrBlank(calendarEvents.getPatient().getPnum())))
-                            patientId = Util.getValidatedValue(calendarEvents.getPatient().getPnum());
-                        else
+                        if (pidHasDate != null) {
+                            if (!pidHasDate && (!Util.isNullOrBlank(calendarEvents.getPatient().getPnum())))
+                                patientId = Util.getValidatedValue(calendarEvents.getPatient().getPnum());
+                            else
+                                patientId = Util.getValidatedValue(calendarEvents.getPatient().getPid());
+                        } else
                             patientId = Util.getValidatedValue(calendarEvents.getPatient().getPid());
 
                         mobileNumber = Util.getValidatedValueOrNull(patient.getMobileNumber());

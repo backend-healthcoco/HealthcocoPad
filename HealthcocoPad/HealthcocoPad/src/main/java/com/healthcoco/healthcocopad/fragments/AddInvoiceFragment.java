@@ -365,8 +365,9 @@ public class AddInvoiceFragment extends HealthCocoFragment implements LocalDoInB
                     init();
                     initTabsFragmentsList();
                     initViewPagerAdapter();
-                    if (!pidHasDate && (!Util.isNullOrBlank(selectedPatient.getPnum())))
-                        selectedPatient.setPid(Util.getValidatedValue(selectedPatient.getPnum()));
+                    if (pidHasDate != null)
+                        if (!pidHasDate && (!Util.isNullOrBlank(selectedPatient.getPnum())))
+                            selectedPatient.setPid(Util.getValidatedValue(selectedPatient.getPnum()));
                     initActionPatientDetailActionBar(PatientProfileScreenType.IN_ADD_VISIT_HEADER, view, selectedPatient);
                 }
                 break;
