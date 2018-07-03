@@ -361,8 +361,9 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
                 case FRAGMENT_INITIALISATION:
                     if (user != null && selectedPatient != null) {
                         LogUtils.LOGD(TAG, "Selected patient " + selectedPatient.getLocalPatientName());
-                        if (!pidHasDate && (!Util.isNullOrBlank(selectedPatient.getPnum())))
-                            selectedPatient.setPid(Util.getValidatedValue(selectedPatient.getPnum()));
+                        if (pidHasDate != null)
+                            if (!pidHasDate && (!Util.isNullOrBlank(selectedPatient.getPnum())))
+                                selectedPatient.setPid(Util.getValidatedValue(selectedPatient.getPnum()));
                         initActionPatientDetailActionBar(PatientProfileScreenType.IN_ADD_VISIT_HEADER, view, selectedPatient);
                         if (!Util.isNullOrBlank(visitId)) {
                             new LocalDataBackgroundtaskOptimised(mActivity, GET_VISIT_DETAILS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);

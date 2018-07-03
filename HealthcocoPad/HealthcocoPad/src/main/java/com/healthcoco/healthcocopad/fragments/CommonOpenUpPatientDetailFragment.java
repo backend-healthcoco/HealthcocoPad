@@ -493,9 +493,12 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
             }
         });
         tvPatientName.setText(selectedPatient.getLocalPatientName());
-        if (!pidHasDate && (!Util.isNullOrBlank(selectedPatient.getPnum())))
-            tvPatientId.setText(Util.getValidatedValue(selectedPatient.getPnum()));
-        else
+        if (pidHasDate != null) {
+            if (!pidHasDate && (!Util.isNullOrBlank(selectedPatient.getPnum())))
+                tvPatientId.setText(Util.getValidatedValue(selectedPatient.getPnum()));
+            else
+                tvPatientId.setText(Util.getValidatedValue(selectedPatient.getPid()));
+        } else
             tvPatientId.setText(Util.getValidatedValue(selectedPatient.getPid()));
         String formattedGenderAge = Util.getFormattedGenderAge(selectedPatient);
         if (!Util.isNullOrBlank(formattedGenderAge)) {
