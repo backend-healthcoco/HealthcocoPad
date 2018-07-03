@@ -263,7 +263,7 @@
     <string name="recently_added">Recently Added</string>
     <string name="no_groups">No Groups</string>
     <string name="most_visited">Most Visited</string>
-    <string name="name_mobile_number">Name/Mobile Number</string>
+    <string name="name_mobile_number">Name/Mobile Number/Patient Id</string>
     <string name="dr">Dr.</string>
     <string name="error_loading_image">Error Loading Image</string>
     <string name="contact">Contact</string>

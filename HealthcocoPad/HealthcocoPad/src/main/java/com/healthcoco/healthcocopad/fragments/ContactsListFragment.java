@@ -1033,7 +1033,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
             case SEARCH_PATIENTS:
                 volleyResponseBean = LocalDataServiceImpl.getInstance(mApp)
                         .getSearchedPatientsListPageWise(WebServiceType.GET_CONTACTS, user,
-                                PAGE_NUMBER, MAX_SIZE, filterType, selectedSearchType, getSearchEditTextValue(selectedSearchType), null, null);
+                                PAGE_NUMBER, MAX_SIZE, filterType, selectedSearchType, getSearchEditTextValue(selectedSearchType), pidHasDate, null, null);
                 break;
             case SORT_LIST_BY_GROUP:
                 volleyResponseBean = LocalDataServiceImpl.getInstance(mApp)

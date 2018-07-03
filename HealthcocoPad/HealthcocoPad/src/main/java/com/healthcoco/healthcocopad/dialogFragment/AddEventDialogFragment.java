@@ -864,6 +864,7 @@ public class AddEventDialogFragment extends HealthCocoDialogFragment implements
             tvDoctorName.setText("Dr. " + user.getFirstName());
             tvDoctorName.setEnabled(false);
             isSingleDoctor = true;
+            clinicDoctorProfileList = (ArrayList<RegisteredDoctorProfile>) responseList;
         }
     }
 
