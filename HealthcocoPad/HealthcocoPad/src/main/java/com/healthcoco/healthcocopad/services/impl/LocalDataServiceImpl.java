@@ -2294,7 +2294,7 @@ public class LocalDataServiceImpl {
 
     public VolleyResponseBean getSearchedPatientsListPageWise(WebServiceType webServiceType, User user,
                                                               int pageNum, int maxSize, FilterItemType filterType, AdvanceSearchOptionsType advanceSearchOptionsType, String searchTerm,
-                                                              Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+                                                              Boolean pidHasDate, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
         volleyResponseBean.setWebServiceType(webServiceType);
         volleyResponseBean.setIsDataFromLocal(true);
@@ -2306,12 +2306,27 @@ public class LocalDataServiceImpl {
             if (advanceSearchOptionsType != null && !Util.isNullOrBlank(searchTerm)) {
                 switch (advanceSearchOptionsType) {
                     case GENERAL_SEARCH:
-                        whereCondition = whereCondition
-                                + " AND "
-                                + "(" + LocalDatabaseUtils.getSearchTermEqualsIgnoreCaseQuery(LocalDatabaseUtils.KEY_LOCAL_PATIENT_NAME, searchTerm)
-                                + " OR "
-                                + LocalDatabaseUtils.getSearchTermEqualsIgnoreCaseQuery(LocalDatabaseUtils.KEY_MOBILE_NUMBER, searchTerm)
-                                + ")";
+                        if (pidHasDate != null && (!pidHasDate)) {
+                            whereCondition = whereCondition
+                                    + " AND "
+                                    + "(" + LocalDatabaseUtils.getSearchTermEqualsIgnoreCaseQuery(LocalDatabaseUtils.KEY_LOCAL_PATIENT_NAME, searchTerm)
+                                    + " OR "
+                                    + LocalDatabaseUtils.getSearchTermEqualsIgnoreCaseQuery(LocalDatabaseUtils.KEY_PID, searchTerm)
+                                    + " OR "
+                                    + LocalDatabaseUtils.getSearchTermEqualsIgnoreCaseQuery(LocalDatabaseUtils.KEY_PNUM, searchTerm)
+                                    + " OR "
+                                    + LocalDatabaseUtils.getSearchTermEqualsIgnoreCaseQuery(LocalDatabaseUtils.KEY_MOBILE_NUMBER, searchTerm)
+                                    + ")";
+                        } else {
+                            whereCondition = whereCondition
+                                    + " AND "
+                                    + "(" + LocalDatabaseUtils.getSearchTermEqualsIgnoreCaseQuery(LocalDatabaseUtils.KEY_LOCAL_PATIENT_NAME, searchTerm)
+                                    + " OR "
+                                    + LocalDatabaseUtils.getSearchTermEqualsIgnoreCaseQuery(LocalDatabaseUtils.KEY_PID, searchTerm)
+                                    + " OR "
+                                    + LocalDatabaseUtils.getSearchTermEqualsIgnoreCaseQuery(LocalDatabaseUtils.KEY_MOBILE_NUMBER, searchTerm)
+                                    + ")";
+                        }
                         break;
                     case PATIENT_NAME:
                         whereCondition = whereCondition
@@ -2324,9 +2339,18 @@ public class LocalDataServiceImpl {
                                 + LocalDatabaseUtils.getSearchTermEqualsIgnoreCaseQuery(LocalDatabaseUtils.KEY_MOBILE_NUMBER, searchTerm);
                         break;
                     case PATIENT_ID:
-                        whereCondition = whereCondition
-                                + " AND "
-                                + LocalDatabaseUtils.getSearchTermEqualsIgnoreCaseQuery(LocalDatabaseUtils.KEY_PID, searchTerm);
+                        if (pidHasDate != null && (!pidHasDate)) {
+                            whereCondition = whereCondition
+                                    + " AND "
+                                    + "(" + LocalDatabaseUtils.getSearchTermEqualsIgnoreCaseQuery(LocalDatabaseUtils.KEY_PNUM, searchTerm)
+                                    + " OR "
+                                    + LocalDatabaseUtils.getSearchTermEqualsIgnoreCaseQuery(LocalDatabaseUtils.KEY_PID, searchTerm)
+                                    + ")";
+                        } else {
+                            whereCondition = whereCondition
+                                    + " AND "
+                                    + LocalDatabaseUtils.getSearchTermEqualsIgnoreCaseQuery(LocalDatabaseUtils.KEY_PID, searchTerm);
+                        }
                         break;
                     case REFERENCE:
                         whereCondition = whereCondition

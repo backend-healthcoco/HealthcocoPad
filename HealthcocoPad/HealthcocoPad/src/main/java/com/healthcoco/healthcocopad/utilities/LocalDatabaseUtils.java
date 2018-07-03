@@ -40,6 +40,7 @@ public class LocalDatabaseUtils {
     public static final String KEY_LOCAL_PATIENT_NAME = "local_patient_name";
     public static final String KEY_MOBILE_NUMBER = "mobile_number";
     public static final String KEY_PID = "pid";
+    public static final String KEY_PNUM = "pnum";
     public static final String KEY_EMAIL_ADDRESS = "email_address";
     public static final String KEY_REFERENCE = "reference";
     public static final String KEY_REFERRED_BY = "referred_by";
