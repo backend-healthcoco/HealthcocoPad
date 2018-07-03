@@ -111,7 +111,6 @@ import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.fragments.DoctorProfileFragment;
 import com.healthcoco.healthcocopad.fragments.InitialSyncFragment;
 import com.healthcoco.healthcocopad.fragments.MenuDrawerFragment;
-import com.healthcoco.healthcocopad.listeners.AppointmentDetailsPopupListener;
 import com.healthcoco.healthcocopad.listeners.DoctorListPopupWindowListener;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
 import com.healthcoco.healthcocopad.listeners.QueueListitemlistener;
@@ -1609,6 +1608,19 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
     public void openGallery(HealthCocoFragment currentFragment) {
         Intent intent = new Intent("android.intent.action.PICK", MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         currentFragment.startActivityForResult(intent, HealthCocoConstants.REQUEST_CODE_GALLERY);
+    }
+
+    public void selectVideoFromGallery(HealthCocoDialogFragment currentFragment) {
+        Intent intent;
+        if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
+            intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
+        } else {
+            intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Video.Media.INTERNAL_CONTENT_URI);
+        }
+        intent.setType("video/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        intent.putExtra("return-data", true);
+        currentFragment.startActivityForResult(intent, HealthCocoConstants.REQUEST_CODE_VIDEO_GALLERY);
     }
 
     public Uri openCamera(HealthCocoDialogFragment currentFragment, String reportImage) {

@@ -34,6 +34,7 @@ import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocopad.dialogFragment.NextReviewOnDialogFragment;
 import com.healthcoco.healthcocopad.dialogFragment.UploadReportDialogFragment;
+import com.healthcoco.healthcocopad.dialogFragment.UploadVideoDialogFragment;
 import com.healthcoco.healthcocopad.enums.CommonListDialogType;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.DialogType;
@@ -194,7 +195,7 @@ public class PatientReportsDetailFragment extends HealthCocoFragment implements 
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.fl_bt_add_report:
-                openDialogFragment(new UploadReportDialogFragment(), REQUEST_CODE_UPLOAD_REPORT);
+                openDialogFragment(new UploadVideoDialogFragment(), REQUEST_CODE_UPLOAD_REPORT);
 //                openDialogFragment(DialogType.SELECT_IMAGE, this);
 
 //                try {

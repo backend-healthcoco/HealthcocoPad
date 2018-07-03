@@ -31,6 +31,8 @@ public enum WebServiceType {
 
     GET_VIDEO(Method.GET, "video/get"),
 
+    ADD_VIDEO(Method.POST, "video/add"),
+
     GET_PRESCRIPTION(Method.GET, "prescription/"),
     GET_REPORTS_UPDATED(Method.GET, "records/"),
     GET_CLINICAL_NOTES(Method.GET, "clinicalNotes/"),

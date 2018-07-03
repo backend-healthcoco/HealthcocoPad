@@ -17,7 +17,7 @@ import android.widget.TextView;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
-import com.healthcoco.healthcocopad.adapter.DoctorVideosListAdapter;
+import com.healthcoco.healthcocopad.adapter.PatientEducationVideosListAdapter;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.DoctorVideos;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
@@ -45,17 +45,17 @@ import java.util.Locale;
  * Created by Shreshtha on 31-07-2017.
  */
 
-public class DoctorVideoListFragment extends HealthCocoFragment implements View.OnClickListener,
+public class PatientEducationVideoListFragment extends HealthCocoFragment implements View.OnClickListener,
         LocalDoInBackgroundListenerOptimised, TextWatcher, SwipeRefreshLayout.OnRefreshListener, LoadMorePageListener, AdapterView.OnItemClickListener {
 
     private ListViewLoadMore lvVideos;
     private GridView gvVideos;
     private User user;
-    private ArrayList<DoctorVideos> doctorVideosList;
+    private ArrayList<PatientEducationVideo> educationVideoList;
     private TextView tvNoVideos;
     //    private SwipeRefreshLayout swipeRefreshLayout;
     private ProgressBar progressLoading;
-    private DoctorVideosListAdapter adapter;
+    private PatientEducationVideosListAdapter adapter;
     private boolean isEndOfListAchieved;
     private boolean isInitialLoading;
     private String lastTextSearched;
@@ -103,7 +103,7 @@ public class DoctorVideoListFragment extends HealthCocoFragment implements View.
     }
 
     private void initAdapters() {
-        adapter = new DoctorVideosListAdapter(mActivity);
+        adapter = new PatientEducationVideosListAdapter(mActivity);
         gvVideos.setAdapter(adapter);
     }
 
@@ -154,16 +154,16 @@ public class DoctorVideoListFragment extends HealthCocoFragment implements View.
                     break;
                 case GET_VIDEO:
                     if (response.isDataFromLocal()) {
-                        doctorVideosList = (ArrayList<DoctorVideos>) (ArrayList<?>) response.getDataList();
+                        educationVideoList = (ArrayList<PatientEducationVideo>) (ArrayList<?>) response.getDataList();
 
-                        if (!Util.isNullOrEmptyList(doctorVideosList)) {
-                            LogUtils.LOGD(TAG, "Success onResponse list Size in page " + doctorVideosList.size());
+                        if (!Util.isNullOrEmptyList(educationVideoList)) {
+                            LogUtils.LOGD(TAG, "Success onResponse list Size in page " + educationVideoList.size());
                         }
                         if (!response.isFromLocalAfterApiSuccess() && response.isUserOnline()) {
                             getVideoList(true);
                             return;
                         }
-                        notifyAdapter(doctorVideosList);
+                        notifyAdapter(educationVideoList);
                     } else if (!Util.isNullOrEmptyList(response.getDataList())) {
                         new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_VIDEOS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
                         response.setIsFromLocalAfterApiSuccess(true);
@@ -197,10 +197,10 @@ public class DoctorVideoListFragment extends HealthCocoFragment implements View.
     private void getVideoList(boolean showLoading) {
         if (showLoading)
             mActivity.showLoading(false);
-        WebDataServiceImpl.getInstance(mApp).getVideos(PatientEducationVideo.class, WebServiceType.GET_VIDEO, user.getUniqueId(), this, this);
+        WebDataServiceImpl.getInstance(mApp).getPatientEducationVideos(PatientEducationVideo.class, WebServiceType.GET_VIDEO, user.getUniqueId(), this, this);
     }
 
-    private void notifyAdapter(ArrayList<DoctorVideos> list) {
+    private void notifyAdapter(ArrayList<PatientEducationVideo> list) {
         if (!Util.isNullOrEmptyList(list)) {
             gvVideos.setVisibility(View.VISIBLE);
             tvNoVideos.setVisibility(View.GONE);
@@ -226,14 +226,14 @@ public class DoctorVideoListFragment extends HealthCocoFragment implements View.
     public void afterTextChanged(Editable s) {
         String search = String.valueOf(s).toLowerCase(Locale.ENGLISH);
         ArrayList tempList = new ArrayList<>();
-        if (!Util.isNullOrEmptyList(doctorVideosList)) {
+        if (!Util.isNullOrEmptyList(educationVideoList)) {
             if (search.length() == 0) {
-                tempList.addAll(doctorVideosList);
+                tempList.addAll(educationVideoList);
             } else {
-                for (DoctorVideos doctorVideos : doctorVideosList) {
-                    if (!Util.isNullOrBlank(doctorVideos.getName()) && doctorVideos.getName().toLowerCase(Locale.ENGLISH)
+                for (PatientEducationVideo patientEducationVideo : educationVideoList) {
+                    if (!Util.isNullOrBlank(patientEducationVideo.getName()) && patientEducationVideo.getName().toLowerCase(Locale.ENGLISH)
                             .contains(search)) {
-                        tempList.add(doctorVideos);
+                        tempList.add(patientEducationVideo);
                     }
                 }
             }
