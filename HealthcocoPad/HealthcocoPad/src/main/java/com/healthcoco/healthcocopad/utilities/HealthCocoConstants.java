@@ -95,6 +95,7 @@ public class HealthCocoConstants {
     public static final int REQUEST_CODE_LOCATION_ADMIN = 210;
     public static final int RESULT_CODE_LOCATION_ADMIN = 211;
     public static final int REQUEST_CODE_VIDEO_GALLERY = 212;
+    public static final int REQUEST_CODE_CATEGORY = 213;
 
 
     public static final String PARAM_SIZE = "&size=";

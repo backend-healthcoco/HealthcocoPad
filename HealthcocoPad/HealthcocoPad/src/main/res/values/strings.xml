@@ -1237,6 +1237,7 @@
     <string name="treatment_satisfaction">Treatment satisfaction</string>
     <string name="value_of_money">Value for money</string>
     <string name="wait_time">Wait time</string>
+    <string name="category">Category</string>
 
 
 </resources>

@@ -43,9 +43,12 @@ import com.healthcoco.healthcocopad.utilities.ImageUtil;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
 
+import org.parceler.Parcels;
+
 import java.io.IOException;
 import java.util.ArrayList;
 
+import static com.healthcoco.healthcocopad.dialogFragment.SelectCategoryFragment.TAG_SELECTED_CATEGORY;
 import static com.healthcoco.healthcocopad.utilities.FileChooser.getPath;
 
 /**
@@ -61,6 +64,7 @@ public class UploadVideoDialogFragment extends HealthCocoDialogFragment implemen
     };
     private EditText editTitle;
     private EditText editDescription;
+    private TextView tvCategory;
     private Uri imageUri;
     private ReportDetailsToSend reportDetailsToSend;
     private User user;
@@ -69,6 +73,7 @@ public class UploadVideoDialogFragment extends HealthCocoDialogFragment implemen
     private TextView tvSelectFile;
     private TextView tvFileName;
     private LinearLayout containerFileDetails;
+    private ArrayList<String> categoryList = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -104,6 +109,7 @@ public class UploadVideoDialogFragment extends HealthCocoDialogFragment implemen
         editTitle = (EditText) view.findViewById(R.id.edit_title);
         editDescription = (EditText) view.findViewById(R.id.edit_description);
         tvFileName = (TextView) view.findViewById(R.id.tv_file_name);
+        tvCategory = (TextView) view.findViewById(R.id.tv_category);
         containerFileDetails = (LinearLayout) view.findViewById(R.id.container_file_details);
         containerFileDetails.setVisibility(View.GONE);
     }
@@ -113,6 +119,7 @@ public class UploadVideoDialogFragment extends HealthCocoDialogFragment implemen
         tvSelectFile.setOnClickListener(this);
         initSaveCancelButton(this);
         initActionbarTitle(getResources().getString(R.string.upload_record));
+        tvCategory.setOnClickListener(this);
     }
 
     @Override
@@ -147,7 +154,15 @@ public class UploadVideoDialogFragment extends HealthCocoDialogFragment implemen
                 Util.checkNetworkStatus(mActivity);
                 validateData();
                 break;
+            case R.id.tv_category:
+                openSelectCategoryFragment();
+                break;
         }
+    }
+
+    private void openSelectCategoryFragment() {
+
+        mActivity.openCategoryFragment(TAG_SELECTED_CATEGORY, categoryList, this, HealthCocoConstants.REQUEST_CODE_CATEGORY);
     }
 
     private void clearPreviousAlerts() {
@@ -215,24 +230,25 @@ public class UploadVideoDialogFragment extends HealthCocoDialogFragment implemen
                     } else {
 //                        Toast.makeText(getApplicationContext(), "Failed to select video", Toast.LENGTH_LONG).show();
                     }
-                }
-                if (requestCode == HealthCocoConstants.REQUEST_CODE_CAMERA && imageUri != null) {
-                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(mActivity.getContentResolver(), imageUri);
-                    if (bitmap != null) {
-                        showImage(imageUri.getPath(), imageUri);
+                } else if (requestCode == HealthCocoConstants.REQUEST_CODE_CATEGORY) {
+                    categoryList = Parcels.unwrap(data.getParcelableExtra(TAG_SELECTED_CATEGORY));
+                    if (!Util.isNullOrEmptyList(categoryList)) {
+                        setSelectedCategory(categoryList);
                     }
-                } else if (requestCode == HealthCocoConstants.REQUEST_CODE_GALLERY && data.getData() != null) {
-                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(mActivity.getContentResolver(), data.getData());
-                    if (bitmap != null) {
-                        showImage(ImageUtil.getRealPathFromURI(mActivity, data.getData()), data.getData());
-                    }
-                } else if (requestCode == HealthCocoConstants.REQUEST_CODE_FILE && data.getData() != null) {
-                    showImage(ImageUtil.getRealPathFromURI(mActivity, data.getData()), data.getData());
                 }
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
+    }
+
+    private void setSelectedCategory(ArrayList<String> categoryList) {
+        String categoty = "";
+        for (String s : categoryList) {
+            categoty = categoty + s + ", ";
+        }
+        categoty = categoty.substring(0, categoty.length() - 2);
+        tvCategory.setText(categoty);
     }
 
     private void showImage(String filePath, Uri imageUri) {
