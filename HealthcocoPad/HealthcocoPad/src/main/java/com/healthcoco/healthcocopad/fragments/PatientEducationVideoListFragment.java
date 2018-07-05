@@ -3,6 +3,7 @@ package com.healthcoco.healthcocopad.fragments;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -19,11 +20,11 @@ import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.adapter.PatientEducationVideosListAdapter;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
-import com.healthcoco.healthcocopad.bean.server.DoctorVideos;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.PatientEducationVideo;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
+import com.healthcoco.healthcocopad.dialogFragment.UploadVideoDialogFragment;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
@@ -59,6 +60,8 @@ public class PatientEducationVideoListFragment extends HealthCocoFragment implem
     private boolean isEndOfListAchieved;
     private boolean isInitialLoading;
     private String lastTextSearched;
+    private FloatingActionButton floatingActionButton;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -90,6 +93,8 @@ public class PatientEducationVideoListFragment extends HealthCocoFragment implem
 //        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
 //        swipeRefreshLayout.setColorSchemeResources(R.color.blue_action_bar);
         progressLoading = (ProgressBar) view.findViewById(R.id.progress_loading);
+        floatingActionButton = (FloatingActionButton) view.findViewById(R.id.fl_bt_add_video);
+
         initEditSearchView(R.string.search_videos, this, this);
         view.findViewById(R.id.bt_advance_search).setVisibility(View.GONE);
     }
@@ -98,6 +103,7 @@ public class PatientEducationVideoListFragment extends HealthCocoFragment implem
     public void initListeners() {
 //        lvVideos.setLoadMoreListener(this);
         gvVideos.setOnItemClickListener(this);
+        floatingActionButton.setOnClickListener(this);
 //        swipeRefreshLayout.setOnRefreshListener(this);
 //        lvVideos.setSwipeRefreshLayout(swipeRefreshLayout);
     }
@@ -124,12 +130,12 @@ public class PatientEducationVideoListFragment extends HealthCocoFragment implem
                     user = doctor.getUser();
                 }
                 break;
-            case ADD_VIDEOS:
-                LocalDataServiceImpl.getInstance(mApp).addVideos(user.getUniqueId(),
-                        (ArrayList<DoctorVideos>) (ArrayList<?>) response.getDataList());
+//            case ADD_VIDEOS:
+//                LocalDataServiceImpl.getInstance(mApp).addVideos(user.getUniqueId(),
+//                        (ArrayList<DoctorVideos>) (ArrayList<?>) response.getDataList());
             case GET_VIDEOS:
                 volleyResponseBean = LocalDataServiceImpl.getInstance(mApp)
-                        .getVideosResponse(WebServiceType.GET_VIDEO, user.getUniqueId(), null, null);
+                        .getEducationVideosResponse(WebServiceType.GET_VIDEO, user.getUniqueId(), null, null);
                 break;
         }
         if (volleyResponseBean == null)
@@ -159,10 +165,10 @@ public class PatientEducationVideoListFragment extends HealthCocoFragment implem
                         if (!Util.isNullOrEmptyList(educationVideoList)) {
                             LogUtils.LOGD(TAG, "Success onResponse list Size in page " + educationVideoList.size());
                         }
-                        if (!response.isFromLocalAfterApiSuccess() && response.isUserOnline()) {
+//                        if (!response.isFromLocalAfterApiSuccess() && response.isUserOnline()) {
                             getVideoList(true);
-                            return;
-                        }
+//                            return;
+//                        }
                         notifyAdapter(educationVideoList);
                     } else if (!Util.isNullOrEmptyList(response.getDataList())) {
                         new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_VIDEOS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
@@ -243,12 +249,16 @@ public class PatientEducationVideoListFragment extends HealthCocoFragment implem
 
     @Override
     public void onClick(View v) {
-
+        switch (v.getId()) {
+            case R.id.fl_bt_add_video:
+                openDialogFragment(new UploadVideoDialogFragment(), 0);
+                break;
+        }
     }
 
     @Override
     public void onRefresh() {
-        getVideoList(false);
+//        getVideoList(false);
     }
 
     @Override
@@ -268,9 +278,9 @@ public class PatientEducationVideoListFragment extends HealthCocoFragment implem
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         try {
             Object object = parent.getAdapter().getItem(position);
-            if (object instanceof DoctorVideos) {
-                DoctorVideos doctorVideos = (DoctorVideos) object;
-                openVideoViewActivity(CommonOpenUpFragmentType.PLAY_VIDEO, HealthCocoConstants.TAG_DOCTOR_VIDEO_DATA, doctorVideos,
+            if (object instanceof PatientEducationVideo) {
+                PatientEducationVideo patientEducationVideo = (PatientEducationVideo) object;
+                openVideoViewActivity(CommonOpenUpFragmentType.PLAY_VIDEO, HealthCocoConstants.TAG_EDUCATION_VIDEO_DATA, patientEducationVideo,
                         HealthCocoConstants.REQUEST_CODE_PLAY_VIDEO);
             }
         } catch (Exception e) {

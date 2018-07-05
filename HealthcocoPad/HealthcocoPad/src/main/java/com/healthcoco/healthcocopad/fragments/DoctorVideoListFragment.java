@@ -197,7 +197,7 @@ public class DoctorVideoListFragment extends HealthCocoFragment implements View.
     private void getVideoList(boolean showLoading) {
         if (showLoading)
             mActivity.showLoading(false);
-        WebDataServiceImpl.getInstance(mApp).getVideos(PatientEducationVideo.class, WebServiceType.GET_VIDEO, user.getUniqueId(), this, this);
+        WebDataServiceImpl.getInstance(mApp).getVideos(DoctorVideos.class, WebServiceType.GET_VIDEO, user.getUniqueId(), this, this);
     }
 
     private void notifyAdapter(ArrayList<DoctorVideos> list) {

@@ -5395,6 +5395,51 @@ public class LocalDataServiceImpl {
         return volleyResponseBean;
     }
 
+
+    public void addEducationVideoList(String doctorId, ArrayList<PatientEducationVideo> videosArrayList) {
+        try {
+            for (PatientEducationVideo patientEducationVideo : videosArrayList) {
+                addEducationVideo(patientEducationVideo, doctorId);
+            }
+        } catch (Exception e) {
+            Log.i(TAG, "Error in saving in transaction " + e.getMessage());
+        }
+    }
+
+    public void addEducationVideo(PatientEducationVideo patientEducationVideo, String doctorId) {
+        patientEducationVideo.setCustomUniqueId(doctorId);
+        patientEducationVideo.setTagsJsonString(getJsonFromObject(patientEducationVideo.getTags()));
+        patientEducationVideo.save();
+    }
+
+
+    public VolleyResponseBean getEducationVideosResponse(WebServiceType webServiceType, String
+            doctorId, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener
+                                                                 errorListener) {
+        VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
+        volleyResponseBean.setWebServiceType(webServiceType);
+        volleyResponseBean.setIsDataFromLocal(true);
+        volleyResponseBean.setIsUserOnline(HealthCocoConstants.isNetworkOnline);
+        try {
+            String whereCondition = "Select * from " + StringUtil.toSQLName(PatientEducationVideo.class.getSimpleName())
+                    + " where "
+                    + LocalDatabaseUtils.KEY_CUSTOM_UNIQUE_ID + "=\"" + doctorId + "\"";
+
+            LogUtils.LOGD(TAG, "Select Query " + whereCondition);
+            List<PatientEducationVideo> videosList = SugarRecord.findWithQuery(PatientEducationVideo.class, whereCondition);
+            for (PatientEducationVideo educationVideo : videosList) {
+                educationVideo.setTags((ArrayList<String>) (Object) getObjectsListFronJson(educationVideo.getTagsJsonString()));
+            }
+            volleyResponseBean.setDataList(getObjectsListFromMap(videosList));
+            if (responseListener != null)
+                responseListener.onResponse(volleyResponseBean);
+        } catch (Exception e) {
+            e.printStackTrace();
+            showErrorLocal(volleyResponseBean, errorListener);
+        }
+        return volleyResponseBean;
+    }
+
     public VolleyResponseBean getPrintSettingsResponse(WebServiceType webServiceType, String
             doctorId, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener
                                                                errorListener) {

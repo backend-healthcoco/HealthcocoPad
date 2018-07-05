@@ -137,6 +137,7 @@ public class HealthCocoConstants {
     public static final String PARAM_VISIT_FOR = "&visitFor=";
     public static final String PARAM_ACTIVE_TRUE = "?active=true";
     public static final String TAG_DOCTOR_VIDEO_DATA = "doctorVideo";
+    public static final String TAG_EDUCATION_VIDEO_DATA = "educationVideo";
     public static final String PARAM_MATRIX_DOCTOR_ID = ";doctorId=";
     public static final String PARAM_MATRIX_LOCATION_ID = ";?locationId=";
     public static final String TAG_LOCATION_ID = "?locationId=";

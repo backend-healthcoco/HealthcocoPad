@@ -27,7 +27,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:layout_weight="30"
-                    android:text="@string/attachment"
+                    android:text="@string/file"
                     android:textColor="@color/black"
                     android:textSize="@dimen/text_size_upload_record_dialog" />
 
@@ -45,7 +45,7 @@
                         android:layout_toRightOf="@+id/tv_select_image"
                         android:background="@drawable/shape_rounded_corners_grey_border_solid_white"
                         android:padding="10dp"
-                        android:text="@string/icon_add_file"
+                        android:text="@string/icon_select_file"
                         android:textColor="@drawable/text_selector_grey_blue"
                         android:textSize="@dimen/text_size_upload_record_dialog" />
 
@@ -87,7 +87,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:layout_weight="30"
-                    android:text="@string/image_label"
+                    android:text="@string/title"
                     android:textColor="@color/black"
                     android:textSize="@dimen/text_size_upload_record_dialog" />
 
@@ -99,7 +99,7 @@
                     android:layout_weight="70"
                     android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
                     android:gravity="start"
-                    android:hint="@string/image_label"
+                    android:hint="@string/video_title"
                     android:maxLines="1"
                     android:padding="10dp"
                     android:textColorHint="@color/grey_hint_color"
@@ -116,7 +116,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:layout_weight="30"
-                    android:text="@string/image_description"
+                    android:text="@string/description"
                     android:textColor="@color/black"
                     android:textSize="@dimen/text_size_upload_record_dialog" />
 
@@ -128,7 +128,7 @@
                     android:layout_weight="70"
                     android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
                     android:gravity="start"
-                    android:hint="@string/image_description"
+                    android:hint="@string/description"
                     android:lines="4"
                     android:padding="10dp"
                     android:singleLine="false"
@@ -158,14 +158,63 @@
                     android:layout_weight="70"
                     android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
                     android:gravity="start"
-                    android:hint="@string/image_label"
+                    android:hint="@string/category"
                     android:maxLines="1"
                     android:padding="10dp"
                     android:textColorHint="@color/grey_hint_color"
                     android:textSize="@dimen/text_size_upload_record_dialog" />
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/layout_margin"
+                android:layout_marginTop="@dimen/layout_margin"
+                android:orientation="horizontal">
 
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:layout_weight="30"
+                    android:text="@string/store_file"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_upload_record_dialog" />
+
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/layout_margin"
+                    android:layout_weight="70"
+                    android:orientation="horizontal">
+
+
+                    <com.healthcoco.healthcocopad.views.FontAwesomeCheckbox
+                        android:id="@+id/cb_local"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/transparent"
+                        android:button="@android:color/transparent"
+                        android:paddingLeft="1dp"
+                        android:text="@string/text_check_in_sqaure_save_to_local"
+                        android:textColor="@drawable/text_light_grey_normal_blue_selected"
+                        android:textSize="@dimen/text_size_book_appointment_dialog_fragment" />
+
+                    <com.healthcoco.healthcocopad.views.FontAwesomeCheckbox
+                        android:id="@+id/cb_server"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/item_contact_padding"
+                        android:background="@android:color/transparent"
+                        android:button="@android:color/transparent"
+                        android:paddingLeft="1dp"
+                        android:text="@string/text_check_in_sqaure_upload_to_sever"
+                        android:textColor="@drawable/text_light_grey_normal_blue_selected"
+                        android:textSize="@dimen/text_size_book_appointment_dialog_fragment" />
+
+                </LinearLayout>
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

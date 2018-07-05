@@ -1238,6 +1238,11 @@
     <string name="value_of_money">Value for money</string>
     <string name="wait_time">Wait time</string>
     <string name="category">Category</string>
+    <string name="failed_to_select_videos">Failed to select video</string>
+    <string name="store_file">Store File</string>
+    <string name="video_title">Video Title</string>
+    <string name="description">Description</string>
+    <string name="upload_video">Upload Video</string>
 
 
 </resources>

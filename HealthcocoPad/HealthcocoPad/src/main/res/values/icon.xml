@@ -89,5 +89,9 @@
     <string name="icon_email">&#xf0e0;</string>
     <string name="icon_calendar">&#xf073;</string>
     <string name="icon_user">&#xf007;</string>
+    <string name="text_check_in_sqaure_upload_to_sever">&#xf046;&#160;Upload to Server&#160;</string>
+    <string name="text_check_in_sqaure_save_to_local">&#xf046;&#160;Save in Local&#160;</string>
+    <string name="icon_select_file">&#xf067;&#160;Select File</string>
+
 
 </resources>

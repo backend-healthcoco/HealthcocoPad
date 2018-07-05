@@ -6,11 +6,14 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -29,6 +32,7 @@ import com.healthcoco.healthcocopad.bean.server.Records;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.enums.DialogType;
+import com.healthcoco.healthcocopad.enums.HealthCocoFileType;
 import com.healthcoco.healthcocopad.enums.OptionsType;
 import com.healthcoco.healthcocopad.enums.ReportFileType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
@@ -37,6 +41,7 @@ import com.healthcoco.healthcocopad.listeners.CommonOptionsDialogItemClickListen
 import com.healthcoco.healthcocopad.multipart.MultipartUploadRequestAsynTask;
 import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
+import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
 import com.healthcoco.healthcocopad.utilities.EditTextTextViewErrorUtil;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.ImageUtil;
@@ -45,7 +50,12 @@ import com.healthcoco.healthcocopad.utilities.Util;
 
 import org.parceler.Parcels;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 
 import static com.healthcoco.healthcocopad.dialogFragment.SelectCategoryFragment.TAG_SELECTED_CATEGORY;
@@ -62,9 +72,13 @@ public class UploadVideoDialogFragment extends HealthCocoDialogFragment implemen
             "image/*", "application/pdf", "text/*",
             "application/rtf", "application/msword", "application/vnd.ms-powerpoint"
     };
+    String selectedVideoPath;
+    String pathToSaveAndGet;
     private EditText editTitle;
     private EditText editDescription;
     private TextView tvCategory;
+    private CheckBox cbLocal;
+    private CheckBox cbServer;
     private Uri imageUri;
     private ReportDetailsToSend reportDetailsToSend;
     private User user;
@@ -94,12 +108,9 @@ public class UploadVideoDialogFragment extends HealthCocoDialogFragment implemen
         LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
         if (doctor != null && doctor.getUser() != null && !Util.isNullOrBlank(doctor.getUser().getUniqueId())) {
             user = doctor.getUser();
-            selectedPatient = LocalDataServiceImpl.getInstance(mApp).getPatient(HealthCocoConstants.SELECTED_PATIENTS_USER_ID);
-            if (selectedPatient != null && !Util.isNullOrBlank(selectedPatient.getUserId())) {
-                initViews();
-                initListeners();
-                initData();
-            }
+            initViews();
+            initListeners();
+            initData();
         }
     }
 
@@ -110,15 +121,20 @@ public class UploadVideoDialogFragment extends HealthCocoDialogFragment implemen
         editDescription = (EditText) view.findViewById(R.id.edit_description);
         tvFileName = (TextView) view.findViewById(R.id.tv_file_name);
         tvCategory = (TextView) view.findViewById(R.id.tv_category);
+        cbLocal = (CheckBox) view.findViewById(R.id.cb_local);
+        cbServer = (CheckBox) view.findViewById(R.id.cb_server);
         containerFileDetails = (LinearLayout) view.findViewById(R.id.container_file_details);
+
         containerFileDetails.setVisibility(View.GONE);
+        cbLocal.setSelected(true);
+        cbLocal.setClickable(false);
     }
 
     @Override
     public void initListeners() {
         tvSelectFile.setOnClickListener(this);
         initSaveCancelButton(this);
-        initActionbarTitle(getResources().getString(R.string.upload_record));
+        initActionbarTitle(getResources().getString(R.string.upload_video));
         tvCategory.setOnClickListener(this);
     }
 
@@ -130,24 +146,7 @@ public class UploadVideoDialogFragment extends HealthCocoDialogFragment implemen
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-          /*  case R.id.tv_select_image:
-                openDialogFragment(DialogType.SELECT_IMAGE, this);
-                break;*/
             case R.id.tv_select_file:
-//                try {
-//                    String action = "";
-//                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT)
-//                        action = Intent.ACTION_GET_CONTENT;
-//                    else
-//                        action = Intent.ACTION_OPEN_DOCUMENT;
-//                    Intent intent = new Intent(action);
-//                    intent.addCategory(Intent.CATEGORY_OPENABLE);
-//                    intent.setType("*/*");
-//                    intent.putExtra(Intent.EXTRA_MIME_TYPES, ACCEPT_MIME_TYPES);
-//                    startActivityForResult(intent, HealthCocoConstants.REQUEST_CODE_FILE);
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
                 openDialogFragment(DialogType.SELECT_IMAGE, this);
                 break;
             case R.id.bt_save:
@@ -189,16 +188,38 @@ public class UploadVideoDialogFragment extends HealthCocoDialogFragment implemen
 
     private void addRecord() {
         mActivity.showLoading(false);
-        AddVideoRequestMultipart addVideoRequestMultipart = new AddVideoRequestMultipart();
-        addVideoRequestMultipart.setDescription(Util.getValidatedValue(String.valueOf(editDescription.getText())));
-        addVideoRequestMultipart.setName(Util.getValidatedValue(String.valueOf(editTitle.getText())));
-        addVideoRequestMultipart.setDoctorId(user.getUniqueId());
-        addVideoRequestMultipart.setHospitalId(user.getForeignHospitalId());
-        addVideoRequestMultipart.setLocationId(user.getForeignLocationId());
-//        requestMultipart.setRecordsState(RecordState.APPROVAL_NOT_REQUIRED);
 
-        new MultipartUploadRequestAsynTask(mActivity, PatientEducationVideo.class, WebServiceType.ADD_VIDEO, addVideoRequestMultipart, reportDetailsToSend.getRecordsPath(), this, this).execute();
+        PatientEducationVideo patientEducationVideo = new PatientEducationVideo();
+//        patientEducationVideo.setCreatedBy(user.getFirstName());
+        patientEducationVideo.setName(Util.getValidatedValueOrNull(editTitle));
+        patientEducationVideo.setUniqueId(String.valueOf(DateTimeUtil.getCalendarInstance().getTimeInMillis()));
+        patientEducationVideo.setDiscarded(false);
+        patientEducationVideo.setDescription(Util.getValidatedValue(String.valueOf(editDescription.getText())));
+        patientEducationVideo.setDoctorId(user.getUniqueId());
+        patientEducationVideo.setHospitalId(user.getForeignHospitalId());
+        patientEducationVideo.setLocationId(user.getForeignLocationId());
+        if (Util.isNullOrEmptyList(categoryList))
+            patientEducationVideo.setTags(categoryList);
 
+        boolean isSaved = saveVideoToFolder();
+
+        if (cbServer.isChecked()) {
+            AddVideoRequestMultipart addVideoRequestMultipart = new AddVideoRequestMultipart();
+            addVideoRequestMultipart.setDescription(Util.getValidatedValue(String.valueOf(editDescription.getText())));
+            addVideoRequestMultipart.setName(Util.getValidatedValue(String.valueOf(editTitle.getText())));
+            addVideoRequestMultipart.setDoctorId(user.getUniqueId());
+            addVideoRequestMultipart.setHospitalId(user.getForeignHospitalId());
+            addVideoRequestMultipart.setLocationId(user.getForeignLocationId());
+
+            new MultipartUploadRequestAsynTask(mActivity, PatientEducationVideo.class, WebServiceType.ADD_VIDEO, addVideoRequestMultipart, reportDetailsToSend.getRecordsPath(), this, this).execute();
+        } else {
+            if (isSaved) {
+                patientEducationVideo.setVideoUrl(pathToSaveAndGet + "." + Util.getFileExtension(selectedVideoPath));
+                LocalDataServiceImpl.getInstance(mApp).addEducationVideo(patientEducationVideo, user.getUniqueId());
+                mActivity.hideLoading();
+                getDialog().dismiss();
+            }
+        }
     }
 
 
@@ -225,10 +246,10 @@ public class UploadVideoDialogFragment extends HealthCocoDialogFragment implemen
             try {
                 if (requestCode == HealthCocoConstants.REQUEST_CODE_VIDEO_GALLERY) {
                     if (data.getData() != null) {
-                        String selectedVideoPath = getPath(mActivity, data.getData());
+                        selectedVideoPath = getPath(mActivity, data.getData());
                         showImage(selectedVideoPath, data.getData());
                     } else {
-//                        Toast.makeText(getApplicationContext(), "Failed to select video", Toast.LENGTH_LONG).show();
+                        Util.showToast(mActivity, R.string.failed_to_select_videos);
                     }
                 } else if (requestCode == HealthCocoConstants.REQUEST_CODE_CATEGORY) {
                     categoryList = Parcels.unwrap(data.getParcelableExtra(TAG_SELECTED_CATEGORY));
@@ -277,14 +298,6 @@ public class UploadVideoDialogFragment extends HealthCocoDialogFragment implemen
         }
     }
 
-
-    private String getEncodeButeArray() {
-        if (reportDetailsToSend.getReportFileType() == ReportFileType.IMAGE)
-            return ImageUtil.encodeTobase64(originalBitmap);
-        else
-            return Util.getByteArrayFromUri(mActivity, reportDetailsToSend.getReportUri());
-    }
-
     @Override
     public void onErrorResponse(VolleyResponseBean volleyResponseBean, String errorMessage) {
         LogUtils.LOGD(TAG, "ADD_RECORD Fail");
@@ -325,4 +338,66 @@ public class UploadVideoDialogFragment extends HealthCocoDialogFragment implemen
         }
     }
 
+    private boolean saveVideoToFolder() {
+
+        pathToSaveAndGet = ImageUtil.getPathToSaveFile(HealthCocoFileType.DOCTOR_VIDEO, Util.getValidatedValueOrNull(editTitle), Util.getFileExtension(selectedVideoPath));
+
+        // the file to be moved or copied
+        File sourceLocation = new File(selectedVideoPath);
+
+        // make sure your target location folder exists!
+        File targetLocation = new File(pathToSaveAndGet + "." + Util.getFileExtension(selectedVideoPath));
+
+        // just to take note of the location sources
+        LogUtils.LOGD(TAG, "sourceLocation: " + sourceLocation);
+        LogUtils.LOGD(TAG, "targetLocation: " + targetLocation);
+
+        try {
+
+            // 1 = move the file, 2 = copy the file
+            int actionChoice = 2;
+
+            // moving the file to another directory
+            if (actionChoice == 1) {
+                if (sourceLocation.renameTo(targetLocation)) {
+                    Log.v(TAG, "Move file successful.");
+                } else {
+                    Log.v(TAG, "Move file failed.");
+                }
+            }
+            // we will copy the file
+            else {
+
+                // make sure the target file exists
+                if (sourceLocation.exists()) {
+
+                    InputStream in = new FileInputStream(sourceLocation);
+                    OutputStream out = new FileOutputStream(targetLocation);
+
+                    // Copy the bits from instream to outstream
+                    byte[] buf = new byte[1024];
+                    int len;
+
+                    while ((len = in.read(buf)) > 0) {
+                        out.write(buf, 0, len);
+                    }
+
+                    in.close();
+                    out.close();
+
+                    LogUtils.LOGD(TAG, "Copy file successful.");
+
+                    return true;
+                } else {
+                    LogUtils.LOGD(TAG, "Copy file failed. Source file missing.");
+                    return false;
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+
+    }
 }

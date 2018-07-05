@@ -15,6 +15,8 @@ import android.widget.VideoView;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.server.DoctorVideos;
+import com.healthcoco.healthcocopad.bean.server.Patient;
+import com.healthcoco.healthcocopad.bean.server.PatientEducationVideo;
 import com.healthcoco.healthcocopad.custom.DownloadFileFromUrlAsyncTask;
 import com.healthcoco.healthcocopad.enums.HealthCocoFileType;
 import com.healthcoco.healthcocopad.listeners.DownloadFileFromUrlListener;
@@ -33,6 +35,7 @@ public class VideoFragment extends HealthCocoFragment implements MediaPlayer.OnP
     private int position = 0;
     private MediaController mediaController;
     private DoctorVideos doctorVideos;
+    private PatientEducationVideo educationVideo;
     private ProgressBar progressLoadingHorizontal;
     private ProgressBar progressLoadingCircular;
 
@@ -53,9 +56,14 @@ public class VideoFragment extends HealthCocoFragment implements MediaPlayer.OnP
     public void init() {
         Intent intent = mActivity.getIntent();
         doctorVideos = Parcels.unwrap(intent.getParcelableExtra(HealthCocoConstants.TAG_DOCTOR_VIDEO_DATA));
+        educationVideo = Parcels.unwrap(intent.getParcelableExtra(HealthCocoConstants.TAG_EDUCATION_VIDEO_DATA));
         initViews();
         initListeners();
-        setMediaController();
+
+        if (doctorVideos != null)
+            setMediaController();
+        else if (educationVideo != null)
+            setMediaControllerEducation();
     }
 
     private void setMediaController() {
@@ -66,6 +74,17 @@ public class VideoFragment extends HealthCocoFragment implements MediaPlayer.OnP
             // St the videoView that acts as the anchor for the MediaController.
             mediaController.setAnchorView(videoView);
             new DownloadFileFromUrlAsyncTask(mActivity, this, HealthCocoFileType.DOCTOR_VIDEO, Util.getFileNameFromUrl(doctorVideos.getVideoUrl()), progressLoadingCircular, progressLoadingHorizontal).execute(doctorVideos.getVideoUrl());
+        }
+    }
+
+    private void setMediaControllerEducation() {
+        // Set the media controller buttons
+        if (mediaController == null) {
+            mediaController = new MediaController(mActivity);
+
+            // St the videoView that acts as the anchor for the MediaController.
+            mediaController.setAnchorView(videoView);
+            new DownloadFileFromUrlAsyncTask(mActivity, this, HealthCocoFileType.DOCTOR_VIDEO, Util.getFileNameFromUrl(educationVideo.getVideoUrl()), progressLoadingCircular, progressLoadingHorizontal).execute(educationVideo.getVideoUrl());
         }
     }
 

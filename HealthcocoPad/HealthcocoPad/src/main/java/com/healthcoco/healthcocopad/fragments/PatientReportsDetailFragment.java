@@ -195,7 +195,7 @@ public class PatientReportsDetailFragment extends HealthCocoFragment implements 
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.fl_bt_add_report:
-                openDialogFragment(new UploadVideoDialogFragment(), REQUEST_CODE_UPLOAD_REPORT);
+                openDialogFragment(new UploadReportDialogFragment(), REQUEST_CODE_UPLOAD_REPORT);
 //                openDialogFragment(DialogType.SELECT_IMAGE, this);
 
 //                try {

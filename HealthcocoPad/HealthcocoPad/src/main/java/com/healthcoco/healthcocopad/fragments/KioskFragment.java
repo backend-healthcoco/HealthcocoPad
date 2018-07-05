@@ -193,6 +193,7 @@ public class KioskFragment extends HealthCocoFragment implements
                 case DOCTOR_AND_CLINIC:
                     break;
                 case VIDEO:
+                    openCommonOpenUpActivity(CommonOpenUpFragmentType.EDUCATION_VIDEO, "VIDEO", null);
                     break;
                 case FEEDBACK:
                     openCommonOpenUpActivity(CommonOpenUpFragmentType.FEEDBACK_DOCTOR, AppointmentFeedbackFragment.TAG_FEEDBACK_TYPE, FeedbackType.DOCTOR.ordinal(), 0);

@@ -46,6 +46,7 @@ import com.healthcoco.healthcocopad.fragments.FeedsFragment;
 import com.healthcoco.healthcocopad.fragments.InitialSyncFragment;
 import com.healthcoco.healthcocopad.fragments.LoginSignupFragment;
 import com.healthcoco.healthcocopad.fragments.NotificationResponseDataFragment;
+import com.healthcoco.healthcocopad.fragments.PatientEducationVideoListFragment;
 import com.healthcoco.healthcocopad.fragments.PatientRegistrationFragment;
 import com.healthcoco.healthcocopad.fragments.PatientRegistrationTabsFragment;
 import com.healthcoco.healthcocopad.fragments.QueueFragment;
@@ -248,6 +249,9 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
                 break;
             case FEEDBACK_DOCTOR:
                 openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.WITH_SUBMIT, fragmentType.getTitleId(), new AppointmentFeedbackFragment());
+                break;
+            case EDUCATION_VIDEO:
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, R.string.videos, new PatientEducationVideoListFragment());
                 break;
         }
     }
