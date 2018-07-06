@@ -4,10 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,18 +14,15 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.healthcoco.healthcocopad.HealthCocoDialogFragment;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.request.AddVideoRequestMultipart;
-import com.healthcoco.healthcocopad.bean.request.RecordsAddRequestMultipart;
 import com.healthcoco.healthcocopad.bean.request.ReportDetailsToSend;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.PatientEducationVideo;
-import com.healthcoco.healthcocopad.bean.server.Records;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.enums.DialogType;
@@ -53,12 +47,11 @@ import org.parceler.Parcels;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 
-import static com.healthcoco.healthcocopad.dialogFragment.SelectCategoryFragment.TAG_SELECTED_CATEGORY;
+import static com.healthcoco.healthcocopad.dialogFragment.SelectCategoryDialogFragment.TAG_SELECTED_CATEGORY;
 import static com.healthcoco.healthcocopad.utilities.FileChooser.getPath;
 
 /**

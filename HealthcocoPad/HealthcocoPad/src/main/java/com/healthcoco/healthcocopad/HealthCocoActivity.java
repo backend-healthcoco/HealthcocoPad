@@ -99,7 +99,7 @@ import com.healthcoco.healthcocopad.dialogFragment.AddUpdateNameDialogFragment;
 import com.healthcoco.healthcocopad.dialogFragment.ChangeAppointmentStatusDialogFragment;
 import com.healthcoco.healthcocopad.dialogFragment.EnlargedImageViewDialogFragment;
 import com.healthcoco.healthcocopad.dialogFragment.PatientCardDialogFragment;
-import com.healthcoco.healthcocopad.dialogFragment.SelectCategoryFragment;
+import com.healthcoco.healthcocopad.dialogFragment.SelectCategoryDialogFragment;
 import com.healthcoco.healthcocopad.enums.AddUpdateNameDialogType;
 import com.healthcoco.healthcocopad.enums.BooleanTypeValues;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
@@ -1962,15 +1962,15 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
     }
 
     public void openCategoryFragment(String Tag, Object obj, Fragment fragment, int requestCode) {
-        SelectCategoryFragment selectCategoryFragment = new SelectCategoryFragment();
+        SelectCategoryDialogFragment selectCategoryDialogFragment = new SelectCategoryDialogFragment();
         if (obj != null) {
             Bundle bundle = new Bundle();
             bundle.putParcelable(Tag, Parcels.wrap(obj));
-            selectCategoryFragment.setArguments(bundle);
+            selectCategoryDialogFragment.setArguments(bundle);
         }
-        selectCategoryFragment.setTargetFragment(fragment, requestCode);
-        selectCategoryFragment.show(getSupportFragmentManager(),
-                selectCategoryFragment.getClass().getSimpleName());
+        selectCategoryDialogFragment.setTargetFragment(fragment, requestCode);
+        selectCategoryDialogFragment.show(getSupportFragmentManager(),
+                selectCategoryDialogFragment.getClass().getSimpleName());
 
     }
 

@@ -67,6 +67,7 @@ public enum CommonOpenUpFragmentType {
     ADD_CLINICAL_NOTE(R.string.edit_clinical_note),
     SYNC(R.string.sync),
     PATIENT_REGISTRATION_TABS(R.string.new_contact),
+    ABOUT_DOCTOR(R.string.about_doctor),
     BLOGS(R.string.blogs),
     BLOG_DETAIL(R.string.blog_detail),
     FEEDBACK_DOCTOR(R.string.feedback);

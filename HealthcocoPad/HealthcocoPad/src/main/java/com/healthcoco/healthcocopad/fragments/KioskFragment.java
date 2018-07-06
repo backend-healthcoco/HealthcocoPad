@@ -191,6 +191,7 @@ public class KioskFragment extends HealthCocoFragment implements
                     openCommonOpenUpActivity(CommonOpenUpFragmentType.PATIENT_REGISTRATION_TABS, "PATIENT", null);
                     break;
                 case DOCTOR_AND_CLINIC:
+                    openCommonOpenUpActivity(CommonOpenUpFragmentType.ABOUT_DOCTOR, "ABOUT_DOCTOR", null);
                     break;
                 case VIDEO:
                     openCommonOpenUpActivity(CommonOpenUpFragmentType.EDUCATION_VIDEO, "VIDEO", null);

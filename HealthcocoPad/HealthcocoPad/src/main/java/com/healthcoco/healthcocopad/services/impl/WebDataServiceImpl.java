@@ -1241,7 +1241,7 @@ public class WebDataServiceImpl implements GCMRefreshListener {
                             + HealthCocoConstants.PARAM_UPDATED_TIME + updatedTime;
                     break;
                 case GET_REPORTS_UPDATED:
-//                    url = url + HealthCocoConstants.PARAM_IS_DOCTOR_APP_TRUE;
+                    url = url + HealthCocoConstants.PARAM_IS_DOCTOR_APP_TRUE;
                     break;
             }
             getResponse(Request.Priority.IMMEDIATE, webServiceType, class1, url, null, null, responseListener,

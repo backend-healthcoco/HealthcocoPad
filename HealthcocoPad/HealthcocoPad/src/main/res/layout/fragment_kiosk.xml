@@ -14,8 +14,26 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/background_kiosk"
-            android:gravity="center"
-            android:orientation="horizontal">
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding_30_dp"
+                android:text="@string/welcome_to"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_clinic_name_kiosk" />
+
+            <TextView
+                android:id="@+id/tv_clinic_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/layout_padding_5dp"
+                android:text="@string/clinic_name"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_clinic_name_kiosk"
+                android:textStyle="bold" />
 
         </LinearLayout>
 
@@ -36,7 +54,8 @@
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recyclerview_options"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/padding_30_dp" />
         </LinearLayout>
 
 

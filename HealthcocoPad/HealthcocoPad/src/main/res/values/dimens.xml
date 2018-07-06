@@ -232,5 +232,7 @@
     <dimen name="text_size_blog_detail">18sp</dimen>
     <dimen name="text_size_blog_detail_new">20sp</dimen>
     <dimen name="text_size_feedback_doctor_lab_title">17sp</dimen>
+    <dimen name="text_size_clinic_name_kiosk">23sp</dimen>
+
 
 </resources>

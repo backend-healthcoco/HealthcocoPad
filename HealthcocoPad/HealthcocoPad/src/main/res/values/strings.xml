@@ -1184,6 +1184,8 @@
     <string name="health_feeds">Health Feeds</string>
     <string name="my_articles">My Articles</string>
     <string name="blog_detail">Blog Detail</string>
+    <string name="about_doctor">About Doctor</string>
+    <string name="welcome_to">Welcome to</string>
 
     <!--doctor feedback texts-->
     <string name="would_you_like_to_recommend_doctor">Would you like to Recommend %s?</string>

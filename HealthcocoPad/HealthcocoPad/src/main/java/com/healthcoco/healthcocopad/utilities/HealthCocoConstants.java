@@ -98,6 +98,7 @@ public class HealthCocoConstants {
     public static final int REQUEST_CODE_CATEGORY = 213;
 
 
+    public static final String PARAM_IS_DOCTOR_APP_TRUE = "&isDoctorApp=true";
     public static final String PARAM_SIZE = "&size=";
     public static final String PARAM_PAGE = "&page=";
     public static final String PARAM_SEARCH_TERM = "&searchTerm=";

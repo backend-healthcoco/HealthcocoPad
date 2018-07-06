@@ -24,6 +24,7 @@ import com.healthcoco.healthcocopad.calendar.CalendarFragment;
 import com.healthcoco.healthcocopad.enums.ActionbarLeftRightActionTypeDrawables;
 import com.healthcoco.healthcocopad.enums.ActionbarType;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
+import com.healthcoco.healthcocopad.fragments.AboutDoctorFragment;
 import com.healthcoco.healthcocopad.fragments.AboutUsFragment;
 import com.healthcoco.healthcocopad.fragments.AddEditClinicImageFragment;
 import com.healthcoco.healthcocopad.fragments.AddClinicalNotesVisitNormalFragment;
@@ -240,6 +241,9 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
                 break;
             case PATIENT_REGISTRATION_TABS:
                 openFragment(ActionbarType.HIDDEN, new PatientRegistrationTabsFragment());
+                break;
+            case ABOUT_DOCTOR:
+                openFragment(ActionbarType.HIDDEN, new AboutDoctorFragment());
                 break;
             case BLOGS:
                 openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, R.string.blogs, new FeedsFragment());

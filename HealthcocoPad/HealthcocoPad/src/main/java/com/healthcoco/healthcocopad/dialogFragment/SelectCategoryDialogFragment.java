@@ -38,7 +38,7 @@ import java.util.List;
 /**
  * Created by Shreshtha on 28-02-2017.
  */
-public class SelectCategoryFragment extends HealthCocoDialogFragment implements AdapterView.OnItemClickListener, View.OnClickListener,
+public class SelectCategoryDialogFragment extends HealthCocoDialogFragment implements AdapterView.OnItemClickListener, View.OnClickListener,
         CommonUiPermissionsListener {
     public static final String TAG_SELECTED_CATEGORY = "selectedCategory";
     private GridView gvSettingsUIPermission;
