@@ -1,28 +1,23 @@
 package com.healthcoco.healthcocopad.calendar.pinlockview;
 
 import android.animation.ObjectAnimator;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
-import com.healthcoco.healthcocopad.activities.KioskActivity;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
-import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
+import com.healthcoco.healthcocopad.enums.KioskScreenType;
 import com.healthcoco.healthcocopad.enums.KioskSubItemType;
-import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
 import com.healthcoco.healthcocopad.listeners.PatientRegistrationDetailsListener;
 
 
-public class EnterPinFragment extends HealthCocoFragment implements LocalDoInBackgroundListenerOptimised, PinLockListener {
+public class EnterPinFragment extends HealthCocoFragment implements LocalDoInBackgroundListenerOptimised, PinLockListener, View.OnClickListener {
 
     public static final String TAG = "EnterPinFragment";
 
@@ -30,9 +25,10 @@ public class EnterPinFragment extends HealthCocoFragment implements LocalDoInBac
 
     private PinLockView mPinLockView;
     private IndicatorDots mIndicatorDots;
-    private TextView mTextTitle;
-    private TextView mTextAttempts;
+    private TextView tvTitle;
+    private TextView tvAttempts;
     private PatientRegistrationDetailsListener registrationDetailsListener;
+    private Button btHome;
 
     public EnterPinFragment(PatientRegistrationDetailsListener registrationDetailsListener) {
         super();
@@ -62,11 +58,11 @@ public class EnterPinFragment extends HealthCocoFragment implements LocalDoInBac
 
     @Override
     public void initViews() {
-        mTextAttempts = (TextView) view.findViewById(R.id.attempts);
-        mTextTitle = (TextView) view.findViewById(R.id.title);
+        tvAttempts = (TextView) view.findViewById(R.id.attempts);
+        tvTitle = (TextView) view.findViewById(R.id.title);
         mIndicatorDots = (IndicatorDots) view.findViewById(R.id.indicator_dots);
         mPinLockView = (PinLockView) view.findViewById(R.id.pinlockView);
-
+        btHome = (Button) view.findViewById(R.id.bt_kiosk_home);
 
         mPinLockView.attachIndicatorDots(mIndicatorDots);
         mPinLockView.setPinLength(PIN_LENGTH);
@@ -76,6 +72,7 @@ public class EnterPinFragment extends HealthCocoFragment implements LocalDoInBac
     @Override
     public void initListeners() {
         mPinLockView.setPinLockListener(this);
+        btHome.setOnClickListener(this);
     }
 
 
@@ -101,10 +98,10 @@ public class EnterPinFragment extends HealthCocoFragment implements LocalDoInBac
         if (pin.equals("1234")) {
 //            setResult(RESULT_OK);
 //            finish();
-            registrationDetailsListener.readyToMoveNext(KioskSubItemType.BLOGS.ordinal());
+            registrationDetailsListener.readyToMoveNext(KioskScreenType.HOME.ordinal());
         } else {
             shake();
-            mTextAttempts.setText(getString(R.string.pinlock_wrongpin));
+            tvAttempts.setText(getString(R.string.pinlock_wrongpin));
             mPinLockView.resetPinLockView();
         }
     }
@@ -112,5 +109,14 @@ public class EnterPinFragment extends HealthCocoFragment implements LocalDoInBac
     @Override
     public void onEmpty() {
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.bt_kiosk_home:
+                registrationDetailsListener.readyToMoveNext(KioskScreenType.KIOSK.ordinal());
+                break;
+        }
     }
 }

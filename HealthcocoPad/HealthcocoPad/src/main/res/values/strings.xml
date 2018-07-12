@@ -1186,6 +1186,7 @@
     <string name="blog_detail">Blog Detail</string>
     <string name="about_doctor">About Doctor</string>
     <string name="welcome_to">Welcome to</string>
+    <string name="kiosk_setting">Kiosk Setting</string>
 
     <!--doctor feedback texts-->
     <string name="would_you_like_to_recommend_doctor">Would you like to Recommend %s?</string>

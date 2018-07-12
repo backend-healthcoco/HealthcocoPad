@@ -11,6 +11,7 @@ import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.HealthcocoFCMListener;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.calendar.pinlockview.EnterPinFragment;
+import com.healthcoco.healthcocopad.enums.KioskScreenType;
 import com.healthcoco.healthcocopad.enums.KioskSubItemType;
 import com.healthcoco.healthcocopad.fragments.AboutDoctorFragment;
 import com.healthcoco.healthcocopad.fragments.KioskFragment;
@@ -69,12 +70,15 @@ public class KioskActivity extends HealthCocoActivity implements PatientRegistra
     public void readyToMoveNext(Object object) {
         if (object != null) {
             int ordinal = (int) object;
-            KioskSubItemType subItemType = KioskSubItemType.values()[ordinal];
-            switch (subItemType) {
-                case PATIENT_REGISTER:
+            KioskScreenType screenType = KioskScreenType.values()[ordinal];
+            switch (screenType) {
+                case PINVIEW:
                     replaceFragment(new EnterPinFragment(this));
                     break;
-                case BLOGS:
+                case KIOSK:
+                    replaceFragment(new KioskFragment(this));
+                    break;
+                case HOME:
                     Intent intent = new Intent(this, HomeActivity.class);
 //                    intent.putExtra(HealthcocoFCMListener.TAG_NOTIFICATION_RESPONSE, notificationResponseData);
                     startActivity(intent);

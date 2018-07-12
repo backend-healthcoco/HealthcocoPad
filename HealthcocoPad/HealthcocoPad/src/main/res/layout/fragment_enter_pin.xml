@@ -10,8 +10,8 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:layout_marginBottom="@dimen/icon_history_size"
-        android:layout_marginTop="@dimen/icon_history_size"
+        android:layout_marginBottom="@dimen/padding_30_dp"
+        android:layout_marginTop="@dimen/padding_30_dp"
         android:background="@drawable/shape_rounded_corners_solid_blue_pinview_background"
         android:gravity="center"
         android:orientation="vertical"
@@ -61,4 +61,22 @@
             android:textSize="@dimen/textsize_title" />
 
     </LinearLayout>
+
+    <Button
+        android:id="@+id/bt_kiosk_home"
+        android:layout_width="@dimen/lock_button_size"
+        android:layout_height="@dimen/lock_button_size"
+        android:layout_gravity="right"
+        android:layout_marginRight="@dimen/padding_30_dp"
+        android:layout_marginTop="@dimen/padding_30_dp"
+        android:background="@drawable/kiosk_home_button_selector" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:layout_marginLeft="@dimen/padding_30_dp"
+        android:layout_marginTop="@dimen/padding_20_dp"
+        android:background="@drawable/logo_kiosk_home" />
+
 </FrameLayout>

@@ -20,7 +20,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/padding_30_dp"
+                android:layout_marginTop="@dimen/fab_margin_left"
                 android:text="@string/welcome_to"
                 android:textColor="@color/white"
                 android:textSize="@dimen/text_size_clinic_name_kiosk" />
@@ -58,6 +58,22 @@
                 android:layout_marginBottom="@dimen/padding_30_dp" />
         </LinearLayout>
 
+        <Button
+            android:id="@+id/bt_kiosk_lock"
+            android:layout_width="@dimen/lock_button_size"
+            android:layout_height="@dimen/lock_button_size"
+            android:layout_gravity="right"
+            android:layout_marginRight="@dimen/padding_30_dp"
+            android:layout_marginTop="@dimen/padding_30_dp"
+            android:background="@drawable/kiosk_lock_button_selector" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_marginLeft="@dimen/padding_30_dp"
+            android:layout_marginTop="@dimen/padding_20_dp"
+            android:background="@drawable/logo_kiosk_home" />
 
     </FrameLayout>
 </LinearLayout>

@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 
 import com.android.volley.Response;
@@ -21,6 +22,7 @@ import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocopad.enums.AdapterType;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.FeedbackType;
+import com.healthcoco.healthcocopad.enums.KioskScreenType;
 import com.healthcoco.healthcocopad.enums.KioskSubItemType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
@@ -48,6 +50,7 @@ public class KioskFragment extends HealthCocoFragment implements
     private KioskSubItemType kioskSubItemType;
     private RecyclerView optionsRecyclerView;
     private LinearLayout layoutLeft;
+    private Button btLock;
     private HealthcocoRecyclerViewAdapter mAdapter;
     private ArrayList<KioskSubItemType> subItemTypeArrayList = new ArrayList<>();
     private boolean receiversRegistered;
@@ -102,11 +105,13 @@ public class KioskFragment extends HealthCocoFragment implements
     public void initViews() {
         optionsRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerview_options);
         layoutLeft = (LinearLayout) view.findViewById(R.id.layout_left);
+        btLock = (Button) view.findViewById(R.id.bt_kiosk_lock);
     }
 
     @Override
     public void initListeners() {
         layoutLeft.setOnClickListener(this);
+        btLock.setOnClickListener(this);
     }
 
 
@@ -191,6 +196,9 @@ public class KioskFragment extends HealthCocoFragment implements
         switch (v.getId()) {
             case R.id.layout_left:
                 break;
+            case R.id.bt_kiosk_lock:
+                registrationDetailsListener.readyToMoveNext(KioskScreenType.PINVIEW.ordinal());
+                break;
         }
     }
 
@@ -213,14 +221,10 @@ public class KioskFragment extends HealthCocoFragment implements
                     openCommonOpenUpActivity(CommonOpenUpFragmentType.FEEDBACK_DOCTOR, AppointmentFeedbackFragment.TAG_FEEDBACK_TYPE, FeedbackType.DOCTOR.ordinal(), 0);
                     break;
                 case BLOGS:
-                    onPinKeyClick();
-//                   openCommonOpenUpActivity(CommonOpenUpFragmentType.BLOGS, "BLOGS", null);
+                    openCommonOpenUpActivity(CommonOpenUpFragmentType.BLOGS, "BLOGS", null);
                     break;
             }
         }
     }
 
-    public void onPinKeyClick() {
-        registrationDetailsListener.readyToMoveNext(KioskSubItemType.PATIENT_REGISTER.ordinal());
-    }
 }
