@@ -16,10 +16,10 @@ public enum FeedbackType {
     DOCTOR(new HashMap<Integer, Integer>() {
         {
 //            put(R.id.tv_name_for_feedback, R.string.doctor_name);
-            put(R.id.parent_rating_five_star, R.string.how_was_your_overall_experience_at);
+            put(R.id.parent_rating_five_star, R.string.how_was_your_overall_experience_with);
             put(R.id.parent_clinic_name, R.string.which_clinic_did_you_visit);
             put(R.id.parent_health_problem_treatment, R.string.for_which_health_problem);
-            put(R.id.parent_experience, R.string.share_your_experience_at);
+            put(R.id.parent_experience, R.string.share_your_experience_with);
         }
     });
 

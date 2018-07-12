@@ -38,7 +38,7 @@
     <color name="grey_item_border">#C5C5CD</color>
     <color name="grey_icons">#9C9C9C</color>
     <color name="grey_dark_background">#d6d3d3</color>
-    <color name="orange">#90F77600</color>
+    <color name="orange">#fcf7a100</color>
     <color name="orange_translucent">#60FF7700</color>
     <color name="grey_widget_background">#e6e6e6</color>
     <color name="grey_widget_background_translucent">#d9d9d9</color>
@@ -55,6 +55,17 @@
     <color name="accent">#2789e4</color>
     <color name="yellow_text">#ffff00</color>
     <color name="grey_background_updated">#f9f7f7</color>
+
+    <!--color pinview-->
+    <color name="text_numberpressed">#fff</color>
+    <color name="text_title">#dcddde</color>
+    <color name="layout_background">#18191A</color>
+    <color name="text_attempts">#bfc0c1</color>
+    <color name="text_fingerprint">#FF87898C</color>
+    <color name="button_notpressed">#2136FFD9</color>
+    <color name="dot_emptyborder">#87898C</color>
+    <color name="transparent">#00000000</color>
+    <color name="white_transparent">#29e7e7e7</color>
 
 
 </resources>

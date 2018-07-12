@@ -64,6 +64,7 @@ public enum CommonOpenUpFragmentType {
     PLAY_VIDEO(R.string.videos),
     EDUCATION_VIDEO(R.string.videos),
     ENLARGED_MAP_VIEW_FRAGMENT(R.string.location),
+    DOCTOR_DETAILS(R.string.about_doctor),
     ADD_CLINICAL_NOTE(R.string.edit_clinical_note),
     SYNC(R.string.sync),
     PATIENT_REGISTRATION_TABS(R.string.new_contact),

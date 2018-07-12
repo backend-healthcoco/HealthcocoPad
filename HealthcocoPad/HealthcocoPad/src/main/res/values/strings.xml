@@ -1196,9 +1196,9 @@
     <string name="how_was_your_overall_experience_with">How was your overall experience with %s</string>
     <string name="please_rate_your_experience_with">Please rate your Experinece with %s</string>
 
-    <string name="share_your_experience_at">Share your experience at %s</string>
-    <string name="how_was_your_overall_experience_at">How was your overall experience at %s</string>
-    <string name="please_rate_your_experience_at">Please rate your Experinece at %s</string>
+    <!--<string name="share_your_experience_at">Share your experience at %s</string>-->
+    <!--<string name="how_was_your_overall_experience_at">How was your overall experience at %s</string>-->
+    <!--<string name="please_rate_your_experience_at">Please rate your Experinece at %s</string>-->
 
 
     <string name="which_clinic_did_you_visit">Which clinic did you visit?</string>
@@ -1245,6 +1245,11 @@
     <string name="video_title">Video Title</string>
     <string name="description">Description</string>
     <string name="upload_video">Upload Video</string>
+
+    <!--Pinview texts-->
+    <string name="pinlock_wrongpin">Wrong PIN</string>
+    <string name="pinlock_title">Enter PIN</string>
+    <string name="forgot_your_pin">&#160;Forgot PIN&#160;?</string>
 
 
 </resources>

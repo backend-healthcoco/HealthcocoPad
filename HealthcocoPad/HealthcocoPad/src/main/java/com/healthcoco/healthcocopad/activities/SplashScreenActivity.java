@@ -26,6 +26,7 @@ import com.healthcoco.healthcocopad.enums.DeviceType;
 import com.healthcoco.healthcocopad.enums.UserState;
 import com.healthcoco.healthcocopad.enums.VersionCheckType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
+import com.healthcoco.healthcocopad.fragments.KioskFragment;
 import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
@@ -40,10 +41,10 @@ import io.fabric.sdk.android.Fabric;
  * Created by neha on 18/01/17.
  */
 public class SplashScreenActivity extends HealthCocoActivity implements GsonRequest.ErrorListener, Response.Listener<VolleyResponseBean> {
-    private static final String TAG = Util.class.getSimpleName();
     public static final String TAG_VERSION_CODE = "versionCode";
-    private Handler handler;
+    private static final String TAG = Util.class.getSimpleName();
     private static final int SPLASH_TIME = 2000;
+    private Handler handler;
     private Runnable runnable;
     private String notificationResponseData;
 
@@ -128,7 +129,7 @@ public class SplashScreenActivity extends HealthCocoActivity implements GsonRequ
     }
 
     private void openHomeActivity() {
-        Intent intent = new Intent(this, HomeActivity.class);
+        Intent intent = new Intent(this, KioskActivity.class);
         intent.putExtra(HealthcocoFCMListener.TAG_NOTIFICATION_RESPONSE, notificationResponseData);
         startActivity(intent);
         finish();

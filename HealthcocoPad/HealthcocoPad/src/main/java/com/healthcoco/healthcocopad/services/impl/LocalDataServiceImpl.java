@@ -659,6 +659,41 @@ public class LocalDataServiceImpl {
         return clinicDoctorProfilesList;
     }
 
+    public List<ClinicDoctorProfile> getClinicDoctorsList(String locationId, List<RegisteredDoctorProfile> registeredDoctorProfileList, int maxSize) {
+        String whereCondition = "Select * from " + StringUtil.toSQLName(ClinicDoctorProfile.class.getSimpleName())
+                + " where "
+                + LocalDatabaseUtils.KEY_LOCATION_ID + "=\"" + locationId + "\"";
+
+
+        if (!Util.isNullOrEmptyList(registeredDoctorProfileList)) {
+            whereCondition = whereCondition + " AND " + LocalDatabaseUtils.KEY_UNIQUE_ID + " in(";
+            for (RegisteredDoctorProfile doctorProfile : registeredDoctorProfileList) {
+                whereCondition = whereCondition + "\"" + doctorProfile.getUserId() + "\",";
+            }
+            whereCondition = whereCondition.substring(0, whereCondition.length() - 1);
+            whereCondition = whereCondition + ")";
+
+        }
+
+        //specifying order by limit and offset query
+        String conditionsLimit = " ORDER BY " + LocalDatabaseUtils.KEY_CREATED_TIME + " DESC ";
+
+        if (maxSize > 0)
+            conditionsLimit = conditionsLimit + " LIMIT " + maxSize;
+
+        whereCondition = whereCondition + conditionsLimit;
+        LogUtils.LOGD(TAG, "Select Query " + whereCondition);
+        List<ClinicDoctorProfile> clinicDoctorProfilesList = SugarRecord.findWithQuery(ClinicDoctorProfile.class, whereCondition);
+        if (!Util.isNullOrEmptyList(clinicDoctorProfilesList)) {
+            for (ClinicDoctorProfile clinicDoctorProfile :
+                    clinicDoctorProfilesList) {
+                clinicDoctorProfile.setSpecialities(getSpecialities(LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, clinicDoctorProfile.getUniqueId()));
+            }
+        }
+        return clinicDoctorProfilesList;
+    }
+
+
     public Location getLocation(String locationId) {
         Select<Location> selectQuery = Select.from(Location.class)
                 .where(Condition.prop(LocalDatabaseUtils.KEY_UNIQUE_ID).eq(locationId));

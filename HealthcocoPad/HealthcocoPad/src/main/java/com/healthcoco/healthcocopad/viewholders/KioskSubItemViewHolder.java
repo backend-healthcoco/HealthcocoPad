@@ -39,7 +39,7 @@ public class KioskSubItemViewHolder extends HealthcocoComonRecylcerViewHolder {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onItemClickListener.onItemClicked(kioskSubItemType);
+                    onItemClickListener.onItemClicked(kioskSubItemType.ordinal());
                 }
             });
 

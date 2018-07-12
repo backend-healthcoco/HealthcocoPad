@@ -63,6 +63,7 @@ public class DownloadImageFromUrlUtil {
             String url = "";
             String colorCode = String.valueOf(context.getResources().getColor(R.color.grey_light_text));
             String name = "";
+            int imageHeight = context.getResources().getDimensionPixelOffset(patientProfileScreenType.getImageWidth());
             if (object instanceof RegisteredPatientDetailsUpdated) {
                 RegisteredPatientDetailsUpdated registeredPatientDetailsDetailsUpdated = (RegisteredPatientDetailsUpdated) object;
                 url = registeredPatientDetailsDetailsUpdated.getThumbnailUrl();
@@ -88,21 +89,23 @@ public class DownloadImageFromUrlUtil {
                 url = clinicDoctorProfile.getThumbnailUrl();
                 colorCode = clinicDoctorProfile.getColorCode();
                 name = clinicDoctorProfile.getFirstName();
+                if (patientProfileScreenType == PatientProfileScreenType.IN_ABOUT_DOCTOR)
+                    imageHeight = context.getResources().getDimensionPixelOffset(patientProfileScreenType.getImageheight());
             } else if (object instanceof PatientCard) {
                 PatientCard patientCard = (PatientCard) object;
                 url = patientCard.getThumbnailUrl();
                 colorCode = patientCard.getColorCode();
                 name = patientCard.getFirstName();
             }
-            int imageSize = context.getResources().getDimensionPixelOffset(patientProfileScreenType.getImageViewSize());
+            int imageSize = context.getResources().getDimensionPixelOffset(patientProfileScreenType.getImageWidth());
             int textSize = context.getResources().getDimensionPixelOffset(patientProfileScreenType.getTextSize());
 
             //resizing imageview
-            FrameLayout.LayoutParams layoutParamsImageView = new FrameLayout.LayoutParams(imageSize, imageSize);
+            FrameLayout.LayoutParams layoutParamsImageView = new FrameLayout.LayoutParams(imageSize, imageHeight);
             layoutParamsImageView.gravity = Gravity.CENTER;
             ivContactProfile.setLayoutParams(layoutParamsImageView);
             //resizing textView and its text size
-            FrameLayout.LayoutParams layoutParamsTextView = new FrameLayout.LayoutParams(imageSize, imageSize);
+            FrameLayout.LayoutParams layoutParamsTextView = new FrameLayout.LayoutParams(imageSize, imageHeight);
             layoutParamsTextView.gravity = Gravity.CENTER;
             tvInitialAlphabet.setLayoutParams(layoutParamsTextView);
             tvInitialAlphabet.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
@@ -122,9 +125,67 @@ public class DownloadImageFromUrlUtil {
         }
     }
 
+    public static void loadImageWithInitialAlphabet(Context context, PatientProfileScreenType patientProfileScreenType, ImageLoadedListener imageLoadedListener, Object object, final ProgressBar progressLoading, final ImageView ivContactProfile) {
+        try {
+            String url = "";
+            String colorCode = String.valueOf(context.getResources().getColor(R.color.grey_light_text));
+            String name = "";
+            int imageHeight = context.getResources().getDimensionPixelOffset(patientProfileScreenType.getImageWidth());
+            if (object instanceof RegisteredPatientDetailsUpdated) {
+                RegisteredPatientDetailsUpdated registeredPatientDetailsDetailsUpdated = (RegisteredPatientDetailsUpdated) object;
+                url = registeredPatientDetailsDetailsUpdated.getThumbnailUrl();
+                colorCode = registeredPatientDetailsDetailsUpdated.getColorCode();
+                name = registeredPatientDetailsDetailsUpdated.getLocalPatientName();
+            } else if (object instanceof AlreadyRegisteredPatientsResponse) {
+                AlreadyRegisteredPatientsResponse alreadyRegisteredPatientsResponse = (AlreadyRegisteredPatientsResponse) object;
+                url = alreadyRegisteredPatientsResponse.getThumbnailUrl();
+                colorCode = alreadyRegisteredPatientsResponse.getColorCode();
+                name = alreadyRegisteredPatientsResponse.getFirstName();
+            } else if (object instanceof DoctorProfile) {
+                DoctorProfile doctor = (DoctorProfile) object;
+                url = doctor.getThumbnailUrl();
+                colorCode = doctor.getColorCode();
+                name = doctor.getFirstName();
+            } else if (object instanceof RegisteredDoctorProfile) {
+                RegisteredDoctorProfile doctor = (RegisteredDoctorProfile) object;
+                url = doctor.getThumbnailUrl();
+                colorCode = doctor.getColorCode();
+                name = doctor.getFirstName();
+            } else if (object instanceof ClinicDoctorProfile) {
+                ClinicDoctorProfile clinicDoctorProfile = (ClinicDoctorProfile) object;
+                url = clinicDoctorProfile.getThumbnailUrl();
+                colorCode = clinicDoctorProfile.getColorCode();
+                name = clinicDoctorProfile.getFirstName();
+                if (patientProfileScreenType == PatientProfileScreenType.IN_ABOUT_DOCTOR)
+                    imageHeight = context.getResources().getDimensionPixelOffset(patientProfileScreenType.getImageheight());
+            } else if (object instanceof PatientCard) {
+                PatientCard patientCard = (PatientCard) object;
+                url = patientCard.getThumbnailUrl();
+                colorCode = patientCard.getColorCode();
+                name = patientCard.getFirstName();
+            }
+            int imageSize = context.getResources().getDimensionPixelOffset(patientProfileScreenType.getImageWidth());
+            int textSize = context.getResources().getDimensionPixelOffset(patientProfileScreenType.getTextSize());
+
+            //resizing imageview
+            FrameLayout.LayoutParams layoutParamsImageView = new FrameLayout.LayoutParams(imageSize, imageHeight);
+            layoutParamsImageView.gravity = Gravity.CENTER;
+            ivContactProfile.setLayoutParams(layoutParamsImageView);
+            //resizing textView and its text size
+            FrameLayout.LayoutParams layoutParamsTextView = new FrameLayout.LayoutParams(imageSize, imageHeight);
+            layoutParamsTextView.gravity = Gravity.CENTER;
+            if (!Util.isNullOrBlank(url)) {
+                loadImageUsingImageLoader(progressLoading, ivContactProfile, url);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
     public static void loadRingWithColorCode(Context context, PatientProfileScreenType patientProfileScreenType, final String colorCode, final ImageView ivContactProfile) {
         try {
-            int imageSize = context.getResources().getDimensionPixelOffset(patientProfileScreenType.getImageViewSize());
+            int imageSize = context.getResources().getDimensionPixelOffset(patientProfileScreenType.getImageWidth());
             ivContactProfile.setBackgroundResource(R.drawable.shape_circle_solid_white_grey_border);
             //resizing imageview
             FrameLayout.LayoutParams layoutParamsImageView = new FrameLayout.LayoutParams(imageSize, imageSize);

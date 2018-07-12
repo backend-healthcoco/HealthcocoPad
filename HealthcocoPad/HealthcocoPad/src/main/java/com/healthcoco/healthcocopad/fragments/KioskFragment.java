@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import com.android.volley.Response;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
+import com.healthcoco.healthcocopad.activities.KioskActivity;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.User;
@@ -24,12 +25,17 @@ import com.healthcoco.healthcocopad.enums.KioskSubItemType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
+import com.healthcoco.healthcocopad.listeners.PatientRegistrationDetailsListener;
 import com.healthcoco.healthcocopad.recyclerview.HealthcocoRecyclerViewAdapter;
 import com.healthcoco.healthcocopad.recyclerview.HealthcocoRecyclerViewItemClickListener;
 import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 
 import java.util.ArrayList;
+
+import static com.healthcoco.healthcocopad.enums.KioskSubItemType.DOCTOR_AND_CLINIC;
+import static com.healthcoco.healthcocopad.enums.KioskSubItemType.PATIENT_REGISTER;
+import static com.healthcoco.healthcocopad.enums.KioskSubItemType.VIDEO;
 
 /**
  * Created by Prashant on 23-06-18.
@@ -46,6 +52,12 @@ public class KioskFragment extends HealthCocoFragment implements
     private ArrayList<KioskSubItemType> subItemTypeArrayList = new ArrayList<>();
     private boolean receiversRegistered;
     private User user;
+    private PatientRegistrationDetailsListener registrationDetailsListener;
+
+    public KioskFragment(PatientRegistrationDetailsListener registrationDetailsListener) {
+        super();
+        this.registrationDetailsListener = registrationDetailsListener;
+    }
 
 
     @Override
@@ -127,9 +139,9 @@ public class KioskFragment extends HealthCocoFragment implements
             }
             adapter.notifyDataSetChanged();
         }*/
-        subItemTypeArrayList.add(KioskSubItemType.PATIENT_REGISTER);
-        subItemTypeArrayList.add(KioskSubItemType.DOCTOR_AND_CLINIC);
-        subItemTypeArrayList.add(KioskSubItemType.VIDEO);
+        subItemTypeArrayList.add(PATIENT_REGISTER);
+        subItemTypeArrayList.add(DOCTOR_AND_CLINIC);
+        subItemTypeArrayList.add(VIDEO);
         subItemTypeArrayList.add(KioskSubItemType.FEEDBACK);
         subItemTypeArrayList.add(KioskSubItemType.BLOGS);
 
@@ -184,8 +196,9 @@ public class KioskFragment extends HealthCocoFragment implements
 
     @Override
     public void onItemClicked(Object object) {
-        if (object != null && object instanceof KioskSubItemType) {
-            KioskSubItemType subItemType = (KioskSubItemType) object;
+        if (object != null) {
+            int ordinal = (int) object;
+            KioskSubItemType subItemType = KioskSubItemType.values()[ordinal];
             switch (subItemType) {
                 case PATIENT_REGISTER:
                     openCommonOpenUpActivity(CommonOpenUpFragmentType.PATIENT_REGISTRATION_TABS, "PATIENT", null);
@@ -200,9 +213,14 @@ public class KioskFragment extends HealthCocoFragment implements
                     openCommonOpenUpActivity(CommonOpenUpFragmentType.FEEDBACK_DOCTOR, AppointmentFeedbackFragment.TAG_FEEDBACK_TYPE, FeedbackType.DOCTOR.ordinal(), 0);
                     break;
                 case BLOGS:
-                    openCommonOpenUpActivity(CommonOpenUpFragmentType.BLOGS, "BLOGS", null);
+                    onPinKeyClick();
+//                   openCommonOpenUpActivity(CommonOpenUpFragmentType.BLOGS, "BLOGS", null);
                     break;
             }
         }
+    }
+
+    public void onPinKeyClick() {
+        registrationDetailsListener.readyToMoveNext(KioskSubItemType.PATIENT_REGISTER.ordinal());
     }
 }

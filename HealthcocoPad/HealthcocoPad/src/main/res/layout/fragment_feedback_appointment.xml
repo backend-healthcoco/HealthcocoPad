@@ -33,11 +33,11 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="@dimen/layout_margin"
             android:layout_marginLeft="@dimen/clinic_logo_image"
             android:layout_marginRight="@dimen/clinic_logo_image"
             android:layout_marginTop="@dimen/layout_margin"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/layout_margin">
 
 
             <LinearLayout

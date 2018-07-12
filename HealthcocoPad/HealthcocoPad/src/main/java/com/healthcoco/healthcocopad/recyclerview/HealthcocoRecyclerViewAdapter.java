@@ -9,10 +9,13 @@ import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
 import com.healthcoco.healthcocopad.bean.server.ClinicDoctorProfile;
+import com.healthcoco.healthcocopad.bean.server.ClinicImage;
 import com.healthcoco.healthcocopad.bean.server.Events;
 import com.healthcoco.healthcocopad.bean.server.RegisteredDoctorProfile;
 import com.healthcoco.healthcocopad.enums.AdapterType;
 import com.healthcoco.healthcocopad.enums.KioskSubItemType;
+import com.healthcoco.healthcocopad.viewholders.AboutDoctorListViewHolder;
+import com.healthcoco.healthcocopad.viewholders.ClinicImageListItemHolder;
 import com.healthcoco.healthcocopad.viewholders.DoctorListViewHolder;
 import com.healthcoco.healthcocopad.viewholders.EventItemViewHolder;
 import com.healthcoco.healthcocopad.viewholders.KioskSubItemViewHolder;
@@ -91,6 +94,14 @@ public class HealthcocoRecyclerViewAdapter extends RecyclerView.Adapter<Healthco
                 convertView = mInflater.inflate(R.layout.item_doctor_popup_list, parent, false);
                 viewHolder = new DoctorListViewHolder(mActivity, convertView, listenerObject);
                 break;
+            case ABOUT_DOCTOR:
+                convertView = mInflater.inflate(R.layout.list_item_about_doctor, parent, false);
+                viewHolder = new AboutDoctorListViewHolder(mActivity, convertView, onItemClickListener);
+                break;
+            case CLINIC_IMAGE:
+                convertView = mInflater.inflate(R.layout.list_item_about_doctor, parent, false);
+                viewHolder = new ClinicImageListItemHolder(mActivity, convertView, onItemClickListener);
+                break;
         }
         return viewHolder;
     }
@@ -120,7 +131,19 @@ public class HealthcocoRecyclerViewAdapter extends RecyclerView.Adapter<Healthco
             case DOCTOR_POPUP_LIST:
                 if (holder instanceof DoctorListViewHolder && object instanceof RegisteredDoctorProfile) {
                     DoctorListViewHolder doctorListViewHolder = ((DoctorListViewHolder) holder);
-                    holder.applyData(object);
+                    doctorListViewHolder.applyData(object);
+                }
+                break;
+            case ABOUT_DOCTOR:
+                if (holder instanceof AboutDoctorListViewHolder && object instanceof ClinicDoctorProfile) {
+                    AboutDoctorListViewHolder aboutDoctorListViewHolder = (AboutDoctorListViewHolder) holder;
+                    aboutDoctorListViewHolder.applyData(object);
+                }
+                break;
+            case CLINIC_IMAGE:
+                if (holder instanceof ClinicImageListItemHolder && object instanceof ClinicImage) {
+                    ClinicImageListItemHolder clinicImageListItemHolder = (ClinicImageListItemHolder) holder;
+                    clinicImageListItemHolder.applyData(object);
                 }
                 break;
         }

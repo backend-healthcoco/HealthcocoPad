@@ -41,10 +41,12 @@ import com.healthcoco.healthcocopad.fragments.CommonUiPermissionsFragment;
 import com.healthcoco.healthcocopad.fragments.ContactsListFragment;
 import com.healthcoco.healthcocopad.fragments.DiagramsListFragment;
 import com.healthcoco.healthcocopad.fragments.DiseaseListFragment;
+import com.healthcoco.healthcocopad.fragments.DoctorDetailsFragment;
 import com.healthcoco.healthcocopad.fragments.EnlargedMapViewFragment;
 import com.healthcoco.healthcocopad.fragments.FeedbackFragment;
 import com.healthcoco.healthcocopad.fragments.FeedsFragment;
 import com.healthcoco.healthcocopad.fragments.InitialSyncFragment;
+import com.healthcoco.healthcocopad.fragments.KioskFragment;
 import com.healthcoco.healthcocopad.fragments.LoginSignupFragment;
 import com.healthcoco.healthcocopad.fragments.NotificationResponseDataFragment;
 import com.healthcoco.healthcocopad.fragments.PatientEducationVideoListFragment;
@@ -256,6 +258,9 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
                 break;
             case EDUCATION_VIDEO:
                 openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, R.string.videos, new PatientEducationVideoListFragment());
+                break;
+            case DOCTOR_DETAILS:
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_CROSS, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, R.string.about_doctor, new DoctorDetailsFragment());
                 break;
         }
     }

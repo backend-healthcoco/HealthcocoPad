@@ -219,7 +219,7 @@ public class HomeActivity extends HealthCocoActivity implements View.OnClickList
                 fragment = new DoctorVideoListFragment();
                 break;
             case REGISTER:
-                actionBarNormal.setVisibility(View.GONE);
+             /*   actionBarNormal.setVisibility(View.GONE);
                 params = new SlidingPaneLayout.LayoutParams(
                         SlidingPaneLayout.LayoutParams.MATCH_PARENT,
                         SlidingPaneLayout.LayoutParams.MATCH_PARENT
@@ -227,7 +227,12 @@ public class HomeActivity extends HealthCocoActivity implements View.OnClickList
                 params.setMargins(0, 0, 0, 0);
                 layoutHomeActivity.setLayoutParams(params);
 
-                fragment = new KioskFragment();
+                fragment = new KioskFragment();*/
+                Intent intent = new Intent(this, KioskActivity.class);
+//                intent.putExtra(HealthcocoFCMListener.TAG_NOTIFICATION_RESPONSE, notificationResponseData);
+                startActivity(intent);
+                finish();
+
                 break;
             case HELP_IMPROVE:
                 openCommonOpenUpActivity(CommonOpenUpFragmentType.FEEDBACK, null, 0);
