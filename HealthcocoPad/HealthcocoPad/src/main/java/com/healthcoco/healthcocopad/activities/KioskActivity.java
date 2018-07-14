@@ -67,7 +67,7 @@ public class KioskActivity extends HealthCocoActivity implements PatientRegistra
     }
 
     @Override
-    public void readyToMoveNext(Object object) {
+    public void readyToMoveNext(Object object, boolean isEditPatient) {
         if (object != null) {
             int ordinal = (int) object;
             KioskScreenType screenType = KioskScreenType.values()[ordinal];

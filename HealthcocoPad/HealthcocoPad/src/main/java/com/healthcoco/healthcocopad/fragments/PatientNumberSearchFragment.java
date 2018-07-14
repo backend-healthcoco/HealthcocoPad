@@ -38,6 +38,7 @@ import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
+import com.myscript.atk.core.Line;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,6 +55,7 @@ public class PatientNumberSearchFragment extends HealthCocoFragment implements V
     private boolean isMobileNumberOptional;
     private Button btRegisterNewPatient;
     private ListView lvPatients;
+    private LinearLayout layoutRegisterNew;
     private PatientNumberSearchAdapter mAdapter;
     private ArrayList<AlreadyRegisteredPatientsResponse> list = new ArrayList<>();
     private LinearLayout loadingExistingPatientsList;
@@ -103,9 +105,10 @@ public class PatientNumberSearchFragment extends HealthCocoFragment implements V
         btRegisterNewPatient = (Button) view.findViewById(R.id.bt_register_new_patient);
         lvPatients = (ListView) view.findViewById(R.id.lv_patients);
         loadingExistingPatientsList = (LinearLayout) view.findViewById(R.id.loading_existing_patients_list);
+        layoutRegisterNew = (LinearLayout) view.findViewById(R.id.layout_register_new_patient);
         mActivity.showSoftKeyboard(editMobileNumber);
         Util.setFocusToEditText(mActivity, editMobileNumber);
-        btRegisterNewPatient.setVisibility(View.GONE);
+        layoutRegisterNew.setVisibility(View.GONE);
         if (isMobileNumberOptional) {
             btSkip.setVisibility(View.VISIBLE);
         }
@@ -129,11 +132,11 @@ public class PatientNumberSearchFragment extends HealthCocoFragment implements V
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.bt_skip:
-                openRegistrationFragment(null, null);
+                openRegistrationFragment(null, null, false);
                 break;
             case R.id.bt_register_new_patient:
                 if (list.size() < 9) {
-                    openRegistrationFragment(String.valueOf(editMobileNumber.getText()), null);
+                    openRegistrationFragment(String.valueOf(editMobileNumber.getText()), null, false);
                 } else
                     Util.showAlert(mActivity, R.string.alert_nine_patients_already_registered);
                 break;
@@ -191,9 +194,9 @@ public class PatientNumberSearchFragment extends HealthCocoFragment implements V
                         LocalDataServiceImpl.getInstance(mApp).addAlreadyRegisteredPatients(list);
                         notifyAndRefreshPatientList(list);
                     } else {
-//                        openRegistrationFragment(String.valueOf(editMobileNumber.getText()));
+                        openRegistrationFragment(String.valueOf(editMobileNumber.getText()), null, false);
                     }
-                    btRegisterNewPatient.setVisibility(View.VISIBLE);
+                    layoutRegisterNew.setVisibility(View.VISIBLE);
                     break;
             }
         }
@@ -206,7 +209,7 @@ public class PatientNumberSearchFragment extends HealthCocoFragment implements V
         mAdapter.notifyDataSetChanged();
     }
 
-    private void openRegistrationFragment(String mobileNo, String patientUniqueId) {
+    private void openRegistrationFragment(String mobileNo, String patientUniqueId, boolean isEditPatient) {
         RegisterNewPatientRequest patientDetails = new RegisterNewPatientRequest();
 //        String mobileNo = String.valueOf(editMobileNumber.getText());
         if (!Util.isNullOrBlank(mobileNo))
@@ -214,7 +217,7 @@ public class PatientNumberSearchFragment extends HealthCocoFragment implements V
                 patientDetails.setMobileNumber(mobileNo);
         if (!Util.isNullOrBlank(patientUniqueId))
             patientDetails.setUserId(patientUniqueId);
-        registrationDetailsListener.readyToMoveNext(patientDetails);
+        registrationDetailsListener.readyToMoveNext(patientDetails, isEditPatient);
     }
 
 
@@ -231,6 +234,7 @@ public class PatientNumberSearchFragment extends HealthCocoFragment implements V
             Util.sendBroadcast(mApp, BookAppointmentDialogFragment.INTENT_REFRESH_SELECTED_PATIENT);
             Util.sendBroadcast(mApp, ContactsListFragment.INTENT_FINISH_CONTACTS_LIST_SCREEN);
 //            mActivity.finish();
+            openRegistrationFragment(null, alreadyRegisteredPatient.getUserId(), true);
         } else {
             boolean isEdit = false;
             if (alreadyRegisteredPatient.getIsPartOfClinic() != null && alreadyRegisteredPatient.getIsPartOfClinic()) {
@@ -242,7 +246,7 @@ public class PatientNumberSearchFragment extends HealthCocoFragment implements V
                     } else
                         isEdit = true;
             }
-            openRegistrationFragment(null, alreadyRegisteredPatient.getUserId());
+            openRegistrationFragment(null, alreadyRegisteredPatient.getUserId(), false);
         }
     }
 
@@ -266,7 +270,7 @@ public class PatientNumberSearchFragment extends HealthCocoFragment implements V
                 if (Util.isValidMobileNo(s)) {
                     mActivity.hideSoftKeyboard();
                     validateData();
-                } else btRegisterNewPatient.setVisibility(View.GONE);
+                } else layoutRegisterNew.setVisibility(View.GONE);
 
                 break;
         }

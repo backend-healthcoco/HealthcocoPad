@@ -12,47 +12,37 @@ import android.widget.TextView;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
-import com.healthcoco.healthcocopad.bean.server.DoctorClinicProfile;
 import com.healthcoco.healthcocopad.bean.server.KioskPin;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocopad.enums.KioskScreenType;
-import com.healthcoco.healthcocopad.enums.KioskSubItemType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
 import com.healthcoco.healthcocopad.listeners.PatientRegistrationDetailsListener;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
-import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
+import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.Util;
 
 
-public class EnterPinFragment extends HealthCocoFragment implements LocalDoInBackgroundListenerOptimised, PinLockListener, View.OnClickListener {
+public class ChangePinFragment extends HealthCocoFragment implements LocalDoInBackgroundListenerOptimised, PinLockListener, View.OnClickListener {
 
     public static final String TAG = "EnterPinFragment";
 
     private static final int PIN_LENGTH = 4;
-    private static final String DEFAULT_PIN = "1234";
 
     private PinLockView mPinLockView;
-    private IndicatorDots mIndicatorDots;
     private TextView tvTitle;
     private TextView tvAttempts;
-    private PatientRegistrationDetailsListener registrationDetailsListener;
-    private Button btHome;
+    private TextView tvEnteredValue;
+    private TextView tvSubmit;
     private User user;
     private String pinCode;
 
-    public EnterPinFragment(PatientRegistrationDetailsListener registrationDetailsListener) {
-        super();
-        this.registrationDetailsListener = registrationDetailsListener;
-    }
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_enter_pin, container, false);
+        view = inflater.inflate(R.layout.fragment_change_pin, container, false);
         super.onCreateView(inflater, container, savedInstanceState);
         return view;
     }
@@ -73,29 +63,19 @@ public class EnterPinFragment extends HealthCocoFragment implements LocalDoInBac
     @Override
     public void initViews() {
         tvAttempts = (TextView) view.findViewById(R.id.attempts);
+        tvEnteredValue = (TextView) view.findViewById(R.id.tv_enter_value);
         tvTitle = (TextView) view.findViewById(R.id.title);
-        mIndicatorDots = (IndicatorDots) view.findViewById(R.id.indicator_dots);
         mPinLockView = (PinLockView) view.findViewById(R.id.pinlockView);
-        btHome = (Button) view.findViewById(R.id.bt_kiosk_home);
+        tvSubmit = (TextView) view.findViewById(R.id.tv_submit);
 
-        mPinLockView.attachIndicatorDots(mIndicatorDots);
         mPinLockView.setPinLength(PIN_LENGTH);
-        mIndicatorDots.setIndicatorType(IndicatorDots.IndicatorType.FIXED);
     }
 
     @Override
     public void initListeners() {
         mPinLockView.setPinLockListener(this);
-        btHome.setOnClickListener(this);
+        tvSubmit.setOnClickListener(this);
     }
-
-
-    private void shake() {
-        ObjectAnimator objectAnimator = new ObjectAnimator().ofFloat(mPinLockView, "translationX",
-                0, 25, -25, 25, -25, 15, -15, 6, -6, 0).setDuration(1000);
-        objectAnimator.start();
-    }
-
 
     @Override
     public VolleyResponseBean doInBackground(VolleyResponseBean response) {
@@ -107,9 +87,6 @@ public class EnterPinFragment extends HealthCocoFragment implements LocalDoInBac
                 LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
                 if (doctor != null && doctor.getUser() != null && !Util.isNullOrBlank(doctor.getUser().getUniqueId())) {
                     user = doctor.getUser();
-                    KioskPin kioskPin = LocalDataServiceImpl.getInstance(mApp).getKioskPin(user.getUniqueId());
-                    if (kioskPin != null)
-                        pinCode = kioskPin.getPin();
                 }
                 return volleyResponseBean;
         }
@@ -127,9 +104,15 @@ public class EnterPinFragment extends HealthCocoFragment implements LocalDoInBac
             switch (response.getWebServiceType()) {
                 case FRAGMENT_INITIALISATION:
                     if (user != null) {
-                        if (Util.isNullOrBlank(pinCode)) {
-                            pinCode = DEFAULT_PIN;
-                        }
+                    }
+                    break;
+                case ADD_EDIT_PIN:
+                    if (response.isValidData(response)) {
+                        LocalDataServiceImpl.getInstance(mApp).
+                                addKioskPin(response.getData());
+                        Util.showToast(mActivity, getString(R.string.pin_successfully_changed));
+                        mActivity.hideLoading();
+                        mActivity.finish();
                     }
                     break;
             }
@@ -140,15 +123,7 @@ public class EnterPinFragment extends HealthCocoFragment implements LocalDoInBac
 
     @Override
     public void onComplete(String pin) {
-        if (pin.equals(pinCode)) {
-//            setResult(RESULT_OK);
-//            finish();
-            registrationDetailsListener.readyToMoveNext(KioskScreenType.HOME.ordinal(), false);
-        } else {
-            shake();
-            tvAttempts.setText(getString(R.string.pinlock_wrongpin));
-            mPinLockView.resetPinLockView();
-        }
+//        Util.showToast(mActivity, getString(R.string.max_length_reached));
     }
 
     @Override
@@ -158,25 +133,51 @@ public class EnterPinFragment extends HealthCocoFragment implements LocalDoInBac
 
     @Override
     public void onPinEntered(String key) {
-
+        pinCode = key;
+        tvEnteredValue.setText(key);
     }
 
     @Override
     public void onPinDeleted() {
-
+        pinCode = pinCode.substring(0, pinCode.length() - 1);
+        tvEnteredValue.setText(pinCode);
     }
 
     @Override
     public boolean isReset() {
-        return true;
+        return false;
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.bt_kiosk_home:
-                registrationDetailsListener.readyToMoveNext(KioskScreenType.KIOSK.ordinal(), false);
+            case R.id.tv_submit:
+                validateData();
                 break;
         }
+    }
+
+    private void validateData() {
+        String pinNumber = (String.valueOf(tvEnteredValue.getText()));
+        String msg = null;
+        if (Util.isNullOrBlank(pinNumber)) {
+            msg = getResources().getString(R.string.please_enter_valid_pin);
+        } else if (pinNumber.length() < 4)
+            msg = getResources().getString(R.string.please_enter_valid_pin);
+
+        if (Util.isNullOrBlank(msg)) {
+            changePin(pinNumber);
+        } else {
+//            if (!isMobileNumberOptional)
+            Util.showAlert(mActivity, msg);
+        }
+    }
+
+    private void changePin(String pin) {
+        mActivity.showLoading(false);
+        KioskPin kioskPin = new KioskPin();
+        kioskPin.setPin(pin);
+        kioskPin.setDoctorId(user.getUniqueId());
+        WebDataServiceImpl.getInstance(mApp).addSuggestion(KioskPin.class, WebServiceType.ADD_EDIT_PIN, kioskPin, this, this);
     }
 }

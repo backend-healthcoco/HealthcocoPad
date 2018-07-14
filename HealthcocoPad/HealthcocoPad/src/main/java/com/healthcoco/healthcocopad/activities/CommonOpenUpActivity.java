@@ -21,6 +21,7 @@ import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.calendar.CalendarFragment;
+import com.healthcoco.healthcocopad.calendar.pinlockview.ChangePinFragment;
 import com.healthcoco.healthcocopad.enums.ActionbarLeftRightActionTypeDrawables;
 import com.healthcoco.healthcocopad.enums.ActionbarType;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
@@ -54,6 +55,7 @@ import com.healthcoco.healthcocopad.fragments.PatientRegistrationFragment;
 import com.healthcoco.healthcocopad.fragments.PatientRegistrationTabsFragment;
 import com.healthcoco.healthcocopad.fragments.QueueFragment;
 import com.healthcoco.healthcocopad.fragments.SelectedDiagramDetailFragment;
+import com.healthcoco.healthcocopad.fragments.SettingKioskFragment;
 import com.healthcoco.healthcocopad.fragments.SettingPrintSetupFragment;
 import com.healthcoco.healthcocopad.fragments.SettingUIPermissionsFragment;
 import com.healthcoco.healthcocopad.fragments.SettingsNameHideActivateFragment;
@@ -189,6 +191,9 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
             case SETTINGS_UI_PERMISSION_PATIENT_TAB:
                 openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_CROSS, ActionbarLeftRightActionTypeDrawables.WITH_SAVE, R.string.patient_tab_ui_permission_details, new CommonUiPermissionsFragment());
                 break;
+            case SETTING_KIOSK:
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_CROSS, ActionbarLeftRightActionTypeDrawables.WITH_SAVE, R.string.kiosk_setting, new SettingKioskFragment());
+                break;
             case ADD_NEW_PRESCRIPTION:
                 openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_CROSS, ActionbarLeftRightActionTypeDrawables.WITH_SAVE, R.string.new_prescription, new AddEditNormalVisitPrescriptionFragment());
                 break;
@@ -261,6 +266,9 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
                 break;
             case DOCTOR_DETAILS:
                 openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_CROSS, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, R.string.about_doctor, new DoctorDetailsFragment());
+                break;
+            case CHANGE_PIN:
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_CROSS, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, R.string.change_pin, new ChangePinFragment());
                 break;
         }
     }

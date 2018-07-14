@@ -7,4 +7,9 @@ public interface PinLockListener {
 
     void onEmpty();
 
+    void onPinEntered(String key);
+
+    void onPinDeleted();
+
+    boolean isReset();
 }

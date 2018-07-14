@@ -145,6 +145,7 @@ public class PatientBasicDetailsFragment extends HealthCocoFragment implements V
     private ExistingPatientAutoCompleteAdapter existingPatientAutotvAdapter;
     private List<Reference> referenceList;
     private Reference selectedReference;
+    private ArrayList<String> notesListLastAdded = new ArrayList<>();
     private CityResponse selectedCity;
     private ImageView ivImageView;
     private Uri profileImageUri;
@@ -163,6 +164,7 @@ public class PatientBasicDetailsFragment extends HealthCocoFragment implements V
     private EditText editAge;
     //    private LinearLayout containerAge;
     private ImageButton btDeleteReferredBy;
+    private ArrayList<String> groupIdsToAssign = new ArrayList<String>();
     private LinearLayout containerAge;
 
     public PatientBasicDetailsFragment(PatientRegistrationDetailsListener registrationDetailsListener) {
@@ -292,7 +294,8 @@ public class PatientBasicDetailsFragment extends HealthCocoFragment implements V
 
     }
 
-    public void initDataFromPreviousFragment(Object object) {
+    public void initDataFromPreviousFragment(Object object, boolean isEditPatient) {
+        this.isEditPatient = isEditPatient;
         RegisterNewPatientRequest patientRequest = (RegisterNewPatientRequest) object;
         String patientUniqueId = "";
         if (patientRequest != null) {
@@ -308,7 +311,7 @@ public class PatientBasicDetailsFragment extends HealthCocoFragment implements V
             }
             if (!Util.isNullOrBlank(patientUniqueId)) {
                 if (isEditPatient) {
-                    selectedPatient = LocalDataServiceImpl.getInstance(mApp).getPatient(patientUniqueId);
+                    selectedPatient = LocalDataServiceImpl.getInstance(mApp).getPatient(patientUniqueId, user.getForeignLocationId());
                     initPatientDetails(selectedPatient);
                 } else {
                     alreadyRegisteredPatient = LocalDataServiceImpl.getInstance(mApp).getALreadyRegisteredPatient(patientUniqueId);
@@ -347,6 +350,7 @@ public class PatientBasicDetailsFragment extends HealthCocoFragment implements V
             mobileNumber = Util.getValidatedValue(registeredPatientDetailsUpdated.getMobileNumber());
             gender = Util.getValidatedValue(registeredPatientDetailsUpdated.getGender());
             birthday = Util.getDOB(registeredPatientDetailsUpdated.getDob());
+            groupIdsToAssign = registeredPatientDetailsUpdated.getGroupIds();
             colorCode = registeredPatientDetailsUpdated.getColorCode();
             selectedReference = registeredPatientDetailsUpdated.getReferredBy();
             if (selectedReference != null)
@@ -369,6 +373,7 @@ public class PatientBasicDetailsFragment extends HealthCocoFragment implements V
                 profession = Util.getValidatedValue(registeredPatientDetailsUpdated.getPatient().getProfession());
                 bloodGroup = Util.getValidatedValue(registeredPatientDetailsUpdated.getPatient().getBloodGroup());
                 secondaryMobile = Util.getValidatedValue(registeredPatientDetailsUpdated.getPatient().getSecMobile());
+                notesListLastAdded = registeredPatientDetailsUpdated.getPatient().getNotes();
                 aadharId = registeredPatientDetailsUpdated.getPatient().getAdhaarId();
                 panNumber = registeredPatientDetailsUpdated.getPatient().getPanCardNumber();
                 drivingLicense = registeredPatientDetailsUpdated.getPatient().getDrivingLicenseId();
@@ -522,18 +527,20 @@ public class PatientBasicDetailsFragment extends HealthCocoFragment implements V
         patientDetails.setSecMobile(Util.getValidatedValueOrNull(String.valueOf(editSecondaryMobile.getText())));
         patientDetails.setAddress(getAddress());
         patientDetails.setImage(patientProfileFileDetails);
+        patientDetails.setNotes(notesListLastAdded);
+        patientDetails.setGroups(groupIdsToAssign);
 
         String age = Util.getValidatedValueOrNull(editAge);
         if (!Util.isNullOrBlank(age))
             patientDetails.setAge(Integer.parseInt(age));
         if (isEditPatient) {
             patientDetails.setUserId(selectedPatient.getUserId());
-            WebDataServiceImpl.getInstance(mApp).updatePatient(RegisteredPatientDetailsUpdated.class, patientDetails, this, this);
+            registrationDetailsListener.readyToMoveNext(patientDetails, isEditPatient);
         } else {
             if (alreadyRegisteredPatient != null)
                 patientDetails.setUserId(alreadyRegisteredPatient.getUserId());
 //            WebDataServiceImpl.getInstance(mApp).registerNewPatient(RegisteredPatientDetailsUpdated.class, patientDetails, this, this);
-            registrationDetailsListener.readyToMoveNext(patientDetails);
+            registrationDetailsListener.readyToMoveNext(patientDetails, isEditPatient);
         }
     }
 

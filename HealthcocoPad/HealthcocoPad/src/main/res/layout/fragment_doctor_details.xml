@@ -455,8 +455,7 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
                         android:background="@drawable/shape_rounded_corners_item_background"
                         android:orientation="vertical"
                         android:padding="10dp"

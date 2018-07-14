@@ -1187,6 +1187,8 @@
     <string name="about_doctor">About Doctor</string>
     <string name="welcome_to">Welcome to</string>
     <string name="kiosk_setting">Kiosk Setting</string>
+    <string name="register_new_patient">Register New Patient</string>
+    <string name="not_in_above">Not Registered</string>
 
     <!--doctor feedback texts-->
     <string name="would_you_like_to_recommend_doctor">Would you like to Recommend %s?</string>
@@ -1252,5 +1254,15 @@
     <string name="pinlock_title">Enter PIN</string>
     <string name="forgot_your_pin">&#160;Forgot PIN&#160;?</string>
 
+    <!--Kiosk Setting texts-->
+    <string name="add_patient_video">Add Patient Video</string>
+    <string name="change_pin">Change Kiosk PIN</string>
+    <string name="pin">PIN</string>
+    <string name="enter_new_pin">Enter new PIN</string>
+    <string name="please_enter_pin">Please Enter PIN</string>
+    <string name="pin_successfully_changed">PIN has been successfully Changed</string>
+    <string name="kiosk_not_activated">You have not Activated Kisok</string>
+    <string name="please_enter_valid_pin">Please enter 4 digit PIN</string>
+    <string name="max_length_reached">Maximum leagth of PIN is 4 digit</string>
 
 </resources>

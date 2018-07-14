@@ -58,7 +58,20 @@
             android:layout_marginRight="@dimen/fab_margin_bottom"
             android:hint="@string/please_enter_password"
             android:inputType="textPassword"
-            android:textSize="@dimen/text_size_edit_otp_number" />
+            android:textSize="@dimen/text_size_edit_otp_number"
+            android:visibility="gone" />
+
+        <EditText
+            android:id="@+id/edit_pin"
+            style="@style/add_drug_detail_edittext_textview_padding"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/fab_margin_bottom"
+            android:hint="@string/enter_new_pin"
+            android:inputType="textPassword"
+            android:maxLength="4"
+            android:textSize="@dimen/text_size_edit_otp_number"
+            android:visibility="gone" />
     </LinearLayout>
 
 </LinearLayout>

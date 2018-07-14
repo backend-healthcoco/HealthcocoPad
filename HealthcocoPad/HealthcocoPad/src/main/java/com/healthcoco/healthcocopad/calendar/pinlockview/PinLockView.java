@@ -54,19 +54,27 @@ public class PinLockView extends RecyclerView {
                         mPinLockListener.onComplete(mPin);
                     }
                 }
+                if (mPinLockListener != null) {
+                    if (mPin.length() <= mPinLength) {
+                        mPinLockListener.onPinEntered(mPin);
+                    }
+                }
             } else {
                 if (!false) {
-                    resetPinLockView();
-                    mPin = mPin.concat(String.valueOf(keyValue));
+                    if (mPinLockListener != null)
+                        if (mPinLockListener.isReset()) {
+                            resetPinLockView();
+                            mPin = mPin.concat(String.valueOf(keyValue));
 
-                    if (isIndicatorDotsAttached()) {
-                        mIndicatorDots.updateDot(mPin.length());
-                    }
+                            if (isIndicatorDotsAttached()) {
+                                mIndicatorDots.updateDot(mPin.length());
+                            }
 
-                } else {
-                    if (mPinLockListener != null) {
-                        mPinLockListener.onComplete(mPin);
-                    }
+                        } else {
+                            if (mPinLockListener != null) {
+                                mPinLockListener.onComplete(mPin);
+                            }
+                        }
                 }
             }
         }
@@ -93,6 +101,7 @@ public class PinLockView extends RecyclerView {
                         mPinLockListener.onEmpty();
                         clearInternalPin();
                     }
+                    mPinLockListener.onPinDeleted();
                 }
             } else {
                 if (mPinLockListener != null) {

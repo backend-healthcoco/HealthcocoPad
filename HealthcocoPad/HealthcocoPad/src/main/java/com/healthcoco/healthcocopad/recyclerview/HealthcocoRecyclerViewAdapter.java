@@ -99,7 +99,7 @@ public class HealthcocoRecyclerViewAdapter extends RecyclerView.Adapter<Healthco
                 viewHolder = new AboutDoctorListViewHolder(mActivity, convertView, onItemClickListener);
                 break;
             case CLINIC_IMAGE:
-                convertView = mInflater.inflate(R.layout.list_item_about_doctor, parent, false);
+                convertView = mInflater.inflate(R.layout.list_item_clinic_images, parent, false);
                 viewHolder = new ClinicImageListItemHolder(mActivity, convertView, onItemClickListener);
                 break;
         }

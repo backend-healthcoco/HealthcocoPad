@@ -383,6 +383,7 @@ public class UploadVideoDialogFragment extends HealthCocoDialogFragment implemen
                     return true;
                 } else {
                     LogUtils.LOGD(TAG, "Copy file failed. Source file missing.");
+                    Util.showToast(mActivity, R.string.failed_to_select_videos);
                     return false;
                 }
             }

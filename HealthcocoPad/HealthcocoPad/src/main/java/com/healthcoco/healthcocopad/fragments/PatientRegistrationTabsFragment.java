@@ -164,7 +164,7 @@ public class PatientRegistrationTabsFragment extends HealthCocoFragment implemen
                 nextButtonOnClick();
                 break;
             case R.id.bt_cross:
-                ((CommonOpenUpActivity) mActivity).onBackPressed();
+                prevButtonOnClick();
                 break;
 
         }
@@ -186,20 +186,40 @@ public class PatientRegistrationTabsFragment extends HealthCocoFragment implemen
         }
     }
 
-    private void scrollToNext() {
-        mViewPager.setCurrentItem((mViewPager.getCurrentItem() + 1), true);
-    }
-
-    @Override
-    public void readyToMoveNext(Object object) {
+    private void prevButtonOnClick() {
         int currentItem = mViewPager.getCurrentItem();
         PatientRegistrationTabsType registrationTabsType = PatientRegistrationTabsType.values()[currentItem];
         switch (registrationTabsType) {
             case SEARCH_PATIENT:
-                basicDetailsFragment.initDataFromPreviousFragment(object);
+                ((CommonOpenUpActivity) mActivity).onBackPressed();
                 break;
             case BASIC_DETAILS:
-                otherDeatilsFragment.initDataFromPreviousFragment(object);
+                scrollToPrev();
+                break;
+            case MORE_DETAIlS:
+                scrollToPrev();
+                break;
+        }
+    }
+
+    private void scrollToNext() {
+        mViewPager.setCurrentItem((mViewPager.getCurrentItem() + 1), true);
+    }
+
+    private void scrollToPrev() {
+        mViewPager.setCurrentItem((mViewPager.getCurrentItem() - 1), true);
+    }
+
+    @Override
+    public void readyToMoveNext(Object object, boolean isEditPatient) {
+        int currentItem = mViewPager.getCurrentItem();
+        PatientRegistrationTabsType registrationTabsType = PatientRegistrationTabsType.values()[currentItem];
+        switch (registrationTabsType) {
+            case SEARCH_PATIENT:
+                basicDetailsFragment.initDataFromPreviousFragment(object, isEditPatient);
+                break;
+            case BASIC_DETAILS:
+                otherDeatilsFragment.initDataFromPreviousFragment(object, isEditPatient);
                 break;
         }
         scrollToNext();

@@ -26,6 +26,7 @@ import com.healthcoco.healthcocopad.bean.server.HolterSuggestions;
 import com.healthcoco.healthcocopad.bean.server.IndicationOfUsgSuggestions;
 import com.healthcoco.healthcocopad.bean.server.IndirectLarygoscopyExamSuggestions;
 import com.healthcoco.healthcocopad.bean.server.InvestigationSuggestions;
+import com.healthcoco.healthcocopad.bean.server.KioskPin;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.MenstrualHistorySuggestions;
 import com.healthcoco.healthcocopad.bean.server.NeckExamSuggestions;
@@ -67,6 +68,7 @@ public class AddNewSuggestionDialogFragment extends HealthCocoDialogFragment imp
     public static final String TAG_SGGESTION = "suggestionTag";
     private EditText editSuggestion;
     private EditText editPassword;
+    private EditText editPin;
     private TextView titleTextView;
     private TextView suggessionTypeTextView;
     private LinearLayout layoutPassword;
@@ -121,6 +123,7 @@ public class AddNewSuggestionDialogFragment extends HealthCocoDialogFragment imp
     public void initViews() {
         editSuggestion = (EditText) view.findViewById(R.id.edit_suggestion);
         editPassword = (EditText) view.findViewById(R.id.edit_password);
+        editPin = (EditText) view.findViewById(R.id.edit_pin);
         titleTextView = (TextView) view.findViewById(R.id.tv_title);
         suggessionTypeTextView = (TextView) view.findViewById(R.id.tv_suggesion_type);
         layoutPassword = (LinearLayout) view.findViewById(R.id.layout_password);
@@ -142,13 +145,25 @@ public class AddNewSuggestionDialogFragment extends HealthCocoDialogFragment imp
             case PASSWORD:
                 layoutPassword.setVisibility(View.VISIBLE);
                 editSuggestion.setVisibility(View.GONE);
-                suggessionTypeTextView.setText(doctor.getUser().getEmailAddress());
+                editPin.setVisibility(View.GONE);
+                editPassword.setVisibility(View.VISIBLE);
+                suggessionTypeTextView.setText(getString(R.string.email) + ": " + doctor.getUser().getEmailAddress());
+                initSaveCancelButton(this, getString(R.string.submit));
+                break;
+            case PIN:
+                layoutPassword.setVisibility(View.VISIBLE);
+                editSuggestion.setVisibility(View.GONE);
+                suggessionTypeTextView.setText(getString(R.string.email) + ": " + doctor.getUser().getEmailAddress());
+                editPin.setVisibility(View.VISIBLE);
+                editPassword.setVisibility(View.GONE);
                 initSaveCancelButton(this, getString(R.string.submit));
                 break;
             default:
                 suggessionTypeTextView.setText(R.string.suggestion);
                 editSuggestion.setVisibility(View.VISIBLE);
                 layoutPassword.setVisibility(View.GONE);
+                editPin.setVisibility(View.GONE);
+                editPassword.setVisibility(View.GONE);
                 initListeners();
                 break;
         }
@@ -171,6 +186,12 @@ public class AddNewSuggestionDialogFragment extends HealthCocoDialogFragment imp
                 suggestion = String.valueOf(editPassword.getText());
                 if (Util.isNullOrBlank(suggestion)) {
                     msg = getResources().getString(R.string.please_enter_password);
+                }
+                break;
+            case PIN:
+                suggestion = String.valueOf(editPin.getText());
+                if (Util.isNullOrBlank(suggestion)) {
+                    msg = getResources().getString(R.string.please_enter_pin);
                 }
                 break;
             default:
@@ -285,6 +306,9 @@ public class AddNewSuggestionDialogFragment extends HealthCocoDialogFragment imp
                 break;
             case PASSWORD:
                 checkIsLocationAdmin(doctor.getUser().getEmailAddress(), suggestion, doctor.getUser().getForeignLocationId());
+                break;
+            case PIN:
+                changePin(user.getUniqueId(), suggestion);
                 break;
         }
     }
@@ -672,6 +696,14 @@ public class AddNewSuggestionDialogFragment extends HealthCocoDialogFragment imp
 //        isLocationAdmin(UserVerification.class, userVerification, this, this);
     }
 
+    private void changePin(String doctorId, String pin) {
+        mActivity.showLoading(false);
+        KioskPin kioskPin = new KioskPin();
+        kioskPin.setPin(pin);
+        kioskPin.setDoctorId(doctorId);
+        WebDataServiceImpl.getInstance(mApp).addSuggestion(KioskPin.class, WebServiceType.ADD_EDIT_PIN, kioskPin, this, this);
+    }
+
 
     @Override
     public void onErrorResponse(VolleyResponseBean volleyResponseBean, String errorMessage) {
@@ -875,11 +907,12 @@ public class AddNewSuggestionDialogFragment extends HealthCocoDialogFragment imp
                             addSuggestions(WebServiceType.GET_PROCEDURE_NOTE_SUGGESTIONS, LocalTabelType.PROCEDURE_NOTE_SUGGESTIONS,
                                     response.getData(), null, null);
                 break;
-            case ADD_ADVICE_SUGGESTIONS:
-                if (response.isValidData(response))
+            case ADD_EDIT_PIN:
+                if (response.isValidData(response)) {
                     LocalDataServiceImpl.getInstance(mApp).
-                            addSuggestions(WebServiceType.GET_SEARCH_ADVICE_SOLR, LocalTabelType.ADVICE_SUGGESTIONS,
-                                    response.getData(), null, null);
+                            addKioskPin(response.getData());
+                    Util.showToast(mActivity, getString(R.string.pin_successfully_changed));
+                }
                 break;
             case IS_LOCATION_ADMIN:
                 if (response.isValidData(response)) {

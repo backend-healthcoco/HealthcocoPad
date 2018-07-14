@@ -39,6 +39,7 @@
     <color name="grey_icons">#9C9C9C</color>
     <color name="grey_dark_background">#d6d3d3</color>
     <color name="orange">#fcf7a100</color>
+    <color name="orange_dark">#fcda7619</color>
     <color name="orange_translucent">#60FF7700</color>
     <color name="grey_widget_background">#e6e6e6</color>
     <color name="grey_widget_background_translucent">#d9d9d9</color>

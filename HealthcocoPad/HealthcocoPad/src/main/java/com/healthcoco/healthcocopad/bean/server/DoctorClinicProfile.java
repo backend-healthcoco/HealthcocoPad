@@ -61,6 +61,7 @@ public class DoctorClinicProfile extends SugarRecord {
     private ArrayList<Role> roles;
     private Boolean isMobileNumberOptional;
     private Boolean isPidHasDate;
+    private Boolean iskiosk;
 
 
     public DoctorClinicProfile() {
@@ -363,5 +364,13 @@ public class DoctorClinicProfile extends SugarRecord {
 
     public void setPidHasDate(Boolean pidHasDate) {
         isPidHasDate = pidHasDate;
+    }
+
+    public Boolean getIskiosk() {
+        return iskiosk;
+    }
+
+    public void setIskiosk(Boolean iskiosk) {
+        this.iskiosk = iskiosk;
     }
 }

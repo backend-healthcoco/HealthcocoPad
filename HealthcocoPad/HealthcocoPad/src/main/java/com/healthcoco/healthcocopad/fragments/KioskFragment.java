@@ -10,12 +10,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.android.volley.Response;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.activities.KioskActivity;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
+import com.healthcoco.healthcocopad.bean.server.DoctorClinicProfile;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
@@ -51,10 +53,12 @@ public class KioskFragment extends HealthCocoFragment implements
     private RecyclerView optionsRecyclerView;
     private LinearLayout layoutLeft;
     private Button btLock;
+    private TextView tvClinicName;
     private HealthcocoRecyclerViewAdapter mAdapter;
     private ArrayList<KioskSubItemType> subItemTypeArrayList = new ArrayList<>();
     private boolean receiversRegistered;
     private User user;
+    private DoctorClinicProfile doctorClinicProfile;
     private PatientRegistrationDetailsListener registrationDetailsListener;
 
     public KioskFragment(PatientRegistrationDetailsListener registrationDetailsListener) {
@@ -106,6 +110,7 @@ public class KioskFragment extends HealthCocoFragment implements
         optionsRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerview_options);
         layoutLeft = (LinearLayout) view.findViewById(R.id.layout_left);
         btLock = (Button) view.findViewById(R.id.bt_kiosk_lock);
+        tvClinicName = (TextView) view.findViewById(R.id.tv_clinic_name);
     }
 
     @Override
@@ -160,11 +165,18 @@ public class KioskFragment extends HealthCocoFragment implements
                 case FRAGMENT_INITIALISATION:
                     if (user != null) {
                         initData();
+                        if (doctorClinicProfile != null)
+                            setClinicName();
                         return;
                     }
                     break;
             }
         }
+    }
+
+    private void setClinicName() {
+        if (doctorClinicProfile != null && doctorClinicProfile.getLocationName() != null)
+            tvClinicName.setText(doctorClinicProfile.getLocationName());
     }
 
     @Override
@@ -177,7 +189,9 @@ public class KioskFragment extends HealthCocoFragment implements
                 LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
                 if (doctor != null && doctor.getUser() != null) {
                     user = doctor.getUser();
+                    doctorClinicProfile = LocalDataServiceImpl.getInstance(mApp).getDoctorClinicProfile(user.getUniqueId(), user.getForeignLocationId());
                 }
+
                 return volleyResponseBean;
         }
         if (volleyResponseBean == null)
@@ -197,7 +211,7 @@ public class KioskFragment extends HealthCocoFragment implements
             case R.id.layout_left:
                 break;
             case R.id.bt_kiosk_lock:
-                registrationDetailsListener.readyToMoveNext(KioskScreenType.PINVIEW.ordinal());
+                registrationDetailsListener.readyToMoveNext(KioskScreenType.PINVIEW.ordinal(), false);
                 break;
         }
     }

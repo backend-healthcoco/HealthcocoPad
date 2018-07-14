@@ -192,7 +192,7 @@ public class AboutDoctorFragment extends HealthCocoFragment implements ViewPager
     }
 
     @Override
-    public void readyToMoveNext(Object object) {
+    public void readyToMoveNext(Object object, boolean isEditPatient) {
 
     }
 

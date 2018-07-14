@@ -103,7 +103,6 @@ public class PatientOtherDeatilsFragment extends HealthCocoFragment implements V
     private static final String SEPARATOR_GROUP_NOTES = "; ";
     RegisterNewPatientRequest patientDetails = new RegisterNewPatientRequest();
     private User user;
-    private RegisteredPatientDetailsUpdated selectedPatient;
     private boolean isEditPatient;
     private LinearLayout loadingExistingPatientsList;
     private ExistingPatientAutoCompleteAdapter existingPatientAutotvAdapter;
@@ -212,8 +211,16 @@ public class PatientOtherDeatilsFragment extends HealthCocoFragment implements V
         }
     }
 
-    public void initDataFromPreviousFragment(Object object) {
+    public void initDataFromPreviousFragment(Object object, boolean isEditPatient) {
+        this.isEditPatient = isEditPatient;
         patientDetails = (RegisterNewPatientRequest) object;
+        notesListLastAdded = patientDetails.getNotes();
+        groupIdsToAssign = patientDetails.getGroups();
+
+        if (!Util.isNullOrEmptyList(notesListLastAdded))
+            notifyNoteListAdapter(notesListLastAdded);
+        if (!Util.isNullOrEmptyList(groupIdsToAssign))
+            getGroupsList();
     }
 
 
@@ -237,7 +244,6 @@ public class PatientOtherDeatilsFragment extends HealthCocoFragment implements V
         patientDetails.setGroups(groupIdsToAssign);
 
         if (isEditPatient) {
-            patientDetails.setUserId(selectedPatient.getUserId());
             WebDataServiceImpl.getInstance(mApp).updatePatient(RegisteredPatientDetailsUpdated.class, patientDetails, this, this);
         } else {
             WebDataServiceImpl.getInstance(mApp).registerNewPatient(RegisteredPatientDetailsUpdated.class, patientDetails, this, this);
@@ -286,7 +292,6 @@ public class PatientOtherDeatilsFragment extends HealthCocoFragment implements V
                     RegisteredPatientDetailsUpdated patientDetails = (RegisteredPatientDetailsUpdated) response.getData();
                     LogUtils.LOGD(TAG, "REGISTER_PATIENT SYNC_COMPLETE" + patientDetails.getLocalPatientName());
                     LocalDataServiceImpl.getInstance(mApp).addPatient(patientDetails);
-                    openPatientDetailScreen(patientDetails);
                     refreshContactsData(patientDetails);
                     mActivity.hideLoading();
                     mActivity.setResult(HealthCocoConstants.RESULT_CODE_REGISTRATION);

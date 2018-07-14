@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.HealthCocoViewHolder;
 import com.healthcoco.healthcocopad.R;
+import com.healthcoco.healthcocopad.enums.KioskSettingsItemType;
 import com.healthcoco.healthcocopad.enums.SettingsItemType;
 import com.healthcoco.healthcocopad.enums.UIPermissionsItemType;
 import com.healthcoco.healthcocopad.fragments.CalendarViewType;
@@ -21,6 +22,7 @@ public class SettingsItemViewHolder extends HealthCocoViewHolder {
     private SettingsItemType itemType;
     private UIPermissionsItemType permissionsItemType;
     private CalendarViewType calendarViewType;
+    private KioskSettingsItemType kioskSettingsItemType;
     private TextView tvViewType;
     private TextView tvName;
     private TextView tvVersionName;
@@ -41,6 +43,8 @@ public class SettingsItemViewHolder extends HealthCocoViewHolder {
             this.permissionsItemType = (UIPermissionsItemType) object;
         } else if (object instanceof CalendarViewType) {
             this.calendarViewType = (CalendarViewType) object;
+        } else if (object instanceof KioskSettingsItemType) {
+            this.kioskSettingsItemType = (KioskSettingsItemType) object;
         }
     }
 
@@ -95,6 +99,8 @@ public class SettingsItemViewHolder extends HealthCocoViewHolder {
             layoutItemSetting.setVisibility(View.GONE);
             layoutViewType.setVisibility(View.VISIBLE);
             tvViewType.setText(calendarViewType.getTitleId());
+        } else if (kioskSettingsItemType instanceof KioskSettingsItemType) {
+            tvName.setText(kioskSettingsItemType.getTitleId());
         }
     }
 

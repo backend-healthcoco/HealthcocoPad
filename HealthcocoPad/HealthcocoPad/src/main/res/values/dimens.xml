@@ -54,7 +54,7 @@
     <dimen name="list_item_clinic_profile_padding">8dp</dimen>
 
     <dimen name="initial_alphabet_doctor_profile">120dp</dimen>
-    <dimen name="width_doctor_profile">150dp</dimen>
+    <dimen name="width_doctor_profile">180dp</dimen>
     <dimen name="height_doctor_profile">220dp</dimen>
     <dimen name="initial_alphabet_add_edit_doctor_profile">71dp</dimen>
     <dimen name="text_size_initial_alphabet_doctor_profile">20sp</dimen>
@@ -236,7 +236,8 @@
     <dimen name="text_size_blog_detail">18sp</dimen>
     <dimen name="text_size_blog_detail_new">20sp</dimen>
     <dimen name="text_size_feedback_doctor_lab_title">17sp</dimen>
-    <dimen name="text_size_clinic_name_kiosk">23sp</dimen>
+    <dimen name="text_size_clinic_name_kiosk">28sp</dimen>
+    <dimen name="text_size_name_kiosk">23sp</dimen>
 
 
     // text size PinView

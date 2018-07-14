@@ -51,6 +51,8 @@ public enum SuggestionType {
 
     PASSWORD(false, R.string.password),
 
+    PIN(false, R.string.pincode),
+
 
     ADVICE(false, R.string.advice_tag),
     TEMPLATE(false, R.string.templates);

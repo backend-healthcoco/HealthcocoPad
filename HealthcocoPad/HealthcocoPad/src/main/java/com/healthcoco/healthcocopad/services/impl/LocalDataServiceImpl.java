@@ -2490,6 +2490,17 @@ public class LocalDataServiceImpl {
         return null;
     }
 
+    public RegisteredPatientDetailsUpdated getPatient(String selecetdPatientId, String locationId) {
+        RegisteredPatientDetailsUpdated patient = Select.from(RegisteredPatientDetailsUpdated.class)
+                .where(Condition.prop(LocalDatabaseUtils.KEY_USER_ID).eq(selecetdPatientId),
+                        Condition.prop(LocalDatabaseUtils.KEY_LOCATION_ID).eq(locationId)).first();
+        if (patient != null) {
+            RegisteredPatientDetailsUpdated patientDetail = getPatientRestDetails(patient);
+            return patientDetail;
+        }
+        return null;
+    }
+
     public VolleyResponseBean getPatientsListWithGroup(WebServiceType webServiceType, User user, String groupId,
                                                        boolean discarded, int pageNum, int maxSize,
                                                        Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
@@ -5744,8 +5755,25 @@ public class LocalDataServiceImpl {
         clinicalNotesDynamicField.save();
     }
 
+    public void addKioskPin(Object object) {
+
+        if (object != null && object instanceof KioskPin) {
+            KioskPin kioskPin = (KioskPin) object;
+
+            KioskPin.deleteAll(KioskPin.class);
+            kioskPin.save();
+        }
+
+    }
+
+    public KioskPin getKioskPin(String doctorId) {
+        KioskPin kioskPin = Select.from(KioskPin.class)
+                .where(Condition.prop(LocalDatabaseUtils.KEY_DOCTOR_ID).eq(doctorId)).first();
+
+        return kioskPin;
+    }
+
     private enum FromTableType {
         ADD_TEMPLATES, ADD_TREATMENT, ADD_PRESCRIPTION
     }
-
 }
