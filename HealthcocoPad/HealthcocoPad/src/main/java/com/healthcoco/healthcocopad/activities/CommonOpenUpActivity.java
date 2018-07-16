@@ -46,6 +46,7 @@ import com.healthcoco.healthcocopad.fragments.DoctorDetailsFragment;
 import com.healthcoco.healthcocopad.fragments.EnlargedMapViewFragment;
 import com.healthcoco.healthcocopad.fragments.FeedbackFragment;
 import com.healthcoco.healthcocopad.fragments.FeedsFragment;
+import com.healthcoco.healthcocopad.fragments.FollowUpAppointmentFragment;
 import com.healthcoco.healthcocopad.fragments.InitialSyncFragment;
 import com.healthcoco.healthcocopad.fragments.KioskFragment;
 import com.healthcoco.healthcocopad.fragments.LoginSignupFragment;
@@ -253,7 +254,7 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
                 openFragment(ActionbarType.HIDDEN, new AboutDoctorFragment());
                 break;
             case BLOGS:
-                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, R.string.blogs, new FeedsFragment());
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, R.string.blogs, new FollowUpAppointmentFragment());
                 break;
             case BLOG_DETAIL:
                 openFragment(ActionbarType.HIDDEN, new BlogDetailFragment());

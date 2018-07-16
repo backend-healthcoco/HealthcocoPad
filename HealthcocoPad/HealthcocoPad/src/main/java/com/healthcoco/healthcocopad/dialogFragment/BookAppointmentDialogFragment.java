@@ -872,7 +872,6 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
             }
         } else {
             tvDoctorName.setText("Dr. " + user.getFirstName());
-
         }
     }
 

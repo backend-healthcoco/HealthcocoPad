@@ -238,6 +238,9 @@
     <dimen name="text_size_feedback_doctor_lab_title">17sp</dimen>
     <dimen name="text_size_clinic_name_kiosk">28sp</dimen>
     <dimen name="text_size_name_kiosk">23sp</dimen>
+    <dimen name="text_view_patient_name_width">400dp</dimen>
+    <dimen name="text_view_mobile_width">300dp</dimen>
+    <dimen name="text_view_doctor_name_width">450dp</dimen>
 
 
     // text size PinView
