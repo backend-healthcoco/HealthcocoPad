@@ -129,7 +129,7 @@ public class SplashScreenActivity extends HealthCocoActivity implements GsonRequ
     }
 
     private void openHomeActivity() {
-        Intent intent = new Intent(this, KioskActivity.class);
+        Intent intent = new Intent(this, HomeActivity.class);
         intent.putExtra(HealthcocoFCMListener.TAG_NOTIFICATION_RESPONSE, notificationResponseData);
         startActivity(intent);
         finish();

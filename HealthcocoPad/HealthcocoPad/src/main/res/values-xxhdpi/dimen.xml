@@ -29,5 +29,7 @@
     <dimen name="queue_doctor_name_textview_width">700px</dimen>
     <dimen name="calendar_date_textview_width">620px</dimen>
     <dimen name="date_textview_width">400px</dimen>
+    <dimen name="menu_image_width">82px</dimen>
+
 
 </resources>

@@ -6,6 +6,7 @@ import android.widget.BaseAdapter;
 
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.enums.FragmentType;
+import com.healthcoco.healthcocopad.enums.PatientDetailTabType;
 import com.healthcoco.healthcocopad.viewholders.MenuListViewHolder;
 
 import java.util.ArrayList;
@@ -15,7 +16,7 @@ import java.util.ArrayList;
  */
 public class MenuListAdapter extends BaseAdapter {
 
-    private ArrayList<FragmentType> list;
+    private ArrayList<Object> list;
     private HealthCocoActivity mActivity;
     private MenuListViewHolder holder;
     private int selectedPosition = 0;
@@ -58,15 +59,23 @@ public class MenuListAdapter extends BaseAdapter {
         return convertView;
     }
 
-    public void setListData(ArrayList<FragmentType> fragmentType) {
-        this.list = fragmentType;
+    public void setListData(ArrayList<Object> objectArrayList) {
+        this.list = objectArrayList;
     }
 
-    public void setSetSelectedPosition(FragmentType fragmentType) {
-        if (fragmentType != FragmentType.HELP_IMPROVE && list.contains(fragmentType)) {
-            this.selectedPosition = list.indexOf(fragmentType);
+    public void setSetSelectedPosition(Object object) {
+        if (object != null && object instanceof FragmentType) {
+            FragmentType fragmentType = (FragmentType) object;
+            if (fragmentType != FragmentType.HELP_IMPROVE && list.contains(fragmentType)) {
+                this.selectedPosition = list.indexOf(fragmentType);
+                notifyDataSetChanged();
+            }
+        } else if (object != null && object instanceof PatientDetailTabType) {
+            PatientDetailTabType patientDetailTabType = (PatientDetailTabType) object;
+            this.selectedPosition = list.indexOf(patientDetailTabType);
             notifyDataSetChanged();
         }
+
     }
 
 }

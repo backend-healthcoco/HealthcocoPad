@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -15,10 +16,12 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TextView;
 
@@ -38,9 +41,11 @@ import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.custom.DummyTabFactory;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
+import com.healthcoco.healthcocopad.drawer.MenuListAdapter;
 import com.healthcoco.healthcocopad.enums.ActionbarLeftRightActionTypeDrawables;
 import com.healthcoco.healthcocopad.enums.ActionbarType;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
+import com.healthcoco.healthcocopad.enums.FragmentType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.LocalTabelType;
 import com.healthcoco.healthcocopad.enums.PatientDetailTabType;
@@ -68,7 +73,7 @@ import static com.healthcoco.healthcocopad.R.id.container_right_action;
  * Created by Shreshtha on 03-03-2017.
  */
 public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implements View.OnClickListener, ViewPager.OnPageChangeListener, TabHost.OnTabChangeListener,
-        LocalDoInBackgroundListenerOptimised, CommonOpenUpPatientDetailListener, DoctorListPopupWindowListener {
+        LocalDoInBackgroundListenerOptimised, CommonOpenUpPatientDetailListener, DoctorListPopupWindowListener, AdapterView.OnItemClickListener {
     public static final String INTENT_REFRESH_PATIENT_PROFILE = "com.healthcoco.REFRESH_PATIENT_PROFILE";
     public static final String TAG_PATIENT_DETAIL_TAB_TYPE = "detailTabType";
     public static final String INTENT_REFRESH_AMOUNT_DETAILS = "com.healthcoco.REFRESH_AMOUNT_DETAILS";
@@ -129,6 +134,10 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
     private boolean isOTPVerified;
     private Boolean pidHasDate;
     private boolean receiversRegistered;
+    private ListView lvMenuList;
+    private ArrayList<PatientDetailTabType> list;
+    private MenuListAdapter menuListAdapter;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -155,6 +164,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
 
     @Override
     public void initViews() {
+        lvMenuList = (ListView) view.findViewById(R.id.lvMenuList);
         tabhost = (TabHost) view.findViewById(android.R.id.tabhost);
         tabhost.setup();
 //        tabLayout = (TabLayout) view.findViewById(R.id.tabs);
@@ -180,12 +190,15 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
         mViewPager.addOnPageChangeListener(this);
         tabhost.setOnTabChangedListener(this);
         ((CommonOpenUpActivity) mActivity).initActionbarRightAction(this);
+        lvMenuList.setOnItemClickListener(this);
+
     }
 
     private void initTabs() {
         fragmentsList.clear();
         if (mViewPager.getAdapter() != null)
             mViewPager.getAdapter().notifyDataSetChanged();
+        list = new ArrayList<>();
         for (PatientDetailTabType detailTabType :
                 PatientDetailTabType.values()) {
             HealthCocoFragment healthcocoFragment = null;
@@ -242,10 +255,12 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                     }
                     break;
             }
-            if (healthcocoFragment != null)
+            if (healthcocoFragment != null) {
 
 //                if (user.getUiPermissions().getTabPermissions().contains(detailTabType) || (detailTabType == PatientDetailTabType.PATIENT_DETAIL_VISIT))
                 tabhost.addTab(getTabSpec(detailTabType, healthcocoFragment));
+                list.add(detailTabType);
+            }
         }
     }
 
@@ -265,6 +280,15 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                 mActivity.getSupportFragmentManager());
         viewPagerAdapter.setFragmentsList(fragmentsList);
         mViewPager.setAdapter(viewPagerAdapter);
+
+        ColorDrawable sage = new ColorDrawable(this.getResources().getColor(R.color.grey_dark_background));
+        lvMenuList.setDivider(sage);
+        lvMenuList.setDividerHeight(2);
+
+        menuListAdapter = new MenuListAdapter(mActivity);
+        menuListAdapter.setListData((ArrayList<Object>) (Object) list);
+        lvMenuList.setAdapter(menuListAdapter);
+
     }
 
     private void openFragment(ActionbarType actionbarType, int actionBarTitle, ActionbarLeftRightActionTypeDrawables leftAction, ActionbarLeftRightActionTypeDrawables rightAction, HealthCocoFragment fragment) {
@@ -756,4 +780,11 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
 
     }
 
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        mViewPager.setCurrentItem(position);
+        PatientDetailTabType patientDetailTabType = list.get(position);
+        if (menuListAdapter != null)
+            menuListAdapter.setSetSelectedPosition(patientDetailTabType);
+    }
 }

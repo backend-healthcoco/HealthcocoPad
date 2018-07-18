@@ -148,7 +148,7 @@ public class MenuDrawerFragment extends HealthCocoFragment implements View.OnCli
         list = new ArrayList<>();
         list.add(FragmentType.CONTACTS);
         list.add(FragmentType.QUEUE);
-        list.add(FragmentType.EVENTS);
+//        list.add(FragmentType.EVENTS);
         list.add(FragmentType.PROFILE);
         list.add(FragmentType.CLINIC_PROFILE);
 //        list.add(FragmentType.ISSUE_TRACKER);
@@ -159,9 +159,9 @@ public class MenuDrawerFragment extends HealthCocoFragment implements View.OnCli
             if (doctorProfile.getSpecialities().contains("Dentist"))
                 list.add(FragmentType.VIDEOS);
         }
-        list.add(FragmentType.REGISTER);
+//        list.add(FragmentType.REGISTER);
         menuListAdapter = new MenuListAdapter(mActivity);
-        menuListAdapter.setListData(list);
+        menuListAdapter.setListData((ArrayList<Object>) (Object) list);
         lvMenuList.setAdapter(menuListAdapter);
     }
 
