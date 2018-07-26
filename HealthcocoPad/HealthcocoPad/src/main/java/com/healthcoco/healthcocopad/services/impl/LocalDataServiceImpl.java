@@ -5340,6 +5340,22 @@ public class LocalDataServiceImpl {
         }
     }
 
+    public void addInvestigationNote(InvestigationNote investigationNoteToSend) {
+        InvestigationNote.deleteAll(InvestigationNote.class, LocalDatabaseUtils.KEY_UNIQUE_ID + "= ?", investigationNoteToSend.getUniqueId());
+        try {
+            investigationNoteToSend.save();
+        } catch (Exception e) {
+            Log.i(null, "Error in saving in transaction " + e.getMessage());
+        }
+    }
+
+    public InvestigationNote getInvestigationNote(String investigationNoteId) {
+        InvestigationNote investigationNote = Select.from(InvestigationNote.class)
+                .where(Condition.prop(LocalDatabaseUtils.KEY_UNIQUE_ID).eq(investigationNoteId)).first();
+
+        return investigationNote;
+    }
+
     public Records getRecord(String recordId, String patientId) {
         return getRecord(null, recordId, patientId);
     }
@@ -5771,6 +5787,62 @@ public class LocalDataServiceImpl {
                 .where(Condition.prop(LocalDatabaseUtils.KEY_DOCTOR_ID).eq(doctorId)).first();
 
         return kioskPin;
+    }
+
+    public VolleyResponseBean getInvestigationList(WebServiceType
+                                                           webServiceType, ArrayList<RegisteredDoctorProfile>
+                                                           clinicDoctorProfileList, String foreignLocationId,
+                                                   String foreignHospitalId, String selectedPatientId, int pageNum, int maxSize,
+                                                   Response.Listener<VolleyResponseBean> responseListener, GsonRequest.
+                                                           ErrorListener errorListener) {
+        VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
+        volleyResponseBean.setWebServiceType(webServiceType);
+        volleyResponseBean.setIsDataFromLocal(true);
+        volleyResponseBean.setIsUserOnline(HealthCocoConstants.isNetworkOnline);
+        try {
+            List<InvestigationNote> list = getInvestigationListPageWise(clinicDoctorProfileList, foreignLocationId, foreignHospitalId, pageNum, maxSize, selectedPatientId);
+            volleyResponseBean.setDataList(getObjectsListFromMap(list));
+            if (responseListener != null)
+                responseListener.onResponse(volleyResponseBean);
+        } catch (Exception e) {
+            e.printStackTrace();
+            showErrorLocal(volleyResponseBean, errorListener);
+        }
+        return volleyResponseBean;
+    }
+
+    private List<InvestigationNote> getInvestigationListPageWise
+            (ArrayList<RegisteredDoctorProfile> clinicDoctorProfileList, String
+                    locationId, String hospitalId, int pageNum, int maxSize, String
+                     selectedPatientId) {
+
+        String whereCondition = "Select * from " + StringUtil.toSQLName(InvestigationNote.class.getSimpleName())
+                + " where "
+                + LocalDatabaseUtils.KEY_PATIENT_ID + "=\"" + selectedPatientId + "\"";
+        whereCondition = whereCondition + " AND "
+                + LocalDatabaseUtils.KEY_HOSPITAL_ID + "=\"" + hospitalId + "\""
+                + " AND "
+                + LocalDatabaseUtils.KEY_LOCATION_ID + "=\"" + locationId + "\"";
+        if (!Util.isNullOrEmptyList(clinicDoctorProfileList))
+            for (int i = 0; i < clinicDoctorProfileList.size(); i++) {
+                if (i == 0)
+                    whereCondition = whereCondition + " AND " + LocalDatabaseUtils.KEY_DOCTOR_ID + "=\"" + clinicDoctorProfileList.get(i).getUserId() + "\"";
+                else
+                    whereCondition = whereCondition + " OR " + LocalDatabaseUtils.KEY_DOCTOR_ID + "=\"" + clinicDoctorProfileList.get(i).getUserId() + "\"";
+
+            }
+
+        String conditionsLimit = " ORDER BY " + LocalDatabaseUtils.KEY_CREATED_TIME + " DESC "
+                + " LIMIT " + maxSize
+                + " OFFSET " + (pageNum * maxSize);
+
+        whereCondition = whereCondition + conditionsLimit;
+        LogUtils.LOGD(TAG, "Select Query " + whereCondition);
+        List<InvestigationNote> list = SugarRecord.findWithQuery(InvestigationNote.class, whereCondition);
+        if (!Util.isNullOrEmptyList(list)) {
+            return list;
+        }
+        return null;
     }
 
     private enum FromTableType {

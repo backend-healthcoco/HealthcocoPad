@@ -656,4 +656,12 @@ public class DateTimeUtil {
         return today;
     }
 
+    public static long getSelectedFromDateTime(int year, int month, int day) {
+        Calendar calendar1 = DateTimeUtil.getCalendarInstance();
+        calendar1.set(Calendar.YEAR, year);
+        calendar1.set(Calendar.MONTH, month);
+        calendar1.set(Calendar.DAY_OF_MONTH, day);
+        return calendar1.getTimeInMillis();
+    }
+
 }

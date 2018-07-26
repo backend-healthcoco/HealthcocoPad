@@ -19,7 +19,8 @@ public enum PatientDetailTabType {
     PATIENT_DETAIL_APPOINTMENT(5, R.string.appointment, R.string.appointment, R.drawable.selector_ic_apoointment_tab, View.VISIBLE, View.VISIBLE, "APPOINTMENT"),
     PATIENT_DETAIL_TREATMENT(6, R.string.treatment, R.string.treatment, R.drawable.selector_ic_treatment_tab, View.VISIBLE, View.VISIBLE, "TREATMENT"),
     PATIENT_DETAIL_INVOICE(7, R.string.invoice, R.string.invoice, R.drawable.selector_ic_invoice_tab, View.VISIBLE, View.VISIBLE, "BILLING"),
-    PATIENT_DETAIL_RECEIPT(8, R.string.receipt, R.string.receipt, R.drawable.selector_ic_receipt_tab, View.VISIBLE, View.VISIBLE, "BILLING");
+    PATIENT_DETAIL_RECEIPT(8, R.string.receipt, R.string.receipt, R.drawable.selector_ic_receipt_tab, View.VISIBLE, View.VISIBLE, "BILLING"),
+    PATIENT_DETAIL_INVESTIGATION_NOTES(9, R.string.investigations, R.string.investigations, R.drawable.selector_ic_clinical_notes_tab, View.VISIBLE, View.VISIBLE, "INVESTIGATION_NOTES"),;
     //        PATIENT_DETAIL_BILLING(7, R.string.billing, R.drawable.selector_ic_treatment_tab, new PatientTreatmentDetailFragment());
     //    PATIENT_DETAIL_IMPORTANT(3, R.string.important,R.string.important, R.drawable.selector_ic_important_tab, View.GONE,View.VISIBLE),
     private final int textId;

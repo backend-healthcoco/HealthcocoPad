@@ -526,7 +526,11 @@ public enum WebServiceType {
 
     ADD_REMOVE_FAVORITE(Method.GET, "favourite/addRemove/"),
 
-    GET_HARDCODED_BLOOD_GROUPS(0, "");
+    GET_HARDCODED_BLOOD_GROUPS(0, ""),
+
+    ADD_INVESTIGATION_NOTE(0, null),
+
+    GET_INVESTIGATION_NOTE(0, null);
 
     private int methodType;
     private String url;

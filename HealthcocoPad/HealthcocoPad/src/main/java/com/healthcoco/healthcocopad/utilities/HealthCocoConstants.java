@@ -96,6 +96,8 @@ public class HealthCocoConstants {
     public static final int RESULT_CODE_LOCATION_ADMIN = 211;
     public static final int REQUEST_CODE_VIDEO_GALLERY = 212;
     public static final int REQUEST_CODE_CATEGORY = 213;
+    public static final int REQUEST_CODE_INVESTIGATION = 214;
+    public static final int RESULT_CODE_ADD_NEW_IVESTIGATION = 215;
 
 
     public static final String PARAM_IS_DOCTOR_APP_TRUE = "&isDoctorApp=true";

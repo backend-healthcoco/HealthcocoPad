@@ -1,0 +1,435 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <include layout="@layout/actionbar_patient_image_gender_age" />
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/padding_30_dp"
+        android:layout_marginRight="@dimen/padding_30_dp"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:id="@+id/layout_parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="100dp"
+            android:background="@color/white"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:orientation="vertical"
+            android:padding="5dp">
+
+            <LinearLayout
+                android:id="@+id/parent_haematology"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/item_contact_padding"
+                android:paddingTop="@dimen/item_contact_padding"
+                android:visibility="gone">
+
+
+                <TextView
+                    android:id="@+id/tv_title_haematology"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/padding_30_dp"
+                    android:drawableEnd="@drawable/arrow_down_drug"
+                    android:paddingBottom="@dimen/item_contact_padding"
+                    android:paddingLeft="@dimen/margin_left_clinical_notes_item_title"
+                    android:paddingTop="@dimen/item_contact_padding"
+                    android:text="@string/haematology"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_patient_deatil_fragment" />
+
+                <LinearLayout
+                    android:id="@+id/layout_haematology_field"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/item_contact_padding"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/grey_hint_color" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/parent_bio_chemistry"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/item_contact_padding"
+                android:visibility="gone">
+
+
+                <TextView
+                    android:id="@+id/tv_title_bio_chemistry"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/item_contact_padding"
+                    android:paddingBottom="@dimen/item_contact_padding"
+                    android:paddingLeft="@dimen/margin_left_clinical_notes_item_title"
+                    android:paddingTop="@dimen/item_contact_padding"
+                    android:text="@string/bio_chemistry"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_patient_deatil_fragment" />
+
+                <LinearLayout
+                    android:id="@+id/layout_bio_chemistry_field"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/item_contact_padding"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/grey_hint_color" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/parent_lipid_profile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/item_contact_padding"
+                android:visibility="gone">
+
+
+                <TextView
+                    android:id="@+id/tv_title_lipid_profile"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/item_contact_padding"
+                    android:paddingBottom="@dimen/item_contact_padding"
+                    android:paddingLeft="@dimen/margin_left_clinical_notes_item_title"
+                    android:paddingTop="@dimen/item_contact_padding"
+                    android:text="@string/lipid_profile"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_patient_deatil_fragment" />
+
+                <LinearLayout
+                    android:id="@+id/layout_lipid_profile_field"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/item_contact_padding"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/grey_hint_color" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/parent_kidney_function_test"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/item_contact_padding"
+                android:visibility="gone">
+
+
+                <TextView
+                    android:id="@+id/tv_title_kidney_function_test"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/item_contact_padding"
+                    android:paddingBottom="@dimen/item_contact_padding"
+                    android:paddingLeft="@dimen/margin_left_clinical_notes_item_title"
+                    android:paddingTop="@dimen/item_contact_padding"
+                    android:text="@string/kidney_function_test"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_patient_deatil_fragment" />
+
+                <LinearLayout
+                    android:id="@+id/layout_kidney_function_test_field"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/item_contact_padding"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/grey_hint_color" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/parent_lever_function_test"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/item_contact_padding"
+                android:visibility="gone">
+
+
+                <TextView
+                    android:id="@+id/tv_title_lever_function_test"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/item_contact_padding"
+                    android:paddingBottom="@dimen/item_contact_padding"
+                    android:paddingLeft="@dimen/margin_left_clinical_notes_item_title"
+                    android:paddingTop="@dimen/item_contact_padding"
+                    android:text="@string/liver_function_test"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_patient_deatil_fragment" />
+
+                <LinearLayout
+                    android:id="@+id/layout_lever_function_test_field"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/item_contact_padding"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/grey_hint_color" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/parent_uacr"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/item_contact_padding"
+                android:visibility="gone">
+
+
+                <TextView
+                    android:id="@+id/tv_title_uacr"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/item_contact_padding"
+                    android:paddingBottom="@dimen/item_contact_padding"
+                    android:paddingLeft="@dimen/margin_left_clinical_notes_item_title"
+                    android:paddingTop="@dimen/item_contact_padding"
+                    android:text="@string/uacr"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_patient_deatil_fragment" />
+
+                <LinearLayout
+                    android:id="@+id/layout_uacr_field"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/item_contact_padding"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/grey_hint_color" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/parent_urine_routine"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/item_contact_padding"
+                android:visibility="gone">
+
+
+                <TextView
+                    android:id="@+id/tv_title_urine_routine"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/item_contact_padding"
+                    android:paddingBottom="@dimen/item_contact_padding"
+                    android:paddingLeft="@dimen/margin_left_clinical_notes_item_title"
+                    android:paddingTop="@dimen/item_contact_padding"
+                    android:text="@string/urine_routine"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_patient_deatil_fragment" />
+
+                <LinearLayout
+                    android:id="@+id/layout_urine_routine_field"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/item_contact_padding"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/grey_hint_color" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/parent_thyroid_function_test"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/item_contact_padding"
+                android:visibility="gone">
+
+
+                <TextView
+                    android:id="@+id/tv_title_thyroid_function_test"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/item_contact_padding"
+                    android:paddingBottom="@dimen/item_contact_padding"
+                    android:paddingLeft="@dimen/margin_left_clinical_notes_item_title"
+                    android:paddingTop="@dimen/item_contact_padding"
+                    android:text="@string/thyroid_function_test"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_patient_deatil_fragment" />
+
+                <LinearLayout
+                    android:id="@+id/layout_thyroid_function_test"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/item_contact_padding"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/grey_hint_color" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/parent_pcos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/item_contact_padding"
+                android:visibility="gone">
+
+
+                <TextView
+                    android:id="@+id/tv_title_pcos"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/item_contact_padding"
+                    android:paddingBottom="@dimen/item_contact_padding"
+                    android:paddingLeft="@dimen/margin_left_clinical_notes_item_title"
+                    android:paddingTop="@dimen/item_contact_padding"
+                    android:text="@string/pcos"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_patient_deatil_fragment" />
+
+                <LinearLayout
+                    android:id="@+id/layout_pcos"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/item_contact_padding"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/grey_hint_color" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/parent_others"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/item_contact_padding"
+                android:visibility="gone">
+
+
+                <TextView
+                    android:id="@+id/tv_title_others"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/item_contact_padding"
+                    android:paddingBottom="@dimen/item_contact_padding"
+                    android:paddingLeft="@dimen/margin_left_clinical_notes_item_title"
+                    android:paddingTop="@dimen/item_contact_padding"
+                    android:text="@string/others"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_patient_deatil_fragment" />
+
+                <LinearLayout
+                    android:id="@+id/layout_others"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/item_contact_padding"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/grey_hint_color" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

@@ -29,6 +29,7 @@ import com.healthcoco.healthcocopad.fragments.AboutDoctorFragment;
 import com.healthcoco.healthcocopad.fragments.AboutUsFragment;
 import com.healthcoco.healthcocopad.fragments.AddEditClinicImageFragment;
 import com.healthcoco.healthcocopad.fragments.AddClinicalNotesVisitNormalFragment;
+import com.healthcoco.healthcocopad.fragments.AddEditNormalInvestigationFragment;
 import com.healthcoco.healthcocopad.fragments.AddEditNormalVisitPrescriptionFragment;
 import com.healthcoco.healthcocopad.fragments.AddEditNormalVisitsFragment;
 import com.healthcoco.healthcocopad.fragments.AddInvoiceFragment;
@@ -222,6 +223,9 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
                 break;*/
             case ADD_VISITS:
                 openFragment(ActionbarType.HIDDEN, 0, new AddEditNormalVisitsFragment());
+                break;
+            case ADD_INVESTIGATION_NOTE:
+                openFragment(ActionbarType.HIDDEN, 0, new AddEditNormalInvestigationFragment());
                 break;
             case ADD_INVOICE:
                 openFragment(ActionbarType.HIDDEN, 0, new AddInvoiceFragment());
@@ -419,6 +423,7 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
             switch (fragmentType) {
                 case ADD_NEW_PRESCRIPTION:
                 case ADD_CLINICAL_NOTE:
+                case ADD_INVESTIGATION_NOTE:
 //                case ADD_DRUG_DETAIL:
                 case ADD_NEW_TEMPLATE:
 //                case ADD_RECORD_DETAIL:

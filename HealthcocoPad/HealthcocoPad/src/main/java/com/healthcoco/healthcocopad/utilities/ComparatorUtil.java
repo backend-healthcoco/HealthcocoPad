@@ -22,6 +22,7 @@ import com.healthcoco.healthcocopad.bean.server.HistoryPresentComplaintSuggestio
 import com.healthcoco.healthcocopad.bean.server.HolterSuggestions;
 import com.healthcoco.healthcocopad.bean.server.IndicationOfUsgSuggestions;
 import com.healthcoco.healthcocopad.bean.server.Investigation;
+import com.healthcoco.healthcocopad.bean.server.InvestigationNote;
 import com.healthcoco.healthcocopad.bean.server.InvestigationSuggestions;
 import com.healthcoco.healthcocopad.bean.server.Invoice;
 import com.healthcoco.healthcocopad.bean.server.MenstrualHistorySuggestions;
@@ -356,6 +357,18 @@ public class ComparatorUtil {
             if (treatment1.getCreatedTime() != null && treatment2.getCreatedTime() != null) {
                 Date date1 = new Date(treatment1.getCreatedTime());
                 Date date2 = new Date(treatment2.getCreatedTime());
+                return date2.compareTo(date1);
+            }
+            return 0;
+        }
+    };
+    public static Comparator<InvestigationNote> investigationNoteDateComparator = new Comparator<InvestigationNote>() {
+
+        @Override
+        public int compare(InvestigationNote investigationNote1, InvestigationNote investigationNote2) {
+            if (investigationNote1.getCreatedTime() != null && investigationNote2.getCreatedTime() != null) {
+                Date date1 = new Date(investigationNote1.getCreatedTime());
+                Date date2 = new Date(investigationNote2.getCreatedTime());
                 return date2.compareTo(date1);
             }
             return 0;

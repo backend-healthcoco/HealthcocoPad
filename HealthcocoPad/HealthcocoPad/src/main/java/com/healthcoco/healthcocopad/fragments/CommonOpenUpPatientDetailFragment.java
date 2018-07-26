@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -31,8 +30,6 @@ import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.adapter.CommonViewPagerAdapter;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.AmountResponse;
-import com.healthcoco.healthcocopad.bean.server.ClinicDetailResponse;
-import com.healthcoco.healthcocopad.bean.server.ClinicDoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.DoctorClinicProfile;
 import com.healthcoco.healthcocopad.bean.server.DoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
@@ -45,7 +42,6 @@ import com.healthcoco.healthcocopad.drawer.MenuListAdapter;
 import com.healthcoco.healthcocopad.enums.ActionbarLeftRightActionTypeDrawables;
 import com.healthcoco.healthcocopad.enums.ActionbarType;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
-import com.healthcoco.healthcocopad.enums.FragmentType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.LocalTabelType;
 import com.healthcoco.healthcocopad.enums.PatientDetailTabType;
@@ -112,7 +108,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
     private PatientProfileDetailFragment profileFragment;
     private PatientVisitDetailFragment visitsFragment;
     private PatientAppointmentDetailFragment appointmentFragment;
-    private PatientClinicalNotesDetailFragment clinicalNotesDetailFragment;
+    private PatientInvestigationDetailFragment patientInvestigationDetailFragment;
     private PatientPrescriptionDetailFragment prescriptionDetailFragment;
     private PatientReportsDetailFragment reportsDetailFragment;
     private PatientTreatmentDetailFragment treatmentDetailFragment;
@@ -217,8 +213,8 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                     break;
                 case PATIENT_DETAIL_CLINICAL_NOTES:
                     if (user.getUiPermissions().getTabPermissions().contains(detailTabType.getValue())) {
-                        clinicalNotesDetailFragment = new PatientClinicalNotesDetailFragment();
-                        healthcocoFragment = clinicalNotesDetailFragment;
+                        patientInvestigationDetailFragment = new PatientInvestigationDetailFragment();
+                        healthcocoFragment = patientInvestigationDetailFragment;
                     }
                     break;
                 case PATIENT_DETAIL_PRESCRIPTION:
@@ -254,6 +250,12 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                         healthcocoFragment = receiptDetailFragment;
                     }
                     break;
+               /* case PATIENT_DETAIL_INVESTIGATION_NOTES:
+                    if (user.getUiPermissions().getTabPermissions().contains(detailTabType.getValue())) {
+                        patientInvestigationDetailFragment = new PatientClinicalNotesDetailFragment();
+                        healthcocoFragment = patientInvestigationDetailFragment;
+                    }
+                    break;*/
             }
             if (healthcocoFragment != null) {
 
@@ -281,14 +283,9 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
         viewPagerAdapter.setFragmentsList(fragmentsList);
         mViewPager.setAdapter(viewPagerAdapter);
 
-        ColorDrawable sage = new ColorDrawable(this.getResources().getColor(R.color.grey_dark_background));
-        lvMenuList.setDivider(sage);
-        lvMenuList.setDividerHeight(2);
-
         menuListAdapter = new MenuListAdapter(mActivity);
         menuListAdapter.setListData((ArrayList<Object>) (Object) list);
         lvMenuList.setAdapter(menuListAdapter);
-
     }
 
     private void openFragment(ActionbarType actionbarType, int actionBarTitle, ActionbarLeftRightActionTypeDrawables leftAction, ActionbarLeftRightActionTypeDrawables rightAction, HealthCocoFragment fragment) {
@@ -442,7 +439,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                     break;
                 case PATIENT_DETAIL_CLINICAL_NOTES:
                     if (!isClinicalNotesTabClicked) {
-                        clinicalNotesDetailFragment.refreshData(PatientDetailTabType.PATIENT_DETAIL_CLINICAL_NOTES, clinicDoctorProfileList);
+                        patientInvestigationDetailFragment.refreshData(PatientDetailTabType.PATIENT_DETAIL_CLINICAL_NOTES, clinicDoctorProfileList);
                         isClinicalNotesTabClicked = true;
                     }
                     break;
@@ -491,7 +488,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
             visitsFragment.setUserData(user, loginedUser, selectedPatient);
             appointmentFragment.setUserData(user, selectedPatient);
             if (user.getUiPermissions().getTabPermissions().contains(PatientDetailTabType.PATIENT_DETAIL_CLINICAL_NOTES.getValue()))
-                clinicalNotesDetailFragment.setUserData(user, loginedUser, selectedPatient);
+                patientInvestigationDetailFragment.setUserData(user, loginedUser, selectedPatient);
             if (user.getUiPermissions().getTabPermissions().contains(PatientDetailTabType.PATIENT_DETAIL_PRESCRIPTION.getValue()))
                 prescriptionDetailFragment.setUserData(user, loginedUser, selectedPatient);
             if (user.getUiPermissions().getTabPermissions().contains(PatientDetailTabType.PATIENT_DETAIL_REPORTS.getValue()))

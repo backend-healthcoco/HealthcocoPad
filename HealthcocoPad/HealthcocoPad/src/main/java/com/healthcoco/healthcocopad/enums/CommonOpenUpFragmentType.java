@@ -57,6 +57,7 @@ public enum CommonOpenUpFragmentType {
     ADD_NEW_TEMPLATE(R.string.new_template),
     NOTIFICATION_RESPONSE_DATA(R.string.notification_details),
     ADD_VISITS(0),
+    ADD_INVESTIGATION_NOTE(0),
     ADD_INVOICE(R.string.invoice),
     SELECT_DIAGRAM(R.string.diagrams),
     SELECTED_DIAGRAM_DETAIL(0), BOOK_APPOINTMENT(R.string.book),

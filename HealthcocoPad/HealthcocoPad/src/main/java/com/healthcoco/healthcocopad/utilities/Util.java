@@ -22,6 +22,8 @@ import android.util.Patterns;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.MimeTypeMap;
 import android.widget.EditText;
@@ -63,6 +65,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -1031,4 +1034,40 @@ public class Util {
     }
 */
 
+    public static void slideDown(Context ctx, View v) {
+        Animation a = AnimationUtils.loadAnimation(ctx, R.anim.slide_down_layout);
+        if (a != null) {
+            a.reset();
+            if (v != null) {
+                v.clearAnimation();
+                v.startAnimation(a);
+            }
+        }
+    }
+
+    public static void slideUp(Context ctx, final View v) {
+        Animation a = AnimationUtils.loadAnimation(ctx, R.anim.slide_up_layout);
+        if (a != null) {
+            a.reset();
+            if (v != null) {
+                v.clearAnimation();
+                v.startAnimation(a);
+                v.postOnAnimationDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        v.setVisibility(View.GONE);
+                    }
+                }, 250);
+            }
+        }
+    }
+
+    public static String generateKey(String initial) {
+        String zeros = "000000";
+        Random rnd = new Random();
+        String key = Integer.toString(rnd.nextInt(0X1000000), 16);
+        key = zeros.substring(key.length()) + key;
+        key = initial + key;
+        return key;
+    }
 }

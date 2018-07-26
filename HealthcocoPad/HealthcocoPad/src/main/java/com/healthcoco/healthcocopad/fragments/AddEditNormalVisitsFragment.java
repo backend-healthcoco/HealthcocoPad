@@ -234,7 +234,7 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
 
                 addFragment(addClinicalNotesVisitNormalFragment, R.string.clinical_notes, false);
                 addFragment(addEditNormalVisitPrescriptionFragment, R.string.prescriptions, false);
-                addFragment(addNewTreatmentFragment, R.string.treatment, true);
+//                addFragment(addNewTreatmentFragment, R.string.treatment, true);
                 tabs.setVisibility(View.VISIBLE);
                 flBtSwap.setVisibility(View.VISIBLE);
                 break;
@@ -852,21 +852,13 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
 //                tvDate.setText(DateTimeUtil.getFormattedTime(DateTimeUtil.DATE_FORMAT_DAY_MONTH_YEAR_SLASH, year, monthOfYear, dayOfMonth, 0, 0, 0));
                 int msg = 0;
-                selectedFromDateTimeMillis = getSelectedFromDateTime(year, monthOfYear, dayOfMonth);
+                selectedFromDateTimeMillis = DateTimeUtil.getSelectedFromDateTime(year, monthOfYear, dayOfMonth);
                 tvDate.setText(DateTimeUtil.getFormatedDate(selectedFromDateTimeMillis));
 
             }
         }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
         datePickerDialog.getDatePicker().setMaxDate(new Date().getTime());
         datePickerDialog.show();
-    }
-
-    private long getSelectedFromDateTime(int year, int month, int day) {
-        Calendar calendar1 = DateTimeUtil.getCalendarInstance();
-        calendar1.set(Calendar.YEAR, year);
-        calendar1.set(Calendar.MONTH, month);
-        calendar1.set(Calendar.DAY_OF_MONTH, day);
-        return calendar1.getTimeInMillis();
     }
 
 }
