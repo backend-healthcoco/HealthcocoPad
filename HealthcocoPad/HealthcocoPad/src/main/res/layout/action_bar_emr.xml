@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/action_bar_home_for_queue"
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize"
+    android:background="@color/blue_action_bar"
+    android:gravity="center"
+    android:orientation="horizontal">
+
+    <ImageButton
+        android:id="@+id/bt_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_centerInParent="true"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/content_description"
+        android:paddingLeft="10dp"
+        android:paddingRight="20dp"
+        android:src="@drawable/icon_menu_selector"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="@dimen/queue_doctor_name_textview_width"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:gravity="center_vertical"
+        android:paddingLeft="20dp"
+        android:paddingRight="50dp"
+        android:singleLine="true"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_size_patient_name_visit_fragment"
+        android:visibility="visible" />
+
+    <LinearLayout
+        android:id="@+id/layout_doctor_name"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/list_item_clinic_profile_padding"
+        android:layout_marginRight="@dimen/list_item_clinic_profile_padding"
+        android:layout_toEndOf="@+id/bt_menu"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:visibility="visible">
+
+
+        <TextView
+            android:id="@+id/tv_doctor_name"
+            android:layout_width="@dimen/doctor_name_textview_width"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/padding_item_drug_dosage_top_bottom"
+            android:background="@drawable/shape_rounded_corners_white_border_solid_blue"
+            android:drawableEnd="@drawable/arrow_menu_down"
+            android:drawablePadding="@dimen/patient_profile_image_padding"
+            android:paddingBottom="@dimen/dotor_profile_edit_text_top_padding"
+            android:paddingLeft="@dimen/item_contact_padding"
+            android:paddingRight="@dimen/dotor_profile_edit_text_top_padding"
+            android:paddingTop="@dimen/dotor_profile_edit_text_top_padding"
+            android:singleLine="true"
+            android:textColor="@color/white"
+            android:textColorHint="@color/grey_light_text"
+            android:textSize="@dimen/text_size_patient_name_visit_fragment"
+            android:visibility="visible" />
+
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_due_amount"
+        android:layout_width="@dimen/queue_doctor_name_textview_width"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/margin_left_right_add_vital_signs"
+        android:gravity="right"
+        android:padding="@dimen/dotor_profile_edit_text_bottom_padding"
+        android:textColor="@color/red_error"
+        android:textSize="@dimen/text_size_patient_name_visit_fragment"
+        android:visibility="visible" />
+
+</LinearLayout>

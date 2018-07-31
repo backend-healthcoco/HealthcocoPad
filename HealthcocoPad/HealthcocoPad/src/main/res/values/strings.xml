@@ -1373,5 +1373,23 @@
     <string name="bilirubin_indirect">Bilirubin Indirect</string>
     <string name="bilirubin_indirect_range"> 0.1 - 0.9 mg/dL</string>
 
+    <!--Apply Leave texts-->
+    <string name="leave_type">Leave Type</string>
+    <string name="date_of_request">Date of Request</string>
+    <string name="date_of_cancellation">Date of Cancellation</string>
+    <string name="reason_for_leave">Reason for leave</string>
+    <string name="write_reason">Reason in Details</string>
+    <string name="from_date">From Date</string>
+    <string name="to_date">To Date</string>
+    <string name="add_leave">Add Leave</string>
+    <string name="edit_leave">Edit Leave</string>
+    <string name="please_select_from_date">Please select from date</string>
+    <string name="please_select_from_date_first">Please select from date first</string>
+    <string name="please_select_to_date">Please select to date</string>
+    <string name="please_select_leave_type">Please select leave type</string>
+    <string name="leave_added">Leave Added</string>
+    <string name="no_leave_found">No Leave Found</string>
+    <string name="leave_id">Leave Id :&#160;</string>
+
 
 </resources>

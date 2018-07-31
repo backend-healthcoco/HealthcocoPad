@@ -528,6 +528,10 @@ public enum WebServiceType {
 
     GET_HARDCODED_BLOOD_GROUPS(0, ""),
 
+    ADD_LEAVE(0, null),
+
+    GET_LEAVE_LIST(0, null),
+
     ADD_INVESTIGATION_NOTE(0, null),
 
     GET_INVESTIGATION_NOTE(0, null);

@@ -30,15 +30,120 @@
                 android:background="@color/grey_background"
                 android:orientation="horizontal">
 
-                <ListView
-                    android:id="@+id/lvMenuList"
+                <LinearLayout
                     android:layout_width="250dp"
                     android:layout_height="match_parent"
-                    android:background="@color/white"
-                    android:divider="@color/grey_background"
-                    android:dividerHeight="2dp"
-                    android:overScrollMode="never"
-                    android:scrollbars="none"></ListView>
+                    android:background="@color/grey_background"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:orientation="vertical">
+
+
+                        <LinearLayout
+                            android:id="@+id/patient_profile_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:elevation="5dp"
+                            android:orientation="vertical"
+                            android:visibility="visible">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginTop="@dimen/padding_30_dp"
+                                android:gravity="center">
+
+                                <include layout="@layout/layout_image_patient_profile" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_alignParentRight="true"
+                                android:layout_marginLeft="10dp"
+                                android:gravity="center"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/tv_name"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentLeft="true"
+                                    android:layout_centerVertical="true"
+                                    android:textColor="@color/blue_action_bar"
+                                    android:textSize="@dimen/text_size_patient_name_visit_fragment" />
+
+
+                                <LinearLayout
+                                    android:id="@+id/lv_patient_info"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentRight="true"
+                                    android:layout_centerVertical="true"
+                                    android:layout_marginBottom="@dimen/padding_20_dp"
+                                    android:layout_weight="1"
+                                    android:gravity="center"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:id="@+id/tv_patient_id"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:maxLines="1"
+                                        android:textSize="@dimen/text_size_patient_id_deatil_fragment" />
+
+                                    <TextView
+                                        android:id="@+id/tv_patient_gender"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:maxLines="1"
+                                        android:textSize="@dimen/text_size_patient_id_deatil_fragment" />
+                                </LinearLayout>
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/container_left_action"
+                            android:layout_width="wrap_content"
+                            android:layout_height="?attr/actionBarSize"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentTop="true"
+                            android:gravity="center|start"
+                            android:orientation="horizontal"
+                            android:paddingLeft="5dp">
+
+                            <ImageButton
+                                android:id="@+id/bt_back"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:background="@color/transparent"
+                                android:paddingLeft="5dp"
+                                android:paddingRight="@dimen/padding_20_dp"
+                                android:src="@drawable/selector_actionbar_back_blue" />
+                        </LinearLayout>
+
+                    </RelativeLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:background="@color/grey_item_border" />
+
+                    <ListView
+                        android:id="@+id/lvMenuList"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/white"
+                        android:divider="@color/grey_background"
+                        android:dividerHeight="2dp"
+                        android:overScrollMode="never"
+                        android:scrollbars="none"></ListView>
+                </LinearLayout>
 
                 <View
                     android:layout_width="0.5dp"
@@ -51,124 +156,7 @@
                     android:background="@color/grey_background"
                     android:orientation="vertical">
 
-                    <LinearLayout
-                        android:id="@+id/patient_profile_layout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:background="@color/white"
-                        android:elevation="5dp"
-                        android:orientation="horizontal"
-                        android:visibility="visible">
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="@dimen/list_item_clinic_profile_padding">
-
-                            <include layout="@layout/layout_image_patient_profile" />
-                        </LinearLayout>
-
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_alignParentRight="true"
-                            android:layout_marginLeft="10dp"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:id="@+id/tv_name"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentLeft="true"
-                                android:layout_centerVertical="true"
-                                android:textColor="@color/blue_action_bar"
-                                android:textSize="@dimen/text_size_patient_name_visit_fragment" />
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:layout_alignParentLeft="true"
-                                android:layout_marginBottom="@dimen/list_item_clinic_profile_padding"
-                                android:layout_marginLeft="@dimen/list_item_clinic_profile_padding"
-                                android:layout_marginRight="@dimen/list_item_clinic_profile_padding"
-                                android:layout_marginTop="@dimen/list_item_clinic_profile_padding"
-                                android:layout_toStartOf="@+id/lv_patient_info"
-                                android:gravity="center">
-
-                                <LinearLayout
-                                    android:id="@+id/layout_doctor_name"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
-                                    android:layout_alignParentLeft="true"
-                                    android:layout_marginBottom="@dimen/border_profile_images"
-                                    android:layout_marginLeft="@dimen/list_item_clinic_profile_padding"
-                                    android:layout_marginRight="@dimen/list_item_clinic_profile_padding"
-                                    android:layout_marginTop="@dimen/border_profile_images"
-                                    android:gravity="center"
-                                    android:visibility="invisible">
-
-
-                                    <TextView
-                                        android:id="@+id/tv_doctor_name"
-                                        android:layout_width="@dimen/doctor_name_textview_width"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginLeft="@dimen/padding_item_drug_dosage_top_bottom"
-                                        android:background="@drawable/shape_rounded_corners_item_background_dark_grey"
-                                        android:drawableEnd="@drawable/arrow_down_drug"
-                                        android:drawablePadding="@dimen/patient_profile_image_padding"
-                                        android:hint="@string/doctors"
-                                        android:paddingBottom="@dimen/dotor_profile_edit_text_top_padding"
-                                        android:paddingLeft="@dimen/item_contact_padding"
-                                        android:paddingRight="@dimen/dotor_profile_edit_text_top_padding"
-                                        android:paddingTop="@dimen/dotor_profile_edit_text_top_padding"
-                                        android:singleLine="true"
-                                        android:textColor="@color/black"
-                                        android:textColorHint="@color/grey_light_text"
-                                        android:textSize="@dimen/text_size_patient_name_visit_fragment" />
-
-                                </LinearLayout>
-
-                                <TextView
-                                    android:id="@+id/tv_due_amount"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginLeft="@dimen/margin_left_right_add_vital_signs"
-                                    android:padding="@dimen/dotor_profile_edit_text_bottom_padding"
-                                    android:textColor="@color/red_error"
-                                    android:textSize="@dimen/text_size_patient_name_visit_fragment"
-                                    android:visibility="gone" />
-
-
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:id="@+id/lv_patient_info"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentRight="true"
-                                android:layout_centerVertical="true"
-                                android:layout_marginRight="@dimen/doctor_profile_layout_padding"
-                                android:layout_weight="1"
-                                android:orientation="horizontal">
-
-                                <TextView
-                                    android:id="@+id/tv_patient_id"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:maxLines="1"
-                                    android:textSize="@dimen/text_size_patient_id_deatil_fragment" />
-
-                                <TextView
-                                    android:id="@+id/tv_patient_gender"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:maxLines="1"
-                                    android:textSize="@dimen/text_size_patient_id_deatil_fragment" />
-                            </LinearLayout>
-                        </RelativeLayout>
-                    </LinearLayout>
+                    <include layout="@layout/action_bar_emr" />
 
                     <android.support.v4.view.ViewPager
                         android:id="@+id/view_pager"

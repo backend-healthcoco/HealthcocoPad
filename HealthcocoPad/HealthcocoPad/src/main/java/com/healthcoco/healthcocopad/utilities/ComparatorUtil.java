@@ -25,6 +25,7 @@ import com.healthcoco.healthcocopad.bean.server.Investigation;
 import com.healthcoco.healthcocopad.bean.server.InvestigationNote;
 import com.healthcoco.healthcocopad.bean.server.InvestigationSuggestions;
 import com.healthcoco.healthcocopad.bean.server.Invoice;
+import com.healthcoco.healthcocopad.bean.server.Leave;
 import com.healthcoco.healthcocopad.bean.server.MenstrualHistorySuggestions;
 import com.healthcoco.healthcocopad.bean.server.NotesSuggestions;
 import com.healthcoco.healthcocopad.bean.server.Observation;
@@ -369,6 +370,18 @@ public class ComparatorUtil {
             if (investigationNote1.getCreatedTime() != null && investigationNote2.getCreatedTime() != null) {
                 Date date1 = new Date(investigationNote1.getCreatedTime());
                 Date date2 = new Date(investigationNote2.getCreatedTime());
+                return date2.compareTo(date1);
+            }
+            return 0;
+        }
+    };
+    public static Comparator<Leave> leaveDateComparator = new Comparator<Leave>() {
+
+        @Override
+        public int compare(Leave leave1, Leave leave2) {
+            if (leave1.getCreatedTime() != null && leave2.getCreatedTime() != null) {
+                Date date1 = new Date(leave1.getCreatedTime());
+                Date date2 = new Date(leave2.getCreatedTime());
                 return date2.compareTo(date1);
             }
             return 0;

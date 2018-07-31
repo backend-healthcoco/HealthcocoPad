@@ -60,7 +60,19 @@ public enum PopupWindowType {
         add("Ceramic-facing");
         add("Full Ceramic metal free");
         add("Zirconia");
-    }});
+    }}),
+
+    LEAVE_TYPE(new ArrayList<Object>() {
+        {
+            add("Annual Leave");
+            add("Bereavement");
+            add("Maternity Leave");
+            add("Sick Leave");
+            add("Unpaid Leave");
+            add("Parental Leave");
+            add("Other");
+        }
+    });
 
     private final ArrayList<Object> list;
 

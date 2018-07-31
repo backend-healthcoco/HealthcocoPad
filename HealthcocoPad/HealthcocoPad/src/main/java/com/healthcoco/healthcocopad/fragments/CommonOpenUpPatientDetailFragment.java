@@ -26,7 +26,6 @@ import android.widget.TextView;
 
 import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
-import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.adapter.CommonViewPagerAdapter;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.AmountResponse;
@@ -111,7 +110,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
     private PatientInvestigationDetailFragment patientInvestigationDetailFragment;
     private PatientPrescriptionDetailFragment prescriptionDetailFragment;
     private PatientReportsDetailFragment reportsDetailFragment;
-    private PatientTreatmentDetailFragment treatmentDetailFragment;
+    private PatientLeaveDetailFragment treatmentDetailFragment;
     private PatientInvoiceDetailFragment invoiceDetailFragment;
     private PatientReceiptDetailFragment receiptDetailFragment;
     private HealthcocoPopupWindow doctorsListPopupWindow;
@@ -133,6 +132,8 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
     private ListView lvMenuList;
     private ArrayList<PatientDetailTabType> list;
     private MenuListAdapter menuListAdapter;
+    private TextView tvTitle;
+    private ImageButton btnBack;
 
 
     @Override
@@ -176,7 +177,8 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
         ivContactProfile = (ImageView) view.findViewById(R.id.iv_image);
         patientProfileLayout = (LinearLayout) view.findViewById(R.id.patient_profile_layout);
         doctorNameLayout = (LinearLayout) view.findViewById(R.id.layout_doctor_name);
-        ((CommonOpenUpActivity) mActivity).showRightAction(false);
+        btnBack = (ImageButton) view.findViewById(R.id.bt_back);
+        tvTitle = (TextView) view.findViewById(R.id.tv_title);
 
 
     }
@@ -185,9 +187,8 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
     public void initListeners() {
         mViewPager.addOnPageChangeListener(this);
         tabhost.setOnTabChangedListener(this);
-        ((CommonOpenUpActivity) mActivity).initActionbarRightAction(this);
         lvMenuList.setOnItemClickListener(this);
-
+        btnBack.setOnClickListener(this);
     }
 
     private void initTabs() {
@@ -211,7 +212,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                     appointmentFragment = new PatientAppointmentDetailFragment();
                     healthcocoFragment = appointmentFragment;
                     break;
-                case PATIENT_DETAIL_CLINICAL_NOTES:
+                case PATIENT_DETAIL_INVESTIGATION_NOTES:
                     if (user.getUiPermissions().getTabPermissions().contains(detailTabType.getValue())) {
                         patientInvestigationDetailFragment = new PatientInvestigationDetailFragment();
                         healthcocoFragment = patientInvestigationDetailFragment;
@@ -234,7 +235,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
 //                    break;
                 case PATIENT_DETAIL_TREATMENT:
                     if (user.getUiPermissions().getTabPermissions().contains(detailTabType.getValue())) {
-                        treatmentDetailFragment = new PatientTreatmentDetailFragment();
+                        treatmentDetailFragment = new PatientLeaveDetailFragment();
                         healthcocoFragment = treatmentDetailFragment;
                     }
                     break;
@@ -414,7 +415,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
             doctorNameLayout.setVisibility(View.VISIBLE);
         else
             doctorNameLayout.setVisibility(View.INVISIBLE);
-        tvDueAmount.setVisibility(View.GONE);
+        tvDueAmount.setVisibility(View.INVISIBLE);
         if (patientDetailTabType != null) {
             setPatientDetailHeaderVisibility(patientDetailTabType.getPatientDetailHeaderVisibility());
             switch (patientDetailTabType) {
@@ -437,9 +438,9 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                         isAppointmentTabClicked = true;
                     }
                     break;
-                case PATIENT_DETAIL_CLINICAL_NOTES:
+                case PATIENT_DETAIL_INVESTIGATION_NOTES:
                     if (!isClinicalNotesTabClicked) {
-                        patientInvestigationDetailFragment.refreshData(PatientDetailTabType.PATIENT_DETAIL_CLINICAL_NOTES, clinicDoctorProfileList);
+                        patientInvestigationDetailFragment.refreshData(PatientDetailTabType.PATIENT_DETAIL_INVESTIGATION_NOTES, clinicDoctorProfileList);
                         isClinicalNotesTabClicked = true;
                     }
                     break;
@@ -479,7 +480,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                     }
             }
         }
-        ((CommonOpenUpActivity) mActivity).initActionbarTitle(patientDetailTabType.getActionBarTitleId());
+        tvTitle.setText(patientDetailTabType.getActionBarTitleId());
     }
 
     private void initData() {
@@ -487,7 +488,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
             refreshHeaderData(selectedPatient);
             visitsFragment.setUserData(user, loginedUser, selectedPatient);
             appointmentFragment.setUserData(user, selectedPatient);
-            if (user.getUiPermissions().getTabPermissions().contains(PatientDetailTabType.PATIENT_DETAIL_CLINICAL_NOTES.getValue()))
+            if (user.getUiPermissions().getTabPermissions().contains(PatientDetailTabType.PATIENT_DETAIL_INVESTIGATION_NOTES.getValue()))
                 patientInvestigationDetailFragment.setUserData(user, loginedUser, selectedPatient);
             if (user.getUiPermissions().getTabPermissions().contains(PatientDetailTabType.PATIENT_DETAIL_PRESCRIPTION.getValue()))
                 prescriptionDetailFragment.setUserData(user, loginedUser, selectedPatient);
@@ -521,7 +522,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                 tvPatientId.setText(Util.getValidatedValue(selectedPatient.getPid()));
         } else
             tvPatientId.setText(Util.getValidatedValue(selectedPatient.getPid()));
-        String formattedGenderAge = Util.getFormattedGenderAge(selectedPatient);
+        String formattedGenderAge = Util.getFormattedEmrGenderAge(selectedPatient);
         if (!Util.isNullOrBlank(formattedGenderAge)) {
             tvGenderDate.setVisibility(View.VISIBLE);
             tvGenderDate.setText(formattedGenderAge);
@@ -529,7 +530,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
             tvGenderDate.setVisibility(View.GONE);
             tvGenderDate.setText("");
         }
-        DownloadImageFromUrlUtil.loadImageWithInitialAlphabet(mActivity, PatientProfileScreenType.IN_PATIENT_DEATIL_PROFILE, selectedPatient, null, ivContactProfile, tvInitialAlphabet);
+        DownloadImageFromUrlUtil.loadImageWithInitialAlphabet(mActivity, PatientProfileScreenType.IN_PATIENT_EMR_PROFILE, selectedPatient, null, ivContactProfile, tvInitialAlphabet);
         refreshHeaderDueAmountData(selectedPatient);
     }
 
@@ -541,7 +542,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
             tvDueAmount.setText(String.valueOf(mActivity.getResources().getString(R.string.due_amount)) + "\u20B9 " + Util.getFormattedDoubleNumber(selectedPatient.getTotalDueAmount()));
             tvDueAmount.setTextColor(mActivity.getResources().getColor(R.color.red_error));
         } else {
-            tvDueAmount.setVisibility(View.GONE);
+            tvDueAmount.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -550,6 +551,9 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
         switch (v.getId()) {
             case container_right_action:
                 openGlobalRecordAccessDialogFragment();
+                break;
+            case R.id.bt_back:
+                mActivity.finish();
                 break;
         }
     }

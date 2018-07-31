@@ -542,6 +542,48 @@ public class Util {
         return formattedString;
     }
 
+    public static String getFormattedEmrGenderAge(Object object) {
+        String formattedString = "";
+        String gender = "";
+        String formattedAge = "";
+        DOB dob = null;
+        if (object instanceof RegisteredPatientDetailsUpdated) {
+            RegisteredPatientDetailsUpdated selectedPatient = (RegisteredPatientDetailsUpdated) object;
+            gender = selectedPatient.getGender();
+            dob = selectedPatient.getDob();
+        } else if (object instanceof DoctorProfile) {
+            DoctorProfile doctorProfile = (DoctorProfile) object;
+            gender = doctorProfile.getGender();
+            dob = doctorProfile.getDob();
+        }
+        if (dob != null) {
+            if (object instanceof RegisteredPatientDetailsUpdated) {
+                Calendar calendar = Calendar.getInstance();
+                LogUtils.LOGD(TAG, "Date patient " + dob.getYears() + "," + dob.getMonths() + "," + dob.getDays());
+                calendar.set(dob.getYears(), dob.getMonths() - 1, dob.getDays(), 0, 0);
+                formattedAge = DateTimeUtil.getDateDifference(calendar);
+            } else if (object instanceof DoctorProfile) {
+                formattedAge = dob.getDays() + "/" + dob.getMonths() + "/" + dob.getYears();
+            }
+        }
+        if ((object instanceof DoctorProfile)) {
+            if (!Util.isNullOrBlank(gender))
+                formattedString = formattedString + gender;
+            if (!Util.isNullOrBlank(formattedString) && !Util.isNullOrBlank(formattedAge))
+                formattedString = formattedString + " | " + formattedAge;
+            else if (Util.isNullOrBlank(formattedString) && !Util.isNullOrBlank(formattedAge))
+                formattedString = formattedString + formattedAge;
+        } else {
+            if (!Util.isNullOrBlank(gender))
+                formattedString = formattedString + "" + gender;
+            if (!Util.isNullOrBlank(formattedString) && !Util.isNullOrBlank(formattedAge))
+                formattedString = formattedString + " | " + formattedAge;
+            else if (Util.isNullOrBlank(formattedString) && !Util.isNullOrBlank(formattedAge))
+                formattedString = " | " + formattedString + formattedAge;
+        }
+        return formattedString;
+    }
+
     public static String getFileExtension(Context context, Uri contentUri) {
         Cursor cursor = null;
         try {
