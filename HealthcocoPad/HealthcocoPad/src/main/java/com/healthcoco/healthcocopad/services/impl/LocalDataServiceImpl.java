@@ -5861,6 +5861,22 @@ public class LocalDataServiceImpl {
         return leave;
     }
 
+    public void addBioMetricDetails(BiometricDetails biometricDetails) {
+        BiometricDetails.deleteAll(BiometricDetails.class, LocalDatabaseUtils.KEY_UNIQUE_ID + "= ?", biometricDetails.getUniqueId());
+        try {
+            biometricDetails.save();
+        } catch (Exception e) {
+            Log.i(null, "Error in saving in transaction " + e.getMessage());
+        }
+    }
+
+    public BiometricDetails getBioMetricDetails(String uniqueId) {
+        BiometricDetails biometricDetails = Select.from(BiometricDetails.class)
+                .where(Condition.prop(LocalDatabaseUtils.KEY_UNIQUE_ID).eq(uniqueId)).first();
+
+        return biometricDetails;
+    }
+
     public VolleyResponseBean getLeaveList(WebServiceType webServiceType, ArrayList<RegisteredDoctorProfile> clinicDoctorProfileList, String foreignLocationId,
                                            String foreignHospitalId, String selectedPatientId, int pageNum, int maxSize,
                                            Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
@@ -5913,8 +5929,79 @@ public class LocalDataServiceImpl {
         return null;
     }
 
+    public void addReferDoctor(ReferDoctor referDoctor) {
+        ReferDoctor.deleteAll(ReferDoctor.class, LocalDatabaseUtils.KEY_UNIQUE_ID + "= ?", referDoctor.getUniqueId());
+        try {
+            referDoctor.save();
+        } catch (Exception e) {
+            Log.i(null, "Error in saving in transaction " + e.getMessage());
+        }
+    }
+
+    public ReferDoctor getReferDoctor(String referId) {
+        ReferDoctor referDoctor = Select.from(ReferDoctor.class)
+                .where(Condition.prop(LocalDatabaseUtils.KEY_UNIQUE_ID).eq(referId)).first();
+
+        return referDoctor;
+    }
+
+
+    public VolleyResponseBean getReferDoctorList(WebServiceType webServiceType, ArrayList<RegisteredDoctorProfile> clinicDoctorProfileList, String foreignLocationId,
+                                                 String foreignHospitalId, String selectedPatientId, int pageNum, int maxSize,
+                                                 Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
+        volleyResponseBean.setWebServiceType(webServiceType);
+        volleyResponseBean.setIsDataFromLocal(true);
+        volleyResponseBean.setIsUserOnline(HealthCocoConstants.isNetworkOnline);
+        try {
+            List<ReferDoctor> list = getReferDoctorListPageWise(clinicDoctorProfileList, foreignLocationId, foreignHospitalId, pageNum, maxSize, selectedPatientId);
+            volleyResponseBean.setDataList(getObjectsListFromMap(list));
+            if (responseListener != null)
+                responseListener.onResponse(volleyResponseBean);
+        } catch (Exception e) {
+            e.printStackTrace();
+            showErrorLocal(volleyResponseBean, errorListener);
+        }
+        return volleyResponseBean;
+    }
+
+    private List<ReferDoctor> getReferDoctorListPageWise(ArrayList<RegisteredDoctorProfile> clinicDoctorProfileList, String
+            locationId, String hospitalId, int pageNum, int maxSize, String
+                                                                 selectedPatientId) {
+
+        String whereCondition = "Select * from " + StringUtil.toSQLName(ReferDoctor.class.getSimpleName())
+                + " where "
+                + LocalDatabaseUtils.KEY_PATIENT_ID + "=\"" + selectedPatientId + "\"";
+        whereCondition = whereCondition + " AND "
+                + LocalDatabaseUtils.KEY_HOSPITAL_ID + "=\"" + hospitalId + "\""
+                + " AND "
+                + LocalDatabaseUtils.KEY_LOCATION_ID + "=\"" + locationId + "\"";
+        if (!Util.isNullOrEmptyList(clinicDoctorProfileList))
+            for (int i = 0; i < clinicDoctorProfileList.size(); i++) {
+                if (i == 0)
+                    whereCondition = whereCondition + " AND " + LocalDatabaseUtils.KEY_DOCTOR_ID + "=\"" + clinicDoctorProfileList.get(i).getUserId() + "\"";
+                else
+                    whereCondition = whereCondition + " OR " + LocalDatabaseUtils.KEY_DOCTOR_ID + "=\"" + clinicDoctorProfileList.get(i).getUserId() + "\"";
+
+            }
+
+        String conditionsLimit = " ORDER BY " + LocalDatabaseUtils.KEY_CREATED_TIME + " DESC "
+                + " LIMIT " + maxSize
+                + " OFFSET " + (pageNum * maxSize);
+
+        whereCondition = whereCondition + conditionsLimit;
+        LogUtils.LOGD(TAG, "Select Query " + whereCondition);
+        List<ReferDoctor> list = SugarRecord.findWithQuery(ReferDoctor.class, whereCondition);
+        if (!Util.isNullOrEmptyList(list)) {
+            return list;
+        }
+        return null;
+    }
+
+
     private enum FromTableType {
         ADD_TEMPLATES, ADD_TREATMENT, ADD_PRESCRIPTION
     }
+
 
 }

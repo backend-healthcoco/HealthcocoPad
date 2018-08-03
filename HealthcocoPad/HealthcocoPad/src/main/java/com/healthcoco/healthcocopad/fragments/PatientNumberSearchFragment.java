@@ -1,6 +1,5 @@
 package com.healthcoco.healthcocopad.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,10 +11,8 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.android.volley.Response;
-import com.healthcoco.healthcocopad.HealthCocoDialogFragment;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
-import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.adapter.PatientNumberSearchAdapter;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.request.RegisterNewPatientRequest;
@@ -25,8 +22,6 @@ import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.custom.HealthcocoTextWatcher;
 import com.healthcoco.healthcocopad.dialogFragment.BookAppointmentDialogFragment;
-import com.healthcoco.healthcocopad.dialogFragment.PatientNumberSearchResultsDialogFragment;
-import com.healthcoco.healthcocopad.enums.AddUpdateNameDialogType;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.RoleType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
@@ -38,10 +33,8 @@ import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
-import com.myscript.atk.core.Line;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Shreshtha on 03-03-2017.
@@ -254,7 +247,7 @@ public class PatientNumberSearchFragment extends HealthCocoFragment implements V
         Util.checkNetworkStatus(mActivity);
         if (HealthCocoConstants.isNetworkOnline) {
             HealthCocoConstants.SELECTED_PATIENTS_USER_ID = alreadyRegisteredPatient.getUserId();
-            mActivity.openCommonOpenUpActivity(CommonOpenUpFragmentType.PATIENT_DETAIL, null,
+            mActivity.openCommonOpenUpActivity(CommonOpenUpFragmentType.PATIENT_VERIFICATION, null,
                     REQUEST_CODE_PATIENT_NUMBER_SERACH);
             mActivity.finish();
         } else {

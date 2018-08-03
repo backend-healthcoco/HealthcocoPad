@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <include layout="@layout/action_bar_title_save"></include>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/image_patient_deatail">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/layout_margin"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/list_item_padding"
+                android:paddingLeft="@dimen/patient_profile_image_padding"
+                android:paddingRight="@dimen/patient_profile_image_padding"
+                android:paddingTop="@dimen/list_item_padding"
+                android:weightSum="4">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|start"
+                    android:layout_marginRight="@dimen/padding_30_dp"
+                    android:layout_weight="1.2"
+                    android:gravity="center|end"
+                    android:paddingLeft="10dp"
+                    android:text="@string/patient_name"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_book_appointment_dialog_fragment" />
+
+                <TextView
+                    android:id="@+id/tv_patient_name"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|start"
+                    android:layout_marginRight="@dimen/padding_30_dp"
+                    android:layout_weight="2.2"
+                    android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
+                    android:gravity="center|start"
+                    android:minHeight="0dp"
+                    android:padding="10dp"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_book_appointment_dialog_fragment" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_cancel_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/layout_margin"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/list_item_padding"
+                android:paddingLeft="@dimen/patient_profile_image_padding"
+                android:paddingRight="@dimen/patient_profile_image_padding"
+                android:paddingTop="@dimen/list_item_padding"
+                android:weightSum="4">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|start"
+                    android:layout_marginRight="@dimen/padding_30_dp"
+                    android:layout_weight="1.2"
+                    android:gravity="center|end"
+                    android:paddingLeft="10dp"
+                    android:text="@string/date"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_book_appointment_dialog_fragment" />
+
+                <TextView
+                    android:id="@+id/tv_date"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|start"
+                    android:layout_marginRight="@dimen/padding_30_dp"
+                    android:layout_weight="2.2"
+                    android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
+                    android:drawableEnd="@drawable/arrow_down_drug"
+                    android:gravity="center|start"
+                    android:minHeight="0dp"
+                    android:padding="10dp"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_book_appointment_dialog_fragment" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/layout_margin"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/list_item_padding"
+                android:paddingLeft="@dimen/patient_profile_image_padding"
+                android:paddingRight="@dimen/patient_profile_image_padding"
+                android:paddingTop="@dimen/list_item_padding"
+                android:weightSum="4">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|start"
+                    android:layout_marginRight="@dimen/padding_30_dp"
+                    android:layout_weight="1.2"
+                    android:gravity="center|end"
+                    android:paddingLeft="10dp"
+                    android:text="@string/referred_by"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_book_appointment_dialog_fragment" />
+
+                <TextView
+                    android:id="@+id/tv_referred_by"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|start"
+                    android:layout_marginRight="@dimen/padding_30_dp"
+                    android:layout_weight="2.2"
+                    android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
+                    android:gravity="center|start"
+                    android:minHeight="0dp"
+                    android:padding="10dp"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_book_appointment_dialog_fragment" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/layout_margin"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/list_item_padding"
+                android:paddingLeft="@dimen/patient_profile_image_padding"
+                android:paddingRight="@dimen/patient_profile_image_padding"
+                android:paddingTop="@dimen/list_item_padding"
+                android:weightSum="4">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|start"
+                    android:layout_marginRight="@dimen/padding_30_dp"
+                    android:layout_weight="1.2"
+                    android:gravity="center|end"
+                    android:paddingLeft="10dp"
+                    android:text="@string/referred_to"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_book_appointment_dialog_fragment" />
+
+                <TextView
+                    android:id="@+id/tv_referred_to"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|start"
+                    android:layout_marginRight="@dimen/padding_30_dp"
+                    android:layout_weight="2.2"
+                    android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
+                    android:drawableEnd="@drawable/arrow_down_drug"
+                    android:gravity="center|start"
+                    android:minHeight="0dp"
+                    android:padding="10dp"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_book_appointment_dialog_fragment" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/layout_margin"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/list_item_padding"
+                android:paddingLeft="@dimen/patient_profile_image_padding"
+                android:paddingRight="@dimen/patient_profile_image_padding"
+                android:paddingTop="@dimen/list_item_padding"
+                android:weightSum="4">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:layout_marginRight="@dimen/padding_30_dp"
+                    android:layout_weight="1.2"
+                    android:gravity="end"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="5dp"
+                    android:text="@string/details"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_book_appointment_dialog_fragment" />
+
+                <EditText
+                    android:id="@+id/edit_Details"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|start"
+                    android:layout_marginRight="@dimen/padding_30_dp"
+                    android:layout_weight="2.2"
+                    android:background="@drawable/shape_rounded_corners_item_background_dark_grey"
+                    android:gravity="start"
+                    android:hint="@string/details"
+                    android:minHeight="0dp"
+                    android:minLines="3"
+                    android:padding="10dp"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_book_appointment_dialog_fragment" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/layout_margin"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/list_item_padding"
+                android:paddingLeft="@dimen/patient_profile_image_padding"
+                android:paddingRight="@dimen/patient_profile_image_padding"
+                android:paddingTop="@dimen/list_item_padding"
+                android:weightSum="4">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|start"
+                    android:layout_marginRight="@dimen/padding_30_dp"
+                    android:layout_weight="1.2"
+                    android:gravity="center|end"
+                    android:paddingLeft="10dp"
+                    android:text="@string/date_of_request"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_book_appointment_dialog_fragment" />
+
+                <TextView
+                    android:id="@+id/tv_request_date"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|start"
+                    android:layout_marginRight="@dimen/padding_30_dp"
+                    android:layout_weight="2.2"
+                    android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
+                    android:gravity="center|start"
+                    android:minHeight="0dp"
+                    android:padding="10dp"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_book_appointment_dialog_fragment" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

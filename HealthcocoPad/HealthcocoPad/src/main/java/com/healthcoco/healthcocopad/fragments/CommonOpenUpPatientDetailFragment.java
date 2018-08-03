@@ -108,9 +108,9 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
     private PatientVisitDetailFragment visitsFragment;
     private PatientAppointmentDetailFragment appointmentFragment;
     private PatientInvestigationDetailFragment patientInvestigationDetailFragment;
-    private PatientPrescriptionDetailFragment prescriptionDetailFragment;
+    private PatientLeaveDetailFragment prescriptionDetailFragment;
     private PatientReportsDetailFragment reportsDetailFragment;
-    private PatientLeaveDetailFragment treatmentDetailFragment;
+    private PatientReferalDetailFragment treatmentDetailFragment;
     private PatientInvoiceDetailFragment invoiceDetailFragment;
     private PatientReceiptDetailFragment receiptDetailFragment;
     private HealthcocoPopupWindow doctorsListPopupWindow;
@@ -220,7 +220,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                     break;
                 case PATIENT_DETAIL_PRESCRIPTION:
                     if (user.getUiPermissions().getTabPermissions().contains(detailTabType.getValue())) {
-                        prescriptionDetailFragment = new PatientPrescriptionDetailFragment();
+                        prescriptionDetailFragment = new PatientLeaveDetailFragment();
                         healthcocoFragment = prescriptionDetailFragment;
                     }
                     break;
@@ -235,7 +235,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
 //                    break;
                 case PATIENT_DETAIL_TREATMENT:
                     if (user.getUiPermissions().getTabPermissions().contains(detailTabType.getValue())) {
-                        treatmentDetailFragment = new PatientLeaveDetailFragment();
+                        treatmentDetailFragment = new PatientReferalDetailFragment();
                         healthcocoFragment = treatmentDetailFragment;
                     }
                     break;

@@ -565,11 +565,11 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
             case PATIENT_DETAIL_VISIT:
                 int blankClinicalNoteMsgId = addClinicalNotesVisitNormalFragment.getBlankClinicalNoteMsgId();
                 int blankPrescriptionMsgId = addEditNormalVisitPrescriptionFragment.getBlankPrescriptionMsg();
-                int blankTreatmentMsgId = addNewTreatmentFragment.getBlankTreatmentMsg();
-                if (blankClinicalNoteMsgId != 0 && blankPrescriptionMsgId != 0 && blankTreatmentMsgId != 0)
+//                int blankTreatmentMsgId = addNewTreatmentFragment.getBlankTreatmentMsg();
+                if (blankClinicalNoteMsgId != 0 && blankPrescriptionMsgId != 0)
                     errorMsg = R.string.alert_blank_visit;
                 if (errorMsg == 0) {
-                    addVisit(blankClinicalNoteMsgId, blankPrescriptionMsgId, blankTreatmentMsgId);
+                    addVisit(blankClinicalNoteMsgId, blankPrescriptionMsgId, 0);
                 } else
                     Util.showToast(mActivity, errorMsg);
                 break;
@@ -732,11 +732,11 @@ public class AddEditNormalVisitsFragment extends HealthCocoFragment implements
             visitDetails.setPrescription(addEditNormalVisitPrescriptionFragment.getPrescriptionRequestDetails());
             visitDetails.getPrescription().setDoctorId(user.getUniqueId());
         }
-        if (blankTreatmentMsgId == 0) {
+       /* if (blankTreatmentMsgId == 0) {
 //            addNewTreatmentFragment.refreshListViewUpdatedTreatmentList();
             visitDetails.setTreatmentRequest(addNewTreatmentFragment.getTreatmentRequestDetails(isFromClone));
             visitDetails.getTreatmentRequest().setDoctorId(user.getUniqueId());
-        }
+        }*/
         if (Util.isNullOrBlank(appointmentId))
             visitDetails.setAppointmentRequest(appointmentRequest);
         WebDataServiceImpl.getInstance(mApp).addVisit(VisitDetails.class, visitDetails, this, this);

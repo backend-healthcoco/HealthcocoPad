@@ -24,31 +24,22 @@ import com.healthcoco.healthcocopad.HealthCocoApplication;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
-import com.healthcoco.healthcocopad.bean.request.AppointmentRequestToSend;
 import com.healthcoco.healthcocopad.bean.request.EventRequest;
-import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
 import com.healthcoco.healthcocopad.bean.server.Events;
 import com.healthcoco.healthcocopad.bean.server.PatientCard;
 import com.healthcoco.healthcocopad.bean.server.WorkingHours;
 import com.healthcoco.healthcocopad.dialogFragment.AddEventDialogFragment;
-import com.healthcoco.healthcocopad.dialogFragment.BookAppointmentDialogFragment;
 import com.healthcoco.healthcocopad.enums.AddEventsFromScreenType;
 import com.healthcoco.healthcocopad.enums.AppointmentStatusType;
-import com.healthcoco.healthcocopad.enums.BookAppointmentFromScreenType;
-import com.healthcoco.healthcocopad.enums.CalendarStatus;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
-import com.healthcoco.healthcocopad.enums.CreatedByType;
 import com.healthcoco.healthcocopad.enums.PatientDetailTabType;
-import com.healthcoco.healthcocopad.enums.PatientProfileScreenType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.fragments.EventFragment;
 import com.healthcoco.healthcocopad.fragments.PatientAppointmentDetailFragment;
-import com.healthcoco.healthcocopad.fragments.QueueFragment;
 import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
-import com.healthcoco.healthcocopad.utilities.DownloadImageFromUrlUtil;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
@@ -56,9 +47,7 @@ import com.healthcoco.healthcocopad.utilities.Util;
 import org.parceler.Parcels;
 
 import static android.support.v4.app.ActivityCompat.startActivityForResult;
-import static com.healthcoco.healthcocopad.dialogFragment.BookAppointmentDialogFragment.TAG_APPOINTMENT_ID;
 import static com.healthcoco.healthcocopad.enums.AddEventsFromScreenType.EVENTS_LIST_RESCHEDULE;
-import static com.healthcoco.healthcocopad.enums.BookAppointmentFromScreenType.APPOINTMENTS_QUEUE_RESCHEDULE;
 
 /**
  * Created by Prashant on 30/05/18.
@@ -277,7 +266,7 @@ public class EventDetailsPopupWindow extends PopupWindow implements View.OnClick
     public void onPatientDatailsClicked() {
         HealthCocoConstants.SELECTED_PATIENTS_USER_ID = events.getPatientCard().getUserId();
         Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
-        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.PATIENT_DETAIL.ordinal());
+        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.PATIENT_VERIFICATION.ordinal());
         intent.putExtra(HealthCocoConstants.TAG_TAB_TYPE, PatientDetailTabType.PATIENT_DETAIL_PROFILE.ordinal());
         startActivityForResult(mActivity, intent, 0, null);
 

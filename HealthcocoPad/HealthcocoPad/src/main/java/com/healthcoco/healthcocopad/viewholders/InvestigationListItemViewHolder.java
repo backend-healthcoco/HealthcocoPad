@@ -191,7 +191,7 @@ public class InvestigationListItemViewHolder extends HealthCocoViewHolder implem
             headerCreatedByTreatment.setVisibility(View.VISIBLE);
             containerTreatmentBy.setVisibility(View.VISIBLE);
             containerBottomButtons.setVisibility(View.VISIBLE);
-            imageView.setVisibility(View.VISIBLE);
+            imageView.setVisibility(View.GONE);
         }
 
 
@@ -237,7 +237,7 @@ public class InvestigationListItemViewHolder extends HealthCocoViewHolder implem
                     Util.checkNetworkStatus(mActivity);
                     if (HealthCocoConstants.isNetworkOnline) {
                         int msgId = R.string.confirm_discard_clinical_notes_message;
-                        int titleId = R.string.confirm_discard_treatment_title;
+                        int titleId = R.string.confirm_discard_investigation;
                         showConfirmationAlert(v.getId(), mActivity.getResources().getString(titleId), mActivity.getResources().getString(msgId));
                     } else onNetworkUnavailable(null);
                 }

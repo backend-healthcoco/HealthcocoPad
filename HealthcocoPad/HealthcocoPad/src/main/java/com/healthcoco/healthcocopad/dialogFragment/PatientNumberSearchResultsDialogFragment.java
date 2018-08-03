@@ -176,7 +176,7 @@ public class PatientNumberSearchResultsDialogFragment extends HealthCocoDialogFr
         Util.checkNetworkStatus(mActivity);
         if (HealthCocoConstants.isNetworkOnline) {
             HealthCocoConstants.SELECTED_PATIENTS_USER_ID = alreadyRegisteredPatient.getUserId();
-            mActivity.openCommonOpenUpActivity(CommonOpenUpFragmentType.PATIENT_DETAIL, null,
+            mActivity.openCommonOpenUpActivity(CommonOpenUpFragmentType.PATIENT_VERIFICATION, null,
                     REQUEST_CODE_PATIENT_SEARCH);
             closeThisActivity();
         } else {

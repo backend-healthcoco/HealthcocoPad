@@ -86,5 +86,10 @@ dependencies {
     compile project(':MyScript_ATK-Text-android-component')
     compile 'com.android.support:cardview-v7:25.1.0'
     compile 'com.android.support.constraint:constraint-layout:1.1.2'
+    //requred for Fingerprint Verification
+    compile files('libs/mantra.mfs100.jar')
+    //requred for Investigation graphs
+    compile 'com.github.PhilJay:MPAndroidChart:v3.0.0'
+
 }
 apply plugin: 'com.google.gms.google-services'

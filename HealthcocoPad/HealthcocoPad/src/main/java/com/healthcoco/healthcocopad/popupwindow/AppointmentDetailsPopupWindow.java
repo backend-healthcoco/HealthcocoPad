@@ -392,7 +392,7 @@ public class AppointmentDetailsPopupWindow extends PopupWindow implements View.O
     public void onReceiptClicked() {
         HealthCocoConstants.SELECTED_PATIENTS_USER_ID = calendarEvents.getPatient().getUserId();
         Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
-        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.PATIENT_DETAIL.ordinal());
+        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.PATIENT_VERIFICATION.ordinal());
         intent.putExtra(HealthCocoConstants.TAG_TAB_TYPE, PATIENT_DETAIL_RECEIPT.ordinal());
         startActivityForResult(mActivity, intent, 0, null);
 
@@ -401,7 +401,7 @@ public class AppointmentDetailsPopupWindow extends PopupWindow implements View.O
     public void onVisitClicked() {
         HealthCocoConstants.SELECTED_PATIENTS_USER_ID = calendarEvents.getPatient().getUserId();
         Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
-        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.PATIENT_DETAIL.ordinal());
+        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.PATIENT_VERIFICATION.ordinal());
         intent.putExtra(HealthCocoConstants.TAG_TAB_TYPE, PatientDetailTabType.PATIENT_DETAIL_VISIT.ordinal());
         startActivityForResult(mActivity, intent, 0, null);
 
@@ -410,7 +410,7 @@ public class AppointmentDetailsPopupWindow extends PopupWindow implements View.O
     public void onInvoiceClicked() {
         HealthCocoConstants.SELECTED_PATIENTS_USER_ID = calendarEvents.getPatient().getUserId();
         Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
-        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.PATIENT_DETAIL.ordinal());
+        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.PATIENT_VERIFICATION.ordinal());
         intent.putExtra(HealthCocoConstants.TAG_TAB_TYPE, PATIENT_DETAIL_INVOICE.ordinal());
         startActivityForResult(mActivity, intent, 0, null);
 
@@ -419,7 +419,7 @@ public class AppointmentDetailsPopupWindow extends PopupWindow implements View.O
     public void onPatientDatailsClicked() {
         HealthCocoConstants.SELECTED_PATIENTS_USER_ID = calendarEvents.getPatient().getUserId();
         Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
-        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.PATIENT_DETAIL.ordinal());
+        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.PATIENT_VERIFICATION.ordinal());
         intent.putExtra(HealthCocoConstants.TAG_TAB_TYPE, PatientDetailTabType.PATIENT_DETAIL_PROFILE.ordinal());
         startActivityForResult(mActivity, intent, 0, null);
 

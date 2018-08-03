@@ -39,6 +39,7 @@ import com.healthcoco.healthcocopad.bean.server.PsSuggestions;
 import com.healthcoco.healthcocopad.bean.server.PvSuggestions;
 import com.healthcoco.healthcocopad.bean.server.ReceiptResponse;
 import com.healthcoco.healthcocopad.bean.server.Records;
+import com.healthcoco.healthcocopad.bean.server.ReferDoctor;
 import com.healthcoco.healthcocopad.bean.server.Reference;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.Specialities;
@@ -370,6 +371,18 @@ public class ComparatorUtil {
             if (investigationNote1.getCreatedTime() != null && investigationNote2.getCreatedTime() != null) {
                 Date date1 = new Date(investigationNote1.getCreatedTime());
                 Date date2 = new Date(investigationNote2.getCreatedTime());
+                return date2.compareTo(date1);
+            }
+            return 0;
+        }
+    };
+    public static Comparator<ReferDoctor> referDcotorDateComparator = new Comparator<ReferDoctor>() {
+
+        @Override
+        public int compare(ReferDoctor referDoctor, ReferDoctor ReferDoctor2) {
+            if (referDoctor.getCreatedTime() != null && ReferDoctor2.getCreatedTime() != null) {
+                Date date1 = new Date(referDoctor.getCreatedTime());
+                Date date2 = new Date(ReferDoctor2.getCreatedTime());
                 return date2.compareTo(date1);
             }
             return 0;

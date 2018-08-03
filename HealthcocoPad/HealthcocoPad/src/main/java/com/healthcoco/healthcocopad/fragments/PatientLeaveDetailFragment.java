@@ -184,7 +184,6 @@ public class PatientLeaveDetailFragment extends HealthCocoFragment implements Sw
             if (resultCode == HealthCocoConstants.RESULT_CODE_ADD_NEW_LEAVE) {
                 lvLeave.smoothScrollToPosition(0);
                 getListFromLocal(true, isOTPVerified, 0);
-                Util.showToast(mActivity, getString(R.string.investigation_saved));
             }
         }
     }

@@ -8,6 +8,7 @@ import com.healthcoco.healthcocopad.R;
 public enum CommonOpenUpFragmentType {
     LOGIN_SIGN_UP(0),
     CONTINUE_SIGN_UP(0),
+    PATIENT_VERIFICATION(0),
     PATIENT_DETAIL(0),
     CONTACTS_DETAIL(0),
     TERMS_OF_SERVICE(R.string.terms_of_service),

@@ -1282,7 +1282,7 @@
     <string name="no_investigation_found">No Investigations Found</string>
     <string name="investigation_saved">Investigations Saved</string>
     <string name="investigation_id"> | Investigation Id :&#160;</string>
-
+    <string name="confirm_discard_investigation">Are you sure you want to discard this Investigation?</string>
 
     <string name="absolute_eosinophil_count">Absolute Eosinophil Count</string>
     <string name="absolute_eosinophil_count_range">40 -440 cells/cu mm</string>
@@ -1390,6 +1390,29 @@
     <string name="leave_added">Leave Added</string>
     <string name="no_leave_found">No Leave Found</string>
     <string name="leave_id">Leave Id :&#160;</string>
+    <string name="no_referal_found">No Referal Found</string>
+    <string name="refer_id">Refer Id :&#160;</string>
+    <string name="please_write_details">Please write Details</string>
+    <string name="please_select_refferred_by_doctor">Please select Referred by Doctor</string>
+    <string name="please_select_refferred_to_doctor">Please select Referred to Doctor</string>
+    <string name="confirm_discard_Leave">Are you sure you want to discard this Leave?</string>
+    <string name="confirm_discard_refer_doctor">Are you sure you want to discard Refer Doctor?</string>
+    <string name="add_refer_to_doctor">Referal</string>
+    <string name="refer_doctor">Referal</string>
 
+
+    <!--FingerPint texts-->
+    <string name="pinlock_fingerprint">Use Fingerprint</string>
+    <string name="enter_adhar_no">Enter Aadhar Deatils and Employee Id.</string>
+    <string name="employee_id">Employee Id</string>
+    <string name="start">Start</string>
+    <string name="stop">Stop</string>
+    <string name="retry">Retry</string>
+    <string name="fingerprint_verification">Fingerprint Verification</string>
+    <string name="please_complete_doctor_verification">Please Complete Doctor Verification</string>
+    <string name="please_complete_patient_verification">Please Complete Patient Verification</string>
+    <string name="referred_to">Referred To</string>
+    <string name="details">Details</string>
+    <string name="submitted">Submitted</string>
 
 </resources>

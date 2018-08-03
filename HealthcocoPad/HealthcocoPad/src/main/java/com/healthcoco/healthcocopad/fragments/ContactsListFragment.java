@@ -30,7 +30,6 @@ import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.activities.HomeActivity;
 import com.healthcoco.healthcocopad.adapter.ContactsListAdapter;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
-import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
 import com.healthcoco.healthcocopad.bean.server.ClinicDetailResponse;
 import com.healthcoco.healthcocopad.bean.server.DoctorClinicProfile;
 import com.healthcoco.healthcocopad.bean.server.DoctorProfile;
@@ -66,7 +65,6 @@ import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimis
 import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
-import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
@@ -486,7 +484,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
     public void onAddPrescriptionClicked(RegisteredPatientDetailsUpdated selecetdPatient) {
         HealthCocoConstants.SELECTED_PATIENTS_USER_ID = selecetdPatient.getUserId();
         Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
-        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.PATIENT_DETAIL.ordinal());
+        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.PATIENT_VERIFICATION.ordinal());
         intent.putExtra(HealthCocoConstants.TAG_TAB_TYPE, PatientDetailTabType.PATIENT_DETAIL_PRESCRIPTION.ordinal());
         startActivityForResult(intent, REQUEST_CODE_CONTACTS_DETAIL);
         contactsListAdapter.notifyDataSetChanged();
@@ -497,7 +495,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
         if (selecetdPatient.getPatient() != null && !Util.isNullOrBlank(selecetdPatient.getPatient().getPatientId())) {
             HealthCocoConstants.SELECTED_PATIENTS_USER_ID = selecetdPatient.getUserId();
             if (isInHomeActivity()) {
-                openCommonOpenUpActivity(CommonOpenUpFragmentType.PATIENT_DETAIL, null, REQUEST_CODE_CONTACTS_DETAIL);
+                openCommonOpenUpActivity(CommonOpenUpFragmentType.PATIENT_VERIFICATION, null, REQUEST_CODE_CONTACTS_DETAIL);
                 contactsListAdapter.notifyDataSetChanged();
             } else {
                 Util.sendBroadcast(mApp, BookAppointmentDialogFragment.INTENT_REFRESH_SELECTED_PATIENT);

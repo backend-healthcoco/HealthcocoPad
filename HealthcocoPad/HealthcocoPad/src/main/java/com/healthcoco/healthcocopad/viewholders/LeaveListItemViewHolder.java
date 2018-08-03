@@ -211,7 +211,7 @@ public class LeaveListItemViewHolder extends HealthCocoViewHolder implements Vie
             headerCreatedByTreatment.setVisibility(View.VISIBLE);
             containerTreatmentBy.setVisibility(View.VISIBLE);
             containerBottomButtons.setVisibility(View.VISIBLE);
-            imageView.setVisibility(View.VISIBLE);
+            imageView.setVisibility(View.GONE);
         }
 
 

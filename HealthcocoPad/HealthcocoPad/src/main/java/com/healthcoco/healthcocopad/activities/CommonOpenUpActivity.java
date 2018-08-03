@@ -20,7 +20,6 @@ import android.widget.TextView;
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
-import com.healthcoco.healthcocopad.calendar.CalendarFragment;
 import com.healthcoco.healthcocopad.calendar.pinlockview.ChangePinFragment;
 import com.healthcoco.healthcocopad.enums.ActionbarLeftRightActionTypeDrawables;
 import com.healthcoco.healthcocopad.enums.ActionbarType;
@@ -46,16 +45,14 @@ import com.healthcoco.healthcocopad.fragments.DiseaseListFragment;
 import com.healthcoco.healthcocopad.fragments.DoctorDetailsFragment;
 import com.healthcoco.healthcocopad.fragments.EnlargedMapViewFragment;
 import com.healthcoco.healthcocopad.fragments.FeedbackFragment;
-import com.healthcoco.healthcocopad.fragments.FeedsFragment;
+import com.healthcoco.healthcocopad.fragments.FingerPrintVarificationFragment;
 import com.healthcoco.healthcocopad.fragments.FollowUpAppointmentFragment;
 import com.healthcoco.healthcocopad.fragments.InitialSyncFragment;
-import com.healthcoco.healthcocopad.fragments.KioskFragment;
 import com.healthcoco.healthcocopad.fragments.LoginSignupFragment;
 import com.healthcoco.healthcocopad.fragments.NotificationResponseDataFragment;
 import com.healthcoco.healthcocopad.fragments.PatientEducationVideoListFragment;
 import com.healthcoco.healthcocopad.fragments.PatientRegistrationFragment;
 import com.healthcoco.healthcocopad.fragments.PatientRegistrationTabsFragment;
-import com.healthcoco.healthcocopad.fragments.QueueFragment;
 import com.healthcoco.healthcocopad.fragments.SelectedDiagramDetailFragment;
 import com.healthcoco.healthcocopad.fragments.SettingKioskFragment;
 import com.healthcoco.healthcocopad.fragments.SettingPrintSetupFragment;
@@ -201,6 +198,11 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
                 break;
             case PATIENT_REGISTRATION:
                 openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.WITH_SAVE, fragmentType.getTitleId(), new PatientRegistrationFragment());
+                break;
+            case PATIENT_VERIFICATION:
+                hideSoftKeyboardOnStartUp();
+                openFragment(ActionbarType.HIDDEN, new FingerPrintVarificationFragment());
+//                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.WITH_GLOBAL_ACCESS_BUTTON, R.string.patient_profile, new CommonOpenUpPatientDetailFragment());
                 break;
             case PATIENT_DETAIL:
                 hideSoftKeyboardOnStartUp();

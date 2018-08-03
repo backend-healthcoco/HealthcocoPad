@@ -280,5 +280,6 @@
     <dimen name="default_horizontal_spacing">40dp</dimen>
     <dimen name="default_vertical_spacing">18dp</dimen>
     <dimen name="delete_button_size_height">56dp</dimen>
+    <dimen name="finger_icon">60dp</dimen>
 
 </resources>

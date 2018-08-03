@@ -132,7 +132,7 @@ public class ReportsListItemViewHolder extends HealthCocoViewHolder
                 containerBottomButtons.setVisibility(View.VISIBLE);
                 tvLabelGlobalRecord.setVisibility(View.GONE);
             }
-            imageView.setVisibility(View.VISIBLE);
+            imageView.setVisibility(View.GONE);
         }
         //handling approve decline view visibility
         if (record.getRecordsState() != null) {

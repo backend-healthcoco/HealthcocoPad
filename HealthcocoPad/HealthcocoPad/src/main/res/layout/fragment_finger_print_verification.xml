@@ -1,0 +1,655 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="top"
+        android:orientation="vertical"
+        android:paddingBottom="3dp"
+        android:paddingTop="5dp"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/lblMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/message"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text=""
+            android:textSize="15dp"
+            android:textStyle="bold" />
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/container_left_action"
+                android:layout_width="wrap_content"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:gravity="center|start"
+                android:orientation="horizontal"
+                android:paddingLeft="5dp">
+
+                <ImageButton
+                    android:id="@+id/bt_back"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="@color/transparent"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="@dimen/padding_20_dp"
+                    android:src="@drawable/selector_actionbar_back_blue" />
+            </LinearLayout>
+
+            <TextView
+                style="@style/ActionBarTitleStyle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="left|center_vertical"
+                android:text="@string/fingerprint_verification"
+                android:textColor="@color/blue_action_bar" />
+
+            <TextView
+                android:id="@+id/tv_done"
+                style="@style/ActionBarTitleStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="right"
+                android:gravity="center"
+                android:paddingLeft="@dimen/padding_20_dp"
+                android:paddingRight="@dimen/padding_20_dp"
+                android:text="@string/done"
+                android:textColor="@drawable/text_selector_blue_grey" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/doctor_profile_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/padding_30_dp"
+                    android:elevation="5dp"
+                    android:orientation="vertical"
+                    android:visibility="visible">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="@dimen/padding_30_dp"
+                        android:gravity="center">
+
+                        <include layout="@layout/layout_image_doctor_profile" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tv_doctor_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginBottom="@dimen/padding_20_dp"
+                            android:layout_marginTop="@dimen/padding_20_dp"
+                            android:textColor="@color/blue_action_bar"
+                            android:textSize="@dimen/text_size_patient_name_visit_fragment" />
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:visibility="invisible">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:paddingTop="@dimen/layout_margin">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="@dimen/layout_margin"
+                            android:paddingTop="@dimen/layout_margin"
+                            android:text="@string/enter_adhar_no"
+                            android:textColor="@color/green_logo"
+                            android:textSize="@dimen/text_size_patient_name_visit_fragment" />
+
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="@dimen/layout_margin"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginBottom="@dimen/layout_margin"
+                                android:orientation="horizontal">
+
+                                <EditText
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center|start"
+                                    android:layout_marginRight="@dimen/layout_margin"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/edit_text_bottom_line_blue"
+                                    android:gravity="center|start"
+                                    android:hint="@string/aadhar_id"
+                                    android:inputType="number"
+                                    android:maxLength="12"
+                                    android:minHeight="0dp"
+                                    android:padding="10dp"
+                                    android:textColor="@color/black"
+                                    android:textSize="@dimen/text_size_book_appointment_dialog_fragment" />
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:src="@drawable/icon_check_normal"
+                                    android:visibility="invisible" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginBottom="@dimen/layout_margin"
+                                android:orientation="horizontal">
+
+                                <EditText
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center|start"
+                                    android:layout_marginRight="@dimen/layout_margin"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/edit_text_bottom_line_blue"
+                                    android:gravity="center|start"
+                                    android:hint="@string/mobile_number"
+                                    android:inputType="number"
+                                    android:maxLength="12"
+                                    android:minHeight="0dp"
+                                    android:padding="10dp"
+                                    android:textColor="@color/black"
+                                    android:textSize="@dimen/text_size_book_appointment_dialog_fragment" />
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:src="@drawable/icon_check_normal"
+                                    android:visibility="invisible" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginBottom="@dimen/layout_margin"
+                                android:orientation="horizontal">
+
+                                <EditText
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center|start"
+                                    android:layout_marginRight="@dimen/layout_margin"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/edit_text_bottom_line_blue"
+                                    android:gravity="center|start"
+                                    android:hint="@string/employee_id"
+                                    android:inputType="number"
+                                    android:maxLength="12"
+                                    android:minHeight="0dp"
+                                    android:padding="10dp"
+                                    android:textColor="@color/black"
+                                    android:textSize="@dimen/text_size_book_appointment_dialog_fragment" />
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:src="@drawable/icon_check_normal"
+                                    android:visibility="invisible" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/or"
+                            android:textColor="@color/text_fingerprint"
+                            android:textSize="@dimen/text_size_patient_name_visit_fragment" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="@dimen/layout_margin"
+                            android:paddingTop="@dimen/layout_margin"
+                            android:text="@string/pinlock_fingerprint"
+                            android:textColor="@color/green_logo"
+                            android:textSize="@dimen/text_size_patient_name_visit_fragment" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/padding_20_dp"
+                    android:orientation="vertical">
+
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:id="@+id/finger_view_doctor"
+                        android:layout_width="@dimen/finger_icon"
+                        android:layout_height="@dimen/finger_icon"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="@dimen/layout_margin"
+                        android:src="@drawable/ic_fingerprint" />
+
+                    <TextView
+                        android:id="@+id/tv_finger_doctor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="@dimen/layout_margin"
+                        android:paddingLeft="@dimen/padding_30_dp"
+                        android:paddingRight="@dimen/padding_30_dp"
+                        android:text="@string/pinlock_fingerprint"
+                        android:textColor="@color/text_fingerprint"
+                        android:textSize="@dimen/text_size_feedback" />
+
+                    <com.healthcoco.healthcocopad.views.FontAwesomeButton
+                        android:id="@+id/bt_start_doctor"
+                        style="?android:attr/borderlessButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/layout_margin"
+                        android:background="@drawable/selector_rounded_corners_btn_blue"
+                        android:minHeight="0dp"
+                        android:paddingBottom="10dp"
+                        android:paddingLeft="40dp"
+                        android:paddingRight="40dp"
+                        android:paddingTop="@dimen/layout_margin"
+                        android:text="@string/start"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_size_registration_title"
+                        android:visibility="visible" />
+
+                    <com.healthcoco.healthcocopad.views.FontAwesomeButton
+                        android:id="@+id/bt_stop_doctor"
+                        style="?android:attr/borderlessButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/layout_margin"
+                        android:background="@drawable/selector_rounded_corners_btn_blue"
+                        android:minHeight="0dp"
+                        android:paddingBottom="10dp"
+                        android:paddingLeft="45dp"
+                        android:paddingRight="45dp"
+                        android:paddingTop="11dp"
+                        android:text="@string/stop"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_size_registration_title"
+                        android:visibility="gone" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/patient_profile_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/padding_30_dp"
+                    android:elevation="5dp"
+                    android:orientation="vertical"
+                    android:visibility="visible">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="@dimen/padding_30_dp"
+                        android:gravity="center">
+
+                        <include layout="@layout/layout_image_patient_profile" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tv_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginBottom="@dimen/padding_20_dp"
+                            android:layout_marginTop="@dimen/padding_20_dp"
+                            android:textColor="@color/blue_action_bar"
+                            android:textSize="@dimen/text_size_patient_name_visit_fragment" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingTop="@dimen/layout_margin">
+
+                    <TextView
+                        android:id="@+id/tv_enter_adhar_card"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="@dimen/layout_margin"
+                        android:paddingLeft="@dimen/report_thumbnail"
+                        android:paddingRight="@dimen/report_thumbnail"
+                        android:paddingTop="@dimen/layout_margin"
+                        android:text="@string/enter_adhar_no"
+                        android:textColor="@color/green_logo"
+                        android:textSize="@dimen/text_size_patient_name_visit_fragment" />
+
+
+                    <LinearLayout
+                        android:id="@+id/layout_adhar_no"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/layout_margin"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginBottom="@dimen/layout_margin"
+                            android:orientation="horizontal">
+
+                            <EditText
+                                android:id="@+id/edit_adhar_no"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center|start"
+                                android:layout_marginRight="@dimen/layout_margin"
+                                android:layout_weight="1"
+                                android:background="@drawable/edit_text_bottom_line_blue"
+                                android:gravity="center|start"
+                                android:hint="@string/aadhar_id"
+                                android:inputType="number"
+                                android:maxLength="12"
+                                android:minHeight="0dp"
+                                android:padding="10dp"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/text_size_book_appointment_dialog_fragment" />
+
+                            <ImageView
+                                android:id="@+id/iv_adhar_done"
+                                android:layout_width="@dimen/round_progress_bar_size"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/ic_correct_green"
+                                android:visibility="invisible" />
+
+                            <LinearLayout
+                                android:id="@+id/loading_adhar"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:visibility="gone">
+
+                                <ProgressBar
+                                    style="?android:attr/progressBarStyleSmall"
+                                    android:layout_width="@dimen/round_progress_bar_size"
+                                    android:layout_height="@dimen/round_progress_bar_size"
+                                    android:layout_gravity="center|bottom"
+                                    android:progressDrawable="@drawable/progress_loading" />
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginBottom="@dimen/layout_margin"
+                            android:orientation="horizontal">
+
+                            <EditText
+                                android:id="@+id/edit_mobile_no"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center|start"
+                                android:layout_marginRight="@dimen/layout_margin"
+                                android:layout_weight="1"
+                                android:background="@drawable/edit_text_bottom_line_blue"
+                                android:gravity="center|start"
+                                android:hint="@string/mobile_number"
+                                android:inputType="number"
+                                android:maxLength="10"
+                                android:minHeight="0dp"
+                                android:padding="10dp"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/text_size_book_appointment_dialog_fragment" />
+
+                            <ImageView
+                                android:id="@+id/iv_mobile_done"
+                                android:layout_width="@dimen/round_progress_bar_size"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/ic_correct_green"
+                                android:visibility="invisible" />
+
+                            <LinearLayout
+                                android:id="@+id/loading_mobile"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:visibility="gone">
+
+                                <ProgressBar
+                                    style="?android:attr/progressBarStyleSmall"
+                                    android:layout_width="@dimen/round_progress_bar_size"
+                                    android:layout_height="@dimen/round_progress_bar_size"
+                                    android:layout_gravity="center|bottom"
+                                    android:progressDrawable="@drawable/progress_loading" />
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginBottom="@dimen/layout_margin"
+                            android:orientation="horizontal">
+
+                            <EditText
+                                android:id="@+id/edit_employee_no"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center|start"
+                                android:layout_marginRight="@dimen/layout_margin"
+                                android:layout_weight="1"
+                                android:background="@drawable/edit_text_bottom_line_blue"
+                                android:gravity="center|start"
+                                android:hint="@string/employee_id"
+                                android:inputType="number"
+                                android:maxLength="8"
+                                android:minHeight="0dp"
+                                android:padding="10dp"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/text_size_book_appointment_dialog_fragment" />
+
+                            <ImageView
+                                android:id="@+id/iv_employee_done"
+                                android:layout_width="@dimen/round_progress_bar_size"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/ic_correct_green"
+                                android:visibility="invisible" />
+
+                            <LinearLayout
+                                android:id="@+id/loading_employee"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:visibility="gone">
+
+                                <ProgressBar
+                                    style="?android:attr/progressBarStyleSmall"
+                                    android:layout_width="@dimen/round_progress_bar_size"
+                                    android:layout_height="@dimen/round_progress_bar_size"
+                                    android:layout_gravity="center|bottom"
+                                    android:progressDrawable="@drawable/progress_loading" />
+                            </LinearLayout>
+
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/or"
+                        android:textColor="@color/text_fingerprint"
+                        android:textSize="@dimen/text_size_patient_name_visit_fragment" />
+
+                    <TextView
+                        android:id="@+id/tv_use_finger_print"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="@dimen/layout_margin"
+                        android:paddingTop="@dimen/layout_margin"
+                        android:text="@string/pinlock_fingerprint"
+                        android:textColor="@color/green_logo"
+                        android:textSize="@dimen/text_size_patient_name_visit_fragment" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_patient_fingerprint"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/padding_20_dp"
+                    android:orientation="vertical"
+                    android:visibility="visible">
+
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:id="@+id/finger_view_patient"
+                        android:layout_width="@dimen/finger_icon"
+                        android:layout_height="@dimen/finger_icon"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="@dimen/layout_margin"
+                        android:src="@drawable/ic_fingerprint" />
+
+                    <TextView
+                        android:id="@+id/tv_finger_patient"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="@dimen/layout_margin"
+                        android:paddingLeft="@dimen/padding_30_dp"
+                        android:paddingRight="@dimen/padding_30_dp"
+                        android:text="@string/pinlock_fingerprint"
+                        android:textColor="@color/text_fingerprint"
+                        android:textSize="@dimen/text_size_feedback" />
+
+                    <com.healthcoco.healthcocopad.views.FontAwesomeButton
+                        android:id="@+id/bt_start_patient"
+                        style="?android:attr/borderlessButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/layout_margin"
+                        android:background="@drawable/selector_rounded_corners_btn_blue"
+                        android:minHeight="0dp"
+                        android:paddingBottom="10dp"
+                        android:paddingLeft="40dp"
+                        android:paddingRight="40dp"
+                        android:paddingTop="@dimen/layout_margin"
+                        android:text="@string/start"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_size_registration_title"
+                        android:visibility="visible" />
+
+                    <com.healthcoco.healthcocopad.views.FontAwesomeButton
+                        android:id="@+id/bt_stop_patient"
+                        style="?android:attr/borderlessButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/layout_margin"
+                        android:background="@drawable/selector_rounded_corners_btn_blue"
+                        android:minHeight="0dp"
+                        android:paddingBottom="10dp"
+                        android:paddingLeft="45dp"
+                        android:paddingRight="45dp"
+                        android:paddingTop="11dp"
+                        android:text="@string/stop"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_size_registration_title"
+                        android:visibility="gone" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

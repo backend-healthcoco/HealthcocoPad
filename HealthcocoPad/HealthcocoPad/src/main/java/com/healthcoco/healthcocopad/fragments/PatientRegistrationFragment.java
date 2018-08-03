@@ -62,7 +62,6 @@ import com.healthcoco.healthcocopad.enums.DialogType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.LocalTabelType;
 import com.healthcoco.healthcocopad.enums.OptionsType;
-import com.healthcoco.healthcocopad.enums.PatientProfileScreenType;
 import com.healthcoco.healthcocopad.enums.RecordType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.CommonListDialogItemClickListener;
@@ -784,7 +783,7 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
     private void openPatientDetailScreen(RegisteredPatientDetailsUpdated selecetdPatient) {
         if (selecetdPatient.getPatient() != null && !Util.isNullOrBlank(selecetdPatient.getPatient().getPatientId())) {
             HealthCocoConstants.SELECTED_PATIENTS_USER_ID = selecetdPatient.getUserId();
-            openCommonOpenUpActivity(CommonOpenUpFragmentType.PATIENT_DETAIL, null,
+            openCommonOpenUpActivity(CommonOpenUpFragmentType.PATIENT_VERIFICATION, null,
                     REQUEST_CODE_REGISTER_PATIENT);
         }
     }
