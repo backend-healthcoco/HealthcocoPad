@@ -452,6 +452,43 @@
             </LinearLayout>
 
             <include layout="@layout/item_patient_detail_patient_data" />
+
+            <LinearLayout
+                android:id="@+id/layout_add_fingerprint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/padding_20_dp"
+                android:layout_marginTop="@dimen/patient_detail_top_bottom_paddding"
+                android:background="@drawable/shape_emr_item_background"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingRight="@dimen/patient_profile_image_padding"
+                        android:text="@string/fa_note_icon"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/add_fingerprint"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_patient_deatil_fragment" />
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

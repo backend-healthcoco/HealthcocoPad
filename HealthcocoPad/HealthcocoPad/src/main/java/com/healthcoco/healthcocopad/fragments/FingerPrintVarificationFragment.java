@@ -56,8 +56,8 @@ public class FingerPrintVarificationFragment extends HealthCocoFragment implemen
     ScannerAction scannerAction = ScannerAction.Capture;
     int timeout = 1000000;
     MFS100 mfs100 = null;
-    private BiometricDetails biometricDetails;
-    private BiometricDetails fromDataBase;
+    private BiometricDetails pateintBio;
+    private BiometricDetails doctorBio;
     private TextView tvInitialAlphabetDoctor;
     private ImageView ivContactProfileDoctor;
     private TextView tvInitialAlphabet;
@@ -231,7 +231,10 @@ public class FingerPrintVarificationFragment extends HealthCocoFragment implemen
             case R.id.bt_start_doctor:
                 scannerAction = ScannerAction.Capture;
                 if (!isCaptureRunning) {
-                    StartDoctorCapture();
+                    if (doctorBio != null)
+                        StartDoctorCapture();
+                    else
+                        Util.showToast(mActivity, R.string.fingerprint_not_available);
                 }
                 btStartDoctor.setVisibility(View.GONE);
                 btStopDoctor.setVisibility(View.VISIBLE);
@@ -244,7 +247,10 @@ public class FingerPrintVarificationFragment extends HealthCocoFragment implemen
             case R.id.bt_start_patient:
                 scannerAction = ScannerAction.Capture;
                 if (!isCaptureRunning) {
-                    StartPatientCapture();
+                    if (pateintBio != null)
+                        StartPatientCapture();
+                    else
+                        Util.showToast(mActivity, R.string.fingerprint_not_available);
                 }
                 btStartPatient.setVisibility(View.GONE);
                 btStopPatient.setVisibility(View.VISIBLE);
@@ -298,7 +304,11 @@ public class FingerPrintVarificationFragment extends HealthCocoFragment implemen
                     user = doctor.getUser();
                 if (doctor != null && doctor.getUser() != null && !Util.isNullOrBlank(doctor.getUser().getUniqueId()) && selectedPatient != null && !Util.isNullOrBlank(selectedPatient.getUserId())) {
                     doctorProfile = LocalDataServiceImpl.getInstance(mApp).getDoctorProfileObject(user.getUniqueId());
+                    doctorBio = LocalDataServiceImpl.getInstance(mApp).getBioMetricDetails(user.getUniqueId());
                 }
+                if (selectedPatient != null)
+                    pateintBio = LocalDataServiceImpl.getInstance(mApp).getBioMetricDetails(selectedPatient.getUniqueId());
+
                 break;
         }
         if (volleyResponseBean == null)
@@ -349,7 +359,7 @@ public class FingerPrintVarificationFragment extends HealthCocoFragment implemen
     }
 
     private void validateData() {
-      /*  ArrayList<View> errorViewList = new ArrayList<>();
+        ArrayList<View> errorViewList = new ArrayList<>();
         String msg = null;
 
         if (!isDoctorVerified) {
@@ -370,18 +380,18 @@ public class FingerPrintVarificationFragment extends HealthCocoFragment implemen
                     msg = getResources().getString(R.string.please_enter_employee_id);
                     errorViewList.add(editEmployeeNo);
                 }
-               *//* if (Util.isNullOrBlank(msg))
+               /* if (Util.isNullOrBlank(msg))
                     openPatientDetails();
                 else {
 //                    EditTextTextViewErrorUtil.showErrorOnEditText(mActivity, view, errorViewList, msg);
-                }*//*
+                }*/
             }
         }
-        if (Util.isNullOrBlank(msg))*/
-        openPatientDetails();
-     /*   else {
+        if (Util.isNullOrBlank(msg))
+            openPatientDetails();
+        else {
             EditTextTextViewErrorUtil.showErrorOnEditText(mActivity, view, errorViewList, msg);
-        }*/
+        }
     }
 
     private void openPatientDetails() {
@@ -424,9 +434,9 @@ public class FingerPrintVarificationFragment extends HealthCocoFragment implemen
                     } else {
                         lastCapFingerData = fingerData;
 
-                        SetTextOnUIThreadDoctor("Done");
+//                        SetTextOnUIThreadDoctor("Done");
                         isDoctorVerified = true;
-                        SetData2(fingerData);
+                        SetData2Doctor(fingerData);
                     }
                 } catch (Exception ex) {
                     SetTextOnUIThread("Error");
@@ -440,7 +450,6 @@ public class FingerPrintVarificationFragment extends HealthCocoFragment implemen
 
     private void StartPatientCapture() {
         new Thread(new Runnable() {
-
             @Override
             public void run() {
                 SetTextOnUIThread("");
@@ -454,9 +463,9 @@ public class FingerPrintVarificationFragment extends HealthCocoFragment implemen
                     } else {
                         lastCapFingerData = fingerData;
 
-                        SetTextOnUIThreadPatient("Done");
+//                        SetTextOnUIThreadPatient("Done");
                         isPatientVerified = true;
-                        SetData2(fingerData);
+                        SetData2Patient(fingerData);
                     }
                 } catch (Exception ex) {
                     SetTextOnUIThread("Error");
@@ -495,7 +504,12 @@ public class FingerPrintVarificationFragment extends HealthCocoFragment implemen
         lblMessage.post(new Runnable() {
             public void run() {
                 tvfingerprintDoctor.setText(str);
-                btStopDoctor.setVisibility(View.GONE);
+                if (isDoctorVerified)
+                    btStopDoctor.setVisibility(View.GONE);
+                else {
+                    btStopDoctor.setVisibility(View.GONE);
+                    btStartDoctor.setVisibility(View.VISIBLE);
+                }
             }
         });
     }
@@ -505,7 +519,12 @@ public class FingerPrintVarificationFragment extends HealthCocoFragment implemen
         lblMessage.post(new Runnable() {
             public void run() {
                 tvfingerprintPatient.setText(str);
-                btStopPatient.setVisibility(View.GONE);
+                if (isPatientVerified) {
+                    btStopPatient.setVisibility(View.GONE);
+                } else {
+                    btStopPatient.setVisibility(View.GONE);
+                    btStartPatient.setVisibility(View.VISIBLE);
+                }
             }
         });
     }
@@ -519,25 +538,42 @@ public class FingerPrintVarificationFragment extends HealthCocoFragment implemen
         });
     }
 
-    public void SetData2(FingerData fingerData) {
-        if (scannerAction.equals(ScannerAction.Capture)) {
-            Enroll_Template = new byte[fingerData.ISOTemplate().length];
-            System.arraycopy(fingerData.ISOTemplate(), 0, Enroll_Template, 0,
-                    fingerData.ISOTemplate().length);
-        } else if (scannerAction.equals(ScannerAction.Verify)) {
-            Verify_Template = new byte[fingerData.ISOTemplate().length];
-            System.arraycopy(fingerData.ISOTemplate(), 0, Verify_Template, 0,
-                    fingerData.ISOTemplate().length);
-            int ret = mfs100.MatchISO(Enroll_Template, Verify_Template);
-            if (ret < 0) {
-                SetTextOnUIThread("Error: " + ret + "(" + mfs100.GetErrorMsg(ret) + ")");
+    public void SetData2Doctor(FingerData fingerData) {
+        Verify_Template = new byte[fingerData.ISOTemplate().length];
+        System.arraycopy(fingerData.ISOTemplate(), 0, Verify_Template, 0,
+                fingerData.ISOTemplate().length);
+        int ret = mfs100.MatchISO(doctorBio.getBioDetails(), Verify_Template);
+        if (ret < 0) {
+            SetTextOnUIThread("Error: " + ret + "(" + mfs100.GetErrorMsg(ret) + ")");
+        } else {
+            if (ret >= 1400) {
+                isDoctorVerified = true;
+                SetTextOnUIThreadDoctor("Finger matched");
             } else {
-                if (ret >= 1400) {
-                    SetTextOnUIThread("Finger matched with score: " + ret);
-                } else {
-                    SetTextOnUIThread("Finger not matched, score: " + ret);
-                }
+                isDoctorVerified = false;
+                SetTextOnUIThreadDoctor("Finger not matched, Try Again");
             }
+
+        }
+
+    }
+
+    public void SetData2Patient(FingerData fingerData) {
+        Verify_Template = new byte[fingerData.ISOTemplate().length];
+        System.arraycopy(fingerData.ISOTemplate(), 0, Verify_Template, 0,
+                fingerData.ISOTemplate().length);
+        int ret = mfs100.MatchISO(pateintBio.getBioDetails(), Verify_Template);
+        if (ret < 0) {
+            SetTextOnUIThread("Error: " + ret + "(" + mfs100.GetErrorMsg(ret) + ")");
+        } else {
+            if (ret >= 1400) {
+                isPatientVerified = true;
+                SetTextOnUIThreadPatient("Finger matched");
+            } else {
+                isPatientVerified = false;
+                SetTextOnUIThreadPatient("Finger not matched, Try Again");
+            }
+
         }
 
     }

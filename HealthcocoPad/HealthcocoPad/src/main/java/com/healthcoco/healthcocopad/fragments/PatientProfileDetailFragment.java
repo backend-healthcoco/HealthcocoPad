@@ -33,9 +33,11 @@ import com.healthcoco.healthcocopad.bean.server.UserGroups;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocopad.dialogFragment.AddEditDrugAndAllergyDetailDialogFragment;
 import com.healthcoco.healthcocopad.dialogFragment.AddEditPersonalHistoryDetailDialogFragment;
+import com.healthcoco.healthcocopad.dialogFragment.FingerPrintDialogFragment;
 import com.healthcoco.healthcocopad.enums.BooleanTypeValues;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.HistoryFilterType;
+import com.healthcoco.healthcocopad.enums.LeaveFromScreenType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.LocalTabelType;
 import com.healthcoco.healthcocopad.enums.PatientProfileScreenType;
@@ -143,6 +145,7 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
     private LinearLayout containerPinCode;
     private LinearLayout containerGroups;
     private LinearLayout containerNotes;
+    private LinearLayout layoutAddFingerprint;
     private TextView tvGenderDate;
     private CommonOpenUpPatientDetailFragment patientDetailFragmentUpdated;
 
@@ -223,6 +226,7 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
         containerGroups = (LinearLayout) mainContainerGroups.findViewById(R.id.container_groups);
 
         containerNotes = (LinearLayout) mainContainerNotes.findViewById(R.id.container_notes);
+        layoutAddFingerprint = (LinearLayout) view.findViewById(R.id.layout_add_fingerprint);
         //PersonalHistory Views
         tvDiet = (TextView) mainContainerPersonalHistory.findViewById(R.id.tv_diet);
         containerDiet = (LinearLayout) mainContainerPersonalHistory.findViewById(R.id.container_diet);
@@ -260,6 +264,7 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
         btEditPatientProfileGroups.setOnClickListener(this);
         btEditPatientProfilePatientData.setOnClickListener(this);
         btEditPatientProfileNotes.setOnClickListener(this);
+        layoutAddFingerprint.setOnClickListener(this);
     }
 
     private void hideAllMainLayouts() {
@@ -609,7 +614,20 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
                 else
                     onNetworkUnavailable(null);
                 break;
+            case R.id.layout_add_fingerprint:
+                openAddFingerprintFragment();
+                break;
         }
+    }
+
+    private void openAddFingerprintFragment() {
+        FingerPrintDialogFragment dialogFragment = new FingerPrintDialogFragment();
+        Bundle bundle = new Bundle();
+//        bundle.putString(HealthCocoConstants.TAG_UNIQUE_ID, calendarEvents.getAppointmentId());
+        bundle.putParcelable(FingerPrintDialogFragment.TAG_FROM_SCREEN_TYPE, Parcels.wrap(LeaveFromScreenType.ADD_NEW.ordinal()));
+        dialogFragment.setArguments(bundle);
+        dialogFragment.setTargetFragment(this, HealthCocoConstants.REQUEST_CODE_LEAVE);
+        dialogFragment.show(mActivity.getSupportFragmentManager(), dialogFragment.getClass().getSimpleName());
     }
 
     private void openHisoryFragment(HistoryFilterType historyFilterType) {

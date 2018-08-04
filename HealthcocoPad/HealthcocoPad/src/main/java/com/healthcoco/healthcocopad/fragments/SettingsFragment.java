@@ -16,10 +16,15 @@ import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.adapter.SettingsListAdapter;
 import com.healthcoco.healthcocopad.bean.server.GCMRequest;
+import com.healthcoco.healthcocopad.dialogFragment.AddLeaveDialogFragment;
+import com.healthcoco.healthcocopad.dialogFragment.FingerPrintDialogFragment;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
+import com.healthcoco.healthcocopad.enums.LeaveFromScreenType;
 import com.healthcoco.healthcocopad.enums.SettingsItemType;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
+
+import org.parceler.Parcels;
 
 import java.util.Arrays;
 import java.util.List;
@@ -126,7 +131,7 @@ public class SettingsFragment extends HealthCocoFragment implements AdapterView.
                 openCommonOpenUpActivity(CommonOpenUpFragmentType.SETTING_PRINT, itemType.ordinal());
                 break;
             case KIOSK:
-                openCommonOpenUpActivity(CommonOpenUpFragmentType.SETTING_KIOSK, itemType.ordinal());
+                openAddFingerprintFragment();
                 break;
             case SYNC:
                 openCommonOpenUpActivity(CommonOpenUpFragmentType.SYNC, itemType.ordinal());
@@ -159,6 +164,16 @@ public class SettingsFragment extends HealthCocoFragment implements AdapterView.
                 showConfirmSignOutAlert();
                 break;
         }
+    }
+
+    private void openAddFingerprintFragment() {
+        FingerPrintDialogFragment dialogFragment = new FingerPrintDialogFragment();
+        Bundle bundle = new Bundle();
+//        bundle.putString(HealthCocoConstants.TAG_UNIQUE_ID, calendarEvents.getAppointmentId());
+        bundle.putParcelable(FingerPrintDialogFragment.TAG_FROM_SCREEN_TYPE, Parcels.wrap(LeaveFromScreenType.RESCHEDULE.ordinal()));
+        dialogFragment.setArguments(bundle);
+        dialogFragment.setTargetFragment(this, HealthCocoConstants.REQUEST_CODE_LEAVE);
+        dialogFragment.show(mActivity.getSupportFragmentManager(), dialogFragment.getClass().getSimpleName());
     }
 
     private void openCommonOpenUpActivity(CommonOpenUpFragmentType fragmentType, int typeOrdinal) {

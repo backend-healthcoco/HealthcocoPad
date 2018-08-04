@@ -170,8 +170,8 @@ public class InvestigationGraphFragment extends HealthCocoFragment
         YAxis leftAxis = lineChart.getAxisLeft();
         leftAxis.setTextColor(Color.BLACK);
         xAxis.setTextSize(13f);
-        leftAxis.setAxisMaximum(maxLimit);
-        leftAxis.setAxisMinimum(minLimit);
+//        leftAxis.setAxisMaximum(maxLimit);
+//        leftAxis.setAxisMinimum(minLimit);
         leftAxis.setDrawGridLines(false);
         leftAxis.setGranularityEnabled(true);
 
@@ -454,7 +454,7 @@ public class InvestigationGraphFragment extends HealthCocoFragment
                             break;
                     }
                     if (!Util.isNullOrBlank(text)) {
-                        Float entry = Float.valueOf(Integer.parseInt(text));
+                        Float entry = Float.parseFloat(text);
                         entries.add(new Entry(responseList.indexOf(investigationNote), entry, getResources().getDrawable(R.drawable.star)));
                     }
                 }

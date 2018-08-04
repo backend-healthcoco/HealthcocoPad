@@ -1,0 +1,213 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="top"
+        android:orientation="vertical"
+        android:paddingBottom="3dp"
+        android:paddingTop="5dp"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/lblMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/message"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text=""
+            android:textSize="15dp"
+            android:textStyle="bold" />
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/container_left_action"
+                android:layout_width="wrap_content"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:gravity="center|start"
+                android:orientation="horizontal"
+                android:paddingLeft="5dp">
+
+                <ImageButton
+                    android:id="@+id/bt_back"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="@color/transparent"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="@dimen/padding_20_dp"
+                    android:src="@drawable/selector_actionbar_back_blue" />
+            </LinearLayout>
+
+            <TextView
+                style="@style/ActionBarTitleStyle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center|center_vertical"
+                android:text="@string/add_fingerprint"
+                android:textColor="@color/blue_action_bar" />
+
+            <TextView
+                android:id="@+id/tv_done"
+                style="@style/ActionBarTitleStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="right"
+                android:gravity="center"
+                android:paddingLeft="@dimen/padding_20_dp"
+                android:paddingRight="@dimen/padding_20_dp"
+                android:text="@string/done"
+                android:textColor="@drawable/text_selector_blue_grey" />
+
+        </LinearLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/doctor_profile_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/padding_30_dp"
+                    android:elevation="5dp"
+                    android:orientation="vertical"
+                    android:visibility="visible">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="@dimen/padding_30_dp"
+                        android:gravity="center">
+
+                        <include layout="@layout/layout_image_patient_profile" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tv_doctor_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginBottom="@dimen/padding_20_dp"
+                            android:layout_marginTop="@dimen/padding_20_dp"
+                            android:textColor="@color/blue_action_bar"
+                            android:textSize="@dimen/text_size_patient_name_visit_fragment" />
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:visibility="invisible">
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/padding_20_dp"
+                    android:orientation="vertical">
+
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:id="@+id/finger_view_doctor"
+                        android:layout_width="@dimen/finger_icon"
+                        android:layout_height="@dimen/finger_icon"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="@dimen/layout_margin"
+                        android:src="@drawable/ic_fingerprint" />
+
+                    <TextView
+                        android:id="@+id/tv_finger_doctor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="@dimen/layout_margin"
+                        android:paddingLeft="@dimen/padding_30_dp"
+                        android:paddingRight="@dimen/padding_30_dp"
+                        android:text="@string/pinlock_fingerprint"
+                        android:textColor="@color/text_fingerprint"
+                        android:textSize="@dimen/text_size_feedback" />
+
+                    <com.healthcoco.healthcocopad.views.FontAwesomeButton
+                        android:id="@+id/bt_start_doctor"
+                        style="?android:attr/borderlessButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/layout_margin"
+                        android:background="@drawable/selector_rounded_corners_btn_blue"
+                        android:minHeight="0dp"
+                        android:paddingBottom="10dp"
+                        android:paddingLeft="40dp"
+                        android:paddingRight="40dp"
+                        android:paddingTop="@dimen/layout_margin"
+                        android:text="@string/start"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_size_registration_title"
+                        android:visibility="visible" />
+
+                    <com.healthcoco.healthcocopad.views.FontAwesomeButton
+                        android:id="@+id/bt_stop_doctor"
+                        style="?android:attr/borderlessButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/layout_margin"
+                        android:background="@drawable/selector_rounded_corners_btn_blue"
+                        android:minHeight="0dp"
+                        android:paddingBottom="10dp"
+                        android:paddingLeft="45dp"
+                        android:paddingRight="45dp"
+                        android:paddingTop="11dp"
+                        android:text="@string/stop"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_size_registration_title"
+                        android:visibility="gone" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </ScrollView>
+    </LinearLayout>
+</LinearLayout>

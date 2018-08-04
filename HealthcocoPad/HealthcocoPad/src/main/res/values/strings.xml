@@ -1410,6 +1410,7 @@
     <string name="stop">Stop</string>
     <string name="retry">Retry</string>
     <string name="fingerprint_verification">Fingerprint Verification</string>
+    <string name="add_fingerprint">Add Fingerprint</string>
     <string name="please_complete_doctor_verification">Please Complete Doctor Verification</string>
     <string name="please_complete_patient_verification">Please Complete Patient Verification</string>
     <string name="referred_to">Referred To</string>
@@ -1418,5 +1419,8 @@
     <string name="app_name_best">Best</string>
     <string name="please_enter_aadhar_number">Please Aadhar Number</string>
     <string name="please_enter_employee_id">Please Employee Id</string>
+    <string name="please_add_finger_verification">Please Add Finger Verification</string>
+    <string name="fingerprint_added">Fingerprint Added</string>
+    <string name="fingerprint_not_available">Fingerprint Varification not Available</string>
 
 </resources>
