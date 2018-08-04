@@ -1,7 +1,9 @@
 package com.healthcoco.healthcocopad.fragments;
 
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
@@ -26,6 +28,7 @@ import android.widget.TextView;
 
 import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
+import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.adapter.CommonViewPagerAdapter;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.AmountResponse;
@@ -85,6 +88,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
     private TextView tvDoctorName;
     private TextView tvPatientId;
     private TextView tvDueAmount;
+    private ImageView ivGraph;
     private ImageView ivContactProfile;
     private LinearLayout patientProfileLayout;
     private LinearLayout doctorNameLayout;
@@ -179,6 +183,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
         doctorNameLayout = (LinearLayout) view.findViewById(R.id.layout_doctor_name);
         btnBack = (ImageButton) view.findViewById(R.id.bt_back);
         tvTitle = (TextView) view.findViewById(R.id.tv_title);
+        ivGraph = (ImageView) view.findViewById(R.id.iv_graph);
 
 
     }
@@ -189,6 +194,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
         tabhost.setOnTabChangedListener(this);
         lvMenuList.setOnItemClickListener(this);
         btnBack.setOnClickListener(this);
+        ivGraph.setOnClickListener(this);
     }
 
     private void initTabs() {
@@ -415,7 +421,8 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
             doctorNameLayout.setVisibility(View.VISIBLE);
         else
             doctorNameLayout.setVisibility(View.INVISIBLE);
-        tvDueAmount.setVisibility(View.INVISIBLE);
+        tvDueAmount.setVisibility(View.GONE);
+        ivGraph.setVisibility(View.GONE);
         if (patientDetailTabType != null) {
             setPatientDetailHeaderVisibility(patientDetailTabType.getPatientDetailHeaderVisibility());
             switch (patientDetailTabType) {
@@ -439,6 +446,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                     }
                     break;
                 case PATIENT_DETAIL_INVESTIGATION_NOTES:
+                    ivGraph.setVisibility(View.VISIBLE);
                     if (!isClinicalNotesTabClicked) {
                         patientInvestigationDetailFragment.refreshData(PatientDetailTabType.PATIENT_DETAIL_INVESTIGATION_NOTES, clinicDoctorProfileList);
                         isClinicalNotesTabClicked = true;
@@ -537,12 +545,12 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
     private void refreshHeaderDueAmountData(RegisteredPatientDetailsUpdated selectedPatient) {
         if (selectedPatient.getTotalDueAmount() < 0) {
             tvDueAmount.setText(String.valueOf(mActivity.getResources().getString(R.string.advance_amount)) + "\u20B9 " + Util.getFormattedDoubleNumber(selectedPatient.getTotalDueAmount()));
-            tvDueAmount.setTextColor(mActivity.getResources().getColor(R.color.green_logo));
+            tvDueAmount.setTextColor(mActivity.getResources().getColor(R.color.white));
         } else if (selectedPatient.getTotalDueAmount() > 0) {
             tvDueAmount.setText(String.valueOf(mActivity.getResources().getString(R.string.due_amount)) + "\u20B9 " + Util.getFormattedDoubleNumber(selectedPatient.getTotalDueAmount()));
-            tvDueAmount.setTextColor(mActivity.getResources().getColor(R.color.red_error));
+            tvDueAmount.setTextColor(mActivity.getResources().getColor(R.color.white));
         } else {
-            tvDueAmount.setVisibility(View.INVISIBLE);
+            tvDueAmount.setVisibility(View.GONE);
         }
     }
 
@@ -553,10 +561,15 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                 openGlobalRecordAccessDialogFragment();
                 break;
             case R.id.bt_back:
-                mActivity.finish();
+                showFinishConfirmationAlert();
+//                mActivity.finish();
+                break;
+            case R.id.iv_graph:
+                openInvestigationGraph();
                 break;
         }
     }
+
 
     public void setPatientDetailHeaderVisibility(int visibility) {
         patientProfileLayout.setVisibility(visibility);
@@ -788,4 +801,35 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
         if (menuListAdapter != null)
             menuListAdapter.setSetSelectedPosition(patientDetailTabType);
     }
+
+    private void openInvestigationGraph() {
+        Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
+        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.INVESTIGATION_GRAPHS.ordinal());
+        startActivityForResult(intent, 0);
+    }
+
+    private void showFinishConfirmationAlert() {
+        final AlertDialog.Builder alertBuilder = new AlertDialog.Builder(mActivity);
+        alertBuilder.setTitle(R.string.alert);
+        alertBuilder.setMessage(R.string.your_changes_will_not_be_saved);
+        alertBuilder.setCancelable(false);
+        alertBuilder.setPositiveButton(R.string.leave, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                mActivity.finish();
+            }
+        });
+        alertBuilder.setNegativeButton(R.string.stay, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        alertBuilder.create();
+        alertBuilder.show();
+    }
+
 }

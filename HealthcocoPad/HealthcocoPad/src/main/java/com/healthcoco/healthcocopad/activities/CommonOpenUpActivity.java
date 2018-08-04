@@ -48,6 +48,7 @@ import com.healthcoco.healthcocopad.fragments.FeedbackFragment;
 import com.healthcoco.healthcocopad.fragments.FingerPrintVarificationFragment;
 import com.healthcoco.healthcocopad.fragments.FollowUpAppointmentFragment;
 import com.healthcoco.healthcocopad.fragments.InitialSyncFragment;
+import com.healthcoco.healthcocopad.fragments.InvestigationGraphFragment;
 import com.healthcoco.healthcocopad.fragments.LoginSignupFragment;
 import com.healthcoco.healthcocopad.fragments.NotificationResponseDataFragment;
 import com.healthcoco.healthcocopad.fragments.PatientEducationVideoListFragment;
@@ -203,6 +204,10 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
                 hideSoftKeyboardOnStartUp();
                 openFragment(ActionbarType.HIDDEN, new FingerPrintVarificationFragment());
 //                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.WITH_GLOBAL_ACCESS_BUTTON, R.string.patient_profile, new CommonOpenUpPatientDetailFragment());
+                break;
+            case INVESTIGATION_GRAPHS:
+                hideSoftKeyboardOnStartUp();
+                openFragment(ActionbarType.HIDDEN, 0, new InvestigationGraphFragment());
                 break;
             case PATIENT_DETAIL:
                 hideSoftKeyboardOnStartUp();
@@ -435,6 +440,7 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
                 case ADD_INVOICE:
                 case ADD_RECEIPT:
                 case BOOK_APPOINTMENT:
+                case PATIENT_DETAIL:
                 case PATIENT_REGISTRATION_TABS:
                     showFinishConfirmationAlert();
                     break;

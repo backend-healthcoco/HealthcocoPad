@@ -37,12 +37,15 @@ import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimis
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.DownloadImageFromUrlUtil;
+import com.healthcoco.healthcocopad.utilities.EditTextTextViewErrorUtil;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.mantra.mfs100.FingerData;
 import com.mantra.mfs100.MFS100;
 import com.mantra.mfs100.MFS100Event;
+
+import java.util.ArrayList;
 
 public class FingerPrintVarificationFragment extends HealthCocoFragment implements MFS100Event, View.OnClickListener, LocalDoInBackgroundListenerOptimised, HealthcocoTextWatcherListener {
 
@@ -346,19 +349,37 @@ public class FingerPrintVarificationFragment extends HealthCocoFragment implemen
     }
 
     private void validateData() {
-       /* ArrayList<View> errorViewList = new ArrayList<>();
+      /*  ArrayList<View> errorViewList = new ArrayList<>();
         String msg = null;
 
         if (!isDoctorVerified) {
             msg = getResources().getString(R.string.please_complete_doctor_verification);
             errorViewList.add(tvDoctorName);
         } else if (!isPatientVerified) {
-            msg = getResources().getString(R.string.please_complete_patient_verification);
-            errorViewList.add(tvPatientName);
+            if (!isAdharLayoutVisible) {
+                msg = getResources().getString(R.string.please_complete_patient_verification);
+                errorViewList.add(tvPatientName);
+            } else {
+                if (Util.isNullOrBlank(Util.getValidatedValueOrNull(editAdharNo))) {
+                    msg = getResources().getString(R.string.please_enter_aadhar_number);
+                    errorViewList.add(editAdharNo);
+                } else if (Util.isNullOrBlank(Util.getValidatedValueOrNull(editMobileNo))) {
+                    msg = getResources().getString(R.string.please_enter_mobile_no);
+                    errorViewList.add(editMobileNo);
+                } else if (Util.isNullOrBlank(Util.getValidatedValueOrNull(editEmployeeNo))) {
+                    msg = getResources().getString(R.string.please_enter_employee_id);
+                    errorViewList.add(editEmployeeNo);
+                }
+               *//* if (Util.isNullOrBlank(msg))
+                    openPatientDetails();
+                else {
+//                    EditTextTextViewErrorUtil.showErrorOnEditText(mActivity, view, errorViewList, msg);
+                }*//*
+            }
         }
         if (Util.isNullOrBlank(msg))*/
         openPatientDetails();
-       /* else {
+     /*   else {
             EditTextTextViewErrorUtil.showErrorOnEditText(mActivity, view, errorViewList, msg);
         }*/
     }

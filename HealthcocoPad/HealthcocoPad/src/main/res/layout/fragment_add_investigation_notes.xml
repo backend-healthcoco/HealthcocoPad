@@ -45,7 +45,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="@dimen/padding_30_dp"
-                    android:drawableEnd="@drawable/arrow_down_drug"
                     android:paddingBottom="@dimen/item_contact_padding"
                     android:paddingLeft="@dimen/margin_left_clinical_notes_item_title"
                     android:paddingTop="@dimen/item_contact_padding"

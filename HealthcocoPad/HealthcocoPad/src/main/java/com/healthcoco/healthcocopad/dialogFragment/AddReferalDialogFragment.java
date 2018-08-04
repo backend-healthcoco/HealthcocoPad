@@ -126,7 +126,7 @@ public class AddReferalDialogFragment extends HealthCocoDialogFragment implement
                 case ADD_NEW:
                     initActionbarTitle(getResources().getString(R.string.add_refer_to_doctor));
                     tvRequestDate.setText(DateTimeUtil.getCurrentFormattedDate(DateTimeUtil.DATE_FORMAT_WEEKDAY_DAY_MONTH_AS_TEXT_YEAR_DASH));
-                    tvReferredBy.setText(user.getFirstName());
+                    tvReferredBy.setText("Dr. " + user.getFirstName());
                     break;
                 case RESCHEDULE:
                     initActionbarTitle(getResources().getString(R.string.add_refer_to_doctor));

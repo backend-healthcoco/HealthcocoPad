@@ -30,6 +30,8 @@ public enum PopupWindowType {
 
     DOCTOR_LIST,
 
+    INVESTIGATION_LIST,
+
     DOCTOR_CLINIC_PROFILE,
 
     DISCOUNT_TYPE(new ArrayList<Object>() {{

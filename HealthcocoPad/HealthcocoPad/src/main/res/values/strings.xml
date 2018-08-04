@@ -1283,6 +1283,7 @@
     <string name="investigation_saved">Investigations Saved</string>
     <string name="investigation_id"> | Investigation Id :&#160;</string>
     <string name="confirm_discard_investigation">Are you sure you want to discard this Investigation?</string>
+    <string name="blank_investigation_note">Blank Investigation Note cannot be added</string>
 
     <string name="absolute_eosinophil_count">Absolute Eosinophil Count</string>
     <string name="absolute_eosinophil_count_range">40 -440 cells/cu mm</string>
@@ -1414,5 +1415,8 @@
     <string name="referred_to">Referred To</string>
     <string name="details">Details</string>
     <string name="submitted">Submitted</string>
+    <string name="app_name_best">Best</string>
+    <string name="please_enter_aadhar_number">Please Aadhar Number</string>
+    <string name="please_enter_employee_id">Please Employee Id</string>
 
 </resources>

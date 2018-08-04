@@ -20,12 +20,14 @@ import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.InvestigationNote;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
+import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocopad.dialogFragment.NextReviewOnDialogFragment;
 import com.healthcoco.healthcocopad.enums.ActionbarLeftRightActionTypeDrawables;
 import com.healthcoco.healthcocopad.enums.InvestigationSubType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
+import com.healthcoco.healthcocopad.enums.PatientProfileScreenType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
@@ -56,6 +58,7 @@ public class AddEditNormalInvestigationFragment extends HealthCocoFragment imple
     private LinearLayout layoutNextReview;
     private TextView tvNextReviewDate;
     private TextView tvDoctorName;
+    private RegisteredPatientDetailsUpdated selectedPatient;
     private TextView tvDate;
     private TextView tvNextReviewTime;
     private LinearLayout lvDoctorName;
@@ -146,11 +149,11 @@ public class AddEditNormalInvestigationFragment extends HealthCocoFragment imple
         ((CommonOpenUpActivity) mActivity).initRightActionView(ActionbarLeftRightActionTypeDrawables.WITH_SAVE, view);
         btSave = ((CommonOpenUpActivity) mActivity).initActionbarRightAction(this);
 
-        parentHaematology.setOnClickListener(this);
+    /*    parentHaematology.setOnClickListener(this);
         parentBioChemistry.setOnClickListener(this);
         parentKidneyFunctionTest.setOnClickListener(this);
         parentLipidProfile.setOnClickListener(this);
-        parentLiverFuntionTest.setOnClickListener(this);
+        parentLiverFuntionTest.setOnClickListener(this);*/
     }
 
 
@@ -569,6 +572,7 @@ public class AddEditNormalInvestigationFragment extends HealthCocoFragment imple
                             tvDate.setText(DateTimeUtil.getFormatedDate(investigationNote.getCreatedTime()));
                             selectedFromDateTimeMillis = investigationNote.getCreatedTime();
                         }
+                        initActionPatientDetailActionBar(PatientProfileScreenType.IN_ADD_VISIT_HEADER, view, selectedPatient);
                     } else {
                         mActivity.hideLoading();
                         mActivity.finish();
@@ -596,6 +600,7 @@ public class AddEditNormalInvestigationFragment extends HealthCocoFragment imple
                 if (doctor != null && doctor.getUser() != null && !Util.isNullOrBlank(doctor.getUser().getUniqueId())) {
                     user = doctor.getUser();
                 }
+                selectedPatient = LocalDataServiceImpl.getInstance(mApp).getPatient(HealthCocoConstants.SELECTED_PATIENTS_USER_ID);
                 if (!Util.isNullOrBlank(investigationNoteId))
                     investigationNote = LocalDataServiceImpl.getInstance(mApp).getInvestigationNote(investigationNoteId);
                 break;
@@ -626,8 +631,7 @@ public class AddEditNormalInvestigationFragment extends HealthCocoFragment imple
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.container_right_action:
-                mActivity.showLoading(false);
-                getInvestigationNoteToSend();
+                validateData();
                 break;
             case R.id.parent_haematology:
                 toggleLayoutView(layoutHaematology);
@@ -654,6 +658,30 @@ public class AddEditNormalInvestigationFragment extends HealthCocoFragment imple
 //                    openDialogFragment(new NextReviewOnDialogFragment(), REQUEST_CODE_NEXT_REVIEW);
                 break;
         }
+    }
+
+    private void validateData() {
+        if (isBlankClinicalNote()) {
+            mActivity.showLoading(false);
+            getInvestigationNoteToSend();
+        } else {
+            Util.showToast(mActivity, mActivity.getString(R.string.blank_investigation_note));
+        }
+    }
+
+    public boolean isBlankClinicalNote() {
+        mActivity.showLoading(false);
+        boolean isDataPresent = false;
+        for (InvestigationSubType investigationSubType :
+                InvestigationSubType.values()) {
+            EditText autoTvPermission = (EditText) view.findViewWithTag(investigationSubType.getValue());
+            if (autoTvPermission != null && !Util.isNullOrBlank(Util.getValidatedValueOrBlankTrimming(autoTvPermission))) {
+                isDataPresent = true;
+                break;
+            }
+        }
+        mActivity.hideLoading();
+        return isDataPresent;
     }
 
     private void toggleLayoutView(LinearLayout linearLayout) {

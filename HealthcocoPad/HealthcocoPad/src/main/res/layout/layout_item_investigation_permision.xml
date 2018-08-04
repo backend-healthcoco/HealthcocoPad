@@ -48,6 +48,7 @@
             android:focusableInTouchMode="true"
             android:gravity="start"
             android:hint="@string/holter"
+            android:inputType="numberDecimal"
             android:maxLines="1"
             android:padding="15dp"
             android:singleLine="true"

@@ -18,6 +18,7 @@ import com.healthcoco.healthcocopad.bean.server.DoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.RegisteredDoctorProfile;
 import com.healthcoco.healthcocopad.dialogFragment.BookAppointmentDialogFragment;
 import com.healthcoco.healthcocopad.enums.AppointmentSlotsType;
+import com.healthcoco.healthcocopad.enums.InvestigationSubType;
 import com.healthcoco.healthcocopad.enums.PatientProfileScreenType;
 import com.healthcoco.healthcocopad.enums.PatientTreatmentStatus;
 import com.healthcoco.healthcocopad.enums.PopupWindowType;
@@ -149,6 +150,12 @@ public class PopupListViewAdapter extends BaseAdapter {
                 if (object instanceof AppointmentSlotsType) {
                     AppointmentSlotsType appointmentSlotsType = (AppointmentSlotsType) object;
                     text = Math.round(appointmentSlotsType.getTime()) + " " + Util.getValidatedValue(appointmentSlotsType.getUnits().getValueToDisplay());
+                }
+                break;
+            case INVESTIGATION_LIST:
+                if (object instanceof InvestigationSubType) {
+                    InvestigationSubType investigationSubType = (InvestigationSubType) object;
+                    text = mActivity.getString(investigationSubType.getTextId());
                 }
                 break;
             case TIME_SLOTS:
