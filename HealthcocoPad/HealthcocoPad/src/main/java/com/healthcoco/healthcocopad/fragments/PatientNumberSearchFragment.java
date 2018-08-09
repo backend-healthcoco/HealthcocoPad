@@ -40,6 +40,8 @@ import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.myscript.atk.core.Line;
 
+import org.parceler.Parcels;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,10 +64,12 @@ public class PatientNumberSearchFragment extends HealthCocoFragment implements V
     private User user;
     private String mobileNumber;
     private PatientRegistrationDetailsListener registrationDetailsListener;
+    private boolean isFromRegistration;
 
     public PatientNumberSearchFragment(PatientRegistrationDetailsListener registrationDetailsListener) {
         super();
         this.registrationDetailsListener = registrationDetailsListener;
+        isFromRegistration = registrationDetailsListener.isFromPatientRegistarion();
     }
 
 
@@ -86,6 +90,10 @@ public class PatientNumberSearchFragment extends HealthCocoFragment implements V
             if (doctorClinicProfile != null && doctorClinicProfile.getMobileNumberOptional() != null)
                 isMobileNumberOptional = doctorClinicProfile.getMobileNumberOptional();
 //            isMobileNumberOptional = Util.getIsMobileNumberOptional(doctor);
+            Intent intent = mActivity.getIntent();
+            if (intent != null) {
+                mobileNumber = Parcels.unwrap(intent.getParcelableExtra(HealthCocoConstants.TAG_MOBILE_NUMBER));
+            }
             init();
         }
     }
@@ -95,6 +103,10 @@ public class PatientNumberSearchFragment extends HealthCocoFragment implements V
         initViews();
         initAdapter();
         initListeners();
+
+        if (!Util.isNullOrBlank(mobileNumber)) {
+            editMobileNumber.setText(mobileNumber);
+        }
     }
 
     @Override
@@ -189,12 +201,19 @@ public class PatientNumberSearchFragment extends HealthCocoFragment implements V
             switch (response.getWebServiceType()) {
                 case SEARCH_PATIENTS:
                     if (!Util.isNullOrEmptyList(response.getDataList())) {
+
                         list = (ArrayList<AlreadyRegisteredPatientsResponse>) (ArrayList<?>) response
                                 .getDataList();
                         LocalDataServiceImpl.getInstance(mApp).addAlreadyRegisteredPatients(list);
                         notifyAndRefreshPatientList(list);
+                        if (!Util.isNullOrBlank(mobileNumber)) {
+                            openRegistrationFragment(mobileNumber, null, false);
+                        }
                     } else {
-                        openRegistrationFragment(String.valueOf(editMobileNumber.getText()), null, false);
+                        if (isFromRegistration)
+                            openRegistrationFragment(String.valueOf(editMobileNumber.getText()), null, false);
+                        else
+                            layoutRegisterNew.setVisibility(View.VISIBLE);
                     }
                     layoutRegisterNew.setVisibility(View.VISIBLE);
                     break;

@@ -624,6 +624,14 @@ public class LocalDataServiceImpl {
         return registeredDoctorProfileList;
     }
 
+    public RegisteredDoctorProfile getRegisterDoctorProfile(String doctorId) {
+
+        RegisteredDoctorProfile registeredDoctorProfile = Select.from(RegisteredDoctorProfile.class)
+                .where(Condition.prop(LocalDatabaseUtils.KEY_USER_ID).eq(doctorId)).first();
+
+        return registeredDoctorProfile;
+    }
+
     public List<ClinicWorkingSchedule> getClinicWorkingSchedules(String locationId) {
         List<ClinicWorkingSchedule> list = Select.from(ClinicWorkingSchedule.class)
                 .where(Condition.prop(LocalDatabaseUtils.KEY_LOCATION_ID).eq(locationId)).list();

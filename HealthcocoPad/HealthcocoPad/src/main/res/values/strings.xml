@@ -1174,6 +1174,8 @@
     <string name="blogs">Blogs</string>
     <string name="mobile_number_patient_registration">Mobile Number&#160;&#160;&#160;</string>
     <string name="basic_details">Basic Details</string>
+    <string name="select_appointment">Select Appoitment</string>
+    <string name="confirm_appointment">Confirm Appoitment</string>
     <string name="more_details">More Details</string>
     <string name="please_enter_mobile_number">Please Enter Mobile Number</string>
     <string name="next">Next</string>

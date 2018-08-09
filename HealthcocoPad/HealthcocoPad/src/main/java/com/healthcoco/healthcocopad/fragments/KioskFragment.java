@@ -34,6 +34,7 @@ import com.healthcoco.healthcocopad.recyclerview.HealthcocoRecyclerViewAdapter;
 import com.healthcoco.healthcocopad.recyclerview.HealthcocoRecyclerViewItemClickListener;
 import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
+import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 
 import java.util.ArrayList;
 
@@ -154,6 +155,7 @@ public class KioskFragment extends HealthCocoFragment implements
         subItemTypeArrayList.add(VIDEO);
         subItemTypeArrayList.add(KioskSubItemType.FEEDBACK);
         subItemTypeArrayList.add(KioskSubItemType.BLOGS);
+        subItemTypeArrayList.add(KioskSubItemType.FOLLOW_UP_APPOINTMENT);
 
         mAdapter.notifyDataSetChanged();
     }
@@ -223,7 +225,7 @@ public class KioskFragment extends HealthCocoFragment implements
             KioskSubItemType subItemType = KioskSubItemType.values()[ordinal];
             switch (subItemType) {
                 case PATIENT_REGISTER:
-                    openCommonOpenUpActivity(CommonOpenUpFragmentType.PATIENT_REGISTRATION_TABS, "PATIENT", null);
+                    openCommonOpenUpActivity(CommonOpenUpFragmentType.PATIENT_REGISTRATION_TABS, HealthCocoConstants.TAG_MOBILE_NUMBER, null);
                     break;
                 case DOCTOR_AND_CLINIC:
                     openCommonOpenUpActivity(CommonOpenUpFragmentType.ABOUT_DOCTOR, "ABOUT_DOCTOR", null);
@@ -236,6 +238,9 @@ public class KioskFragment extends HealthCocoFragment implements
                     break;
                 case BLOGS:
                     openCommonOpenUpActivity(CommonOpenUpFragmentType.BLOGS, "BLOGS", null);
+                    break;
+                case FOLLOW_UP_APPOINTMENT:
+                    openCommonOpenUpActivity(CommonOpenUpFragmentType.FOLLOW_UP_APPOINTMENT, "FOLLOW_UP_APPOINTMENT", null);
                     break;
             }
         }

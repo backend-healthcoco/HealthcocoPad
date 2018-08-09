@@ -1,6 +1,5 @@
 package com.healthcoco.healthcocopad.fragments;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -17,9 +16,14 @@ import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.adapter.ContactsDetailViewPagerAdapter;
+import com.healthcoco.healthcocopad.bean.request.RegisterNewPatientRequest;
 import com.healthcoco.healthcocopad.custom.DummyTabFactory;
+import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
+import com.healthcoco.healthcocopad.enums.FollowUpAppointmentTabsType;
 import com.healthcoco.healthcocopad.enums.PatientRegistrationTabsType;
 import com.healthcoco.healthcocopad.listeners.PatientRegistrationDetailsListener;
+import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
+import com.healthcoco.healthcocopad.utilities.Util;
 import com.healthcoco.healthcocopad.views.CustomViewPager;
 
 import java.util.ArrayList;
@@ -28,12 +32,12 @@ import java.util.ArrayList;
  * Created by Prashant on 25-06-18.
  */
 
-public class PatientRegistrationTabsFragment extends HealthCocoFragment implements ViewPager.OnPageChangeListener,
+public class AppointmentTabsFragment extends HealthCocoFragment implements ViewPager.OnPageChangeListener,
         View.OnClickListener, PatientRegistrationDetailsListener {
 
-    PatientNumberSearchFragment searchFragment;
-    PatientBasicDetailsFragment basicDetailsFragment;
-    PatientOtherDeatilsFragment otherDeatilsFragment;
+    private PatientNumberSearchFragment searchFragment;
+    private FollowUpAppointmentFragment followUpAppointmentFragment;
+    private ConfirmAppointmentFragment confirmAppointmentFragment;
     private TabHost tabhost;
     private CustomViewPager mViewPager;
     private ImageButton btCross;
@@ -45,7 +49,7 @@ public class PatientRegistrationTabsFragment extends HealthCocoFragment implemen
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_patient_registration_tabs, container, false);
+        view = inflater.inflate(R.layout.fragment_appointment_tabs, container, false);
         super.onCreateView(inflater, container, savedInstanceState);
         return view;
     }
@@ -74,7 +78,9 @@ public class PatientRegistrationTabsFragment extends HealthCocoFragment implemen
         tvTitle = (TextView) view.findViewById(R.id.tv_title);
 
         btCross.setImageResource(R.drawable.selector_actionbar_back);
-        tvTitle.setText(getString(R.string.patient_registration));
+        tvTitle.setText(getString(R.string.appointment));
+
+        btSave.setVisibility(View.INVISIBLE);
     }
 
     public void initListeners() {
@@ -88,20 +94,20 @@ public class PatientRegistrationTabsFragment extends HealthCocoFragment implemen
         tabhost.clearAllTabs();
         if (mViewPager.getAdapter() != null)
             mViewPager.getAdapter().notifyDataSetChanged();
-        for (PatientRegistrationTabsType registrationTabsType :
-                PatientRegistrationTabsType.values()) {
-            switch (registrationTabsType) {
+        for (FollowUpAppointmentTabsType followUpAppointmentTabsType :
+                FollowUpAppointmentTabsType.values()) {
+            switch (followUpAppointmentTabsType) {
                 case SEARCH_PATIENT:
                     searchFragment = new PatientNumberSearchFragment(this);
-                    addFragment(registrationTabsType, searchFragment);
+                    addFragment(followUpAppointmentTabsType, searchFragment);
                     break;
-                case BASIC_DETAILS:
-                    basicDetailsFragment = new PatientBasicDetailsFragment(this);
-                    addFragment(registrationTabsType, basicDetailsFragment);
+                case SELECT_APPOINTMENT:
+                    followUpAppointmentFragment = new FollowUpAppointmentFragment(this);
+                    addFragment(followUpAppointmentTabsType, followUpAppointmentFragment);
                     break;
-                case MORE_DETAIlS:
-                    otherDeatilsFragment = new PatientOtherDeatilsFragment();
-                    addFragment(registrationTabsType, otherDeatilsFragment);
+                case CONFIRM_APPOINTMENT:
+                    confirmAppointmentFragment = new ConfirmAppointmentFragment(this);
+                    addFragment(followUpAppointmentTabsType, confirmAppointmentFragment);
                     break;
             }
 
@@ -109,17 +115,17 @@ public class PatientRegistrationTabsFragment extends HealthCocoFragment implemen
 
     }
 
-    private void addFragment(PatientRegistrationTabsType registrationTabsType, Fragment fragment) {
-        tabhost.addTab(getTabSpec(registrationTabsType, fragment));
-        tabhost.getTabWidget().getChildTabViewAt(registrationTabsType.getTabPosition()).setEnabled(false);
+    private void addFragment(FollowUpAppointmentTabsType followUpAppointmentTabsType, Fragment fragment) {
+        tabhost.addTab(getTabSpec(followUpAppointmentTabsType, fragment));
+        tabhost.getTabWidget().getChildTabViewAt(followUpAppointmentTabsType.getTabPosition()).setEnabled(false);
     }
 
-    private TabHost.TabSpec getTabSpec(PatientRegistrationTabsType registrationTabsType, Fragment fragment) {
+    private TabHost.TabSpec getTabSpec(FollowUpAppointmentTabsType followUpAppointmentTabsType, Fragment fragment) {
         fragmentsList.add(fragment);
         View view1 = mActivity.getLayoutInflater().inflate(R.layout.tab_indicator_add_visit, null);
         TextView tvTabText = (TextView) view1.findViewById(R.id.tv_tab_text);
-        tvTabText.setText(registrationTabsType.getStringValue());
-        return tabhost.newTabSpec(String.valueOf(registrationTabsType)).setIndicator(view1).setContent(new DummyTabFactory(mActivity));
+        tvTabText.setText(getString(followUpAppointmentTabsType.getTextId()));
+        return tabhost.newTabSpec(String.valueOf(followUpAppointmentTabsType)).setIndicator(view1).setContent(new DummyTabFactory(mActivity));
     }
 
     private void initViewPagerAdapter() {
@@ -131,20 +137,7 @@ public class PatientRegistrationTabsFragment extends HealthCocoFragment implemen
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-        PatientRegistrationTabsType registrationTabsType = PatientRegistrationTabsType.values()[position];
-        switch (registrationTabsType) {
-            case SEARCH_PATIENT:
-                btSave.setVisibility(View.GONE);
-                break;
-            case BASIC_DETAILS:
-                btSave.setVisibility(View.VISIBLE);
-                btSave.setText(getString(R.string.next));
-                break;
-            case MORE_DETAIlS:
-                btSave.setVisibility(View.VISIBLE);
-                btSave.setText(getString(R.string.save));
-                break;
-        }
+
     }
 
     @Override
@@ -160,47 +153,12 @@ public class PatientRegistrationTabsFragment extends HealthCocoFragment implemen
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.bt_save:
-                nextButtonOnClick();
-                break;
             case R.id.bt_cross:
                 prevButtonOnClick();
                 break;
-
         }
     }
 
-    private void nextButtonOnClick() {
-        int currentItem = mViewPager.getCurrentItem();
-        PatientRegistrationTabsType registrationTabsType = PatientRegistrationTabsType.values()[currentItem];
-        switch (registrationTabsType) {
-            case SEARCH_PATIENT:
-                scrollToNext();
-                break;
-            case BASIC_DETAILS:
-                basicDetailsFragment.validateData();
-                break;
-            case MORE_DETAIlS:
-                otherDeatilsFragment.validateData();
-                break;
-        }
-    }
-
-    public void prevButtonOnClick() {
-        int currentItem = mViewPager.getCurrentItem();
-        PatientRegistrationTabsType registrationTabsType = PatientRegistrationTabsType.values()[currentItem];
-        switch (registrationTabsType) {
-            case SEARCH_PATIENT:
-                ((CommonOpenUpActivity) mActivity).finishThisActivity();
-                break;
-            case BASIC_DETAILS:
-                scrollToPrev();
-                break;
-            case MORE_DETAIlS:
-                scrollToPrev();
-                break;
-        }
-    }
 
     private void scrollToNext() {
         mViewPager.setCurrentItem((mViewPager.getCurrentItem() + 1), true);
@@ -213,21 +171,49 @@ public class PatientRegistrationTabsFragment extends HealthCocoFragment implemen
     @Override
     public void readyToMoveNext(Object object, boolean isEditPatient) {
         int currentItem = mViewPager.getCurrentItem();
-        PatientRegistrationTabsType registrationTabsType = PatientRegistrationTabsType.values()[currentItem];
-        switch (registrationTabsType) {
+        FollowUpAppointmentTabsType followUpAppointmentTabsType = FollowUpAppointmentTabsType.values()[currentItem];
+        switch (followUpAppointmentTabsType) {
             case SEARCH_PATIENT:
-                basicDetailsFragment.initDataFromPreviousFragment(object, isEditPatient);
+                RegisterNewPatientRequest patientDetails = (RegisterNewPatientRequest) object;
+                if (patientDetails != null) {
+                    if (!Util.isNullOrBlank(patientDetails.getUserId())) {
+                        followUpAppointmentFragment.initDataFromPreviousFragment(object, isEditPatient);
+                        scrollToNext();
+                    } else {
+                        openCommonOpenUpActivity(CommonOpenUpFragmentType.PATIENT_REGISTRATION_TABS, HealthCocoConstants.TAG_MOBILE_NUMBER, patientDetails.getMobileNumber());
+                        mActivity.finish();
+                    }
+                }
+
                 break;
-            case BASIC_DETAILS:
-                otherDeatilsFragment.initDataFromPreviousFragment(object, isEditPatient);
+            case SELECT_APPOINTMENT:
+                confirmAppointmentFragment.initDataFromPreviousFragment(object, isEditPatient);
+                scrollToNext();
+                break;
+            case CONFIRM_APPOINTMENT:
+//                otherDeatilsFragment.initDataFromPreviousFragment(object, isEditPatient);
                 break;
         }
-        scrollToNext();
+    }
 
+    public void prevButtonOnClick() {
+        int currentItem = mViewPager.getCurrentItem();
+        FollowUpAppointmentTabsType followUpAppointmentTabsType = FollowUpAppointmentTabsType.values()[currentItem];
+        switch (followUpAppointmentTabsType) {
+            case SEARCH_PATIENT:
+                ((CommonOpenUpActivity) mActivity).finishThisActivity();
+                break;
+            case SELECT_APPOINTMENT:
+                scrollToPrev();
+                break;
+            case CONFIRM_APPOINTMENT:
+                scrollToPrev();
+                break;
+        }
     }
 
     @Override
     public boolean isFromPatientRegistarion() {
-        return true;
+        return false;
     }
 }

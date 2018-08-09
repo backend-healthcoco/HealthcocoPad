@@ -69,6 +69,7 @@ public enum CommonOpenUpFragmentType {
     SYNC(R.string.sync),
     PATIENT_REGISTRATION_TABS(R.string.new_contact),
     ABOUT_DOCTOR(R.string.about_doctor),
+    FOLLOW_UP_APPOINTMENT(R.string.appointment),
     BLOGS(R.string.blogs),
     CHANGE_PIN(R.string.change_pin),
     BLOG_DETAIL(R.string.blog_detail),

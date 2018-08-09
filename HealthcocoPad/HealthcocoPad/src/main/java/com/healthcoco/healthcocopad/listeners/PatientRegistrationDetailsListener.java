@@ -7,4 +7,6 @@ package com.healthcoco.healthcocopad.listeners;
 public interface PatientRegistrationDetailsListener {
 
     public void readyToMoveNext(Object object, boolean isEditPatient);
+
+    public boolean isFromPatientRegistarion();
 }

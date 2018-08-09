@@ -87,4 +87,9 @@ public class KioskActivity extends HealthCocoActivity implements PatientRegistra
             }
         }
     }
+
+    @Override
+    public boolean isFromPatientRegistarion() {
+        return false;
+    }
 }

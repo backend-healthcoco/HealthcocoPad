@@ -20,7 +20,6 @@ import android.widget.TextView;
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
-import com.healthcoco.healthcocopad.calendar.CalendarFragment;
 import com.healthcoco.healthcocopad.calendar.pinlockview.ChangePinFragment;
 import com.healthcoco.healthcocopad.enums.ActionbarLeftRightActionTypeDrawables;
 import com.healthcoco.healthcocopad.enums.ActionbarType;
@@ -36,7 +35,9 @@ import com.healthcoco.healthcocopad.fragments.AddNewTemplateFragment;
 import com.healthcoco.healthcocopad.fragments.AddNewTreatmentFragment;
 import com.healthcoco.healthcocopad.fragments.AddReceiptFragment;
 import com.healthcoco.healthcocopad.fragments.AppointmentFeedbackFragment;
+import com.healthcoco.healthcocopad.fragments.AppointmentTabsFragment;
 import com.healthcoco.healthcocopad.fragments.BlogDetailFragment;
+import com.healthcoco.healthcocopad.fragments.CommonHealthFeedsFragment;
 import com.healthcoco.healthcocopad.fragments.CommonOpenUpPatientDetailFragment;
 import com.healthcoco.healthcocopad.fragments.CommonUiPermissionsFragment;
 import com.healthcoco.healthcocopad.fragments.ContactsListFragment;
@@ -46,15 +47,12 @@ import com.healthcoco.healthcocopad.fragments.DoctorDetailsFragment;
 import com.healthcoco.healthcocopad.fragments.EnlargedMapViewFragment;
 import com.healthcoco.healthcocopad.fragments.FeedbackFragment;
 import com.healthcoco.healthcocopad.fragments.FeedsFragment;
-import com.healthcoco.healthcocopad.fragments.FollowUpAppointmentFragment;
 import com.healthcoco.healthcocopad.fragments.InitialSyncFragment;
-import com.healthcoco.healthcocopad.fragments.KioskFragment;
 import com.healthcoco.healthcocopad.fragments.LoginSignupFragment;
 import com.healthcoco.healthcocopad.fragments.NotificationResponseDataFragment;
 import com.healthcoco.healthcocopad.fragments.PatientEducationVideoListFragment;
 import com.healthcoco.healthcocopad.fragments.PatientRegistrationFragment;
 import com.healthcoco.healthcocopad.fragments.PatientRegistrationTabsFragment;
-import com.healthcoco.healthcocopad.fragments.QueueFragment;
 import com.healthcoco.healthcocopad.fragments.SelectedDiagramDetailFragment;
 import com.healthcoco.healthcocopad.fragments.SettingKioskFragment;
 import com.healthcoco.healthcocopad.fragments.SettingPrintSetupFragment;
@@ -254,10 +252,13 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
                 openFragment(ActionbarType.HIDDEN, new AboutDoctorFragment());
                 break;
             case BLOGS:
-                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, R.string.blogs, new FollowUpAppointmentFragment());
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, R.string.blogs, new FeedsFragment());
                 break;
             case BLOG_DETAIL:
                 openFragment(ActionbarType.HIDDEN, new BlogDetailFragment());
+                break;
+            case FOLLOW_UP_APPOINTMENT:
+                openFragment(ActionbarType.HIDDEN, new AppointmentTabsFragment());
                 break;
             case FEEDBACK_DOCTOR:
                 openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.WITH_SUBMIT, fragmentType.getTitleId(), new AppointmentFeedbackFragment());
@@ -406,6 +407,14 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
             switch (fragmentType) {
                 case CONTINUE_SIGN_UP:
                     return;
+                case FOLLOW_UP_APPOINTMENT:
+                    AppointmentTabsFragment appointmentTabsFragment = (AppointmentTabsFragment) getSupportFragmentManager().findFragmentById(R.id.layout_fragment_common_open_up);
+                    appointmentTabsFragment.prevButtonOnClick();
+                    break;
+                case PATIENT_REGISTRATION_TABS:
+                    PatientRegistrationTabsFragment registrationTabsFragment = (PatientRegistrationTabsFragment) getSupportFragmentManager().findFragmentById(R.id.layout_fragment_common_open_up);
+                    registrationTabsFragment.prevButtonOnClick();
+                    break;
                 default:
                     finishThisActivity();
                     break;
@@ -426,6 +435,7 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
                 case ADD_VISITS:
                 case ADD_INVOICE:
                 case ADD_RECEIPT:
+                case FOLLOW_UP_APPOINTMENT:
                 case BOOK_APPOINTMENT:
                 case PATIENT_REGISTRATION_TABS:
                     showFinishConfirmationAlert();

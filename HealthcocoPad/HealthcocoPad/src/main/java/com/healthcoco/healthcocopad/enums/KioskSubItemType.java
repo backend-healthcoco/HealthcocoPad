@@ -12,6 +12,7 @@ public enum KioskSubItemType {
     DOCTOR_AND_CLINIC("DOCTOR_AND_CLINIC", R.string.about_doctor_and_clinic, R.drawable.img_know, R.string.settings_no_groups_added),
     VIDEO("VIDEO", R.string.videos, R.drawable.img_video, R.string.settings_no_groups_added),
     FEEDBACK("FEEDBACK", R.string.feedback, R.drawable.img_feedback, R.string.settings_no_groups_added),
+    FOLLOW_UP_APPOINTMENT("FOLLOW_UP_APPOINTMENT", R.string.appointment, R.drawable.img_consent_form, R.string.settings_no_groups_added),
     BLOGS("BLOGS", R.string.blogs, R.drawable.img_consent_form, R.string.settings_no_groups_added);
 
 

@@ -26,6 +26,7 @@ import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.adapter.AppointmentSlotAdapter;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.request.AppointmentRequestToSend;
+import com.healthcoco.healthcocopad.bean.request.RegisterNewPatientRequest;
 import com.healthcoco.healthcocopad.bean.server.AlreadyRegisteredPatientsResponse;
 import com.healthcoco.healthcocopad.bean.server.AppointmentSlot;
 import com.healthcoco.healthcocopad.bean.server.AppointmentTimeSlotDetails;
@@ -58,6 +59,7 @@ import com.healthcoco.healthcocopad.fragments.PatientAppointmentDetailFragment;
 import com.healthcoco.healthcocopad.listeners.AutoCompleteTextViewListener;
 import com.healthcoco.healthcocopad.listeners.HealthcocoTextWatcherListener;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
+import com.healthcoco.healthcocopad.listeners.PatientRegistrationDetailsListener;
 import com.healthcoco.healthcocopad.popupwindow.HealthcocoPopupWindow;
 import com.healthcoco.healthcocopad.popupwindow.PopupWindowListener;
 import com.healthcoco.healthcocopad.services.GsonRequest;
@@ -98,12 +100,11 @@ public class FollowUpAppointmentFragment extends HealthCocoFragment implements
     private TextView tvSelectedDate;
     private AppointmentSlotAdapter adapter;
     private AvailableTimeSlots selectedTimeSlot;
-    private EditText editNote;
     private CheckBox cbEmailDoctor;
     private CheckBox cbEmailPatient;
     private CheckBox cbSmsDoctor;
     private CheckBox cbSmsPatient;
-    private EditText editMobileNumber;
+    //    private EditText editMobileNumber;
     private LinkedHashMap<String, RegisteredDoctorProfile> clinicDoctorListHashMap = new LinkedHashMap<>();
     private HealthcocoPopupWindow doctorsListPopupWindow;
     private EditText editPatientName;
@@ -114,7 +115,16 @@ public class FollowUpAppointmentFragment extends HealthCocoFragment implements
     private TextView tvClinicName;
     private LinearLayout layoutDoctorName;
     private TextView tvDoctorName;
+    private String patientUniqueId;
+    private String mobileNumber;
+    private String name;
     private AppointmentSlot selectedAppointmentSlot;
+    private PatientRegistrationDetailsListener registrationDetailsListener;
+
+    public FollowUpAppointmentFragment(PatientRegistrationDetailsListener registrationDetailsListener) {
+        super();
+        this.registrationDetailsListener = registrationDetailsListener;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -141,13 +151,11 @@ public class FollowUpAppointmentFragment extends HealthCocoFragment implements
 
     @Override
     public void initViews() {
-        editNote = (EditText) view.findViewById(R.id.edit_note);
         cbEmailDoctor = (CheckBox) view.findViewById(R.id.cb_email_doctor);
         cbEmailPatient = (CheckBox) view.findViewById(R.id.cb_email_patient);
         cbSmsDoctor = (CheckBox) view.findViewById(R.id.cb_sms_doctor);
         cbSmsPatient = (CheckBox) view.findViewById(R.id.cb_sms_patient);
 
-        editMobileNumber = (EditText) view.findViewById(R.id.edit_mobile_number);
         editPatientName = (EditText) view.findViewById(R.id.edit_patient_name);
         layoutDoctorName = (LinearLayout) view.findViewById(R.id.layout_doctor_name);
         tvDoctorName = (TextView) view.findViewById(R.id.tv_doctor_name);
@@ -165,7 +173,6 @@ public class FollowUpAppointmentFragment extends HealthCocoFragment implements
         tvSelectedDate.setOnClickListener(this);
         tvSelectedDate.addTextChangedListener(new HealthcocoTextWatcher(tvSelectedDate, this));
 
-        editMobileNumber.addTextChangedListener(new HealthcocoTextWatcher(editMobileNumber, this));
         gvTimeSlots.setOnItemClickListener(this);
         tvSubmit.setOnClickListener(this);
     }
@@ -235,15 +242,7 @@ public class FollowUpAppointmentFragment extends HealthCocoFragment implements
                         refreshAppointmentSlotDetails(appointmentTimeSlotDetails);
                     }
                     break;
-                case ADD_APPOINTMENT:
-                    if (response.isValidData(response) && response.getData() instanceof CalendarEvents) {
-                        CalendarEvents calendarEvents = (CalendarEvents) response.getData();
-                        calendarEvents.setIsAddedOnSuccess(true);
-                        LocalDataServiceImpl.getInstance(mApp).addAppointment(calendarEvents);
-                        Util.showToast(mActivity, R.string.appointment_created);
-//                        getDialog().dismiss();
-                    }
-                    break;
+
                 default:
                     break;
             }
@@ -323,15 +322,15 @@ public class FollowUpAppointmentFragment extends HealthCocoFragment implements
         ArrayList<View> errorViewList = new ArrayList<>();
         String msg = null;
         String selectedDate = String.valueOf(tvSelectedDate.getText()).trim();
-        String mobileNumber = String.valueOf(editMobileNumber.getText()).trim();
 
-        if (selectedPatient == null && Util.isNullOrBlank(mobileNumber)/* && Util.isNullOrBlank(patientName)*/) {
+      /*  if (selectedPatient == null && Util.isNullOrBlank(mobileNumber)*//* && Util.isNullOrBlank(patientName)*//*) {
             msg = getResources().getString(R.string.please_select_patient_or_add_new);
         } else if (!Util.isNullOrBlank(mobileNumber) && !Util.isValidMobileNo(mobileNumber)) {
             msg = getResources().getString(R.string.please_enter_valid_mobile_no_or_select_existing_patient);
 //        } else if (!Util.isNullOrBlank(mobileNumber) && Util.isNullOrBlank(patientName)) {
             msg = getResources().getString(R.string.please_enter_patient_name_or_select_existing_patient);
-        } else if (Util.isNullOrBlank(selectedDate)) {
+        } else*/
+        if (Util.isNullOrBlank(selectedDate)) {
             msg = getResources().getString(R.string.please_select_date);
             errorViewList.add(tvSelectedDate);
         } else if (selectedAppointmentSlot == null || selectedTimeSlot == null) {
@@ -345,7 +344,6 @@ public class FollowUpAppointmentFragment extends HealthCocoFragment implements
     }
 
     private void addAppointment(String selecetdDate) {
-        mActivity.showLoading(false);
         Float selectedFromTimeInMinutes = DateTimeUtil.getMinutesFromFormattedDateime(TIME_FORMAT_RECEIVED_FROM_SERVER,
                 selectedTimeSlot.getTime());
 
@@ -354,17 +352,23 @@ public class FollowUpAppointmentFragment extends HealthCocoFragment implements
         appointment.setDoctorId(user.getUniqueId());
         appointment.setHospitalId(user.getForeignHospitalId());
         appointment.setLocationId(user.getForeignLocationId());
-        appointment.setPatientId(HealthCocoConstants.SELECTED_PATIENTS_USER_ID);
-//        appointment.setLocalPatientName(Util.getValidatedValueOrNull(autotvPatientName));
-        appointment.setMobileNumber(Util.getValidatedValueOrNull(editMobileNumber));
+        if (!Util.isNullOrBlank(patientUniqueId))
+            appointment.setPatientId(patientUniqueId);
+        else
+            appointment.setPatientId(HealthCocoConstants.SELECTED_PATIENTS_USER_ID);
 
-        appointment.setNotifyDoctorBySms(cbSmsDoctor.isChecked());
-        appointment.setNotifyDoctorByEmail(cbEmailDoctor.isChecked());
+        if (!Util.isNullOrBlank(name))
+            appointment.setLocalPatientName(name);
+        if (!Util.isNullOrBlank(mobileNumber))
+            appointment.setMobileNumber(mobileNumber);
 
-        appointment.setNotifyPatientBySms(cbSmsPatient.isChecked());
-        appointment.setNotifyPatientByEmail(cbEmailPatient.isChecked());
+        appointment.setNotifyDoctorBySms(false);
+        appointment.setNotifyDoctorByEmail(false);
 
-        appointment.setExplanation(Util.getValidatedValueOrNull(editNote));
+        appointment.setNotifyPatientBySms(false);
+        appointment.setNotifyPatientByEmail(true);
+//
+//        appointment.setExplanation(Util.getValidatedValueOrNull(editNote));
         appointment.setFromDate(DateTimeUtil.getLongFromFormattedDayMonthYearFormatString(DATE_FORMAT_USED_IN_THIS_SCREEN, selecetdDate));
         appointment.setToDate(DateTimeUtil.getLongFromFormattedDayMonthYearFormatString(DATE_FORMAT_USED_IN_THIS_SCREEN, selecetdDate));
         appointment.setTime(new WorkingHours(selectedFromTimeInMinutes, selectedFromTimeInMinutes + selectedAppointmentSlot.getTime()));
@@ -372,7 +376,7 @@ public class FollowUpAppointmentFragment extends HealthCocoFragment implements
 
         appointment.setState(AppointmentStatusType.NEW);
 
-        WebDataServiceImpl.getInstance(mApp).addAppointment(CalendarEvents.class, appointment, this, this);
+        registrationDetailsListener.readyToMoveNext(appointment, false);
     }
 
     private void clearPreviousAlerts() {
@@ -449,6 +453,7 @@ public class FollowUpAppointmentFragment extends HealthCocoFragment implements
                     RegisteredDoctorProfile doctorProfile = (RegisteredDoctorProfile) object;
                     tvDoctorName.setText(doctorProfile.getFirstNameWithTitle());
                     user.setUniqueId(doctorProfile.getUserId());
+                    getAppointmentSlotNew(DATE_FORMAT_USED_IN_THIS_SCREEN, Util.getValidatedValueOrNull(tvSelectedDate));
                 }
                 break;
         }
@@ -463,6 +468,7 @@ public class FollowUpAppointmentFragment extends HealthCocoFragment implements
         if (responseList.size() > 1) {
             tvDoctorName.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.arrow_down_drug, 0);
             tvDoctorName.setEnabled(true);
+            tvDoctorName.setText("Dr. " + user.getFirstName());
 
             if (!Util.isNullOrEmptyList(responseList)) {
                 for (RegisteredDoctorProfile clinicDoctorProfile :
@@ -478,9 +484,44 @@ public class FollowUpAppointmentFragment extends HealthCocoFragment implements
             }
         } else {
             tvDoctorName.setText("Dr. " + user.getFirstName());
-
         }
     }
 
 
+    public void initDataFromPreviousFragment(Object object, boolean isEditPatient) {
+        RegisterNewPatientRequest patientRequest = (RegisterNewPatientRequest) object;
+        if (patientRequest != null) {
+            if (!Util.isNullOrBlank(patientRequest.getUserId()))
+                patientUniqueId = patientRequest.getUserId();
+
+            if (!Util.isNullOrBlank(patientUniqueId)) {
+                if (!Util.isNullOrBlank(patientUniqueId)) {
+                    if (isEditPatient) {
+                        RegisteredPatientDetailsUpdated patient = LocalDataServiceImpl.getInstance(mApp).getPatient(patientUniqueId, user.getForeignLocationId());
+                        initPatientDetails(patient);
+                    } else {
+                        AlreadyRegisteredPatientsResponse alreadyRegisteredPatient = LocalDataServiceImpl.getInstance(mApp).getALreadyRegisteredPatient(patientUniqueId);
+                        if (alreadyRegisteredPatient != null) {
+                            initPatientDetails(alreadyRegisteredPatient);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private void initPatientDetails(Object patientDetails) {
+
+        if (patientDetails instanceof RegisteredPatientDetailsUpdated) {
+            RegisteredPatientDetailsUpdated registeredPatientDetailsUpdated = (RegisteredPatientDetailsUpdated) patientDetails;
+            name = Util.getValidatedValue(registeredPatientDetailsUpdated.getLocalPatientName());
+            mobileNumber = Util.getValidatedValue(registeredPatientDetailsUpdated.getMobileNumber());
+
+        } else if (patientDetails instanceof AlreadyRegisteredPatientsResponse) {
+            AlreadyRegisteredPatientsResponse alreadyRegisteredPatient = (AlreadyRegisteredPatientsResponse) patientDetails;
+            mobileNumber = Util.getValidatedValue(alreadyRegisteredPatient.getMobileNumber());
+            name = Util.getValidatedValue(alreadyRegisteredPatient.getFirstName());
+        }
+
+    }
 }

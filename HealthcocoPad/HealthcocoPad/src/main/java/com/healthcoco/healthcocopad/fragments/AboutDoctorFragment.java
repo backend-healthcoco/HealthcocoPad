@@ -197,6 +197,11 @@ public class AboutDoctorFragment extends HealthCocoFragment implements ViewPager
     }
 
     @Override
+    public boolean isFromPatientRegistarion() {
+        return false;
+    }
+
+    @Override
     public void onTabChanged(String tabId) {
         mViewPager.setCurrentItem(tabhost.getCurrentTab());
     }
