@@ -3,6 +3,7 @@ package com.healthcoco.healthcocopad.bean.request;
 import com.healthcoco.healthcocopad.bean.Address;
 import com.healthcoco.healthcocopad.bean.DOB;
 import com.healthcoco.healthcocopad.bean.FileDetails;
+import com.healthcoco.healthcocopad.bean.PersonalHistory;
 import com.healthcoco.healthcocopad.bean.server.Reference;
 import com.healthcoco.healthcocopad.bean.server.Relations;
 
@@ -42,6 +43,9 @@ public class RegisterNewPatientRequest {
     private ArrayList<String> groups;
     private Integer age;
     private String localPatientName;
+    private AddMedicalFamilyHistoryRequest pastMedicalHistoryHandler;
+    private AddMedicalFamilyHistoryRequest familyMedicalHistoryHandler;
+    private PersonalHistory personalHistoryAddRequest;
 
     public String getUserId() {
         return userId;
@@ -281,5 +285,29 @@ public class RegisterNewPatientRequest {
 
     public void setLocalPatientName(String localPatientName) {
         this.localPatientName = localPatientName;
+    }
+
+    public AddMedicalFamilyHistoryRequest getPastMedicalHistoryHandler() {
+        return pastMedicalHistoryHandler;
+    }
+
+    public void setPastMedicalHistoryHandler(AddMedicalFamilyHistoryRequest pastMedicalHistoryHandler) {
+        this.pastMedicalHistoryHandler = pastMedicalHistoryHandler;
+    }
+
+    public AddMedicalFamilyHistoryRequest getFamilyMedicalHistoryHandler() {
+        return familyMedicalHistoryHandler;
+    }
+
+    public void setFamilyMedicalHistoryHandler(AddMedicalFamilyHistoryRequest familyMedicalHistoryHandler) {
+        this.familyMedicalHistoryHandler = familyMedicalHistoryHandler;
+    }
+
+    public PersonalHistory getPersonalHistoryAddRequest() {
+        return personalHistoryAddRequest;
+    }
+
+    public void setPersonalHistoryAddRequest(PersonalHistory personalHistoryAddRequest) {
+        this.personalHistoryAddRequest = personalHistoryAddRequest;
     }
 }

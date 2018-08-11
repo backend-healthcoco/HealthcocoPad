@@ -2827,6 +2827,7 @@ public class LocalDataServiceImpl {
 
     public void addHistoryDetailResponse(HistoryDetailsResponse history) {
         history.setCustomUniqueId(history.getPatientId() + history.getLocationId() + history.getHospitalId());
+        deleteFromHistoryIfPresent(history.getCustomUniqueId());
         //setting medicalHistory list
         if (!Util.isNullOrEmptyList(history.getMedicalhistory())) {
             history.setMedicalHistoryIdsJsonString(getJsonFromObject(addMedicalFamilyHistoryDetails(history.getMedicalhistory())));

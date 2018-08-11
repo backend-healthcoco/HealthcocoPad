@@ -36,14 +36,19 @@ import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.adapter.GroupsGridViewAdapter;
 import com.healthcoco.healthcocopad.adapter.NotesListViewAdapter;
+import com.healthcoco.healthcocopad.adapter.PersonalFamilyHistoryDiseaseAdapter;
 import com.healthcoco.healthcocopad.bean.Address;
 import com.healthcoco.healthcocopad.bean.FileDetails;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
+import com.healthcoco.healthcocopad.bean.request.AddMedicalFamilyHistoryRequest;
 import com.healthcoco.healthcocopad.bean.request.RegisterNewPatientRequest;
 import com.healthcoco.healthcocopad.bean.server.AlreadyRegisteredPatientsResponse;
 import com.healthcoco.healthcocopad.bean.server.BloodGroup;
 import com.healthcoco.healthcocopad.bean.server.CityResponse;
+import com.healthcoco.healthcocopad.bean.server.Disease;
+import com.healthcoco.healthcocopad.bean.server.HistoryDetailsResponse;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
+import com.healthcoco.healthcocopad.bean.server.MedicalFamilyHistoryDetails;
 import com.healthcoco.healthcocopad.bean.server.Profession;
 import com.healthcoco.healthcocopad.bean.server.Reference;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
@@ -69,6 +74,8 @@ import com.healthcoco.healthcocopad.listeners.CommonOptionsDialogItemClickListen
 import com.healthcoco.healthcocopad.listeners.DownloadFileFromUrlListener;
 import com.healthcoco.healthcocopad.listeners.HealthcocoTextWatcherListener;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
+import com.healthcoco.healthcocopad.listeners.MedicalFamilyHistoryItemListener;
+import com.healthcoco.healthcocopad.listeners.PatientRegistrationDetailsListener;
 import com.healthcoco.healthcocopad.listeners.PatientRegistrationListener;
 import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
@@ -98,10 +105,11 @@ import java.util.List;
  */
 public class PatientOtherDeatilsFragment extends HealthCocoFragment implements View.OnClickListener,
         GsonRequest.ErrorListener, Response.Listener<VolleyResponseBean>, LocalDoInBackgroundListenerOptimised,
-        DownloadFileFromUrlListener, PatientRegistrationListener {
+        DownloadFileFromUrlListener, PatientRegistrationListener, MedicalFamilyHistoryItemListener {
     private static final int REQUEST_CODE_REGISTER_PATIENT = 101;
     private static final String SEPARATOR_GROUP_NOTES = "; ";
     RegisterNewPatientRequest patientDetails = new RegisterNewPatientRequest();
+    PatientRegistrationDetailsListener registrationDetailsListener;
     private User user;
     private boolean isEditPatient;
     private LinearLayout loadingExistingPatientsList;
@@ -116,6 +124,22 @@ public class PatientOtherDeatilsFragment extends HealthCocoFragment implements V
     private ArrayList<String> groupIdsToAssign = new ArrayList<String>();
     private TextView tvNoNotes;
     private TextView tvNoGroups;
+    private GridView gvPastHistory;
+    private PersonalFamilyHistoryDiseaseAdapter adapter;
+    private ArrayList<Disease> diseaseList;
+    private TextView tvNoDiseaseHistory;
+    private RegisteredPatientDetailsUpdated selectedPatient;
+    private ArrayList<String> addPastDiseasesList = new ArrayList<String>();
+    private ArrayList<String> removePastDiseasesList = new ArrayList<String>();
+    private ArrayList<String> pastDiseaseIdsList = new ArrayList<String>();
+    private ArrayList<String> addFamilyDiseasesList = new ArrayList<String>();
+    private HistoryDetailsResponse historyDetailsResponse;
+
+    public PatientOtherDeatilsFragment(PatientRegistrationDetailsListener registrationDetailsListener) {
+        super();
+        this.registrationDetailsListener = registrationDetailsListener;
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -147,6 +171,11 @@ public class PatientOtherDeatilsFragment extends HealthCocoFragment implements V
     private void initAdapters() {
         initNoteListAdapter();
         initGroupAdapter();
+
+        adapter = new PersonalFamilyHistoryDiseaseAdapter(mActivity, this);
+        adapter.setListData(diseaseList);
+        gvPastHistory.setAdapter(adapter);
+
     }
 
     private void getGroupListFromLocal() {
@@ -158,6 +187,32 @@ public class PatientOtherDeatilsFragment extends HealthCocoFragment implements V
         gvGroups.setAdapter(groupsListViewAdapter);
     }
 
+    public void getHistoryListFromServer(boolean showLoading) {
+        try {
+            if (user != null) {
+                if (showLoading)
+                    showLoadingOverlay(true);
+                else showLoadingOverlay(false);
+                Long updatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(user, LocalTabelType.HISTORY_DETAIL_RESPONSE);
+                boolean isInHistory = false;
+                if (updatedTime == 0) {
+                    isInHistory = true;
+                }
+                WebDataServiceImpl.getInstance(mApp).getHistoryListUpdatedAPI(HistoryDetailsResponse.class, WebServiceType.GET_HISTORY_LIST, isOtpVerified(), patientDetails.getUserId(), user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(),
+                        isInHistory, updatedTime, this, this);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public void getHistoryListFromLocal() {
+        if (user != null) {
+            new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_HISTORY_LIST, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        }
+    }
+
     @Override
     public void initViews() {
 
@@ -167,6 +222,9 @@ public class PatientOtherDeatilsFragment extends HealthCocoFragment implements V
         tvNoGroups = (TextView) view.findViewById(R.id.tv_no_groups);
         gvGroups = (GridView) view.findViewById(R.id.gv_groups);
         loadingExistingPatientsList = (LinearLayout) view.findViewById(R.id.loading_existing_patients_list);
+
+        gvPastHistory = (GridView) view.findViewById(R.id.gv_past_history_list);
+        tvNoDiseaseHistory = (TextView) view.findViewById(R.id.tv_no_past_history);
 
     }
 
@@ -221,6 +279,13 @@ public class PatientOtherDeatilsFragment extends HealthCocoFragment implements V
             notifyNoteListAdapter(notesListLastAdded);
         if (!Util.isNullOrEmptyList(groupIdsToAssign))
             getGroupsList();
+
+
+        if (isEditPatient)
+            getHistoryListFromServer(false);
+        else
+            getListFromLocal();
+
     }
 
 
@@ -239,14 +304,41 @@ public class PatientOtherDeatilsFragment extends HealthCocoFragment implements V
     }
 
     private void registerPatient(String name) {
-        mActivity.showLoading(false);
+//        mActivity.showLoading(false);
         patientDetails.setNotes(notesListLastAdded);
         patientDetails.setGroups(groupIdsToAssign);
 
-        if (isEditPatient) {
-            WebDataServiceImpl.getInstance(mApp).updatePatient(RegisteredPatientDetailsUpdated.class, patientDetails, this, this);
-        } else {
-            WebDataServiceImpl.getInstance(mApp).registerNewPatient(RegisteredPatientDetailsUpdated.class, patientDetails, this, this);
+        addPastMedicalHistory();
+
+        registrationDetailsListener.readyToMoveNext(patientDetails, isEditPatient);
+    }
+
+    private void addPastMedicalHistory() {
+
+        AddMedicalFamilyHistoryRequest addPastHistoryRequest = new AddMedicalFamilyHistoryRequest();
+        addPastHistoryRequest.setHospitalId(user.getForeignHospitalId());
+        addPastHistoryRequest.setLocationId(user.getForeignLocationId());
+        addPastHistoryRequest.setDoctorId(user.getUniqueId());
+        addPastHistoryRequest.setAddDiseases(addPastDiseasesList);
+        addPastHistoryRequest.setRemoveDiseases(removePastDiseasesList);
+        if (isEditPatient)
+            addPastHistoryRequest.setPatientId(patientDetails.getUserId());
+
+        patientDetails.setPastMedicalHistoryHandler(addPastHistoryRequest);
+
+        if (historyDetailsResponse != null) {
+            AddMedicalFamilyHistoryRequest addFamilyHistoryRequest = new AddMedicalFamilyHistoryRequest();
+            addFamilyHistoryRequest.setHospitalId(user.getForeignHospitalId());
+            addFamilyHistoryRequest.setLocationId(user.getForeignLocationId());
+            addFamilyHistoryRequest.setDoctorId(user.getUniqueId());
+            addFamilyHistoryRequest.setAddDiseases(addFamilyDiseasesList);
+            if (isEditPatient)
+                addFamilyHistoryRequest.setPatientId(patientDetails.getUserId());
+
+            patientDetails.setFamilyMedicalHistoryHandler(addFamilyHistoryRequest);
+
+            if (isEditPatient)
+                patientDetails.setPersonalHistoryAddRequest(historyDetailsResponse.getPersonalHistory());
         }
     }
 
@@ -276,30 +368,19 @@ public class PatientOtherDeatilsFragment extends HealthCocoFragment implements V
     public void onResponse(VolleyResponseBean response) {
         LogUtils.LOGD(TAG, "Success " + String.valueOf(response.getWebServiceType()));
         switch (response.getWebServiceType()) {
-            case UPDATE_PATIENT:
-                if (response.isValidData(response) && response.getData() instanceof RegisteredPatientDetailsUpdated) {
-                    RegisteredPatientDetailsUpdated patientDetails = (RegisteredPatientDetailsUpdated) response.getData();
-                    refreshContactsData(patientDetails);
-                    mActivity.hideLoading();
-                    //will directly refresh PatientDetailSCreen on its onActivityResult
-                    mActivity.setResult(HealthCocoConstants.RESULT_CODE_REGISTRATION, new Intent().putExtra(HealthCocoConstants.TAG_PATIENT_PROFILE, Parcels.wrap(patientDetails)));
-                    ((CommonOpenUpActivity) mActivity).finish();
-                    return;
+            case GET_DISEASE_LIST:
+                if (response.isDataFromLocal()) {
+                    diseaseList = (ArrayList<Disease>) (ArrayList<?>) response.getDataList();
+                    LogUtils.LOGD(TAG, "Success onResponse diseaseList Size " + diseaseList.size() + " isDataFromLocal " + response.isDataFromLocal());
                 }
+                notifyAdapter(diseaseList);
                 break;
-            case REGISTER_PATIENT:
-                if (response.isValidData(response) && response.getData() instanceof RegisteredPatientDetailsUpdated) {
-                    RegisteredPatientDetailsUpdated patientDetails = (RegisteredPatientDetailsUpdated) response.getData();
-                    LogUtils.LOGD(TAG, "REGISTER_PATIENT SYNC_COMPLETE" + patientDetails.getLocalPatientName());
-                    LocalDataServiceImpl.getInstance(mApp).addPatient(patientDetails);
-                    refreshContactsData(patientDetails);
-                    mActivity.hideLoading();
-                    mActivity.setResult(HealthCocoConstants.RESULT_CODE_REGISTRATION);
-                    ((CommonOpenUpActivity) mActivity).finish();
-                    return;
-                }
+            case GET_HISTORY_LIST:
+                historyDetailsResponse = (HistoryDetailsResponse) response.getData();
+                if (historyDetailsResponse != null)
+                    initPastHistory(historyDetailsResponse.getMedicalhistory());
+                getListFromLocal();
                 break;
-
             case GET_GROUPS:
                 if (response.isDataFromLocal()) {
                     ArrayList<UserGroups> groupsList = (ArrayList<UserGroups>) (ArrayList<?>) response
@@ -353,21 +434,6 @@ public class PatientOtherDeatilsFragment extends HealthCocoFragment implements V
         notesListViewAdapter.notifyDataSetChanged();
     }
 
-    private void refreshContactsData(RegisteredPatientDetailsUpdated patientDetails) {
-        LocalDataServiceImpl.getInstance(mApp).addPatient(patientDetails);
-        mActivity.syncContacts(false, user);
-        Util.sendBroadcast(mApp, ContactsListFragment.INTENT_GET_CONTACT_LIST_LOCAL);
-    }
-
-    private void openPatientDetailScreen(RegisteredPatientDetailsUpdated selecetdPatient) {
-        if (selecetdPatient.getPatient() != null && !Util.isNullOrBlank(selecetdPatient.getPatient().getPatientId())) {
-            HealthCocoConstants.SELECTED_PATIENTS_USER_ID = selecetdPatient.getUserId();
-            openCommonOpenUpActivity(CommonOpenUpFragmentType.PATIENT_DETAIL, null,
-                    REQUEST_CODE_REGISTER_PATIENT);
-        }
-    }
-
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -402,6 +468,14 @@ public class PatientOtherDeatilsFragment extends HealthCocoFragment implements V
                 LocalDataServiceImpl.getInstance(mApp).addUserGroupsList((ArrayList<UserGroups>) (ArrayList<?>) response.getDataList());
             case GET_GROUPS:
                 volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getUserGroups(WebServiceType.GET_GROUPS, groupIdsToAssign, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(), null, null);
+                break;
+            case GET_DISEASE_LIST:
+                volleyResponseBean = LocalDataServiceImpl.getInstance(mApp)
+                        .getDiseaseList(WebServiceType.GET_DISEASE_LIST, null, BooleanTypeValues.FALSE, null, 0, null, null);
+                break;
+            case GET_HISTORY_LIST:
+                if (isEditPatient)
+                    volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getHistoryDetailResponse(WebServiceType.GET_HISTORY_LIST, BooleanTypeValues.FALSE, isOtpVerified(), user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(), patientDetails.getUserId(), null, null);
                 break;
         }
         if (volleyResponseBean == null)
@@ -483,5 +557,68 @@ public class PatientOtherDeatilsFragment extends HealthCocoFragment implements V
         return groupIdsToAssign.contains(groupId);
     }
 
+    private void getListFromLocal() {
+        mActivity.showLoading(false);
+        new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_DISEASE_LIST, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+    private void notifyAdapter(ArrayList<Disease> list) {
+        if (!Util.isNullOrEmptyList(list)) {
+            Collections.sort(list, ComparatorUtil.diseaseDateComparator);
+            gvPastHistory.setVisibility(View.VISIBLE);
+            tvNoDiseaseHistory.setVisibility(View.GONE);
+            adapter.setListData(list);
+            adapter.notifyDataSetChanged();
+        } else {
+            gvPastHistory.setVisibility(View.GONE);
+            tvNoDiseaseHistory.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void onAddDiseaseClicked(String diseaseId) {
+        if (!addPastDiseasesList.contains(diseaseId))
+            addPastDiseasesList.add(diseaseId);
+        if (removePastDiseasesList.contains(diseaseId)) {
+            removePastDiseasesList.remove(diseaseId);
+            if (pastDiseaseIdsList.contains(diseaseId))
+                pastDiseaseIdsList.remove(diseaseId);
+        }
+    }
+
+    @Override
+    public void onRemoveDiseaseClicked(String diseaseId) {
+        if (!removePastDiseasesList.contains(diseaseId)) {
+            removePastDiseasesList.add(diseaseId);
+            if (pastDiseaseIdsList.contains(diseaseId))
+                pastDiseaseIdsList.remove(diseaseId);
+        }
+        if (addPastDiseasesList.contains(diseaseId))
+            addPastDiseasesList.remove(diseaseId);
+    }
+
+    @Override
+    public boolean isDiseaseAdded(String uniqueId) {
+        if (addPastDiseasesList.contains(uniqueId) || pastDiseaseIdsList.contains(uniqueId))
+            return true;
+        return false;
+    }
+
+    private void initPastHistory(List<MedicalFamilyHistoryDetails> medicalhistory) {
+        pastDiseaseIdsList.clear();
+        if (!Util.isNullOrEmptyList(medicalhistory)) {
+            for (MedicalFamilyHistoryDetails familyHistoryDetails :
+                    medicalhistory) {
+                pastDiseaseIdsList.add(familyHistoryDetails.getUniqueId());
+            }
+        }
+        addFamilyDiseasesList.clear();
+        if (!Util.isNullOrEmptyList(historyDetailsResponse.getFamilyhistory())) {
+            for (MedicalFamilyHistoryDetails familyHistoryDetails :
+                    historyDetailsResponse.getFamilyhistory()) {
+                addFamilyDiseasesList.add(familyHistoryDetails.getUniqueId());
+            }
+        }
+    }
 
 }

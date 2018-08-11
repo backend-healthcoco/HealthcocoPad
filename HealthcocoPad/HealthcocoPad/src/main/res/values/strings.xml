@@ -1177,6 +1177,7 @@
     <string name="select_appointment">Select Appoitment</string>
     <string name="confirm_appointment">Confirm Appoitment</string>
     <string name="more_details">More Details</string>
+    <string name="medical_history">Medical History</string>
     <string name="please_enter_mobile_number">Please Enter Mobile Number</string>
     <string name="next">Next</string>
     <string name="health">Health</string>

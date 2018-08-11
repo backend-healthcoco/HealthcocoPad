@@ -310,7 +310,7 @@ public class Util {
     }
 
     public static boolean isValidMobileNo(String num) {
-        String MOBILE_NUMBER = "^[7-9][0-9]{9}$";
+        String MOBILE_NUMBER = "^[6-9][0-9]{9}$";
         Pattern pattern1 = Pattern.compile(MOBILE_NUMBER);
         return pattern1.matcher(num).matches();
     }

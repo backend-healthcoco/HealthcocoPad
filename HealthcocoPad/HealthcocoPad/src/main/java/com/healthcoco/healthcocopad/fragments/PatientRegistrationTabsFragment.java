@@ -34,6 +34,7 @@ public class PatientRegistrationTabsFragment extends HealthCocoFragment implemen
     PatientNumberSearchFragment searchFragment;
     PatientBasicDetailsFragment basicDetailsFragment;
     PatientOtherDeatilsFragment otherDeatilsFragment;
+    PatientMedicalDeatilsFragment medicalDeatilsFragment;
     private TabHost tabhost;
     private CustomViewPager mViewPager;
     private ImageButton btCross;
@@ -100,8 +101,12 @@ public class PatientRegistrationTabsFragment extends HealthCocoFragment implemen
                     addFragment(registrationTabsType, basicDetailsFragment);
                     break;
                 case MORE_DETAIlS:
-                    otherDeatilsFragment = new PatientOtherDeatilsFragment();
+                    otherDeatilsFragment = new PatientOtherDeatilsFragment(this);
                     addFragment(registrationTabsType, otherDeatilsFragment);
+                    break;
+                case MEDICAL_HISTORY:
+                    medicalDeatilsFragment = new PatientMedicalDeatilsFragment();
+                    addFragment(registrationTabsType, medicalDeatilsFragment);
                     break;
             }
 
@@ -141,6 +146,10 @@ public class PatientRegistrationTabsFragment extends HealthCocoFragment implemen
                 btSave.setText(getString(R.string.next));
                 break;
             case MORE_DETAIlS:
+                btSave.setVisibility(View.VISIBLE);
+                btSave.setText(getString(R.string.next));
+                break;
+            case MEDICAL_HISTORY:
                 btSave.setVisibility(View.VISIBLE);
                 btSave.setText(getString(R.string.save));
                 break;
@@ -183,6 +192,9 @@ public class PatientRegistrationTabsFragment extends HealthCocoFragment implemen
             case MORE_DETAIlS:
                 otherDeatilsFragment.validateData();
                 break;
+            case MEDICAL_HISTORY:
+                medicalDeatilsFragment.validateData();
+                break;
         }
     }
 
@@ -197,6 +209,9 @@ public class PatientRegistrationTabsFragment extends HealthCocoFragment implemen
                 scrollToPrev();
                 break;
             case MORE_DETAIlS:
+                scrollToPrev();
+                break;
+            case MEDICAL_HISTORY:
                 scrollToPrev();
                 break;
         }
@@ -220,6 +235,9 @@ public class PatientRegistrationTabsFragment extends HealthCocoFragment implemen
                 break;
             case BASIC_DETAILS:
                 otherDeatilsFragment.initDataFromPreviousFragment(object, isEditPatient);
+                break;
+            case MORE_DETAIlS:
+                medicalDeatilsFragment.initDataFromPreviousFragment(object, isEditPatient);
                 break;
         }
         scrollToNext();
