@@ -46,6 +46,7 @@ import com.healthcoco.healthcocopad.fragments.DiseaseListFragment;
 import com.healthcoco.healthcocopad.fragments.DoctorDetailsFragment;
 import com.healthcoco.healthcocopad.fragments.EnlargedMapViewFragment;
 import com.healthcoco.healthcocopad.fragments.FeedbackFragment;
+import com.healthcoco.healthcocopad.fragments.FeedbackTabsFragment;
 import com.healthcoco.healthcocopad.fragments.FeedsFragment;
 import com.healthcoco.healthcocopad.fragments.InitialSyncFragment;
 import com.healthcoco.healthcocopad.fragments.LoginSignupFragment;
@@ -261,7 +262,8 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
                 openFragment(ActionbarType.HIDDEN, new AppointmentTabsFragment());
                 break;
             case FEEDBACK_DOCTOR:
-                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.WITH_SUBMIT, fragmentType.getTitleId(), new AppointmentFeedbackFragment());
+                openFragment(ActionbarType.HIDDEN, new FeedbackTabsFragment());
+//                  openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.WITH_SUBMIT, fragmentType.getTitleId(), new AppointmentFeedbackFragment());
                 break;
             case EDUCATION_VIDEO:
                 openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, R.string.videos, new PatientEducationVideoListFragment());

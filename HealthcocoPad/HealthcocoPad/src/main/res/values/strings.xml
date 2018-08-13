@@ -331,10 +331,16 @@
     <string name="otp_sent_to">One Time Password has been sent to&#160;</string>
     <string name="please_enter_same_to_verify">Please enter same to verify.</string>
     <string name="enter_otp">Enter OTP</string>
-    <string name="verify">Verify</string>
+    <string name="verify">&#160;Verify&#160;</string>
     <string name="verification_complete">Verification Complete</string>
     <string name="regenerate_otp">Regenerate OTP?</string>
     <string name="generate_otp">Generate OTP</string>
+    <string name="didnt_receive_otp">Didn\'t receive OTP?</string>
+    <string name="resend">Resend</string>
+    <string name="please_enter_the_otp_sent_to_your_phone">Please Enter the <font fgcolor='#000000'>6 digit OTP</font> that has been sent to\n your
+        phone number <font fgcolor='#000000'>%s</font> for varification.</string>
+    <string name="please_enter_valid_otp">Please enter Valid OTP</string>
+
 
     <string name="appointment_details">Appointment Details</string>
     <string name="select_time">Select Time</string>
@@ -1251,6 +1257,8 @@
     <string name="video_title">Video Title</string>
     <string name="description">Description</string>
     <string name="upload_video">Upload Video</string>
+    <string name="blank_space">&#160;&#160;</string>
+
 
     <!--Pinview texts-->
     <string name="pinlock_wrongpin">Wrong PIN</string>

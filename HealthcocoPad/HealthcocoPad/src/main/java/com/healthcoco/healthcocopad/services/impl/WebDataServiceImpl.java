@@ -183,6 +183,25 @@ public class WebDataServiceImpl implements GCMRefreshListener {
                 errorListener);
     }
 
+    public void generateOtp(Class<?> class1, String mobileNumber,
+                            Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        WebServiceType webServiceType = WebServiceType.GENERATE_OTP;
+        String url = webServiceType.getUrl()
+                + mobileNumber;
+        getResponse(webServiceType, class1, url, null, null, responseListener,
+                errorListener);
+    }
+
+    public void verifyOtp(Class<?> class1, String mobileNumber, String otpNumber,
+                          Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        WebServiceType webServiceType = WebServiceType.VERIFY_OTP;
+        String url = webServiceType.getUrl()
+                + mobileNumber + "/"
+                + otpNumber + HealthCocoConstants.PARAM_TAG_VERIFY;
+        getResponse(webServiceType, class1, url, null, null, responseListener,
+                errorListener);
+    }
+
     private void showUserOffline(WebServiceType webServiceType, Response.Listener<VolleyResponseBean> responseListener) {
         VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
         volleyResponseBean.setWebServiceType(webServiceType);

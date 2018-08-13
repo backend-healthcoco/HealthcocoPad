@@ -27,11 +27,14 @@ import com.healthcoco.healthcocopad.bean.server.DoctorClinicProfile;
 import com.healthcoco.healthcocopad.bean.server.DoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.User;
+import com.healthcoco.healthcocopad.dialogFragment.OtpVarificationFragment;
 import com.healthcoco.healthcocopad.enums.FeedbackType;
 import com.healthcoco.healthcocopad.enums.PopupWindowType;
+import com.healthcoco.healthcocopad.listeners.PatientRegistrationDetailsListener;
 import com.healthcoco.healthcocopad.popupwindow.PopupWindowListener;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
+import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.Util;
 
 import org.parceler.Parcels;
@@ -63,41 +66,8 @@ public class AppointmentFeedbackFragment extends HealthCocoFragment implements R
     private QuestionAnswers questionAnswer;
     private User user;
     private DoctorProfile doctorProfile;
-
-    enum LikeUnlikeType {
-        LIKE(R.string.what_were_you_happy_with,
-                new ArrayList<Integer>() {{
-                    add(R.string.doctor_friendliness);
-                    add(R.string.explanation_of_health_issue);
-                    add(R.string.treatment_satisfaction);
-                    add(R.string.value_of_money);
-                    add(R.string.wait_time);
-                }}),
-        UNLIKE(R.string.what_can_be_improved,
-                new ArrayList<Integer>() {{
-                    add(R.string.doctor_friendliness);
-                    add(R.string.explanation_of_health_issue);
-                    add(R.string.treatment_satisfaction);
-                    add(R.string.value_of_money);
-                    add(R.string.wait_time);
-                }});
-
-        private final int questionId;
-        private final ArrayList<Integer> answersList;
-
-        LikeUnlikeType(int questionId, ArrayList<Integer> answersList) {
-            this.questionId = questionId;
-            this.answersList = answersList;
-        }
-
-        public int getQuestionId() {
-            return questionId;
-        }
-
-        public ArrayList<Integer> getAnswersList() {
-            return answersList;
-        }
-    }
+    private String patientId;
+    private PatientRegistrationDetailsListener registrationDetailsListener;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -194,7 +164,6 @@ public class AppointmentFeedbackFragment extends HealthCocoFragment implements R
     @Override
     public void initListeners() {
         rgLikeUnlike.setOnCheckedChangeListener(this);
-        ((CommonOpenUpActivity) mActivity).initActionbarRightAction(this);
         ratingBarFeedback.setOnRatingBarChangeListener(this);
     }
 
@@ -216,7 +185,7 @@ public class AppointmentFeedbackFragment extends HealthCocoFragment implements R
         initTitleTexts(nameForFeedback, clinicPharmacyName);
         tvNameForFeedback.setText(nameForFeedback);
         tvClinicName.setText(clinicPharmacyName);
-        ratingBarFeedback.setRating(3);
+        ratingBarFeedback.setRating(0);
     }
 
     private void initTitleTexts(String nameForFeedback, String clinicPharmacyName) {
@@ -319,7 +288,7 @@ public class AppointmentFeedbackFragment extends HealthCocoFragment implements R
         }
     }
 
-    private void validateData() {
+    public void validateData() {
         Object errorMsg = getValidatedMessageForVisibleViews();
 //
 //        if (rgLikeUnlike.getCheckedRadioButtonId() < 0)
@@ -396,7 +365,8 @@ public class AppointmentFeedbackFragment extends HealthCocoFragment implements R
                 break;
         }
         appointmentFeedback.setQuestionAnswers(getQuestionAnswersList(questionAnswer));
-//        appointmentFeedback.setPatientId(HealthCocoActivity.SELECTED_PATIENT_ID);
+        if (Util.isNullOrBlank(patientId))
+            appointmentFeedback.setPatientId(patientId);
         appointmentFeedback.setFeedbackType(feedbackType);
         appointmentFeedback.setRecommended(getRecommendedFlag());
         appointmentFeedback.setOverallExperience((int) ratingBarFeedback.getRating());
@@ -452,6 +422,45 @@ public class AppointmentFeedbackFragment extends HealthCocoFragment implements R
     @Override
     public void onEmptyListFound() {
 
+    }
+
+    public void initDataFromPreviousFragment(String patientId) {
+        this.patientId = patientId;
+    }
+
+    enum LikeUnlikeType {
+        LIKE(R.string.what_were_you_happy_with,
+                new ArrayList<Integer>() {{
+                    add(R.string.doctor_friendliness);
+                    add(R.string.explanation_of_health_issue);
+                    add(R.string.treatment_satisfaction);
+                    add(R.string.value_of_money);
+                    add(R.string.wait_time);
+                }}),
+        UNLIKE(R.string.what_can_be_improved,
+                new ArrayList<Integer>() {{
+                    add(R.string.doctor_friendliness);
+                    add(R.string.explanation_of_health_issue);
+                    add(R.string.treatment_satisfaction);
+                    add(R.string.value_of_money);
+                    add(R.string.wait_time);
+                }});
+
+        private final int questionId;
+        private final ArrayList<Integer> answersList;
+
+        LikeUnlikeType(int questionId, ArrayList<Integer> answersList) {
+            this.questionId = questionId;
+            this.answersList = answersList;
+        }
+
+        public int getQuestionId() {
+            return questionId;
+        }
+
+        public ArrayList<Integer> getAnswersList() {
+            return answersList;
+        }
     }
 
 }
