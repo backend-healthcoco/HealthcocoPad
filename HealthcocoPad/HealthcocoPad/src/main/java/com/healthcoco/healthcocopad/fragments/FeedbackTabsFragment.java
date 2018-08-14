@@ -19,7 +19,9 @@ import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.adapter.ContactsDetailViewPagerAdapter;
 import com.healthcoco.healthcocopad.bean.request.RegisterNewPatientRequest;
 import com.healthcoco.healthcocopad.bean.server.AlreadyRegisteredPatientsResponse;
+import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
+import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.custom.DummyTabFactory;
 import com.healthcoco.healthcocopad.dialogFragment.OtpVarificationFragment;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
@@ -49,6 +51,7 @@ public class FeedbackTabsFragment extends HealthCocoFragment implements ViewPage
     private ArrayList<Fragment> fragmentsList = new ArrayList<>();
     private String patientId;
     private String mobileNumber;
+    private User user;
 
     @Nullable
     @Override
@@ -62,6 +65,10 @@ public class FeedbackTabsFragment extends HealthCocoFragment implements ViewPage
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         init();
+        LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
+        if (doctor != null && doctor.getUser() != null && !Util.isNullOrBlank(doctor.getUser().getUniqueId())) {
+            user = doctor.getUser();
+        }
     }
 
     @Override
@@ -199,7 +206,6 @@ public class FeedbackTabsFragment extends HealthCocoFragment implements ViewPage
         if (patientDetails != null) {
             if (!Util.isNullOrBlank(patientDetails.getUserId())) {
                 initDataFromPreviousFragment(object, isEditPatient);
-                scrollToNext();
             } else {
                 openCommonOpenUpActivity(CommonOpenUpFragmentType.PATIENT_REGISTRATION_TABS, HealthCocoConstants.TAG_MOBILE_NUMBER, patientDetails.getMobileNumber());
                 mActivity.finish();
@@ -235,17 +241,20 @@ public class FeedbackTabsFragment extends HealthCocoFragment implements ViewPage
             if (!Util.isNullOrBlank(patientId)) {
                 if (!Util.isNullOrBlank(patientId)) {
                     if (isEditPatient) {
-                        RegisteredPatientDetailsUpdated patient = LocalDataServiceImpl.getInstance(mApp).getPatient(patientId, patientRequest.getLocationId());
-                        initPatientDetails(patient);
-                    } else {
-                        AlreadyRegisteredPatientsResponse alreadyRegisteredPatient = LocalDataServiceImpl.getInstance(mApp).getALreadyRegisteredPatient(patientId);
-                        if (alreadyRegisteredPatient != null) {
-                            initPatientDetails(alreadyRegisteredPatient);
+                        RegisteredPatientDetailsUpdated patient = LocalDataServiceImpl.getInstance(mApp).getPatient(patientId, user.getForeignLocationId());
+                        if (patient != null)
+                            initPatientDetails(patient);
+                        else {
+                            AlreadyRegisteredPatientsResponse alreadyRegisteredPatient = LocalDataServiceImpl.getInstance(mApp).getALreadyRegisteredPatient(patientId);
+                            if (alreadyRegisteredPatient != null) {
+                                initPatientDetails(alreadyRegisteredPatient);
+                            }
                         }
                     }
                 }
             }
         }
+
     }
 
     private void initPatientDetails(Object patientDetails) {
@@ -257,7 +266,7 @@ public class FeedbackTabsFragment extends HealthCocoFragment implements ViewPage
             AlreadyRegisteredPatientsResponse alreadyRegisteredPatient = (AlreadyRegisteredPatientsResponse) patientDetails;
             mobileNumber = Util.getValidatedValue(alreadyRegisteredPatient.getMobileNumber());
         }
-        if (Util.isNullOrBlank(mobileNumber))
+        if (!Util.isNullOrBlank(mobileNumber))
             openVerifyOtpFragment();
     }
 
@@ -269,7 +278,7 @@ public class FeedbackTabsFragment extends HealthCocoFragment implements ViewPage
         bundle.putString(HealthCocoConstants.TAG_UNIQUE_ID, patientId);
         bundle.putString(HealthCocoConstants.TAG_MOBILE_NUMBER, mobileNumber);
         dialogFragment.setArguments(bundle);
-        dialogFragment.setTargetFragment(dialogFragment, HealthCocoConstants.REQUEST_CODE_VERIFY_OTP);
+        dialogFragment.setTargetFragment(this, HealthCocoConstants.REQUEST_CODE_VERIFY_OTP);
         dialogFragment.show(mActivity.getSupportFragmentManager(), dialogFragment.getClass().getSimpleName());
     }
 

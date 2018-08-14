@@ -312,11 +312,13 @@ public class PatientBasicDetailsFragment extends HealthCocoFragment implements V
             if (!Util.isNullOrBlank(patientUniqueId)) {
                 if (isEditPatient) {
                     selectedPatient = LocalDataServiceImpl.getInstance(mApp).getPatient(patientUniqueId, user.getForeignLocationId());
-                    initPatientDetails(selectedPatient);
-                } else {
-                    alreadyRegisteredPatient = LocalDataServiceImpl.getInstance(mApp).getALreadyRegisteredPatient(patientUniqueId);
-                    if (alreadyRegisteredPatient != null) {
-                        initPatientDetails(alreadyRegisteredPatient);
+                    if (selectedPatient != null)
+                        initPatientDetails(selectedPatient);
+                    else {
+                        alreadyRegisteredPatient = LocalDataServiceImpl.getInstance(mApp).getALreadyRegisteredPatient(patientUniqueId);
+                        if (alreadyRegisteredPatient != null) {
+                            initPatientDetails(alreadyRegisteredPatient);
+                        }
                     }
                 }
             }

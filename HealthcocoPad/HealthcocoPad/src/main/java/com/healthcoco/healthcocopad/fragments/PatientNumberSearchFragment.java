@@ -155,7 +155,7 @@ public class PatientNumberSearchFragment extends HealthCocoFragment implements V
         }
     }
 
-    private void validateData() {
+    public void validateData() {
         String mobileNo = (String.valueOf(editMobileNumber.getText()));
         String msg = null;
         if (Util.isNullOrBlank(mobileNo)) {

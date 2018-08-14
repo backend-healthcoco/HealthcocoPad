@@ -110,6 +110,9 @@ public class OtpVarificationFragment extends HealthCocoDialogFragment implements
     private String patientId;
     private String patientMobile;
 
+    private Button btSave;
+    private ImageButton btCross;
+    private TextView tvTitle;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -127,7 +130,7 @@ public class OtpVarificationFragment extends HealthCocoDialogFragment implements
             patientId = bundle.getString(HealthCocoConstants.TAG_UNIQUE_ID);
             patientMobile = bundle.getString(HealthCocoConstants.TAG_MOBILE_NUMBER);
         }
-        if (Util.isNullOrBlank(patientMobile)) {
+        if (!Util.isNullOrBlank(patientMobile)) {
             init();
 //            setWidthHeight(0.80, 0.90);
             generateOtp();
@@ -154,7 +157,15 @@ public class OtpVarificationFragment extends HealthCocoDialogFragment implements
         tvResend = (TextView) view.findViewById(R.id.tv_resend);
         tvEnterOtp = (TextView) view.findViewById(R.id.tv_enter_otp);
 
-        if (Util.isNullOrBlank(patientMobile))
+        btCross = (ImageButton) view.findViewById(R.id.bt_cross);
+        btSave = (Button) view.findViewById(R.id.bt_save);
+        tvTitle = (TextView) view.findViewById(R.id.tv_title);
+
+        tvTitle.setText(getString(R.string.otp_verification));
+        btSave.setVisibility(View.INVISIBLE);
+        btCross = (ImageButton) view.findViewById(R.id.bt_cross);
+
+        if (!Util.isNullOrBlank(patientMobile))
             tvEnterOtp.setText(String.format(getResources().getString(R.string.please_enter_the_otp_sent_to_your_phone), patientMobile));
     }
 
@@ -171,6 +182,7 @@ public class OtpVarificationFragment extends HealthCocoDialogFragment implements
         tvVerify.setOnClickListener(this);
         tvCancel.setOnClickListener(this);
         tvResend.setOnClickListener(this);
+        btCross.setOnClickListener(this);
     }
 
     @Override
@@ -243,6 +255,11 @@ public class OtpVarificationFragment extends HealthCocoDialogFragment implements
                 validateData();
                 break;
             case R.id.tv_cancel:
+                dismiss();
+                break;
+            case R.id.bt_cross:
+                getTargetFragment().onActivityResult(HealthCocoConstants.REQUEST_CODE_VERIFY_OTP, HealthCocoConstants.RESULT_CODE_VERIFY_OTP, null);
+                dismiss();
                 break;
             case R.id.tv_resend:
                 generateOtp();

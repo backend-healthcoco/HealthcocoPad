@@ -340,7 +340,7 @@
     <string name="please_enter_the_otp_sent_to_your_phone">Please Enter the <font fgcolor='#000000'>6 digit OTP</font> that has been sent to\n your
         phone number <font fgcolor='#000000'>%s</font> for varification.</string>
     <string name="please_enter_valid_otp">Please enter Valid OTP</string>
-
+    <string name="otp_verification">OTP Verification</string>
 
     <string name="appointment_details">Appointment Details</string>
     <string name="select_time">Select Time</string>

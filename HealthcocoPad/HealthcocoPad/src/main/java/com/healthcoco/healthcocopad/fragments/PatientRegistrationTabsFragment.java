@@ -20,6 +20,7 @@ import com.healthcoco.healthcocopad.adapter.ContactsDetailViewPagerAdapter;
 import com.healthcoco.healthcocopad.custom.DummyTabFactory;
 import com.healthcoco.healthcocopad.enums.PatientRegistrationTabsType;
 import com.healthcoco.healthcocopad.listeners.PatientRegistrationDetailsListener;
+import com.healthcoco.healthcocopad.utilities.Util;
 import com.healthcoco.healthcocopad.views.CustomViewPager;
 
 import java.util.ArrayList;
@@ -29,7 +30,7 @@ import java.util.ArrayList;
  */
 
 public class PatientRegistrationTabsFragment extends HealthCocoFragment implements ViewPager.OnPageChangeListener,
-        View.OnClickListener, PatientRegistrationDetailsListener {
+        View.OnClickListener, PatientRegistrationDetailsListener, TabHost.OnTabChangeListener {
 
     PatientNumberSearchFragment searchFragment;
     PatientBasicDetailsFragment basicDetailsFragment;
@@ -81,6 +82,7 @@ public class PatientRegistrationTabsFragment extends HealthCocoFragment implemen
     public void initListeners() {
         mViewPager.addOnPageChangeListener(this);
         btSave.setOnClickListener(this);
+        tabhost.setOnTabChangedListener(this);
         btCross.setOnClickListener(this);
     }
 
@@ -184,7 +186,7 @@ public class PatientRegistrationTabsFragment extends HealthCocoFragment implemen
         PatientRegistrationTabsType registrationTabsType = PatientRegistrationTabsType.values()[currentItem];
         switch (registrationTabsType) {
             case SEARCH_PATIENT:
-                scrollToNext();
+                Util.showToast(mActivity, R.string.please_enter_valid_mobile_no);
                 break;
             case BASIC_DETAILS:
                 basicDetailsFragment.validateData();
@@ -247,5 +249,11 @@ public class PatientRegistrationTabsFragment extends HealthCocoFragment implemen
     @Override
     public boolean isFromPatientRegistarion() {
         return true;
+    }
+
+    @Override
+    public void onTabChanged(String tabId) {
+
+//        nextButtonOnClick();
     }
 }

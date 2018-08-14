@@ -498,11 +498,13 @@ public class FollowUpAppointmentFragment extends HealthCocoFragment implements
                 if (!Util.isNullOrBlank(patientUniqueId)) {
                     if (isEditPatient) {
                         RegisteredPatientDetailsUpdated patient = LocalDataServiceImpl.getInstance(mApp).getPatient(patientUniqueId, user.getForeignLocationId());
-                        initPatientDetails(patient);
-                    } else {
-                        AlreadyRegisteredPatientsResponse alreadyRegisteredPatient = LocalDataServiceImpl.getInstance(mApp).getALreadyRegisteredPatient(patientUniqueId);
-                        if (alreadyRegisteredPatient != null) {
-                            initPatientDetails(alreadyRegisteredPatient);
+                        if (patient != null)
+                            initPatientDetails(patient);
+                        else {
+                            AlreadyRegisteredPatientsResponse alreadyRegisteredPatient = LocalDataServiceImpl.getInstance(mApp).getALreadyRegisteredPatient(patientUniqueId);
+                            if (alreadyRegisteredPatient != null) {
+                                initPatientDetails(alreadyRegisteredPatient);
+                            }
                         }
                     }
                 }
