@@ -6,6 +6,7 @@ import android.widget.BaseAdapter;
 
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.bean.server.PatientEducationVideo;
+import com.healthcoco.healthcocopad.listeners.PatientVideoListItemClickListeners;
 import com.healthcoco.healthcocopad.viewholders.PatientEducationVideosListViewHolder;
 
 import java.util.ArrayList;
@@ -19,9 +20,11 @@ public class PatientEducationVideosListAdapter extends BaseAdapter {
     private final HealthCocoActivity mActivity;
     private ArrayList<PatientEducationVideo> list;
     private PatientEducationVideosListViewHolder holder;
+    private PatientVideoListItemClickListeners itemClickListeners;
 
-    public PatientEducationVideosListAdapter(HealthCocoActivity activity) {
+    public PatientEducationVideosListAdapter(HealthCocoActivity activity, PatientVideoListItemClickListeners itemClickListeners) {
         this.mActivity = activity;
+        this.itemClickListeners = itemClickListeners;
     }
 
     @Override
@@ -45,7 +48,7 @@ public class PatientEducationVideosListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        holder = new PatientEducationVideosListViewHolder(mActivity);
+        holder = new PatientEducationVideosListViewHolder(mActivity, itemClickListeners);
         convertView = holder.getContentView();
         convertView.setTag(holder);
         holder.setData(getItem(position));

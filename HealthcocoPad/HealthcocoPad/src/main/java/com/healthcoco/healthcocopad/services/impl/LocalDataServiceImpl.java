@@ -5493,16 +5493,19 @@ public class LocalDataServiceImpl {
 
 
     public VolleyResponseBean getEducationVideosResponse(WebServiceType webServiceType, String
-            doctorId, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener
+            doctorId, boolean discarded, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener
                                                                  errorListener) {
         VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
         volleyResponseBean.setWebServiceType(webServiceType);
         volleyResponseBean.setIsDataFromLocal(true);
         volleyResponseBean.setIsUserOnline(HealthCocoConstants.isNetworkOnline);
         try {
+
             String whereCondition = "Select * from " + StringUtil.toSQLName(PatientEducationVideo.class.getSimpleName())
                     + " where "
                     + LocalDatabaseUtils.KEY_CUSTOM_UNIQUE_ID + "=\"" + doctorId + "\"";
+            if (!discarded)
+                whereCondition = whereCondition + " AND " + LocalDatabaseUtils.KEY_DISCARDED + " =" + LocalDatabaseUtils.BOOLEAN_FALSE_VALUE;
 
             LogUtils.LOGD(TAG, "Select Query " + whereCondition);
             List<PatientEducationVideo> videosList = SugarRecord.findWithQuery(PatientEducationVideo.class, whereCondition);
@@ -5517,6 +5520,21 @@ public class LocalDataServiceImpl {
             showErrorLocal(volleyResponseBean, errorListener);
         }
         return volleyResponseBean;
+    }
+
+    public PatientEducationVideo getPatientEducationVideo(String patientVideoId) {
+        PatientEducationVideo patientEducationVideo = Select.from(PatientEducationVideo.class)
+                .where(Condition.prop(LocalDatabaseUtils.KEY_UNIQUE_ID).eq(patientVideoId)).first();
+
+        return patientEducationVideo;
+    }
+
+    public boolean deletePatientEducationVideo(String patientVideoId) {
+        int value = SugarRecord.deleteAll(PatientEducationVideo.class, LocalDatabaseUtils.KEY_UNIQUE_ID + "= ?", patientVideoId);
+        if (value > 0)
+            return true;
+        else
+            return false;
     }
 
     public VolleyResponseBean getPrintSettingsResponse(WebServiceType webServiceType, String

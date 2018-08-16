@@ -186,7 +186,8 @@ public class SettingKioskFragment extends HealthCocoFragment implements GsonRequ
         KioskSettingsItemType itemType = listType.get(position);
         switch (itemType) {
             case ADD_VIDEO:
-                openDialogFragment(new UploadVideoDialogFragment(), 0);
+                openCommonOpenUpActivity(CommonOpenUpFragmentType.EDUCATION_VIDEO, HealthCocoConstants.TAG_IS_FROM_SETTINGS, true, 0);
+//                openDialogFragment(new UploadVideoDialogFragment(), 0);
                 break;
             case CHANGE_PIN:
                 mActivity.openAddNewSuggestionsFragment(this, HealthCocoConstants.REQUEST_CODE_LOCATION_ADMIN, SuggestionType.PASSWORD);

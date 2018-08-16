@@ -67,6 +67,7 @@ public class UploadVideoDialogFragment extends HealthCocoDialogFragment implemen
     };
     String selectedVideoPath;
     String pathToSaveAndGet;
+    PatientEducationVideo educationVideo;
     private EditText editTitle;
     private EditText editDescription;
     private TextView tvCategory;
@@ -81,6 +82,7 @@ public class UploadVideoDialogFragment extends HealthCocoDialogFragment implemen
     private TextView tvFileName;
     private LinearLayout containerFileDetails;
     private ArrayList<String> categoryList = new ArrayList<>();
+    private String patientVideoId;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -92,6 +94,11 @@ public class UploadVideoDialogFragment extends HealthCocoDialogFragment implemen
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            patientVideoId = Parcels.unwrap(bundle.getParcelable(HealthCocoConstants.TAG_UNIQUE_ID));
+//            patientVideoId = bundle.getString(HealthCocoConstants.TAG_UNIQUE_ID);
+        }
         init();
         setWidthHeight(0.60, 0.80);
     }
@@ -103,7 +110,11 @@ public class UploadVideoDialogFragment extends HealthCocoDialogFragment implemen
             user = doctor.getUser();
             initViews();
             initListeners();
-            initData();
+
+            if (!Util.isNullOrBlank(patientVideoId)) {
+                educationVideo = LocalDataServiceImpl.getInstance(mApp).getPatientEducationVideo(patientVideoId);
+                initData();
+            }
         }
     }
 
@@ -133,14 +144,19 @@ public class UploadVideoDialogFragment extends HealthCocoDialogFragment implemen
 
     @Override
     public void initData() {
-
+        editTitle.setText(educationVideo.getName());
+        editDescription.setText(educationVideo.getDescription());
+        tvFileName.setText(educationVideo.getFileName());
+        containerFileDetails.setVisibility(View.VISIBLE);
+        tvSelectFile.setVisibility(View.GONE);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_select_file:
-                openDialogFragment(DialogType.SELECT_IMAGE, this);
+                mActivity.selectVideoFromGallery(this);
+//                openDialogFragment(DialogType.SELECT_IMAGE, this);
                 break;
             case R.id.bt_save:
                 Util.checkNetworkStatus(mActivity);
@@ -169,8 +185,9 @@ public class UploadVideoDialogFragment extends HealthCocoDialogFragment implemen
         if (Util.isNullOrBlank(imageTitle)) {
             msg = getResources().getString(R.string.please_enter_image_label);
             errorViewList.add(editTitle);
-//        } else if (reportDetailsToSend == null) {
-//            msg = getResources().getString(R.string.please_select_image_or_file_to_upload);
+        } else if (Util.isNullOrBlank(Util.getValidatedValueOrNull(tvFileName))) {
+            msg = getResources().getString(R.string.please_select_image_or_file_to_upload);
+            errorViewList.add(editTitle);
         }
         if (Util.isNullOrBlank(msg)) {
             addRecord();
@@ -181,20 +198,29 @@ public class UploadVideoDialogFragment extends HealthCocoDialogFragment implemen
 
     private void addRecord() {
         mActivity.showLoading(false);
-
+        boolean isSaved;
         PatientEducationVideo patientEducationVideo = new PatientEducationVideo();
 //        patientEducationVideo.setCreatedBy(user.getFirstName());
         patientEducationVideo.setName(Util.getValidatedValueOrNull(editTitle));
-        patientEducationVideo.setUniqueId(String.valueOf(DateTimeUtil.getCalendarInstance().getTimeInMillis()));
         patientEducationVideo.setDiscarded(false);
         patientEducationVideo.setDescription(Util.getValidatedValue(String.valueOf(editDescription.getText())));
+        patientEducationVideo.setFileName(Util.getValidatedValue(String.valueOf(tvFileName.getText())));
         patientEducationVideo.setDoctorId(user.getUniqueId());
         patientEducationVideo.setHospitalId(user.getForeignHospitalId());
         patientEducationVideo.setLocationId(user.getForeignLocationId());
+        patientEducationVideo.setUpdatedTime(DateTimeUtil.getCalendarInstance().getTimeInMillis());
+
         if (Util.isNullOrEmptyList(categoryList))
             patientEducationVideo.setTags(categoryList);
 
-        boolean isSaved = saveVideoToFolder();
+        if (!Util.isNullOrBlank(patientVideoId)) {
+            patientEducationVideo.setUniqueId(educationVideo.getUniqueId());
+            patientEducationVideo.setVideoUrl(educationVideo.getVideoUrl());
+            isSaved = true;
+        } else {
+            patientEducationVideo.setUniqueId(String.valueOf(DateTimeUtil.getCalendarInstance().getTimeInMillis()));
+            isSaved = saveVideoToFolder();
+        }
 
         if (cbServer.isChecked()) {
             AddVideoRequestMultipart addVideoRequestMultipart = new AddVideoRequestMultipart();
@@ -207,9 +233,12 @@ public class UploadVideoDialogFragment extends HealthCocoDialogFragment implemen
             new MultipartUploadRequestAsynTask(mActivity, PatientEducationVideo.class, WebServiceType.ADD_VIDEO, addVideoRequestMultipart, reportDetailsToSend.getRecordsPath(), this, this).execute();
         } else {
             if (isSaved) {
-                patientEducationVideo.setVideoUrl(pathToSaveAndGet + "." + Util.getFileExtension(selectedVideoPath));
+                if (Util.isNullOrBlank(patientVideoId))
+                    patientEducationVideo.setVideoUrl(pathToSaveAndGet + "." + Util.getFileExtension(selectedVideoPath));
                 LocalDataServiceImpl.getInstance(mApp).addEducationVideo(patientEducationVideo, user.getUniqueId());
                 mActivity.hideLoading();
+                getTargetFragment().onActivityResult(getTargetRequestCode(),
+                        HealthCocoConstants.RESULT_CODE_ADD_VIDEO, null);
                 getDialog().dismiss();
             }
         }

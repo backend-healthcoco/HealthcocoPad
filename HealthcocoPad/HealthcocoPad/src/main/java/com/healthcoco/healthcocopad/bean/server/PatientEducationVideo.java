@@ -25,6 +25,7 @@ public class PatientEducationVideo extends SugarRecord {
     private Boolean discarded;
     private String speciality;
     private String videoUrl;
+    private String fileName;
     private String description;
     private String doctorId;
     private String locationId;
@@ -159,5 +160,13 @@ public class PatientEducationVideo extends SugarRecord {
 
     public void setTagsJsonString(String tagsJsonString) {
         this.tagsJsonString = tagsJsonString;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 }

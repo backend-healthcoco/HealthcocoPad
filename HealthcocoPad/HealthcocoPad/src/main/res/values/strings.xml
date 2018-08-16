@@ -1188,6 +1188,7 @@
     <string name="next">Next</string>
     <string name="health">Health</string>
     <string name="favorite">Favorite</string>
+    <string name="confirm_discard_video">Are you sure you want to discard this Video?</string>
     <string name="no_health_feeds_added">No Health Feeds Added</string>
     <string name="no_fav_feeds_added">No Favorite Feeds Added</string>
     <string name="health_feeds">Health Feeds</string>

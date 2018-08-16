@@ -78,7 +78,7 @@
             android:layout_marginRight="@dimen/fab_margin_right"
             android:scaleType="center"
             android:src="@drawable/actionbar_add_me"
-            android:visibility="gone" />
+            android:visibility="visible" />
 
     </FrameLayout>
 

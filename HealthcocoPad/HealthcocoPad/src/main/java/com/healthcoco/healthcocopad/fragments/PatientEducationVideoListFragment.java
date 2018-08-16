@@ -30,6 +30,7 @@ import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.LoadMorePageListener;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
+import com.healthcoco.healthcocopad.listeners.PatientVideoListItemClickListeners;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
@@ -47,7 +48,7 @@ import java.util.Locale;
  */
 
 public class PatientEducationVideoListFragment extends HealthCocoFragment implements View.OnClickListener,
-        LocalDoInBackgroundListenerOptimised, TextWatcher, SwipeRefreshLayout.OnRefreshListener, LoadMorePageListener, AdapterView.OnItemClickListener {
+        LocalDoInBackgroundListenerOptimised, TextWatcher, SwipeRefreshLayout.OnRefreshListener, LoadMorePageListener, AdapterView.OnItemClickListener, PatientVideoListItemClickListeners {
 
     private ListViewLoadMore lvVideos;
     private GridView gvVideos;
@@ -61,7 +62,7 @@ public class PatientEducationVideoListFragment extends HealthCocoFragment implem
     private boolean isInitialLoading;
     private String lastTextSearched;
     private FloatingActionButton floatingActionButton;
-
+    private boolean isFromSettings;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -73,6 +74,10 @@ public class PatientEducationVideoListFragment extends HealthCocoFragment implem
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        Intent intent = mActivity.getIntent();
+        isFromSettings = intent.getBooleanExtra(HealthCocoConstants.TAG_IS_FROM_SETTINGS, false);
+
         init();
         mActivity.showLoading(false);
         new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_FRAGMENT_INITIALISATION_DATA, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
@@ -97,6 +102,11 @@ public class PatientEducationVideoListFragment extends HealthCocoFragment implem
 
         initEditSearchView(R.string.search_videos, this, this);
         view.findViewById(R.id.bt_advance_search).setVisibility(View.GONE);
+
+        if (isFromSettings)
+            floatingActionButton.setVisibility(View.VISIBLE);
+        else
+            floatingActionButton.setVisibility(View.GONE);
     }
 
     @Override
@@ -109,7 +119,7 @@ public class PatientEducationVideoListFragment extends HealthCocoFragment implem
     }
 
     private void initAdapters() {
-        adapter = new PatientEducationVideosListAdapter(mActivity);
+        adapter = new PatientEducationVideosListAdapter(mActivity, this);
         gvVideos.setAdapter(adapter);
     }
 
@@ -135,7 +145,7 @@ public class PatientEducationVideoListFragment extends HealthCocoFragment implem
 //                        (ArrayList<DoctorVideos>) (ArrayList<?>) response.getDataList());
             case GET_VIDEOS:
                 volleyResponseBean = LocalDataServiceImpl.getInstance(mApp)
-                        .getEducationVideosResponse(WebServiceType.GET_VIDEO, user.getUniqueId(), null, null);
+                        .getEducationVideosResponse(WebServiceType.GET_VIDEO, user.getUniqueId(), isFromSetting(), null, null);
                 break;
         }
         if (volleyResponseBean == null)
@@ -166,7 +176,7 @@ public class PatientEducationVideoListFragment extends HealthCocoFragment implem
                             LogUtils.LOGD(TAG, "Success onResponse list Size in page " + educationVideoList.size());
                         }
 //                        if (!response.isFromLocalAfterApiSuccess() && response.isUserOnline()) {
-                            getVideoList(true);
+                        getVideoList(true);
 //                            return;
 //                        }
                         notifyAdapter(educationVideoList);
@@ -201,9 +211,10 @@ public class PatientEducationVideoListFragment extends HealthCocoFragment implem
     }
 
     private void getVideoList(boolean showLoading) {
-        if (showLoading)
+      /*  if (showLoading)
             mActivity.showLoading(false);
         WebDataServiceImpl.getInstance(mApp).getPatientEducationVideos(PatientEducationVideo.class, WebServiceType.GET_VIDEO, user.getUniqueId(), this, this);
+*/
     }
 
     private void notifyAdapter(ArrayList<PatientEducationVideo> list) {
@@ -251,7 +262,7 @@ public class PatientEducationVideoListFragment extends HealthCocoFragment implem
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.fl_bt_add_video:
-                openDialogFragment(new UploadVideoDialogFragment(), 0);
+                openDialogFragment(new UploadVideoDialogFragment(), HealthCocoConstants.REQUEST_CODE_ADD_VIDEO);
                 break;
         }
     }
@@ -276,16 +287,17 @@ public class PatientEducationVideoListFragment extends HealthCocoFragment implem
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        try {
-            Object object = parent.getAdapter().getItem(position);
-            if (object instanceof PatientEducationVideo) {
-                PatientEducationVideo patientEducationVideo = (PatientEducationVideo) object;
-                openVideoViewActivity(CommonOpenUpFragmentType.PLAY_VIDEO, HealthCocoConstants.TAG_EDUCATION_VIDEO_DATA, patientEducationVideo,
-                        HealthCocoConstants.REQUEST_CODE_PLAY_VIDEO);
+        if (!isFromSettings)
+            try {
+                Object object = parent.getAdapter().getItem(position);
+                if (object instanceof PatientEducationVideo) {
+                    PatientEducationVideo patientEducationVideo = (PatientEducationVideo) object;
+                    openVideoViewActivity(CommonOpenUpFragmentType.PLAY_VIDEO, HealthCocoConstants.TAG_EDUCATION_VIDEO_DATA, patientEducationVideo,
+                            HealthCocoConstants.REQUEST_CODE_PLAY_VIDEO);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     private void openVideoViewActivity(CommonOpenUpFragmentType fragmentType, String tag, Object intentData, int requestCode) {
@@ -297,5 +309,53 @@ public class PatientEducationVideoListFragment extends HealthCocoFragment implem
             startActivity(intent);
         else
             startActivityForResult(intent, requestCode);
+    }
+
+    @Override
+    public void onEditClicked(Object object) {
+        if (object instanceof PatientEducationVideo) {
+            PatientEducationVideo patientEducationVideo = (PatientEducationVideo) object;
+            openDialogFragment(new UploadVideoDialogFragment(), HealthCocoConstants.TAG_UNIQUE_ID,
+                    patientEducationVideo.getUniqueId(), HealthCocoConstants.REQUEST_CODE_ADD_VIDEO);
+        }
+    }
+
+    @Override
+    public void onDiscardClicked(Object object) {
+        if (object instanceof PatientEducationVideo) {
+            PatientEducationVideo patientEducationVideo = (PatientEducationVideo) object;
+            boolean isDeleted = LocalDataServiceImpl.getInstance(mApp).deletePatientEducationVideo(patientEducationVideo.getUniqueId());
+            if (isDeleted)
+                getDataFromLocal();
+        }
+    }
+
+    @Override
+    public void onVideoClicked(Object object) {
+        try {
+            if (object instanceof PatientEducationVideo) {
+                PatientEducationVideo patientEducationVideo = (PatientEducationVideo) object;
+                openVideoViewActivity(CommonOpenUpFragmentType.PLAY_VIDEO, HealthCocoConstants.TAG_EDUCATION_VIDEO_DATA, patientEducationVideo,
+                        HealthCocoConstants.REQUEST_CODE_PLAY_VIDEO);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public boolean isFromSetting() {
+        return isFromSettings;
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == HealthCocoConstants.REQUEST_CODE_ADD_VIDEO) {
+            if (resultCode == HealthCocoConstants.RESULT_CODE_ADD_VIDEO) {
+                getDataFromLocal();
+            }
+        }
     }
 }

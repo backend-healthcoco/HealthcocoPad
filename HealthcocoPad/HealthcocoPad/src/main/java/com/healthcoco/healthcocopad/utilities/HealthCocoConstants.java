@@ -22,6 +22,7 @@ public class HealthCocoConstants {
     public static final String TAG_GROUP_ID = "group_id";
     public static final String TAG_GROUP_IDS_LIST = "groupsIdsList";
     public static final String TAG_IS_EDIT_PATIENT = "isEditPatient";
+    public static final String TAG_IS_FROM_SETTINGS = "isFromSettings";
     public static final String TAG_TOOTH_NUMBER = "toothNumber";
     public static final String TAG_TOOTH_MATERIAL = "material";
     public static final String PARAM_TAG_UPDATE = "/update/";
@@ -96,6 +97,10 @@ public class HealthCocoConstants {
     public static final int RESULT_CODE_LOCATION_ADMIN = 211;
     public static final int REQUEST_CODE_VIDEO_GALLERY = 212;
     public static final int REQUEST_CODE_CATEGORY = 213;
+    public static final int REQUEST_CODE_FEEDBACK_OTP = 214;
+    public static final int RESULT_CODE_FEEDBACK_OTP = 215;
+    public static final int REQUEST_CODE_ADD_VIDEO = 216;
+    public static final int RESULT_CODE_ADD_VIDEO = 217;
 
 
     public static final String PARAM_IS_DOCTOR_APP_TRUE = "&isDoctorApp=true";

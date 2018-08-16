@@ -278,15 +278,15 @@ public class FeedbackTabsFragment extends HealthCocoFragment implements ViewPage
         bundle.putString(HealthCocoConstants.TAG_UNIQUE_ID, patientId);
         bundle.putString(HealthCocoConstants.TAG_MOBILE_NUMBER, mobileNumber);
         dialogFragment.setArguments(bundle);
-        dialogFragment.setTargetFragment(this, HealthCocoConstants.REQUEST_CODE_VERIFY_OTP);
+        dialogFragment.setTargetFragment(this, HealthCocoConstants.REQUEST_CODE_FEEDBACK_OTP);
         dialogFragment.show(mActivity.getSupportFragmentManager(), dialogFragment.getClass().getSimpleName());
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == HealthCocoConstants.REQUEST_CODE_VERIFY_OTP) {
-            if (resultCode == HealthCocoConstants.RESULT_CODE_VERIFY_OTP) {
+        if (requestCode == HealthCocoConstants.REQUEST_CODE_FEEDBACK_OTP) {
+            if (resultCode == HealthCocoConstants.RESULT_CODE_FEEDBACK_OTP) {
                 appointmentFeedbackFragment.initDataFromPreviousFragment(patientId);
                 scrollToNext();
             }

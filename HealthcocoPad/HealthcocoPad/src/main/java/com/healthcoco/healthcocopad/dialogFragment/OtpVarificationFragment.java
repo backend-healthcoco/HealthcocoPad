@@ -213,7 +213,8 @@ public class OtpVarificationFragment extends HealthCocoDialogFragment implements
             LogUtils.LOGD(TAG, "Success " + String.valueOf(response.getWebServiceType()));
             switch (response.getWebServiceType()) {
                 case VERIFY_OTP:
-                    getTargetFragment().onActivityResult(HealthCocoConstants.REQUEST_CODE_VERIFY_OTP, HealthCocoConstants.RESULT_CODE_VERIFY_OTP, null);
+                    getTargetFragment().onActivityResult(HealthCocoConstants.REQUEST_CODE_FEEDBACK_OTP,
+                            HealthCocoConstants.RESULT_CODE_FEEDBACK_OTP, null);
                     dismiss();
                     Util.showToast(mActivity, R.string.verification_complete);
                     break;
@@ -258,7 +259,7 @@ public class OtpVarificationFragment extends HealthCocoDialogFragment implements
                 dismiss();
                 break;
             case R.id.bt_cross:
-                getTargetFragment().onActivityResult(HealthCocoConstants.REQUEST_CODE_VERIFY_OTP, HealthCocoConstants.RESULT_CODE_VERIFY_OTP, null);
+                getTargetFragment().onActivityResult(HealthCocoConstants.REQUEST_CODE_FEEDBACK_OTP, HealthCocoConstants.RESULT_CODE_FEEDBACK_OTP, null);
                 dismiss();
                 break;
             case R.id.tv_resend:
