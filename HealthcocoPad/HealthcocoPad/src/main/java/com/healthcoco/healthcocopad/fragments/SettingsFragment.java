@@ -15,11 +15,17 @@ import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.adapter.SettingsListAdapter;
+import com.healthcoco.healthcocopad.bean.server.DoctorClinicProfile;
 import com.healthcoco.healthcocopad.bean.server.GCMRequest;
+import com.healthcoco.healthcocopad.bean.server.LoginResponse;
+import com.healthcoco.healthcocopad.bean.server.User;
+import com.healthcoco.healthcocopad.enums.AccountPackageType;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.SettingsItemType;
+import com.healthcoco.healthcocopad.enums.UserState;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
+import com.healthcoco.healthcocopad.utilities.Util;
 
 import java.util.Arrays;
 import java.util.List;
@@ -31,6 +37,8 @@ public class SettingsFragment extends HealthCocoFragment implements AdapterView.
     private ListView lvSettings;
     private SettingsListAdapter adapter;
     private List<SettingsItemType> listType;
+    private boolean isKiosk;
+    private AccountPackageType packageType;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -43,6 +51,15 @@ public class SettingsFragment extends HealthCocoFragment implements AdapterView.
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
+        if (doctor != null && doctor.getUser() != null && !Util.isNullOrBlank(doctor.getUser().getUniqueId()) && doctor.getUser().getUserState() == UserState.USERSTATECOMPLETE) {
+            User user = doctor.getUser();
+            DoctorClinicProfile doctorClinicProfile = LocalDataServiceImpl.getInstance(mApp).getDoctorClinicProfile(user.getUniqueId(), user.getForeignLocationId());
+            if (doctorClinicProfile != null && doctorClinicProfile.getIskiosk() != null)
+                isKiosk = doctorClinicProfile.getIskiosk();
+            if (doctorClinicProfile.getPackageType() != null)
+                packageType = doctorClinicProfile.getPackageType();
+        }
         init();
     }
 
@@ -65,7 +82,9 @@ public class SettingsFragment extends HealthCocoFragment implements AdapterView.
     }
 
     private void initAdapters() {
-        listType = Arrays.asList(SettingsItemType.values());
+        listType = packageType.getSettingItemList();
+        if (!isKiosk)
+            listType.remove(SettingsItemType.KIOSK);
         adapter = new SettingsListAdapter(mActivity);
         lvSettings.setAdapter(adapter);
         adapter.setListData((List<Object>) (List<?>) listType);

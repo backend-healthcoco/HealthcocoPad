@@ -38,6 +38,7 @@ import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.custom.DummyTabFactory;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
+import com.healthcoco.healthcocopad.enums.AccountPackageType;
 import com.healthcoco.healthcocopad.enums.ActionbarLeftRightActionTypeDrawables;
 import com.healthcoco.healthcocopad.enums.ActionbarType;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
@@ -129,6 +130,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
     private boolean isOTPVerified;
     private Boolean pidHasDate;
     private boolean receiversRegistered;
+    private AccountPackageType packageType;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -186,66 +188,68 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
         fragmentsList.clear();
         if (mViewPager.getAdapter() != null)
             mViewPager.getAdapter().notifyDataSetChanged();
-        for (PatientDetailTabType detailTabType :
-                PatientDetailTabType.values()) {
-            HealthCocoFragment healthcocoFragment = null;
-            switch (detailTabType) {
-                case PATIENT_DETAIL_PROFILE:
-                    profileFragment = new PatientProfileDetailFragment();
-                    healthcocoFragment = profileFragment;
-                    break;
-                case PATIENT_DETAIL_VISIT:
-                    visitsFragment = new PatientVisitDetailFragment();
-                    healthcocoFragment = visitsFragment;
-                    break;
-                case PATIENT_DETAIL_APPOINTMENT:
-                    appointmentFragment = new PatientAppointmentDetailFragment();
-                    healthcocoFragment = appointmentFragment;
-                    break;
-                case PATIENT_DETAIL_CLINICAL_NOTES:
-                    if (user.getUiPermissions().getTabPermissions().contains(detailTabType.getValue())) {
-                        clinicalNotesDetailFragment = new PatientClinicalNotesDetailFragment();
-                        healthcocoFragment = clinicalNotesDetailFragment;
-                    }
-                    break;
-                case PATIENT_DETAIL_PRESCRIPTION:
-                    if (user.getUiPermissions().getTabPermissions().contains(detailTabType.getValue())) {
-                        prescriptionDetailFragment = new PatientPrescriptionDetailFragment();
-                        healthcocoFragment = prescriptionDetailFragment;
-                    }
-                    break;
-                case PATIENT_DETAIL_REPORTS:
-                    if (user.getUiPermissions().getTabPermissions().contains(detailTabType.getValue())) {
-                        reportsDetailFragment = new PatientReportsDetailFragment();
-                        healthcocoFragment = reportsDetailFragment;
-                    }
-                    break;
+        if (packageType != null) {
+            for (PatientDetailTabType detailTabType :
+                    packageType.getTabItemList()) {
+                HealthCocoFragment healthcocoFragment = null;
+                switch (detailTabType) {
+                    case PATIENT_DETAIL_PROFILE:
+                        profileFragment = new PatientProfileDetailFragment();
+                        healthcocoFragment = profileFragment;
+                        break;
+                    case PATIENT_DETAIL_VISIT:
+                        visitsFragment = new PatientVisitDetailFragment();
+                        healthcocoFragment = visitsFragment;
+                        break;
+                    case PATIENT_DETAIL_APPOINTMENT:
+                        appointmentFragment = new PatientAppointmentDetailFragment();
+                        healthcocoFragment = appointmentFragment;
+                        break;
+                    case PATIENT_DETAIL_CLINICAL_NOTES:
+                        if (user.getUiPermissions().getTabPermissions().contains(detailTabType.getValue())) {
+                            clinicalNotesDetailFragment = new PatientClinicalNotesDetailFragment();
+                            healthcocoFragment = clinicalNotesDetailFragment;
+                        }
+                        break;
+                    case PATIENT_DETAIL_PRESCRIPTION:
+                        if (user.getUiPermissions().getTabPermissions().contains(detailTabType.getValue())) {
+                            prescriptionDetailFragment = new PatientPrescriptionDetailFragment();
+                            healthcocoFragment = prescriptionDetailFragment;
+                        }
+                        break;
+                    case PATIENT_DETAIL_REPORTS:
+                        if (user.getUiPermissions().getTabPermissions().contains(detailTabType.getValue())) {
+                            reportsDetailFragment = new PatientReportsDetailFragment();
+                            healthcocoFragment = reportsDetailFragment;
+                        }
+                        break;
 //                case PATIENT_DETAIL_IMPORTANT:
 //                    healthcocoFragment = new PatientImportantDetailFragment();
 //                    break;
-                case PATIENT_DETAIL_TREATMENT:
-                    if (user.getUiPermissions().getTabPermissions().contains(detailTabType.getValue())) {
-                        treatmentDetailFragment = new PatientTreatmentDetailFragment();
-                        healthcocoFragment = treatmentDetailFragment;
-                    }
-                    break;
-                case PATIENT_DETAIL_INVOICE:
-                    if (user.getUiPermissions().getTabPermissions().contains(detailTabType.getValue())) {
-                        invoiceDetailFragment = new PatientInvoiceDetailFragment();
-                        healthcocoFragment = invoiceDetailFragment;
-                    }
-                    break;
-                case PATIENT_DETAIL_RECEIPT:
-                    if (user.getUiPermissions().getTabPermissions().contains(detailTabType.getValue())) {
-                        receiptDetailFragment = new PatientReceiptDetailFragment();
-                        healthcocoFragment = receiptDetailFragment;
-                    }
-                    break;
-            }
-            if (healthcocoFragment != null)
+                    case PATIENT_DETAIL_TREATMENT:
+                        if (user.getUiPermissions().getTabPermissions().contains(detailTabType.getValue())) {
+                            treatmentDetailFragment = new PatientTreatmentDetailFragment();
+                            healthcocoFragment = treatmentDetailFragment;
+                        }
+                        break;
+                    case PATIENT_DETAIL_INVOICE:
+                        if (user.getUiPermissions().getTabPermissions().contains(detailTabType.getValue())) {
+                            invoiceDetailFragment = new PatientInvoiceDetailFragment();
+                            healthcocoFragment = invoiceDetailFragment;
+                        }
+                        break;
+                    case PATIENT_DETAIL_RECEIPT:
+                        if (user.getUiPermissions().getTabPermissions().contains(detailTabType.getValue())) {
+                            receiptDetailFragment = new PatientReceiptDetailFragment();
+                            healthcocoFragment = receiptDetailFragment;
+                        }
+                        break;
+                }
+                if (healthcocoFragment != null)
 
 //                if (user.getUiPermissions().getTabPermissions().contains(detailTabType) || (detailTabType == PatientDetailTabType.PATIENT_DETAIL_VISIT))
-                tabhost.addTab(getTabSpec(detailTabType, healthcocoFragment));
+                    tabhost.addTab(getTabSpec(detailTabType, healthcocoFragment));
+            }
         }
     }
 
@@ -464,19 +468,21 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
     private void initData() {
         if (selectedPatient != null) {
             refreshHeaderData(selectedPatient);
-            visitsFragment.setUserData(user, loginedUser, selectedPatient);
-            appointmentFragment.setUserData(user, selectedPatient);
-            if (user.getUiPermissions().getTabPermissions().contains(PatientDetailTabType.PATIENT_DETAIL_CLINICAL_NOTES.getValue()))
+            if (visitsFragment != null)
+                visitsFragment.setUserData(user, loginedUser, selectedPatient);
+            if (appointmentFragment != null)
+                appointmentFragment.setUserData(user, selectedPatient);
+            if (clinicalNotesDetailFragment != null)
                 clinicalNotesDetailFragment.setUserData(user, loginedUser, selectedPatient);
-            if (user.getUiPermissions().getTabPermissions().contains(PatientDetailTabType.PATIENT_DETAIL_PRESCRIPTION.getValue()))
+            if (prescriptionDetailFragment != null)
                 prescriptionDetailFragment.setUserData(user, loginedUser, selectedPatient);
-            if (user.getUiPermissions().getTabPermissions().contains(PatientDetailTabType.PATIENT_DETAIL_REPORTS.getValue()))
+            if (reportsDetailFragment != null)
                 reportsDetailFragment.setUserData(user, selectedPatient);
-            if (user.getUiPermissions().getTabPermissions().contains(PatientDetailTabType.PATIENT_DETAIL_TREATMENT.getValue()))
+            if (treatmentDetailFragment != null)
                 treatmentDetailFragment.setUserData(user, loginedUser, selectedPatient);
-            if (user.getUiPermissions().getTabPermissions().contains(PatientDetailTabType.PATIENT_DETAIL_INVOICE.getValue()))
+            if (invoiceDetailFragment != null)
                 invoiceDetailFragment.setUserData(user, loginedUser, selectedPatient);
-            if (user.getUiPermissions().getTabPermissions().contains(PatientDetailTabType.PATIENT_DETAIL_RECEIPT.getValue()))
+            if (receiptDetailFragment != null)
                 receiptDetailFragment.setUserData(user, loginedUser, selectedPatient);
         } else {
             mActivity.showLoading(false);
@@ -557,6 +563,9 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                 if (doctorClinicProfile != null && doctorClinicProfile.getPidHasDate() != null)
                     pidHasDate = doctorClinicProfile.getPidHasDate();
 
+                if (doctorClinicProfile.getPackageType() != null)
+                    packageType = doctorClinicProfile.getPackageType();
+
                 break;
             case ADD_REGISTER_DOCTOR:
                 LocalDataServiceImpl.getInstance(mApp).addRegisterDoctorResponse((ArrayList<RegisteredDoctorProfile>) (ArrayList<?>) response.getDataList(), user.getForeignLocationId());
@@ -592,9 +601,11 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                         getPatientAmountDetails();
                         Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(user, LocalTabelType.VISIT_DETAILS);
                         if (latestUpdatedTime < 1)
-                            visitsFragment.refreshData(PatientDetailTabType.PATIENT_DETAIL_VISIT, clinicDoctorProfileList);
+                            if (visitsFragment != null)
+                                visitsFragment.refreshData(PatientDetailTabType.PATIENT_DETAIL_VISIT, clinicDoctorProfileList);
                         if (ordinal != 0) {
-                            mViewPager.setCurrentItem(ordinal);
+                            PatientDetailTabType patientDetailTabType = PatientDetailTabType.values()[ordinal];
+                            mViewPager.setCurrentItem(packageType.getTabItemList().indexOf(patientDetailTabType));
 //                            prescriptionDetailFragment.refreshData(PatientDetailTabType.PATIENT_DETAIL_PRESCRIPTION);
                         }
                     } else {

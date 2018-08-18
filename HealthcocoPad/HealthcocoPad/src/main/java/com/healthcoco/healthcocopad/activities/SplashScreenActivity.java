@@ -18,8 +18,10 @@ import com.healthcoco.healthcocopad.HealthcocoFCMListener;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.VersionCheckRequest;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
+import com.healthcoco.healthcocopad.bean.server.DoctorClinicProfile;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
+import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.enums.AppType;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.DeviceType;
@@ -47,6 +49,7 @@ public class SplashScreenActivity extends HealthCocoActivity implements GsonRequ
     private Handler handler;
     private Runnable runnable;
     private String notificationResponseData;
+    private boolean isKiosk;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,6 +124,10 @@ public class SplashScreenActivity extends HealthCocoActivity implements GsonRequ
     private void launchNextActivity() {
         LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
         if (doctor != null && doctor.getUser() != null && !Util.isNullOrBlank(doctor.getUser().getUniqueId()) && doctor.getUser().getUserState() == UserState.USERSTATECOMPLETE) {
+            User user = doctor.getUser();
+            DoctorClinicProfile doctorClinicProfile = LocalDataServiceImpl.getInstance(mApp).getDoctorClinicProfile(user.getUniqueId(), user.getForeignLocationId());
+            if (doctorClinicProfile != null && doctorClinicProfile.getIskiosk() != null)
+                isKiosk = doctorClinicProfile.getIskiosk();
             openHomeActivity();
         } else {
             initGCM();
@@ -129,8 +136,9 @@ public class SplashScreenActivity extends HealthCocoActivity implements GsonRequ
     }
 
     private void openHomeActivity() {
-        Intent intent = new Intent(this, KioskActivity.class);
+        Intent intent = new Intent(this, HomeActivity.class);
         intent.putExtra(HealthcocoFCMListener.TAG_NOTIFICATION_RESPONSE, notificationResponseData);
+        intent.putExtra(HealthCocoConstants.TAG_IS_KIOSK, isKiosk);
         startActivity(intent);
         finish();
     }

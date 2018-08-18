@@ -22,6 +22,7 @@ import com.android.volley.Response;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.activities.HomeActivity;
+import com.healthcoco.healthcocopad.bean.MenuItem;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.DoctorClinicProfile;
 import com.healthcoco.healthcocopad.bean.server.DoctorProfile;
@@ -30,6 +31,7 @@ import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocopad.dialogFragment.MenuClinicListDialogFragment;
 import com.healthcoco.healthcocopad.drawer.MenuListAdapter;
+import com.healthcoco.healthcocopad.enums.AccountPackageType;
 import com.healthcoco.healthcocopad.enums.FragmentType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.PatientProfileScreenType;
@@ -42,7 +44,9 @@ import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.Util;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Shreshtha on 28-01-2017.
@@ -73,6 +77,8 @@ public class MenuDrawerFragment extends HealthCocoFragment implements View.OnCli
     private boolean receiversRegistered;
     private LinearLayout manageClinicLayout;
     private List<DoctorClinicProfile> clinicProfile;
+    private boolean isKiosk;
+    private User user;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_master, null);
@@ -143,26 +149,38 @@ public class MenuDrawerFragment extends HealthCocoFragment implements View.OnCli
         lvMenuList.setOnItemClickListener(this);
     }
 
-    private void initMenuListAdapter() {
+    private void initMenuListAdapter(DoctorClinicProfile doctorClinicProfile) {
+        if (doctorClinicProfile != null && doctorClinicProfile.getIskiosk() != null) {
+            isKiosk = doctorClinicProfile.getIskiosk();
 
-        list = new ArrayList<>();
-        list.add(FragmentType.CONTACTS);
-        list.add(FragmentType.QUEUE);
-        list.add(FragmentType.EVENTS);
-        list.add(FragmentType.PROFILE);
-        list.add(FragmentType.CLINIC_PROFILE);
-//        list.add(FragmentType.ISSUE_TRACKER);
-//        list.add(FragmentType.SYNC);
-        list.add(FragmentType.HELP_IMPROVE);
-        list.add(FragmentType.SETTINGS);
-        if (doctorProfile != null) {
-            if (doctorProfile.getSpecialities().contains("Dentist"))
-                list.add(FragmentType.VIDEOS);
+            if (doctorClinicProfile.getPackageType() != null) {
+                AccountPackageType packageType = doctorClinicProfile.getPackageType();
+                LinkedHashMap<FragmentType, MenuItem> menuItemList = packageType.getMenuItemList();
+                if (!Util.isNullOrEmptyList(menuItemList)) {
+
+                    if (doctorProfile != null) {
+                        if (doctorProfile.getSpecialities().contains("Dentist")) {
+                            if (packageType == AccountPackageType.ADVANCE || packageType == AccountPackageType.PRO)
+                                menuItemList.put(FragmentType.VIDEOS, new MenuItem(FragmentType.VIDEOS, "", false));
+                        } else
+                            menuItemList.remove(FragmentType.VIDEOS);
+                    }
+                    if (isKiosk)
+                        menuItemList.put(FragmentType.KIOSK, new MenuItem(FragmentType.KIOSK, "", false));
+                    else
+                        menuItemList.remove(FragmentType.KIOSK);
+
+                    list = new ArrayList<>();
+                    list.addAll(menuItemList.keySet());
+
+
+                    menuListAdapter = new MenuListAdapter(mActivity);
+                    menuListAdapter.setListData(list);
+                    lvMenuList.setAdapter(menuListAdapter);
+                }
+            }
+
         }
-        list.add(FragmentType.REGISTER);
-        menuListAdapter = new MenuListAdapter(mActivity);
-        menuListAdapter.setListData(list);
-        lvMenuList.setAdapter(menuListAdapter);
     }
 
     @Override
@@ -225,7 +243,6 @@ public class MenuDrawerFragment extends HealthCocoFragment implements View.OnCli
             if (clinicProfile.size() == 1)
                 tvClinicName.setCompoundDrawables(null, null, null, null);
 
-            initMenuListAdapter();
         }
 //        swipeRefreshLayout.setRefreshing(false);
     }
@@ -248,8 +265,10 @@ public class MenuDrawerFragment extends HealthCocoFragment implements View.OnCli
         }
         if (!Util.isNullOrBlank(SELECTED_LOCATION_ID)) {
             DoctorClinicProfile doctorClinicProfile = LocalDataServiceImpl.getInstance(mApp).getDoctorClinicProfile(doctorProfile.getDoctorId(), SELECTED_LOCATION_ID);
-            if (doctorClinicProfile != null)
+            if (doctorClinicProfile != null) {
                 refreshSelectedDoctorClinicProfileDetails(doctorClinicProfile);
+                initMenuListAdapter(doctorClinicProfile);
+            }
         }
     }
 

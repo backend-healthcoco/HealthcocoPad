@@ -5,6 +5,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.healthcoco.healthcocopad.bean.ConsultationFee;
+import com.healthcoco.healthcocopad.enums.AccountPackageType;
 import com.healthcoco.healthcocopad.enums.DoctorFacility;
 import com.healthcoco.healthcocopad.enums.BooleanTypeValues;
 import com.healthcoco.healthcocopad.utilities.Util;
@@ -61,6 +62,7 @@ public class DoctorClinicProfile extends SugarRecord {
     private ArrayList<Role> roles;
     private Boolean isMobileNumberOptional;
     private Boolean isPidHasDate;
+    private AccountPackageType packageType;
     private Boolean iskiosk;
 
 
@@ -373,4 +375,13 @@ public class DoctorClinicProfile extends SugarRecord {
     public void setIskiosk(Boolean iskiosk) {
         this.iskiosk = iskiosk;
     }
+
+    public AccountPackageType getPackageType() {
+        return packageType;
+    }
+
+    public void setPackageType(AccountPackageType packageType) {
+        this.packageType = packageType;
+    }
+
 }

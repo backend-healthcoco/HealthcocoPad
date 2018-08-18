@@ -61,6 +61,7 @@ import com.healthcoco.healthcocopad.fragments.MenuDrawerFragment;
 import com.healthcoco.healthcocopad.fragments.QueueFragment;
 import com.healthcoco.healthcocopad.fragments.SettingsFragment;
 import com.healthcoco.healthcocopad.fragments.SyncFragment;
+import com.healthcoco.healthcocopad.listeners.KioskTabListener;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
 import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
@@ -74,11 +75,12 @@ import com.healthcoco.healthcocopad.views.SlidingPaneDrawerLayout;
 import java.util.List;
 
 public class HomeActivity extends HealthCocoActivity implements View.OnClickListener, GsonRequest.ErrorListener,
-        LocalDoInBackgroundListenerOptimised, Response.Listener<VolleyResponseBean> {
+        LocalDoInBackgroundListenerOptimised, Response.Listener<VolleyResponseBean>, KioskTabListener {
     public static final String INTENT_SYNC_SUCCESS = "com.healthcoco.INITIAL_SYNC_SUCCESS";
     public static final int REQUEST_PERMISSIONS = 101;
     public static final int REQUEST_CALL_PERMISSIONS = 102;
     private static final int MENU_SELECTION_TIME = 500;
+    HealthCocoFragment kioskFragment = null;
     private ImageButton btMenu;
     private TextView tvTitle;
     private DrawerLayout drawerLayout;
@@ -95,6 +97,7 @@ public class HomeActivity extends HealthCocoActivity implements View.OnClickList
     private MenuDrawerFragment menuFragment;
     private ContactsListFragment contactsFragment;
     private FilterFragment filterFragment;
+    private boolean isKiosk;
     BroadcastReceiver initialSyncSuccessreceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, final Intent intent) {
@@ -118,6 +121,7 @@ public class HomeActivity extends HealthCocoActivity implements View.OnClickList
     private void init() {
         Intent intent = getIntent();
         String notifficationResponseData = intent.getStringExtra(HealthcocoFCMListener.TAG_NOTIFICATION_RESPONSE);
+        isKiosk = intent.getBooleanExtra(HealthCocoConstants.TAG_IS_KIOSK, false);
         if (!Util.isNullOrBlank(notifficationResponseData)) {
             openNotificationResponseDataFragment(notifficationResponseData);
         }
@@ -218,21 +222,8 @@ public class HomeActivity extends HealthCocoActivity implements View.OnClickList
             case VIDEOS:
                 fragment = new DoctorVideoListFragment();
                 break;
-            case REGISTER:
-             /*   actionBarNormal.setVisibility(View.GONE);
-                params = new SlidingPaneLayout.LayoutParams(
-                        SlidingPaneLayout.LayoutParams.MATCH_PARENT,
-                        SlidingPaneLayout.LayoutParams.MATCH_PARENT
-                );
-                params.setMargins(0, 0, 0, 0);
-                layoutHomeActivity.setLayoutParams(params);
-
-                fragment = new KioskFragment();*/
-                Intent intent = new Intent(this, KioskActivity.class);
-//                intent.putExtra(HealthcocoFCMListener.TAG_NOTIFICATION_RESPONSE, notificationResponseData);
-                startActivity(intent);
-                finish();
-
+            case KIOSK:
+                openKioskFragment();
                 break;
             case HELP_IMPROVE:
                 openCommonOpenUpActivity(CommonOpenUpFragmentType.FEEDBACK, null, 0);
@@ -250,6 +241,7 @@ public class HomeActivity extends HealthCocoActivity implements View.OnClickList
         initRightAction(fragmentType);
         initMiddleAction(fragmentType);
     }
+
 
     private void initMiddleAction(FragmentType fragmentType) {
         ActionbarLeftRightActionTypeDrawables middleActionType = fragmentType.getMiddleActionType();
@@ -391,7 +383,10 @@ public class HomeActivity extends HealthCocoActivity implements View.OnClickList
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.layout_contacts_fragment, contactsFragment, contactsFragment.getClass().getSimpleName());
         fragmentTransaction.commitAllowingStateLoss();
-        initFragment(FragmentType.CONTACTS);
+        if (isKiosk)
+            initFragment(FragmentType.KIOSK);
+        else
+            initFragment(FragmentType.CONTACTS);
     }
 
     private void initFilterFragment() {
@@ -627,5 +622,37 @@ public class HomeActivity extends HealthCocoActivity implements View.OnClickList
                 android.Manifest.permission.ACCESS_COARSE_LOCATION,
                 android.Manifest.permission.ACCESS_FINE_LOCATION,
         }, REQUEST_PERMISSIONS);
+    }
+
+
+    private void openKioskFragment() {
+      /*  actionBarNormal.setVisibility(View.GONE);
+        params = new SlidingPaneLayout.LayoutParams(
+                SlidingPaneLayout.LayoutParams.MATCH_PARENT,
+                SlidingPaneLayout.LayoutParams.MATCH_PARENT
+        );
+        params.setMargins(0, 0, 0, 0);
+        layoutHomeActivity.setLayoutParams(params);fragmentTransaction
+*/
+        kioskFragment = new KioskActivity(this);
+        setContactsFragmentVisibility(false, selectedFramentType);
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
+        fragmentTransaction.replace(R.id.drawer_layout, kioskFragment, kioskFragment.getClass().getSimpleName());
+        fragmentTransaction.commit();
+        sliding_pane_layout.setVisibility(View.GONE);
+
+    }
+
+
+    @Override
+    public void onHomeButtonClick() {
+        sliding_pane_layout.setVisibility(View.VISIBLE);
+        initFragment(FragmentType.CONTACTS);
+//        getSupportFragmentManager().beginTransaction().remove(kioskFragment).commit();
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.fragment_animation_fade_in, R.anim.fragment_animation_fade_out);
+        fragmentTransaction.remove(kioskFragment);
+        fragmentTransaction.commit();
     }
 }

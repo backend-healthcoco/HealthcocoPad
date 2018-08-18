@@ -16,6 +16,7 @@ public enum FragmentType {
     HELP_IMPROVE(MenuType.SEPARATOR, R.string.help_us_to_improve, R.drawable.ic_action_help, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION),
     SYNC(MenuType.SEPARATOR, R.string.sync, R.drawable.ic_action_sync, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION),
     VIDEOS(MenuType.SEPARATOR, R.string.videos, R.drawable.ic_video, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION),
+    KIOSK(MenuType.SEPARATOR, R.string.register, R.drawable.ic_registers, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION),
     REGISTER(MenuType.SEPARATOR, R.string.register, R.drawable.ic_registers, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION),
     SUBSCRIPTION(MenuType.SEPARATOR, R.string.subscription, R.drawable.ic_subscribe, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION);
 
