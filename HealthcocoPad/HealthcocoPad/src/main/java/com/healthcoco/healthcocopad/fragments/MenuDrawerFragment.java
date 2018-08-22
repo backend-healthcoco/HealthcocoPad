@@ -173,14 +173,16 @@ public class MenuDrawerFragment extends HealthCocoFragment implements View.OnCli
 
                     list = new ArrayList<>();
                     list.addAll(menuItemList.keySet());
-
-
-                    menuListAdapter = new MenuListAdapter(mActivity);
-                    menuListAdapter.setListData(list);
-                    lvMenuList.setAdapter(menuListAdapter);
                 }
+            } else {
+                list = new ArrayList<>();
+                list.add(FragmentType.CONTACTS);
+                list.add(FragmentType.SETTINGS);
             }
 
+            menuListAdapter = new MenuListAdapter(mActivity);
+            menuListAdapter.setListData(list);
+            lvMenuList.setAdapter(menuListAdapter);
         }
     }
 

@@ -44,11 +44,7 @@
             android:id="@+id/pinlockView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/lockview_margin"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/attempts"
-            app:layout_constraintVertical_bias="0.1" />
+            android:layout_margin="@dimen/lockview_margin" />
 
         <TextView
             android:id="@+id/tv_forgot_pin"

@@ -463,11 +463,11 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
                 dialog.dismiss();
                 if (fragmentType != null) {
                     switch (fragmentType) {
-//                        case FOLLOW_UP_APPOINTMENT:
-//                        case FEEDBACK_DOCTOR:
-//                        case PATIENT_REGISTRATION_TABS:
-//                            openHomeActivity();
-//                            break;
+                        case FOLLOW_UP_APPOINTMENT:
+                        case FEEDBACK_DOCTOR:
+                        case PATIENT_REGISTRATION_TABS:
+                            openHomeActivity();
+                            break;
                         default:
                             finish();
                             break;
