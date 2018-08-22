@@ -15,7 +15,6 @@ import android.widget.TextView;
 import com.android.volley.Response;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
-import com.healthcoco.healthcocopad.activities.KioskActivity;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.DoctorClinicProfile;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
@@ -28,6 +27,7 @@ import com.healthcoco.healthcocopad.enums.KioskScreenType;
 import com.healthcoco.healthcocopad.enums.KioskSubItemType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
+import com.healthcoco.healthcocopad.listeners.KioskTabListener;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
 import com.healthcoco.healthcocopad.listeners.PatientRegistrationDetailsListener;
 import com.healthcoco.healthcocopad.recyclerview.HealthcocoRecyclerViewAdapter;
@@ -60,11 +60,11 @@ public class KioskFragment extends HealthCocoFragment implements
     private boolean receiversRegistered;
     private User user;
     private DoctorClinicProfile doctorClinicProfile;
-    private PatientRegistrationDetailsListener registrationDetailsListener;
+    private KioskTabListener kioskTabListener;
 
-    public KioskFragment(PatientRegistrationDetailsListener registrationDetailsListener) {
+    public KioskFragment(KioskTabListener kioskTabListener) {
         super();
-        this.registrationDetailsListener = registrationDetailsListener;
+        this.kioskTabListener = kioskTabListener;
     }
 
 
@@ -213,7 +213,7 @@ public class KioskFragment extends HealthCocoFragment implements
             case R.id.layout_left:
                 break;
             case R.id.bt_kiosk_lock:
-                registrationDetailsListener.readyToMoveNext(KioskScreenType.PINVIEW.ordinal(), false);
+                kioskTabListener.onHomeButtonClick(KioskScreenType.PINVIEW.ordinal());
                 break;
         }
     }
@@ -228,19 +228,19 @@ public class KioskFragment extends HealthCocoFragment implements
                     openCommonOpenUpActivity(CommonOpenUpFragmentType.PATIENT_REGISTRATION_TABS, HealthCocoConstants.TAG_MOBILE_NUMBER, null);
                     break;
                 case DOCTOR_AND_CLINIC:
-                    openCommonOpenUpActivity(CommonOpenUpFragmentType.ABOUT_DOCTOR, "ABOUT_DOCTOR", null);
+                    openCommonOpenUpActivity(CommonOpenUpFragmentType.ABOUT_DOCTOR, "ABOUT_DOCTOR", 0);
                     break;
                 case VIDEO:
-                    openCommonOpenUpActivity(CommonOpenUpFragmentType.EDUCATION_VIDEO, "VIDEO", null);
+                    openCommonOpenUpActivity(CommonOpenUpFragmentType.EDUCATION_VIDEO, "VIDEO", 0);
                     break;
                 case FEEDBACK:
                     openCommonOpenUpActivity(CommonOpenUpFragmentType.FEEDBACK_DOCTOR, AppointmentFeedbackFragment.TAG_FEEDBACK_TYPE, FeedbackType.DOCTOR.ordinal(), 0);
                     break;
                 case BLOGS:
-                    openCommonOpenUpActivity(CommonOpenUpFragmentType.BLOGS, "BLOGS", null);
+                    openCommonOpenUpActivity(CommonOpenUpFragmentType.BLOGS, "BLOGS", 0);
                     break;
                 case FOLLOW_UP_APPOINTMENT:
-                    openCommonOpenUpActivity(CommonOpenUpFragmentType.FOLLOW_UP_APPOINTMENT, "FOLLOW_UP_APPOINTMENT", null);
+                    openCommonOpenUpActivity(CommonOpenUpFragmentType.FOLLOW_UP_APPOINTMENT, "FOLLOW_UP_APPOINTMENT", 0);
                     break;
             }
         }

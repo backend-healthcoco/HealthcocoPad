@@ -7,12 +7,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.Settings;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -40,12 +37,14 @@ import com.healthcoco.healthcocopad.bean.server.DoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.NotificationResponse;
 import com.healthcoco.healthcocopad.bean.server.User;
+import com.healthcoco.healthcocopad.calendar.pinlockview.EnterPinFragment;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocopad.enums.ActionbarLeftRightActionTypeDrawables;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.DefaultSyncServiceType;
 import com.healthcoco.healthcocopad.enums.FilterItemType;
 import com.healthcoco.healthcocopad.enums.FragmentType;
+import com.healthcoco.healthcocopad.enums.KioskScreenType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.fragments.CalendarFragment;
@@ -106,6 +105,7 @@ public class HomeActivity extends HealthCocoActivity implements View.OnClickList
             }
         }
     };
+    private boolean isFromSplash;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,6 +121,7 @@ public class HomeActivity extends HealthCocoActivity implements View.OnClickList
     private void init() {
         Intent intent = getIntent();
         String notifficationResponseData = intent.getStringExtra(HealthcocoFCMListener.TAG_NOTIFICATION_RESPONSE);
+        isFromSplash = intent.getBooleanExtra(HealthCocoConstants.TAG_IS_FROM_SPLASH, false);
         isKiosk = intent.getBooleanExtra(HealthCocoConstants.TAG_IS_KIOSK, false);
         if (!Util.isNullOrBlank(notifficationResponseData)) {
             openNotificationResponseDataFragment(notifficationResponseData);
@@ -433,6 +434,13 @@ public class HomeActivity extends HealthCocoActivity implements View.OnClickList
         }
     }
 
+
+    public void closePaneLayout() {
+        if (sliding_pane_layout.isOpen()) {
+            sliding_pane_layout.closePane();
+        }
+    }
+
     public void closePaneLayout(FragmentType fragmentType) {
         selectedFramentType = fragmentType;
         sliding_pane_layout.closePane();
@@ -451,6 +459,14 @@ public class HomeActivity extends HealthCocoActivity implements View.OnClickList
                 if (handled) {
                     break;
                 }
+            } else if (f instanceof KioskFragment) {
+                showFinishConfirmationAlert();
+                handled = true;
+                break;
+            } else if (f instanceof EnterPinFragment) {
+                showFinishConfirmationAlert();
+                handled = true;
+                break;
             }
         }
         if (!handled) {
@@ -524,7 +540,8 @@ public class HomeActivity extends HealthCocoActivity implements View.OnClickList
                     if (response.getData() != null && response.getData() instanceof DoctorProfile) {
                         menuFragment.initData((DoctorProfile) response.getData());
 //                        initContactsFragment();
-                        WebDataServiceImpl.getInstance(mApp).getDoctorProfile(DoctorProfile.class, user.getUniqueId(), null, null, this, this);
+                        if (isFromSplash)
+                            WebDataServiceImpl.getInstance(mApp).getDoctorProfile(DoctorProfile.class, user.getUniqueId(), null, null, this, this);
                         return;
                     }
                     break;
@@ -626,19 +643,11 @@ public class HomeActivity extends HealthCocoActivity implements View.OnClickList
 
 
     private void openKioskFragment() {
-      /*  actionBarNormal.setVisibility(View.GONE);
-        params = new SlidingPaneLayout.LayoutParams(
-                SlidingPaneLayout.LayoutParams.MATCH_PARENT,
-                SlidingPaneLayout.LayoutParams.MATCH_PARENT
-        );
-        params.setMargins(0, 0, 0, 0);
-        layoutHomeActivity.setLayoutParams(params);fragmentTransaction
-*/
-        kioskFragment = new KioskActivity(this);
-        setContactsFragmentVisibility(false, selectedFramentType);
+        kioskFragment = new KioskFragment(this);
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
         fragmentTransaction.replace(R.id.drawer_layout, kioskFragment, kioskFragment.getClass().getSimpleName());
+        fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
         sliding_pane_layout.setVisibility(View.GONE);
 
@@ -646,13 +655,39 @@ public class HomeActivity extends HealthCocoActivity implements View.OnClickList
 
 
     @Override
-    public void onHomeButtonClick() {
-        sliding_pane_layout.setVisibility(View.VISIBLE);
-        initFragment(FragmentType.CONTACTS);
-//        getSupportFragmentManager().beginTransaction().remove(kioskFragment).commit();
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.setCustomAnimations(R.anim.fragment_animation_fade_in, R.anim.fragment_animation_fade_out);
-        fragmentTransaction.remove(kioskFragment);
-        fragmentTransaction.commit();
+    public void onHomeButtonClick(Object object) {
+        if (object != null) {
+            int ordinal = (int) object;
+            KioskScreenType screenType = KioskScreenType.values()[ordinal];
+            switch (screenType) {
+                case PINVIEW:
+                    kioskFragment = new EnterPinFragment(this);
+                    replaceFragment(kioskFragment);
+                    break;
+                case KIOSK:
+                    kioskFragment = new KioskFragment(this);
+                    replaceFragment(kioskFragment);
+                    break;
+                case HOME:
+                    sliding_pane_layout.setVisibility(View.VISIBLE);
+                    initFragment(FragmentType.CONTACTS);
+                    FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                    fragmentTransaction.setCustomAnimations(R.anim.fragment_animation_fade_in, R.anim.fragment_animation_fade_out);
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.remove(kioskFragment).commit();
+                    break;
+            }
+        }
     }
+
+
+    private void replaceFragment(HealthCocoFragment fragment) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.setCustomAnimations(R.anim.fragment_animation_fade_in, R.anim.fragment_animation_fade_out);
+        transaction.replace(R.id.drawer_layout, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
+
+
 }

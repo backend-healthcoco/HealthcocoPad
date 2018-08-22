@@ -21,6 +21,7 @@ import com.healthcoco.healthcocopad.enums.KioskScreenType;
 import com.healthcoco.healthcocopad.enums.KioskSubItemType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
+import com.healthcoco.healthcocopad.listeners.KioskTabListener;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
 import com.healthcoco.healthcocopad.listeners.PatientRegistrationDetailsListener;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
@@ -39,14 +40,14 @@ public class EnterPinFragment extends HealthCocoFragment implements LocalDoInBac
     private IndicatorDots mIndicatorDots;
     private TextView tvTitle;
     private TextView tvAttempts;
-    private PatientRegistrationDetailsListener registrationDetailsListener;
+    private KioskTabListener kioskTabListener;
     private Button btHome;
     private User user;
     private String pinCode;
 
-    public EnterPinFragment(PatientRegistrationDetailsListener registrationDetailsListener) {
+    public EnterPinFragment(KioskTabListener kioskTabListener) {
         super();
-        this.registrationDetailsListener = registrationDetailsListener;
+        this.kioskTabListener = kioskTabListener;
     }
 
 
@@ -143,7 +144,7 @@ public class EnterPinFragment extends HealthCocoFragment implements LocalDoInBac
         if (pin.equals(pinCode)) {
 //            setResult(RESULT_OK);
 //            finish();
-            registrationDetailsListener.readyToMoveNext(KioskScreenType.HOME.ordinal(), false);
+            kioskTabListener.onHomeButtonClick(KioskScreenType.HOME.ordinal());
         } else {
             shake();
             tvAttempts.setText(getString(R.string.pinlock_wrongpin));
@@ -175,7 +176,7 @@ public class EnterPinFragment extends HealthCocoFragment implements LocalDoInBac
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.bt_kiosk_home:
-                registrationDetailsListener.readyToMoveNext(KioskScreenType.KIOSK.ordinal(), false);
+                kioskTabListener.onHomeButtonClick(KioskScreenType.KIOSK.ordinal());
                 break;
         }
     }

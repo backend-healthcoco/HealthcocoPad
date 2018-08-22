@@ -6,6 +6,6 @@ package com.healthcoco.healthcocopad.listeners;
 
 public interface KioskTabListener {
 
-    public void onHomeButtonClick();
+    public void onHomeButtonClick(Object object);
 
 }

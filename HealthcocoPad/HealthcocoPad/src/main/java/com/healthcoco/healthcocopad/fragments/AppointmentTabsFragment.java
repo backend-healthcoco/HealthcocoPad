@@ -39,7 +39,7 @@ public class AppointmentTabsFragment extends HealthCocoFragment implements ViewP
     private FollowUpAppointmentFragment followUpAppointmentFragment;
     private ConfirmAppointmentFragment confirmAppointmentFragment;
     private TabHost tabhost;
-    private CustomViewPager mViewPager;
+    private ViewPager mViewPager;
     private ImageButton btCross;
     private Button btSave;
     private TextView tvTitle;
@@ -71,7 +71,7 @@ public class AppointmentTabsFragment extends HealthCocoFragment implements ViewP
     public void initViews() {
         tabhost = (TabHost) view.findViewById(android.R.id.tabhost);
         tabhost.setup();
-        mViewPager = (CustomViewPager) view.findViewById(R.id.viewpager_home_tabs);
+        mViewPager = (ViewPager) view.findViewById(R.id.viewpager_home_tabs);
 
         btCross = (ImageButton) view.findViewById(R.id.bt_cross);
         btSave = (Button) view.findViewById(R.id.bt_save);

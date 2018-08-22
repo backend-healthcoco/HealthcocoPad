@@ -150,8 +150,9 @@ public class MenuDrawerFragment extends HealthCocoFragment implements View.OnCli
     }
 
     private void initMenuListAdapter(DoctorClinicProfile doctorClinicProfile) {
-        if (doctorClinicProfile != null && doctorClinicProfile.getIskiosk() != null) {
-            isKiosk = doctorClinicProfile.getIskiosk();
+        if (doctorClinicProfile != null) {
+            if (doctorClinicProfile.getIskiosk() != null)
+                isKiosk = doctorClinicProfile.getIskiosk();
 
             if (doctorClinicProfile.getPackageType() != null) {
                 AccountPackageType packageType = doctorClinicProfile.getPackageType();

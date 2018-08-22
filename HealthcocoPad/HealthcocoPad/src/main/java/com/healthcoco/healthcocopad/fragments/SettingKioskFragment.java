@@ -163,7 +163,7 @@ public class SettingKioskFragment extends HealthCocoFragment implements GsonRequ
             switch (response.getWebServiceType()) {
                 case FRAGMENT_INITIALISATION:
                     if (user != null) {
-                        if (!isKiosk) {
+                        if (isKiosk) {
                             initData();
                         } else {
                             nodataFound();

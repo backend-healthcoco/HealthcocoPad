@@ -439,6 +439,7 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
                 case ADD_RECEIPT:
                 case FOLLOW_UP_APPOINTMENT:
                 case BOOK_APPOINTMENT:
+                case FEEDBACK_DOCTOR:
                 case PATIENT_REGISTRATION_TABS:
                     showFinishConfirmationAlert();
                     break;
@@ -460,7 +461,18 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
-                finish();
+                if (fragmentType != null) {
+                    switch (fragmentType) {
+//                        case FOLLOW_UP_APPOINTMENT:
+//                        case FEEDBACK_DOCTOR:
+//                        case PATIENT_REGISTRATION_TABS:
+//                            openHomeActivity();
+//                            break;
+                        default:
+                            finish();
+                            break;
+                    }
+                }
             }
         });
         alertBuilder.setNegativeButton(R.string.stay, new DialogInterface.OnClickListener() {
@@ -528,4 +540,11 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
         }
     }
 
+    private void openHomeActivity() {
+        Intent intent = new Intent(this, HomeActivity.class);
+        intent.putExtra(HealthCocoConstants.TAG_IS_KIOSK, true);
+        intent.putExtra(HealthCocoConstants.TAG_IS_FROM_SPLASH, false);
+        startActivity(intent);
+        finish();
+    }
 }

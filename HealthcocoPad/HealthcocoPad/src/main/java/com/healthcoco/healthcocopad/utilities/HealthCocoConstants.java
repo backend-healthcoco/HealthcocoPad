@@ -23,6 +23,7 @@ public class HealthCocoConstants {
     public static final String TAG_GROUP_IDS_LIST = "groupsIdsList";
     public static final String TAG_IS_EDIT_PATIENT = "isEditPatient";
     public static final String TAG_IS_KIOSK = "isKiosk";
+    public static final String TAG_IS_FROM_SPLASH = "isFromSplash";
     public static final String TAG_IS_FROM_SETTINGS = "isFromSettings";
     public static final String TAG_TOOTH_NUMBER = "toothNumber";
     public static final String TAG_TOOTH_MATERIAL = "material";
