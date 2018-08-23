@@ -226,6 +226,7 @@ public class KioskFragment extends HealthCocoFragment implements
             switch (subItemType) {
                 case PATIENT_REGISTER:
                     openCommonOpenUpActivity(CommonOpenUpFragmentType.PATIENT_REGISTRATION_TABS, HealthCocoConstants.TAG_MOBILE_NUMBER, null);
+                    mActivity.finish();
                     break;
                 case DOCTOR_AND_CLINIC:
                     openCommonOpenUpActivity(CommonOpenUpFragmentType.ABOUT_DOCTOR, "ABOUT_DOCTOR", 0);
@@ -235,12 +236,14 @@ public class KioskFragment extends HealthCocoFragment implements
                     break;
                 case FEEDBACK:
                     openCommonOpenUpActivity(CommonOpenUpFragmentType.FEEDBACK_DOCTOR, AppointmentFeedbackFragment.TAG_FEEDBACK_TYPE, FeedbackType.DOCTOR.ordinal(), 0);
+                    mActivity.finish();
                     break;
                 case BLOGS:
                     openCommonOpenUpActivity(CommonOpenUpFragmentType.BLOGS, "BLOGS", 0);
                     break;
                 case FOLLOW_UP_APPOINTMENT:
                     openCommonOpenUpActivity(CommonOpenUpFragmentType.FOLLOW_UP_APPOINTMENT, "FOLLOW_UP_APPOINTMENT", 0);
+                    mActivity.finish();
                     break;
             }
         }

@@ -540,7 +540,7 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
         }
     }
 
-    private void openHomeActivity() {
+    public void openHomeActivity() {
         Intent intent = new Intent(this, HomeActivity.class);
         intent.putExtra(HealthCocoConstants.TAG_IS_KIOSK, true);
         intent.putExtra(HealthCocoConstants.TAG_IS_FROM_SPLASH, false);

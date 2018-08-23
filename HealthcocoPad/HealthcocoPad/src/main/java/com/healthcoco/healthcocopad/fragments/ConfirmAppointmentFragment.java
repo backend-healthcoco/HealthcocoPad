@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.android.volley.Response;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
+import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.adapter.AppointmentSlotAdapter;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.request.AppointmentRequestToSend;
@@ -179,7 +180,7 @@ public class ConfirmAppointmentFragment extends HealthCocoFragment implements
                         calendarEvents.setIsAddedOnSuccess(true);
                         LocalDataServiceImpl.getInstance(mApp).addAppointment(calendarEvents);
                         Util.showToast(mActivity, R.string.appointment_created);
-                        mActivity.finish();
+                        ((CommonOpenUpActivity) mActivity).openHomeActivity();
                     }
                     break;
                 default:

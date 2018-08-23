@@ -259,7 +259,6 @@ public class OtpVarificationFragment extends HealthCocoDialogFragment implements
                 dismiss();
                 break;
             case R.id.bt_cross:
-                getTargetFragment().onActivityResult(HealthCocoConstants.REQUEST_CODE_FEEDBACK_OTP, HealthCocoConstants.RESULT_CODE_FEEDBACK_OTP, null);
                 dismiss();
                 break;
             case R.id.tv_resend:

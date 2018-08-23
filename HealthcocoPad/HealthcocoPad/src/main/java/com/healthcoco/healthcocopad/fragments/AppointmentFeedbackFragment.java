@@ -398,7 +398,7 @@ public class AppointmentFeedbackFragment extends HealthCocoFragment implements R
             switch (response.getWebServiceType()) {
                 case ADD_PRESCRIPTION_APPOINTMENT_FEEDBACK:
                     Util.showToast(mActivity, R.string.feedback_sent_successfully);
-                    mActivity.finish();
+                    ((CommonOpenUpActivity) mActivity).openHomeActivity();
                     break;
             }
         }

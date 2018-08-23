@@ -176,7 +176,7 @@ public class PatientMedicalDeatilsFragment extends HealthCocoFragment implements
                     mActivity.hideLoading();
                     //will directly refresh PatientDetailSCreen on its onActivityResult
                     mActivity.setResult(HealthCocoConstants.RESULT_CODE_REGISTRATION, new Intent().putExtra(HealthCocoConstants.TAG_PATIENT_PROFILE, Parcels.wrap(patientDetails)));
-                    ((CommonOpenUpActivity) mActivity).finish();
+                    ((CommonOpenUpActivity) mActivity).openHomeActivity();
                     return;
                 }
                 break;
@@ -188,7 +188,7 @@ public class PatientMedicalDeatilsFragment extends HealthCocoFragment implements
                     refreshContactsData(patientDetails);
                     mActivity.hideLoading();
                     mActivity.setResult(HealthCocoConstants.RESULT_CODE_REGISTRATION);
-                    ((CommonOpenUpActivity) mActivity).finish();
+                    ((CommonOpenUpActivity) mActivity).openHomeActivity();
                     return;
                 }
                 break;
