@@ -36,11 +36,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Shreshtha on 28-02-2017.
+ * Created by Prashant on 06-08-2018.
  */
 public class SelectCategoryDialogFragment extends HealthCocoDialogFragment implements AdapterView.OnItemClickListener, View.OnClickListener,
         CommonUiPermissionsListener {
     public static final String TAG_SELECTED_CATEGORY = "selectedCategory";
+    public static final String TAG_ALL_CATEGORY = "allCategory";
     private GridView gvSettingsUIPermission;
     private UIPermissionItemGridAdapter adapter;
     private ArrayList<String> allCategory = new ArrayList<>();
@@ -66,6 +67,7 @@ public class SelectCategoryDialogFragment extends HealthCocoDialogFragment imple
 
         if (bundle != null && bundle.containsKey(TAG_SELECTED_CATEGORY)) {
             assignedPermissionsList = Parcels.unwrap(bundle.getParcelable(TAG_SELECTED_CATEGORY));
+            allCategory = Parcels.unwrap(bundle.getParcelable(TAG_ALL_CATEGORY));
             initViews();
             initListeners();
             initAdapters();
@@ -81,8 +83,12 @@ public class SelectCategoryDialogFragment extends HealthCocoDialogFragment imple
     @Override
     public void initListeners() {
         initSaveCancelButton(this);
-        initActionbarTitle(getResources().getString(R.string.category));
         gvSettingsUIPermission.setOnItemClickListener(this);
+        if (!Util.isNullOrEmptyList(allCategory))
+            initActionbarTitle(getResources().getString(R.string.category));
+        else
+            initActionbarTitle(getResources().getString(R.string.kiosk_tab_permission));
+
     }
 
     private void initAdapters() {
@@ -91,13 +97,16 @@ public class SelectCategoryDialogFragment extends HealthCocoDialogFragment imple
     }
 
     public void initData() {
-        allCategory.add("HEALTH");
-        allCategory.add("GENARAL");
-        allCategory.add("MEDICAL");
-        allCategory.add("HARBAL");
-        allCategory.add("KIDS");
+        if (!Util.isNullOrEmptyList(allCategory)) {
+            allCategory.add("HEALTH");
+            allCategory.add("GENARAL");
+            allCategory.add("MEDICAL");
+            allCategory.add("HARBAL");
+            allCategory.add("KIDS");
 //        allCategory = VideoCategory.values();
-        notifyAdapter(allCategory);
+            notifyAdapter(allCategory);
+        } else
+            notifyAdapter(allCategory);
     }
 
     private void notifyAdapter(List<String> list) {

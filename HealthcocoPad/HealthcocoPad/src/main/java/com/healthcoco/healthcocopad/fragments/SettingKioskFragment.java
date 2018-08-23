@@ -37,9 +37,11 @@ import com.healthcoco.healthcocopad.dialogFragment.EditFooterSetupDialogFragment
 import com.healthcoco.healthcocopad.dialogFragment.EditHeaderSetupDialogFragment;
 import com.healthcoco.healthcocopad.dialogFragment.EditPageSetupDialogFragment;
 import com.healthcoco.healthcocopad.dialogFragment.EditPatientDetailsSetupDialogFragment;
+import com.healthcoco.healthcocopad.dialogFragment.SelectCategoryDialogFragment;
 import com.healthcoco.healthcocopad.dialogFragment.UploadVideoDialogFragment;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.KioskSettingsItemType;
+import com.healthcoco.healthcocopad.enums.KioskSubItemType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.SuggestionType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
@@ -52,10 +54,14 @@ import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.healthcoco.healthcocopad.views.TextViewFontAwesome;
 
+import org.parceler.Parcels;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.healthcoco.healthcocopad.dialogFragment.SelectCategoryDialogFragment.TAG_ALL_CATEGORY;
+import static com.healthcoco.healthcocopad.dialogFragment.SelectCategoryDialogFragment.TAG_SELECTED_CATEGORY;
 import static com.healthcoco.healthcocopad.enums.UIPermissionsItemType.PATIENT_TAB_PERMISSION;
 
 /**
@@ -203,5 +209,20 @@ public class SettingKioskFragment extends HealthCocoFragment implements GsonRequ
                 openCommonOpenUpActivity(CommonOpenUpFragmentType.CHANGE_PIN, "CHANGE_PIN", null);
             }
         }
+    }
+
+    public void selectKioskTabPermission() {
+        ArrayList<String> allCategory = new ArrayList<>();
+
+//        ArrayList<KioskSubItemType> value=KioskSubItemType.values()
+
+        SelectCategoryDialogFragment dialogFragment = new SelectCategoryDialogFragment();
+        Bundle bundle = new Bundle();
+//        bundle.putParcelable(TAG_SELECTED_CATEGORY, Parcels.wrap());
+//        bundle.putParcelable(TAG_ALL_CATEGORY, Parcels.wrap());
+        dialogFragment.setArguments(bundle);
+        dialogFragment.setTargetFragment(this, PatientAppointmentDetailFragment.REQUEST_CODE_APPOINTMENTS_LIST);
+        dialogFragment.show(mActivity.getSupportFragmentManager(), dialogFragment.getClass().getSimpleName());
+
     }
 }

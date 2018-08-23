@@ -1272,6 +1272,7 @@
     <string name="kiosk_not_activated">You have not Activated Kisok</string>
     <string name="please_enter_valid_pin">Please enter 4 digit PIN</string>
     <string name="max_length_reached">Maximum leagth of PIN is 4 digit</string>
+    <string name="kiosk_tab_permission">Kiosk Tab Permission</string>
     <string name="select_date">Select Date</string>
     <string name="select_doctor">Select Doctor</string>
 
