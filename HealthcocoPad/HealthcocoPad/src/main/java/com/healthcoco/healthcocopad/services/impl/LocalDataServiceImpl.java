@@ -5800,6 +5800,20 @@ public class LocalDataServiceImpl {
         return kioskPin;
     }
 
+    public void addKioskTabPermission(KioskTabPermission kioskTabPermission) {
+        kioskTabPermission.setTagsJsonString(getJsonFromObject(kioskTabPermission.getTabPermission()));
+        kioskTabPermission.save();
+    }
+
+
+    public KioskTabPermission getKioskTabPermission(String doctorId) {
+        KioskTabPermission kioskTabPermission = Select.from(KioskTabPermission.class)
+                .where(Condition.prop(LocalDatabaseUtils.KEY_DOCTOR_ID).eq(doctorId)).first();
+
+        return kioskTabPermission;
+    }
+
+
     private enum FromTableType {
         ADD_TEMPLATES, ADD_TREATMENT, ADD_PRESCRIPTION
     }

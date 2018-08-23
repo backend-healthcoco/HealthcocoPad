@@ -17,6 +17,7 @@ import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.DoctorClinicProfile;
+import com.healthcoco.healthcocopad.bean.server.KioskTabPermission;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
@@ -38,7 +39,10 @@ import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 
 import java.util.ArrayList;
 
+import static com.healthcoco.healthcocopad.enums.KioskSubItemType.BLOGS;
 import static com.healthcoco.healthcocopad.enums.KioskSubItemType.DOCTOR_AND_CLINIC;
+import static com.healthcoco.healthcocopad.enums.KioskSubItemType.FEEDBACK;
+import static com.healthcoco.healthcocopad.enums.KioskSubItemType.FOLLOW_UP_APPOINTMENT;
 import static com.healthcoco.healthcocopad.enums.KioskSubItemType.PATIENT_REGISTER;
 import static com.healthcoco.healthcocopad.enums.KioskSubItemType.VIDEO;
 
@@ -61,6 +65,7 @@ public class KioskFragment extends HealthCocoFragment implements
     private User user;
     private DoctorClinicProfile doctorClinicProfile;
     private KioskTabListener kioskTabListener;
+    private KioskTabPermission kioskTabPermission;
 
     public KioskFragment(KioskTabListener kioskTabListener) {
         super();
@@ -122,41 +127,27 @@ public class KioskFragment extends HealthCocoFragment implements
 
 
     public void initData() {
-      /*  if (doctorProfile != null) {
-            DoctorClinicProfile doctorClinicProfile = LocalDataServiceImpl.getInstance(mApp).getDoctorClinicProfile(doctorProfile.getDoctorId(), MenuFragment.SELECTED_LOCATION_ID);
-            if (doctorClinicProfile != null) {
-                if (doctorClinicProfile.getClinic()) {
-                    if (!Util.isNullOrEmptyList(doctorProfile.getParentSpecialities())) {
-                        // For only Dentist
-                        if (doctorProfile.getParentSpecialities().contains("Dentist")) {
-                            if (doctorClinicProfile.getLab() && !doctorClinicProfile.getParent())
-                                adapter.setListData(TabSubItemsType.getForDentistsLabTabSubItemsTypeList());
-                            else
-                                adapter.setListData(TabSubItemsType.getDentistTabSubItemsTypeList());
-                        } else {
-                            if (doctorClinicProfile.getLab() && !doctorClinicProfile.getParent()) {
-                                adapter.setListData(TabSubItemsType.getForLabTabSubItemsTypeList());
-                            } else
-                                adapter.setListData(TabSubItemsType.getNormalTabSubItemsTypeList());
-                        }
-                    } else
-                        adapter.setListData(TabSubItemsType.getNormalTabSubItemsTypeList());
-                } else if (doctorClinicProfile.getLab() && !doctorClinicProfile.getParent()) {
-                    adapter.setListData(TabSubItemsType.getForLabTabSubItemsTypeList());
-                } else {
-                    // For only parent lab
-                    adapter.setListData(TabSubItemsType.getNormalTabSubItemsTypeList());
-                }
-            }
-            adapter.notifyDataSetChanged();
-        }*/
-        subItemTypeArrayList.add(PATIENT_REGISTER);
-        subItemTypeArrayList.add(DOCTOR_AND_CLINIC);
-        subItemTypeArrayList.add(VIDEO);
-        subItemTypeArrayList.add(KioskSubItemType.FEEDBACK);
-        subItemTypeArrayList.add(KioskSubItemType.BLOGS);
-        subItemTypeArrayList.add(KioskSubItemType.FOLLOW_UP_APPOINTMENT);
-
+        if (kioskTabPermission != null) {
+            if (kioskTabPermission.getTabPermission().contains(PATIENT_REGISTER.getValue()))
+                subItemTypeArrayList.add(PATIENT_REGISTER);
+            if (kioskTabPermission.getTabPermission().contains(DOCTOR_AND_CLINIC.getValue()))
+                subItemTypeArrayList.add(DOCTOR_AND_CLINIC);
+            if (kioskTabPermission.getTabPermission().contains(VIDEO.getValue()))
+                subItemTypeArrayList.add(VIDEO);
+            if (kioskTabPermission.getTabPermission().contains(FEEDBACK.getValue()))
+                subItemTypeArrayList.add(FEEDBACK);
+            if (kioskTabPermission.getTabPermission().contains(BLOGS.getValue()))
+                subItemTypeArrayList.add(BLOGS);
+            if (kioskTabPermission.getTabPermission().contains(FOLLOW_UP_APPOINTMENT.getValue()))
+                subItemTypeArrayList.add(FOLLOW_UP_APPOINTMENT);
+        } else {
+            subItemTypeArrayList.add(PATIENT_REGISTER);
+            subItemTypeArrayList.add(DOCTOR_AND_CLINIC);
+            subItemTypeArrayList.add(VIDEO);
+            subItemTypeArrayList.add(FEEDBACK);
+            subItemTypeArrayList.add(BLOGS);
+            subItemTypeArrayList.add(FOLLOW_UP_APPOINTMENT);
+        }
         mAdapter.notifyDataSetChanged();
     }
 
@@ -192,6 +183,7 @@ public class KioskFragment extends HealthCocoFragment implements
                 if (doctor != null && doctor.getUser() != null) {
                     user = doctor.getUser();
                     doctorClinicProfile = LocalDataServiceImpl.getInstance(mApp).getDoctorClinicProfile(user.getUniqueId(), user.getForeignLocationId());
+                    kioskTabPermission = LocalDataServiceImpl.getInstance(mApp).getKioskTabPermission(user.getUniqueId());
                 }
 
                 return volleyResponseBean;
