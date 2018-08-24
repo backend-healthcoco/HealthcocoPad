@@ -1,7 +1,12 @@
 package com.healthcoco.healthcocopad.viewholders;
 
 import android.app.AlertDialog;
+import android.content.ContentResolver;
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.ThumbnailUtils;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -52,6 +57,11 @@ public class PatientEducationVideosListViewHolder extends HealthCocoViewHolder i
             if (patientEducationVideo.getCreatedTime() != null) {
                 tvDate.setText(DateTimeUtil.getFormatedDateAndTime(DATE_FORMAT, patientEducationVideo.getUpdatedTime()));
             } else tvDate.setText("");
+
+            if (!Util.isNullOrBlank(patientEducationVideo.getVideoUrl())) {
+                Bitmap thumb = ThumbnailUtils.createVideoThumbnail(patientEducationVideo.getVideoUrl(), MediaStore.Video.Thumbnails.MINI_KIND);
+                ivThumbnail.setImageBitmap(thumb);
+            }
         }
     }
 

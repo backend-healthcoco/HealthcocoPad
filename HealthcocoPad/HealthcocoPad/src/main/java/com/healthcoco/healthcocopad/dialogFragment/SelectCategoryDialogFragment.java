@@ -45,7 +45,8 @@ public class SelectCategoryDialogFragment extends HealthCocoDialogFragment imple
     private GridView gvSettingsUIPermission;
     private UIPermissionItemGridAdapter adapter;
     private ArrayList<String> allCategory = new ArrayList<>();
-    private ArrayList<String> assignedPermissionsList;
+    private ArrayList<String> assignedPermissionsList = new ArrayList<>();
+    ;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -65,9 +66,11 @@ public class SelectCategoryDialogFragment extends HealthCocoDialogFragment imple
     public void init() {
         Bundle bundle = getArguments();
 
-        if (bundle != null && bundle.containsKey(TAG_SELECTED_CATEGORY)) {
-            assignedPermissionsList = Parcels.unwrap(bundle.getParcelable(TAG_SELECTED_CATEGORY));
-            allCategory = Parcels.unwrap(bundle.getParcelable(TAG_ALL_CATEGORY));
+        if (bundle != null) {
+            if (bundle.containsKey(TAG_SELECTED_CATEGORY))
+                assignedPermissionsList = Parcels.unwrap(bundle.getParcelable(TAG_SELECTED_CATEGORY));
+            if (bundle.containsKey(TAG_ALL_CATEGORY))
+                allCategory = Parcels.unwrap(bundle.getParcelable(TAG_ALL_CATEGORY));
             initViews();
             initListeners();
             initAdapters();
@@ -84,7 +87,7 @@ public class SelectCategoryDialogFragment extends HealthCocoDialogFragment imple
     public void initListeners() {
         initSaveCancelButton(this);
         gvSettingsUIPermission.setOnItemClickListener(this);
-        if (!Util.isNullOrEmptyList(allCategory))
+        if (Util.isNullOrEmptyList(allCategory))
             initActionbarTitle(getResources().getString(R.string.category));
         else
             initActionbarTitle(getResources().getString(R.string.kiosk_tab_permission));
@@ -97,7 +100,7 @@ public class SelectCategoryDialogFragment extends HealthCocoDialogFragment imple
     }
 
     public void initData() {
-        if (!Util.isNullOrEmptyList(allCategory)) {
+        if (Util.isNullOrEmptyList(allCategory)) {
             allCategory.add("HEALTH");
             allCategory.add("GENARAL");
             allCategory.add("MEDICAL");

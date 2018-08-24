@@ -181,6 +181,7 @@ public class HomeActivity extends HealthCocoActivity implements View.OnClickList
     }
 
     public void initFragment(FragmentType fragmentType) {
+        hideSoftKeyboard();
         actionBarNormal.setVisibility(View.VISIBLE);
         SlidingPaneLayout.LayoutParams params = new SlidingPaneLayout.LayoutParams(
                 SlidingPaneLayout.LayoutParams.MATCH_PARENT,

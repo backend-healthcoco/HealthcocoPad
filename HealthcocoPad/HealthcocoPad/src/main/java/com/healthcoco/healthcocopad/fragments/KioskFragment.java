@@ -36,6 +36,7 @@ import com.healthcoco.healthcocopad.recyclerview.HealthcocoRecyclerViewItemClick
 import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
+import com.healthcoco.healthcocopad.utilities.Util;
 
 import java.util.ArrayList;
 
@@ -127,7 +128,8 @@ public class KioskFragment extends HealthCocoFragment implements
 
 
     public void initData() {
-        if (kioskTabPermission != null) {
+        if (kioskTabPermission != null && (!Util.isNullOrEmptyList(kioskTabPermission.getTabPermission()))) {
+
             if (kioskTabPermission.getTabPermission().contains(PATIENT_REGISTER.getValue()))
                 subItemTypeArrayList.add(PATIENT_REGISTER);
             if (kioskTabPermission.getTabPermission().contains(DOCTOR_AND_CLINIC.getValue()))
@@ -140,6 +142,7 @@ public class KioskFragment extends HealthCocoFragment implements
                 subItemTypeArrayList.add(BLOGS);
             if (kioskTabPermission.getTabPermission().contains(FOLLOW_UP_APPOINTMENT.getValue()))
                 subItemTypeArrayList.add(FOLLOW_UP_APPOINTMENT);
+
         } else {
             subItemTypeArrayList.add(PATIENT_REGISTER);
             subItemTypeArrayList.add(DOCTOR_AND_CLINIC);
@@ -212,6 +215,7 @@ public class KioskFragment extends HealthCocoFragment implements
 
     @Override
     public void onItemClicked(Object object) {
+        mActivity.hideSoftKeyboard();
         if (object != null) {
             int ordinal = (int) object;
             KioskSubItemType subItemType = KioskSubItemType.values()[ordinal];

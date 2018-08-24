@@ -102,6 +102,11 @@ public class CommonHealthFeedsViewHolder extends HealthCocoViewHolder implements
         btLike = (ImageView) convertView.findViewById(R.id.bt_like);
         loadingGif = (ImageView) convertView.findViewById(R.id.loading_gif);
         containerBlogItem = (LinearLayout) convertView.findViewById(R.id.container_blog_item);
+
+        tvTotalLikes.setVisibility(View.GONE);
+        tvTotalShare.setVisibility(View.GONE);
+        btShare.setVisibility(View.GONE);
+        btLike.setVisibility(View.GONE);
     }
 
     private void initListener() {

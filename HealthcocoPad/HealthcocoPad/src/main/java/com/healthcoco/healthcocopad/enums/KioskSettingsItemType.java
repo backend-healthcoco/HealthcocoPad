@@ -9,7 +9,8 @@ import com.healthcoco.healthcocopad.R;
 public enum KioskSettingsItemType {
 
     ADD_VIDEO(R.string.add_patient_video, 0, 0),
-    CHANGE_PIN(R.string.change_pin, 0, 0);
+    CHANGE_PIN(R.string.change_pin, 0, 0),
+    KIOSK_PERMISSION(R.string.kiosk_tab_permission, 0, 0);
 
     private final int searchHintId;
     private final int titleId;

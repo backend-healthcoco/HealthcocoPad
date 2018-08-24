@@ -5801,7 +5801,7 @@ public class LocalDataServiceImpl {
     }
 
     public void addKioskTabPermission(KioskTabPermission kioskTabPermission) {
-        kioskTabPermission.setTagsJsonString(getJsonFromObject(kioskTabPermission.getTabPermission()));
+        kioskTabPermission.setTabPermissionJsonString(getJsonFromObject(kioskTabPermission.getTabPermission()));
         kioskTabPermission.save();
     }
 
@@ -5809,6 +5809,8 @@ public class LocalDataServiceImpl {
     public KioskTabPermission getKioskTabPermission(String doctorId) {
         KioskTabPermission kioskTabPermission = Select.from(KioskTabPermission.class)
                 .where(Condition.prop(LocalDatabaseUtils.KEY_DOCTOR_ID).eq(doctorId)).first();
+        if (kioskTabPermission != null)
+            kioskTabPermission.setTabPermission((ArrayList<String>) (Object) getObjectsListFronJson(kioskTabPermission.getTabPermissionJsonString()));
 
         return kioskTabPermission;
     }
