@@ -1,5 +1,6 @@
 package com.healthcoco.healthcocopad.fragments;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
@@ -24,6 +25,7 @@ import com.healthcoco.healthcocopad.bean.server.ContentSetup;
 import com.healthcoco.healthcocopad.bean.server.DoctorClinicProfile;
 import com.healthcoco.healthcocopad.bean.server.FooterSetup;
 import com.healthcoco.healthcocopad.bean.server.HeaderSetup;
+import com.healthcoco.healthcocopad.bean.server.KioskTabPermission;
 import com.healthcoco.healthcocopad.bean.server.LeftText;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.PageSetup;
@@ -50,6 +52,7 @@ import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimis
 import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
+import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.healthcoco.healthcocopad.views.TextViewFontAwesome;
@@ -77,6 +80,7 @@ public class SettingKioskFragment extends HealthCocoFragment implements GsonRequ
     private TextView tvKioskNotAvailable;
     private SettingsListAdapter adapter;
     private List<KioskSettingsItemType> listType;
+    private KioskTabPermission kioskTabPermission;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -148,11 +152,13 @@ public class SettingKioskFragment extends HealthCocoFragment implements GsonRequ
                 LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
                 if (doctor != null && doctor.getUser() != null && !Util.isNullOrBlank(doctor.getUser().getUniqueId())) {
                     user = doctor.getUser();
-                }
-                DoctorClinicProfile doctorClinicProfile = LocalDataServiceImpl.getInstance(mApp).getDoctorClinicProfile(user.getUniqueId(), user.getForeignLocationId());
-                if (doctorClinicProfile != null && doctorClinicProfile.getIskiosk() != null)
-                    isKiosk = doctorClinicProfile.getIskiosk();
 
+                    DoctorClinicProfile doctorClinicProfile = LocalDataServiceImpl.getInstance(mApp).getDoctorClinicProfile(user.getUniqueId(), user.getForeignLocationId());
+                    if (doctorClinicProfile != null && doctorClinicProfile.getIskiosk() != null)
+                        isKiosk = doctorClinicProfile.getIskiosk();
+
+                    kioskTabPermission = LocalDataServiceImpl.getInstance(mApp).getKioskTabPermission(user.getUniqueId());
+                }
                 return volleyResponseBean;
         }
         return volleyResponseBean;
@@ -198,6 +204,9 @@ public class SettingKioskFragment extends HealthCocoFragment implements GsonRequ
             case CHANGE_PIN:
                 mActivity.openAddNewSuggestionsFragment(this, HealthCocoConstants.REQUEST_CODE_LOCATION_ADMIN, SuggestionType.PASSWORD);
                 break;
+            case KIOSK_PERMISSION:
+                selectKioskTabPermission();
+                break;
         }
     }
 
@@ -209,20 +218,45 @@ public class SettingKioskFragment extends HealthCocoFragment implements GsonRequ
                 openCommonOpenUpActivity(CommonOpenUpFragmentType.CHANGE_PIN, "CHANGE_PIN", null);
             }
         }
+        if (requestCode == HealthCocoConstants.REQUEST_CODE_CATEGORY) {
+            if (resultCode == Activity.RESULT_OK) {
+                ArrayList<String> TabPermission = Parcels.unwrap(data.getParcelableExtra(TAG_SELECTED_CATEGORY));
+                if (!Util.isNullOrEmptyList(TabPermission)) {
+                    addKioskTabPermission(TabPermission);
+                }
+            }
+        }
     }
 
     public void selectKioskTabPermission() {
         ArrayList<String> allCategory = new ArrayList<>();
+        List<KioskSubItemType> itemTypeList = Arrays.asList(KioskSubItemType.values());
 
-//        ArrayList<KioskSubItemType> value=KioskSubItemType.values()
+        for (KioskSubItemType kioskSubItemType : itemTypeList) {
+            allCategory.add(kioskSubItemType.getValue());
+        }
 
         SelectCategoryDialogFragment dialogFragment = new SelectCategoryDialogFragment();
         Bundle bundle = new Bundle();
-//        bundle.putParcelable(TAG_SELECTED_CATEGORY, Parcels.wrap());
-//        bundle.putParcelable(TAG_ALL_CATEGORY, Parcels.wrap());
+        if (kioskTabPermission != null)
+            bundle.putParcelable(TAG_SELECTED_CATEGORY, Parcels.wrap(kioskTabPermission.getTabPermission()));
+        bundle.putParcelable(TAG_ALL_CATEGORY, Parcels.wrap(allCategory));
         dialogFragment.setArguments(bundle);
-        dialogFragment.setTargetFragment(this, PatientAppointmentDetailFragment.REQUEST_CODE_APPOINTMENTS_LIST);
+        dialogFragment.setTargetFragment(this, HealthCocoConstants.REQUEST_CODE_CATEGORY);
         dialogFragment.show(mActivity.getSupportFragmentManager(), dialogFragment.getClass().getSimpleName());
 
+    }
+
+    private void addKioskTabPermission(ArrayList<String> tabPermission) {
+
+        KioskTabPermission kioskTabPermission = new KioskTabPermission();
+//        patientEducationVideo.setCreatedBy(user.getFirstName());
+        kioskTabPermission.setDoctorId(user.getUniqueId());
+        kioskTabPermission.setHospitalId(user.getForeignHospitalId());
+        kioskTabPermission.setLocationId(user.getForeignLocationId());
+        kioskTabPermission.setUniqueId(user.getUniqueId());
+        kioskTabPermission.setTabPermission(tabPermission);
+
+        LocalDataServiceImpl.getInstance(mApp).addKioskTabPermission(kioskTabPermission);
     }
 }

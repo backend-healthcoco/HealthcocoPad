@@ -14,7 +14,7 @@ import java.util.ArrayList;
 @Parcel
 public class KioskTabPermission extends SugarRecord {
     //fields used in local
-    protected String tagsJsonString;
+    protected String tabPermissionJsonString;
     @Unique
     private String uniqueId;
     private Long createdTime;
@@ -27,12 +27,12 @@ public class KioskTabPermission extends SugarRecord {
     @Ignore
     private ArrayList<String> TabPermission;
 
-    public String getTagsJsonString() {
-        return tagsJsonString;
+    public String getTabPermissionJsonString() {
+        return tabPermissionJsonString;
     }
 
-    public void setTagsJsonString(String tagsJsonString) {
-        this.tagsJsonString = tagsJsonString;
+    public void setTabPermissionJsonString(String tabPermissionJsonString) {
+        this.tabPermissionJsonString = tabPermissionJsonString;
     }
 
     public String getUniqueId() {

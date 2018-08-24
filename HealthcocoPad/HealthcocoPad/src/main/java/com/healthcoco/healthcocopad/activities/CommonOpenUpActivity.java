@@ -192,7 +192,7 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
                 openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_CROSS, ActionbarLeftRightActionTypeDrawables.WITH_SAVE, R.string.patient_tab_ui_permission_details, new CommonUiPermissionsFragment());
                 break;
             case SETTING_KIOSK:
-                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_CROSS, ActionbarLeftRightActionTypeDrawables.WITH_SAVE, R.string.kiosk_setting, new SettingKioskFragment());
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_CROSS, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, R.string.kiosk_setting, new SettingKioskFragment());
                 break;
             case ADD_NEW_PRESCRIPTION:
                 openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_CROSS, ActionbarLeftRightActionTypeDrawables.WITH_SAVE, R.string.new_prescription, new AddEditNormalVisitPrescriptionFragment());

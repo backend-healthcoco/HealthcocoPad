@@ -152,6 +152,7 @@ public class AppointmentTabsFragment extends HealthCocoFragment implements ViewP
 
     @Override
     public void onClick(View v) {
+        mActivity.hideSoftKeyboard();
         switch (v.getId()) {
             case R.id.bt_cross:
                 prevButtonOnClick();
