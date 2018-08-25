@@ -100,6 +100,7 @@ import com.healthcoco.healthcocopad.dialogFragment.ChangeAppointmentStatusDialog
 import com.healthcoco.healthcocopad.dialogFragment.EnlargedImageViewDialogFragment;
 import com.healthcoco.healthcocopad.dialogFragment.PatientCardDialogFragment;
 import com.healthcoco.healthcocopad.dialogFragment.SelectCategoryDialogFragment;
+import com.healthcoco.healthcocopad.dialogFragment.VerifyLoctionAdminDialogFragment;
 import com.healthcoco.healthcocopad.enums.AddUpdateNameDialogType;
 import com.healthcoco.healthcocopad.enums.BooleanTypeValues;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
@@ -1979,6 +1980,13 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
         addNewSuggestionDialogFragment.setTargetFragment(fragment, requestCode);
         addNewSuggestionDialogFragment.show(getSupportFragmentManager(),
                 addNewSuggestionDialogFragment.getClass().getSimpleName());
+    }
+
+    public void openVerifyAdminFragment(Fragment fragment, int requestCode, SuggestionType suggestionType) {
+        VerifyLoctionAdminDialogFragment adminDialogFragment = new VerifyLoctionAdminDialogFragment(suggestionType);
+        adminDialogFragment.setTargetFragment(fragment, requestCode);
+        adminDialogFragment.show(getSupportFragmentManager(),
+                adminDialogFragment.getClass().getSimpleName());
     }
 
     public void openAddNewSuggestionsFragment(Fragment fragment, int requestCode, SuggestionType suggestionType, String suggestion, String uniqueId) {

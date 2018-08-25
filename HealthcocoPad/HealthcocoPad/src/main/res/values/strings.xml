@@ -33,6 +33,7 @@
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="password_colon">Password&#160;:</string>
+    <string name="email_colon">Email&#160;:</string>
     <string name="signin_accept_terms_and_conditions">By Signing in, you agree to Healthcoco Pad\'s &#160;</string>
 
     <string name="underlined_terms_of_service"><u>Terms of Service</u></string>
@@ -1271,6 +1272,8 @@
     <string name="enter_new_pin">Enter new PIN</string>
     <string name="please_enter_pin">Please Enter PIN</string>
     <string name="pin_successfully_changed">PIN has been successfully Changed</string>
+    <string name="please_enter_valid_email_password">Please Enter valid Email id and Password</string>
+    <string name="please_contact_admin_for_ui_permission">Please contact Admin to change UI Persmission</string>
     <string name="kiosk_not_activated">You have not Activated Kisok</string>
     <string name="please_enter_valid_pin">Please enter 4 digit PIN</string>
     <string name="max_length_reached">Maximum leagth of PIN is 4 digit</string>

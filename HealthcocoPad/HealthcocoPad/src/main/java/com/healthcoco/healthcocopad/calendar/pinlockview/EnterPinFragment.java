@@ -1,6 +1,7 @@
 package com.healthcoco.healthcocopad.calendar.pinlockview;
 
 import android.animation.ObjectAnimator;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -17,9 +18,11 @@ import com.healthcoco.healthcocopad.bean.server.KioskPin;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
+import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.KioskScreenType;
 import com.healthcoco.healthcocopad.enums.KioskSubItemType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
+import com.healthcoco.healthcocopad.enums.SuggestionType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.KioskTabListener;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
@@ -40,6 +43,7 @@ public class EnterPinFragment extends HealthCocoFragment implements LocalDoInBac
     private IndicatorDots mIndicatorDots;
     private TextView tvTitle;
     private TextView tvAttempts;
+    private TextView tvForgotPin;
     private KioskTabListener kioskTabListener;
     private Button btHome;
     private User user;
@@ -78,6 +82,7 @@ public class EnterPinFragment extends HealthCocoFragment implements LocalDoInBac
         mIndicatorDots = (IndicatorDots) view.findViewById(R.id.indicator_dots);
         mPinLockView = (PinLockView) view.findViewById(R.id.pinlockView);
         btHome = (Button) view.findViewById(R.id.bt_kiosk_home);
+        tvForgotPin = (TextView) view.findViewById(R.id.tv_forgot_pin);
 
         mPinLockView.attachIndicatorDots(mIndicatorDots);
         mPinLockView.setPinLength(PIN_LENGTH);
@@ -88,6 +93,7 @@ public class EnterPinFragment extends HealthCocoFragment implements LocalDoInBac
     public void initListeners() {
         mPinLockView.setPinLockListener(this);
         btHome.setOnClickListener(this);
+        tvForgotPin.setOnClickListener(this);
     }
 
 
@@ -178,6 +184,22 @@ public class EnterPinFragment extends HealthCocoFragment implements LocalDoInBac
             case R.id.bt_kiosk_home:
                 kioskTabListener.onHomeButtonClick(KioskScreenType.KIOSK.ordinal());
                 break;
+            case R.id.tv_forgot_pin:
+                mActivity.openVerifyAdminFragment(this, HealthCocoConstants.REQUEST_CODE_LOCATION_ADMIN, SuggestionType.PASSWORD);
+                break;
         }
     }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == HealthCocoConstants.REQUEST_CODE_LOCATION_ADMIN) {
+            if (resultCode == HealthCocoConstants.RESULT_CODE_LOCATION_ADMIN) {
+                openCommonOpenUpActivity(CommonOpenUpFragmentType.CHANGE_PIN, "CHANGE_PIN", null);
+            }
+        }
+    }
+
 }
+
