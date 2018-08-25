@@ -115,6 +115,7 @@
                     android:gravity="center|bottom"
                     android:hint="@string/duration"
                     android:inputType="phone"
+                    android:maxLines="1"
                     android:paddingBottom="@dimen/padding_item_drug_dosage_top_bottom"
                     android:paddingLeft="@dimen/padding_item_drug_dosage_top_bottom"
                     android:paddingTop="@dimen/padding_item_drug_dosage_top_bottom"

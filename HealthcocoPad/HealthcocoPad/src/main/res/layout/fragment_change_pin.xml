@@ -41,7 +41,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/attempts_margintop"
-            android:textColor="@color/text_attempts" />
+            android:textColor="@color/text_attempts"
+            android:visibility="gone" />
 
         <com.healthcoco.healthcocopad.calendar.pinlockview.PinLockView
             android:id="@+id/pinlockView"
@@ -54,7 +55,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
-            android:layout_marginTop="@dimen/attempts_margintop"
             android:paddingBottom="@dimen/layout_padding_5dp"
             android:paddingLeft="@dimen/layout_margin"
             android:paddingTop="@dimen/layout_margin"

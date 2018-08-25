@@ -922,7 +922,7 @@ public class AddNewSuggestionDialogFragment extends HealthCocoDialogFragment imp
                         getTargetFragment().onActivityResult(HealthCocoConstants.REQUEST_CODE_LOCATION_ADMIN, HealthCocoConstants.RESULT_CODE_LOCATION_ADMIN, null);
                         dismiss();
                     } else {
-                        Util.showToast(mActivity, "Please contact Admin to change UI Persmission");
+                        Util.showToast(mActivity, getString(R.string.please_contact_admin_for_ui_permission));
                         return;
                     }
                 }
