@@ -289,7 +289,7 @@ public class EventDetailsPopupWindow extends PopupWindow implements View.OnClick
         bundle.putString(HealthCocoConstants.TAG_UNIQUE_ID, events.getUniqueId());
         bundle.putParcelable(AddEventDialogFragment.TAG_FROM_SCREEN_TYPE, Parcels.wrap(screenType.ordinal()));
         addEventDialogFragment.setArguments(bundle);
-        addEventDialogFragment.setTargetFragment(addEventDialogFragment, PatientAppointmentDetailFragment.REQUEST_CODE_APPOINTMENTS_LIST);
+//        addEventDialogFragment.setTargetFragment(addEventDialogFragment, PatientAppointmentDetailFragment.REQUEST_CODE_APPOINTMENTS_LIST);
         addEventDialogFragment.show(mActivity.getSupportFragmentManager(), addEventDialogFragment.getClass().getSimpleName());
         dismiss();
     }
