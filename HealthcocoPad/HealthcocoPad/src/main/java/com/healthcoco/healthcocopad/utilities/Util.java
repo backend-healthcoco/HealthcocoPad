@@ -1094,6 +1094,16 @@ public class Util {
             return Color.WHITE;*/
     }
 
+    public static void restartApplication(HealthCocoActivity mActivity) {
+        Intent intent = mActivity.getBaseContext().getPackageManager().
+                getLaunchIntentForPackage(mActivity.getBaseContext().getPackageName());
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        mActivity.startActivity(intent);
+
+        mActivity.finish();
+    }
+
    /* public static boolean getIsMobileNumberOptional(LoginResponse doctor) {
         for (Hospital hospital : doctor.getHospitals()) {
             if (hospital != null && (!Util.isNullOrEmptyList(hospital.getLocationsAndAccessControl()))) {
