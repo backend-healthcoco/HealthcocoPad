@@ -211,7 +211,7 @@ public class AppointmentsListViewholder extends HealthCocoViewHolder implements
         bundle.putString(HealthCocoConstants.TAG_UNIQUE_ID, appointment.getAppointmentId());
         bundle.putParcelable(BookAppointmentDialogFragment.TAG_FROM_SCREEN_TYPE, Parcels.wrap(screenType.ordinal()));
         dialogFragment.setArguments(bundle);
-        dialogFragment.setTargetFragment(dialogFragment, PatientAppointmentDetailFragment.REQUEST_CODE_APPOINTMENTS_LIST);
+//        dialogFragment.setTargetFragment(dialogFragment, PatientAppointmentDetailFragment.REQUEST_CODE_APPOINTMENTS_LIST);
         dialogFragment.show(mActivity.getSupportFragmentManager(), dialogFragment.getClass().getSimpleName());
     }
 

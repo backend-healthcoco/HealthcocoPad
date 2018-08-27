@@ -47,6 +47,7 @@ import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocopad.dialogFragment.BookAppointmentDialogFragment;
 import com.healthcoco.healthcocopad.dialogFragment.GroupsListDialogFragment;
 import com.healthcoco.healthcocopad.dialogFragment.PatientNumberSearchDialogFragment;
+import com.healthcoco.healthcocopad.enums.AccountPackageType;
 import com.healthcoco.healthcocopad.enums.AddUpdateNameDialogType;
 import com.healthcoco.healthcocopad.enums.AdvanceSearchOptionsType;
 import com.healthcoco.healthcocopad.enums.AutoCompleteTextViewType;
@@ -222,6 +223,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
     private ClinicDetailResponse selectedClinicProfile;
     private boolean mobileNumberOptional;
     private Boolean pidHasDate;
+    private AccountPackageType packageType;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -705,9 +707,13 @@ public class ContactsListFragment extends HealthCocoFragment implements
                     if (user != null && !Util.isNullOrBlank(user.getUniqueId())
                             && !Util.isNullOrBlank(user.getForeignHospitalId())
                             && !Util.isNullOrBlank(user.getForeignLocationId())) {
+//                        if (packageType != null) {
                         initFilterFragment();
                         getListFromLocal(true);
+//                        } else
+//                            showConfirmationAlert(null, mActivity.getResources().getString(R.string.confirm_discard_patient), null);
                         return;
+
                     }
                     break;
                 case GET_CONTACTS:
@@ -799,6 +805,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
         mActivity.hideLoading();
         swipeRefreshLayout.setRefreshing(false);
     }
+
 
     private int getProgressCount(VolleyResponseBean response) {
         int progess = 5;
@@ -1005,6 +1012,9 @@ public class ContactsListFragment extends HealthCocoFragment implements
                     if (doctorClinicProfile != null && doctorClinicProfile.getPidHasDate() != null)
                         pidHasDate = doctorClinicProfile.getPidHasDate();
 
+                    if (doctorClinicProfile != null && doctorClinicProfile.getPackageType() != null)
+                        packageType = doctorClinicProfile.getPackageType();
+
 //                    mobileNumberOptional = Util.getIsMobileNumberOptional(doctor);
                 }
                 break;
@@ -1129,7 +1139,8 @@ public class ContactsListFragment extends HealthCocoFragment implements
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                discardPatient(patientDetailsUpdated);
+//                discardPatient(patientDetailsUpdated);
+                Util.restartApplication(mActivity);
             }
         });
         alertBuilder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
