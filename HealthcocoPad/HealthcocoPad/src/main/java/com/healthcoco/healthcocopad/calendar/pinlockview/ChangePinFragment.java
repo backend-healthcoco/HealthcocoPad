@@ -1,6 +1,7 @@
 package com.healthcoco.healthcocopad.calendar.pinlockview;
 
 import android.animation.ObjectAnimator;
+import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -23,6 +24,7 @@ import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimis
 import com.healthcoco.healthcocopad.listeners.PatientRegistrationDetailsListener;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
+import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.Util;
 
 
@@ -111,6 +113,8 @@ public class ChangePinFragment extends HealthCocoFragment implements LocalDoInBa
                         LocalDataServiceImpl.getInstance(mApp).
                                 addKioskPin(response.getData());
                         Util.showToast(mActivity, getString(R.string.pin_successfully_changed));
+                        mActivity.setResult(HealthCocoConstants.RESULT_CODE_CHANGE_PIN, null);
+//                     onActivityResult(HealthCocoConstants.REQUEST_CODE_CHANGE_PIN, Activity.RESULT_OK, null);
                         mActivity.hideLoading();
                         mActivity.finish();
                     }

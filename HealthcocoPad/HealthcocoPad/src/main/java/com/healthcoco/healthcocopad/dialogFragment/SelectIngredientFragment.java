@@ -248,16 +248,14 @@ public class SelectIngredientFragment extends HealthCocoFragment implements
                 }
             }
 
-        MealQuantity tempQuantity = new MealQuantity();
         if (ingredientResponse.getQuantity() != null) {
+            MealQuantity tempQuantity = new MealQuantity();
             tempQuantity.setValue(ingredientResponse.getQuantity().getValue());
             if (ingredientResponse.getQuantity().getType() != null)
                 tempQuantity.setType(ingredientResponse.getQuantity().getType());
+            ingredient.setQuantityTemp(tempQuantity);
+            ingredient.setQuantity(tempQuantity);
         }
-        ingredient.setQuantityTemp(tempQuantity);
-        ingredient.setType(ingredientResponse.getQuantity().getType());
-        ingredient.setValue(ingredientResponse.getQuantity().getValue());
-
 
         if (ingredientResponse.getCalories() != null) {
             MealQuantity qty = new MealQuantity();
@@ -340,28 +338,33 @@ public class SelectIngredientFragment extends HealthCocoFragment implements
 
     private Ingredient getNutrientPerHundredUnit(Ingredient ingredientResponse) {
 
-        QuantityType type = ingredientResponse.getType();
-        double value = ingredientResponse.getValue();
         double currentValue = 1;
-        MealQuantity currentQuantity = new MealQuantity();
-        if (!Util.isNullOrEmptyList(ingredientResponse.getEquivalentMeasurements()))
-            for (EquivalentQuantities equivalentQuantities : ingredientResponse.getEquivalentMeasurements()) {
-                if (type == equivalentQuantities.getServingType()) {
-                    double equivalentQuantitiesValue = equivalentQuantities.getValue();
-                    currentValue = value * equivalentQuantitiesValue;
-                    currentQuantity.setValue(currentValue);
-                    currentQuantity.setType(equivalentQuantities.getType());
-                    ingredientResponse.setCurrentQuantity(currentQuantity);
-                }
-            }
+        if (ingredientResponse.getQuantity() != null) {
+            QuantityType type = ingredientResponse.getQuantity().getType();
+            double value = ingredientResponse.getQuantity().getValue();
 
-        MealQuantity tempQuantity = new MealQuantity();
-        if (!Util.isNullOrZeroNumber(ingredientResponse.getValue())) {
-            tempQuantity.setValue(ingredientResponse.getValue());
-            if (ingredientResponse.getType() != null)
-                tempQuantity.setType(ingredientResponse.getType());
+            MealQuantity currentQuantity = new MealQuantity();
+            if (!Util.isNullOrEmptyList(ingredientResponse.getEquivalentMeasurements()))
+                for (EquivalentQuantities equivalentQuantities : ingredientResponse.getEquivalentMeasurements()) {
+                    if (type == equivalentQuantities.getServingType()) {
+                        double equivalentQuantitiesValue = equivalentQuantities.getValue();
+                        currentValue = value * equivalentQuantitiesValue;
+                        currentQuantity.setValue(currentValue);
+                        currentQuantity.setType(equivalentQuantities.getType());
+                        ingredientResponse.setCurrentQuantity(currentQuantity);
+                    }
+                }
         }
-        ingredientResponse.setQuantityTemp(tempQuantity);
+        if (ingredientResponse.getQuantity() != null) {
+            MealQuantity tempQuantity = new MealQuantity();
+            if (!Util.isNullOrZeroNumber(ingredientResponse.getQuantity().getValue())) {
+                tempQuantity.setValue(ingredientResponse.getQuantity().getValue());
+                if (ingredientResponse.getQuantity().getType() != null)
+                    tempQuantity.setType(ingredientResponse.getQuantity().getType());
+            }
+            ingredientResponse.setQuantity(tempQuantity);
+            ingredientResponse.setQuantityTemp(tempQuantity);
+        }
 
         if (ingredientResponse.getCalories() != null) {
             MealQuantity qty = new MealQuantity();

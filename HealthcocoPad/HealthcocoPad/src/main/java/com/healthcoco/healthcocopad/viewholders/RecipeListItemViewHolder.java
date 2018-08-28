@@ -196,9 +196,11 @@ public class RecipeListItemViewHolder extends HealthcocoComonRecylcerViewHolder 
 
                 tvItemTitle.setText(ingredient.getName());
 
-                String quantityType = ingredient.getType().getUnit();
-                if (!Util.isNullOrZeroNumber(ingredient.getValue())) {
-                    tvItemQuantity.setText(Util.getValidatedValue(ingredient.getValue()) + quantityType);
+                if (ingredient.getQuantity() != null) {
+                    String quantityType = ingredient.getQuantity().getType().getUnit();
+                    if (!Util.isNullOrZeroNumber(ingredient.getQuantity().getValue())) {
+                        tvItemQuantity.setText(Util.getValidatedValue(ingredient.getQuantity().getValue()) + quantityType);
+                    }
                 }
                 if (ingredient.getCalories() != null) {
                     if (ingredient.getCalories().getType() != null) {

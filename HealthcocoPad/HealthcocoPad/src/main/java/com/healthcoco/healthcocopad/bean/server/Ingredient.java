@@ -30,8 +30,7 @@ public class Ingredient extends SugarRecord {
 
     private String uniqueId;
     private String name;
-    private double value;
-    private QuantityType type;
+    private MealQuantity quantity;
     @Ignore
     private List<EquivalentQuantities> equivalentMeasurements;
     @Ignore
@@ -149,20 +148,12 @@ public class Ingredient extends SugarRecord {
         this.name = name;
     }
 
-    public double getValue() {
-        return value;
+    public MealQuantity getQuantity() {
+        return quantity;
     }
 
-    public void setValue(double value) {
-        this.value = value;
-    }
-
-    public QuantityType getType() {
-        return type;
-    }
-
-    public void setType(QuantityType type) {
-        this.type = type;
+    public void setQuantity(MealQuantity quantity) {
+        this.quantity = quantity;
     }
 
     public List<EquivalentQuantities> getEquivalentMeasurements() {

@@ -89,10 +89,12 @@ public class IngredientListItemViewHolder extends HealthcocoComonRecylcerViewHol
         if (ingredient != null) {
             tvTitle.setText(ingredient.getName());
 
-            if (!Util.isNullOrZeroNumber(ingredient.getValue())) {
-                tvQuantity.setText(Util.getValidatedValue(ingredient.getValue()));
-                mActivity.initPopupWindows(tvQuantity, PopupWindowType.QUANTITY_VALUE, PopupWindowType.QUANTITY_VALUE.getList(), this);
-                tvServingType.setText(ingredient.getType().getUnit());
+            if (ingredient.getQuantity() != null) {
+                if (!Util.isNullOrZeroNumber(ingredient.getQuantity().getValue())) {
+                    tvQuantity.setText(Util.getValidatedValue(ingredient.getQuantity().getValue()));
+                    mActivity.initPopupWindows(tvQuantity, PopupWindowType.QUANTITY_VALUE, PopupWindowType.QUANTITY_VALUE.getList(), this);
+                    tvServingType.setText(ingredient.getQuantity().getType().getUnit());
+                }
             } else {
                 tvQuantity.setText("");
             }
@@ -145,20 +147,25 @@ public class IngredientListItemViewHolder extends HealthcocoComonRecylcerViewHol
                     EquivalentQuantities equivalentQuantities = (EquivalentQuantities) object;
                     this.equivalentQuantities = equivalentQuantities;
                     tvServingType.setText(equivalentQuantities.getServingType().getUnit());
-                    ingredient.setType(equivalentQuantities.getServingType());
-                    ingredient.getCurrentQuantity().setValue(Util.getValidatedDoubleValue(tvQuantity) * equivalentQuantities.getValue());
-
+                    if (ingredient.getQuantity() != null) {
+                        ingredient.getQuantity().setType(equivalentQuantities.getServingType());
+                        ingredient.getCurrentQuantity().setValue(Util.getValidatedDoubleValue(tvQuantity) * equivalentQuantities.getValue());
+                    }
                     break;
                 }
             case QUANTITY_VALUE:
                 if (object instanceof String) {
                     tvQuantity.setText((String) object);
                     if (equivalentQuantities != null) {
-                        ingredient.getCurrentQuantity().setValue(Util.getValidatedDoubleValue(tvQuantity) * equivalentQuantities.getValue());
-                        ingredient.setValue(Util.getValidatedDoubleValue(tvQuantity));
+                        if (ingredient.getQuantity() != null) {
+                            ingredient.getCurrentQuantity().setValue(Util.getValidatedDoubleValue(tvQuantity) * equivalentQuantities.getValue());
+                            ingredient.getQuantity().setValue(Util.getValidatedDoubleValue(tvQuantity));
+                        }
                     } else {
-                        ingredient.getCurrentQuantity().setValue((Util.getValidatedDoubleValue(tvQuantity) * ingredient.getCurrentQuantity().getValue()) / ingredient.getValue());
-                        ingredient.setValue(Util.getValidatedDoubleValue(tvQuantity));
+                        if (ingredient.getQuantity() != null) {
+                            ingredient.getCurrentQuantity().setValue((Util.getValidatedDoubleValue(tvQuantity) * ingredient.getCurrentQuantity().getValue()) / ingredient.getQuantity().getValue());
+                            ingredient.getQuantity().setValue(Util.getValidatedDoubleValue(tvQuantity));
+                        }
                     }
                 }
                 break;

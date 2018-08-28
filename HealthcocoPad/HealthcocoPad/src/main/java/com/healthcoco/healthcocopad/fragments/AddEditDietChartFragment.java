@@ -695,10 +695,10 @@ public class AddEditDietChartFragment extends HealthCocoFragment implements
 
                             tvItemTitle.setText(ingredient.getName());
 
-                            if (ingredient.getType() != null) {
-                                String type = ingredient.getType().getUnit();
-                                if (!Util.isNullOrZeroNumber(ingredient.getValue())) {
-                                    tvItemQuantity.setText(Util.getValidatedValue(ingredient.getValue()) + type);
+                            if (ingredient.getQuantity().getType() != null) {
+                                String type = ingredient.getQuantity().getType().getUnit();
+                                if (!Util.isNullOrZeroNumber(ingredient.getQuantity().getValue())) {
+                                    tvItemQuantity.setText(Util.getValidatedValue(ingredient.getQuantity().getValue()) + type);
                                 }
                             }
                             if (ingredient.getCalories() != null) {
