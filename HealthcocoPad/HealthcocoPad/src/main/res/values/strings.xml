@@ -1281,4 +1281,13 @@
     <string name="select_date">Select Date</string>
     <string name="select_doctor">Select Doctor</string>
 
+    <!--Patient Assesment texts-->
+    <string name="community">Community</string>
+    <string name="no_of_family_member">No. of Family Member</string>
+    <string name="adult">Adult</string>
+    <string name="child">Child</string>
+    <string name="pregnant">Pregnant</string>
+    <string name="lactating">Lactating</string>
+    <string name="working">Working</string>
+
 </resources>

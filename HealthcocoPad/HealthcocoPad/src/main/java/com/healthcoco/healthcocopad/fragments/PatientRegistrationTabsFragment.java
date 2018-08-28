@@ -33,9 +33,7 @@ public class PatientRegistrationTabsFragment extends HealthCocoFragment implemen
         View.OnClickListener, PatientRegistrationDetailsListener, TabHost.OnTabChangeListener {
 
     PatientNumberSearchFragment searchFragment;
-    PatientBasicDetailsFragment basicDetailsFragment;
-    PatientOtherDeatilsFragment otherDeatilsFragment;
-    PatientMedicalDeatilsFragment medicalDeatilsFragment;
+    PatientProfileFragment basicDetailsFragment;
     private TabHost tabhost;
     private CustomViewPager mViewPager;
     private ImageButton btCross;
@@ -99,16 +97,8 @@ public class PatientRegistrationTabsFragment extends HealthCocoFragment implemen
                     addFragment(registrationTabsType, searchFragment);
                     break;
                 case BASIC_DETAILS:
-                    basicDetailsFragment = new PatientBasicDetailsFragment(this);
+                    basicDetailsFragment = new PatientProfileFragment(this);
                     addFragment(registrationTabsType, basicDetailsFragment);
-                    break;
-                case MORE_DETAIlS:
-                    otherDeatilsFragment = new PatientOtherDeatilsFragment(this);
-                    addFragment(registrationTabsType, otherDeatilsFragment);
-                    break;
-                case MEDICAL_HISTORY:
-                    medicalDeatilsFragment = new PatientMedicalDeatilsFragment();
-                    addFragment(registrationTabsType, medicalDeatilsFragment);
                     break;
             }
 
@@ -144,14 +134,6 @@ public class PatientRegistrationTabsFragment extends HealthCocoFragment implemen
                 btSave.setVisibility(View.GONE);
                 break;
             case BASIC_DETAILS:
-                btSave.setVisibility(View.VISIBLE);
-                btSave.setText(getString(R.string.next));
-                break;
-            case MORE_DETAIlS:
-                btSave.setVisibility(View.VISIBLE);
-                btSave.setText(getString(R.string.next));
-                break;
-            case MEDICAL_HISTORY:
                 btSave.setVisibility(View.VISIBLE);
                 btSave.setText(getString(R.string.save));
                 break;
@@ -192,12 +174,6 @@ public class PatientRegistrationTabsFragment extends HealthCocoFragment implemen
             case BASIC_DETAILS:
                 basicDetailsFragment.validateData();
                 break;
-            case MORE_DETAIlS:
-                otherDeatilsFragment.validateData();
-                break;
-            case MEDICAL_HISTORY:
-                medicalDeatilsFragment.validateData();
-                break;
         }
     }
 
@@ -209,12 +185,6 @@ public class PatientRegistrationTabsFragment extends HealthCocoFragment implemen
                 ((CommonOpenUpActivity) mActivity).finishThisActivity();
                 break;
             case BASIC_DETAILS:
-                scrollToPrev();
-                break;
-            case MORE_DETAIlS:
-                scrollToPrev();
-                break;
-            case MEDICAL_HISTORY:
                 scrollToPrev();
                 break;
         }
@@ -236,12 +206,6 @@ public class PatientRegistrationTabsFragment extends HealthCocoFragment implemen
             case SEARCH_PATIENT:
                 basicDetailsFragment.initDataFromPreviousFragment(object, isEditPatient);
                 break;
-            case BASIC_DETAILS:
-                otherDeatilsFragment.initDataFromPreviousFragment(object, isEditPatient);
-                break;
-            case MORE_DETAIlS:
-                medicalDeatilsFragment.initDataFromPreviousFragment(object, isEditPatient);
-                break;
         }
         scrollToNext();
 
@@ -254,7 +218,5 @@ public class PatientRegistrationTabsFragment extends HealthCocoFragment implemen
 
     @Override
     public void onTabChanged(String tabId) {
-
-//        nextButtonOnClick();
     }
 }
