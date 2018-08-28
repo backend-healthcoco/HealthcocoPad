@@ -265,7 +265,7 @@ public class PatientNumberSearchFragment extends HealthCocoFragment implements V
                     } else
                         isEdit = true;
             }
-            openRegistrationFragment(null, alreadyRegisteredPatient.getUserId(), false);
+            openRegistrationFragment(null, alreadyRegisteredPatient.getUserId(), true);
         }
     }
 

@@ -1,6 +1,7 @@
 package com.healthcoco.healthcocopad.calendar.pinlockview;
 
 import android.animation.ObjectAnimator;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -196,7 +197,12 @@ public class EnterPinFragment extends HealthCocoFragment implements LocalDoInBac
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == HealthCocoConstants.REQUEST_CODE_LOCATION_ADMIN) {
             if (resultCode == HealthCocoConstants.RESULT_CODE_LOCATION_ADMIN) {
-                openCommonOpenUpActivity(CommonOpenUpFragmentType.CHANGE_PIN, "CHANGE_PIN", null);
+                openCommonOpenUpActivity(CommonOpenUpFragmentType.CHANGE_PIN, "CHANGE_PIN", null, HealthCocoConstants.REQUEST_CODE_CHANGE_PIN);
+            }
+        }
+        if (requestCode == HealthCocoConstants.REQUEST_CODE_CHANGE_PIN) {
+            if (resultCode == HealthCocoConstants.RESULT_CODE_CHANGE_PIN) {
+                new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_FRAGMENT_INITIALISATION_DATA, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             }
         }
     }
