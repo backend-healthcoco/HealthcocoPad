@@ -1290,4 +1290,33 @@
     <string name="lactating">Lactating</string>
     <string name="working">Working</string>
 
+
+    <!--Patient Measurement texts-->
+    <string name="body_age">Body Age</string>
+    <string name="body_age_hint">&#160;(Body Age)&#160;</string>
+    <string name="body_fat_colon">Body Fat&#160;(%)&#160;:&#160;</string>
+    <string name="v_fat_colon">V-Fat&#160;(%)&#160;:&#160;</string>
+    <string name="body_age_colon">Body Age&#160;:&#160;</string>
+    <string name="body_fat">Body Fat</string>
+    <string name="v_fat">V&#160;-&#160;Fat</string>
+    <string name="s_fat">S&#160;-&#160;Fat</string>
+    <string name="s_fat_colon">S-Fat&#160;(%)&#160;:&#160;</string>
+    <string name="muscles">Muscles</string>
+    <string name="muscles_colon">Muscles&#160;(%)&#160;:&#160;</string>
+    <string name="waist_circuference">Waist Circumference</string>
+    <string name="waist_circuference_colon">Waist Circumference&#160;(cm)&#160;:&#160;</string>
+    <string name="hip_circuference_colon">Hip Circumference&#160;(cm)&#160;:&#160;</string>
+    <string name="hip_circuference">Hip Circumference</string>
+    <string name="metabolism">Meatbolism</string>
+    <string name="bmr">BMR</string>
+    <string name="bmr_colon">BMR&#160;(Kcal)&#160;:&#160;</string>
+    <string name="waist_hip_ratio_colon">Waist/Hip Ratio&#160;:&#160;</string>
+    <string name="waist_hip_ratio">Waist/Hip Ratio</string>
+    <string name="waist_by_hip">&#160;(waist/hip)&#160;</string>
+    <string name="kilo_calorie">&#160;(Kcal)&#160;</string>
+    <string name="whole_body">Whole Body</string>
+    <string name="arms_body">Arms Body</string>
+    <string name="trunks_body">Trunks Body</string>
+    <string name="legs_body">Legs Body</string>
+
 </resources>
