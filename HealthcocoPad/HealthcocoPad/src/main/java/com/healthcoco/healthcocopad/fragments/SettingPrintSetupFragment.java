@@ -251,6 +251,16 @@ public class SettingPrintSetupFragment extends HealthCocoFragment implements Gso
     }
 
     @Override
+    public void onErrorResponse(VolleyResponseBean volleyResponseBean, String errorMessage) {
+        super.onErrorResponse(volleyResponseBean, errorMessage);
+        switch (volleyResponseBean.getWebServiceType()) {
+            case GET_PRINT_SETTINGS:
+//                WebDataServiceImpl.getInstance(mApp).getPrintSettings(PrintSettings.class, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(), this, this);
+                break;
+        }
+    }
+
+    @Override
     public void onResponse(VolleyResponseBean response) {
         if (response != null && response.getWebServiceType() != null) {
             switch (response.getWebServiceType()) {
@@ -266,7 +276,6 @@ public class SettingPrintSetupFragment extends HealthCocoFragment implements Gso
                             printSettings = (PrintSettings) response.getData();
                             initData(printSettings);
                         }
-
                         if (isInitialLoading && response.isUserOnline()) {
                             isInitialLoading = false;
                             WebDataServiceImpl.getInstance(mApp).getPrintSettings(PrintSettings.class, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(), this, this);

@@ -5,7 +5,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.RadioGroup;
 
 import com.android.volley.Response;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
@@ -34,30 +38,29 @@ import java.util.ArrayList;
  * Created by Prashant on 14/07/2018.
  */
 
-public class AddEditMeasurementFragment extends HealthCocoFragment implements
+public class AddEditLifeStyleFragment extends HealthCocoFragment implements
         GsonRequest.ErrorListener, LocalDoInBackgroundListenerOptimised, Response.Listener<VolleyResponseBean>,
-        View.OnClickListener, HealthcocoTextWatcherListener {
+        View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
     private User user;
     private RegisteredPatientDetailsUpdated selectedPatient;
-    private EditText editWeight;
-    private EditText editHeight;
-    private EditText editBmi;
-    private EditText editBodyAge;
-    private EditText editWaistCircumference;
-    private EditText editHipCircumference;
-    private EditText editWaistHipRatio;
-    private EditText editBodyFat;
-    private EditText editBmr;
-    private EditText editVfat;
-    private EditText editWholeBodySfat;
-    private EditText editWholeBodyMuscles;
-    private EditText editArmsBodySfat;
-    private EditText editArmsBodyMuscles;
-    private EditText editTrunkBodySfat;
-    private EditText editTrunkBodyMuscles;
-    private EditText editLegsBodySfat;
-    private EditText editLegsBodyMuscles;
+    private EditText editFromTimeWorkingHrs;
+    private EditText editToTimeWorkingHrs;
+    private EditText editFromTimeSleepingDay;
+    private EditText editToTimeSleepingDay;
+    private EditText editFromTimeSleepingNight;
+    private EditText editToTimeSleepingNight;
+    private EditText editFromTimeTvWaching;
+    private EditText editToTimeTvWaching;
+    private EditText editFromTimeSocialMedia;
+    private EditText editToTimeSocialMedia;
+    private CheckBox cbDay;
+    private CheckBox cbNight;
+    private LinearLayout layoutSleepingDay;
+    private LinearLayout layoutSleepingNight;
+    private RadioGroup radioTvBedroom;
+    private RadioGroup radioLaptopBedroom;
+    private RadioGroup radioLifeStyle;
 
 
     @Override
@@ -86,30 +89,30 @@ public class AddEditMeasurementFragment extends HealthCocoFragment implements
     @Override
     public void initViews() {
 
-        editWeight = (EditText) view.findViewById(R.id.edit_weight);
-        editHeight = (EditText) view.findViewById(R.id.edit_height);
-        editBmi = (EditText) view.findViewById(R.id.edit_bmi);
-        editBodyAge = (EditText) view.findViewById(R.id.edit_body_age);
-        editWaistCircumference = (EditText) view.findViewById(R.id.edit_waist_circumference);
-        editHipCircumference = (EditText) view.findViewById(R.id.edit_hip_circumference);
-        editWaistHipRatio = (EditText) view.findViewById(R.id.edit_waist_hip_ratio);
-        editBodyFat = (EditText) view.findViewById(R.id.edit_body_fat);
-        editBmr = (EditText) view.findViewById(R.id.edit_bmr);
-        editVfat = (EditText) view.findViewById(R.id.edit_v_fat);
-        editWholeBodySfat = (EditText) view.findViewById(R.id.edit_whole_body_s_fat);
-        editWholeBodyMuscles = (EditText) view.findViewById(R.id.edit_whole_body_muscles);
-        editArmsBodySfat = (EditText) view.findViewById(R.id.edit_arms_body_s_fat);
-        editArmsBodyMuscles = (EditText) view.findViewById(R.id.edit_arms_body_muscles);
-        editTrunkBodySfat = (EditText) view.findViewById(R.id.edit_trunks_body_s_fat);
-        editTrunkBodyMuscles = (EditText) view.findViewById(R.id.edit_trunks_body_muscles);
-        editLegsBodySfat = (EditText) view.findViewById(R.id.edit_legs_body_s_fat);
-        editLegsBodyMuscles = (EditText) view.findViewById(R.id.edit_legs_body_muscles);
+        editFromTimeWorkingHrs = (EditText) view.findViewById(R.id.edit_working_hrs_from_time);
+        editToTimeWorkingHrs = (EditText) view.findViewById(R.id.edit_working_hrs_to_time);
+        editFromTimeSleepingDay = (EditText) view.findViewById(R.id.edit_sleeping_from_time_day);
+        editToTimeSleepingDay = (EditText) view.findViewById(R.id.edit_sleeping_to_time_day);
+        editFromTimeSleepingNight = (EditText) view.findViewById(R.id.edit_sleeping_from_time_night);
+        editToTimeSleepingNight = (EditText) view.findViewById(R.id.edit_sleeping_to_time_night);
+        editFromTimeTvWaching = (EditText) view.findViewById(R.id.edit_tv_view_from_time);
+        editToTimeTvWaching = (EditText) view.findViewById(R.id.edit_tv_view_to_time);
+        editFromTimeSocialMedia = (EditText) view.findViewById(R.id.edit_social_media_from_time);
+        editToTimeSocialMedia = (EditText) view.findViewById(R.id.edit_social_media_to_time);
+        cbDay = (CheckBox) view.findViewById(R.id.cb_day);
+        cbNight = (CheckBox) view.findViewById(R.id.cb_night);
+        radioTvBedroom = (RadioGroup) view.findViewById(R.id.rg_tv_in_bedroom);
+        radioLaptopBedroom = (RadioGroup) view.findViewById(R.id.rg_laptop_in_bedroom);
+        radioLifeStyle = (RadioGroup) view.findViewById(R.id.rg_life_style);
+        layoutSleepingDay = (LinearLayout) view.findViewById(R.id.layout_sleep_pattern_day);
+        layoutSleepingNight = (LinearLayout) view.findViewById(R.id.layout_sleep_pattern_night);
+
     }
 
     @Override
     public void initListeners() {
-        editHeight.addTextChangedListener(new HealthcocoTextWatcher(editHeight, this));
-        editWeight.addTextChangedListener(new HealthcocoTextWatcher(editWeight, this));
+        cbDay.setOnCheckedChangeListener(this);
+        cbNight.setOnCheckedChangeListener(this);
     }
 
     public void initData() {
@@ -194,64 +197,43 @@ public class AddEditMeasurementFragment extends HealthCocoFragment implements
         String msg = null;
 //        String selectedDate = String.valueOf(tvSelectedDate.getText()).trim();
 
-        if (Util.isNullOrBlank(msg))
-            addMeasurement();
-        else {
+        if (Util.isNullOrBlank(msg)) {
+            addLifeStyle();
+        } else {
             EditTextTextViewErrorUtil.showErrorOnEditText(mActivity, view, errorViewList, msg);
         }
     }
 
-    private void addMeasurement() {
+    private void addLifeStyle() {
 
-        Util.getValidatedValueOrNull(editWeight);
-        Util.getValidatedValueOrNull(editHeight);
-        Util.getValidatedValueOrNull(editBmi);
-        Util.getValidatedValueOrNull(editBodyAge);
-        Util.getValidatedValueOrNull(editWaistCircumference);
-        Util.getValidatedValueOrNull(editHipCircumference);
-        Util.getValidatedValueOrNull(editWaistHipRatio);
-        Util.getValidatedValueOrNull(editBodyFat);
-        Util.getValidatedValueOrNull(editBmr);
-        Util.getValidatedValueOrNull(editVfat);
-        Util.getValidatedValueOrNull(editWholeBodySfat);
-        Util.getValidatedValueOrNull(editWholeBodyMuscles);
-        Util.getValidatedValueOrNull(editArmsBodySfat);
-        Util.getValidatedValueOrNull(editArmsBodyMuscles);
-        Util.getValidatedValueOrNull(editTrunkBodySfat);
-        Util.getValidatedValueOrNull(editTrunkBodyMuscles);
-        Util.getValidatedValueOrNull(editLegsBodySfat);
-        Util.getValidatedValueOrNull(editLegsBodyMuscles);
+        Util.getValidatedValueOrNull(editFromTimeWorkingHrs);
+        Util.getValidatedValueOrNull(editToTimeWorkingHrs);
+        Util.getValidatedValueOrNull(editFromTimeSleepingDay);
+        Util.getValidatedValueOrNull(editToTimeSleepingDay);
+        Util.getValidatedValueOrNull(editFromTimeSleepingNight);
+        Util.getValidatedValueOrNull(editToTimeSleepingNight);
+        Util.getValidatedValueOrNull(editFromTimeTvWaching);
+        Util.getValidatedValueOrNull(editToTimeTvWaching);
+        Util.getValidatedValueOrNull(editFromTimeSocialMedia);
+        Util.getValidatedValueOrNull(editToTimeSocialMedia);
+
     }
 
     @Override
-    public void afterTextChange(View v, String s) {
-        switch (v.getId()) {
-            case R.id.edit_height:
-                if (!Util.isNullOrBlank(s)
-                        && !Util.isNullOrBlank(editWeight.getText().toString())
-                        && !Util.isNullOrBlank(s)) {
-                    float weight = Float.parseFloat(editWeight.getText().toString());
-                    float height = Float.parseFloat(s);
-                    //BMI = weight in KG / square of (height in metre)
-                    float bmiValue = Util.calculateBMI(weight, Float.parseFloat(s) / 100);
-
-                    editBmi.setText(Util.getFormattedFloatNumber(bmiValue));
+    public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+        switch (compoundButton.getId()) {
+            case R.id.cb_day:
+                if (isChecked) {
+                    Util.toggleLayoutView(mActivity, layoutSleepingDay, true);
                 } else {
-                    editBmi.setText("");
+                    Util.toggleLayoutView(mActivity, layoutSleepingDay, false);
                 }
                 break;
-            case R.id.edit_weight:
-                if (!Util.isNullOrBlank(s)
-                        && !Util.isNullOrBlank(editHeight.getText().toString())
-                        && !Util.isNullOrBlank(s)) {
-                    float weight = Float.parseFloat(s);
-                    float height = Float.parseFloat(editHeight.getText().toString());
-                    //BMI = weight in KG / square of (height in metre)
-                    float bmiValue = Util.calculateBMI(weight, height / 100);
-                    editBmi.setText(Util.getFormattedFloatNumber(bmiValue));
-
+            case R.id.cb_night:
+                if (isChecked) {
+                    Util.toggleLayoutView(mActivity, layoutSleepingNight, true);
                 } else {
-                    editBmi.setText("");
+                    Util.toggleLayoutView(mActivity, layoutSleepingNight, false);
                 }
                 break;
         }

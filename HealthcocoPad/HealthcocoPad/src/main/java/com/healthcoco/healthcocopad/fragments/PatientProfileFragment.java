@@ -899,18 +899,10 @@ public class PatientProfileFragment extends HealthCocoFragment implements View.O
     public void onCheckedChanged(RadioGroup radioGroup, int i) {
         RadioButton radioButton = (RadioButton) radioGroupGender.findViewWithTag(getString(R.string.female));
         if (radioButton.isChecked()) {
-            toggleLayoutView(layoutFemale, true);
+            Util.toggleLayoutView(mActivity, layoutFemale, true);
         } else {
-            toggleLayoutView(layoutFemale, false);
+            Util.toggleLayoutView(mActivity, layoutFemale, false);
         }
     }
 
-    private void toggleLayoutView(LinearLayout linearLayout, boolean layoutVisibility) {
-        if (layoutVisibility) {
-            linearLayout.setVisibility(View.VISIBLE);
-            Util.slideDown(mActivity, linearLayout);
-        } else {
-            Util.slideUp(mActivity, linearLayout);
-        }
-    }
 }

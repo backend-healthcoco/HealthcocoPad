@@ -1033,6 +1033,15 @@ public class Util {
     }
 */
 
+    public static void toggleLayoutView(Context ctx, LinearLayout linearLayout, boolean layoutVisibility) {
+        if (layoutVisibility) {
+            linearLayout.setVisibility(View.VISIBLE);
+            slideDown(ctx, linearLayout);
+        } else {
+            slideUp(ctx, linearLayout);
+        }
+    }
+
     public static void slideDown(Context ctx, View v) {
         Animation a = AnimationUtils.loadAnimation(ctx, R.anim.slide_down_layout);
         if (a != null) {

@@ -1319,4 +1319,24 @@
     <string name="trunks_body">Trunks Body</string>
     <string name="legs_body">Legs Body</string>
 
+    <!--Patient Life Style texts-->
+    <string name="working_days">Working Days</string>
+    <string name="working_hrs">Working Hours</string>
+    <string name="from_time">From Time</string>
+    <string name="to_time">To Time</string>
+    <string name="sleep_pattern">Sleep Pattern</string>
+    <string name="off_days">Off Days</string>
+    <string name="day">Day</string>
+    <string name="night">Night</string>
+    <string name="sedentary">Sedentary</string>
+    <string name="moderate">Moderate</string>
+    <string name="heavy">Heavy</string>
+    <string name="life_style">Life Style</string>
+    <string name="mobile_usage">Mobile Usage</string>
+    <string name="travelling_period">Travelling Period</string>
+    <string name="tv_view_pattern">TV View Pattern</string>
+    <string name="social_meadia_time">Social Meadia Time</string>
+    <string name="tv_in_bedroom">TV in bedroom \n(Sleeping Hrs)</string>
+    <string name="laptop_in_bedroom">Laptop use in bedroom \n(Sleeping Hrs)</string>
+
 </resources>
