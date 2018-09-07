@@ -209,6 +209,8 @@ public class EditPatientDetailsSetupDialogFragment extends HealthCocoDialogFragm
     }
 
     private void validateData() {
+        if (patientDetails == null)
+            patientDetails = new PatientDetails();
         patientDetails.setShowName(true);
         patientDetails.setShowPID(true);
         patientDetails.setShowResourceId(true);

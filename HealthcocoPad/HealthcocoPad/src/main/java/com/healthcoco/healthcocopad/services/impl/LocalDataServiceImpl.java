@@ -5547,10 +5547,14 @@ public class LocalDataServiceImpl {
         try {
             PrintSettings printSettings = Select.from(PrintSettings.class).where(Condition.prop(LocalDatabaseUtils.KEY_DOCTOR_ID).eq(doctorId)).first();
             if (printSettings != null) {
-                printSettings.setHeaderSetup(getHeaderSetup());
-                printSettings.setFooterSetup(getFooterSetup());
-                printSettings.setContentSetup(getContentSetup());
-                printSettings.setPageSetup(getPageSetup());
+                if (getHeaderSetup() != null)
+                    printSettings.setHeaderSetup(getHeaderSetup());
+                if (getFooterSetup() != null)
+                    printSettings.setFooterSetup(getFooterSetup());
+                if (getContentSetup() != null)
+                    printSettings.setContentSetup(getContentSetup());
+                if (getPageSetup() != null)
+                    printSettings.setPageSetup(getPageSetup());
             }
             volleyResponseBean.setData(printSettings);
             if (responseListener != null)
@@ -5576,7 +5580,8 @@ public class LocalDataServiceImpl {
 
     private FooterSetup getFooterSetup() {
         FooterSetup footerSetup = Select.from(FooterSetup.class).first();
-        footerSetup.setBottomText(getBottomText());
+        if (footerSetup != null)
+            footerSetup.setBottomText(getBottomText());
         return footerSetup;
     }
 
@@ -5586,9 +5591,11 @@ public class LocalDataServiceImpl {
 
     private HeaderSetup getHeaderSetup() {
         HeaderSetup headerSetup = Select.from(HeaderSetup.class).first();
-        headerSetup.setPatientDetails(getPatientDetailsSetup());
-        headerSetup.setTopLeftText(getTopLeftText());
-        headerSetup.setTopRightText(getTopRightText());
+        if (headerSetup != null) {
+            headerSetup.setPatientDetails(getPatientDetailsSetup());
+            headerSetup.setTopLeftText(getTopLeftText());
+            headerSetup.setTopRightText(getTopRightText());
+        }
         return headerSetup;
     }
 
@@ -5621,6 +5628,7 @@ public class LocalDataServiceImpl {
 
     private void addHeaderSetup(HeaderSetup headerSetup) {
         if (headerSetup != null) {
+            HeaderSetup.deleteAll(HeaderSetup.class);
             addPatientDetails(headerSetup.getPatientDetails());
             if (!Util.isNullOrEmptyList(headerSetup.getTopLeftText()))
                 addLeftTopText(headerSetup.getTopLeftText());
@@ -5641,15 +5649,22 @@ public class LocalDataServiceImpl {
     }
 
     private void addPatientDetails(PatientDetails patientDetails) {
-        if (patientDetails != null) patientDetails.save();
+        if (patientDetails != null) {
+            PatientDetails.deleteAll(PatientDetails.class);
+            patientDetails.save();
+        }
     }
 
     private void addContentSetup(ContentSetup contentSetup) {
-        if (contentSetup != null) contentSetup.save();
+        if (contentSetup != null) {
+            ContentSetup.deleteAll(ContentSetup.class);
+            contentSetup.save();
+        }
     }
 
     private void addFooterSetup(FooterSetup footerSetup) {
         if (footerSetup != null) {
+            FooterSetup.deleteAll(FooterSetup.class);
             if (!Util.isNullOrEmptyList(footerSetup.getBottomText()))
                 addBottomText(footerSetup.getBottomText());
             footerSetup.save();
@@ -5662,8 +5677,10 @@ public class LocalDataServiceImpl {
     }
 
     private void addPageSetup(PageSetup pageSetup) {
-        if (pageSetup != null)
+        if (pageSetup != null) {
+            PageSetup.deleteAll(PageSetup.class);
             pageSetup.save();
+        }
     }
 
     public void addPrintSetting(PrintSettings printSetting) {

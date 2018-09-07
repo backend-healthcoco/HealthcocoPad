@@ -178,6 +178,8 @@ public class EditFooterSetupDialogFragment extends HealthCocoDialogFragment
                 }
             }
 
+        } else {
+            footerSetup = new FooterSetup();
         }
     }
 
