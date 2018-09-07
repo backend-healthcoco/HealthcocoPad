@@ -157,6 +157,8 @@ public class EditContentSetupDialogFragment extends HealthCocoDialogFragment
                     radioButton1.setChecked(true);
             }
 
+        } else {
+            contentSetup = new ContentSetup();
         }
     }
 

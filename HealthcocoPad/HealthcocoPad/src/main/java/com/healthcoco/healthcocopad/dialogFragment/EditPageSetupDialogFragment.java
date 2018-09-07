@@ -142,7 +142,8 @@ public class EditPageSetupDialogFragment extends HealthCocoDialogFragment
 
             if (!Util.isNullOrZeroNumber(pageSetup.getRightMargin()))
                 etRightMargin.setText(Util.getValidatedValue(pageSetup.getRightMargin()));
-        }
+        } else
+            pageSetup = new PageSetup();
     }
 
     @Override

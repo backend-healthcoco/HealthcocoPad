@@ -103,7 +103,6 @@ public class EditHeaderSetupDialogFragment extends HealthCocoDialogFragment
 
         rightAdapter = new HeaderListAdapter(mActivity);
         lvTopRightText.setAdapter(rightAdapter);
-
     }
 
 
@@ -123,7 +122,6 @@ public class EditHeaderSetupDialogFragment extends HealthCocoDialogFragment
         tvTopLeftText.setSelected(true);
 
         tvTitle.setText(R.string.header);
-
     }
 
     @Override
@@ -160,12 +158,49 @@ public class EditHeaderSetupDialogFragment extends HealthCocoDialogFragment
                     radioButton1.setChecked(true);
             }
 
+            if (Util.isNullOrEmptyList(headerSetup.getTopLeftText()))
+                addDefaultTopLeftText();
+            if (Util.isNullOrEmptyList(headerSetup.getTopRightText()))
+                addDefaultTopRightText();
+
+
+            leftAdapter.setListData(headerSetup.getTopLeftText());
+            leftAdapter.notifyDataSetChanged();
+
+            rightAdapter.setListData(headerSetup.getTopRightText());
+            rightAdapter.notifyDataSetChanged();
+        } else {
+            headerSetup = new HeaderSetup();
+
+            addDefaultTopLeftText();
+            addDefaultTopRightText();
+
             leftAdapter.setListData(headerSetup.getTopLeftText());
             leftAdapter.notifyDataSetChanged();
 
             rightAdapter.setListData(headerSetup.getTopRightText());
             rightAdapter.notifyDataSetChanged();
         }
+    }
+
+    private void addDefaultTopRightText() {
+        List<RightText> topRightText = new ArrayList<>();
+        topRightText.add(new RightText());
+        topRightText.add(new RightText());
+        topRightText.add(new RightText());
+        topRightText.add(new RightText());
+        headerSetup.setTopRightText(topRightText);
+
+    }
+
+    private void addDefaultTopLeftText() {
+        List<LeftText> topLeftText = new ArrayList<>();
+        topLeftText.add(new LeftText());
+        topLeftText.add(new LeftText());
+        topLeftText.add(new LeftText());
+        topLeftText.add(new LeftText());
+        headerSetup.setTopLeftText(topLeftText);
+
     }
 
     @Override
