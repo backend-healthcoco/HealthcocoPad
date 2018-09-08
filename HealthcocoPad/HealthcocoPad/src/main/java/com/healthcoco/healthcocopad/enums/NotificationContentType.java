@@ -12,7 +12,16 @@ public enum NotificationContentType {
     APPOINTMENT_STATUS_CHANGE(R.string.appointment_details, null),
     APPOINTMENT_REFRESH(R.string.appointment_details, null),
     PATIENT_REFRESH(R.string.appointment_details, null),
-    CALENDAR_REMINDER;
+    CALENDAR_REMINDER,
+    CLINICAL_NOTES_REFRESH,
+    PATIENT_VISIT_REFRESH,
+    PRESCRIPTION_REFRESH,
+    RECORDS_REFRESH,
+    TREATMENTS_REFRESH,
+    INVOICE_REFRESH,
+    RECEIPT_REFRESH,
+    DISCHARGE_SUMMARY_REFRESH,
+    REFRESH;
 
     private final int titleId;
     private final WebServiceType webServiceType;
