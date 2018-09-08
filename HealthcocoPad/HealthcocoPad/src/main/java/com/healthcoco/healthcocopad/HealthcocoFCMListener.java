@@ -64,6 +64,17 @@ public class HealthcocoFCMListener extends FirebaseMessagingService {
                     case PATIENT_REFRESH:
                         Util.sendBroadcast((HealthCocoApplication) getApplicationContext(), ContactsListFragment.INTENT_GET_CONTACT_LIST_SERVER);
                         return;
+                    case CLINICAL_NOTES_REFRESH:
+                    case PATIENT_VISIT_REFRESH:
+                    case PRESCRIPTION_REFRESH:
+                    case RECORDS_REFRESH:
+                    case TREATMENTS_REFRESH:
+                    case INVOICE_REFRESH:
+                    case RECEIPT_REFRESH:
+                    case DISCHARGE_SUMMARY_REFRESH:
+                    case REFRESH:
+                        return;
+
                 }
             }
 
