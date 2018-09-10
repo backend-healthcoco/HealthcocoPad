@@ -1327,6 +1327,10 @@
     <string name="sleep_pattern">Sleep Pattern</string>
     <string name="off_days">Off Days</string>
     <string name="day">Day</string>
+    <string name="days">(Days)</string>
+    <string name="hrs_per_day">Hrs/Day</string>
+    <string name="days_per_month">Days/Month</string>
+    <string name="hrs_day">(Hrs/Day)</string>
     <string name="night">Night</string>
     <string name="sedentary">Sedentary</string>
     <string name="moderate">Moderate</string>

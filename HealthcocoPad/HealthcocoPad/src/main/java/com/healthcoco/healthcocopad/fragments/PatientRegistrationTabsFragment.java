@@ -33,7 +33,7 @@ public class PatientRegistrationTabsFragment extends HealthCocoFragment implemen
         View.OnClickListener, PatientRegistrationDetailsListener, TabHost.OnTabChangeListener {
 
     PatientNumberSearchFragment searchFragment;
-    PatientProfileFragment basicDetailsFragment;
+    AddEditLifeStyleFragment basicDetailsFragment;
     private TabHost tabhost;
     private CustomViewPager mViewPager;
     private ImageButton btCross;
@@ -97,7 +97,7 @@ public class PatientRegistrationTabsFragment extends HealthCocoFragment implemen
                     addFragment(registrationTabsType, searchFragment);
                     break;
                 case BASIC_DETAILS:
-                    basicDetailsFragment = new PatientProfileFragment(this);
+                    basicDetailsFragment = new AddEditLifeStyleFragment();
                     addFragment(registrationTabsType, basicDetailsFragment);
                     break;
             }
@@ -172,7 +172,7 @@ public class PatientRegistrationTabsFragment extends HealthCocoFragment implemen
                 Util.showToast(mActivity, R.string.please_enter_valid_mobile_no);
                 break;
             case BASIC_DETAILS:
-                basicDetailsFragment.validateData();
+//                basicDetailsFragment.validateData();
                 break;
         }
     }
@@ -204,7 +204,7 @@ public class PatientRegistrationTabsFragment extends HealthCocoFragment implemen
         PatientRegistrationTabsType registrationTabsType = PatientRegistrationTabsType.values()[currentItem];
         switch (registrationTabsType) {
             case SEARCH_PATIENT:
-                basicDetailsFragment.initDataFromPreviousFragment(object, isEditPatient);
+//                basicDetailsFragment.initDataFromPreviousFragment(object, isEditPatient);
                 break;
         }
         scrollToNext();
