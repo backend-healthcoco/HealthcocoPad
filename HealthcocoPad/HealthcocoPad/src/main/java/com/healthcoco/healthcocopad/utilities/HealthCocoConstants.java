@@ -25,6 +25,7 @@ public class HealthCocoConstants {
     public static final String TAG_IS_KIOSK = "isKiosk";
     public static final String TAG_IS_FROM_SPLASH = "isFromSplash";
     public static final String TAG_IS_FROM_SETTINGS = "isFromSettings";
+    public static final String TAG_IS_FROM_NUTRITION = "isFromNutrition";
     public static final String TAG_TOOTH_NUMBER = "toothNumber";
     public static final String TAG_TOOTH_MATERIAL = "material";
     public static final String PARAM_TAG_UPDATE = "/update/";

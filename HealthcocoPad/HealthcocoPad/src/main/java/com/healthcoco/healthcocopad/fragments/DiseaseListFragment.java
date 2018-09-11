@@ -66,6 +66,7 @@ public class DiseaseListFragment extends HealthCocoFragment implements View.OnCl
     private HistoryFilterType filterType;
     private User user;
     private FontAwesomeButton btAddNewHistory;
+    private boolean isFromNutrition;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -86,6 +87,7 @@ public class DiseaseListFragment extends HealthCocoFragment implements View.OnCl
     public void init() {
         Intent intent = mActivity.getIntent();
         int filterTypeOrdinal = intent.getIntExtra(HealthCocoConstants.TAG_HISTORY_FILTER_TYPE, 0);
+        isFromNutrition = intent.getBooleanExtra(HealthCocoConstants.TAG_IS_FROM_NUTRITION, false);
         diseaseIdsList = intent.getStringArrayListExtra(HealthCocoConstants.TAG_DISEASE_IDS_LIST);
         filterType = HistoryFilterType.values()[filterTypeOrdinal];
         if (filterType != null)

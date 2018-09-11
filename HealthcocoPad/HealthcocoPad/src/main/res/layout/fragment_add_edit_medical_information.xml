@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:orientation="vertical"
+            android:paddingBottom="100dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingTop="5dp">
+
+
+            <LinearLayout
+                android:id="@+id/parent_past_history"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/padding_20_dp"
+                android:layout_marginRight="@dimen/padding_20_dp"
+                android:background="@color/white"
+                android:clickable="true"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginBottom="@dimen/layout_margin"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="@dimen/padding_20_dp"
+                    android:layout_weight="1"
+                    android:text="@string/past_history"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_floating_label" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/patient_profile_image_padding"
+                    android:layout_marginTop="@dimen/layout_padding"
+                    android:layout_weight="3"
+                    android:orientation="horizontal">
+
+
+                    <LinearLayout
+                        android:id="@+id/container_past_history"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="@dimen/layout_padding"
+                        android:layout_weight="1"
+                        android:orientation="vertical" />
+
+                    <com.healthcoco.healthcocopad.views.FontAwesomeButton
+                        android:id="@+id/bt_add_past_history"
+                        style="?android:attr/borderlessButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:layout_marginLeft="@dimen/padding_20_dp"
+                        android:background="@drawable/selector_rounded_corners_btn_blue"
+                        android:minHeight="0dp"
+                        android:paddingBottom="10dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="15dp"
+                        android:paddingTop="10dp"
+                        android:text="@string/icon_text_add"
+                        android:textColor="@drawable/text_selector_white_blue"
+                        android:textSize="@dimen/text_size_edit_otp_number"
+                        android:visibility="visible" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/parent_family_history"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/padding_20_dp"
+                android:layout_marginRight="@dimen/padding_20_dp"
+                android:layout_marginTop="@dimen/padding_20_dp"
+                android:background="@color/white"
+                android:clickable="true"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginBottom="@dimen/layout_margin"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="@dimen/padding_20_dp"
+                    android:layout_weight="1"
+                    android:text="@string/family_history"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_floating_label" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/patient_profile_image_padding"
+                    android:layout_marginTop="@dimen/layout_padding"
+                    android:layout_weight="3"
+                    android:orientation="horizontal">
+
+
+                    <LinearLayout
+                        android:id="@+id/container_family_history"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="@dimen/layout_padding"
+                        android:layout_weight="1"
+                        android:orientation="vertical" />
+
+                    <com.healthcoco.healthcocopad.views.FontAwesomeButton
+                        android:id="@+id/bt_add_family_history"
+                        style="?android:attr/borderlessButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:layout_marginLeft="@dimen/padding_20_dp"
+                        android:background="@drawable/selector_rounded_corners_btn_blue"
+                        android:minHeight="0dp"
+                        android:paddingBottom="10dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="15dp"
+                        android:paddingTop="10dp"
+                        android:text="@string/icon_text_add"
+                        android:textColor="@drawable/text_selector_white_blue"
+                        android:textSize="@dimen/text_size_edit_otp_number"
+                        android:visibility="visible" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/padding_20_dp"
+                android:layout_marginRight="@dimen/padding_20_dp"
+                android:background="@color/white"
+                android:clickable="true"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginBottom="@dimen/layout_margin"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="@dimen/padding_20_dp"
+                    android:layout_weight="1"
+                    android:text="@string/working_days"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_floating_label" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/patient_profile_image_padding"
+                    android:layout_weight="3"
+                    android:orientation="vertical">
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/padding_20_dp"
+                        android:orientation="vertical"
+                        android:weightSum="3">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginBottom="@dimen/layout_padding"
+                            android:orientation="horizontal">
+
+                            <CheckBox
+                                android:id="@+id/cb_sunday"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:checked="false"
+                                android:paddingLeft="@dimen/layout_padding"
+                                android:tag="@string/sunday"
+                                android:text="@string/sunday"
+                                android:textColor="@drawable/text_blue_black_selector"
+                                android:textSize="@dimen/text_size_registration_title" />
+
+                            <CheckBox
+                                android:id="@+id/cb_monday"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:checked="false"
+                                android:paddingLeft="@dimen/layout_padding"
+                                android:tag="@string/monday"
+                                android:text="@string/monday"
+                                android:textColor="@drawable/text_blue_black_selector"
+                                android:textSize="@dimen/text_size_registration_title" />
+
+                            <CheckBox
+                                android:id="@+id/cb_tuesday"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:checked="false"
+                                android:paddingLeft="@dimen/layout_padding"
+                                android:tag="@string/tuesday"
+                                android:text="@string/tuesday"
+                                android:textColor="@drawable/text_blue_black_selector"
+                                android:textSize="@dimen/text_size_registration_title" />
+
+                            <CheckBox
+                                android:id="@+id/cb_wednesday"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:checked="false"
+                                android:paddingLeft="@dimen/layout_padding"
+                                android:tag="@string/wednesday"
+                                android:text="@string/wednesday"
+                                android:textColor="@drawable/text_blue_black_selector"
+                                android:textSize="@dimen/text_size_registration_title" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:orientation="horizontal"
+                            android:weightSum="4">
+
+                            <CheckBox
+                                android:id="@+id/cb_thursday"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:checked="false"
+                                android:paddingLeft="@dimen/layout_padding"
+                                android:tag="@string/thursday"
+                                android:text="@string/thursday"
+                                android:textColor="@drawable/text_blue_black_selector"
+                                android:textSize="@dimen/text_size_registration_title" />
+
+                            <CheckBox
+                                android:id="@+id/cb_friday"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:checked="false"
+                                android:paddingLeft="@dimen/layout_padding"
+                                android:tag="@string/friday"
+                                android:text="@string/friday"
+                                android:textColor="@drawable/text_blue_black_selector"
+                                android:textSize="@dimen/text_size_registration_title" />
+
+                            <CheckBox
+                                android:id="@+id/cb_saturday"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:checked="false"
+                                android:paddingLeft="@dimen/layout_padding"
+                                android:tag="@string/saturday"
+                                android:text="@string/saturday"
+                                android:textColor="@drawable/text_blue_black_selector"
+                                android:textSize="@dimen/text_size_registration_title" />
+
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+
+                </LinearLayout>
+            </LinearLayout>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="@dimen/item_contact_padding"
+                android:layout_marginTop="@dimen/padding_20_dp"
+                android:background="@color/grey_hint_color" />
+
+            <LinearLayout
+                android:id="@+id/parent_tv_in_bedroom"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/padding_20_dp"
+                android:layout_marginRight="@dimen/padding_20_dp"
+                android:layout_marginTop="@dimen/padding_20_dp"
+                android:background="@color/white"
+                android:clickable="true"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginBottom="@dimen/layout_margin"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="@dimen/padding_20_dp"
+                    android:layout_weight="1"
+                    android:text="@string/tv_in_bedroom"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_floating_label" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/patient_profile_image_padding"
+                    android:layout_weight="3"
+                    android:orientation="vertical">
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/padding_20_dp"
+                        android:orientation="horizontal"
+                        android:weightSum="3">
+
+                        <RadioGroup
+                            android:id="@+id/rg_tv_in_bedroom"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1.5"
+                            android:orientation="horizontal">
+
+                            <RadioButton
+                                android:id="@+id/rb_yes_tv_bedroom"
+                                style="@style/Base.Widget.AppCompat.CompoundButton.CheckBox"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="@dimen/fab_margin_left"
+                                android:paddingBottom="@dimen/edit_text_patient_registration_padding"
+                                android:paddingLeft="@dimen/layout_padding"
+                                android:paddingRight="@dimen/fab_margin_left"
+                                android:paddingTop="@dimen/edit_text_patient_registration_padding"
+                                android:tag="@string/yes"
+                                android:text="@string/yes"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/text_size_add_visits_lable" />
+
+                            <RadioButton
+                                android:id="@+id/rb_no_tv_bedroom"
+                                style="@style/Base.Widget.AppCompat.CompoundButton.CheckBox"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="false"
+                                android:paddingBottom="@dimen/edit_text_patient_registration_padding"
+                                android:paddingLeft="@dimen/layout_padding"
+                                android:paddingRight="@dimen/fab_margin_left"
+                                android:paddingTop="@dimen/edit_text_patient_registration_padding"
+                                android:tag="@string/no"
+                                android:text="@string/no"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/text_size_add_visits_lable" />
+                        </RadioGroup>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

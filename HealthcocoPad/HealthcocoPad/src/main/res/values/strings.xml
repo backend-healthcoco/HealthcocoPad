@@ -1343,4 +1343,11 @@
     <string name="tv_in_bedroom">TV in bedroom \n(Sleeping Hrs)</string>
     <string name="laptop_in_bedroom">Laptop use in bedroom \n(Sleeping Hrs)</string>
 
+
+    <!--Patient Life Style texts-->
+    <string name="if_insulin">If Insulin</string>
+    <string name="ever_hospitalized">Ever Hospitalized</string>
+    <string name="stress">Stress</string>
+    <string name="genetic_syndrome">Genetic Syndrome/ History</string>
+
 </resources>

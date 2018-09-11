@@ -84,7 +84,6 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/parent_working_days"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/padding_20_dp"
