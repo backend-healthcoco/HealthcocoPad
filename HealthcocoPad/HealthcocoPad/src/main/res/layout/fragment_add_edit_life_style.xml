@@ -317,7 +317,7 @@
                                 android:textSize="12sp" />
 
 
-                            <TextView
+                            <EditText
                                 android:id="@+id/edit_working_hrs_to_time"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"

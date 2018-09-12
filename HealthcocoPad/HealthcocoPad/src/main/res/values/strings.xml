@@ -1349,5 +1349,8 @@
     <string name="ever_hospitalized">Ever Hospitalized</string>
     <string name="stress">Stress</string>
     <string name="genetic_syndrome">Genetic Syndrome/ History</string>
+    <string name="write_a_reason">Write a Reason</string>
+    <string name="freq">Frequency</string>
+    <string name="gms">Gms</string>
 
 </resources>

@@ -6,8 +6,15 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.android.volley.Response;
@@ -19,7 +26,10 @@ import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.MedicalFamilyHistoryDetails;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.User;
+import com.healthcoco.healthcocopad.custom.AutoCompleteTextViewAdapter;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
+import com.healthcoco.healthcocopad.enums.AutoCompleteTextViewType;
+import com.healthcoco.healthcocopad.enums.CommonListDialogType;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.HistoryFilterType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
@@ -32,6 +42,7 @@ import com.healthcoco.healthcocopad.utilities.EditTextTextViewErrorUtil;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
+import com.healthcoco.healthcocopad.views.CustomAutoCompleteTextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,17 +54,54 @@ import java.util.List;
 
 public class AddEditMedicalInformationFragment extends HealthCocoFragment implements
         GsonRequest.ErrorListener, LocalDoInBackgroundListenerOptimised, Response.Listener<VolleyResponseBean>,
-        View.OnClickListener, HistoryDiseaseIdsListener {
+        View.OnClickListener, HistoryDiseaseIdsListener, CompoundButton.OnCheckedChangeListener, RadioGroup.OnCheckedChangeListener {
+
+    public static ArrayList<Object> QUANTITY_ALCOHOL = new ArrayList<Object>() {{
+        add("ml");
+        add("gms");
+        add("unit");
+    }};
+    public static ArrayList<Object> FREQUENCY_ALCOHOL = new ArrayList<Object>() {{
+        add("per Day");
+        add("per Week");
+        add("per Month");
+        add("per Year");
+    }};
 
     private User user;
     private RegisteredPatientDetailsUpdated selectedPatient;
 
     private LinearLayout containerPastHistory;
     private LinearLayout containerFamilyHistory;
+    private LinearLayout layoutSmoking;
+    private LinearLayout layoutAlcohol;
+    private LinearLayout layoutTobacco;
+    private LinearLayout layoutReason;
     private TextView tvNoDataText;
 
     private Button addPastHistory;
     private Button addFamilyHistory;
+
+    private CheckBox cbSmoking;
+    private CheckBox cbAlcohol;
+    private CheckBox cbTobacco;
+    private RadioGroup radioInsulin;
+    private RadioGroup radioHospitalized;
+    private RadioGroup radioStress;
+    private EditText editQuantitySmoking;
+    private EditText editQuantityAlcohol;
+    private EditText editQuantityTobacco;
+    private EditText editFrequencySmoking;
+    private EditText editFrequencyAlcohol;
+    private EditText editFrequencyTobacco;
+    private EditText editReason;
+
+    private CustomAutoCompleteTextView tvQuantitySmoking;
+    private CustomAutoCompleteTextView tvQuantityAlcohol;
+    private CustomAutoCompleteTextView tvQuantityTobacco;
+    private CustomAutoCompleteTextView tvFrequencySmoking;
+    private CustomAutoCompleteTextView tvFrequencyAlcohol;
+    private CustomAutoCompleteTextView tvFrequencyTobacco;
 
     private ArrayList<String> pastHistoryIdsList = new ArrayList<String>();
     private ArrayList<String> familyHistoryIdsList = new ArrayList<String>();
@@ -80,6 +128,7 @@ public class AddEditMedicalInformationFragment extends HealthCocoFragment implem
         initViews();
         initListeners();
         initAdapter();
+        initData();
     }
 
     @Override
@@ -90,15 +139,54 @@ public class AddEditMedicalInformationFragment extends HealthCocoFragment implem
         containerFamilyHistory = (LinearLayout) view.findViewById(R.id.container_family_history);
         addPastHistory = (Button) view.findViewById(R.id.bt_add_past_history);
         addFamilyHistory = (Button) view.findViewById(R.id.bt_add_family_history);
+
+        cbSmoking = (CheckBox) view.findViewById(R.id.cb_smoking);
+        cbAlcohol = (CheckBox) view.findViewById(R.id.cb_alcohol);
+        cbTobacco = (CheckBox) view.findViewById(R.id.cb_tobacco);
+        radioInsulin = (RadioGroup) view.findViewById(R.id.rg_insulin);
+        radioHospitalized = (RadioGroup) view.findViewById(R.id.rg_hospitalized);
+        radioStress = (RadioGroup) view.findViewById(R.id.rg_stress);
+        editQuantitySmoking = (EditText) view.findViewById(R.id.edit_quantity_smoking);
+        editQuantityAlcohol = (EditText) view.findViewById(R.id.edit_quantity_alcohol);
+        editQuantityTobacco = (EditText) view.findViewById(R.id.edit_quantity_tobacco);
+        editFrequencySmoking = (EditText) view.findViewById(R.id.edit_frequency_smoking);
+        editFrequencyAlcohol = (EditText) view.findViewById(R.id.edit_frequency_alcohol);
+        editFrequencyTobacco = (EditText) view.findViewById(R.id.edit_frequency_tobacco);
+        editReason = (EditText) view.findViewById(R.id.edit_reason);
+        layoutSmoking = (LinearLayout) view.findViewById(R.id.layout_smoking);
+        layoutAlcohol = (LinearLayout) view.findViewById(R.id.layout_alcohol);
+        layoutTobacco = (LinearLayout) view.findViewById(R.id.layout_tobacco);
+        layoutReason = (LinearLayout) view.findViewById(R.id.layout_reason);
+
+        tvQuantitySmoking = (CustomAutoCompleteTextView) view.findViewById(R.id.tv_quantity_smoking);
+        tvQuantityAlcohol = (CustomAutoCompleteTextView) view.findViewById(R.id.tv_quantity_alcohol);
+        tvQuantityTobacco = (CustomAutoCompleteTextView) view.findViewById(R.id.tv_quantity_tobacco);
+        tvFrequencySmoking = (CustomAutoCompleteTextView) view.findViewById(R.id.tv_frequency_smoking);
+        tvFrequencyAlcohol = (CustomAutoCompleteTextView) view.findViewById(R.id.tv_frequency_alcohol);
+        tvFrequencyTobacco = (CustomAutoCompleteTextView) view.findViewById(R.id.tv_frequency_tobacco);
     }
 
     @Override
     public void initListeners() {
         addPastHistory.setOnClickListener(this);
         addFamilyHistory.setOnClickListener(this);
+
+        cbSmoking.setOnCheckedChangeListener(this);
+        cbAlcohol.setOnCheckedChangeListener(this);
+        cbTobacco.setOnCheckedChangeListener(this);
+
+        radioHospitalized.setOnCheckedChangeListener(this);
     }
 
     public void initData() {
+
+        initAutoTvAdapter(tvQuantitySmoking, AutoCompleteTextViewType.QUANTITY, QUANTITY_ALCOHOL);
+        initAutoTvAdapter(tvQuantityAlcohol, AutoCompleteTextViewType.QUANTITY, QUANTITY_ALCOHOL);
+        initAutoTvAdapter(tvQuantityTobacco, AutoCompleteTextViewType.QUANTITY, QUANTITY_ALCOHOL);
+        initAutoTvAdapter(tvFrequencySmoking, AutoCompleteTextViewType.FREQUENCY, FREQUENCY_ALCOHOL);
+        initAutoTvAdapter(tvFrequencyAlcohol, AutoCompleteTextViewType.FREQUENCY, FREQUENCY_ALCOHOL);
+        initAutoTvAdapter(tvFrequencyTobacco, AutoCompleteTextViewType.FREQUENCY, FREQUENCY_ALCOHOL);
+
     }
 
     private void initAdapter() {
@@ -246,4 +334,67 @@ public class AddEditMedicalInformationFragment extends HealthCocoFragment implem
                 break;
         }
     }
+
+    @Override
+    public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+        switch (compoundButton.getId()) {
+            case R.id.cb_smoking:
+                if (isChecked) {
+                    Util.toggleLayoutView(mActivity, layoutSmoking, true);
+                } else {
+                    Util.toggleLayoutView(mActivity, layoutSmoking, false);
+                }
+                break;
+            case R.id.cb_alcohol:
+                if (isChecked) {
+                    Util.toggleLayoutView(mActivity, layoutAlcohol, true);
+                } else {
+                    Util.toggleLayoutView(mActivity, layoutAlcohol, false);
+                }
+                break;
+            case R.id.cb_tobacco:
+                if (isChecked) {
+                    Util.toggleLayoutView(mActivity, layoutTobacco, true);
+                } else {
+                    Util.toggleLayoutView(mActivity, layoutTobacco, false);
+                }
+                break;
+        }
+    }
+
+    @Override
+    public void onCheckedChanged(RadioGroup radioGroup, int i) {
+        RadioButton radioButton = (RadioButton) radioHospitalized.findViewWithTag(getString(R.string.yes));
+        if (radioButton.isChecked()) {
+            Util.toggleLayoutView(mActivity, layoutReason, true);
+        } else {
+            Util.toggleLayoutView(mActivity, layoutReason, false);
+        }
+    }
+
+    private void initAutoTvAdapter(AutoCompleteTextView autoCompleteTextView, final AutoCompleteTextViewType autoCompleteTextViewType, ArrayList<Object> list) {
+        try {
+            if (!Util.isNullOrEmptyList(list)) {
+                final AutoCompleteTextViewAdapter adapter = new AutoCompleteTextViewAdapter(mActivity, R.layout.spinner_drop_down_item_grey_background,
+                        list, autoCompleteTextViewType);
+                autoCompleteTextView.setThreshold(1);
+                autoCompleteTextView.setAdapter(adapter);
+                autoCompleteTextView.setDropDownAnchor(autoCompleteTextView.getId());
+                autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        switch (autoCompleteTextViewType) {
+                            case QUANTITY:
+                                break;
+                            case FREQUENCY:
+                                break;
+                        }
+                    }
+                });
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }

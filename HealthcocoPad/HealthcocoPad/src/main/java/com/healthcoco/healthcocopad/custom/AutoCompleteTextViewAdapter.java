@@ -43,6 +43,57 @@ public class AutoCompleteTextViewAdapter extends ArrayAdapter<Object> {
     private List<Object> items;
     private List<Object> itemsAll = new ArrayList<>();
     private List<Object> suggestions;
+    Filter nameFilter = new Filter() {
+        @Override
+        public String convertResultToString(Object resultValue) {
+            String text = getText(0, null, autoCompleteTextViewType, resultValue);
+            return text;
+        }
+
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            try {
+                suggestions.clear();
+                if (autoCompleteTextViewType == AutoCompleteTextViewType.DOCTOR_CLINIC
+                        || autoCompleteTextViewType == AutoCompleteTextViewType.APPOINTMENT_SLOT
+                        || autoCompleteTextViewType == AutoCompleteTextViewType.YEAR_OF_PASSING
+                        || autoCompleteTextViewType == AutoCompleteTextViewType.NUMBERS
+                        || autoCompleteTextViewType == AutoCompleteTextViewType.EXPERIENCE_LIST
+                        || autoCompleteTextViewType == AutoCompleteTextViewType.BLOOD_GROUP
+                        || autoCompleteTextViewType == AutoCompleteTextViewType.ADVANCE_SEARCH_OPTION
+                        || autoCompleteTextViewType == AutoCompleteTextViewType.DRUG_TYPE
+                        || autoCompleteTextViewType == AutoCompleteTextViewType.ROLES
+                        || autoCompleteTextViewType == AutoCompleteTextViewType.DOCTOR_TITLES
+                        || autoCompleteTextViewType == AutoCompleteTextViewType.AVAILABLE_BOOKED_APPOINTMENTS
+                        || autoCompleteTextViewType == AutoCompleteTextViewType.COUNTRY) {
+
+                    suggestions.addAll(itemsAll);
+                } else if (constraint != null) {
+                    for (Object object : itemsAll) {
+                        String text = getText(0, null, autoCompleteTextViewType, object);
+                        if (text.toLowerCase().contains(constraint.toString().toLowerCase()))
+                            suggestions.add(object);
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            FilterResults filterResults = new FilterResults();
+            filterResults.values = suggestions;
+            filterResults.count = suggestions.size();
+            return filterResults;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            try {
+                items = (List<Object>) results.values;
+                notifyDataSetChanged();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    };
     private int viewResourceId;
 
     public AutoCompleteTextViewAdapter(Context context, int viewResourceId, List<Object> items, AutoCompleteTextViewType autoCompleteTextViewType) {
@@ -214,6 +265,12 @@ public class AutoCompleteTextViewAdapter extends ArrayAdapter<Object> {
                     if (view != null) view.setTag(searchOptionsType);
                 }
                 break;
+            case QUANTITY:
+            case FREQUENCY:
+                if (object instanceof String) {
+                    text = (String) object;
+                }
+                break;
         }
         return text;
     }
@@ -222,56 +279,4 @@ public class AutoCompleteTextViewAdapter extends ArrayAdapter<Object> {
     public Filter getFilter() {
         return nameFilter;
     }
-
-    Filter nameFilter = new Filter() {
-        @Override
-        public String convertResultToString(Object resultValue) {
-            String text = getText(0, null, autoCompleteTextViewType, resultValue);
-            return text;
-        }
-
-        @Override
-        protected FilterResults performFiltering(CharSequence constraint) {
-            try {
-                suggestions.clear();
-                if (autoCompleteTextViewType == AutoCompleteTextViewType.DOCTOR_CLINIC
-                        || autoCompleteTextViewType == AutoCompleteTextViewType.APPOINTMENT_SLOT
-                        || autoCompleteTextViewType == AutoCompleteTextViewType.YEAR_OF_PASSING
-                        || autoCompleteTextViewType == AutoCompleteTextViewType.NUMBERS
-                        || autoCompleteTextViewType == AutoCompleteTextViewType.EXPERIENCE_LIST
-                        || autoCompleteTextViewType == AutoCompleteTextViewType.BLOOD_GROUP
-                        || autoCompleteTextViewType == AutoCompleteTextViewType.ADVANCE_SEARCH_OPTION
-                        || autoCompleteTextViewType == AutoCompleteTextViewType.DRUG_TYPE
-                        || autoCompleteTextViewType == AutoCompleteTextViewType.ROLES
-                        || autoCompleteTextViewType == AutoCompleteTextViewType.DOCTOR_TITLES
-                        || autoCompleteTextViewType == AutoCompleteTextViewType.AVAILABLE_BOOKED_APPOINTMENTS
-                        || autoCompleteTextViewType == AutoCompleteTextViewType.COUNTRY) {
-
-                    suggestions.addAll(itemsAll);
-                } else if (constraint != null) {
-                    for (Object object : itemsAll) {
-                        String text = getText(0, null, autoCompleteTextViewType, object);
-                        if (text.toLowerCase().contains(constraint.toString().toLowerCase()))
-                            suggestions.add(object);
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            FilterResults filterResults = new FilterResults();
-            filterResults.values = suggestions;
-            filterResults.count = suggestions.size();
-            return filterResults;
-        }
-
-        @Override
-        protected void publishResults(CharSequence constraint, FilterResults results) {
-            try {
-                items = (List<Object>) results.values;
-                notifyDataSetChanged();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    };
 }
