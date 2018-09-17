@@ -337,7 +337,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/parent_mobile_usage"
+                android:id="@+id/parent_travelling_period"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/padding_20_dp"
@@ -781,55 +781,40 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/patient_profile_image_padding"
+                    android:layout_marginTop="@dimen/padding_20_dp"
                     android:layout_weight="3"
-                    android:orientation="vertical">
+                    android:gravity="center|start"
+                    android:orientation="horizontal"
+                    android:weightSum="3">
 
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                    <EditText
+                        android:id="@+id/edit_tv_view_time"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/padding_20_dp"
-                        android:orientation="horizontal"
-                        android:weightSum="3">
+                        android:layout_weight="0.8"
+                        android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
+                        android:gravity="center"
+                        android:hint="@string/hrs_day"
+                        android:inputType="numberDecimal"
+                        android:longClickable="false"
+                        android:paddingBottom="@dimen/login_edit_text_bottom_padding"
+                        android:paddingLeft="@dimen/layout_padding"
+                        android:singleLine="true"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/grey_hint_color"
+                        android:textSize="@dimen/text_size_add_visits_lable" />
 
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="@dimen/margin_left_right_add_vital_signs"
-                            android:layout_weight="2"
-                            android:gravity="center|start"
-                            android:orientation="horizontal">
-
-
-                            <EditText
-                                android:id="@+id/edit_tv_view_time"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="0.8"
-                                android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
-                                android:gravity="center"
-                                android:hint="@string/hrs_day"
-                                android:inputType="numberDecimal"
-                                android:longClickable="false"
-                                android:paddingBottom="@dimen/login_edit_text_bottom_padding"
-                                android:paddingLeft="@dimen/layout_padding"
-                                android:singleLine="true"
-                                android:textColor="@color/black"
-                                android:textColorHint="@color/grey_hint_color"
-                                android:textSize="@dimen/text_size_add_visits_lable" />
-
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:singleLine="true"
-                                android:text="@string/hrs_per_day"
-                                android:textColor="@color/black"
-                                android:textColorHint="@color/grey_hint_color"
-                                android:textSize="@dimen/text_size_add_visits_lable"
-                                android:visibility="visible" />
-                        </LinearLayout>
-                    </LinearLayout>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:singleLine="true"
+                        android:text="@string/hrs_per_day"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/grey_hint_color"
+                        android:textSize="@dimen/text_size_add_visits_lable"
+                        android:visibility="visible" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -862,53 +847,38 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/patient_profile_image_padding"
+                    android:layout_marginTop="@dimen/padding_20_dp"
                     android:layout_weight="3"
-                    android:orientation="vertical">
+                    android:gravity="center|start"
+                    android:orientation="horizontal"
+                    android:weightSum="3">
 
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                    <EditText
+                        android:id="@+id/edit_mobile_usage"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/padding_20_dp"
-                        android:orientation="horizontal"
-                        android:weightSum="3">
+                        android:layout_weight="0.8"
+                        android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
+                        android:gravity="center"
+                        android:hint="@string/hrs_day"
+                        android:inputType="numberDecimal"
+                        android:longClickable="false"
+                        android:paddingBottom="@dimen/login_edit_text_bottom_padding"
+                        android:paddingLeft="@dimen/layout_padding"
+                        android:singleLine="true"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/grey_hint_color"
+                        android:textSize="@dimen/text_size_add_visits_lable" />
 
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="@dimen/margin_left_right_add_vital_signs"
-                            android:layout_weight="2"
-                            android:gravity="center|start"
-                            android:orientation="horizontal">
-
-                            <EditText
-                                android:id="@+id/edit_mobile_usage"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="0.8"
-                                android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
-                                android:gravity="center"
-                                android:hint="@string/hrs_day"
-                                android:inputType="numberDecimal"
-                                android:longClickable="false"
-                                android:paddingBottom="@dimen/login_edit_text_bottom_padding"
-                                android:paddingLeft="@dimen/layout_padding"
-                                android:singleLine="true"
-                                android:textColor="@color/black"
-                                android:textColorHint="@color/grey_hint_color"
-                                android:textSize="@dimen/text_size_add_visits_lable" />
-
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:singleLine="true"
-                                android:text="@string/hrs_per_day"
-                                android:textColor="@color/black"
-                                android:textColorHint="@color/grey_hint_color"
-                                android:textSize="@dimen/text_size_add_visits_lable" />
-                        </LinearLayout>
-                    </LinearLayout>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:singleLine="true"
+                        android:text="@string/hrs_per_day"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/grey_hint_color"
+                        android:textSize="@dimen/text_size_add_visits_lable" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -941,170 +911,39 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/patient_profile_image_padding"
+                    android:layout_marginTop="@dimen/padding_20_dp"
                     android:layout_weight="3"
-                    android:orientation="vertical">
+                    android:gravity="center|start"
+                    android:orientation="horizontal"
+                    android:weightSum="3">
 
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                    <EditText
+                        android:id="@+id/edit_social_media"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/layout_padding_5dp"
-                        android:orientation="horizontal"
-                        android:weightSum="3">
+                        android:layout_weight="0.8"
+                        android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
+                        android:gravity="center"
+                        android:hint="@string/hrs_day"
+                        android:inputType="numberDecimal"
+                        android:longClickable="false"
+                        android:paddingBottom="@dimen/login_edit_text_bottom_padding"
+                        android:paddingLeft="@dimen/layout_padding"
+                        android:singleLine="true"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/grey_hint_color"
+                        android:textSize="@dimen/text_size_add_visits_lable" />
 
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="@dimen/margin_left_right_add_vital_signs"
-                            android:layout_marginTop="@dimen/padding_20_dp"
-                            android:layout_weight="2"
-                            android:gravity="center|start"
-                            android:orientation="horizontal">
-
-                            <EditText
-                                android:id="@+id/edit_social_media"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="0.8"
-                                android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
-                                android:gravity="center"
-                                android:hint="@string/hrs_day"
-                                android:inputType="numberDecimal"
-                                android:longClickable="false"
-                                android:paddingBottom="@dimen/login_edit_text_bottom_padding"
-                                android:paddingLeft="@dimen/layout_padding"
-                                android:singleLine="true"
-                                android:textColor="@color/black"
-                                android:textColorHint="@color/grey_hint_color"
-                                android:textSize="@dimen/text_size_add_visits_lable" />
-
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:singleLine="true"
-                                android:text="@string/hrs_per_day"
-                                android:textColor="@color/black"
-                                android:textColorHint="@color/grey_hint_color"
-                                android:textSize="@dimen/text_size_add_visits_lable" />
-                        </LinearLayout>
-
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="@dimen/margin_left_right_add_vital_signs"
-                            android:layout_weight="1"
-                            android:gravity="center|start"
-                            android:orientation="vertical"
-                            android:visibility="gone">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:hint="@string/from_time"
-                                android:paddingLeft="@dimen/layout_padding"
-                                android:textSize="12sp" />
-
-                            <TextView
-                                android:id="@+id/edit_social_media_from_time"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
-                                android:longClickable="false"
-                                android:paddingBottom="@dimen/login_edit_text_bottom_padding"
-                                android:paddingLeft="@dimen/layout_padding"
-                                android:paddingTop="@dimen/layout_padding_5dp"
-                                android:singleLine="true"
-                                android:textColor="@color/black"
-                                android:textColorHint="@color/grey_hint_color"
-                                android:textSize="@dimen/text_size_add_visits_lable" />
-
-                        </LinearLayout>
-
-                        <android.support.design.widget.TextInputLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="@dimen/margin_left_right_add_vital_signs"
-                            android:layout_weight="1"
-                            android:gravity="center|start"
-                            android:orientation="vertical"
-                            android:visibility="gone">
-
-                            <EditText
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
-                                android:editable="false"
-                                android:hint="@string/from_time"
-                                android:inputType="none"
-                                android:paddingBottom="@dimen/login_edit_text_bottom_padding"
-                                android:paddingLeft="@dimen/layout_padding"
-                                android:paddingTop="@dimen/layout_padding_5dp"
-                                android:singleLine="true"
-                                android:textColor="@color/black"
-                                android:textColorHint="@color/grey_hint_color"
-                                android:textSize="@dimen/text_size_add_visits_lable" />
-                        </android.support.design.widget.TextInputLayout>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/margin_left_right_add_vital_signs"
-                            android:layout_marginRight="@dimen/margin_left_right_add_vital_signs"
-                            android:layout_weight="1"
-                            android:gravity="center|start"
-                            android:orientation="vertical"
-                            android:visibility="gone">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:hint="@string/to_time"
-                                android:paddingLeft="@dimen/layout_padding"
-                                android:textSize="12sp" />
-
-                            <TextView
-                                android:id="@+id/edit_social_media_to_time"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
-                                android:longClickable="false"
-                                android:paddingBottom="@dimen/login_edit_text_bottom_padding"
-                                android:paddingLeft="@dimen/layout_padding"
-                                android:paddingTop="@dimen/layout_padding_5dp"
-                                android:singleLine="true"
-                                android:textColor="@color/black"
-                                android:textColorHint="@color/grey_hint_color"
-                                android:textSize="@dimen/text_size_add_visits_lable" />
-
-                        </LinearLayout>
-
-                        <android.support.design.widget.TextInputLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/margin_left_right_add_vital_signs"
-                            android:layout_marginRight="@dimen/margin_left_right_add_vital_signs"
-                            android:layout_weight="1"
-                            android:gravity="center|start"
-                            android:orientation="vertical"
-                            android:visibility="gone">
-
-                            <EditText
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
-                                android:hint="@string/to_time"
-                                android:inputType="textEmailAddress"
-                                android:paddingBottom="@dimen/login_edit_text_bottom_padding"
-                                android:paddingLeft="@dimen/layout_padding"
-                                android:paddingTop="@dimen/layout_padding_5dp"
-                                android:singleLine="true"
-                                android:textColor="@color/black"
-                                android:textColorHint="@color/grey_hint_color"
-                                android:textSize="@dimen/text_size_add_visits_lable" />
-                        </android.support.design.widget.TextInputLayout>
-                    </LinearLayout>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:singleLine="true"
+                        android:text="@string/hrs_per_day"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/grey_hint_color"
+                        android:textSize="@dimen/text_size_add_visits_lable" />
                 </LinearLayout>
             </LinearLayout>
 

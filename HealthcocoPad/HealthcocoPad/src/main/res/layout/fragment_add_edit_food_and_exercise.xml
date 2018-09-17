@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="vertical"
+            android:paddingBottom="100dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingTop="5dp">
+
+
+            <LinearLayout
+                android:id="@+id/parent_food_preference"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/padding_20_dp"
+                android:layout_marginRight="@dimen/padding_20_dp"
+                android:background="@color/white"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginBottom="@dimen/layout_margin"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="@dimen/padding_20_dp"
+                    android:layout_weight="1"
+                    android:text="@string/food_preference"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_floating_label" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/patient_profile_image_padding"
+                    android:layout_weight="3"
+                    android:orientation="vertical">
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/padding_20_dp"
+                        android:orientation="vertical"
+                        android:weightSum="3">
+
+
+                        <GridView
+                            android:id="@+id/gv_food_preference"
+                            android:layout_width="match_parent"
+                            android:layout_height="120dp"
+                            android:background="@color/white"
+                            android:cacheColorHint="@android:color/transparent"
+                            android:clipToPadding="false"
+                            android:divider="@null"
+                            android:listSelector="@android:color/transparent"
+                            android:numColumns="4"
+                            android:overScrollMode="never"
+                            android:visibility="visible" />
+
+
+                    </LinearLayout>
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="@dimen/item_contact_padding"
+                android:layout_marginTop="@dimen/padding_20_dp"
+                android:background="@color/grey_hint_color" />
+
+            <LinearLayout
+                android:id="@+id/parent_meal_time_and_pattern"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/padding_20_dp"
+                android:layout_marginRight="@dimen/padding_20_dp"
+                android:background="@color/white"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginBottom="@dimen/layout_margin"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="@dimen/padding_20_dp"
+                    android:layout_weight="1"
+                    android:text="@string/meal_timings"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_floating_label" />
+
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/patient_profile_image_padding"
+                    android:layout_weight="3"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/padding_20_dp"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:weightSum="3">
+
+                            <CheckBox
+                                android:id="@+id/cb_early_morning"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:checked="false"
+                                android:gravity="center|start"
+                                android:paddingLeft="@dimen/layout_padding"
+                                android:tag="@string/early_morning"
+                                android:text="@string/early_morning"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/text_size_floating_label" />
+
+                            <LinearLayout
+                                android:id="@+id/layout_time_early_morning"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="@dimen/layout_padding_5dp"
+                                android:layout_marginTop="@dimen/layout_padding_5dp"
+                                android:layout_weight="1"
+                                android:gravity="center|start"
+                                android:orientation="horizontal"
+                                android:visibility="gone">
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginRight="@dimen/layout_padding"
+                                    android:src="@drawable/icon_early_morning" />
+
+                                <TextView
+                                    android:id="@+id/tv_time_early_morning"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
+                                    android:hint="@string/time"
+                                    android:longClickable="false"
+                                    android:paddingBottom="@dimen/login_edit_text_bottom_padding"
+                                    android:paddingLeft="@dimen/layout_padding"
+                                    android:singleLine="true"
+                                    android:textColor="@color/black"
+                                    android:textColorHint="@color/grey_hint_color"
+                                    android:textSize="@dimen/text_size_add_visits_lable" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/layout_early_morning"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/layout_padding_5dp"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/margin_left_right_add_vital_signs"
+                                android:layout_marginRight="@dimen/margin_left_right_add_vital_signs"
+                                android:gravity="center|start"
+                                android:orientation="horizontal"
+                                android:weightSum="3">
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1.6"
+                                    android:longClickable="false"
+                                    android:paddingBottom="@dimen/layout_padding"
+                                    android:paddingLeft="@dimen/layout_padding"
+                                    android:paddingTop="@dimen/layout_padding"
+                                    android:singleLine="true"
+                                    android:text="@string/food"
+                                    android:textColor="@color/orange"
+                                    android:textColorHint="@color/grey_hint_color"
+                                    android:textSize="@dimen/text_size_floating_label"
+                                    android:textStyle="bold" />
+
+                                <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+                                    android:id="@+id/tv_add_food_early_morning"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:paddingBottom="@dimen/layout_padding"
+                                    android:paddingLeft="@dimen/item_contact_padding"
+                                    android:paddingRight="@dimen/item_contact_padding"
+                                    android:paddingTop="@dimen/layout_padding"
+                                    android:text="@string/icon_add"
+                                    android:textColor="@color/orange"
+                                    android:textSize="@dimen/text_size_treatment_list_title" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/margin_left_right_add_vital_signs"
+                                android:layout_marginRight="@dimen/margin_left_right_add_vital_signs"
+                                android:layout_weight="1"
+                                android:gravity="center|start"
+                                android:orientation="horizontal"
+                                android:paddingBottom="@dimen/padding_20_dp"
+                                android:weightSum="3">
+
+                                <LinearLayout
+                                    android:id="@+id/container_food_early_morning"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1.6"
+                                    android:gravity="center|start"
+                                    android:orientation="vertical"
+                                    android:paddingLeft="@dimen/layout_padding" />
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/padding_20_dp"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:weightSum="3">
+
+                            <CheckBox
+                                android:id="@+id/cb_breakfast"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:checked="false"
+                                android:gravity="center|start"
+                                android:paddingLeft="@dimen/layout_padding"
+                                android:tag="@string/breakfast"
+                                android:text="@string/breakfast"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/text_size_floating_label" />
+
+                            <LinearLayout
+                                android:id="@+id/layout_time_breakfast"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="@dimen/layout_padding_5dp"
+                                android:layout_marginTop="@dimen/layout_padding_5dp"
+                                android:layout_weight="1"
+                                android:gravity="center|start"
+                                android:orientation="horizontal"
+                                android:visibility="gone">
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginRight="@dimen/layout_padding"
+                                    android:src="@drawable/icon_breakfast" />
+
+                                <TextView
+                                    android:id="@+id/tv_time_breakfast"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
+                                    android:hint="@string/time"
+                                    android:longClickable="false"
+                                    android:paddingBottom="@dimen/login_edit_text_bottom_padding"
+                                    android:paddingLeft="@dimen/layout_padding"
+                                    android:singleLine="true"
+                                    android:textColor="@color/black"
+                                    android:textColorHint="@color/grey_hint_color"
+                                    android:textSize="@dimen/text_size_add_visits_lable" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/layout_breakfast"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/layout_padding_5dp"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/margin_left_right_add_vital_signs"
+                                android:layout_marginRight="@dimen/margin_left_right_add_vital_signs"
+                                android:gravity="center|start"
+                                android:orientation="horizontal"
+                                android:weightSum="3">
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1.6"
+                                    android:longClickable="false"
+                                    android:paddingBottom="@dimen/layout_padding"
+                                    android:paddingLeft="@dimen/layout_padding"
+                                    android:paddingTop="@dimen/layout_padding"
+                                    android:singleLine="true"
+                                    android:text="@string/food"
+                                    android:textColor="@color/orange"
+                                    android:textColorHint="@color/grey_hint_color"
+                                    android:textSize="@dimen/text_size_floating_label"
+                                    android:textStyle="bold" />
+
+                                <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+                                    android:id="@+id/tv_add_food_breakfast"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:paddingBottom="@dimen/layout_padding"
+                                    android:paddingLeft="@dimen/item_contact_padding"
+                                    android:paddingRight="@dimen/item_contact_padding"
+                                    android:paddingTop="@dimen/layout_padding"
+                                    android:text="@string/icon_add"
+                                    android:textColor="@color/orange"
+                                    android:textSize="@dimen/text_size_treatment_list_title" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/margin_left_right_add_vital_signs"
+                                android:layout_marginRight="@dimen/margin_left_right_add_vital_signs"
+                                android:layout_weight="1"
+                                android:gravity="center|start"
+                                android:orientation="horizontal"
+                                android:paddingBottom="@dimen/padding_20_dp"
+                                android:weightSum="3">
+
+                                <LinearLayout
+                                    android:id="@+id/container_food_breakfast"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1.6"
+                                    android:gravity="center|start"
+                                    android:orientation="vertical"
+                                    android:paddingLeft="@dimen/layout_padding" />
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="@dimen/item_contact_padding"
+                android:layout_marginTop="@dimen/padding_20_dp"
+                android:background="@color/grey_hint_color" />
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
