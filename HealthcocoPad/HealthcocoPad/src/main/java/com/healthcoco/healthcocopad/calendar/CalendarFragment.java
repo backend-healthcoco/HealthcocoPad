@@ -387,7 +387,7 @@ public class CalendarFragment extends HealthCocoFragment implements WeekView.Eve
         bundle.putLong(HealthCocoConstants.TAG_SELECTED_DATE_TIME_IN_MILLIS, time.getTimeInMillis());
         bundle.putParcelable(BookAppointmentDialogFragment.TAG_FROM_SCREEN_TYPE, Parcels.wrap(APPOINTMENTS_QUEUE_ADD_NEW.ordinal()));
         dialogFragment.setArguments(bundle);
-        dialogFragment.setTargetFragment(this, PatientAppointmentDetailFragment.REQUEST_CODE_APPOINTMENTS_LIST);
+//        dialogFragment.setTargetFragment(this, PatientAppointmentDetailFragment.REQUEST_CODE_APPOINTMENTS_LIST);
         dialogFragment.show(mActivity.getSupportFragmentManager(), dialogFragment.getClass().getSimpleName());
 
     }

@@ -607,7 +607,7 @@ public class QueueFragment extends HealthCocoFragment implements LocalDoInBackgr
 //        bundle.putString(HealthCocoConstants.TAG_UNIQUE_ID, calendarEvents.getAppointmentId());
         bundle.putParcelable(BookAppointmentDialogFragment.TAG_FROM_SCREEN_TYPE, Parcels.wrap(screenType.ordinal()));
         dialogFragment.setArguments(bundle);
-        dialogFragment.setTargetFragment(this, PatientAppointmentDetailFragment.REQUEST_CODE_APPOINTMENTS_LIST);
+//        dialogFragment.setTargetFragment(this, PatientAppointmentDetailFragment.REQUEST_CODE_APPOINTMENTS_LIST);
         dialogFragment.show(mActivity.getSupportFragmentManager(), dialogFragment.getClass().getSimpleName());
 
     }
