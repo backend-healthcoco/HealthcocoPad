@@ -57,7 +57,7 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     implementation project(':SugarOrm')
     implementation 'com.android.support:appcompat-v7:26.+'
-    implementation 'com.android.support:support-v4:26.+'
+    implementation 'com.android.support:support-v4:26.0.1'
     implementation 'com.android.support:design:26.+'
     //Volley
     implementation 'com.google.code.gson:gson:2.2.4'

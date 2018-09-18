@@ -536,7 +536,10 @@ public class PatientBasicDetailsFragment extends HealthCocoFragment implements V
         if (!Util.isNullOrBlank(age))
             patientDetails.setAge(Integer.parseInt(age));
         if (isEditPatient) {
-            patientDetails.setUserId(selectedPatient.getUserId());
+            if (selectedPatient != null)
+                patientDetails.setUserId(selectedPatient.getUserId());
+            else if (alreadyRegisteredPatient != null)
+                patientDetails.setUserId(alreadyRegisteredPatient.getUserId());
             registrationDetailsListener.readyToMoveNext(patientDetails, isEditPatient);
         } else {
             if (alreadyRegisteredPatient != null)
