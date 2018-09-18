@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <GridView
+            android:id="@+id/gv_assessment_details"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:horizontalSpacing="@dimen/diagram_list_grid_item_spacing"
+            android:numColumns="3"
+            android:padding="@dimen/diagram_list_grid_item_spacing"
+            android:scrollbarStyle="outsideOverlay"
+            android:verticalSpacing="@dimen/diagram_list_grid_item_spacing"
+            android:visibility="gone"></GridView>
+
+
+        <ProgressBar
+            android:id="@+id/progress_loading"
+            style="?android:attr/progressBarStyleSmall"
+            android:layout_width="@dimen/round_progress_bar_size"
+            android:layout_height="@dimen/round_progress_bar_size"
+            android:layout_gravity="center|bottom"
+            android:progressDrawable="@drawable/progress_loading"
+            android:visibility="gone" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fl_bt_add_new_assessment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_marginBottom="@dimen/fab_margin_bottom"
+            android:layout_marginRight="@dimen/fab_margin_right"
+            android:scaleType="center"
+            android:src="@drawable/actionbar_add_me"
+            android:visibility="visible" />
+
+    </FrameLayout>
+
+</LinearLayout>
