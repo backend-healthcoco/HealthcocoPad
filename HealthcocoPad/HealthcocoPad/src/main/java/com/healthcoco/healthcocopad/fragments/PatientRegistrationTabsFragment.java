@@ -17,6 +17,7 @@ import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.adapter.ContactsDetailViewPagerAdapter;
+import com.healthcoco.healthcocopad.bean.server.Patient;
 import com.healthcoco.healthcocopad.custom.DummyTabFactory;
 import com.healthcoco.healthcocopad.enums.PatientRegistrationTabsType;
 import com.healthcoco.healthcocopad.listeners.PatientRegistrationDetailsListener;
@@ -33,7 +34,8 @@ public class PatientRegistrationTabsFragment extends HealthCocoFragment implemen
         View.OnClickListener, PatientRegistrationDetailsListener, TabHost.OnTabChangeListener {
 
     PatientNumberSearchFragment searchFragment;
-    AddEditFoodAndExerciseFragment basicDetailsFragment;
+    PatientProfileFragment basicDetailsFragment;
+    AddEditMeasurementFragment measurementFragment;
     private TabHost tabhost;
     private CustomViewPager mViewPager;
     private ImageButton btCross;
@@ -97,7 +99,7 @@ public class PatientRegistrationTabsFragment extends HealthCocoFragment implemen
                     addFragment(registrationTabsType, searchFragment);
                     break;
                 case BASIC_DETAILS:
-                    basicDetailsFragment = new AddEditFoodAndExerciseFragment();
+                    basicDetailsFragment = new PatientProfileFragment(this);
                     addFragment(registrationTabsType, basicDetailsFragment);
                     break;
             }
@@ -172,7 +174,7 @@ public class PatientRegistrationTabsFragment extends HealthCocoFragment implemen
                 Util.showToast(mActivity, R.string.please_enter_valid_mobile_no);
                 break;
             case BASIC_DETAILS:
-//                basicDetailsFragment.validateData();
+                basicDetailsFragment.validateData();
                 break;
         }
     }
@@ -204,7 +206,7 @@ public class PatientRegistrationTabsFragment extends HealthCocoFragment implemen
         PatientRegistrationTabsType registrationTabsType = PatientRegistrationTabsType.values()[currentItem];
         switch (registrationTabsType) {
             case SEARCH_PATIENT:
-//                basicDetailsFragment.initDataFromPreviousFragment(object, isEditPatient);
+                basicDetailsFragment.initDataFromPreviousFragment(object, isEditPatient);
                 break;
         }
         scrollToNext();

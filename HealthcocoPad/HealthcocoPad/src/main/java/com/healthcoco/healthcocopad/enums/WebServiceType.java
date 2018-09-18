@@ -526,6 +526,8 @@ public enum WebServiceType {
 
     ADD_REMOVE_FAVORITE(Method.GET, "favourite/addRemove/"),
 
+    ADD_PATIENT_DETAILS_ASSESSMENT(Method.POST, "nutrition/assessment/patientDetail/addEdit/"),
+
     GET_HARDCODED_BLOOD_GROUPS(0, "");
 
     private int methodType;

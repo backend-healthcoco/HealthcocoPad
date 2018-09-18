@@ -43,6 +43,7 @@ import com.healthcoco.healthcocopad.bean.request.TreatmentRequest;
 import com.healthcoco.healthcocopad.bean.request.UserPermissionsRequest;
 import com.healthcoco.healthcocopad.bean.request.UserVerification;
 import com.healthcoco.healthcocopad.bean.server.AdviceSuggestion;
+import com.healthcoco.healthcocopad.bean.server.AssessmentPersonalDetail;
 import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
 import com.healthcoco.healthcocopad.bean.server.ClinicDoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.Diagram;
@@ -1813,5 +1814,9 @@ public class WebDataServiceImpl implements GCMRefreshListener {
         }
     }
 
+    public void addPatientDetail(Class<?> class1, AssessmentPersonalDetail object, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        WebServiceType webServiceType = WebServiceType.ADD_PATIENT_DETAILS_ASSESSMENT;
+        getResponse(webServiceType, class1, webServiceType.getUrl(), object, null, responseListener, errorListener);
+    }
 
 }
