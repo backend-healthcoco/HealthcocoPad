@@ -22,6 +22,7 @@ import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
+import com.healthcoco.healthcocopad.enums.FoodPreferenceType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.CommonUiPermissionsListener;
@@ -36,6 +37,7 @@ import com.healthcoco.healthcocopad.utilities.Util;
 import com.healthcoco.healthcocopad.views.TextViewFontAwesome;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
@@ -74,15 +76,8 @@ public class AddEditFoodAndExerciseFragment extends HealthCocoFragment implement
     private GridView gvFoodPreference;
     private UIPermissionItemGridAdapter adapter;
     private ArrayList<String> selectedFoodPreference = new ArrayList<>();
-    private ArrayList<String> allFoodPreference = new ArrayList<String>() {{
-        add("Grain");
-        add("Milk");
-        add("Egg");
-        add("Fish");
-        add("Meat");
-        add("Seafood");
-        add("Honey");
-    }};
+    private ArrayList<String> allFoodPreference;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -105,6 +100,7 @@ public class AddEditFoodAndExerciseFragment extends HealthCocoFragment implement
         initViews();
         initListeners();
         initAdapter();
+        initData();
     }
 
     @Override
@@ -141,12 +137,20 @@ public class AddEditFoodAndExerciseFragment extends HealthCocoFragment implement
     }
 
     public void initData() {
+
+        List<FoodPreferenceType> preferenceTypeList = (List<FoodPreferenceType>) Arrays.asList(FoodPreferenceType.values());
+
+        allFoodPreference = new ArrayList<String>();
+        for (FoodPreferenceType foodPreferenceType : preferenceTypeList) {
+            allFoodPreference.add(foodPreferenceType.getFoodPreferenceType());
+        }
+
+        notifyAdapter(allFoodPreference);
     }
 
     private void initAdapter() {
         adapter = new UIPermissionItemGridAdapter(mActivity, this);
         gvFoodPreference.setAdapter(adapter);
-        notifyAdapter(allFoodPreference);
     }
 
     private void notifyAdapter(List<String> list) {

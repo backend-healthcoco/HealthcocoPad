@@ -73,6 +73,12 @@ public enum CommonOpenUpFragmentType {
     BLOGS(R.string.blogs),
     CHANGE_PIN(R.string.change_pin),
     BLOG_DETAIL(R.string.blog_detail),
+    PATIENT_ASSESSMENT(R.string.personal_assessment),
+    PERSONAL_DETAILS(R.string.personal_details),
+    MEASUREMENT(R.string.measurements),
+    FOOD_AND_EXERCISE(R.string.food_and_exercise),
+    LIFE_SYLE(R.string.life_style),
+    MEDICAL_INFORMATION(R.string.medical_information),
     FEEDBACK_DOCTOR(R.string.feedback);
 
     private final int titleId;

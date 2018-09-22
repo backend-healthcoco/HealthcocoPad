@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import com.healthcoco.healthcocopad.bean.Address;
 import com.healthcoco.healthcocopad.bean.DOB;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
+import com.healthcoco.healthcocopad.utilities.StringUtil;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.orm.SugarRecord;
 import com.orm.annotation.Ignore;
@@ -17,17 +18,18 @@ import java.util.List;
 
 @Parcel
 public class AssessmentPersonalDetail extends SugarRecord {
-
+    public static String TABLE_NAME = " " + StringUtil.toSQLName(AssessmentPersonalDetail.class.getSimpleName());
+    protected String physicalStatusTypeJsonString;
+    protected String dobJsonString;
     protected String addressJsonString;
-
     @Unique
     private String uniqueId;
-
     private Long adminCreatedTime;
     private String createdBy;
     private String patientId;
     private String bloodGroup;
-    private String physicalStatusType;
+    @Ignore
+    private ArrayList<String> physicalStatusType;
     private String goal;
     private String community;
     private int noOfAdultMember;
@@ -36,10 +38,12 @@ public class AssessmentPersonalDetail extends SugarRecord {
     private String firstName;
     @Ignore
     private DOB dob;
+    private int age;
     private String mobileNumber;
     private String gender;
     @Ignore
     private Address address;
+    private String assessmentUniqueId;
     private String doctorId;
     private String locationId;
     private String hospitalId;
@@ -94,14 +98,6 @@ public class AssessmentPersonalDetail extends SugarRecord {
 
     public void setBloodGroup(String bloodGroup) {
         this.bloodGroup = bloodGroup;
-    }
-
-    public String getPhysicalStatusType() {
-        return physicalStatusType;
-    }
-
-    public void setPhysicalStatusType(String physicalStatusType) {
-        this.physicalStatusType = physicalStatusType;
     }
 
     public String getGoal() {
@@ -230,5 +226,45 @@ public class AssessmentPersonalDetail extends SugarRecord {
 
     public void setDiscarded(Boolean discarded) {
         this.discarded = discarded;
+    }
+
+    public String getPhysicalStatusTypeJsonString() {
+        return physicalStatusTypeJsonString;
+    }
+
+    public void setPhysicalStatusTypeJsonString(String physicalStatusTypeJsonString) {
+        this.physicalStatusTypeJsonString = physicalStatusTypeJsonString;
+    }
+
+    public String getDobJsonString() {
+        return dobJsonString;
+    }
+
+    public void setDobJsonString(String dobJsonString) {
+        this.dobJsonString = dobJsonString;
+    }
+
+    public String getAssessmentUniqueId() {
+        return assessmentUniqueId;
+    }
+
+    public void setAssessmentUniqueId(String assessmentUniqueId) {
+        this.assessmentUniqueId = assessmentUniqueId;
+    }
+
+    public ArrayList<String> getPhysicalStatusType() {
+        return physicalStatusType;
+    }
+
+    public void setPhysicalStatusType(ArrayList<String> physicalStatusType) {
+        this.physicalStatusType = physicalStatusType;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
     }
 }

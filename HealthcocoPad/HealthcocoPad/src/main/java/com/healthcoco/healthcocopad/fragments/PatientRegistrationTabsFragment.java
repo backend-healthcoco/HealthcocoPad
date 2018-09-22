@@ -35,7 +35,7 @@ public class PatientRegistrationTabsFragment extends HealthCocoFragment implemen
 
     PatientNumberSearchFragment searchFragment;
     PatientProfileFragment basicDetailsFragment;
-    AddEditMeasurementFragment measurementFragment;
+    PatientAssessmentFragment patientAssessmentFragment;
     private TabHost tabhost;
     private CustomViewPager mViewPager;
     private ImageButton btCross;
@@ -102,6 +102,10 @@ public class PatientRegistrationTabsFragment extends HealthCocoFragment implemen
                     basicDetailsFragment = new PatientProfileFragment(this);
                     addFragment(registrationTabsType, basicDetailsFragment);
                     break;
+                case MORE_DETAIlS:
+                    patientAssessmentFragment = new PatientAssessmentFragment();
+                    addFragment(registrationTabsType, patientAssessmentFragment);
+                    break;
             }
 
         }
@@ -136,6 +140,10 @@ public class PatientRegistrationTabsFragment extends HealthCocoFragment implemen
                 btSave.setVisibility(View.GONE);
                 break;
             case BASIC_DETAILS:
+                btSave.setVisibility(View.VISIBLE);
+                btSave.setText(getString(R.string.save));
+                break;
+            case MORE_DETAIlS:
                 btSave.setVisibility(View.VISIBLE);
                 btSave.setText(getString(R.string.save));
                 break;
@@ -176,6 +184,9 @@ public class PatientRegistrationTabsFragment extends HealthCocoFragment implemen
             case BASIC_DETAILS:
                 basicDetailsFragment.validateData();
                 break;
+            case MORE_DETAIlS:
+//                basicDetailsFragment.validateData();
+                break;
         }
     }
 
@@ -188,6 +199,9 @@ public class PatientRegistrationTabsFragment extends HealthCocoFragment implemen
                 break;
             case BASIC_DETAILS:
                 scrollToPrev();
+                break;
+            case MORE_DETAIlS:
+                ((CommonOpenUpActivity) mActivity).finishThisActivity();
                 break;
         }
     }
@@ -207,6 +221,9 @@ public class PatientRegistrationTabsFragment extends HealthCocoFragment implemen
         switch (registrationTabsType) {
             case SEARCH_PATIENT:
                 basicDetailsFragment.initDataFromPreviousFragment(object, isEditPatient);
+                break;
+            case BASIC_DETAILS:
+                patientAssessmentFragment.initDataFromPreviousFragment(object, isEditPatient);
                 break;
         }
         scrollToNext();

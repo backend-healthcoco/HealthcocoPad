@@ -14,6 +14,7 @@
     <dimen name="treatment_tooth_height">160px</dimen>
     <dimen name="treatment_tooth_width">85px</dimen>
     <dimen name="video_placeholder_height">400px</dimen>
+    <dimen name="assessment_type_height">350px</dimen>
 
     <dimen name="visits_icon_notes">162px</dimen>
     <dimen name="visits_icon_drugs">162px</dimen>

@@ -528,6 +528,8 @@ public enum WebServiceType {
 
     ADD_PATIENT_DETAILS_ASSESSMENT(Method.POST, "nutrition/assessment/patientDetail/addEdit/"),
 
+    ADD_PATIENT_MEASUREMENT_INFO(Method.POST, "nutrition/assessment/measurementInfo/addEdit/"),
+
     GET_HARDCODED_BLOOD_GROUPS(0, "");
 
     private int methodType;

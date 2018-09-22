@@ -29,7 +29,7 @@ public class SettingsUIPermissionItemViewHolder extends HealthCocoViewHolder imp
     }
 
     public void applyData() {
-        chUIPermission.setText(Util.getFormattedStringReplaceBySpace(permission));
+        chUIPermission.setText(Util.toTitleCase(Util.getFormattedStringReplaceBySpace(permission)));
         chUIPermission.setChecked(commonUiPermissionsListener.isAssigned(permission));
     }
 

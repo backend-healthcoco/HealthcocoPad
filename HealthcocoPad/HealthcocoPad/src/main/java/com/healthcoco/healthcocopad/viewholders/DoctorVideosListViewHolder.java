@@ -53,7 +53,7 @@ public class DoctorVideosListViewHolder extends HealthCocoViewHolder {
     }
 
     private void initViews(View view) {
-        tvVideoName = (TextView) view.findViewById(R.id.tv_video_name);
+        tvVideoName = (TextView) view.findViewById(R.id.tv_assessment_type);
         tvDate = (TextView) view.findViewById(R.id.tv_date);
         ivThumbnail = (ImageView) view.findViewById(R.id.iv_thumbnail);
     }

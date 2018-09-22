@@ -124,6 +124,7 @@ public class HealthCocoConstants {
     public static final String PARAM_ROLE = "&role=";
     public static final String PARAM_USER_STATE = "&userState=";
     public static final String TAG_SELECTED_USER_ID = "selectedPatientId";
+    public static final String TAG_PATIENT_ID = "patientId";
     public static final String TAG_MOBILE_NUMBER = "mobileNo";
     public static final String PARAM_TAG_DELETE = "/delete/";
     public static final String PARAM_TAG_ALL = "/ALL/";
@@ -139,6 +140,7 @@ public class HealthCocoConstants {
     public static final String TAG_IS_FROM_CLONE = "isFromClone";
     public static final String TAG_IS_FROM_VISIT = "isFromVisit";
     public static final String TAG_PRESCRIPTION_ID = "prescriptionId";
+    public static final String TAG_ASSESSMENT_ID = "assessmentId";
     public static final String TAG_TEMPLATE_ID = "templateId";
     public static final String TAG_DRUG_DETAILS = "drugDetails";
     public static final String TAG_RESULT_MESSAGE = "msg";

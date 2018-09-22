@@ -281,6 +281,12 @@ public class Util {
         return null;
     }
 
+    public static String getValidatedValue(Double value) {
+        if (value != null)
+            return String.valueOf(value);
+        return null;
+    }
+
     public static boolean isNullOrEmptyList(List<?> list) {
         return (list == null || list.size() <= 0) ? true : false;
     }
@@ -348,6 +354,19 @@ public class Util {
             return value.trim();
         }
         return null;
+    }
+
+    public static double getValidatedDoubleValue(EditText textView) {
+        String validatedValue = getValidatedValueOrNull(textView);
+        try {
+            if (!Util.isNullOrBlank(validatedValue)) {
+                double value = Double.parseDouble(validatedValue);
+                return value;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
     public static String getValidatedValueOrNull(String value) {
@@ -809,6 +828,34 @@ public class Util {
     public static String getFormattedStringReplaceBySpace(String text) {
         text = text.replaceAll("_", " ");
         return text;
+    }
+
+    public static String toTitleCase(String str) {
+
+        if (str == null) {
+            return null;
+        }
+
+        boolean space = true;
+        StringBuilder builder = new StringBuilder(str);
+        final int len = builder.length();
+
+        for (int i = 0; i < len; ++i) {
+            char c = builder.charAt(i);
+            if (space) {
+                if (!Character.isWhitespace(c)) {
+                    // Convert to title case and switch out of whitespace mode.
+                    builder.setCharAt(i, Character.toTitleCase(c));
+                    space = false;
+                }
+            } else if (Character.isWhitespace(c)) {
+                space = true;
+            } else {
+                builder.setCharAt(i, Character.toLowerCase(c));
+            }
+        }
+
+        return builder.toString();
     }
 
     public static void enableAllChildViews(View view, boolean isEnabled) {

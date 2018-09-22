@@ -7,19 +7,16 @@ import android.widget.TextView;
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.HealthCocoViewHolder;
 import com.healthcoco.healthcocopad.R;
-import com.healthcoco.healthcocopad.bean.server.DoctorVideos;
-import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
-import com.healthcoco.healthcocopad.utilities.Util;
+import com.healthcoco.healthcocopad.enums.AssessmentFormType;
 
 /**
- * Created by Shreshtha on 01-08-2017.
+ * Created by Prashant on 18-09-2018.
  */
 
 public class AssessmentTypeListViewHolder extends HealthCocoViewHolder {
     public static final String DATE_FORMAT = "dd MMM";
-    private DoctorVideos doctorVideos;
-    private TextView tvVideoName;
-    private TextView tvDate;
+    private AssessmentFormType assessmentFormType;
+    private TextView tvAssessmentType;
     private ImageView ivThumbnail;
 
     public AssessmentTypeListViewHolder(HealthCocoActivity mActivity) {
@@ -29,32 +26,26 @@ public class AssessmentTypeListViewHolder extends HealthCocoViewHolder {
 
     @Override
     public void setData(Object object) {
-        this.doctorVideos = (DoctorVideos) object;
+        this.assessmentFormType = (AssessmentFormType) object;
     }
 
     @Override
     public void applyData() {
-        if (doctorVideos != null) {
-            if (!Util.isNullOrBlank(doctorVideos.getName())) {
-                tvVideoName.setText(doctorVideos.getName());
-            } else tvVideoName.setText("");
-            if (doctorVideos.getCreatedTime() != null) {
-                tvDate.setText(DateTimeUtil.getFormatedDateAndTime(DATE_FORMAT, doctorVideos.getCreatedTime()));
-            } else tvDate.setText("");
-        }
+        if (assessmentFormType != null) {
+            tvAssessmentType.setText(assessmentFormType.getTitleId());
+        } else tvAssessmentType.setText("");
     }
 
     @Override
     public View getContentView() {
-        View view = (View) inflater.inflate(R.layout.list_item_doctor_video, null);
+        View view = (View) inflater.inflate(R.layout.list_item_assessment_type, null);
         initViews(view);
         initListeners();
         return view;
     }
 
     private void initViews(View view) {
-        tvVideoName = (TextView) view.findViewById(R.id.tv_video_name);
-        tvDate = (TextView) view.findViewById(R.id.tv_date);
+        tvAssessmentType = (TextView) view.findViewById(R.id.tv_assessment_type);
         ivThumbnail = (ImageView) view.findViewById(R.id.iv_thumbnail);
     }
 

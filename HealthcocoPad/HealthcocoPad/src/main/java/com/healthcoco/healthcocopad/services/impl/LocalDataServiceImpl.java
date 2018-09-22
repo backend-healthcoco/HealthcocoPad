@@ -5832,6 +5832,55 @@ public class LocalDataServiceImpl {
         return kioskTabPermission;
     }
 
+    public void addAssessmentPersonalDetail(AssessmentPersonalDetail assessmentPersonalDetail) {
+        if (assessmentPersonalDetail != null) {
+            deleteAllFrom(AssessmentPersonalDetail.class, LocalDatabaseUtils.KEY_UNIQUE_ID, assessmentPersonalDetail.getUniqueId());
+
+            assessmentPersonalDetail.setDobJsonString(getJsonFromObject(assessmentPersonalDetail.getDob()));
+            assessmentPersonalDetail.setAddressJsonString(getJsonFromObject(assessmentPersonalDetail.getAddress()));
+            assessmentPersonalDetail.setPhysicalStatusTypeJsonString(getJsonFromObject(assessmentPersonalDetail.getPhysicalStatusType()));
+            assessmentPersonalDetail.save();
+        }
+//        registeredPatientDetailsUpdated.setGroupIds((ArrayList<String>) (Object) getObjectsListFronJson(registeredPatientDetailsUpdated.getGroupIdsJsonString()));
+    }
+
+    public AssessmentPersonalDetail getAssessmentPersonalDetail(String assessmentId) {
+        AssessmentPersonalDetail personalDetail = Select.from(AssessmentPersonalDetail.class)
+                .where(Condition.prop(LocalDatabaseUtils.KEY_UNIQUE_ID).eq(assessmentId)).first();
+        if (personalDetail != null) {
+            personalDetail.setPhysicalStatusType((ArrayList<String>) (Object) getObjectsListFronJson(personalDetail.getPhysicalStatusTypeJsonString()));
+            personalDetail.setAddress((Address) getObjectFromJson(Address.class, personalDetail.getAddressJsonString()));
+            personalDetail.setDob((DOB) getObjectFromJson(DOB.class, personalDetail.getDobJsonString()));
+        }
+        return personalDetail;
+    }
+
+    public void addPatientMeasurementInfo(PatientMeasurementInfo patientMeasurementInfo) {
+        if (patientMeasurementInfo != null) {
+            deleteAllFrom(PatientMeasurementInfo.class, LocalDatabaseUtils.KEY_ASSESSMENT_ID, patientMeasurementInfo.getAssessmentId());
+
+            patientMeasurementInfo.setWaistHipRatioJsonString(getJsonFromObject(patientMeasurementInfo.getWaistHipRatio()));
+            patientMeasurementInfo.setWholeBodyJsonString(getJsonFromObject(patientMeasurementInfo.getWholeBody()));
+            patientMeasurementInfo.setArmBodyJsonString(getJsonFromObject(patientMeasurementInfo.getArmBody()));
+            patientMeasurementInfo.setTrunkBodyJsonString(getJsonFromObject(patientMeasurementInfo.getTrunkBody()));
+            patientMeasurementInfo.setLegBodyJsonString(getJsonFromObject(patientMeasurementInfo.getLegBody()));
+            patientMeasurementInfo.save();
+        }
+//        registeredPatientDetailsUpdated.setGroupIds((ArrayList<String>) (Object) getObjectsListFronJson(registeredPatientDetailsUpdated.getGroupIdsJsonString()));
+    }
+
+    public PatientMeasurementInfo getPatientMeasurementInfo(String assessmentId) {
+        PatientMeasurementInfo patientMeasurementInfo = Select.from(PatientMeasurementInfo.class)
+                .where(Condition.prop(LocalDatabaseUtils.KEY_ASSESSMENT_ID).eq(assessmentId)).first();
+        if (patientMeasurementInfo != null) {
+            patientMeasurementInfo.setWaistHipRatio((Ratio) getObjectFromJson(Ratio.class, patientMeasurementInfo.getWaistHipRatioJsonString()));
+            patientMeasurementInfo.setWholeBody((BodyContent) getObjectFromJson(BodyContent.class, patientMeasurementInfo.getWholeBodyJsonString()));
+            patientMeasurementInfo.setArmBody((BodyContent) getObjectFromJson(BodyContent.class, patientMeasurementInfo.getArmBodyJsonString()));
+            patientMeasurementInfo.setTrunkBody((BodyContent) getObjectFromJson(BodyContent.class, patientMeasurementInfo.getTrunkBodyJsonString()));
+            patientMeasurementInfo.setLegBody((BodyContent) getObjectFromJson(BodyContent.class, patientMeasurementInfo.getLegBodyJsonString()));
+        }
+        return patientMeasurementInfo;
+    }
 
     private enum FromTableType {
         ADD_TEMPLATES, ADD_TREATMENT, ADD_PRESCRIPTION

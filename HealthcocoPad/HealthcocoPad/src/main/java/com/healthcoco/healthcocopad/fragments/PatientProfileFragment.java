@@ -44,17 +44,16 @@ import com.healthcoco.healthcocopad.bean.server.Profession;
 import com.healthcoco.healthcocopad.bean.server.Reference;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.User;
-import com.healthcoco.healthcocopad.bean.server.UserGroups;
 import com.healthcoco.healthcocopad.custom.AutoCompleteTextViewAdapter;
 import com.healthcoco.healthcocopad.custom.ExistingPatientAutoCompleteAdapter;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocopad.enums.AutoCompleteTextViewType;
 import com.healthcoco.healthcocopad.enums.BooleanTypeValues;
 import com.healthcoco.healthcocopad.enums.CommonListDialogType;
-import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.DialogType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.OptionsType;
+import com.healthcoco.healthcocopad.enums.PhysicalStatusType;
 import com.healthcoco.healthcocopad.enums.RecordType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.CommonListDialogItemClickListener;
@@ -75,8 +74,6 @@ import com.healthcoco.healthcocopad.utilities.ImageUtil;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.healthcoco.healthcocopad.views.CustomAutoCompleteTextView;
-
-import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -156,10 +153,15 @@ public class PatientProfileFragment extends HealthCocoFragment implements View.O
     private EditText editAdult;
     private EditText editChild;
     private EditText editCommunity;
+    private AssessmentPersonalDetail assessmentPersonalDetail;
 
     public PatientProfileFragment(PatientRegistrationDetailsListener registrationDetailsListener) {
         super();
         this.registrationDetailsListener = registrationDetailsListener;
+    }
+
+    public PatientProfileFragment() {
+
     }
 
     @Override
@@ -172,7 +174,18 @@ public class PatientProfileFragment extends HealthCocoFragment implements View.O
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
         init();
+
+        Intent intent = mActivity.getIntent();
+        if (intent != null) {
+            String assessmentId = intent.getStringExtra(HealthCocoConstants.TAG_ASSESSMENT_ID);
+            String patientId = intent.getStringExtra(HealthCocoConstants.TAG_PATIENT_ID);
+            if (assessmentId != null)
+                assessmentPersonalDetail = LocalDataServiceImpl.getInstance(mApp).getAssessmentPersonalDetail(assessmentId);
+            if (assessmentPersonalDetail != null)
+                initPatientDetails(assessmentPersonalDetail);
+        }
     }
 
     @Override
@@ -220,8 +233,11 @@ public class PatientProfileFragment extends HealthCocoFragment implements View.O
         containerAge = (LinearLayout) view.findViewById(R.id.container_age);
         layoutFemale = (LinearLayout) view.findViewById(R.id.layout_female);
         cbPregnant = (CheckBox) view.findViewById(R.id.cb_pregnant);
+        cbPregnant.setTag(PhysicalStatusType.PREGNANT.getPhysicalStatusType());
         cbLactating = (CheckBox) view.findViewById(R.id.cb_lactating);
+        cbLactating.setTag(PhysicalStatusType.LACTATING.getPhysicalStatusType());
         cbWorking = (CheckBox) view.findViewById(R.id.cb_working);
+        cbWorking.setTag(PhysicalStatusType.WORKING.getPhysicalStatusType());
         loadingExistingPatientsList = (LinearLayout) view.findViewById(R.id.loading_existing_patients_list);
 
         layoutFemale.setVisibility(View.GONE);
@@ -229,7 +245,8 @@ public class PatientProfileFragment extends HealthCocoFragment implements View.O
 
     @Override
     public void initListeners() {
-//        ((CommonOpenUpActivity) mActivity).initActionbarRightAction(this);
+        if (registrationDetailsListener == null)
+            ((CommonOpenUpActivity) mActivity).initActionbarRightAction(this);
         tvBirthDay.setOnClickListener(this);
         tvReferredBy.setOnClickListener(this);
         btContactProfile.setOnClickListener(this);
@@ -328,6 +345,7 @@ public class PatientProfileFragment extends HealthCocoFragment implements View.O
         String bloodGroup = "";
         String country = "";
         String streetAddress = "";
+        String age = "";
         if (patientDetails instanceof RegisteredPatientDetailsUpdated) {
             RegisteredPatientDetailsUpdated registeredPatientDetailsUpdated = (RegisteredPatientDetailsUpdated) patientDetails;
             imageUrl = Util.getValidatedValue(registeredPatientDetailsUpdated.getImageUrl());
@@ -359,6 +377,40 @@ public class PatientProfileFragment extends HealthCocoFragment implements View.O
             AlreadyRegisteredPatientsResponse alreadyRegisteredPatient = (AlreadyRegisteredPatientsResponse) patientDetails;
             mobileNumber = Util.getValidatedValue(alreadyRegisteredPatient.getMobileNumber());
             name = Util.getValidatedValue(alreadyRegisteredPatient.getFirstName());
+        } else if (patientDetails instanceof AssessmentPersonalDetail) {
+            AssessmentPersonalDetail personalDetail = (AssessmentPersonalDetail) patientDetails;
+            name = Util.getValidatedValue(personalDetail.getFirstName());
+            mobileNumber = Util.getValidatedValue(personalDetail.getMobileNumber());
+            gender = Util.getValidatedValue(personalDetail.getGender());
+            birthday = Util.getDOB(personalDetail.getDob());
+            if (personalDetail.getDob() == null)
+                age = Util.getValidatedValue(personalDetail.getAge());
+
+            if (!Util.isNullOrEmptyList(personalDetail.getPhysicalStatusType())) {
+                for (String physicalStatus : personalDetail.getPhysicalStatusType()) {
+                    CheckBox checkBox = (CheckBox) view.findViewWithTag(physicalStatus);
+                    checkBox.setChecked(true);
+                }
+            }
+
+            if (personalDetail.getAddress() != null) {
+                Address address = personalDetail.getAddress();
+                city = Util.getValidatedValue(address.getCity());
+                locality = Util.getValidatedValue(address.getLocality());
+                pincode = Util.getValidatedValue(address.getPostalCode());
+                country = Util.getValidatedValue(address.getCountry());
+                streetAddress = Util.getValidatedValue(address.getStreetAddress());
+                selectedCity = new CityResponse();
+                selectedCity.setCity(Util.getValidatedValue(city));
+                selectedCity.setLatitude(address.getLatitude());
+                selectedCity.setLongitude(address.getLongitude());
+            }
+            profession = Util.getValidatedValue(personalDetail.getProfession());
+            bloodGroup = Util.getValidatedValue(personalDetail.getBloodGroup());
+
+            editCommunity.setText(Util.getValidatedValue(personalDetail.getCommunity()));
+            editChild.setText(Util.getValidatedValue(personalDetail.getNoOfChildMember()));
+            editAdult.setText(Util.getValidatedValue(personalDetail.getNoOfAdultMember()));
         }
         if (!Util.isNullOrBlank(imageUrl))
             DownloadImageFromUrlUtil.loadImageUsingImageLoaderUsingDefaultImage(R.drawable.icon_profile_normal, ivImageView, imageUrl, null);
@@ -393,7 +445,10 @@ public class PatientProfileFragment extends HealthCocoFragment implements View.O
         if (!Util.isNullOrBlank(birthday)) {
             containerAge.setVisibility(View.GONE);
             tvBirthDay.setText(birthday);
-        } else containerAge.setVisibility(View.VISIBLE);
+        } else {
+            containerAge.setVisibility(View.VISIBLE);
+            editAge.setText(age);
+        }
     }
 
     @Override
@@ -417,6 +472,9 @@ public class PatientProfileFragment extends HealthCocoFragment implements View.O
                 break;
             case R.id.bt_delete_referred_by:
                 tvReferredBy.setText("");
+                break;
+            case R.id.container_right_action:
+                validateData();
                 break;
 
         }
@@ -456,14 +514,14 @@ public class PatientProfileFragment extends HealthCocoFragment implements View.O
             msg = getResources().getString(R.string.please_enter_valid_pincode);
         }
         if (Util.isNullOrBlank(msg)) {
-            registerPatient(name);
+            addPersonalDetails(name);
         } else {
             errorViewList.add(selectedEditText);
             EditTextTextViewErrorUtil.showErrorOnEditText(mActivity, view, errorViewList, msg);
         }
     }
 
-    private void registerPatient(String name) {
+    private void addPersonalDetails(String name) {
         mActivity.showLoading(false);
         AssessmentPersonalDetail patientDetails = new AssessmentPersonalDetail();
         patientDetails.setFirstName(name);
@@ -473,20 +531,27 @@ public class PatientProfileFragment extends HealthCocoFragment implements View.O
         patientDetails.setLocationId(user.getForeignLocationId());
         patientDetails.setHospitalId(user.getForeignHospitalId());
         patientDetails.setDob(DateTimeUtil.getDob(String.valueOf(tvBirthDay.getText())));
+        if (patientDetails.getDob() == null) {
+            String age = Util.getValidatedValueOrNull(editAge);
+            if (!Util.isNullOrBlank(age))
+                patientDetails.setAge(Integer.parseInt(age));
+        }
         //setting gender
         View checkedRadioButton = view.findViewById(radioGroupGender.getCheckedRadioButtonId());
         if (checkedRadioButton != null) {
             patientDetails.setGender(String.valueOf(checkedRadioButton.getTag()));
             if (String.valueOf(checkedRadioButton.getTag()).equalsIgnoreCase(getString(R.string.female))) {
+                ArrayList<String> physicalStatusList = new ArrayList<>();
                 if (cbPregnant.isChecked()) {
-
+                    physicalStatusList.add((String) cbPregnant.getTag());
                 }
                 if (cbLactating.isChecked()) {
-
+                    physicalStatusList.add((String) cbLactating.getTag());
                 }
                 if (cbWorking.isChecked()) {
-
+                    physicalStatusList.add((String) cbWorking.getTag());
                 }
+                patientDetails.setPhysicalStatusType(physicalStatusList);
             }
         }
 
@@ -497,20 +562,23 @@ public class PatientProfileFragment extends HealthCocoFragment implements View.O
         patientDetails.setNoOfChildMember(Util.getValidatedIntegerValue(editChild));
         patientDetails.setAddress(getAddress());
 
-        String age = Util.getValidatedValueOrNull(editAge);
-//        if (!Util.isNullOrBlank(age))
-//            patientDetails.setAge(Integer.parseInt(age));
-
 
         if (isEditPatient) {
-            patientDetails.setPatientId(selectedPatient.getUserId());
-        } else {
-            if (alreadyRegisteredPatient != null)
+            if (selectedPatient != null)
+                patientDetails.setPatientId(selectedPatient.getUserId());
+            else if (alreadyRegisteredPatient != null)
                 patientDetails.setPatientId(alreadyRegisteredPatient.getUserId());
-        }
-        registrationDetailsListener.readyToMoveNext(patientDetails, isEditPatient);
 
-        WebDataServiceImpl.getInstance(mApp).addPatientDetail(AssessmentPersonalDetail.class, patientDetails, this, this);
+        } else {
+            if (alreadyRegisteredPatient != null) {
+                patientDetails.setPatientId(alreadyRegisteredPatient.getUserId());
+            }
+            if (assessmentPersonalDetail != null) {
+                patientDetails.setPatientId(assessmentPersonalDetail.getPatientId());
+                patientDetails.setUniqueId(assessmentPersonalDetail.getUniqueId());
+            }
+        }
+        WebDataServiceImpl.getInstance(mApp).addPatientPersonalDetail(AssessmentPersonalDetail.class, patientDetails, this, this);
     }
 
     private Address getAddress() {
@@ -615,14 +683,15 @@ public class PatientProfileFragment extends HealthCocoFragment implements View.O
             case ADD_PATIENT_DETAILS_ASSESSMENT:
                 if (response.isValidData(response) && response.getData() instanceof AssessmentPersonalDetail) {
                     AssessmentPersonalDetail personalDetail = (AssessmentPersonalDetail) response.getData();
-//                    LogUtils.LOGD(TAG, "REGISTER_PATIENT SYNC_COMPLETE" + personalDetail.getLocalPatientName());
-//                    LocalDataServiceImpl.getInstance(mApp).addPatient(patientDetails);
-//                    openPatientDetailScreen(patientDetails);
-//                    refreshContactsData(patientDetails);
+                    LocalDataServiceImpl.getInstance(mApp).addAssessmentPersonalDetail(personalDetail);
+                    refreshContactsData();
                     mActivity.hideLoading();
-//                    mActivity.setResult(HealthCocoConstants.RESULT_CODE_REGISTRATION);
-//                    ((CommonOpenUpActivity) mActivity).finish();
-                    return;
+                    if (registrationDetailsListener != null) {
+                        registrationDetailsListener.readyToMoveNext(personalDetail, isEditPatient);
+                    } else {
+                        mActivity.setResult(HealthCocoConstants.RESULT_CODE_REGISTRATION);
+                        ((CommonOpenUpActivity) mActivity).finish();
+                    }
                 }
                 break;
             case GET_REFERENCE:
@@ -663,18 +732,9 @@ public class PatientProfileFragment extends HealthCocoFragment implements View.O
         mActivity.hideLoading();
     }
 
-    private void refreshContactsData(RegisteredPatientDetailsUpdated patientDetails) {
-        LocalDataServiceImpl.getInstance(mApp).addPatient(patientDetails);
+    private void refreshContactsData() {
         mActivity.syncContacts(false, user);
         Util.sendBroadcast(mApp, ContactsListFragment.INTENT_GET_CONTACT_LIST_LOCAL);
-    }
-
-    private void openPatientDetailScreen(RegisteredPatientDetailsUpdated selecetdPatient) {
-        if (selecetdPatient.getPatient() != null && !Util.isNullOrBlank(selecetdPatient.getPatient().getPatientId())) {
-            HealthCocoConstants.SELECTED_PATIENTS_USER_ID = selecetdPatient.getUserId();
-            openCommonOpenUpActivity(CommonOpenUpFragmentType.PATIENT_DETAIL, null,
-                    REQUEST_CODE_REGISTER_PATIENT);
-        }
     }
 
 

@@ -1,5 +1,6 @@
 package com.healthcoco.healthcocopad.fragments;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,8 +11,13 @@ import android.widget.EditText;
 import com.android.volley.Response;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
+import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
+import com.healthcoco.healthcocopad.bean.server.AssessmentPersonalDetail;
+import com.healthcoco.healthcocopad.bean.server.BodyContent;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
+import com.healthcoco.healthcocopad.bean.server.PatientMeasurementInfo;
+import com.healthcoco.healthcocopad.bean.server.Ratio;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.custom.HealthcocoTextWatcher;
@@ -22,6 +28,7 @@ import com.healthcoco.healthcocopad.listeners.HealthcocoTextWatcherListener;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
 import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
+import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.EditTextTextViewErrorUtil;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
@@ -39,7 +46,7 @@ public class AddEditMeasurementFragment extends HealthCocoFragment implements
         View.OnClickListener, HealthcocoTextWatcherListener {
 
     private User user;
-    private RegisteredPatientDetailsUpdated selectedPatient;
+    //    private RegisteredPatientDetailsUpdated selectedPatient;
     private EditText editWeight;
     private EditText editHeight;
     private EditText editBmi;
@@ -58,7 +65,9 @@ public class AddEditMeasurementFragment extends HealthCocoFragment implements
     private EditText editTrunkBodyMuscles;
     private EditText editLegsBodySfat;
     private EditText editLegsBodyMuscles;
-
+    private PatientMeasurementInfo measurementInfo;
+    private String assessmentId;
+    private String patientId;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -72,6 +81,18 @@ public class AddEditMeasurementFragment extends HealthCocoFragment implements
         super.onActivityCreated(savedInstanceState);
         Bundle bundle = getArguments();
         init();
+
+        Intent intent = mActivity.getIntent();
+        if (intent != null) {
+            assessmentId = intent.getStringExtra(HealthCocoConstants.TAG_ASSESSMENT_ID);
+            patientId = intent.getStringExtra(HealthCocoConstants.TAG_PATIENT_ID);
+            if (assessmentId != null)
+                measurementInfo = LocalDataServiceImpl.getInstance(mApp).getPatientMeasurementInfo(assessmentId);
+            if (measurementInfo != null)
+                initMeasurementInfo();
+        }
+
+
         mActivity.showLoading(false);
         new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_FRAGMENT_INITIALISATION_DATA, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
@@ -108,11 +129,45 @@ public class AddEditMeasurementFragment extends HealthCocoFragment implements
 
     @Override
     public void initListeners() {
+        ((CommonOpenUpActivity) mActivity).initActionbarRightAction(this);
+
         editHeight.addTextChangedListener(new HealthcocoTextWatcher(editHeight, this));
         editWeight.addTextChangedListener(new HealthcocoTextWatcher(editWeight, this));
     }
 
-    public void initData() {
+    public void initMeasurementInfo() {
+
+        editWeight.setText(Util.getValidatedValue(measurementInfo.getWeightInKG()));
+        editHeight.setText(Util.getValidatedValue(measurementInfo.getHeightInCM()));
+        editBmi.setText(Util.getValidatedValue(measurementInfo.getBmi()));
+        editBodyAge.setText(Util.getValidatedValue(measurementInfo.getBodyAge()));
+
+        if (measurementInfo.getWaistHipRatio() != null) {
+            editWaistCircumference.setText(Util.getValidatedValue(measurementInfo.getWaistHipRatio().getNumerator()));
+            editHipCircumference.setText(Util.getValidatedValue(measurementInfo.getWaistHipRatio().getDunomenitor()));
+//            editWaistHipRatio.setText(Util.getValidatedValue(measurementInfo.get));
+        }
+
+        editBodyFat.setText(Util.getValidatedValue(measurementInfo.getBodyFat()));
+        editBmr.setText(Util.getValidatedValue(measurementInfo.getBmr()));
+        editVfat.setText(Util.getValidatedValue(measurementInfo.getVfat()));
+
+        if (measurementInfo.getWholeBody() != null) {
+            editWholeBodySfat.setText(Util.getValidatedValue(measurementInfo.getWholeBody().getSfat()));
+            editWholeBodyMuscles.setText(Util.getValidatedValue(measurementInfo.getWholeBody().getMuscles()));
+        }
+        if (measurementInfo.getArmBody() != null) {
+            editArmsBodySfat.setText(Util.getValidatedValue(measurementInfo.getArmBody().getSfat()));
+            editArmsBodyMuscles.setText(Util.getValidatedValue(measurementInfo.getArmBody().getMuscles()));
+        }
+        if (measurementInfo.getTrunkBody() != null) {
+            editTrunkBodySfat.setText(Util.getValidatedValue(measurementInfo.getTrunkBody().getSfat()));
+            editTrunkBodyMuscles.setText(Util.getValidatedValue(measurementInfo.getTrunkBody().getMuscles()));
+        }
+        if (measurementInfo.getLegBody() != null) {
+            editLegsBodySfat.setText(Util.getValidatedValue(measurementInfo.getLegBody().getSfat()));
+            editLegsBodyMuscles.setText(Util.getValidatedValue(measurementInfo.getLegBody().getMuscles()));
+        }
     }
 
     private void initAdapter() {
@@ -142,9 +197,17 @@ public class AddEditMeasurementFragment extends HealthCocoFragment implements
             switch (response.getWebServiceType()) {
                 case FRAGMENT_INITIALISATION:
                     if (user != null && !Util.isNullOrBlank(user.getUniqueId())) {
-                        if (selectedPatient != null) {
 
-                        }
+                    }
+                    break;
+                case ADD_PATIENT_MEASUREMENT_INFO:
+                    if (response.isValidData(response) && response.getData() instanceof PatientMeasurementInfo) {
+                        PatientMeasurementInfo data = (PatientMeasurementInfo) response.getData();
+                        LocalDataServiceImpl.getInstance(mApp).addPatientMeasurementInfo(data);
+                        mActivity.hideLoading();
+
+                        mActivity.setResult(HealthCocoConstants.RESULT_CODE_REGISTRATION);
+                        ((CommonOpenUpActivity) mActivity).finish();
                     }
                     break;
                 default:
@@ -164,9 +227,7 @@ public class AddEditMeasurementFragment extends HealthCocoFragment implements
                 LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
                 if (doctor != null && doctor.getUser() != null) {
                     user = doctor.getUser();
-                    selectedPatient = LocalDataServiceImpl.getInstance(mApp).getPatient(HealthCocoConstants.SELECTED_PATIENTS_USER_ID);
-//                    doctorClinicProfile = LocalDataServiceImpl.getInstance(mApp).getDoctorClinicProfile(user.getUniqueId(), user.getForeignLocationId());
-//                    registeredDoctorProfileList = LocalDataServiceImpl.getInstance(mApp).getRegisterDoctorDetails(user.getForeignLocationId());
+//                    selectedPatient = LocalDataServiceImpl.getInstance(mApp).getPatient(HealthCocoConstants.SELECTED_PATIENTS_USER_ID);
                 }
                 break;
         }
@@ -186,6 +247,9 @@ public class AddEditMeasurementFragment extends HealthCocoFragment implements
         switch (v.getId()) {
             case R.id.tv_selected_date:
                 break;
+            case R.id.container_right_action:
+                validateData();
+                break;
         }
     }
 
@@ -203,24 +267,63 @@ public class AddEditMeasurementFragment extends HealthCocoFragment implements
 
     private void addMeasurement() {
 
-        Util.getValidatedValueOrNull(editWeight);
-        Util.getValidatedValueOrNull(editHeight);
-        Util.getValidatedValueOrNull(editBmi);
-        Util.getValidatedValueOrNull(editBodyAge);
-        Util.getValidatedValueOrNull(editWaistCircumference);
-        Util.getValidatedValueOrNull(editHipCircumference);
-        Util.getValidatedValueOrNull(editWaistHipRatio);
-        Util.getValidatedValueOrNull(editBodyFat);
-        Util.getValidatedValueOrNull(editBmr);
-        Util.getValidatedValueOrNull(editVfat);
-        Util.getValidatedValueOrNull(editWholeBodySfat);
-        Util.getValidatedValueOrNull(editWholeBodyMuscles);
-        Util.getValidatedValueOrNull(editArmsBodySfat);
-        Util.getValidatedValueOrNull(editArmsBodyMuscles);
-        Util.getValidatedValueOrNull(editTrunkBodySfat);
-        Util.getValidatedValueOrNull(editTrunkBodyMuscles);
-        Util.getValidatedValueOrNull(editLegsBodySfat);
-        Util.getValidatedValueOrNull(editLegsBodyMuscles);
+        mActivity.showLoading(false);
+
+        PatientMeasurementInfo patientMeasurementInfo = new PatientMeasurementInfo();
+
+        if (measurementInfo != null) {
+            patientMeasurementInfo.setPatientId(measurementInfo.getPatientId());
+            patientMeasurementInfo.setAssessmentId(measurementInfo.getAssessmentId());
+            patientMeasurementInfo.setDoctorId(measurementInfo.getDoctorId());
+            patientMeasurementInfo.setLocationId(measurementInfo.getLocationId());
+            patientMeasurementInfo.setHospitalId(measurementInfo.getHospitalId());
+
+        } else {
+            if (!Util.isNullOrBlank(patientId))
+                patientMeasurementInfo.setPatientId(patientId);
+            if (!Util.isNullOrBlank(assessmentId))
+                patientMeasurementInfo.setAssessmentId(assessmentId);
+            patientMeasurementInfo.setDoctorId(user.getUniqueId());
+            patientMeasurementInfo.setLocationId(user.getForeignLocationId());
+            patientMeasurementInfo.setHospitalId(user.getForeignHospitalId());
+        }
+
+        patientMeasurementInfo.setWeightInKG(Util.getValidatedDoubleValue(editWeight));
+        patientMeasurementInfo.setHeightInCM(Util.getValidatedDoubleValue(editHeight));
+        patientMeasurementInfo.setBmi(Util.getValidatedDoubleValue(editBmi));
+        patientMeasurementInfo.setBodyAge(Util.getValidatedIntegerValue(editBodyAge));
+        patientMeasurementInfo.setBodyFat(Util.getValidatedDoubleValue(editBodyFat));
+        patientMeasurementInfo.setBmr(Util.getValidatedIntegerValue(editBmr));
+        patientMeasurementInfo.setVfat(Util.getValidatedDoubleValue(editVfat));
+
+        Ratio waistHipRatio = new Ratio();
+        waistHipRatio.setNumerator(Util.getValidatedIntegerValue(editWaistCircumference));
+        waistHipRatio.setDunomenitor(Util.getValidatedIntegerValue(editHipCircumference));
+        patientMeasurementInfo.setWaistHipRatio(waistHipRatio);
+
+        BodyContent wholeBody = new BodyContent();
+        wholeBody.setSfat(Util.getValidatedDoubleValue(editWholeBodySfat));
+        wholeBody.setMuscles(Util.getValidatedDoubleValue(editWholeBodyMuscles));
+        patientMeasurementInfo.setWholeBody(wholeBody);
+
+        BodyContent armBody = new BodyContent();
+        armBody.setSfat(Util.getValidatedDoubleValue(editArmsBodySfat));
+        armBody.setMuscles(Util.getValidatedDoubleValue(editArmsBodyMuscles));
+        patientMeasurementInfo.setArmBody(armBody);
+
+        BodyContent trunkBody = new BodyContent();
+        trunkBody.setSfat(Util.getValidatedDoubleValue(editTrunkBodySfat));
+        trunkBody.setMuscles(Util.getValidatedDoubleValue(editTrunkBodyMuscles));
+        patientMeasurementInfo.setTrunkBody(trunkBody);
+
+        BodyContent legBody = new BodyContent();
+        legBody.setSfat(Util.getValidatedDoubleValue(editLegsBodySfat));
+        legBody.setMuscles(Util.getValidatedDoubleValue(editLegsBodyMuscles));
+        patientMeasurementInfo.setLegBody(legBody);
+
+
+        WebDataServiceImpl.getInstance(mApp).addPatientMeasurementInfo(PatientMeasurementInfo.class, patientMeasurementInfo, this, this);
+
     }
 
     @Override

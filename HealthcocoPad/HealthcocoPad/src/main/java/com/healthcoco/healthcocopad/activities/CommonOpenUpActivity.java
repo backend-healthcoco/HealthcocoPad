@@ -28,6 +28,7 @@ import com.healthcoco.healthcocopad.fragments.AboutDoctorFragment;
 import com.healthcoco.healthcocopad.fragments.AboutUsFragment;
 import com.healthcoco.healthcocopad.fragments.AddEditClinicImageFragment;
 import com.healthcoco.healthcocopad.fragments.AddClinicalNotesVisitNormalFragment;
+import com.healthcoco.healthcocopad.fragments.AddEditMeasurementFragment;
 import com.healthcoco.healthcocopad.fragments.AddEditNormalVisitPrescriptionFragment;
 import com.healthcoco.healthcocopad.fragments.AddEditNormalVisitsFragment;
 import com.healthcoco.healthcocopad.fragments.AddInvoiceFragment;
@@ -51,7 +52,9 @@ import com.healthcoco.healthcocopad.fragments.FeedsFragment;
 import com.healthcoco.healthcocopad.fragments.InitialSyncFragment;
 import com.healthcoco.healthcocopad.fragments.LoginSignupFragment;
 import com.healthcoco.healthcocopad.fragments.NotificationResponseDataFragment;
+import com.healthcoco.healthcocopad.fragments.PatientAssessmentFragment;
 import com.healthcoco.healthcocopad.fragments.PatientEducationVideoListFragment;
+import com.healthcoco.healthcocopad.fragments.PatientProfileFragment;
 import com.healthcoco.healthcocopad.fragments.PatientRegistrationFragment;
 import com.healthcoco.healthcocopad.fragments.PatientRegistrationTabsFragment;
 import com.healthcoco.healthcocopad.fragments.SelectedDiagramDetailFragment;
@@ -67,6 +70,9 @@ import com.healthcoco.healthcocopad.fragments.WebViewFragments;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
+
+import static com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType.PATIENT_ASSESSMENT;
+import static com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType.PERSONAL_DETAILS;
 
 public class CommonOpenUpActivity extends HealthCocoActivity {
     private Fragment loginSignupFragment;
@@ -274,6 +280,19 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
             case CHANGE_PIN:
                 openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_CROSS, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, R.string.change_pin, new ChangePinFragment());
                 break;
+            case MEASUREMENT:
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.WITH_SAVE, PERSONAL_DETAILS.getTitleId(), new AddEditMeasurementFragment());
+                break;
+            case FOOD_AND_EXERCISE:
+            case LIFE_SYLE:
+            case MEDICAL_INFORMATION:
+            case PERSONAL_DETAILS:
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.WITH_SAVE, PERSONAL_DETAILS.getTitleId(), new PatientProfileFragment());
+                break;
+            case PATIENT_ASSESSMENT:
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, PATIENT_ASSESSMENT.getTitleId(), new PatientAssessmentFragment());
+                break;
+
         }
     }
 

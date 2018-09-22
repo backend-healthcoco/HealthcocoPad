@@ -1289,9 +1289,12 @@
     <string name="pregnant">Pregnant</string>
     <string name="lactating">Lactating</string>
     <string name="working">Working</string>
+    <string name="personal_details">Personal Details</string>
+    <string name="personal_assessment">Personal Assessment</string>
 
 
     <!--Patient Measurement texts-->
+    <string name="measurements">Measurements</string>
     <string name="body_age">Body Age</string>
     <string name="body_age_hint">&#160;(Body Age)&#160;</string>
     <string name="body_fat_colon">Body Fat&#160;(%)&#160;:&#160;</string>
@@ -1354,6 +1357,7 @@
     <string name="gms">Gms</string>
 
     <!--Patient Food and Exercise texts-->
+    <string name="food_and_exercise">Food and Exercise</string>
     <string name="food_preference">Food Preference</string>
     <string name="meal_timings">Meal Timings</string>
     <string name="food_cravings">Food Cravings</string>
@@ -1367,5 +1371,10 @@
     <string name="lunch">Lunch</string>
     <string name="evening_snack">Evening Snack</string>
     <string name="dinner">Dinner</string>
+
+
+    <!--Patient Medical Information texts-->
+    <string name="medical_information">Medical Information</string>
+
 
 </resources>

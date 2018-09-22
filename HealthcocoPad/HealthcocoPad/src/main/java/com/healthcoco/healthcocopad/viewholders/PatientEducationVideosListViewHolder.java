@@ -1,10 +1,8 @@
 package com.healthcoco.healthcocopad.viewholders;
 
 import android.app.AlertDialog;
-import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.media.ThumbnailUtils;
 import android.provider.MediaStore;
 import android.view.View;
@@ -74,7 +72,7 @@ public class PatientEducationVideosListViewHolder extends HealthCocoViewHolder i
     }
 
     private void initViews(View view) {
-        tvVideoName = (TextView) view.findViewById(R.id.tv_video_name);
+        tvVideoName = (TextView) view.findViewById(R.id.tv_assessment_type);
         tvDate = (TextView) view.findViewById(R.id.tv_date);
         ivThumbnail = (ImageView) view.findViewById(R.id.iv_thumbnail);
         ivEdit = (ImageView) view.findViewById(R.id.iv_edit);

@@ -6,19 +6,21 @@ import android.widget.BaseAdapter;
 
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.bean.server.DoctorVideos;
+import com.healthcoco.healthcocopad.enums.AssessmentFormType;
 import com.healthcoco.healthcocopad.viewholders.AssessmentTypeListViewHolder;
 import com.healthcoco.healthcocopad.viewholders.DoctorVideosListViewHolder;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
- * Created by Shreshtha on 01-08-2017.
+ * Created by Prashant on 18-09-2018.
  */
 
 public class AssessmentTypeListAdapter extends BaseAdapter {
 
     private final HealthCocoActivity mActivity;
-    private ArrayList<String> list;
+    private List<AssessmentFormType> list;
     private AssessmentTypeListViewHolder holder;
 
     public AssessmentTypeListAdapter(HealthCocoActivity activity) {
@@ -65,7 +67,7 @@ public class AssessmentTypeListAdapter extends BaseAdapter {
     }
 
 
-    public void setListData(ArrayList<String> list) {
+    public void setListData(List<AssessmentFormType> list) {
         this.list = list;
     }
 }

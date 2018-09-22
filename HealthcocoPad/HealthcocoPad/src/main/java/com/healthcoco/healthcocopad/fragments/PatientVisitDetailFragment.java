@@ -34,6 +34,7 @@ import com.healthcoco.healthcocopad.bean.server.VisitDetails;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocopad.custom.OptionsPopupWindow;
 import com.healthcoco.healthcocopad.enums.AddUpdateNameDialogType;
+import com.healthcoco.healthcocopad.enums.AssessmentFormType;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.LocalTabelType;
@@ -548,11 +549,19 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
 //        Util.addVisitToggleStateInPreference(mActivity,true);
     }
 
+    private void openAssessmentForm() {
+        Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
+        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.PATIENT_ASSESSMENT.ordinal());
+        intent.putExtra(HealthCocoConstants.TAG_PATIENT_ID, selectedPatient.getUserId());
+        startActivity(intent);
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.fl_bt_add_visit:
-                openAddVisitFragment();
+//                openAddVisitFragment();
+                openAssessmentForm();
                 break;
         }
     }
