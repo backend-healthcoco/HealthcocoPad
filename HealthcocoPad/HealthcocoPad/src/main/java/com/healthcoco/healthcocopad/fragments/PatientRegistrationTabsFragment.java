@@ -34,7 +34,7 @@ public class PatientRegistrationTabsFragment extends HealthCocoFragment implemen
         View.OnClickListener, PatientRegistrationDetailsListener, TabHost.OnTabChangeListener {
 
     PatientNumberSearchFragment searchFragment;
-    PatientProfileFragment basicDetailsFragment;
+    AddEditFoodAndExerciseFragment basicDetailsFragment;
     PatientAssessmentFragment patientAssessmentFragment;
     private TabHost tabhost;
     private CustomViewPager mViewPager;
@@ -99,7 +99,8 @@ public class PatientRegistrationTabsFragment extends HealthCocoFragment implemen
                     addFragment(registrationTabsType, searchFragment);
                     break;
                 case BASIC_DETAILS:
-                    basicDetailsFragment = new PatientProfileFragment(this);
+//                    basicDetailsFragment = new PatientProfileFragment(this);
+                    basicDetailsFragment = new AddEditFoodAndExerciseFragment();
                     addFragment(registrationTabsType, basicDetailsFragment);
                     break;
                 case MORE_DETAIlS:
@@ -182,7 +183,7 @@ public class PatientRegistrationTabsFragment extends HealthCocoFragment implemen
                 Util.showToast(mActivity, R.string.please_enter_valid_mobile_no);
                 break;
             case BASIC_DETAILS:
-                basicDetailsFragment.validateData();
+//                basicDetailsFragment.validateData();
                 break;
             case MORE_DETAIlS:
 //                basicDetailsFragment.validateData();
@@ -220,7 +221,7 @@ public class PatientRegistrationTabsFragment extends HealthCocoFragment implemen
         PatientRegistrationTabsType registrationTabsType = PatientRegistrationTabsType.values()[currentItem];
         switch (registrationTabsType) {
             case SEARCH_PATIENT:
-                basicDetailsFragment.initDataFromPreviousFragment(object, isEditPatient);
+//                basicDetailsFragment.initDataFromPreviousFragment(object, isEditPatient);
                 break;
             case BASIC_DETAILS:
                 patientAssessmentFragment.initDataFromPreviousFragment(object, isEditPatient);

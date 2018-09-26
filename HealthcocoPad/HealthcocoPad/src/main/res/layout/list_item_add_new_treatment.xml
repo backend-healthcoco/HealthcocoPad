@@ -2,7 +2,58 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/layout_add_treatment_title_padding_10dp">
+    android:layout_margin="@dimen/layout_add_treatment_title_padding_10dp"
+    android:background="@color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:padding="@dimen/layout_add_treatment_title_padding_10dp">
+
+        <TextView
+            android:id="@+id/tv_recipe_name"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="@dimen/padding_20_dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_drug_child_lable" />
+
+
+        <TextView
+            android:id="@+id/tv_quantity"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/padding_20_dp"
+            android:layout_weight="0.4"
+            android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
+            android:drawableEnd="@drawable/arrow_down_drug"
+            android:drawablePadding="5dp"
+            android:hint="@string/percentage"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:textColorHint="@color/grey_light_text"
+            android:textSize="@dimen/text_size_drug_child_lable" />
+
+        <TextView
+            android:id="@+id/tv_type"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/layout_padding"
+            android:layout_weight="0.4"
+            android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
+            android:drawableEnd="@drawable/arrow_down_drug"
+            android:drawablePadding="5dp"
+            android:hint="@string/percentage"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:textColorHint="@color/grey_light_text"
+            android:textSize="@dimen/text_size_drug_child_lable" />
+
+
+    </LinearLayout>
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -10,202 +61,12 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/container_treatment_item"
+            android:id="@+id/container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:background="@drawable/shape_emr_item_background"
             android:orientation="vertical"
             android:padding="@dimen/layout_add_treatment_title_padding_10dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white_translucent"
-                android:orientation="horizontal"
-                android:padding="@dimen/layout_add_treatment_title_padding_10dp">
-
-                <TextView
-                    android:id="@+id/tv_text_treatment_name"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1.5"
-                    android:gravity="center_vertical"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/text_size_drug_child_lable" />
-
-                <EditText
-                    android:id="@+id/edit_qty_per_day"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/padding_item_drug_dosage_top_bottom"
-                    android:layout_marginRight="@dimen/padding_item_drug_dosage_top_bottom"
-                    android:layout_weight="0.6"
-                    android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
-                    android:digits="0123456789"
-                    android:gravity="center"
-                    android:hint="@string/quantity"
-                    android:inputType="number"
-                    android:maxLength="3"
-                    android:singleLine="true"
-                    android:text="1"
-                    android:textColor="@color/black"
-                    android:textColorHint="@color/grey_light_text"
-                    android:textSize="@dimen/text_size_drug_child_lable" />
-
-                <EditText
-                    android:id="@+id/edit_cost"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/padding_item_drug_dosage_top_bottom"
-                    android:layout_marginRight="@dimen/padding_item_drug_dosage_top_bottom"
-                    android:layout_weight="0.8"
-                    android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
-                    android:digits="0123456789"
-                    android:gravity="center"
-                    android:hint="@string/cost"
-                    android:inputType="number"
-                    android:maxLength="7"
-                    android:singleLine="true"
-                    android:textColor="@color/black"
-                    android:textColorHint="@color/grey_light_text"
-                    android:textSize="@dimen/text_size_drug_child_lable" />
-
-
-                <EditText
-                    android:id="@+id/edit_discount"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/padding_item_drug_dosage_top_bottom"
-                    android:layout_marginRight="@dimen/padding_item_drug_dosage_top_bottom"
-                    android:layout_weight="0.6"
-                    android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
-                    android:digits="0123456789"
-                    android:gravity="center"
-                    android:hint="@string/discount"
-                    android:inputType="number"
-                    android:singleLine="true"
-                    android:textColorHint="@color/grey_light_text"
-                    android:textSize="@dimen/text_size_drug_child_lable" />
-
-                <TextView
-                    android:id="@+id/tv_discount_type"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.4"
-                    android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
-                    android:drawableEnd="@drawable/arrow_down_drug"
-                    android:drawablePadding="5dp"
-                    android:hint="@string/percentage"
-                    android:singleLine="true"
-                    android:textColor="@color/black"
-                    android:textColorHint="@color/grey_light_text"
-                    android:textSize="@dimen/text_size_drug_child_lable" />
-
-
-                <TextView
-                    android:id="@+id/tv_total_ruppes"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/padding_item_drug_dosage_top_bottom"
-                    android:layout_marginRight="@dimen/padding_item_drug_dosage_top_bottom"
-                    android:layout_weight="0.8"
-                    android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
-                    android:gravity="center"
-                    android:hint="@string/fa_total_rupees"
-                    android:singleLine="true"
-                    android:textColor="@color/black"
-                    android:textColorHint="@color/grey_light_text"
-                    android:textSize="@dimen/text_size_drug_child_lable" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/layout_treatment_tooth_number"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white_translucent"
-                android:orientation="horizontal"
-                android:paddingBottom="@dimen/layout_add_treatment_title_padding_10dp"
-                android:paddingLeft="@dimen/layout_add_treatment_title_padding_10dp"
-                android:paddingRight="@dimen/layout_add_treatment_title_padding_10dp">
-
-                <TextView
-                    android:id="@+id/tv_tooth_numbers"
-                    style="@style/add_treatment_detail_edittext_textview_padding"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/padding_item_drug_dosage_top_bottom"
-                    android:layout_marginRight="@dimen/padding_item_drug_dosage_top_bottom"
-                    android:layout_weight="2"
-                    android:drawableEnd="@drawable/arrow_down_drug"
-                    android:hint="@string/tooth_number"
-                    android:textColor="@color/black"
-                    android:textColorHint="@color/grey_light_text"
-                    android:textSize="@dimen/text_size_drug_child_lable" />
-
-                <TextView
-                    android:id="@+id/tv_tooth_material"
-                    style="@style/add_treatment_detail_edittext_textview_padding"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/padding_item_drug_dosage_top_bottom"
-                    android:layout_marginRight="@dimen/padding_item_drug_dosage_top_bottom"
-                    android:layout_weight="1"
-                    android:drawableEnd="@drawable/arrow_down_drug"
-                    android:hint="@string/material"
-                    android:textColor="@color/black"
-                    android:textColorHint="@color/grey_light_text"
-                    android:textSize="@dimen/text_size_drug_child_lable" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white_translucent"
-                android:orientation="horizontal"
-                android:paddingBottom="@dimen/layout_add_treatment_title_padding_10dp"
-                android:paddingLeft="@dimen/layout_add_treatment_title_padding_10dp"
-                android:paddingRight="@dimen/layout_add_treatment_title_padding_10dp">
-
-                <com.healthcoco.healthcocopad.views.TextViewFontAwesome
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:gravity="center|start"
-                    android:text="@string/fa_info_text"
-                    android:textColor="@color/green_logo"
-                    android:textSize="25sp" />
-
-                <EditText
-                    android:id="@+id/edit_text_treatment_note"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/padding_item_drug_dosage_top_bottom"
-                    android:layout_marginRight="@dimen/padding_item_drug_dosage_top_bottom"
-                    android:layout_weight="2"
-                    android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
-                    android:hint="@string/write_a_note"
-                    android:maxLines="1"
-                    android:textColor="@color/black"
-                    android:textColorHint="@color/grey_light_text"
-                    android:textSize="@dimen/text_size_drug_child_lable" />
-
-                <TextView
-                    android:id="@+id/tv_text_treatment_status"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/padding_item_drug_dosage_top_bottom"
-                    android:layout_marginRight="@dimen/padding_item_drug_dosage_top_bottom"
-                    android:layout_weight="1"
-                    android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
-                    android:drawableEnd="@drawable/arrow_down_drug"
-                    android:hint="@string/status"
-                    android:textColor="@color/black"
-                    android:textColorHint="@color/grey_light_text"
-                    android:textSize="@dimen/text_size_drug_child_lable" />
-
-            </LinearLayout>
 
         </LinearLayout>
 

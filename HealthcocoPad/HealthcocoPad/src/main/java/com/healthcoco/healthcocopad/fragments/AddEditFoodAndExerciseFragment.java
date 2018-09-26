@@ -3,6 +3,9 @@ package com.healthcoco.healthcocopad.fragments;
 import android.app.TimePickerDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,11 +25,14 @@ import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
+import com.healthcoco.healthcocopad.enums.AdapterType;
 import com.healthcoco.healthcocopad.enums.FoodPreferenceType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.CommonUiPermissionsListener;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
+import com.healthcoco.healthcocopad.recyclerview.HealthcocoRecyclerViewAdapter;
+import com.healthcoco.healthcocopad.recyclerview.HealthcocoRecyclerViewItemClickListener;
 import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
@@ -57,27 +63,54 @@ public class AddEditFoodAndExerciseFragment extends HealthCocoFragment implement
     private User user;
     private RegisteredPatientDetailsUpdated selectedPatient;
 
-    private TextView tvTimeEarlyMorning;
-    private TextViewFontAwesome tvAddFoodEarlyMorning;
     private TextView tvTimeBreakfast;
     private TextViewFontAwesome tvAddFoodBreakfast;
-
-    private CheckBox cbEarlyMorning;
     private CheckBox cbBreakfast;
-
-    private LinearLayout layoutEarlyMorning;
-    private LinearLayout layoutTimeEarlyMorning;
     private LinearLayout layoutBreakfast;
     private LinearLayout layoutTimeBreakfast;
-
-    private LinearLayout containerFoodEarlyMorning;
     private LinearLayout containerFoodBreakfast;
+
+    private TextView tvTimeEarlyMorning;
+    private TextViewFontAwesome tvAddFoodEarlyMorning;
+    private CheckBox cbEarlyMorning;
+    private LinearLayout layoutEarlyMorning;
+    private LinearLayout layoutTimeEarlyMorning;
+    private RecyclerView containerFoodEarlyMorning;
+
+    private TextView tvTimeMidMorning;
+    private TextViewFontAwesome tvAddFoodMidMorning;
+    private CheckBox cbMidMorning;
+    private LinearLayout layoutMidMorning;
+    private LinearLayout layoutTimeMidMorning;
+    private LinearLayout containerFoodMidMorning;
+
+    private TextView tvTimeLunch;
+    private TextViewFontAwesome tvAddFoodLunch;
+    private CheckBox cbLunch;
+    private LinearLayout layoutLunch;
+    private LinearLayout layoutTimeLunch;
+    private LinearLayout containerFoodLunch;
+
+    private TextView tvTimeEveningSnacks;
+    private TextViewFontAwesome tvAddFoodEveningSnacks;
+    private CheckBox cbEveningSnacks;
+    private LinearLayout layoutEveningSnacks;
+    private LinearLayout layoutTimeEveningSnacks;
+    private LinearLayout containerFoodEveningSnacks;
+
+    private TextView tvTimeDinner;
+    private TextViewFontAwesome tvAddFoodDinner;
+    private CheckBox cbDinner;
+    private LinearLayout layoutDinner;
+    private LinearLayout layoutTimeDinner;
+    private LinearLayout containerFoodDinner;
 
     private GridView gvFoodPreference;
     private UIPermissionItemGridAdapter adapter;
     private ArrayList<String> selectedFoodPreference = new ArrayList<>();
     private ArrayList<String> allFoodPreference;
 
+    private HealthcocoRecyclerViewAdapter mAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -110,30 +143,72 @@ public class AddEditFoodAndExerciseFragment extends HealthCocoFragment implement
         tvTimeEarlyMorning = (TextView) view.findViewById(R.id.tv_time_early_morning);
         tvAddFoodEarlyMorning = (TextViewFontAwesome) view.findViewById(R.id.tv_add_food_early_morning);
         cbEarlyMorning = (CheckBox) view.findViewById(R.id.cb_early_morning);
-
         layoutEarlyMorning = (LinearLayout) view.findViewById(R.id.layout_early_morning);
         layoutTimeEarlyMorning = (LinearLayout) view.findViewById(R.id.layout_time_early_morning);
-        containerFoodEarlyMorning = (LinearLayout) view.findViewById(R.id.container_food_early_morning);
+        containerFoodEarlyMorning = (RecyclerView) view.findViewById(R.id.container_food_early_morning);
 
         tvTimeBreakfast = (TextView) view.findViewById(R.id.tv_time_breakfast);
         tvAddFoodBreakfast = (TextViewFontAwesome) view.findViewById(R.id.tv_add_food_breakfast);
         cbBreakfast = (CheckBox) view.findViewById(R.id.cb_breakfast);
-
         layoutBreakfast = (LinearLayout) view.findViewById(R.id.layout_breakfast);
         layoutTimeBreakfast = (LinearLayout) view.findViewById(R.id.layout_time_breakfast);
         containerFoodBreakfast = (LinearLayout) view.findViewById(R.id.container_food_breakfast);
+
+        tvTimeMidMorning = (TextView) view.findViewById(R.id.tv_time_mid_morning);
+        tvAddFoodMidMorning = (TextViewFontAwesome) view.findViewById(R.id.tv_add_food_mid_morning);
+        cbMidMorning = (CheckBox) view.findViewById(R.id.cb_mid_morning);
+        layoutMidMorning = (LinearLayout) view.findViewById(R.id.layout_mid_morning);
+        layoutTimeMidMorning = (LinearLayout) view.findViewById(R.id.layout_time_mid_morning);
+        containerFoodMidMorning = (LinearLayout) view.findViewById(R.id.container_food_mid_morning);
+
+        tvTimeLunch = (TextView) view.findViewById(R.id.tv_time_lunch);
+        tvAddFoodLunch = (TextViewFontAwesome) view.findViewById(R.id.tv_add_food_lunch);
+        cbLunch = (CheckBox) view.findViewById(R.id.cb_lunch);
+        layoutLunch = (LinearLayout) view.findViewById(R.id.layout_lunch);
+        layoutTimeLunch = (LinearLayout) view.findViewById(R.id.layout_time_lunch);
+        containerFoodLunch = (LinearLayout) view.findViewById(R.id.container_food_lunch);
+
+        tvTimeEveningSnacks = (TextView) view.findViewById(R.id.tv_time_evening_snack);
+        tvAddFoodEveningSnacks = (TextViewFontAwesome) view.findViewById(R.id.tv_add_food_evening_snack);
+        cbEveningSnacks = (CheckBox) view.findViewById(R.id.cb_evening_snack);
+        layoutEveningSnacks = (LinearLayout) view.findViewById(R.id.layout_evening_snack);
+        layoutTimeEveningSnacks = (LinearLayout) view.findViewById(R.id.layout_time_evening_snack);
+        containerFoodEveningSnacks = (LinearLayout) view.findViewById(R.id.container_food_evening_snack);
+
+        tvTimeDinner = (TextView) view.findViewById(R.id.tv_time_dinner);
+        tvAddFoodDinner = (TextViewFontAwesome) view.findViewById(R.id.tv_add_food_dinner);
+        cbDinner = (CheckBox) view.findViewById(R.id.cb_dinner);
+        layoutDinner = (LinearLayout) view.findViewById(R.id.layout_dinner);
+        layoutTimeDinner = (LinearLayout) view.findViewById(R.id.layout_time_dinner);
+        containerFoodDinner = (LinearLayout) view.findViewById(R.id.container_food_dinner);
     }
 
     @Override
     public void initListeners() {
         cbEarlyMorning.setOnCheckedChangeListener(this);
-        cbBreakfast.setOnCheckedChangeListener(this);
-
         tvTimeEarlyMorning.setOnClickListener(this);
         tvAddFoodEarlyMorning.setOnClickListener(this);
 
+
+        cbBreakfast.setOnCheckedChangeListener(this);
         tvTimeBreakfast.setOnClickListener(this);
         tvAddFoodBreakfast.setOnClickListener(this);
+
+        cbMidMorning.setOnCheckedChangeListener(this);
+        tvTimeMidMorning.setOnClickListener(this);
+        tvAddFoodMidMorning.setOnClickListener(this);
+
+        cbLunch.setOnCheckedChangeListener(this);
+        tvTimeLunch.setOnClickListener(this);
+        tvAddFoodLunch.setOnClickListener(this);
+
+        cbEveningSnacks.setOnCheckedChangeListener(this);
+        tvTimeEveningSnacks.setOnClickListener(this);
+        tvAddFoodEveningSnacks.setOnClickListener(this);
+
+        cbDinner.setOnCheckedChangeListener(this);
+        tvTimeDinner.setOnClickListener(this);
+        tvAddFoodDinner.setOnClickListener(this);
     }
 
     public void initData() {
@@ -151,6 +226,14 @@ public class AddEditFoodAndExerciseFragment extends HealthCocoFragment implement
     private void initAdapter() {
         adapter = new UIPermissionItemGridAdapter(mActivity, this);
         gvFoodPreference.setAdapter(adapter);
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(mActivity, LinearLayoutManager.VERTICAL, false);
+        containerFoodEarlyMorning.setLayoutManager(layoutManager);
+        containerFoodEarlyMorning.setItemAnimator(new DefaultItemAnimator());
+
+        mAdapter = new HealthcocoRecyclerViewAdapter(mActivity, AdapterType.FOOD_SUB_ITEM, this);
+//        mAdapter.setListData();
+        containerFoodEarlyMorning.setAdapter(mAdapter);
     }
 
     private void notifyAdapter(List<String> list) {
@@ -228,7 +311,7 @@ public class AddEditFoodAndExerciseFragment extends HealthCocoFragment implement
                 openTimePickerDialog(null, (TextView) v);
                 break;
             case R.id.tv_add_food_early_morning:
-                addFood(containerFoodEarlyMorning);
+//                addFood(containerFoodEarlyMorning);
                 break;
             case R.id.tv_add_food_breakfast:
                 addFood(containerFoodBreakfast);
@@ -350,4 +433,9 @@ public class AddEditFoodAndExerciseFragment extends HealthCocoFragment implement
 
         containerLayout.addView(layoutSubItemPermission);
     }
+
+    private void addMeal(Object mealItem) {
+    }
+
+
 }

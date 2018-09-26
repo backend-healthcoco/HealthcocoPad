@@ -18,6 +18,7 @@ import com.healthcoco.healthcocopad.viewholders.AboutDoctorListViewHolder;
 import com.healthcoco.healthcocopad.viewholders.ClinicImageListItemHolder;
 import com.healthcoco.healthcocopad.viewholders.DoctorListViewHolder;
 import com.healthcoco.healthcocopad.viewholders.EventItemViewHolder;
+import com.healthcoco.healthcocopad.viewholders.FoodSubItemViewHolder;
 import com.healthcoco.healthcocopad.viewholders.KioskSubItemViewHolder;
 import com.healthcoco.healthcocopad.viewholders.QueueItemViewHolder;
 
@@ -88,6 +89,11 @@ public class HealthcocoRecyclerViewAdapter extends RecyclerView.Adapter<Healthco
             case KIOSK_SUB_ITEM:
                 convertView = mInflater.inflate(R.layout.list_item_kiosk_tab, null);
                 viewHolder = new KioskSubItemViewHolder(mActivity, convertView, onItemClickListener);
+                break;
+
+            case FOOD_SUB_ITEM:
+                convertView = mInflater.inflate(R.layout.sub_item_add_food, null);
+                viewHolder = new FoodSubItemViewHolder(mActivity, convertView, onItemClickListener);
                 break;
 
             case DOCTOR_POPUP_LIST:

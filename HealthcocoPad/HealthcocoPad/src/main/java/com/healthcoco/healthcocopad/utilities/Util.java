@@ -306,6 +306,12 @@ public class Util {
                 || Integer.valueOf(text.trim()) == 0) ? true : false;
     }
 
+    public static boolean isNullOrZeroNumber(double i) {
+        String text = getValidatedValue(i);
+        return (text == null || text.trim().equalsIgnoreCase("") || text.trim().equalsIgnoreCase("null")
+                || Double.valueOf(text.trim()) == 0) ? true : false;
+    }
+
     public static boolean isNullOrZeroNumber(long l) {
         String text = String.valueOf(l);
         return (text == null || text.trim().equalsIgnoreCase("") || text.trim().equalsIgnoreCase("null")
