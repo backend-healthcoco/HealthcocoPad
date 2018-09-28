@@ -19,6 +19,7 @@ import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.adapter.ContactsDetailViewPagerAdapter;
 import com.healthcoco.healthcocopad.bean.server.Patient;
 import com.healthcoco.healthcocopad.custom.DummyTabFactory;
+import com.healthcoco.healthcocopad.dialogFragment.SelectRecipeFragment;
 import com.healthcoco.healthcocopad.enums.PatientRegistrationTabsType;
 import com.healthcoco.healthcocopad.listeners.PatientRegistrationDetailsListener;
 import com.healthcoco.healthcocopad.utilities.Util;
@@ -34,7 +35,7 @@ public class PatientRegistrationTabsFragment extends HealthCocoFragment implemen
         View.OnClickListener, PatientRegistrationDetailsListener, TabHost.OnTabChangeListener {
 
     PatientNumberSearchFragment searchFragment;
-    AddEditFoodAndExerciseFragment basicDetailsFragment;
+    SelectRecipeFragment basicDetailsFragment;
     PatientAssessmentFragment patientAssessmentFragment;
     private TabHost tabhost;
     private CustomViewPager mViewPager;
@@ -100,7 +101,7 @@ public class PatientRegistrationTabsFragment extends HealthCocoFragment implemen
                     break;
                 case BASIC_DETAILS:
 //                    basicDetailsFragment = new PatientProfileFragment(this);
-                    basicDetailsFragment = new AddEditFoodAndExerciseFragment();
+                    basicDetailsFragment = new SelectRecipeFragment();
                     addFragment(registrationTabsType, basicDetailsFragment);
                     break;
                 case MORE_DETAIlS:

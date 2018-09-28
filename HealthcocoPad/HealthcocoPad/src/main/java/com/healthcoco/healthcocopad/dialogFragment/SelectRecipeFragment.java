@@ -1,76 +1,35 @@
 package com.healthcoco.healthcocopad.dialogFragment;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.view.ViewPager;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TabHost;
-import android.widget.TextView;
 
 import com.healthcoco.healthcocopad.HealthCocoDialogFragment;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
-import com.healthcoco.healthcocopad.adapter.ContactsDetailViewPagerAdapter;
-import com.healthcoco.healthcocopad.bean.TotalTreatmentCostDiscountValues;
-import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
-import com.healthcoco.healthcocopad.bean.request.TreatmentRequest;
-import com.healthcoco.healthcocopad.bean.server.DoctorProfile;
-import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.Meal;
-import com.healthcoco.healthcocopad.bean.server.Quantity;
-import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
-import com.healthcoco.healthcocopad.bean.server.TreatmentItem;
-import com.healthcoco.healthcocopad.bean.server.TreatmentService;
-import com.healthcoco.healthcocopad.bean.server.Treatments;
-import com.healthcoco.healthcocopad.bean.server.UnitValue;
 import com.healthcoco.healthcocopad.bean.server.User;
-import com.healthcoco.healthcocopad.custom.DummyTabFactory;
-import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocopad.enums.AdapterType;
-import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
-import com.healthcoco.healthcocopad.enums.QuantityEnum;
-import com.healthcoco.healthcocopad.enums.UnitType;
-import com.healthcoco.healthcocopad.enums.VisitIdType;
-import com.healthcoco.healthcocopad.enums.WebServiceType;
-import com.healthcoco.healthcocopad.fragments.PatientTreatmentDetailFragment;
-import com.healthcoco.healthcocopad.fragments.SelectedTreatmentsListFragment;
-import com.healthcoco.healthcocopad.fragments.TreatmentCustomListFragment;
 import com.healthcoco.healthcocopad.fragments.TreatmentListFragment;
-import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
 import com.healthcoco.healthcocopad.listeners.SelectedTreatmentItemClickListener;
 import com.healthcoco.healthcocopad.recyclerview.HealthcocoRecyclerViewAdapter;
-import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
-import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
-import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.Util;
-import com.healthcoco.healthcocopad.views.ScrollViewWithHeaderNewPrescriptionLayout;
-
-import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.List;
 
 /**
- * Created by Prashant on 24/09/2018.
+ * Created by Prashant on 26/09/2018.
  */
 
 
-public class SelectFoodDialogFragment extends HealthCocoDialogFragment implements
+public class SelectRecipeFragment extends HealthCocoFragment implements
         View.OnClickListener, SelectedTreatmentItemClickListener {
     public static final String INTENT_GET_MODIFIED_VALUE = "com.healthcoco.MODIFIED_VALUE";
     public static final String TAG_SELECTED_TREATMENT_OBJECT = "selectedTreatmentItemOrdinal";
@@ -114,6 +73,7 @@ public class SelectFoodDialogFragment extends HealthCocoDialogFragment implement
         initViews();
         initListeners();
         initAdapter();
+        notifyAdapter(mealHashMap);
     }
 
     @Override
@@ -126,11 +86,6 @@ public class SelectFoodDialogFragment extends HealthCocoDialogFragment implement
         ((CommonOpenUpActivity) mActivity).initSaveButton(this);
     }
 
-    @Override
-    public void initData() {
-
-    }
-
 
     private void initAdapter() {
         mealHashMap = new LinkedHashMap<>();
@@ -139,7 +94,7 @@ public class SelectFoodDialogFragment extends HealthCocoDialogFragment implement
         selectedRecipeRecyclerView.setLayoutManager(layoutManager);
         selectedRecipeRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        mAdapter = new HealthcocoRecyclerViewAdapter(mActivity, AdapterType.FOOD_SUB_ITEM, this);
+        mAdapter = new HealthcocoRecyclerViewAdapter(mActivity, AdapterType.RECIPE_ITEM, this);
 //        mAdapter.setListData();
         selectedRecipeRecyclerView.setAdapter(mAdapter);
 
@@ -204,6 +159,16 @@ public class SelectFoodDialogFragment extends HealthCocoDialogFragment implement
 
     private void notifyAdapter(HashMap<String, Meal> mealHashMap) {
         ArrayList<Meal> list = new ArrayList<>(mealHashMap.values());
+
+        list.add(new Meal());
+        list.add(new Meal());
+        list.add(new Meal());
+        list.add(new Meal());
+        list.add(new Meal());
+        list.add(new Meal());
+        list.add(new Meal());
+        list.add(new Meal());
+
         if (!Util.isNullOrEmptyList(list)) {
             selectedRecipeRecyclerView.setVisibility(View.VISIBLE);
 //            tvNoTreatmentAdded.setVisibility(View.GONE);

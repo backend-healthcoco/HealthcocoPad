@@ -11,6 +11,7 @@ import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
 import com.healthcoco.healthcocopad.bean.server.ClinicDoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.ClinicImage;
 import com.healthcoco.healthcocopad.bean.server.Events;
+import com.healthcoco.healthcocopad.bean.server.Meal;
 import com.healthcoco.healthcocopad.bean.server.RegisteredDoctorProfile;
 import com.healthcoco.healthcocopad.enums.AdapterType;
 import com.healthcoco.healthcocopad.enums.KioskSubItemType;
@@ -21,6 +22,7 @@ import com.healthcoco.healthcocopad.viewholders.EventItemViewHolder;
 import com.healthcoco.healthcocopad.viewholders.FoodSubItemViewHolder;
 import com.healthcoco.healthcocopad.viewholders.KioskSubItemViewHolder;
 import com.healthcoco.healthcocopad.viewholders.QueueItemViewHolder;
+import com.healthcoco.healthcocopad.viewholders.RecipeListItemViewHolder;
 
 import java.util.ArrayList;
 
@@ -92,8 +94,13 @@ public class HealthcocoRecyclerViewAdapter extends RecyclerView.Adapter<Healthco
                 break;
 
             case FOOD_SUB_ITEM:
-                convertView = mInflater.inflate(R.layout.sub_item_add_food, null);
+                convertView = mInflater.inflate(R.layout.sub_item_add_food, parent, false);
                 viewHolder = new FoodSubItemViewHolder(mActivity, convertView, onItemClickListener);
+                break;
+
+            case RECIPE_ITEM:
+                convertView = mInflater.inflate(R.layout.list_item_selected_recipe, parent, false);
+                viewHolder = new RecipeListItemViewHolder(mActivity, convertView, onItemClickListener);
                 break;
 
             case DOCTOR_POPUP_LIST:
@@ -150,6 +157,12 @@ public class HealthcocoRecyclerViewAdapter extends RecyclerView.Adapter<Healthco
                 if (holder instanceof ClinicImageListItemHolder && object instanceof ClinicImage) {
                     ClinicImageListItemHolder clinicImageListItemHolder = (ClinicImageListItemHolder) holder;
                     clinicImageListItemHolder.applyData(object);
+                }
+                break;
+            case RECIPE_ITEM:
+                if (holder instanceof RecipeListItemViewHolder && object instanceof Meal) {
+                    RecipeListItemViewHolder recipeListItemViewHolder = (RecipeListItemViewHolder) holder;
+                    recipeListItemViewHolder.applyData(object);
                 }
                 break;
         }

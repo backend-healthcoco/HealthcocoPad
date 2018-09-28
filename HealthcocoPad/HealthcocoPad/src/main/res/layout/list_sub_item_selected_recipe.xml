@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/layout_padding_5dp"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/layout_padding"
+            android:orientation="horizontal"
+            android:padding="@dimen/layout_padding_5dp">
+
+            <TextView
+                android:id="@+id/tv_ingredient_name"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginRight="@dimen/padding_20_dp"
+                android:layout_weight="0.7"
+                android:gravity="center_vertical"
+                android:textColor="@color/orange_dark"
+                android:textSize="@dimen/text_size_view_profile" />
+
+
+            <TextView
+                android:id="@+id/tv_quantity_ingredient"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/padding_20_dp"
+                android:layout_marginRight="@dimen/padding_20_dp"
+                android:layout_weight="0.3"
+                android:drawablePadding="@dimen/layout_padding_5dp"
+                android:gravity="center"
+                android:hint="@string/quantity"
+                android:paddingBottom="@dimen/layout_padding_5dp"
+                android:singleLine="true"
+                android:textColor="@color/orange_dark"
+                android:textColorHint="@color/grey_light_text"
+                android:textSize="@dimen/text_size_view_profile" />
+
+            <TextView
+                android:id="@+id/tv_serving_ingredient"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/padding_20_dp"
+                android:layout_marginRight="@dimen/fab_margin_left"
+                android:layout_weight="0.4"
+                android:drawablePadding="@dimen/layout_padding_5dp"
+                android:gravity="center"
+                android:hint="@string/serving"
+                android:paddingBottom="@dimen/layout_padding_5dp"
+                android:singleLine="true"
+                android:textColor="@color/orange_dark"
+                android:textColorHint="@color/grey_light_text"
+                android:textSize="@dimen/text_size_view_profile" />
+
+
+        </LinearLayout>
+
+
+        <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+            android:id="@+id/bt_delete_ingredient"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|end"
+            android:adjustViewBounds="true"
+            android:gravity="center|start"
+            android:paddingLeft="@dimen/padding_20_dp"
+            android:paddingTop="@dimen/layout_padding_5dp"
+            android:paddingRight="@dimen/padding_20_dp"
+            android:paddingBottom="@dimen/layout_padding_5dp"
+            android:text="@string/fa_times_circle"
+            android:textColor="@color/orange_dark"
+            android:textSize="20sp" />
+
+    </FrameLayout>
+
+</LinearLayout>

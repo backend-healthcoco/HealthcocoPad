@@ -1366,11 +1366,20 @@
     <string name="min_per_day">Minutes/Day</string>
     <string name="time_per_week">Times/Week</string>
     <string name="early_morning">Early Morning</string>
+    <string name="morning_snacks">Morning Snacks</string>
     <string name="breakfast">Breakfast</string>
+    <string name="post_breakfast">Post Breakfast</string>
     <string name="mid_morning">Mid Morning</string>
     <string name="lunch">Lunch</string>
+    <string name="post_lunch">Post Lunch</string>
     <string name="evening_snack">Evening Snack</string>
     <string name="dinner">Dinner</string>
+    <string name="serving">Serving</string>
+    <string name="ingredients">Ingredients</string>
+    <string name="protein_colon">Protein&#160;:&#160;</string>
+    <string name="fat_colon">Fat&#160;:&#160;</string>
+    <string name="carbs_colon">Carbs&#160;:&#160;</string>
+    <string name="fiber_colon">Fiber&#160;:&#160;</string>
 
 
     <!--Patient Medical Information texts-->

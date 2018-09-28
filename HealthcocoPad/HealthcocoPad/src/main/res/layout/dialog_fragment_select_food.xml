@@ -15,7 +15,7 @@
             android:id="@+id/layout_recipe_list"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="0.4"
+            android:layout_weight="0.35"
             android:orientation="vertical"
             android:visibility="visible">
 
@@ -40,9 +40,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:padding="@dimen/layout_padding"
-                android:visibility="visible"
-                android:weightSum="1" />
+                android:visibility="visible" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>
