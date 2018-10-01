@@ -7,15 +7,20 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
-import com.healthcoco.healthcocopad.HealthCocoDialogFragment;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
-import com.healthcoco.healthcocopad.bean.server.Meal;
+import com.healthcoco.healthcocopad.bean.EquivalentQuantities;
+import com.healthcoco.healthcocopad.bean.MealQuantity;
+import com.healthcoco.healthcocopad.bean.server.DietPlanRecipeItem;
+import com.healthcoco.healthcocopad.bean.server.Nutrients;
+import com.healthcoco.healthcocopad.bean.server.RecipeResponse;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.enums.AdapterType;
-import com.healthcoco.healthcocopad.fragments.TreatmentListFragment;
+import com.healthcoco.healthcocopad.enums.QuantityType;
+import com.healthcoco.healthcocopad.fragments.RecipeListFragment;
 import com.healthcoco.healthcocopad.listeners.SelectedTreatmentItemClickListener;
 import com.healthcoco.healthcocopad.recyclerview.HealthcocoRecyclerViewAdapter;
 import com.healthcoco.healthcocopad.utilities.Util;
@@ -36,11 +41,12 @@ public class SelectRecipeFragment extends HealthCocoFragment implements
     public static final String TAG_TREATMENT_ID = "treatmentId";
     private User user;
 
-    private TreatmentListFragment treatmentListFragment;
+    private RecipeListFragment recipeListFragment;
 
+    private TextView tvNoRecipeAdded;
     private RecyclerView selectedRecipeRecyclerView;
     private HealthcocoRecyclerViewAdapter mAdapter;
-    private LinkedHashMap<String, Meal> mealHashMap;
+    private LinkedHashMap<String, RecipeResponse> recipeHashMap;
 
 
     @Override
@@ -71,14 +77,16 @@ public class SelectRecipeFragment extends HealthCocoFragment implements
     @Override
     public void init() {
         initViews();
+        initRecipeListSolrFragment();
         initListeners();
         initAdapter();
-        notifyAdapter(mealHashMap);
+        notifyAdapter(recipeHashMap);
     }
 
     @Override
     public void initViews() {
         selectedRecipeRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view_selected_recipe);
+        tvNoRecipeAdded = (TextView) view.findViewById(R.id.tv_no_recipe);
     }
 
     @Override
@@ -88,7 +96,7 @@ public class SelectRecipeFragment extends HealthCocoFragment implements
 
 
     private void initAdapter() {
-        mealHashMap = new LinkedHashMap<>();
+        recipeHashMap = new LinkedHashMap<>();
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(mActivity, LinearLayoutManager.VERTICAL, false);
         selectedRecipeRecyclerView.setLayoutManager(layoutManager);
@@ -100,14 +108,11 @@ public class SelectRecipeFragment extends HealthCocoFragment implements
 
     }
 
-    private void initSelectedTreatmentsListFragment() {
-//        Bundle bundle = new Bundle();
-//        selectedTreatmentsListFragment = new SelectedTreatmentsListFragment();
-//        if (!Util.isNullOrEmptyList(treatmentsList))
-//            bundle.putParcelable(SelectedTreatmentsListFragment.TAG_TREATMENT_ITEM_DETAIL, Parcels.wrap(treatmentsList.get(0)));
-//        bundle.putParcelable(SelectedTreatmentsListFragment.TAG_DOCTOR_PROFILE, Parcels.wrap(doctorProfile));
-//        selectedTreatmentsListFragment.setArguments(bundle);
-//        mFragmentManager.beginTransaction().add(R.id.layout_recipe_list, selectedTreatmentsListFragment, selectedTreatmentsListFragment.getClass().getSimpleName()).commit();
+    private void initRecipeListSolrFragment() {
+
+        recipeListFragment = new RecipeListFragment(this);
+        mFragmentManager.beginTransaction().add(R.id.layout_recipe_list, recipeListFragment,
+                recipeListFragment.getClass().getSimpleName()).commit();
     }
 
     @Override
@@ -141,48 +146,77 @@ public class SelectRecipeFragment extends HealthCocoFragment implements
 
     @Override
     public void onTreatmentItemClick(Object object) {
-       /* TreatmentService treatmentService = (TreatmentService) object;
-        addTreatmentService(treatmentService);
-        if (object != null && selectedTreatmentsListFragment != null) {
-            svContainer.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
-                @Override
-                public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-                    svContainer.removeOnLayoutChangeListener(this);
-                    Log.d(TAG, "list got updated, do what ever u want");
-                    svContainer.requestChildFocus(selectedTreatmentsListFragment.getLastChildView(), selectedTreatmentsListFragment.getLastChildView());
-                }
-            });
-        }*/
-        Meal meal = new Meal();
-        notifyAdapter(mealHashMap);
+        RecipeResponse recipeResponse = (RecipeResponse) object;
+        if (recipeResponse != null) {
+
+            recipeHashMap.put(recipeResponse.getUniqueId(), getNutrientPerHundredUnit(recipeResponse));
+        }
+        notifyAdapter(recipeHashMap);
     }
 
-    private void notifyAdapter(HashMap<String, Meal> mealHashMap) {
-        ArrayList<Meal> list = new ArrayList<>(mealHashMap.values());
 
-        list.add(new Meal());
-        list.add(new Meal());
-        list.add(new Meal());
-        list.add(new Meal());
-        list.add(new Meal());
-        list.add(new Meal());
-        list.add(new Meal());
-        list.add(new Meal());
+    private void notifyAdapter(HashMap<String, RecipeResponse> mealHashMap) {
+        ArrayList<RecipeResponse> list = new ArrayList<>(mealHashMap.values());
 
         if (!Util.isNullOrEmptyList(list)) {
             selectedRecipeRecyclerView.setVisibility(View.VISIBLE);
-//            tvNoTreatmentAdded.setVisibility(View.GONE);
+            tvNoRecipeAdded.setVisibility(View.GONE);
         } else {
             selectedRecipeRecyclerView.setVisibility(View.GONE);
-//            tvNoTreatmentAdded.setVisibility(View.VISIBLE);
+            tvNoRecipeAdded.setVisibility(View.VISIBLE);
         }
         mAdapter.setListData((ArrayList<Object>) (Object) list);
         mAdapter.notifyDataSetChanged();
-//        selectedRecipeRecyclerView.smoothScrollToPosition(list.size() - 1);
+        selectedRecipeRecyclerView.smoothScrollToPosition(mAdapter.getItemCount());
     }
 
     @Override
     public User getUser() {
         return null;
+    }
+
+
+    private RecipeResponse getNutrientPerHundredUnit(RecipeResponse recipeResponse) {
+
+        DietPlanRecipeItem dietPlanRecipeItem = new DietPlanRecipeItem();
+
+        dietPlanRecipeItem.setUniqueId(recipeResponse.getUniqueId());
+        dietPlanRecipeItem.setName(recipeResponse.getName());
+        dietPlanRecipeItem.setQuantity(recipeResponse.getQuantity());
+        dietPlanRecipeItem.setIngredients(recipeResponse.getIngredients());
+        dietPlanRecipeItem.setNutrients(recipeResponse.getNutrients());
+        dietPlanRecipeItem.setDirection(recipeResponse.getDirection());
+        dietPlanRecipeItem.setCalaries(recipeResponse.getCalaries());
+
+
+        MealQuantity quantity = recipeResponse.getQuantity();
+        QuantityType type = quantity.getType();
+        double value = quantity.getValue();
+        double currentValue = 1;
+        MealQuantity currentQuantity = new MealQuantity();
+        for (EquivalentQuantities equivalentQuantities : recipeResponse.getEquivalentMeasurements()) {
+            if (type == equivalentQuantities.getServingType()) {
+                double equivalentQuantitiesValue = equivalentQuantities.getValue();
+                currentValue = value * equivalentQuantitiesValue;
+                currentQuantity.setValue(currentValue);
+                currentQuantity.setType(type);
+                recipeResponse.setCurrentQuantity(currentQuantity);
+            }
+        }
+
+        for (Nutrients nutrients : recipeResponse.getNutrients()) {
+            nutrients.setValue((nutrients.getValue() / currentValue) * 100);
+        }
+        recipeResponse.setNutrientPerHundredUnit(recipeResponse.getNutrients());
+
+
+        if (recipeResponse.getCalaries() != null) {
+            dietPlanRecipeItem.setCalaries(recipeResponse.getCalaries());
+
+            recipeResponse.setCalariesPerHundredUnit((recipeResponse.getCalaries().getValue() / currentValue) * 100);
+        }
+
+
+        return recipeResponse;
     }
 }

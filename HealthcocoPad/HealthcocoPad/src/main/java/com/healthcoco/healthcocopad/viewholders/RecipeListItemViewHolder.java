@@ -7,11 +7,16 @@ import android.widget.TextView;
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.MealQuantity;
+import com.healthcoco.healthcocopad.bean.server.DietPlanRecipeItem;
+import com.healthcoco.healthcocopad.bean.server.Ingredient;
 import com.healthcoco.healthcocopad.bean.server.Meal;
+import com.healthcoco.healthcocopad.bean.server.RecipeResponse;
 import com.healthcoco.healthcocopad.recyclerview.HealthcocoComonRecylcerViewHolder;
 import com.healthcoco.healthcocopad.recyclerview.HealthcocoRecyclerViewItemClickListener;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.healthcoco.healthcocopad.views.TextViewFontAwesome;
+
+import java.util.List;
 
 /**
  * Created by Prashant on 23-06-18.
@@ -20,7 +25,7 @@ import com.healthcoco.healthcocopad.views.TextViewFontAwesome;
 public class RecipeListItemViewHolder extends HealthcocoComonRecylcerViewHolder implements View.OnClickListener {
 
     private HealthCocoActivity mActivity;
-    private Meal mealItem;
+    private RecipeResponse recipeItem;
     private TextView tvTitle;
     private TextView tvQuantity;
     private TextView tvServingType;
@@ -28,6 +33,7 @@ public class RecipeListItemViewHolder extends HealthcocoComonRecylcerViewHolder 
     private TextView tvFat;
     private TextView tvCarbs;
     private TextView tvFiber;
+    private TextView tvTotalQuantity;
     private LinearLayout containerIngredients;
     private TextViewFontAwesome btDelete;
 
@@ -49,6 +55,8 @@ public class RecipeListItemViewHolder extends HealthcocoComonRecylcerViewHolder 
         tvCarbs = (TextView) itemView.findViewById(R.id.tv_carbs);
         tvFiber = (TextView) itemView.findViewById(R.id.tv_fiber);
 
+        tvTotalQuantity = (TextView) itemView.findViewById(R.id.tv_total_quantity);
+
         containerIngredients = (LinearLayout) itemView.findViewById(R.id.container_ingredient);
 
         btDelete = (TextViewFontAwesome) itemView.findViewById(R.id.bt_delete);
@@ -58,7 +66,7 @@ public class RecipeListItemViewHolder extends HealthcocoComonRecylcerViewHolder 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onItemClickListener.onItemClicked(mealItem);
+                    onItemClickListener.onItemClicked(recipeItem);
                 }
             });
 
@@ -72,49 +80,56 @@ public class RecipeListItemViewHolder extends HealthcocoComonRecylcerViewHolder 
 
     @Override
     public void applyData(Object object) {
-        mealItem = (Meal) object;
-        if (mealItem != null) {
-            tvTitle.setText(mealItem.getName());
+        recipeItem = (RecipeResponse) object;
+        if (recipeItem != null) {
+            tvTitle.setText(recipeItem.getName());
 
-            if (mealItem.getQuantity() != null) {
-                MealQuantity quantity = mealItem.getQuantity();
+            if (recipeItem.getQuantity() != null) {
+                MealQuantity quantity = recipeItem.getQuantity();
 
                 String quantityType = quantity.getType().getQuantityType();
                 if (!Util.isNullOrZeroNumber(quantity.getValue())) {
-                    tvQuantity.setText(Util.getValidatedValue(quantity.getValue()) + quantityType);
+                    tvQuantity.setText(Util.getValidatedValue(quantity.getValue()));
+                    tvServingType.setText(quantityType);
                 }
             } else {
                 tvQuantity.setText("");
-            }
-            tvTitle.setText("fnafklmavmmalalmlamklsam");
-            tvServingType.setText("120Kcal");
-        }
-        tvTitle.setText("fnafklmavmmalalmlamklsam");
-        tvServingType.setText("Cup");
 
-        containerIngredients.removeAllViews();
-        addIngredients();
-        addIngredients();
-        addIngredients();
-        addIngredients();
+            }
+
+            addIngredients(recipeItem.getIngredients());
+        }
+
     }
 
-    private void addIngredients() {
-//        containerIngredients.removeAllViews();
-//        containerIngredients.setVisibility(View.VISIBLE);
+    private void addIngredients(List<Ingredient> ingredientList) {
 
-        LinearLayout layoutSubItemPermission = (LinearLayout) mActivity.getLayoutInflater().inflate(R.layout.list_sub_item_selected_recipe, null);
-        TextView tvTitle = (TextView) layoutSubItemPermission.findViewById(R.id.tv_ingredient_name);
-        TextView tvQuantity = (TextView) layoutSubItemPermission.findViewById(R.id.tv_quantity_ingredient);
-        TextView tvCalarie = (TextView) layoutSubItemPermission.findViewById(R.id.tv_serving_ingredient);
-        TextViewFontAwesome btDelete = (TextViewFontAwesome) layoutSubItemPermission.findViewById(R.id.bt_delete_ingredient);
-        btDelete.setTag("Delete_Sub_item");
-        btDelete.setOnClickListener(this);
-        tvTitle.setText("Milk");
-        tvQuantity.setText("100");
-        tvCalarie.setText("ml");
+        containerIngredients.removeAllViews();
+        for (Ingredient ingredient : ingredientList) {
+            if (ingredient != null) {
+                LinearLayout layoutSubItemPermission = (LinearLayout) mActivity.getLayoutInflater().inflate(R.layout.list_sub_item_selected_recipe, null);
+                TextView tvItemTitle = (TextView) layoutSubItemPermission.findViewById(R.id.tv_ingredient_name);
+                TextView tvItemQuantity = (TextView) layoutSubItemPermission.findViewById(R.id.tv_quantity_ingredient);
+                TextView tvItemCalarie = (TextView) layoutSubItemPermission.findViewById(R.id.tv_serving_ingredient);
+                TextViewFontAwesome btItemDelete = (TextViewFontAwesome) layoutSubItemPermission.findViewById(R.id.bt_delete_ingredient);
+                btItemDelete.setOnClickListener(this);
+                btItemDelete.setVisibility(View.GONE);
 
-        containerIngredients.addView(layoutSubItemPermission);
+                tvItemTitle.setText(ingredient.getName());
+
+                String quantityType = ingredient.getType().getQuantityType();
+                if (!Util.isNullOrZeroNumber(ingredient.getValue())) {
+                    tvItemQuantity.setText(Util.getValidatedValue(ingredient.getValue()) + quantityType);
+                }
+                if (ingredient.getCalaries() != null) {
+                    String calariesType = ingredient.getCalaries().getType().getQuantityType();
+                    if (!Util.isNullOrZeroNumber(ingredient.getCalaries().getValue())) {
+                        tvItemQuantity.setText(Util.getValidatedValue(ingredient.getCalaries().getValue()) + calariesType);
+                    }
+                }
+                containerIngredients.addView(layoutSubItemPermission);
+            }
+        }
     }
 
 

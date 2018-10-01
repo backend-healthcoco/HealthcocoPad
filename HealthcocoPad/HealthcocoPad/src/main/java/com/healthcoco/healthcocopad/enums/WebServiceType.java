@@ -530,6 +530,8 @@ public enum WebServiceType {
 
     ADD_PATIENT_MEASUREMENT_INFO(Method.POST, "nutrition/assessment/measurementInfo/addEdit/"),
 
+    GET_RECIPE_LIST_SOLR(Method.GET, "solr/recipe/search/?"),
+
     GET_HARDCODED_BLOOD_GROUPS(0, "");
 
     private int methodType;

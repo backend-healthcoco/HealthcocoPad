@@ -105,6 +105,28 @@
                 android:orientation="horizontal">
 
                 <LinearLayout
+                    android:id="@+id/layout_total_quantity"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/layout_add_treatment_title_padding_10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/quantity"
+                        android:textSize="@dimen/text_size_drug_child_lable" />
+
+                    <TextView
+                        android:id="@+id/tv_total_quantity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/text_size_drug_child_lable" />
+
+                </LinearLayout>
+
+                <LinearLayout
                     android:id="@+id/layout_protien"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"

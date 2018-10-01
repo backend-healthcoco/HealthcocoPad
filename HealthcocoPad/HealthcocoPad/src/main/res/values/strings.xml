@@ -1380,6 +1380,8 @@
     <string name="fat_colon">Fat&#160;:&#160;</string>
     <string name="carbs_colon">Carbs&#160;:&#160;</string>
     <string name="fiber_colon">Fiber&#160;:&#160;</string>
+    <string name="no_recipe_added">No Recipe Added</string>
+    <string name="search_recipe">Search Recipe</string>
 
 
     <!--Patient Medical Information texts-->

@@ -1825,4 +1825,25 @@ public class WebDataServiceImpl implements GCMRefreshListener {
         getResponse(webServiceType, class1, webServiceType.getUrl(), object, null, responseListener, errorListener);
     }
 
+
+    public void getRecipeListSolr(Class<?> class1, WebServiceType webServiceType, int pageNum, int size, String searchTerm, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        checkNetworkStatus(mApp.getApplicationContext());
+        String url = null;
+        if (HealthCocoConstants.isNetworkOnline) {
+            switch (webServiceType) {
+                case GET_RECIPE_LIST_SOLR:
+                    url = webServiceType.getUrl()
+                            + HealthCocoConstants.PARAM_DISCARDED_FALSE
+                            + HealthCocoConstants.PARAM_PAGE + pageNum
+                            + HealthCocoConstants.PARAM_SIZE + size
+
+                            + HealthCocoConstants.PARAM_SEARCH_TERM + searchTerm;
+                    break;
+            }
+            getResponse(webServiceType, class1, url, null, null, responseListener, errorListener);
+        } else {
+            showUserOffline(webServiceType, responseListener);
+        }
+    }
+
 }

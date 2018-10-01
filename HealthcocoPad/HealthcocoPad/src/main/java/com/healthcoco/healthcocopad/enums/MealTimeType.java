@@ -2,8 +2,8 @@ package com.healthcoco.healthcocopad.enums;
 
 public enum MealTimeType {
 
-    EARLY_MORNING("EARLY_MORNING"), BREAKFAST("BREAKFAST"), MID_MORNING("MID_MORNING"), LUNCH("LUNCH"), SNACK("SNACK"),
-    DINNER("DINNER");
+    EARLY_MORNING("EARLY_MORNING"), BREAKFAST("BREAKFAST"), MID_MORNING("MID_MORNING"), LUNCH("LUNCH"), EVENING_SNACK("EVENING_SNACK"),
+    DINNER("DINNER"), MID_NIGHT("MID_NIGHT");
 
     private String mealTime;
 

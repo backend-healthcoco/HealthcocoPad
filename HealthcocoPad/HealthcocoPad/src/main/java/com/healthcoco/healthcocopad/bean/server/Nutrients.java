@@ -1,20 +1,16 @@
 package com.healthcoco.healthcocopad.bean.server;
 
-import com.healthcoco.healthcocopad.bean.Duration;
 import com.healthcoco.healthcocopad.enums.NutrientCategoryType;
 import com.healthcoco.healthcocopad.enums.QuantityType;
 import com.healthcoco.healthcocopad.utilities.StringUtil;
 import com.orm.SugarRecord;
 import com.orm.annotation.Ignore;
-import com.orm.annotation.Unique;
 
 import org.parceler.Parcel;
 
-import java.util.List;
-
 @Parcel
-public class IngredientAddItem extends SugarRecord {
-    public static String TABLE_NAME = " " + StringUtil.toSQLName(IngredientAddItem.class.getSimpleName());
+public class Nutrients extends SugarRecord {
+    public static String TABLE_NAME = " " + StringUtil.toSQLName(Nutrients.class.getSimpleName());
 
     protected String foreignMealId;
     protected String customUniqueId;
@@ -101,4 +97,6 @@ public class IngredientAddItem extends SugarRecord {
     public void setNote(String note) {
         this.note = note;
     }
+
+
 }

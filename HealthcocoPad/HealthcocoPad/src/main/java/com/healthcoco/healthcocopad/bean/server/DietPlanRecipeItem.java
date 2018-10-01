@@ -1,8 +1,7 @@
 package com.healthcoco.healthcocopad.bean.server;
 
+import com.healthcoco.healthcocopad.bean.EquivalentQuantities;
 import com.healthcoco.healthcocopad.bean.MealQuantity;
-import com.healthcoco.healthcocopad.enums.MealTimeType;
-import com.healthcoco.healthcocopad.enums.MealType;
 import com.healthcoco.healthcocopad.utilities.StringUtil;
 import com.orm.SugarRecord;
 import com.orm.annotation.Ignore;
@@ -10,26 +9,27 @@ import com.orm.annotation.Unique;
 
 import org.parceler.Parcel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Parcel
-public class Meal extends SugarRecord {
-    public static String TABLE_NAME = " " + StringUtil.toSQLName(Meal.class.getSimpleName());
-    protected String foreignAssessmentId;
-    protected MealTimeType foreignTimeType;
+public class DietPlanRecipeItem extends SugarRecord {
+    public static String TABLE_NAME = " " + StringUtil.toSQLName(DietPlanRecipeItem.class.getSimpleName());
     protected String quantityJsonString;
+    protected String calariesJsonString;
     @Unique
     private String uniqueId;
+    @Ignore
+    private MealQuantity quantity;
     private String name;
     @Ignore
     private List<Ingredient> ingredients;
     @Ignore
     private List<Nutrients> nutrients;
-    @Ignore
-    private MealQuantity quantity;
+    private String direction;
     private String note;
     @Ignore
-    private MealType type;
+    private MealQuantity calaries;
 
     public String getUniqueId() {
         return uniqueId;
@@ -39,20 +39,20 @@ public class Meal extends SugarRecord {
         this.uniqueId = uniqueId;
     }
 
-    public String getForeignAssessmentId() {
-        return foreignAssessmentId;
+    public MealQuantity getQuantity() {
+        return quantity;
     }
 
-    public void setForeignAssessmentId(String foreignAssessmentId) {
-        this.foreignAssessmentId = foreignAssessmentId;
+    public void setQuantity(MealQuantity quantity) {
+        this.quantity = quantity;
     }
 
-    public MealTimeType getForeignTimeType() {
-        return foreignTimeType;
+    public String getQuantityJsonString() {
+        return quantityJsonString;
     }
 
-    public void setForeignTimeType(MealTimeType foreignTimeType) {
-        this.foreignTimeType = foreignTimeType;
+    public void setQuantityJsonString(String quantityJsonString) {
+        this.quantityJsonString = quantityJsonString;
     }
 
     public String getName() {
@@ -79,20 +79,12 @@ public class Meal extends SugarRecord {
         this.nutrients = nutrients;
     }
 
-    public MealQuantity getQuantity() {
-        return quantity;
+    public String getDirection() {
+        return direction;
     }
 
-    public void setQuantity(MealQuantity quantity) {
-        this.quantity = quantity;
-    }
-
-    public String getQuantityJsonString() {
-        return quantityJsonString;
-    }
-
-    public void setQuantityJsonString(String quantityJsonString) {
-        this.quantityJsonString = quantityJsonString;
+    public void setDirection(String direction) {
+        this.direction = direction;
     }
 
     public String getNote() {
@@ -103,11 +95,19 @@ public class Meal extends SugarRecord {
         this.note = note;
     }
 
-    public MealType getType() {
-        return type;
+    public MealQuantity getCalaries() {
+        return calaries;
     }
 
-    public void setType(MealType type) {
-        this.type = type;
+    public void setCalaries(MealQuantity calaries) {
+        this.calaries = calaries;
+    }
+
+    public String getCalariesJsonString() {
+        return calariesJsonString;
+    }
+
+    public void setCalariesJsonString(String calariesJsonString) {
+        this.calariesJsonString = calariesJsonString;
     }
 }
