@@ -17,13 +17,10 @@ public class RecipeResponse extends SugarRecord {
     public static String TABLE_NAME = " " + StringUtil.toSQLName(RecipeResponse.class.getSimpleName());
     protected String quantityJsonString;
     protected String calariesJsonString;
-    protected double calariesPerHundredUnit;
-    @Ignore
-    protected MealQuantity currentQuantity;
+
     protected String equivalentMeasurementsJsonString;
     protected String mealTimingJsonString;
-    @Ignore
-    protected List<Nutrients> nutrientPerHundredUnit;
+
     @Unique
     private String uniqueId;
     private String name;
@@ -38,9 +35,10 @@ public class RecipeResponse extends SugarRecord {
     @Ignore
     private MealQuantity calaries;
     @Ignore
-    private ArrayList<EquivalentQuantities> equivalentMeasurements;
+    private List<EquivalentQuantities> equivalentMeasurements;
     @Ignore
-    private ArrayList<String> mealTiming;
+    private List<String> mealTiming;
+
 
     public String getUniqueId() {
         return uniqueId;
@@ -123,13 +121,6 @@ public class RecipeResponse extends SugarRecord {
         this.calariesJsonString = calariesJsonString;
     }
 
-    public ArrayList<EquivalentQuantities> getEquivalentMeasurements() {
-        return equivalentMeasurements;
-    }
-
-    public void setEquivalentMeasurements(ArrayList<EquivalentQuantities> equivalentMeasurements) {
-        this.equivalentMeasurements = equivalentMeasurements;
-    }
 
     public String getEquivalentMeasurementsJsonString() {
         return equivalentMeasurementsJsonString;
@@ -139,13 +130,6 @@ public class RecipeResponse extends SugarRecord {
         this.equivalentMeasurementsJsonString = equivalentMeasurementsJsonString;
     }
 
-    public ArrayList<String> getMealTiming() {
-        return mealTiming;
-    }
-
-    public void setMealTiming(ArrayList<String> mealTiming) {
-        this.mealTiming = mealTiming;
-    }
 
     public String getMealTimingJsonString() {
         return mealTimingJsonString;
@@ -155,27 +139,20 @@ public class RecipeResponse extends SugarRecord {
         this.mealTimingJsonString = mealTimingJsonString;
     }
 
-    public List<Nutrients> getNutrientPerHundredUnit() {
-        return nutrientPerHundredUnit;
+
+    public List<EquivalentQuantities> getEquivalentMeasurements() {
+        return equivalentMeasurements;
     }
 
-    public void setNutrientPerHundredUnit(List<Nutrients> nutrientPerHundredUnit) {
-        this.nutrientPerHundredUnit = nutrientPerHundredUnit;
+    public void setEquivalentMeasurements(List<EquivalentQuantities> equivalentMeasurements) {
+        this.equivalentMeasurements = equivalentMeasurements;
     }
 
-    public double getCalariesPerHundredUnit() {
-        return calariesPerHundredUnit;
+    public List<String> getMealTiming() {
+        return mealTiming;
     }
 
-    public void setCalariesPerHundredUnit(double calariesPerHundredUnit) {
-        this.calariesPerHundredUnit = calariesPerHundredUnit;
-    }
-
-    public MealQuantity getCurrentQuantity() {
-        return currentQuantity;
-    }
-
-    public void setCurrentQuantity(MealQuantity currentQuantity) {
-        this.currentQuantity = currentQuantity;
+    public void setMealTiming(List<String> mealTiming) {
+        this.mealTiming = mealTiming;
     }
 }

@@ -47,14 +47,14 @@ public class RecipeListSolrViewHolder extends HealthCocoViewHolder implements Vi
 
             if (objData.getCalaries() != null) {
                 MealQuantity calaries = objData.getCalaries();
-                if (calaries.getType() != null)
-                    tvCalarie.setText(Util.getValidatedValue(calaries.getValue()) + calaries.getType().getQuantityType());
+//                if (calaries.getType() != null)
+                tvCalarie.setText(Util.getValidatedValue(calaries.getValue()) + mActivity.getString(R.string.cal_orange) /*+ calaries.getType().getQuantityType()*/);
             }
 
             if (objData.getQuantity() != null) {
                 MealQuantity quantity = objData.getQuantity();
                 if (quantity.getType() != null)
-                    tvCalarie.setText(Util.getValidatedValue(quantity.getValue()) + quantity.getType().getQuantityType());
+                    tvQuantity.setText(Util.getValidatedValue(quantity.getValue()) + quantity.getType().getUnit());
             }
         }
     }

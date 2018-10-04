@@ -2,17 +2,25 @@ package com.healthcoco.healthcocopad.enums;
 
 public enum QuantityType {
 
-    DAYS("DAYS"), QTY("QTY"), KG("KG"), GM("GM"), MGM("MGM"), TABLE_SPOON("TABLE_SPOON"), TEA_SPOON("TEA_SPOON"),
-    PERCENT("PERCENT"), CUP("CUP"), BOWL("BOWL"), LITRE("LITRE"), MILI_LITRE("MILI_LITRE"), GLASS("GLASS"), CAL("CAL");
+    DAYS("DAYS", "days"), QTY("QTY", "qty"), KG("KG", "Kg"), GM("GM", "gm"), MGM("MGM", "mgm"),
+    TABLE_SPOON("TABLE_SPOON", "Table Spoon"), TEA_SPOON("TEA_SPOON", "Tea Spoon"),
+    PERCENT("PERCENT", "%"), CUP("CUP", "Cup"), BOWL("BOWL", "Bowl"),
+    LITRE("LITRE", "Ltr"), MILI_LITRE("MILI_LITRE", "ml"), GLASS("GLASS", "glass"),
+    CAL("CAL", "CAL");
 
     private String quantityType;
+    private String unit;
 
-    QuantityType(String quantityType) {
+    QuantityType(String quantityType, String unit) {
         this.quantityType = quantityType;
+        this.unit = unit;
     }
 
     public String getQuantityType() {
         return quantityType;
     }
 
+    public String getUnit() {
+        return unit;
+    }
 }

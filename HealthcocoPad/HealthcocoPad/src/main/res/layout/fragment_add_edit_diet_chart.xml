@@ -111,7 +111,7 @@
                                 android:id="@+id/container_food_early_morning"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1.6"
+                                android:layout_weight="2.9"
                                 android:gravity="center|start"
                                 android:orientation="vertical"
                                 android:paddingLeft="@dimen/layout_padding" />
@@ -219,7 +219,7 @@
                                 android:id="@+id/container_food_morning_snacks"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1.6"
+                                android:layout_weight="2.9"
                                 android:gravity="center|start"
                                 android:orientation="vertical"
                                 android:paddingLeft="@dimen/layout_padding" />
@@ -326,7 +326,7 @@
                                 android:id="@+id/container_food_breakfast"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1.6"
+                                android:layout_weight="2.9"
                                 android:gravity="center|start"
                                 android:orientation="vertical"
                                 android:paddingLeft="@dimen/layout_padding" />
@@ -433,7 +433,7 @@
                                 android:id="@+id/container_food_post_breakfast"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1.6"
+                                android:layout_weight="2.9"
                                 android:gravity="center|start"
                                 android:orientation="vertical"
                                 android:paddingLeft="@dimen/layout_padding" />
@@ -540,7 +540,7 @@
                                 android:id="@+id/container_food_lunch"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1.6"
+                                android:layout_weight="2.9"
                                 android:gravity="center|start"
                                 android:orientation="vertical"
                                 android:paddingLeft="@dimen/layout_padding" />
@@ -647,7 +647,7 @@
                                 android:id="@+id/container_food_post_lunch"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1.6"
+                                android:layout_weight="2.9"
                                 android:gravity="center|start"
                                 android:orientation="vertical"
                                 android:paddingLeft="@dimen/layout_padding" />
@@ -754,7 +754,7 @@
                                 android:id="@+id/container_food_evening_snack"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1.6"
+                                android:layout_weight="2.9"
                                 android:gravity="center|start"
                                 android:orientation="vertical"
                                 android:paddingLeft="@dimen/layout_padding" />
@@ -861,7 +861,7 @@
                                 android:id="@+id/container_food_dinner"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1.6"
+                                android:layout_weight="2.9"
                                 android:gravity="center|start"
                                 android:orientation="vertical"
                                 android:paddingLeft="@dimen/layout_padding" />

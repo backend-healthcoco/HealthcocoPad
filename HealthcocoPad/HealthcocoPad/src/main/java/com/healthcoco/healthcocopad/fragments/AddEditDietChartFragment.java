@@ -1,47 +1,44 @@
 package com.healthcoco.healthcocopad.fragments;
 
-import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.TimePicker;
 
 import com.android.volley.Response;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
-import com.healthcoco.healthcocopad.adapter.UIPermissionItemGridAdapter;
+import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
+import com.healthcoco.healthcocopad.bean.server.DietPlanRecipeItem;
+import com.healthcoco.healthcocopad.bean.server.DietplanAddItem;
+import com.healthcoco.healthcocopad.bean.server.Ingredient;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
-import com.healthcoco.healthcocopad.enums.AdapterType;
-import com.healthcoco.healthcocopad.enums.FoodPreferenceType;
+import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
+import com.healthcoco.healthcocopad.enums.MealTimeType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
-import com.healthcoco.healthcocopad.listeners.CommonUiPermissionsListener;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
-import com.healthcoco.healthcocopad.recyclerview.HealthcocoRecyclerViewAdapter;
 import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
-import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
 import com.healthcoco.healthcocopad.utilities.EditTextTextViewErrorUtil;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.healthcoco.healthcocopad.views.TextViewFontAwesome;
 
+import org.parceler.Parcels;
+
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
+import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 
@@ -57,7 +54,7 @@ public class AddEditDietChartFragment extends HealthCocoFragment implements
     private RegisteredPatientDetailsUpdated selectedPatient;
 
     private TextViewFontAwesome tvAddEarlyMorning;
-    private RecyclerView containerFoodEarlyMorning;
+    private LinearLayout containerFoodEarlyMorning;
 
     private TextViewFontAwesome tvAddMorningSnacks;
     private LinearLayout containerFoodMorningSnacks;
@@ -80,9 +77,19 @@ public class AddEditDietChartFragment extends HealthCocoFragment implements
     private TextViewFontAwesome tvAddDinner;
     private LinearLayout containerFoodDinner;
 
+    private LinkedHashMap<String, DietplanAddItem> earlyMorning = new LinkedHashMap<>();
+    private LinkedHashMap<String, DietplanAddItem> morningSnacks = new LinkedHashMap<>();
+    private LinkedHashMap<String, DietplanAddItem> breakfast = new LinkedHashMap<>();
+    private LinkedHashMap<String, DietplanAddItem> postBreakfast = new LinkedHashMap<>();
+    private LinkedHashMap<String, DietplanAddItem> lunch = new LinkedHashMap<>();
+    private LinkedHashMap<String, DietplanAddItem> postLunch = new LinkedHashMap<>();
+    private LinkedHashMap<String, DietplanAddItem> eveningSnacks = new LinkedHashMap<>();
+    private LinkedHashMap<String, DietplanAddItem> dinner = new LinkedHashMap<>();
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_add_edit_food_and_exercise, container, false);
+        view = inflater.inflate(R.layout.fragment_add_edit_diet_chart, container, false);
         super.onCreateView(inflater, container, savedInstanceState);
         return view;
     }
@@ -107,7 +114,7 @@ public class AddEditDietChartFragment extends HealthCocoFragment implements
     @Override
     public void initViews() {
         tvAddEarlyMorning = (TextViewFontAwesome) view.findViewById(R.id.tv_add_early_morning);
-        containerFoodEarlyMorning = (RecyclerView) view.findViewById(R.id.container_food_early_morning);
+        containerFoodEarlyMorning = (LinearLayout) view.findViewById(R.id.container_food_early_morning);
 
         tvAddBreakfast = (TextViewFontAwesome) view.findViewById(R.id.tv_add_breakfast);
         containerFoodBreakfast = (LinearLayout) view.findViewById(R.id.container_food_breakfast);
@@ -130,6 +137,7 @@ public class AddEditDietChartFragment extends HealthCocoFragment implements
         tvAddPostBreakfast = (TextViewFontAwesome) view.findViewById(R.id.tv_add_post_breakfast);
         containerFoodPostBreakfast = (LinearLayout) view.findViewById(R.id.container_food_post_breakfast);
     }
+
 
     @Override
     public void initListeners() {
@@ -210,17 +218,6 @@ public class AddEditDietChartFragment extends HealthCocoFragment implements
 
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.tv_add_early_morning:
-//                addFood(containerFoodEarlyMorning);
-                break;
-            case R.id.tv_add_breakfast:
-//                addFood(containerFoodBreakfast);
-                break;
-        }
-    }
 
     private void validateData() {
         ArrayList<View> errorViewList = new ArrayList<>();
@@ -255,5 +252,180 @@ public class AddEditDietChartFragment extends HealthCocoFragment implements
         containerLayout.addView(layoutSubItemPermission);
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.tv_add_early_morning:
+                onAddMealClicked(null, MealTimeType.EARLY_MORNING);
+                break;
+            case R.id.tv_add_breakfast:
+                onAddMealClicked(null, MealTimeType.BREAKFAST);
+                break;
+            case R.id.tv_add_morning_snacks:
+                onAddMealClicked(null, MealTimeType.MID_MORNING);
+                break;
+            case R.id.tv_add_lunch:
+                onAddMealClicked(null, MealTimeType.LUNCH);
+                break;
+            case R.id.tv_add_evening_snack:
+                onAddMealClicked(null, MealTimeType.EVENING_SNACK);
+                break;
+            case R.id.tv_add_dinner:
+                onAddMealClicked(null, MealTimeType.DINNER);
+                break;
+            case R.id.tv_add_post_lunch:
+//                onAddMealClicked(null, MealTimeType.POST_LUNCH);
+                break;
+            case R.id.tv_add_post_breakfast:
+//                onAddMealClicked(null, MealTimeType.POST_BREAKFAST);
+                break;
+        }
+    }
 
+
+    public void onAddMealClicked(String mealId, MealTimeType mealTimeType) {
+        Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
+        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.SELECT_RECIPES.ordinal());
+        intent.putExtra(HealthCocoConstants.TAG_TAB_TYPE, mealTimeType.ordinal());
+        if (!Util.isNullOrBlank(mealId))
+            intent.putExtra(HealthCocoConstants.TAG_UNIQUE_ID, mealId);
+        startActivityForResult(intent, HealthCocoConstants.REQUEST_CODE_ADD_MEAL, null);
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == HealthCocoConstants.REQUEST_CODE_ADD_MEAL) {
+            switch (resultCode) {
+                case HealthCocoConstants.RESULT_CODE_ADD_MEAL:
+                    if (data != null) {
+                        DietplanAddItem dietplanAddItem = Parcels.unwrap(data.getParcelableExtra(HealthCocoConstants.TAG_INTENT_DATA));
+                        if (dietplanAddItem != null) {
+                            updateDietPlan(dietplanAddItem);
+                        }
+                    }
+                    break;
+            }
+        }
+
+    }
+
+    private void updateDietPlan(DietplanAddItem dietplanAddItem) {
+        switch (dietplanAddItem.getMealTiming()) {
+            case LUNCH:
+                lunch.put(dietplanAddItem.getForeignDietId(), dietplanAddItem);
+                addDietplanItem(containerFoodLunch, new ArrayList<DietplanAddItem>(lunch.values()));
+                break;
+            case BREAKFAST:
+                breakfast.put(dietplanAddItem.getForeignDietId(), dietplanAddItem);
+                addDietplanItem(containerFoodBreakfast, new ArrayList<DietplanAddItem>(breakfast.values()));
+                break;
+            case DINNER:
+                dinner.put(dietplanAddItem.getForeignDietId(), dietplanAddItem);
+                addDietplanItem(containerFoodDinner, new ArrayList<DietplanAddItem>(dinner.values()));
+                break;
+            case EARLY_MORNING:
+                earlyMorning.put(dietplanAddItem.getForeignDietId(), dietplanAddItem);
+                addDietplanItem(containerFoodEarlyMorning, new ArrayList<DietplanAddItem>(earlyMorning.values()));
+                break;
+            case MID_NIGHT:
+                earlyMorning.put(dietplanAddItem.getForeignDietId(), dietplanAddItem);
+                break;
+            case MID_MORNING:
+                morningSnacks.put(dietplanAddItem.getForeignDietId(), dietplanAddItem);
+                break;
+            case EVENING_SNACK:
+                eveningSnacks.put(dietplanAddItem.getForeignDietId(), dietplanAddItem);
+                addDietplanItem(containerFoodEveningSnacks, new ArrayList<DietplanAddItem>(eveningSnacks.values()));
+                break;
+        }
+    }
+
+
+    private void addDietplanItem(LinearLayout containerFood, ArrayList<DietplanAddItem> itemArrayList) {
+        containerFood.removeAllViews();
+        for (DietplanAddItem dietplanAddItem : itemArrayList) {
+
+            LinearLayout layoutMeal = (LinearLayout) mActivity.getLayoutInflater().inflate(R.layout.list_item_selected_meal, null);
+            TextView tvOption = (TextView) layoutMeal.findViewById(R.id.tv_option);
+            LinearLayout containerMeals = (LinearLayout) layoutMeal.findViewById(R.id.container_meal);
+            tvOption.setText(getString(R.string.option) + (itemArrayList.indexOf(dietplanAddItem) + 1));
+
+            for (DietPlanRecipeItem recipeItem : dietplanAddItem.getRecipes()) {
+
+                LinearLayout layoutRecipe = (LinearLayout) mActivity.getLayoutInflater().inflate(R.layout.list_sub_item_selected_recipe, null);
+                TextView tvRecipeTitle = (TextView) layoutRecipe.findViewById(R.id.tv_ingredient_name);
+                TextView tvRecipeQuantity = (TextView) layoutRecipe.findViewById(R.id.tv_quantity_ingredient);
+                TextView tvRecipeCalarie = (TextView) layoutRecipe.findViewById(R.id.tv_serving_ingredient);
+                LinearLayout containerIngredients = (LinearLayout) layoutRecipe.findViewById(R.id.container_ingredient);
+
+                tvRecipeTitle.setText(recipeItem.getName());
+
+                if (recipeItem.getQuantity() != null) {
+                    if (recipeItem.getQuantity().getType() != null) {
+                        String quantityType = recipeItem.getQuantity().getType().getQuantityType();
+                        if (!Util.isNullOrZeroNumber(recipeItem.getQuantity().getValue())) {
+                            tvRecipeQuantity.setText(Util.getValidatedValue(recipeItem.getQuantity().getValue()) + quantityType);
+                        }
+                    }
+                }
+                if (recipeItem.getCalaries() != null) {
+                    if (!Util.isNullOrZeroNumber(recipeItem.getCalaries().getValue())) {
+                        tvRecipeCalarie.setText(Util.getValidatedValue(recipeItem.getCalaries().getValue()) + mActivity.getString(R.string.cal_orange) /*+ calaries.getType().getQuantityType()*/);
+                    }
+                }
+
+
+                containerIngredients.removeAllViews();
+
+                if (!recipeItem.getNutrientValueAtRecipeLevel()) {
+                    if (!Util.isNullOrEmptyList(recipeItem.getIngredients())) {
+                        containerIngredients.setVisibility(View.VISIBLE);
+                        for (Ingredient ingredient : recipeItem.getIngredients()) {
+                            if (ingredient != null) {
+                                LinearLayout layoutSubItemPermission = (LinearLayout) mActivity.getLayoutInflater().inflate(R.layout.list_sub_item_selected_ingredient, null);
+                                TextView tvItemTitle = (TextView) layoutSubItemPermission.findViewById(R.id.tv_ingredient_name);
+                                TextView tvItemQuantity = (TextView) layoutSubItemPermission.findViewById(R.id.tv_quantity_ingredient);
+                                TextView tvItemCalarie = (TextView) layoutSubItemPermission.findViewById(R.id.tv_serving_ingredient);
+                                TextViewFontAwesome btItemDelete = (TextViewFontAwesome) layoutSubItemPermission.findViewById(R.id.bt_delete_ingredient);
+                                btItemDelete.setOnClickListener(this);
+                                btItemDelete.setVisibility(View.GONE);
+
+                                tvItemTitle.setText(ingredient.getName());
+
+                                if (ingredient.getType() != null) {
+                                    String type = ingredient.getType().getQuantityType();
+                                    if (!Util.isNullOrZeroNumber(ingredient.getValue())) {
+                                        tvItemQuantity.setText(Util.getValidatedValue(ingredient.getValue()) + type);
+                                    }
+                                }
+                                if (ingredient.getCalaries() != null) {
+                                    if (!Util.isNullOrZeroNumber(ingredient.getCalaries().getValue())) {
+                                        tvItemCalarie.setText(Util.getValidatedValue(ingredient.getCalaries().getValue()) + mActivity.getString(R.string.cal_orange));
+                                    }
+                                }
+                                containerIngredients.addView(layoutSubItemPermission);
+                            }
+                        }
+                    } else
+                        containerIngredients.setVisibility(View.GONE);
+                } else {
+                    containerIngredients.setVisibility(View.GONE);
+                }
+                containerMeals.addView(layoutRecipe);
+            }
+            containerFood.addView(layoutMeal);
+        }
+    }
+
+
+   /* earlyMorning;
+    morningSnacks;
+    breakfast;
+    postBreakfast;
+    lunch;
+    postLunch;
+    eveningSnacks;
+    dinner;*/
 }

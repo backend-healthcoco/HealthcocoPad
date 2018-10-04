@@ -10,8 +10,10 @@ import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
 import com.healthcoco.healthcocopad.bean.server.ClinicDoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.ClinicImage;
+import com.healthcoco.healthcocopad.bean.server.DietPlanRecipeItem;
 import com.healthcoco.healthcocopad.bean.server.Events;
 import com.healthcoco.healthcocopad.bean.server.Meal;
+import com.healthcoco.healthcocopad.bean.server.RecipeResponse;
 import com.healthcoco.healthcocopad.bean.server.RegisteredDoctorProfile;
 import com.healthcoco.healthcocopad.enums.AdapterType;
 import com.healthcoco.healthcocopad.enums.KioskSubItemType;
@@ -160,7 +162,7 @@ public class HealthcocoRecyclerViewAdapter extends RecyclerView.Adapter<Healthco
                 }
                 break;
             case RECIPE_ITEM:
-                if (holder instanceof RecipeListItemViewHolder && object instanceof Meal) {
+                if (holder instanceof RecipeListItemViewHolder && object instanceof DietPlanRecipeItem) {
                     RecipeListItemViewHolder recipeListItemViewHolder = (RecipeListItemViewHolder) holder;
                     recipeListItemViewHolder.applyData(object);
                 }

@@ -1355,6 +1355,7 @@
     <string name="write_a_reason">Write a Reason</string>
     <string name="freq">Frequency</string>
     <string name="gms">Gms</string>
+    <string name="select_recipe">Select Recipe</string>
 
     <!--Patient Food and Exercise texts-->
     <string name="food_and_exercise">Food and Exercise</string>
@@ -1376,12 +1377,16 @@
     <string name="dinner">Dinner</string>
     <string name="serving">Serving</string>
     <string name="ingredients">Ingredients</string>
+    <string name="cal">&#160;Cal</string>
     <string name="protein_colon">Protein&#160;:&#160;</string>
     <string name="fat_colon">Fat&#160;:&#160;</string>
     <string name="carbs_colon">Carbs&#160;:&#160;</string>
     <string name="fiber_colon">Fiber&#160;:&#160;</string>
     <string name="no_recipe_added">No Recipe Added</string>
     <string name="search_recipe">Search Recipe</string>
+    <string name="cal_orange"><font fgcolor="#f98740">&#160;Cal</font> </string>
+    <string name="add_diet_chart">Add Diet Chart</string>
+    <string name="option">Option&#160;</string>
 
 
     <!--Patient Medical Information texts-->

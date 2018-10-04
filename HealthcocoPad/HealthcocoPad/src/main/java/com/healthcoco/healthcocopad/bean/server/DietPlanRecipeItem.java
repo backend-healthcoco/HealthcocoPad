@@ -31,6 +31,18 @@ public class DietPlanRecipeItem extends SugarRecord {
     @Ignore
     private MealQuantity calaries;
 
+    protected double calariesPerHundredUnit;
+    @Ignore
+    protected MealQuantity currentQuantity;
+    protected String equivalentMeasurementsJsonString;
+    protected String mealTimingJsonString;
+    @Ignore
+    protected List<Nutrients> nutrientPerHundredUnit;
+    protected Boolean nutrientValueAtRecipeLevel;
+    @Ignore
+    protected List<EquivalentQuantities> equivalentMeasurements;
+
+
     public String getUniqueId() {
         return uniqueId;
     }
@@ -109,5 +121,61 @@ public class DietPlanRecipeItem extends SugarRecord {
 
     public void setCalariesJsonString(String calariesJsonString) {
         this.calariesJsonString = calariesJsonString;
+    }
+
+    public double getCalariesPerHundredUnit() {
+        return calariesPerHundredUnit;
+    }
+
+    public void setCalariesPerHundredUnit(double calariesPerHundredUnit) {
+        this.calariesPerHundredUnit = calariesPerHundredUnit;
+    }
+
+    public MealQuantity getCurrentQuantity() {
+        return currentQuantity;
+    }
+
+    public void setCurrentQuantity(MealQuantity currentQuantity) {
+        this.currentQuantity = currentQuantity;
+    }
+
+    public String getEquivalentMeasurementsJsonString() {
+        return equivalentMeasurementsJsonString;
+    }
+
+    public void setEquivalentMeasurementsJsonString(String equivalentMeasurementsJsonString) {
+        this.equivalentMeasurementsJsonString = equivalentMeasurementsJsonString;
+    }
+
+    public String getMealTimingJsonString() {
+        return mealTimingJsonString;
+    }
+
+    public void setMealTimingJsonString(String mealTimingJsonString) {
+        this.mealTimingJsonString = mealTimingJsonString;
+    }
+
+    public List<Nutrients> getNutrientPerHundredUnit() {
+        return nutrientPerHundredUnit;
+    }
+
+    public void setNutrientPerHundredUnit(List<Nutrients> nutrientPerHundredUnit) {
+        this.nutrientPerHundredUnit = nutrientPerHundredUnit;
+    }
+
+    public Boolean getNutrientValueAtRecipeLevel() {
+        return nutrientValueAtRecipeLevel;
+    }
+
+    public void setNutrientValueAtRecipeLevel(Boolean nutrientValueAtRecipeLevel) {
+        this.nutrientValueAtRecipeLevel = nutrientValueAtRecipeLevel;
+    }
+
+    public List<EquivalentQuantities> getEquivalentMeasurements() {
+        return equivalentMeasurements;
+    }
+
+    public void setEquivalentMeasurements(List<EquivalentQuantities> equivalentMeasurements) {
+        this.equivalentMeasurements = equivalentMeasurements;
     }
 }

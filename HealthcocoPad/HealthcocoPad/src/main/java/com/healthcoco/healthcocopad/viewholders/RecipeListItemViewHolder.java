@@ -6,26 +6,28 @@ import android.widget.TextView;
 
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.R;
+import com.healthcoco.healthcocopad.bean.EquivalentQuantities;
 import com.healthcoco.healthcocopad.bean.MealQuantity;
 import com.healthcoco.healthcocopad.bean.server.DietPlanRecipeItem;
 import com.healthcoco.healthcocopad.bean.server.Ingredient;
-import com.healthcoco.healthcocopad.bean.server.Meal;
-import com.healthcoco.healthcocopad.bean.server.RecipeResponse;
+import com.healthcoco.healthcocopad.enums.PopupWindowType;
+import com.healthcoco.healthcocopad.popupwindow.PopupWindowListener;
 import com.healthcoco.healthcocopad.recyclerview.HealthcocoComonRecylcerViewHolder;
 import com.healthcoco.healthcocopad.recyclerview.HealthcocoRecyclerViewItemClickListener;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.healthcoco.healthcocopad.views.TextViewFontAwesome;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Prashant on 23-06-18.
  */
 
-public class RecipeListItemViewHolder extends HealthcocoComonRecylcerViewHolder implements View.OnClickListener {
+public class RecipeListItemViewHolder extends HealthcocoComonRecylcerViewHolder implements View.OnClickListener, PopupWindowListener {
 
     private HealthCocoActivity mActivity;
-    private RecipeResponse recipeItem;
+    private DietPlanRecipeItem recipeItem;
     private TextView tvTitle;
     private TextView tvQuantity;
     private TextView tvServingType;
@@ -35,7 +37,9 @@ public class RecipeListItemViewHolder extends HealthcocoComonRecylcerViewHolder 
     private TextView tvFiber;
     private TextView tvTotalQuantity;
     private LinearLayout containerIngredients;
+    private LinearLayout parentIngredients;
     private TextViewFontAwesome btDelete;
+    private boolean isIngredientValue = false;
 
 
     public RecipeListItemViewHolder(HealthCocoActivity mActivity, View itemView, HealthcocoRecyclerViewItemClickListener itemClickListener) {
@@ -57,6 +61,7 @@ public class RecipeListItemViewHolder extends HealthcocoComonRecylcerViewHolder 
 
         tvTotalQuantity = (TextView) itemView.findViewById(R.id.tv_total_quantity);
 
+        parentIngredients = (LinearLayout) itemView.findViewById(R.id.parent_ingredient);
         containerIngredients = (LinearLayout) itemView.findViewById(R.id.container_ingredient);
 
         btDelete = (TextViewFontAwesome) itemView.findViewById(R.id.bt_delete);
@@ -80,34 +85,42 @@ public class RecipeListItemViewHolder extends HealthcocoComonRecylcerViewHolder 
 
     @Override
     public void applyData(Object object) {
-        recipeItem = (RecipeResponse) object;
+        recipeItem = (DietPlanRecipeItem) object;
         if (recipeItem != null) {
             tvTitle.setText(recipeItem.getName());
 
             if (recipeItem.getQuantity() != null) {
                 MealQuantity quantity = recipeItem.getQuantity();
 
-                String quantityType = quantity.getType().getQuantityType();
                 if (!Util.isNullOrZeroNumber(quantity.getValue())) {
                     tvQuantity.setText(Util.getValidatedValue(quantity.getValue()));
-                    tvServingType.setText(quantityType);
+                    tvServingType.setText(quantity.getType().getUnit());
                 }
             } else {
                 tvQuantity.setText("");
-
             }
 
-            addIngredients(recipeItem.getIngredients());
+            if (!Util.isNullOrEmptyList(recipeItem.getEquivalentMeasurements()))
+                mActivity.initPopupWindows(tvServingType, PopupWindowType.SERVING_TYPE, (ArrayList<Object>) (Object) recipeItem.getEquivalentMeasurements(), this);
+
+            mActivity.initPopupWindows(tvQuantity, PopupWindowType.QUANTITY_TYPE, PopupWindowType.QUANTITY_TYPE.getList(), this);
+
+            if (recipeItem.getNutrientValueAtRecipeLevel() != null)
+                isIngredientValue = recipeItem.getNutrientValueAtRecipeLevel();
+
+            if (isIngredientValue)
+                addIngredients(recipeItem.getIngredients());
+            else parentIngredients.setVisibility(View.GONE);
         }
 
     }
 
     private void addIngredients(List<Ingredient> ingredientList) {
-
+        parentIngredients.setVisibility(View.VISIBLE);
         containerIngredients.removeAllViews();
         for (Ingredient ingredient : ingredientList) {
             if (ingredient != null) {
-                LinearLayout layoutSubItemPermission = (LinearLayout) mActivity.getLayoutInflater().inflate(R.layout.list_sub_item_selected_recipe, null);
+                LinearLayout layoutSubItemPermission = (LinearLayout) mActivity.getLayoutInflater().inflate(R.layout.list_sub_item_selected_ingredient, null);
                 TextView tvItemTitle = (TextView) layoutSubItemPermission.findViewById(R.id.tv_ingredient_name);
                 TextView tvItemQuantity = (TextView) layoutSubItemPermission.findViewById(R.id.tv_quantity_ingredient);
                 TextView tvItemCalarie = (TextView) layoutSubItemPermission.findViewById(R.id.tv_serving_ingredient);
@@ -124,7 +137,7 @@ public class RecipeListItemViewHolder extends HealthcocoComonRecylcerViewHolder 
                 if (ingredient.getCalaries() != null) {
                     String calariesType = ingredient.getCalaries().getType().getQuantityType();
                     if (!Util.isNullOrZeroNumber(ingredient.getCalaries().getValue())) {
-                        tvItemQuantity.setText(Util.getValidatedValue(ingredient.getCalaries().getValue()) + calariesType);
+                        tvItemCalarie.setText(Util.getValidatedValue(ingredient.getCalaries().getValue()) + calariesType);
                     }
                 }
                 containerIngredients.addView(layoutSubItemPermission);
@@ -136,5 +149,18 @@ public class RecipeListItemViewHolder extends HealthcocoComonRecylcerViewHolder 
     @Override
     public void onClick(View view) {
         String tag = (String) view.getTag();
+    }
+
+    @Override
+    public void onItemSelected(PopupWindowType popupWindowType, Object object) {
+        if (object instanceof EquivalentQuantities) {
+            EquivalentQuantities equivalentQuantities = (EquivalentQuantities) object;
+            tvServingType.setText(equivalentQuantities.getServingType().getUnit());
+        }
+    }
+
+    @Override
+    public void onEmptyListFound() {
+
     }
 }

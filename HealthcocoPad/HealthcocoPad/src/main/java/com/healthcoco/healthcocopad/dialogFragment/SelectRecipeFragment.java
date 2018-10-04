@@ -1,5 +1,6 @@
 package com.healthcoco.healthcocopad.dialogFragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,19 +16,27 @@ import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.bean.EquivalentQuantities;
 import com.healthcoco.healthcocopad.bean.MealQuantity;
 import com.healthcoco.healthcocopad.bean.server.DietPlanRecipeItem;
+import com.healthcoco.healthcocopad.bean.server.DietplanAddItem;
 import com.healthcoco.healthcocopad.bean.server.Nutrients;
 import com.healthcoco.healthcocopad.bean.server.RecipeResponse;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.enums.AdapterType;
+import com.healthcoco.healthcocopad.enums.MealTimeType;
+import com.healthcoco.healthcocopad.enums.PatientDetailTabType;
 import com.healthcoco.healthcocopad.enums.QuantityType;
 import com.healthcoco.healthcocopad.fragments.RecipeListFragment;
 import com.healthcoco.healthcocopad.listeners.SelectedTreatmentItemClickListener;
 import com.healthcoco.healthcocopad.recyclerview.HealthcocoRecyclerViewAdapter;
+import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
+import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.Util;
+
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 /**
  * Created by Prashant on 26/09/2018.
@@ -46,8 +55,9 @@ public class SelectRecipeFragment extends HealthCocoFragment implements
     private TextView tvNoRecipeAdded;
     private RecyclerView selectedRecipeRecyclerView;
     private HealthcocoRecyclerViewAdapter mAdapter;
-    private LinkedHashMap<String, RecipeResponse> recipeHashMap;
-
+    private LinkedHashMap<String, DietPlanRecipeItem> recipeHashMap;
+    private int ordinal;
+    private MealTimeType mealTimeType;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -60,17 +70,11 @@ public class SelectRecipeFragment extends HealthCocoFragment implements
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Bundle bundle = getArguments();
-     /*   if (bundle != null && bundle.containsKey(PatientTreatmentDetailFragment.TAG_TREATMENT_DATA)) {
-            treatmentsList = Parcels.unwrap(bundle.getParcelable(PatientTreatmentDetailFragment.TAG_TREATMENT_DATA));
-            if (!Util.isNullOrEmptyList(treatmentsList)) {
-                for (Treatments treatments : treatmentsList) {
-                    treatment = treatments;
-                }
-            }
-        }
-        if (bundle != null && bundle.containsKey(HealthCocoConstants.TAG_IS_FROM_VISIT)) {
-            isFromVisit = Parcels.unwrap(bundle.getParcelable(HealthCocoConstants.TAG_IS_FROM_VISIT));
-        }*/
+
+        Intent intent = mActivity.getIntent();
+        ordinal = intent.getIntExtra(HealthCocoConstants.TAG_TAB_TYPE, 0);
+        mealTimeType = MealTimeType.values()[ordinal];
+
         init();
     }
 
@@ -91,7 +95,7 @@ public class SelectRecipeFragment extends HealthCocoFragment implements
 
     @Override
     public void initListeners() {
-        ((CommonOpenUpActivity) mActivity).initSaveButton(this);
+        ((CommonOpenUpActivity) mActivity).initActionbarRightAction(this);
     }
 
 
@@ -118,7 +122,7 @@ public class SelectRecipeFragment extends HealthCocoFragment implements
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.bt_save:
+            case R.id.container_right_action:
                 validateData();
                 break;
             default:
@@ -129,7 +133,7 @@ public class SelectRecipeFragment extends HealthCocoFragment implements
     public void validateData() {
         int msgId = getBlankTreatmentMsg();
         if (msgId == 0) {
-//            addTreatment();
+            addDietPlanItem();
         } else {
             Util.showToast(mActivity, msgId);
         }
@@ -155,8 +159,8 @@ public class SelectRecipeFragment extends HealthCocoFragment implements
     }
 
 
-    private void notifyAdapter(HashMap<String, RecipeResponse> mealHashMap) {
-        ArrayList<RecipeResponse> list = new ArrayList<>(mealHashMap.values());
+    private void notifyAdapter(HashMap<String, DietPlanRecipeItem> mealHashMap) {
+        ArrayList<DietPlanRecipeItem> list = new ArrayList<>(mealHashMap.values());
 
         if (!Util.isNullOrEmptyList(list)) {
             selectedRecipeRecyclerView.setVisibility(View.VISIBLE);
@@ -176,7 +180,7 @@ public class SelectRecipeFragment extends HealthCocoFragment implements
     }
 
 
-    private RecipeResponse getNutrientPerHundredUnit(RecipeResponse recipeResponse) {
+    private DietPlanRecipeItem getNutrientPerHundredUnit(RecipeResponse recipeResponse) {
 
         DietPlanRecipeItem dietPlanRecipeItem = new DietPlanRecipeItem();
 
@@ -187,36 +191,54 @@ public class SelectRecipeFragment extends HealthCocoFragment implements
         dietPlanRecipeItem.setNutrients(recipeResponse.getNutrients());
         dietPlanRecipeItem.setDirection(recipeResponse.getDirection());
         dietPlanRecipeItem.setCalaries(recipeResponse.getCalaries());
-
+        dietPlanRecipeItem.setEquivalentMeasurements(recipeResponse.getEquivalentMeasurements());
+        dietPlanRecipeItem.setNutrientValueAtRecipeLevel(recipeResponse.getNutrientValueAtRecipeLevel());
 
         MealQuantity quantity = recipeResponse.getQuantity();
         QuantityType type = quantity.getType();
         double value = quantity.getValue();
         double currentValue = 1;
         MealQuantity currentQuantity = new MealQuantity();
-        for (EquivalentQuantities equivalentQuantities : recipeResponse.getEquivalentMeasurements()) {
-            if (type == equivalentQuantities.getServingType()) {
-                double equivalentQuantitiesValue = equivalentQuantities.getValue();
-                currentValue = value * equivalentQuantitiesValue;
-                currentQuantity.setValue(currentValue);
-                currentQuantity.setType(type);
-                recipeResponse.setCurrentQuantity(currentQuantity);
+        if (!Util.isNullOrEmptyList(recipeResponse.getEquivalentMeasurements()))
+            for (EquivalentQuantities equivalentQuantities : recipeResponse.getEquivalentMeasurements()) {
+                if (type == equivalentQuantities.getServingType()) {
+                    double equivalentQuantitiesValue = equivalentQuantities.getValue();
+                    currentValue = value * equivalentQuantitiesValue;
+                    currentQuantity.setValue(currentValue);
+                    currentQuantity.setType(type);
+                    dietPlanRecipeItem.setCurrentQuantity(currentQuantity);
+                }
             }
-        }
 
-        for (Nutrients nutrients : recipeResponse.getNutrients()) {
-            nutrients.setValue((nutrients.getValue() / currentValue) * 100);
+        if (!Util.isNullOrEmptyList(recipeResponse.getNutrients())) {
+            for (Nutrients nutrients : recipeResponse.getNutrients()) {
+                nutrients.setValue((nutrients.getValue() / currentValue) * 100);
+            }
+            dietPlanRecipeItem.setNutrientPerHundredUnit(recipeResponse.getNutrients());
         }
-        recipeResponse.setNutrientPerHundredUnit(recipeResponse.getNutrients());
-
 
         if (recipeResponse.getCalaries() != null) {
             dietPlanRecipeItem.setCalaries(recipeResponse.getCalaries());
-
-            recipeResponse.setCalariesPerHundredUnit((recipeResponse.getCalaries().getValue() / currentValue) * 100);
+            dietPlanRecipeItem.setCalariesPerHundredUnit((recipeResponse.getCalaries().getValue() / currentValue) * 100);
         }
 
 
-        return recipeResponse;
+        return dietPlanRecipeItem;
     }
+
+
+    private void addDietPlanItem() {
+        DietplanAddItem dietplanAddItem = new DietplanAddItem();
+
+        dietplanAddItem.setMealTiming(mealTimeType);
+        dietplanAddItem.setForeignDietId(DateTimeUtil.getCurrentDateLong() + "");
+        dietplanAddItem.setRecipes(new ArrayList<DietPlanRecipeItem>(recipeHashMap.values()));
+
+
+        Intent data = new Intent();
+        data.putExtra(HealthCocoConstants.TAG_INTENT_DATA, Parcels.wrap(dietplanAddItem));
+        getActivity().setResult(HealthCocoConstants.RESULT_CODE_ADD_MEAL, data);
+        getActivity().finish();
+    }
+
 }

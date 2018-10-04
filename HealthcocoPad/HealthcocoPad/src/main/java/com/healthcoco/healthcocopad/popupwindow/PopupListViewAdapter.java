@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.R;
+import com.healthcoco.healthcocopad.bean.EquivalentQuantities;
 import com.healthcoco.healthcocopad.bean.server.AppointmentSlot;
 import com.healthcoco.healthcocopad.bean.server.AvailableTimeSlots;
 import com.healthcoco.healthcocopad.bean.server.ClinicDoctorProfile;
@@ -143,6 +144,12 @@ public class PopupListViewAdapter extends BaseAdapter {
                 if (object instanceof PatientTreatmentStatus) {
                     PatientTreatmentStatus treatmentStatus = (PatientTreatmentStatus) object;
                     text = treatmentStatus.getTreamentStatus();
+                }
+                break;
+            case SERVING_TYPE:
+                if (object instanceof EquivalentQuantities) {
+                    EquivalentQuantities equivalentQuantities = (EquivalentQuantities) object;
+                    text = equivalentQuantities.getServingType().getUnit();
                 }
                 break;
             case APPOINTMENT_SLOT:

@@ -104,6 +104,8 @@ public class HealthCocoConstants {
     public static final int RESULT_CODE_FEEDBACK_OTP = 215;
     public static final int REQUEST_CODE_ADD_VIDEO = 216;
     public static final int RESULT_CODE_ADD_VIDEO = 217;
+    public static final int REQUEST_CODE_ADD_MEAL = 218;
+    public static final int RESULT_CODE_ADD_MEAL = 219;
 
 
     public static final String PARAM_IS_DOCTOR_APP_TRUE = "&isDoctorApp=true";

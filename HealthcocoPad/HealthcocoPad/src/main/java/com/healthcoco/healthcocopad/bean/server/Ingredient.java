@@ -32,7 +32,7 @@ public class Ingredient extends SugarRecord {
     @Ignore
     private List<Nutrients> nutrients;
     @Ignore
-    private ArrayList<EquivalentQuantities> equivalentMeasurements;
+    private List<EquivalentQuantities> equivalentMeasurements;
     @Ignore
     private MealQuantity calaries;
 
@@ -93,11 +93,11 @@ public class Ingredient extends SugarRecord {
         this.nutrients = nutrients;
     }
 
-    public ArrayList<EquivalentQuantities> getEquivalentMeasurements() {
+    public List<EquivalentQuantities> getEquivalentMeasurements() {
         return equivalentMeasurements;
     }
 
-    public void setEquivalentMeasurements(ArrayList<EquivalentQuantities> equivalentMeasurements) {
+    public void setEquivalentMeasurements(List<EquivalentQuantities> equivalentMeasurements) {
         this.equivalentMeasurements = equivalentMeasurements;
     }
 
