@@ -31,15 +31,15 @@ public enum AccountPackageType {
             new ArrayList<PatientDetailTabType>() {{
                 add(PatientDetailTabType.PATIENT_DETAIL_PROFILE);
                 add(PatientDetailTabType.PATIENT_DETAIL_VISIT);
-//                add(PatientDetailTabType.HISTORY);
-                add(PatientDetailTabType.PATIENT_DETAIL_APPOINTMENT);
                 add(PatientDetailTabType.PATIENT_DETAIL_CLINICAL_NOTES);
-//                add(PatientDetailTabType.MY_FILES);
                 add(PatientDetailTabType.PATIENT_DETAIL_REPORTS);
                 add(PatientDetailTabType.PATIENT_DETAIL_PRESCRIPTION);
+                add(PatientDetailTabType.PATIENT_DETAIL_APPOINTMENT);
+                //                add(PatientDetailTabType.MY_FILES);
                 add(PatientDetailTabType.PATIENT_DETAIL_TREATMENT);
                 add(PatientDetailTabType.PATIENT_DETAIL_INVOICE);
                 add(PatientDetailTabType.PATIENT_DETAIL_RECEIPT);
+//                add(PatientDetailTabType.REGISTER);
             }},
             new ArrayList<SettingsItemType>() {{
                 add(SettingsItemType.GROUPS);
@@ -78,11 +78,11 @@ public enum AccountPackageType {
             new ArrayList<PatientDetailTabType>() {{
                 add(PatientDetailTabType.PATIENT_DETAIL_PROFILE);
                 add(PatientDetailTabType.PATIENT_DETAIL_VISIT);
-                add(PatientDetailTabType.PATIENT_DETAIL_APPOINTMENT);
                 add(PatientDetailTabType.PATIENT_DETAIL_CLINICAL_NOTES);
-                //                add(PatientDetailTabType.MY_FILES);
                 add(PatientDetailTabType.PATIENT_DETAIL_REPORTS);
                 add(PatientDetailTabType.PATIENT_DETAIL_PRESCRIPTION);
+                add(PatientDetailTabType.PATIENT_DETAIL_APPOINTMENT);
+                //                add(PatientDetailTabType.MY_FILES);
                 add(PatientDetailTabType.PATIENT_DETAIL_TREATMENT);
                 add(PatientDetailTabType.PATIENT_DETAIL_INVOICE);
                 add(PatientDetailTabType.PATIENT_DETAIL_RECEIPT);
