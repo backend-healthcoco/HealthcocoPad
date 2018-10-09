@@ -4,6 +4,9 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -16,28 +19,26 @@ import android.widget.TextView;
 import com.android.volley.Response;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
-import com.healthcoco.healthcocopad.adapter.RecipeListSolrAdapter;
-import com.healthcoco.healthcocopad.adapter.TreatmentsListSolrAdapter;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.RecipeResponse;
-import com.healthcoco.healthcocopad.bean.server.TreatmentService;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocopad.dialogFragment.AddNewTreatmentDialogFragment;
+import com.healthcoco.healthcocopad.enums.AdapterType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.AddNewDrugListener;
-import com.healthcoco.healthcocopad.listeners.LoadMorePageListener;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
-import com.healthcoco.healthcocopad.listeners.SelectedTreatmentItemClickListener;
+import com.healthcoco.healthcocopad.listeners.SelectedRecipeItemClickListener;
+import com.healthcoco.healthcocopad.recyclerview.EndlessRecyclerViewScrollListener;
+import com.healthcoco.healthcocopad.recyclerview.HealthcocoRecyclerViewAdapter;
 import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
-import com.healthcoco.healthcocopad.views.ListViewLoadMore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,30 +50,31 @@ import java.util.Locale;
 public class RecipeListFragment extends HealthCocoFragment implements View.OnClickListener,
         Response.Listener<VolleyResponseBean>, GsonRequest.ErrorListener,
         TextWatcher, LocalDoInBackgroundListenerOptimised,
-        LoadMorePageListener, SwipeRefreshLayout.OnRefreshListener, AddNewDrugListener {
+        SwipeRefreshLayout.OnRefreshListener, AddNewDrugListener {
 
     //variables need for pagination
     public static final int MAX_SIZE = 25;
-    SelectedTreatmentItemClickListener treatmentItemClickListener;
+    private SelectedRecipeItemClickListener selectedRecipeItemClickListener;
     private int PAGE_NUMBER = 0;
     private boolean isEndOfListAchieved;
     private boolean isLoadingFromSearch;
     private boolean isInitialLoading;
     //other variables
     private ProgressBar progressLoading;
-    private ListViewLoadMore lvRecipes;
-    private RecipeListSolrAdapter adapter;
+    private RecyclerView recipeRecyclerView;
+    private HealthcocoRecyclerViewAdapter mAdapter;
     private ImageButton btAddNewTemplate;
     private List<RecipeResponse> recipeListSolr = new ArrayList<RecipeResponse>();
     private TextView tvNoRecipe;
     private User user;
     private String lastTextSearched;
+    private boolean isResponseReceived = false;
 
     public RecipeListFragment() {
     }
 
-    public RecipeListFragment(SelectedTreatmentItemClickListener treatmentItemClickListener) {
-        this.treatmentItemClickListener = treatmentItemClickListener;
+    public RecipeListFragment(SelectedRecipeItemClickListener selectedRecipeItemClickListener) {
+        this.selectedRecipeItemClickListener = selectedRecipeItemClickListener;
     }
 
     @Override
@@ -99,40 +101,53 @@ public class RecipeListFragment extends HealthCocoFragment implements View.OnCli
 
     @Override
     public void initViews() {
-        lvRecipes = (ListViewLoadMore) view.findViewById(R.id.lv_recipe);
+        recipeRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view_recipe);
         tvNoRecipe = (TextView) view.findViewById(R.id.tv_no_recipe);
         btAddNewTemplate = (ImageButton) view.findViewById(R.id.bt_add_recipe);
         progressLoading = (ProgressBar) view.findViewById(R.id.progress_loading);
         initEditSearchView(R.string.search_recipe, this, this);
 
         btAddNewTemplate.setVisibility(View.VISIBLE);
-        lvRecipes.setVisibility(View.VISIBLE);
+        recipeRecyclerView.setVisibility(View.VISIBLE);
     }
 
 
     @Override
     public void initListeners() {
         btAddNewTemplate.setOnClickListener(this);
-        lvRecipes.setLoadMoreListener(this);
     }
 
     private void initAdapters() {
-        adapter = new RecipeListSolrAdapter(mActivity, treatmentItemClickListener);
-        lvRecipes.setAdapter(adapter);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(mActivity, LinearLayoutManager.VERTICAL, false);
+        recipeRecyclerView.setLayoutManager(layoutManager);
+        recipeRecyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        mAdapter = new HealthcocoRecyclerViewAdapter(mActivity, AdapterType.RECIPE_ITEM_SOLR, selectedRecipeItemClickListener);
+        mAdapter.setListData((ArrayList<Object>) (Object) recipeListSolr);
+        recipeRecyclerView.setAdapter(mAdapter);
+
+        recipeRecyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(layoutManager) {
+            @Override
+            public void onLoadMore(int current_page) {
+                loadMore(current_page);
+            }
+        });
+
     }
 
     private void notifyAdapter(List<RecipeResponse> recipeResponseList) {
         if (!Util.isNullOrEmptyList(recipeResponseList)) {
-            lvRecipes.setVisibility(View.VISIBLE);
+            recipeRecyclerView.setVisibility(View.VISIBLE);
             tvNoRecipe.setVisibility(View.GONE);
         } else {
-            lvRecipes.setVisibility(View.GONE);
+            recipeRecyclerView.setVisibility(View.GONE);
             tvNoRecipe.setVisibility(View.VISIBLE);
         }
         progressLoading.setVisibility(View.GONE);
-        adapter.setListData(recipeResponseList);
-        adapter.notifyDataSetChanged();
+        mAdapter.setListData((ArrayList<Object>) (Object) recipeResponseList);
+        mAdapter.notifyDataSetChanged();
     }
+
 
     private void getRecipeList(boolean isInitialLoading, int pageNum, int size, String searchTerm) {
         if (user != null) {
@@ -142,7 +157,7 @@ public class RecipeListFragment extends HealthCocoFragment implements View.OnCli
                 progressLoading.setVisibility(View.GONE);
             } else
                 progressLoading.setVisibility(View.VISIBLE);
-
+            isResponseReceived = false;
             WebDataServiceImpl.getInstance(mApp).getRecipeListSolr(RecipeResponse.class,
                     WebServiceType.GET_RECIPE_LIST_SOLR, pageNum, size, searchTerm, this, this);
         }
@@ -200,6 +215,7 @@ public class RecipeListFragment extends HealthCocoFragment implements View.OnCli
             case GET_RECIPE_LIST_SOLR:
                 ArrayList<RecipeResponse> list = (ArrayList<RecipeResponse>) (ArrayList<?>) response.getDataList();
                 LogUtils.LOGD(TAG, "onResponse Treatment Size " + recipeListSolr.size() + " isDataFromLocal " + response.isDataFromLocal());
+                isResponseReceived = true;
                 if (recipeListSolr == null)
                     recipeListSolr = new ArrayList<>();
                 if (isLoadingFromSearch) {
@@ -277,17 +293,13 @@ public class RecipeListFragment extends HealthCocoFragment implements View.OnCli
         lastTextSearched = search;
     }
 
-    @Override
-    public void loadMore() {
-        if (!isEndOfListAchieved && !isInitialLoading && !isLoadingFromSearch) {
-            PAGE_NUMBER++;
-            getRecipeList(false, PAGE_NUMBER, MAX_SIZE, getSearchEditTextValue());
-        }
-    }
 
-    @Override
-    public boolean isEndOfListAchieved() {
-        return isEndOfListAchieved;
+    public void loadMore(int current_page) {
+        if (isResponseReceived)
+            if (!isEndOfListAchieved && !isInitialLoading && !isLoadingFromSearch) {
+                PAGE_NUMBER++;
+                getRecipeList(false, PAGE_NUMBER, MAX_SIZE, getSearchEditTextValue());
+            }
     }
 
 
@@ -298,7 +310,7 @@ public class RecipeListFragment extends HealthCocoFragment implements View.OnCli
 
     @Override
     public void onSaveClicked(Object treatmentService) {
-        lvRecipes.smoothScrollToPosition(0);
+        recipeRecyclerView.smoothScrollToPosition(0);
         PAGE_NUMBER = 0;
         isEndOfListAchieved = false;
         isLoadingFromSearch = false;

@@ -11,6 +11,7 @@ import com.healthcoco.healthcocopad.bean.MealQuantity;
 import com.healthcoco.healthcocopad.bean.server.DietPlanRecipeItem;
 import com.healthcoco.healthcocopad.bean.server.Ingredient;
 import com.healthcoco.healthcocopad.enums.PopupWindowType;
+import com.healthcoco.healthcocopad.listeners.SelectedRecipeItemClickListener;
 import com.healthcoco.healthcocopad.popupwindow.PopupWindowListener;
 import com.healthcoco.healthcocopad.recyclerview.HealthcocoComonRecylcerViewHolder;
 import com.healthcoco.healthcocopad.recyclerview.HealthcocoRecyclerViewItemClickListener;
@@ -40,11 +41,13 @@ public class RecipeListItemViewHolder extends HealthcocoComonRecylcerViewHolder 
     private LinearLayout parentIngredients;
     private TextViewFontAwesome btDelete;
     private boolean isIngredientValue = false;
+    private EquivalentQuantities equivalentQuantities;
+    private SelectedRecipeItemClickListener recipeItemClickListener;
 
-
-    public RecipeListItemViewHolder(HealthCocoActivity mActivity, View itemView, HealthcocoRecyclerViewItemClickListener itemClickListener) {
+    public RecipeListItemViewHolder(HealthCocoActivity mActivity, View itemView, HealthcocoRecyclerViewItemClickListener itemClickListener, Object listenerObject) {
         super(mActivity, itemView, itemClickListener);
         this.mActivity = mActivity;
+        this.recipeItemClickListener = (SelectedRecipeItemClickListener) listenerObject;
     }
 
     @Override
@@ -78,7 +81,7 @@ public class RecipeListItemViewHolder extends HealthcocoComonRecylcerViewHolder 
         btDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                recipeItemClickListener.onDeleteIteClicked(recipeItem);
             }
         });
     }
@@ -89,21 +92,45 @@ public class RecipeListItemViewHolder extends HealthcocoComonRecylcerViewHolder 
         if (recipeItem != null) {
             tvTitle.setText(recipeItem.getName());
 
-            if (recipeItem.getQuantity() != null) {
-                MealQuantity quantity = recipeItem.getQuantity();
-
-                if (!Util.isNullOrZeroNumber(quantity.getValue())) {
-                    tvQuantity.setText(Util.getValidatedValue(quantity.getValue()));
-                    tvServingType.setText(quantity.getType().getUnit());
-                }
+            if (recipeItem.getQuantity() != null && (!Util.isNullOrZeroNumber(recipeItem.getQuantity().getValue()))) {
+                tvQuantity.setText(Util.getValidatedValue(recipeItem.getQuantity().getValue()));
+                tvServingType.setText(recipeItem.getQuantity().getType().getUnit());
+                mActivity.initPopupWindows(tvQuantity, PopupWindowType.QUANTITY_TYPE, PopupWindowType.QUANTITY_TYPE.getList(), this);
             } else {
                 tvQuantity.setText("");
             }
 
             if (!Util.isNullOrEmptyList(recipeItem.getEquivalentMeasurements()))
                 mActivity.initPopupWindows(tvServingType, PopupWindowType.SERVING_TYPE, (ArrayList<Object>) (Object) recipeItem.getEquivalentMeasurements(), this);
+            else {
+                tvServingType.setText("");
+            }
 
-            mActivity.initPopupWindows(tvQuantity, PopupWindowType.QUANTITY_TYPE, PopupWindowType.QUANTITY_TYPE.getList(), this);
+            if (recipeItem.getCurrentQuantity() != null && recipeItem.getCalaries() != null)
+                tvTotalQuantity.setText(recipeItem.getCurrentQuantity().getValue() + recipeItem.getCurrentQuantity().getType().getUnit() + " - " +
+                        recipeItem.getCalaries().getValue() + mActivity.getString(R.string.cal_orange));
+            else
+                tvTotalQuantity.setText("");
+
+            if (recipeItem.getProtein() != null)
+                tvProtein.setText(recipeItem.getProtein().getValue()/* + recipeItem.getProtein().getType().getUnit()*/ + "");
+            else
+                tvProtein.setText("");
+
+            if (recipeItem.getFat() != null)
+                tvFat.setText(recipeItem.getFat().getValue()/* + recipeItem.getProtein().getType().getUnit()*/ + "");
+            else
+                tvFat.setText("");
+
+            if (recipeItem.getCarbohydreate() != null)
+                tvCarbs.setText(recipeItem.getCarbohydreate().getValue()/* + recipeItem.getProtein().getType().getUnit()*/ + "");
+            else
+                tvCarbs.setText("");
+
+            if (recipeItem.getFiber() != null)
+                tvFiber.setText(recipeItem.getFiber().getValue()/* + recipeItem.getProtein().getType().getUnit()*/ + "");
+            else
+                tvFiber.setText("");
 
             if (recipeItem.getNutrientValueAtRecipeLevel() != null)
                 isIngredientValue = recipeItem.getNutrientValueAtRecipeLevel();
@@ -153,10 +180,53 @@ public class RecipeListItemViewHolder extends HealthcocoComonRecylcerViewHolder 
 
     @Override
     public void onItemSelected(PopupWindowType popupWindowType, Object object) {
-        if (object instanceof EquivalentQuantities) {
-            EquivalentQuantities equivalentQuantities = (EquivalentQuantities) object;
-            tvServingType.setText(equivalentQuantities.getServingType().getUnit());
+        switch (popupWindowType) {
+            case SERVING_TYPE:
+                if (object instanceof EquivalentQuantities) {
+                    EquivalentQuantities equivalentQuantities = (EquivalentQuantities) object;
+                    this.equivalentQuantities = equivalentQuantities;
+                    tvServingType.setText(equivalentQuantities.getServingType().getUnit());
+                    recipeItem.getTempQuantity().setType(equivalentQuantities.getServingType());
+                    recipeItem.getCurrentQuantity().setValue(Util.getValidatedDoubleValue(tvQuantity) * equivalentQuantities.getValue());
+
+                    break;
+                }
+            case QUANTITY_TYPE:
+                if (object instanceof String) {
+                    tvQuantity.setText((String) object);
+                    if (equivalentQuantities != null) {
+                        recipeItem.getCurrentQuantity().setValue(Util.getValidatedDoubleValue(tvQuantity) * equivalentQuantities.getValue());
+                        recipeItem.getTempQuantity().setValue(Util.getValidatedDoubleValue(tvQuantity));
+                    } else {
+                        recipeItem.getCurrentQuantity().setValue((Util.getValidatedDoubleValue(tvQuantity) * recipeItem.getCurrentQuantity().getValue()) / recipeItem.getTempQuantity().getValue());
+                        recipeItem.getTempQuantity().setValue(Util.getValidatedDoubleValue(tvQuantity));
+                    }
+                }
+                break;
         }
+
+        if (recipeItem.getProteinTemp() != null) {
+            recipeItem.getProteinTemp().setValue((recipeItem.getProteinPerHundredUnit() * recipeItem.getCurrentQuantity().getValue()) / 100);
+            tvProtein.setText(recipeItem.getProteinTemp().getValue()/* + recipeItem.getProtein().getType().getUnit()*/ + "");
+        }
+        if (recipeItem.getFatTemp() != null) {
+            recipeItem.getFatTemp().setValue((recipeItem.getFatPerHundredUnit() * recipeItem.getCurrentQuantity().getValue()) / 100);
+            tvFat.setText(recipeItem.getFatTemp().getValue()/* + recipeItem.getProtein().getType().getUnit()*/ + "");
+        }
+        if (recipeItem.getCarbohydreateTemp() != null) {
+            recipeItem.getCarbohydreateTemp().setValue((recipeItem.getCarbohydreatePerHundredUnit() * recipeItem.getCurrentQuantity().getValue()) / 100);
+            tvCarbs.setText(recipeItem.getCarbohydreateTemp().getValue()/* + recipeItem.getProtein().getType().getUnit()*/ + "");
+        }
+        if (recipeItem.getFiberTemp() != null) {
+            recipeItem.getFiberTemp().setValue((recipeItem.getFiberPerHundredUnit() * recipeItem.getCurrentQuantity().getValue()) / 100);
+            tvFiber.setText(recipeItem.getFiberTemp().getValue()/* + recipeItem.getProtein().getType().getUnit()*/ + "");
+        }
+        if (recipeItem.getCalariesTemp() != null) {
+            recipeItem.getCalariesTemp().setValue((recipeItem.getCalariesPerHundredUnit() * recipeItem.getCurrentQuantity().getValue()) / 100);
+        }
+        tvTotalQuantity.setText(recipeItem.getCurrentQuantity().getValue() + recipeItem.getCurrentQuantity().getType().getUnit() + " - " +
+                recipeItem.getCalariesTemp().getValue() + mActivity.getString(R.string.cal_orange));
+        recipeItemClickListener.onQuantityChanged(recipeItem);
     }
 
     @Override

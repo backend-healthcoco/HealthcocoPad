@@ -532,6 +532,8 @@ public enum WebServiceType {
 
     GET_RECIPE_LIST_SOLR(Method.GET, "solr/recipe/search/?"),
 
+    ADD_EDIT_DIET_PLAN(Method.POST, "dietPlan/addEdit/"),
+
     GET_HARDCODED_BLOOD_GROUPS(0, "");
 
     private int methodType;

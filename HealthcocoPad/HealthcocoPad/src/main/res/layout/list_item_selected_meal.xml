@@ -2,19 +2,90 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/layout_padding_5dp"
+    android:layout_marginTop="@dimen/layout_padding_5dp"
+    android:layout_marginRight="@dimen/layout_padding_5dp"
+    android:layout_marginBottom="@dimen/layout_padding_5dp"
     android:background="@drawable/shadow_popup_new"
     android:orientation="vertical"
     android:padding="@dimen/padding_20_dp">
 
-    <TextView
-        android:id="@+id/tv_option"
-        android:layout_width="wrap_content"
+
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/option"
-        android:textColor="@color/green_logo"
-        android:textSize="@dimen/text_size_add_clinical_note_points"
-        android:textStyle="bold" />
+        android:layout_marginBottom="@dimen/layout_padding_5dp">
+
+        <TextView
+            android:id="@+id/tv_option"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/layout_padding"
+            android:text="@string/option"
+            android:textColor="@color/green_logo"
+            android:textSize="@dimen/text_size_add_clinical_note_points"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/bt_edit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/item_visits_button_padding_left_right_20dp"
+                android:layout_weight="1"
+                android:background="@drawable/shape_rounded_corners_item_background_dark_grey"
+                android:gravity="center"
+                android:padding="3dp"
+                android:visibility="visible">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="5dp"
+                    android:background="@color/white"
+                    android:drawableLeft="@drawable/icon_edit_selector"
+                    android:drawablePadding="5dp"
+                    android:gravity="center|start"
+                    android:paddingLeft="@dimen/layout_padding"
+                    android:paddingRight="@dimen/layout_padding"
+                    android:text="@string/edit"
+                    android:textColor="@drawable/text_selector_grey_blue"
+                    android:textSize="@dimen/text_size_bt_history_edit_sms_email" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/bt_remove"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginRight="@dimen/item_visits_button_padding_left_right_20dp"
+                android:layout_weight="1"
+                android:background="@drawable/shape_rounded_corners_item_background_dark_grey"
+                android:clickable="true"
+                android:gravity="center"
+                android:padding="3dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="5dp"
+                    android:background="@color/white"
+                    android:drawableLeft="@drawable/discard_selector"
+                    android:drawablePadding="5dp"
+                    android:gravity="center|start"
+                    android:paddingLeft="@dimen/layout_padding"
+                    android:paddingRight="@dimen/layout_padding"
+                    android:text="@string/remove"
+                    android:textColor="@drawable/text_selector_grey_blue"
+                    android:textSize="@dimen/text_size_bt_history_edit_sms_email" />
+            </LinearLayout>
+        </LinearLayout>
+
+    </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/container_meal"
@@ -23,5 +94,140 @@
         android:layout_margin="@dimen/layout_padding"
         android:orientation="vertical"
         android:paddingLeft="@dimen/layout_padding" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"
+        android:layout_marginLeft="@dimen/layout_padding"
+        android:layout_marginRight="@dimen/layout_padding"
+        android:background="@color/grey_icons" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/layout_padding"
+        android:layout_marginRight="@dimen/layout_padding"
+        android:background="@color/white"
+        android:orientation="horizontal">
+
+
+        <LinearLayout
+            android:id="@+id/layout_total_cal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:padding="@dimen/layout_add_treatment_title_padding_10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/calaries_colon"
+                android:textSize="@dimen/text_size_drug_child_lable" />
+
+            <TextView
+                android:id="@+id/tv_total_cal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:textColor="@color/brown_dark"
+                android:textSize="@dimen/text_size_drug_child_lable" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_total_protien"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:padding="@dimen/layout_add_treatment_title_padding_10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/protein_colon"
+                android:textSize="@dimen/text_size_drug_child_lable" />
+
+            <TextView
+                android:id="@+id/tv_total_protein"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/brown_dark"
+                android:textSize="@dimen/text_size_drug_child_lable" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_total_fat"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:padding="@dimen/layout_add_treatment_title_padding_10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/fat_colon"
+                android:textSize="@dimen/text_size_drug_child_lable" />
+
+            <TextView
+                android:id="@+id/tv_total_fat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/brown_dark"
+                android:textSize="@dimen/text_size_drug_child_lable" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_total_carbs"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:padding="@dimen/layout_add_treatment_title_padding_10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/carbs_colon"
+                android:textSize="@dimen/text_size_drug_child_lable" />
+
+            <TextView
+                android:id="@+id/tv_total_carbs"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/brown_dark"
+                android:textSize="@dimen/text_size_drug_child_lable" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_total_fiber"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:padding="@dimen/layout_add_treatment_title_padding_10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/fiber_colon"
+                android:textSize="@dimen/text_size_drug_child_lable" />
+
+            <TextView
+                android:id="@+id/tv_total_fiber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/brown_dark"
+                android:textSize="@dimen/text_size_drug_child_lable" />
+
+        </LinearLayout>
+
+    </LinearLayout>
 
 </LinearLayout>

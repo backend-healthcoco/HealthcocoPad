@@ -26,6 +26,7 @@ public class DietPlan extends SugarRecord {
     private String patientId;
     private Boolean discarded;
     private String createdBy;
+    private String uniquePlanId;
     @Ignore
     private ArrayList<DietplanAddItem> items;
     @Ignore
@@ -125,5 +126,13 @@ public class DietPlan extends SugarRecord {
 
     public void setCalariesJsonString(String calariesJsonString) {
         this.calariesJsonString = calariesJsonString;
+    }
+
+    public String getUniquePlanId() {
+        return uniquePlanId;
+    }
+
+    public void setUniquePlanId(String uniquePlanId) {
+        this.uniquePlanId = uniquePlanId;
     }
 }

@@ -68,6 +68,7 @@
                             android:weightSum="3">
 
                             <TextView
+                                android:id="@+id/tv_add_food_early_morning"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1.6"
@@ -76,7 +77,7 @@
                                 android:paddingTop="@dimen/layout_padding"
                                 android:paddingBottom="@dimen/layout_padding"
                                 android:singleLine="true"
-                                android:text="@string/food"
+                                android:text="@string/add_food"
                                 android:textColor="@color/orange"
                                 android:textColorHint="@color/grey_hint_color"
                                 android:textSize="@dimen/text_size_floating_label"
@@ -99,7 +100,6 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/margin_left_right_add_vital_signs"
                             android:layout_marginRight="@dimen/margin_left_right_add_vital_signs"
                             android:layout_weight="1"
                             android:gravity="center|start"
@@ -111,118 +111,9 @@
                                 android:id="@+id/container_food_early_morning"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="2.9"
+                                android:layout_weight="3"
                                 android:gravity="center|start"
-                                android:orientation="vertical"
-                                android:paddingLeft="@dimen/layout_padding" />
-                        </LinearLayout>
-                    </LinearLayout>
-
-                </LinearLayout>
-            </LinearLayout>
-
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="@dimen/padding_20_dp"
-                android:layout_marginBottom="@dimen/item_contact_padding"
-                android:background="@color/grey_hint_color" />
-
-            <LinearLayout
-                android:id="@+id/parent_morning_snacks"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/padding_20_dp"
-                android:layout_marginRight="@dimen/padding_20_dp"
-                android:background="@color/white"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginTop="@dimen/padding_20_dp"
-                    android:layout_marginBottom="@dimen/layout_margin"
-                    android:layout_weight="1"
-                    android:text="@string/morning_snacks"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/text_size_floating_label" />
-
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/patient_profile_image_padding"
-                    android:layout_marginTop="@dimen/layout_padding"
-                    android:layout_weight="3"
-                    android:orientation="vertical">
-
-
-                    <LinearLayout
-                        android:id="@+id/layout_morning_snacks"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:visibility="visible">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="@dimen/margin_left_right_add_vital_signs"
-                            android:gravity="center|start"
-                            android:orientation="horizontal"
-                            android:weightSum="3">
-
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1.6"
-                                android:longClickable="false"
-                                android:paddingLeft="@dimen/layout_padding"
-                                android:paddingTop="@dimen/layout_padding"
-                                android:paddingBottom="@dimen/layout_padding"
-                                android:singleLine="true"
-                                android:text="@string/food"
-                                android:textColor="@color/orange"
-                                android:textColorHint="@color/grey_hint_color"
-                                android:textSize="@dimen/text_size_floating_label"
-                                android:textStyle="bold" />
-
-                            <com.healthcoco.healthcocopad.views.TextViewFontAwesome
-                                android:id="@+id/tv_add_morning_snacks"
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:paddingLeft="@dimen/item_contact_padding"
-                                android:paddingTop="@dimen/layout_padding"
-                                android:paddingRight="@dimen/item_contact_padding"
-                                android:paddingBottom="@dimen/layout_padding"
-                                android:text="@string/icon_add"
-                                android:textColor="@color/orange"
-                                android:textSize="@dimen/text_size_treatment_list_title" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/margin_left_right_add_vital_signs"
-                            android:layout_marginRight="@dimen/margin_left_right_add_vital_signs"
-                            android:layout_weight="1"
-                            android:gravity="center|start"
-                            android:orientation="horizontal"
-                            android:paddingBottom="@dimen/padding_20_dp"
-                            android:weightSum="3">
-
-                            <LinearLayout
-                                android:id="@+id/container_food_morning_snacks"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="2.9"
-                                android:gravity="center|start"
-                                android:orientation="vertical"
-                                android:paddingLeft="@dimen/layout_padding" />
+                                android:orientation="vertical" />
                         </LinearLayout>
                     </LinearLayout>
 
@@ -283,6 +174,7 @@
                             android:weightSum="3">
 
                             <TextView
+                                android:id="@+id/tv_add_food_breakfast"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1.6"
@@ -291,7 +183,7 @@
                                 android:paddingTop="@dimen/layout_padding"
                                 android:paddingBottom="@dimen/layout_padding"
                                 android:singleLine="true"
-                                android:text="@string/food"
+                                android:text="@string/add_food"
                                 android:textColor="@color/orange"
                                 android:textColorHint="@color/grey_hint_color"
                                 android:textSize="@dimen/text_size_floating_label"
@@ -314,7 +206,6 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/margin_left_right_add_vital_signs"
                             android:layout_marginRight="@dimen/margin_left_right_add_vital_signs"
                             android:layout_weight="1"
                             android:gravity="center|start"
@@ -326,10 +217,9 @@
                                 android:id="@+id/container_food_breakfast"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="2.9"
+                                android:layout_weight="3"
                                 android:gravity="center|start"
-                                android:orientation="vertical"
-                                android:paddingLeft="@dimen/layout_padding" />
+                                android:orientation="vertical" />
                         </LinearLayout>
                     </LinearLayout>
 
@@ -344,7 +234,7 @@
                 android:background="@color/grey_hint_color" />
 
             <LinearLayout
-                android:id="@+id/parent_post_breakfast"
+                android:id="@+id/parent_mid_morning"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/padding_20_dp"
@@ -360,7 +250,7 @@
                     android:layout_marginTop="@dimen/padding_20_dp"
                     android:layout_marginBottom="@dimen/layout_margin"
                     android:layout_weight="1"
-                    android:text="@string/post_breakfast"
+                    android:text="@string/mid_morning"
                     android:textColor="@color/black"
                     android:textSize="@dimen/text_size_floating_label" />
 
@@ -375,7 +265,7 @@
 
 
                     <LinearLayout
-                        android:id="@+id/layout_post_breakfast"
+                        android:id="@+id/layout_mid_morning"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
@@ -390,6 +280,7 @@
                             android:weightSum="3">
 
                             <TextView
+                                android:id="@+id/tv_add_food_morning_snacks"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1.6"
@@ -398,14 +289,14 @@
                                 android:paddingTop="@dimen/layout_padding"
                                 android:paddingBottom="@dimen/layout_padding"
                                 android:singleLine="true"
-                                android:text="@string/food"
+                                android:text="@string/add_food"
                                 android:textColor="@color/orange"
                                 android:textColorHint="@color/grey_hint_color"
                                 android:textSize="@dimen/text_size_floating_label"
                                 android:textStyle="bold" />
 
                             <com.healthcoco.healthcocopad.views.TextViewFontAwesome
-                                android:id="@+id/tv_add_post_breakfast"
+                                android:id="@+id/tv_add_morning_snacks"
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
                                 android:paddingLeft="@dimen/item_contact_padding"
@@ -421,7 +312,6 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/margin_left_right_add_vital_signs"
                             android:layout_marginRight="@dimen/margin_left_right_add_vital_signs"
                             android:layout_weight="1"
                             android:gravity="center|start"
@@ -430,13 +320,12 @@
                             android:weightSum="3">
 
                             <LinearLayout
-                                android:id="@+id/container_food_post_breakfast"
+                                android:id="@+id/container_food_morning_snacks"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="2.9"
+                                android:layout_weight="3"
                                 android:gravity="center|start"
-                                android:orientation="vertical"
-                                android:paddingLeft="@dimen/layout_padding" />
+                                android:orientation="vertical" />
                         </LinearLayout>
                     </LinearLayout>
 
@@ -451,7 +340,7 @@
                 android:background="@color/grey_hint_color" />
 
             <LinearLayout
-                android:id="@+id/parentlunch"
+                android:id="@+id/parent_lunch"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/padding_20_dp"
@@ -497,6 +386,7 @@
                             android:weightSum="3">
 
                             <TextView
+                                android:id="@+id/tv_add_food_lunch"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1.6"
@@ -505,7 +395,7 @@
                                 android:paddingTop="@dimen/layout_padding"
                                 android:paddingBottom="@dimen/layout_padding"
                                 android:singleLine="true"
-                                android:text="@string/food"
+                                android:text="@string/add_food"
                                 android:textColor="@color/orange"
                                 android:textColorHint="@color/grey_hint_color"
                                 android:textSize="@dimen/text_size_floating_label"
@@ -528,7 +418,6 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/margin_left_right_add_vital_signs"
                             android:layout_marginRight="@dimen/margin_left_right_add_vital_signs"
                             android:layout_weight="1"
                             android:gravity="center|start"
@@ -540,10 +429,9 @@
                                 android:id="@+id/container_food_lunch"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="2.9"
+                                android:layout_weight="3"
                                 android:gravity="center|start"
-                                android:orientation="vertical"
-                                android:paddingLeft="@dimen/layout_padding" />
+                                android:orientation="vertical" />
                         </LinearLayout>
                     </LinearLayout>
 
@@ -604,6 +492,7 @@
                             android:weightSum="3">
 
                             <TextView
+                                android:id="@+id/tv_add_food_post_lunch"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1.6"
@@ -612,7 +501,7 @@
                                 android:paddingTop="@dimen/layout_padding"
                                 android:paddingBottom="@dimen/layout_padding"
                                 android:singleLine="true"
-                                android:text="@string/food"
+                                android:text="@string/add_food"
                                 android:textColor="@color/orange"
                                 android:textColorHint="@color/grey_hint_color"
                                 android:textSize="@dimen/text_size_floating_label"
@@ -635,7 +524,6 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/margin_left_right_add_vital_signs"
                             android:layout_marginRight="@dimen/margin_left_right_add_vital_signs"
                             android:layout_weight="1"
                             android:gravity="center|start"
@@ -647,10 +535,9 @@
                                 android:id="@+id/container_food_post_lunch"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="2.9"
+                                android:layout_weight="3"
                                 android:gravity="center|start"
-                                android:orientation="vertical"
-                                android:paddingLeft="@dimen/layout_padding" />
+                                android:orientation="vertical" />
                         </LinearLayout>
                     </LinearLayout>
 
@@ -711,6 +598,7 @@
                             android:weightSum="3">
 
                             <TextView
+                                android:id="@+id/tv_add_food_evening_snack"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1.6"
@@ -719,7 +607,7 @@
                                 android:paddingTop="@dimen/layout_padding"
                                 android:paddingBottom="@dimen/layout_padding"
                                 android:singleLine="true"
-                                android:text="@string/food"
+                                android:text="@string/add_food"
                                 android:textColor="@color/orange"
                                 android:textColorHint="@color/grey_hint_color"
                                 android:textSize="@dimen/text_size_floating_label"
@@ -742,7 +630,6 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/margin_left_right_add_vital_signs"
                             android:layout_marginRight="@dimen/margin_left_right_add_vital_signs"
                             android:layout_weight="1"
                             android:gravity="center|start"
@@ -754,10 +641,9 @@
                                 android:id="@+id/container_food_evening_snack"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="2.9"
+                                android:layout_weight="3"
                                 android:gravity="center|start"
-                                android:orientation="vertical"
-                                android:paddingLeft="@dimen/layout_padding" />
+                                android:orientation="vertical" />
                         </LinearLayout>
                     </LinearLayout>
 
@@ -818,6 +704,7 @@
                             android:weightSum="3">
 
                             <TextView
+                                android:id="@+id/tv_add_food_dinner"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1.6"
@@ -826,7 +713,7 @@
                                 android:paddingTop="@dimen/layout_padding"
                                 android:paddingBottom="@dimen/layout_padding"
                                 android:singleLine="true"
-                                android:text="@string/food"
+                                android:text="@string/add_food"
                                 android:textColor="@color/orange"
                                 android:textColorHint="@color/grey_hint_color"
                                 android:textSize="@dimen/text_size_floating_label"
@@ -849,7 +736,6 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/margin_left_right_add_vital_signs"
                             android:layout_marginRight="@dimen/margin_left_right_add_vital_signs"
                             android:layout_weight="1"
                             android:gravity="center|start"
@@ -861,10 +747,221 @@
                                 android:id="@+id/container_food_dinner"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="2.9"
+                                android:layout_weight="3"
                                 android:gravity="center|start"
-                                android:orientation="vertical"
-                                android:paddingLeft="@dimen/layout_padding" />
+                                android:orientation="vertical" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/padding_20_dp"
+                android:layout_marginBottom="@dimen/item_contact_padding"
+                android:background="@color/grey_hint_color" />
+
+            <LinearLayout
+                android:id="@+id/parent_post_dinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/padding_20_dp"
+                android:layout_marginRight="@dimen/padding_20_dp"
+                android:background="@color/white"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="@dimen/padding_20_dp"
+                    android:layout_marginBottom="@dimen/layout_margin"
+                    android:layout_weight="1"
+                    android:text="@string/post_dinner"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_floating_label" />
+
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/patient_profile_image_padding"
+                    android:layout_marginTop="@dimen/layout_padding"
+                    android:layout_weight="3"
+                    android:orientation="vertical">
+
+
+                    <LinearLayout
+                        android:id="@+id/layout_post_dinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="visible">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="@dimen/margin_left_right_add_vital_signs"
+                            android:gravity="center|start"
+                            android:orientation="horizontal"
+                            android:weightSum="3">
+
+                            <TextView
+                                android:id="@+id/tv_add_food_post_dinner"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1.6"
+                                android:longClickable="false"
+                                android:paddingLeft="@dimen/layout_padding"
+                                android:paddingTop="@dimen/layout_padding"
+                                android:paddingBottom="@dimen/layout_padding"
+                                android:singleLine="true"
+                                android:text="@string/add_food"
+                                android:textColor="@color/orange"
+                                android:textColorHint="@color/grey_hint_color"
+                                android:textSize="@dimen/text_size_floating_label"
+                                android:textStyle="bold" />
+
+                            <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+                                android:id="@+id/tv_add_post_dinner"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:paddingLeft="@dimen/item_contact_padding"
+                                android:paddingTop="@dimen/layout_padding"
+                                android:paddingRight="@dimen/item_contact_padding"
+                                android:paddingBottom="@dimen/layout_padding"
+                                android:text="@string/icon_add"
+                                android:textColor="@color/orange"
+                                android:textSize="@dimen/text_size_treatment_list_title" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="@dimen/margin_left_right_add_vital_signs"
+                            android:layout_weight="1"
+                            android:gravity="center|start"
+                            android:orientation="horizontal"
+                            android:paddingBottom="@dimen/padding_20_dp"
+                            android:weightSum="3">
+
+                            <LinearLayout
+                                android:id="@+id/container_food_post_dinner"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="3"
+                                android:gravity="center|start"
+                                android:orientation="vertical" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/padding_20_dp"
+                android:layout_marginBottom="@dimen/item_contact_padding"
+                android:background="@color/grey_hint_color" />
+
+            <LinearLayout
+                android:id="@+id/parent_mid_night"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/padding_20_dp"
+                android:layout_marginRight="@dimen/padding_20_dp"
+                android:background="@color/white"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="@dimen/padding_20_dp"
+                    android:layout_marginBottom="@dimen/layout_margin"
+                    android:layout_weight="1"
+                    android:text="@string/mid_night"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_floating_label" />
+
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/patient_profile_image_padding"
+                    android:layout_marginTop="@dimen/layout_padding"
+                    android:layout_weight="3"
+                    android:orientation="vertical">
+
+
+                    <LinearLayout
+                        android:id="@+id/layout_mid_night"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="visible">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="@dimen/margin_left_right_add_vital_signs"
+                            android:gravity="center|start"
+                            android:orientation="horizontal"
+                            android:weightSum="3">
+
+                            <TextView
+                                android:id="@+id/tv_add_food_mid_night"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1.6"
+                                android:longClickable="false"
+                                android:paddingLeft="@dimen/layout_padding"
+                                android:paddingTop="@dimen/layout_padding"
+                                android:paddingBottom="@dimen/layout_padding"
+                                android:singleLine="true"
+                                android:text="@string/add_food"
+                                android:textColor="@color/orange"
+                                android:textColorHint="@color/grey_hint_color"
+                                android:textSize="@dimen/text_size_floating_label"
+                                android:textStyle="bold" />
+
+                            <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+                                android:id="@+id/tv_add_mid_night"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:paddingLeft="@dimen/item_contact_padding"
+                                android:paddingTop="@dimen/layout_padding"
+                                android:paddingRight="@dimen/item_contact_padding"
+                                android:paddingBottom="@dimen/layout_padding"
+                                android:text="@string/icon_add"
+                                android:textColor="@color/orange"
+                                android:textSize="@dimen/text_size_treatment_list_title" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="@dimen/margin_left_right_add_vital_signs"
+                            android:layout_weight="1"
+                            android:gravity="center|start"
+                            android:orientation="horizontal"
+                            android:paddingBottom="@dimen/padding_20_dp"
+                            android:weightSum="3">
+
+                            <LinearLayout
+                                android:id="@+id/container_food_mid_night"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="3"
+                                android:gravity="center|start"
+                                android:orientation="vertical" />
                         </LinearLayout>
                     </LinearLayout>
 

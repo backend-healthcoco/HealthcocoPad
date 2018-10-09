@@ -20,16 +20,19 @@ public class RecipeResponse extends SugarRecord {
 
     protected String equivalentMeasurementsJsonString;
     protected String mealTimingJsonString;
+    protected String carbohydreateJsonString;
+    protected String fatJsonString;
+    protected String proteinJsonString;
+    protected String fiberJsonString;
 
     @Unique
     private String uniqueId;
     private String name;
     private String direction;
     private Boolean nutrientValueAtRecipeLevel;
-    @Ignore
-    private List<Ingredient> ingredients;
-    @Ignore
-    private List<Nutrients> nutrients;
+    /* @Ignore
+     private List<Ingredient> ingredients;
+   */
     @Ignore
     private MealQuantity quantity;
     @Ignore
@@ -38,7 +41,14 @@ public class RecipeResponse extends SugarRecord {
     private List<EquivalentQuantities> equivalentMeasurements;
     @Ignore
     private List<String> mealTiming;
-
+    @Ignore
+    private MealQuantity fat;
+    @Ignore
+    private MealQuantity protein;
+    @Ignore
+    private MealQuantity carbohydreate;
+    @Ignore
+    private MealQuantity fiber;
 
     public String getUniqueId() {
         return uniqueId;
@@ -55,22 +65,6 @@ public class RecipeResponse extends SugarRecord {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public List<Ingredient> getIngredients() {
-        return ingredients;
-    }
-
-    public void setIngredients(List<Ingredient> ingredients) {
-        this.ingredients = ingredients;
-    }
-
-    public List<Nutrients> getNutrients() {
-        return nutrients;
-    }
-
-    public void setNutrients(List<Nutrients> nutrients) {
-        this.nutrients = nutrients;
     }
 
     public MealQuantity getQuantity() {
@@ -154,5 +148,69 @@ public class RecipeResponse extends SugarRecord {
 
     public void setMealTiming(List<String> mealTiming) {
         this.mealTiming = mealTiming;
+    }
+
+    public String getCarbohydreateJsonString() {
+        return carbohydreateJsonString;
+    }
+
+    public void setCarbohydreateJsonString(String carbohydreateJsonString) {
+        this.carbohydreateJsonString = carbohydreateJsonString;
+    }
+
+    public String getFatJsonString() {
+        return fatJsonString;
+    }
+
+    public void setFatJsonString(String fatJsonString) {
+        this.fatJsonString = fatJsonString;
+    }
+
+    public String getProteinJsonString() {
+        return proteinJsonString;
+    }
+
+    public void setProteinJsonString(String proteinJsonString) {
+        this.proteinJsonString = proteinJsonString;
+    }
+
+    public String getFiberJsonString() {
+        return fiberJsonString;
+    }
+
+    public void setFiberJsonString(String fiberJsonString) {
+        this.fiberJsonString = fiberJsonString;
+    }
+
+    public MealQuantity getFat() {
+        return fat;
+    }
+
+    public void setFat(MealQuantity fat) {
+        this.fat = fat;
+    }
+
+    public MealQuantity getProtein() {
+        return protein;
+    }
+
+    public void setProtein(MealQuantity protein) {
+        this.protein = protein;
+    }
+
+    public MealQuantity getCarbohydreate() {
+        return carbohydreate;
+    }
+
+    public void setCarbohydreate(MealQuantity carbohydreate) {
+        this.carbohydreate = carbohydreate;
+    }
+
+    public MealQuantity getFiber() {
+        return fiber;
+    }
+
+    public void setFiber(MealQuantity fiber) {
+        this.fiber = fiber;
     }
 }

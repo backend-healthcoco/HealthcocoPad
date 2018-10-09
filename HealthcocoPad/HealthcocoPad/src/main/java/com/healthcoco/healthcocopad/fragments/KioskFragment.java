@@ -221,7 +221,7 @@ public class KioskFragment extends HealthCocoFragment implements
             KioskSubItemType subItemType = KioskSubItemType.values()[ordinal];
             switch (subItemType) {
                 case PATIENT_REGISTER:
-                    openCommonOpenUpActivity(CommonOpenUpFragmentType.ADD_DIET, HealthCocoConstants.TAG_MOBILE_NUMBER, null);
+                    openCommonOpenUpActivity(CommonOpenUpFragmentType.PATIENT_REGISTRATION_TABS, HealthCocoConstants.TAG_MOBILE_NUMBER, null);
                     mActivity.finish();
                     break;
                 case DOCTOR_AND_CLINIC:

@@ -375,6 +375,19 @@ public class Util {
         return 0;
     }
 
+    public static double getValidatedDoubleValue(TextView textView) {
+        String validatedValue = getValidatedValueOrNull(textView);
+        try {
+            if (!Util.isNullOrBlank(validatedValue)) {
+                double value = Double.parseDouble(validatedValue);
+                return value;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
     public static String getValidatedValueOrNull(String value) {
         if (!Util.isNullOrBlank(value))
             return value.trim();

@@ -551,7 +551,7 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
 
     private void openAssessmentForm() {
         Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
-        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.PATIENT_ASSESSMENT.ordinal());
+        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.ADD_DIET.ordinal());
         intent.putExtra(HealthCocoConstants.TAG_PATIENT_ID, selectedPatient.getUserId());
         startActivity(intent);
     }

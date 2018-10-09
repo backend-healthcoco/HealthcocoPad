@@ -24,6 +24,13 @@ public class DietplanAddItem extends SugarRecord {
     @Ignore
     private MealQuantity calaries;
 
+    protected double calTotal;
+    protected double fatTotal;
+    protected double proteinTotal;
+    protected double carbohydreateTotal;
+    protected double fiberTotal;
+
+
     public String getForeignDietId() {
         return foreignDietId;
     }
@@ -70,5 +77,45 @@ public class DietplanAddItem extends SugarRecord {
 
     public void setCalariesJsonString(String calariesJsonString) {
         this.calariesJsonString = calariesJsonString;
+    }
+
+    public double getFatTotal() {
+        return fatTotal;
+    }
+
+    public void setFatTotal(double fatTotal) {
+        this.fatTotal = fatTotal;
+    }
+
+    public double getProteinTotal() {
+        return proteinTotal;
+    }
+
+    public void setProteinTotal(double proteinTotal) {
+        this.proteinTotal = proteinTotal;
+    }
+
+    public double getCarbohydreateTotal() {
+        return carbohydreateTotal;
+    }
+
+    public void setCarbohydreateTotal(double carbohydreateTotal) {
+        this.carbohydreateTotal = carbohydreateTotal;
+    }
+
+    public double getFiberTotal() {
+        return fiberTotal;
+    }
+
+    public void setFiberTotal(double fiberTotal) {
+        this.fiberTotal = fiberTotal;
+    }
+
+    public double getCalTotal() {
+        return calTotal;
+    }
+
+    public void setCalTotal(double calTotal) {
+        this.calTotal = calTotal;
     }
 }

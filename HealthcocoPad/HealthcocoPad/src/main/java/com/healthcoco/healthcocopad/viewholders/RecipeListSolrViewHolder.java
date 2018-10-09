@@ -11,37 +11,55 @@ import com.healthcoco.healthcocopad.bean.MealQuantity;
 import com.healthcoco.healthcocopad.bean.server.RecipeResponse;
 import com.healthcoco.healthcocopad.bean.server.TreatmentService;
 import com.healthcoco.healthcocopad.bean.server.User;
+import com.healthcoco.healthcocopad.listeners.SelectedRecipeItemClickListener;
 import com.healthcoco.healthcocopad.listeners.SelectedTreatmentItemClickListener;
+import com.healthcoco.healthcocopad.recyclerview.HealthcocoComonRecylcerViewHolder;
+import com.healthcoco.healthcocopad.recyclerview.HealthcocoRecyclerViewItemClickListener;
 import com.healthcoco.healthcocopad.utilities.Util;
 
 /**
  * Created by Shreshtha on 15-07-2017.
  */
 
-public class RecipeListSolrViewHolder extends HealthCocoViewHolder implements View.OnClickListener {
+public class RecipeListSolrViewHolder extends HealthcocoComonRecylcerViewHolder {
 
-    private User user;
-    private SelectedTreatmentItemClickListener selectedTreatmentItemClickListener;
+    private SelectedRecipeItemClickListener selectedRecipeItemClickListener;
     private HealthCocoActivity mActivity;
     private RecipeResponse objData;
     private TextView tvTitle;
     private TextView tvQuantity;
     private TextView tvCalarie;
 
-    public RecipeListSolrViewHolder(HealthCocoActivity mActivity, SelectedTreatmentItemClickListener selectedTreatmentItemClickListener) {
-        super(mActivity);
+    public RecipeListSolrViewHolder(HealthCocoActivity mActivity, View itemView, HealthcocoRecyclerViewItemClickListener itemClickListener, Object listenerObject) {
+        super(mActivity, itemView, itemClickListener);
         this.mActivity = mActivity;
-        this.selectedTreatmentItemClickListener = selectedTreatmentItemClickListener;
-        user = selectedTreatmentItemClickListener.getUser();
+        this.selectedRecipeItemClickListener = (SelectedRecipeItemClickListener) listenerObject;
     }
 
     @Override
-    public void setData(Object object) {
-        this.objData = (RecipeResponse) object;
+    public void initViews(View contentView) {
+        tvTitle = (TextView) contentView.findViewById(R.id.tv_title_food);
+        tvQuantity = (TextView) contentView.findViewById(R.id.tv_quantity_food);
+        tvCalarie = (TextView) contentView.findViewById(R.id.tv_calarie_food);
+
+        if (onItemClickListener != null)
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                }
+            });
+
+        itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                selectedRecipeItemClickListener.onRecipeItemClicked(objData);
+            }
+        });
     }
 
     @Override
-    public void applyData() {
+    public void applyData(Object object) {
+        objData = (RecipeResponse) object;
         if (objData != null) {
             tvTitle.setText(objData.getName());
 
@@ -57,21 +75,5 @@ public class RecipeListSolrViewHolder extends HealthCocoViewHolder implements Vi
                     tvQuantity.setText(Util.getValidatedValue(quantity.getValue()) + quantity.getType().getUnit());
             }
         }
-    }
-
-    @Override
-    public View getContentView() {
-        LinearLayout contentView = (LinearLayout) inflater.inflate(R.layout.sub_item_add_food, null);
-        tvTitle = (TextView) contentView.findViewById(R.id.tv_title_food);
-        tvQuantity = (TextView) contentView.findViewById(R.id.tv_quantity_food);
-        tvCalarie = (TextView) contentView.findViewById(R.id.tv_calarie_food);
-
-        contentView.setOnClickListener(this);
-        return contentView;
-    }
-
-    @Override
-    public void onClick(View v) {
-        selectedTreatmentItemClickListener.onTreatmentItemClick(objData);
     }
 }

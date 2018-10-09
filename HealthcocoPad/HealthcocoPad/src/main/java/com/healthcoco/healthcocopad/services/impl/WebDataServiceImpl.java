@@ -47,6 +47,7 @@ import com.healthcoco.healthcocopad.bean.server.AssessmentPersonalDetail;
 import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
 import com.healthcoco.healthcocopad.bean.server.ClinicDoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.Diagram;
+import com.healthcoco.healthcocopad.bean.server.DietPlan;
 import com.healthcoco.healthcocopad.bean.server.Disease;
 import com.healthcoco.healthcocopad.bean.server.DoctorClinicProfile;
 import com.healthcoco.healthcocopad.bean.server.DoctorProfile;
@@ -1841,6 +1842,19 @@ public class WebDataServiceImpl implements GCMRefreshListener {
                     break;
             }
             getResponse(webServiceType, class1, url, null, null, responseListener, errorListener);
+        } else {
+            showUserOffline(webServiceType, responseListener);
+        }
+    }
+
+    public void addDietPlan(Class<?> class1, DietPlan dietPlan,
+                            Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        WebServiceType webServiceType = WebServiceType.ADD_EDIT_DIET_PLAN;
+        checkNetworkStatus(mApp);
+        if (HealthCocoConstants.isNetworkOnline) {
+            String url = webServiceType.getUrl();
+            getResponse(webServiceType, class1, url, dietPlan, null, responseListener,
+                    errorListener);
         } else {
             showUserOffline(webServiceType, responseListener);
         }

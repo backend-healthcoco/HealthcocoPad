@@ -25,6 +25,7 @@ import com.healthcoco.healthcocopad.viewholders.FoodSubItemViewHolder;
 import com.healthcoco.healthcocopad.viewholders.KioskSubItemViewHolder;
 import com.healthcoco.healthcocopad.viewholders.QueueItemViewHolder;
 import com.healthcoco.healthcocopad.viewholders.RecipeListItemViewHolder;
+import com.healthcoco.healthcocopad.viewholders.RecipeListSolrViewHolder;
 
 import java.util.ArrayList;
 
@@ -80,7 +81,6 @@ public class HealthcocoRecyclerViewAdapter extends RecyclerView.Adapter<Healthco
         LayoutInflater mInflater = mActivity.getLayoutInflater();
         switch (adapterType) {
             case APOINTMENT_QUEUE:
-
                 convertView = mInflater.inflate(R.layout.list_item_queue, null);
                 viewHolder = new QueueItemViewHolder(mActivity, convertView, onItemClickListener, listenerObject);
                 break;
@@ -102,7 +102,11 @@ public class HealthcocoRecyclerViewAdapter extends RecyclerView.Adapter<Healthco
 
             case RECIPE_ITEM:
                 convertView = mInflater.inflate(R.layout.list_item_selected_recipe, parent, false);
-                viewHolder = new RecipeListItemViewHolder(mActivity, convertView, onItemClickListener);
+                viewHolder = new RecipeListItemViewHolder(mActivity, convertView, onItemClickListener, listenerObject);
+                break;
+            case RECIPE_ITEM_SOLR:
+                convertView = mInflater.inflate(R.layout.sub_item_add_food, parent, false);
+                viewHolder = new RecipeListSolrViewHolder(mActivity, convertView, onItemClickListener, listenerObject);
                 break;
 
             case DOCTOR_POPUP_LIST:
@@ -165,6 +169,12 @@ public class HealthcocoRecyclerViewAdapter extends RecyclerView.Adapter<Healthco
                 if (holder instanceof RecipeListItemViewHolder && object instanceof DietPlanRecipeItem) {
                     RecipeListItemViewHolder recipeListItemViewHolder = (RecipeListItemViewHolder) holder;
                     recipeListItemViewHolder.applyData(object);
+                }
+                break;
+            case RECIPE_ITEM_SOLR:
+                if (holder instanceof RecipeListSolrViewHolder && object instanceof RecipeResponse) {
+                    RecipeListSolrViewHolder recipeListSolrViewHolder = (RecipeListSolrViewHolder) holder;
+                    recipeListSolrViewHolder.applyData(object);
                 }
                 break;
         }
