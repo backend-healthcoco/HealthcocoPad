@@ -2,44 +2,41 @@ package com.healthcoco.healthcocopad.bean.server;
 
 import com.healthcoco.healthcocopad.bean.EquivalentQuantities;
 import com.healthcoco.healthcocopad.bean.MealQuantity;
+import com.healthcoco.healthcocopad.enums.QuantityType;
 import com.healthcoco.healthcocopad.utilities.StringUtil;
 import com.orm.SugarRecord;
 import com.orm.annotation.Ignore;
-import com.orm.annotation.Unique;
 
 import org.parceler.Parcel;
 
-import java.util.ArrayList;
 import java.util.List;
 
-@Parcel
-public class RecipeResponse extends SugarRecord {
-    public static String TABLE_NAME = " " + StringUtil.toSQLName(RecipeResponse.class.getSimpleName());
-    protected String quantityJsonString;
-    protected String calariesJsonString;
+/**
+ * Created by Prashant on 24/09/2018.
+ */
 
+@Parcel
+public class IngredientResponse extends SugarRecord {
+    public static String TABLE_NAME = " " + StringUtil.toSQLName(IngredientResponse.class.getSimpleName());
+
+    protected String foreignMealId;
     protected String equivalentMeasurementsJsonString;
-    protected String mealTimingJsonString;
+    protected String calariesJsonString;
     protected String carbohydreateJsonString;
     protected String fatJsonString;
     protected String proteinJsonString;
     protected String fiberJsonString;
+    protected String customUniqueId;
 
-    @Unique
     private String uniqueId;
     private String name;
-    private String direction;
-    private Boolean nutrientValueAtRecipeLevel;
-    @Ignore
-    private List<Ingredient> ingredients;
     @Ignore
     private MealQuantity quantity;
+    private String note;
     @Ignore
     private MealQuantity calaries;
     @Ignore
     private List<EquivalentQuantities> equivalentMeasurements;
-    @Ignore
-    private List<String> mealTiming;
     @Ignore
     private MealQuantity fat;
     @Ignore
@@ -49,6 +46,22 @@ public class RecipeResponse extends SugarRecord {
     @Ignore
     private MealQuantity fiber;
 
+    public String getForeignMealId() {
+        return foreignMealId;
+    }
+
+    public void setForeignMealId(String foreignMealId) {
+        this.foreignMealId = foreignMealId;
+    }
+
+    public String getCustomUniqueId() {
+        return customUniqueId;
+    }
+
+    public void setCustomUniqueId(String customUniqueId) {
+        this.customUniqueId = customUniqueId;
+    }
+
     public String getUniqueId() {
         return uniqueId;
     }
@@ -56,7 +69,6 @@ public class RecipeResponse extends SugarRecord {
     public void setUniqueId(String uniqueId) {
         this.uniqueId = uniqueId;
     }
-
 
     public String getName() {
         return name;
@@ -66,36 +78,20 @@ public class RecipeResponse extends SugarRecord {
         this.name = name;
     }
 
-    public MealQuantity getQuantity() {
-        return quantity;
+    public List<EquivalentQuantities> getEquivalentMeasurements() {
+        return equivalentMeasurements;
     }
 
-    public void setQuantity(MealQuantity quantity) {
-        this.quantity = quantity;
+    public void setEquivalentMeasurements(List<EquivalentQuantities> equivalentMeasurements) {
+        this.equivalentMeasurements = equivalentMeasurements;
     }
 
-    public String getDirection() {
-        return direction;
+    public String getEquivalentMeasurementsJsonString() {
+        return equivalentMeasurementsJsonString;
     }
 
-    public void setDirection(String direction) {
-        this.direction = direction;
-    }
-
-    public Boolean getNutrientValueAtRecipeLevel() {
-        return nutrientValueAtRecipeLevel;
-    }
-
-    public void setNutrientValueAtRecipeLevel(Boolean nutrientValueAtRecipeLevel) {
-        this.nutrientValueAtRecipeLevel = nutrientValueAtRecipeLevel;
-    }
-
-    public String getQuantityJsonString() {
-        return quantityJsonString;
-    }
-
-    public void setQuantityJsonString(String quantityJsonString) {
-        this.quantityJsonString = quantityJsonString;
+    public void setEquivalentMeasurementsJsonString(String equivalentMeasurementsJsonString) {
+        this.equivalentMeasurementsJsonString = equivalentMeasurementsJsonString;
     }
 
     public MealQuantity getCalaries() {
@@ -112,41 +108,6 @@ public class RecipeResponse extends SugarRecord {
 
     public void setCalariesJsonString(String calariesJsonString) {
         this.calariesJsonString = calariesJsonString;
-    }
-
-
-    public String getEquivalentMeasurementsJsonString() {
-        return equivalentMeasurementsJsonString;
-    }
-
-    public void setEquivalentMeasurementsJsonString(String equivalentMeasurementsJsonString) {
-        this.equivalentMeasurementsJsonString = equivalentMeasurementsJsonString;
-    }
-
-
-    public String getMealTimingJsonString() {
-        return mealTimingJsonString;
-    }
-
-    public void setMealTimingJsonString(String mealTimingJsonString) {
-        this.mealTimingJsonString = mealTimingJsonString;
-    }
-
-
-    public List<EquivalentQuantities> getEquivalentMeasurements() {
-        return equivalentMeasurements;
-    }
-
-    public void setEquivalentMeasurements(List<EquivalentQuantities> equivalentMeasurements) {
-        this.equivalentMeasurements = equivalentMeasurements;
-    }
-
-    public List<String> getMealTiming() {
-        return mealTiming;
-    }
-
-    public void setMealTiming(List<String> mealTiming) {
-        this.mealTiming = mealTiming;
     }
 
     public String getCarbohydreateJsonString() {
@@ -213,11 +174,19 @@ public class RecipeResponse extends SugarRecord {
         this.fiber = fiber;
     }
 
-    public List<Ingredient> getIngredients() {
-        return ingredients;
+    public MealQuantity getQuantity() {
+        return quantity;
     }
 
-    public void setIngredients(List<Ingredient> ingredients) {
-        this.ingredients = ingredients;
+    public void setQuantity(MealQuantity quantity) {
+        this.quantity = quantity;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 }

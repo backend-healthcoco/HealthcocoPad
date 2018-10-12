@@ -24,6 +24,8 @@ public class DietplanAddItem extends SugarRecord {
     @Ignore
     private MealQuantity calaries;
 
+    private Float toTime;
+
     protected double calTotal;
     protected double fatTotal;
     protected double proteinTotal;
@@ -117,5 +119,13 @@ public class DietplanAddItem extends SugarRecord {
 
     public void setCalTotal(double calTotal) {
         this.calTotal = calTotal;
+    }
+
+    public Float getToTime() {
+        return toTime;
+    }
+
+    public void setToTime(Float toTime) {
+        this.toTime = toTime;
     }
 }

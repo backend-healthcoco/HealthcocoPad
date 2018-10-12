@@ -1356,6 +1356,7 @@
     <string name="freq">Frequency</string>
     <string name="gms">Gms</string>
     <string name="select_recipe">Select Recipe</string>
+    <string name="select_ingredient">Select Ingredient</string>
 
     <!--Patient Food and Exercise texts-->
     <string name="food_and_exercise">Food and Exercise</string>
@@ -1387,6 +1388,7 @@
     <string name="fat_colon">Fat&#160;:&#160;</string>
     <string name="carbs_colon">Carbs&#160;:&#160;</string>
     <string name="fiber_colon">Fiber&#160;:&#160;</string>
+    <string name="no_ingredient_added">No Ingradient Added</string>
     <string name="no_recipe_added">No Recipe Added</string>
     <string name="search_recipe">Search Recipe</string>
     <string name="cal_orange"><font fgcolor="#f98740">&#160;Cal</font> </string>
@@ -1395,6 +1397,9 @@
     <string name="remove">Remove</string>
     <string name="alert_add_diet_plan">Blank Diet Plan cannot be saved.Add Diet</string>
     <string name="alert_add_diet">Blank Diet cannot be saved.Add Food</string>
+    <string name="no_diet_plan_found">No Diet Plan Found</string>
+    <string name="diet_space">Diet&#160;</string>
+    <string name="diet_plan_id"> | Plan ID&#160;:&#160;</string>
 
 
     <!--Patient Medical Information texts-->

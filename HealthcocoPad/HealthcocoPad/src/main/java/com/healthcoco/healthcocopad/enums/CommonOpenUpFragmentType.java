@@ -77,6 +77,7 @@ public enum CommonOpenUpFragmentType {
     PERSONAL_DETAILS(R.string.personal_details),
     MEASUREMENT(R.string.measurements),
     SELECT_RECIPES(R.string.select_recipe),
+    SELECT_INGREDIENT(R.string.select_ingredient),
     ADD_DIET(R.string.add_diet_chart),
     FOOD_AND_EXERCISE(R.string.food_and_exercise),
     LIFE_SYLE(R.string.life_style),

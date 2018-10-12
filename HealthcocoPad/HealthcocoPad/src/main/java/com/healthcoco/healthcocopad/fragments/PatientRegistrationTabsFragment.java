@@ -35,7 +35,7 @@ public class PatientRegistrationTabsFragment extends HealthCocoFragment implemen
         View.OnClickListener, PatientRegistrationDetailsListener, TabHost.OnTabChangeListener {
 
     PatientNumberSearchFragment searchFragment;
-    SelectRecipeFragment basicDetailsFragment;
+    PatientProfileFragment basicDetailsFragment;
     PatientAssessmentFragment patientAssessmentFragment;
     private TabHost tabhost;
     private CustomViewPager mViewPager;
@@ -100,8 +100,7 @@ public class PatientRegistrationTabsFragment extends HealthCocoFragment implemen
                     addFragment(registrationTabsType, searchFragment);
                     break;
                 case BASIC_DETAILS:
-//                    basicDetailsFragment = new PatientProfileFragment(this);
-                    basicDetailsFragment = new SelectRecipeFragment();
+                    basicDetailsFragment = new PatientProfileFragment(this);
                     addFragment(registrationTabsType, basicDetailsFragment);
                     break;
                 case MORE_DETAIlS:

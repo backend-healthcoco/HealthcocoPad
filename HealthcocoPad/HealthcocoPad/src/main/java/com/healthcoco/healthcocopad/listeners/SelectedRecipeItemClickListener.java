@@ -14,4 +14,6 @@ public interface SelectedRecipeItemClickListener {
 
     public void onRecipeItemClicked(Object object);
 
+    public void onIngredientItemClicked(Object object);
+
 }

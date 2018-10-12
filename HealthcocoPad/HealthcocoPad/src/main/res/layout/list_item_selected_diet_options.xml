@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="@dimen/padding_20_dp">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/layout_padding_5dp">
+
+        <TextView
+            android:id="@+id/tv_option"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/layout_padding"
+            android:text="@string/option"
+            android:textColor="@color/green_logo"
+            android:textSize="@dimen/text_size_add_clinical_note_points"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/container_meal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/layout_padding"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/layout_padding" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"
+        android:layout_marginLeft="@dimen/layout_padding"
+        android:layout_marginRight="@dimen/layout_padding"
+        android:background="@color/grey_icons" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/layout_padding"
+        android:layout_marginRight="@dimen/layout_padding"
+        android:background="@color/white"
+        android:orientation="horizontal">
+
+
+        <LinearLayout
+            android:id="@+id/layout_total_cal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:padding="@dimen/layout_add_treatment_title_padding_10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/calaries_colon"
+                android:textSize="@dimen/text_size_drug_child_lable" />
+
+            <TextView
+                android:id="@+id/tv_total_cal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:textColor="@color/brown_dark"
+                android:textSize="@dimen/text_size_drug_child_lable" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_total_protien"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:padding="@dimen/layout_add_treatment_title_padding_10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/protein_colon"
+                android:textSize="@dimen/text_size_drug_child_lable" />
+
+            <TextView
+                android:id="@+id/tv_total_protein"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/brown_dark"
+                android:textSize="@dimen/text_size_drug_child_lable" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_total_fat"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:padding="@dimen/layout_add_treatment_title_padding_10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/fat_colon"
+                android:textSize="@dimen/text_size_drug_child_lable" />
+
+            <TextView
+                android:id="@+id/tv_total_fat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/brown_dark"
+                android:textSize="@dimen/text_size_drug_child_lable" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_total_carbs"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:padding="@dimen/layout_add_treatment_title_padding_10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/carbs_colon"
+                android:textSize="@dimen/text_size_drug_child_lable" />
+
+            <TextView
+                android:id="@+id/tv_total_carbs"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/brown_dark"
+                android:textSize="@dimen/text_size_drug_child_lable" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_total_fiber"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:padding="@dimen/layout_add_treatment_title_padding_10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/fiber_colon"
+                android:textSize="@dimen/text_size_drug_child_lable" />
+
+            <TextView
+                android:id="@+id/tv_total_fiber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/brown_dark"
+                android:textSize="@dimen/text_size_drug_child_lable" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

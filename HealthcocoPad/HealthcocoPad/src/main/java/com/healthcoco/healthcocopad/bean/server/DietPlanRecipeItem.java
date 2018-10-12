@@ -33,6 +33,21 @@ public class DietPlanRecipeItem extends SugarRecord {
     @Ignore
     private MealQuantity calaries;
     @Ignore
+    protected MealQuantity currentQuantity;
+    protected String equivalentMeasurementsJsonString;
+    protected Boolean nutrientValueAtRecipeLevel;
+    @Ignore
+    protected List<EquivalentQuantities> equivalentMeasurements;
+    @Ignore
+    private MealQuantity fat;
+    @Ignore
+    private MealQuantity protein;
+    @Ignore
+    private MealQuantity carbohydreate;
+    @Ignore
+    private MealQuantity fiber;
+
+    @Ignore
     protected MealQuantity calariesTemp;
     @Ignore
     protected MealQuantity fatTemp;
@@ -42,29 +57,14 @@ public class DietPlanRecipeItem extends SugarRecord {
     protected MealQuantity carbohydreateTemp;
     @Ignore
     protected MealQuantity fiberTemp;
+
     protected double fatPerHundredUnit;
     protected double proteinPerHundredUnit;
     protected double carbohydreatePerHundredUnit;
     protected double fiberPerHundredUnit;
-
     protected double calariesPerHundredUnit;
     @Ignore
     protected MealQuantity tempQuantity;
-    @Ignore
-    private MealQuantity fat;
-    @Ignore
-    private MealQuantity protein;
-    @Ignore
-    private MealQuantity carbohydreate;
-    @Ignore
-    protected MealQuantity currentQuantity;
-    protected String equivalentMeasurementsJsonString;
-    protected Boolean nutrientValueAtRecipeLevel;
-    @Ignore
-    protected List<EquivalentQuantities> equivalentMeasurements;
-    @Ignore
-    private MealQuantity fiber;
-
 
     public String getUniqueId() {
         return uniqueId;

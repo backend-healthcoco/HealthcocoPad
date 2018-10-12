@@ -112,7 +112,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
     private PatientPrescriptionDetailFragment prescriptionDetailFragment;
     private PatientReportsDetailFragment reportsDetailFragment;
     private PatientTreatmentDetailFragment treatmentDetailFragment;
-    private PatientInvoiceDetailFragment invoiceDetailFragment;
+    private PatientDietPlanDetailFragment invoiceDetailFragment;
     private PatientReceiptDetailFragment receiptDetailFragment;
     private HealthcocoPopupWindow doctorsListPopupWindow;
     private boolean isProfileTabClicked = true;
@@ -234,7 +234,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                         break;
                     case PATIENT_DETAIL_INVOICE:
                         if (user.getUiPermissions().getTabPermissions().contains(detailTabType.getValue())) {
-                            invoiceDetailFragment = new PatientInvoiceDetailFragment();
+                            invoiceDetailFragment = new PatientDietPlanDetailFragment();
                             healthcocoFragment = invoiceDetailFragment;
                         }
                         break;

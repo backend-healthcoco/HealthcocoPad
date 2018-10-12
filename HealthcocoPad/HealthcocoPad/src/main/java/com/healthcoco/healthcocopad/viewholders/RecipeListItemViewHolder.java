@@ -78,6 +78,13 @@ public class RecipeListItemViewHolder extends HealthcocoComonRecylcerViewHolder 
                 }
             });
 
+        itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                recipeItemClickListener.onIngredientItemClicked(recipeItem);
+            }
+        });
+
         btDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -106,10 +113,21 @@ public class RecipeListItemViewHolder extends HealthcocoComonRecylcerViewHolder 
                 tvServingType.setText("");
             }
 
-            if (recipeItem.getCurrentQuantity() != null && recipeItem.getCalaries() != null)
-                tvTotalQuantity.setText(recipeItem.getCurrentQuantity().getValue() + recipeItem.getCurrentQuantity().getType().getUnit() + " - " +
-                        recipeItem.getCalaries().getValue() + mActivity.getString(R.string.cal_orange));
-            else
+            if (recipeItem.getNutrientValueAtRecipeLevel() != null)
+                isIngredientValue = recipeItem.getNutrientValueAtRecipeLevel();
+
+            if (isIngredientValue) {
+                tvQuantity.setVisibility(View.GONE);
+                tvServingType.setVisibility(View.GONE);
+            }
+
+            if (recipeItem.getCurrentQuantity() != null && recipeItem.getCalaries() != null) {
+                if (!isIngredientValue)
+                    tvTotalQuantity.setText(recipeItem.getCurrentQuantity().getValue() + recipeItem.getCurrentQuantity().getType().getUnit() + " - " +
+                            recipeItem.getCalaries().getValue() + mActivity.getString(R.string.cal_orange));
+                else
+                    tvTotalQuantity.setText(recipeItem.getCalaries().getValue() + mActivity.getString(R.string.cal_orange));
+            } else
                 tvTotalQuantity.setText("");
 
             if (recipeItem.getProtein() != null)
@@ -132,10 +150,8 @@ public class RecipeListItemViewHolder extends HealthcocoComonRecylcerViewHolder 
             else
                 tvFiber.setText("");
 
-            if (recipeItem.getNutrientValueAtRecipeLevel() != null)
-                isIngredientValue = recipeItem.getNutrientValueAtRecipeLevel();
 
-            if (isIngredientValue)
+            if (!Util.isNullOrEmptyList(recipeItem.getIngredients()))
                 addIngredients(recipeItem.getIngredients());
             else parentIngredients.setVisibility(View.GONE);
         }
@@ -157,14 +173,16 @@ public class RecipeListItemViewHolder extends HealthcocoComonRecylcerViewHolder 
 
                 tvItemTitle.setText(ingredient.getName());
 
-                String quantityType = ingredient.getType().getQuantityType();
+                String quantityType = ingredient.getType().getUnit();
                 if (!Util.isNullOrZeroNumber(ingredient.getValue())) {
                     tvItemQuantity.setText(Util.getValidatedValue(ingredient.getValue()) + quantityType);
                 }
                 if (ingredient.getCalaries() != null) {
-                    String calariesType = ingredient.getCalaries().getType().getQuantityType();
-                    if (!Util.isNullOrZeroNumber(ingredient.getCalaries().getValue())) {
-                        tvItemCalarie.setText(Util.getValidatedValue(ingredient.getCalaries().getValue()) + calariesType);
+                    if (ingredient.getCalaries().getType() != null) {
+                        String calariesType = ingredient.getCalaries().getType().getQuantityType();
+                        if (!Util.isNullOrZeroNumber(ingredient.getCalaries().getValue())) {
+                            tvItemCalarie.setText(Util.getValidatedValue(ingredient.getCalaries().getValue()) + calariesType);
+                        }
                     }
                 }
                 containerIngredients.addView(layoutSubItemPermission);

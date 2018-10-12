@@ -20,6 +20,7 @@ import com.healthcoco.healthcocopad.bean.server.DietplanAddItem;
 import com.healthcoco.healthcocopad.bean.server.RecipeResponse;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.enums.AdapterType;
+import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.MealTimeType;
 import com.healthcoco.healthcocopad.enums.QuantityType;
 import com.healthcoco.healthcocopad.fragments.RecipeListFragment;
@@ -42,9 +43,6 @@ import java.util.LinkedHashMap;
 
 public class SelectRecipeFragment extends HealthCocoFragment implements
         View.OnClickListener, SelectedRecipeItemClickListener {
-    public static final String INTENT_GET_MODIFIED_VALUE = "com.healthcoco.MODIFIED_VALUE";
-    public static final String TAG_SELECTED_TREATMENT_OBJECT = "selectedTreatmentItemOrdinal";
-    public static final String TAG_TREATMENT_ID = "treatmentId";
     private User user;
 
     private RecipeListFragment recipeListFragment;
@@ -78,7 +76,6 @@ public class SelectRecipeFragment extends HealthCocoFragment implements
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Bundle bundle = getArguments();
 
         Intent intent = mActivity.getIntent();
         ordinal = intent.getIntExtra(HealthCocoConstants.TAG_TAB_TYPE, 0);
@@ -103,13 +100,89 @@ public class SelectRecipeFragment extends HealthCocoFragment implements
 
                 for (DietPlanRecipeItem recipeItem : dietplanAddItemReceived.getRecipes()) {
                     if (!recipeHashMap.containsKey(recipeItem.getUniqueId()))
-                        recipeHashMap.put(recipeItem.getUniqueId(), recipeItem);
+                        recipeHashMap.put(recipeItem.getUniqueId(), getRecipePerHundredUnit(recipeItem));
 
                     notifyAdapter(recipeHashMap);
                     selectedRecipeRecyclerView.smoothScrollToPosition(mAdapter.getItemCount());
                 }
             }
         }
+    }
+
+    private DietPlanRecipeItem getRecipePerHundredUnit(DietPlanRecipeItem recipeItem) {
+
+        MealQuantity quantity = recipeItem.getQuantity();
+        QuantityType type = quantity.getType();
+        double value = quantity.getValue();
+        double currentValue = 1;
+        MealQuantity currentQuantity = new MealQuantity();
+        if (!Util.isNullOrEmptyList(recipeItem.getEquivalentMeasurements()))
+            for (EquivalentQuantities equivalentQuantities : recipeItem.getEquivalentMeasurements()) {
+                if (type == equivalentQuantities.getServingType()) {
+                    double equivalentQuantitiesValue = equivalentQuantities.getValue();
+                    currentValue = value * equivalentQuantitiesValue;
+                    currentQuantity.setValue(currentValue);
+                    currentQuantity.setType(type);
+                    recipeItem.setCurrentQuantity(currentQuantity);
+                }
+            }
+
+        MealQuantity tempQuantity = new MealQuantity();
+        if (recipeItem.getQuantity() != null) {
+            tempQuantity.setValue(recipeItem.getQuantity().getValue());
+            if (recipeItem.getQuantity().getType() != null)
+                tempQuantity.setType(recipeItem.getQuantity().getType());
+        }
+        recipeItem.setTempQuantity(tempQuantity);
+
+        if (recipeItem.getCalaries() != null) {
+            MealQuantity qty = new MealQuantity();
+            qty.setValue(recipeItem.getCalaries().getValue());
+            if (recipeItem.getCalaries().getType() != null)
+                qty.setType(recipeItem.getCalaries().getType());
+            recipeItem.setCalariesTemp(qty);
+
+
+            recipeItem.setCalariesPerHundredUnit((recipeItem.getCalaries().getValue() / currentValue) * 100);
+        }
+        if (recipeItem.getFat() != null) {
+            MealQuantity qty = new MealQuantity();
+            qty.setValue(recipeItem.getFat().getValue());
+            if (recipeItem.getFat().getType() != null)
+                qty.setType(recipeItem.getFat().getType());
+            recipeItem.setFatTemp(qty);
+
+            recipeItem.setFatPerHundredUnit((recipeItem.getFat().getValue() / currentValue) * 100);
+        }
+        if (recipeItem.getProtein() != null) {
+            MealQuantity qty = new MealQuantity();
+            qty.setValue(recipeItem.getProtein().getValue());
+            if (recipeItem.getProtein().getType() != null)
+                qty.setType(recipeItem.getProtein().getType());
+            recipeItem.setProteinTemp(qty);
+
+            recipeItem.setProteinPerHundredUnit((recipeItem.getProtein().getValue() / currentValue) * 100);
+        }
+        if (recipeItem.getCarbohydreate() != null) {
+            MealQuantity qty = new MealQuantity();
+            qty.setValue(recipeItem.getCarbohydreate().getValue());
+            if (recipeItem.getCarbohydreate().getType() != null)
+                qty.setType(recipeItem.getCarbohydreate().getType());
+            recipeItem.setCarbohydreateTemp(qty);
+
+            recipeItem.setCarbohydreatePerHundredUnit((recipeItem.getCarbohydreate().getValue() / currentValue) * 100);
+        }
+        if (recipeItem.getFiber() != null) {
+            MealQuantity qty = new MealQuantity();
+            qty.setValue(recipeItem.getFiber().getValue());
+            if (recipeItem.getFiber().getType() != null)
+                qty.setType(recipeItem.getFiber().getType());
+            recipeItem.setFiberTemp(qty);
+
+            recipeItem.setFiberPerHundredUnit((recipeItem.getFiber().getValue() / currentValue) * 100);
+        }
+
+        return recipeItem;
     }
 
     @Override
@@ -241,6 +314,8 @@ public class SelectRecipeFragment extends HealthCocoFragment implements
         dietPlanRecipeItem.setFiber(recipeResponse.getFiber());
         dietPlanRecipeItem.setEquivalentMeasurements(recipeResponse.getEquivalentMeasurements());
         dietPlanRecipeItem.setNutrientValueAtRecipeLevel(recipeResponse.getNutrientValueAtRecipeLevel());
+        if (!Util.isNullOrEmptyList(recipeResponse.getIngredients()))
+            dietPlanRecipeItem.setIngredients(recipeResponse.getIngredients());
 
         MealQuantity quantity = recipeResponse.getQuantity();
         QuantityType type = quantity.getType();
@@ -389,5 +464,40 @@ public class SelectRecipeFragment extends HealthCocoFragment implements
         data.putExtra(HealthCocoConstants.TAG_INTENT_DATA, Parcels.wrap(dietplanAddItem));
         getActivity().setResult(HealthCocoConstants.RESULT_CODE_ADD_MEAL, data);
         getActivity().finish();
+    }
+
+    @Override
+    public void onIngredientItemClicked(Object object) {
+        DietPlanRecipeItem dietPlanRecipeItem = (DietPlanRecipeItem) object;
+        onAddMealClicked(dietPlanRecipeItem);
+    }
+
+
+    public void onAddMealClicked(DietPlanRecipeItem dietPlanRecipeItem) {
+        Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
+        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.SELECT_INGREDIENT.ordinal());
+        if (dietPlanRecipeItem != null)
+            intent.putExtra(HealthCocoConstants.TAG_INTENT_DATA, Parcels.wrap(dietPlanRecipeItem));
+        startActivityForResult(intent, HealthCocoConstants.REQUEST_CODE_ADD_INGREDIENT, null);
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == HealthCocoConstants.REQUEST_CODE_ADD_INGREDIENT) {
+            switch (resultCode) {
+                case HealthCocoConstants.RESULT_CODE_ADD_INGREDIENT:
+                    if (data != null) {
+                        DietPlanRecipeItem dietPlanRecipeItem = Parcels.unwrap(data.getParcelableExtra(HealthCocoConstants.TAG_INTENT_DATA));
+                        if (dietPlanRecipeItem != null) {
+                            onQuantityChanged(dietPlanRecipeItem);
+                            notifyAdapter(recipeHashMap);
+                        }
+                    }
+                    break;
+            }
+        }
+
     }
 }

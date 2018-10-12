@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/layout_ingredient_list"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.35"
+            android:orientation="vertical"
+            android:visibility="visible">
+
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="0.3dp"
+            android:layout_height="match_parent"
+            android:background="@color/grey_icons"></View>
+
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.7"
+            android:background="@color/grey_background"
+            android:orientation="vertical">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_view_selected_ingradient"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:visibility="visible" />
+
+            <TextView
+                android:id="@+id/tv_no_ingredient"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="@string/no_ingredient_added"
+                android:textSize="@dimen/text_size_no_results"
+                android:textStyle="bold"
+                android:visibility="gone" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:background="@color/grey_icons" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="horizontal">
+
+
+                <LinearLayout
+                    android:id="@+id/layout_total_cal"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/layout_add_treatment_title_padding_10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/calaries_colon"
+                        android:textSize="@dimen/text_size_drug_child_lable" />
+
+                    <TextView
+                        android:id="@+id/tv_total_cal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:maxLines="1"
+                        android:textColor="@color/brown_dark"
+                        android:textSize="@dimen/text_size_drug_child_lable" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_total_protien"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/layout_add_treatment_title_padding_10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/protein_colon"
+                        android:textSize="@dimen/text_size_drug_child_lable" />
+
+                    <TextView
+                        android:id="@+id/tv_total_protein"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/brown_dark"
+                        android:textSize="@dimen/text_size_drug_child_lable" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_total_fat"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/layout_add_treatment_title_padding_10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/fat_colon"
+                        android:textSize="@dimen/text_size_drug_child_lable" />
+
+                    <TextView
+                        android:id="@+id/tv_total_fat"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/brown_dark"
+                        android:textSize="@dimen/text_size_drug_child_lable" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_total_carbs"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/layout_add_treatment_title_padding_10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/carbs_colon"
+                        android:textSize="@dimen/text_size_drug_child_lable" />
+
+                    <TextView
+                        android:id="@+id/tv_total_carbs"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/brown_dark"
+                        android:textSize="@dimen/text_size_drug_child_lable" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_total_fiber"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/layout_add_treatment_title_padding_10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/fiber_colon"
+                        android:textSize="@dimen/text_size_drug_child_lable" />
+
+                    <TextView
+                        android:id="@+id/tv_total_fiber"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/brown_dark"
+                        android:textSize="@dimen/text_size_drug_child_lable" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

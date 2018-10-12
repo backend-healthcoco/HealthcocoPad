@@ -12,6 +12,8 @@ import com.healthcoco.healthcocopad.bean.server.ClinicDoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.ClinicImage;
 import com.healthcoco.healthcocopad.bean.server.DietPlanRecipeItem;
 import com.healthcoco.healthcocopad.bean.server.Events;
+import com.healthcoco.healthcocopad.bean.server.Ingredient;
+import com.healthcoco.healthcocopad.bean.server.IngredientResponse;
 import com.healthcoco.healthcocopad.bean.server.Meal;
 import com.healthcoco.healthcocopad.bean.server.RecipeResponse;
 import com.healthcoco.healthcocopad.bean.server.RegisteredDoctorProfile;
@@ -22,6 +24,8 @@ import com.healthcoco.healthcocopad.viewholders.ClinicImageListItemHolder;
 import com.healthcoco.healthcocopad.viewholders.DoctorListViewHolder;
 import com.healthcoco.healthcocopad.viewholders.EventItemViewHolder;
 import com.healthcoco.healthcocopad.viewholders.FoodSubItemViewHolder;
+import com.healthcoco.healthcocopad.viewholders.IngredientListItemViewHolder;
+import com.healthcoco.healthcocopad.viewholders.IngredientListSolrViewHolder;
 import com.healthcoco.healthcocopad.viewholders.KioskSubItemViewHolder;
 import com.healthcoco.healthcocopad.viewholders.QueueItemViewHolder;
 import com.healthcoco.healthcocopad.viewholders.RecipeListItemViewHolder;
@@ -108,7 +112,14 @@ public class HealthcocoRecyclerViewAdapter extends RecyclerView.Adapter<Healthco
                 convertView = mInflater.inflate(R.layout.sub_item_add_food, parent, false);
                 viewHolder = new RecipeListSolrViewHolder(mActivity, convertView, onItemClickListener, listenerObject);
                 break;
-
+            case INGREDIENT_ITEM_SOLR:
+                convertView = mInflater.inflate(R.layout.sub_item_add_food, parent, false);
+                viewHolder = new IngredientListSolrViewHolder(mActivity, convertView, onItemClickListener, listenerObject);
+                break;
+            case INGREDIENT_ITEM:
+                convertView = mInflater.inflate(R.layout.list_item_selected_recipe, parent, false);
+                viewHolder = new IngredientListItemViewHolder(mActivity, convertView, onItemClickListener, listenerObject);
+                break;
             case DOCTOR_POPUP_LIST:
                 convertView = mInflater.inflate(R.layout.item_doctor_popup_list, parent, false);
                 viewHolder = new DoctorListViewHolder(mActivity, convertView, listenerObject);
@@ -171,10 +182,22 @@ public class HealthcocoRecyclerViewAdapter extends RecyclerView.Adapter<Healthco
                     recipeListItemViewHolder.applyData(object);
                 }
                 break;
+            case INGREDIENT_ITEM:
+                if (holder instanceof IngredientListItemViewHolder && object instanceof Ingredient) {
+                    IngredientListItemViewHolder listItemViewHolder = (IngredientListItemViewHolder) holder;
+                    listItemViewHolder.applyData(object);
+                }
+                break;
             case RECIPE_ITEM_SOLR:
                 if (holder instanceof RecipeListSolrViewHolder && object instanceof RecipeResponse) {
                     RecipeListSolrViewHolder recipeListSolrViewHolder = (RecipeListSolrViewHolder) holder;
                     recipeListSolrViewHolder.applyData(object);
+                }
+                break;
+            case INGREDIENT_ITEM_SOLR:
+                if (holder instanceof IngredientListSolrViewHolder && object instanceof IngredientResponse) {
+                    IngredientListSolrViewHolder listSolrViewHolder = (IngredientListSolrViewHolder) holder;
+                    listSolrViewHolder.applyData(object);
                 }
                 break;
         }

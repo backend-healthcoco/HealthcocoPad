@@ -21,6 +21,7 @@ import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.calendar.pinlockview.ChangePinFragment;
+import com.healthcoco.healthcocopad.dialogFragment.SelectIngredientFragment;
 import com.healthcoco.healthcocopad.dialogFragment.SelectRecipeFragment;
 import com.healthcoco.healthcocopad.enums.ActionbarLeftRightActionTypeDrawables;
 import com.healthcoco.healthcocopad.enums.ActionbarType;
@@ -76,6 +77,7 @@ import com.healthcoco.healthcocopad.utilities.Util;
 import static com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType.ADD_DIET;
 import static com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType.PATIENT_ASSESSMENT;
 import static com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType.PERSONAL_DETAILS;
+import static com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType.SELECT_INGREDIENT;
 import static com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType.SELECT_RECIPES;
 
 public class CommonOpenUpActivity extends HealthCocoActivity {
@@ -301,6 +303,9 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
                 break;
             case SELECT_RECIPES:
                 openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.WITH_SAVE, SELECT_RECIPES.getTitleId(), new SelectRecipeFragment());
+                break;
+            case SELECT_INGREDIENT:
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.WITH_SAVE, SELECT_INGREDIENT.getTitleId(), new SelectIngredientFragment());
                 break;
 
         }

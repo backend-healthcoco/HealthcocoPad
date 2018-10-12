@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/layout_padding_5dp"
+    android:layout_marginRight="@dimen/layout_padding_5dp"
+    android:layout_marginBottom="@dimen/layout_padding_5dp"
+    android:orientation="vertical"
+    android:padding="@dimen/padding_20_dp">
+
+
+    <TextView
+        android:id="@+id/container_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/layout_padding"
+        android:background="@color/grey_widget_background"
+        android:paddingLeft="@dimen/layout_padding"
+        android:paddingTop="@dimen/layout_padding_5dp"
+        android:paddingRight="@dimen/layout_padding_5dp"
+        android:paddingBottom="@dimen/layout_padding_5dp"
+        android:textColor="@color/black_greyish"
+        android:textSize="@dimen/actionbar_title_size" />
+
+    <LinearLayout
+        android:id="@+id/container_diet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/layout_padding"
+        android:layout_marginRight="@dimen/layout_padding"
+        android:orientation="vertical" />
+
+
+</LinearLayout>

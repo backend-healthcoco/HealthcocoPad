@@ -8,6 +8,7 @@ import com.healthcoco.healthcocopad.bean.server.ClinicalNotes;
 import com.healthcoco.healthcocopad.bean.server.Complaint;
 import com.healthcoco.healthcocopad.bean.server.ComplaintSuggestions;
 import com.healthcoco.healthcocopad.bean.server.DiagnosisSuggestions;
+import com.healthcoco.healthcocopad.bean.server.DietPlan;
 import com.healthcoco.healthcocopad.bean.server.Disease;
 import com.healthcoco.healthcocopad.bean.server.Drug;
 import com.healthcoco.healthcocopad.bean.server.DrugDirection;
@@ -381,6 +382,18 @@ public class ComparatorUtil {
             if (invoice1.getCreatedTime() != null && invoice2.getCreatedTime() != null) {
                 Date date1 = new Date(invoice1.getCreatedTime());
                 Date date2 = new Date(invoice2.getCreatedTime());
+                return date2.compareTo(date1);
+            }
+            return 0;
+        }
+    };
+    public static Comparator<DietPlan> dietPlanComparator = new Comparator<DietPlan>() {
+
+        @Override
+        public int compare(DietPlan dietPlan, DietPlan dietPlan1) {
+            if (dietPlan.getCreatedTime() != null && dietPlan1.getCreatedTime() != null) {
+                Date date1 = new Date(dietPlan.getCreatedTime());
+                Date date2 = new Date(dietPlan1.getCreatedTime());
                 return date2.compareTo(date1);
             }
             return 0;

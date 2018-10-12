@@ -1847,6 +1847,26 @@ public class WebDataServiceImpl implements GCMRefreshListener {
         }
     }
 
+    public void getIngredientListSolr(Class<?> class1, WebServiceType webServiceType, int pageNum, int size, String searchTerm, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        checkNetworkStatus(mApp.getApplicationContext());
+        String url = null;
+        if (HealthCocoConstants.isNetworkOnline) {
+            switch (webServiceType) {
+                case GET_INGREDINET_LIST_SOLR:
+                    url = webServiceType.getUrl()
+                            + HealthCocoConstants.PARAM_DISCARDED_FALSE
+                            + HealthCocoConstants.PARAM_PAGE + pageNum
+                            + HealthCocoConstants.PARAM_SIZE + size
+
+                            + HealthCocoConstants.PARAM_SEARCH_TERM + searchTerm;
+                    break;
+            }
+            getResponse(webServiceType, class1, url, null, null, responseListener, errorListener);
+        } else {
+            showUserOffline(webServiceType, responseListener);
+        }
+    }
+
     public void addDietPlan(Class<?> class1, DietPlan dietPlan,
                             Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         WebServiceType webServiceType = WebServiceType.ADD_EDIT_DIET_PLAN;
@@ -1860,4 +1880,22 @@ public class WebDataServiceImpl implements GCMRefreshListener {
         }
     }
 
+    public void getDietPlan(Class<?> class1, boolean discarded,
+                            String doctorId, String locationId, String hospitalId, String patientId, long updatedTime,
+                            Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        WebServiceType webServiceType = WebServiceType.GET_DIET_PLAN;
+        if (HealthCocoConstants.isNetworkOnline) {
+            String url = webServiceType.getUrl() + "?"
+                    + HealthCocoConstants.PARAM_PATIENT_ID + patientId
+                    + HealthCocoConstants.PARAM_DOCTOR_ID + doctorId
+                    + HealthCocoConstants.PARAM_LOCATION_ID + locationId
+                    + HealthCocoConstants.PARAM_HOSPITAL_ID + hospitalId
+                    + HealthCocoConstants.PARAM_DISCARDED_AMPERCENT + discarded
+                    + HealthCocoConstants.PARAM_UPDATED_TIME + updatedTime;
+            getResponse(Request.Priority.IMMEDIATE, webServiceType, class1, url, null, null, responseListener,
+                    errorListener);
+        } else {
+            errorListener.onNetworkUnavailable(webServiceType);
+        }
+    }
 }

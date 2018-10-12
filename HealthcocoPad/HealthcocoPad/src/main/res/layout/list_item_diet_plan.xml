@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="@dimen/item_visits_button_padding_left_right_20dp">
+
+    <ImageView
+        android:id="@+id/image_view"
+        android:layout_width="@dimen/list_item_image_size"
+        android:layout_height="@dimen/list_item_image_size"
+        android:layout_gravity="start"
+        android:paddingRight="@dimen/item_visits_button_padding_left_right_20dp"
+        android:src="@drawable/ic_icon_list_invoice" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/emr_item_margin"
+            android:background="@drawable/shape_emr_item_background"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/container_header_created_by_treatment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/shape_emr_grey_background"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/tv_date"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawablePadding="@dimen/drawable_text_padding"
+                    android:gravity="center|start"
+                    android:text="26/4/2015"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_emr_date" />
+
+                <LinearLayout
+                    android:id="@+id/container_treatment_by"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center|end"
+                    android:orientation="horizontal"
+                    android:padding="3dp">
+
+                    <TextView
+                        android:id="@+id/tv_label_global_record"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center|start"
+                        android:text="@string/global_record"
+                        android:textColor="@color/green_logo"
+                        android:textSize="@dimen/text_size_prescribed_by_name"
+                        android:visibility="gone" />
+
+
+                    <TextView
+                        android:id="@+id/tv_label_created_by"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center|start"
+                        android:text="@string/created_by"
+                        android:textColor="@color/grey_light_text"
+                        android:textSize="@dimen/text_size_prescribed_by_name" />
+
+                    <TextView
+                        android:id="@+id/tv_created_by"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center|start"
+                        android:text="Dr."
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_prescribed_by_name" />
+                </LinearLayout>
+
+
+                <TextView
+                    android:id="@+id/tv_invoice_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center|start"
+                    android:text="@string/invoice_id"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_emr_date" />
+
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/container_invoice"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/margin_add_vital_signs_layout"
+                android:orientation="vertical"></LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/container_bottom_buttons"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="@dimen/padding_margin_prescribed_item_center"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginRight="@dimen/padding_margin_prescribed_item_center"
+                    android:layout_marginBottom="@dimen/item_padding"
+                    android:background="@color/grey_background" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/item_visits_button_padding_left_right_20dp"
+                    android:baselineAligned="false"
+                    android:clickable="false">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:id="@+id/bt_email"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/item_visits_button_padding_left_right_20dp"
+                            android:layout_marginRight="@dimen/item_visits_button_padding_left_right_20dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/shape_rounded_corners_item_background_dark_grey"
+                            android:clickable="true"
+                            android:gravity="center"
+                            android:padding="5dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@color/white"
+                                android:drawableLeft="@drawable/email_selector"
+                                android:drawablePadding="5dp"
+                                android:gravity="center|start"
+                                android:paddingLeft="@dimen/item_visits_button_padding_left_right_20dp"
+                                android:paddingRight="@dimen/item_visits_button_padding_left_right_20dp"
+                                android:text="@string/email"
+                                android:textColor="@drawable/text_selector_grey_blue"
+                                android:textSize="@dimen/text_size_bt_history_edit_sms_email" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/bt_history"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/item_visits_button_padding_left_right_20dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/shape_rounded_corners_item_background_dark_grey"
+                            android:clickable="true"
+                            android:gravity="center"
+                            android:padding="5dp"
+                            android:visibility="gone">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="5dp"
+                                android:background="@drawable/selector_btn_add"
+                                android:paddingLeft="@dimen/item_visits_button_padding_left_right_20dp"
+                                android:visibility="visible" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="5dp"
+                                android:background="@color/white"
+                                android:gravity="center|start"
+                                android:paddingRight="@dimen/item_visits_button_padding_left_right_20dp"
+                                android:text="@string/important"
+                                android:textColor="@drawable/text_selector_grey_blue"
+                                android:textSize="@dimen/text_size_bt_history_edit_sms_email" />
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:id="@+id/bt_generate_invoice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="@dimen/item_visits_button_padding_left_right_20dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/shape_rounded_corners_item_background_dark_grey"
+                            android:gravity="center"
+                            android:padding="5dp"
+                            android:visibility="gone">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="5dp"
+                                android:background="@color/white"
+                                android:drawablePadding="5dp"
+                                android:gravity="center|start"
+                                android:paddingLeft="@dimen/item_visits_button_padding_left_right_20dp"
+                                android:paddingRight="@dimen/item_visits_button_padding_left_right_20dp"
+                                android:text="@string/generate_invoice"
+                                android:textColor="@drawable/text_selector_grey_blue"
+                                android:textSize="@dimen/text_size_bt_history_edit_sms_email" />
+                        </LinearLayout>
+
+
+                        <LinearLayout
+                            android:id="@+id/bt_print"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="@dimen/item_visits_button_padding_left_right_20dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/shape_rounded_corners_item_background_dark_grey"
+                            android:gravity="center"
+                            android:padding="5dp"
+                            android:visibility="visible">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="5dp"
+                                android:background="@color/white"
+                                android:drawableLeft="@drawable/icon_print_selector"
+                                android:drawablePadding="5dp"
+                                android:gravity="center|start"
+                                android:paddingLeft="@dimen/item_visits_button_padding_left_right_20dp"
+                                android:paddingRight="@dimen/item_visits_button_padding_left_right_20dp"
+                                android:text="@string/print"
+                                android:textColor="@drawable/text_selector_grey_blue"
+                                android:textSize="@dimen/text_size_bt_history_edit_sms_email" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/bt_edit"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="@dimen/item_visits_button_padding_left_right_20dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/shape_rounded_corners_item_background_dark_grey"
+                            android:gravity="center"
+                            android:padding="5dp"
+                            android:visibility="visible">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="5dp"
+                                android:background="@color/white"
+                                android:drawableLeft="@drawable/icon_edit_selector"
+                                android:drawablePadding="5dp"
+                                android:gravity="center|start"
+                                android:paddingLeft="@dimen/item_visits_button_padding_left_right_20dp"
+                                android:paddingRight="@dimen/item_visits_button_padding_left_right_20dp"
+                                android:text="@string/edit"
+                                android:textColor="@drawable/text_selector_grey_blue"
+                                android:textSize="@dimen/text_size_bt_history_edit_sms_email" />
+                        </LinearLayout>
+
+
+                        <LinearLayout
+                            android:id="@+id/bt_discard"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="@dimen/item_visits_button_padding_left_right_20dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/shape_rounded_corners_item_background_dark_grey"
+                            android:clickable="true"
+                            android:gravity="center"
+                            android:padding="5dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="5dp"
+                                android:background="@color/white"
+                                android:drawableLeft="@drawable/discard_selector"
+                                android:drawablePadding="5dp"
+                                android:gravity="center|start"
+                                android:paddingLeft="@dimen/item_visits_button_padding_left_right_20dp"
+                                android:paddingRight="@dimen/item_visits_button_padding_left_right_20dp"
+                                android:text="@string/discard"
+                                android:textColor="@drawable/text_selector_grey_blue"
+                                android:textSize="@dimen/text_size_bt_history_edit_sms_email" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </RelativeLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <include layout="@layout/layout_discarded" />
+    </FrameLayout>
+</LinearLayout>

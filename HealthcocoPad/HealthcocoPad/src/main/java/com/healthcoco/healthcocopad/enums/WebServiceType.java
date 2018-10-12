@@ -532,7 +532,11 @@ public enum WebServiceType {
 
     GET_RECIPE_LIST_SOLR(Method.GET, "solr/recipe/search/?"),
 
+    GET_INGREDINET_LIST_SOLR(Method.GET, "solr/recipe/ingredient/search/?"),
+
     ADD_EDIT_DIET_PLAN(Method.POST, "dietPlan/addEdit/"),
+
+    GET_DIET_PLAN(Method.GET, "dietPlan/get/"),
 
     GET_HARDCODED_BLOOD_GROUPS(0, "");
 

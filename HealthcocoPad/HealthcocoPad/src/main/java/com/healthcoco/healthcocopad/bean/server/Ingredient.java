@@ -46,6 +46,27 @@ public class Ingredient extends SugarRecord {
     @Ignore
     private MealQuantity fiber;
 
+    @Ignore
+    protected MealQuantity calariesTemp;
+    @Ignore
+    protected MealQuantity fatTemp;
+    @Ignore
+    protected MealQuantity proteinTemp;
+    @Ignore
+    protected MealQuantity carbohydreateTemp;
+    @Ignore
+    protected MealQuantity fiberTemp;
+    @Ignore
+    protected MealQuantity currentQuantity;
+
+    protected double fatPerHundredUnit;
+    protected double proteinPerHundredUnit;
+    protected double carbohydreatePerHundredUnit;
+    protected double fiberPerHundredUnit;
+    protected double calariesPerHundredUnit;
+    @Ignore
+    protected MealQuantity tempQuantity;
+
     public String getForeignMealId() {
         return foreignMealId;
     }
@@ -188,5 +209,101 @@ public class Ingredient extends SugarRecord {
 
     public void setFiber(MealQuantity fiber) {
         this.fiber = fiber;
+    }
+
+    public MealQuantity getCalariesTemp() {
+        return calariesTemp;
+    }
+
+    public void setCalariesTemp(MealQuantity calariesTemp) {
+        this.calariesTemp = calariesTemp;
+    }
+
+    public MealQuantity getFatTemp() {
+        return fatTemp;
+    }
+
+    public void setFatTemp(MealQuantity fatTemp) {
+        this.fatTemp = fatTemp;
+    }
+
+    public MealQuantity getProteinTemp() {
+        return proteinTemp;
+    }
+
+    public void setProteinTemp(MealQuantity proteinTemp) {
+        this.proteinTemp = proteinTemp;
+    }
+
+    public MealQuantity getCarbohydreateTemp() {
+        return carbohydreateTemp;
+    }
+
+    public void setCarbohydreateTemp(MealQuantity carbohydreateTemp) {
+        this.carbohydreateTemp = carbohydreateTemp;
+    }
+
+    public MealQuantity getFiberTemp() {
+        return fiberTemp;
+    }
+
+    public void setFiberTemp(MealQuantity fiberTemp) {
+        this.fiberTemp = fiberTemp;
+    }
+
+    public double getFatPerHundredUnit() {
+        return fatPerHundredUnit;
+    }
+
+    public void setFatPerHundredUnit(double fatPerHundredUnit) {
+        this.fatPerHundredUnit = fatPerHundredUnit;
+    }
+
+    public double getProteinPerHundredUnit() {
+        return proteinPerHundredUnit;
+    }
+
+    public void setProteinPerHundredUnit(double proteinPerHundredUnit) {
+        this.proteinPerHundredUnit = proteinPerHundredUnit;
+    }
+
+    public double getCarbohydreatePerHundredUnit() {
+        return carbohydreatePerHundredUnit;
+    }
+
+    public void setCarbohydreatePerHundredUnit(double carbohydreatePerHundredUnit) {
+        this.carbohydreatePerHundredUnit = carbohydreatePerHundredUnit;
+    }
+
+    public double getFiberPerHundredUnit() {
+        return fiberPerHundredUnit;
+    }
+
+    public void setFiberPerHundredUnit(double fiberPerHundredUnit) {
+        this.fiberPerHundredUnit = fiberPerHundredUnit;
+    }
+
+    public double getCalariesPerHundredUnit() {
+        return calariesPerHundredUnit;
+    }
+
+    public void setCalariesPerHundredUnit(double calariesPerHundredUnit) {
+        this.calariesPerHundredUnit = calariesPerHundredUnit;
+    }
+
+    public MealQuantity getTempQuantity() {
+        return tempQuantity;
+    }
+
+    public void setTempQuantity(MealQuantity tempQuantity) {
+        this.tempQuantity = tempQuantity;
+    }
+
+    public MealQuantity getCurrentQuantity() {
+        return currentQuantity;
+    }
+
+    public void setCurrentQuantity(MealQuantity currentQuantity) {
+        this.currentQuantity = currentQuantity;
     }
 }
