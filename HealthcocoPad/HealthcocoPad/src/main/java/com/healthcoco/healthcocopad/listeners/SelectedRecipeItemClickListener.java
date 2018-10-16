@@ -8,12 +8,14 @@ import com.healthcoco.healthcocopad.bean.server.User;
 
 public interface SelectedRecipeItemClickListener {
 
-    public void onDeleteIteClicked(Object object);
+    public void onDeleteItemClicked(Object object);
 
     public void onQuantityChanged(Object object);
 
     public void onRecipeItemClicked(Object object);
 
     public void onIngredientItemClicked(Object object);
+
+    public void onAnalyseItemClicked(Object object);
 
 }

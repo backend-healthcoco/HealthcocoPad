@@ -9,14 +9,13 @@ import com.orm.annotation.Unique;
 
 import org.parceler.Parcel;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Parcel
 public class DietPlanRecipeItem extends SugarRecord {
     public static String TABLE_NAME = " " + StringUtil.toSQLName(DietPlanRecipeItem.class.getSimpleName());
     protected String quantityJsonString;
-    protected String calariesJsonString;
+    protected String caloriesJsonString;
     protected String carbohydreateJsonString;
     protected String fatJsonString;
     protected String proteinJsonString;
@@ -30,14 +29,7 @@ public class DietPlanRecipeItem extends SugarRecord {
     private List<Ingredient> ingredients;
     private String direction;
     private String note;
-    @Ignore
-    private MealQuantity calaries;
-    @Ignore
-    protected MealQuantity currentQuantity;
-    protected String equivalentMeasurementsJsonString;
-    protected Boolean nutrientValueAtRecipeLevel;
-    @Ignore
-    protected List<EquivalentQuantities> equivalentMeasurements;
+    protected boolean isAnalysed;
     @Ignore
     private MealQuantity fat;
     @Ignore
@@ -46,7 +38,19 @@ public class DietPlanRecipeItem extends SugarRecord {
     private MealQuantity carbohydreate;
     @Ignore
     private MealQuantity fiber;
-
+    protected double caloriesPerHundredUnit;
+    @Ignore
+    protected MealQuantity currentQuantity;
+    protected String equivalentMeasurementsJsonString;
+    protected Boolean nutrientValueAtRecipeLevel;
+    @Ignore
+    protected List<EquivalentQuantities> equivalentMeasurements;
+    @Ignore
+    private MealQuantity calories;
+    @Ignore
+    private List<Nutrients> generalNutrients;
+    @Ignore
+    private List<Nutrients> carbNutrients;
     @Ignore
     protected MealQuantity calariesTemp;
     @Ignore
@@ -62,9 +66,19 @@ public class DietPlanRecipeItem extends SugarRecord {
     protected double proteinPerHundredUnit;
     protected double carbohydreatePerHundredUnit;
     protected double fiberPerHundredUnit;
-    protected double calariesPerHundredUnit;
+    @Ignore
+    private List<Nutrients> lipidNutrients;
     @Ignore
     protected MealQuantity tempQuantity;
+    @Ignore
+    private List<Nutrients> proteinAminoAcidNutrients;
+    @Ignore
+    private List<Nutrients> vitaminNutrients;
+    @Ignore
+    private List<Nutrients> mineralNutrients;
+    @Ignore
+    private List<Nutrients> otherNutrients;
+
 
     public String getUniqueId() {
         return uniqueId;
@@ -122,28 +136,28 @@ public class DietPlanRecipeItem extends SugarRecord {
         this.note = note;
     }
 
-    public MealQuantity getCalaries() {
-        return calaries;
+    public MealQuantity getCalories() {
+        return calories;
     }
 
-    public void setCalaries(MealQuantity calaries) {
-        this.calaries = calaries;
+    public void setCalories(MealQuantity calories) {
+        this.calories = calories;
     }
 
-    public String getCalariesJsonString() {
-        return calariesJsonString;
+    public String getCaloriesJsonString() {
+        return caloriesJsonString;
     }
 
-    public void setCalariesJsonString(String calariesJsonString) {
-        this.calariesJsonString = calariesJsonString;
+    public void setCaloriesJsonString(String caloriesJsonString) {
+        this.caloriesJsonString = caloriesJsonString;
     }
 
-    public double getCalariesPerHundredUnit() {
-        return calariesPerHundredUnit;
+    public double getCaloriesPerHundredUnit() {
+        return caloriesPerHundredUnit;
     }
 
-    public void setCalariesPerHundredUnit(double calariesPerHundredUnit) {
-        this.calariesPerHundredUnit = calariesPerHundredUnit;
+    public void setCaloriesPerHundredUnit(double caloriesPerHundredUnit) {
+        this.caloriesPerHundredUnit = caloriesPerHundredUnit;
     }
 
     public MealQuantity getCurrentQuantity() {
@@ -320,5 +334,61 @@ public class DietPlanRecipeItem extends SugarRecord {
 
     public void setFiberTemp(MealQuantity fiberTemp) {
         this.fiberTemp = fiberTemp;
+    }
+
+    public List<Nutrients> getGeneralNutrients() {
+        return generalNutrients;
+    }
+
+    public void setGeneralNutrients(List<Nutrients> generalNutrients) {
+        this.generalNutrients = generalNutrients;
+    }
+
+    public List<Nutrients> getCarbNutrients() {
+        return carbNutrients;
+    }
+
+    public void setCarbNutrients(List<Nutrients> carbNutrients) {
+        this.carbNutrients = carbNutrients;
+    }
+
+    public List<Nutrients> getLipidNutrients() {
+        return lipidNutrients;
+    }
+
+    public void setLipidNutrients(List<Nutrients> lipidNutrients) {
+        this.lipidNutrients = lipidNutrients;
+    }
+
+    public List<Nutrients> getProteinAminoAcidNutrients() {
+        return proteinAminoAcidNutrients;
+    }
+
+    public void setProteinAminoAcidNutrients(List<Nutrients> proteinAminoAcidNutrients) {
+        this.proteinAminoAcidNutrients = proteinAminoAcidNutrients;
+    }
+
+    public List<Nutrients> getVitaminNutrients() {
+        return vitaminNutrients;
+    }
+
+    public void setVitaminNutrients(List<Nutrients> vitaminNutrients) {
+        this.vitaminNutrients = vitaminNutrients;
+    }
+
+    public List<Nutrients> getMineralNutrients() {
+        return mineralNutrients;
+    }
+
+    public void setMineralNutrients(List<Nutrients> mineralNutrients) {
+        this.mineralNutrients = mineralNutrients;
+    }
+
+    public List<Nutrients> getOtherNutrients() {
+        return otherNutrients;
+    }
+
+    public void setOtherNutrients(List<Nutrients> otherNutrients) {
+        this.otherNutrients = otherNutrients;
     }
 }

@@ -1898,4 +1898,21 @@ public class WebDataServiceImpl implements GCMRefreshListener {
             errorListener.onNetworkUnavailable(webServiceType);
         }
     }
+
+    public void getRecipe(Class<?> class1, WebServiceType webServiceType, String recipeId, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        checkNetworkStatus(mApp.getApplicationContext());
+        String url = null;
+        if (HealthCocoConstants.isNetworkOnline) {
+            switch (webServiceType) {
+                case GET_RECIPE:
+                    url = webServiceType.getUrl()
+                            + recipeId
+                            + HealthCocoConstants.PARAM_TAG_GET;
+                    break;
+            }
+            getResponse(webServiceType, class1, url, null, null, responseListener, errorListener);
+        } else {
+            showUserOffline(webServiceType, responseListener);
+        }
+    }
 }

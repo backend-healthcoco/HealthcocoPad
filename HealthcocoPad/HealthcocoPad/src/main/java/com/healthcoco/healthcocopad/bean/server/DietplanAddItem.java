@@ -22,7 +22,7 @@ public class DietplanAddItem extends SugarRecord {
     private List<DietPlanRecipeItem> recipes;
     private String note;
     @Ignore
-    private MealQuantity calaries;
+    private MealQuantity calories;
 
     private Float toTime;
 
@@ -65,12 +65,12 @@ public class DietplanAddItem extends SugarRecord {
         this.note = note;
     }
 
-    public MealQuantity getCalaries() {
-        return calaries;
+    public MealQuantity getCalories() {
+        return calories;
     }
 
-    public void setCalaries(MealQuantity calaries) {
-        this.calaries = calaries;
+    public void setCalories(MealQuantity calories) {
+        this.calories = calories;
     }
 
     public String getCalariesJsonString() {

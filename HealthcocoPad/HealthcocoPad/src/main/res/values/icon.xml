@@ -97,6 +97,8 @@
     <string name="text_check_in_sqaure_save_to_local">&#xf046;&#160;Save in Local&#160;</string>
     <string name="icon_select_file">&#xf067;&#160;Select File</string>
     <string name="icon_add">&#xf055;</string>
+    <string name="check_circle_analysed">&#xf058;&#160;</string>
+    <string name="info_circle_analyse">&#xf05a;&#160;</string>
 
 
 </resources>

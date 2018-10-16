@@ -1,6 +1,5 @@
 package com.healthcoco.healthcocopad.bean.server;
 
-import com.healthcoco.healthcocopad.bean.EquivalentQuantities;
 import com.healthcoco.healthcocopad.bean.MealQuantity;
 import com.healthcoco.healthcocopad.utilities.StringUtil;
 import com.orm.SugarRecord;
@@ -10,7 +9,6 @@ import com.orm.annotation.Unique;
 import org.parceler.Parcel;
 
 import java.util.ArrayList;
-import java.util.List;
 
 @Parcel
 public class DietPlan extends SugarRecord {
@@ -30,7 +28,7 @@ public class DietPlan extends SugarRecord {
     @Ignore
     private ArrayList<DietplanAddItem> items;
     @Ignore
-    private MealQuantity calaries;
+    private MealQuantity calories;
 
     public String getUniqueId() {
         return uniqueId;
@@ -112,12 +110,12 @@ public class DietPlan extends SugarRecord {
         this.items = items;
     }
 
-    public MealQuantity getCalaries() {
-        return calaries;
+    public MealQuantity getCalories() {
+        return calories;
     }
 
-    public void setCalaries(MealQuantity calaries) {
-        this.calaries = calaries;
+    public void setCalories(MealQuantity calories) {
+        this.calories = calories;
     }
 
     public String getCalariesJsonString() {

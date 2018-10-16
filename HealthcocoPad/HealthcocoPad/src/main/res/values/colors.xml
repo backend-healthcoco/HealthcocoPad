@@ -24,6 +24,7 @@
     <color name="grey_light">#EDEDED</color>
     <color name="white_translucent_forgot_password">#F2ffffff</color>
     <color name="green_logo">#30CA70</color>
+    <color name="green_dark">#1cb15a</color>
     <color name="green_translucent">#8030CA70</color>
     <color name="login_sign_in_bt">#5a5676</color>
     <color name="login_sign_in_bt_translucent">#905a5676</color>

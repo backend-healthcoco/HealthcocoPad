@@ -16,10 +16,8 @@ import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.bean.EquivalentQuantities;
 import com.healthcoco.healthcocopad.bean.MealQuantity;
 import com.healthcoco.healthcocopad.bean.server.DietPlanRecipeItem;
-import com.healthcoco.healthcocopad.bean.server.DietplanAddItem;
 import com.healthcoco.healthcocopad.bean.server.Ingredient;
 import com.healthcoco.healthcocopad.bean.server.IngredientResponse;
-import com.healthcoco.healthcocopad.bean.server.RecipeResponse;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.enums.AdapterType;
 import com.healthcoco.healthcocopad.enums.MealTimeType;
@@ -27,7 +25,6 @@ import com.healthcoco.healthcocopad.enums.QuantityType;
 import com.healthcoco.healthcocopad.fragments.IngredientListFragment;
 import com.healthcoco.healthcocopad.listeners.SelectedRecipeItemClickListener;
 import com.healthcoco.healthcocopad.recyclerview.HealthcocoRecyclerViewAdapter;
-import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.Util;
 
@@ -199,8 +196,8 @@ public class SelectIngredientFragment extends HealthCocoFragment implements
         calaries = 0;
         if (!Util.isNullOrEmptyList(list)) {
             for (Ingredient ingredient : list) {
-                if (ingredient.getCalariesTemp() != null) {
-                    calaries = calaries + ingredient.getCalariesTemp().getValue();
+                if (ingredient.getCaloriesTemp() != null) {
+                    calaries = calaries + ingredient.getCaloriesTemp().getValue();
                 }
                 if (ingredient.getFatTemp() != null) {
                     fat = fat + ingredient.getFatTemp().getValue();
@@ -231,7 +228,7 @@ public class SelectIngredientFragment extends HealthCocoFragment implements
         ingredient.setName(ingredientResponse.getName());
         ingredient.setType(ingredientResponse.getQuantity().getType());
         ingredient.setValue(ingredientResponse.getQuantity().getValue());
-        ingredient.setCalaries(ingredientResponse.getCalaries());
+        ingredient.setCalories(ingredientResponse.getCalories());
         ingredient.setFat(ingredientResponse.getFat());
         ingredient.setProtein(ingredientResponse.getProtein());
         ingredient.setCarbohydreate(ingredientResponse.getCarbohydreate());
@@ -262,16 +259,16 @@ public class SelectIngredientFragment extends HealthCocoFragment implements
         }
         ingredient.setTempQuantity(tempQuantity);
 
-        if (ingredientResponse.getCalaries() != null) {
+        if (ingredientResponse.getCalories() != null) {
             MealQuantity qty = new MealQuantity();
-            qty.setValue(ingredientResponse.getCalaries().getValue());
-            if (ingredientResponse.getCalaries().getType() != null)
-                qty.setType(ingredientResponse.getCalaries().getType());
-            ingredient.setCalariesTemp(qty);
+            qty.setValue(ingredientResponse.getCalories().getValue());
+            if (ingredientResponse.getCalories().getType() != null)
+                qty.setType(ingredientResponse.getCalories().getType());
+            ingredient.setCaloriesTemp(qty);
 
 
-            ingredient.setCalaries(ingredientResponse.getCalaries());
-            ingredient.setCalariesPerHundredUnit((ingredientResponse.getCalaries().getValue() / currentValue) * 100);
+            ingredient.setCalories(ingredientResponse.getCalories());
+            ingredient.setCaloriesPerHundredUnit((ingredientResponse.getCalories().getValue() / currentValue) * 100);
         }
         if (ingredientResponse.getFat() != null) {
             MealQuantity qty = new MealQuantity();
@@ -346,13 +343,13 @@ public class SelectIngredientFragment extends HealthCocoFragment implements
         }
         ingredientResponse.setTempQuantity(tempQuantity);
 
-        if (ingredientResponse.getCalaries() != null) {
+        if (ingredientResponse.getCalories() != null) {
             MealQuantity qty = new MealQuantity();
-            qty.setValue(ingredientResponse.getCalaries().getValue());
-            if (ingredientResponse.getCalaries().getType() != null)
-                qty.setType(ingredientResponse.getCalaries().getType());
-            ingredientResponse.setCalariesTemp(qty);
-            ingredientResponse.setCalariesPerHundredUnit((ingredientResponse.getCalaries().getValue() / currentValue) * 100);
+            qty.setValue(ingredientResponse.getCalories().getValue());
+            if (ingredientResponse.getCalories().getType() != null)
+                qty.setType(ingredientResponse.getCalories().getType());
+            ingredientResponse.setCaloriesTemp(qty);
+            ingredientResponse.setCaloriesPerHundredUnit((ingredientResponse.getCalories().getValue() / currentValue) * 100);
         }
         if (ingredientResponse.getFat() != null) {
             MealQuantity qty = new MealQuantity();
@@ -408,7 +405,12 @@ public class SelectIngredientFragment extends HealthCocoFragment implements
     }
 
     @Override
-    public void onDeleteIteClicked(Object object) {
+    public void onAnalyseItemClicked(Object object) {
+
+    }
+
+    @Override
+    public void onDeleteItemClicked(Object object) {
         Ingredient ingredientItem = (Ingredient) object;
         if (ingredientItem != null) {
             ingredientHashMap.remove(ingredientItem.getUniqueId());
@@ -423,8 +425,8 @@ public class SelectIngredientFragment extends HealthCocoFragment implements
             ingredient.setType(ingredient.getTempQuantity().getType());
             ingredient.setValue(ingredient.getTempQuantity().getValue());
 
-            if (ingredient.getCalariesTemp() != null)
-                ingredient.setCalaries(ingredient.getCalariesTemp());
+            if (ingredient.getCaloriesTemp() != null)
+                ingredient.setCalories(ingredient.getCaloriesTemp());
             if (ingredient.getProteinTemp() != null)
                 ingredient.setProtein(ingredient.getProteinTemp());
             if (ingredient.getFatTemp() != null)

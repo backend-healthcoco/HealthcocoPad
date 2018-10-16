@@ -19,7 +19,6 @@ import com.healthcoco.healthcocopad.bean.server.Invoice;
 import com.healthcoco.healthcocopad.enums.MealTimeType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.DietItemClickListeners;
-import com.healthcoco.healthcocopad.listeners.InvoiceItemClickListeners;
 import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
@@ -328,11 +327,12 @@ public class DietPlanListItemViewHolder extends HealthCocoViewHolder implements 
             LinearLayout containerMeals = (LinearLayout) layoutMeal.findViewById(R.id.container_meal);
             tvOption.setText(mActivity.getString(R.string.diet_space) + (itemArrayList.indexOf(dietplanAddItem) + 1));
 
-            tvTotalCalaries.setText(dietplanAddItem.getCalTotal() + mActivity.getString(R.string.cal_orange));
-            tvTotalProtein.setText(dietplanAddItem.getFatTotal() + "");
-            tvTotalFat.setText(dietplanAddItem.getProteinTotal() + "");
-            tvTotalCarbs.setText(dietplanAddItem.getCarbohydreateTotal() + "");
-            tvTotalFiber.setText(dietplanAddItem.getFiberTotal() + "");
+            tvTotalCalaries.setText(Util.round(dietplanAddItem.getCalTotal(), 2) + mActivity.getString(R.string.cal_orange));
+            tvTotalProtein.setText(Util.round(dietplanAddItem.getFatTotal(), 2) + mActivity.getString(R.string.gm));
+            tvTotalFat.setText(Util.round(dietplanAddItem.getProteinTotal(), 2) + mActivity.getString(R.string.gm));
+            tvTotalCarbs.setText(Util.round(dietplanAddItem.getCarbohydreateTotal(), 2) + mActivity.getString(R.string.gm));
+            tvTotalFiber.setText(Util.round(dietplanAddItem.getFiberTotal(), 2) + mActivity.getString(R.string.gm));
+
 
             for (DietPlanRecipeItem recipeItem : dietplanAddItem.getRecipes()) {
 
@@ -360,9 +360,9 @@ public class DietPlanListItemViewHolder extends HealthCocoViewHolder implements 
                         }
                     }
                 }
-                if (recipeItem.getCalaries() != null) {
-                    if (!Util.isNullOrZeroNumber(recipeItem.getCalaries().getValue())) {
-                        tvRecipeCalarie.setText(Util.getValidatedValue(recipeItem.getCalaries().getValue()) + mActivity.getString(R.string.cal_orange) /*+ calaries.getType().getQuantityType()*/);
+                if (recipeItem.getCalories() != null) {
+                    if (!Util.isNullOrZeroNumber(recipeItem.getCalories().getValue())) {
+                        tvRecipeCalarie.setText(Util.getValidatedValue(recipeItem.getCalories().getValue()) + mActivity.getString(R.string.cal_orange) /*+ calaries.getType().getQuantityType()*/);
                     }
                 }
 
@@ -388,9 +388,9 @@ public class DietPlanListItemViewHolder extends HealthCocoViewHolder implements 
                                     tvItemQuantity.setText(Util.getValidatedValue(ingredient.getValue()) + type);
                                 }
                             }
-                            if (ingredient.getCalaries() != null) {
-                                if (!Util.isNullOrZeroNumber(ingredient.getCalaries().getValue())) {
-                                    tvItemCalarie.setText(Util.getValidatedValue(ingredient.getCalaries().getValue()) + mActivity.getString(R.string.cal_orange));
+                            if (ingredient.getCalories() != null) {
+                                if (!Util.isNullOrZeroNumber(ingredient.getCalories().getValue())) {
+                                    tvItemCalarie.setText(Util.getValidatedValue(ingredient.getCalories().getValue()) + mActivity.getString(R.string.cal_orange));
                                 }
                             }
                             containerIngredients.addView(layoutSubItemPermission);

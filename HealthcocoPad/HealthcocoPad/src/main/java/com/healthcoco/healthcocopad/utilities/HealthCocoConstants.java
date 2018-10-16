@@ -33,6 +33,7 @@ public class HealthCocoConstants {
     public static final String PARAM_TAG_VERIFY = "/verify/";
     public static final String PARAM_CHANGE_STATE = "/changeState";
     public static final String PARAM_TAG_ADD = "/add/";
+    public static final String PARAM_TAG_GET = "/get/";
     public static final String TAG_DIAGRAM_TAG = "diagramTag";
     public static final String TAG_SELECTED_DIAGRAM = "selectedDiagram";
     public static final String TAG_MAP_TYPE = "mapType";

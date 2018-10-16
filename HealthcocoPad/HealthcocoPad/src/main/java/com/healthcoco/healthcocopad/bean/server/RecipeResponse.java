@@ -9,15 +9,13 @@ import com.orm.annotation.Unique;
 
 import org.parceler.Parcel;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Parcel
 public class RecipeResponse extends SugarRecord {
     public static String TABLE_NAME = " " + StringUtil.toSQLName(RecipeResponse.class.getSimpleName());
     protected String quantityJsonString;
-    protected String calariesJsonString;
-
+    protected String caloriesJsonString;
     protected String equivalentMeasurementsJsonString;
     protected String mealTimingJsonString;
     protected String carbohydreateJsonString;
@@ -35,7 +33,7 @@ public class RecipeResponse extends SugarRecord {
     @Ignore
     private MealQuantity quantity;
     @Ignore
-    private MealQuantity calaries;
+    private MealQuantity calories;
     @Ignore
     private List<EquivalentQuantities> equivalentMeasurements;
     @Ignore
@@ -98,20 +96,20 @@ public class RecipeResponse extends SugarRecord {
         this.quantityJsonString = quantityJsonString;
     }
 
-    public MealQuantity getCalaries() {
-        return calaries;
+    public MealQuantity getCalories() {
+        return calories;
     }
 
-    public void setCalaries(MealQuantity calaries) {
-        this.calaries = calaries;
+    public void setCalories(MealQuantity calories) {
+        this.calories = calories;
     }
 
-    public String getCalariesJsonString() {
-        return calariesJsonString;
+    public String getCaloriesJsonString() {
+        return caloriesJsonString;
     }
 
-    public void setCalariesJsonString(String calariesJsonString) {
-        this.calariesJsonString = calariesJsonString;
+    public void setCaloriesJsonString(String caloriesJsonString) {
+        this.caloriesJsonString = caloriesJsonString;
     }
 
 

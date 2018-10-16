@@ -33,7 +33,6 @@ import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
-import com.healthcoco.healthcocopad.utilities.EditTextTextViewErrorUtil;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
@@ -553,11 +552,11 @@ public class AddEditDietChartFragment extends HealthCocoFragment implements
             LinearLayout btRemove = (LinearLayout) layoutMeal.findViewById(R.id.bt_remove);
             LinearLayout btEdit = (LinearLayout) layoutMeal.findViewById(R.id.bt_edit);
 
-            tvTotalCalaries.setText(dietplanAddItem.getCalTotal() + getString(R.string.cal_orange));
-            tvTotalProtein.setText(dietplanAddItem.getFatTotal() + "");
-            tvTotalFat.setText(dietplanAddItem.getProteinTotal() + "");
-            tvTotalCarbs.setText(dietplanAddItem.getCarbohydreateTotal() + "");
-            tvTotalFiber.setText(dietplanAddItem.getFiberTotal() + "");
+            tvTotalCalaries.setText(Util.round(dietplanAddItem.getCalTotal(), 2) + getString(R.string.cal_orange));
+            tvTotalProtein.setText(Util.round(dietplanAddItem.getFatTotal(), 2) + getString(R.string.gm));
+            tvTotalFat.setText(Util.round(dietplanAddItem.getProteinTotal(), 2) + getString(R.string.gm));
+            tvTotalCarbs.setText(Util.round(dietplanAddItem.getCarbohydreateTotal(), 2) + getString(R.string.gm));
+            tvTotalFiber.setText(Util.round(dietplanAddItem.getFiberTotal(), 2) + getString(R.string.gm));
 
 
             btEdit.setId(EDIT_ID);
@@ -596,9 +595,9 @@ public class AddEditDietChartFragment extends HealthCocoFragment implements
                         }
                     }
                 }
-                if (recipeItem.getCalaries() != null) {
-                    if (!Util.isNullOrZeroNumber(recipeItem.getCalaries().getValue())) {
-                        tvRecipeCalarie.setText(Util.getValidatedValue(recipeItem.getCalaries().getValue()) + mActivity.getString(R.string.cal_orange) /*+ calaries.getType().getQuantityType()*/);
+                if (recipeItem.getCalories() != null) {
+                    if (!Util.isNullOrZeroNumber(recipeItem.getCalories().getValue())) {
+                        tvRecipeCalarie.setText(Util.getValidatedValue(recipeItem.getCalories().getValue()) + mActivity.getString(R.string.cal_orange) /*+ calaries.getType().getQuantityType()*/);
                     }
                 }
 
@@ -626,9 +625,9 @@ public class AddEditDietChartFragment extends HealthCocoFragment implements
                                     tvItemQuantity.setText(Util.getValidatedValue(ingredient.getValue()) + type);
                                 }
                             }
-                            if (ingredient.getCalaries() != null) {
-                                if (!Util.isNullOrZeroNumber(ingredient.getCalaries().getValue())) {
-                                    tvItemCalarie.setText(Util.getValidatedValue(ingredient.getCalaries().getValue()) + mActivity.getString(R.string.cal_orange));
+                            if (ingredient.getCalories() != null) {
+                                if (!Util.isNullOrZeroNumber(ingredient.getCalories().getValue())) {
+                                    tvItemCalarie.setText(Util.getValidatedValue(ingredient.getCalories().getValue()) + mActivity.getString(R.string.cal_orange));
                                 }
                             }
                             containerIngredients.addView(layoutSubItemPermission);

@@ -7,7 +7,6 @@ import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.MealQuantity;
 import com.healthcoco.healthcocopad.bean.server.IngredientResponse;
-import com.healthcoco.healthcocopad.bean.server.RecipeResponse;
 import com.healthcoco.healthcocopad.listeners.SelectedRecipeItemClickListener;
 import com.healthcoco.healthcocopad.recyclerview.HealthcocoComonRecylcerViewHolder;
 import com.healthcoco.healthcocopad.recyclerview.HealthcocoRecyclerViewItemClickListener;
@@ -59,8 +58,8 @@ public class IngredientListSolrViewHolder extends HealthcocoComonRecylcerViewHol
         if (objData != null) {
             tvTitle.setText(objData.getName());
 
-            if (objData.getCalaries() != null) {
-                MealQuantity calaries = objData.getCalaries();
+            if (objData.getCalories() != null) {
+                MealQuantity calaries = objData.getCalories();
 //                if (calaries.getType() != null)
                 tvCalarie.setText(Util.getValidatedValue(calaries.getValue()) + mActivity.getString(R.string.cal_orange) /*+ calaries.getType().getQuantityType()*/);
             }

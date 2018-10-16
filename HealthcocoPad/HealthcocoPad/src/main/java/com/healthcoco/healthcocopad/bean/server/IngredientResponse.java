@@ -2,7 +2,6 @@ package com.healthcoco.healthcocopad.bean.server;
 
 import com.healthcoco.healthcocopad.bean.EquivalentQuantities;
 import com.healthcoco.healthcocopad.bean.MealQuantity;
-import com.healthcoco.healthcocopad.enums.QuantityType;
 import com.healthcoco.healthcocopad.utilities.StringUtil;
 import com.orm.SugarRecord;
 import com.orm.annotation.Ignore;
@@ -21,7 +20,7 @@ public class IngredientResponse extends SugarRecord {
 
     protected String foreignMealId;
     protected String equivalentMeasurementsJsonString;
-    protected String calariesJsonString;
+    protected String caloriesJsonString;
     protected String carbohydreateJsonString;
     protected String fatJsonString;
     protected String proteinJsonString;
@@ -34,7 +33,7 @@ public class IngredientResponse extends SugarRecord {
     private MealQuantity quantity;
     private String note;
     @Ignore
-    private MealQuantity calaries;
+    private MealQuantity calories;
     @Ignore
     private List<EquivalentQuantities> equivalentMeasurements;
     @Ignore
@@ -94,20 +93,20 @@ public class IngredientResponse extends SugarRecord {
         this.equivalentMeasurementsJsonString = equivalentMeasurementsJsonString;
     }
 
-    public MealQuantity getCalaries() {
-        return calaries;
+    public MealQuantity getCalories() {
+        return calories;
     }
 
-    public void setCalaries(MealQuantity calaries) {
-        this.calaries = calaries;
+    public void setCalories(MealQuantity calories) {
+        this.calories = calories;
     }
 
-    public String getCalariesJsonString() {
-        return calariesJsonString;
+    public String getCaloriesJsonString() {
+        return caloriesJsonString;
     }
 
-    public void setCalariesJsonString(String calariesJsonString) {
-        this.calariesJsonString = calariesJsonString;
+    public void setCaloriesJsonString(String caloriesJsonString) {
+        this.caloriesJsonString = caloriesJsonString;
     }
 
     public String getCarbohydreateJsonString() {

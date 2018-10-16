@@ -538,6 +538,8 @@ public enum WebServiceType {
 
     GET_DIET_PLAN(Method.GET, "dietPlan/get/"),
 
+    GET_RECIPE(Method.GET, "recipe/"),
+
     GET_HARDCODED_BLOOD_GROUPS(0, "");
 
     private int methodType;

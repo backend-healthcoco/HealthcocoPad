@@ -1,18 +1,13 @@
 package com.healthcoco.healthcocopad.viewholders;
 
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.healthcoco.healthcocopad.HealthCocoActivity;
-import com.healthcoco.healthcocopad.HealthCocoViewHolder;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.MealQuantity;
 import com.healthcoco.healthcocopad.bean.server.RecipeResponse;
-import com.healthcoco.healthcocopad.bean.server.TreatmentService;
-import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.listeners.SelectedRecipeItemClickListener;
-import com.healthcoco.healthcocopad.listeners.SelectedTreatmentItemClickListener;
 import com.healthcoco.healthcocopad.recyclerview.HealthcocoComonRecylcerViewHolder;
 import com.healthcoco.healthcocopad.recyclerview.HealthcocoRecyclerViewItemClickListener;
 import com.healthcoco.healthcocopad.utilities.Util;
@@ -63,8 +58,8 @@ public class RecipeListSolrViewHolder extends HealthcocoComonRecylcerViewHolder 
         if (objData != null) {
             tvTitle.setText(objData.getName());
 
-            if (objData.getCalaries() != null) {
-                MealQuantity calaries = objData.getCalaries();
+            if (objData.getCalories() != null) {
+                MealQuantity calaries = objData.getCalories();
 //                if (calaries.getType() != null)
                 tvCalarie.setText(Util.getValidatedValue(calaries.getValue()) + mActivity.getString(R.string.cal_orange) /*+ calaries.getType().getQuantityType()*/);
             }

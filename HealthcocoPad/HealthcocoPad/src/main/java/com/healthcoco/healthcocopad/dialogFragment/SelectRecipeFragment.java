@@ -1,6 +1,7 @@
 package com.healthcoco.healthcocopad.dialogFragment;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -8,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.healthcoco.healthcocopad.HealthCocoFragment;
@@ -15,17 +17,28 @@ import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.bean.EquivalentQuantities;
 import com.healthcoco.healthcocopad.bean.MealQuantity;
+import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.DietPlanRecipeItem;
 import com.healthcoco.healthcocopad.bean.server.DietplanAddItem;
+import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.RecipeResponse;
+import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.User;
+import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
+import com.healthcoco.healthcocopad.enums.ActionbarLeftRightActionTypeDrawables;
 import com.healthcoco.healthcocopad.enums.AdapterType;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
+import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.MealTimeType;
+import com.healthcoco.healthcocopad.enums.PatientProfileScreenType;
 import com.healthcoco.healthcocopad.enums.QuantityType;
+import com.healthcoco.healthcocopad.enums.WebServiceType;
+import com.healthcoco.healthcocopad.fragments.AnalyseDietChartFragment;
 import com.healthcoco.healthcocopad.fragments.RecipeListFragment;
+import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
 import com.healthcoco.healthcocopad.listeners.SelectedRecipeItemClickListener;
 import com.healthcoco.healthcocopad.recyclerview.HealthcocoRecyclerViewAdapter;
+import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.Util;
@@ -42,8 +55,9 @@ import java.util.LinkedHashMap;
 
 
 public class SelectRecipeFragment extends HealthCocoFragment implements
-        View.OnClickListener, SelectedRecipeItemClickListener {
+        View.OnClickListener, SelectedRecipeItemClickListener, LocalDoInBackgroundListenerOptimised {
     private User user;
+    private RegisteredPatientDetailsUpdated selectedPatient;
 
     private RecipeListFragment recipeListFragment;
 
@@ -58,6 +72,7 @@ public class SelectRecipeFragment extends HealthCocoFragment implements
     private TextView tvTotalCarbs;
     private TextView tvTotalFiber;
     private TextView tvTotalCalaries;
+    private Button btAnalyse;
     private DietplanAddItem dietplanAddItemReceived;
 
     private double protein = 0;
@@ -82,6 +97,10 @@ public class SelectRecipeFragment extends HealthCocoFragment implements
         mealTimeType = MealTimeType.values()[ordinal];
         dietplanAddItemReceived = Parcels.unwrap(intent.getParcelableExtra(HealthCocoConstants.TAG_INTENT_DATA));
         init();
+
+        mActivity.showLoading(false);
+        new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_FRAGMENT_INITIALISATION_DATA, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
     }
 
     @Override
@@ -135,15 +154,15 @@ public class SelectRecipeFragment extends HealthCocoFragment implements
         }
         recipeItem.setTempQuantity(tempQuantity);
 
-        if (recipeItem.getCalaries() != null) {
+        if (recipeItem.getCalories() != null) {
             MealQuantity qty = new MealQuantity();
-            qty.setValue(recipeItem.getCalaries().getValue());
-            if (recipeItem.getCalaries().getType() != null)
-                qty.setType(recipeItem.getCalaries().getType());
+            qty.setValue(recipeItem.getCalories().getValue());
+            if (recipeItem.getCalories().getType() != null)
+                qty.setType(recipeItem.getCalories().getType());
             recipeItem.setCalariesTemp(qty);
 
 
-            recipeItem.setCalariesPerHundredUnit((recipeItem.getCalaries().getValue() / currentValue) * 100);
+            recipeItem.setCaloriesPerHundredUnit((recipeItem.getCalories().getValue() / currentValue) * 100);
         }
         if (recipeItem.getFat() != null) {
             MealQuantity qty = new MealQuantity();
@@ -189,6 +208,7 @@ public class SelectRecipeFragment extends HealthCocoFragment implements
     public void initViews() {
         selectedRecipeRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view_selected_recipe);
         tvNoRecipeAdded = (TextView) view.findViewById(R.id.tv_no_recipe);
+        btAnalyse = (Button) view.findViewById(R.id.bt_analyse);
 
         tvTotalCalaries = (TextView) view.findViewById(R.id.tv_total_cal);
         tvTotalProtein = (TextView) view.findViewById(R.id.tv_total_protein);
@@ -199,7 +219,11 @@ public class SelectRecipeFragment extends HealthCocoFragment implements
 
     @Override
     public void initListeners() {
+        btAnalyse.setOnClickListener(this);
+
+        ((CommonOpenUpActivity) mActivity).initRightActionView(ActionbarLeftRightActionTypeDrawables.WITH_SAVE, view);
         ((CommonOpenUpActivity) mActivity).initActionbarRightAction(this);
+
     }
 
 
@@ -228,6 +252,9 @@ public class SelectRecipeFragment extends HealthCocoFragment implements
         switch (v.getId()) {
             case R.id.container_right_action:
                 validateData();
+                break;
+            case R.id.bt_analyse:
+                onAnalysedClicked();
                 break;
             default:
                 break;
@@ -292,11 +319,11 @@ public class SelectRecipeFragment extends HealthCocoFragment implements
                 }
             }
         }
-        tvTotalCalaries.setText(String.valueOf(calaries) + getString(R.string.cal_orange));
-        tvTotalProtein.setText(String.valueOf(protein));
-        tvTotalFat.setText(String.valueOf(fat));
-        tvTotalCarbs.setText(String.valueOf(carbs));
-        tvTotalFiber.setText(String.valueOf(fiber));
+        tvTotalCalaries.setText(Util.round(calaries, 2) + getString(R.string.cal_orange));
+        tvTotalProtein.setText(Util.round(protein, 2) + getString(R.string.gm));
+        tvTotalFat.setText(Util.round(fat, 2) + getString(R.string.gm));
+        tvTotalCarbs.setText(Util.round(carbs, 2) + getString(R.string.gm));
+        tvTotalFiber.setText(Util.round(fiber, 2) + getString(R.string.gm));
     }
 
     private DietPlanRecipeItem getNutrientPerHundredUnit(RecipeResponse recipeResponse) {
@@ -307,7 +334,7 @@ public class SelectRecipeFragment extends HealthCocoFragment implements
         dietPlanRecipeItem.setName(recipeResponse.getName());
         dietPlanRecipeItem.setQuantity(recipeResponse.getQuantity());
         dietPlanRecipeItem.setDirection(recipeResponse.getDirection());
-        dietPlanRecipeItem.setCalaries(recipeResponse.getCalaries());
+        dietPlanRecipeItem.setCalories(recipeResponse.getCalories());
         dietPlanRecipeItem.setFat(recipeResponse.getFat());
         dietPlanRecipeItem.setProtein(recipeResponse.getProtein());
         dietPlanRecipeItem.setCarbohydreate(recipeResponse.getCarbohydreate());
@@ -341,16 +368,16 @@ public class SelectRecipeFragment extends HealthCocoFragment implements
         }
         dietPlanRecipeItem.setTempQuantity(tempQuantity);
 
-        if (recipeResponse.getCalaries() != null) {
+        if (recipeResponse.getCalories() != null) {
             MealQuantity qty = new MealQuantity();
-            qty.setValue(recipeResponse.getCalaries().getValue());
-            if (recipeResponse.getCalaries().getType() != null)
-                qty.setType(recipeResponse.getCalaries().getType());
+            qty.setValue(recipeResponse.getCalories().getValue());
+            if (recipeResponse.getCalories().getType() != null)
+                qty.setType(recipeResponse.getCalories().getType());
             dietPlanRecipeItem.setCalariesTemp(qty);
 
 
-            dietPlanRecipeItem.setCalaries(recipeResponse.getCalaries());
-            dietPlanRecipeItem.setCalariesPerHundredUnit((recipeResponse.getCalaries().getValue() / currentValue) * 100);
+            dietPlanRecipeItem.setCalories(recipeResponse.getCalories());
+            dietPlanRecipeItem.setCaloriesPerHundredUnit((recipeResponse.getCalories().getValue() / currentValue) * 100);
         }
         if (recipeResponse.getFat() != null) {
             MealQuantity qty = new MealQuantity();
@@ -412,7 +439,7 @@ public class SelectRecipeFragment extends HealthCocoFragment implements
     }
 
     @Override
-    public void onDeleteIteClicked(Object object) {
+    public void onDeleteItemClicked(Object object) {
         DietPlanRecipeItem recipeItem = (DietPlanRecipeItem) object;
         if (recipeItem != null) {
             recipeHashMap.remove(recipeItem.getUniqueId());
@@ -427,7 +454,7 @@ public class SelectRecipeFragment extends HealthCocoFragment implements
             recipeItem.setQuantity(recipeItem.getTempQuantity());
 
             if (recipeItem.getCalariesTemp() != null)
-                recipeItem.setCalaries(recipeItem.getCalariesTemp());
+                recipeItem.setCalories(recipeItem.getCalariesTemp());
             if (recipeItem.getProteinTemp() != null)
                 recipeItem.setProtein(recipeItem.getProteinTemp());
             if (recipeItem.getFatTemp() != null)
@@ -469,11 +496,22 @@ public class SelectRecipeFragment extends HealthCocoFragment implements
     @Override
     public void onIngredientItemClicked(Object object) {
         DietPlanRecipeItem dietPlanRecipeItem = (DietPlanRecipeItem) object;
-        onAddMealClicked(dietPlanRecipeItem);
+        onAddIngredientClicked(dietPlanRecipeItem);
+    }
+
+    @Override
+    public void onAnalyseItemClicked(Object object) {
+        DietPlanRecipeItem dietPlanRecipeItem = (DietPlanRecipeItem) object;
+
+        Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
+        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.ANALYSE.ordinal());
+        if (dietPlanRecipeItem != null)
+            intent.putExtra(AnalyseDietChartFragment.TAG_RECIPE_DATA, Parcels.wrap(dietPlanRecipeItem));
+        startActivity(intent);
     }
 
 
-    public void onAddMealClicked(DietPlanRecipeItem dietPlanRecipeItem) {
+    public void onAddIngredientClicked(DietPlanRecipeItem dietPlanRecipeItem) {
         Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
         intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.SELECT_INGREDIENT.ordinal());
         if (dietPlanRecipeItem != null)
@@ -481,6 +519,28 @@ public class SelectRecipeFragment extends HealthCocoFragment implements
         startActivityForResult(intent, HealthCocoConstants.REQUEST_CODE_ADD_INGREDIENT, null);
     }
 
+    public void onAnalysedClicked() {
+        DietplanAddItem dietplanAddItem = new DietplanAddItem();
+
+        dietplanAddItem.setCalTotal(calaries);
+        dietplanAddItem.setProteinTotal(protein);
+        dietplanAddItem.setFatTotal(fat);
+        dietplanAddItem.setCarbohydreateTotal(carbs);
+        dietplanAddItem.setFiberTotal(fiber);
+
+        dietplanAddItem.setMealTiming(mealTimeType);
+        if (dietplanAddItemReceived != null)
+            dietplanAddItem.setForeignDietId(dietplanAddItemReceived.getForeignDietId());
+        else
+            dietplanAddItem.setForeignDietId(DateTimeUtil.getCurrentDateLong() + "");
+        dietplanAddItem.setRecipes(new ArrayList<DietPlanRecipeItem>(recipeHashMap.values()));
+
+        Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
+        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.ANALYSE.ordinal());
+        if (dietplanAddItem != null)
+            intent.putExtra(AnalyseDietChartFragment.TAG_DIET_PLAN_DATA, Parcels.wrap(dietplanAddItem));
+        startActivity(intent);
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -498,6 +558,44 @@ public class SelectRecipeFragment extends HealthCocoFragment implements
                     break;
             }
         }
+
+    }
+
+    @Override
+    public void onResponse(VolleyResponseBean response) {
+        switch (response.getWebServiceType()) {
+            case FRAGMENT_INITIALISATION:
+                if (user != null && selectedPatient != null) {
+                    initActionPatientDetailActionBar(PatientProfileScreenType.IN_ADD_VISIT_HEADER, view, selectedPatient);
+                }
+                break;
+            default:
+                break;
+        }
+        mActivity.hideLoading();
+    }
+
+    @Override
+    public VolleyResponseBean doInBackground(VolleyResponseBean response) {
+        VolleyResponseBean volleyResponseBean = null;
+        switch (response.getLocalBackgroundTaskType()) {
+            case GET_FRAGMENT_INITIALISATION_DATA:
+                volleyResponseBean = new VolleyResponseBean();
+                volleyResponseBean.setWebServiceType(WebServiceType.FRAGMENT_INITIALISATION);
+                LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
+                if (doctor != null)
+                    user = doctor.getUser();
+                selectedPatient = LocalDataServiceImpl.getInstance(mApp).getPatient(HealthCocoConstants.SELECTED_PATIENTS_USER_ID);
+                break;
+        }
+        if (volleyResponseBean == null)
+            volleyResponseBean = new VolleyResponseBean();
+        volleyResponseBean.setIsFromLocalAfterApiSuccess(response.isFromLocalAfterApiSuccess());
+        return volleyResponseBean;
+    }
+
+    @Override
+    public void onPostExecute(VolleyResponseBean aVoid) {
 
     }
 }

@@ -17,14 +17,10 @@ public class Nutrients extends SugarRecord {
 
     private String uniqueId;
     private String name;
-    @Ignore
-    private NutrientCategoryType category;
     private double value;
-    @Ignore
-    private QuantityType type;
     private double inPercent;
     private String note;
-
+    private String nutrientCode;
 
     public String getForeignMealId() {
         return foreignMealId;
@@ -58,28 +54,12 @@ public class Nutrients extends SugarRecord {
         this.name = name;
     }
 
-    public NutrientCategoryType getCategory() {
-        return category;
-    }
-
-    public void setCategory(NutrientCategoryType category) {
-        this.category = category;
-    }
-
     public double getValue() {
         return value;
     }
 
     public void setValue(double value) {
         this.value = value;
-    }
-
-    public QuantityType getType() {
-        return type;
-    }
-
-    public void setType(QuantityType type) {
-        this.type = type;
     }
 
     public double getInPercent() {
@@ -98,5 +78,11 @@ public class Nutrients extends SugarRecord {
         this.note = note;
     }
 
+    public String getNutrientCode() {
+        return nutrientCode;
+    }
 
+    public void setNutrientCode(String nutrientCode) {
+        this.nutrientCode = nutrientCode;
+    }
 }

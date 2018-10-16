@@ -7,7 +7,6 @@ import android.widget.TextView;
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.EquivalentQuantities;
-import com.healthcoco.healthcocopad.bean.MealQuantity;
 import com.healthcoco.healthcocopad.bean.server.DietPlanRecipeItem;
 import com.healthcoco.healthcocopad.bean.server.Ingredient;
 import com.healthcoco.healthcocopad.enums.PopupWindowType;
@@ -40,6 +39,9 @@ public class RecipeListItemViewHolder extends HealthcocoComonRecylcerViewHolder 
     private LinearLayout containerIngredients;
     private LinearLayout parentIngredients;
     private TextViewFontAwesome btDelete;
+    private TextViewFontAwesome iconAnalyse;
+    private TextView tvAnalyse;
+    private LinearLayout btAnalyse;
     private boolean isIngredientValue = false;
     private EquivalentQuantities equivalentQuantities;
     private SelectedRecipeItemClickListener recipeItemClickListener;
@@ -68,6 +70,9 @@ public class RecipeListItemViewHolder extends HealthcocoComonRecylcerViewHolder 
         containerIngredients = (LinearLayout) itemView.findViewById(R.id.container_ingredient);
 
         btDelete = (TextViewFontAwesome) itemView.findViewById(R.id.bt_delete);
+        iconAnalyse = (TextViewFontAwesome) itemView.findViewById(R.id.icon_analyse);
+        tvAnalyse = (TextView) itemView.findViewById(R.id.tv_analyse);
+        btAnalyse = (LinearLayout) itemView.findViewById(R.id.bt_analyse);
 
 
         if (onItemClickListener != null)
@@ -88,7 +93,14 @@ public class RecipeListItemViewHolder extends HealthcocoComonRecylcerViewHolder 
         btDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                recipeItemClickListener.onDeleteIteClicked(recipeItem);
+                recipeItemClickListener.onDeleteItemClicked(recipeItem);
+            }
+        });
+
+        btAnalyse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                recipeItemClickListener.onAnalyseItemClicked(recipeItem);
             }
         });
     }
@@ -121,35 +133,46 @@ public class RecipeListItemViewHolder extends HealthcocoComonRecylcerViewHolder 
                 tvServingType.setVisibility(View.GONE);
             }
 
-            if (recipeItem.getCurrentQuantity() != null && recipeItem.getCalaries() != null) {
+            if (recipeItem.getCurrentQuantity() != null && recipeItem.getCalories() != null) {
                 if (!isIngredientValue)
-                    tvTotalQuantity.setText(recipeItem.getCurrentQuantity().getValue() + recipeItem.getCurrentQuantity().getType().getUnit() + " - " +
-                            recipeItem.getCalaries().getValue() + mActivity.getString(R.string.cal_orange));
+                    tvTotalQuantity.setText(Util.round(recipeItem.getCurrentQuantity().getValue(), 2) + recipeItem.getCurrentQuantity().getType().getUnit() + " - " +
+                            Util.round(recipeItem.getCalories().getValue(), 2) + mActivity.getString(R.string.cal_orange));
                 else
-                    tvTotalQuantity.setText(recipeItem.getCalaries().getValue() + mActivity.getString(R.string.cal_orange));
+                    tvTotalQuantity.setText(Util.round(recipeItem.getCalories().getValue(), 2) + mActivity.getString(R.string.cal_orange));
             } else
                 tvTotalQuantity.setText("");
 
             if (recipeItem.getProtein() != null)
-                tvProtein.setText(recipeItem.getProtein().getValue()/* + recipeItem.getProtein().getType().getUnit()*/ + "");
+                tvProtein.setText(Util.round(recipeItem.getProtein().getValue(), 2)/* + recipeItem.getProtein().getType().getUnit()*/ + "");
             else
                 tvProtein.setText("");
 
             if (recipeItem.getFat() != null)
-                tvFat.setText(recipeItem.getFat().getValue()/* + recipeItem.getProtein().getType().getUnit()*/ + "");
+                tvFat.setText(Util.round(recipeItem.getFat().getValue(), 2)/* + recipeItem.getProtein().getType().getUnit()*/ + "");
             else
                 tvFat.setText("");
 
             if (recipeItem.getCarbohydreate() != null)
-                tvCarbs.setText(recipeItem.getCarbohydreate().getValue()/* + recipeItem.getProtein().getType().getUnit()*/ + "");
+                tvCarbs.setText(Util.round(recipeItem.getCarbohydreate().getValue(), 2)/* + recipeItem.getProtein().getType().getUnit()*/ + "");
             else
                 tvCarbs.setText("");
 
             if (recipeItem.getFiber() != null)
-                tvFiber.setText(recipeItem.getFiber().getValue()/* + recipeItem.getProtein().getType().getUnit()*/ + "");
+                tvFiber.setText(Util.round(recipeItem.getFiber().getValue(), 2)/* + recipeItem.getProtein().getType().getUnit()*/ + "");
             else
                 tvFiber.setText("");
 
+            if (!Util.isNullOrEmptyList(recipeItem.getGeneralNutrients())) {
+                tvAnalyse.setTextColor(mActivity.getResources().getColor(R.color.green_dark));
+                iconAnalyse.setTextColor(mActivity.getResources().getColor(R.color.green_dark));
+                iconAnalyse.setText(mActivity.getString(R.string.check_circle_analysed));
+                tvAnalyse.setText(mActivity.getString(R.string.analysed));
+            } else {
+                tvAnalyse.setTextColor(mActivity.getResources().getColor(R.color.red_error));
+                iconAnalyse.setTextColor(mActivity.getResources().getColor(R.color.red_error));
+                iconAnalyse.setText(mActivity.getString(R.string.info_circle_analyse));
+                tvAnalyse.setText(mActivity.getString(R.string.not_analysed));
+            }
 
             if (!Util.isNullOrEmptyList(recipeItem.getIngredients()))
                 addIngredients(recipeItem.getIngredients());
@@ -177,11 +200,11 @@ public class RecipeListItemViewHolder extends HealthcocoComonRecylcerViewHolder 
                 if (!Util.isNullOrZeroNumber(ingredient.getValue())) {
                     tvItemQuantity.setText(Util.getValidatedValue(ingredient.getValue()) + quantityType);
                 }
-                if (ingredient.getCalaries() != null) {
-                    if (ingredient.getCalaries().getType() != null) {
-                        String calariesType = ingredient.getCalaries().getType().getQuantityType();
-                        if (!Util.isNullOrZeroNumber(ingredient.getCalaries().getValue())) {
-                            tvItemCalarie.setText(Util.getValidatedValue(ingredient.getCalaries().getValue()) + calariesType);
+                if (ingredient.getCalories() != null) {
+                    if (ingredient.getCalories().getType() != null) {
+                        String calariesType = ingredient.getCalories().getType().getQuantityType();
+                        if (!Util.isNullOrZeroNumber(ingredient.getCalories().getValue())) {
+                            tvItemCalarie.setText(Util.getValidatedValue(ingredient.getCalories().getValue()) + calariesType);
                         }
                     }
                 }
@@ -225,25 +248,25 @@ public class RecipeListItemViewHolder extends HealthcocoComonRecylcerViewHolder 
 
         if (recipeItem.getProteinTemp() != null) {
             recipeItem.getProteinTemp().setValue((recipeItem.getProteinPerHundredUnit() * recipeItem.getCurrentQuantity().getValue()) / 100);
-            tvProtein.setText(recipeItem.getProteinTemp().getValue()/* + recipeItem.getProtein().getType().getUnit()*/ + "");
+            tvProtein.setText(Util.round(recipeItem.getProteinTemp().getValue(), 2)/* + recipeItem.getProtein().getType().getUnit()*/ + "");
         }
         if (recipeItem.getFatTemp() != null) {
             recipeItem.getFatTemp().setValue((recipeItem.getFatPerHundredUnit() * recipeItem.getCurrentQuantity().getValue()) / 100);
-            tvFat.setText(recipeItem.getFatTemp().getValue()/* + recipeItem.getProtein().getType().getUnit()*/ + "");
+            tvFat.setText(Util.round(recipeItem.getFatTemp().getValue(), 2)/* + recipeItem.getProtein().getType().getUnit()*/ + "");
         }
         if (recipeItem.getCarbohydreateTemp() != null) {
             recipeItem.getCarbohydreateTemp().setValue((recipeItem.getCarbohydreatePerHundredUnit() * recipeItem.getCurrentQuantity().getValue()) / 100);
-            tvCarbs.setText(recipeItem.getCarbohydreateTemp().getValue()/* + recipeItem.getProtein().getType().getUnit()*/ + "");
+            tvCarbs.setText(Util.round(recipeItem.getCarbohydreateTemp().getValue(), 2)/* + recipeItem.getProtein().getType().getUnit()*/ + "");
         }
         if (recipeItem.getFiberTemp() != null) {
             recipeItem.getFiberTemp().setValue((recipeItem.getFiberPerHundredUnit() * recipeItem.getCurrentQuantity().getValue()) / 100);
-            tvFiber.setText(recipeItem.getFiberTemp().getValue()/* + recipeItem.getProtein().getType().getUnit()*/ + "");
+            tvFiber.setText(Util.round(recipeItem.getFiberTemp().getValue(), 2)/* + recipeItem.getProtein().getType().getUnit()*/ + "");
         }
         if (recipeItem.getCalariesTemp() != null) {
-            recipeItem.getCalariesTemp().setValue((recipeItem.getCalariesPerHundredUnit() * recipeItem.getCurrentQuantity().getValue()) / 100);
+            recipeItem.getCalariesTemp().setValue((recipeItem.getCaloriesPerHundredUnit() * recipeItem.getCurrentQuantity().getValue()) / 100);
         }
-        tvTotalQuantity.setText(recipeItem.getCurrentQuantity().getValue() + recipeItem.getCurrentQuantity().getType().getUnit() + " - " +
-                recipeItem.getCalariesTemp().getValue() + mActivity.getString(R.string.cal_orange));
+        tvTotalQuantity.setText(Util.round(recipeItem.getCurrentQuantity().getValue(), 2) + recipeItem.getCurrentQuantity().getType().getUnit() + " - " +
+                Util.round(recipeItem.getCalariesTemp().getValue(), 2) + mActivity.getString(R.string.cal_orange));
         recipeItemClickListener.onQuantityChanged(recipeItem);
     }
 
