@@ -35,8 +35,6 @@ public class Ingredient extends SugarRecord {
     @Ignore
     private List<EquivalentQuantities> equivalentMeasurements;
     @Ignore
-    protected MealQuantity caloriesTemp;
-    @Ignore
     private MealQuantity fat;
     @Ignore
     private MealQuantity protein;
@@ -44,7 +42,6 @@ public class Ingredient extends SugarRecord {
     private MealQuantity carbohydreate;
     @Ignore
     private MealQuantity fiber;
-    protected double caloriesPerHundredUnit;
     @Ignore
     private MealQuantity calories;
     @Ignore
@@ -60,6 +57,9 @@ public class Ingredient extends SugarRecord {
     @Ignore
     private List<Nutrients> mineralNutrients;
     @Ignore
+    protected MealQuantity caloriesTemp;
+    protected double caloriesPerHundredUnit;
+    @Ignore
     protected MealQuantity fatTemp;
     @Ignore
     protected MealQuantity proteinTemp;
@@ -69,13 +69,12 @@ public class Ingredient extends SugarRecord {
     protected MealQuantity fiberTemp;
     @Ignore
     protected MealQuantity currentQuantity;
-
+    @Ignore
+    private List<Nutrients> otherNutrients;
     protected double fatPerHundredUnit;
     protected double proteinPerHundredUnit;
     protected double carbohydreatePerHundredUnit;
     protected double fiberPerHundredUnit;
-    @Ignore
-    private List<Nutrients> otherNutrients;
     @Ignore
     protected MealQuantity tempQuantity;
 

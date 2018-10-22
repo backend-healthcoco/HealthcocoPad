@@ -33,6 +33,7 @@ import com.healthcoco.healthcocopad.bean.request.DoctorSignupHandheldContinueReq
 import com.healthcoco.healthcocopad.bean.request.DrugInteractionRequest;
 import com.healthcoco.healthcocopad.bean.request.EventRequest;
 import com.healthcoco.healthcocopad.bean.request.Feedback;
+import com.healthcoco.healthcocopad.bean.request.IngredientToSend;
 import com.healthcoco.healthcocopad.bean.request.InvoiceRequest;
 import com.healthcoco.healthcocopad.bean.request.PrescriptionRequest;
 import com.healthcoco.healthcocopad.bean.request.PrintPatientCardRequest;
@@ -55,6 +56,7 @@ import com.healthcoco.healthcocopad.bean.server.Drug;
 import com.healthcoco.healthcocopad.bean.server.DrugType;
 import com.healthcoco.healthcocopad.bean.server.Events;
 import com.healthcoco.healthcocopad.bean.server.GCMRequest;
+import com.healthcoco.healthcocopad.bean.server.Ingredient;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.NotificationResponse;
 import com.healthcoco.healthcocopad.bean.server.PatientMeasurementInfo;
@@ -1847,7 +1849,7 @@ public class WebDataServiceImpl implements GCMRefreshListener {
         }
     }
 
-    public void getIngredientListSolr(Class<?> class1, WebServiceType webServiceType, int pageNum, int size, String searchTerm, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+    public void getListSolr(Class<?> class1, WebServiceType webServiceType, int pageNum, int size, String searchTerm, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         checkNetworkStatus(mApp.getApplicationContext());
         String url = null;
         if (HealthCocoConstants.isNetworkOnline) {
@@ -1859,6 +1861,10 @@ public class WebDataServiceImpl implements GCMRefreshListener {
                             + HealthCocoConstants.PARAM_SIZE + size
 
                             + HealthCocoConstants.PARAM_SEARCH_TERM + searchTerm;
+                    break;
+                case GET_NUTRIENT_LIST_SOLR:
+                    url = webServiceType.getUrl()
+                            + HealthCocoConstants.PARAM_DISCARDED_FALSE;
                     break;
             }
             getResponse(webServiceType, class1, url, null, null, responseListener, errorListener);
@@ -1911,6 +1917,19 @@ public class WebDataServiceImpl implements GCMRefreshListener {
                     break;
             }
             getResponse(webServiceType, class1, url, null, null, responseListener, errorListener);
+        } else {
+            showUserOffline(webServiceType, responseListener);
+        }
+    }
+
+    public void addEditIngredient(Class<?> class1, IngredientToSend ingredientToSend,
+                                  Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        WebServiceType webServiceType = WebServiceType.ADD_EDIT_INGREDIENT;
+        checkNetworkStatus(mApp);
+        if (HealthCocoConstants.isNetworkOnline) {
+            String url = webServiceType.getUrl();
+            getResponse(webServiceType, class1, url, ingredientToSend, null, responseListener,
+                    errorListener);
         } else {
             showUserOffline(webServiceType, responseListener);
         }

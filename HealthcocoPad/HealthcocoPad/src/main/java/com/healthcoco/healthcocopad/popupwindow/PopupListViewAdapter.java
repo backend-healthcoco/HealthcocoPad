@@ -22,6 +22,7 @@ import com.healthcoco.healthcocopad.enums.AppointmentSlotsType;
 import com.healthcoco.healthcocopad.enums.PatientProfileScreenType;
 import com.healthcoco.healthcocopad.enums.PatientTreatmentStatus;
 import com.healthcoco.healthcocopad.enums.PopupWindowType;
+import com.healthcoco.healthcocopad.enums.QuantityType;
 import com.healthcoco.healthcocopad.enums.UnitType;
 import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
 import com.healthcoco.healthcocopad.utilities.DownloadImageFromUrlUtil;
@@ -156,6 +157,12 @@ public class PopupListViewAdapter extends BaseAdapter {
                 if (object instanceof AppointmentSlotsType) {
                     AppointmentSlotsType appointmentSlotsType = (AppointmentSlotsType) object;
                     text = Math.round(appointmentSlotsType.getTime()) + " " + Util.getValidatedValue(appointmentSlotsType.getUnits().getValueToDisplay());
+                }
+                break;
+            case NUTRIENT_TYPE:
+                if (object instanceof QuantityType) {
+                    QuantityType quantityType = (QuantityType) object;
+                    text = quantityType.getUnit();
                 }
                 break;
             case TIME_SLOTS:

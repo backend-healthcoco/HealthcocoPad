@@ -111,6 +111,7 @@ public class HealthCocoConstants {
     public static final int RESULT_CODE_ADD_DIET = 221;
     public static final int REQUEST_CODE_ADD_INGREDIENT = 222;
     public static final int RESULT_CODE_ADD_INGREDIENT = 223;
+    public static final int REQUEST_CODE_ADD_NUTRIENT = 224;
 
 
     public static final String PARAM_IS_DOCTOR_APP_TRUE = "&isDoctorApp=true";

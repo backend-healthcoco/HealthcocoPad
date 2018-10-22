@@ -20,10 +20,8 @@ import com.android.volley.Response;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
-import com.healthcoco.healthcocopad.bean.server.Ingredient;
 import com.healthcoco.healthcocopad.bean.server.IngredientResponse;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
-import com.healthcoco.healthcocopad.bean.server.RecipeResponse;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocopad.dialogFragment.AddNewTreatmentDialogFragment;
@@ -162,7 +160,7 @@ public class IngredientListFragment extends HealthCocoFragment implements View.O
             } else
                 progressLoading.setVisibility(View.VISIBLE);
             isResponseReceived = false;
-            WebDataServiceImpl.getInstance(mApp).getIngredientListSolr(IngredientResponse.class,
+            WebDataServiceImpl.getInstance(mApp).getListSolr(IngredientResponse.class,
                     WebServiceType.GET_INGREDINET_LIST_SOLR, pageNum, size, searchTerm, this, this);
         }
     }

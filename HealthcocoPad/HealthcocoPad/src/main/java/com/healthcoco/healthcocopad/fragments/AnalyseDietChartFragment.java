@@ -57,13 +57,13 @@ public class AnalyseDietChartFragment extends HealthCocoFragment implements
     private LinearLayout parentCategoryOne;
     private LinearLayout parentCategoryTwo;
 
-    private LinkedHashMap<String, Nutrients> generalNutrients = new LinkedHashMap<>();
-    private LinkedHashMap<String, Nutrients> carbNutrients = new LinkedHashMap<>();
-    private LinkedHashMap<String, Nutrients> lipidNutrients = new LinkedHashMap<>();
-    private LinkedHashMap<String, Nutrients> proteinAminoAcidNutrients = new LinkedHashMap<>();
-    private LinkedHashMap<String, Nutrients> vitaminNutrients = new LinkedHashMap<>();
-    private LinkedHashMap<String, Nutrients> mineralNutrients = new LinkedHashMap<>();
-    private LinkedHashMap<String, Nutrients> otherNutrients = new LinkedHashMap<>();
+    private List<Nutrients> generalNutrients;
+    private List<Nutrients> carbNutrients;
+    private List<Nutrients> lipidNutrients;
+    private List<Nutrients> proteinAminoAcidNutrients;
+    private List<Nutrients> vitaminNutrients;
+    private List<Nutrients> mineralNutrients;
+    private List<Nutrients> otherNutrients;
 
     private DietplanAddItem dietplanAddItemReceived;
     private DietPlanRecipeItem recipeItemRecived;
@@ -84,6 +84,7 @@ public class AnalyseDietChartFragment extends HealthCocoFragment implements
         Intent intent = mActivity.getIntent();
         dietplanAddItemReceived = Parcels.unwrap(intent.getParcelableExtra(AnalyseDietChartFragment.TAG_DIET_PLAN_DATA));
         recipeItemRecived = Parcels.unwrap(intent.getParcelableExtra(AnalyseDietChartFragment.TAG_RECIPE_DATA));
+//        LocalDataServiceImpl.getInstance(mApp).addNutrientValueByGroup();
 
         init();
         mActivity.showLoading(false);
@@ -236,25 +237,25 @@ public class AnalyseDietChartFragment extends HealthCocoFragment implements
             }
 
         if (!Util.isNullOrEmptyList(recipeItemRecived.getGeneralNutrients())) {
-            generalNutrients = getDataFormList(recipeItemRecived.getGeneralNutrients(), generalNutrients, recipeItemRecived.getCurrentQuantity().getValue());
+            LocalDataServiceImpl.getInstance(mApp).addNutrientList(getDataFormList(recipeItemRecived.getGeneralNutrients(), recipeItemRecived.getCurrentQuantity().getValue()));
         }
         if (!Util.isNullOrEmptyList(recipeItemRecived.getCarbNutrients())) {
-            carbNutrients = getDataFormList(recipeItemRecived.getCarbNutrients(), carbNutrients, recipeItemRecived.getCurrentQuantity().getValue());
+            LocalDataServiceImpl.getInstance(mApp).addNutrientList(getDataFormList(recipeItemRecived.getCarbNutrients(), recipeItemRecived.getCurrentQuantity().getValue()));
         }
         if (!Util.isNullOrEmptyList(recipeItemRecived.getLipidNutrients())) {
-            lipidNutrients = getDataFormList(recipeItemRecived.getLipidNutrients(), lipidNutrients, recipeItemRecived.getCurrentQuantity().getValue());
+            LocalDataServiceImpl.getInstance(mApp).addNutrientList(getDataFormList(recipeItemRecived.getLipidNutrients(), recipeItemRecived.getCurrentQuantity().getValue()));
         }
         if (!Util.isNullOrEmptyList(recipeItemRecived.getProteinAminoAcidNutrients())) {
-            proteinAminoAcidNutrients = getDataFormList(recipeItemRecived.getProteinAminoAcidNutrients(), proteinAminoAcidNutrients, recipeItemRecived.getCurrentQuantity().getValue());
+            LocalDataServiceImpl.getInstance(mApp).addNutrientList(getDataFormList(recipeItemRecived.getProteinAminoAcidNutrients(), recipeItemRecived.getCurrentQuantity().getValue()));
         }
         if (!Util.isNullOrEmptyList(recipeItemRecived.getVitaminNutrients())) {
-            vitaminNutrients = getDataFormList(recipeItemRecived.getVitaminNutrients(), vitaminNutrients, recipeItemRecived.getCurrentQuantity().getValue());
+            LocalDataServiceImpl.getInstance(mApp).addNutrientList(getDataFormList(recipeItemRecived.getVitaminNutrients(), recipeItemRecived.getCurrentQuantity().getValue()));
         }
         if (!Util.isNullOrEmptyList(recipeItemRecived.getMineralNutrients())) {
-            mineralNutrients = getDataFormList(recipeItemRecived.getMineralNutrients(), mineralNutrients, recipeItemRecived.getCurrentQuantity().getValue());
+            LocalDataServiceImpl.getInstance(mApp).addNutrientList(getDataFormList(recipeItemRecived.getMineralNutrients(), recipeItemRecived.getCurrentQuantity().getValue()));
         }
         if (!Util.isNullOrEmptyList(recipeItemRecived.getOtherNutrients())) {
-            otherNutrients = getDataFormList(recipeItemRecived.getOtherNutrients(), otherNutrients, recipeItemRecived.getCurrentQuantity().getValue());
+            LocalDataServiceImpl.getInstance(mApp).addNutrientList(getDataFormList(recipeItemRecived.getOtherNutrients(), recipeItemRecived.getCurrentQuantity().getValue()));
         }
 
         if (isEndOfListAchieved)
@@ -264,45 +265,36 @@ public class AnalyseDietChartFragment extends HealthCocoFragment implements
 
     }
 
-    private LinkedHashMap<String, Nutrients> getDataFormList(List<Nutrients> nutrientsList, LinkedHashMap<String, Nutrients> nutrientHashMap, double value) {
-        LinkedHashMap<String, Nutrients> linkedHashMap = new LinkedHashMap<>();
+    private List<Nutrients> getDataFormList(List<Nutrients> nutrientsList, double value) {
         for (Nutrients nutrients : nutrientsList) {
             nutrients.setValue((nutrients.getValue() * recipeItemRecived.getCurrentQuantity().getValue()) / value);
-            linkedHashMap.put(nutrients.getName(), nutrients);
         }
-        if (!Util.isNullOrEmptyList(nutrientHashMap)) {
-            for (Nutrients nutrientItem : nutrientHashMap.values()) {
-                Nutrients tempNutrient = linkedHashMap.get(nutrientItem.getName());
-                if (tempNutrient != null)
-                    nutrientItem.setValue(nutrientItem.getValue() + tempNutrient.getValue());
-            }
-            return nutrientHashMap;
-        }
-        return linkedHashMap;
+        return nutrientsList;
     }
 
     private void updateNutrientView() {
 
+        LocalDataServiceImpl.getInstance(mApp).addNutrientValueByGroup();
         if (!Util.isNullOrEmptyList(generalNutrients))
-            updateDietPlan(new ArrayList<Nutrients>(generalNutrients.values()), R.string.protein_colon, parentCategoryOne);
+            updateDietPlan(new ArrayList<Nutrients>(generalNutrients), R.string.protein_colon, parentCategoryOne);
 
         if (!Util.isNullOrEmptyList(carbNutrients))
-            updateDietPlan(new ArrayList<Nutrients>(carbNutrients.values()), R.string.protein_colon, parentCategoryOne);
+            updateDietPlan(new ArrayList<Nutrients>(carbNutrients), R.string.protein_colon, parentCategoryOne);
 
         if (!Util.isNullOrEmptyList(lipidNutrients))
-            updateDietPlan(new ArrayList<Nutrients>(lipidNutrients.values()), R.string.protein_colon, parentCategoryOne);
+            updateDietPlan(new ArrayList<Nutrients>(lipidNutrients), R.string.protein_colon, parentCategoryOne);
 
         if (!Util.isNullOrEmptyList(proteinAminoAcidNutrients))
-            updateDietPlan(new ArrayList<Nutrients>(proteinAminoAcidNutrients.values()), R.string.protein_colon, parentCategoryOne);
+            updateDietPlan(new ArrayList<Nutrients>(proteinAminoAcidNutrients), R.string.protein_colon, parentCategoryOne);
 
         if (!Util.isNullOrEmptyList(vitaminNutrients))
-            updateDietPlan(new ArrayList<Nutrients>(vitaminNutrients.values()), R.string.protein_colon, parentCategoryTwo);
+            updateDietPlan(new ArrayList<Nutrients>(vitaminNutrients), R.string.protein_colon, parentCategoryTwo);
 
         if (!Util.isNullOrEmptyList(mineralNutrients))
-            updateDietPlan(new ArrayList<Nutrients>(mineralNutrients.values()), R.string.protein_colon, parentCategoryTwo);
+            updateDietPlan(new ArrayList<Nutrients>(mineralNutrients), R.string.protein_colon, parentCategoryTwo);
 
         if (!Util.isNullOrEmptyList(otherNutrients))
-            updateDietPlan(new ArrayList<Nutrients>(otherNutrients.values()), R.string.protein_colon, parentCategoryTwo);
+            updateDietPlan(new ArrayList<Nutrients>(otherNutrients), R.string.protein_colon, parentCategoryTwo);
     }
 
 
@@ -315,10 +307,10 @@ public class AnalyseDietChartFragment extends HealthCocoFragment implements
 
         for (Nutrients nutrient : nutrientsArrayList) {
             LinearLayout layoutNutrient = (LinearLayout) mActivity.getLayoutInflater().inflate(R.layout.sub_item_nutrient, null);
-            TextView tvName = (TextView) layoutNutrient.findViewById(R.id.tv_ingredient_name);
-            TextView tvValue = (TextView) layoutNutrient.findViewById(R.id.tv_quantity_ingredient);
+            TextView tvName = (TextView) layoutNutrient.findViewById(R.id.tv_name_nutrient);
+            TextView tvValue = (TextView) layoutNutrient.findViewById(R.id.tv_value_nutrient);
             tvName.setText(nutrient.getName());
-            tvValue.setText(Util.getValidatedValue(nutrient.getValue()));
+            tvValue.setText(Util.getValidatedValue(nutrient.getValue()) + nutrient.getType().getUnit());
 
             containerNutrient.addView(layoutNutrient);
         }

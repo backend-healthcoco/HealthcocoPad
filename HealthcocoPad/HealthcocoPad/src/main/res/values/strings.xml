@@ -1410,4 +1410,24 @@
     <string name="medical_information">Medical Information</string>
 
 
+    <!--Add Ingredient texts-->
+    <string name="ingredient_name">Ingredient Name&#160;:&#160;</string>
+    <string name="equivalent_measurement">Equivalent Measurement&#160;:&#160;</string>
+    <string name="nutrients">Nutrients&#160;:&#160;</string>
+    <string name="serving_type">Serving Type</string>
+    <string name="value">Value</string>
+    <string name="type">Type</string>
+    <string name="please_enter_serving_type">Please enter Serving Type</string>
+    <string name="please_enter_type">Please enter Type</string>
+    <string name="please_enter_value">Please enter value</string>
+    <string name="please_enter_qauntity">Please enter quantity</string>
+    <string name="general">General</string>
+    <string name="carbohydrates">Carbohydrates</string>
+    <string name="lipids">Lipids</string>
+    <string name="protein_and_amino_acids">Protein and Amino Acids</string>
+    <string name="vitamins">Vitamins</string>
+    <string name="minerals">Minerals</string>
+    <string name="others">Others</string>
+
+
 </resources>

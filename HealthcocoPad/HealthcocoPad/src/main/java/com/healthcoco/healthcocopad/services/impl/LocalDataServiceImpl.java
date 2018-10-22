@@ -5882,6 +5882,39 @@ public class LocalDataServiceImpl {
         return patientMeasurementInfo;
     }
 
+    public void addNutrientList(List<Nutrients> generalNutrients) {
+        Nutrients.saveInTx(generalNutrients);
+    }
+
+    /*   private List<Nutrients> getNutrientList(String treatmentId) {
+           Select<Nutrients> selectQuery = Select.from(Nutrients.class)
+                   .where(Condition.prop(LocalDatabaseUtils.KEY_TREATMENT_ID).eq(treatmentId));
+           List<Nutrients> list = selectQuery.list();
+           return list;
+       }
+   */
+
+    public void addNutrientValueByGroup() {
+        //forming where condition query
+        String whereCondition = "Select " +
+                LocalDatabaseUtils.KEY_UNIQUE_ID + ", " +
+                LocalDatabaseUtils.KEY_NAME + ", Sum(" +
+                LocalDatabaseUtils.KEY_VALUE + "), " +
+                LocalDatabaseUtils.KEY_TYPE + ", " +
+                "note, nutrient_code from " + StringUtil.toSQLName(Nutrients.class.getSimpleName())
+                + " group by "
+                + LocalDatabaseUtils.KEY_UNIQUE_ID;
+
+        LogUtils.LOGD(TAG, "Select Query " + whereCondition);
+        List<Nutrients> nutrientsList = Nutrients.findWithQuery(Nutrients.class, whereCondition);
+        if (!Util.isNullOrEmptyList(nutrientsList)) {
+            Nutrients.deleteAll(Nutrients.class);
+            addNutrientList(nutrientsList);
+        }
+//        SugarRecord.findWithQuery(MedicalFamilyHistoryDetails.class, whereCondition);
+    }
+
+
     private enum FromTableType {
         ADD_TEMPLATES, ADD_TREATMENT, ADD_PRESCRIPTION
     }

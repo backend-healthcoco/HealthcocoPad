@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.enums.PopupWindowType;
+import com.healthcoco.healthcocopad.enums.QuantityType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -91,6 +92,11 @@ public class HealthcocoPopupWindow extends PopupWindow implements View.OnClickLi
         if (anchorView != null && anchorView instanceof TextView && tag instanceof String) {
             TextView tvText = (TextView) anchorView;
             tvText.setText((String) tag);
+        } else if (anchorView != null && anchorView instanceof TextView && tag instanceof QuantityType) {
+            QuantityType quantityType = (QuantityType) tag;
+            TextView tvText = (TextView) anchorView;
+            tvText.setText(quantityType.getUnit());
+            tvText.setTag(tag);
         }
         if (popupWindowListener != null)
             popupWindowListener.onItemSelected(popupWindowType, tag);

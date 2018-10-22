@@ -46,6 +46,20 @@ public class RecipeResponse extends SugarRecord {
     private MealQuantity carbohydreate;
     @Ignore
     private MealQuantity fiber;
+    @Ignore
+    private List<Nutrients> generalNutrients;
+    @Ignore
+    private List<Nutrients> carbNutrients;
+    @Ignore
+    private List<Nutrients> lipidNutrients;
+    @Ignore
+    private List<Nutrients> proteinAminoAcidNutrients;
+    @Ignore
+    private List<Nutrients> vitaminNutrients;
+    @Ignore
+    private List<Nutrients> mineralNutrients;
+    @Ignore
+    private List<Nutrients> otherNutrients;
 
     public String getUniqueId() {
         return uniqueId;
@@ -217,5 +231,61 @@ public class RecipeResponse extends SugarRecord {
 
     public void setIngredients(List<Ingredient> ingredients) {
         this.ingredients = ingredients;
+    }
+
+    public List<Nutrients> getGeneralNutrients() {
+        return generalNutrients;
+    }
+
+    public void setGeneralNutrients(List<Nutrients> generalNutrients) {
+        this.generalNutrients = generalNutrients;
+    }
+
+    public List<Nutrients> getCarbNutrients() {
+        return carbNutrients;
+    }
+
+    public void setCarbNutrients(List<Nutrients> carbNutrients) {
+        this.carbNutrients = carbNutrients;
+    }
+
+    public List<Nutrients> getLipidNutrients() {
+        return lipidNutrients;
+    }
+
+    public void setLipidNutrients(List<Nutrients> lipidNutrients) {
+        this.lipidNutrients = lipidNutrients;
+    }
+
+    public List<Nutrients> getProteinAminoAcidNutrients() {
+        return proteinAminoAcidNutrients;
+    }
+
+    public void setProteinAminoAcidNutrients(List<Nutrients> proteinAminoAcidNutrients) {
+        this.proteinAminoAcidNutrients = proteinAminoAcidNutrients;
+    }
+
+    public List<Nutrients> getVitaminNutrients() {
+        return vitaminNutrients;
+    }
+
+    public void setVitaminNutrients(List<Nutrients> vitaminNutrients) {
+        this.vitaminNutrients = vitaminNutrients;
+    }
+
+    public List<Nutrients> getMineralNutrients() {
+        return mineralNutrients;
+    }
+
+    public void setMineralNutrients(List<Nutrients> mineralNutrients) {
+        this.mineralNutrients = mineralNutrients;
+    }
+
+    public List<Nutrients> getOtherNutrients() {
+        return otherNutrients;
+    }
+
+    public void setOtherNutrients(List<Nutrients> otherNutrients) {
+        this.otherNutrients = otherNutrients;
     }
 }

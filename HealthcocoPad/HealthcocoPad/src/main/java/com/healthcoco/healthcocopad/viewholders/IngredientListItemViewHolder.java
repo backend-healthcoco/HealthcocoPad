@@ -92,7 +92,7 @@ public class IngredientListItemViewHolder extends HealthcocoComonRecylcerViewHol
             if (!Util.isNullOrZeroNumber(ingredient.getValue())) {
                 tvQuantity.setText(Util.getValidatedValue(ingredient.getValue()));
                 tvServingType.setText(ingredient.getType().getUnit());
-                mActivity.initPopupWindows(tvQuantity, PopupWindowType.QUANTITY_TYPE, PopupWindowType.QUANTITY_TYPE.getList(), this);
+                mActivity.initPopupWindows(tvQuantity, PopupWindowType.QUANTITY_VALUE, PopupWindowType.QUANTITY_VALUE.getList(), this);
             } else {
                 tvQuantity.setText("");
             }
@@ -152,7 +152,7 @@ public class IngredientListItemViewHolder extends HealthcocoComonRecylcerViewHol
 
                     break;
                 }
-            case QUANTITY_TYPE:
+            case QUANTITY_VALUE:
                 if (object instanceof String) {
                     tvQuantity.setText((String) object);
                     if (equivalentQuantities != null) {

@@ -15,6 +15,7 @@ import com.healthcoco.healthcocopad.bean.server.Events;
 import com.healthcoco.healthcocopad.bean.server.Ingredient;
 import com.healthcoco.healthcocopad.bean.server.IngredientResponse;
 import com.healthcoco.healthcocopad.bean.server.Meal;
+import com.healthcoco.healthcocopad.bean.server.Nutrients;
 import com.healthcoco.healthcocopad.bean.server.RecipeResponse;
 import com.healthcoco.healthcocopad.bean.server.RegisteredDoctorProfile;
 import com.healthcoco.healthcocopad.enums.AdapterType;
@@ -27,6 +28,7 @@ import com.healthcoco.healthcocopad.viewholders.FoodSubItemViewHolder;
 import com.healthcoco.healthcocopad.viewholders.IngredientListItemViewHolder;
 import com.healthcoco.healthcocopad.viewholders.IngredientListSolrViewHolder;
 import com.healthcoco.healthcocopad.viewholders.KioskSubItemViewHolder;
+import com.healthcoco.healthcocopad.viewholders.NutrientListItemViewHolder;
 import com.healthcoco.healthcocopad.viewholders.QueueItemViewHolder;
 import com.healthcoco.healthcocopad.viewholders.RecipeListItemViewHolder;
 import com.healthcoco.healthcocopad.viewholders.RecipeListSolrViewHolder;
@@ -120,6 +122,10 @@ public class HealthcocoRecyclerViewAdapter extends RecyclerView.Adapter<Healthco
                 convertView = mInflater.inflate(R.layout.list_item_selected_recipe, parent, false);
                 viewHolder = new IngredientListItemViewHolder(mActivity, convertView, onItemClickListener, listenerObject);
                 break;
+            case NUTRIENT_ITEM:
+                convertView = mInflater.inflate(R.layout.list_item_nutrient, parent, false);
+                viewHolder = new NutrientListItemViewHolder(mActivity, convertView, onItemClickListener, listenerObject);
+                break;
             case DOCTOR_POPUP_LIST:
                 convertView = mInflater.inflate(R.layout.item_doctor_popup_list, parent, false);
                 viewHolder = new DoctorListViewHolder(mActivity, convertView, listenerObject);
@@ -186,6 +192,12 @@ public class HealthcocoRecyclerViewAdapter extends RecyclerView.Adapter<Healthco
                 if (holder instanceof IngredientListItemViewHolder && object instanceof Ingredient) {
                     IngredientListItemViewHolder listItemViewHolder = (IngredientListItemViewHolder) holder;
                     listItemViewHolder.applyData(object);
+                }
+                break;
+            case NUTRIENT_ITEM:
+                if (holder instanceof NutrientListItemViewHolder && object instanceof Nutrients) {
+                    NutrientListItemViewHolder nutrientListItemViewHolder = (NutrientListItemViewHolder) holder;
+                    nutrientListItemViewHolder.applyData(object);
                 }
                 break;
             case RECIPE_ITEM_SOLR:

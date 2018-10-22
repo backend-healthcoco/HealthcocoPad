@@ -31,9 +31,11 @@ import com.healthcoco.healthcocopad.fragments.AboutUsFragment;
 import com.healthcoco.healthcocopad.fragments.AddEditClinicImageFragment;
 import com.healthcoco.healthcocopad.fragments.AddClinicalNotesVisitNormalFragment;
 import com.healthcoco.healthcocopad.fragments.AddEditDietChartFragment;
+import com.healthcoco.healthcocopad.fragments.AddEditIngradientFragment;
 import com.healthcoco.healthcocopad.fragments.AddEditMeasurementFragment;
 import com.healthcoco.healthcocopad.fragments.AddEditNormalVisitPrescriptionFragment;
 import com.healthcoco.healthcocopad.fragments.AddEditNormalVisitsFragment;
+import com.healthcoco.healthcocopad.fragments.AddEditNutrientValueFragment;
 import com.healthcoco.healthcocopad.fragments.AddInvoiceFragment;
 import com.healthcoco.healthcocopad.fragments.AddNewTemplateFragment;
 import com.healthcoco.healthcocopad.fragments.AddNewTreatmentFragment;
@@ -307,10 +309,10 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
                 openFragment(ActionbarType.HIDDEN, new SelectRecipeFragment());
                 break;
             case SELECT_INGREDIENT:
-                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.WITH_SAVE, SELECT_INGREDIENT.getTitleId(), new SelectIngredientFragment());
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.WITH_SAVE, SELECT_INGREDIENT.getTitleId(), new AddEditNutrientValueFragment());
                 break;
             case ANALYSE:
-                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.WITH_SAVE, ANALYSE.getTitleId(), new AnalyseDietChartFragment());
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.WITH_SAVE, ANALYSE.getTitleId(), new AddEditIngradientFragment());
                 break;
 
         }

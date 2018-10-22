@@ -99,6 +99,8 @@
     <string name="icon_add">&#xf055;</string>
     <string name="check_circle_analysed">&#xf058;&#160;</string>
     <string name="info_circle_analyse">&#xf05a;&#160;</string>
+    <string name="icon_add_equivalent_measurement">&#xf055;&#160;Add Equivalent Measurement</string>
+    <string name="icon_add_nutrient">&#xf055;&#160;Add Nutrient</string>
 
 
 </resources>

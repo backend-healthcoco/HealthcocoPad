@@ -54,6 +54,18 @@ public enum PopupWindowType {
         add(AppointmentSlotsType.SLOT12);
     }}),
 
+    NUTRIENT_TYPE(new ArrayList<Object>() {{
+        add(QuantityType.GM);
+        add(QuantityType.GM);
+        add(QuantityType.GM);
+        add(QuantityType.GM);
+    }}),
+
+    MICRO_NUTRIENT_TYPE(new ArrayList<Object>() {{
+        add(QuantityType.GM);
+        add(QuantityType.MGM);
+    }}),
+
     MATERIAL_TYPE(new ArrayList<Object>() {{
         add("Ceramic-full ceramic/pfm");
         add("Ni Cr");
@@ -64,7 +76,7 @@ public enum PopupWindowType {
         add("Zirconia");
     }}),
 
-    QUANTITY_TYPE(new ArrayList<Object>() {
+    QUANTITY_VALUE(new ArrayList<Object>() {
         {
             add("0.25");
             add("0.5");

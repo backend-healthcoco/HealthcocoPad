@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/padding_20_dp"
+        android:layout_marginTop="@dimen/layout_padding_5dp"
+        android:layout_marginRight="@dimen/padding_20_dp"
+        android:layout_marginBottom="@dimen/layout_padding_5dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_serving_type"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/padding_20_dp"
+            android:layout_weight="1"
+            android:hint="@string/serving_type"
+            android:paddingRight="@dimen/layout_padding"
+            android:textSize="@dimen/text_size_registration_title" />
+
+        <TextView
+            android:id="@+id/tv_value"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:hint="@string/value"
+            android:inputType="numberDecimal" />
+
+        <TextView
+            android:id="@+id/tv_type"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/padding_20_dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:hint="@string/type"
+            android:paddingRight="@dimen/layout_padding" />
+
+        <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+            android:id="@+id/bt_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center|end"
+            android:adjustViewBounds="true"
+            android:gravity="center|start"
+            android:paddingLeft="@dimen/fab_margin_right"
+            android:paddingRight="@dimen/padding_20_dp"
+            android:text="@string/fa_times_circle"
+            android:textColor="@color/orange_dark"
+            android:textSize="19sp" />
+
+        <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+            android:id="@+id/bt_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center|end"
+            android:adjustViewBounds="true"
+            android:gravity="center|start"
+            android:paddingLeft="@dimen/fab_margin_right"
+            android:paddingRight="@dimen/padding_20_dp"
+            android:text="@string/fa_times_circle"
+            android:textColor="@color/orange_dark"
+            android:textSize="19sp" />
+
+    </LinearLayout>
+</LinearLayout>

@@ -534,7 +534,11 @@ public enum WebServiceType {
 
     GET_INGREDINET_LIST_SOLR(Method.GET, "solr/recipe/ingredient/search/?"),
 
+    GET_NUTRIENT_LIST_SOLR(Method.GET, "solr/recipe/nutrient/search/?"),
+
     ADD_EDIT_DIET_PLAN(Method.POST, "dietPlan/addEdit/"),
+
+    ADD_EDIT_INGREDIENT(Method.POST, "recipe/ingredient/addEdit/"),
 
     GET_DIET_PLAN(Method.GET, "dietPlan/get/"),
 
