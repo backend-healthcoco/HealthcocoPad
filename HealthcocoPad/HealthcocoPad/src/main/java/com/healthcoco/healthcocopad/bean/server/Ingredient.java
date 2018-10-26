@@ -58,6 +58,8 @@ public class Ingredient extends SugarRecord {
     private List<Nutrients> mineralNutrients;
     @Ignore
     protected MealQuantity caloriesTemp;
+    @Ignore
+    private List<Nutrients> otherNutrients;
     protected double caloriesPerHundredUnit;
     @Ignore
     protected MealQuantity fatTemp;
@@ -69,8 +71,6 @@ public class Ingredient extends SugarRecord {
     protected MealQuantity fiberTemp;
     @Ignore
     protected MealQuantity currentQuantity;
-    @Ignore
-    private List<Nutrients> otherNutrients;
     protected double fatPerHundredUnit;
     protected double proteinPerHundredUnit;
     protected double carbohydreatePerHundredUnit;

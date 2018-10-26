@@ -101,6 +101,7 @@
     <string name="info_circle_analyse">&#xf05a;&#160;</string>
     <string name="icon_add_equivalent_measurement">&#xf055;&#160;Add Equivalent Measurement</string>
     <string name="icon_add_nutrient">&#xf055;&#160;Add Nutrient</string>
+    <string name="icon_add_ingredient">&#xf055;&#160;Add Ingredient</string>
 
 
 </resources>

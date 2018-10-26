@@ -13,6 +13,7 @@ import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.EquivalentQuantities;
 import com.healthcoco.healthcocopad.enums.PopupWindowType;
 import com.healthcoco.healthcocopad.enums.QuantityType;
+import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.Util;
 
@@ -27,18 +28,25 @@ import java.util.ArrayList;
 public class AddEquivalentMeasurementDialogFragment extends HealthCocoDialogFragment implements View.OnClickListener {
 
     public ArrayList<Object> quantityTypeList = new ArrayList<Object>() {{
-        add(QuantityType.GM);
+        add(QuantityType.G);
         add(QuantityType.MILI_LITRE);
     }};
     public ArrayList<Object> servingTypeList = new ArrayList<Object>() {{
         add(QuantityType.TABLE_SPOON);
+        add(QuantityType.TEA_SPOON);
         add(QuantityType.BOWL);
         add(QuantityType.CUP);
+        add(QuantityType.G);
+        add(QuantityType.MG);
+        add(QuantityType.LITRE);
+        add(QuantityType.MILI_LITRE);
     }};
     private TextView titleTextView;
     private TextView tvType;
     private TextView tvServingType;
     private EditText editValue;
+    EquivalentQuantities equivalentQuantity;
+    private Bundle bundle;
 
 
     public AddEquivalentMeasurementDialogFragment() {
@@ -54,6 +62,12 @@ public class AddEquivalentMeasurementDialogFragment extends HealthCocoDialogFrag
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        bundle = getArguments();
+        if (bundle != null)
+            equivalentQuantity = Parcels.unwrap(bundle.getParcelable(HealthCocoConstants.TAG_INTENT_DATA));
+
+        setWidthHeight(0.60, 0.60);
         init();
     }
 
@@ -85,7 +99,19 @@ public class AddEquivalentMeasurementDialogFragment extends HealthCocoDialogFrag
 
     @Override
     public void initData() {
+        if (equivalentQuantity != null) {
 
+            if (!Util.isNullOrZeroNumber(equivalentQuantity.getValue()))
+                editValue.setText(Util.getValidatedValue(equivalentQuantity.getValue()));
+            if (equivalentQuantity.getServingType() != null) {
+                tvServingType.setText(equivalentQuantity.getServingType().getUnit());
+                tvServingType.setTag(equivalentQuantity.getServingType());
+            }
+            if (equivalentQuantity.getType() != null) {
+                tvType.setText(equivalentQuantity.getType().getUnit());
+                tvType.setTag(equivalentQuantity.getType());
+            }
+        }
     }
 
     @Override
@@ -123,7 +149,7 @@ public class AddEquivalentMeasurementDialogFragment extends HealthCocoDialogFrag
 
         Intent data = new Intent();
         data.putExtra(HealthCocoConstants.TAG_INTENT_DATA, Parcels.wrap(equivalentQuantities));
-        getTargetFragment().onActivityResult(HealthCocoConstants.REQUEST_CODE_ADD_INGREDIENT, mActivity.RESULT_OK, data);
+        getTargetFragment().onActivityResult(HealthCocoConstants.REQUEST_CODE_ADD_MEASUREMENT, mActivity.RESULT_OK, data);
         dismiss();
     }
 }

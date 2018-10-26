@@ -36,6 +36,7 @@ import com.healthcoco.healthcocopad.fragments.AddEditMeasurementFragment;
 import com.healthcoco.healthcocopad.fragments.AddEditNormalVisitPrescriptionFragment;
 import com.healthcoco.healthcocopad.fragments.AddEditNormalVisitsFragment;
 import com.healthcoco.healthcocopad.fragments.AddEditNutrientValueFragment;
+import com.healthcoco.healthcocopad.fragments.AddEditRecipeFragment;
 import com.healthcoco.healthcocopad.fragments.AddInvoiceFragment;
 import com.healthcoco.healthcocopad.fragments.AddNewTemplateFragment;
 import com.healthcoco.healthcocopad.fragments.AddNewTreatmentFragment;
@@ -78,6 +79,8 @@ import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
 
 import static com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType.ADD_DIET;
+import static com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType.ADD_INGREDIENT;
+import static com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType.ADD_NUTRIENT;
 import static com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType.ANALYSE;
 import static com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType.PATIENT_ASSESSMENT;
 import static com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType.PERSONAL_DETAILS;
@@ -309,12 +312,20 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
                 openFragment(ActionbarType.HIDDEN, new SelectRecipeFragment());
                 break;
             case SELECT_INGREDIENT:
-                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.WITH_SAVE, SELECT_INGREDIENT.getTitleId(), new AddEditNutrientValueFragment());
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.WITH_SAVE, SELECT_INGREDIENT.getTitleId(), new SelectIngredientFragment());
                 break;
             case ANALYSE:
-                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.WITH_SAVE, ANALYSE.getTitleId(), new AddEditIngradientFragment());
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.WITH_SAVE, ANALYSE.getTitleId(), new AnalyseDietChartFragment());
                 break;
-
+            case ADD_INGREDIENT:
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.WITH_SAVE, ADD_INGREDIENT.getTitleId(), new AddEditIngradientFragment());
+                break;
+            case ADD_NUTRIENT:
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.WITH_SAVE, ADD_NUTRIENT.getTitleId(), new AddEditNutrientValueFragment());
+                break;
+            case ADD_RECIPE:
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.WITH_SAVE, ADD_NUTRIENT.getTitleId(), new AddEditRecipeFragment());
+                break;
         }
     }
 

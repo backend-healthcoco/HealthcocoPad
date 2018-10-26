@@ -125,6 +125,9 @@ public class LocalDatabaseUtils {
     public static final String KEY_DRUG_ID = "drug_id";
     public static final String KEY_VALUE = "value";
     public static final String KEY_TYPE = "type";
+    public static final String KEY_CATEGORY_TYPE = "category_type";
+    public static final String KEY_NOTE = "note";
+    public static final String KEY_NUTRIENT_CODE = "nutrient_code";
     public static final String KEY_FOR_DOCTOR = "for_doctor";
     private static final String TAG = LocalDatabaseUtils.class.getSimpleName();
     public static String KEY_FOREIGN_ROLE_ID = "foreign_role_id";

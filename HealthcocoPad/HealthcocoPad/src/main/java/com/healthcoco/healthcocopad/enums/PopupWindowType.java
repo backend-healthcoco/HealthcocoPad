@@ -55,15 +55,15 @@ public enum PopupWindowType {
     }}),
 
     NUTRIENT_TYPE(new ArrayList<Object>() {{
-        add(QuantityType.GM);
-        add(QuantityType.GM);
-        add(QuantityType.GM);
-        add(QuantityType.GM);
+        add(QuantityType.G);
+        add(QuantityType.G);
+        add(QuantityType.G);
+        add(QuantityType.G);
     }}),
 
     MICRO_NUTRIENT_TYPE(new ArrayList<Object>() {{
-        add(QuantityType.GM);
-        add(QuantityType.MGM);
+        add(QuantityType.G);
+        add(QuantityType.MG);
     }}),
 
     MATERIAL_TYPE(new ArrayList<Object>() {{
@@ -75,6 +75,8 @@ public enum PopupWindowType {
         add("Full Ceramic metal free");
         add("Zirconia");
     }}),
+
+    QUANTITY_TYPE,
 
     QUANTITY_VALUE(new ArrayList<Object>() {
         {

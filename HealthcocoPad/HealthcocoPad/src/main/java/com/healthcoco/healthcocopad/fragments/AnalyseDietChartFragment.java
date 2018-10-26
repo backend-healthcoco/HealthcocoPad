@@ -23,6 +23,7 @@ import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
+import com.healthcoco.healthcocopad.enums.NutrientCategoryType;
 import com.healthcoco.healthcocopad.enums.QuantityType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
@@ -237,25 +238,25 @@ public class AnalyseDietChartFragment extends HealthCocoFragment implements
             }
 
         if (!Util.isNullOrEmptyList(recipeItemRecived.getGeneralNutrients())) {
-            LocalDataServiceImpl.getInstance(mApp).addNutrientList(getDataFormList(recipeItemRecived.getGeneralNutrients(), recipeItemRecived.getCurrentQuantity().getValue()));
+            LocalDataServiceImpl.getInstance(mApp).addNutrientList(getDataFormList(recipeItemRecived.getGeneralNutrients(), recipeItemRecived.getCurrentQuantity().getValue(), NutrientCategoryType.GENERAL));
         }
         if (!Util.isNullOrEmptyList(recipeItemRecived.getCarbNutrients())) {
-            LocalDataServiceImpl.getInstance(mApp).addNutrientList(getDataFormList(recipeItemRecived.getCarbNutrients(), recipeItemRecived.getCurrentQuantity().getValue()));
+            LocalDataServiceImpl.getInstance(mApp).addNutrientList(getDataFormList(recipeItemRecived.getCarbNutrients(), recipeItemRecived.getCurrentQuantity().getValue(), NutrientCategoryType.CARBOHYDRATE));
         }
         if (!Util.isNullOrEmptyList(recipeItemRecived.getLipidNutrients())) {
-            LocalDataServiceImpl.getInstance(mApp).addNutrientList(getDataFormList(recipeItemRecived.getLipidNutrients(), recipeItemRecived.getCurrentQuantity().getValue()));
+            LocalDataServiceImpl.getInstance(mApp).addNutrientList(getDataFormList(recipeItemRecived.getLipidNutrients(), recipeItemRecived.getCurrentQuantity().getValue(), NutrientCategoryType.LIPIDS));
         }
         if (!Util.isNullOrEmptyList(recipeItemRecived.getProteinAminoAcidNutrients())) {
-            LocalDataServiceImpl.getInstance(mApp).addNutrientList(getDataFormList(recipeItemRecived.getProteinAminoAcidNutrients(), recipeItemRecived.getCurrentQuantity().getValue()));
+            LocalDataServiceImpl.getInstance(mApp).addNutrientList(getDataFormList(recipeItemRecived.getProteinAminoAcidNutrients(), recipeItemRecived.getCurrentQuantity().getValue(), NutrientCategoryType.PROTEIN_AMINOACIDS));
         }
         if (!Util.isNullOrEmptyList(recipeItemRecived.getVitaminNutrients())) {
-            LocalDataServiceImpl.getInstance(mApp).addNutrientList(getDataFormList(recipeItemRecived.getVitaminNutrients(), recipeItemRecived.getCurrentQuantity().getValue()));
+            LocalDataServiceImpl.getInstance(mApp).addNutrientList(getDataFormList(recipeItemRecived.getVitaminNutrients(), recipeItemRecived.getCurrentQuantity().getValue(), NutrientCategoryType.VITAMINS));
         }
         if (!Util.isNullOrEmptyList(recipeItemRecived.getMineralNutrients())) {
-            LocalDataServiceImpl.getInstance(mApp).addNutrientList(getDataFormList(recipeItemRecived.getMineralNutrients(), recipeItemRecived.getCurrentQuantity().getValue()));
+            LocalDataServiceImpl.getInstance(mApp).addNutrientList(getDataFormList(recipeItemRecived.getMineralNutrients(), recipeItemRecived.getCurrentQuantity().getValue(), NutrientCategoryType.MINERALS));
         }
         if (!Util.isNullOrEmptyList(recipeItemRecived.getOtherNutrients())) {
-            LocalDataServiceImpl.getInstance(mApp).addNutrientList(getDataFormList(recipeItemRecived.getOtherNutrients(), recipeItemRecived.getCurrentQuantity().getValue()));
+            LocalDataServiceImpl.getInstance(mApp).addNutrientList(getDataFormList(recipeItemRecived.getOtherNutrients(), recipeItemRecived.getCurrentQuantity().getValue(), NutrientCategoryType.OTHERS));
         }
 
         if (isEndOfListAchieved)
@@ -265,9 +266,10 @@ public class AnalyseDietChartFragment extends HealthCocoFragment implements
 
     }
 
-    private List<Nutrients> getDataFormList(List<Nutrients> nutrientsList, double value) {
+    private List<Nutrients> getDataFormList(List<Nutrients> nutrientsList, double value, NutrientCategoryType categoryType) {
         for (Nutrients nutrients : nutrientsList) {
             nutrients.setValue((nutrients.getValue() * recipeItemRecived.getCurrentQuantity().getValue()) / value);
+            nutrients.setCategoryType(categoryType);
         }
         return nutrientsList;
     }
@@ -275,6 +277,16 @@ public class AnalyseDietChartFragment extends HealthCocoFragment implements
     private void updateNutrientView() {
 
         LocalDataServiceImpl.getInstance(mApp).addNutrientValueByGroup();
+
+        generalNutrients = LocalDataServiceImpl.getInstance(mApp).getNutrientList(NutrientCategoryType.GENERAL);
+        carbNutrients = LocalDataServiceImpl.getInstance(mApp).getNutrientList(NutrientCategoryType.CARBOHYDRATE);
+        lipidNutrients = LocalDataServiceImpl.getInstance(mApp).getNutrientList(NutrientCategoryType.LIPIDS);
+        proteinAminoAcidNutrients = LocalDataServiceImpl.getInstance(mApp).getNutrientList(NutrientCategoryType.PROTEIN_AMINOACIDS);
+        vitaminNutrients = LocalDataServiceImpl.getInstance(mApp).getNutrientList(NutrientCategoryType.VITAMINS);
+        mineralNutrients = LocalDataServiceImpl.getInstance(mApp).getNutrientList(NutrientCategoryType.MINERALS);
+        otherNutrients = LocalDataServiceImpl.getInstance(mApp).getNutrientList(NutrientCategoryType.OTHERS);
+
+
         if (!Util.isNullOrEmptyList(generalNutrients))
             updateDietPlan(new ArrayList<Nutrients>(generalNutrients), R.string.protein_colon, parentCategoryOne);
 

@@ -17,8 +17,7 @@ import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.bean.EquivalentQuantities;
 import com.healthcoco.healthcocopad.bean.MealQuantity;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
-import com.healthcoco.healthcocopad.bean.request.IngredientToSend;
-import com.healthcoco.healthcocopad.bean.server.DietPlan;
+import com.healthcoco.healthcocopad.bean.request.IngredientRequest;
 import com.healthcoco.healthcocopad.bean.server.Ingredient;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.Nutrients;
@@ -108,7 +107,7 @@ public class AddEditIngradientFragment extends HealthCocoFragment implements Vie
     }
 
     private void initAdapters() {
-        mActivity.initPopupWindows(tvTypeQuantity, PopupWindowType.NUTRIENT_TYPE, PopupWindowType.NUTRIENT_TYPE.getList(), this);
+        mActivity.initPopupWindows(tvTypeQuantity, PopupWindowType.QUANTITY_TYPE, new ArrayList<Object>(quantitiesLinkedHashMap.values()), this);
         mActivity.initPopupWindows(tvTypeProtein, PopupWindowType.NUTRIENT_TYPE, PopupWindowType.NUTRIENT_TYPE.getList(), this);
         mActivity.initPopupWindows(tvTypeFat, PopupWindowType.NUTRIENT_TYPE, PopupWindowType.NUTRIENT_TYPE.getList(), this);
         mActivity.initPopupWindows(tvTypeFiber, PopupWindowType.NUTRIENT_TYPE, PopupWindowType.NUTRIENT_TYPE.getList(), this);
@@ -160,15 +159,15 @@ public class AddEditIngradientFragment extends HealthCocoFragment implements Vie
                 validateData();
                 break;
             case R.id.tv_add_equivalent_measurement:
-                openAddEquivalentMeasurementDialog();
+                openAddEquivalentMeasurementDialog(null);
                 break;
             case R.id.tv_add_nutrient:
                 openAddNutrientWindow();
                 break;
             case EDIT_ID:
-                EquivalentQuantities item = (EquivalentQuantities) v.getTag();
-//                if (item != null)
-//                    onAddMealClicked(dietplanAddItem, dietplanAddItem.getMealTiming());
+                EquivalentQuantities itemEquivalentQuantities = (EquivalentQuantities) v.getTag();
+                if (itemEquivalentQuantities != null)
+                    openAddEquivalentMeasurementDialog(itemEquivalentQuantities);
                 break;
             case DELETE_ID:
                 String tag = (String) v.getTag();
@@ -182,15 +181,20 @@ public class AddEditIngradientFragment extends HealthCocoFragment implements Vie
 
     private void openAddNutrientWindow() {
         Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
-        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.SELECT_INGREDIENT.ordinal());
+        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.ADD_NUTRIENT.ordinal());
 //        if (dietPlanRecipeItem != null)
 //            intent.putExtra(HealthCocoConstants.TAG_INTENT_DATA, Parcels.wrap(dietPlanRecipeItem));
         startActivityForResult(intent, HealthCocoConstants.REQUEST_CODE_ADD_NUTRIENT, null);
     }
 
-    private void openAddEquivalentMeasurementDialog() {
+    private void openAddEquivalentMeasurementDialog(EquivalentQuantities equivalentQuantities) {
         AddEquivalentMeasurementDialogFragment measurementDialogFragment = new AddEquivalentMeasurementDialogFragment();
-        measurementDialogFragment.setTargetFragment(this, HealthCocoConstants.REQUEST_CODE_ADD_INGREDIENT);
+        if (equivalentQuantities != null) {
+            Bundle bundle = new Bundle();
+            bundle.putParcelable(HealthCocoConstants.TAG_INTENT_DATA, Parcels.wrap(equivalentQuantities));
+            measurementDialogFragment.setArguments(bundle);
+        }
+        measurementDialogFragment.setTargetFragment(this, HealthCocoConstants.REQUEST_CODE_ADD_MEASUREMENT);
         measurementDialogFragment.show(mActivity.getSupportFragmentManager(),
                 measurementDialogFragment.getClass().getSimpleName());
     }
@@ -214,13 +218,17 @@ public class AddEditIngradientFragment extends HealthCocoFragment implements Vie
 
     private void addIngredient() {
         mActivity.showLoading(false);
-        IngredientToSend ingredientToSend = new IngredientToSend();
+        IngredientRequest ingredientRequest = new IngredientRequest();
 
-        ingredientToSend.setName(Util.getValidatedValueOrNull(editName));
-        ingredientToSend.setValue(Util.getValidatedDoubleValue(editValueQuantity));
-        ingredientToSend.setType((QuantityType) tvTypeQuantity.getTag());
+        ingredientRequest.setName(Util.getValidatedValueOrNull(editName));
+
+        MealQuantity mealQuantity = new MealQuantity();
+        mealQuantity.setValue(Util.getValidatedDoubleValue(editValueQuantity));
+        mealQuantity.setType((QuantityType) tvTypeQuantity.getTag());
+        ingredientRequest.setQuantity(mealQuantity);
+
         if (!Util.isNullOrEmptyList(quantitiesLinkedHashMap))
-            ingredientToSend.setEquivalentMeasurements(new ArrayList<>(quantitiesLinkedHashMap.values()));
+            ingredientRequest.setEquivalentMeasurements(new ArrayList<>(quantitiesLinkedHashMap.values()));
 
         String valueFat = Util.getValidatedValueOrNull(editValueFat);
         if (!Util.isNullOrBlank(valueFat)) {
@@ -228,7 +236,7 @@ public class AddEditIngradientFragment extends HealthCocoFragment implements Vie
             quantity.setValue(Double.parseDouble(valueFat));
             if (!Util.isNullOrBlank(Util.getValidatedValueOrNull(tvTypeFat)))
                 quantity.setType((QuantityType) tvTypeFat.getTag());
-            ingredientToSend.setFat(quantity);
+            ingredientRequest.setFat(quantity);
         }
 
         String valueProtein = Util.getValidatedValueOrNull(editValueProtein);
@@ -237,7 +245,7 @@ public class AddEditIngradientFragment extends HealthCocoFragment implements Vie
             quantity.setValue(Double.parseDouble(valueProtein));
             if (!Util.isNullOrBlank(Util.getValidatedValueOrNull(tvTypeProtein)))
                 quantity.setType((QuantityType) tvTypeProtein.getTag());
-            ingredientToSend.setProtein(quantity);
+            ingredientRequest.setProtein(quantity);
         }
 
         String valueCarbs = Util.getValidatedValueOrNull(editValueCarbs);
@@ -246,7 +254,7 @@ public class AddEditIngradientFragment extends HealthCocoFragment implements Vie
             quantity.setValue(Double.parseDouble(valueCarbs));
             if (!Util.isNullOrBlank(Util.getValidatedValueOrNull(tvTypeCarbs)))
                 quantity.setType((QuantityType) tvTypeCarbs.getTag());
-            ingredientToSend.setCarbohydreate(quantity);
+            ingredientRequest.setCarbohydreate(quantity);
         }
 
         String valueFiber = Util.getValidatedValueOrNull(editValueFiber);
@@ -255,7 +263,7 @@ public class AddEditIngradientFragment extends HealthCocoFragment implements Vie
             quantity.setValue(Double.parseDouble(valueFiber));
             if (!Util.isNullOrBlank(Util.getValidatedValueOrNull(tvTypeFiber)))
                 quantity.setType((QuantityType) tvTypeFiber.getTag());
-            ingredientToSend.setFiber(quantity);
+            ingredientRequest.setFiber(quantity);
         }
 
         String valueCal = Util.getValidatedValueOrNull(editValueCal);
@@ -264,26 +272,26 @@ public class AddEditIngradientFragment extends HealthCocoFragment implements Vie
             quantity.setValue(Double.parseDouble(valueCal));
             if (!Util.isNullOrBlank(Util.getValidatedValueOrNull(tvTypeCal)))
                 quantity.setType((QuantityType) tvTypeCal.getTag());
-            ingredientToSend.setCalories(quantity);
+            ingredientRequest.setCalories(quantity);
         }
 
         if (ingredientNutrient != null) {
-            ingredientToSend.setGeneralNutrients(ingredientNutrient.getGeneralNutrients());
-            ingredientToSend.setCarbNutrients(ingredientNutrient.getCarbNutrients());
-            ingredientToSend.setLipidNutrients(ingredientNutrient.getLipidNutrients());
-            ingredientToSend.setProteinAminoAcidNutrients(ingredientNutrient.getProteinAminoAcidNutrients());
-            ingredientToSend.setVitaminNutrients(ingredientNutrient.getVitaminNutrients());
-            ingredientToSend.setMineralNutrients(ingredientNutrient.getMineralNutrients());
-            ingredientToSend.setOtherNutrients(ingredientNutrient.getOtherNutrients());
+            ingredientRequest.setGeneralNutrients(ingredientNutrient.getGeneralNutrients());
+            ingredientRequest.setCarbNutrients(ingredientNutrient.getCarbNutrients());
+            ingredientRequest.setLipidNutrients(ingredientNutrient.getLipidNutrients());
+            ingredientRequest.setProteinAminoAcidNutrients(ingredientNutrient.getProteinAminoAcidNutrients());
+            ingredientRequest.setVitaminNutrients(ingredientNutrient.getVitaminNutrients());
+            ingredientRequest.setMineralNutrients(ingredientNutrient.getMineralNutrients());
+            ingredientRequest.setOtherNutrients(ingredientNutrient.getOtherNutrients());
         }
 
         if (user != null) {
-            ingredientToSend.setLocationId(user.getForeignLocationId());
-            ingredientToSend.setHospitalId(user.getForeignHospitalId());
-            ingredientToSend.setDoctorId(user.getUniqueId());
+            ingredientRequest.setLocationId(user.getForeignLocationId());
+            ingredientRequest.setHospitalId(user.getForeignHospitalId());
+            ingredientRequest.setDoctorId(user.getUniqueId());
         }
 
-        WebDataServiceImpl.getInstance(mApp).addEditIngredient(Ingredient.class, ingredientToSend, this, this);
+        WebDataServiceImpl.getInstance(mApp).addEditIngredient(Ingredient.class, ingredientRequest, this, this);
 
     }
 
@@ -359,12 +367,18 @@ public class AddEditIngradientFragment extends HealthCocoFragment implements Vie
 
     @Override
     public void onItemSelected(PopupWindowType popupWindowType, Object object) {
-
+        switch (popupWindowType) {
+            case QUANTITY_TYPE:
+                EquivalentQuantities equivalentQuantities = (EquivalentQuantities) object;
+                tvTypeQuantity.setText(equivalentQuantities.getServingType().getUnit());
+                tvTypeQuantity.setTag(equivalentQuantities.getServingType());
+                break;
+        }
     }
 
     @Override
     public void onEmptyListFound() {
-
+        Util.showToast(mActivity, getString(R.string.please_add_equivalent_quantity_first));
     }
 
     @Override
@@ -372,7 +386,7 @@ public class AddEditIngradientFragment extends HealthCocoFragment implements Vie
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == mActivity.RESULT_OK)
             switch (requestCode) {
-                case HealthCocoConstants.REQUEST_CODE_ADD_INGREDIENT:
+                case HealthCocoConstants.REQUEST_CODE_ADD_MEASUREMENT:
                     if (data != null) {
                         EquivalentQuantities quantity = Parcels.unwrap(data.getParcelableExtra(HealthCocoConstants.TAG_INTENT_DATA));
                         if (quantity != null) {
@@ -392,8 +406,8 @@ public class AddEditIngradientFragment extends HealthCocoFragment implements Vie
             }
     }
 
-    private void addEquivalentMeasurement
-            (ArrayList<EquivalentQuantities> equivalentQuantities) {
+    private void addEquivalentMeasurement(ArrayList<EquivalentQuantities> equivalentQuantities) {
+        mActivity.initPopupWindows(tvTypeQuantity, PopupWindowType.QUANTITY_TYPE, new ArrayList<Object>(equivalentQuantities), this);
         containerEquivalentMeasurement.removeAllViews();
         if (!Util.isNullOrEmptyList(equivalentQuantities)) {
             containerEquivalentMeasurement.setVisibility(View.VISIBLE);

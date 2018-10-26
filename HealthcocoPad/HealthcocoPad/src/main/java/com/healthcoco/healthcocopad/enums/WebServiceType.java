@@ -540,6 +540,8 @@ public enum WebServiceType {
 
     ADD_EDIT_INGREDIENT(Method.POST, "recipe/ingredient/addEdit/"),
 
+    ADD_EDIT_RECIPE(Method.POST, "recipe/addEdit/"),
+
     GET_DIET_PLAN(Method.GET, "dietPlan/get/"),
 
     GET_RECIPE(Method.GET, "recipe/"),

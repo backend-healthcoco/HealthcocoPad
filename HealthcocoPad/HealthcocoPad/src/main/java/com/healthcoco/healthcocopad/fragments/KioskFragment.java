@@ -225,10 +225,10 @@ public class KioskFragment extends HealthCocoFragment implements
                     mActivity.finish();
                     break;
                 case DOCTOR_AND_CLINIC:
-                    openCommonOpenUpActivity(CommonOpenUpFragmentType.ABOUT_DOCTOR, "ABOUT_DOCTOR", 0);
+                    openCommonOpenUpActivity(CommonOpenUpFragmentType.ADD_INGREDIENT, "ABOUT_DOCTOR", 0);
                     break;
                 case VIDEO:
-                    openCommonOpenUpActivity(CommonOpenUpFragmentType.EDUCATION_VIDEO, "VIDEO", 0);
+                    openCommonOpenUpActivity(CommonOpenUpFragmentType.ADD_RECIPE, "VIDEO", 0);
                     break;
                 case FEEDBACK:
                     openCommonOpenUpActivity(CommonOpenUpFragmentType.FEEDBACK_DOCTOR, AppointmentFeedbackFragment.TAG_FEEDBACK_TYPE, FeedbackType.DOCTOR.ordinal(), 0);

@@ -1,6 +1,7 @@
 package com.healthcoco.healthcocopad.services.impl;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
 
@@ -27,6 +28,8 @@ import com.healthcoco.healthcocopad.enums.BooleanTypeValues;
 import com.healthcoco.healthcocopad.enums.FilterItemType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.LocalTabelType;
+import com.healthcoco.healthcocopad.enums.NutrientCategoryType;
+import com.healthcoco.healthcocopad.enums.QuantityType;
 import com.healthcoco.healthcocopad.enums.RecordType;
 import com.healthcoco.healthcocopad.enums.RoleType;
 import com.healthcoco.healthcocopad.enums.SuggestionType;
@@ -46,10 +49,13 @@ import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.ReflectionUtil;
 import com.healthcoco.healthcocopad.utilities.StringUtil;
 import com.healthcoco.healthcocopad.utilities.Util;
+import com.orm.SugarContext;
+import com.orm.SugarDb;
 import com.orm.SugarRecord;
 import com.orm.query.Condition;
 import com.orm.query.Select;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -5882,8 +5888,20 @@ public class LocalDataServiceImpl {
         return patientMeasurementInfo;
     }
 
-    public void addNutrientList(List<Nutrients> generalNutrients) {
-        Nutrients.saveInTx(generalNutrients);
+    public void addNutrientList(List<Nutrients> nutrientsList) {
+        Nutrients.saveInTx(nutrientsList);
+    }
+
+    public void deleteAllNutrient() {
+        Nutrients.deleteAll(Nutrients.class);
+    }
+
+    public void addNutrientList(List<Nutrients> nutrientsList, NutrientCategoryType categoryType) {
+        if (categoryType != null)
+            for (Nutrients nutrient : nutrientsList) {
+                nutrient.setCategoryType(categoryType);
+            }
+        Nutrients.saveInTx(nutrientsList);
     }
 
     /*   private List<Nutrients> getNutrientList(String treatmentId) {
@@ -5894,24 +5912,108 @@ public class LocalDataServiceImpl {
        }
    */
 
+    public List<Nutrients> getNutrientList(NutrientCategoryType categoryType) {
+        Select<Nutrients> selectQuery = Select.from(Nutrients.class)
+                .where(Condition.prop(LocalDatabaseUtils.KEY_CATEGORY_TYPE).eq(categoryType));
+        List<Nutrients> list = selectQuery.list();
+        return list;
+    }
+
     public void addNutrientValueByGroup() {
         //forming where condition query
         String whereCondition = "Select " +
+                LocalDatabaseUtils.KEY_UNIQUE_ID +
+                ", Sum(" +
+                LocalDatabaseUtils.KEY_VALUE + ") from "
+                + StringUtil.toSQLName(Nutrients.class.getSimpleName())
+                + " group by "
+                + LocalDatabaseUtils.KEY_UNIQUE_ID;
+
+     /*   String whereCondition = "Select " +
                 LocalDatabaseUtils.KEY_UNIQUE_ID + ", " +
                 LocalDatabaseUtils.KEY_NAME + ", Sum(" +
                 LocalDatabaseUtils.KEY_VALUE + "), " +
                 LocalDatabaseUtils.KEY_TYPE + ", " +
+                LocalDatabaseUtils.KEY_CATEGORY_TYPE + ", " +
                 "note, nutrient_code from " + StringUtil.toSQLName(Nutrients.class.getSimpleName())
                 + " group by "
-                + LocalDatabaseUtils.KEY_UNIQUE_ID;
+                + LocalDatabaseUtils.KEY_UNIQUE_ID;*/
 
         LogUtils.LOGD(TAG, "Select Query " + whereCondition);
-        List<Nutrients> nutrientsList = Nutrients.findWithQuery(Nutrients.class, whereCondition);
+        List<Nutrients> nutrientsList = SugarRecord.findWithQuery(Nutrients.class,
+                "Select unique_id as unique_id, type, Sum(value) as value," +
+                        " category_type as category_type, note as note," +
+                        " nutrient_code as nutrient_code from NUTRIENTS group by unique_id");
         if (!Util.isNullOrEmptyList(nutrientsList)) {
             Nutrients.deleteAll(Nutrients.class);
             addNutrientList(nutrientsList);
         }
 //        SugarRecord.findWithQuery(MedicalFamilyHistoryDetails.class, whereCondition);
+    }
+
+    public void addNutrientValueGroup() {
+        //forming where condition query
+        String whereCondition = "Select " +
+                LocalDatabaseUtils.KEY_UNIQUE_ID + ", " +
+                LocalDatabaseUtils.KEY_NAME + ", Sum(" +
+                LocalDatabaseUtils.KEY_VALUE + ") as " +
+                LocalDatabaseUtils.KEY_VALUE + ", " +
+                LocalDatabaseUtils.KEY_TYPE + ", " +
+                LocalDatabaseUtils.KEY_CATEGORY_TYPE + ", " +
+                LocalDatabaseUtils.KEY_NOTE + ", " +
+                LocalDatabaseUtils.KEY_NUTRIENT_CODE + " from " +
+                StringUtil.toSQLName(Nutrients.class.getSimpleName())
+                + " group by "
+                + LocalDatabaseUtils.KEY_UNIQUE_ID;
+
+        List<Nutrients> nutrientsList = new ArrayList<>();
+        Field f = null;
+        try {
+            f = SugarContext.getSugarContext().getClass().getDeclaredField("sugarDb");
+            f.setAccessible(true);
+            SugarDb db = (SugarDb) f.get(SugarContext.getSugarContext());
+            Cursor cursor = db.getDB().
+                    rawQuery(whereCondition, null);
+
+            if (cursor.moveToFirst())
+                cursor.getInt(cursor.getColumnIndex(LocalDatabaseUtils.KEY_VALUE));
+
+
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                Nutrients nutrient = new Nutrients();
+
+                nutrient.setUniqueId(cursor.getString(cursor.getColumnIndex(LocalDatabaseUtils.KEY_UNIQUE_ID.toUpperCase())));
+                nutrient.setName(cursor.getString(cursor.getColumnIndex(LocalDatabaseUtils.KEY_NAME.toUpperCase())));
+                nutrient.setValue(cursor.getDouble(cursor.getColumnIndex(LocalDatabaseUtils.KEY_VALUE)));
+                nutrient.setNote(cursor.getString(cursor.getColumnIndex(LocalDatabaseUtils.KEY_NOTE.toUpperCase())));
+                nutrient.setNutrientCode(cursor.getString(cursor.getColumnIndex(LocalDatabaseUtils.KEY_NUTRIENT_CODE.toUpperCase())));
+
+                String type = cursor.getString(cursor.getColumnIndex(LocalDatabaseUtils.KEY_TYPE.toUpperCase()));
+                String categoryType = cursor.getString(cursor.getColumnIndex(LocalDatabaseUtils.KEY_CATEGORY_TYPE.toUpperCase()));
+
+                if (!Util.isNullOrBlank(categoryType)) {
+                    NutrientCategoryType nutrientCategoryType = NutrientCategoryType.valueOf(categoryType);
+                    nutrient.setCategoryType(nutrientCategoryType);
+                }
+                if (!Util.isNullOrBlank(type)) {
+                    QuantityType quantityType = QuantityType.valueOf(type);
+                    nutrient.setType(quantityType);
+                }
+
+                nutrientsList.add(nutrient);
+                cursor.moveToNext();
+            }
+
+            if (!Util.isNullOrEmptyList(nutrientsList)) {
+                Nutrients.deleteAll(Nutrients.class);
+                addNutrientList(nutrientsList);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
 

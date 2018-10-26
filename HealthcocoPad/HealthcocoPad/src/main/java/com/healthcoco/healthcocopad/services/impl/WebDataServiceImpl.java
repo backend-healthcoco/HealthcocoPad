@@ -33,30 +33,25 @@ import com.healthcoco.healthcocopad.bean.request.DoctorSignupHandheldContinueReq
 import com.healthcoco.healthcocopad.bean.request.DrugInteractionRequest;
 import com.healthcoco.healthcocopad.bean.request.EventRequest;
 import com.healthcoco.healthcocopad.bean.request.Feedback;
-import com.healthcoco.healthcocopad.bean.request.IngredientToSend;
+import com.healthcoco.healthcocopad.bean.request.IngredientRequest;
 import com.healthcoco.healthcocopad.bean.request.InvoiceRequest;
 import com.healthcoco.healthcocopad.bean.request.PrescriptionRequest;
 import com.healthcoco.healthcocopad.bean.request.PrintPatientCardRequest;
 import com.healthcoco.healthcocopad.bean.request.ProfessionalMembershipRequest;
 import com.healthcoco.healthcocopad.bean.request.ProfessionalStatementRequest;
+import com.healthcoco.healthcocopad.bean.request.RecipeRequest;
 import com.healthcoco.healthcocopad.bean.request.RegisterNewPatientRequest;
 import com.healthcoco.healthcocopad.bean.request.TreatmentRequest;
 import com.healthcoco.healthcocopad.bean.request.UserPermissionsRequest;
-import com.healthcoco.healthcocopad.bean.request.UserVerification;
-import com.healthcoco.healthcocopad.bean.server.AdviceSuggestion;
 import com.healthcoco.healthcocopad.bean.server.AssessmentPersonalDetail;
 import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
-import com.healthcoco.healthcocopad.bean.server.ClinicDoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.Diagram;
 import com.healthcoco.healthcocopad.bean.server.DietPlan;
 import com.healthcoco.healthcocopad.bean.server.Disease;
 import com.healthcoco.healthcocopad.bean.server.DoctorClinicProfile;
-import com.healthcoco.healthcocopad.bean.server.DoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.Drug;
 import com.healthcoco.healthcocopad.bean.server.DrugType;
-import com.healthcoco.healthcocopad.bean.server.Events;
 import com.healthcoco.healthcocopad.bean.server.GCMRequest;
-import com.healthcoco.healthcocopad.bean.server.Ingredient;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.NotificationResponse;
 import com.healthcoco.healthcocopad.bean.server.PatientMeasurementInfo;
@@ -77,7 +72,6 @@ import com.healthcoco.healthcocopad.enums.LocalTabelType;
 import com.healthcoco.healthcocopad.enums.RecordState;
 import com.healthcoco.healthcocopad.enums.RoleType;
 import com.healthcoco.healthcocopad.enums.UserState;
-import com.healthcoco.healthcocopad.enums.VisitedForType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.GCMRefreshListener;
 import com.healthcoco.healthcocopad.services.GsonRequest;
@@ -1864,7 +1858,11 @@ public class WebDataServiceImpl implements GCMRefreshListener {
                     break;
                 case GET_NUTRIENT_LIST_SOLR:
                     url = webServiceType.getUrl()
-                            + HealthCocoConstants.PARAM_DISCARDED_FALSE;
+                            + HealthCocoConstants.PARAM_DISCARDED_FALSE
+                            + HealthCocoConstants.PARAM_PAGE + pageNum
+                            + HealthCocoConstants.PARAM_SIZE + size
+
+                            + HealthCocoConstants.PARAM_SEARCH_TERM + searchTerm;
                     break;
             }
             getResponse(webServiceType, class1, url, null, null, responseListener, errorListener);
@@ -1922,13 +1920,26 @@ public class WebDataServiceImpl implements GCMRefreshListener {
         }
     }
 
-    public void addEditIngredient(Class<?> class1, IngredientToSend ingredientToSend,
+    public void addEditIngredient(Class<?> class1, IngredientRequest ingredientRequest,
                                   Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         WebServiceType webServiceType = WebServiceType.ADD_EDIT_INGREDIENT;
         checkNetworkStatus(mApp);
         if (HealthCocoConstants.isNetworkOnline) {
             String url = webServiceType.getUrl();
-            getResponse(webServiceType, class1, url, ingredientToSend, null, responseListener,
+            getResponse(webServiceType, class1, url, ingredientRequest, null, responseListener,
+                    errorListener);
+        } else {
+            showUserOffline(webServiceType, responseListener);
+        }
+    }
+
+    public void addEditRecipe(Class<?> class1, RecipeRequest recipeRequest,
+                              Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        WebServiceType webServiceType = WebServiceType.ADD_EDIT_RECIPE;
+        checkNetworkStatus(mApp);
+        if (HealthCocoConstants.isNetworkOnline) {
+            String url = webServiceType.getUrl();
+            getResponse(webServiceType, class1, url, recipeRequest, null, responseListener,
                     errorListener);
         } else {
             showUserOffline(webServiceType, responseListener);

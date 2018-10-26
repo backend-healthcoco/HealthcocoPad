@@ -16,7 +16,9 @@ import com.android.volley.Response;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
+import com.healthcoco.healthcocopad.bean.EquivalentQuantities;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
+import com.healthcoco.healthcocopad.bean.server.DietPlanRecipeItem;
 import com.healthcoco.healthcocopad.bean.server.Ingredient;
 import com.healthcoco.healthcocopad.bean.server.IngredientResponse;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
@@ -26,9 +28,11 @@ import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocopad.enums.AdapterType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
+import com.healthcoco.healthcocopad.enums.MealTimeType;
 import com.healthcoco.healthcocopad.enums.QuantityType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
+import com.healthcoco.healthcocopad.listeners.SelectedRecipeItemClickListener;
 import com.healthcoco.healthcocopad.recyclerview.HealthcocoRecyclerViewAdapter;
 import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
@@ -41,6 +45,7 @@ import com.healthcoco.healthcocopad.viewholders.NutrientListItemViewHolder;
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
@@ -48,6 +53,10 @@ import java.util.List;
  */
 public class AddEditNutrientValueFragment extends HealthCocoFragment implements View.OnClickListener,
         GsonRequest.ErrorListener, Response.Listener<VolleyResponseBean>, LocalDoInBackgroundListenerOptimised {
+
+    //variables need for pagination
+    public static final int MAX_SIZE = 100;
+    private int PAGE_NUMBER = 0;
 
     private User user;
 
@@ -67,6 +76,15 @@ public class AddEditNutrientValueFragment extends HealthCocoFragment implements 
     private List<Nutrients> mineralNutrients = new ArrayList<>();
     private List<Nutrients> otherNutrients = new ArrayList<>();
 
+    private LinkedHashMap<String, Nutrients> generalNutrientMap = new LinkedHashMap<>();
+    private LinkedHashMap<String, Nutrients> carbNutrientMap = new LinkedHashMap<>();
+    private LinkedHashMap<String, Nutrients> lipidNutrientMap = new LinkedHashMap<>();
+    private LinkedHashMap<String, Nutrients> proteinAminoAcidNutrientMap = new LinkedHashMap<>();
+    private LinkedHashMap<String, Nutrients> vitaminNutrientMap = new LinkedHashMap<>();
+    private LinkedHashMap<String, Nutrients> mineralNutrientMap = new LinkedHashMap<>();
+    private LinkedHashMap<String, Nutrients> otherNutrientMap = new LinkedHashMap<>();
+
+
     private HealthcocoRecyclerViewAdapter generalAdapter;
     private HealthcocoRecyclerViewAdapter carbAdapter;
     private HealthcocoRecyclerViewAdapter lipidAdapter;
@@ -75,9 +93,10 @@ public class AddEditNutrientValueFragment extends HealthCocoFragment implements 
     private HealthcocoRecyclerViewAdapter mineralAdapter;
     private HealthcocoRecyclerViewAdapter otherAdapter;
 
+    private boolean isFromRecipe;
+    private Ingredient ingredient;
+    private DietPlanRecipeItem dietPlanRecipeItem;
 
-    public AddEditNutrientValueFragment() {
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -89,7 +108,11 @@ public class AddEditNutrientValueFragment extends HealthCocoFragment implements 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
         Intent intent = mActivity.getIntent();
+        isFromRecipe = intent.getBooleanExtra(HealthCocoConstants.TAG_IS_FROM_RECIPE, false);
+        dietPlanRecipeItem = Parcels.unwrap(intent.getParcelableExtra(HealthCocoConstants.TAG_RECIPE_DATA));
+        ingredient = Parcels.unwrap(intent.getParcelableExtra(HealthCocoConstants.TAG_INGREDIENT_DATA));
 
         init();
         mActivity.showLoading(false);
@@ -194,7 +217,7 @@ public class AddEditNutrientValueFragment extends HealthCocoFragment implements 
         mApp.cancelPendingRequests(String.valueOf(WebServiceType.GET_RECIPE_LIST_SOLR));
         mActivity.showLoading(false);
         WebDataServiceImpl.getInstance(mApp).getListSolr(NutrientResponse.class,
-                WebServiceType.GET_NUTRIENT_LIST_SOLR, 0, 0, null, this, this);
+                WebServiceType.GET_NUTRIENT_LIST_SOLR, PAGE_NUMBER, MAX_SIZE, "", this, this);
     }
 
     @Override
@@ -208,38 +231,56 @@ public class AddEditNutrientValueFragment extends HealthCocoFragment implements 
 
     public void validateData() {
         if (!Util.isNullOrEmptyList(generalNutrients))
-            generalNutrients = getDataFromList(rvGeneral, generalNutrients);
+            generalNutrients = getDataFromList(rvGeneral, generalNutrients.size());
         if (!Util.isNullOrEmptyList(carbNutrients))
-            carbNutrients = getDataFromList(rvCarbs, carbNutrients);
+            carbNutrients = getDataFromList(rvCarbs, carbNutrients.size());
         if (!Util.isNullOrEmptyList(lipidNutrients))
-            lipidNutrients = getDataFromList(rvLipid, lipidNutrients);
+            lipidNutrients = getDataFromList(rvLipid, lipidNutrients.size());
         if (!Util.isNullOrEmptyList(proteinAminoAcidNutrients))
-            proteinAminoAcidNutrients = getDataFromList(rvProteinAminoAcid, proteinAminoAcidNutrients);
+            proteinAminoAcidNutrients = getDataFromList(rvProteinAminoAcid, proteinAminoAcidNutrients.size());
         if (!Util.isNullOrEmptyList(vitaminNutrients))
-            vitaminNutrients = getDataFromList(rvVitamin, vitaminNutrients);
+            vitaminNutrients = getDataFromList(rvVitamin, vitaminNutrients.size());
         if (!Util.isNullOrEmptyList(mineralNutrients))
-            mineralNutrients = getDataFromList(rvMineral, mineralNutrients);
+            mineralNutrients = getDataFromList(rvMineral, mineralNutrients.size());
         if (!Util.isNullOrEmptyList(otherNutrients))
-            otherNutrients = getDataFromList(rvOther, otherNutrients);
+            otherNutrients = getDataFromList(rvOther, otherNutrients.size());
 
-        Ingredient ingredient = new Ingredient();
-        ingredient.setGeneralNutrients(generalNutrients);
-        ingredient.setCarbNutrients(carbNutrients);
-        ingredient.setLipidNutrients(lipidNutrients);
-        ingredient.setProteinAminoAcidNutrients(proteinAminoAcidNutrients);
-        ingredient.setVitaminNutrients(vitaminNutrients);
-        ingredient.setMineralNutrients(mineralNutrients);
-        ingredient.setOtherNutrients(otherNutrients);
+        if (isFromRecipe) {
+            if (dietPlanRecipeItem == null)
+                dietPlanRecipeItem = new DietPlanRecipeItem();
+            dietPlanRecipeItem.setGeneralNutrients(generalNutrients);
+            dietPlanRecipeItem.setCarbNutrients(carbNutrients);
+            dietPlanRecipeItem.setLipidNutrients(lipidNutrients);
+            dietPlanRecipeItem.setProteinAminoAcidNutrients(proteinAminoAcidNutrients);
+            dietPlanRecipeItem.setVitaminNutrients(vitaminNutrients);
+            dietPlanRecipeItem.setMineralNutrients(mineralNutrients);
+            dietPlanRecipeItem.setOtherNutrients(otherNutrients);
 
-        Intent data = new Intent();
-        data.putExtra(HealthCocoConstants.TAG_INTENT_DATA, Parcels.wrap(ingredient));
-        getActivity().setResult(mActivity.RESULT_OK, data);
-        getActivity().finish();
+            Intent data = new Intent();
+            data.putExtra(HealthCocoConstants.TAG_INTENT_DATA, Parcels.wrap(dietPlanRecipeItem));
+            getActivity().setResult(mActivity.RESULT_OK, data);
+            getActivity().finish();
+        } else {
+            if (ingredient == null)
+                ingredient = new Ingredient();
+            ingredient.setGeneralNutrients(generalNutrients);
+            ingredient.setCarbNutrients(carbNutrients);
+            ingredient.setLipidNutrients(lipidNutrients);
+            ingredient.setProteinAminoAcidNutrients(proteinAminoAcidNutrients);
+            ingredient.setVitaminNutrients(vitaminNutrients);
+            ingredient.setMineralNutrients(mineralNutrients);
+            ingredient.setOtherNutrients(otherNutrients);
+
+            Intent data = new Intent();
+            data.putExtra(HealthCocoConstants.TAG_INTENT_DATA, Parcels.wrap(ingredient));
+            getActivity().setResult(mActivity.RESULT_OK, data);
+            getActivity().finish();
+        }
     }
 
-    private List<Nutrients> getDataFromList(RecyclerView recyclerView, List<Nutrients> list) {
-        ArrayList<Nutrients> nutrientList = new ArrayList<>();
-        for (int position = 0; position < list.size(); position++) {
+    private List<Nutrients> getDataFromList(RecyclerView recyclerView, int listSize) {
+        List<Nutrients> nutrientList = new ArrayList<>();
+        for (int position = 0; position < listSize; position++) {
             View view = recyclerView.getChildAt(position);
             EditText editValue = view.findViewById(R.id.edit_value);
             TextView tvType = view.findViewById(R.id.tv_type);
@@ -287,9 +328,10 @@ public class AddEditNutrientValueFragment extends HealthCocoFragment implements 
                 break;
             case GET_NUTRIENT_LIST_SOLR:
                 ArrayList<NutrientResponse> list = (ArrayList<NutrientResponse>) (ArrayList<?>) response.getDataList();
-                LogUtils.LOGD(TAG, "onResponse Nutrient Size " + list.size() + " isDataFromLocal " + response.isDataFromLocal());
-                if (!Util.isNullOrEmptyList(list))
+                if (!Util.isNullOrEmptyList(list)) {
+                    LogUtils.LOGD(TAG, "onResponse Nutrient Size " + list.size() + " isDataFromLocal " + response.isDataFromLocal());
                     notifyAdapter(list);
+                }
                 mActivity.hideLoading();
                 break;
         }
@@ -305,28 +347,38 @@ public class AddEditNutrientValueFragment extends HealthCocoFragment implements 
 
             switch (nutrientItem.getCategory()) {
                 case GENERAL:
+                    generalNutrientMap.put(nutrient.getUniqueId(), nutrient);
                     generalNutrients.add(nutrient);
                     break;
                 case CARBOHYDRATE:
+                    carbNutrientMap.put(nutrient.getUniqueId(), nutrient);
                     carbNutrients.add(nutrient);
                     break;
                 case LIPIDS:
+                    lipidNutrientMap.put(nutrient.getUniqueId(), nutrient);
                     lipidNutrients.add(nutrient);
                     break;
                 case PROTEIN_AMINOACIDS:
+                    proteinAminoAcidNutrientMap.put(nutrient.getUniqueId(), nutrient);
                     proteinAminoAcidNutrients.add(nutrient);
                     break;
                 case VITAMINS:
+                    vitaminNutrientMap.put(nutrient.getUniqueId(), nutrient);
                     vitaminNutrients.add(nutrient);
                     break;
                 case MINERALS:
+                    mineralNutrientMap.put(nutrient.getUniqueId(), nutrient);
                     mineralNutrients.add(nutrient);
                     break;
                 case OTHERS:
+                    otherNutrientMap.put(nutrient.getUniqueId(), nutrient);
                     otherNutrients.add(nutrient);
                     break;
             }
         }
+
+//        updateReceivedData();
+
         generalAdapter.notifyDataSetChanged();
         carbAdapter.notifyDataSetChanged();
         lipidAdapter.notifyDataSetChanged();
@@ -336,6 +388,61 @@ public class AddEditNutrientValueFragment extends HealthCocoFragment implements 
         otherAdapter.notifyDataSetChanged();
     }
 
+    private void updateReceivedData() {
+        if (dietPlanRecipeItem != null) {
+            if (!Util.isNullOrEmptyList(dietPlanRecipeItem.getGeneralNutrients()))
+                generalNutrients = getReceivedData(dietPlanRecipeItem.getGeneralNutrients(), generalNutrientMap);
+
+            if (!Util.isNullOrEmptyList(dietPlanRecipeItem.getCarbNutrients()))
+                carbNutrients = getReceivedData(dietPlanRecipeItem.getCarbNutrients(), carbNutrientMap);
+
+            if (!Util.isNullOrEmptyList(dietPlanRecipeItem.getLipidNutrients()))
+                lipidNutrients = getReceivedData(dietPlanRecipeItem.getLipidNutrients(), lipidNutrientMap);
+
+            if (!Util.isNullOrEmptyList(dietPlanRecipeItem.getProteinAminoAcidNutrients()))
+                proteinAminoAcidNutrients = getReceivedData(dietPlanRecipeItem.getProteinAminoAcidNutrients(), proteinAminoAcidNutrientMap);
+
+            if (!Util.isNullOrEmptyList(dietPlanRecipeItem.getVitaminNutrients()))
+                vitaminNutrients = getReceivedData(dietPlanRecipeItem.getVitaminNutrients(), vitaminNutrientMap);
+
+            if (!Util.isNullOrEmptyList(dietPlanRecipeItem.getMineralNutrients()))
+                mineralNutrients = getReceivedData(dietPlanRecipeItem.getMineralNutrients(), mineralNutrientMap);
+
+            if (!Util.isNullOrEmptyList(dietPlanRecipeItem.getOtherNutrients()))
+                otherNutrients = getReceivedData(dietPlanRecipeItem.getOtherNutrients(), otherNutrientMap);
+
+        } else if (ingredient != null) {
+
+            if (!Util.isNullOrEmptyList(ingredient.getGeneralNutrients()))
+                generalNutrients = getReceivedData(ingredient.getGeneralNutrients(), generalNutrientMap);
+
+            if (!Util.isNullOrEmptyList(ingredient.getCarbNutrients()))
+                carbNutrients = getReceivedData(ingredient.getCarbNutrients(), carbNutrientMap);
+
+            if (!Util.isNullOrEmptyList(ingredient.getLipidNutrients()))
+                lipidNutrients = getReceivedData(ingredient.getLipidNutrients(), lipidNutrientMap);
+
+            if (!Util.isNullOrEmptyList(ingredient.getProteinAminoAcidNutrients()))
+                proteinAminoAcidNutrients = getReceivedData(ingredient.getProteinAminoAcidNutrients(), proteinAminoAcidNutrientMap);
+
+            if (!Util.isNullOrEmptyList(ingredient.getVitaminNutrients()))
+                vitaminNutrients = getReceivedData(ingredient.getVitaminNutrients(), vitaminNutrientMap);
+
+            if (!Util.isNullOrEmptyList(ingredient.getMineralNutrients()))
+                mineralNutrients = getReceivedData(ingredient.getMineralNutrients(), mineralNutrientMap);
+
+            if (!Util.isNullOrEmptyList(ingredient.getOtherNutrients()))
+                otherNutrients = getReceivedData(ingredient.getOtherNutrients(), otherNutrientMap);
+        }
+
+    }
+
+    private List<Nutrients> getReceivedData(List<Nutrients> nutrientsList, LinkedHashMap<String, Nutrients> nutrientsHashMap) {
+        for (Nutrients nutrient : nutrientsList) {
+            nutrientsHashMap.put(nutrient.getUniqueId(), nutrient);
+        }
+        return new ArrayList<>(nutrientsHashMap.values());
+    }
 
     /**
      * dont add break statement after add(since we need to call get statement also after add
@@ -366,5 +473,4 @@ public class AddEditNutrientValueFragment extends HealthCocoFragment implements 
     @Override
     public void onPostExecute(VolleyResponseBean volleyResponseBean) {
     }
-
 }

@@ -165,6 +165,12 @@ public class PopupListViewAdapter extends BaseAdapter {
                     text = quantityType.getUnit();
                 }
                 break;
+            case QUANTITY_TYPE:
+                if (object instanceof EquivalentQuantities) {
+                    EquivalentQuantities quantityType = (EquivalentQuantities) object;
+                    text = quantityType.getServingType().getUnit();
+                }
+                break;
             case TIME_SLOTS:
                 if (object instanceof AvailableTimeSlots) {
                     AvailableTimeSlots availableTimeSlots = (AvailableTimeSlots) object;

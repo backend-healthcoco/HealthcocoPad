@@ -24,6 +24,7 @@ public class HealthCocoConstants {
     public static final String TAG_IS_EDIT_PATIENT = "isEditPatient";
     public static final String TAG_IS_KIOSK = "isKiosk";
     public static final String TAG_IS_FROM_SPLASH = "isFromSplash";
+    public static final String TAG_IS_FROM_RECIPE = "isFromRECIPE";
     public static final String TAG_IS_FROM_SETTINGS = "isFromSettings";
     public static final String TAG_IS_FROM_NUTRITION = "isFromNutrition";
     public static final String TAG_TOOTH_NUMBER = "toothNumber";
@@ -43,6 +44,9 @@ public class HealthCocoConstants {
     public static final String TAG_PATIENT_PROFILE = "patientProfile";
     public static final String TAG_SELECTED_DATE_TIME_IN_MILLIS = "selectedTimeInMillis";
     public static final String TAG_DIAGNOSTICS_LIST = "diagnostics_list";
+    public static final String TAG_RECIPE_DATA = "recipeData";
+    public static final String TAG_INGREDIENT_DATA = "ingredientData";
+
     public static final int RESULT_CODE_ADD_PRESCIPTION = 101;
     public static final int REQUEST_CODE_CAMERA = 102;
     public static final int REQUEST_CODE_GALLERY = 103;
@@ -112,6 +116,7 @@ public class HealthCocoConstants {
     public static final int REQUEST_CODE_ADD_INGREDIENT = 222;
     public static final int RESULT_CODE_ADD_INGREDIENT = 223;
     public static final int REQUEST_CODE_ADD_NUTRIENT = 224;
+    public static final int REQUEST_CODE_ADD_MEASUREMENT = 225;
 
 
     public static final String PARAM_IS_DOCTOR_APP_TRUE = "&isDoctorApp=true";

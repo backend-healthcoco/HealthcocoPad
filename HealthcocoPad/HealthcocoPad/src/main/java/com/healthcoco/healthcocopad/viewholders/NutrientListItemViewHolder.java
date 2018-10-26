@@ -64,8 +64,8 @@ public class NutrientListItemViewHolder extends HealthcocoComonRecylcerViewHolde
                 tvType.setText(nutrient.getType().getUnit());
                 tvType.setTag(nutrient.getType());
             } else {
-                tvType.setText(QuantityType.GM.getUnit());
-                tvType.setTag(QuantityType.GM);
+                tvType.setText(QuantityType.G.getUnit());
+                tvType.setTag(QuantityType.G);
             }
             editValue.setTag(nutrient);
         }

@@ -21,6 +21,7 @@ public class Nutrients extends SugarRecord {
     private QuantityType type;
     private String note;
     private String nutrientCode;
+    protected NutrientCategoryType categoryType;
 
     public String getForeignMealId() {
         return foreignMealId;
@@ -84,5 +85,13 @@ public class Nutrients extends SugarRecord {
 
     public void setNutrientCode(String nutrientCode) {
         this.nutrientCode = nutrientCode;
+    }
+
+    public NutrientCategoryType getCategoryType() {
+        return categoryType;
+    }
+
+    public void setCategoryType(NutrientCategoryType categoryType) {
+        this.categoryType = categoryType;
     }
 }

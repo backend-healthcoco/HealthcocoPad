@@ -1355,9 +1355,6 @@
     <string name="write_a_reason">Write a Reason</string>
     <string name="freq">Frequency</string>
     <string name="gms">Gms</string>
-    <string name="select_recipe">Select Recipe</string>
-    <string name="select_ingredient">Select Ingredient</string>
-    <string name="analyse">Analyse</string>
 
     <!--Patient Food and Exercise texts-->
     <string name="food_and_exercise">Food and Exercise</string>
@@ -1413,6 +1410,7 @@
     <!--Add Ingredient texts-->
     <string name="ingredient_name">Ingredient Name&#160;:&#160;</string>
     <string name="equivalent_measurement">Equivalent Measurement&#160;:&#160;</string>
+    <string name="ingredient_colon">Ingredient&#160;:&#160;</string>
     <string name="nutrients">Nutrients&#160;:&#160;</string>
     <string name="serving_type">Serving Type</string>
     <string name="value">Value</string>
@@ -1428,6 +1426,17 @@
     <string name="vitamins">Vitamins</string>
     <string name="minerals">Minerals</string>
     <string name="others">Others</string>
+    <string name="select_ingredient">Select Ingredient</string>
+    <string name="add_ingredient">Add Ingredient</string>
+
+
+    <!--Add Recipe texts-->
+    <string name="analyse">Analyse</string>
+    <string name="select_recipe">Select Recipe</string>
+    <string name="add_recipe">Add Recipe</string>
+    <string name="add_nutrient">Add Nutrient</string>
+    <string name="recipe_name">Recipe Name&#160;:&#160;</string>
+    <string name="please_add_equivalent_quantity_first">Please add equivalent measurement first</string>
 
 
 </resources>

@@ -50,24 +50,25 @@
             android:layout_gravity="center|end"
             android:adjustViewBounds="true"
             android:gravity="center|start"
-            android:paddingLeft="@dimen/fab_margin_right"
-            android:paddingRight="@dimen/padding_20_dp"
-            android:text="@string/fa_times_circle"
-            android:textColor="@color/orange_dark"
-            android:textSize="19sp" />
+            android:paddingLeft="@dimen/layout_padding"
+            android:paddingRight="@dimen/layout_padding"
+            android:text="@string/icon_edit"
+            android:textColor="@color/grey_icons"
+            android:textSize="18sp" />
 
         <com.healthcoco.healthcocopad.views.TextViewFontAwesome
             android:id="@+id/bt_delete"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="center|end"
+            android:layout_marginLeft="@dimen/layout_padding"
             android:adjustViewBounds="true"
             android:gravity="center|start"
-            android:paddingLeft="@dimen/fab_margin_right"
+            android:paddingLeft="@dimen/layout_padding"
             android:paddingRight="@dimen/padding_20_dp"
             android:text="@string/fa_times_circle"
-            android:textColor="@color/orange_dark"
-            android:textSize="19sp" />
+            android:textColor="@color/red_error"
+            android:textSize="18sp" />
 
     </LinearLayout>
 </LinearLayout>

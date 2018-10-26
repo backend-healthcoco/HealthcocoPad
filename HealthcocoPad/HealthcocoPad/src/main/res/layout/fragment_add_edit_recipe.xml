@@ -1,0 +1,428 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:fillViewport="true"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    android:overScrollMode="never">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="15dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/layout_padding"
+            android:layout_marginRight="@dimen/layout_padding"
+            android:orientation="horizontal"
+            android:padding="10dp"
+            android:weightSum="5">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/recipe_name"
+                android:textSize="@dimen/text_size_registration_title" />
+
+            <EditText
+                android:id="@+id/edit_recipe_name"
+                style="@style/assesment_edittext"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:padding="15dp">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/layout_padding"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/quantity_colon"
+                        android:textSize="@dimen/text_size_registration_title" />
+
+                    <EditText
+                        android:id="@+id/edit_value_quantity"
+                        style="@style/assesment_edittext"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:inputType="numberDecimal" />
+
+                    <TextView
+                        android:id="@+id/tv_type_quantity"
+                        style="@style/assesment_edittext"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/padding_20_dp"
+                        android:layout_weight="1"
+                        android:drawableEnd="@drawable/arrow_down_drug"
+                        android:gravity="center"
+                        android:paddingRight="@dimen/layout_padding" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/layout_padding"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/fat_colon"
+                        android:textSize="@dimen/text_size_registration_title" />
+
+                    <EditText
+                        android:id="@+id/edit_value_fat"
+                        style="@style/assesment_edittext"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:inputType="numberDecimal" />
+
+                    <TextView
+                        android:id="@+id/tv_type_fat"
+                        style="@style/assesment_edittext"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/padding_20_dp"
+                        android:layout_weight="1"
+                        android:drawableEnd="@drawable/arrow_down_drug"
+                        android:gravity="center"
+                        android:paddingRight="@dimen/layout_padding" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/layout_padding"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/protein_colon"
+                        android:textSize="@dimen/text_size_registration_title" />
+
+                    <EditText
+                        android:id="@+id/edit_value_protein"
+                        style="@style/assesment_edittext"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:inputType="numberDecimal" />
+
+                    <TextView
+                        android:id="@+id/tv_type_protein"
+                        style="@style/assesment_edittext"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/padding_20_dp"
+                        android:layout_weight="1"
+                        android:drawableEnd="@drawable/arrow_down_drug"
+                        android:gravity="center"
+                        android:paddingRight="@dimen/layout_padding" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:padding="15dp">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/layout_padding"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/carbs_colon"
+                        android:textSize="@dimen/text_size_registration_title" />
+
+                    <EditText
+                        android:id="@+id/edit_value_carb"
+                        style="@style/assesment_edittext"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:inputType="numberDecimal" />
+
+                    <TextView
+                        android:id="@+id/tv_type_carb"
+                        style="@style/assesment_edittext"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/padding_20_dp"
+                        android:layout_weight="1"
+                        android:drawableEnd="@drawable/arrow_down_drug"
+                        android:gravity="center"
+                        android:paddingRight="@dimen/layout_padding"
+                        android:textColor="@color/black_greyish" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/layout_padding"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/fiber_colon"
+                        android:textSize="@dimen/text_size_registration_title" />
+
+                    <EditText
+                        android:id="@+id/edit_value_fiber"
+                        style="@style/assesment_edittext"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:inputType="numberDecimal" />
+
+                    <TextView
+                        android:id="@+id/tv_type_fiber"
+                        style="@style/assesment_edittext"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/padding_20_dp"
+                        android:layout_weight="1"
+                        android:drawableEnd="@drawable/arrow_down_drug"
+                        android:gravity="center"
+                        android:paddingRight="@dimen/layout_padding" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/layout_padding"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/calories_colon"
+                        android:textSize="@dimen/text_size_registration_title" />
+
+                    <EditText
+                        android:id="@+id/edit_value_calories"
+                        style="@style/assesment_edittext"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:inputType="numberDecimal" />
+
+                    <TextView
+                        android:id="@+id/tv_type_calories"
+                        style="@style/assesment_edittext"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/padding_20_dp"
+                        android:layout_weight="1"
+                        android:drawableEnd="@drawable/arrow_down_drug"
+                        android:gravity="center"
+                        android:paddingRight="@dimen/layout_padding" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/layout_padding"
+            android:layout_marginRight="@dimen/layout_padding"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/layout_padding"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.03"
+                    android:text="@string/equivalent_measurement"
+                    android:textSize="@dimen/text_size_registration_title" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2.4"
+                    android:orientation="vertical">
+
+                    <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+                        android:id="@+id/tv_add_equivalent_measurement"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/layout_padding_5dp"
+                        android:text="@string/icon_add_equivalent_measurement"
+                        android:textColor="@color/orange"
+                        android:textSize="@dimen/text_size_treatment_list_title" />
+
+                    <LinearLayout
+                        android:id="@+id/container_equivalent_measurement"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/layout_padding"
+                        android:orientation="vertical"
+                        android:visibility="gone" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding_20_dp"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.03"
+                    android:text="@string/ingredient_colon"
+                    android:textSize="@dimen/text_size_registration_title" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2.4"
+                    android:orientation="vertical">
+
+                    <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+                        android:id="@+id/tv_add_ingredient"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/layout_padding_5dp"
+                        android:text="@string/icon_add_ingredient"
+                        android:textColor="@color/orange"
+                        android:textSize="@dimen/text_size_treatment_list_title" />
+
+                    <LinearLayout
+                        android:id="@+id/container_ingredient"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/layout_padding"
+                        android:orientation="vertical"
+                        android:visibility="visible" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/padding_20_dp"
+            android:layout_marginRight="@dimen/padding_20_dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="10dp"
+                android:weightSum="4">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.2"
+                    android:text="@string/nutrients"
+                    android:textSize="@dimen/text_size_registration_title" />
+
+                <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+                    android:id="@+id/tv_add_nutrient"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="@dimen/layout_padding_5dp"
+                    android:layout_weight="1.2"
+                    android:text="@string/icon_add_nutrient"
+                    android:textColor="@color/orange"
+                    android:textSize="@dimen/text_size_treatment_list_title" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/layout_padding"
+                android:paddingTop="@dimen/layout_padding"
+                android:paddingRight="@dimen/layout_padding"
+                android:paddingBottom="30dp">
+
+                <LinearLayout
+                    android:id="@+id/parent_layout_category_one"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:paddingLeft="5dp"
+                    android:paddingTop="5dp"
+                    android:paddingRight="5dp" />
+
+
+                <LinearLayout
+                    android:id="@+id/parent_layout_category_two"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:paddingLeft="5dp"
+                    android:paddingTop="5dp"
+                    android:paddingRight="5dp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

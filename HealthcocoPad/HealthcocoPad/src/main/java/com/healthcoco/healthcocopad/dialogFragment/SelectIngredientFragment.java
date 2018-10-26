@@ -18,13 +18,16 @@ import com.healthcoco.healthcocopad.bean.MealQuantity;
 import com.healthcoco.healthcocopad.bean.server.DietPlanRecipeItem;
 import com.healthcoco.healthcocopad.bean.server.Ingredient;
 import com.healthcoco.healthcocopad.bean.server.IngredientResponse;
+import com.healthcoco.healthcocopad.bean.server.Nutrients;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.enums.AdapterType;
 import com.healthcoco.healthcocopad.enums.MealTimeType;
+import com.healthcoco.healthcocopad.enums.NutrientCategoryType;
 import com.healthcoco.healthcocopad.enums.QuantityType;
 import com.healthcoco.healthcocopad.fragments.IngredientListFragment;
 import com.healthcoco.healthcocopad.listeners.SelectedRecipeItemClickListener;
 import com.healthcoco.healthcocopad.recyclerview.HealthcocoRecyclerViewAdapter;
+import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.Util;
 
@@ -33,6 +36,7 @@ import org.parceler.Parcels;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 /**
  * Created by Prashant on 26/09/2018.
@@ -314,6 +318,20 @@ public class SelectIngredientFragment extends HealthCocoFragment implements
             ingredient.setFiberPerHundredUnit((ingredientResponse.getFiber().getValue() / currentValue) * 100);
         }
 
+        if (!Util.isNullOrEmptyList(ingredientResponse.getGeneralNutrients()))
+            ingredient.setGeneralNutrients(ingredientResponse.getGeneralNutrients());
+        if (!Util.isNullOrEmptyList(ingredientResponse.getCarbNutrients()))
+            ingredient.setCarbNutrients(ingredientResponse.getCarbNutrients());
+        if (!Util.isNullOrEmptyList(ingredientResponse.getLipidNutrients()))
+            ingredient.setLipidNutrients(ingredientResponse.getLipidNutrients());
+        if (!Util.isNullOrEmptyList(ingredientResponse.getProteinAminoAcidNutrients()))
+            ingredient.setProteinAminoAcidNutrients(ingredientResponse.getProteinAminoAcidNutrients());
+        if (!Util.isNullOrEmptyList(ingredientResponse.getVitaminNutrients()))
+            ingredient.setVitaminNutrients(ingredientResponse.getVitaminNutrients());
+        if (!Util.isNullOrEmptyList(ingredientResponse.getMineralNutrients()))
+            ingredient.setMineralNutrients(ingredientResponse.getMineralNutrients());
+        if (!Util.isNullOrEmptyList(ingredientResponse.getOtherNutrients()))
+            ingredient.setOtherNutrients(ingredientResponse.getOtherNutrients());
 
         return ingredient;
     }
@@ -422,6 +440,8 @@ public class SelectIngredientFragment extends HealthCocoFragment implements
     public void onQuantityChanged(Object object) {
         Ingredient ingredient = (Ingredient) object;
         if (ingredient != null) {
+            ingredient = updateNutrientValue(ingredient, ingredient.getValue(), ingredient.getType());
+
             ingredient.setType(ingredient.getTempQuantity().getType());
             ingredient.setValue(ingredient.getTempQuantity().getValue());
 
@@ -441,30 +461,152 @@ public class SelectIngredientFragment extends HealthCocoFragment implements
         setTotalNutrientsValue(new ArrayList<>(ingredientHashMap.values()));
     }
 
+    private Ingredient updateNutrientValue(Ingredient ingredient, double value, QuantityType type) {
+
+        double currentValue = 1;
+        if (!Util.isNullOrEmptyList(ingredient.getEquivalentMeasurements()))
+            for (EquivalentQuantities equivalentQuantities : ingredient.getEquivalentMeasurements()) {
+                if (type == equivalentQuantities.getServingType()) {
+                    double equivalentQuantitiesValue = equivalentQuantities.getValue();
+                    currentValue = value * equivalentQuantitiesValue;
+                }
+            }
+
+        if (!Util.isNullOrEmptyList(ingredient.getGeneralNutrients())) {
+            ingredient.setGeneralNutrients(changeNutrientValue(ingredient.getGeneralNutrients(), ingredient, currentValue, NutrientCategoryType.GENERAL));
+        }
+        if (!Util.isNullOrEmptyList(ingredient.getCarbNutrients())) {
+            ingredient.setCarbNutrients(changeNutrientValue(ingredient.getCarbNutrients(), ingredient, currentValue, NutrientCategoryType.CARBOHYDRATE));
+        }
+        if (!Util.isNullOrEmptyList(ingredient.getLipidNutrients())) {
+            ingredient.setLipidNutrients(changeNutrientValue(ingredient.getLipidNutrients(), ingredient, currentValue, NutrientCategoryType.LIPIDS));
+        }
+        if (!Util.isNullOrEmptyList(ingredient.getProteinAminoAcidNutrients())) {
+            ingredient.setProteinAminoAcidNutrients(changeNutrientValue(ingredient.getProteinAminoAcidNutrients(), ingredient, currentValue, NutrientCategoryType.PROTEIN_AMINOACIDS));
+        }
+        if (!Util.isNullOrEmptyList(ingredient.getVitaminNutrients())) {
+            ingredient.setVitaminNutrients(changeNutrientValue(ingredient.getVitaminNutrients(), ingredient, currentValue, NutrientCategoryType.VITAMINS));
+        }
+        if (!Util.isNullOrEmptyList(ingredient.getMineralNutrients())) {
+            ingredient.setMineralNutrients(changeNutrientValue(ingredient.getMineralNutrients(), ingredient, currentValue, NutrientCategoryType.MINERALS));
+        }
+        if (!Util.isNullOrEmptyList(ingredient.getOtherNutrients())) {
+            ingredient.setOtherNutrients(changeNutrientValue(ingredient.getOtherNutrients(), ingredient, currentValue, NutrientCategoryType.OTHERS));
+        }
+        return ingredient;
+    }
+
+    private List<Nutrients> changeNutrientValue(List<Nutrients> nutrientsList, Ingredient ingredient, double currentValue, NutrientCategoryType categoryType) {
+
+        for (Nutrients nutrients : nutrientsList) {
+            nutrients.setValue((nutrients.getValue() * ingredient.getCurrentQuantity().getValue()) / currentValue);
+            nutrients.setCategoryType(categoryType);
+        }
+        return nutrientsList;
+    }
+
 
     private void addDietPlanItem() {
         DietPlanRecipeItem planRecipeItem = new DietPlanRecipeItem();
         if (dietPlanRecipeItemReceived != null)
             planRecipeItem = dietPlanRecipeItemReceived;
 
-
         if (planRecipeItem.getCalariesTemp() != null)
             planRecipeItem.getCalariesTemp().setValue(calaries);
+        else {
+            MealQuantity qty = new MealQuantity();
+            qty.setValue(calaries);
+            qty.setType(QuantityType.CAL);
+            planRecipeItem.setCalariesTemp(qty);
+        }
         if (planRecipeItem.getProteinTemp() != null)
             planRecipeItem.getProteinTemp().setValue(protein);
+        else {
+            MealQuantity qty = new MealQuantity();
+            qty.setValue(protein);
+            qty.setType(QuantityType.G);
+            planRecipeItem.setProteinTemp(qty);
+        }
         if (planRecipeItem.getFatTemp() != null)
             planRecipeItem.getFatTemp().setValue(fat);
+        else {
+            MealQuantity qty = new MealQuantity();
+            qty.setValue(fat);
+            qty.setType(QuantityType.G);
+            planRecipeItem.setFatTemp(qty);
+        }
         if (planRecipeItem.getCarbohydreateTemp() != null)
             planRecipeItem.getCarbohydreateTemp().setValue(carbs);
-        if (planRecipeItem.getFiberTemp() != null) planRecipeItem.getFiberTemp().setValue(fiber);
+        else {
+            MealQuantity qty = new MealQuantity();
+            qty.setValue(carbs);
+            qty.setType(QuantityType.G);
+            planRecipeItem.setCarbohydreateTemp(qty);
+        }
+        if (planRecipeItem.getFiberTemp() != null)
+            planRecipeItem.getFiberTemp().setValue(fiber);
+        else {
+            MealQuantity qty = new MealQuantity();
+            qty.setValue(fiber);
+            qty.setType(QuantityType.G);
+            planRecipeItem.setFiberTemp(qty);
+        }
 
         planRecipeItem.setNutrientValueAtRecipeLevel(true);
         planRecipeItem.setIngredients(new ArrayList<Ingredient>(ingredientHashMap.values()));
 
+        planRecipeItem = addNutrientValue(planRecipeItem);
 
         Intent data = new Intent();
         data.putExtra(HealthCocoConstants.TAG_INTENT_DATA, Parcels.wrap(planRecipeItem));
         getActivity().setResult(HealthCocoConstants.RESULT_CODE_ADD_INGREDIENT, data);
         getActivity().finish();
     }
+
+    private DietPlanRecipeItem addNutrientValue(DietPlanRecipeItem planRecipeItem) {
+        LocalDataServiceImpl.getInstance(mApp).deleteAllNutrient();
+        for (Ingredient ingredient : planRecipeItem.getIngredients()) {
+            addNutruentList(ingredient);
+        }
+        LocalDataServiceImpl.getInstance(mApp).addNutrientValueGroup();
+
+        planRecipeItem.setGeneralNutrients(LocalDataServiceImpl.getInstance(mApp).getNutrientList(NutrientCategoryType.GENERAL));
+        planRecipeItem.setCarbNutrients(LocalDataServiceImpl.getInstance(mApp).getNutrientList(NutrientCategoryType.CARBOHYDRATE));
+        planRecipeItem.setLipidNutrients(LocalDataServiceImpl.getInstance(mApp).getNutrientList(NutrientCategoryType.LIPIDS));
+        planRecipeItem.setProteinAminoAcidNutrients(LocalDataServiceImpl.getInstance(mApp).getNutrientList(NutrientCategoryType.PROTEIN_AMINOACIDS));
+        planRecipeItem.setVitaminNutrients(LocalDataServiceImpl.getInstance(mApp).getNutrientList(NutrientCategoryType.VITAMINS));
+        planRecipeItem.setMineralNutrients(LocalDataServiceImpl.getInstance(mApp).getNutrientList(NutrientCategoryType.MINERALS));
+        planRecipeItem.setOtherNutrients(LocalDataServiceImpl.getInstance(mApp).getNutrientList(NutrientCategoryType.OTHERS));
+
+        return planRecipeItem;
+    }
+
+
+    private void addNutruentList(Ingredient ingredient) {
+
+        if (!Util.isNullOrEmptyList(ingredient.getGeneralNutrients())) {
+            LocalDataServiceImpl.getInstance(mApp).addNutrientList(ingredient.getGeneralNutrients(), NutrientCategoryType.GENERAL);
+        }
+        if (!Util.isNullOrEmptyList(ingredient.getCarbNutrients())) {
+            LocalDataServiceImpl.getInstance(mApp).addNutrientList(ingredient.getCarbNutrients(), NutrientCategoryType.CARBOHYDRATE);
+        }
+        if (!Util.isNullOrEmptyList(ingredient.getLipidNutrients())) {
+            LocalDataServiceImpl.getInstance(mApp).addNutrientList(ingredient.getLipidNutrients(), NutrientCategoryType.LIPIDS);
+        }
+        if (!Util.isNullOrEmptyList(ingredient.getProteinAminoAcidNutrients())) {
+            LocalDataServiceImpl.getInstance(mApp).addNutrientList(ingredient.getProteinAminoAcidNutrients(), NutrientCategoryType.PROTEIN_AMINOACIDS);
+        }
+        if (!Util.isNullOrEmptyList(ingredient.getVitaminNutrients())) {
+            LocalDataServiceImpl.getInstance(mApp).addNutrientList(ingredient.getVitaminNutrients(), NutrientCategoryType.VITAMINS);
+        }
+        if (!Util.isNullOrEmptyList(ingredient.getMineralNutrients())) {
+            LocalDataServiceImpl.getInstance(mApp).addNutrientList(ingredient.getMineralNutrients(), NutrientCategoryType.MINERALS);
+        }
+        if (!Util.isNullOrEmptyList(ingredient.getOtherNutrients())) {
+            LocalDataServiceImpl.getInstance(mApp).addNutrientList(ingredient.getOtherNutrients(), NutrientCategoryType.OTHERS);
+        }
+
+    }
+
+
 }
