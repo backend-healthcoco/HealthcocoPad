@@ -377,7 +377,7 @@ public class AddEditNutrientValueFragment extends HealthCocoFragment implements 
             }
         }
 
-//        updateReceivedData();
+        updateReceivedData();
 
         generalAdapter.notifyDataSetChanged();
         carbAdapter.notifyDataSetChanged();
@@ -389,52 +389,67 @@ public class AddEditNutrientValueFragment extends HealthCocoFragment implements 
     }
 
     private void updateReceivedData() {
+
         if (dietPlanRecipeItem != null) {
-            if (!Util.isNullOrEmptyList(dietPlanRecipeItem.getGeneralNutrients()))
-                generalNutrients = getReceivedData(dietPlanRecipeItem.getGeneralNutrients(), generalNutrientMap);
-
-            if (!Util.isNullOrEmptyList(dietPlanRecipeItem.getCarbNutrients()))
-                carbNutrients = getReceivedData(dietPlanRecipeItem.getCarbNutrients(), carbNutrientMap);
-
-            if (!Util.isNullOrEmptyList(dietPlanRecipeItem.getLipidNutrients()))
-                lipidNutrients = getReceivedData(dietPlanRecipeItem.getLipidNutrients(), lipidNutrientMap);
-
-            if (!Util.isNullOrEmptyList(dietPlanRecipeItem.getProteinAminoAcidNutrients()))
-                proteinAminoAcidNutrients = getReceivedData(dietPlanRecipeItem.getProteinAminoAcidNutrients(), proteinAminoAcidNutrientMap);
-
-            if (!Util.isNullOrEmptyList(dietPlanRecipeItem.getVitaminNutrients()))
-                vitaminNutrients = getReceivedData(dietPlanRecipeItem.getVitaminNutrients(), vitaminNutrientMap);
-
-            if (!Util.isNullOrEmptyList(dietPlanRecipeItem.getMineralNutrients()))
-                mineralNutrients = getReceivedData(dietPlanRecipeItem.getMineralNutrients(), mineralNutrientMap);
-
-            if (!Util.isNullOrEmptyList(dietPlanRecipeItem.getOtherNutrients()))
-                otherNutrients = getReceivedData(dietPlanRecipeItem.getOtherNutrients(), otherNutrientMap);
-
+            if (!Util.isNullOrEmptyList(dietPlanRecipeItem.getGeneralNutrients())) {
+                generalNutrients.clear();
+                generalNutrients.addAll(getReceivedData(dietPlanRecipeItem.getGeneralNutrients(), generalNutrientMap));
+            }
+            if (!Util.isNullOrEmptyList(dietPlanRecipeItem.getCarbNutrients())) {
+                carbNutrients.clear();
+                carbNutrients.addAll(getReceivedData(dietPlanRecipeItem.getCarbNutrients(), carbNutrientMap));
+            }
+            if (!Util.isNullOrEmptyList(dietPlanRecipeItem.getLipidNutrients())) {
+                lipidNutrients.clear();
+                lipidNutrients.addAll(getReceivedData(dietPlanRecipeItem.getLipidNutrients(), lipidNutrientMap));
+            }
+            if (!Util.isNullOrEmptyList(dietPlanRecipeItem.getProteinAminoAcidNutrients())) {
+                proteinAminoAcidNutrients.clear();
+                proteinAminoAcidNutrients.addAll(getReceivedData(dietPlanRecipeItem.getProteinAminoAcidNutrients(), proteinAminoAcidNutrientMap));
+            }
+            if (!Util.isNullOrEmptyList(dietPlanRecipeItem.getVitaminNutrients())) {
+                vitaminNutrients.clear();
+                vitaminNutrients.addAll(getReceivedData(dietPlanRecipeItem.getVitaminNutrients(), vitaminNutrientMap));
+            }
+            if (!Util.isNullOrEmptyList(dietPlanRecipeItem.getMineralNutrients())) {
+                mineralNutrients.clear();
+                mineralNutrients.addAll(getReceivedData(dietPlanRecipeItem.getMineralNutrients(), mineralNutrientMap));
+            }
+            if (!Util.isNullOrEmptyList(dietPlanRecipeItem.getOtherNutrients())) {
+                otherNutrients.clear();
+                otherNutrients.addAll(getReceivedData(dietPlanRecipeItem.getOtherNutrients(), otherNutrientMap));
+            }
         } else if (ingredient != null) {
 
-            if (!Util.isNullOrEmptyList(ingredient.getGeneralNutrients()))
-                generalNutrients = getReceivedData(ingredient.getGeneralNutrients(), generalNutrientMap);
-
-            if (!Util.isNullOrEmptyList(ingredient.getCarbNutrients()))
-                carbNutrients = getReceivedData(ingredient.getCarbNutrients(), carbNutrientMap);
-
-            if (!Util.isNullOrEmptyList(ingredient.getLipidNutrients()))
-                lipidNutrients = getReceivedData(ingredient.getLipidNutrients(), lipidNutrientMap);
-
-            if (!Util.isNullOrEmptyList(ingredient.getProteinAminoAcidNutrients()))
-                proteinAminoAcidNutrients = getReceivedData(ingredient.getProteinAminoAcidNutrients(), proteinAminoAcidNutrientMap);
-
-            if (!Util.isNullOrEmptyList(ingredient.getVitaminNutrients()))
-                vitaminNutrients = getReceivedData(ingredient.getVitaminNutrients(), vitaminNutrientMap);
-
-            if (!Util.isNullOrEmptyList(ingredient.getMineralNutrients()))
-                mineralNutrients = getReceivedData(ingredient.getMineralNutrients(), mineralNutrientMap);
-
-            if (!Util.isNullOrEmptyList(ingredient.getOtherNutrients()))
-                otherNutrients = getReceivedData(ingredient.getOtherNutrients(), otherNutrientMap);
+            if (!Util.isNullOrEmptyList(ingredient.getGeneralNutrients())) {
+                generalNutrients.clear();
+                generalNutrients.addAll(getReceivedData(ingredient.getGeneralNutrients(), generalNutrientMap));
+            }
+            if (!Util.isNullOrEmptyList(ingredient.getCarbNutrients())) {
+                carbNutrients.clear();
+                carbNutrients.addAll(getReceivedData(ingredient.getCarbNutrients(), carbNutrientMap));
+            }
+            if (!Util.isNullOrEmptyList(ingredient.getLipidNutrients())) {
+                lipidNutrients.clear();
+                lipidNutrients.addAll(getReceivedData(ingredient.getLipidNutrients(), lipidNutrientMap));
+            }
+            if (!Util.isNullOrEmptyList(ingredient.getProteinAminoAcidNutrients())) {
+                proteinAminoAcidNutrients.clear();
+                proteinAminoAcidNutrients.addAll(getReceivedData(ingredient.getProteinAminoAcidNutrients(), proteinAminoAcidNutrientMap));
+            }
+            if (!Util.isNullOrEmptyList(ingredient.getVitaminNutrients())) {
+                vitaminNutrients.clear();
+                vitaminNutrients.addAll(getReceivedData(ingredient.getVitaminNutrients(), vitaminNutrientMap));
+            }
+            if (!Util.isNullOrEmptyList(ingredient.getMineralNutrients())) {
+                mineralNutrients.clear();
+                mineralNutrients.addAll(getReceivedData(ingredient.getMineralNutrients(), mineralNutrientMap));
+            }
+            if (!Util.isNullOrEmptyList(ingredient.getOtherNutrients())) {
+                otherNutrients.clear();
+                otherNutrients.addAll(getReceivedData(ingredient.getOtherNutrients(), otherNutrientMap));
+            }
         }
-
     }
 
     private List<Nutrients> getReceivedData(List<Nutrients> nutrientsList, LinkedHashMap<String, Nutrients> nutrientsHashMap) {

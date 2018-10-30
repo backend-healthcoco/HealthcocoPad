@@ -182,8 +182,8 @@ public class AddEditIngradientFragment extends HealthCocoFragment implements Vie
     private void openAddNutrientWindow() {
         Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
         intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.ADD_NUTRIENT.ordinal());
-//        if (dietPlanRecipeItem != null)
-//            intent.putExtra(HealthCocoConstants.TAG_INTENT_DATA, Parcels.wrap(dietPlanRecipeItem));
+        if (ingredientNutrient != null)
+            intent.putExtra(HealthCocoConstants.TAG_INGREDIENT_DATA, Parcels.wrap(ingredientNutrient));
         startActivityForResult(intent, HealthCocoConstants.REQUEST_CODE_ADD_NUTRIENT, null);
     }
 

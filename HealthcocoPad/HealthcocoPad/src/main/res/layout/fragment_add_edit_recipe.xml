@@ -296,9 +296,9 @@
 
                     <com.healthcoco.healthcocopad.views.TextViewFontAwesome
                         android:id="@+id/tv_add_equivalent_measurement"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/layout_padding_5dp"
+                        android:padding="@dimen/layout_padding_5dp"
                         android:text="@string/icon_add_equivalent_measurement"
                         android:textColor="@color/orange"
                         android:textSize="@dimen/text_size_treatment_list_title" />
@@ -336,9 +336,9 @@
 
                     <com.healthcoco.healthcocopad.views.TextViewFontAwesome
                         android:id="@+id/tv_add_ingredient"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/layout_padding_5dp"
+                        android:padding="@dimen/layout_padding_5dp"
                         android:text="@string/icon_add_ingredient"
                         android:textColor="@color/orange"
                         android:textSize="@dimen/text_size_treatment_list_title" />
@@ -380,9 +380,9 @@
                 <com.healthcoco.healthcocopad.views.TextViewFontAwesome
                     android:id="@+id/tv_add_nutrient"
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="@dimen/layout_padding_5dp"
-                    android:layout_weight="1.2"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2.8"
+                    android:padding="@dimen/layout_padding_5dp"
                     android:text="@string/icon_add_nutrient"
                     android:textColor="@color/orange"
                     android:textSize="@dimen/text_size_treatment_list_title" />
