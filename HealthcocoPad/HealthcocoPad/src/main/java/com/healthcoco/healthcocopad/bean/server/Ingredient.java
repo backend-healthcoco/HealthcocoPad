@@ -57,18 +57,8 @@ public class Ingredient extends SugarRecord {
     @Ignore
     private List<Nutrients> mineralNutrients;
     @Ignore
-    protected MealQuantity caloriesTemp;
-    @Ignore
-    private List<Nutrients> otherNutrients;
+    protected MealQuantity quantityTemp;
     protected double caloriesPerHundredUnit;
-    @Ignore
-    protected MealQuantity fatTemp;
-    @Ignore
-    protected MealQuantity proteinTemp;
-    @Ignore
-    protected MealQuantity carbohydreateTemp;
-    @Ignore
-    protected MealQuantity fiberTemp;
     @Ignore
     protected MealQuantity currentQuantity;
     protected double fatPerHundredUnit;
@@ -76,7 +66,8 @@ public class Ingredient extends SugarRecord {
     protected double carbohydreatePerHundredUnit;
     protected double fiberPerHundredUnit;
     @Ignore
-    protected MealQuantity tempQuantity;
+    private List<Nutrients> otherNutrients;
+
 
     public String getForeignMealId() {
         return foreignMealId;
@@ -84,6 +75,54 @@ public class Ingredient extends SugarRecord {
 
     public void setForeignMealId(String foreignMealId) {
         this.foreignMealId = foreignMealId;
+    }
+
+    public String getEquivalentMeasurementsJsonString() {
+        return equivalentMeasurementsJsonString;
+    }
+
+    public void setEquivalentMeasurementsJsonString(String equivalentMeasurementsJsonString) {
+        this.equivalentMeasurementsJsonString = equivalentMeasurementsJsonString;
+    }
+
+    public String getCaloriesJsonString() {
+        return caloriesJsonString;
+    }
+
+    public void setCaloriesJsonString(String caloriesJsonString) {
+        this.caloriesJsonString = caloriesJsonString;
+    }
+
+    public String getCarbohydreateJsonString() {
+        return carbohydreateJsonString;
+    }
+
+    public void setCarbohydreateJsonString(String carbohydreateJsonString) {
+        this.carbohydreateJsonString = carbohydreateJsonString;
+    }
+
+    public String getFatJsonString() {
+        return fatJsonString;
+    }
+
+    public void setFatJsonString(String fatJsonString) {
+        this.fatJsonString = fatJsonString;
+    }
+
+    public String getProteinJsonString() {
+        return proteinJsonString;
+    }
+
+    public void setProteinJsonString(String proteinJsonString) {
+        this.proteinJsonString = proteinJsonString;
+    }
+
+    public String getFiberJsonString() {
+        return fiberJsonString;
+    }
+
+    public void setFiberJsonString(String fiberJsonString) {
+        this.fiberJsonString = fiberJsonString;
     }
 
     public String getCustomUniqueId() {
@@ -134,62 +173,6 @@ public class Ingredient extends SugarRecord {
         this.equivalentMeasurements = equivalentMeasurements;
     }
 
-    public String getEquivalentMeasurementsJsonString() {
-        return equivalentMeasurementsJsonString;
-    }
-
-    public void setEquivalentMeasurementsJsonString(String equivalentMeasurementsJsonString) {
-        this.equivalentMeasurementsJsonString = equivalentMeasurementsJsonString;
-    }
-
-    public MealQuantity getCalories() {
-        return calories;
-    }
-
-    public void setCalories(MealQuantity calories) {
-        this.calories = calories;
-    }
-
-    public String getCaloriesJsonString() {
-        return caloriesJsonString;
-    }
-
-    public void setCaloriesJsonString(String caloriesJsonString) {
-        this.caloriesJsonString = caloriesJsonString;
-    }
-
-    public String getCarbohydreateJsonString() {
-        return carbohydreateJsonString;
-    }
-
-    public void setCarbohydreateJsonString(String carbohydreateJsonString) {
-        this.carbohydreateJsonString = carbohydreateJsonString;
-    }
-
-    public String getFatJsonString() {
-        return fatJsonString;
-    }
-
-    public void setFatJsonString(String fatJsonString) {
-        this.fatJsonString = fatJsonString;
-    }
-
-    public String getProteinJsonString() {
-        return proteinJsonString;
-    }
-
-    public void setProteinJsonString(String proteinJsonString) {
-        this.proteinJsonString = proteinJsonString;
-    }
-
-    public String getFiberJsonString() {
-        return fiberJsonString;
-    }
-
-    public void setFiberJsonString(String fiberJsonString) {
-        this.fiberJsonString = fiberJsonString;
-    }
-
     public MealQuantity getFat() {
         return fat;
     }
@@ -222,100 +205,12 @@ public class Ingredient extends SugarRecord {
         this.fiber = fiber;
     }
 
-    public MealQuantity getCaloriesTemp() {
-        return caloriesTemp;
+    public MealQuantity getCalories() {
+        return calories;
     }
 
-    public void setCaloriesTemp(MealQuantity caloriesTemp) {
-        this.caloriesTemp = caloriesTemp;
-    }
-
-    public MealQuantity getFatTemp() {
-        return fatTemp;
-    }
-
-    public void setFatTemp(MealQuantity fatTemp) {
-        this.fatTemp = fatTemp;
-    }
-
-    public MealQuantity getProteinTemp() {
-        return proteinTemp;
-    }
-
-    public void setProteinTemp(MealQuantity proteinTemp) {
-        this.proteinTemp = proteinTemp;
-    }
-
-    public MealQuantity getCarbohydreateTemp() {
-        return carbohydreateTemp;
-    }
-
-    public void setCarbohydreateTemp(MealQuantity carbohydreateTemp) {
-        this.carbohydreateTemp = carbohydreateTemp;
-    }
-
-    public MealQuantity getFiberTemp() {
-        return fiberTemp;
-    }
-
-    public void setFiberTemp(MealQuantity fiberTemp) {
-        this.fiberTemp = fiberTemp;
-    }
-
-    public double getFatPerHundredUnit() {
-        return fatPerHundredUnit;
-    }
-
-    public void setFatPerHundredUnit(double fatPerHundredUnit) {
-        this.fatPerHundredUnit = fatPerHundredUnit;
-    }
-
-    public double getProteinPerHundredUnit() {
-        return proteinPerHundredUnit;
-    }
-
-    public void setProteinPerHundredUnit(double proteinPerHundredUnit) {
-        this.proteinPerHundredUnit = proteinPerHundredUnit;
-    }
-
-    public double getCarbohydreatePerHundredUnit() {
-        return carbohydreatePerHundredUnit;
-    }
-
-    public void setCarbohydreatePerHundredUnit(double carbohydreatePerHundredUnit) {
-        this.carbohydreatePerHundredUnit = carbohydreatePerHundredUnit;
-    }
-
-    public double getFiberPerHundredUnit() {
-        return fiberPerHundredUnit;
-    }
-
-    public void setFiberPerHundredUnit(double fiberPerHundredUnit) {
-        this.fiberPerHundredUnit = fiberPerHundredUnit;
-    }
-
-    public double getCaloriesPerHundredUnit() {
-        return caloriesPerHundredUnit;
-    }
-
-    public void setCaloriesPerHundredUnit(double caloriesPerHundredUnit) {
-        this.caloriesPerHundredUnit = caloriesPerHundredUnit;
-    }
-
-    public MealQuantity getTempQuantity() {
-        return tempQuantity;
-    }
-
-    public void setTempQuantity(MealQuantity tempQuantity) {
-        this.tempQuantity = tempQuantity;
-    }
-
-    public MealQuantity getCurrentQuantity() {
-        return currentQuantity;
-    }
-
-    public void setCurrentQuantity(MealQuantity currentQuantity) {
-        this.currentQuantity = currentQuantity;
+    public void setCalories(MealQuantity calories) {
+        this.calories = calories;
     }
 
     public List<Nutrients> getGeneralNutrients() {
@@ -372,5 +267,61 @@ public class Ingredient extends SugarRecord {
 
     public void setOtherNutrients(List<Nutrients> otherNutrients) {
         this.otherNutrients = otherNutrients;
+    }
+
+    public double getCaloriesPerHundredUnit() {
+        return caloriesPerHundredUnit;
+    }
+
+    public void setCaloriesPerHundredUnit(double caloriesPerHundredUnit) {
+        this.caloriesPerHundredUnit = caloriesPerHundredUnit;
+    }
+
+    public MealQuantity getCurrentQuantity() {
+        return currentQuantity;
+    }
+
+    public void setCurrentQuantity(MealQuantity currentQuantity) {
+        this.currentQuantity = currentQuantity;
+    }
+
+    public double getFatPerHundredUnit() {
+        return fatPerHundredUnit;
+    }
+
+    public void setFatPerHundredUnit(double fatPerHundredUnit) {
+        this.fatPerHundredUnit = fatPerHundredUnit;
+    }
+
+    public double getProteinPerHundredUnit() {
+        return proteinPerHundredUnit;
+    }
+
+    public void setProteinPerHundredUnit(double proteinPerHundredUnit) {
+        this.proteinPerHundredUnit = proteinPerHundredUnit;
+    }
+
+    public double getCarbohydreatePerHundredUnit() {
+        return carbohydreatePerHundredUnit;
+    }
+
+    public void setCarbohydreatePerHundredUnit(double carbohydreatePerHundredUnit) {
+        this.carbohydreatePerHundredUnit = carbohydreatePerHundredUnit;
+    }
+
+    public double getFiberPerHundredUnit() {
+        return fiberPerHundredUnit;
+    }
+
+    public void setFiberPerHundredUnit(double fiberPerHundredUnit) {
+        this.fiberPerHundredUnit = fiberPerHundredUnit;
+    }
+
+    public MealQuantity getQuantityTemp() {
+        return quantityTemp;
+    }
+
+    public void setQuantityTemp(MealQuantity quantityTemp) {
+        this.quantityTemp = quantityTemp;
     }
 }

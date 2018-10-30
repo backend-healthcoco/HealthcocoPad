@@ -453,47 +453,47 @@ public class AddEditRecipeFragment extends HealthCocoFragment implements View.On
     }
 
     private void initNutrientData(DietPlanRecipeItem dietPlanRecipeItem) {
-        if (dietPlanRecipeItem.getFiberTemp() != null) {
-            if (!Util.isNullOrZeroNumber(dietPlanRecipeItem.getFiberTemp().getValue()))
-                editValueFiber.setText(Util.getValidatedValue(dietPlanRecipeItem.getFiberTemp().getValue()));
-            if (dietPlanRecipeItem.getFiberTemp().getType() != null) {
-                tvTypeFiber.setText(dietPlanRecipeItem.getFiberTemp().getType().getUnit());
-                tvTypeFiber.setTag(dietPlanRecipeItem.getFiberTemp().getType());
+        if (dietPlanRecipeItem.getFiber() != null) {
+            if (!Util.isNullOrZeroNumber(dietPlanRecipeItem.getFiber().getValue()))
+                editValueFiber.setText(Util.getValidatedValue(dietPlanRecipeItem.getFiber().getValue()));
+            if (dietPlanRecipeItem.getFiber().getType() != null) {
+                tvTypeFiber.setText(dietPlanRecipeItem.getFiber().getType().getUnit());
+                tvTypeFiber.setTag(dietPlanRecipeItem.getFiber().getType());
             }
         }
 
-        if (dietPlanRecipeItem.getCarbohydreateTemp() != null) {
-            if (!Util.isNullOrZeroNumber(dietPlanRecipeItem.getCarbohydreateTemp().getValue()))
-                editValueCarbs.setText(Util.getValidatedValue(dietPlanRecipeItem.getCarbohydreateTemp().getValue()));
-            if (dietPlanRecipeItem.getCarbohydreateTemp().getType() != null) {
-                tvTypeCarbs.setText(dietPlanRecipeItem.getCarbohydreateTemp().getType().getUnit());
-                tvTypeCarbs.setTag(dietPlanRecipeItem.getCarbohydreateTemp().getType());
+        if (dietPlanRecipeItem.getCarbohydreate() != null) {
+            if (!Util.isNullOrZeroNumber(dietPlanRecipeItem.getCarbohydreate().getValue()))
+                editValueCarbs.setText(Util.getValidatedValue(dietPlanRecipeItem.getCarbohydreate().getValue()));
+            if (dietPlanRecipeItem.getCarbohydreate().getType() != null) {
+                tvTypeCarbs.setText(dietPlanRecipeItem.getCarbohydreate().getType().getUnit());
+                tvTypeCarbs.setTag(dietPlanRecipeItem.getCarbohydreate().getType());
             }
         }
 
-        if (dietPlanRecipeItem.getFatTemp() != null) {
-            if (!Util.isNullOrZeroNumber(dietPlanRecipeItem.getFatTemp().getValue()))
-                editValueFat.setText(Util.getValidatedValue(dietPlanRecipeItem.getFatTemp().getValue()));
-            if (dietPlanRecipeItem.getFatTemp().getType() != null) {
-                tvTypeFat.setText(dietPlanRecipeItem.getFatTemp().getType().getUnit());
-                tvTypeFat.setTag(dietPlanRecipeItem.getFatTemp().getType());
+        if (dietPlanRecipeItem.getFat() != null) {
+            if (!Util.isNullOrZeroNumber(dietPlanRecipeItem.getFat().getValue()))
+                editValueFat.setText(Util.getValidatedValue(dietPlanRecipeItem.getFat().getValue()));
+            if (dietPlanRecipeItem.getFat().getType() != null) {
+                tvTypeFat.setText(dietPlanRecipeItem.getFat().getType().getUnit());
+                tvTypeFat.setTag(dietPlanRecipeItem.getFat().getType());
             }
         }
 
-        if (dietPlanRecipeItem.getProteinTemp() != null) {
-            if (!Util.isNullOrZeroNumber(dietPlanRecipeItem.getProteinTemp().getValue()))
-                editValueProtein.setText(Util.getValidatedValue(dietPlanRecipeItem.getProteinTemp().getValue()));
-            if (dietPlanRecipeItem.getProteinTemp().getType() != null) {
-                tvTypeProtein.setText(dietPlanRecipeItem.getProteinTemp().getType().getUnit());
-                tvTypeProtein.setTag(dietPlanRecipeItem.getProteinTemp().getType());
+        if (dietPlanRecipeItem.getProtein() != null) {
+            if (!Util.isNullOrZeroNumber(dietPlanRecipeItem.getProtein().getValue()))
+                editValueProtein.setText(Util.getValidatedValue(dietPlanRecipeItem.getProtein().getValue()));
+            if (dietPlanRecipeItem.getProtein().getType() != null) {
+                tvTypeProtein.setText(dietPlanRecipeItem.getProtein().getType().getUnit());
+                tvTypeProtein.setTag(dietPlanRecipeItem.getProtein().getType());
             }
         }
-        if (dietPlanRecipeItem.getCalariesTemp() != null) {
-            if (!Util.isNullOrZeroNumber(dietPlanRecipeItem.getCalariesTemp().getValue()))
-                editValueCal.setText(Util.getValidatedValue(dietPlanRecipeItem.getCalariesTemp().getValue()));
-            if (dietPlanRecipeItem.getCalariesTemp().getType() != null) {
-                tvTypeCal.setText(dietPlanRecipeItem.getCalariesTemp().getType().getUnit());
-                tvTypeCal.setTag(dietPlanRecipeItem.getCalariesTemp().getType());
+        if (dietPlanRecipeItem.getCalories() != null) {
+            if (!Util.isNullOrZeroNumber(dietPlanRecipeItem.getCalories().getValue()))
+                editValueCal.setText(Util.getValidatedValue(dietPlanRecipeItem.getCalories().getValue()));
+            if (dietPlanRecipeItem.getCalories().getType() != null) {
+                tvTypeCal.setText(dietPlanRecipeItem.getCalories().getType().getUnit());
+                tvTypeCal.setTag(dietPlanRecipeItem.getCalories().getType());
             }
         }
 

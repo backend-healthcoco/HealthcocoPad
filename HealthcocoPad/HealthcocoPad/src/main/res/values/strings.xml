@@ -1394,7 +1394,7 @@
     <string name="add_diet_chart">Add Diet Chart</string>
     <string name="option">Option&#160;</string>
     <string name="remove">Remove</string>
-    <string name="alert_add_diet_plan">Blank Diet Plan cannot be saved.Add Diet</string>
+    <string name="alert_add_diet_plan">Blank Diet Plan cannot be saved. Add Diet</string>
     <string name="alert_add_diet">Blank Diet cannot be saved.Add Food</string>
     <string name="no_diet_plan_found">No Diet Plan Found</string>
     <string name="diet_space">Diet&#160;</string>
@@ -1437,6 +1437,7 @@
     <string name="add_nutrient">Add Nutrient</string>
     <string name="recipe_name">Recipe Name&#160;:&#160;</string>
     <string name="please_add_equivalent_quantity_first">Please add equivalent measurement first</string>
+    <string name="alert_add_analyse_diet_plan">Blank Diet Plan cannot be Analysed. Add Diet</string>
 
 
 </resources>

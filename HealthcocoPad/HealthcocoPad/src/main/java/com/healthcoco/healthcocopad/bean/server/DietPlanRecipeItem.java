@@ -24,12 +24,13 @@ public class DietPlanRecipeItem extends SugarRecord {
     private String uniqueId;
     @Ignore
     private MealQuantity quantity;
+    @Ignore
+    protected MealQuantity quantityTemp;
     private String name;
     @Ignore
     private List<Ingredient> ingredients;
     private String direction;
     private String note;
-    protected boolean isAnalysed;
     @Ignore
     private MealQuantity fat;
     @Ignore
@@ -51,16 +52,6 @@ public class DietPlanRecipeItem extends SugarRecord {
     private List<Nutrients> generalNutrients;
     @Ignore
     private List<Nutrients> carbNutrients;
-    @Ignore
-    protected MealQuantity calariesTemp;
-    @Ignore
-    protected MealQuantity fatTemp;
-    @Ignore
-    protected MealQuantity proteinTemp;
-    @Ignore
-    protected MealQuantity carbohydreateTemp;
-    @Ignore
-    protected MealQuantity fiberTemp;
 
     protected double fatPerHundredUnit;
     protected double proteinPerHundredUnit;
@@ -68,8 +59,6 @@ public class DietPlanRecipeItem extends SugarRecord {
     protected double fiberPerHundredUnit;
     @Ignore
     private List<Nutrients> lipidNutrients;
-    @Ignore
-    protected MealQuantity tempQuantity;
     @Ignore
     private List<Nutrients> proteinAminoAcidNutrients;
     @Ignore
@@ -192,14 +181,6 @@ public class DietPlanRecipeItem extends SugarRecord {
         this.equivalentMeasurements = equivalentMeasurements;
     }
 
-    public MealQuantity getTempQuantity() {
-        return tempQuantity;
-    }
-
-    public void setTempQuantity(MealQuantity tempQuantity) {
-        this.tempQuantity = tempQuantity;
-    }
-
     public String getCarbohydreateJsonString() {
         return carbohydreateJsonString;
     }
@@ -296,46 +277,6 @@ public class DietPlanRecipeItem extends SugarRecord {
         this.fiberPerHundredUnit = fiberPerHundredUnit;
     }
 
-    public MealQuantity getCalariesTemp() {
-        return calariesTemp;
-    }
-
-    public void setCalariesTemp(MealQuantity calariesTemp) {
-        this.calariesTemp = calariesTemp;
-    }
-
-    public MealQuantity getFatTemp() {
-        return fatTemp;
-    }
-
-    public void setFatTemp(MealQuantity fatTemp) {
-        this.fatTemp = fatTemp;
-    }
-
-    public MealQuantity getProteinTemp() {
-        return proteinTemp;
-    }
-
-    public void setProteinTemp(MealQuantity proteinTemp) {
-        this.proteinTemp = proteinTemp;
-    }
-
-    public MealQuantity getCarbohydreateTemp() {
-        return carbohydreateTemp;
-    }
-
-    public void setCarbohydreateTemp(MealQuantity carbohydreateTemp) {
-        this.carbohydreateTemp = carbohydreateTemp;
-    }
-
-    public MealQuantity getFiberTemp() {
-        return fiberTemp;
-    }
-
-    public void setFiberTemp(MealQuantity fiberTemp) {
-        this.fiberTemp = fiberTemp;
-    }
-
     public List<Nutrients> getGeneralNutrients() {
         return generalNutrients;
     }
@@ -391,4 +332,13 @@ public class DietPlanRecipeItem extends SugarRecord {
     public void setOtherNutrients(List<Nutrients> otherNutrients) {
         this.otherNutrients = otherNutrients;
     }
+
+    public MealQuantity getQuantityTemp() {
+        return quantityTemp;
+    }
+
+    public void setQuantityTemp(MealQuantity quantityTemp) {
+        this.quantityTemp = quantityTemp;
+    }
+
 }

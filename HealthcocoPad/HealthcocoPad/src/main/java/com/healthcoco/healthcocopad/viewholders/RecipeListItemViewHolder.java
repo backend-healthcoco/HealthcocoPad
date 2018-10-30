@@ -227,7 +227,7 @@ public class RecipeListItemViewHolder extends HealthcocoComonRecylcerViewHolder 
                     EquivalentQuantities equivalentQuantities = (EquivalentQuantities) object;
                     this.equivalentQuantities = equivalentQuantities;
                     tvServingType.setText(equivalentQuantities.getServingType().getUnit());
-                    recipeItem.getTempQuantity().setType(equivalentQuantities.getServingType());
+                    recipeItem.getQuantity().setType(equivalentQuantities.getServingType());
                     recipeItem.getCurrentQuantity().setValue(Util.getValidatedDoubleValue(tvQuantity) * equivalentQuantities.getValue());
 
                     break;
@@ -237,36 +237,36 @@ public class RecipeListItemViewHolder extends HealthcocoComonRecylcerViewHolder 
                     tvQuantity.setText((String) object);
                     if (equivalentQuantities != null) {
                         recipeItem.getCurrentQuantity().setValue(Util.getValidatedDoubleValue(tvQuantity) * equivalentQuantities.getValue());
-                        recipeItem.getTempQuantity().setValue(Util.getValidatedDoubleValue(tvQuantity));
+                        recipeItem.getQuantity().setValue(Util.getValidatedDoubleValue(tvQuantity));
                     } else {
-                        recipeItem.getCurrentQuantity().setValue((Util.getValidatedDoubleValue(tvQuantity) * recipeItem.getCurrentQuantity().getValue()) / recipeItem.getTempQuantity().getValue());
-                        recipeItem.getTempQuantity().setValue(Util.getValidatedDoubleValue(tvQuantity));
+                        recipeItem.getCurrentQuantity().setValue((Util.getValidatedDoubleValue(tvQuantity) * recipeItem.getCurrentQuantity().getValue()) / recipeItem.getQuantity().getValue());
+                        recipeItem.getQuantity().setValue(Util.getValidatedDoubleValue(tvQuantity));
                     }
                 }
                 break;
         }
 
-        if (recipeItem.getProteinTemp() != null) {
-            recipeItem.getProteinTemp().setValue((recipeItem.getProteinPerHundredUnit() * recipeItem.getCurrentQuantity().getValue()) / 100);
-            tvProtein.setText(Util.round(recipeItem.getProteinTemp().getValue(), 2)/* + recipeItem.getProtein().getType().getUnit()*/ + "");
+        if (recipeItem.getProtein() != null) {
+            recipeItem.getProtein().setValue((recipeItem.getProteinPerHundredUnit() * recipeItem.getCurrentQuantity().getValue()) / 100);
+            tvProtein.setText(Util.round(recipeItem.getProtein().getValue(), 2)/* + recipeItem.getProtein().getType().getUnit()*/ + "");
         }
-        if (recipeItem.getFatTemp() != null) {
-            recipeItem.getFatTemp().setValue((recipeItem.getFatPerHundredUnit() * recipeItem.getCurrentQuantity().getValue()) / 100);
-            tvFat.setText(Util.round(recipeItem.getFatTemp().getValue(), 2)/* + recipeItem.getProtein().getType().getUnit()*/ + "");
+        if (recipeItem.getFat() != null) {
+            recipeItem.getFat().setValue((recipeItem.getFatPerHundredUnit() * recipeItem.getCurrentQuantity().getValue()) / 100);
+            tvFat.setText(Util.round(recipeItem.getFat().getValue(), 2)/* + recipeItem.getProtein().getType().getUnit()*/ + "");
         }
-        if (recipeItem.getCarbohydreateTemp() != null) {
-            recipeItem.getCarbohydreateTemp().setValue((recipeItem.getCarbohydreatePerHundredUnit() * recipeItem.getCurrentQuantity().getValue()) / 100);
-            tvCarbs.setText(Util.round(recipeItem.getCarbohydreateTemp().getValue(), 2)/* + recipeItem.getProtein().getType().getUnit()*/ + "");
+        if (recipeItem.getCarbohydreate() != null) {
+            recipeItem.getCarbohydreate().setValue((recipeItem.getCarbohydreatePerHundredUnit() * recipeItem.getCurrentQuantity().getValue()) / 100);
+            tvCarbs.setText(Util.round(recipeItem.getCarbohydreate().getValue(), 2)/* + recipeItem.getProtein().getType().getUnit()*/ + "");
         }
-        if (recipeItem.getFiberTemp() != null) {
-            recipeItem.getFiberTemp().setValue((recipeItem.getFiberPerHundredUnit() * recipeItem.getCurrentQuantity().getValue()) / 100);
-            tvFiber.setText(Util.round(recipeItem.getFiberTemp().getValue(), 2)/* + recipeItem.getProtein().getType().getUnit()*/ + "");
+        if (recipeItem.getFiber() != null) {
+            recipeItem.getFiber().setValue((recipeItem.getFiberPerHundredUnit() * recipeItem.getCurrentQuantity().getValue()) / 100);
+            tvFiber.setText(Util.round(recipeItem.getFiber().getValue(), 2)/* + recipeItem.getProtein().getType().getUnit()*/ + "");
         }
-        if (recipeItem.getCalariesTemp() != null) {
-            recipeItem.getCalariesTemp().setValue((recipeItem.getCaloriesPerHundredUnit() * recipeItem.getCurrentQuantity().getValue()) / 100);
+        if (recipeItem.getCalories() != null) {
+            recipeItem.getCalories().setValue((recipeItem.getCaloriesPerHundredUnit() * recipeItem.getCurrentQuantity().getValue()) / 100);
         }
         tvTotalQuantity.setText(Util.round(recipeItem.getCurrentQuantity().getValue(), 2) + recipeItem.getCurrentQuantity().getType().getUnit() + " - " +
-                Util.round(recipeItem.getCalariesTemp().getValue(), 2) + mActivity.getString(R.string.cal_orange));
+                Util.round(recipeItem.getCalories().getValue(), 2) + mActivity.getString(R.string.cal_orange));
         recipeItemClickListener.onQuantityChanged(recipeItem);
     }
 

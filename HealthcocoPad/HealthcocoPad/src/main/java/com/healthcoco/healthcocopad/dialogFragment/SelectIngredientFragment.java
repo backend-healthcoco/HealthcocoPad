@@ -200,20 +200,20 @@ public class SelectIngredientFragment extends HealthCocoFragment implements
         calaries = 0;
         if (!Util.isNullOrEmptyList(list)) {
             for (Ingredient ingredient : list) {
-                if (ingredient.getCaloriesTemp() != null) {
-                    calaries = calaries + ingredient.getCaloriesTemp().getValue();
+                if (ingredient.getCalories() != null) {
+                    calaries = calaries + ingredient.getCalories().getValue();
                 }
-                if (ingredient.getFatTemp() != null) {
-                    fat = fat + ingredient.getFatTemp().getValue();
+                if (ingredient.getFat() != null) {
+                    fat = fat + ingredient.getFat().getValue();
                 }
-                if (ingredient.getProteinTemp() != null) {
-                    protein = protein + ingredient.getProteinTemp().getValue();
+                if (ingredient.getProtein() != null) {
+                    protein = protein + ingredient.getProtein().getValue();
                 }
-                if (ingredient.getCarbohydreateTemp() != null) {
-                    carbs = carbs + ingredient.getCarbohydreateTemp().getValue();
+                if (ingredient.getCarbohydreate() != null) {
+                    carbs = carbs + ingredient.getCarbohydreate().getValue();
                 }
-                if (ingredient.getFiberTemp() != null) {
-                    fiber = fiber + ingredient.getFiberTemp().getValue();
+                if (ingredient.getFiber() != null) {
+                    fiber = fiber + ingredient.getFiber().getValue();
                 }
             }
         }
@@ -230,13 +230,6 @@ public class SelectIngredientFragment extends HealthCocoFragment implements
 
         ingredient.setUniqueId(ingredientResponse.getUniqueId());
         ingredient.setName(ingredientResponse.getName());
-        ingredient.setType(ingredientResponse.getQuantity().getType());
-        ingredient.setValue(ingredientResponse.getQuantity().getValue());
-        ingredient.setCalories(ingredientResponse.getCalories());
-        ingredient.setFat(ingredientResponse.getFat());
-        ingredient.setProtein(ingredientResponse.getProtein());
-        ingredient.setCarbohydreate(ingredientResponse.getCarbohydreate());
-        ingredient.setFiber(ingredientResponse.getFiber());
         ingredient.setEquivalentMeasurements(ingredientResponse.getEquivalentMeasurements());
 
         MealQuantity quantity = ingredientResponse.getQuantity();
@@ -261,17 +254,18 @@ public class SelectIngredientFragment extends HealthCocoFragment implements
             if (ingredientResponse.getQuantity().getType() != null)
                 tempQuantity.setType(ingredientResponse.getQuantity().getType());
         }
-        ingredient.setTempQuantity(tempQuantity);
+        ingredient.setQuantityTemp(tempQuantity);
+        ingredient.setType(ingredientResponse.getQuantity().getType());
+        ingredient.setValue(ingredientResponse.getQuantity().getValue());
+
 
         if (ingredientResponse.getCalories() != null) {
             MealQuantity qty = new MealQuantity();
             qty.setValue(ingredientResponse.getCalories().getValue());
             if (ingredientResponse.getCalories().getType() != null)
                 qty.setType(ingredientResponse.getCalories().getType());
-            ingredient.setCaloriesTemp(qty);
+            ingredient.setCalories(qty);
 
-
-            ingredient.setCalories(ingredientResponse.getCalories());
             ingredient.setCaloriesPerHundredUnit((ingredientResponse.getCalories().getValue() / currentValue) * 100);
         }
         if (ingredientResponse.getFat() != null) {
@@ -279,9 +273,8 @@ public class SelectIngredientFragment extends HealthCocoFragment implements
             qty.setValue(ingredientResponse.getFat().getValue());
             if (ingredientResponse.getFat().getType() != null)
                 qty.setType(ingredientResponse.getFat().getType());
-            ingredient.setFatTemp(qty);
+            ingredient.setFat(qty);
 
-            ingredient.setFat(ingredientResponse.getFat());
             ingredient.setFatPerHundredUnit((ingredientResponse.getFat().getValue() / currentValue) * 100);
         }
         if (ingredientResponse.getProtein() != null) {
@@ -289,10 +282,8 @@ public class SelectIngredientFragment extends HealthCocoFragment implements
             qty.setValue(ingredientResponse.getProtein().getValue());
             if (ingredientResponse.getProtein().getType() != null)
                 qty.setType(ingredientResponse.getProtein().getType());
-            ingredient.setProteinTemp(qty);
+            ingredient.setProtein(qty);
 
-
-            ingredient.setProtein(ingredientResponse.getProtein());
             ingredient.setProteinPerHundredUnit((ingredientResponse.getProtein().getValue() / currentValue) * 100);
         }
         if (ingredientResponse.getCarbohydreate() != null) {
@@ -300,10 +291,8 @@ public class SelectIngredientFragment extends HealthCocoFragment implements
             qty.setValue(ingredientResponse.getCarbohydreate().getValue());
             if (ingredientResponse.getCarbohydreate().getType() != null)
                 qty.setType(ingredientResponse.getCarbohydreate().getType());
-            ingredient.setCarbohydreateTemp(qty);
+            ingredient.setCarbohydreate(qty);
 
-
-            ingredient.setCarbohydreate(ingredientResponse.getCarbohydreate());
             ingredient.setCarbohydreatePerHundredUnit((ingredientResponse.getCarbohydreate().getValue() / currentValue) * 100);
         }
         if (ingredientResponse.getFiber() != null) {
@@ -311,29 +300,42 @@ public class SelectIngredientFragment extends HealthCocoFragment implements
             qty.setValue(ingredientResponse.getFiber().getValue());
             if (ingredientResponse.getFiber().getType() != null)
                 qty.setType(ingredientResponse.getFiber().getType());
-            ingredient.setFiberTemp(qty);
+            ingredient.setFiber(qty);
 
-
-            ingredient.setFiber(ingredientResponse.getFiber());
             ingredient.setFiberPerHundredUnit((ingredientResponse.getFiber().getValue() / currentValue) * 100);
         }
 
         if (!Util.isNullOrEmptyList(ingredientResponse.getGeneralNutrients()))
-            ingredient.setGeneralNutrients(ingredientResponse.getGeneralNutrients());
+            ingredient.setGeneralNutrients(getNutrientArrayList(ingredientResponse.getGeneralNutrients()));
         if (!Util.isNullOrEmptyList(ingredientResponse.getCarbNutrients()))
-            ingredient.setCarbNutrients(ingredientResponse.getCarbNutrients());
+            ingredient.setCarbNutrients(getNutrientArrayList(ingredientResponse.getCarbNutrients()));
         if (!Util.isNullOrEmptyList(ingredientResponse.getLipidNutrients()))
-            ingredient.setLipidNutrients(ingredientResponse.getLipidNutrients());
+            ingredient.setLipidNutrients(getNutrientArrayList(ingredientResponse.getLipidNutrients()));
         if (!Util.isNullOrEmptyList(ingredientResponse.getProteinAminoAcidNutrients()))
-            ingredient.setProteinAminoAcidNutrients(ingredientResponse.getProteinAminoAcidNutrients());
+            ingredient.setProteinAminoAcidNutrients(getNutrientArrayList(ingredientResponse.getProteinAminoAcidNutrients()));
         if (!Util.isNullOrEmptyList(ingredientResponse.getVitaminNutrients()))
-            ingredient.setVitaminNutrients(ingredientResponse.getVitaminNutrients());
+            ingredient.setVitaminNutrients(getNutrientArrayList(ingredientResponse.getVitaminNutrients()));
         if (!Util.isNullOrEmptyList(ingredientResponse.getMineralNutrients()))
-            ingredient.setMineralNutrients(ingredientResponse.getMineralNutrients());
+            ingredient.setMineralNutrients(getNutrientArrayList(ingredientResponse.getMineralNutrients()));
         if (!Util.isNullOrEmptyList(ingredientResponse.getOtherNutrients()))
-            ingredient.setOtherNutrients(ingredientResponse.getOtherNutrients());
+            ingredient.setOtherNutrients(getNutrientArrayList(ingredientResponse.getOtherNutrients()));
 
         return ingredient;
+    }
+
+    private List<Nutrients> getNutrientArrayList(List<Nutrients> nutrientArrayList) {
+        List<Nutrients> nutrientList = new ArrayList<>();
+        for (Nutrients nutrient : nutrientArrayList) {
+            Nutrients newNutrient = new Nutrients();
+            newNutrient.setUniqueId(nutrient.getUniqueId());
+            newNutrient.setName(nutrient.getName());
+            newNutrient.setValue(nutrient.getValue());
+            newNutrient.setType(nutrient.getType());
+            newNutrient.setNote(nutrient.getNote());
+            newNutrient.setNutrientCode(nutrient.getNutrientCode());
+            nutrientList.add(newNutrient);
+        }
+        return nutrientList;
     }
 
     private Ingredient getNutrientPerHundredUnit(Ingredient ingredientResponse) {
@@ -359,14 +361,14 @@ public class SelectIngredientFragment extends HealthCocoFragment implements
             if (ingredientResponse.getType() != null)
                 tempQuantity.setType(ingredientResponse.getType());
         }
-        ingredientResponse.setTempQuantity(tempQuantity);
+        ingredientResponse.setQuantityTemp(tempQuantity);
 
         if (ingredientResponse.getCalories() != null) {
             MealQuantity qty = new MealQuantity();
             qty.setValue(ingredientResponse.getCalories().getValue());
             if (ingredientResponse.getCalories().getType() != null)
                 qty.setType(ingredientResponse.getCalories().getType());
-            ingredientResponse.setCaloriesTemp(qty);
+            ingredientResponse.setCalories(qty);
             ingredientResponse.setCaloriesPerHundredUnit((ingredientResponse.getCalories().getValue() / currentValue) * 100);
         }
         if (ingredientResponse.getFat() != null) {
@@ -374,7 +376,7 @@ public class SelectIngredientFragment extends HealthCocoFragment implements
             qty.setValue(ingredientResponse.getFat().getValue());
             if (ingredientResponse.getFat().getType() != null)
                 qty.setType(ingredientResponse.getFat().getType());
-            ingredientResponse.setFatTemp(qty);
+            ingredientResponse.setFat(qty);
             ingredientResponse.setFatPerHundredUnit((ingredientResponse.getFat().getValue() / currentValue) * 100);
         }
         if (ingredientResponse.getProtein() != null) {
@@ -382,7 +384,7 @@ public class SelectIngredientFragment extends HealthCocoFragment implements
             qty.setValue(ingredientResponse.getProtein().getValue());
             if (ingredientResponse.getProtein().getType() != null)
                 qty.setType(ingredientResponse.getProtein().getType());
-            ingredientResponse.setProteinTemp(qty);
+            ingredientResponse.setProtein(qty);
             ingredientResponse.setProteinPerHundredUnit((ingredientResponse.getProtein().getValue() / currentValue) * 100);
         }
         if (ingredientResponse.getCarbohydreate() != null) {
@@ -390,7 +392,7 @@ public class SelectIngredientFragment extends HealthCocoFragment implements
             qty.setValue(ingredientResponse.getCarbohydreate().getValue());
             if (ingredientResponse.getCarbohydreate().getType() != null)
                 qty.setType(ingredientResponse.getCarbohydreate().getType());
-            ingredientResponse.setCarbohydreateTemp(qty);
+            ingredientResponse.setCarbohydreate(qty);
             ingredientResponse.setCarbohydreatePerHundredUnit((ingredientResponse.getCarbohydreate().getValue() / currentValue) * 100);
         }
         if (ingredientResponse.getFiber() != null) {
@@ -398,7 +400,7 @@ public class SelectIngredientFragment extends HealthCocoFragment implements
             qty.setValue(ingredientResponse.getFiber().getValue());
             if (ingredientResponse.getFiber().getType() != null)
                 qty.setType(ingredientResponse.getFiber().getType());
-            ingredientResponse.setFiberTemp(qty);
+            ingredientResponse.setFiber(qty);
             ingredientResponse.setFiberPerHundredUnit((ingredientResponse.getFiber().getValue() / currentValue) * 100);
         }
 
@@ -440,21 +442,19 @@ public class SelectIngredientFragment extends HealthCocoFragment implements
     public void onQuantityChanged(Object object) {
         Ingredient ingredient = (Ingredient) object;
         if (ingredient != null) {
-            ingredient = updateNutrientValue(ingredient, ingredient.getValue(), ingredient.getType());
+            ingredient = updateNutrientValue(ingredient, ingredient.getQuantityTemp().getValue(), ingredient.getQuantityTemp().getType());
 
-            ingredient.setType(ingredient.getTempQuantity().getType());
-            ingredient.setValue(ingredient.getTempQuantity().getValue());
 
-            if (ingredient.getCaloriesTemp() != null)
-                ingredient.setCalories(ingredient.getCaloriesTemp());
-            if (ingredient.getProteinTemp() != null)
-                ingredient.setProtein(ingredient.getProteinTemp());
-            if (ingredient.getFatTemp() != null)
-                ingredient.setFat(ingredient.getFatTemp());
-            if (ingredient.getCarbohydreateTemp() != null)
-                ingredient.setCarbohydreate(ingredient.getCarbohydreateTemp());
-            if (ingredient.getFiberTemp() != null)
-                ingredient.setFiber(ingredient.getFiberTemp());
+            if (ingredient.getCalories() != null)
+                ingredient.setCalories(ingredient.getCalories());
+            if (ingredient.getProtein() != null)
+                ingredient.setProtein(ingredient.getProtein());
+            if (ingredient.getFat() != null)
+                ingredient.setFat(ingredient.getFat());
+            if (ingredient.getCarbohydreate() != null)
+                ingredient.setCarbohydreate(ingredient.getCarbohydreate());
+            if (ingredient.getFiber() != null)
+                ingredient.setFiber(ingredient.getFiber());
 
             ingredientHashMap.put(ingredient.getUniqueId(), ingredient);
         }
@@ -511,45 +511,45 @@ public class SelectIngredientFragment extends HealthCocoFragment implements
         if (dietPlanRecipeItemReceived != null)
             planRecipeItem = dietPlanRecipeItemReceived;
 
-        if (planRecipeItem.getCalariesTemp() != null)
-            planRecipeItem.getCalariesTemp().setValue(calaries);
+        if (planRecipeItem.getCalories() != null)
+            planRecipeItem.getCalories().setValue(calaries);
         else {
             MealQuantity qty = new MealQuantity();
             qty.setValue(calaries);
             qty.setType(QuantityType.CAL);
-            planRecipeItem.setCalariesTemp(qty);
+            planRecipeItem.setCalories(qty);
         }
-        if (planRecipeItem.getProteinTemp() != null)
-            planRecipeItem.getProteinTemp().setValue(protein);
+        if (planRecipeItem.getProtein() != null)
+            planRecipeItem.getProtein().setValue(protein);
         else {
             MealQuantity qty = new MealQuantity();
             qty.setValue(protein);
             qty.setType(QuantityType.G);
-            planRecipeItem.setProteinTemp(qty);
+            planRecipeItem.setProtein(qty);
         }
-        if (planRecipeItem.getFatTemp() != null)
-            planRecipeItem.getFatTemp().setValue(fat);
+        if (planRecipeItem.getFat() != null)
+            planRecipeItem.getFat().setValue(fat);
         else {
             MealQuantity qty = new MealQuantity();
             qty.setValue(fat);
             qty.setType(QuantityType.G);
-            planRecipeItem.setFatTemp(qty);
+            planRecipeItem.setFat(qty);
         }
-        if (planRecipeItem.getCarbohydreateTemp() != null)
-            planRecipeItem.getCarbohydreateTemp().setValue(carbs);
+        if (planRecipeItem.getCarbohydreate() != null)
+            planRecipeItem.getCarbohydreate().setValue(carbs);
         else {
             MealQuantity qty = new MealQuantity();
             qty.setValue(carbs);
             qty.setType(QuantityType.G);
-            planRecipeItem.setCarbohydreateTemp(qty);
+            planRecipeItem.setCarbohydreate(qty);
         }
-        if (planRecipeItem.getFiberTemp() != null)
-            planRecipeItem.getFiberTemp().setValue(fiber);
+        if (planRecipeItem.getFiber() != null)
+            planRecipeItem.getFiber().setValue(fiber);
         else {
             MealQuantity qty = new MealQuantity();
             qty.setValue(fiber);
             qty.setType(QuantityType.G);
-            planRecipeItem.setFiberTemp(qty);
+            planRecipeItem.setFiber(qty);
         }
 
         planRecipeItem.setNutrientValueAtRecipeLevel(true);

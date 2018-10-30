@@ -283,6 +283,12 @@ public class Util {
         return null;
     }
 
+    public static String getValidatedValue(Long value) {
+        if (value != null)
+            return String.valueOf(value);
+        return null;
+    }
+
     public static String getValidatedValue(Double value) {
         if (value != null)
             return String.valueOf(value);

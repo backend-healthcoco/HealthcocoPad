@@ -91,16 +91,14 @@ public class IngredientListItemViewHolder extends HealthcocoComonRecylcerViewHol
 
             if (!Util.isNullOrZeroNumber(ingredient.getValue())) {
                 tvQuantity.setText(Util.getValidatedValue(ingredient.getValue()));
-                tvServingType.setText(ingredient.getType().getUnit());
                 mActivity.initPopupWindows(tvQuantity, PopupWindowType.QUANTITY_VALUE, PopupWindowType.QUANTITY_VALUE.getList(), this);
+                tvServingType.setText(ingredient.getType().getUnit());
             } else {
                 tvQuantity.setText("");
             }
 
-            if (!Util.isNullOrEmptyList(ingredient.getEquivalentMeasurements()))
+            if (!Util.isNullOrEmptyList(ingredient.getEquivalentMeasurements())) {
                 mActivity.initPopupWindows(tvServingType, PopupWindowType.SERVING_TYPE, (ArrayList<Object>) (Object) ingredient.getEquivalentMeasurements(), this);
-            else {
-                tvServingType.setText("");
             }
 
             if (ingredient.getCurrentQuantity() != null && ingredient.getCalories() != null)
@@ -147,7 +145,7 @@ public class IngredientListItemViewHolder extends HealthcocoComonRecylcerViewHol
                     EquivalentQuantities equivalentQuantities = (EquivalentQuantities) object;
                     this.equivalentQuantities = equivalentQuantities;
                     tvServingType.setText(equivalentQuantities.getServingType().getUnit());
-                    ingredient.getTempQuantity().setType(equivalentQuantities.getServingType());
+                    ingredient.setType(equivalentQuantities.getServingType());
                     ingredient.getCurrentQuantity().setValue(Util.getValidatedDoubleValue(tvQuantity) * equivalentQuantities.getValue());
 
                     break;
@@ -157,36 +155,36 @@ public class IngredientListItemViewHolder extends HealthcocoComonRecylcerViewHol
                     tvQuantity.setText((String) object);
                     if (equivalentQuantities != null) {
                         ingredient.getCurrentQuantity().setValue(Util.getValidatedDoubleValue(tvQuantity) * equivalentQuantities.getValue());
-                        ingredient.getTempQuantity().setValue(Util.getValidatedDoubleValue(tvQuantity));
+                        ingredient.setValue(Util.getValidatedDoubleValue(tvQuantity));
                     } else {
-                        ingredient.getCurrentQuantity().setValue((Util.getValidatedDoubleValue(tvQuantity) * ingredient.getCurrentQuantity().getValue()) / ingredient.getTempQuantity().getValue());
-                        ingredient.getTempQuantity().setValue(Util.getValidatedDoubleValue(tvQuantity));
+                        ingredient.getCurrentQuantity().setValue((Util.getValidatedDoubleValue(tvQuantity) * ingredient.getCurrentQuantity().getValue()) / ingredient.getValue());
+                        ingredient.setValue(Util.getValidatedDoubleValue(tvQuantity));
                     }
                 }
                 break;
         }
 
-        if (ingredient.getProteinTemp() != null) {
-            ingredient.getProteinTemp().setValue((ingredient.getProteinPerHundredUnit() * ingredient.getCurrentQuantity().getValue()) / 100);
-            tvProtein.setText(ingredient.getProteinTemp().getValue()/* + ingredient.getProtein().getType().getUnit()*/ + "");
+        if (ingredient.getProtein() != null) {
+            ingredient.getProtein().setValue((ingredient.getProteinPerHundredUnit() * ingredient.getCurrentQuantity().getValue()) / 100);
+            tvProtein.setText(ingredient.getProtein().getValue()/* + ingredient.getProtein().getType().getUnit()*/ + "");
         }
-        if (ingredient.getFatTemp() != null) {
-            ingredient.getFatTemp().setValue((ingredient.getFatPerHundredUnit() * ingredient.getCurrentQuantity().getValue()) / 100);
-            tvFat.setText(ingredient.getFatTemp().getValue()/* + ingredient.getProtein().getType().getUnit()*/ + "");
+        if (ingredient.getFat() != null) {
+            ingredient.getFat().setValue((ingredient.getFatPerHundredUnit() * ingredient.getCurrentQuantity().getValue()) / 100);
+            tvFat.setText(ingredient.getFat().getValue()/* + ingredient.getProtein().getType().getUnit()*/ + "");
         }
-        if (ingredient.getCarbohydreateTemp() != null) {
-            ingredient.getCarbohydreateTemp().setValue((ingredient.getCarbohydreatePerHundredUnit() * ingredient.getCurrentQuantity().getValue()) / 100);
-            tvCarbs.setText(ingredient.getCarbohydreateTemp().getValue()/* + ingredient.getProtein().getType().getUnit()*/ + "");
+        if (ingredient.getCarbohydreate() != null) {
+            ingredient.getCarbohydreate().setValue((ingredient.getCarbohydreatePerHundredUnit() * ingredient.getCurrentQuantity().getValue()) / 100);
+            tvCarbs.setText(ingredient.getCarbohydreate().getValue()/* + ingredient.getProtein().getType().getUnit()*/ + "");
         }
-        if (ingredient.getFiberTemp() != null) {
-            ingredient.getFiberTemp().setValue((ingredient.getFiberPerHundredUnit() * ingredient.getCurrentQuantity().getValue()) / 100);
-            tvFiber.setText(ingredient.getFiberTemp().getValue()/* + ingredient.getProtein().getType().getUnit()*/ + "");
+        if (ingredient.getFiber() != null) {
+            ingredient.getFiber().setValue((ingredient.getFiberPerHundredUnit() * ingredient.getCurrentQuantity().getValue()) / 100);
+            tvFiber.setText(ingredient.getFiber().getValue()/* + ingredient.getProtein().getType().getUnit()*/ + "");
         }
-        if (ingredient.getCaloriesTemp() != null) {
-            ingredient.getCaloriesTemp().setValue((ingredient.getCaloriesPerHundredUnit() * ingredient.getCurrentQuantity().getValue()) / 100);
+        if (ingredient.getCalories() != null) {
+            ingredient.getCalories().setValue((ingredient.getCaloriesPerHundredUnit() * ingredient.getCurrentQuantity().getValue()) / 100);
         }
         tvTotalQuantity.setText(ingredient.getCurrentQuantity().getValue() + ingredient.getCurrentQuantity().getType().getUnit() + " - " +
-                ingredient.getCaloriesTemp().getValue() + mActivity.getString(R.string.cal_orange));
+                ingredient.getCalories().getValue() + mActivity.getString(R.string.cal_orange));
         recipeItemClickListener.onQuantityChanged(ingredient);
     }
 

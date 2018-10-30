@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -24,9 +25,11 @@ import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
+import com.healthcoco.healthcocopad.enums.ActionbarLeftRightActionTypeDrawables;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.MealTimeType;
+import com.healthcoco.healthcocopad.enums.PatientProfileScreenType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
 import com.healthcoco.healthcocopad.services.GsonRequest;
@@ -43,6 +46,7 @@ import org.parceler.Parcels;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 
 /**
@@ -112,7 +116,8 @@ public class AddEditDietChartFragment extends HealthCocoFragment implements
 
     private LinkedHashMap<String, DietplanAddItem> dietplanHashMap = new LinkedHashMap<>();
     private DietPlan dietPlanReceived;
-
+    private Button btAnalyse;
+    private TextView tvTitle;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -137,7 +142,6 @@ public class AddEditDietChartFragment extends HealthCocoFragment implements
     public void init() {
         initViews();
         initListeners();
-        initAdapter();
         initData();
     }
 
@@ -179,6 +183,9 @@ public class AddEditDietChartFragment extends HealthCocoFragment implements
         tvTimeDinner = (TextView) view.findViewById(R.id.tv_time_dinner);
         tvTimePostDinner = (TextView) view.findViewById(R.id.tv_time_post_dinner);
         tvTimeMidNight = (TextView) view.findViewById(R.id.tv_time_mid_night);
+        btAnalyse = (Button) view.findViewById(R.id.bt_analyse);
+        tvTitle = (TextView) view.findViewById(R.id.tv_title);
+        tvTitle.setText(getString(R.string.add_diet_chart));
 
         tvTimeEarlyMorning.setTag(0l);
         tvTimeBreakfast.setTag(0l);
@@ -194,8 +201,9 @@ public class AddEditDietChartFragment extends HealthCocoFragment implements
 
     @Override
     public void initListeners() {
+        btAnalyse.setOnClickListener(this);
+        ((CommonOpenUpActivity) mActivity).initRightActionView(ActionbarLeftRightActionTypeDrawables.WITH_SAVE, view);
         ((CommonOpenUpActivity) mActivity).initActionbarRightAction(this);
-
 
         tvAddEarlyMorning.setOnClickListener(this);
         tvAddBreakfast.setOnClickListener(this);
@@ -217,6 +225,16 @@ public class AddEditDietChartFragment extends HealthCocoFragment implements
         view.findViewById(R.id.tv_add_food_post_dinner).setOnClickListener(this);
         view.findViewById(R.id.tv_add_food_mid_night).setOnClickListener(this);
 
+        view.findViewById(R.id.tv_analyse_early_morning).setOnClickListener(this);
+        view.findViewById(R.id.tv_analyse_breakfast).setOnClickListener(this);
+        view.findViewById(R.id.tv_analyse_morning_snacks).setOnClickListener(this);
+        view.findViewById(R.id.tv_analyse_lunch).setOnClickListener(this);
+        view.findViewById(R.id.tv_analyse_post_lunch).setOnClickListener(this);
+        view.findViewById(R.id.tv_analyse_evening_snack).setOnClickListener(this);
+        view.findViewById(R.id.tv_analyse_dinner).setOnClickListener(this);
+        view.findViewById(R.id.tv_analyse_post_dinner).setOnClickListener(this);
+        view.findViewById(R.id.tv_analyse_mid_night).setOnClickListener(this);
+
         tvTimeEarlyMorning.setOnClickListener(this);
         tvTimeBreakfast.setOnClickListener(this);
         tvTimeMidMorning.setOnClickListener(this);
@@ -232,14 +250,11 @@ public class AddEditDietChartFragment extends HealthCocoFragment implements
         if (dietPlanReceived != null) {
             if (!Util.isNullOrEmptyList(dietPlanReceived.getItems()))
                 for (DietplanAddItem dietplanAddItem : dietPlanReceived.getItems()) {
+                    dietplanAddItem.setForeignDietId(Util.getValidatedValue(DateTimeUtil.getCurrentDateLong()));
                     updateDietPlan(dietplanAddItem, dietplanAddItem.getToTime());
                 }
         }
     }
-
-    private void initAdapter() {
-    }
-
 
     @Override
     public void onErrorResponse(VolleyResponseBean volleyResponseBean, String errorMessage) {
@@ -265,7 +280,7 @@ public class AddEditDietChartFragment extends HealthCocoFragment implements
                 case FRAGMENT_INITIALISATION:
                     if (user != null && !Util.isNullOrBlank(user.getUniqueId())) {
                         if (selectedPatient != null) {
-
+                            initActionPatientDetailActionBar(PatientProfileScreenType.IN_ADD_VISIT_HEADER, view, selectedPatient);
                         }
                     }
                     break;
@@ -346,11 +361,12 @@ public class AddEditDietChartFragment extends HealthCocoFragment implements
 
         dietPlanToSend.setItems(new ArrayList<DietplanAddItem>(dietplanHashMap.values()));
 
-        if (dietPlanReceived.getUniqueId() != null)
-            dietPlanToSend.setUniqueId(dietPlanReceived.getUniqueId());
-        if (dietPlanReceived.getUniquePlanId() != null)
-            dietPlanToSend.setUniquePlanId(dietPlanReceived.getUniquePlanId());
-
+        if (dietPlanReceived != null) {
+            if (dietPlanReceived.getUniqueId() != null)
+                dietPlanToSend.setUniqueId(dietPlanReceived.getUniqueId());
+            if (dietPlanReceived.getUniquePlanId() != null)
+                dietPlanToSend.setUniquePlanId(dietPlanReceived.getUniquePlanId());
+        }
 
         WebDataServiceImpl.getInstance(mApp).addDietPlan(DietPlan.class, dietPlanToSend, this, this);
     }
@@ -439,11 +455,56 @@ public class AddEditDietChartFragment extends HealthCocoFragment implements
             case R.id.tv_time_mid_night:
                 openTimePickerDialog(null, (TextView) v);
                 break;
-
+            case R.id.tv_analyse_early_morning:
+                analyseDietChart(new ArrayList<DietplanAddItem>(earlyMorning.values()));
+                break;
+            case R.id.tv_analyse_breakfast:
+                analyseDietChart(new ArrayList<DietplanAddItem>(breakfast.values()));
+                break;
+            case R.id.tv_analyse_morning_snacks:
+                analyseDietChart(new ArrayList<DietplanAddItem>(midMorning.values()));
+                break;
+            case R.id.tv_analyse_lunch:
+                analyseDietChart(new ArrayList<DietplanAddItem>(lunch.values()));
+                break;
+            case R.id.tv_analyse_post_lunch:
+                analyseDietChart(new ArrayList<DietplanAddItem>(postLunch.values()));
+                break;
+            case R.id.tv_analyse_evening_snack:
+                analyseDietChart(new ArrayList<DietplanAddItem>(eveningSnacks.values()));
+                break;
+            case R.id.tv_analyse_dinner:
+                analyseDietChart(new ArrayList<DietplanAddItem>(dinner.values()));
+                break;
+            case R.id.tv_analyse_post_dinner:
+                analyseDietChart(new ArrayList<DietplanAddItem>(postDinner.values()));
+                break;
+            case R.id.tv_analyse_mid_night:
+                analyseDietChart(new ArrayList<DietplanAddItem>(midNight.values()));
+                break;
             case R.id.container_right_action:
                 validateData();
                 break;
+            case R.id.bt_analyse:
+                onAnalysedietChartClicked();
+                break;
         }
+    }
+
+    private void onAnalysedietChartClicked() {
+        ArrayList<DietplanAddItem> addItemList = new ArrayList<>();
+
+        addItemList.addAll(new ArrayList<DietplanAddItem>(earlyMorning.values()));
+        addItemList.addAll(new ArrayList<DietplanAddItem>(breakfast.values()));
+        addItemList.addAll(new ArrayList<DietplanAddItem>(midMorning.values()));
+        addItemList.addAll(new ArrayList<DietplanAddItem>(lunch.values()));
+        addItemList.addAll(new ArrayList<DietplanAddItem>(postLunch.values()));
+        addItemList.addAll(new ArrayList<DietplanAddItem>(eveningSnacks.values()));
+        addItemList.addAll(new ArrayList<DietplanAddItem>(dinner.values()));
+        addItemList.addAll(new ArrayList<DietplanAddItem>(postDinner.values()));
+        addItemList.addAll(new ArrayList<DietplanAddItem>(midNight.values()));
+
+        analyseDietChart(addItemList);
     }
 
 
@@ -474,6 +535,7 @@ public class AddEditDietChartFragment extends HealthCocoFragment implements
         }
 
     }
+
 
     private void updateDietPlan(DietplanAddItem dietplanAddItem, float mealTiming) {
         dietplanHashMap.put(dietplanAddItem.getForeignDietId(), dietplanAddItem);
@@ -533,6 +595,20 @@ public class AddEditDietChartFragment extends HealthCocoFragment implements
                     tvTimeMidNight.setText(DateTimeUtil.getFormattedTime(0, Math.round((float) mealTiming)));
                 break;
         }
+    }
+
+    private void analyseDietChart(ArrayList<DietplanAddItem> itemArrayList) {
+        if (!Util.isNullOrEmptyList(itemArrayList)) {
+            DietPlan dietPlan = new DietPlan();
+            dietPlan.setItems(itemArrayList);
+
+            Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
+            intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.ANALYSE.ordinal());
+            if (dietPlan != null)
+                intent.putExtra(AnalyseDietChartFragment.TAG_DIET_PLAN_CHART, Parcels.wrap(dietPlan));
+            startActivity(intent);
+        } else
+            Util.showToast(mActivity, R.string.alert_add_analyse_diet_plan);
     }
 
 

@@ -5,6 +5,9 @@
     android:background="@color/white"
     android:orientation="vertical">
 
+    <include layout="@layout/actionbar_analyse_button" />
+
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -88,33 +91,56 @@
                             android:orientation="horizontal"
                             android:weightSum="3">
 
-                            <TextView
-                                android:id="@+id/tv_add_food_early_morning"
+                            <LinearLayout
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1.6"
+                                android:layout_marginRight="@dimen/margin_left_right_add_vital_signs"
+                                android:layout_weight="1.8"
+                                android:gravity="center|start"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/tv_add_food_early_morning"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1.6"
+                                    android:longClickable="false"
+                                    android:paddingLeft="@dimen/layout_padding"
+                                    android:paddingTop="@dimen/layout_padding"
+                                    android:paddingBottom="@dimen/layout_padding"
+                                    android:singleLine="true"
+                                    android:text="@string/add_food"
+                                    android:textColor="@color/orange"
+                                    android:textColorHint="@color/grey_hint_color"
+                                    android:textSize="@dimen/text_size_floating_label"
+                                    android:textStyle="bold" />
+
+                                <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+                                    android:id="@+id/tv_add_early_morning"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:paddingLeft="@dimen/item_contact_padding"
+                                    android:paddingTop="@dimen/layout_padding"
+                                    android:paddingRight="@dimen/item_contact_padding"
+                                    android:paddingBottom="@dimen/layout_padding"
+                                    android:text="@string/icon_add"
+                                    android:textColor="@color/orange"
+                                    android:textSize="@dimen/text_size_treatment_list_title" />
+                            </LinearLayout>
+
+                            <TextView
+                                android:id="@+id/tv_analyse_early_morning"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="right"
                                 android:longClickable="false"
-                                android:paddingLeft="@dimen/layout_padding"
                                 android:paddingTop="@dimen/layout_padding"
                                 android:paddingBottom="@dimen/layout_padding"
                                 android:singleLine="true"
-                                android:text="@string/add_food"
-                                android:textColor="@color/orange"
-                                android:textColorHint="@color/grey_hint_color"
-                                android:textSize="@dimen/text_size_floating_label"
-                                android:textStyle="bold" />
-
-                            <com.healthcoco.healthcocopad.views.TextViewFontAwesome
-                                android:id="@+id/tv_add_early_morning"
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:paddingLeft="@dimen/item_contact_padding"
-                                android:paddingTop="@dimen/layout_padding"
-                                android:paddingRight="@dimen/item_contact_padding"
-                                android:paddingBottom="@dimen/layout_padding"
-                                android:text="@string/icon_add"
-                                android:textColor="@color/orange"
-                                android:textSize="@dimen/text_size_treatment_list_title" />
+                                android:text="@string/analyse"
+                                android:textColor="@color/green_dark"
+                                android:textSize="@dimen/text_size_floating_label" />
 
                         </LinearLayout>
 
@@ -216,34 +242,57 @@
                             android:orientation="horizontal"
                             android:weightSum="3">
 
-                            <TextView
-                                android:id="@+id/tv_add_food_breakfast"
+
+                            <LinearLayout
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1.6"
+                                android:layout_marginRight="@dimen/margin_left_right_add_vital_signs"
+                                android:layout_weight="1.8"
+                                android:gravity="center|start"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/tv_add_food_breakfast"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1.6"
+                                    android:longClickable="false"
+                                    android:paddingLeft="@dimen/layout_padding"
+                                    android:paddingTop="@dimen/layout_padding"
+                                    android:paddingBottom="@dimen/layout_padding"
+                                    android:singleLine="true"
+                                    android:text="@string/add_food"
+                                    android:textColor="@color/orange"
+                                    android:textColorHint="@color/grey_hint_color"
+                                    android:textSize="@dimen/text_size_floating_label"
+                                    android:textStyle="bold" />
+
+                                <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+                                    android:id="@+id/tv_add_breakfast"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:paddingLeft="@dimen/item_contact_padding"
+                                    android:paddingTop="@dimen/layout_padding"
+                                    android:paddingRight="@dimen/item_contact_padding"
+                                    android:paddingBottom="@dimen/layout_padding"
+                                    android:text="@string/icon_add"
+                                    android:textColor="@color/orange"
+                                    android:textSize="@dimen/text_size_treatment_list_title" />
+                            </LinearLayout>
+
+                            <TextView
+                                android:id="@+id/tv_analyse_breakfast"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="right"
                                 android:longClickable="false"
-                                android:paddingLeft="@dimen/layout_padding"
                                 android:paddingTop="@dimen/layout_padding"
                                 android:paddingBottom="@dimen/layout_padding"
                                 android:singleLine="true"
-                                android:text="@string/add_food"
-                                android:textColor="@color/orange"
-                                android:textColorHint="@color/grey_hint_color"
-                                android:textSize="@dimen/text_size_floating_label"
-                                android:textStyle="bold" />
-
-                            <com.healthcoco.healthcocopad.views.TextViewFontAwesome
-                                android:id="@+id/tv_add_breakfast"
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:paddingLeft="@dimen/item_contact_padding"
-                                android:paddingTop="@dimen/layout_padding"
-                                android:paddingRight="@dimen/item_contact_padding"
-                                android:paddingBottom="@dimen/layout_padding"
-                                android:text="@string/icon_add"
-                                android:textColor="@color/orange"
-                                android:textSize="@dimen/text_size_treatment_list_title" />
-
+                                android:text="@string/analyse"
+                                android:textColor="@color/green_dark"
+                                android:textSize="@dimen/text_size_floating_label" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -344,34 +393,57 @@
                             android:orientation="horizontal"
                             android:weightSum="3">
 
-                            <TextView
-                                android:id="@+id/tv_add_food_morning_snacks"
+
+                            <LinearLayout
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1.6"
+                                android:layout_marginRight="@dimen/margin_left_right_add_vital_signs"
+                                android:layout_weight="1.8"
+                                android:gravity="center|start"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/tv_add_food_morning_snacks"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1.6"
+                                    android:longClickable="false"
+                                    android:paddingLeft="@dimen/layout_padding"
+                                    android:paddingTop="@dimen/layout_padding"
+                                    android:paddingBottom="@dimen/layout_padding"
+                                    android:singleLine="true"
+                                    android:text="@string/add_food"
+                                    android:textColor="@color/orange"
+                                    android:textColorHint="@color/grey_hint_color"
+                                    android:textSize="@dimen/text_size_floating_label"
+                                    android:textStyle="bold" />
+
+                                <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+                                    android:id="@+id/tv_add_morning_snacks"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:paddingLeft="@dimen/item_contact_padding"
+                                    android:paddingTop="@dimen/layout_padding"
+                                    android:paddingRight="@dimen/item_contact_padding"
+                                    android:paddingBottom="@dimen/layout_padding"
+                                    android:text="@string/icon_add"
+                                    android:textColor="@color/orange"
+                                    android:textSize="@dimen/text_size_treatment_list_title" />
+                            </LinearLayout>
+
+                            <TextView
+                                android:id="@+id/tv_analyse_morning_snacks"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="right"
                                 android:longClickable="false"
-                                android:paddingLeft="@dimen/layout_padding"
                                 android:paddingTop="@dimen/layout_padding"
                                 android:paddingBottom="@dimen/layout_padding"
                                 android:singleLine="true"
-                                android:text="@string/add_food"
-                                android:textColor="@color/orange"
-                                android:textColorHint="@color/grey_hint_color"
-                                android:textSize="@dimen/text_size_floating_label"
-                                android:textStyle="bold" />
-
-                            <com.healthcoco.healthcocopad.views.TextViewFontAwesome
-                                android:id="@+id/tv_add_morning_snacks"
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:paddingLeft="@dimen/item_contact_padding"
-                                android:paddingTop="@dimen/layout_padding"
-                                android:paddingRight="@dimen/item_contact_padding"
-                                android:paddingBottom="@dimen/layout_padding"
-                                android:text="@string/icon_add"
-                                android:textColor="@color/orange"
-                                android:textSize="@dimen/text_size_treatment_list_title" />
-
+                                android:text="@string/analyse"
+                                android:textColor="@color/green_dark"
+                                android:textSize="@dimen/text_size_floating_label" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -473,34 +545,57 @@
                             android:orientation="horizontal"
                             android:weightSum="3">
 
-                            <TextView
-                                android:id="@+id/tv_add_food_lunch"
+
+                            <LinearLayout
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1.6"
+                                android:layout_marginRight="@dimen/margin_left_right_add_vital_signs"
+                                android:layout_weight="1.8"
+                                android:gravity="center|start"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/tv_add_food_lunch"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1.6"
+                                    android:longClickable="false"
+                                    android:paddingLeft="@dimen/layout_padding"
+                                    android:paddingTop="@dimen/layout_padding"
+                                    android:paddingBottom="@dimen/layout_padding"
+                                    android:singleLine="true"
+                                    android:text="@string/add_food"
+                                    android:textColor="@color/orange"
+                                    android:textColorHint="@color/grey_hint_color"
+                                    android:textSize="@dimen/text_size_floating_label"
+                                    android:textStyle="bold" />
+
+                                <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+                                    android:id="@+id/tv_add_lunch"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:paddingLeft="@dimen/item_contact_padding"
+                                    android:paddingTop="@dimen/layout_padding"
+                                    android:paddingRight="@dimen/item_contact_padding"
+                                    android:paddingBottom="@dimen/layout_padding"
+                                    android:text="@string/icon_add"
+                                    android:textColor="@color/orange"
+                                    android:textSize="@dimen/text_size_treatment_list_title" />
+                            </LinearLayout>
+
+                            <TextView
+                                android:id="@+id/tv_analyse_lunch"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="right"
                                 android:longClickable="false"
-                                android:paddingLeft="@dimen/layout_padding"
                                 android:paddingTop="@dimen/layout_padding"
                                 android:paddingBottom="@dimen/layout_padding"
                                 android:singleLine="true"
-                                android:text="@string/add_food"
-                                android:textColor="@color/orange"
-                                android:textColorHint="@color/grey_hint_color"
-                                android:textSize="@dimen/text_size_floating_label"
-                                android:textStyle="bold" />
-
-                            <com.healthcoco.healthcocopad.views.TextViewFontAwesome
-                                android:id="@+id/tv_add_lunch"
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:paddingLeft="@dimen/item_contact_padding"
-                                android:paddingTop="@dimen/layout_padding"
-                                android:paddingRight="@dimen/item_contact_padding"
-                                android:paddingBottom="@dimen/layout_padding"
-                                android:text="@string/icon_add"
-                                android:textColor="@color/orange"
-                                android:textSize="@dimen/text_size_treatment_list_title" />
-
+                                android:text="@string/analyse"
+                                android:textColor="@color/green_dark"
+                                android:textSize="@dimen/text_size_floating_label" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -602,34 +697,58 @@
                             android:orientation="horizontal"
                             android:weightSum="3">
 
-                            <TextView
-                                android:id="@+id/tv_add_food_post_lunch"
+
+                            <LinearLayout
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1.6"
+                                android:layout_marginRight="@dimen/margin_left_right_add_vital_signs"
+                                android:layout_weight="1.8"
+                                android:gravity="center|start"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/tv_add_food_post_lunch"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1.6"
+                                    android:longClickable="false"
+                                    android:paddingLeft="@dimen/layout_padding"
+                                    android:paddingTop="@dimen/layout_padding"
+                                    android:paddingBottom="@dimen/layout_padding"
+                                    android:singleLine="true"
+                                    android:text="@string/add_food"
+                                    android:textColor="@color/orange"
+                                    android:textColorHint="@color/grey_hint_color"
+                                    android:textSize="@dimen/text_size_floating_label"
+                                    android:textStyle="bold" />
+
+                                <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+                                    android:id="@+id/tv_add_post_lunch"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:paddingLeft="@dimen/item_contact_padding"
+                                    android:paddingTop="@dimen/layout_padding"
+                                    android:paddingRight="@dimen/item_contact_padding"
+                                    android:paddingBottom="@dimen/layout_padding"
+                                    android:text="@string/icon_add"
+                                    android:textColor="@color/orange"
+                                    android:textSize="@dimen/text_size_treatment_list_title" />
+
+                            </LinearLayout>
+
+                            <TextView
+                                android:id="@+id/tv_analyse_post_lunch"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="right"
                                 android:longClickable="false"
-                                android:paddingLeft="@dimen/layout_padding"
                                 android:paddingTop="@dimen/layout_padding"
                                 android:paddingBottom="@dimen/layout_padding"
                                 android:singleLine="true"
-                                android:text="@string/add_food"
-                                android:textColor="@color/orange"
-                                android:textColorHint="@color/grey_hint_color"
-                                android:textSize="@dimen/text_size_floating_label"
-                                android:textStyle="bold" />
-
-                            <com.healthcoco.healthcocopad.views.TextViewFontAwesome
-                                android:id="@+id/tv_add_post_lunch"
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:paddingLeft="@dimen/item_contact_padding"
-                                android:paddingTop="@dimen/layout_padding"
-                                android:paddingRight="@dimen/item_contact_padding"
-                                android:paddingBottom="@dimen/layout_padding"
-                                android:text="@string/icon_add"
-                                android:textColor="@color/orange"
-                                android:textSize="@dimen/text_size_treatment_list_title" />
-
+                                android:text="@string/analyse"
+                                android:textColor="@color/green_dark"
+                                android:textSize="@dimen/text_size_floating_label" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -731,34 +850,58 @@
                             android:orientation="horizontal"
                             android:weightSum="3">
 
-                            <TextView
-                                android:id="@+id/tv_add_food_evening_snack"
+
+                            <LinearLayout
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1.6"
+                                android:layout_marginRight="@dimen/margin_left_right_add_vital_signs"
+                                android:layout_weight="1.8"
+                                android:gravity="center|start"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/tv_add_food_evening_snack"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1.6"
+                                    android:longClickable="false"
+                                    android:paddingLeft="@dimen/layout_padding"
+                                    android:paddingTop="@dimen/layout_padding"
+                                    android:paddingBottom="@dimen/layout_padding"
+                                    android:singleLine="true"
+                                    android:text="@string/add_food"
+                                    android:textColor="@color/orange"
+                                    android:textColorHint="@color/grey_hint_color"
+                                    android:textSize="@dimen/text_size_floating_label"
+                                    android:textStyle="bold" />
+
+                                <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+                                    android:id="@+id/tv_add_evening_snack"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:paddingLeft="@dimen/item_contact_padding"
+                                    android:paddingTop="@dimen/layout_padding"
+                                    android:paddingRight="@dimen/item_contact_padding"
+                                    android:paddingBottom="@dimen/layout_padding"
+                                    android:text="@string/icon_add"
+                                    android:textColor="@color/orange"
+                                    android:textSize="@dimen/text_size_treatment_list_title" />
+
+                            </LinearLayout>
+
+                            <TextView
+                                android:id="@+id/tv_analyse_evening_snack"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="right"
                                 android:longClickable="false"
-                                android:paddingLeft="@dimen/layout_padding"
                                 android:paddingTop="@dimen/layout_padding"
                                 android:paddingBottom="@dimen/layout_padding"
                                 android:singleLine="true"
-                                android:text="@string/add_food"
-                                android:textColor="@color/orange"
-                                android:textColorHint="@color/grey_hint_color"
-                                android:textSize="@dimen/text_size_floating_label"
-                                android:textStyle="bold" />
-
-                            <com.healthcoco.healthcocopad.views.TextViewFontAwesome
-                                android:id="@+id/tv_add_evening_snack"
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:paddingLeft="@dimen/item_contact_padding"
-                                android:paddingTop="@dimen/layout_padding"
-                                android:paddingRight="@dimen/item_contact_padding"
-                                android:paddingBottom="@dimen/layout_padding"
-                                android:text="@string/icon_add"
-                                android:textColor="@color/orange"
-                                android:textSize="@dimen/text_size_treatment_list_title" />
-
+                                android:text="@string/analyse"
+                                android:textColor="@color/green_dark"
+                                android:textSize="@dimen/text_size_floating_label" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -859,34 +1002,58 @@
                             android:orientation="horizontal"
                             android:weightSum="3">
 
-                            <TextView
-                                android:id="@+id/tv_add_food_dinner"
+
+                            <LinearLayout
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1.6"
+                                android:layout_marginRight="@dimen/margin_left_right_add_vital_signs"
+                                android:layout_weight="1.8"
+                                android:gravity="center|start"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/tv_add_food_dinner"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1.6"
+                                    android:longClickable="false"
+                                    android:paddingLeft="@dimen/layout_padding"
+                                    android:paddingTop="@dimen/layout_padding"
+                                    android:paddingBottom="@dimen/layout_padding"
+                                    android:singleLine="true"
+                                    android:text="@string/add_food"
+                                    android:textColor="@color/orange"
+                                    android:textColorHint="@color/grey_hint_color"
+                                    android:textSize="@dimen/text_size_floating_label"
+                                    android:textStyle="bold" />
+
+                                <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+                                    android:id="@+id/tv_add_dinner"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:paddingLeft="@dimen/item_contact_padding"
+                                    android:paddingTop="@dimen/layout_padding"
+                                    android:paddingRight="@dimen/item_contact_padding"
+                                    android:paddingBottom="@dimen/layout_padding"
+                                    android:text="@string/icon_add"
+                                    android:textColor="@color/orange"
+                                    android:textSize="@dimen/text_size_treatment_list_title" />
+
+                            </LinearLayout>
+
+                            <TextView
+                                android:id="@+id/tv_analyse_dinner"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="right"
                                 android:longClickable="false"
-                                android:paddingLeft="@dimen/layout_padding"
                                 android:paddingTop="@dimen/layout_padding"
                                 android:paddingBottom="@dimen/layout_padding"
                                 android:singleLine="true"
-                                android:text="@string/add_food"
-                                android:textColor="@color/orange"
-                                android:textColorHint="@color/grey_hint_color"
-                                android:textSize="@dimen/text_size_floating_label"
-                                android:textStyle="bold" />
-
-                            <com.healthcoco.healthcocopad.views.TextViewFontAwesome
-                                android:id="@+id/tv_add_dinner"
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:paddingLeft="@dimen/item_contact_padding"
-                                android:paddingTop="@dimen/layout_padding"
-                                android:paddingRight="@dimen/item_contact_padding"
-                                android:paddingBottom="@dimen/layout_padding"
-                                android:text="@string/icon_add"
-                                android:textColor="@color/orange"
-                                android:textSize="@dimen/text_size_treatment_list_title" />
-
+                                android:text="@string/analyse"
+                                android:textColor="@color/green_dark"
+                                android:textSize="@dimen/text_size_floating_label" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -987,34 +1154,58 @@
                             android:orientation="horizontal"
                             android:weightSum="3">
 
-                            <TextView
-                                android:id="@+id/tv_add_food_post_dinner"
+
+                            <LinearLayout
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1.6"
+                                android:layout_marginRight="@dimen/margin_left_right_add_vital_signs"
+                                android:layout_weight="1.8"
+                                android:gravity="center|start"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/tv_add_food_post_dinner"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1.6"
+                                    android:longClickable="false"
+                                    android:paddingLeft="@dimen/layout_padding"
+                                    android:paddingTop="@dimen/layout_padding"
+                                    android:paddingBottom="@dimen/layout_padding"
+                                    android:singleLine="true"
+                                    android:text="@string/add_food"
+                                    android:textColor="@color/orange"
+                                    android:textColorHint="@color/grey_hint_color"
+                                    android:textSize="@dimen/text_size_floating_label"
+                                    android:textStyle="bold" />
+
+                                <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+                                    android:id="@+id/tv_add_post_dinner"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:paddingLeft="@dimen/item_contact_padding"
+                                    android:paddingTop="@dimen/layout_padding"
+                                    android:paddingRight="@dimen/item_contact_padding"
+                                    android:paddingBottom="@dimen/layout_padding"
+                                    android:text="@string/icon_add"
+                                    android:textColor="@color/orange"
+                                    android:textSize="@dimen/text_size_treatment_list_title" />
+
+                            </LinearLayout>
+
+                            <TextView
+                                android:id="@+id/tv_analyse_post_dinner"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="right"
                                 android:longClickable="false"
-                                android:paddingLeft="@dimen/layout_padding"
                                 android:paddingTop="@dimen/layout_padding"
                                 android:paddingBottom="@dimen/layout_padding"
                                 android:singleLine="true"
-                                android:text="@string/add_food"
-                                android:textColor="@color/orange"
-                                android:textColorHint="@color/grey_hint_color"
-                                android:textSize="@dimen/text_size_floating_label"
-                                android:textStyle="bold" />
-
-                            <com.healthcoco.healthcocopad.views.TextViewFontAwesome
-                                android:id="@+id/tv_add_post_dinner"
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:paddingLeft="@dimen/item_contact_padding"
-                                android:paddingTop="@dimen/layout_padding"
-                                android:paddingRight="@dimen/item_contact_padding"
-                                android:paddingBottom="@dimen/layout_padding"
-                                android:text="@string/icon_add"
-                                android:textColor="@color/orange"
-                                android:textSize="@dimen/text_size_treatment_list_title" />
-
+                                android:text="@string/analyse"
+                                android:textColor="@color/green_dark"
+                                android:textSize="@dimen/text_size_floating_label" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -1116,34 +1307,58 @@
                             android:orientation="horizontal"
                             android:weightSum="3">
 
-                            <TextView
-                                android:id="@+id/tv_add_food_mid_night"
+
+                            <LinearLayout
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1.6"
+                                android:layout_marginRight="@dimen/margin_left_right_add_vital_signs"
+                                android:layout_weight="1.8"
+                                android:gravity="center|start"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/tv_add_food_mid_night"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1.6"
+                                    android:longClickable="false"
+                                    android:paddingLeft="@dimen/layout_padding"
+                                    android:paddingTop="@dimen/layout_padding"
+                                    android:paddingBottom="@dimen/layout_padding"
+                                    android:singleLine="true"
+                                    android:text="@string/add_food"
+                                    android:textColor="@color/orange"
+                                    android:textColorHint="@color/grey_hint_color"
+                                    android:textSize="@dimen/text_size_floating_label"
+                                    android:textStyle="bold" />
+
+                                <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+                                    android:id="@+id/tv_add_mid_night"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:paddingLeft="@dimen/item_contact_padding"
+                                    android:paddingTop="@dimen/layout_padding"
+                                    android:paddingRight="@dimen/item_contact_padding"
+                                    android:paddingBottom="@dimen/layout_padding"
+                                    android:text="@string/icon_add"
+                                    android:textColor="@color/orange"
+                                    android:textSize="@dimen/text_size_treatment_list_title" />
+
+                            </LinearLayout>
+
+                            <TextView
+                                android:id="@+id/tv_analyse_mid_night"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="right"
                                 android:longClickable="false"
-                                android:paddingLeft="@dimen/layout_padding"
                                 android:paddingTop="@dimen/layout_padding"
                                 android:paddingBottom="@dimen/layout_padding"
                                 android:singleLine="true"
-                                android:text="@string/add_food"
-                                android:textColor="@color/orange"
-                                android:textColorHint="@color/grey_hint_color"
-                                android:textSize="@dimen/text_size_floating_label"
-                                android:textStyle="bold" />
-
-                            <com.healthcoco.healthcocopad.views.TextViewFontAwesome
-                                android:id="@+id/tv_add_mid_night"
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:paddingLeft="@dimen/item_contact_padding"
-                                android:paddingTop="@dimen/layout_padding"
-                                android:paddingRight="@dimen/item_contact_padding"
-                                android:paddingBottom="@dimen/layout_padding"
-                                android:text="@string/icon_add"
-                                android:textColor="@color/orange"
-                                android:textSize="@dimen/text_size_treatment_list_title" />
-
+                                android:text="@string/analyse"
+                                android:textColor="@color/green_dark"
+                                android:textSize="@dimen/text_size_floating_label" />
                         </LinearLayout>
 
                         <LinearLayout

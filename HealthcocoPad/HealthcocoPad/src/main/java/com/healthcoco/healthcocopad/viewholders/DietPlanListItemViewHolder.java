@@ -327,15 +327,13 @@ public class DietPlanListItemViewHolder extends HealthCocoViewHolder implements 
             LinearLayout containerMeals = (LinearLayout) layoutMeal.findViewById(R.id.container_meal);
             tvOption.setText(mActivity.getString(R.string.diet_space) + (itemArrayList.indexOf(dietplanAddItem) + 1));
 
-            tvTotalCalaries.setText(Util.round(dietplanAddItem.getCalTotal(), 2) + mActivity.getString(R.string.cal_orange));
-            tvTotalProtein.setText(Util.round(dietplanAddItem.getFatTotal(), 2) + mActivity.getString(R.string.gm));
-            tvTotalFat.setText(Util.round(dietplanAddItem.getProteinTotal(), 2) + mActivity.getString(R.string.gm));
-            tvTotalCarbs.setText(Util.round(dietplanAddItem.getCarbohydreateTotal(), 2) + mActivity.getString(R.string.gm));
-            tvTotalFiber.setText(Util.round(dietplanAddItem.getFiberTotal(), 2) + mActivity.getString(R.string.gm));
-
+            double protein = 0;
+            double fat = 0;
+            double carbs = 0;
+            double fiber = 0;
+            double calaries = 0;
 
             for (DietPlanRecipeItem recipeItem : dietplanAddItem.getRecipes()) {
-
                 LinearLayout layoutRecipe = (LinearLayout) mActivity.getLayoutInflater().inflate(R.layout.list_sub_item_selected_recipe, null);
                 TextView tvRecipeTitle = (TextView) layoutRecipe.findViewById(R.id.tv_ingredient_name);
                 TextView tvRecipeQuantity = (TextView) layoutRecipe.findViewById(R.id.tv_quantity_ingredient);
@@ -401,8 +399,39 @@ public class DietPlanListItemViewHolder extends HealthCocoViewHolder implements 
                 /*} else {
                     containerIngredients.setVisibility(View.GONE);*/
 //                }
+                if (recipeItem.getCalories() != null) {
+                    calaries = calaries + recipeItem.getCalories().getValue();
+                }
+                if (recipeItem.getFat() != null) {
+                    fat = fat + recipeItem.getFat().getValue();
+                }
+                if (recipeItem.getProtein() != null) {
+                    protein = protein + recipeItem.getProtein().getValue();
+                }
+                if (recipeItem.getCarbohydreate() != null) {
+                    carbs = carbs + recipeItem.getCarbohydreate().getValue();
+                }
+                if (recipeItem.getFiber() != null) {
+                    fiber = fiber + recipeItem.getFiber().getValue();
+                }
+
+
                 containerMeals.addView(layoutRecipe);
             }
+
+            dietplanAddItem.setCalTotal(calaries);
+            dietplanAddItem.setProteinTotal(protein);
+            dietplanAddItem.setFatTotal(fat);
+            dietplanAddItem.setCarbohydreateTotal(carbs);
+            dietplanAddItem.setFiberTotal(fiber);
+
+            tvTotalCalaries.setText(Util.round(dietplanAddItem.getCalTotal(), 2) + mActivity.getString(R.string.cal_orange));
+            tvTotalProtein.setText(Util.round(dietplanAddItem.getFatTotal(), 2) + mActivity.getString(R.string.gm));
+            tvTotalFat.setText(Util.round(dietplanAddItem.getProteinTotal(), 2) + mActivity.getString(R.string.gm));
+            tvTotalCarbs.setText(Util.round(dietplanAddItem.getCarbohydreateTotal(), 2) + mActivity.getString(R.string.gm));
+            tvTotalFiber.setText(Util.round(dietplanAddItem.getFiberTotal(), 2) + mActivity.getString(R.string.gm));
+
+
             containerDiet.addView(layoutMeal);
         }
         containerDietItem.addView(parentDietPlan);
