@@ -111,8 +111,9 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
     private PatientClinicalNotesDetailFragment clinicalNotesDetailFragment;
     private PatientPrescriptionDetailFragment prescriptionDetailFragment;
     private PatientReportsDetailFragment reportsDetailFragment;
+    private PatientDietPlanDetailFragment dietPlanDetailFragment;
     private PatientTreatmentDetailFragment treatmentDetailFragment;
-    private PatientDietPlanDetailFragment invoiceDetailFragment;
+    private PatientInvoiceDetailFragment invoiceDetailFragment;
     private PatientReceiptDetailFragment receiptDetailFragment;
     private HealthcocoPopupWindow doctorsListPopupWindow;
     private boolean isProfileTabClicked = true;
@@ -121,6 +122,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
     private boolean isPrescriptionTabClicked = false;
     private boolean isClinicalNotesTabClicked = false;
     private boolean isReportsTabClicked = false;
+    private boolean isDietPlanTabClicked = false;
     private boolean isTreatmentTabClicked = false;
     private boolean isInvoiceTabClicked = false;
     private boolean isReceiptTabClicked = false;
@@ -190,7 +192,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
             mViewPager.getAdapter().notifyDataSetChanged();
         if (packageType != null) {
             for (PatientDetailTabType detailTabType :
-                    packageType.getTabItemList()) {
+                    PatientDetailTabType.values()) {
                 HealthCocoFragment healthcocoFragment = null;
                 switch (detailTabType) {
                     case PATIENT_DETAIL_PROFILE:
@@ -205,7 +207,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                         appointmentFragment = new PatientAppointmentDetailFragment();
                         healthcocoFragment = appointmentFragment;
                         break;
-                    case PATIENT_DETAIL_CLINICAL_NOTES:
+                   /* case PATIENT_DETAIL_CLINICAL_NOTES:
                         if (user.getUiPermissions().getTabPermissions().contains(detailTabType.getValue())) {
                             clinicalNotesDetailFragment = new PatientClinicalNotesDetailFragment();
                             healthcocoFragment = clinicalNotesDetailFragment;
@@ -216,17 +218,21 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                             prescriptionDetailFragment = new PatientPrescriptionDetailFragment();
                             healthcocoFragment = prescriptionDetailFragment;
                         }
-                        break;
+                        break;*/
                     case PATIENT_DETAIL_REPORTS:
                         if (user.getUiPermissions().getTabPermissions().contains(detailTabType.getValue())) {
                             reportsDetailFragment = new PatientReportsDetailFragment();
                             healthcocoFragment = reportsDetailFragment;
                         }
                         break;
+                    case PATIENT_DETAIL_DIET_PLAN:
+                        dietPlanDetailFragment = new PatientDietPlanDetailFragment();
+                        healthcocoFragment = dietPlanDetailFragment;
+                        break;
 //                case PATIENT_DETAIL_IMPORTANT:
 //                    healthcocoFragment = new PatientImportantDetailFragment();
 //                    break;
-                    case PATIENT_DETAIL_TREATMENT:
+                /*    case PATIENT_DETAIL_TREATMENT:
                         if (user.getUiPermissions().getTabPermissions().contains(detailTabType.getValue())) {
                             treatmentDetailFragment = new PatientTreatmentDetailFragment();
                             healthcocoFragment = treatmentDetailFragment;
@@ -234,7 +240,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                         break;
                     case PATIENT_DETAIL_INVOICE:
                         if (user.getUiPermissions().getTabPermissions().contains(detailTabType.getValue())) {
-                            invoiceDetailFragment = new PatientDietPlanDetailFragment();
+                            invoiceDetailFragment = new PatientInvoiceDetailFragment();
                             healthcocoFragment = invoiceDetailFragment;
                         }
                         break;
@@ -243,7 +249,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                             receiptDetailFragment = new PatientReceiptDetailFragment();
                             healthcocoFragment = receiptDetailFragment;
                         }
-                        break;
+                        break;*/
                 }
                 if (healthcocoFragment != null)
 
@@ -420,7 +426,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                         isAppointmentTabClicked = true;
                     }
                     break;
-                case PATIENT_DETAIL_CLINICAL_NOTES:
+               /* case PATIENT_DETAIL_CLINICAL_NOTES:
                     if (!isClinicalNotesTabClicked) {
                         clinicalNotesDetailFragment.refreshData(PatientDetailTabType.PATIENT_DETAIL_CLINICAL_NOTES, clinicDoctorProfileList);
                         isClinicalNotesTabClicked = true;
@@ -431,7 +437,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                         prescriptionDetailFragment.refreshData(PatientDetailTabType.PATIENT_DETAIL_PRESCRIPTION, clinicDoctorProfileList);
                         isPrescriptionTabClicked = true;
                     }
-                    break;
+                    break;*/
                 case PATIENT_DETAIL_REPORTS:
                     doctorNameLayout.setVisibility(View.INVISIBLE);
                     if (!isReportsTabClicked) {
@@ -439,7 +445,14 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                         isReportsTabClicked = true;
                     }
                     break;
-                case PATIENT_DETAIL_TREATMENT:
+                case PATIENT_DETAIL_DIET_PLAN:
+                    doctorNameLayout.setVisibility(View.INVISIBLE);
+                    if (!isDietPlanTabClicked) {
+                        dietPlanDetailFragment.refreshData(PatientDetailTabType.PATIENT_DETAIL_DIET_PLAN);
+                        isDietPlanTabClicked = true;
+                    }
+                    break;
+              /*  case PATIENT_DETAIL_TREATMENT:
                     if (!isTreatmentTabClicked) {
                         treatmentDetailFragment.refreshData(PatientDetailTabType.PATIENT_DETAIL_TREATMENT, clinicDoctorProfileList);
                         isTreatmentTabClicked = true;
@@ -459,7 +472,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                     if (!isReceiptTabClicked) {
                         receiptDetailFragment.refreshData(PatientDetailTabType.PATIENT_DETAIL_RECEIPT);
                         isReceiptTabClicked = true;
-                    }
+                    }*/
             }
         }
         ((CommonOpenUpActivity) mActivity).initActionbarTitle(patientDetailTabType.getActionBarTitleId());
@@ -478,6 +491,8 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                 prescriptionDetailFragment.setUserData(user, loginedUser, selectedPatient);
             if (reportsDetailFragment != null)
                 reportsDetailFragment.setUserData(user, selectedPatient);
+            if (dietPlanDetailFragment != null)
+                dietPlanDetailFragment.setUserData(user, loginedUser, selectedPatient);
             if (treatmentDetailFragment != null)
                 treatmentDetailFragment.setUserData(user, loginedUser, selectedPatient);
             if (invoiceDetailFragment != null)
@@ -721,6 +736,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
         isClinicalNotesTabClicked = false;
         isReportsTabClicked = false;
         isTreatmentTabClicked = false;
+        isDietPlanTabClicked = false;
     }
 
     @Override

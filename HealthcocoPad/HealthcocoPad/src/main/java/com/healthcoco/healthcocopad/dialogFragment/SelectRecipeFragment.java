@@ -258,7 +258,10 @@ public class SelectRecipeFragment extends HealthCocoFragment implements
                 validateData();
                 break;
             case R.id.bt_analyse:
-                onAnalysedClicked();
+                if (!Util.isNullOrEmptyList(recipeHashMap))
+                    onAnalysedClicked();
+                else
+                    Util.showToast(mActivity, R.string.alert_add_analyse_diet_plan);
                 break;
             default:
                 break;

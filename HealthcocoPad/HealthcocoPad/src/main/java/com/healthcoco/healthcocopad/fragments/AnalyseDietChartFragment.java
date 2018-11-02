@@ -186,25 +186,25 @@ public class AnalyseDietChartFragment extends HealthCocoFragment implements View
     private void updateNutrientView() {
         mActivity.hideLoading();
         if (!Util.isNullOrEmptyList(generalNutrients))
-            updateDietPlan(new ArrayList<Nutrients>(generalNutrients), R.string.protein_colon, parentCategoryOne);
+            updateDietPlan(new ArrayList<Nutrients>(generalNutrients), R.string.general, parentCategoryOne);
 
         if (!Util.isNullOrEmptyList(carbNutrients))
-            updateDietPlan(new ArrayList<Nutrients>(carbNutrients), R.string.protein_colon, parentCategoryOne);
+            updateDietPlan(new ArrayList<Nutrients>(carbNutrients), R.string.carbohydrates, parentCategoryOne);
 
         if (!Util.isNullOrEmptyList(lipidNutrients))
-            updateDietPlan(new ArrayList<Nutrients>(lipidNutrients), R.string.protein_colon, parentCategoryOne);
+            updateDietPlan(new ArrayList<Nutrients>(lipidNutrients), R.string.lipids, parentCategoryOne);
 
         if (!Util.isNullOrEmptyList(proteinAminoAcidNutrients))
-            updateDietPlan(new ArrayList<Nutrients>(proteinAminoAcidNutrients), R.string.protein_colon, parentCategoryOne);
+            updateDietPlan(new ArrayList<Nutrients>(proteinAminoAcidNutrients), R.string.protein_and_amino_acids, parentCategoryOne);
 
         if (!Util.isNullOrEmptyList(vitaminNutrients))
-            updateDietPlan(new ArrayList<Nutrients>(vitaminNutrients), R.string.protein_colon, parentCategoryTwo);
+            updateDietPlan(new ArrayList<Nutrients>(vitaminNutrients), R.string.vitamins, parentCategoryTwo);
 
         if (!Util.isNullOrEmptyList(mineralNutrients))
-            updateDietPlan(new ArrayList<Nutrients>(mineralNutrients), R.string.protein_colon, parentCategoryTwo);
+            updateDietPlan(new ArrayList<Nutrients>(mineralNutrients), R.string.minerals, parentCategoryTwo);
 
         if (!Util.isNullOrEmptyList(otherNutrients))
-            updateDietPlan(new ArrayList<Nutrients>(otherNutrients), R.string.protein_colon, parentCategoryTwo);
+            updateDietPlan(new ArrayList<Nutrients>(otherNutrients), R.string.others, parentCategoryTwo);
     }
 
 

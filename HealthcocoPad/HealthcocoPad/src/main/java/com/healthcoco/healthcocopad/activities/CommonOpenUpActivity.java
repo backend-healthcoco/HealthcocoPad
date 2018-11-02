@@ -81,6 +81,7 @@ import com.healthcoco.healthcocopad.utilities.Util;
 import static com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType.ADD_DIET;
 import static com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType.ADD_INGREDIENT;
 import static com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType.ADD_NUTRIENT;
+import static com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType.ADD_RECIPE;
 import static com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType.ANALYSE;
 import static com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType.PATIENT_ASSESSMENT;
 import static com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType.PERSONAL_DETAILS;
@@ -324,7 +325,7 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
                 openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.WITH_SAVE, ADD_NUTRIENT.getTitleId(), new AddEditNutrientValueFragment());
                 break;
             case ADD_RECIPE:
-                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.WITH_SAVE, ADD_NUTRIENT.getTitleId(), new AddEditRecipeFragment());
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.WITH_SAVE, ADD_RECIPE.getTitleId(), new AddEditRecipeFragment());
                 break;
         }
     }

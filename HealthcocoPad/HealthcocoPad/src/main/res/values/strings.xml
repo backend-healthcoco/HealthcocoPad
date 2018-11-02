@@ -1438,6 +1438,7 @@
     <string name="recipe_name">Recipe Name&#160;:&#160;</string>
     <string name="please_add_equivalent_quantity_first">Please add equivalent measurement first</string>
     <string name="alert_add_analyse_diet_plan">Blank Diet Plan cannot be Analysed. Add Diet</string>
+    <string name="diet_plan">Diet Plan</string>
 
 
 </resources>
