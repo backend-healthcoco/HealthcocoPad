@@ -96,6 +96,7 @@ public class AddEditNutrientValueFragment extends HealthCocoFragment implements 
     private boolean isFromRecipe;
     private Ingredient ingredient;
     private DietPlanRecipeItem dietPlanRecipeItem;
+    private List<NutrientResponse> list = new ArrayList<>();
 
 
     @Override
@@ -324,11 +325,15 @@ public class AddEditNutrientValueFragment extends HealthCocoFragment implements 
         LogUtils.LOGD(TAG, "Success " + String.valueOf(response.getWebServiceType()));
         switch (response.getWebServiceType()) {
             case FRAGMENT_INITIALISATION:
-                getIngredientList();
+                if (!Util.isNullOrEmptyList(list))
+                    notifyAdapter(list);
+                else
+                    getIngredientList();
                 break;
             case GET_NUTRIENT_LIST_SOLR:
-                ArrayList<NutrientResponse> list = (ArrayList<NutrientResponse>) (ArrayList<?>) response.getDataList();
+                list = (ArrayList<NutrientResponse>) (ArrayList<?>) response.getDataList();
                 if (!Util.isNullOrEmptyList(list)) {
+                    LocalDataServiceImpl.getInstance(mApp).addNutrientResopnseList(list);
                     LogUtils.LOGD(TAG, "onResponse Nutrient Size " + list.size() + " isDataFromLocal " + response.isDataFromLocal());
                     notifyAdapter(list);
                 }
@@ -338,8 +343,8 @@ public class AddEditNutrientValueFragment extends HealthCocoFragment implements 
         mActivity.hideLoading();
     }
 
-    private void notifyAdapter(ArrayList<NutrientResponse> list) {
-        for (NutrientResponse nutrientItem : list) {
+    private void notifyAdapter(List<NutrientResponse> nutrientResponseList) {
+        for (NutrientResponse nutrientItem : nutrientResponseList) {
             Nutrients nutrient = new Nutrients();
             nutrient.setUniqueId(nutrientItem.getUniqueId());
             nutrient.setName(nutrientItem.getName());
@@ -474,6 +479,7 @@ public class AddEditNutrientValueFragment extends HealthCocoFragment implements 
                 volleyResponseBean = new VolleyResponseBean();
                 volleyResponseBean.setWebServiceType(WebServiceType.FRAGMENT_INITIALISATION);
                 LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
+                list = LocalDataServiceImpl.getInstance(mApp).getNutrientResponseList();
                 if (doctor != null && doctor.getUser() != null) {
                     user = doctor.getUser();
                 }

@@ -342,21 +342,23 @@ public class SelectRecipeFragment extends HealthCocoFragment implements
         if (!Util.isNullOrEmptyList(recipeResponse.getIngredients()))
             dietPlanRecipeItem.setIngredients(recipeResponse.getIngredients());
 
-        MealQuantity quantity = recipeResponse.getQuantity();
-        QuantityType type = quantity.getType();
-        double value = quantity.getValue();
         double currentValue = 1;
-        MealQuantity currentQuantity = new MealQuantity();
-        if (!Util.isNullOrEmptyList(recipeResponse.getEquivalentMeasurements()))
-            for (EquivalentQuantities equivalentQuantities : recipeResponse.getEquivalentMeasurements()) {
-                if (type == equivalentQuantities.getServingType()) {
-                    double equivalentQuantitiesValue = equivalentQuantities.getValue();
-                    currentValue = value * equivalentQuantitiesValue;
-                    currentQuantity.setValue(currentValue);
-                    currentQuantity.setType(type);
-                    dietPlanRecipeItem.setCurrentQuantity(currentQuantity);
+        if (recipeResponse.getQuantity() != null) {
+            MealQuantity quantity = recipeResponse.getQuantity();
+            QuantityType type = quantity.getType();
+            double value = quantity.getValue();
+            MealQuantity currentQuantity = new MealQuantity();
+            if (!Util.isNullOrEmptyList(recipeResponse.getEquivalentMeasurements()))
+                for (EquivalentQuantities equivalentQuantities : recipeResponse.getEquivalentMeasurements()) {
+                    if (type == equivalentQuantities.getServingType()) {
+                        double equivalentQuantitiesValue = equivalentQuantities.getValue();
+                        currentValue = value * equivalentQuantitiesValue;
+                        currentQuantity.setValue(currentValue);
+                        currentQuantity.setType(type);
+                        dietPlanRecipeItem.setCurrentQuantity(currentQuantity);
+                    }
                 }
-            }
+        }
 
         MealQuantity tempQuantity = new MealQuantity();
         if (recipeResponse.getQuantity() != null) {

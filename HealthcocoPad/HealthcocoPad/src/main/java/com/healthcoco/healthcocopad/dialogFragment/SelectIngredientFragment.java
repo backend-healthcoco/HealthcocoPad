@@ -217,11 +217,11 @@ public class SelectIngredientFragment extends HealthCocoFragment implements
                 }
             }
         }
-        tvTotalCalaries.setText(String.valueOf(calaries) + getString(R.string.cal_orange));
-        tvTotalProtein.setText(String.valueOf(protein));
-        tvTotalFat.setText(String.valueOf(fat));
-        tvTotalCarbs.setText(String.valueOf(carbs));
-        tvTotalFiber.setText(String.valueOf(fiber));
+        tvTotalCalaries.setText(Util.round(calaries, 2) + getString(R.string.cal_orange));
+        tvTotalProtein.setText(Util.round(protein, 2) + getString(R.string.gm));
+        tvTotalFat.setText(Util.round(fat, 2) + getString(R.string.gm));
+        tvTotalCarbs.setText(Util.round(carbs, 2) + getString(R.string.gm));
+        tvTotalFiber.setText(Util.round(fiber, 2) + getString(R.string.gm));
     }
 
     private Ingredient getNutrientPerHundredUnit(IngredientResponse ingredientResponse) {

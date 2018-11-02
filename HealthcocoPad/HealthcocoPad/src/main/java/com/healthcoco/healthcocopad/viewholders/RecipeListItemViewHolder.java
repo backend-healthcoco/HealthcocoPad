@@ -174,9 +174,16 @@ public class RecipeListItemViewHolder extends HealthcocoComonRecylcerViewHolder 
                 tvAnalyse.setText(mActivity.getString(R.string.not_analysed));
             }
 
-            if (!Util.isNullOrEmptyList(recipeItem.getIngredients()))
+            if (!Util.isNullOrEmptyList(recipeItem.getIngredients())) {
                 addIngredients(recipeItem.getIngredients());
-            else parentIngredients.setVisibility(View.GONE);
+                tvQuantity.setVisibility(View.GONE);
+                tvServingType.setVisibility(View.GONE);
+
+            } else {
+                parentIngredients.setVisibility(View.GONE);
+                tvQuantity.setVisibility(View.VISIBLE);
+                tvServingType.setVisibility(View.VISIBLE);
+            }
         }
 
     }

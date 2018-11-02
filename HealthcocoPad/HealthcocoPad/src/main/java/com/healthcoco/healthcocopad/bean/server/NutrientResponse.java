@@ -4,6 +4,7 @@ import com.healthcoco.healthcocopad.enums.NutrientCategoryType;
 import com.healthcoco.healthcocopad.enums.QuantityType;
 import com.healthcoco.healthcocopad.utilities.StringUtil;
 import com.orm.SugarRecord;
+import com.orm.annotation.Unique;
 
 import org.parceler.Parcel;
 
@@ -11,7 +12,7 @@ import org.parceler.Parcel;
 public class NutrientResponse extends SugarRecord {
     public static String TABLE_NAME = " " + StringUtil.toSQLName(NutrientResponse.class.getSimpleName());
 
-
+    @Unique
     private String uniqueId;
     private String name;
     private QuantityType type;

@@ -6016,6 +6016,13 @@ public class LocalDataServiceImpl {
 
     }
 
+    public List<NutrientResponse> getNutrientResponseList() {
+        return Select.from(NutrientResponse.class).list();
+    }
+
+    public void addNutrientResopnseList(List<NutrientResponse> nutrientsList) {
+        NutrientResponse.saveInTx(nutrientsList);
+    }
 
     private enum FromTableType {
         ADD_TEMPLATES, ADD_TREATMENT, ADD_PRESCRIPTION
