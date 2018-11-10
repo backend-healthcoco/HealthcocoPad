@@ -31,8 +31,11 @@ import com.healthcoco.healthcocopad.fragments.AboutUsFragment;
 import com.healthcoco.healthcocopad.fragments.AddEditClinicImageFragment;
 import com.healthcoco.healthcocopad.fragments.AddClinicalNotesVisitNormalFragment;
 import com.healthcoco.healthcocopad.fragments.AddEditDietChartFragment;
+import com.healthcoco.healthcocopad.fragments.AddEditFoodAndExerciseFragment;
 import com.healthcoco.healthcocopad.fragments.AddEditIngradientFragment;
+import com.healthcoco.healthcocopad.fragments.AddEditLifeStyleFragment;
 import com.healthcoco.healthcocopad.fragments.AddEditMeasurementFragment;
+import com.healthcoco.healthcocopad.fragments.AddEditMedicalInformationFragment;
 import com.healthcoco.healthcocopad.fragments.AddEditNormalVisitPrescriptionFragment;
 import com.healthcoco.healthcocopad.fragments.AddEditNormalVisitsFragment;
 import com.healthcoco.healthcocopad.fragments.AddEditNutrientValueFragment;
@@ -83,6 +86,9 @@ import static com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType.ADD_IN
 import static com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType.ADD_NUTRIENT;
 import static com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType.ADD_RECIPE;
 import static com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType.ANALYSE;
+import static com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType.FOOD_AND_EXERCISE;
+import static com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType.LIFE_SYLE;
+import static com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType.MEDICAL_INFORMATION;
 import static com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType.PATIENT_ASSESSMENT;
 import static com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType.PERSONAL_DETAILS;
 import static com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType.SELECT_INGREDIENT;
@@ -298,8 +304,14 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
                 openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.WITH_SAVE, PERSONAL_DETAILS.getTitleId(), new AddEditMeasurementFragment());
                 break;
             case FOOD_AND_EXERCISE:
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.WITH_SAVE, FOOD_AND_EXERCISE.getTitleId(), new AddEditFoodAndExerciseFragment());
+                break;
             case LIFE_SYLE:
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, LIFE_SYLE.getTitleId(), new AddEditLifeStyleFragment());
+                break;
             case MEDICAL_INFORMATION:
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, MEDICAL_INFORMATION.getTitleId(), new AddEditMedicalInformationFragment());
+                break;
             case PERSONAL_DETAILS:
                 openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.WITH_SAVE, PERSONAL_DETAILS.getTitleId(), new PatientProfileFragment());
                 break;

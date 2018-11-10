@@ -16,6 +16,7 @@ import com.healthcoco.healthcocopad.bean.ConsultationFee;
 import com.healthcoco.healthcocopad.bean.DOB;
 import com.healthcoco.healthcocopad.bean.DoctorExperience;
 import com.healthcoco.healthcocopad.bean.Duration;
+import com.healthcoco.healthcocopad.bean.server.Exercise;
 import com.healthcoco.healthcocopad.bean.PersonalHistory;
 import com.healthcoco.healthcocopad.bean.server.UIPermissions;
 import com.healthcoco.healthcocopad.bean.UiPermissionsBoth;
@@ -28,6 +29,7 @@ import com.healthcoco.healthcocopad.enums.BooleanTypeValues;
 import com.healthcoco.healthcocopad.enums.FilterItemType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.LocalTabelType;
+import com.healthcoco.healthcocopad.enums.MealTimeType;
 import com.healthcoco.healthcocopad.enums.NutrientCategoryType;
 import com.healthcoco.healthcocopad.enums.QuantityType;
 import com.healthcoco.healthcocopad.enums.RecordType;
@@ -5888,6 +5890,65 @@ public class LocalDataServiceImpl {
         return patientMeasurementInfo;
     }
 
+    public void addPatientFoodAndExercise(PatientFoodAndExcercise foodAndExcercise) {
+        if (foodAndExcercise != null) {
+            deleteAllFrom(PatientFoodAndExcercise.class, LocalDatabaseUtils.KEY_ASSESSMENT_ID, foodAndExcercise.getAssessmentId());
+
+            foodAndExcercise.setFoodPreferJsonString(getJsonFromObject(foodAndExcercise.getFoodPrefer()));
+
+            addFoodCravings(foodAndExcercise.getFoodCravings(), foodAndExcercise.getAssessmentId());
+            addExerciseDetails(foodAndExcercise.getExercise(), foodAndExcercise.getAssessmentId());
+            addMealTimeAndPattern(foodAndExcercise.getMealTimeAndPattern(), foodAndExcercise.getAssessmentId());
+            foodAndExcercise.save();
+        }
+//        registeredPatientDetailsUpdated.setGroupIds((ArrayList<String>) (Object) getObjectsListFronJson(registeredPatientDetailsUpdated.getGroupIdsJsonString()));
+    }
+
+    private void addMealTimeAndPattern(List<MealTimeAndPattern> mealTimeAndPatternList, String assessmentId) {
+        if (!Util.isNullOrEmptyList(mealTimeAndPatternList)) {
+            for (MealTimeAndPattern mealTimeAndPattern : mealTimeAndPatternList) {
+                if (!Util.isNullOrBlank(assessmentId))
+                    mealTimeAndPattern.setForeignAssessmentId(assessmentId);
+                addDietPlanRecipeItem(mealTimeAndPattern.getFood(), assessmentId, mealTimeAndPattern.getTimeType());
+                mealTimeAndPattern.save();
+            }
+        }
+    }
+
+    private void addDietPlanRecipeItem(List<DietPlanRecipeItem> foodList, String assessmentId, MealTimeType timeType) {
+        if (!Util.isNullOrEmptyList(foodList)) {
+            for (DietPlanRecipeItem dietPlanRecipeItem : foodList) {
+                if (!Util.isNullOrBlank(assessmentId))
+                    dietPlanRecipeItem.setForeignAssessmentId(assessmentId);
+                dietPlanRecipeItem.save();
+            }
+        }
+    }
+
+    private void addExerciseDetails(List<Exercise> exerciseList, String assessmentId) {
+        if (!Util.isNullOrEmptyList(exerciseList)) {
+            for (Exercise exercise : exerciseList) {
+                if (!Util.isNullOrBlank(assessmentId))
+                    exercise.setForeignAssessmentId(assessmentId);
+                exercise.save();
+            }
+        }
+    }
+
+    private void addFoodCravings(List<FoodCravingRequest> foodCravingList, String
+            assessmentId) {
+        if (!Util.isNullOrEmptyList(foodCravingList)) {
+            for (FoodCravingRequest foodCravingRequest : foodCravingList) {
+                if (foodCravingRequest.getFood() != null)
+                    foodCravingRequest.setRecipeItemId(foodCravingRequest.getFood().getUniqueId());
+                if (!Util.isNullOrBlank(assessmentId))
+                    foodCravingRequest.setForeignAssessmentId(assessmentId);
+                foodCravingRequest.save();
+            }
+        }
+    }
+
+
     public void addNutrientList(List<Nutrients> nutrientsList) {
         Nutrients.saveInTx(nutrientsList);
     }
@@ -5896,7 +5957,8 @@ public class LocalDataServiceImpl {
         Nutrients.deleteAll(Nutrients.class);
     }
 
-    public void addNutrientList(List<Nutrients> nutrientsList, NutrientCategoryType categoryType) {
+    public void addNutrientList(List<Nutrients> nutrientsList, NutrientCategoryType
+            categoryType) {
         if (categoryType != null)
             for (Nutrients nutrient : nutrientsList) {
                 nutrient.setCategoryType(categoryType);
@@ -5917,38 +5979,6 @@ public class LocalDataServiceImpl {
                 .where(Condition.prop(LocalDatabaseUtils.KEY_CATEGORY_TYPE).eq(categoryType));
         List<Nutrients> list = selectQuery.list();
         return list;
-    }
-
-    public void addNutrientValueByGroup() {
-        //forming where condition query
-        String whereCondition = "Select " +
-                LocalDatabaseUtils.KEY_UNIQUE_ID +
-                ", Sum(" +
-                LocalDatabaseUtils.KEY_VALUE + ") from "
-                + StringUtil.toSQLName(Nutrients.class.getSimpleName())
-                + " group by "
-                + LocalDatabaseUtils.KEY_UNIQUE_ID;
-
-     /*   String whereCondition = "Select " +
-                LocalDatabaseUtils.KEY_UNIQUE_ID + ", " +
-                LocalDatabaseUtils.KEY_NAME + ", Sum(" +
-                LocalDatabaseUtils.KEY_VALUE + "), " +
-                LocalDatabaseUtils.KEY_TYPE + ", " +
-                LocalDatabaseUtils.KEY_CATEGORY_TYPE + ", " +
-                "note, nutrient_code from " + StringUtil.toSQLName(Nutrients.class.getSimpleName())
-                + " group by "
-                + LocalDatabaseUtils.KEY_UNIQUE_ID;*/
-
-        LogUtils.LOGD(TAG, "Select Query " + whereCondition);
-        List<Nutrients> nutrientsList = SugarRecord.findWithQuery(Nutrients.class,
-                "Select unique_id as unique_id, type, Sum(value) as value," +
-                        " category_type as category_type, note as note," +
-                        " nutrient_code as nutrient_code from NUTRIENTS group by unique_id");
-        if (!Util.isNullOrEmptyList(nutrientsList)) {
-            Nutrients.deleteAll(Nutrients.class);
-            addNutrientList(nutrientsList);
-        }
-//        SugarRecord.findWithQuery(MedicalFamilyHistoryDetails.class, whereCondition);
     }
 
     public void addNutrientValueGroup() {

@@ -18,11 +18,11 @@ public class MealTimeAndPattern extends SugarRecord {
     protected String foreignAssessmentId;
 
     @Ignore
-    private List<Meal> food;
+    private List<DietPlanRecipeItem> food;
     @Ignore
     private MealTimeType timeType;
-    private int fromTime;
-    private int toTime;
+    private Float fromTime;
+    private Float toTime;
 
     public String getForeignAssessmentId() {
         return foreignAssessmentId;
@@ -32,11 +32,11 @@ public class MealTimeAndPattern extends SugarRecord {
         this.foreignAssessmentId = foreignAssessmentId;
     }
 
-    public List<Meal> getFood() {
+    public List<DietPlanRecipeItem> getFood() {
         return food;
     }
 
-    public void setFood(List<Meal> food) {
+    public void setFood(List<DietPlanRecipeItem> food) {
         this.food = food;
     }
 
@@ -48,19 +48,19 @@ public class MealTimeAndPattern extends SugarRecord {
         this.timeType = timeType;
     }
 
-    public int getFromTime() {
+    public Float getFromTime() {
         return fromTime;
     }
 
-    public void setFromTime(int fromTime) {
+    public void setFromTime(Float fromTime) {
         this.fromTime = fromTime;
     }
 
-    public int getToTime() {
+    public Float getToTime() {
         return toTime;
     }
 
-    public void setToTime(int toTime) {
+    public void setToTime(Float toTime) {
         this.toTime = toTime;
     }
 }

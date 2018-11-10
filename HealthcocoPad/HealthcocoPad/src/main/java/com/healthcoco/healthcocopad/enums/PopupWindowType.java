@@ -77,6 +77,7 @@ public enum PopupWindowType {
     }}),
 
     QUANTITY_TYPE,
+    EXERCISE_TYPE,
 
     QUANTITY_VALUE(new ArrayList<Object>() {
         {

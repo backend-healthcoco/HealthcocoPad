@@ -79,7 +79,6 @@ public class AddEditMeasurementFragment extends HealthCocoFragment implements
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Bundle bundle = getArguments();
         init();
 
         Intent intent = mActivity.getIntent();
@@ -322,7 +321,7 @@ public class AddEditMeasurementFragment extends HealthCocoFragment implements
         patientMeasurementInfo.setLegBody(legBody);
 
 
-        WebDataServiceImpl.getInstance(mApp).addPatientMeasurementInfo(PatientMeasurementInfo.class, patientMeasurementInfo, this, this);
+        WebDataServiceImpl.getInstance(mApp).addPatientAssessmentInfo(PatientMeasurementInfo.class, WebServiceType.ADD_PATIENT_MEASUREMENT_INFO, patientMeasurementInfo, this, this);
 
     }
 

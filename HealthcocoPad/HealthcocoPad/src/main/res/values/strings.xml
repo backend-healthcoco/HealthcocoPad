@@ -1365,7 +1365,9 @@
     <string name="food">Food</string>
     <string name="exercise">Exercise</string>
     <string name="min_per_day">Minutes/Day</string>
+    <string name="mins_per_day">&#160;min/Day</string>
     <string name="time_per_week">Times/Week</string>
+    <string name="per_week">&#160;/Week</string>
     <string name="early_morning">Early Morning</string>
     <string name="morning_snacks">Morning Snacks</string>
     <string name="breakfast">Breakfast</string>

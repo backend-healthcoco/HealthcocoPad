@@ -21,6 +21,7 @@ import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.DietPlanRecipeItem;
 import com.healthcoco.healthcocopad.bean.server.DietplanAddItem;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
+import com.healthcoco.healthcocopad.bean.server.MealTimeAndPattern;
 import com.healthcoco.healthcocopad.bean.server.Nutrients;
 import com.healthcoco.healthcocopad.bean.server.RecipeResponse;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
@@ -76,6 +77,8 @@ public class SelectRecipeFragment extends HealthCocoFragment implements
     private Button btAnalyse;
     private TextView tvTitle;
     private DietplanAddItem dietplanAddItemReceived;
+    private MealTimeAndPattern mealTimeAndPatternReceived;
+    private boolean isFromAssessment;
 
     private double protein = 0;
     private double fat = 0;
@@ -96,8 +99,13 @@ public class SelectRecipeFragment extends HealthCocoFragment implements
 
         Intent intent = mActivity.getIntent();
         ordinal = intent.getIntExtra(HealthCocoConstants.TAG_TAB_TYPE, 0);
+        isFromAssessment = intent.getBooleanExtra(HealthCocoConstants.TAG_IS_FROM_ASSESSMENT, false);
         mealTimeType = MealTimeType.values()[ordinal];
-        dietplanAddItemReceived = Parcels.unwrap(intent.getParcelableExtra(HealthCocoConstants.TAG_INTENT_DATA));
+        if (isFromAssessment)
+            mealTimeAndPatternReceived = Parcels.unwrap(intent.getParcelableExtra(HealthCocoConstants.TAG_INTENT_DATA));
+        else
+            dietplanAddItemReceived = Parcels.unwrap(intent.getParcelableExtra(HealthCocoConstants.TAG_INTENT_DATA));
+
         init();
 
         mActivity.showLoading(false);
@@ -124,7 +132,19 @@ public class SelectRecipeFragment extends HealthCocoFragment implements
                         recipeHashMap.put(recipeItem.getUniqueId(), getRecipePerHundredUnit(recipeItem));
 
                     notifyAdapter(recipeHashMap);
-                    selectedRecipeRecyclerView.smoothScrollToPosition(mAdapter.getItemCount());
+//                    selectedRecipeRecyclerView.smoothScrollToPosition(mAdapter.getItemCount());
+                }
+            }
+        }
+        if (mealTimeAndPatternReceived != null) {
+            if (!Util.isNullOrEmptyList(mealTimeAndPatternReceived.getFood())) {
+
+                for (DietPlanRecipeItem recipeItem : mealTimeAndPatternReceived.getFood()) {
+                    if (!recipeHashMap.containsKey(recipeItem.getUniqueId()))
+                        recipeHashMap.put(recipeItem.getUniqueId(), getRecipePerHundredUnit(recipeItem));
+
+                    notifyAdapter(recipeHashMap);
+//                    selectedRecipeRecyclerView.smoothScrollToPosition(mAdapter.getItemCount());
                 }
             }
         }
@@ -271,7 +291,10 @@ public class SelectRecipeFragment extends HealthCocoFragment implements
     public void validateData() {
         int msgId = getBlankDietMsg();
         if (msgId == 0) {
-            addDietPlanItem();
+            if (isFromAssessment)
+                addMealAndFoodPattern();
+            else
+                addDietPlanItem();
         } else {
             Util.showToast(mActivity, msgId);
         }
@@ -517,6 +540,19 @@ public class SelectRecipeFragment extends HealthCocoFragment implements
 
         Intent data = new Intent();
         data.putExtra(HealthCocoConstants.TAG_INTENT_DATA, Parcels.wrap(dietplanAddItem));
+        getActivity().setResult(HealthCocoConstants.RESULT_CODE_ADD_MEAL, data);
+        getActivity().finish();
+    }
+
+    private void addMealAndFoodPattern() {
+        MealTimeAndPattern mealTimeAndPattern = new MealTimeAndPattern();
+
+        mealTimeAndPattern.setTimeType(mealTimeType);
+        mealTimeAndPattern.setFood(new ArrayList<DietPlanRecipeItem>(recipeHashMap.values()));
+
+
+        Intent data = new Intent();
+        data.putExtra(HealthCocoConstants.TAG_INTENT_DATA, Parcels.wrap(mealTimeAndPattern));
         getActivity().setResult(HealthCocoConstants.RESULT_CODE_ADD_MEAL, data);
         getActivity().finish();
     }

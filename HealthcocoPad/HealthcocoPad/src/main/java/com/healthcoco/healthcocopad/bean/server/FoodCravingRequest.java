@@ -15,9 +15,10 @@ public class FoodCravingRequest extends SugarRecord {
     public static String TABLE_NAME = " " + StringUtil.toSQLName(FoodCravingRequest.class.getSimpleName());
 
     protected String foreignAssessmentId;
+    protected String recipeItemId;
 
     @Ignore
-    private Meal food;
+    private DietPlanRecipeItem food;
     private int noOfTime;
 
     public String getForeignAssessmentId() {
@@ -28,11 +29,11 @@ public class FoodCravingRequest extends SugarRecord {
         this.foreignAssessmentId = foreignAssessmentId;
     }
 
-    public Meal getFood() {
+    public DietPlanRecipeItem getFood() {
         return food;
     }
 
-    public void setFood(Meal food) {
+    public void setFood(DietPlanRecipeItem food) {
         this.food = food;
     }
 
@@ -42,5 +43,13 @@ public class FoodCravingRequest extends SugarRecord {
 
     public void setNoOfTime(int noOfTime) {
         this.noOfTime = noOfTime;
+    }
+
+    public String getRecipeItemId() {
+        return recipeItemId;
+    }
+
+    public void setRecipeItemId(String recipeItemId) {
+        this.recipeItemId = recipeItemId;
     }
 }

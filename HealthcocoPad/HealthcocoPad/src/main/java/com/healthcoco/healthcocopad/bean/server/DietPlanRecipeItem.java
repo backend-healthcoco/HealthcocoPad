@@ -20,7 +20,9 @@ public class DietPlanRecipeItem extends SugarRecord {
     protected String fatJsonString;
     protected String proteinJsonString;
     protected String fiberJsonString;
-    @Unique
+
+    protected String foreignAssessmentId;
+
     private String uniqueId;
     @Ignore
     private MealQuantity quantity;
@@ -341,4 +343,11 @@ public class DietPlanRecipeItem extends SugarRecord {
         this.quantityTemp = quantityTemp;
     }
 
+    public String getForeignAssessmentId() {
+        return foreignAssessmentId;
+    }
+
+    public void setForeignAssessmentId(String foreignAssessmentId) {
+        this.foreignAssessmentId = foreignAssessmentId;
+    }
 }

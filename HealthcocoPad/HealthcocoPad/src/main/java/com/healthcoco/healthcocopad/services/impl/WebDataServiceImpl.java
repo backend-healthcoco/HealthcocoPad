@@ -54,6 +54,7 @@ import com.healthcoco.healthcocopad.bean.server.DrugType;
 import com.healthcoco.healthcocopad.bean.server.GCMRequest;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.NotificationResponse;
+import com.healthcoco.healthcocopad.bean.server.PatientFoodAndExcercise;
 import com.healthcoco.healthcocopad.bean.server.PatientMeasurementInfo;
 import com.healthcoco.healthcocopad.bean.server.Prescription;
 import com.healthcoco.healthcocopad.bean.server.PrintSettings;
@@ -1817,8 +1818,19 @@ public class WebDataServiceImpl implements GCMRefreshListener {
         getResponse(webServiceType, class1, webServiceType.getUrl(), object, null, responseListener, errorListener);
     }
 
-    public void addPatientMeasurementInfo(Class<?> class1, PatientMeasurementInfo object, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
-        WebServiceType webServiceType = WebServiceType.ADD_PATIENT_MEASUREMENT_INFO;
+    public void addPatientAssessmentInfo(Class<?> class1, WebServiceType webServiceType, Object object, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        checkNetworkStatus(mApp.getApplicationContext());
+        String url = null;
+        if (HealthCocoConstants.isNetworkOnline) {
+            switch (webServiceType) {
+                case ADD_PATIENT_MEASUREMENT_INFO:
+                    url = webServiceType.getUrl();
+                    break;
+                case ADD_PATIENT_FOOD_AND_EXERCISE:
+                    url = webServiceType.getUrl();
+                    break;
+            }
+        }
         getResponse(webServiceType, class1, webServiceType.getUrl(), object, null, responseListener, errorListener);
     }
 
@@ -1940,6 +1952,28 @@ public class WebDataServiceImpl implements GCMRefreshListener {
         if (HealthCocoConstants.isNetworkOnline) {
             String url = webServiceType.getUrl();
             getResponse(webServiceType, class1, url, recipeRequest, null, responseListener,
+                    errorListener);
+        } else {
+            showUserOffline(webServiceType, responseListener);
+        }
+    }
+
+
+    public void getPatientAssessmentDetails(Class<?> class1, WebServiceType webServiceType, String assessmentId,
+                                            Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+
+        checkNetworkStatus(mApp.getApplicationContext());
+        String url = null;
+        if (HealthCocoConstants.isNetworkOnline) {
+            switch (webServiceType) {
+                case GET_PATIENT_FOOD_AND_EXERCISE:
+                    url = webServiceType.getUrl()
+                            + assessmentId
+                            + HealthCocoConstants.PARAM_TAG_GET;
+                    break;
+            }
+
+            getResponse(webServiceType, class1, url, null, null, responseListener,
                     errorListener);
         } else {
             showUserOffline(webServiceType, responseListener);

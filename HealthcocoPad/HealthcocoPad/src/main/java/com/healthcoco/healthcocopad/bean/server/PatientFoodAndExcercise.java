@@ -1,6 +1,5 @@
 package com.healthcoco.healthcocopad.bean.server;
 
-import com.healthcoco.healthcocopad.bean.Exercise;
 import com.healthcoco.healthcocopad.utilities.StringUtil;
 import com.orm.SugarRecord;
 import com.orm.annotation.Ignore;
@@ -25,6 +24,7 @@ public class PatientFoodAndExcercise extends SugarRecord {
 
     @Ignore
     private List<String> foodPrefer;
+    protected String foodPreferJsonString;
     @Ignore
     private List<MealTimeAndPattern> mealTimeAndPattern;
     @Ignore
@@ -110,5 +110,13 @@ public class PatientFoodAndExcercise extends SugarRecord {
 
     public void setExercise(List<Exercise> exercise) {
         this.exercise = exercise;
+    }
+
+    public String getFoodPreferJsonString() {
+        return foodPreferJsonString;
+    }
+
+    public void setFoodPreferJsonString(String foodPreferJsonString) {
+        this.foodPreferJsonString = foodPreferJsonString;
     }
 }

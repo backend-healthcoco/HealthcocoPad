@@ -1,6 +1,5 @@
 package com.healthcoco.healthcocopad.bean;
 
-import com.healthcoco.healthcocopad.enums.ExcerciseType;
 import com.healthcoco.healthcocopad.enums.QuantityType;
 
 import org.parceler.Parcel;

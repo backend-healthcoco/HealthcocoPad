@@ -183,7 +183,7 @@ public class PatientRegistrationTabsFragment extends HealthCocoFragment implemen
                 Util.showToast(mActivity, R.string.please_enter_valid_mobile_no);
                 break;
             case BASIC_DETAILS:
-//                basicDetailsFragment.validateData();
+                basicDetailsFragment.validateData();
                 break;
             case MORE_DETAIlS:
 //                basicDetailsFragment.validateData();
@@ -221,7 +221,7 @@ public class PatientRegistrationTabsFragment extends HealthCocoFragment implemen
         PatientRegistrationTabsType registrationTabsType = PatientRegistrationTabsType.values()[currentItem];
         switch (registrationTabsType) {
             case SEARCH_PATIENT:
-//                basicDetailsFragment.initDataFromPreviousFragment(object, isEditPatient);
+                basicDetailsFragment.initDataFromPreviousFragment(object, isEditPatient);
                 break;
             case BASIC_DETAILS:
                 patientAssessmentFragment.initDataFromPreviousFragment(object, isEditPatient);

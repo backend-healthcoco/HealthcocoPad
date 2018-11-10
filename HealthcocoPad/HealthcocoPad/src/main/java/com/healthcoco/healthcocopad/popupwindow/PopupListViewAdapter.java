@@ -11,14 +11,12 @@ import android.widget.TextView;
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.EquivalentQuantities;
-import com.healthcoco.healthcocopad.bean.server.AppointmentSlot;
 import com.healthcoco.healthcocopad.bean.server.AvailableTimeSlots;
-import com.healthcoco.healthcocopad.bean.server.ClinicDoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.DoctorClinicProfile;
-import com.healthcoco.healthcocopad.bean.server.DoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.RegisteredDoctorProfile;
 import com.healthcoco.healthcocopad.dialogFragment.BookAppointmentDialogFragment;
 import com.healthcoco.healthcocopad.enums.AppointmentSlotsType;
+import com.healthcoco.healthcocopad.enums.ExerciseType;
 import com.healthcoco.healthcocopad.enums.PatientProfileScreenType;
 import com.healthcoco.healthcocopad.enums.PatientTreatmentStatus;
 import com.healthcoco.healthcocopad.enums.PopupWindowType;
@@ -163,6 +161,12 @@ public class PopupListViewAdapter extends BaseAdapter {
                 if (object instanceof QuantityType) {
                     QuantityType quantityType = (QuantityType) object;
                     text = quantityType.getUnit();
+                }
+                break;
+            case EXERCISE_TYPE:
+                if (object instanceof ExerciseType) {
+                    ExerciseType excerciseType = (ExerciseType) object;
+                    text = excerciseType.getExcerciseType();
                 }
                 break;
             case QUANTITY_TYPE:
