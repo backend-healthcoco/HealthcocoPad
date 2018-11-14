@@ -47,6 +47,8 @@ public class HealthCocoConstants {
     public static final String TAG_DIAGNOSTICS_LIST = "diagnostics_list";
     public static final String TAG_RECIPE_DATA = "recipeData";
     public static final String TAG_INGREDIENT_DATA = "ingredientData";
+    public static final String TAG_IS_TRAVELLING_PERIOD = "isTravellingPeriod";
+
 
     public static final int RESULT_CODE_ADD_PRESCIPTION = 101;
     public static final int REQUEST_CODE_CAMERA = 102;
@@ -121,6 +123,7 @@ public class HealthCocoConstants {
     public static final int REQUEST_CODE_ADD_MEAL = 226;
     public static final int RESULT_CODE_ADD_MEAL = 227;
     public static final int REQUEST_CODE_ADD_EXERCISE = 228;
+    public static final int REQUEST_CODE_ADD_WORKING_HRS = 229;
 
     public static final String PARAM_IS_DOCTOR_APP_TRUE = "&isDoctorApp=true";
     public static final String PARAM_SIZE = "&size=";

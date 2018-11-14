@@ -307,7 +307,7 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
                 openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.WITH_SAVE, FOOD_AND_EXERCISE.getTitleId(), new AddEditFoodAndExerciseFragment());
                 break;
             case LIFE_SYLE:
-                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, LIFE_SYLE.getTitleId(), new AddEditLifeStyleFragment());
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.WITH_SAVE, LIFE_SYLE.getTitleId(), new AddEditLifeStyleFragment());
                 break;
             case MEDICAL_INFORMATION:
                 openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, MEDICAL_INFORMATION.getTitleId(), new AddEditMedicalInformationFragment());

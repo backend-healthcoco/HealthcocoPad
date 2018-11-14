@@ -18,10 +18,10 @@
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:orientation="vertical"
-            android:paddingBottom="100dp"
             android:paddingLeft="5dp"
+            android:paddingTop="5dp"
             android:paddingRight="5dp"
-            android:paddingTop="5dp">
+            android:paddingBottom="100dp">
 
 
             <LinearLayout
@@ -31,18 +31,15 @@
                 android:layout_marginLeft="@dimen/padding_20_dp"
                 android:layout_marginRight="@dimen/padding_20_dp"
                 android:background="@color/white"
-                android:clickable="true"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
                 android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
-                    android:layout_marginBottom="@dimen/layout_margin"
                     android:layout_marginLeft="8dp"
                     android:layout_marginTop="@dimen/padding_20_dp"
+                    android:layout_marginBottom="@dimen/layout_margin"
                     android:layout_weight="1"
                     android:text="@string/working_days"
                     android:textColor="@color/black"
@@ -89,9 +86,6 @@
                 android:layout_marginLeft="@dimen/padding_20_dp"
                 android:layout_marginRight="@dimen/padding_20_dp"
                 android:background="@color/white"
-                android:clickable="true"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
                 android:orientation="horizontal"
                 android:visibility="gone">
 
@@ -99,9 +93,9 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
-                    android:layout_marginBottom="@dimen/layout_margin"
                     android:layout_marginLeft="8dp"
                     android:layout_marginTop="@dimen/padding_20_dp"
+                    android:layout_marginBottom="@dimen/layout_margin"
                     android:layout_weight="1"
                     android:text="@string/working_days"
                     android:textColor="@color/black"
@@ -234,21 +228,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/padding_20_dp"
-                android:layout_marginRight="@dimen/padding_20_dp"
                 android:layout_marginTop="@dimen/padding_20_dp"
+                android:layout_marginRight="@dimen/padding_20_dp"
                 android:background="@color/white"
-                android:clickable="true"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
                 android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
-                    android:layout_marginBottom="@dimen/layout_margin"
                     android:layout_marginLeft="8dp"
                     android:layout_marginTop="@dimen/padding_20_dp"
+                    android:layout_marginBottom="@dimen/layout_margin"
                     android:layout_weight="1"
                     android:text="@string/working_hrs"
                     android:textColor="@color/black"
@@ -263,76 +254,49 @@
 
 
                     <LinearLayout
+                        android:id="@+id/layout_add_working_hrs"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/layout_padding_5dp"
+                        android:layout_marginRight="@dimen/margin_left_right_add_vital_signs"
+                        android:layout_weight="1.8"
+                        android:gravity="center|start"
                         android:orientation="horizontal"
-                        android:weightSum="3">
+                        android:weightSum="2">
 
-                        <LinearLayout
+                        <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginRight="@dimen/margin_left_right_add_vital_signs"
                             android:layout_weight="1"
-                            android:gravity="center|start"
-                            android:orientation="vertical">
+                            android:longClickable="false"
+                            android:paddingLeft="@dimen/layout_padding"
+                            android:paddingTop="@dimen/layout_padding"
+                            android:paddingBottom="@dimen/layout_padding"
+                            android:singleLine="true"
+                            android:text="@string/add_working_hrs"
+                            android:textColor="@color/orange"
+                            android:textColorHint="@color/grey_hint_color"
+                            android:textSize="@dimen/text_size_floating_label" />
 
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:hint="@string/from_time"
-                                android:paddingLeft="@dimen/layout_padding"
-                                android:textSize="12sp" />
-
-                            <TextView
-                                android:id="@+id/edit_working_hrs_from_time"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
-                                android:longClickable="false"
-                                android:paddingBottom="@dimen/login_edit_text_bottom_padding"
-                                android:paddingLeft="@dimen/layout_padding"
-                                android:paddingTop="@dimen/layout_padding_5dp"
-                                android:singleLine="true"
-                                android:textColor="@color/black"
-                                android:textColorHint="@color/grey_hint_color"
-                                android:textSize="@dimen/text_size_add_visits_lable" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/margin_left_right_add_vital_signs"
-                            android:layout_marginRight="@dimen/margin_left_right_add_vital_signs"
-                            android:layout_weight="1"
-                            android:gravity="center|start"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:hint="@string/to_time"
-                                android:paddingLeft="@dimen/layout_padding"
-                                android:textSize="12sp" />
-
-
-                            <EditText
-                                android:id="@+id/edit_working_hrs_to_time"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
-                                android:inputType="textEmailAddress"
-                                android:longClickable="false"
-                                android:paddingBottom="@dimen/login_edit_text_bottom_padding"
-                                android:paddingLeft="@dimen/layout_padding"
-                                android:paddingTop="@dimen/layout_padding_5dp"
-                                android:singleLine="true"
-                                android:textColor="@color/black"
-                                android:textColorHint="@color/grey_hint_color"
-                                android:textSize="@dimen/text_size_add_visits_lable" />
-                        </LinearLayout>
+                        <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:paddingLeft="@dimen/item_contact_padding"
+                            android:paddingTop="@dimen/layout_padding"
+                            android:paddingRight="@dimen/item_contact_padding"
+                            android:paddingBottom="@dimen/layout_padding"
+                            android:text="@string/icon_add"
+                            android:textColor="@color/orange"
+                            android:textSize="@dimen/text_size_treatment_list_title" />
                     </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/layout_working_hours"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/layout_padding_5dp"
+                        android:orientation="vertical"
+                        android:visibility="gone" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -341,21 +305,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/padding_20_dp"
-                android:layout_marginRight="@dimen/padding_20_dp"
                 android:layout_marginTop="@dimen/padding_20_dp"
+                android:layout_marginRight="@dimen/padding_20_dp"
                 android:background="@color/white"
-                android:clickable="true"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
                 android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
-                    android:layout_marginBottom="@dimen/layout_margin"
                     android:layout_marginLeft="8dp"
                     android:layout_marginTop="@dimen/padding_20_dp"
+                    android:layout_marginBottom="@dimen/layout_margin"
                     android:layout_weight="1"
                     android:text="@string/travelling_period"
                     android:textColor="@color/black"
@@ -368,58 +329,58 @@
                     android:layout_weight="3"
                     android:orientation="vertical">
 
-
                     <LinearLayout
+                        android:id="@+id/layout_add_travelling_period"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/padding_20_dp"
+                        android:layout_marginTop="@dimen/layout_padding_5dp"
+                        android:layout_marginRight="@dimen/margin_left_right_add_vital_signs"
+                        android:layout_weight="1.8"
+                        android:gravity="center|start"
                         android:orientation="horizontal"
-                        android:weightSum="3">
+                        android:weightSum="2">
 
-                        <LinearLayout
+                        <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginRight="@dimen/margin_left_right_add_vital_signs"
-                            android:layout_weight="2"
-                            android:gravity="center|start"
-                            android:orientation="horizontal">
+                            android:layout_weight="1"
+                            android:longClickable="false"
+                            android:paddingLeft="@dimen/layout_padding"
+                            android:paddingTop="@dimen/layout_padding"
+                            android:paddingBottom="@dimen/layout_padding"
+                            android:singleLine="true"
+                            android:text="@string/add_travelling_period"
+                            android:textColor="@color/orange"
+                            android:textColorHint="@color/grey_hint_color"
+                            android:textSize="@dimen/text_size_floating_label" />
 
-                            <EditText
-                                android:id="@+id/edit_travelling_peroid"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="0.8"
-                                android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
-                                android:gravity="center"
-                                android:hint="@string/days"
-                                android:inputType="numberDecimal"
-                                android:longClickable="false"
-                                android:paddingBottom="@dimen/login_edit_text_bottom_padding"
-                                android:paddingLeft="@dimen/layout_padding"
-                                android:singleLine="true"
-                                android:textColor="@color/black"
-                                android:textColorHint="@color/grey_hint_color"
-                                android:textSize="@dimen/text_size_add_visits_lable" />
-
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:singleLine="true"
-                                android:text="@string/days_per_month"
-                                android:textColor="@color/black"
-                                android:textColorHint="@color/grey_hint_color"
-                                android:textSize="@dimen/text_size_add_visits_lable" />
-                        </LinearLayout>
+                        <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:paddingLeft="@dimen/item_contact_padding"
+                            android:paddingTop="@dimen/layout_padding"
+                            android:paddingRight="@dimen/item_contact_padding"
+                            android:paddingBottom="@dimen/layout_padding"
+                            android:text="@string/icon_add"
+                            android:textColor="@color/orange"
+                            android:textSize="@dimen/text_size_treatment_list_title" />
                     </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/layout_travelling_period"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/layout_padding_5dp"
+                        android:orientation="vertical"
+                        android:visibility="gone" />
                 </LinearLayout>
             </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginBottom="@dimen/item_contact_padding"
                 android:layout_marginTop="@dimen/padding_20_dp"
+                android:layout_marginBottom="@dimen/item_contact_padding"
                 android:background="@color/grey_hint_color" />
 
             <LinearLayout
@@ -429,8 +390,6 @@
                 android:layout_marginLeft="@dimen/padding_20_dp"
                 android:layout_marginRight="@dimen/padding_20_dp"
                 android:background="@color/white"
-                android:clickable="true"
-                android:focusable="true"
                 android:focusableInTouchMode="true"
                 android:orientation="horizontal">
 
@@ -438,9 +397,9 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
-                    android:layout_marginBottom="@dimen/layout_margin"
                     android:layout_marginLeft="8dp"
                     android:layout_marginTop="@dimen/padding_20_dp"
+                    android:layout_marginBottom="@dimen/layout_margin"
                     android:layout_weight="1"
                     android:text="@string/sleep_pattern"
                     android:textColor="@color/black"
@@ -479,8 +438,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/layout_padding_5dp"
                             android:orientation="horizontal"
-                            android:visibility="gone"
-                            android:weightSum="3">
+                            android:visibility="visible">
 
                             <LinearLayout
                                 android:layout_width="0dp"
@@ -498,14 +456,14 @@
                                     android:textSize="12sp" />
 
                                 <TextView
-                                    android:id="@+id/edit_sleeping_from_time_day"
+                                    android:id="@+id/tv_sleeping_from_time_day"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
                                     android:longClickable="false"
-                                    android:paddingBottom="@dimen/login_edit_text_bottom_padding"
                                     android:paddingLeft="@dimen/layout_padding"
                                     android:paddingTop="@dimen/layout_padding_5dp"
+                                    android:paddingBottom="@dimen/login_edit_text_bottom_padding"
                                     android:singleLine="true"
                                     android:textColor="@color/black"
                                     android:textColorHint="@color/grey_hint_color"
@@ -528,9 +486,9 @@
                                     android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
                                     android:hint="@string/from_time"
                                     android:inputType="textEmailAddress"
-                                    android:paddingBottom="@dimen/login_edit_text_bottom_padding"
                                     android:paddingLeft="@dimen/layout_padding"
                                     android:paddingTop="@dimen/layout_padding_5dp"
+                                    android:paddingBottom="@dimen/login_edit_text_bottom_padding"
                                     android:singleLine="true"
                                     android:textColor="@color/black"
                                     android:textColorHint="@color/grey_hint_color"
@@ -555,15 +513,15 @@
 
 
                                 <TextView
-                                    android:id="@+id/edit_sleeping_to_time_day"
+                                    android:id="@+id/tv_sleeping_to_time_day"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
                                     android:inputType="textEmailAddress"
                                     android:longClickable="false"
-                                    android:paddingBottom="@dimen/login_edit_text_bottom_padding"
                                     android:paddingLeft="@dimen/layout_padding"
                                     android:paddingTop="@dimen/layout_padding_5dp"
+                                    android:paddingBottom="@dimen/login_edit_text_bottom_padding"
                                     android:singleLine="true"
                                     android:textColor="@color/black"
                                     android:textColorHint="@color/grey_hint_color"
@@ -578,22 +536,75 @@
                                 android:layout_weight="1"
                                 android:gravity="center|start"
                                 android:orientation="vertical"
+                                android:paddingTop="@dimen/padding_20_dp"
                                 android:visibility="gone">
 
                                 <EditText
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
-                                    android:hint="@string/to_time"
+                                    android:hint="@string/mins_per_day"
                                     android:inputType="textEmailAddress"
-                                    android:paddingBottom="@dimen/login_edit_text_bottom_padding"
                                     android:paddingLeft="@dimen/layout_padding"
                                     android:paddingTop="@dimen/layout_padding_5dp"
+                                    android:paddingBottom="@dimen/login_edit_text_bottom_padding"
                                     android:singleLine="true"
                                     android:textColor="@color/black"
                                     android:textColorHint="@color/grey_hint_color"
                                     android:textSize="@dimen/text_size_add_visits_lable" />
                             </android.support.design.widget.TextInputLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="@dimen/margin_left_right_add_vital_signs"
+                                android:layout_weight="1.8"
+                                android:gravity="center|start"
+                                android:orientation="horizontal"
+                                android:paddingTop="@dimen/padding_20_dp"
+                                android:visibility="visible">
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="@dimen/layout_padding"
+                                    android:layout_weight="0.5"
+                                    android:singleLine="true"
+                                    android:text="@string/or"
+                                    android:textColor="@color/black"
+                                    android:textColorHint="@color/grey_hint_color"
+                                    android:textSize="@dimen/text_size_add_visits_lable" />
+
+
+                                <EditText
+                                    android:id="@+id/edit_sleeping_time_day"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
+                                    android:gravity="center"
+                                    android:hint="@string/hrs_day"
+                                    android:inputType="numberDecimal"
+                                    android:longClickable="false"
+                                    android:paddingLeft="@dimen/layout_padding"
+                                    android:paddingBottom="@dimen/login_edit_text_bottom_padding"
+                                    android:singleLine="true"
+                                    android:textColor="@color/black"
+                                    android:textColorHint="@color/grey_hint_color"
+                                    android:textSize="@dimen/text_size_add_visits_lable" />
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="@dimen/layout_padding_5dp"
+                                    android:layout_weight="1"
+                                    android:singleLine="true"
+                                    android:text="@string/hrs_per_day"
+                                    android:textColor="@color/black"
+                                    android:textColorHint="@color/grey_hint_color"
+                                    android:textSize="@dimen/text_size_add_visits_lable" />
+                            </LinearLayout>
+
                         </LinearLayout>
 
                     </LinearLayout>
@@ -624,8 +635,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/layout_padding_5dp"
                             android:orientation="horizontal"
-                            android:visibility="gone"
-                            android:weightSum="3">
+                            android:visibility="visible">
 
                             <LinearLayout
                                 android:layout_width="0dp"
@@ -643,14 +653,14 @@
                                     android:textSize="12sp" />
 
                                 <TextView
-                                    android:id="@+id/edit_sleeping_from_time_night"
+                                    android:id="@+id/tv_sleeping_from_time_night"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
                                     android:longClickable="false"
-                                    android:paddingBottom="@dimen/login_edit_text_bottom_padding"
                                     android:paddingLeft="@dimen/layout_padding"
                                     android:paddingTop="@dimen/layout_padding_5dp"
+                                    android:paddingBottom="@dimen/login_edit_text_bottom_padding"
                                     android:singleLine="true"
                                     android:textColor="@color/black"
                                     android:textColorHint="@color/grey_hint_color"
@@ -673,9 +683,9 @@
                                     android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
                                     android:hint="@string/from_time"
                                     android:inputType="textEmailAddress"
-                                    android:paddingBottom="@dimen/login_edit_text_bottom_padding"
                                     android:paddingLeft="@dimen/layout_padding"
                                     android:paddingTop="@dimen/layout_padding_5dp"
+                                    android:paddingBottom="@dimen/login_edit_text_bottom_padding"
                                     android:singleLine="true"
                                     android:textColor="@color/black"
                                     android:textColorHint="@color/grey_hint_color"
@@ -700,46 +710,74 @@
 
 
                                 <TextView
-                                    android:id="@+id/edit_sleeping_to_time_night"
+                                    android:id="@+id/tv_sleeping_to_time_night"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
                                     android:inputType="textEmailAddress"
                                     android:longClickable="false"
-                                    android:paddingBottom="@dimen/login_edit_text_bottom_padding"
                                     android:paddingLeft="@dimen/layout_padding"
                                     android:paddingTop="@dimen/layout_padding_5dp"
+                                    android:paddingBottom="@dimen/login_edit_text_bottom_padding"
                                     android:singleLine="true"
                                     android:textColor="@color/black"
                                     android:textColorHint="@color/grey_hint_color"
                                     android:textSize="@dimen/text_size_add_visits_lable" />
                             </LinearLayout>
 
-                            <android.support.design.widget.TextInputLayout
+                            <LinearLayout
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="@dimen/margin_left_right_add_vital_signs"
                                 android:layout_marginRight="@dimen/margin_left_right_add_vital_signs"
-                                android:layout_weight="1"
+                                android:layout_weight="1.8"
                                 android:gravity="center|start"
-                                android:orientation="vertical"
-                                android:visibility="gone">
+                                android:orientation="horizontal"
+                                android:paddingTop="@dimen/padding_20_dp"
+                                android:visibility="visible">
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="@dimen/layout_padding"
+                                    android:layout_weight="0.5"
+                                    android:singleLine="true"
+                                    android:text="@string/or"
+                                    android:textColor="@color/black"
+                                    android:textColorHint="@color/grey_hint_color"
+                                    android:textSize="@dimen/text_size_add_visits_lable" />
+
 
                                 <EditText
-                                    android:layout_width="match_parent"
+                                    android:id="@+id/edit_sleeping_time_night"
+                                    android:layout_width="0dp"
                                     android:layout_height="wrap_content"
+                                    android:layout_weight="1"
                                     android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
-                                    android:hint="@string/to_time"
-                                    android:inputType="textEmailAddress"
-                                    android:paddingBottom="@dimen/login_edit_text_bottom_padding"
+                                    android:gravity="center"
+                                    android:hint="@string/hrs_day"
+                                    android:inputType="numberDecimal"
+                                    android:longClickable="false"
                                     android:paddingLeft="@dimen/layout_padding"
-                                    android:paddingTop="@dimen/layout_padding_5dp"
+                                    android:paddingBottom="@dimen/login_edit_text_bottom_padding"
                                     android:singleLine="true"
                                     android:textColor="@color/black"
                                     android:textColorHint="@color/grey_hint_color"
                                     android:textSize="@dimen/text_size_add_visits_lable" />
-                            </android.support.design.widget.TextInputLayout>
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="@dimen/layout_padding_5dp"
+                                    android:layout_weight="1"
+                                    android:singleLine="true"
+                                    android:text="@string/hrs_per_day"
+                                    android:textColor="@color/black"
+                                    android:textColorHint="@color/grey_hint_color"
+                                    android:textSize="@dimen/text_size_add_visits_lable" />
+                            </LinearLayout>
                         </LinearLayout>
+
+
                     </LinearLayout>
 
                 </LinearLayout>
@@ -748,8 +786,8 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginBottom="@dimen/item_contact_padding"
                 android:layout_marginTop="@dimen/padding_20_dp"
+                android:layout_marginBottom="@dimen/item_contact_padding"
                 android:background="@color/grey_hint_color" />
 
             <LinearLayout
@@ -757,21 +795,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/padding_20_dp"
-                android:layout_marginRight="@dimen/padding_20_dp"
                 android:layout_marginTop="@dimen/padding_20_dp"
+                android:layout_marginRight="@dimen/padding_20_dp"
                 android:background="@color/white"
-                android:clickable="true"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
                 android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
-                    android:layout_marginBottom="@dimen/layout_margin"
                     android:layout_marginLeft="8dp"
                     android:layout_marginTop="@dimen/padding_20_dp"
+                    android:layout_marginBottom="@dimen/layout_margin"
                     android:layout_weight="1"
                     android:text="@string/tv_view_pattern"
                     android:textColor="@color/black"
@@ -781,25 +816,24 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/patient_profile_image_padding"
-                    android:layout_marginTop="@dimen/padding_20_dp"
                     android:layout_weight="3"
                     android:gravity="center|start"
-                    android:orientation="horizontal"
-                    android:weightSum="3">
+                    android:orientation="horizontal">
 
 
                     <EditText
                         android:id="@+id/edit_tv_view_time"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/layout_padding"
                         android:layout_weight="0.8"
                         android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
                         android:gravity="center"
                         android:hint="@string/hrs_day"
                         android:inputType="numberDecimal"
                         android:longClickable="false"
-                        android:paddingBottom="@dimen/login_edit_text_bottom_padding"
                         android:paddingLeft="@dimen/layout_padding"
+                        android:paddingBottom="@dimen/login_edit_text_bottom_padding"
                         android:singleLine="true"
                         android:textColor="@color/black"
                         android:textColorHint="@color/grey_hint_color"
@@ -808,13 +842,94 @@
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                        android:layout_marginLeft="@dimen/layout_padding_5dp"
+                        android:layout_marginTop="@dimen/layout_padding"
+                        android:layout_weight="0.6"
                         android:singleLine="true"
                         android:text="@string/hrs_per_day"
                         android:textColor="@color/black"
                         android:textColorHint="@color/grey_hint_color"
                         android:textSize="@dimen/text_size_add_visits_lable"
                         android:visibility="visible" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/layout_padding"
+                        android:layout_marginTop="@dimen/layout_padding"
+                        android:layout_weight="0.5"
+                        android:singleLine="true"
+                        android:text="@string/or"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/grey_hint_color"
+                        android:textSize="@dimen/text_size_add_visits_lable" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/margin_left_right_add_vital_signs"
+                        android:layout_weight="1"
+                        android:gravity="center|start"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/from_time"
+                            android:paddingLeft="@dimen/layout_padding"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:id="@+id/tv_tv_view_from_time"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
+                            android:longClickable="false"
+                            android:paddingLeft="@dimen/layout_padding"
+                            android:paddingTop="@dimen/layout_padding_5dp"
+                            android:paddingBottom="@dimen/login_edit_text_bottom_padding"
+                            android:singleLine="true"
+                            android:textColor="@color/black"
+                            android:textColorHint="@color/grey_hint_color"
+                            android:textSize="@dimen/text_size_add_visits_lable" />
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/margin_left_right_add_vital_signs"
+                        android:layout_marginRight="@dimen/margin_left_right_add_vital_signs"
+                        android:layout_weight="1"
+                        android:gravity="center|start"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/to_time"
+                            android:paddingLeft="@dimen/layout_padding"
+                            android:textSize="12sp" />
+
+
+                        <TextView
+                            android:id="@+id/tv_tv_view_to_time"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
+                            android:inputType="textEmailAddress"
+                            android:longClickable="false"
+                            android:paddingLeft="@dimen/layout_padding"
+                            android:paddingTop="@dimen/layout_padding_5dp"
+                            android:paddingBottom="@dimen/login_edit_text_bottom_padding"
+                            android:singleLine="true"
+                            android:textColor="@color/black"
+                            android:textColorHint="@color/grey_hint_color"
+                            android:textSize="@dimen/text_size_add_visits_lable" />
+                    </LinearLayout>
+
+
                 </LinearLayout>
             </LinearLayout>
 
@@ -823,21 +938,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/padding_20_dp"
-                android:layout_marginRight="@dimen/padding_20_dp"
                 android:layout_marginTop="@dimen/padding_20_dp"
+                android:layout_marginRight="@dimen/padding_20_dp"
                 android:background="@color/white"
-                android:clickable="true"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
                 android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
-                    android:layout_marginBottom="@dimen/layout_margin"
                     android:layout_marginLeft="8dp"
                     android:layout_marginTop="@dimen/padding_20_dp"
+                    android:layout_marginBottom="@dimen/layout_margin"
                     android:layout_weight="1"
                     android:text="@string/mobile_usage"
                     android:textColor="@color/black"
@@ -847,24 +959,23 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/patient_profile_image_padding"
-                    android:layout_marginTop="@dimen/padding_20_dp"
                     android:layout_weight="3"
                     android:gravity="center|start"
-                    android:orientation="horizontal"
-                    android:weightSum="3">
+                    android:orientation="horizontal">
 
                     <EditText
                         android:id="@+id/edit_mobile_usage"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/layout_padding"
                         android:layout_weight="0.8"
                         android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
                         android:gravity="center"
                         android:hint="@string/hrs_day"
                         android:inputType="numberDecimal"
                         android:longClickable="false"
-                        android:paddingBottom="@dimen/login_edit_text_bottom_padding"
                         android:paddingLeft="@dimen/layout_padding"
+                        android:paddingBottom="@dimen/login_edit_text_bottom_padding"
                         android:singleLine="true"
                         android:textColor="@color/black"
                         android:textColorHint="@color/grey_hint_color"
@@ -873,12 +984,92 @@
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                        android:layout_marginLeft="@dimen/layout_padding_5dp"
+                        android:layout_marginTop="@dimen/layout_padding"
+                        android:layout_weight="0.6"
                         android:singleLine="true"
                         android:text="@string/hrs_per_day"
                         android:textColor="@color/black"
                         android:textColorHint="@color/grey_hint_color"
                         android:textSize="@dimen/text_size_add_visits_lable" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/layout_padding"
+                        android:layout_marginTop="@dimen/layout_padding"
+                        android:layout_weight="0.5"
+                        android:singleLine="true"
+                        android:text="@string/or"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/grey_hint_color"
+                        android:textSize="@dimen/text_size_add_visits_lable" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/margin_left_right_add_vital_signs"
+                        android:layout_weight="1"
+                        android:gravity="center|start"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/from_time"
+                            android:paddingLeft="@dimen/layout_padding"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:id="@+id/tv_mobile_usage_from_time"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
+                            android:longClickable="false"
+                            android:paddingLeft="@dimen/layout_padding"
+                            android:paddingTop="@dimen/layout_padding_5dp"
+                            android:paddingBottom="@dimen/login_edit_text_bottom_padding"
+                            android:singleLine="true"
+                            android:textColor="@color/black"
+                            android:textColorHint="@color/grey_hint_color"
+                            android:textSize="@dimen/text_size_add_visits_lable" />
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/margin_left_right_add_vital_signs"
+                        android:layout_marginRight="@dimen/margin_left_right_add_vital_signs"
+                        android:layout_weight="1"
+                        android:gravity="center|start"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/to_time"
+                            android:paddingLeft="@dimen/layout_padding"
+                            android:textSize="12sp" />
+
+
+                        <TextView
+                            android:id="@+id/tv_mobile_usage_to_time"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
+                            android:inputType="textEmailAddress"
+                            android:longClickable="false"
+                            android:paddingLeft="@dimen/layout_padding"
+                            android:paddingTop="@dimen/layout_padding_5dp"
+                            android:paddingBottom="@dimen/login_edit_text_bottom_padding"
+                            android:singleLine="true"
+                            android:textColor="@color/black"
+                            android:textColorHint="@color/grey_hint_color"
+                            android:textSize="@dimen/text_size_add_visits_lable" />
+                    </LinearLayout>
+
                 </LinearLayout>
             </LinearLayout>
 
@@ -887,21 +1078,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/padding_20_dp"
-                android:layout_marginRight="@dimen/padding_20_dp"
                 android:layout_marginTop="@dimen/padding_20_dp"
+                android:layout_marginRight="@dimen/padding_20_dp"
                 android:background="@color/white"
-                android:clickable="true"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
                 android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
-                    android:layout_marginBottom="@dimen/layout_margin"
                     android:layout_marginLeft="8dp"
                     android:layout_marginTop="@dimen/padding_20_dp"
+                    android:layout_marginBottom="@dimen/layout_margin"
                     android:layout_weight="1"
                     android:text="@string/social_meadia_time"
                     android:textColor="@color/black"
@@ -911,25 +1099,24 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/patient_profile_image_padding"
-                    android:layout_marginTop="@dimen/padding_20_dp"
                     android:layout_weight="3"
                     android:gravity="center|start"
-                    android:orientation="horizontal"
-                    android:weightSum="3">
+                    android:orientation="horizontal">
 
 
                     <EditText
                         android:id="@+id/edit_social_media"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/layout_padding"
                         android:layout_weight="0.8"
                         android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
                         android:gravity="center"
                         android:hint="@string/hrs_day"
                         android:inputType="numberDecimal"
                         android:longClickable="false"
-                        android:paddingBottom="@dimen/login_edit_text_bottom_padding"
                         android:paddingLeft="@dimen/layout_padding"
+                        android:paddingBottom="@dimen/login_edit_text_bottom_padding"
                         android:singleLine="true"
                         android:textColor="@color/black"
                         android:textColorHint="@color/grey_hint_color"
@@ -938,12 +1125,92 @@
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                        android:layout_marginLeft="@dimen/layout_padding_5dp"
+                        android:layout_marginTop="@dimen/layout_padding"
+                        android:layout_weight="0.6"
                         android:singleLine="true"
                         android:text="@string/hrs_per_day"
                         android:textColor="@color/black"
                         android:textColorHint="@color/grey_hint_color"
                         android:textSize="@dimen/text_size_add_visits_lable" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/layout_padding"
+                        android:layout_marginTop="@dimen/layout_padding"
+                        android:layout_weight="0.5"
+                        android:singleLine="true"
+                        android:text="@string/or"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/grey_hint_color"
+                        android:textSize="@dimen/text_size_add_visits_lable" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/margin_left_right_add_vital_signs"
+                        android:layout_weight="1"
+                        android:gravity="center|start"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/from_time"
+                            android:paddingLeft="@dimen/layout_padding"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:id="@+id/tv_social_media_from_time"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
+                            android:longClickable="false"
+                            android:paddingLeft="@dimen/layout_padding"
+                            android:paddingTop="@dimen/layout_padding_5dp"
+                            android:paddingBottom="@dimen/login_edit_text_bottom_padding"
+                            android:singleLine="true"
+                            android:textColor="@color/black"
+                            android:textColorHint="@color/grey_hint_color"
+                            android:textSize="@dimen/text_size_add_visits_lable" />
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/margin_left_right_add_vital_signs"
+                        android:layout_marginRight="@dimen/margin_left_right_add_vital_signs"
+                        android:layout_weight="1"
+                        android:gravity="center|start"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/to_time"
+                            android:paddingLeft="@dimen/layout_padding"
+                            android:textSize="12sp" />
+
+
+                        <TextView
+                            android:id="@+id/tv_social_media_to_time"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
+                            android:inputType="textEmailAddress"
+                            android:longClickable="false"
+                            android:paddingLeft="@dimen/layout_padding"
+                            android:paddingTop="@dimen/layout_padding_5dp"
+                            android:paddingBottom="@dimen/login_edit_text_bottom_padding"
+                            android:singleLine="true"
+                            android:textColor="@color/black"
+                            android:textColorHint="@color/grey_hint_color"
+                            android:textSize="@dimen/text_size_add_visits_lable" />
+                    </LinearLayout>
+
                 </LinearLayout>
             </LinearLayout>
 
@@ -952,21 +1219,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/padding_20_dp"
-                android:layout_marginRight="@dimen/padding_20_dp"
                 android:layout_marginTop="@dimen/padding_20_dp"
+                android:layout_marginRight="@dimen/padding_20_dp"
                 android:background="@color/white"
-                android:clickable="true"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
                 android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
-                    android:layout_marginBottom="@dimen/layout_margin"
                     android:layout_marginLeft="8dp"
                     android:layout_marginTop="@dimen/padding_20_dp"
+                    android:layout_marginBottom="@dimen/layout_margin"
                     android:layout_weight="1"
                     android:text="@string/tv_in_bedroom"
                     android:textColor="@color/black"
@@ -1001,10 +1265,10 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginRight="@dimen/fab_margin_left"
-                                android:paddingBottom="@dimen/edit_text_patient_registration_padding"
                                 android:paddingLeft="@dimen/layout_padding"
-                                android:paddingRight="@dimen/fab_margin_left"
                                 android:paddingTop="@dimen/edit_text_patient_registration_padding"
+                                android:paddingRight="@dimen/fab_margin_left"
+                                android:paddingBottom="@dimen/edit_text_patient_registration_padding"
                                 android:tag="@string/yes"
                                 android:text="@string/yes"
                                 android:textColor="@color/black"
@@ -1016,15 +1280,57 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:checked="false"
-                                android:paddingBottom="@dimen/edit_text_patient_registration_padding"
                                 android:paddingLeft="@dimen/layout_padding"
-                                android:paddingRight="@dimen/fab_margin_left"
                                 android:paddingTop="@dimen/edit_text_patient_registration_padding"
+                                android:paddingRight="@dimen/fab_margin_left"
+                                android:paddingBottom="@dimen/edit_text_patient_registration_padding"
                                 android:tag="@string/no"
                                 android:text="@string/no"
                                 android:textColor="@color/black"
                                 android:textSize="@dimen/text_size_add_visits_lable" />
                         </RadioGroup>
+
+                        <LinearLayout
+                            android:id="@+id/layout_tv_in_bedroom"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="@dimen/margin_left_right_add_vital_signs"
+                            android:layout_weight="1.8"
+                            android:gravity="center|start"
+                            android:orientation="horizontal"
+                            android:paddingTop="@dimen/layout_padding"
+                            android:visibility="visible">
+
+
+                            <EditText
+                                android:id="@+id/edit_tv_in_bedroom"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
+                                android:gravity="center"
+                                android:hint="@string/hrs_day"
+                                android:inputType="numberDecimal"
+                                android:longClickable="false"
+                                android:paddingLeft="@dimen/layout_padding"
+                                android:paddingBottom="@dimen/login_edit_text_bottom_padding"
+                                android:singleLine="true"
+                                android:textColor="@color/black"
+                                android:textColorHint="@color/grey_hint_color"
+                                android:textSize="@dimen/text_size_add_visits_lable" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/layout_padding_5dp"
+                                android:layout_weight="1"
+                                android:singleLine="true"
+                                android:text="@string/hrs_per_day"
+                                android:textColor="@color/black"
+                                android:textColorHint="@color/grey_hint_color"
+                                android:textSize="@dimen/text_size_add_visits_lable" />
+                        </LinearLayout>
+
 
                     </LinearLayout>
 
@@ -1037,20 +1343,16 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/padding_20_dp"
                 android:layout_marginRight="@dimen/padding_20_dp"
-                android:layout_marginTop="@dimen/padding_20_dp"
                 android:background="@color/white"
-                android:clickable="true"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
                 android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
-                    android:layout_marginBottom="@dimen/layout_margin"
                     android:layout_marginLeft="8dp"
                     android:layout_marginTop="@dimen/padding_20_dp"
+                    android:layout_marginBottom="@dimen/layout_margin"
                     android:layout_weight="1"
                     android:text="@string/laptop_in_bedroom"
                     android:textColor="@color/black"
@@ -1085,10 +1387,10 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginRight="@dimen/fab_margin_left"
-                                android:paddingBottom="@dimen/edit_text_patient_registration_padding"
                                 android:paddingLeft="@dimen/layout_padding"
-                                android:paddingRight="@dimen/fab_margin_left"
                                 android:paddingTop="@dimen/edit_text_patient_registration_padding"
+                                android:paddingRight="@dimen/fab_margin_left"
+                                android:paddingBottom="@dimen/edit_text_patient_registration_padding"
                                 android:tag="@string/yes"
                                 android:text="@string/yes"
                                 android:textColor="@color/black"
@@ -1100,15 +1402,56 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:checked="false"
-                                android:paddingBottom="@dimen/edit_text_patient_registration_padding"
                                 android:paddingLeft="@dimen/layout_padding"
-                                android:paddingRight="@dimen/fab_margin_left"
                                 android:paddingTop="@dimen/edit_text_patient_registration_padding"
+                                android:paddingRight="@dimen/fab_margin_left"
+                                android:paddingBottom="@dimen/edit_text_patient_registration_padding"
                                 android:tag="@string/no"
                                 android:text="@string/no"
                                 android:textColor="@color/black"
                                 android:textSize="@dimen/text_size_add_visits_lable" />
                         </RadioGroup>
+
+                        <LinearLayout
+                            android:id="@+id/layout_laptop_in_bedroom"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="@dimen/margin_left_right_add_vital_signs"
+                            android:layout_weight="1.8"
+                            android:gravity="center|start"
+                            android:orientation="horizontal"
+                            android:paddingTop="@dimen/layout_padding"
+                            android:visibility="visible">
+
+
+                            <EditText
+                                android:id="@+id/edit_laptop_in_bedroom"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
+                                android:gravity="center"
+                                android:hint="@string/hrs_day"
+                                android:inputType="numberDecimal"
+                                android:longClickable="false"
+                                android:paddingLeft="@dimen/layout_padding"
+                                android:paddingBottom="@dimen/login_edit_text_bottom_padding"
+                                android:singleLine="true"
+                                android:textColor="@color/black"
+                                android:textColorHint="@color/grey_hint_color"
+                                android:textSize="@dimen/text_size_add_visits_lable" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/layout_padding_5dp"
+                                android:layout_weight="1"
+                                android:singleLine="true"
+                                android:text="@string/hrs_per_day"
+                                android:textColor="@color/black"
+                                android:textColorHint="@color/grey_hint_color"
+                                android:textSize="@dimen/text_size_add_visits_lable" />
+                        </LinearLayout>
 
                     </LinearLayout>
 
@@ -1122,18 +1465,15 @@
                 android:layout_marginLeft="@dimen/padding_20_dp"
                 android:layout_marginRight="@dimen/padding_20_dp"
                 android:background="@color/white"
-                android:clickable="true"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
                 android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
-                    android:layout_marginBottom="@dimen/layout_margin"
                     android:layout_marginLeft="8dp"
                     android:layout_marginTop="@dimen/padding_20_dp"
+                    android:layout_marginBottom="@dimen/layout_margin"
                     android:layout_weight="1"
                     android:text="@string/life_style"
                     android:textColor="@color/black"
@@ -1169,11 +1509,10 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginRight="@dimen/text_size_visits_close_text"
-                                android:paddingBottom="@dimen/edit_text_patient_registration_padding"
                                 android:paddingLeft="@dimen/layout_padding"
-                                android:paddingRight="@dimen/padding_30_dp"
                                 android:paddingTop="@dimen/edit_text_patient_registration_padding"
-                                android:tag="@string/sedentary"
+                                android:paddingRight="@dimen/padding_30_dp"
+                                android:paddingBottom="@dimen/edit_text_patient_registration_padding"
                                 android:text="@string/sedentary"
                                 android:textColor="@color/black"
                                 android:textSize="@dimen/text_size_add_visits_lable" />
@@ -1185,11 +1524,10 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginRight="@dimen/text_size_visits_close_text"
                                 android:checked="false"
-                                android:paddingBottom="@dimen/edit_text_patient_registration_padding"
                                 android:paddingLeft="@dimen/layout_padding"
-                                android:paddingRight="@dimen/padding_30_dp"
                                 android:paddingTop="@dimen/edit_text_patient_registration_padding"
-                                android:tag="@string/moderate"
+                                android:paddingRight="@dimen/padding_30_dp"
+                                android:paddingBottom="@dimen/edit_text_patient_registration_padding"
                                 android:text="@string/moderate"
                                 android:textColor="@color/black"
                                 android:textSize="@dimen/text_size_add_visits_lable" />
@@ -1200,11 +1538,10 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:checked="false"
-                                android:paddingBottom="@dimen/edit_text_patient_registration_padding"
                                 android:paddingLeft="@dimen/layout_padding_5dp"
-                                android:paddingRight="@dimen/padding_30_dp"
                                 android:paddingTop="@dimen/edit_text_patient_registration_padding"
-                                android:tag="@string/heavy"
+                                android:paddingRight="@dimen/padding_30_dp"
+                                android:paddingBottom="@dimen/edit_text_patient_registration_padding"
                                 android:text="@string/heavy"
                                 android:textColor="@color/black"
                                 android:textSize="@dimen/text_size_add_visits_lable" />

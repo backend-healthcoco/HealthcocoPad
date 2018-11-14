@@ -293,7 +293,7 @@ public class AddEditFoodAndExerciseFragment extends HealthCocoFragment implement
             }
             if (!Util.isNullOrEmptyList(patientFoodAndExcercise.getMealTimeAndPattern())) {
                 for (MealTimeAndPattern mealTimeAndPattern : patientFoodAndExcercise.getMealTimeAndPattern()) {
-                    updateDietPlan(mealTimeAndPattern);
+                    updateDietPlan(mealTimeAndPattern, mealTimeAndPattern.getFromTime());
                 }
             }
             if (!Util.isNullOrEmptyList(patientFoodAndExcercise.getExercise())) {
@@ -308,7 +308,7 @@ public class AddEditFoodAndExerciseFragment extends HealthCocoFragment implement
                     if (!Util.isNullOrEmptyList(timeAndPattern.getFood())) {
                         timeAndPattern.setFood(timeAndPattern.getFood());
                         timeAndPattern.setTimeType(MealTimeType.MID_NIGHT);
-                        updateDietPlan(timeAndPattern);
+                        updateDietPlan(timeAndPattern, 0);
                     }
                 }
                 addEquivalentMeasurement(new ArrayList<>(exerciseHashMap.values()));
@@ -679,7 +679,7 @@ public class AddEditFoodAndExerciseFragment extends HealthCocoFragment implement
                     if (data != null) {
                         MealTimeAndPattern mealTimeAndPattern = Parcels.unwrap(data.getParcelableExtra(HealthCocoConstants.TAG_INTENT_DATA));
                         if (mealTimeAndPattern != null) {
-                            updateDietPlan(mealTimeAndPattern);
+                            updateDietPlan(mealTimeAndPattern, 0);
                         }
                     }
                 break;
@@ -699,25 +699,43 @@ public class AddEditFoodAndExerciseFragment extends HealthCocoFragment implement
     }
 
 
-    private void updateDietPlan(MealTimeAndPattern mealTimeAndPattern) {
+    private void updateDietPlan(MealTimeAndPattern mealTimeAndPattern, float mealTiming) {
         switch (mealTimeAndPattern.getTimeType()) {
             case EARLY_MORNING:
                 addFood(containerFoodEarlyMorning, mealTimeAndPattern.getFood());
+                cbEarlyMorning.setChecked(true);
+                if (!Util.isNullOrZeroNumber(mealTiming))
+                    tvTimeEarlyMorning.setText(DateTimeUtil.getFormattedTime(0, Math.round((float) mealTiming)));
                 break;
             case BREAKFAST:
                 addFood(containerFoodBreakfast, mealTimeAndPattern.getFood());
+                cbBreakfast.setChecked(true);
+                if (!Util.isNullOrZeroNumber(mealTiming))
+                    tvTimeBreakfast.setText(DateTimeUtil.getFormattedTime(0, Math.round((float) mealTiming)));
                 break;
             case MID_MORNING:
                 addFood(containerFoodMidMorning, mealTimeAndPattern.getFood());
+                cbMidMorning.setChecked(true);
+                if (!Util.isNullOrZeroNumber(mealTiming))
+                    tvTimeMidMorning.setText(DateTimeUtil.getFormattedTime(0, Math.round((float) mealTiming)));
                 break;
             case LUNCH:
                 addFood(containerFoodLunch, mealTimeAndPattern.getFood());
+                cbLunch.setChecked(true);
+                if (!Util.isNullOrZeroNumber(mealTiming))
+                    tvTimeLunch.setText(DateTimeUtil.getFormattedTime(0, Math.round((float) mealTiming)));
                 break;
             case EVENING_SNACK:
                 addFood(containerFoodEveningSnacks, mealTimeAndPattern.getFood());
+                cbEveningSnacks.setChecked(true);
+                if (!Util.isNullOrZeroNumber(mealTiming))
+                    tvTimeEveningSnacks.setText(DateTimeUtil.getFormattedTime(0, Math.round((float) mealTiming)));
                 break;
             case DINNER:
                 addFood(containerFoodDinner, mealTimeAndPattern.getFood());
+                cbDinner.setChecked(true);
+                if (!Util.isNullOrZeroNumber(mealTiming))
+                    tvTimeDinner.setText(DateTimeUtil.getFormattedTime(0, Math.round((float) mealTiming)));
                 break;
             case MID_NIGHT:
                 addFood(containerFoodCravings, mealTimeAndPattern.getFood());

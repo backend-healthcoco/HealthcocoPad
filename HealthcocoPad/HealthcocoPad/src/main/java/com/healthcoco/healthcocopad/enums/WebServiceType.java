@@ -532,7 +532,11 @@ public enum WebServiceType {
 
     ADD_PATIENT_FOOD_AND_EXERCISE(Method.POST, "nutrition/assessment/food/exercise/addEdit/"),
 
-    GET_PATIENT_FOOD_AND_EXERCISE(Method.POST, "nutrition/assessment/food/exercise/"),
+    GET_PATIENT_FOOD_AND_EXERCISE(Method.GET, "nutrition/assessment/food/exercise/"),
+
+    ADD_PATIENT_LIFE_STYLE(Method.POST, "nutrition/assessment/lifeStyle/addEdit/"),
+
+    GET_PATIENT_LIFE_STYLE(Method.GET, "nutrition/assessment/lifeStyle/"),
 
     GET_RECIPE_LIST_SOLR(Method.GET, "solr/recipe/search/?"),
 

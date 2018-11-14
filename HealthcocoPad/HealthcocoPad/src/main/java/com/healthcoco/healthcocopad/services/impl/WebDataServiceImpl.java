@@ -1965,13 +1965,9 @@ public class WebDataServiceImpl implements GCMRefreshListener {
         checkNetworkStatus(mApp.getApplicationContext());
         String url = null;
         if (HealthCocoConstants.isNetworkOnline) {
-            switch (webServiceType) {
-                case GET_PATIENT_FOOD_AND_EXERCISE:
-                    url = webServiceType.getUrl()
-                            + assessmentId
-                            + HealthCocoConstants.PARAM_TAG_GET;
-                    break;
-            }
+            url = webServiceType.getUrl()
+                    + assessmentId
+                    + HealthCocoConstants.PARAM_TAG_GET;
 
             getResponse(webServiceType, class1, url, null, null, responseListener,
                     errorListener);

@@ -1355,6 +1355,11 @@
     <string name="write_a_reason">Write a Reason</string>
     <string name="freq">Frequency</string>
     <string name="gms">Gms</string>
+    <string name="add_working_hrs">Add Working Hours</string>
+    <string name="add_travelling_period">Add Travelling Period</string>
+    <string name="please_enter_from_time">Please enter From Time</string>
+    <string name="please_enter_to_time">Please enter To Time</string>
+
 
     <!--Patient Food and Exercise texts-->
     <string name="food_and_exercise">Food and Exercise</string>
@@ -1365,6 +1370,7 @@
     <string name="food">Food</string>
     <string name="exercise">Exercise</string>
     <string name="min_per_day">Minutes/Day</string>
+    <string name="minutes_bracket">(Min)</string>
     <string name="mins_per_day">&#160;min/Day</string>
     <string name="time_per_week">Times/Week</string>
     <string name="per_week">&#160;/Week</string>
