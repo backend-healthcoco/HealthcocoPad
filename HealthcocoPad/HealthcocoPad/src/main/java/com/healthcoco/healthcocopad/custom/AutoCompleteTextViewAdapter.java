@@ -25,6 +25,8 @@ import com.healthcoco.healthcocopad.bean.server.Role;
 import com.healthcoco.healthcocopad.dialogFragment.BookAppointmentDialogFragment;
 import com.healthcoco.healthcocopad.enums.AdvanceSearchOptionsType;
 import com.healthcoco.healthcocopad.enums.AutoCompleteTextViewType;
+import com.healthcoco.healthcocopad.enums.ConsumeTimeType;
+import com.healthcoco.healthcocopad.enums.QuantityType;
 import com.healthcoco.healthcocopad.listeners.AutoCompleteTextViewListener;
 import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
 import com.healthcoco.healthcocopad.utilities.Util;
@@ -266,9 +268,15 @@ public class AutoCompleteTextViewAdapter extends ArrayAdapter<Object> {
                 }
                 break;
             case QUANTITY:
+                if (object instanceof QuantityType) {
+                    QuantityType quantityType = (QuantityType) object;
+                    text = quantityType.getUnit();
+                }
+                break;
             case FREQUENCY:
-                if (object instanceof String) {
-                    text = (String) object;
+                if (object instanceof ConsumeTimeType) {
+                    ConsumeTimeType consumeTimeType = (ConsumeTimeType) object;
+                    text = getContext().getResources().getString(consumeTimeType.getTimeTitle());
                 }
                 break;
         }

@@ -1,5 +1,6 @@
 package com.healthcoco.healthcocopad.fragments;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -66,7 +67,7 @@ public class DiseaseListFragment extends HealthCocoFragment implements View.OnCl
     private HistoryFilterType filterType;
     private User user;
     private FontAwesomeButton btAddNewHistory;
-    private boolean isFromNutrition;
+    private boolean isFromAssessment;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -87,7 +88,7 @@ public class DiseaseListFragment extends HealthCocoFragment implements View.OnCl
     public void init() {
         Intent intent = mActivity.getIntent();
         int filterTypeOrdinal = intent.getIntExtra(HealthCocoConstants.TAG_HISTORY_FILTER_TYPE, 0);
-        isFromNutrition = intent.getBooleanExtra(HealthCocoConstants.TAG_IS_FROM_NUTRITION, false);
+        isFromAssessment = intent.getBooleanExtra(HealthCocoConstants.TAG_IS_FROM_ASSESSMENT, false);
         diseaseIdsList = intent.getStringArrayListExtra(HealthCocoConstants.TAG_DISEASE_IDS_LIST);
         filterType = HistoryFilterType.values()[filterTypeOrdinal];
         if (filterType != null)
@@ -182,7 +183,23 @@ public class DiseaseListFragment extends HealthCocoFragment implements View.OnCl
                     webServiceType = WebServiceType.ADD_FAMILY_HISTORY;
                     break;
             }
-            WebDataServiceImpl.getInstance(mApp).addMedicalFamilyHistory(webServiceType, Boolean.class, addMedicalFamilyHistoryRequest, this, this);
+
+            if (!isFromAssessment) {
+                WebDataServiceImpl.getInstance(mApp).addMedicalFamilyHistory(webServiceType, Boolean.class, addMedicalFamilyHistoryRequest, this, this);
+            } else {
+                ArrayList<String> diseaseArrayList = new ArrayList<>();
+                for (Disease disease : diseaseList) {
+                    if (addDiseasesList.contains(disease.getUniqueId())) {
+                        diseaseArrayList.add(disease.getDisease());
+                    }
+                }
+                addMedicalFamilyHistoryRequest.setAddDiseases(diseaseArrayList);
+                Intent data = new Intent();
+                data.putExtra(HealthCocoConstants.TAG_INTENT_DATA, Parcels.wrap(addMedicalFamilyHistoryRequest));
+                data.putExtra(HealthCocoConstants.TAG_HISTORY_FILTER_TYPE, filterType.ordinal());
+                getActivity().setResult(HealthCocoConstants.RESULT_CODE_PAST_HISTORY, data);
+                getActivity().finish();
+            }
         }
     }
 

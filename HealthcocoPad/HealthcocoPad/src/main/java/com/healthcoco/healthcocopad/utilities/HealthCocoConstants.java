@@ -124,6 +124,8 @@ public class HealthCocoConstants {
     public static final int RESULT_CODE_ADD_MEAL = 227;
     public static final int REQUEST_CODE_ADD_EXERCISE = 228;
     public static final int REQUEST_CODE_ADD_WORKING_HRS = 229;
+    public static final int RESULT_CODE_PAST_HISTORY = 230;
+    public static final int RESULT_CODE_EXISTING_MEDICATION = 231;
 
     public static final String PARAM_IS_DOCTOR_APP_TRUE = "&isDoctorApp=true";
     public static final String PARAM_SIZE = "&size=";

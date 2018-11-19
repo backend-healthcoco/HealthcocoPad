@@ -16,10 +16,10 @@
             android:layout_height="wrap_content"
             android:background="@color/white"
             android:orientation="vertical"
-            android:paddingBottom="100dp"
             android:paddingLeft="5dp"
+            android:paddingTop="5dp"
             android:paddingRight="5dp"
-            android:paddingTop="5dp">
+            android:paddingBottom="100dp">
 
 
             <LinearLayout
@@ -35,9 +35,9 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
-                    android:layout_marginBottom="@dimen/layout_margin"
                     android:layout_marginLeft="8dp"
                     android:layout_marginTop="@dimen/padding_20_dp"
+                    android:layout_marginBottom="@dimen/layout_margin"
                     android:layout_weight="1"
                     android:text="@string/past_history"
                     android:textColor="@color/black"
@@ -55,7 +55,7 @@
                     <LinearLayout
                         android:id="@+id/container_past_history"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/layout_padding"
                         android:layout_weight="1"
                         android:orientation="vertical" />
@@ -69,10 +69,10 @@
                         android:layout_marginLeft="@dimen/padding_20_dp"
                         android:background="@drawable/selector_rounded_corners_btn_blue"
                         android:minHeight="0dp"
-                        android:paddingBottom="10dp"
                         android:paddingLeft="10dp"
-                        android:paddingRight="15dp"
                         android:paddingTop="10dp"
+                        android:paddingRight="15dp"
+                        android:paddingBottom="10dp"
                         android:text="@string/icon_text_add"
                         android:textColor="@drawable/text_selector_white_blue"
                         android:textSize="@dimen/text_size_edit_otp_number"
@@ -86,8 +86,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/padding_20_dp"
-                android:layout_marginRight="@dimen/padding_20_dp"
                 android:layout_marginTop="@dimen/padding_20_dp"
+                android:layout_marginRight="@dimen/padding_20_dp"
                 android:background="@color/white"
                 android:orientation="horizontal">
 
@@ -95,9 +95,9 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
-                    android:layout_marginBottom="@dimen/layout_margin"
                     android:layout_marginLeft="8dp"
                     android:layout_marginTop="@dimen/padding_20_dp"
+                    android:layout_marginBottom="@dimen/layout_margin"
                     android:layout_weight="1"
                     android:text="@string/family_history"
                     android:textColor="@color/black"
@@ -115,7 +115,7 @@
                     <LinearLayout
                         android:id="@+id/container_family_history"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/layout_padding"
                         android:layout_weight="1"
                         android:orientation="vertical" />
@@ -129,10 +129,70 @@
                         android:layout_marginLeft="@dimen/padding_20_dp"
                         android:background="@drawable/selector_rounded_corners_btn_blue"
                         android:minHeight="0dp"
-                        android:paddingBottom="10dp"
                         android:paddingLeft="10dp"
-                        android:paddingRight="15dp"
                         android:paddingTop="10dp"
+                        android:paddingRight="15dp"
+                        android:paddingBottom="10dp"
+                        android:text="@string/icon_text_add"
+                        android:textColor="@drawable/text_selector_white_blue"
+                        android:textSize="@dimen/text_size_edit_otp_number"
+                        android:visibility="visible" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/parent_disease"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/padding_20_dp"
+                android:layout_marginTop="@dimen/padding_20_dp"
+                android:layout_marginRight="@dimen/padding_20_dp"
+                android:background="@color/white"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="@dimen/padding_20_dp"
+                    android:layout_marginBottom="@dimen/layout_margin"
+                    android:layout_weight="1"
+                    android:text="@string/existing_disease"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_floating_label" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/patient_profile_image_padding"
+                    android:layout_marginTop="@dimen/layout_padding"
+                    android:layout_weight="3"
+                    android:orientation="horizontal">
+
+
+                    <LinearLayout
+                        android:id="@+id/container_disease"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/layout_padding"
+                        android:layout_weight="1"
+                        android:orientation="vertical" />
+
+                    <com.healthcoco.healthcocopad.views.FontAwesomeButton
+                        android:id="@+id/bt_add_disease"
+                        style="?android:attr/borderlessButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:layout_marginLeft="@dimen/padding_20_dp"
+                        android:background="@drawable/selector_rounded_corners_btn_blue"
+                        android:minHeight="0dp"
+                        android:paddingLeft="10dp"
+                        android:paddingTop="10dp"
+                        android:paddingRight="15dp"
+                        android:paddingBottom="10dp"
                         android:text="@string/icon_text_add"
                         android:textColor="@drawable/text_selector_white_blue"
                         android:textSize="@dimen/text_size_edit_otp_number"
@@ -154,9 +214,9 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
-                    android:layout_marginBottom="@dimen/layout_margin"
                     android:layout_marginLeft="8dp"
                     android:layout_marginTop="@dimen/padding_20_dp"
+                    android:layout_marginBottom="@dimen/layout_margin"
                     android:layout_weight="1"
                     android:text="@string/working_days"
                     android:textColor="@color/black"
@@ -288,8 +348,78 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginBottom="@dimen/item_contact_padding"
                 android:layout_marginTop="@dimen/padding_20_dp"
+                android:layout_marginBottom="@dimen/item_contact_padding"
+                android:background="@color/grey_hint_color" />
+
+            <LinearLayout
+                android:id="@+id/parent_drug_allergy"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/padding_20_dp"
+                android:layout_marginRight="@dimen/padding_20_dp"
+                android:background="@color/white"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="@dimen/padding_20_dp"
+                    android:layout_marginBottom="@dimen/layout_margin"
+                    android:layout_weight="1"
+                    android:text="@string/drug_allergy"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_floating_label" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/patient_profile_image_padding"
+                    android:layout_marginTop="@dimen/layout_padding"
+                    android:layout_weight="3"
+                    android:orientation="horizontal">
+
+
+                    <LinearLayout
+                        android:id="@+id/container_drug_allergy"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/layout_padding"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <include layout="@layout/item_patient_detail_drugs_and_alleries" />
+
+                    </LinearLayout>
+
+                    <com.healthcoco.healthcocopad.views.FontAwesomeButton
+                        android:id="@+id/bt_add_drug_allergy"
+                        style="?android:attr/borderlessButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:layout_marginLeft="@dimen/padding_20_dp"
+                        android:background="@drawable/selector_rounded_corners_btn_blue"
+                        android:minHeight="0dp"
+                        android:paddingLeft="10dp"
+                        android:paddingTop="10dp"
+                        android:paddingRight="15dp"
+                        android:paddingBottom="10dp"
+                        android:text="@string/icon_text_add"
+                        android:textColor="@drawable/text_selector_white_blue"
+                        android:textSize="@dimen/text_size_edit_otp_number"
+                        android:visibility="visible" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/padding_20_dp"
+                android:layout_marginBottom="@dimen/item_contact_padding"
                 android:background="@color/grey_hint_color" />
 
             <LinearLayout
@@ -305,9 +435,9 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
-                    android:layout_marginBottom="@dimen/layout_margin"
                     android:layout_marginLeft="8dp"
                     android:layout_marginTop="@dimen/padding_20_dp"
+                    android:layout_marginBottom="@dimen/layout_margin"
                     android:layout_weight="1"
                     android:text="@string/addictions"
                     android:textColor="@color/black"
@@ -345,114 +475,155 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/layout_padding_5dp"
-                            android:orientation="horizontal"
-                            android:visibility="gone"
-                            android:weightSum="3">
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+
+                            <android.support.design.widget.TextInputLayout
+                                android:layout_width="@dimen/doctor_name_textview_width"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/layout_padding_5dp"
+                                android:layout_marginBottom="@dimen/layout_padding_5dp"
+                                android:gravity="center|start"
+                                android:orientation="vertical">
+
+                                <EditText
+                                    android:id="@+id/edit_type_smoking"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
+                                    android:hint="@string/type"
+                                    android:inputType="textEmailAddress"
+                                    android:paddingLeft="@dimen/layout_padding"
+                                    android:paddingTop="@dimen/layout_padding_5dp"
+                                    android:paddingBottom="@dimen/login_edit_text_bottom_padding"
+                                    android:singleLine="true"
+                                    android:textColor="@color/black"
+                                    android:textColorHint="@color/grey_hint_color"
+                                    android:textSize="@dimen/text_size_add_visits_lable"
+                                    android:visibility="visible" />
+                            </android.support.design.widget.TextInputLayout>
+
 
                             <LinearLayout
-                                android:layout_width="0dp"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginRight="@dimen/margin_left_right_add_vital_signs"
-                                android:layout_weight="1.2"
-                                android:gravity="center|start"
-                                android:orientation="horizontal">
+                                android:layout_marginTop="@dimen/layout_padding_5dp"
+                                android:orientation="horizontal"
+                                android:visibility="visible"
+                                android:weightSum="3">
 
-                                <android.support.design.widget.TextInputLayout
+
+                                <LinearLayout
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
-                                    android:layout_weight="1"
+                                    android:layout_marginRight="@dimen/margin_left_right_add_vital_signs"
+                                    android:layout_weight="1.4"
                                     android:gravity="center|start"
-                                    android:orientation="vertical">
+                                    android:orientation="horizontal">
 
-                                    <EditText
-                                        android:id="@+id/edit_quantity_smoking"
-                                        android:layout_width="match_parent"
+                                    <android.support.design.widget.TextInputLayout
+                                        android:layout_width="0dp"
                                         android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:gravity="center|start"
+                                        android:orientation="vertical">
+
+                                        <EditText
+                                            android:id="@+id/edit_quantity_smoking"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
+                                            android:hint="@string/quantity"
+                                            android:inputType="textEmailAddress"
+                                            android:paddingLeft="@dimen/layout_padding"
+                                            android:paddingTop="@dimen/layout_padding_5dp"
+                                            android:paddingBottom="@dimen/login_edit_text_bottom_padding"
+                                            android:singleLine="true"
+                                            android:textColor="@color/black"
+                                            android:textColorHint="@color/grey_hint_color"
+                                            android:textSize="@dimen/text_size_add_visits_lable" />
+                                    </android.support.design.widget.TextInputLayout>
+
+                                    <com.healthcoco.healthcocopad.views.CustomAutoCompleteTextView
+                                        android:id="@+id/tv_quantity_smoking"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="@dimen/layout_padding"
+                                        android:layout_weight="1"
                                         android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
-                                        android:hint="@string/quantity"
-                                        android:inputType="textEmailAddress"
-                                        android:paddingBottom="@dimen/login_edit_text_bottom_padding"
+                                        android:clickable="true"
+                                        android:drawableEnd="@drawable/arrow_down_drug"
+                                        android:editable="false"
+                                        android:focusable="false"
                                         android:paddingLeft="@dimen/layout_padding"
-                                        android:paddingTop="@dimen/layout_padding_5dp"
+                                        android:paddingTop="@dimen/item_contact_padding"
+                                        android:paddingRight="@dimen/layout_padding_5dp"
+                                        android:paddingBottom="@dimen/login_edit_text_bottom_padding"
                                         android:singleLine="true"
+                                        android:text="@string/gm"
                                         android:textColor="@color/black"
                                         android:textColorHint="@color/grey_hint_color"
                                         android:textSize="@dimen/text_size_add_visits_lable" />
-                                </android.support.design.widget.TextInputLayout>
 
-                                <com.healthcoco.healthcocopad.views.CustomAutoCompleteTextView
-                                    android:id="@+id/tv_quantity_smoking"
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="0.7"
-                                    android:background="@color/transparent"
-                                    android:clickable="true"
-                                    android:editable="false"
-                                    android:focusable="false"
-                                    android:paddingLeft="@dimen/layout_padding"
-                                    android:paddingRight="@dimen/layout_padding"
-                                    android:paddingTop="@dimen/layout_padding_5dp"
-                                    android:singleLine="true"
-                                    android:text="@string/gms"
-                                    android:textColor="@color/black"
-                                    android:textColorHint="@color/grey_hint_color"
-                                    android:textSize="@dimen/text_size_add_visits_lable" />
+                                </LinearLayout>
 
 
-                            </LinearLayout>
-
-
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="@dimen/margin_left_right_add_vital_signs"
-                                android:layout_marginRight="@dimen/margin_left_right_add_vital_signs"
-                                android:layout_weight="1.2"
-                                android:gravity="center|start"
-                                android:orientation="horizontal">
-
-                                <android.support.design.widget.TextInputLayout
+                                <LinearLayout
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="@dimen/margin_left_right_add_vital_signs"
-                                    android:layout_weight="1"
-                                    android:gravity="center|start">
+                                    android:layout_marginRight="@dimen/margin_left_right_add_vital_signs"
+                                    android:layout_weight="1.4"
+                                    android:gravity="center|start"
+                                    android:orientation="horizontal">
 
-                                    <EditText
-                                        android:id="@+id/edit_frequency_smoking"
-                                        android:layout_width="match_parent"
+                                    <android.support.design.widget.TextInputLayout
+                                        android:layout_width="0dp"
                                         android:layout_height="wrap_content"
+                                        android:layout_marginLeft="@dimen/margin_left_right_add_vital_signs"
+                                        android:layout_weight="1"
+                                        android:gravity="center|start">
+
+                                        <EditText
+                                            android:id="@+id/edit_frequency_smoking"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
+                                            android:hint="@string/freq"
+                                            android:inputType="textEmailAddress"
+                                            android:paddingLeft="@dimen/layout_padding"
+                                            android:paddingTop="@dimen/layout_padding_5dp"
+                                            android:paddingBottom="@dimen/login_edit_text_bottom_padding"
+                                            android:singleLine="true"
+                                            android:textColor="@color/black"
+                                            android:textColorHint="@color/grey_hint_color"
+                                            android:textSize="@dimen/text_size_add_visits_lable" />
+                                    </android.support.design.widget.TextInputLayout>
+
+
+                                    <com.healthcoco.healthcocopad.views.CustomAutoCompleteTextView
+                                        android:id="@+id/tv_frequency_smoking"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="@dimen/layout_padding"
+                                        android:layout_weight="1"
                                         android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
-                                        android:hint="@string/freq"
-                                        android:inputType="textEmailAddress"
-                                        android:paddingBottom="@dimen/login_edit_text_bottom_padding"
+                                        android:clickable="true"
+                                        android:drawableEnd="@drawable/arrow_down_drug"
+                                        android:editable="false"
+                                        android:focusable="false"
                                         android:paddingLeft="@dimen/layout_padding"
-                                        android:paddingTop="@dimen/layout_padding_5dp"
+                                        android:paddingTop="@dimen/item_contact_padding"
+                                        android:paddingRight="@dimen/layout_padding_5dp"
+                                        android:paddingBottom="@dimen/login_edit_text_bottom_padding"
                                         android:singleLine="true"
+                                        android:text="@string/daily"
                                         android:textColor="@color/black"
                                         android:textColorHint="@color/grey_hint_color"
                                         android:textSize="@dimen/text_size_add_visits_lable" />
-                                </android.support.design.widget.TextInputLayout>
 
-
-                                <com.healthcoco.healthcocopad.views.CustomAutoCompleteTextView
-                                    android:id="@+id/tv_frequency_smoking"
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="0.8"
-                                    android:background="@color/transparent"
-                                    android:clickable="true"
-                                    android:editable="false"
-                                    android:focusable="false"
-                                    android:paddingLeft="@dimen/layout_padding"
-                                    android:paddingRight="@dimen/padding_20_dp"
-                                    android:paddingTop="@dimen/layout_padding_5dp"
-                                    android:singleLine="true"
-                                    android:text="@string/days_per_month"
-                                    android:textColor="@color/black"
-                                    android:textColorHint="@color/grey_hint_color"
-                                    android:textSize="@dimen/text_size_add_visits_lable" />
-
+                                </LinearLayout>
                             </LinearLayout>
 
                         </LinearLayout>
@@ -483,116 +654,157 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/layout_padding_5dp"
-                            android:orientation="horizontal"
-                            android:visibility="gone"
-                            android:weightSum="3">
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+
+                            <android.support.design.widget.TextInputLayout
+                                android:layout_width="@dimen/doctor_name_textview_width"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/layout_padding_5dp"
+                                android:layout_marginBottom="@dimen/layout_padding_5dp"
+                                android:gravity="center|start"
+                                android:orientation="vertical">
+
+                                <EditText
+                                    android:id="@+id/edit_type_alcohol"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
+                                    android:hint="@string/type"
+                                    android:inputType="textEmailAddress"
+                                    android:paddingLeft="@dimen/layout_padding"
+                                    android:paddingTop="@dimen/layout_padding_5dp"
+                                    android:paddingBottom="@dimen/login_edit_text_bottom_padding"
+                                    android:singleLine="true"
+                                    android:textColor="@color/black"
+                                    android:textColorHint="@color/grey_hint_color"
+                                    android:textSize="@dimen/text_size_add_visits_lable"
+                                    android:visibility="visible" />
+                            </android.support.design.widget.TextInputLayout>
+
 
                             <LinearLayout
-                                android:layout_width="0dp"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginRight="@dimen/margin_left_right_add_vital_signs"
-                                android:layout_weight="1.2"
-                                android:gravity="center|start"
-                                android:orientation="horizontal">
+                                android:layout_marginTop="@dimen/layout_padding_5dp"
+                                android:orientation="horizontal"
+                                android:weightSum="3">
 
-                                <android.support.design.widget.TextInputLayout
+                                <LinearLayout
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
-                                    android:layout_weight="1"
+                                    android:layout_marginRight="@dimen/margin_left_right_add_vital_signs"
+                                    android:layout_weight="1.4"
                                     android:gravity="center|start"
-                                    android:orientation="vertical">
+                                    android:orientation="horizontal">
 
-                                    <EditText
-                                        android:id="@+id/edit_quantity_alcohol"
-                                        android:layout_width="match_parent"
+                                    <android.support.design.widget.TextInputLayout
+                                        android:layout_width="0dp"
                                         android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:gravity="center|start"
+                                        android:orientation="vertical">
+
+                                        <EditText
+                                            android:id="@+id/edit_quantity_alcohol"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
+                                            android:hint="@string/quantity"
+                                            android:inputType="textEmailAddress"
+                                            android:paddingLeft="@dimen/layout_padding"
+                                            android:paddingTop="@dimen/layout_padding_5dp"
+                                            android:paddingBottom="@dimen/login_edit_text_bottom_padding"
+                                            android:singleLine="true"
+                                            android:textColor="@color/black"
+                                            android:textColorHint="@color/grey_hint_color"
+                                            android:textSize="@dimen/text_size_add_visits_lable" />
+                                    </android.support.design.widget.TextInputLayout>
+
+
+                                    <com.healthcoco.healthcocopad.views.CustomAutoCompleteTextView
+                                        android:id="@+id/tv_quantity_alcohol"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="@dimen/layout_padding"
+                                        android:layout_weight="1"
                                         android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
-                                        android:hint="@string/quantity"
-                                        android:inputType="textEmailAddress"
-                                        android:paddingBottom="@dimen/login_edit_text_bottom_padding"
+                                        android:clickable="true"
+                                        android:drawableEnd="@drawable/arrow_down_drug"
+                                        android:editable="false"
+                                        android:focusable="false"
                                         android:paddingLeft="@dimen/layout_padding"
-                                        android:paddingTop="@dimen/layout_padding_5dp"
+                                        android:paddingTop="@dimen/item_contact_padding"
+                                        android:paddingRight="@dimen/layout_padding_5dp"
+                                        android:paddingBottom="@dimen/login_edit_text_bottom_padding"
                                         android:singleLine="true"
+                                        android:text="@string/gm"
                                         android:textColor="@color/black"
                                         android:textColorHint="@color/grey_hint_color"
                                         android:textSize="@dimen/text_size_add_visits_lable" />
-                                </android.support.design.widget.TextInputLayout>
-
-                                <com.healthcoco.healthcocopad.views.CustomAutoCompleteTextView
-                                    android:id="@+id/tv_quantity_alcohol"
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="0.7"
-                                    android:background="@color/transparent"
-                                    android:clickable="true"
-                                    android:editable="false"
-                                    android:focusable="false"
-                                    android:paddingLeft="@dimen/layout_padding"
-                                    android:paddingRight="@dimen/layout_padding"
-                                    android:paddingTop="@dimen/layout_padding_5dp"
-                                    android:singleLine="true"
-                                    android:text="@string/days_per_month"
-                                    android:textColor="@color/black"
-                                    android:textColorHint="@color/grey_hint_color"
-                                    android:textSize="@dimen/text_size_add_visits_lable" />
 
 
-                            </LinearLayout>
+                                </LinearLayout>
 
 
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="@dimen/margin_left_right_add_vital_signs"
-                                android:layout_marginRight="@dimen/margin_left_right_add_vital_signs"
-                                android:layout_weight="1.2"
-                                android:gravity="center|start"
-                                android:orientation="horizontal">
-
-                                <android.support.design.widget.TextInputLayout
+                                <LinearLayout
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="@dimen/margin_left_right_add_vital_signs"
-                                    android:layout_weight="1"
-                                    android:gravity="center|start">
+                                    android:layout_marginRight="@dimen/margin_left_right_add_vital_signs"
+                                    android:layout_weight="1.4"
+                                    android:gravity="center|start"
+                                    android:orientation="horizontal">
 
-                                    <EditText
-                                        android:id="@+id/edit_frequency_alcohol"
-                                        android:layout_width="match_parent"
+                                    <android.support.design.widget.TextInputLayout
+                                        android:layout_width="0dp"
                                         android:layout_height="wrap_content"
+                                        android:layout_marginLeft="@dimen/margin_left_right_add_vital_signs"
+                                        android:layout_weight="1"
+                                        android:gravity="center|start">
+
+                                        <EditText
+                                            android:id="@+id/edit_frequency_alcohol"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
+                                            android:hint="@string/freq"
+                                            android:inputType="textEmailAddress"
+                                            android:paddingLeft="@dimen/layout_padding"
+                                            android:paddingTop="@dimen/layout_padding_5dp"
+                                            android:paddingBottom="@dimen/login_edit_text_bottom_padding"
+                                            android:singleLine="true"
+                                            android:textColor="@color/black"
+                                            android:textColorHint="@color/grey_hint_color"
+                                            android:textSize="@dimen/text_size_add_visits_lable" />
+                                    </android.support.design.widget.TextInputLayout>
+
+
+                                    <com.healthcoco.healthcocopad.views.CustomAutoCompleteTextView
+                                        android:id="@+id/tv_frequency_alcohol"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="@dimen/layout_padding"
+                                        android:layout_weight="1"
                                         android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
-                                        android:hint="@string/freq"
-                                        android:inputType="textEmailAddress"
-                                        android:paddingBottom="@dimen/login_edit_text_bottom_padding"
+                                        android:clickable="true"
+                                        android:drawableEnd="@drawable/arrow_down_drug"
+                                        android:editable="false"
+                                        android:focusable="false"
                                         android:paddingLeft="@dimen/layout_padding"
-                                        android:paddingTop="@dimen/layout_padding_5dp"
+                                        android:paddingTop="@dimen/item_contact_padding"
+                                        android:paddingRight="@dimen/layout_padding_5dp"
+                                        android:paddingBottom="@dimen/login_edit_text_bottom_padding"
                                         android:singleLine="true"
+                                        android:text="@string/daily"
                                         android:textColor="@color/black"
                                         android:textColorHint="@color/grey_hint_color"
                                         android:textSize="@dimen/text_size_add_visits_lable" />
-                                </android.support.design.widget.TextInputLayout>
 
-
-                                <com.healthcoco.healthcocopad.views.CustomAutoCompleteTextView
-                                    android:id="@+id/tv_frequency_alcohol"
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="0.8"
-                                    android:background="@color/transparent"
-                                    android:clickable="true"
-                                    android:editable="false"
-                                    android:focusable="false"
-                                    android:paddingLeft="@dimen/layout_padding"
-                                    android:paddingRight="@dimen/layout_padding"
-                                    android:paddingTop="@dimen/layout_padding_5dp"
-                                    android:singleLine="true"
-                                    android:text="@string/days_per_month"
-                                    android:textColor="@color/black"
-                                    android:textColorHint="@color/grey_hint_color"
-                                    android:textSize="@dimen/text_size_add_visits_lable" />
+                                </LinearLayout>
 
                             </LinearLayout>
-
                         </LinearLayout>
 
                     </LinearLayout>
@@ -621,116 +833,155 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/layout_padding_5dp"
-                            android:orientation="horizontal"
-                            android:visibility="gone"
-                            android:weightSum="3">
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+
+                            <android.support.design.widget.TextInputLayout
+                                android:layout_width="@dimen/doctor_name_textview_width"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/layout_padding_5dp"
+                                android:layout_marginBottom="@dimen/layout_padding_5dp"
+                                android:gravity="center|start"
+                                android:orientation="vertical">
+
+                                <EditText
+                                    android:id="@+id/edit_type_tobacco"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
+                                    android:hint="@string/type"
+                                    android:inputType="textEmailAddress"
+                                    android:paddingLeft="@dimen/layout_padding"
+                                    android:paddingTop="@dimen/layout_padding_5dp"
+                                    android:paddingBottom="@dimen/login_edit_text_bottom_padding"
+                                    android:singleLine="true"
+                                    android:textColor="@color/black"
+                                    android:textColorHint="@color/grey_hint_color"
+                                    android:textSize="@dimen/text_size_add_visits_lable"
+                                    android:visibility="visible" />
+                            </android.support.design.widget.TextInputLayout>
 
                             <LinearLayout
-                                android:layout_width="0dp"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginRight="@dimen/margin_left_right_add_vital_signs"
-                                android:layout_weight="1.2"
-                                android:gravity="center|start"
-                                android:orientation="horizontal">
+                                android:layout_marginTop="@dimen/layout_padding_5dp"
+                                android:orientation="horizontal"
+                                android:weightSum="3">
 
-                                <android.support.design.widget.TextInputLayout
+                                <LinearLayout
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
-                                    android:layout_weight="1"
+                                    android:layout_marginRight="@dimen/margin_left_right_add_vital_signs"
+                                    android:layout_weight="1.4"
                                     android:gravity="center|start"
-                                    android:orientation="vertical">
+                                    android:orientation="horizontal">
 
-                                    <EditText
-                                        android:id="@+id/edit_quantity_tobacco"
-                                        android:layout_width="match_parent"
+                                    <android.support.design.widget.TextInputLayout
+                                        android:layout_width="0dp"
                                         android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:gravity="center|start"
+                                        android:orientation="vertical">
+
+                                        <EditText
+                                            android:id="@+id/edit_quantity_tobacco"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
+                                            android:hint="@string/quantity"
+                                            android:inputType="textEmailAddress"
+                                            android:paddingLeft="@dimen/layout_padding"
+                                            android:paddingTop="@dimen/layout_padding_5dp"
+                                            android:paddingBottom="@dimen/login_edit_text_bottom_padding"
+                                            android:singleLine="true"
+                                            android:textColor="@color/black"
+                                            android:textColorHint="@color/grey_hint_color"
+                                            android:textSize="@dimen/text_size_add_visits_lable" />
+                                    </android.support.design.widget.TextInputLayout>
+
+                                    <com.healthcoco.healthcocopad.views.CustomAutoCompleteTextView
+                                        android:id="@+id/tv_quantity_tobacco"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="@dimen/layout_padding"
+                                        android:layout_weight="1"
                                         android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
-                                        android:hint="@string/quantity"
-                                        android:inputType="textEmailAddress"
-                                        android:paddingBottom="@dimen/login_edit_text_bottom_padding"
+                                        android:clickable="true"
+                                        android:drawableEnd="@drawable/arrow_down_drug"
+                                        android:editable="false"
+                                        android:focusable="false"
                                         android:paddingLeft="@dimen/layout_padding"
-                                        android:paddingTop="@dimen/layout_padding_5dp"
+                                        android:paddingTop="@dimen/item_contact_padding"
+                                        android:paddingRight="@dimen/layout_padding_5dp"
+                                        android:paddingBottom="@dimen/login_edit_text_bottom_padding"
                                         android:singleLine="true"
+                                        android:text="@string/gm"
                                         android:textColor="@color/black"
                                         android:textColorHint="@color/grey_hint_color"
                                         android:textSize="@dimen/text_size_add_visits_lable" />
-                                </android.support.design.widget.TextInputLayout>
-
-                                <com.healthcoco.healthcocopad.views.CustomAutoCompleteTextView
-                                    android:id="@+id/tv_quantity_tobacco"
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="0.7"
-                                    android:background="@color/transparent"
-                                    android:clickable="true"
-                                    android:editable="false"
-                                    android:focusable="false"
-                                    android:paddingLeft="@dimen/layout_padding"
-                                    android:paddingRight="@dimen/layout_padding"
-                                    android:paddingTop="@dimen/layout_padding_5dp"
-                                    android:singleLine="true"
-                                    android:text="@string/days_per_month"
-                                    android:textColor="@color/black"
-                                    android:textColorHint="@color/grey_hint_color"
-                                    android:textSize="@dimen/text_size_add_visits_lable" />
 
 
-                            </LinearLayout>
+                                </LinearLayout>
 
 
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="@dimen/margin_left_right_add_vital_signs"
-                                android:layout_marginRight="@dimen/margin_left_right_add_vital_signs"
-                                android:layout_weight="1.2"
-                                android:gravity="center|start"
-                                android:orientation="horizontal">
-
-                                <android.support.design.widget.TextInputLayout
+                                <LinearLayout
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="@dimen/margin_left_right_add_vital_signs"
-                                    android:layout_weight="1"
-                                    android:gravity="center|start">
+                                    android:layout_marginRight="@dimen/margin_left_right_add_vital_signs"
+                                    android:layout_weight="1.4"
+                                    android:gravity="center|start"
+                                    android:orientation="horizontal">
 
-                                    <EditText
-                                        android:id="@+id/edit_frequency_tobacco"
-                                        android:layout_width="match_parent"
+                                    <android.support.design.widget.TextInputLayout
+                                        android:layout_width="0dp"
                                         android:layout_height="wrap_content"
+                                        android:layout_marginLeft="@dimen/margin_left_right_add_vital_signs"
+                                        android:layout_weight="1"
+                                        android:gravity="center|start">
+
+                                        <EditText
+                                            android:id="@+id/edit_frequency_tobacco"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
+                                            android:hint="@string/freq"
+                                            android:inputType="textEmailAddress"
+                                            android:paddingLeft="@dimen/layout_padding"
+                                            android:paddingTop="@dimen/layout_padding_5dp"
+                                            android:paddingBottom="@dimen/login_edit_text_bottom_padding"
+                                            android:singleLine="true"
+                                            android:textColor="@color/black"
+                                            android:textColorHint="@color/grey_hint_color"
+                                            android:textSize="@dimen/text_size_add_visits_lable" />
+                                    </android.support.design.widget.TextInputLayout>
+
+
+                                    <com.healthcoco.healthcocopad.views.CustomAutoCompleteTextView
+                                        android:id="@+id/tv_frequency_tobacco"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="@dimen/layout_padding"
+                                        android:layout_weight="1"
                                         android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
-                                        android:hint="@string/freq"
-                                        android:inputType="textEmailAddress"
-                                        android:paddingBottom="@dimen/login_edit_text_bottom_padding"
+                                        android:clickable="true"
+                                        android:drawableEnd="@drawable/arrow_down_drug"
+                                        android:editable="false"
+                                        android:focusable="false"
                                         android:paddingLeft="@dimen/layout_padding"
-                                        android:paddingTop="@dimen/layout_padding_5dp"
+                                        android:paddingTop="@dimen/item_contact_padding"
+                                        android:paddingRight="@dimen/layout_padding_5dp"
+                                        android:paddingBottom="@dimen/login_edit_text_bottom_padding"
                                         android:singleLine="true"
+                                        android:text="@string/daily"
                                         android:textColor="@color/black"
                                         android:textColorHint="@color/grey_hint_color"
                                         android:textSize="@dimen/text_size_add_visits_lable" />
-                                </android.support.design.widget.TextInputLayout>
 
-
-                                <com.healthcoco.healthcocopad.views.CustomAutoCompleteTextView
-                                    android:id="@+id/tv_frequency_tobacco"
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="0.8"
-                                    android:background="@color/transparent"
-                                    android:clickable="true"
-                                    android:editable="false"
-                                    android:focusable="false"
-                                    android:paddingLeft="@dimen/layout_padding"
-                                    android:paddingRight="@dimen/layout_padding"
-                                    android:paddingTop="@dimen/layout_padding_5dp"
-                                    android:singleLine="true"
-                                    android:text="@string/days_per_month"
-                                    android:textColor="@color/black"
-                                    android:textColorHint="@color/grey_hint_color"
-                                    android:textSize="@dimen/text_size_add_visits_lable" />
+                                </LinearLayout>
 
                             </LinearLayout>
-
                         </LinearLayout>
 
                     </LinearLayout>
@@ -742,8 +993,8 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginBottom="@dimen/item_contact_padding"
                 android:layout_marginTop="@dimen/padding_20_dp"
+                android:layout_marginBottom="@dimen/item_contact_padding"
                 android:background="@color/grey_hint_color" />
 
             <LinearLayout
@@ -751,8 +1002,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/padding_20_dp"
-                android:layout_marginRight="@dimen/padding_20_dp"
                 android:layout_marginTop="@dimen/padding_20_dp"
+                android:layout_marginRight="@dimen/padding_20_dp"
                 android:background="@color/white"
                 android:orientation="horizontal">
 
@@ -794,8 +1045,8 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginRight="@dimen/fab_margin_left"
                                 android:paddingLeft="@dimen/layout_padding"
-                                android:paddingRight="@dimen/fab_margin_left"
                                 android:paddingTop="@dimen/layout_padding"
+                                android:paddingRight="@dimen/fab_margin_left"
                                 android:tag="@string/yes"
                                 android:text="@string/yes"
                                 android:textColor="@color/black"
@@ -808,8 +1059,8 @@
                                 android:layout_height="wrap_content"
                                 android:checked="false"
                                 android:paddingLeft="@dimen/layout_padding"
-                                android:paddingRight="@dimen/fab_margin_left"
                                 android:paddingTop="@dimen/layout_padding"
+                                android:paddingRight="@dimen/fab_margin_left"
                                 android:tag="@string/no"
                                 android:text="@string/no"
                                 android:textColor="@color/black"
@@ -827,8 +1078,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/padding_20_dp"
-                android:layout_marginRight="@dimen/padding_20_dp"
                 android:layout_marginTop="@dimen/padding_20_dp"
+                android:layout_marginRight="@dimen/padding_20_dp"
                 android:background="@color/white"
                 android:orientation="horizontal">
 
@@ -870,8 +1121,8 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginRight="@dimen/fab_margin_left"
                                 android:paddingLeft="@dimen/layout_padding"
-                                android:paddingRight="@dimen/fab_margin_left"
                                 android:paddingTop="@dimen/edit_text_patient_registration_padding"
+                                android:paddingRight="@dimen/fab_margin_left"
                                 android:tag="@string/yes"
                                 android:text="@string/yes"
                                 android:textColor="@color/black"
@@ -884,8 +1135,8 @@
                                 android:layout_height="wrap_content"
                                 android:checked="false"
                                 android:paddingLeft="@dimen/layout_padding"
-                                android:paddingRight="@dimen/fab_margin_left"
                                 android:paddingTop="@dimen/edit_text_patient_registration_padding"
+                                android:paddingRight="@dimen/fab_margin_left"
                                 android:tag="@string/no"
                                 android:text="@string/no"
                                 android:textColor="@color/black"
@@ -904,8 +1155,8 @@
                                 android:id="@+id/edit_reason"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginRight="@dimen/width_doctor_profile"
                                 android:layout_marginTop="@dimen/layout_padding"
+                                android:layout_marginRight="@dimen/width_doctor_profile"
                                 android:background="@color/white_off"
                                 android:gravity="start"
                                 android:hint="@string/write_a_reason"
@@ -925,8 +1176,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/padding_20_dp"
-                android:layout_marginRight="@dimen/padding_20_dp"
                 android:layout_marginTop="@dimen/padding_20_dp"
+                android:layout_marginRight="@dimen/padding_20_dp"
                 android:background="@color/white"
                 android:orientation="horizontal">
 
@@ -968,8 +1219,8 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginRight="@dimen/fab_margin_left"
                                 android:paddingLeft="@dimen/layout_padding"
-                                android:paddingRight="@dimen/fab_margin_left"
                                 android:paddingTop="@dimen/edit_text_patient_registration_padding"
+                                android:paddingRight="@dimen/fab_margin_left"
                                 android:tag="@string/yes"
                                 android:text="@string/yes"
                                 android:textColor="@color/black"
@@ -982,8 +1233,8 @@
                                 android:layout_height="wrap_content"
                                 android:checked="false"
                                 android:paddingLeft="@dimen/layout_padding"
-                                android:paddingRight="@dimen/fab_margin_left"
                                 android:paddingTop="@dimen/edit_text_patient_registration_padding"
+                                android:paddingRight="@dimen/fab_margin_left"
                                 android:tag="@string/no"
                                 android:text="@string/no"
                                 android:textColor="@color/black"
@@ -995,7 +1246,161 @@
                 </LinearLayout>
             </LinearLayout>
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/padding_20_dp"
+                android:layout_marginBottom="@dimen/item_contact_padding"
+                android:background="@color/grey_hint_color" />
 
+            <LinearLayout
+                android:id="@+id/parent_food_allergy"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/padding_20_dp"
+                android:layout_marginRight="@dimen/padding_20_dp"
+                android:background="@color/white"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="@dimen/padding_20_dp"
+                    android:layout_marginBottom="@dimen/layout_margin"
+                    android:layout_weight="1"
+                    android:text="@string/food_allergy"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_floating_label" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/patient_profile_image_padding"
+                    android:layout_marginTop="@dimen/layout_padding"
+                    android:layout_weight="3"
+                    android:orientation="horizontal">
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/layout_padding"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:id="@+id/container_food_allergy"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/layout_padding"
+                            android:layout_weight="1"
+                            android:orientation="vertical" />
+
+                        <EditText
+                            android:id="@+id/edit_food_allergy"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/layout_padding"
+                            android:layout_marginRight="@dimen/layout_padding"
+                            android:background="@color/white_off"
+                            android:gravity="start"
+                            android:hint="@string/allergy"
+                            android:minLines="3"
+                            android:padding="10dp"
+                            android:textSize="@dimen/text_size_report_detail_title_description"
+                            android:visibility="gone" />
+
+                    </LinearLayout>
+
+                    <com.healthcoco.healthcocopad.views.FontAwesomeButton
+                        android:id="@+id/bt_add_food_allergy"
+                        style="?android:attr/borderlessButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:layout_marginLeft="@dimen/padding_20_dp"
+                        android:background="@drawable/selector_rounded_corners_btn_blue"
+                        android:minHeight="0dp"
+                        android:paddingLeft="10dp"
+                        android:paddingTop="10dp"
+                        android:paddingRight="15dp"
+                        android:paddingBottom="10dp"
+                        android:text="@string/icon_text_add"
+                        android:textColor="@drawable/text_selector_white_blue"
+                        android:textSize="@dimen/text_size_edit_otp_number"
+                        android:visibility="visible" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/padding_20_dp"
+                android:layout_marginBottom="@dimen/item_contact_padding"
+                android:background="@color/grey_hint_color" />
+
+            <LinearLayout
+                android:id="@+id/parent_existing_medication"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/padding_20_dp"
+                android:layout_marginRight="@dimen/padding_20_dp"
+                android:background="@color/white"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="@dimen/padding_20_dp"
+                    android:layout_marginBottom="@dimen/layout_margin"
+                    android:layout_weight="1"
+                    android:text="@string/existing_medication"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_floating_label" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/patient_profile_image_padding"
+                    android:layout_marginTop="@dimen/layout_padding"
+                    android:layout_weight="3"
+                    android:orientation="horizontal">
+
+
+                    <LinearLayout
+                        android:id="@+id/container_existing_medication"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/layout_padding"
+                        android:layout_weight="1"
+                        android:orientation="vertical" />
+
+
+                    <com.healthcoco.healthcocopad.views.FontAwesomeButton
+                        android:id="@+id/bt_add_existing_medication"
+                        style="?android:attr/borderlessButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:layout_marginLeft="@dimen/padding_20_dp"
+                        android:background="@drawable/selector_rounded_corners_btn_blue"
+                        android:minHeight="0dp"
+                        android:paddingLeft="10dp"
+                        android:paddingTop="10dp"
+                        android:paddingRight="15dp"
+                        android:paddingBottom="10dp"
+                        android:text="@string/icon_text_add"
+                        android:textColor="@drawable/text_selector_white_blue"
+                        android:textSize="@dimen/text_size_edit_otp_number"
+                        android:visibility="visible" />
+
+                </LinearLayout>
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

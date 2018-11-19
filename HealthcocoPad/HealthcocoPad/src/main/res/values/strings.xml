@@ -1413,6 +1413,13 @@
 
     <!--Patient Medical Information texts-->
     <string name="medical_information">Medical Information</string>
+    <string name="existing_disease">Existing Disease</string>
+    <string name="existing_medication">Existing Medication</string>
+    <string name="food_allergy">Food and Allergy</string>
+    <string name="daily">Daily</string>
+    <string name="weekly">Weekly</string>
+    <string name="monthly">Monthly</string>
+    <string name="yearly">Yearly</string>
 
 
     <!--Add Ingredient texts-->

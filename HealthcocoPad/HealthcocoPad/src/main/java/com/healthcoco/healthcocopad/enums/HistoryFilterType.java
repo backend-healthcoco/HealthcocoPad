@@ -11,7 +11,8 @@ public enum HistoryFilterType {
     CLINICALNOTES("CLINICAL_NOTES", R.string.clinical_notes),
     ALL("ALL", 0),
     MEDICAL_HISTORY("", R.string.past_history),
-    FAMILY_HISTORY("", R.string.family_history);
+    FAMILY_HISTORY("", R.string.family_history),
+    DISEASE("", R.string.existing_disease);
 
     private final String data;
     private final int actionbarId;

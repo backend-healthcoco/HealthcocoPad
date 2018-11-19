@@ -13,9 +13,9 @@ import java.util.List;
  */
 @Parcel
 public class DrugsAndAllergies extends SugarRecord {
+    protected String drugIdsJsonString;
     @Ignore
-    List<Drug> drugs;
-    private String drugIdsJsonString;
+    private List<Drug> drugs;
     private String allergies;
     @Unique
     private String patientId;

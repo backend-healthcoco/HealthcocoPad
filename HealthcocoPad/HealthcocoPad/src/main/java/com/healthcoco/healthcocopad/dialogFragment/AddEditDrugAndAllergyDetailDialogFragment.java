@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -66,8 +67,10 @@ public class AddEditDrugAndAllergyDetailDialogFragment extends HealthCocoDialogF
         GsonRequest.ErrorListener, Response.Listener<VolleyResponseBean>, TextWatcher, LocalDoInBackgroundListenerOptimised,
         SelectDrugItemClickListener, LoadMorePageListener, SelectedDrugsListItemListener {
     public static final String TAG_DRUGS_AND_ALLERGIES = "drugsAndAllergies";
+    public static final String TAG_DRUGS_AND_ALLERGIES_ASSESSMENT = "drugsAndAllergiesAssessment";
     private EditText etAllergy;
     private ListView lvDrugs;
+    private LinearLayout layoutAllergy;
     private EditText editSearch;
     private static final int MAX_SIZE = 25;
     private int PAGE_NUMBER = 0;
@@ -85,6 +88,8 @@ public class AddEditDrugAndAllergyDetailDialogFragment extends HealthCocoDialogF
     private HistoryDetailsResponse historyDetailsResponse;
     private RegisteredPatientDetailsUpdated selectedPatient;
     private User user;
+    private boolean isFromAssessment;
+    private boolean isFromMedication;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -96,7 +101,7 @@ public class AddEditDrugAndAllergyDetailDialogFragment extends HealthCocoDialogF
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        setWidthHeight(0.50, 0.80);
+        setWidthHeight(0.70, 0.85);
         init();
         showLoadingOverlay(true);
         new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_FRAGMENT_INITIALISATION_DATA, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
@@ -123,6 +128,9 @@ public class AddEditDrugAndAllergyDetailDialogFragment extends HealthCocoDialogF
 
     private void getDataFromIntent() {
         historyDetailsResponse = Parcels.unwrap(getArguments().getParcelable(TAG_DRUGS_AND_ALLERGIES));
+        DrugsAndAllergies drugsAllergies = Parcels.unwrap(getArguments().getParcelable(TAG_DRUGS_AND_ALLERGIES_ASSESSMENT));
+        isFromAssessment = getArguments().getBoolean(HealthCocoConstants.TAG_IS_FROM_ASSESSMENT, false);
+        isFromMedication = getArguments().getBoolean(HealthCocoConstants.TAG_DRUG_DETAILS, false);
         if (historyDetailsResponse != null && historyDetailsResponse.getDrugsAndAllergies() != null) {
             DrugsAndAllergies drugsAndAllergies = historyDetailsResponse.getDrugsAndAllergies();
             if (drugsAndAllergies != null) {
@@ -137,11 +145,28 @@ public class AddEditDrugAndAllergyDetailDialogFragment extends HealthCocoDialogF
                     notifyAdapter(new ArrayList<DrugItem>(drugsListHashMap.values()));
                 }
             }
+        } else if (drugsAllergies != null) {
+            etAllergy.setText(Util.getValidatedValue(drugsAllergies.getAllergies()));
+            List<Drug> drugs = drugsAllergies.getDrugs();
+            if (!Util.isNullOrEmptyList(drugs)) {
+                for (Drug drug : drugs) {
+                    DrugItem drugItem = new DrugItem();
+                    drugItem.setDrug(drug);
+                    drugsListHashMap.put(drug.getUniqueId(), drugItem);
+                }
+                notifyAdapter(new ArrayList<DrugItem>(drugsListHashMap.values()));
+            }
         }
+
+        if (isFromMedication)
+            layoutAllergy.setVisibility(View.GONE);
+        else
+            layoutAllergy.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void initViews() {
+        layoutAllergy = (LinearLayout) view.findViewById(R.id.layout_allergy);
         etAllergy = (EditText) view.findViewById(R.id.et_allergy);
         lvSolarDrugsList = (ListViewLoadMore) view.findViewById(R.id.lv_drugs_list);
         lvDrugs = (ListView) view.findViewById(R.id.lv_drugs);
@@ -209,15 +234,38 @@ public class AddEditDrugAndAllergyDetailDialogFragment extends HealthCocoDialogF
     }
 
     private void addEditDrugsAndAllergies(String allergy) {
-        mActivity.showLoading(false);
-        AddEditDrugsAndAllergiesRequest addEditDrugsAndAllergiesRequest = new AddEditDrugsAndAllergiesRequest();
-        addEditDrugsAndAllergiesRequest.setAllergies(allergy);
-        addEditDrugsAndAllergiesRequest.setDoctorId(user.getUniqueId());
-        addEditDrugsAndAllergiesRequest.setHospitalId(user.getForeignHospitalId());
-        addEditDrugsAndAllergiesRequest.setLocationId(user.getForeignLocationId());
-        addEditDrugsAndAllergiesRequest.setPatientId(selectedPatient.getUserId());
-        addEditDrugsAndAllergiesRequest.setDrugIds(new ArrayList<String>(drugsListHashMap.keySet()));
-        WebDataServiceImpl.getInstance(mApp).addUpdateDrugsAndAllergies(HistoryDetailsResponse.class, addEditDrugsAndAllergiesRequest, this, this);
+        if (!isFromAssessment) {
+            mActivity.showLoading(false);
+            AddEditDrugsAndAllergiesRequest addEditDrugsAndAllergiesRequest = new AddEditDrugsAndAllergiesRequest();
+            addEditDrugsAndAllergiesRequest.setAllergies(allergy);
+            addEditDrugsAndAllergiesRequest.setDoctorId(user.getUniqueId());
+            addEditDrugsAndAllergiesRequest.setHospitalId(user.getForeignHospitalId());
+            addEditDrugsAndAllergiesRequest.setLocationId(user.getForeignLocationId());
+            addEditDrugsAndAllergiesRequest.setPatientId(selectedPatient.getUserId());
+            addEditDrugsAndAllergiesRequest.setDrugIds(new ArrayList<String>(drugsListHashMap.keySet()));
+            WebDataServiceImpl.getInstance(mApp).addUpdateDrugsAndAllergies(HistoryDetailsResponse.class, addEditDrugsAndAllergiesRequest, this, this);
+
+        } else {
+            List<Drug> drugList = new ArrayList<>();
+            for (DrugItem drugItem : drugsListHashMap.values()) {
+                if (drugItem.getDrug() != null) {
+                    drugList.add(drugItem.getDrug());
+                }
+            }
+            DrugsAndAllergies drugsAndAllergies = new DrugsAndAllergies();
+            drugsAndAllergies.setDrugs(drugList);
+            drugsAndAllergies.setAllergies(allergy);
+
+
+            Intent data = new Intent();
+            data.putExtra(HealthCocoConstants.TAG_INTENT_DATA, Parcels.wrap(drugsAndAllergies));
+            if (isFromMedication)
+                getTargetFragment().onActivityResult(getTargetRequestCode(), HealthCocoConstants.RESULT_CODE_EXISTING_MEDICATION, data);
+            else
+                getTargetFragment().onActivityResult(getTargetRequestCode(), HealthCocoConstants.RESULT_CODE_DRUGS_AND_ALLERGIES_DETAIL, data);
+            getDialog().dismiss();
+//            getTargetFragment().onActivityResult();
+        }
     }
 
     @Override
