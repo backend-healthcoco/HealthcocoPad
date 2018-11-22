@@ -538,6 +538,10 @@ public enum WebServiceType {
 
     GET_PATIENT_LIFE_STYLE(Method.GET, "nutrition/assessment/lifeStyle/"),
 
+    ADD_PATIENT_MEDICL_HISTORY(Method.POST, "nutrition/assessment/patientHistory/addEdit/"),
+
+    GET_PATIENT_MEDICL_HISTORY(Method.GET, "nutrition/assessment/patientHistory/"),
+
     GET_RECIPE_LIST_SOLR(Method.GET, "solr/recipe/search/?"),
 
     GET_INGREDINET_LIST_SOLR(Method.GET, "solr/recipe/ingredient/search/?"),

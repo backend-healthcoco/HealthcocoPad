@@ -13,6 +13,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.NumberPicker;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -76,7 +77,7 @@ public class AddEditMedicalInformationFragment extends HealthCocoFragment implem
 
     private static final int REQUEST_CODE_PATIENT_ASSESSMENT = 111;
 
-    public static ArrayList<Object> QUANTITY_ALCOHOL = new ArrayList<Object>() {{
+    public static ArrayList<Object> QUANTITY = new ArrayList<Object>() {{
         add(QuantityType.MG);
         add(QuantityType.G);
         add(QuantityType.MILI_LITRE);
@@ -84,7 +85,7 @@ public class AddEditMedicalInformationFragment extends HealthCocoFragment implem
         add(QuantityType.GLASS);
         add(QuantityType.QTY);
     }};
-    public static ArrayList<Object> FREQUENCY_ALCOHOL = new ArrayList<Object>() {{
+    public static ArrayList<Object> FREQUENCY = new ArrayList<Object>() {{
         add(ConsumeTimeType.DAILY);
         add(ConsumeTimeType.WEEKLY);
         add(ConsumeTimeType.MONTHLY);
@@ -158,6 +159,7 @@ public class AddEditMedicalInformationFragment extends HealthCocoFragment implem
     private String patientId;
     private PatientMedicalHistory patientMedicalHistory;
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_add_edit_medical_information, container, false);
@@ -168,8 +170,14 @@ public class AddEditMedicalInformationFragment extends HealthCocoFragment implem
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Bundle bundle = getArguments();
         init();
+
+        Intent intent = mActivity.getIntent();
+        if (intent != null) {
+            assessmentId = intent.getStringExtra(HealthCocoConstants.TAG_ASSESSMENT_ID);
+            patientId = intent.getStringExtra(HealthCocoConstants.TAG_PATIENT_ID);
+        }
+
         mActivity.showLoading(false);
         new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_FRAGMENT_INITIALISATION_DATA, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
@@ -235,10 +243,20 @@ public class AddEditMedicalInformationFragment extends HealthCocoFragment implem
         containerDrugsDetail = (LinearLayout) containerDrugAllergy.findViewById(R.id.container_drugs_detail);
         tvNoDrugsAndAllergyData = (TextView) containerDrugAllergy.findViewById(R.id.tv_no_data);
 
+//        set default value
+        tvFrequencySmoking.setTag(ConsumeTimeType.DAILY);
+        tvFrequencyAlcohol.setTag(ConsumeTimeType.DAILY);
+        tvFrequencyTobacco.setTag(ConsumeTimeType.DAILY);
+        tvQuantitySmoking.setTag(QuantityType.G);
+        tvQuantityAlcohol.setTag(QuantityType.G);
+        tvQuantityTobacco.setTag(QuantityType.G);
+
     }
 
     @Override
     public void initListeners() {
+        ((CommonOpenUpActivity) mActivity).initActionbarRightAction(this);
+
         addPastHistory.setOnClickListener(this);
         addFamilyHistory.setOnClickListener(this);
         addExistingDisease.setOnClickListener(this);
@@ -253,18 +271,119 @@ public class AddEditMedicalInformationFragment extends HealthCocoFragment implem
         radioHospitalized.setOnCheckedChangeListener(this);
     }
 
-    public void initData() {
 
-        initAutoTvAdapter(tvQuantitySmoking, AutoCompleteTextViewType.QUANTITY, QUANTITY_ALCOHOL);
-        initAutoTvAdapter(tvQuantityAlcohol, AutoCompleteTextViewType.QUANTITY, QUANTITY_ALCOHOL);
-        initAutoTvAdapter(tvQuantityTobacco, AutoCompleteTextViewType.QUANTITY, QUANTITY_ALCOHOL);
-        initAutoTvAdapter(tvFrequencySmoking, AutoCompleteTextViewType.FREQUENCY, FREQUENCY_ALCOHOL);
-        initAutoTvAdapter(tvFrequencyAlcohol, AutoCompleteTextViewType.FREQUENCY, FREQUENCY_ALCOHOL);
-        initAutoTvAdapter(tvFrequencyTobacco, AutoCompleteTextViewType.FREQUENCY, FREQUENCY_ALCOHOL);
+    private void getPatientMedicalHistory() {
+        mActivity.showLoading(false);
+        WebDataServiceImpl.getInstance(mApp).getPatientAssessmentDetails(PatientMedicalHistory.class,
+                WebServiceType.GET_PATIENT_MEDICL_HISTORY, assessmentId, this, this);
+    }
+
+    public void initData() {
+        if (patientMedicalHistory != null) {
+            if (!Util.isNullOrEmptyList(patientMedicalHistory.getFamilyhistory())) {
+                familyHistoryList = patientMedicalHistory.getFamilyhistory();
+                initPastHistory(familyHistoryList, containerFamilyHistory);
+            }
+
+            if (!Util.isNullOrEmptyList(patientMedicalHistory.getMedicalhistory())) {
+                pastHistoryList = patientMedicalHistory.getMedicalhistory();
+                initPastHistory(pastHistoryList, containerPastHistory);
+            }
+            if (!Util.isNullOrEmptyList(patientMedicalHistory.getDiesease())) {
+                existingDiseaseList = patientMedicalHistory.getDiesease();
+                initPastHistory(existingDiseaseList, containerExistingDisease);
+            }
+
+            if (patientMedicalHistory.getDrugsAndAllergies() != null) {
+                drugsAndAllergies = patientMedicalHistory.getDrugsAndAllergies();
+                initDrugsAndAllergyHistory(drugsAndAllergies);
+            }
+
+            if (!Util.isNullOrEmptyList(patientMedicalHistory.getAddiction())) {
+                for (Addiction addiction : patientMedicalHistory.getAddiction()) {
+                    if (addiction.getAddictionType() != null)
+                        switch (addiction.getAddictionType()) {
+                            case SMOCKING:
+                                initAddictionData(addiction, cbSmoking, editTypeSmoking, editQuantitySmoking, tvQuantitySmoking, editFrequencySmoking, tvFrequencySmoking);
+                                break;
+                            case ALCOHOL:
+                                initAddictionData(addiction, cbAlcohol, editTypeAlcohol, editQuantityAlcohol, tvQuantityAlcohol, editFrequencyAlcohol, tvFrequencyAlcohol);
+                                break;
+                            case TOBACCO:
+                                initAddictionData(addiction, cbTobacco, editTypeTobacco, editQuantityTobacco, tvQuantityTobacco, editFrequencyTobacco, tvFrequencyTobacco);
+                                break;
+//                            case OTHER:
+                        }
+                }
+            }
+
+            if (patientMedicalHistory.getStress() != null) {
+                if (patientMedicalHistory.getStress()) {
+                    RadioButton stress = (RadioButton) radioStress.findViewWithTag(getString(R.string.yes));
+                    if (stress != null) {
+                        stress.setChecked(true);
+                    }
+                }
+            }
+            if (patientMedicalHistory.getEverHospitalize() != null) {
+                if (patientMedicalHistory.getEverHospitalize()) {
+                    RadioButton hospitalized = (RadioButton) radioHospitalized.findViewWithTag(getString(R.string.yes));
+                    if (hospitalized != null) {
+                        hospitalized.setChecked(true);
+                    }
+                    if (!Util.isNullOrEmptyList(patientMedicalHistory.getReasons())) {
+                        for (String reason : patientMedicalHistory.getReasons())
+                            editReason.setText(reason);
+                    }
+                }
+            }
+            if (patientMedicalHistory.getFoodAndAllergies() != null) {
+                if (!Util.isNullOrEmptyList(patientMedicalHistory.getFoodAndAllergies().getFoods()))
+                    addFood(containerFoodAllergy, patientMedicalHistory.getFoodAndAllergies().getFoods());
+                if (!Util.isNullOrBlank(patientMedicalHistory.getFoodAndAllergies().getAllergies()))
+                    editFoodAllergy.setText(patientMedicalHistory.getFoodAndAllergies().getAllergies());
+            }
+            if (!Util.isNullOrEmptyList(patientMedicalHistory.getExistingMedication())) {
+                initExistingMedication(patientMedicalHistory.getExistingMedication());
+            }
+        }
 
     }
 
+    private void initAddictionData(Addiction addiction, CheckBox cbAddiction, EditText
+            editType, EditText editQuantity,
+                                   CustomAutoCompleteTextView tvQuantity, EditText
+                                           editFrequency, CustomAutoCompleteTextView tvFrequency) {
+        cbAddiction.setChecked(true);
+        if (!Util.isNullOrBlank(addiction.getAlcoholType())) {
+            editType.setText(addiction.getAlcoholType());
+        }
+        if (addiction.getQuantity() != null) {
+            if (!Util.isNullOrZeroNumber(addiction.getQuantity().getValue()))
+                editQuantity.setText(Util.getValidatedValue(addiction.getQuantity().getValue()));
+            if (addiction.getQuantity().getType() != null) {
+                tvQuantity.setText(addiction.getQuantity().getType().getUnit());
+                tvQuantity.setTag(addiction.getQuantity().getType());
+            }
+        }
+        if (addiction.getConsumeTime() != null) {
+            tvFrequency.setText(getString(addiction.getConsumeTime().getTimeTitle()));
+            tvFrequency.setTag(addiction.getAddictionType());
+        }
+        if (!Util.isNullOrZeroNumber(addiction.getNoOfTime())) {
+            editFrequency.setText(Util.getValidatedValue(addiction.getNoOfTime()));
+        }
+    }
+
     private void initAdapter() {
+
+        initAutoTvAdapter(tvQuantitySmoking, AutoCompleteTextViewType.QUANTITY, QUANTITY);
+        initAutoTvAdapter(tvQuantityAlcohol, AutoCompleteTextViewType.QUANTITY, QUANTITY);
+        initAutoTvAdapter(tvQuantityTobacco, AutoCompleteTextViewType.QUANTITY, QUANTITY);
+        initAutoTvAdapter(tvFrequencySmoking, AutoCompleteTextViewType.FREQUENCY, FREQUENCY);
+        initAutoTvAdapter(tvFrequencyAlcohol, AutoCompleteTextViewType.FREQUENCY, FREQUENCY);
+        initAutoTvAdapter(tvFrequencyTobacco, AutoCompleteTextViewType.FREQUENCY, FREQUENCY);
+
     }
 
 
@@ -291,9 +410,25 @@ public class AddEditMedicalInformationFragment extends HealthCocoFragment implem
             switch (response.getWebServiceType()) {
                 case FRAGMENT_INITIALISATION:
                     if (user != null && !Util.isNullOrBlank(user.getUniqueId())) {
-                        if (selectedPatient != null) {
-
+                        getPatientMedicalHistory();
+                    }
+                    break;
+                case GET_PATIENT_MEDICL_HISTORY:
+                    if (response.isValidData(response) && response.getData() instanceof PatientMedicalHistory) {
+                        patientMedicalHistory = (PatientMedicalHistory) response.getData();
+                        if (patientMedicalHistory != null) {
+                            initData();
                         }
+                    }
+                    break;
+                case ADD_PATIENT_MEDICL_HISTORY:
+                    if (response.isValidData(response) && response.getData() instanceof PatientMedicalHistory) {
+                        PatientMedicalHistory data = (PatientMedicalHistory) response.getData();
+//                        LocalDataServiceImpl.getInstance(mApp).addPatientFoodAndExercise(data);
+                        mActivity.hideLoading();
+
+                        mActivity.setResult(HealthCocoConstants.RESULT_CODE_REGISTRATION);
+                        ((CommonOpenUpActivity) mActivity).finish();
                     }
                     break;
                 default:
@@ -343,13 +478,16 @@ public class AddEditMedicalInformationFragment extends HealthCocoFragment implem
                 openHisoryFragment(HistoryFilterType.DISEASE);
                 break;
             case R.id.bt_add_drug_allergy:
-                openDrugAndAllergyDialog(false);
+                openDrugAndAllergyDialog(false, drugsAndAllergies);
                 break;
             case R.id.bt_add_existing_medication:
-                openDrugAndAllergyDialog(true);
+                openDrugAndAllergyDialog(true, existingMedication);
                 break;
             case R.id.bt_add_food_allergy:
                 openFoodAndAllergy();
+                break;
+            case R.id.container_right_action:
+                validateData();
                 break;
         }
     }
@@ -433,78 +571,52 @@ public class AddEditMedicalInformationFragment extends HealthCocoFragment implem
         if (!Util.isNullOrEmptyList(existingMedicationList))
             medicalHistory.setExistingMedication(existingMedicationList);
 
-//        WebDataServiceImpl.getInstance(mApp).addPatientAssessmentInfo(PatientMedicalHistory.class,
-//                WebServiceType.ADD_PATIENT_LIFE_STYLE, medicalHistory, this, this);
+        WebDataServiceImpl.getInstance(mApp).addPatientAssessmentInfo(PatientMedicalHistory.class,
+                WebServiceType.ADD_PATIENT_MEDICL_HISTORY, medicalHistory, this, this);
 
     }
 
     private List<Addiction> getSelectedAddiction() {
         List<Addiction> addictionList = new ArrayList<>();
+
         if (cbSmoking.isChecked()) {
-            Addiction addiction = new Addiction();
-            addiction.setAddictionType(AddictionType.SMOCKING);
-
-            if (!Util.isNullOrBlank(Util.getValidatedValueOrNull(editQuantitySmoking))) {
-//                addiction.setAddictionType()
-                MealQuantity quantity = new MealQuantity();
-                quantity.setValue(Util.getValidatedDoubleValue(editQuantitySmoking));
-                quantity.setType(QuantityType.valueOf(String.valueOf(tvQuantitySmoking.getText()).toUpperCase()));
-                addiction.setQuantity(quantity);
-            }
-            if (!Util.isNullOrBlank(Util.getValidatedValueOrNull(editFrequencySmoking))) {
-//                addiction.setAddictionType()
-                addiction.setNoOfTime(Util.getValidatedIntegerValue(editQuantitySmoking));
-                addiction.setAddictionType(AddictionType.valueOf(String.valueOf(tvQuantitySmoking.getText()).toUpperCase()));
-            }
-            if (!Util.isNullOrBlank(Util.getValidatedValueOrNull(editTypeSmoking)))
-                addiction.setAlcoholType(Util.getValidatedValueOrNull(editTypeSmoking));
-
-            addictionList.add(addiction);
+            addictionList.add(getAddictionData(AddictionType.SMOCKING, editQuantitySmoking, tvQuantitySmoking,
+                    editFrequencySmoking, tvFrequencySmoking, editTypeSmoking));
         }
         if (cbAlcohol.isChecked()) {
-            Addiction addiction = new Addiction();
-            addiction.setAddictionType(AddictionType.ALCOHOL);
-
-            if (!Util.isNullOrBlank(Util.getValidatedValueOrNull(editQuantityAlcohol))) {
-//                addiction.setAddictionType()
-                MealQuantity quantity = new MealQuantity();
-                quantity.setValue(Util.getValidatedDoubleValue(editQuantityAlcohol));
-                quantity.setType(QuantityType.valueOf(String.valueOf(tvQuantityAlcohol.getText()).toUpperCase()));
-                addiction.setQuantity(quantity);
-            }
-            if (!Util.isNullOrBlank(Util.getValidatedValueOrNull(editFrequencyAlcohol))) {
-//                addiction.setAddictionType()
-                addiction.setNoOfTime(Util.getValidatedIntegerValue(editQuantityAlcohol));
-                addiction.setAddictionType(AddictionType.valueOf(String.valueOf(tvQuantityAlcohol.getText()).toUpperCase()));
-            }
-            if (!Util.isNullOrBlank(Util.getValidatedValueOrNull(editTypeAlcohol)))
-                addiction.setAlcoholType(Util.getValidatedValueOrNull(editTypeAlcohol));
-
-            addictionList.add(addiction);
+            addictionList.add(getAddictionData(AddictionType.ALCOHOL, editQuantityAlcohol, tvQuantityAlcohol,
+                    editFrequencyAlcohol, tvFrequencyAlcohol, editTypeAlcohol));
         }
         if (cbTobacco.isChecked()) {
-            Addiction addiction = new Addiction();
-            addiction.setAddictionType(AddictionType.TOBACCO);
-
-            if (!Util.isNullOrBlank(Util.getValidatedValueOrNull(editQuantityTobacco))) {
-//                addiction.setAddictionType()
-                MealQuantity quantity = new MealQuantity();
-                quantity.setValue(Util.getValidatedDoubleValue(editQuantityTobacco));
-                quantity.setType(QuantityType.valueOf(String.valueOf(tvQuantityTobacco.getText()).toUpperCase()));
-                addiction.setQuantity(quantity);
-            }
-            if (!Util.isNullOrBlank(Util.getValidatedValueOrNull(editFrequencyTobacco))) {
-//                addiction.setAddictionType()
-                addiction.setNoOfTime(Util.getValidatedIntegerValue(editQuantityTobacco));
-                addiction.setAddictionType(AddictionType.valueOf(String.valueOf(tvQuantityTobacco.getText()).toUpperCase()));
-            }
-            if (!Util.isNullOrBlank(Util.getValidatedValueOrNull(editTypeTobacco)))
-                addiction.setAlcoholType(Util.getValidatedValueOrNull(editTypeTobacco));
-
-            addictionList.add(addiction);
+            addictionList.add(getAddictionData(AddictionType.TOBACCO, editQuantityTobacco, tvQuantityTobacco,
+                    editFrequencyTobacco, tvFrequencyTobacco, editTypeTobacco));
         }
 
         return addictionList;
+    }
+
+    private Addiction getAddictionData(AddictionType addictionType, EditText editQuantity, CustomAutoCompleteTextView tvQuantity,
+                                       EditText editFrequency, CustomAutoCompleteTextView tvFrequency, EditText editType) {
+
+        Addiction addiction = new Addiction();
+        addiction.setAddictionType(addictionType);
+
+        if (!Util.isNullOrBlank(Util.getValidatedValueOrNull(editQuantity))) {
+//                addiction.setAddictionType()
+            MealQuantity quantity = new MealQuantity();
+            quantity.setValue(Util.getValidatedDoubleValue(editQuantity));
+            quantity.setType((QuantityType) tvQuantity.getTag());
+            addiction.setQuantity(quantity);
+        }
+        if (!Util.isNullOrBlank(Util.getValidatedValueOrNull(editFrequency))) {
+//                addiction.setAddictionType()
+            addiction.setNoOfTime(Util.getValidatedIntegerValue(editFrequency));
+            addiction.setConsumeTime((ConsumeTimeType) tvFrequency.getTag());
+        }
+        if (!Util.isNullOrBlank(Util.getValidatedValueOrNull(editType)))
+            addiction.setAlcoholType(Util.getValidatedValueOrNull(editType));
+
+        return addiction;
     }
 
     private void openHisoryFragment(HistoryFilterType historyFilterType) {
@@ -564,7 +676,8 @@ public class AddEditMedicalInformationFragment extends HealthCocoFragment implem
         }
     }
 
-    private void initAutoTvAdapter(AutoCompleteTextView autoCompleteTextView, final AutoCompleteTextViewType autoCompleteTextViewType, ArrayList<Object> list) {
+    private void initAutoTvAdapter(AutoCompleteTextView autoCompleteTextView,
+                                   final AutoCompleteTextViewType autoCompleteTextViewType, ArrayList<Object> list) {
         try {
             if (!Util.isNullOrEmptyList(list)) {
                 final AutoCompleteTextViewAdapter adapter = new AutoCompleteTextViewAdapter(mActivity, R.layout.spinner_drop_down_item_grey_background,
@@ -575,10 +688,15 @@ public class AddEditMedicalInformationFragment extends HealthCocoFragment implem
                 autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                        onQuantityItemClicked(autoCompleteTextViewType,parent,view,position,id);
                         switch (autoCompleteTextViewType) {
                             case QUANTITY:
+                                Object quantity = QUANTITY.get(position);
+                                view.setTag(quantity);
                                 break;
                             case FREQUENCY:
+                                Object frequency = FREQUENCY.get(position);
+                                view.setTag(frequency);
                                 break;
                         }
                     }
@@ -588,6 +706,7 @@ public class AddEditMedicalInformationFragment extends HealthCocoFragment implem
             e.printStackTrace();
         }
     }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -638,7 +757,7 @@ public class AddEditMedicalInformationFragment extends HealthCocoFragment implem
                                     PrescriptionAddItem prescriptionAddItem = new PrescriptionAddItem();
                                     try {
                                         ReflectionUtil.copy(prescriptionAddItem, drug);
-
+                                        prescriptionAddItem.setDrugId(drug.getUniqueId());
                                     } catch (Exception e) {
                                         e.printStackTrace();
                                     }
@@ -682,14 +801,14 @@ public class AddEditMedicalInformationFragment extends HealthCocoFragment implem
         tvNoDataText.setText(textId);
     }
 
-    public void openDrugAndAllergyDialog(boolean isFromMedication) {
+    public void openDrugAndAllergyDialog(boolean isFromMedication, DrugsAndAllergies andAllergies) {
         AddEditDrugAndAllergyDetailDialogFragment dialogFragment = new AddEditDrugAndAllergyDetailDialogFragment();
         Bundle bundle = new Bundle();
         bundle.putBoolean(HealthCocoConstants.TAG_IS_FROM_ASSESSMENT, true);
         if (isFromMedication)
             bundle.putBoolean(HealthCocoConstants.TAG_DRUG_DETAILS, true);
-        if (drugsAndAllergies != null)
-            bundle.putParcelable(AddEditDrugAndAllergyDetailDialogFragment.TAG_DRUGS_AND_ALLERGIES_ASSESSMENT, Parcels.wrap(drugsAndAllergies));
+        if (andAllergies != null)
+            bundle.putParcelable(AddEditDrugAndAllergyDetailDialogFragment.TAG_DRUGS_AND_ALLERGIES_ASSESSMENT, Parcels.wrap(andAllergies));
         dialogFragment.setArguments(bundle);
         dialogFragment.setTargetFragment(this, REQUEST_CODE_PATIENT_ASSESSMENT);
         dialogFragment.show(mActivity.getSupportFragmentManager(), dialogFragment.getClass().getSimpleName());

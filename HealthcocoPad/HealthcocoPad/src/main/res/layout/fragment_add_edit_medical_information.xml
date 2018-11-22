@@ -476,7 +476,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/layout_padding_5dp"
                             android:orientation="vertical"
-                            android:visibility="gone">
+                            android:visibility="visible">
 
 
                             <android.support.design.widget.TextInputLayout
