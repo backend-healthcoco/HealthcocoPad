@@ -26,6 +26,7 @@ import com.healthcoco.healthcocopad.bean.Addiction;
 import com.healthcoco.healthcocopad.bean.MealQuantity;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.request.AddMedicalFamilyHistoryRequest;
+import com.healthcoco.healthcocopad.bean.request.PatientMedicalHistoryRequest;
 import com.healthcoco.healthcocopad.bean.server.DietPlanRecipeItem;
 import com.healthcoco.healthcocopad.bean.server.Drug;
 import com.healthcoco.healthcocopad.bean.server.DrugsAndAllergies;
@@ -33,6 +34,7 @@ import com.healthcoco.healthcocopad.bean.server.FoodAndAllergies;
 import com.healthcoco.healthcocopad.bean.server.Ingredient;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.MealTimeAndPattern;
+import com.healthcoco.healthcocopad.bean.server.MedicalFamilyHistoryDetails;
 import com.healthcoco.healthcocopad.bean.server.PatientMedicalHistory;
 import com.healthcoco.healthcocopad.bean.server.PrescriptionAddItem;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
@@ -148,6 +150,10 @@ public class AddEditMedicalInformationFragment extends HealthCocoFragment implem
     private List<String> pastHistoryList = new ArrayList<String>();
     private List<String> familyHistoryList = new ArrayList<String>();
     private List<String> existingDiseaseList = new ArrayList<String>();
+
+    private List<String> pastHistoryIdsList = new ArrayList<String>();
+    private List<String> familyHistoryIdsList = new ArrayList<String>();
+    private List<String> existingDiseaseIdsList = new ArrayList<String>();
 
     private List<PrescriptionAddItem> existingMedicationList = new ArrayList<>();
 
@@ -281,16 +287,25 @@ public class AddEditMedicalInformationFragment extends HealthCocoFragment implem
     public void initData() {
         if (patientMedicalHistory != null) {
             if (!Util.isNullOrEmptyList(patientMedicalHistory.getFamilyhistory())) {
-                familyHistoryList = patientMedicalHistory.getFamilyhistory();
+                for (MedicalFamilyHistoryDetails historyDetails : patientMedicalHistory.getFamilyhistory()) {
+                    familyHistoryList.add(historyDetails.getDisease());
+                    familyHistoryIdsList.add(historyDetails.getUniqueId());
+                }
                 initPastHistory(familyHistoryList, containerFamilyHistory);
             }
 
             if (!Util.isNullOrEmptyList(patientMedicalHistory.getMedicalhistory())) {
-                pastHistoryList = patientMedicalHistory.getMedicalhistory();
+                for (MedicalFamilyHistoryDetails historyDetails : patientMedicalHistory.getMedicalhistory()) {
+                    pastHistoryList.add(historyDetails.getDisease());
+                    pastHistoryIdsList.add(historyDetails.getUniqueId());
+                }
                 initPastHistory(pastHistoryList, containerPastHistory);
             }
             if (!Util.isNullOrEmptyList(patientMedicalHistory.getDiesease())) {
-                existingDiseaseList = patientMedicalHistory.getDiesease();
+                for (MedicalFamilyHistoryDetails historyDetails : patientMedicalHistory.getDiesease()) {
+                    existingDiseaseList.add(historyDetails.getDisease());
+                    existingDiseaseIdsList.add(historyDetails.getUniqueId());
+                }
                 initPastHistory(existingDiseaseList, containerExistingDisease);
             }
 
@@ -301,8 +316,8 @@ public class AddEditMedicalInformationFragment extends HealthCocoFragment implem
 
             if (!Util.isNullOrEmptyList(patientMedicalHistory.getAddiction())) {
                 for (Addiction addiction : patientMedicalHistory.getAddiction()) {
-                    if (addiction.getAddictionType() != null)
-                        switch (addiction.getAddictionType()) {
+                    if (addiction.getType() != null)
+                        switch (addiction.getType()) {
                             case SMOCKING:
                                 initAddictionData(addiction, cbSmoking, editTypeSmoking, editQuantitySmoking, tvQuantitySmoking, editFrequencySmoking, tvFrequencySmoking);
                                 break;
@@ -368,7 +383,7 @@ public class AddEditMedicalInformationFragment extends HealthCocoFragment implem
         }
         if (addiction.getConsumeTime() != null) {
             tvFrequency.setText(getString(addiction.getConsumeTime().getTimeTitle()));
-            tvFrequency.setTag(addiction.getAddictionType());
+            tvFrequency.setTag(addiction.getType());
         }
         if (!Util.isNullOrZeroNumber(addiction.getNoOfTime())) {
             editFrequency.setText(Util.getValidatedValue(addiction.getNoOfTime()));
@@ -508,7 +523,7 @@ public class AddEditMedicalInformationFragment extends HealthCocoFragment implem
 
         mActivity.showLoading(false);
 
-        PatientMedicalHistory medicalHistory = new PatientMedicalHistory();
+        PatientMedicalHistoryRequest medicalHistory = new PatientMedicalHistoryRequest();
 
         if (patientMedicalHistory != null) {
             medicalHistory.setPatientId(patientMedicalHistory.getPatientId());
@@ -526,11 +541,11 @@ public class AddEditMedicalInformationFragment extends HealthCocoFragment implem
             medicalHistory.setHospitalId(user.getForeignHospitalId());
         }
 
-        if (!Util.isNullOrEmptyList(familyHistoryList))
-            medicalHistory.setFamilyhistory(familyHistoryList);
+        if (!Util.isNullOrEmptyList(familyHistoryIdsList))
+            medicalHistory.setFamilyhistory(familyHistoryIdsList);
 
-        if (!Util.isNullOrEmptyList(pastHistoryList))
-            medicalHistory.setMedicalhistory(pastHistoryList);
+        if (!Util.isNullOrEmptyList(pastHistoryIdsList))
+            medicalHistory.setMedicalhistory(pastHistoryIdsList);
 
         if (drugsAndAllergies != null)
             medicalHistory.setDrugsAndAllergies(drugsAndAllergies);
@@ -543,8 +558,8 @@ public class AddEditMedicalInformationFragment extends HealthCocoFragment implem
 
         medicalHistory.setAddiction(getSelectedAddiction());
 
-        if (!Util.isNullOrEmptyList(existingDiseaseList))
-            medicalHistory.setDiesease(existingDiseaseList);
+        if (!Util.isNullOrEmptyList(existingDiseaseIdsList))
+            medicalHistory.setDiesease(existingDiseaseIdsList);
 
         RadioButton hopitalized = (RadioButton) radioHospitalized.findViewWithTag(getString(R.string.yes));
         if (hopitalized.isChecked()) {
@@ -599,7 +614,7 @@ public class AddEditMedicalInformationFragment extends HealthCocoFragment implem
                                        EditText editFrequency, CustomAutoCompleteTextView tvFrequency, EditText editType) {
 
         Addiction addiction = new Addiction();
-        addiction.setAddictionType(addictionType);
+        addiction.setType(addictionType);
 
         if (!Util.isNullOrBlank(Util.getValidatedValueOrNull(editQuantity))) {
 //                addiction.setAddictionType()
@@ -623,13 +638,13 @@ public class AddEditMedicalInformationFragment extends HealthCocoFragment implem
         Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
         switch (historyFilterType) {
             case MEDICAL_HISTORY:
-                intent.putExtra(HealthCocoConstants.TAG_DISEASE_IDS_LIST, new ArrayList<>(pastHistoryList));
+                intent.putExtra(HealthCocoConstants.TAG_DISEASE_IDS_LIST, new ArrayList<>(pastHistoryIdsList));
                 break;
             case FAMILY_HISTORY:
-                intent.putExtra(HealthCocoConstants.TAG_DISEASE_IDS_LIST, new ArrayList<>(familyHistoryList));
+                intent.putExtra(HealthCocoConstants.TAG_DISEASE_IDS_LIST, new ArrayList<>(familyHistoryIdsList));
                 break;
             case DISEASE:
-                intent.putExtra(HealthCocoConstants.TAG_DISEASE_IDS_LIST, new ArrayList<>(existingDiseaseList));
+                intent.putExtra(HealthCocoConstants.TAG_DISEASE_IDS_LIST, new ArrayList<>(existingDiseaseIdsList));
                 break;
         }
         intent.putExtra(HealthCocoConstants.TAG_HISTORY_FILTER_TYPE, historyFilterType.ordinal());
@@ -724,14 +739,17 @@ public class AddEditMedicalInformationFragment extends HealthCocoFragment implem
                                     switch (filterType) {
                                         case MEDICAL_HISTORY:
                                             pastHistoryList = familyHistoryRequest.getAddDiseases();
+                                            pastHistoryIdsList = familyHistoryRequest.getRemoveDiseases();
                                             initPastHistory(pastHistoryList, containerPastHistory);
                                             break;
                                         case FAMILY_HISTORY:
                                             familyHistoryList = familyHistoryRequest.getAddDiseases();
+                                            familyHistoryIdsList = familyHistoryRequest.getRemoveDiseases();
                                             initPastHistory(familyHistoryList, containerFamilyHistory);
                                             break;
                                         case DISEASE:
                                             existingDiseaseList = familyHistoryRequest.getAddDiseases();
+                                            existingDiseaseIdsList = familyHistoryRequest.getRemoveDiseases();
                                             initPastHistory(existingDiseaseList, containerExistingDisease);
                                             break;
                                     }

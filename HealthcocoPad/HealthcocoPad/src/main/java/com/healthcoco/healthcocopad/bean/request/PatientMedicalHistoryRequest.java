@@ -1,6 +1,9 @@
-package com.healthcoco.healthcocopad.bean.server;
+package com.healthcoco.healthcocopad.bean.request;
 
 import com.healthcoco.healthcocopad.bean.Addiction;
+import com.healthcoco.healthcocopad.bean.server.DrugsAndAllergies;
+import com.healthcoco.healthcocopad.bean.server.FoodAndAllergies;
+import com.healthcoco.healthcocopad.bean.server.PrescriptionAddItem;
 import com.healthcoco.healthcocopad.utilities.StringUtil;
 import com.orm.SugarRecord;
 import com.orm.annotation.Ignore;
@@ -11,8 +14,8 @@ import org.parceler.Parcel;
 import java.util.List;
 
 @Parcel
-public class PatientMedicalHistory extends SugarRecord {
-    public static String TABLE_NAME = " " + StringUtil.toSQLName(PatientMedicalHistory.class.getSimpleName());
+public class PatientMedicalHistoryRequest extends SugarRecord {
+    public static String TABLE_NAME = " " + StringUtil.toSQLName(PatientMedicalHistoryRequest.class.getSimpleName());
 
     @Unique
     private String uniqueId;
@@ -27,9 +30,9 @@ public class PatientMedicalHistory extends SugarRecord {
     private String assessmentId;
 
     @Ignore
-    private List<MedicalFamilyHistoryDetails> familyhistory;
+    private List<String> familyhistory;
     @Ignore
-    private List<MedicalFamilyHistoryDetails> medicalhistory;
+    private List<String> medicalhistory;
     @Ignore
     private DrugsAndAllergies drugsAndAllergies;
     @Ignore
@@ -39,7 +42,7 @@ public class PatientMedicalHistory extends SugarRecord {
     @Ignore
     private List<Addiction> addiction;
     @Ignore
-    private List<MedicalFamilyHistoryDetails> diesease;
+    private List<String> diesease;
 
     private Boolean everHospitalize;
 
@@ -131,6 +134,22 @@ public class PatientMedicalHistory extends SugarRecord {
         this.assessmentId = assessmentId;
     }
 
+    public List<String> getFamilyhistory() {
+        return familyhistory;
+    }
+
+    public void setFamilyhistory(List<String> familyhistory) {
+        this.familyhistory = familyhistory;
+    }
+
+    public List<String> getMedicalhistory() {
+        return medicalhistory;
+    }
+
+    public void setMedicalhistory(List<String> medicalhistory) {
+        this.medicalhistory = medicalhistory;
+    }
+
     public DrugsAndAllergies getDrugsAndAllergies() {
         return drugsAndAllergies;
     }
@@ -161,6 +180,14 @@ public class PatientMedicalHistory extends SugarRecord {
 
     public void setAddiction(List<Addiction> addiction) {
         this.addiction = addiction;
+    }
+
+    public List<String> getDiesease() {
+        return diesease;
+    }
+
+    public void setDiesease(List<String> diesease) {
+        this.diesease = diesease;
     }
 
     public Boolean getEverHospitalize() {
@@ -201,29 +228,5 @@ public class PatientMedicalHistory extends SugarRecord {
 
     public void setExistingMedication(List<PrescriptionAddItem> existingMedication) {
         this.existingMedication = existingMedication;
-    }
-
-    public List<MedicalFamilyHistoryDetails> getFamilyhistory() {
-        return familyhistory;
-    }
-
-    public void setFamilyhistory(List<MedicalFamilyHistoryDetails> familyhistory) {
-        this.familyhistory = familyhistory;
-    }
-
-    public List<MedicalFamilyHistoryDetails> getMedicalhistory() {
-        return medicalhistory;
-    }
-
-    public void setMedicalhistory(List<MedicalFamilyHistoryDetails> medicalhistory) {
-        this.medicalhistory = medicalhistory;
-    }
-
-    public List<MedicalFamilyHistoryDetails> getDiesease() {
-        return diesease;
-    }
-
-    public void setDiesease(List<MedicalFamilyHistoryDetails> diesease) {
-        this.diesease = diesease;
     }
 }

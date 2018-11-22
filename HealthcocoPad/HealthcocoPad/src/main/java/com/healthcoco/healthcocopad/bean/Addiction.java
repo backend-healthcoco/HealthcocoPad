@@ -12,18 +12,18 @@ import org.parceler.Parcel;
 @Parcel
 public class Addiction {
 
-    private AddictionType addictionType;
+    private AddictionType type;
     private String alcoholType;
     private Integer noOfTime;
     private MealQuantity quantity;
     private ConsumeTimeType consumeTime;
 
-    public AddictionType getAddictionType() {
-        return addictionType;
+    public AddictionType getType() {
+        return type;
     }
 
-    public void setAddictionType(AddictionType addictionType) {
-        this.addictionType = addictionType;
+    public void setType(AddictionType type) {
+        this.type = type;
     }
 
     public String getAlcoholType() {

@@ -20,7 +20,7 @@ import java.util.List;
 
 @Parcel
 public class Drug extends SugarRecord {
-    private static final String GENERIC_NAME_SEPARATOR = " + ";
+    protected static final String GENERIC_NAME_SEPARATOR = " + ";
     public static String TABLE_NAME = " " + StringUtil.toSQLName(Drug.class.getSimpleName());
     protected String foreignDrugTypeId;
     protected boolean isDrugFromGetDrugsList;

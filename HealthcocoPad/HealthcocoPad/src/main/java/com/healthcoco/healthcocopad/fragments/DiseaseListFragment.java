@@ -194,6 +194,7 @@ public class DiseaseListFragment extends HealthCocoFragment implements View.OnCl
                     }
                 }
                 addMedicalFamilyHistoryRequest.setAddDiseases(diseaseArrayList);
+                addMedicalFamilyHistoryRequest.setRemoveDiseases(addDiseasesList);
                 Intent data = new Intent();
                 data.putExtra(HealthCocoConstants.TAG_INTENT_DATA, Parcels.wrap(addMedicalFamilyHistoryRequest));
                 data.putExtra(HealthCocoConstants.TAG_HISTORY_FILTER_TYPE, filterType.ordinal());

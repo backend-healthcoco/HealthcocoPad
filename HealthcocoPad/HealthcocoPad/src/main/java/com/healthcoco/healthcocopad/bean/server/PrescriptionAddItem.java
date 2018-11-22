@@ -13,7 +13,6 @@ import java.util.List;
 
 @Parcel
 public class PrescriptionAddItem extends SugarRecord {
-    private static final String GENERIC_NAME_SEPARATOR = " + ";
     public static String TABLE_NAME = " " + StringUtil.toSQLName(PrescriptionAddItem.class.getSimpleName());
     protected String foreignDrugTypeId;
     protected boolean isDrugFromGetDrugsList;
