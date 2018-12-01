@@ -154,6 +154,7 @@ public class PatientProfileFragment extends HealthCocoFragment implements View.O
     private EditText editChild;
     private EditText editCommunity;
     private AssessmentPersonalDetail assessmentPersonalDetail;
+    private boolean isFromAssessment;
 
     public PatientProfileFragment(PatientRegistrationDetailsListener registrationDetailsListener) {
         super();
@@ -181,6 +182,11 @@ public class PatientProfileFragment extends HealthCocoFragment implements View.O
         if (intent != null) {
             String assessmentId = intent.getStringExtra(HealthCocoConstants.TAG_ASSESSMENT_ID);
             String patientId = intent.getStringExtra(HealthCocoConstants.TAG_PATIENT_ID);
+            isFromAssessment = intent.getBooleanExtra(HealthCocoConstants.TAG_IS_FROM_ASSESSMENT, false);
+            if (isFromAssessment) {
+                isEditPatient = isFromAssessment;
+                getPatientDeatils(patientId);
+            }
             if (assessmentId != null)
                 assessmentPersonalDetail = LocalDataServiceImpl.getInstance(mApp).getAssessmentPersonalDetail(assessmentId);
             if (assessmentPersonalDetail != null)
@@ -315,16 +321,20 @@ public class PatientProfileFragment extends HealthCocoFragment implements View.O
                 editMobileNumber.setText(R.string.no_mobile_number);
                 editMobileNumber.setTextColor(Color.RED);
             }
-            if (!Util.isNullOrBlank(patientUniqueId)) {
-                if (isEditPatient) {
-                    selectedPatient = LocalDataServiceImpl.getInstance(mApp).getPatient(patientUniqueId, user.getForeignLocationId());
-                    if (selectedPatient != null)
-                        initPatientDetails(selectedPatient);
-                    else {
-                        alreadyRegisteredPatient = LocalDataServiceImpl.getInstance(mApp).getALreadyRegisteredPatient(patientUniqueId);
-                        if (alreadyRegisteredPatient != null) {
-                            initPatientDetails(alreadyRegisteredPatient);
-                        }
+            getPatientDeatils(patientUniqueId);
+        }
+    }
+
+    private void getPatientDeatils(String patientUniqueId) {
+        if (!Util.isNullOrBlank(patientUniqueId)) {
+            if (isEditPatient) {
+                selectedPatient = LocalDataServiceImpl.getInstance(mApp).getPatient(patientUniqueId, user.getForeignLocationId());
+                if (selectedPatient != null)
+                    initPatientDetails(selectedPatient);
+                else {
+                    alreadyRegisteredPatient = LocalDataServiceImpl.getInstance(mApp).getALreadyRegisteredPatient(patientUniqueId);
+                    if (alreadyRegisteredPatient != null) {
+                        initPatientDetails(alreadyRegisteredPatient);
                     }
                 }
             }

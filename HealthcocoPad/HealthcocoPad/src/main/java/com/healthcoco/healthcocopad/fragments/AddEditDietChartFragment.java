@@ -673,7 +673,7 @@ public class AddEditDietChartFragment extends HealthCocoFragment implements
                 }
                 if (recipeItem.getCalories() != null) {
                     if (!Util.isNullOrZeroNumber(recipeItem.getCalories().getValue())) {
-                        tvRecipeCalarie.setText(Util.getValidatedValue(recipeItem.getCalories().getValue()) + mActivity.getString(R.string.cal_orange) /*+ calaries.getType().getQuantityType()*/);
+                        tvRecipeCalarie.setText(Util.getValidatedValue(Util.round(recipeItem.getCalories().getValue(), 2)) + mActivity.getString(R.string.cal_orange) /*+ calaries.getType().getQuantityType()*/);
                     }
                 }
 
@@ -697,14 +697,14 @@ public class AddEditDietChartFragment extends HealthCocoFragment implements
 
                             if (ingredient.getQuantity() != null)
                                 if (ingredient.getQuantity().getType() != null) {
-                                String type = ingredient.getQuantity().getType().getUnit();
-                                if (!Util.isNullOrZeroNumber(ingredient.getQuantity().getValue())) {
-                                    tvItemQuantity.setText(Util.getValidatedValue(ingredient.getQuantity().getValue()) + type);
+                                    String type = ingredient.getQuantity().getType().getUnit();
+                                    if (!Util.isNullOrZeroNumber(ingredient.getQuantity().getValue())) {
+                                        tvItemQuantity.setText(Util.getValidatedValue(Util.round(ingredient.getQuantity().getValue(), 2)) + type);
+                                    }
                                 }
-                            }
                             if (ingredient.getCalories() != null) {
                                 if (!Util.isNullOrZeroNumber(ingredient.getCalories().getValue())) {
-                                    tvItemCalarie.setText(Util.getValidatedValue(ingredient.getCalories().getValue()) + mActivity.getString(R.string.cal_orange));
+                                    tvItemCalarie.setText(Util.getValidatedValue(Util.round(ingredient.getCalories().getValue(), 2)) + mActivity.getString(R.string.cal_orange));
                                 }
                             }
                             containerIngredients.addView(layoutSubItemPermission);

@@ -2,6 +2,7 @@ package com.healthcoco.healthcocopad.utilities;
 
 import android.text.TextUtils;
 
+import com.healthcoco.healthcocopad.bean.server.AssessmentPersonalDetail;
 import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
 import com.healthcoco.healthcocopad.bean.server.CityResponse;
 import com.healthcoco.healthcocopad.bean.server.ClinicalNotes;
@@ -387,6 +388,20 @@ public class ComparatorUtil {
             return 0;
         }
     };
+
+    public static Comparator<AssessmentPersonalDetail> assessmentDateComparator = new Comparator<AssessmentPersonalDetail>() {
+
+        @Override
+        public int compare(AssessmentPersonalDetail object1, AssessmentPersonalDetail object2) {
+            if (object1.getCreatedTime() != null && object2.getCreatedTime() != null) {
+                Date date1 = new Date(object1.getCreatedTime());
+                Date date2 = new Date(object2.getCreatedTime());
+                return date2.compareTo(date1);
+            }
+            return 0;
+        }
+    };
+
     public static Comparator<DietPlan> dietPlanComparator = new Comparator<DietPlan>() {
 
         @Override

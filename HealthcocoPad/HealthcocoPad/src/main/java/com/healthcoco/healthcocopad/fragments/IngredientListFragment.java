@@ -61,6 +61,7 @@ public class IngredientListFragment extends HealthCocoFragment implements View.O
     private boolean isInitialLoading;
     //other variables
     private ProgressBar progressLoading;
+    private ProgressBar progressLoadingCenter;
     private RecyclerView ingredientRecyclerView;
     private HealthcocoRecyclerViewAdapter mAdapter;
     private ImageButton btAddNewTemplate;
@@ -105,11 +106,13 @@ public class IngredientListFragment extends HealthCocoFragment implements View.O
         tvNoIngredient = (TextView) view.findViewById(R.id.tv_no_recipe);
         btAddNewTemplate = (ImageButton) view.findViewById(R.id.bt_add_recipe);
         progressLoading = (ProgressBar) view.findViewById(R.id.progress_loading);
+        progressLoadingCenter = (ProgressBar) view.findViewById(R.id.progress_loading_center);
         initEditSearchView(R.string.search_recipe, this, this);
 
         btAddNewTemplate.setVisibility(View.VISIBLE);
         ingredientRecyclerView.setVisibility(View.VISIBLE);
 
+        tvNoIngredient.setVisibility(View.GONE);
         tvNoIngredient.setText(R.string.no_ingredient_added);
     }
 
@@ -155,7 +158,7 @@ public class IngredientListFragment extends HealthCocoFragment implements View.O
         if (user != null) {
             mApp.cancelPendingRequests(String.valueOf(WebServiceType.GET_RECIPE_LIST_SOLR));
             if (isInitialLoading) {
-                mActivity.showLoading(false);
+                progressLoadingCenter.setVisibility(View.VISIBLE);
                 progressLoading.setVisibility(View.GONE);
             } else
                 progressLoading.setVisibility(View.VISIBLE);
@@ -195,7 +198,7 @@ public class IngredientListFragment extends HealthCocoFragment implements View.O
         } else {
             errorMsg = errorMessage;
         }
-        mActivity.hideLoading();
+        progressLoadingCenter.setVisibility(View.GONE);
         Util.showToast(mActivity, errorMsg);
         onPostExecute(null);
     }
@@ -210,6 +213,7 @@ public class IngredientListFragment extends HealthCocoFragment implements View.O
         switch (response.getWebServiceType()) {
             case FRAGMENT_INITIALISATION:
                 if (user != null) {
+                    mActivity.hideLoading();
                     getIngredientList(true, PAGE_NUMBER, MAX_SIZE, "");
                     return;
                 }
@@ -231,7 +235,7 @@ public class IngredientListFragment extends HealthCocoFragment implements View.O
                     isEndOfListAchieved = true;
 
                 notifyAdapter(ingredientListSolr);
-                mActivity.hideLoading();
+                progressLoadingCenter.setVisibility(View.GONE);
                 progressLoading.setVisibility(View.GONE);
                 isLoadingFromSearch = false;
                 isInitialLoading = false;
@@ -239,6 +243,7 @@ public class IngredientListFragment extends HealthCocoFragment implements View.O
             default:
                 break;
         }
+        progressLoadingCenter.setVisibility(View.GONE);
         mActivity.hideLoading();
     }
 

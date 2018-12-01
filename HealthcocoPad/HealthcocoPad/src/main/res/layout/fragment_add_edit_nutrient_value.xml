@@ -60,6 +60,7 @@
 
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/rv_cabs"
+                        android:padding="@dimen/layout_padding"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
@@ -81,6 +82,7 @@
 
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/rv_lipid"
+                        android:padding="@dimen/layout_padding"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
@@ -102,6 +104,7 @@
 
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/rv_protein_amino_acid"
+                        android:padding="@dimen/layout_padding"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
@@ -131,6 +134,7 @@
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/rv_vitamin"
                         android:layout_width="match_parent"
+                        android:padding="@dimen/layout_padding"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
 
@@ -152,6 +156,7 @@
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/rv_mineral"
                         android:layout_width="match_parent"
+                        android:padding="@dimen/layout_padding"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
 
@@ -173,6 +178,7 @@
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/rv_other"
                         android:layout_width="match_parent"
+                        android:padding="@dimen/layout_padding"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
             </LinearLayout>

@@ -16,7 +16,7 @@ public enum QuantityType {
     BOWL("BOWL", "Bowl"),
     LITRE("LITRE", "Ltr"),
     MILI_LITRE("MILI_LITRE", "ml"),
-    GLASS("GLASS", "glass"),
+    GLASS("GLASS", "Glass"),
     CAL("CAL", "Cal"),
     KCAL("KCAL", "Kcal");
 

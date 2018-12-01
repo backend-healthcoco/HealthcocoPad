@@ -19,17 +19,18 @@ import android.widget.TextView;
 import com.android.volley.Response;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
+import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.RecipeResponse;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
-import com.healthcoco.healthcocopad.dialogFragment.AddNewTreatmentDialogFragment;
 import com.healthcoco.healthcocopad.enums.AdapterType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.AddNewDrugListener;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
+import com.healthcoco.healthcocopad.listeners.RecipeItemListener;
 import com.healthcoco.healthcocopad.listeners.SelectedRecipeItemClickListener;
 import com.healthcoco.healthcocopad.recyclerview.EndlessRecyclerViewScrollListener;
 import com.healthcoco.healthcocopad.recyclerview.HealthcocoRecyclerViewAdapter;
@@ -39,10 +40,15 @@ import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
+import com.healthcoco.healthcocopad.views.FontAwesomeButton;
+
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
+import static com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType.ADD_RECIPE;
 
 /**
  * Created by Prashant on 28-03-2017.
@@ -50,7 +56,7 @@ import java.util.Locale;
 public class RecipeListFragment extends HealthCocoFragment implements View.OnClickListener,
         Response.Listener<VolleyResponseBean>, GsonRequest.ErrorListener,
         TextWatcher, LocalDoInBackgroundListenerOptimised,
-        SwipeRefreshLayout.OnRefreshListener, AddNewDrugListener {
+        SwipeRefreshLayout.OnRefreshListener, RecipeItemListener {
 
     //variables need for pagination
     public static final int MAX_SIZE = 25;
@@ -60,15 +66,17 @@ public class RecipeListFragment extends HealthCocoFragment implements View.OnCli
     private boolean isLoadingFromSearch;
     private boolean isInitialLoading;
     //other variables
+    private ProgressBar progressLoadingCenter;
     private ProgressBar progressLoading;
     private RecyclerView recipeRecyclerView;
     private HealthcocoRecyclerViewAdapter mAdapter;
-    private ImageButton btAddNewTemplate;
+    private ImageButton btAddRecipe;
     private List<RecipeResponse> recipeListSolr = new ArrayList<RecipeResponse>();
     private TextView tvNoRecipe;
     private User user;
     private String lastTextSearched;
     private boolean isResponseReceived = false;
+    private FontAwesomeButton btAddNew;
 
     public RecipeListFragment() {
     }
@@ -103,18 +111,31 @@ public class RecipeListFragment extends HealthCocoFragment implements View.OnCli
     public void initViews() {
         recipeRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view_recipe);
         tvNoRecipe = (TextView) view.findViewById(R.id.tv_no_recipe);
-        btAddNewTemplate = (ImageButton) view.findViewById(R.id.bt_add_recipe);
+        btAddRecipe = (ImageButton) view.findViewById(R.id.bt_add_recipe);
         progressLoading = (ProgressBar) view.findViewById(R.id.progress_loading);
+        progressLoadingCenter = (ProgressBar) view.findViewById(R.id.progress_loading_center);
+        btAddNew = (FontAwesomeButton) view.findViewById(R.id.bt_add_new);
         initEditSearchView(R.string.search_recipe, this, this);
 
-        btAddNewTemplate.setVisibility(View.VISIBLE);
+        btAddRecipe.setVisibility(View.VISIBLE);
         recipeRecyclerView.setVisibility(View.VISIBLE);
+
+        if (selectedRecipeItemClickListener != null) {
+            btAddRecipe.setVisibility(View.VISIBLE);
+            btAddNew.setVisibility(View.GONE);
+        } else {
+            btAddRecipe.setVisibility(View.GONE);
+            btAddNew.setVisibility(View.VISIBLE);
+        }
+
+        tvNoRecipe.setVisibility(View.GONE);
     }
 
 
     @Override
     public void initListeners() {
-        btAddNewTemplate.setOnClickListener(this);
+        btAddRecipe.setOnClickListener(this);
+        btAddNew.setOnClickListener(this);
     }
 
     private void initAdapters() {
@@ -122,7 +143,11 @@ public class RecipeListFragment extends HealthCocoFragment implements View.OnCli
         recipeRecyclerView.setLayoutManager(layoutManager);
         recipeRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        mAdapter = new HealthcocoRecyclerViewAdapter(mActivity, AdapterType.RECIPE_ITEM_SOLR, selectedRecipeItemClickListener);
+        if (selectedRecipeItemClickListener != null)
+            mAdapter = new HealthcocoRecyclerViewAdapter(mActivity, AdapterType.RECIPE_ITEM_SOLR, selectedRecipeItemClickListener);
+        else
+            mAdapter = new HealthcocoRecyclerViewAdapter(mActivity, AdapterType.RECIPE_ITEM_SOLR, (RecipeItemListener) this);
+
         mAdapter.setListData((ArrayList<Object>) (Object) recipeListSolr);
         recipeRecyclerView.setAdapter(mAdapter);
 
@@ -153,7 +178,7 @@ public class RecipeListFragment extends HealthCocoFragment implements View.OnCli
         if (user != null) {
             mApp.cancelPendingRequests(String.valueOf(WebServiceType.GET_RECIPE_LIST_SOLR));
             if (isInitialLoading) {
-                mActivity.showLoading(false);
+                progressLoadingCenter.setVisibility(View.VISIBLE);
                 progressLoading.setVisibility(View.GONE);
             } else
                 progressLoading.setVisibility(View.VISIBLE);
@@ -166,18 +191,17 @@ public class RecipeListFragment extends HealthCocoFragment implements View.OnCli
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.bt_add_treatment:
-                openAddNewTreatmentsFragment();
+            case R.id.bt_add_recipe:
+            case R.id.bt_add_new:
+                openAddNewRecipeFragment();
                 break;
         }
     }
 
-    private void openAddNewTreatmentsFragment() {
-
-        AddNewTreatmentDialogFragment addNewTreatmentDetailFragment = new AddNewTreatmentDialogFragment(this);
-        addNewTreatmentDetailFragment.show(mActivity.getSupportFragmentManager(),
-                addNewTreatmentDetailFragment.getClass().getSimpleName());
-
+    private void openAddNewRecipeFragment() {
+        Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
+        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, ADD_RECIPE.ordinal());
+        startActivity(intent);
     }
 
     @Override
@@ -193,6 +217,7 @@ public class RecipeListFragment extends HealthCocoFragment implements View.OnCli
         } else {
             errorMsg = errorMessage;
         }
+        progressLoadingCenter.setVisibility(View.GONE);
         mActivity.hideLoading();
         Util.showToast(mActivity, errorMsg);
         onPostExecute(null);
@@ -208,6 +233,7 @@ public class RecipeListFragment extends HealthCocoFragment implements View.OnCli
         switch (response.getWebServiceType()) {
             case FRAGMENT_INITIALISATION:
                 if (user != null) {
+                    mActivity.hideLoading();
                     getRecipeList(true, PAGE_NUMBER, MAX_SIZE, "");
                     return;
                 }
@@ -237,6 +263,7 @@ public class RecipeListFragment extends HealthCocoFragment implements View.OnCli
             default:
                 break;
         }
+        progressLoadingCenter.setVisibility(View.GONE);
         mActivity.hideLoading();
     }
 
@@ -309,12 +336,26 @@ public class RecipeListFragment extends HealthCocoFragment implements View.OnCli
     }
 
     @Override
-    public void onSaveClicked(Object treatmentService) {
-        recipeRecyclerView.smoothScrollToPosition(0);
-        PAGE_NUMBER = 0;
-        isEndOfListAchieved = false;
-        isLoadingFromSearch = false;
-        clearSearchEditText();
-        getRecipeList(false, PAGE_NUMBER, MAX_SIZE, "");
+    public void onEditClick(Object object) {
+        RecipeResponse recipeResponse = (RecipeResponse) object;
+        Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
+        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, ADD_RECIPE.ordinal());
+        if (recipeResponse != null) {
+            intent.putExtra(HealthCocoConstants.TAG_INTENT_DATA, Parcels.wrap(recipeResponse));
+        }
+        startActivity(intent);
     }
+
+    @Override
+    public void onItemClicked(Object object) {
+        RecipeResponse recipeResponse = (RecipeResponse) object;
+        Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
+        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, ADD_RECIPE.ordinal());
+        if (recipeResponse != null) {
+            intent.putExtra(HealthCocoConstants.TAG_INTENT_DATA, Parcels.wrap(recipeResponse));
+            intent.putExtra(HealthCocoConstants.TAG_IS_FROM_RECIPE, true);
+        }
+        startActivity(intent);
+    }
+
 }

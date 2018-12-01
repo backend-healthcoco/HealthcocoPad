@@ -385,9 +385,9 @@ public class HomeActivity extends HealthCocoActivity implements View.OnClickList
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.layout_contacts_fragment, contactsFragment, contactsFragment.getClass().getSimpleName());
         fragmentTransaction.commitAllowingStateLoss();
-        if (isKiosk)
-            initFragment(FragmentType.KIOSK);
-        else
+//        if (isKiosk)
+//            initFragment(FragmentType.KIOSK);
+//        else
             initFragment(FragmentType.CONTACTS);
     }
 

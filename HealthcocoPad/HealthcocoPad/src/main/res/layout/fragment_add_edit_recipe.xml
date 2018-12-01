@@ -39,6 +39,51 @@
                 android:layout_weight="2" />
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/layout_padding"
+            android:layout_marginTop="@dimen/layout_padding"
+            android:layout_marginRight="@dimen/layout_padding"
+            android:orientation="horizontal"
+            android:paddingLeft="15dp"
+            android:paddingTop="15dp"
+            android:paddingRight="15dp"
+            android:paddingBottom="10dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.03"
+                android:text="@string/equivalent_measurement"
+                android:textSize="@dimen/text_size_registration_title" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2.4"
+                android:orientation="vertical">
+
+                <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+                    android:id="@+id/tv_add_equivalent_measurement"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/layout_padding_5dp"
+                    android:text="@string/icon_add_equivalent_measurement"
+                    android:textColor="@color/orange"
+                    android:textSize="@dimen/text_size_treatment_list_title" />
+
+                <LinearLayout
+                    android:id="@+id/container_equivalent_measurement"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/layout_padding"
+                    android:orientation="vertical"
+                    android:visibility="gone" />
+
+            </LinearLayout>
+        </LinearLayout>
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -273,46 +318,6 @@
             android:layout_marginRight="@dimen/layout_padding"
             android:orientation="vertical"
             android:padding="10dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/layout_padding"
-                android:orientation="horizontal"
-                android:padding="10dp">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1.03"
-                    android:text="@string/equivalent_measurement"
-                    android:textSize="@dimen/text_size_registration_title" />
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="2.4"
-                    android:orientation="vertical">
-
-                    <com.healthcoco.healthcocopad.views.TextViewFontAwesome
-                        android:id="@+id/tv_add_equivalent_measurement"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:padding="@dimen/layout_padding_5dp"
-                        android:text="@string/icon_add_equivalent_measurement"
-                        android:textColor="@color/orange"
-                        android:textSize="@dimen/text_size_treatment_list_title" />
-
-                    <LinearLayout
-                        android:id="@+id/container_equivalent_measurement"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/layout_padding"
-                        android:orientation="vertical"
-                        android:visibility="gone" />
-
-                </LinearLayout>
-            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"

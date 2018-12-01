@@ -98,7 +98,7 @@ public class AnalyseDietChartFragment extends HealthCocoFragment implements View
     }
 
     public void initData() {
-        mActivity.showLoading(false);
+//        mActivity.showLoading(false);
         if (recipeItem != null) {
             initRecipeData();
         }
@@ -184,7 +184,7 @@ public class AnalyseDietChartFragment extends HealthCocoFragment implements View
     }
 
     private void updateNutrientView() {
-        mActivity.hideLoading();
+//        mActivity.hideLoading();
         if (!Util.isNullOrEmptyList(generalNutrients))
             updateDietPlan(new ArrayList<Nutrients>(generalNutrients), R.string.general, parentCategoryOne);
 
@@ -220,7 +220,7 @@ public class AnalyseDietChartFragment extends HealthCocoFragment implements View
             TextView tvName = (TextView) layoutNutrient.findViewById(R.id.tv_name_nutrient);
             TextView tvValue = (TextView) layoutNutrient.findViewById(R.id.tv_value_nutrient);
             tvName.setText(nutrient.getName());
-            tvValue.setText((Util.getValidatedValue(nutrient.getValue() / listSize) + nutrient.getType().getUnit()));
+            tvValue.setText(Util.getValidatedValue(Util.round((nutrient.getValue() / listSize), 2)) + nutrient.getType().getUnit());
 
             containerNutrient.addView(layoutNutrient);
         }

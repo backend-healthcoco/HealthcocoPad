@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.R;
+import com.healthcoco.healthcocopad.bean.EquivalentQuantities;
 import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
 import com.healthcoco.healthcocopad.bean.server.ClinicDoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.ClinicImage;
@@ -23,6 +24,7 @@ import com.healthcoco.healthcocopad.enums.KioskSubItemType;
 import com.healthcoco.healthcocopad.viewholders.AboutDoctorListViewHolder;
 import com.healthcoco.healthcocopad.viewholders.ClinicImageListItemHolder;
 import com.healthcoco.healthcocopad.viewholders.DoctorListViewHolder;
+import com.healthcoco.healthcocopad.viewholders.EquivalentQuantityListItemViewHolder;
 import com.healthcoco.healthcocopad.viewholders.EventItemViewHolder;
 import com.healthcoco.healthcocopad.viewholders.FoodSubItemViewHolder;
 import com.healthcoco.healthcocopad.viewholders.IngredientListItemViewHolder;
@@ -126,6 +128,10 @@ public class HealthcocoRecyclerViewAdapter extends RecyclerView.Adapter<Healthco
                 convertView = mInflater.inflate(R.layout.list_item_nutrient, parent, false);
                 viewHolder = new NutrientListItemViewHolder(mActivity, convertView, onItemClickListener, listenerObject);
                 break;
+            case EQUIVALENT_MEASUREMENT:
+                convertView = mInflater.inflate(R.layout.list_item_equivalent_quantity, parent, false);
+                viewHolder = new EquivalentQuantityListItemViewHolder(mActivity, convertView, onItemClickListener, listenerObject);
+                break;
             case DOCTOR_POPUP_LIST:
                 convertView = mInflater.inflate(R.layout.item_doctor_popup_list, parent, false);
                 viewHolder = new DoctorListViewHolder(mActivity, convertView, listenerObject);
@@ -210,6 +216,12 @@ public class HealthcocoRecyclerViewAdapter extends RecyclerView.Adapter<Healthco
                 if (holder instanceof IngredientListSolrViewHolder && object instanceof IngredientResponse) {
                     IngredientListSolrViewHolder listSolrViewHolder = (IngredientListSolrViewHolder) holder;
                     listSolrViewHolder.applyData(object);
+                }
+                break;
+            case EQUIVALENT_MEASUREMENT:
+                if (holder instanceof EquivalentQuantityListItemViewHolder && object instanceof EquivalentQuantities) {
+                    EquivalentQuantityListItemViewHolder quantityListItemViewHolder = (EquivalentQuantityListItemViewHolder) holder;
+                    quantityListItemViewHolder.applyData(object);
                 }
                 break;
         }

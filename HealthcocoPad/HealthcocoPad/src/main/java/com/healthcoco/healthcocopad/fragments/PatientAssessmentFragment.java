@@ -50,6 +50,7 @@ public class PatientAssessmentFragment extends HealthCocoFragment implements Vie
     private AssessmentTypeListAdapter adapter;
     private String assessmentId;
     private String patientId;
+    private boolean isFromAssessmet;
     private AssessmentPersonalDetail assessmentPersonalDetail;
 
     @Override
@@ -67,6 +68,7 @@ public class PatientAssessmentFragment extends HealthCocoFragment implements Vie
         if (intent != null) {
             assessmentId = intent.getStringExtra(HealthCocoConstants.TAG_ASSESSMENT_ID);
             patientId = intent.getStringExtra(HealthCocoConstants.TAG_PATIENT_ID);
+            isFromAssessmet = intent.getBooleanExtra(HealthCocoConstants.TAG_IS_FROM_ASSESSMENT, false);
             if (patientId != null)
                 init();
         }
@@ -81,6 +83,9 @@ public class PatientAssessmentFragment extends HealthCocoFragment implements Vie
         initListeners();
         initAdapters();
         initData();
+        if (isFromAssessmet) {
+            openAssessmentForm(AssessmentFormType.PERSONAL_DETAILS);
+        }
     }
 
     @Override
@@ -91,6 +96,8 @@ public class PatientAssessmentFragment extends HealthCocoFragment implements Vie
 
     @Override
     public void initListeners() {
+        ((CommonOpenUpActivity) mActivity).initActionbarRightAction(this);
+
         gvAssessment.setOnItemClickListener(this);
     }
 
@@ -174,7 +181,12 @@ public class PatientAssessmentFragment extends HealthCocoFragment implements Vie
 
     @Override
     public void onClick(View v) {
-
+        switch (v.getId()) {
+            case R.id.container_right_action:
+                mActivity.setResult(HealthCocoConstants.RESULT_CODE_ASSESSMENT);
+                mActivity.finish();
+                break;
+        }
     }
 
     @Override
@@ -195,6 +207,7 @@ public class PatientAssessmentFragment extends HealthCocoFragment implements Vie
         intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, formType.getOpenUpFragmentType().ordinal());
         intent.putExtra(HealthCocoConstants.TAG_ASSESSMENT_ID, assessmentId);
         intent.putExtra(HealthCocoConstants.TAG_PATIENT_ID, patientId);
+        intent.putExtra(HealthCocoConstants.TAG_IS_FROM_ASSESSMENT, isFromAssessmet);
 //        if (!Util.isNullOrBlank(tag) && intentData != null)
 //            intent.putExtra(tag, Parcels.wrap(intentData));
 //        if (requestCode == 0)

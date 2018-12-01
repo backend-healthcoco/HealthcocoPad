@@ -7,46 +7,22 @@
 
     <include layout="@layout/action_bar_title_save" />
 
-    <LinearLayout
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="@dimen/padding_20_dp"
-        android:background="@color/white"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content">
 
-
-        <TextView
-            android:id="@+id/tv_serving_type"
-            style="@style/assesment_edittext"
-            android:layout_width="0dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/padding_20_dp"
-            android:layout_weight="1"
-            android:drawableEnd="@drawable/arrow_down_drug"
-            android:hint="@string/serving_type"
-            android:paddingRight="@dimen/layout_padding"
-            android:textSize="@dimen/text_size_registration_title" />
+            android:background="@color/white"
+            android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/edit_value"
-            style="@style/assesment_edittext"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:hint="@string/value"
-            android:inputType="numberDecimal" />
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_equivalent_measurement"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/layout_padding" />
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
 
-        <TextView
-            android:id="@+id/tv_type"
-            style="@style/assesment_edittext"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/padding_20_dp"
-            android:layout_weight="1"
-            android:drawableEnd="@drawable/arrow_down_drug"
-            android:hint="@string/type"
-            android:paddingRight="@dimen/layout_padding" />
-
-
-    </LinearLayout>
 </LinearLayout>

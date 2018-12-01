@@ -46,6 +46,20 @@
             android:paddingLeft="20dp"
             android:paddingRight="10dp"
             android:src="@drawable/icon_history_selected" />
+
+        <com.healthcoco.healthcocopad.views.FontAwesomeButton
+            android:id="@+id/bt_add_new"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="0.2"
+            android:background="@color/blue_primary_dark"
+            android:singleLine="true"
+            android:text="@string/add_new"
+            android:textColor="@color/white"
+            android:visibility="gone" />
+
+
     </LinearLayout>
 
 
@@ -75,6 +89,15 @@
             android:text="@string/no_recipe_added"
             android:textSize="@dimen/text_size_no_results"
             android:textStyle="bold"
+            android:visibility="visible" />
+
+        <ProgressBar
+            android:id="@+id/progress_loading_center"
+            style="?android:attr/progressBarStyleSmall"
+            android:layout_width="@dimen/round_progress_bar_size"
+            android:layout_height="@dimen/round_progress_bar_size"
+            android:layout_gravity="center"
+            android:progressDrawable="@drawable/progress_loading"
             android:visibility="visible" />
 
         <ProgressBar

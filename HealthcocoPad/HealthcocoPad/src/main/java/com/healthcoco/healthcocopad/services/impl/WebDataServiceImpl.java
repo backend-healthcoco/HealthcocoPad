@@ -1292,7 +1292,7 @@ public class WebDataServiceImpl implements GCMRefreshListener {
                     + HealthCocoConstants.PARAM_HOSPITAL_ID + hospitalId
                     + HealthCocoConstants.PARAM_DISCARDED_AMPERCENT + discarded
                     + HealthCocoConstants.PARAM_UPDATED_TIME + updatedTime;
-            getResponse(Request.Priority.IMMEDIATE, webServiceType, class1, url, null, null, responseListener,
+            getResponse(webServiceType, class1, url, null, null, responseListener,
                     errorListener);
         } else {
             showUserOffline(webServiceType, responseListener);
@@ -1408,7 +1408,26 @@ public class WebDataServiceImpl implements GCMRefreshListener {
                     + HealthCocoConstants.PARAM_HOSPITAL_ID + hospitalId
                     + HealthCocoConstants.PARAM_DISCARDED_AMPERCENT + discarded
                     + HealthCocoConstants.PARAM_UPDATED_TIME + updatedTime;
-            getResponse(Request.Priority.IMMEDIATE, webServiceType, class1, url, null, null, responseListener,
+            getResponse(webServiceType, class1, url, null, null, responseListener,
+                    errorListener);
+        } else {
+            errorListener.onNetworkUnavailable(webServiceType);
+        }
+    }
+
+    public void getAssessment(Class<?> class1, boolean discarded,
+                              String doctorId, String locationId, String hospitalId, String patientId, long updatedTime,
+                              Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        WebServiceType webServiceType = WebServiceType.GET_PATIENT_ASSESSMENT;
+        if (HealthCocoConstants.isNetworkOnline) {
+            String url = webServiceType.getUrl() + "?"
+                    + HealthCocoConstants.PARAM_PATIENT_ID + patientId
+                    + HealthCocoConstants.PARAM_DOCTOR_ID + doctorId
+                    + HealthCocoConstants.PARAM_LOCATION_ID + locationId
+                    + HealthCocoConstants.PARAM_HOSPITAL_ID + hospitalId
+                    + HealthCocoConstants.PARAM_DISCARDED_AMPERCENT + discarded
+                    + HealthCocoConstants.PARAM_UPDATED_TIME + updatedTime;
+            getResponse(webServiceType, class1, url, null, null, responseListener,
                     errorListener);
         } else {
             errorListener.onNetworkUnavailable(webServiceType);
@@ -1445,7 +1464,7 @@ public class WebDataServiceImpl implements GCMRefreshListener {
                     + HealthCocoConstants.PARAM_HOSPITAL_ID + hospitalId
                     + HealthCocoConstants.PARAM_DISCARDED_AMPERCENT + discarded
                     + HealthCocoConstants.PARAM_UPDATED_TIME + updatedTime;
-            getResponse(Request.Priority.IMMEDIATE, webServiceType, class1, url, null, null, responseListener,
+            getResponse(webServiceType, class1, url, null, null, responseListener,
                     errorListener);
         } else {
             errorListener.onNetworkUnavailable(webServiceType);
@@ -1908,7 +1927,7 @@ public class WebDataServiceImpl implements GCMRefreshListener {
                     + HealthCocoConstants.PARAM_HOSPITAL_ID + hospitalId
                     + HealthCocoConstants.PARAM_DISCARDED_AMPERCENT + discarded
                     + HealthCocoConstants.PARAM_UPDATED_TIME + updatedTime;
-            getResponse(Request.Priority.IMMEDIATE, webServiceType, class1, url, null, null, responseListener,
+            getResponse(webServiceType, class1, url, null, null, responseListener,
                     errorListener);
         } else {
             errorListener.onNetworkUnavailable(webServiceType);
@@ -1975,4 +1994,5 @@ public class WebDataServiceImpl implements GCMRefreshListener {
             showUserOffline(webServiceType, responseListener);
         }
     }
+
 }

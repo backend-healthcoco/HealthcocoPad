@@ -67,6 +67,7 @@ import com.healthcoco.healthcocopad.fragments.PatientEducationVideoListFragment;
 import com.healthcoco.healthcocopad.fragments.PatientProfileFragment;
 import com.healthcoco.healthcocopad.fragments.PatientRegistrationFragment;
 import com.healthcoco.healthcocopad.fragments.PatientRegistrationTabsFragment;
+import com.healthcoco.healthcocopad.fragments.RecipeListFragment;
 import com.healthcoco.healthcocopad.fragments.SelectedDiagramDetailFragment;
 import com.healthcoco.healthcocopad.fragments.SettingKioskFragment;
 import com.healthcoco.healthcocopad.fragments.SettingPrintSetupFragment;
@@ -88,9 +89,11 @@ import static com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType.ADD_RE
 import static com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType.ANALYSE;
 import static com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType.FOOD_AND_EXERCISE;
 import static com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType.LIFE_SYLE;
+import static com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType.MEASUREMENT;
 import static com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType.MEDICAL_INFORMATION;
 import static com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType.PATIENT_ASSESSMENT;
 import static com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType.PERSONAL_DETAILS;
+import static com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType.RECIPE_LIST;
 import static com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType.SELECT_INGREDIENT;
 import static com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType.SELECT_RECIPES;
 
@@ -301,7 +304,7 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
                 openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_CROSS, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, R.string.change_pin, new ChangePinFragment());
                 break;
             case MEASUREMENT:
-                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.WITH_SAVE, PERSONAL_DETAILS.getTitleId(), new AddEditMeasurementFragment());
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.WITH_SAVE, MEASUREMENT.getTitleId(), new AddEditMeasurementFragment());
                 break;
             case FOOD_AND_EXERCISE:
                 openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.WITH_SAVE, FOOD_AND_EXERCISE.getTitleId(), new AddEditFoodAndExerciseFragment());
@@ -316,7 +319,7 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
                 openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.WITH_SAVE, PERSONAL_DETAILS.getTitleId(), new PatientProfileFragment());
                 break;
             case PATIENT_ASSESSMENT:
-                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, PATIENT_ASSESSMENT.getTitleId(), new PatientAssessmentFragment());
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.WITH_DONE, PATIENT_ASSESSMENT.getTitleId(), new PatientAssessmentFragment());
                 break;
             case ADD_DIET:
                 openFragment(ActionbarType.HIDDEN, new AddEditDietChartFragment());
@@ -338,6 +341,9 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
                 break;
             case ADD_RECIPE:
                 openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.WITH_SAVE, ADD_RECIPE.getTitleId(), new AddEditRecipeFragment());
+                break;
+            case RECIPE_LIST:
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.WITH_SAVE, RECIPE_LIST.getTitleId(), new RecipeListFragment());
                 break;
         }
     }
@@ -506,6 +512,8 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
                 case BOOK_APPOINTMENT:
                 case FEEDBACK_DOCTOR:
                 case PATIENT_REGISTRATION_TABS:
+                case ADD_RECIPE:
+                case ADD_INGREDIENT:
                     showFinishConfirmationAlert();
                     break;
                 default:

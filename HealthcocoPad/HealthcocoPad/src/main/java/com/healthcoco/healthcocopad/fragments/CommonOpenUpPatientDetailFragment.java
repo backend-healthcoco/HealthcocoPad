@@ -112,6 +112,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
     private PatientPrescriptionDetailFragment prescriptionDetailFragment;
     private PatientReportsDetailFragment reportsDetailFragment;
     private PatientDietPlanDetailFragment dietPlanDetailFragment;
+    private PatientAssessmentDetailFragment assessmentDetailFragment;
     private PatientTreatmentDetailFragment treatmentDetailFragment;
     private PatientInvoiceDetailFragment invoiceDetailFragment;
     private PatientReceiptDetailFragment receiptDetailFragment;
@@ -123,6 +124,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
     private boolean isClinicalNotesTabClicked = false;
     private boolean isReportsTabClicked = false;
     private boolean isDietPlanTabClicked = false;
+    private boolean isAssessmentClicked = false;
     private boolean isTreatmentTabClicked = false;
     private boolean isInvoiceTabClicked = false;
     private boolean isReceiptTabClicked = false;
@@ -228,6 +230,10 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                     case PATIENT_DETAIL_DIET_PLAN:
                         dietPlanDetailFragment = new PatientDietPlanDetailFragment();
                         healthcocoFragment = dietPlanDetailFragment;
+                        break;
+                    case PATIENT_DETAIL_ASSESSMENT:
+                        assessmentDetailFragment = new PatientAssessmentDetailFragment();
+                        healthcocoFragment = assessmentDetailFragment;
                         break;
 //                case PATIENT_DETAIL_IMPORTANT:
 //                    healthcocoFragment = new PatientImportantDetailFragment();
@@ -452,6 +458,13 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                         isDietPlanTabClicked = true;
                     }
                     break;
+                case PATIENT_DETAIL_ASSESSMENT:
+                    doctorNameLayout.setVisibility(View.INVISIBLE);
+                    if (!isAssessmentClicked) {
+                        assessmentDetailFragment.refreshData(PatientDetailTabType.PATIENT_DETAIL_ASSESSMENT);
+                        isAssessmentClicked = true;
+                    }
+                    break;
               /*  case PATIENT_DETAIL_TREATMENT:
                     if (!isTreatmentTabClicked) {
                         treatmentDetailFragment.refreshData(PatientDetailTabType.PATIENT_DETAIL_TREATMENT, clinicDoctorProfileList);
@@ -493,6 +506,8 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                 reportsDetailFragment.setUserData(user, selectedPatient);
             if (dietPlanDetailFragment != null)
                 dietPlanDetailFragment.setUserData(user, loginedUser, selectedPatient);
+            if (assessmentDetailFragment != null)
+                assessmentDetailFragment.setUserData(user, loginedUser, selectedPatient);
             if (treatmentDetailFragment != null)
                 treatmentDetailFragment.setUserData(user, loginedUser, selectedPatient);
             if (invoiceDetailFragment != null)
@@ -737,6 +752,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
         isReportsTabClicked = false;
         isTreatmentTabClicked = false;
         isDietPlanTabClicked = false;
+        isAssessmentClicked = false;
     }
 
     @Override

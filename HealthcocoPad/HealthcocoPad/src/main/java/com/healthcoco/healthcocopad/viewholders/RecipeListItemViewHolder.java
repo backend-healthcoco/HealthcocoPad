@@ -45,6 +45,7 @@ public class RecipeListItemViewHolder extends HealthcocoComonRecylcerViewHolder 
     private boolean isIngredientValue = false;
     private EquivalentQuantities equivalentQuantities;
     private SelectedRecipeItemClickListener recipeItemClickListener;
+    private double ingredientMultiplier = 1;
 
     public RecipeListItemViewHolder(HealthCocoActivity mActivity, View itemView, HealthcocoRecyclerViewItemClickListener itemClickListener, Object listenerObject) {
         super(mActivity, itemView, itemClickListener);
@@ -83,7 +84,7 @@ public class RecipeListItemViewHolder extends HealthcocoComonRecylcerViewHolder 
                 }
             });
 
-        itemView.setOnClickListener(new View.OnClickListener() {
+        parentIngredients.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 recipeItemClickListener.onIngredientItemClicked(recipeItem);
@@ -176,9 +177,10 @@ public class RecipeListItemViewHolder extends HealthcocoComonRecylcerViewHolder 
             }
 
             if (!Util.isNullOrEmptyList(recipeItem.getIngredients())) {
+                ingredientMultiplier = 1;
                 addIngredients(recipeItem.getIngredients());
-                tvQuantity.setVisibility(View.GONE);
-                tvServingType.setVisibility(View.GONE);
+                tvQuantity.setVisibility(View.VISIBLE);
+                tvServingType.setVisibility(View.VISIBLE);
 
             } else {
                 parentIngredients.setVisibility(View.GONE);
@@ -204,19 +206,35 @@ public class RecipeListItemViewHolder extends HealthcocoComonRecylcerViewHolder 
 
                 tvItemTitle.setText(ingredient.getName());
 
+
                 if (ingredient.getQuantity() != null) {
                     String quantityType = ingredient.getQuantity().getType().getUnit();
                     if (!Util.isNullOrZeroNumber(ingredient.getQuantity().getValue())) {
-                        tvItemQuantity.setText(Util.getValidatedValue(ingredient.getQuantity().getValue()) + quantityType);
+                        ingredient.getQuantity().setValue(ingredient.getQuantity().getValue() * ingredientMultiplier);
+                        tvItemQuantity.setText(Util.getValidatedValue(Util.round(ingredient.getQuantity().getValue(), 2)) + quantityType);
                     }
                 }
                 if (ingredient.getCalories() != null) {
                     if (ingredient.getCalories().getType() != null) {
-                        String calariesType = ingredient.getCalories().getType().getQuantityType();
+                        String calariesType = ingredient.getCalories().getType().getUnit();
                         if (!Util.isNullOrZeroNumber(ingredient.getCalories().getValue())) {
-                            tvItemCalarie.setText(Util.getValidatedValue(ingredient.getCalories().getValue()) + calariesType);
+                            ingredient.getCalories().setValue(ingredient.getCalories().getValue() * ingredientMultiplier);
+                            tvItemCalarie.setText(Util.getValidatedValue(Util.round(ingredient.getCalories().getValue(), 2)) + calariesType);
                         }
                     }
+                }
+
+                if (ingredient.getProtein() != null) {
+                    ingredient.getProtein().setValue(ingredient.getProtein().getValue() * ingredientMultiplier);
+                }
+                if (ingredient.getFat() != null) {
+                    ingredient.getFat().setValue(ingredient.getFat().getValue() * ingredientMultiplier);
+                }
+                if (ingredient.getCarbohydreate() != null) {
+                    ingredient.getCarbohydreate().setValue(ingredient.getCarbohydreate().getValue() * ingredientMultiplier);
+                }
+                if (ingredient.getFiber() != null) {
+                    ingredient.getFiber().setValue(ingredient.getFiber().getValue() * ingredientMultiplier);
                 }
                 containerIngredients.addView(layoutSubItemPermission);
             }
@@ -231,6 +249,7 @@ public class RecipeListItemViewHolder extends HealthcocoComonRecylcerViewHolder 
 
     @Override
     public void onItemSelected(PopupWindowType popupWindowType, Object object) {
+        double previousValue = recipeItem.getCurrentQuantity().getValue();
         switch (popupWindowType) {
             case SERVING_TYPE:
                 if (object instanceof EquivalentQuantities) {
@@ -255,6 +274,7 @@ public class RecipeListItemViewHolder extends HealthcocoComonRecylcerViewHolder 
                 }
                 break;
         }
+        ingredientMultiplier = recipeItem.getCurrentQuantity().getValue() / previousValue;
 
         if (recipeItem.getProtein() != null) {
             recipeItem.getProtein().setValue((recipeItem.getProteinPerHundredUnit() * recipeItem.getCurrentQuantity().getValue()) / 100);
@@ -276,7 +296,12 @@ public class RecipeListItemViewHolder extends HealthcocoComonRecylcerViewHolder 
             recipeItem.getCalories().setValue((recipeItem.getCaloriesPerHundredUnit() * recipeItem.getCurrentQuantity().getValue()) / 100);
         }
         tvTotalQuantity.setText(Util.round(recipeItem.getCurrentQuantity().getValue(), 2) + recipeItem.getCurrentQuantity().getType().getUnit() + " - " +
-                Util.round(recipeItem.getCalories().getValue(), 2) + mActivity.getString(R.string.cal_orange));
+                Util.round(recipeItem.getCalories().getValue(), 2) + recipeItem.getCalories().getType().getUnit());
+
+
+        if (!Util.isNullOrEmptyList(recipeItem.getIngredients())) {
+            addIngredients(recipeItem.getIngredients());
+        }
         recipeItemClickListener.onQuantityChanged(recipeItem);
     }
 

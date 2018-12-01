@@ -45,8 +45,8 @@ public class AssessmentTypeListViewHolder extends HealthCocoViewHolder {
     }
 
     private void initViews(View view) {
-        tvAssessmentType = (TextView) view.findViewById(R.id.tv_assessment_type);
-        ivThumbnail = (ImageView) view.findViewById(R.id.iv_thumbnail);
+        tvAssessmentType = (TextView) view.findViewById(R.id.tv_assessment_title);
+        ivThumbnail = (ImageView) view.findViewById(R.id.iv_assessment_type);
     }
 
     private void initListeners() {

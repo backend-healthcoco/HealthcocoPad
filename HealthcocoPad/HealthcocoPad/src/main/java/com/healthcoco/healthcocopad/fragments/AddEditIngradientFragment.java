@@ -51,7 +51,6 @@ import java.util.List;
 public class AddEditIngradientFragment extends HealthCocoFragment implements View.OnClickListener,
         GsonRequest.ErrorListener, Response.Listener<VolleyResponseBean>, LocalDoInBackgroundListenerOptimised, PopupWindowListener {
 
-    private final int EDIT_ID = 100;
     private final int DELETE_ID = 101;
     private User user;
     private TextView tvTypeQuantity;
@@ -75,7 +74,7 @@ public class AddEditIngradientFragment extends HealthCocoFragment implements Vie
     private LinearLayout containerNutrientsOne;
     private LinearLayout containerNutrientsTwo;
     private Ingredient ingredientNutrient;
-    private LinkedHashMap<String, EquivalentQuantities> quantitiesLinkedHashMap = new LinkedHashMap<>();
+    private LinkedHashMap<QuantityType, EquivalentQuantities> quantitiesLinkedHashMap = new LinkedHashMap<>();
 
 
     public AddEditIngradientFragment() {
@@ -159,19 +158,15 @@ public class AddEditIngradientFragment extends HealthCocoFragment implements Vie
                 validateData();
                 break;
             case R.id.tv_add_equivalent_measurement:
-                openAddEquivalentMeasurementDialog(null);
+                openAddEquivalentMeasurementDialog();
                 break;
             case R.id.tv_add_nutrient:
                 openAddNutrientWindow();
                 break;
-            case EDIT_ID:
-                EquivalentQuantities itemEquivalentQuantities = (EquivalentQuantities) v.getTag();
-                if (itemEquivalentQuantities != null)
-                    openAddEquivalentMeasurementDialog(itemEquivalentQuantities);
-                break;
+
             case DELETE_ID:
-                String tag = (String) v.getTag();
-                if (!Util.isNullOrBlank(tag)) {
+                QuantityType tag = (QuantityType) v.getTag();
+                if (tag != null) {
                     quantitiesLinkedHashMap.remove(tag);
                     addEquivalentMeasurement(new ArrayList<>(quantitiesLinkedHashMap.values()));
                 }
@@ -187,11 +182,11 @@ public class AddEditIngradientFragment extends HealthCocoFragment implements Vie
         startActivityForResult(intent, HealthCocoConstants.REQUEST_CODE_ADD_NUTRIENT, null);
     }
 
-    private void openAddEquivalentMeasurementDialog(EquivalentQuantities equivalentQuantities) {
+    private void openAddEquivalentMeasurementDialog() {
         AddEquivalentMeasurementDialogFragment measurementDialogFragment = new AddEquivalentMeasurementDialogFragment();
-        if (equivalentQuantities != null) {
+        if (!Util.isNullOrEmptyList(quantitiesLinkedHashMap)) {
             Bundle bundle = new Bundle();
-            bundle.putParcelable(HealthCocoConstants.TAG_INTENT_DATA, Parcels.wrap(equivalentQuantities));
+            bundle.putParcelable(HealthCocoConstants.TAG_INTENT_DATA, Parcels.wrap(quantitiesLinkedHashMap));
             measurementDialogFragment.setArguments(bundle);
         }
         measurementDialogFragment.setTargetFragment(this, HealthCocoConstants.REQUEST_CODE_ADD_MEASUREMENT);
@@ -388,9 +383,12 @@ public class AddEditIngradientFragment extends HealthCocoFragment implements Vie
             switch (requestCode) {
                 case HealthCocoConstants.REQUEST_CODE_ADD_MEASUREMENT:
                     if (data != null) {
-                        EquivalentQuantities quantity = Parcels.unwrap(data.getParcelableExtra(HealthCocoConstants.TAG_INTENT_DATA));
-                        if (quantity != null) {
-                            quantitiesLinkedHashMap.put(quantity.getServingType().getUnit(), quantity);
+                        List<EquivalentQuantities> quantitiesList = Parcels.unwrap(data.getParcelableExtra(HealthCocoConstants.TAG_INTENT_DATA));
+                        if (!Util.isNullOrEmptyList(quantitiesList)) {
+                            quantitiesLinkedHashMap.clear();
+                            for (EquivalentQuantities equivalentQuantities : quantitiesList) {
+                                quantitiesLinkedHashMap.put(equivalentQuantities.getServingType(), equivalentQuantities);
+                            }
                             addEquivalentMeasurement(new ArrayList<>(quantitiesLinkedHashMap.values()));
                         }
                     }
@@ -425,11 +423,6 @@ public class AddEditIngradientFragment extends HealthCocoFragment implements Vie
                 tvServingType.setText(quantityItem.getServingType().getUnit());
                 tvValue.setText(Util.getValidatedValue(quantityItem.getValue()));
 
-
-                btEdit.setId(EDIT_ID);
-                btEdit.setTag(quantityItem);
-                btEdit.setOnClickListener(this);
-
                 btDelete.setId(DELETE_ID);
                 btDelete.setTag(quantityItem.getServingType().getUnit());
                 btDelete.setOnClickListener(this);
@@ -443,6 +436,8 @@ public class AddEditIngradientFragment extends HealthCocoFragment implements Vie
 
     private void updateNutrientView(Ingredient ingredient) {
 
+        containerNutrientsOne.removeAllViews();
+        containerNutrientsTwo.removeAllViews();
         if (!Util.isNullOrEmptyList(ingredient.getGeneralNutrients()))
             updateDietPlan(ingredient.getGeneralNutrients(), R.string.general, containerNutrientsOne);
         if (!Util.isNullOrEmptyList(ingredient.getCarbNutrients()))

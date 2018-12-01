@@ -2,6 +2,9 @@ package com.healthcoco.healthcocopad.dialogFragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,8 +14,10 @@ import android.widget.TextView;
 import com.healthcoco.healthcocopad.HealthCocoDialogFragment;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.EquivalentQuantities;
+import com.healthcoco.healthcocopad.enums.AdapterType;
 import com.healthcoco.healthcocopad.enums.PopupWindowType;
 import com.healthcoco.healthcocopad.enums.QuantityType;
+import com.healthcoco.healthcocopad.recyclerview.HealthcocoRecyclerViewAdapter;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.Util;
@@ -20,6 +25,8 @@ import com.healthcoco.healthcocopad.utilities.Util;
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 /**
  * Created by Prashant on 19-10-2018.
@@ -27,13 +34,11 @@ import java.util.ArrayList;
 
 public class AddEquivalentMeasurementDialogFragment extends HealthCocoDialogFragment implements View.OnClickListener {
 
-    public ArrayList<Object> quantityTypeList = new ArrayList<Object>() {{
-        add(QuantityType.G);
-        add(QuantityType.MILI_LITRE);
-    }};
-    public ArrayList<Object> servingTypeList = new ArrayList<Object>() {{
+
+    public ArrayList<QuantityType> servingTypeList = new ArrayList<QuantityType>() {{
         add(QuantityType.TABLE_SPOON);
         add(QuantityType.TEA_SPOON);
+        add(QuantityType.GLASS);
         add(QuantityType.BOWL);
         add(QuantityType.CUP);
         add(QuantityType.G);
@@ -42,11 +47,15 @@ public class AddEquivalentMeasurementDialogFragment extends HealthCocoDialogFrag
         add(QuantityType.MILI_LITRE);
     }};
     private TextView titleTextView;
-    private TextView tvType;
-    private TextView tvServingType;
-    private EditText editValue;
-    EquivalentQuantities equivalentQuantity;
+
     private Bundle bundle;
+
+    private List<EquivalentQuantities> quantitiesList = new ArrayList<>();
+    private List<EquivalentQuantities> quantitiesListReceived = new ArrayList<>();
+    private LinkedHashMap<QuantityType, EquivalentQuantities> quantitiesHashMap = new LinkedHashMap<>();
+
+    private RecyclerView rvEquivalentMeasurement;
+    private HealthcocoRecyclerViewAdapter equivalentMeasurementAdapter;
 
 
     public AddEquivalentMeasurementDialogFragment() {
@@ -65,9 +74,9 @@ public class AddEquivalentMeasurementDialogFragment extends HealthCocoDialogFrag
 
         bundle = getArguments();
         if (bundle != null)
-            equivalentQuantity = Parcels.unwrap(bundle.getParcelable(HealthCocoConstants.TAG_INTENT_DATA));
+            quantitiesListReceived = Parcels.unwrap(bundle.getParcelable(HealthCocoConstants.TAG_INTENT_DATA));
 
-        setWidthHeight(0.60, 0.60);
+        setWidthHeight(0.70, 0.90);
         init();
     }
 
@@ -75,43 +84,37 @@ public class AddEquivalentMeasurementDialogFragment extends HealthCocoDialogFrag
     public void init() {
         initViews();
         initListeners();
+        initAdapters();
         initData();
     }
 
     @Override
     public void initViews() {
         titleTextView = view.findViewById(R.id.tv_title);
-        tvType = view.findViewById(R.id.tv_type);
-        tvServingType = view.findViewById(R.id.tv_serving_type);
-        editValue = view.findViewById(R.id.edit_value);
+        rvEquivalentMeasurement = view.findViewById(R.id.rv_equivalent_measurement);
 
-        titleTextView.setText(R.string.add);
+        titleTextView.setText(R.string.add_equivalent);
     }
 
     @Override
     public void initListeners() {
         initSaveCancelButton(this);
-
-        mActivity.initPopupWindows(tvServingType, PopupWindowType.NUTRIENT_TYPE, servingTypeList, null);
-        mActivity.initPopupWindows(tvType, PopupWindowType.NUTRIENT_TYPE, quantityTypeList, null);
-
     }
 
     @Override
     public void initData() {
-        if (equivalentQuantity != null) {
+        notifyAdapter();
+    }
 
-            if (!Util.isNullOrZeroNumber(equivalentQuantity.getValue()))
-                editValue.setText(Util.getValidatedValue(equivalentQuantity.getValue()));
-            if (equivalentQuantity.getServingType() != null) {
-                tvServingType.setText(equivalentQuantity.getServingType().getUnit());
-                tvServingType.setTag(equivalentQuantity.getServingType());
-            }
-            if (equivalentQuantity.getType() != null) {
-                tvType.setText(equivalentQuantity.getType().getUnit());
-                tvType.setTag(equivalentQuantity.getType());
-            }
-        }
+
+    private void initAdapters() {
+        LinearLayoutManager layoutManager = new LinearLayoutManager(mActivity, LinearLayoutManager.VERTICAL, false);
+        rvEquivalentMeasurement.setLayoutManager(layoutManager);
+        rvEquivalentMeasurement.setItemAnimator(new DefaultItemAnimator());
+
+        equivalentMeasurementAdapter = new HealthcocoRecyclerViewAdapter(mActivity, AdapterType.EQUIVALENT_MEASUREMENT, this);
+        equivalentMeasurementAdapter.setListData((ArrayList<Object>) (Object) quantitiesList);
+        rvEquivalentMeasurement.setAdapter(equivalentMeasurementAdapter);
     }
 
     @Override
@@ -125,31 +128,58 @@ public class AddEquivalentMeasurementDialogFragment extends HealthCocoDialogFrag
 
     private void validateData() {
         String msg = null;
-        double value = Util.getValidatedDoubleValue(editValue);
-        String servingType = String.valueOf(editValue.getText());
-        String type = String.valueOf(editValue.getText());
-        if (Util.isNullOrBlank(servingType))
-            msg = getResources().getString((R.string.please_enter_serving_type));
-        if (Util.isNullOrZeroNumber(value))
-            msg = getResources().getString((R.string.please_enter_value));
-        if (Util.isNullOrBlank(type))
-            msg = getResources().getString((R.string.please_enter_type));
 
         if (Util.isNullOrBlank(msg)) {
-            addEquivalentMeasurement(value);
+            addEquivalentMeasurement();
         } else
             Util.showToast(mActivity, msg);
     }
 
-    private void addEquivalentMeasurement(double value) {
-        EquivalentQuantities equivalentQuantities = new EquivalentQuantities();
-        equivalentQuantities.setValue(value);
-        equivalentQuantities.setServingType((QuantityType) tvServingType.getTag());
-        equivalentQuantities.setType((QuantityType) tvType.getTag());
+    private void addEquivalentMeasurement() {
+        quantitiesList.clear();
+
+        for (int position = 0; position < quantitiesHashMap.size(); position++) {
+            View childView = rvEquivalentMeasurement.getChildAt(position);
+
+            if (childView != null) {
+                TextView tvType = childView.findViewById(R.id.tv_type);
+                TextView tvServingType = childView.findViewById(R.id.tv_serving_type);
+                EditText editValue = childView.findViewById(R.id.edit_value);
+
+                String value = Util.getValidatedValueOrNull(editValue);
+                if (!Util.isNullOrBlank(value)) {
+                    EquivalentQuantities equivalentQuantities = new EquivalentQuantities();
+                    equivalentQuantities.setValue(Util.getValidatedDoubleValue(editValue));
+                    equivalentQuantities.setServingType((QuantityType) tvServingType.getTag());
+                    equivalentQuantities.setType((QuantityType) tvType.getTag());
+                    quantitiesList.add(equivalentQuantities);
+                }
+            }
+        }
 
         Intent data = new Intent();
-        data.putExtra(HealthCocoConstants.TAG_INTENT_DATA, Parcels.wrap(equivalentQuantities));
+        data.putExtra(HealthCocoConstants.TAG_INTENT_DATA, Parcels.wrap(quantitiesList));
         getTargetFragment().onActivityResult(HealthCocoConstants.REQUEST_CODE_ADD_MEASUREMENT, mActivity.RESULT_OK, data);
         dismiss();
     }
+
+    private void notifyAdapter() {
+        for (QuantityType quantityType : servingTypeList) {
+            EquivalentQuantities equivalentQuantity = new EquivalentQuantities();
+            equivalentQuantity.setServingType(quantityType);
+            equivalentQuantity.setType(QuantityType.G);
+            quantitiesHashMap.put(quantityType, equivalentQuantity);
+        }
+
+        if (!Util.isNullOrEmptyList(quantitiesListReceived))
+            for (EquivalentQuantities equivalentQuantities : quantitiesListReceived) {
+                quantitiesHashMap.put(equivalentQuantities.getServingType(), equivalentQuantities);
+            }
+
+        quantitiesList.clear();
+        quantitiesList.addAll(new ArrayList<>(quantitiesHashMap.values()));
+
+        equivalentMeasurementAdapter.notifyDataSetChanged();
+    }
+
 }

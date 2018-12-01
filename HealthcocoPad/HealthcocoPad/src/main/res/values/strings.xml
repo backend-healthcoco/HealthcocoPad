@@ -1286,11 +1286,16 @@
     <string name="no_of_family_member">No. of Family Member</string>
     <string name="adult">Adult</string>
     <string name="child">Child</string>
+    <string name="assessment_id"> | Assessment ID&#160;:&#160;</string>
+    <string name="assessment">Assessment</string>
+    <string name="assessment_saved">Assessment Saved</string>
     <string name="pregnant">Pregnant</string>
+    <string name="no_assessment_found">No Assessment found</string>
     <string name="lactating">Lactating</string>
     <string name="working">Working</string>
     <string name="personal_details">Personal Details</string>
     <string name="personal_assessment">Personal Assessment</string>
+    <string name="goal_colon">Goal&#160;:&#160;</string>
 
 
     <!--Patient Measurement texts-->
@@ -1443,17 +1448,19 @@
     <string name="others">Others</string>
     <string name="select_ingredient">Select Ingredient</string>
     <string name="add_ingredient">Add Ingredient</string>
+    <string name="ingredient_list">Ingredient List</string>
 
 
     <!--Add Recipe texts-->
     <string name="analyse">Analyse</string>
     <string name="select_recipe">Select Recipe</string>
     <string name="add_recipe">Add Recipe</string>
+    <string name="recipe_list">Recipe List</string>
     <string name="add_nutrient">Add Nutrient</string>
     <string name="recipe_name">Recipe Name&#160;:&#160;</string>
     <string name="please_add_equivalent_quantity_first">Please add equivalent measurement first</string>
     <string name="alert_add_analyse_diet_plan">Blank Diet Plan cannot be Analysed. Add Diet</string>
     <string name="diet_plan">Diet Plan</string>
-
+    <string name="add_equivalent">Add Equivalent Measurement</string>
 
 </resources>

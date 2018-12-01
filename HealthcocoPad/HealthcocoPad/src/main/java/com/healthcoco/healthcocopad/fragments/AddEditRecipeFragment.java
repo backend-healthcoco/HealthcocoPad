@@ -17,12 +17,12 @@ import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.bean.EquivalentQuantities;
 import com.healthcoco.healthcocopad.bean.MealQuantity;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
-import com.healthcoco.healthcocopad.bean.request.IngredientRequest;
 import com.healthcoco.healthcocopad.bean.request.RecipeRequest;
 import com.healthcoco.healthcocopad.bean.server.DietPlanRecipeItem;
 import com.healthcoco.healthcocopad.bean.server.Ingredient;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.Nutrients;
+import com.healthcoco.healthcocopad.bean.server.RecipeResponse;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocopad.dialogFragment.AddEquivalentMeasurementDialogFragment;
@@ -38,6 +38,7 @@ import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
+import com.healthcoco.healthcocopad.utilities.ReflectionUtil;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.healthcoco.healthcocopad.views.TextViewFontAwesome;
 
@@ -78,8 +79,10 @@ public class AddEditRecipeFragment extends HealthCocoFragment implements View.On
     private LinearLayout containerIngredient;
     private LinearLayout containerNutrientsOne;
     private LinearLayout containerNutrientsTwo;
-    private LinkedHashMap<String, EquivalentQuantities> quantitiesLinkedHashMap = new LinkedHashMap<>();
+    private LinkedHashMap<QuantityType, EquivalentQuantities> quantitiesLinkedHashMap = new LinkedHashMap<>();
     private DietPlanRecipeItem dietPlanRecipeItem;
+    private RecipeResponse recipeResponse;
+    private boolean isViewMode;
 
     public AddEditRecipeFragment() {
     }
@@ -94,7 +97,10 @@ public class AddEditRecipeFragment extends HealthCocoFragment implements View.On
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
         Intent intent = mActivity.getIntent();
+        recipeResponse = Parcels.unwrap(intent.getParcelableExtra(HealthCocoConstants.TAG_INTENT_DATA));
+        isViewMode = intent.getBooleanExtra(HealthCocoConstants.TAG_IS_FROM_RECIPE, false);
 
         init();
         mActivity.showLoading(false);
@@ -104,9 +110,10 @@ public class AddEditRecipeFragment extends HealthCocoFragment implements View.On
     @Override
     public void init() {
         initViews();
-        initListeners();
-        initAdapters();
-        initData();
+        if (!isViewMode) {
+            initListeners();
+            initAdapters();
+        }
     }
 
     private void initAdapters() {
@@ -156,6 +163,103 @@ public class AddEditRecipeFragment extends HealthCocoFragment implements View.On
 
     private void initData() {
 
+        if (dietPlanRecipeItem != null) {
+            editName.setText(dietPlanRecipeItem.getName());
+
+            if (dietPlanRecipeItem.getQuantity() != null && (!Util.isNullOrZeroNumber(dietPlanRecipeItem.getQuantity().getValue()))) {
+                editValueQuantity.setText(Util.getValidatedValue(dietPlanRecipeItem.getQuantity().getValue()));
+                if (dietPlanRecipeItem.getQuantity().getType() != null) {
+                    tvTypeQuantity.setText(dietPlanRecipeItem.getQuantity().getType().getUnit());
+                    tvTypeQuantity.setTag(dietPlanRecipeItem.getQuantity().getType());
+                }
+            } else {
+                editValueQuantity.setText("");
+            }
+
+
+            if (dietPlanRecipeItem.getCalories() != null) {
+                editValueCal.setText(Util.getValidatedValue(Util.round(dietPlanRecipeItem.getCalories().getValue(), 2)));
+                if (dietPlanRecipeItem.getCalories().getType() != null) {
+                    tvTypeCal.setText(dietPlanRecipeItem.getCalories().getType().getUnit());
+                    tvTypeCal.setTag(dietPlanRecipeItem.getCalories().getType());
+                }
+            } else {
+                editValueCal.setText("");
+            }
+
+            if (dietPlanRecipeItem.getProtein() != null) {
+                editValueProtein.setText(Util.getValidatedValue(Util.round(dietPlanRecipeItem.getProtein().getValue(), 2)));
+                if (dietPlanRecipeItem.getProtein().getType() != null) {
+                    tvTypeProtein.setText(dietPlanRecipeItem.getProtein().getType().getUnit());
+                    tvTypeProtein.setTag(dietPlanRecipeItem.getProtein().getType());
+                }
+            } else {
+                editValueProtein.setText("");
+            }
+
+            if (dietPlanRecipeItem.getFat() != null) {
+                editValueFat.setText(Util.getValidatedValue(Util.round(dietPlanRecipeItem.getFat().getValue(), 2)));
+                if (dietPlanRecipeItem.getFat().getType() != null) {
+                    tvTypeFat.setText(dietPlanRecipeItem.getFat().getType().getUnit());
+                    tvTypeFat.setTag(dietPlanRecipeItem.getFat().getType());
+                }
+            } else
+                editValueFat.setText("");
+
+            if (dietPlanRecipeItem.getCarbohydreate() != null) {
+                editValueCarbs.setText(Util.getValidatedValue(Util.round(dietPlanRecipeItem.getCarbohydreate().getValue(), 2)));
+                if (dietPlanRecipeItem.getCarbohydreate().getType() != null) {
+                    tvTypeCarbs.setTag(dietPlanRecipeItem.getCarbohydreate().getType());
+                    tvTypeCarbs.setText(dietPlanRecipeItem.getCarbohydreate().getType().getUnit());
+                }
+            } else
+                editValueCarbs.setText("");
+
+            if (dietPlanRecipeItem.getFiber() != null) {
+                editValueFiber.setText(Util.getValidatedValue(Util.round(dietPlanRecipeItem.getFiber().getValue(), 2)));
+                if (dietPlanRecipeItem.getFiber().getType() != null) {
+                    tvTypeFiber.setTag(dietPlanRecipeItem.getFiber().getType());
+                    tvTypeFiber.setText(dietPlanRecipeItem.getFiber().getType().getUnit());
+                }
+            } else
+                editValueFiber.setText("");
+
+            if (!Util.isNullOrEmptyList(dietPlanRecipeItem.getEquivalentMeasurements())) {
+                for (EquivalentQuantities quantity : dietPlanRecipeItem.getEquivalentMeasurements()) {
+                    quantitiesLinkedHashMap.put(quantity.getServingType(), quantity);
+                }
+                addEquivalentMeasurement(new ArrayList<>(quantitiesLinkedHashMap.values()));
+            }
+            if (!Util.isNullOrEmptyList(dietPlanRecipeItem.getGeneralNutrients())) {
+                updateNutrientView(dietPlanRecipeItem);
+            }
+
+            if (!Util.isNullOrEmptyList(dietPlanRecipeItem.getIngredients())) {
+                addIngredients(dietPlanRecipeItem.getIngredients());
+            } else {
+                containerIngredient.setVisibility(View.GONE);
+                containerIngredient.removeAllViews();
+            }
+        }
+
+        if (isViewMode) {
+            editValueQuantity.setEnabled(false);
+            editValueProtein.setEnabled(false);
+            editValueFat.setEnabled(false);
+            editValueFiber.setEnabled(false);
+            editValueCarbs.setEnabled(false);
+            editValueCal.setEnabled(false);
+            editName.setEnabled(false);
+        }
+
+    }
+
+
+    private void getRecipeList() {
+
+        mActivity.showLoading(false);
+        WebDataServiceImpl.getInstance(mApp).getRecipe(DietPlanRecipeItem.class,
+                WebServiceType.GET_RECIPE, recipeResponse.getUniqueId(), this, this);
     }
 
     @Override
@@ -165,7 +269,7 @@ public class AddEditRecipeFragment extends HealthCocoFragment implements View.On
                 validateData();
                 break;
             case R.id.tv_add_equivalent_measurement:
-                openAddEquivalentMeasurementDialog(null);
+                openAddEquivalentMeasurementDialog();
                 break;
             case R.id.tv_add_nutrient:
                 onAddNutrientClick();
@@ -173,14 +277,9 @@ public class AddEditRecipeFragment extends HealthCocoFragment implements View.On
             case R.id.tv_add_ingredient:
                 onAddIngredientClick();
                 break;
-            case EDIT_ID:
-                EquivalentQuantities itemEquivalentQuantities = (EquivalentQuantities) v.getTag();
-                if (itemEquivalentQuantities != null)
-                    openAddEquivalentMeasurementDialog(itemEquivalentQuantities);
-                break;
             case DELETE_ID:
-                String tag = (String) v.getTag();
-                if (!Util.isNullOrBlank(tag)) {
+                QuantityType tag = (QuantityType) v.getTag();
+                if (tag != null) {
                     quantitiesLinkedHashMap.remove(tag);
                     addEquivalentMeasurement(new ArrayList<>(quantitiesLinkedHashMap.values()));
                 }
@@ -197,11 +296,11 @@ public class AddEditRecipeFragment extends HealthCocoFragment implements View.On
         startActivityForResult(intent, HealthCocoConstants.REQUEST_CODE_ADD_NUTRIENT, null);
     }
 
-    private void openAddEquivalentMeasurementDialog(EquivalentQuantities equivalentQuantities) {
+    private void openAddEquivalentMeasurementDialog() {
         AddEquivalentMeasurementDialogFragment measurementDialogFragment = new AddEquivalentMeasurementDialogFragment();
-        if (equivalentQuantities != null) {
+        if (!Util.isNullOrEmptyList(quantitiesLinkedHashMap)) {
             Bundle bundle = new Bundle();
-            bundle.putParcelable(HealthCocoConstants.TAG_INTENT_DATA, Parcels.wrap(equivalentQuantities));
+            bundle.putParcelable(HealthCocoConstants.TAG_INTENT_DATA, Parcels.wrap(new ArrayList<>(quantitiesLinkedHashMap.values())));
             measurementDialogFragment.setArguments(bundle);
         }
         measurementDialogFragment.setTargetFragment(this, HealthCocoConstants.REQUEST_CODE_ADD_MEASUREMENT);
@@ -354,6 +453,20 @@ public class AddEditRecipeFragment extends HealthCocoFragment implements View.On
         LogUtils.LOGD(TAG, "Success " + String.valueOf(response.getWebServiceType()));
         switch (response.getWebServiceType()) {
             case FRAGMENT_INITIALISATION:
+                if (recipeResponse != null) {
+                    if (isViewMode) {
+                        try {
+                            dietPlanRecipeItem = new DietPlanRecipeItem();
+                            ReflectionUtil.copy(dietPlanRecipeItem, recipeResponse);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        initData();
+                    } else {
+                        getRecipeList();
+                        return;
+                    }
+                }
                 break;
             case ADD_EDIT_RECIPE:
                 if (response.getData() != null && response.getData() instanceof RecipeRequest) {
@@ -361,6 +474,12 @@ public class AddEditRecipeFragment extends HealthCocoFragment implements View.On
 
                     mActivity.setResult(HealthCocoConstants.RESULT_CODE_ADD_DIET, null);
                     ((CommonOpenUpActivity) mActivity).finish();
+                }
+                break;
+            case GET_RECIPE:
+                if (response.getData() != null && response.getData() instanceof DietPlanRecipeItem) {
+                    dietPlanRecipeItem = (DietPlanRecipeItem) response.getData();
+                    initData();
                 }
                 break;
         }
@@ -421,9 +540,12 @@ public class AddEditRecipeFragment extends HealthCocoFragment implements View.On
             case HealthCocoConstants.REQUEST_CODE_ADD_MEASUREMENT:
                 if (resultCode == mActivity.RESULT_OK)
                     if (data != null) {
-                        EquivalentQuantities quantity = Parcels.unwrap(data.getParcelableExtra(HealthCocoConstants.TAG_INTENT_DATA));
-                        if (quantity != null) {
-                            quantitiesLinkedHashMap.put(quantity.getServingType().getUnit(), quantity);
+                        List<EquivalentQuantities> quantitiesList = Parcels.unwrap(data.getParcelableExtra(HealthCocoConstants.TAG_INTENT_DATA));
+                        if (!Util.isNullOrEmptyList(quantitiesList)) {
+                            quantitiesLinkedHashMap.clear();
+                            for (EquivalentQuantities equivalentQuantities : quantitiesList) {
+                                quantitiesLinkedHashMap.put(equivalentQuantities.getServingType(), equivalentQuantities);
+                            }
                             addEquivalentMeasurement(new ArrayList<>(quantitiesLinkedHashMap.values()));
                         }
                     }
@@ -455,16 +577,17 @@ public class AddEditRecipeFragment extends HealthCocoFragment implements View.On
     private void initNutrientData(DietPlanRecipeItem dietPlanRecipeItem) {
         if (dietPlanRecipeItem.getFiber() != null) {
             if (!Util.isNullOrZeroNumber(dietPlanRecipeItem.getFiber().getValue()))
-                editValueFiber.setText(Util.getValidatedValue(dietPlanRecipeItem.getFiber().getValue()));
+                editValueFiber.setText(Util.getValidatedValue(Util.round(dietPlanRecipeItem.getFiber().getValue(), 2)));
             if (dietPlanRecipeItem.getFiber().getType() != null) {
                 tvTypeFiber.setText(dietPlanRecipeItem.getFiber().getType().getUnit());
                 tvTypeFiber.setTag(dietPlanRecipeItem.getFiber().getType());
             }
         }
 
+
         if (dietPlanRecipeItem.getCarbohydreate() != null) {
             if (!Util.isNullOrZeroNumber(dietPlanRecipeItem.getCarbohydreate().getValue()))
-                editValueCarbs.setText(Util.getValidatedValue(dietPlanRecipeItem.getCarbohydreate().getValue()));
+                editValueCarbs.setText(Util.getValidatedValue(Util.round(dietPlanRecipeItem.getCarbohydreate().getValue(), 2)));
             if (dietPlanRecipeItem.getCarbohydreate().getType() != null) {
                 tvTypeCarbs.setText(dietPlanRecipeItem.getCarbohydreate().getType().getUnit());
                 tvTypeCarbs.setTag(dietPlanRecipeItem.getCarbohydreate().getType());
@@ -473,7 +596,7 @@ public class AddEditRecipeFragment extends HealthCocoFragment implements View.On
 
         if (dietPlanRecipeItem.getFat() != null) {
             if (!Util.isNullOrZeroNumber(dietPlanRecipeItem.getFat().getValue()))
-                editValueFat.setText(Util.getValidatedValue(dietPlanRecipeItem.getFat().getValue()));
+                editValueFat.setText(Util.getValidatedValue(Util.round(dietPlanRecipeItem.getFat().getValue(), 2)));
             if (dietPlanRecipeItem.getFat().getType() != null) {
                 tvTypeFat.setText(dietPlanRecipeItem.getFat().getType().getUnit());
                 tvTypeFat.setTag(dietPlanRecipeItem.getFat().getType());
@@ -482,7 +605,7 @@ public class AddEditRecipeFragment extends HealthCocoFragment implements View.On
 
         if (dietPlanRecipeItem.getProtein() != null) {
             if (!Util.isNullOrZeroNumber(dietPlanRecipeItem.getProtein().getValue()))
-                editValueProtein.setText(Util.getValidatedValue(dietPlanRecipeItem.getProtein().getValue()));
+                editValueProtein.setText(Util.getValidatedValue(Util.round(dietPlanRecipeItem.getProtein().getValue(), 2)));
             if (dietPlanRecipeItem.getProtein().getType() != null) {
                 tvTypeProtein.setText(dietPlanRecipeItem.getProtein().getType().getUnit());
                 tvTypeProtein.setTag(dietPlanRecipeItem.getProtein().getType());
@@ -490,7 +613,7 @@ public class AddEditRecipeFragment extends HealthCocoFragment implements View.On
         }
         if (dietPlanRecipeItem.getCalories() != null) {
             if (!Util.isNullOrZeroNumber(dietPlanRecipeItem.getCalories().getValue()))
-                editValueCal.setText(Util.getValidatedValue(dietPlanRecipeItem.getCalories().getValue()));
+                editValueCal.setText(Util.getValidatedValue(Util.round(dietPlanRecipeItem.getCalories().getValue(), 2)));
             if (dietPlanRecipeItem.getCalories().getType() != null) {
                 tvTypeCal.setText(dietPlanRecipeItem.getCalories().getType().getUnit());
                 tvTypeCal.setTag(dietPlanRecipeItem.getCalories().getType());
@@ -518,13 +641,8 @@ public class AddEditRecipeFragment extends HealthCocoFragment implements View.On
                 tvServingType.setText(quantityItem.getServingType().getUnit());
                 tvValue.setText(Util.getValidatedValue(quantityItem.getValue()));
 
-
-                btEdit.setId(EDIT_ID);
-                btEdit.setTag(quantityItem);
-                btEdit.setOnClickListener(this);
-
                 btDelete.setId(DELETE_ID);
-                btDelete.setTag(quantityItem.getServingType().getUnit());
+                btDelete.setTag(quantityItem.getServingType());
                 btDelete.setOnClickListener(this);
 
                 containerEquivalentMeasurement.addView(layoutEquivalentQuantity);
@@ -535,7 +653,8 @@ public class AddEditRecipeFragment extends HealthCocoFragment implements View.On
 
 
     private void updateNutrientView(DietPlanRecipeItem dietPlanRecipeItem) {
-
+        containerNutrientsOne.removeAllViews();
+        containerNutrientsTwo.removeAllViews();
         if (!Util.isNullOrEmptyList(dietPlanRecipeItem.getGeneralNutrients()))
             updateNutrientValue(dietPlanRecipeItem.getGeneralNutrients(), R.string.general, containerNutrientsOne);
         if (!Util.isNullOrEmptyList(dietPlanRecipeItem.getCarbNutrients()))
@@ -568,7 +687,7 @@ public class AddEditRecipeFragment extends HealthCocoFragment implements View.On
             if (!Util.isNullOrBlank(nutrient.getName()))
                 tvName.setText(nutrient.getName());
             if (nutrient.getType() != null)
-                tvValue.setText(Util.getValidatedValue(nutrient.getValue()) + " " + nutrient.getType().getUnit());
+                tvValue.setText(Util.getValidatedValue(Util.round(nutrient.getValue(), 2)) + " " + nutrient.getType().getUnit());
 
             containerNutrient.addView(layoutNutrient);
         }
@@ -593,14 +712,14 @@ public class AddEditRecipeFragment extends HealthCocoFragment implements View.On
                 if (ingredient.getQuantity() != null) {
                     String quantityType = ingredient.getQuantity().getType().getUnit();
                     if (!Util.isNullOrZeroNumber(ingredient.getQuantity().getValue())) {
-                        tvItemQuantity.setText(Util.getValidatedValue(ingredient.getQuantity().getValue()) + quantityType);
+                        tvItemQuantity.setText(Util.getValidatedValue(Util.round(ingredient.getQuantity().getValue(), 2)) + quantityType);
                     }
                 }
                 if (ingredient.getCalories() != null) {
                     if (ingredient.getCalories().getType() != null) {
                         String calariesType = ingredient.getCalories().getType().getUnit();
                         if (!Util.isNullOrZeroNumber(ingredient.getCalories().getValue())) {
-                            tvItemCalarie.setText(Util.getValidatedValue(ingredient.getCalories().getValue()) + calariesType);
+                            tvItemCalarie.setText(Util.getValidatedValue(Util.round(ingredient.getCalories().getValue(), 2)) + calariesType);
                         }
                     }
                 }

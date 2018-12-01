@@ -24,7 +24,7 @@
                 android:layout_height="match_parent">
 
                 <com.healthcoco.healthcocopad.views.ListViewLoadMore
-                    android:id="@+id/lv_visits"
+                    android:id="@+id/lv_assessment"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:clipToPadding="false"
@@ -48,11 +48,11 @@
                     android:visibility="gone" />
 
                 <TextView
-                    android:id="@+id/tv_no_visits_found"
+                    android:id="@+id/tv_no_assessment_found"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:text="@string/no_visits_found"
+                    android:text="@string/no_assessment_found"
                     android:textSize="@dimen/text_size_no_results"
                     android:textStyle="bold"
                     android:visibility="visible" />
@@ -60,14 +60,13 @@
         </com.healthcoco.healthcocopad.views.CustomSwipeRefreshLayout>
 
         <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fl_bt_add_visit"
+            android:id="@+id/fl_bt_add_assessment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|right"
-            android:layout_marginBottom="@dimen/fab_margin_bottom"
             android:layout_marginRight="@dimen/fab_margin_right"
+            android:layout_marginBottom="@dimen/fab_margin_bottom"
             android:scaleType="center"
-            android:visibility="gone"
             android:src="@drawable/actionbar_add_me"
             app:layout_anchorGravity="bottom|right|end" />
 

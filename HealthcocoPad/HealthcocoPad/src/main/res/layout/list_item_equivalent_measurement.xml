@@ -52,6 +52,7 @@
             android:gravity="center|start"
             android:paddingLeft="@dimen/layout_padding"
             android:paddingRight="@dimen/layout_padding"
+            android:visibility="gone"
             android:text="@string/icon_edit"
             android:textColor="@color/grey_icons"
             android:textSize="18sp" />

@@ -26,7 +26,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:padding="@dimen/layout_add_treatment_title_padding_10dp">
+                android:paddingLeft="@dimen/layout_add_treatment_title_padding_10dp"
+                android:paddingTop="@dimen/layout_padding_5dp"
+                android:paddingRight="@dimen/layout_add_treatment_title_padding_10dp"
+                android:paddingBottom="@dimen/layout_add_treatment_title_padding_10dp">
 
                 <TextView
                     android:id="@+id/tv_recipe_name"
@@ -34,6 +37,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginRight="@dimen/padding_20_dp"
                     android:layout_weight="1"
+                    android:paddingTop="@dimen/layout_padding_5dp"
                     android:gravity="center_vertical"
                     android:textColor="@color/black"
                     android:textSize="@dimen/text_size_drug_child_lable" />
@@ -51,6 +55,7 @@
                     android:gravity="center"
                     android:hint="@string/quantity"
                     android:paddingBottom="@dimen/layout_padding_5dp"
+                    android:paddingTop="@dimen/layout_padding_5dp"
                     android:singleLine="true"
                     android:textColor="@color/black"
                     android:textColorHint="@color/grey_light_text"
@@ -62,6 +67,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/layout_padding"
                     android:layout_marginRight="@dimen/padding_20_dp"
+                    android:paddingTop="@dimen/layout_padding_5dp"
                     android:layout_weight="0.4"
                     android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
                     android:drawableEnd="@drawable/arrow_down_drug"

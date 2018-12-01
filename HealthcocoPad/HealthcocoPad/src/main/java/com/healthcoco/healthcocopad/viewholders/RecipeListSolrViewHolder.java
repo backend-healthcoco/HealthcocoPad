@@ -1,12 +1,14 @@
 package com.healthcoco.healthcocopad.viewholders;
 
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.MealQuantity;
 import com.healthcoco.healthcocopad.bean.server.RecipeResponse;
+import com.healthcoco.healthcocopad.listeners.RecipeItemListener;
 import com.healthcoco.healthcocopad.listeners.SelectedRecipeItemClickListener;
 import com.healthcoco.healthcocopad.recyclerview.HealthcocoComonRecylcerViewHolder;
 import com.healthcoco.healthcocopad.recyclerview.HealthcocoRecyclerViewItemClickListener;
@@ -19,16 +21,21 @@ import com.healthcoco.healthcocopad.utilities.Util;
 public class RecipeListSolrViewHolder extends HealthcocoComonRecylcerViewHolder {
 
     private SelectedRecipeItemClickListener selectedRecipeItemClickListener;
+    private RecipeItemListener recipeItemListener;
     private HealthCocoActivity mActivity;
     private RecipeResponse objData;
     private TextView tvTitle;
     private TextView tvQuantity;
     private TextView tvCalarie;
+    private LinearLayout btEdit;
 
     public RecipeListSolrViewHolder(HealthCocoActivity mActivity, View itemView, HealthcocoRecyclerViewItemClickListener itemClickListener, Object listenerObject) {
         super(mActivity, itemView, itemClickListener);
         this.mActivity = mActivity;
-        this.selectedRecipeItemClickListener = (SelectedRecipeItemClickListener) listenerObject;
+        if (listenerObject instanceof SelectedRecipeItemClickListener)
+            this.selectedRecipeItemClickListener = (SelectedRecipeItemClickListener) listenerObject;
+        if (listenerObject instanceof RecipeItemListener)
+            this.recipeItemListener = (RecipeItemListener) listenerObject;
     }
 
     @Override
@@ -36,6 +43,7 @@ public class RecipeListSolrViewHolder extends HealthcocoComonRecylcerViewHolder 
         tvTitle = (TextView) contentView.findViewById(R.id.tv_title_food);
         tvQuantity = (TextView) contentView.findViewById(R.id.tv_quantity_food);
         tvCalarie = (TextView) contentView.findViewById(R.id.tv_calarie_food);
+        btEdit = (LinearLayout) contentView.findViewById(R.id.bt_edit);
 
         if (onItemClickListener != null)
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -47,7 +55,18 @@ public class RecipeListSolrViewHolder extends HealthcocoComonRecylcerViewHolder 
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                selectedRecipeItemClickListener.onRecipeItemClicked(objData);
+                if (selectedRecipeItemClickListener != null)
+                    selectedRecipeItemClickListener.onRecipeItemClicked(objData);
+                if (recipeItemListener != null)
+                    recipeItemListener.onItemClicked(objData);
+            }
+        });
+
+        btEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (recipeItemListener != null)
+                    recipeItemListener.onEditClick(objData);
             }
         });
     }
@@ -70,5 +89,10 @@ public class RecipeListSolrViewHolder extends HealthcocoComonRecylcerViewHolder 
                     tvQuantity.setText(Util.getValidatedValue(quantity.getValue()) + quantity.getType().getUnit());
             }
         }
+
+        if (recipeItemListener != null)
+            btEdit.setVisibility(View.VISIBLE);
+        else
+            btEdit.setVisibility(View.GONE);
     }
 }

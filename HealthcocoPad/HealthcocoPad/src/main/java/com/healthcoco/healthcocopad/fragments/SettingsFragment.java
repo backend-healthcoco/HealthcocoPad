@@ -148,7 +148,7 @@ public class SettingsFragment extends HealthCocoFragment implements AdapterView.
                 openCommonOpenUpActivity(CommonOpenUpFragmentType.SETTING_KIOSK, itemType.ordinal());
                 break;
             case RECIPE:
-                openCommonOpenUpActivity(CommonOpenUpFragmentType.ADD_RECIPE, itemType.ordinal());
+                openCommonOpenUpActivity(CommonOpenUpFragmentType.RECIPE_LIST, itemType.ordinal());
                 break;
             case INGREDIENT:
                 openCommonOpenUpActivity(CommonOpenUpFragmentType.ADD_INGREDIENT, itemType.ordinal());

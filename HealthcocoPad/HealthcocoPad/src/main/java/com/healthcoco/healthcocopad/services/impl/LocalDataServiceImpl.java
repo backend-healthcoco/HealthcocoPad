@@ -1224,6 +1224,11 @@ public class LocalDataServiceImpl {
                 if (!Util.isNullOrEmptyList(treatmentsList))
                     latestUpdatedTime = treatmentsList.get(0).getUpdatedTime();
                 break;
+            case ASSESSMENT:
+                List<AssessmentPersonalDetail> assessmentDetailList = AssessmentPersonalDetail.find(AssessmentPersonalDetail.class, LocalDatabaseUtils.KEY_PATIENT_ID + "= ?", new String[]{"" + HealthCocoConstants.SELECTED_PATIENTS_USER_ID}, null, "updated_time DESC", "1");
+                if (!Util.isNullOrEmptyList(assessmentDetailList))
+                    latestUpdatedTime = assessmentDetailList.get(0).getUpdatedTime();
+                break;
 
             case CALENDAR_EVENTS:
                 List<CalendarEvents> tempCalendarEventsList = CalendarEvents.find(CalendarEvents.class,
@@ -5840,6 +5845,13 @@ public class LocalDataServiceImpl {
         return kioskTabPermission;
     }
 
+    public void addAssessmentDetailList(ArrayList<AssessmentPersonalDetail> assessmentDetailArrayList) {
+        for (AssessmentPersonalDetail assessmentDetail :
+                assessmentDetailArrayList) {
+            addAssessmentPersonalDetail(assessmentDetail);
+        }
+    }
+
     public void addAssessmentPersonalDetail(AssessmentPersonalDetail assessmentPersonalDetail) {
         if (assessmentPersonalDetail != null) {
             deleteAllFrom(AssessmentPersonalDetail.class, LocalDatabaseUtils.KEY_UNIQUE_ID, assessmentPersonalDetail.getUniqueId());
@@ -5862,6 +5874,60 @@ public class LocalDataServiceImpl {
         }
         return personalDetail;
     }
+
+
+    public VolleyResponseBean getAssessmentList(WebServiceType webServiceType, String
+            doctorId, String foreignLocationId,
+                                                String foreignHospitalId, String selectedPatientId, int pageNum, int maxSize,
+                                                Response.Listener<VolleyResponseBean> responseListener, GsonRequest.
+                                                        ErrorListener errorListener) {
+        VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
+        volleyResponseBean.setWebServiceType(webServiceType);
+        volleyResponseBean.setIsDataFromLocal(true);
+        volleyResponseBean.setIsUserOnline(HealthCocoConstants.isNetworkOnline);
+        try {
+            List<AssessmentPersonalDetail> list = getAssessmentListPageWise(doctorId, foreignLocationId, foreignHospitalId, pageNum, maxSize, selectedPatientId);
+            volleyResponseBean.setDataList(getObjectsListFromMap(list));
+            if (responseListener != null)
+                responseListener.onResponse(volleyResponseBean);
+        } catch (Exception e) {
+            e.printStackTrace();
+            showErrorLocal(volleyResponseBean, errorListener);
+        }
+        return volleyResponseBean;
+    }
+
+    private List<AssessmentPersonalDetail> getAssessmentListPageWise(String doctorId, String locationId, String
+            hospitalId, int pageNum, int maxSize, String selectedPatientId) {
+
+        String whereCondition = "Select * from " + StringUtil.toSQLName(AssessmentPersonalDetail.class.getSimpleName())
+                + " where "
+                + LocalDatabaseUtils.KEY_PATIENT_ID + "=\"" + selectedPatientId + "\"";
+        whereCondition = whereCondition + " AND "
+                + LocalDatabaseUtils.KEY_DOCTOR_ID + "=\"" + doctorId + "\""
+                + " AND "
+                + LocalDatabaseUtils.KEY_HOSPITAL_ID + "=\"" + hospitalId + "\""
+                + " AND "
+                + LocalDatabaseUtils.KEY_LOCATION_ID + "=\"" + locationId + "\"";
+        String conditionsLimit = " ORDER BY " + LocalDatabaseUtils.KEY_CREATED_TIME + " DESC "
+                + " LIMIT " + maxSize
+                + " OFFSET " + (pageNum * maxSize);
+
+        whereCondition = whereCondition + conditionsLimit;
+        LogUtils.LOGD(TAG, "Select Query " + whereCondition);
+        List<AssessmentPersonalDetail> list = SugarRecord.findWithQuery(AssessmentPersonalDetail.class, whereCondition);
+        if (!Util.isNullOrEmptyList(list)) {
+            for (AssessmentPersonalDetail personalDetail : list) {
+                personalDetail.setPhysicalStatusType((ArrayList<String>) (Object) getObjectsListFronJson(personalDetail.getPhysicalStatusTypeJsonString()));
+                personalDetail.setAddress((Address) getObjectFromJson(Address.class, personalDetail.getAddressJsonString()));
+                personalDetail.setDob((DOB) getObjectFromJson(DOB.class, personalDetail.getDobJsonString()));
+
+            }
+            return list;
+        }
+        return null;
+    }
+
 
     public void addPatientMeasurementInfo(PatientMeasurementInfo patientMeasurementInfo) {
         if (patientMeasurementInfo != null) {
