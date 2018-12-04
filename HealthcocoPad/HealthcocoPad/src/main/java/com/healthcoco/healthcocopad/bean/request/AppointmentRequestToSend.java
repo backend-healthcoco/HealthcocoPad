@@ -1,6 +1,7 @@
 package com.healthcoco.healthcocopad.bean.request;
 
 
+import com.healthcoco.healthcocopad.bean.DOB;
 import com.healthcoco.healthcocopad.bean.server.WorkingHours;
 import com.healthcoco.healthcocopad.enums.AppointmentStatusType;
 import com.healthcoco.healthcocopad.enums.CreatedByType;
@@ -34,6 +35,12 @@ public class AppointmentRequestToSend {
     private WorkingHours time;
     private String appointmentId;
     private AppointmentStatusType state;
+
+    private String gender;
+    private DOB dob;
+    private boolean isChild;
+    private Integer age;
+
 
     public String getLocationId() {
         return locationId;
@@ -209,5 +216,37 @@ public class AppointmentRequestToSend {
 
     public void setState(AppointmentStatusType state) {
         this.state = state;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public DOB getDob() {
+        return dob;
+    }
+
+    public void setDob(DOB dob) {
+        this.dob = dob;
+    }
+
+    public boolean isChild() {
+        return isChild;
+    }
+
+    public void setChild(boolean child) {
+        isChild = child;
+    }
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
     }
 }

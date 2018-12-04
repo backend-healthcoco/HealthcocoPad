@@ -244,4 +244,11 @@
     <style name="ToolbarColoredBackArrow" parent="AppTheme">
         <item name="android:textColorSecondary">@color/white</item>
     </style>
+
+    <style name="registration_font_awesome_logos">
+        <item name="android:textColor">@color/grey_dark_text</item>
+        <item name="android:layout_marginRight">@dimen/layout_padding</item>
+        <item name="android:textSize">@dimen/text_size_registration_logo</item>
+
+    </style>
 </resources>

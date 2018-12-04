@@ -21,6 +21,7 @@ public class TemplatesListViewHolder extends HealthCocoViewHolder implements OnC
     private TempTemplate template;
     private LinearLayout containerDoses;
     private TextView tvTemplateName;
+    private TextView tvTemplateDefault;
     private LinearLayout btEdit;
     private LinearLayout btDelete;
     private LinearLayout containerTemplate;
@@ -49,6 +50,14 @@ public class TemplatesListViewHolder extends HealthCocoViewHolder implements OnC
             if (drug.getDrug() != null)
                 containerDoses.addView(view);
         }
+        if (template.getDefault() != null) {
+            if (template.getDefault())
+                tvTemplateDefault.setVisibility(View.VISIBLE);
+            else
+                tvTemplateDefault.setVisibility(View.GONE);
+        } else
+            tvTemplateDefault.setVisibility(View.GONE);
+
     }
 
     @Override
@@ -61,6 +70,7 @@ public class TemplatesListViewHolder extends HealthCocoViewHolder implements OnC
 
     private void initViews(View view) {
         tvTemplateName = (TextView) view.findViewById(R.id.tv_template_name);
+        tvTemplateDefault = (TextView) view.findViewById(R.id.tv_template_default);
         containerDoses = (LinearLayout) view.findViewById(R.id.container_drug_names);
         containerTemplate = (LinearLayout) view.findViewById(R.id.container_template);
         btEdit = (LinearLayout) view.findViewById(R.id.bt_edit);

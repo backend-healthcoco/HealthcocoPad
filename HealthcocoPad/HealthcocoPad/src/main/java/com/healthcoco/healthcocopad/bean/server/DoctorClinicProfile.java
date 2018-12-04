@@ -64,6 +64,7 @@ public class DoctorClinicProfile extends SugarRecord {
     private Boolean isPidHasDate;
     private AccountPackageType packageType;
     private Boolean iskiosk;
+    private boolean isVaccinationModuleOn;
 
 
     public DoctorClinicProfile() {
@@ -384,4 +385,11 @@ public class DoctorClinicProfile extends SugarRecord {
         this.packageType = packageType;
     }
 
+    public boolean isVaccinationModuleOn() {
+        return isVaccinationModuleOn;
+    }
+
+    public void setVaccinationModuleOn(boolean vaccinationModuleOn) {
+        isVaccinationModuleOn = vaccinationModuleOn;
+    }
 }

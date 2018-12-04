@@ -25,6 +25,7 @@ public class DoctorContactUs {
     private Boolean isVerified;
     private Boolean toList;
     private DeviceType deviceType;
+    private String mrCode;
 
     public DoctorContactUs() {
     }
@@ -143,5 +144,13 @@ public class DoctorContactUs {
 
     public void setDeviceType(DeviceType deviceType) {
         this.deviceType = deviceType;
+    }
+
+    public String getMrCode() {
+        return mrCode;
+    }
+
+    public void setMrCode(String mrCode) {
+        this.mrCode = mrCode;
     }
 }

@@ -4,7 +4,7 @@ package com.healthcoco.healthcocopad.utilities;
  * Created by Shreshtha on 20-01-2017.
  */
 public enum BuildType {
-    DEV("http://52.38.131.59/dpdocter/api/v1/", "healthcoco@25:6AE8GSW1D7AER3DF", true, true),
+    DEV("http://18.223.94.159/dpdocter/api/v1/", "healthcoco@25:6AE8GSW1D7AER3DF", true, true),
     QA("https://qaapi.healthcoco.com/dpdocter/api/v1/", "healthcoco@36:4SDT9DFSEKLF3DGB", true, true),
     PROD("https://api.healthcoco.com/dpdocter/api/v1/", "hlthco@48#$:03USULTRS0MR7362P9F5", false, false);
 

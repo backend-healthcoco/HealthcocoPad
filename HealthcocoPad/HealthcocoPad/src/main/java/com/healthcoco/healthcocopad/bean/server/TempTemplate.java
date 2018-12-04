@@ -21,6 +21,7 @@ public class TempTemplate extends SugarRecord {
     private Long createdTime;
     private Long updatedTime;
     private Boolean discarded;
+    private Boolean isDefault;
 
 
     public List<DrugItem> getItems() {
@@ -93,5 +94,13 @@ public class TempTemplate extends SugarRecord {
 
     public void setDiscarded(Boolean discarded) {
         this.discarded = discarded;
+    }
+
+    public Boolean getDefault() {
+        return isDefault;
+    }
+
+    public void setDefault(Boolean aDefault) {
+        isDefault = aDefault;
     }
 }

@@ -22,6 +22,8 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -154,6 +156,11 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
     private TextView tvClinicClosed;
     private AppointmentSlot selectedAppointmentSlot;
     private boolean isMobileNumberOptional;
+    private RadioGroup radioGroupGender;
+    private TextView tvBirthDay;
+    private EditText editAge;
+    private LinearLayout containerAge;
+    private LinearLayout containerGender;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -242,6 +249,12 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
         tvSelectedDate = (TextView) view.findViewById(R.id.tv_selected_date);
         layoutSelectTimeSlot = (LinearLayout) view.findViewById(R.id.layout_select_time_slot);
         tvClinicClosed = (TextView) view.findViewById(R.id.tv_clinic_closed);
+        radioGroupGender = (RadioGroup) view.findViewById(R.id.rg_gender_select);
+        tvBirthDay = (TextView) view.findViewById(R.id.tv_birthday);
+        editAge = (EditText) view.findViewById(R.id.edit_age);
+        containerAge = (LinearLayout) view.findViewById(R.id.container_age);
+        containerGender = (LinearLayout) view.findViewById(R.id.container_gender_age);
+        tvBirthDay.setOnClickListener(this);
         refreshSelectedDate(DateTimeUtil.getCurrentDateLong());
     }
 
@@ -502,6 +515,15 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
                                 showSelectedPatientHeader(false);
                                 autotvPatientName.setText(existingPatient.getFirstName());
                                 autotvPatientName.setVisibility(View.VISIBLE);
+                                if (!Util.isNullOrBlank(existingPatient.getGender())) {
+                                    RadioButton radioButton = (RadioButton) radioGroupGender.findViewWithTag(Util.getValidatedValue(existingPatient.getGender()).toUpperCase());
+                                    if (radioButton != null)
+                                        radioButton.setChecked(true);
+                                }
+                                if (!Util.isNullOrBlank(Util.getDOB(existingPatient.getDob()))) {
+                                    containerAge.setVisibility(View.GONE);
+                                    tvBirthDay.setText(Util.getDOB(existingPatient.getDob()));
+                                } else containerAge.setVisibility(View.VISIBLE);
                             }
                         }
                     }
@@ -621,10 +643,33 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
                 autotvPatientName.setEnabled(true);
                 requestFocusOnEditText(autotvPatientName);
                 break;
+            case R.id.tv_birthday:
+                openBirthDatePickerDialog();
+                break;
         }
     }
 
+    private void openBirthDatePickerDialog() {
+        Calendar calendar = Calendar.getInstance();
+        calendar = DateTimeUtil.setCalendarDefaultvalue(calendar, Util.getValidatedValueOrNull(tvBirthDay));
+        DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                tvBirthDay.setText(DateTimeUtil.getBirthDateFormat(dayOfMonth, monthOfYear + 1, year));
+
+            }
+        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+        datePickerDialog.getDatePicker().setMaxDate(DateTimeUtil.getMaxDate(new Date().getTime()));
+        datePickerDialog.show();
+    }
+
     private void showDetailsAddNewPatient(boolean b) {
+        if (doctorClinicProfile.isVaccinationModuleOn())
+            containerGender.setVisibility(View.VISIBLE);
+        else
+            containerGender.setVisibility(View.GONE);
+
         if (b) {
             containerDetailsAddNewPatient.setVisibility(View.VISIBLE);
             btAddNewPatient.setVisibility(View.GONE);
@@ -715,9 +760,21 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
         appointment.setFromDate(DateTimeUtil.getLongFromFormattedDayMonthYearFormatString(DATE_FORMAT_USED_IN_THIS_SCREEN, selecetdDate));
         appointment.setToDate(DateTimeUtil.getLongFromFormattedDayMonthYearFormatString(DATE_FORMAT_USED_IN_THIS_SCREEN, selecetdDate));
         appointment.setTime(new WorkingHours(selectedFromTimeInMinutes, selectedFromTimeInMinutes + (float) tvAppointmentSlotDuration.getTag()));
+        appointment.setDob(DateTimeUtil.getDob(String.valueOf(tvBirthDay.getText())));
+        String age = Util.getValidatedValueOrNull(editAge);
+        if (!Util.isNullOrBlank(age))
+            appointment.setAge(Integer.parseInt(age));
+
+        //setting gender
+        View checkedRadioButton = view.findViewById(radioGroupGender.getCheckedRadioButtonId());
+        if (checkedRadioButton != null)
+            appointment.setGender(String.valueOf(checkedRadioButton.getTag()));
+
 
         if (!Util.isNullOrBlank(appointmentId))
             appointment.setAppointmentId(appointmentId);
+        if (doctorClinicProfile.isVaccinationModuleOn())
+            appointment.setChild(true);
 
         switch (bookAppointmentFromScreenType) {
             case CALENDAR_LIST_RESCHEDULE:

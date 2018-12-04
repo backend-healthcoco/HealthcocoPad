@@ -83,6 +83,8 @@
     <string name="fa_refresh">&#xf021;</string>
     <string name="fa_watch">&#xf017;</string>
     <string name="fa_clock">&#xf017;</string>
+    <string name="fa_gender_venus">&#xf221;</string>
+    <string name="fa_calendar">&#xf073;</string>
 
     <string name="icon_text_hide">&#xf068; Hide</string>
     <string name="icon_text_activate">&#xf067; Activate</string>

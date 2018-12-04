@@ -48,10 +48,10 @@
             android:focusableInTouchMode="true"
             android:gravity="center|top"
             android:orientation="vertical"
-            android:paddingBottom="5dp"
             android:paddingLeft="15dp"
+            android:paddingTop="15dp"
             android:paddingRight="15dp"
-            android:paddingTop="15dp">
+            android:paddingBottom="5dp">
 
             <LinearLayout
                 android:id="@+id/linear_layout"
@@ -75,14 +75,14 @@
                         android:layout_gravity="bottom"
                         android:background="@android:color/transparent"
                         android:drawableEnd="@drawable/arrow_down_drug"
-                        android:drawablePadding="3dp"
                         android:drawableRight="@drawable/arrow_down_drug"
+                        android:drawablePadding="3dp"
                         android:editable="false"
                         android:enabled="false"
                         android:focusable="false"
                         android:gravity="center|bottom|start"
-                        android:paddingBottom="@dimen/login_edit_text_bottom_padding"
                         android:paddingTop="@dimen/login_edit_text_bottom_padding"
+                        android:paddingBottom="@dimen/login_edit_text_bottom_padding"
                         android:text="@string/title_dr"
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_size_signup" />
@@ -99,8 +99,8 @@
                             android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
                             android:hint="@string/full_name"
                             android:inputType="textCapWords"
-                            android:paddingBottom="@dimen/login_edit_text_bottom_padding"
                             android:paddingTop="@dimen/login_edit_text_bottom_padding"
+                            android:paddingBottom="@dimen/login_edit_text_bottom_padding"
                             android:singleLine="true"
                             android:textColor="@color/black"
                             android:textColorHint="@color/grey_hint_color"
@@ -164,8 +164,8 @@
                         android:background="@android:color/transparent"
                         android:editable="false"
                         android:gravity="bottom|center"
-                        android:paddingBottom="@dimen/login_edit_text_bottom_padding"
                         android:paddingTop="@dimen/login_edit_text_bottom_padding"
+                        android:paddingBottom="@dimen/login_edit_text_bottom_padding"
                         android:singleLine="true"
                         android:text="@string/text_91"
                         android:textColor="@color/black"
@@ -185,8 +185,8 @@
                             android:hint="@string/mobile_number"
                             android:inputType="phone"
                             android:maxLength="10"
-                            android:paddingBottom="@dimen/login_edit_text_bottom_padding"
                             android:paddingTop="@dimen/login_edit_text_bottom_padding"
+                            android:paddingBottom="@dimen/login_edit_text_bottom_padding"
                             android:singleLine="true"
                             android:textColor="@color/black"
                             android:textColorHint="@color/grey_hint_color"
@@ -207,8 +207,8 @@
                         android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
                         android:hint="@string/email_address"
                         android:inputType="textEmailAddress"
-                        android:paddingBottom="@dimen/login_edit_text_bottom_padding"
                         android:paddingTop="@dimen/login_edit_text_bottom_padding"
+                        android:paddingBottom="@dimen/login_edit_text_bottom_padding"
                         android:singleLine="true"
                         android:textColor="@color/black"
                         android:textColorHint="@color/grey_hint_color"
@@ -224,8 +224,8 @@
                     android:clickable="true"
                     android:drawableRight="@drawable/arrow_down_drug"
                     android:hint="@string/select_speciality"
-                    android:paddingBottom="10dp"
                     android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
                     android:textColor="@color/black"
                     android:textColorHint="@color/grey_hint_color"
                     android:textSize="@dimen/text_size_signup" />
@@ -242,13 +242,60 @@
                         android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
                         android:hint="@string/city"
                         android:inputType="textEmailAddress"
-                        android:paddingBottom="@dimen/login_edit_text_bottom_padding"
                         android:paddingTop="@dimen/login_edit_text_bottom_padding"
+                        android:paddingBottom="@dimen/login_edit_text_bottom_padding"
                         android:singleLine="true"
                         android:textColor="@color/black"
                         android:textColorHint="@color/grey_hint_color"
                         android:textSize="@dimen/text_size_signup" />
                 </android.support.design.widget.TextInputLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/layout_padding"
+                    android:orientation="horizontal"
+                    android:paddingBottom="@dimen/padding_20_dp">
+
+                    <TextView
+                        android:id="@+id/tv_promo_code"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:background="@android:color/transparent"
+                        android:drawablePadding="3dp"
+                        android:editable="false"
+                        android:enabled="false"
+                        android:focusable="false"
+                        android:gravity="bottom|start"
+                        android:paddingTop="@dimen/login_edit_text_bottom_padding"
+                        android:paddingBottom="@dimen/login_edit_text_bottom_padding"
+                        android:text="@string/promo_code_colon"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_signup" />
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/layout_padding">
+
+                        <EditText
+                            android:id="@+id/edit_promo_code"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
+                            android:hint="@string/promo_code"
+                            android:inputType="textCapWords"
+                            android:paddingLeft="@dimen/layout_padding_5dp"
+                            android:paddingTop="@dimen/login_edit_text_bottom_padding"
+                            android:paddingBottom="@dimen/login_edit_text_bottom_padding"
+                            android:singleLine="true"
+                            android:textColor="@color/black"
+                            android:textColorHint="@color/grey_hint_color"
+                            android:textSize="@dimen/text_size_signup" />
+                    </android.support.design.widget.TextInputLayout>
+                </LinearLayout>
+
             </LinearLayout>
         </RelativeLayout>
     </ScrollView>
@@ -273,8 +320,8 @@
             android:layout_height="match_parent"
             android:orientation="horizontal"
             android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingTop="5dp">
+            android:paddingTop="5dp"
+            android:paddingRight="10dp">
 
             <Button
                 android:id="@+id/bt_alreay_have_an_account"

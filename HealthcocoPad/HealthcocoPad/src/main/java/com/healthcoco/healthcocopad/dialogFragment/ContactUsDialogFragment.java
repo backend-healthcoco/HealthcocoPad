@@ -54,6 +54,7 @@ public class ContactUsDialogFragment extends HealthCocoDialogFragment implements
     private EditText editMobileNo;
     private EditText editEmailAddress;
     private EditText editCity;
+    private EditText editPromoCode;
     private TextView tvSpeciality;
     private ArrayList<Specialities> specialitiesResponse;
     private boolean openSpecialitiesScreen;
@@ -86,7 +87,7 @@ public class ContactUsDialogFragment extends HealthCocoDialogFragment implements
         if (intent != null)
             isFromLoginScreen = intent.getBooleanExtra(TAG_IS_FROM_LOGIN_SCREEN, false);
         init();
-        setWidthHeight(0.50, 0.65);
+        setWidthHeight(0.60, 0.75);
     }
 
     public void init() {
@@ -113,6 +114,7 @@ public class ContactUsDialogFragment extends HealthCocoDialogFragment implements
     public void initViews() {
         bt_cancel = (Button) view.findViewById(R.id.bt_cancel);
         editName = (EditText) view.findViewById(R.id.edit_name);
+        editPromoCode = (EditText) view.findViewById(R.id.edit_promo_code);
         editMobileNo = (EditText) view.findViewById(R.id.edit_mobile_number);
         editEmailAddress = (EditText) view.findViewById(R.id.edit_email_address);
         editCity = (EditText) view.findViewById(R.id.edit_city);
@@ -234,6 +236,9 @@ public class ContactUsDialogFragment extends HealthCocoDialogFragment implements
         DoctorContactUs doctorContactUs = new DoctorContactUs(Util.getValidatedValueOrNull(autoTvTitle), name, gender, mobileNo, emailAddress, new ArrayList<String>() {{
             add(speciality);
         }}, city, DeviceType.ANDROID_PAD);
+        if (!Util.isNullOrBlank(Util.getValidatedValueOrNull(editPromoCode))) {
+            doctorContactUs.setMrCode(Util.getValidatedValueOrNull(editPromoCode));
+        }
         WebDataServiceImpl.getInstance(mApp).sendContactUsRequest(String.class, doctorContactUs, this, this);
     }
 

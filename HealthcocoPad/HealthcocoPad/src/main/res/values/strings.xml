@@ -45,6 +45,8 @@
     <string name="full_name">Full Name</string>
     <string name="mobile_number">Mobile Number</string>
     <string name="title_dr">Dr.</string>
+    <string name="promo_code">Promo Code</string>
+    <string name="promo_code_colon">Promo Code&#160;:&#160;</string>
     <string name="male">MALE</string>
     <string name="female">FEMALE</string>
 
@@ -647,6 +649,7 @@
     <string name="discard">Discard</string>
     <string name="approve">Approve</string>
     <string name="decline">Decline</string>
+    <string name="text_default">DEFAULT</string>
     <string name="save_as_template">Save as Template</string>
     <string name="report_details">Report Details</string>
     <string name="event">Event</string>

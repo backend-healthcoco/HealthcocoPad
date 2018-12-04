@@ -9,7 +9,8 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:paddingBottom="@dimen/fab_margin_left">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -29,10 +30,10 @@
                     android:layout_weight="1"
                     android:background="@color/grey_background"
                     android:orientation="vertical"
-                    android:paddingBottom="@dimen/list_item_padding"
                     android:paddingLeft="@dimen/padding_30_dp"
+                    android:paddingTop="@dimen/list_item_padding"
                     android:paddingRight="@dimen/patient_profile_image_padding"
-                    android:paddingTop="@dimen/list_item_padding">
+                    android:paddingBottom="@dimen/list_item_padding">
 
 
                     <TextView
@@ -79,10 +80,10 @@
                     android:layout_weight="1"
                     android:background="@color/grey_background"
                     android:orientation="vertical"
-                    android:paddingBottom="@dimen/list_item_padding"
                     android:paddingLeft="@dimen/patient_profile_image_padding"
+                    android:paddingTop="@dimen/list_item_padding"
                     android:paddingRight="@dimen/patient_profile_image_padding"
-                    android:paddingTop="@dimen/list_item_padding">
+                    android:paddingBottom="@dimen/list_item_padding">
 
 
                     <TextView
@@ -139,17 +140,17 @@
                         android:layout_height="wrap_content"
                         android:background="@color/white"
                         android:orientation="vertical"
-                        android:paddingBottom="@dimen/list_item_padding"
                         android:paddingLeft="@dimen/patient_profile_image_padding"
-                        android:paddingRight="@dimen/patient_profile_image_padding"
                         android:paddingTop="@dimen/list_item_padding"
+                        android:paddingRight="@dimen/patient_profile_image_padding"
+                        android:paddingBottom="@dimen/list_item_padding"
                         android:visibility="visible">
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:paddingBottom="10dp"
                             android:paddingLeft="10dp"
+                            android:paddingBottom="10dp"
                             android:text="@string/patient_detail"
                             android:textColor="@color/black"
                             android:textSize="@dimen/text_size_book_appointment_dialog_fragment" />
@@ -286,8 +287,8 @@
                                             android:hint="@string/please_enter_mobile_no"
                                             android:inputType="number"
                                             android:maxLength="@integer/max_mobile_number"
-                                            android:paddingBottom="10dp"
                                             android:paddingTop="10dp"
+                                            android:paddingBottom="10dp"
                                             android:textColorHint="@color/grey_hint_color"
                                             android:textSize="@dimen/text_size_report_detail_title_description" />
 
@@ -318,11 +319,128 @@
                                             android:digits=" abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
                                             android:hint="@string/patient_name"
                                             android:inputType="textPersonName|textNoSuggestions|textCapWords"
-                                            android:maxLength="@integer/max_mobile_landline_number"
                                             android:singleLine="true"
                                             android:textColorHint="@color/grey_hint_color" />
 
                                     </android.support.design.widget.TextInputLayout>
+
+                                    <LinearLayout
+                                        android:id="@+id/container_gender_age"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="vertical">
+
+                                        <LinearLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginTop="@dimen/layout_padding"
+                                            android:gravity="center|start"
+                                            android:orientation="horizontal">
+
+
+                                            <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+                                                style="@style/registration_font_awesome_logos"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:text="@string/fa_gender_venus" />
+
+                                            <RadioGroup
+                                                android:id="@+id/rg_gender_select"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:layout_gravity="center"
+                                                android:layout_marginTop="@dimen/edit_text_patient_registration_padding"
+                                                android:layout_marginBottom="@dimen/edit_text_patient_registration_padding"
+                                                android:orientation="horizontal">
+
+                                                <com.healthcoco.healthcocopad.views.FontAwesomeRadioButton
+                                                    android:layout_width="0dp"
+                                                    android:layout_height="wrap_content"
+                                                    android:layout_weight="0.5"
+                                                    android:background="@android:color/transparent"
+                                                    android:button="@android:color/transparent"
+                                                    android:paddingLeft="5dp"
+                                                    android:tag="@string/male"
+                                                    android:text="@string/text_check_male"
+                                                    android:textColor="@drawable/text_light_grey_normal_blue_selected"
+                                                    android:textSize="@dimen/text_size_registration_title" />
+
+                                                <com.healthcoco.healthcocopad.views.FontAwesomeRadioButton
+                                                    android:layout_width="0dp"
+                                                    android:layout_height="wrap_content"
+                                                    android:layout_weight="0.5"
+                                                    android:background="@android:color/transparent"
+                                                    android:button="@android:color/transparent"
+                                                    android:checked="false"
+                                                    android:paddingLeft="1dp"
+                                                    android:tag="@string/female"
+                                                    android:text="@string/text_check_female"
+                                                    android:textColor="@drawable/text_light_grey_normal_blue_selected"
+                                                    android:textSize="@dimen/text_size_registration_title" />
+                                            </RadioGroup>
+
+
+                                        </LinearLayout>
+
+                                        <LinearLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:orientation="horizontal">
+
+                                            <LinearLayout
+                                                android:layout_width="0dp"
+                                                android:layout_height="wrap_content"
+                                                android:layout_weight="1"
+                                                android:gravity="center|start"
+                                                android:orientation="horizontal">
+
+                                                <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+                                                    style="@style/registration_font_awesome_logos"
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:text="@string/fa_calendar" />
+
+                                                <TextView
+                                                    android:id="@+id/tv_birthday"
+                                                    style="@style/registration_edittext"
+                                                    android:layout_width="0dp"
+                                                    android:layout_height="wrap_content"
+                                                    android:layout_weight="1"
+                                                    android:drawableRight="@drawable/arrow_down_drug"
+                                                    android:hint="@string/birthday" />
+
+                                            </LinearLayout>
+
+                                            <LinearLayout
+                                                android:id="@+id/container_age"
+                                                android:layout_width="0dp"
+                                                android:layout_height="wrap_content"
+                                                android:layout_weight="1"
+                                                android:gravity="center|start"
+                                                android:orientation="horizontal">
+
+                                                <TextView
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="match_parent"
+                                                    android:layout_marginStart="20dp"
+                                                    android:gravity="center_vertical|start"
+                                                    android:text="@string/or" />
+
+                                                <EditText
+                                                    android:id="@+id/edit_age"
+                                                    style="@style/registration_edittext"
+                                                    android:layout_width="0dp"
+                                                    android:layout_height="wrap_content"
+                                                    android:layout_marginStart="20dp"
+                                                    android:layout_weight="1"
+                                                    android:hint="@string/age"
+                                                    android:inputType="number"
+                                                    android:maxLength="3"
+                                                    android:singleLine="true" />
+
+                                            </LinearLayout>
+                                        </LinearLayout>
+                                    </LinearLayout>
 
                                 </LinearLayout>
 
@@ -349,10 +467,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@color/grey_background"
-                        android:paddingBottom="@dimen/list_item_padding"
                         android:paddingLeft="@dimen/patient_profile_image_padding"
-                        android:paddingRight="@dimen/patient_profile_image_padding"
                         android:paddingTop="@dimen/list_item_padding"
+                        android:paddingRight="@dimen/patient_profile_image_padding"
+                        android:paddingBottom="@dimen/list_item_padding"
                         android:text="@string/pick_time_slot"
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_size_report_detail_title_description" />
@@ -370,10 +488,10 @@
                             android:layout_height="wrap_content"
                             android:background="@color/white"
                             android:orientation="horizontal"
-                            android:paddingBottom="@dimen/list_item_padding"
                             android:paddingLeft="@dimen/patient_profile_image_padding"
+                            android:paddingTop="@dimen/list_item_padding"
                             android:paddingRight="@dimen/patient_profile_image_padding"
-                            android:paddingTop="@dimen/list_item_padding">
+                            android:paddingBottom="@dimen/list_item_padding">
 
                             <TextView
                                 android:layout_width="0dp"
@@ -414,10 +532,10 @@
                             android:layout_height="wrap_content"
                             android:background="@color/white"
                             android:orientation="horizontal"
-                            android:paddingBottom="@dimen/list_item_padding"
                             android:paddingLeft="@dimen/patient_profile_image_padding"
-                            android:paddingRight="@dimen/patient_profile_image_padding"
                             android:paddingTop="@dimen/list_item_padding"
+                            android:paddingRight="@dimen/patient_profile_image_padding"
+                            android:paddingBottom="@dimen/list_item_padding"
                             android:visibility="visible">
 
                             <TextView
@@ -504,8 +622,8 @@
                         android:gravity="center"
                         android:orientation="horizontal"
                         android:paddingLeft="20dp"
-                        android:paddingRight="20dp"
-                        android:paddingTop="10dp">
+                        android:paddingTop="10dp"
+                        android:paddingRight="20dp">
 
                         <com.healthcoco.healthcocopad.views.TextViewFontAwesome
                             android:layout_width="0dp"

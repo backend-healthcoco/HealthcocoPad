@@ -263,6 +263,11 @@
     <dimen name="layout_maxwidth">500dp</dimen>
     <dimen name="layout_padding">10dp</dimen>
 
+    <!--patient registration-->
+    <dimen name="text_size_registration_logo">15sp</dimen>
+    <dimen name="margin_padding_registration">15dp</dimen>
+
+
     // title PinView
     <dimen name="textsize_title">20sp</dimen>
     <dimen name="title_margintop">54dp</dimen>
