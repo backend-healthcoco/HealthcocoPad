@@ -43,6 +43,7 @@ import com.healthcoco.healthcocopad.bean.server.AlreadyRegisteredPatientsRespons
 import com.healthcoco.healthcocopad.bean.server.BloodGroup;
 import com.healthcoco.healthcocopad.bean.server.CityResponse;
 import com.healthcoco.healthcocopad.bean.FileDetails;
+import com.healthcoco.healthcocopad.bean.server.DoctorClinicProfile;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.Profession;
 import com.healthcoco.healthcocopad.bean.server.Reference;
@@ -174,6 +175,8 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
     private TextView tvNoNotes;
     private TextView tvNoGroups;
     private LinearLayout containerAge;
+    private DoctorClinicProfile doctorClinicProfile;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -193,6 +196,7 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
         LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
         if (doctor != null && doctor.getUser() != null && !Util.isNullOrBlank(doctor.getUser().getUniqueId())) {
             user = doctor.getUser();
+            doctorClinicProfile = LocalDataServiceImpl.getInstance(mApp).getDoctorClinicProfile(user.getUniqueId(), user.getForeignLocationId());
             initViews();
             initListeners();
             initAdapters();
@@ -551,6 +555,9 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
         patientDetails.setSecMobile(Util.getValidatedValueOrNull(String.valueOf(editSecondaryMobile.getText())));
         patientDetails.setAddress(getAddress());
         patientDetails.setImage(patientProfileFileDetails);
+
+        if (doctorClinicProfile.isVaccinationModuleOn())
+            patientDetails.setChild(true);
 
         String age = Util.getValidatedValueOrNull(editAge);
         if (!Util.isNullOrBlank(age))

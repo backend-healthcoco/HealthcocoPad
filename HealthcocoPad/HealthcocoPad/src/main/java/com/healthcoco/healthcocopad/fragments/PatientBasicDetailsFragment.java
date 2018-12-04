@@ -43,6 +43,7 @@ import com.healthcoco.healthcocopad.bean.request.RegisterNewPatientRequest;
 import com.healthcoco.healthcocopad.bean.server.AlreadyRegisteredPatientsResponse;
 import com.healthcoco.healthcocopad.bean.server.BloodGroup;
 import com.healthcoco.healthcocopad.bean.server.CityResponse;
+import com.healthcoco.healthcocopad.bean.server.DoctorClinicProfile;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.Profession;
 import com.healthcoco.healthcocopad.bean.server.Reference;
@@ -166,6 +167,7 @@ public class PatientBasicDetailsFragment extends HealthCocoFragment implements V
     private ImageButton btDeleteReferredBy;
     private ArrayList<String> groupIdsToAssign = new ArrayList<String>();
     private LinearLayout containerAge;
+    private DoctorClinicProfile doctorClinicProfile;
 
     public PatientBasicDetailsFragment(PatientRegistrationDetailsListener registrationDetailsListener) {
         super();
@@ -190,6 +192,7 @@ public class PatientBasicDetailsFragment extends HealthCocoFragment implements V
         LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
         if (doctor != null && doctor.getUser() != null && !Util.isNullOrBlank(doctor.getUser().getUniqueId())) {
             user = doctor.getUser();
+            doctorClinicProfile = LocalDataServiceImpl.getInstance(mApp).getDoctorClinicProfile(user.getUniqueId(), user.getForeignLocationId());
             initViews();
             initListeners();
             initAdapters();
@@ -531,6 +534,9 @@ public class PatientBasicDetailsFragment extends HealthCocoFragment implements V
         patientDetails.setImage(patientProfileFileDetails);
         patientDetails.setNotes(notesListLastAdded);
         patientDetails.setGroups(groupIdsToAssign);
+
+        if (doctorClinicProfile.isVaccinationModuleOn())
+            patientDetails.setChild(true);
 
         String age = Util.getValidatedValueOrNull(editAge);
         if (!Util.isNullOrBlank(age))

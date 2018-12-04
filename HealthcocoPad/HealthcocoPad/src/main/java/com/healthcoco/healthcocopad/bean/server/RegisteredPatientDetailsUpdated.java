@@ -71,6 +71,15 @@ public class RegisteredPatientDetailsUpdated extends SugarRecord {
     private double totalDueAmount;
     private double totalRemainingAdvanceAmount;
 
+    private boolean isChild;
+
+    public boolean isChild() {
+        return isChild;
+    }
+
+    public void setChild(boolean child) {
+        isChild = child;
+    }
     public boolean isPartOfConsultantDoctor() {
         return isPartOfConsultantDoctor;
     }

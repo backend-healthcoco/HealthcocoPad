@@ -46,6 +46,7 @@ public class RegisterNewPatientRequest {
     private AddMedicalFamilyHistoryRequest pastMedicalHistoryHandler;
     private AddMedicalFamilyHistoryRequest familyMedicalHistoryHandler;
     private PersonalHistory personalHistoryAddRequest;
+    private boolean isChild;
 
     public String getUserId() {
         return userId;
@@ -309,5 +310,13 @@ public class RegisterNewPatientRequest {
 
     public void setPersonalHistoryAddRequest(PersonalHistory personalHistoryAddRequest) {
         this.personalHistoryAddRequest = personalHistoryAddRequest;
+    }
+
+    public boolean isChild() {
+        return isChild;
+    }
+
+    public void setChild(boolean child) {
+        isChild = child;
     }
 }
