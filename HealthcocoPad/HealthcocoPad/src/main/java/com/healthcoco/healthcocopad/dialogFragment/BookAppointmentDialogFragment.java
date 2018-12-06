@@ -665,11 +665,6 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
     }
 
     private void showDetailsAddNewPatient(boolean b) {
-        if (doctorClinicProfile.isVaccinationModuleOn())
-            containerGender.setVisibility(View.VISIBLE);
-        else
-            containerGender.setVisibility(View.GONE);
-
         if (b) {
             containerDetailsAddNewPatient.setVisibility(View.VISIBLE);
             btAddNewPatient.setVisibility(View.GONE);
