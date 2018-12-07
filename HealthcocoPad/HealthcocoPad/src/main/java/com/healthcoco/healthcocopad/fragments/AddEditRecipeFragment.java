@@ -56,6 +56,10 @@ public class AddEditRecipeFragment extends HealthCocoFragment implements View.On
 
     private final int EDIT_ID = 100;
     private final int DELETE_ID = 101;
+    public ArrayList<QuantityType> servingTypeList = new ArrayList<QuantityType>() {{
+        add(QuantityType.G);
+        add(QuantityType.MILI_LITRE);
+    }};
     private User user;
     private TextView tvTypeQuantity;
     private TextView tvTypeProtein;
@@ -150,6 +154,19 @@ public class AddEditRecipeFragment extends HealthCocoFragment implements View.On
         containerIngredient = view.findViewById(R.id.container_ingredient);
         containerNutrientsOne = view.findViewById(R.id.parent_layout_category_one);
         containerNutrientsTwo = view.findViewById(R.id.parent_layout_category_two);
+
+        initEquivalentQuantity();
+    }
+
+    private void initEquivalentQuantity() {
+        for (QuantityType quantityType : servingTypeList) {
+            EquivalentQuantities equivalentQuantity = new EquivalentQuantities();
+            equivalentQuantity.setServingType(quantityType);
+            equivalentQuantity.setValue(1.0);
+            equivalentQuantity.setType(quantityType);
+            quantitiesLinkedHashMap.put(quantityType, equivalentQuantity);
+        }
+        addEquivalentMeasurement(new ArrayList<>(quantitiesLinkedHashMap.values()));
     }
 
     @Override
@@ -415,6 +432,11 @@ public class AddEditRecipeFragment extends HealthCocoFragment implements View.On
             recipeRequest.setDoctorId(user.getUniqueId());
         }
 
+        if (dietPlanRecipeItem != null) {
+            if (!Util.isNullOrBlank(dietPlanRecipeItem.getUniqueId()))
+                recipeRequest.setUniqueId(dietPlanRecipeItem.getUniqueId());
+        }
+
         WebDataServiceImpl.getInstance(mApp).addEditRecipe(RecipeRequest.class, recipeRequest, this, this);
     }
 
@@ -564,8 +586,9 @@ public class AddEditRecipeFragment extends HealthCocoFragment implements View.On
                     if (data != null) {
                         dietPlanRecipeItem = Parcels.unwrap(data.getParcelableExtra(HealthCocoConstants.TAG_INTENT_DATA));
                         if (dietPlanRecipeItem != null) {
-                            if (!Util.isNullOrEmptyList(dietPlanRecipeItem.getIngredients()))
+                            if (!Util.isNullOrEmptyList(dietPlanRecipeItem.getIngredients())) {
                                 addIngredients(dietPlanRecipeItem.getIngredients());
+                            }
                             updateNutrientView(dietPlanRecipeItem);
                             initNutrientData(dietPlanRecipeItem);
                         }
@@ -695,8 +718,13 @@ public class AddEditRecipeFragment extends HealthCocoFragment implements View.On
     }
 
     private void addIngredients(List<Ingredient> ingredientList) {
+        boolean isSingleIngredient;
         containerIngredient.setVisibility(View.VISIBLE);
         containerIngredient.removeAllViews();
+        if (dietPlanRecipeItem.getIngredients().size() <= 1) {
+            isSingleIngredient = true;
+        } else
+            isSingleIngredient = false;
         for (Ingredient ingredient : ingredientList) {
             if (ingredient != null) {
                 LinearLayout layoutSubItemPermission = (LinearLayout) mActivity.getLayoutInflater().inflate(R.layout.list_sub_item_selected_ingredient, null);
@@ -707,12 +735,23 @@ public class AddEditRecipeFragment extends HealthCocoFragment implements View.On
                 btItemDelete.setOnClickListener(this);
                 btItemDelete.setVisibility(View.GONE);
 
-                tvItemTitle.setText(ingredient.getName());
-
+                if (!Util.isNullOrBlank(ingredient.getName())) {
+                    tvItemTitle.setText(ingredient.getName());
+                    if (isSingleIngredient)
+                        editName.setText(ingredient.getName());
+                }
                 if (ingredient.getQuantity() != null) {
                     String quantityType = ingredient.getQuantity().getType().getUnit();
                     if (!Util.isNullOrZeroNumber(ingredient.getQuantity().getValue())) {
                         tvItemQuantity.setText(Util.getValidatedValue(Util.round(ingredient.getQuantity().getValue(), 2)) + quantityType);
+                    }
+                    if (isSingleIngredient) {
+                        if (!Util.isNullOrZeroNumber(ingredient.getQuantity().getValue()))
+                            editValueQuantity.setText(Util.getValidatedValue(Util.round(ingredient.getQuantity().getValue(), 2)));
+                        if (ingredient.getQuantity().getType() != null) {
+                            tvTypeQuantity.setText(ingredient.getQuantity().getType().getUnit());
+                            tvTypeQuantity.setTag(ingredient.getQuantity().getType());
+                        }
                     }
                 }
                 if (ingredient.getCalories() != null) {

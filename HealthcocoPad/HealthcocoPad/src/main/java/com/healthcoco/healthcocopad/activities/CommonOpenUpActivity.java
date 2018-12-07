@@ -514,6 +514,8 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
                 case PATIENT_REGISTRATION_TABS:
                 case ADD_RECIPE:
                 case ADD_INGREDIENT:
+                case SELECT_INGREDIENT:
+                case SELECT_RECIPES:
                     showFinishConfirmationAlert();
                     break;
                 default:

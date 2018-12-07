@@ -56,9 +56,9 @@ public enum PopupWindowType {
 
     NUTRIENT_TYPE(new ArrayList<Object>() {{
         add(QuantityType.G);
-        add(QuantityType.G);
-        add(QuantityType.G);
-        add(QuantityType.G);
+        add(QuantityType.MG);
+        add(QuantityType.UG);
+        add(QuantityType.CAL);
     }}),
 
     MICRO_NUTRIENT_TYPE(new ArrayList<Object>() {{

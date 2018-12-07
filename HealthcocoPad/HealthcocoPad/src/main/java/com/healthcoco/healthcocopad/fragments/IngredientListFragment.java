@@ -53,7 +53,7 @@ public class IngredientListFragment extends HealthCocoFragment implements View.O
         SwipeRefreshLayout.OnRefreshListener, AddNewDrugListener {
 
     //variables need for pagination
-    public static final int MAX_SIZE = 25;
+    public static final int MAX_SIZE = 15;
     private SelectedRecipeItemClickListener selectedRecipeItemClickListener;
     private int PAGE_NUMBER = 0;
     private boolean isEndOfListAchieved;
@@ -107,7 +107,7 @@ public class IngredientListFragment extends HealthCocoFragment implements View.O
         btAddNewTemplate = (ImageButton) view.findViewById(R.id.bt_add_recipe);
         progressLoading = (ProgressBar) view.findViewById(R.id.progress_loading);
         progressLoadingCenter = (ProgressBar) view.findViewById(R.id.progress_loading_center);
-        initEditSearchView(R.string.search_recipe, this, this);
+        initEditSearchView(R.string.search_ingredient, this, this);
 
         btAddNewTemplate.setVisibility(View.VISIBLE);
         ingredientRecyclerView.setVisibility(View.VISIBLE);
