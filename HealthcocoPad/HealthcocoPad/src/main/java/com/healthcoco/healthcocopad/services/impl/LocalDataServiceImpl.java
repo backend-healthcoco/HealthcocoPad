@@ -2986,6 +2986,7 @@ public class LocalDataServiceImpl {
                 drugItem.setForeignTableKey(foreignTableKey);
                 drugItem.setForeignTableId(prescriptionTemplateId);
                 drugItem.setCustomUniqueId(drugItem.getForeignTableKey() + drugItem.getForeignTableId() + drugItem.getDrugId());
+                drugItem.setGenericNames(drugItem.getDrug().getGenericNames());
                 drugItem.save();
             }
         }
@@ -3408,6 +3409,7 @@ public class LocalDataServiceImpl {
                 drugItem.setDrug(getDrug(drugItem.getDrugId()));
                 drugItem.setDuration((Duration) getObjectFromJson(Duration.class, drugItem.getDurationJsonString()));
                 drugItem.setDirection((ArrayList<DrugDirection>) getObjectsListFronJson(DrugDirection.class, drugItem.getDirectionJsonString()));
+                drugItem.setGenericNames(drugItem.getDrug().getGenericNames());
             }
         }
         return list;

@@ -12,13 +12,13 @@ import android.widget.AbsListView;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.adapter.SelectedPrescriptionDrugItemsListAdapter;
+import com.healthcoco.healthcocopad.bean.Duration;
 import com.healthcoco.healthcocopad.bean.request.DrugInteractionRequest;
 import com.healthcoco.healthcocopad.bean.server.Drug;
 import com.healthcoco.healthcocopad.bean.server.DrugDirection;
 import com.healthcoco.healthcocopad.bean.server.DrugItem;
 import com.healthcoco.healthcocopad.bean.server.DrugType;
 import com.healthcoco.healthcocopad.bean.server.DrugsListSolrResponse;
-import com.healthcoco.healthcocopad.bean.Duration;
 import com.healthcoco.healthcocopad.bean.server.GenericName;
 import com.healthcoco.healthcocopad.bean.server.Prescription;
 import com.healthcoco.healthcocopad.custom.ExpandableHeightListView;
@@ -221,6 +221,8 @@ public class SelectedDrugItemsListFragment extends HealthCocoFragment implements
                     modifiedList) {
                 if (drugItem.getDrug() != null) {
                     drugItem.setDrugId(drugItem.getDrug().getUniqueId());
+                    drugItem.setDrugName(drugItem.getDrug().getDrugName());
+                    drugItem.setDrugType(drugItem.getDrug().getDrugType());
                     drugItem.setDrug(null);
                 }
             }
@@ -310,6 +312,9 @@ public class SelectedDrugItemsListFragment extends HealthCocoFragment implements
         selectedDrug.setDirection(getDirectionsListFromLocal(directionId));
         selectedDrug.setDuration(getDurationAndUnit(durationtext, durationUnitId));
         selectedDrug.setInstructions(instructions);
+        selectedDrug.setGenericNames(drug.getGenericNames());
+        selectedDrug.setDrugName(drugName);
+        selectedDrug.setDrugType(drugTypeObj);
         if (selectedDrug != null) {
             addDrug(selectedDrug);
         }

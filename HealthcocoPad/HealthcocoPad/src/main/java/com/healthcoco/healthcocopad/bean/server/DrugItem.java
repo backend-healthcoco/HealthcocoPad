@@ -33,6 +33,30 @@ public class DrugItem extends SugarRecord {
     @Unique
     protected String customUniqueId;
 
+    private String drugName;
+    @Ignore
+    private DrugType drugType;
+
+    public List<GenericName> getGenericNames() {
+        return genericNames;
+    }
+
+    public void setGenericNames(List<GenericName> genericNames) {
+        this.genericNames = genericNames;
+    }
+
+    @Ignore
+    private List<GenericName> genericNames;
+
+    public String getGenericNamesJsonString() {
+        return genericNamesJsonString;
+    }
+
+    public void setGenericNamesJsonString(String genericNamesJsonString) {
+        this.genericNamesJsonString = genericNamesJsonString;
+    }
+
+    protected String genericNamesJsonString;
     public String getDoctorId() {
         return doctorId;
     }
@@ -131,5 +155,21 @@ public class DrugItem extends SugarRecord {
 
     public void setDirectionJsonString(String directionJsonString) {
         this.directionJsonString = directionJsonString;
+    }
+
+    public String getDrugName() {
+        return drugName;
+    }
+
+    public void setDrugName(String drugName) {
+        this.drugName = drugName;
+    }
+
+    public DrugType getDrugType() {
+        return drugType;
+    }
+
+    public void setDrugType(DrugType drugType) {
+        this.drugType = drugType;
     }
 }
