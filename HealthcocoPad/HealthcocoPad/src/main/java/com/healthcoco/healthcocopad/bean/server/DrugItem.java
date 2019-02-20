@@ -33,9 +33,9 @@ public class DrugItem extends SugarRecord {
     @Unique
     protected String customUniqueId;
 
-    private String drugName;
+    protected String drugName;
     @Ignore
-    private DrugType drugType;
+    protected DrugType drugType;
 
     public List<GenericName> getGenericNames() {
         return genericNames;
@@ -46,7 +46,7 @@ public class DrugItem extends SugarRecord {
     }
 
     @Ignore
-    private List<GenericName> genericNames;
+    protected List<GenericName> genericNames;
 
     public String getGenericNamesJsonString() {
         return genericNamesJsonString;
