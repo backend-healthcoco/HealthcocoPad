@@ -33,9 +33,9 @@ public class DrugItem extends SugarRecord {
     @Unique
     protected String customUniqueId;
 
-    protected String drugName;
+    private String drugName;
     @Ignore
-    protected DrugType drugType;
+    private DrugType drugType;
 
     public List<GenericName> getGenericNames() {
         return genericNames;
