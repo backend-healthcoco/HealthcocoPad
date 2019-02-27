@@ -2986,7 +2986,8 @@ public class LocalDataServiceImpl {
                 drugItem.setForeignTableKey(foreignTableKey);
                 drugItem.setForeignTableId(prescriptionTemplateId);
                 drugItem.setCustomUniqueId(drugItem.getForeignTableKey() + drugItem.getForeignTableId() + drugItem.getDrugId());
-                drugItem.setGenericNames(drugItem.getDrug().getGenericNames());
+                if (drugItem.getDrug() != null)
+                    drugItem.setGenericNames(drugItem.getDrug().getGenericNames());
                 drugItem.save();
             }
         }
@@ -3764,9 +3765,7 @@ public class LocalDataServiceImpl {
                 responseListener.onResponse(volleyResponseBean);
         } catch (
                 Exception e
-                )
-
-        {
+        ) {
             e.printStackTrace();
             showErrorLocal(volleyResponseBean, errorListener);
         }
@@ -4750,7 +4749,7 @@ public class LocalDataServiceImpl {
         List<DiagnosticTestsPrescription> list = (List<DiagnosticTestsPrescription>) getObjectsList(DiagnosticTestsPrescription.class, LocalDatabaseUtils.KEY_FOREIGN_TABLE_ID, foreignTableId);
         if (!Util.isNullOrEmptyList(list)) {
             for (DiagnosticTestsPrescription diagnosticTestsPrescription : list
-                    ) {
+            ) {
                 DiagnosticTest diagnosticTest = getDiagnosticTest(diagnosticTestsPrescription.getForeignDiagnosticTestId());
                 if (diagnosticTest != null) {
                     diagnosticTestsPrescription.setTest(diagnosticTest);
