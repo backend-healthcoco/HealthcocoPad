@@ -46,7 +46,7 @@ public class DrugItem extends SugarRecord {
     }
 
     @Ignore
-    protected List<GenericName> genericNames;
+    private List<GenericName> genericNames;
 
     public String getGenericNamesJsonString() {
         return genericNamesJsonString;
@@ -57,6 +57,7 @@ public class DrugItem extends SugarRecord {
     }
 
     protected String genericNamesJsonString;
+
     public String getDoctorId() {
         return doctorId;
     }

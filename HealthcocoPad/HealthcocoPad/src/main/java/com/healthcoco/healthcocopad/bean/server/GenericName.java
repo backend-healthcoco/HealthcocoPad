@@ -12,7 +12,7 @@ import org.parceler.Parcel;
 public class GenericName extends SugarRecord {
     @Unique
     private String uniqueId;
-    private String createdBy;
+    protected String createdBy;
     private String code;
     private String name;
 
