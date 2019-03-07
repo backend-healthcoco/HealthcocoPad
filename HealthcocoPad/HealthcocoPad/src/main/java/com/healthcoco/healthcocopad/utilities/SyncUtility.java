@@ -23,6 +23,7 @@ import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.Specialities;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.bean.server.UserGroups;
+import com.healthcoco.healthcocopad.bean.server.VaccineBrandResponse;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.LocalTabelType;
@@ -305,5 +306,8 @@ public class SyncUtility implements Response.Listener<VolleyResponseBean>, GsonR
     @Override
     public void onPostExecute(VolleyResponseBean aVoid) {
 
+    }
+    public void getVaccinesBrandsList() {
+        WebDataServiceImpl.getInstance(mApp).getVaccinationBrandList(VaccineBrandResponse.class, WebServiceType.GET_VACCINATION_BRAND, this, this);
     }
 }

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/parent_layout_selected_vaccine_brands"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/shadow_new"
+    android:orientation="horizontal"
+    android:padding="15dp">
+
+    <CheckBox
+        android:id="@+id/cb_select_vaccine"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/grey_darker"
+        android:textSize="18sp" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_vaccine_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="40"
+                android:text="@string/due_on"
+                android:textColor="@color/grey_darker"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/tv_due_date"
+                style="@style/registration_edittext"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="60"
+                android:drawablePadding="8dp"
+                android:drawableStart="@drawable/tab_cal_date_normal_item"
+                android:textAllCaps="true"
+                android:textColor="@color/grey_darker"
+                android:textSize="15sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="40"
+                android:text="@string/given_on"
+                android:textColor="@color/grey_darker"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/tv_given_date"
+                style="@style/registration_edittext"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="60"
+                android:drawablePadding="8dp"
+                android:drawableStart="@drawable/tab_cal_date_normal_item"
+                android:textAllCaps="true"
+                android:textColor="@color/grey_darker"
+                android:textSize="15sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_add_note"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginTop="3dp"
+        android:text="@string/add_note"
+        android:textAllCaps="true"
+        android:textColor="@drawable/text_blue_translucent_selector"
+        android:textSize="13sp" />
+</LinearLayout>

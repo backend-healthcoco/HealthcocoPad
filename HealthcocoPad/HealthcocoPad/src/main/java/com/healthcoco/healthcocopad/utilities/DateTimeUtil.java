@@ -11,7 +11,6 @@ import com.healthcoco.healthcocopad.dialogFragment.BookAppointmentDialogFragment
 import com.healthcoco.healthcocopad.fragments.CalendarFragment;
 
 import java.sql.Date;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -656,4 +655,25 @@ public class DateTimeUtil {
         return today;
     }
 
+    public static long getLongFromFormattedFormatString(String format, String displayedDate) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.ENGLISH);
+            sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
+            long timeInMillis = sdf.parse(displayedDate).getTime();
+            Calendar calendar2 = getCalendarInstance();
+            calendar2.setTimeInMillis(timeInMillis);
+            Calendar calendar1 = getCalendarInstance();
+            calendar1.set(Calendar.YEAR, calendar2.get(Calendar.YEAR));
+            calendar1.set(Calendar.MONTH, calendar2.get(Calendar.MONTH));
+            calendar1.set(Calendar.DAY_OF_MONTH, calendar2.get(Calendar.DAY_OF_MONTH));
+            calendar1.set(Calendar.HOUR, 0);
+            calendar1.set(Calendar.MINUTE, 1);
+            calendar1.set(Calendar.SECOND, 0);
+            calendar1.set(Calendar.MILLISECOND, 0);
+            return calendar1.getTimeInMillis();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0l;
+    }
 }

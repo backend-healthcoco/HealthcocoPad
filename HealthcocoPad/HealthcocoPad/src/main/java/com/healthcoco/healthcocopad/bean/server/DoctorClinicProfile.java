@@ -65,7 +65,9 @@ public class DoctorClinicProfile extends SugarRecord {
     private AccountPackageType packageType;
     private Boolean iskiosk;
     private boolean isVaccinationModuleOn;
-
+    protected boolean isLab;
+    protected boolean isClinic;
+    protected boolean isParent;
 
     public DoctorClinicProfile() {
     }
@@ -391,5 +393,29 @@ public class DoctorClinicProfile extends SugarRecord {
 
     public void setVaccinationModuleOn(boolean vaccinationModuleOn) {
         isVaccinationModuleOn = vaccinationModuleOn;
+    }
+
+    public boolean isLab() {
+        return isLab;
+    }
+
+    public void setLab(boolean lab) {
+        isLab = lab;
+    }
+
+    public boolean isClinic() {
+        return isClinic;
+    }
+
+    public void setClinic(boolean clinic) {
+        isClinic = clinic;
+    }
+
+    public boolean isParent() {
+        return isParent;
+    }
+
+    public void setParent(boolean parent) {
+        isParent = parent;
     }
 }

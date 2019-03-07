@@ -1,0 +1,284 @@
+package com.healthcoco.healthcocopad.fragments;
+
+import android.content.Intent;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.EditText;
+
+import com.healthcoco.healthcocopad.HealthCocoFragment;
+import com.healthcoco.healthcocopad.R;
+import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
+import com.healthcoco.healthcocopad.bean.BloodPressure;
+import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
+import com.healthcoco.healthcocopad.bean.request.GrowthChartRequest;
+import com.healthcoco.healthcocopad.bean.server.GrowthChartResponse;
+import com.healthcoco.healthcocopad.bean.server.LoginResponse;
+import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
+import com.healthcoco.healthcocopad.bean.server.User;
+import com.healthcoco.healthcocopad.custom.HealthcocoTextWatcher;
+import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
+import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
+import com.healthcoco.healthcocopad.enums.WebServiceType;
+import com.healthcoco.healthcocopad.listeners.HealthcocoTextWatcherListener;
+import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
+import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
+import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
+import com.healthcoco.healthcocopad.utilities.EditTextTextViewErrorUtil;
+import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
+import com.healthcoco.healthcocopad.utilities.Util;
+
+import org.parceler.Parcels;
+
+import java.util.ArrayList;
+
+public class AddGrowthChartFragment extends HealthCocoFragment implements View.OnClickListener, HealthcocoTextWatcherListener, LocalDoInBackgroundListenerOptimised {
+    private EditText editWeight;
+    private EditText editHeight;
+    private EditText editTemperature;
+    private EditText editBmi;
+    private EditText editSys;
+    private EditText editDias;
+    private EditText editBloodSugarF;
+    private EditText editBloodSugarPP;
+    private EditText editBmd;
+    private EditText editHeadCircumfence;
+    private GrowthChartResponse growthChartResponse;
+    private User user;
+    private RegisteredPatientDetailsUpdated selectedPatient;
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        view = inflater.inflate(R.layout.fragment_add_growth_chart, container, false);
+        super.onCreateView(inflater, container, savedInstanceState);
+        return view;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        init();
+        Intent intent = mActivity.getIntent();
+        growthChartResponse = Parcels.unwrap(intent.getParcelableExtra(GrowthChartListFragment.TAG_GROWTH_CHART_DATA));
+        new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_FRAGMENT_INITIALISATION_DATA, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+    @Override
+    public void init() {
+        initViews();
+        initListeners();
+    }
+
+    @Override
+    public void initViews() {
+        editWeight = (EditText) view.findViewById(R.id.edit_weight_kilograms);
+        editHeight = (EditText) view.findViewById(R.id.edit_height_cm);
+        editTemperature = (EditText) view.findViewById(R.id.edit_temp);
+        editHeadCircumfence = (EditText) view.findViewById(R.id.edit_head_circumference);
+        editBmi = (EditText) view.findViewById(R.id.edit_bmi);
+        editSys = (EditText) view.findViewById(R.id.edit_sys);
+        editDias = (EditText) view.findViewById(R.id.edit_dias);
+        editBloodSugarF = (EditText) view.findViewById(R.id.edit_blood_sugar_f_mg_dl);
+        editBloodSugarPP = (EditText) view.findViewById(R.id.edit_blood_sugar_pp_mg_dl);
+        editBmd = (EditText) view.findViewById(R.id.edit_bmd);
+    }
+
+    @Override
+    public void initListeners() {
+        ((CommonOpenUpActivity) mActivity).initActionbarRightAction(this);
+        editHeight.addTextChangedListener(new HealthcocoTextWatcher(editHeight, this));
+        editWeight.addTextChangedListener(new HealthcocoTextWatcher(editWeight, this));
+    }
+
+    private void initData() {
+        if (growthChartResponse != null) {
+            if (growthChartResponse.getWeight() > 0)
+                editWeight.setText(String.valueOf(Util.formatDoubleNumber(growthChartResponse.getWeight())));
+            if (growthChartResponse.getHeight() > 0)
+                editHeight.setText(String.valueOf(Util.formatDoubleNumber(growthChartResponse.getHeight())));
+            if (growthChartResponse.getBmi() > 0)
+                editBmi.setText(String.valueOf(Util.formatDoubleNumber(growthChartResponse.getBmi())));
+            if (growthChartResponse.getSkullCircumference() > 0)
+                editHeadCircumfence.setText(String.valueOf(Util.formatDoubleNumber(growthChartResponse.getSkullCircumference())));
+            if (!Util.isNullOrBlank(growthChartResponse.getTemperature()))
+                editTemperature.setText(Util.getValidatedValue(growthChartResponse.getTemperature()));
+            if (!Util.isNullOrBlank(growthChartResponse.getBloodSugarF()))
+                editBloodSugarF.setText(Util.getValidatedValue(growthChartResponse.getBloodSugarF()));
+            if (!Util.isNullOrBlank(growthChartResponse.getBloodSugarPP()))
+                editBloodSugarPP.setText(Util.getValidatedValue(growthChartResponse.getBloodSugarPP()));
+            if (!Util.isNullOrBlank(growthChartResponse.getBmd()))
+                editBmd.setText(Util.getValidatedValue(growthChartResponse.getBmd()));
+            if (growthChartResponse.getBloodPressure() != null) {
+                if (!Util.isNullOrBlank(growthChartResponse.getBloodPressure().getSystolic()))
+                    editSys.setText(Util.getValidatedValue(growthChartResponse.getBloodPressure().getSystolic()));
+                if (!Util.isNullOrBlank(growthChartResponse.getBloodPressure().getDiastolic()))
+                    editDias.setText(Util.getValidatedValue(growthChartResponse.getBloodPressure().getDiastolic()));
+            }
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.container_right_action:
+                validateData();
+                break;
+        }
+    }
+
+    private void validateData() {
+        ArrayList<View> errorViewList = new ArrayList<>();
+        String msg = null;
+        String systolic = Util.getValidatedValueOrNull(editSys);
+        String diastolic = Util.getValidatedValueOrNull(editDias);
+        if ((Util.isNullOrBlank(systolic) && !Util.isNullOrBlank(diastolic) || (!Util.isNullOrBlank(systolic) && Util.isNullOrBlank(diastolic))))
+            msg = getResources().getString(R.string.please_add_systolic_and_diastolic_both);
+
+        if (Util.isNullOrBlank(msg)) {
+            addRequest();
+        } else {
+            EditTextTextViewErrorUtil.showErrorOnEditText(mActivity, view, errorViewList, msg);
+        }
+    }
+
+    private void addRequest() {
+        GrowthChartRequest growthChartRequest = new GrowthChartRequest();
+        growthChartRequest.setDoctorId(user.getUniqueId());
+        growthChartRequest.setLocationId(user.getForeignLocationId());
+        growthChartRequest.setHospitalId(user.getForeignHospitalId());
+        growthChartRequest.setPatientId(selectedPatient.getUserId());
+        if (growthChartResponse != null) {
+            growthChartRequest.setUniqueId(growthChartResponse.getUniqueId());
+        }
+        growthChartRequest.setWeight(getValidatedDoubleValue(editWeight.getText().toString()));
+        growthChartRequest.setHeight(getValidatedDoubleValue(editHeight.getText().toString()));
+        growthChartRequest.setSkullCircumference(getValidatedDoubleValue(editHeadCircumfence.getText().toString()));
+        growthChartRequest.setBmi(getValidatedDoubleValue(editBmi.getText().toString()));
+        growthChartRequest.setTemperature(Util.getValidatedValueOrNull(editTemperature));
+        growthChartRequest.setAge(selectedPatient.getDob());
+        growthChartRequest.setBloodSugarF(Util.getValidatedValueOrNull(editBloodSugarF));
+        growthChartRequest.setBloodSugarPP(Util.getValidatedValueOrNull(editBloodSugarPP));
+        growthChartRequest.setBmd(Util.getValidatedValueOrNull(editBmd));
+        if (!Util.isNullOrBlank(Util.getValidatedValueOrNull(editSys)) && !Util.isNullOrBlank(Util.getValidatedValueOrNull(editDias)))
+            growthChartRequest.setBloodPressure(getBloodPressure(Util.getValidatedValueOrNull(editSys), Util.getValidatedValueOrNull(editDias)));
+        WebDataServiceImpl.getInstance(mApp).addGrowthChart(GrowthChartResponse.class, WebServiceType.ADD_GROWTH_CHART, growthChartRequest, this, this);
+    }
+
+    private double getValidatedDoubleValue(String s) {
+        double discount = 0;
+        if (!Util.isNullOrBlank(s))
+            discount = Double.parseDouble(s);
+        else discount = 0;
+        return discount;
+    }
+
+    private BloodPressure getBloodPressure(String systolic, String diastolic) {
+        BloodPressure bloodPressure = new BloodPressure();
+        bloodPressure.setSystolic(systolic);
+        bloodPressure.setDiastolic(diastolic);
+        return bloodPressure;
+    }
+
+    @Override
+    public void onErrorResponse(VolleyResponseBean volleyResponseBean, String errorMessage) {
+        String errorMsg = errorMessage;
+        if (volleyResponseBean != null && !Util.isNullOrBlank(volleyResponseBean.getErrMsg())) {
+            errorMsg = volleyResponseBean.getErrMsg();
+        }
+        mActivity.hideLoading();
+        Util.showToast(mActivity, errorMsg);
+    }
+
+    @Override
+    public void onNetworkUnavailable(WebServiceType webServiceType) {
+        Util.showToast(mActivity, R.string.user_offline);
+        mActivity.hideLoading();
+    }
+
+    @Override
+    public void onResponse(VolleyResponseBean response) {
+        if (response != null && response.getWebServiceType() != null) {
+            switch (response.getWebServiceType()) {
+                case FRAGMENT_INITIALISATION:
+                    initData();
+                    break;
+                case ADD_GROWTH_CHART:
+                    if (response.getData() != null) {
+                        if (response.getData() instanceof GrowthChartResponse) {
+                            GrowthChartResponse growthChartResponse = (GrowthChartResponse) response.getData();
+                            LocalDataServiceImpl.getInstance(mApp).addGrowthChartResponse(growthChartResponse);
+                            Util.sendBroadcast(mApp, GrowthChartListFragment.INTENT_REFRESH_REQUEST_LIST_FROM_SERVER);
+                            ((CommonOpenUpActivity) mActivity).finish();
+                        }
+                    }
+                    break;
+            }
+        }
+        mActivity.hideLoading();
+    }
+
+    @Override
+    public void afterTextChange(View v, String s) {
+        switch (v.getId()) {
+            case R.id.edit_height_cm:
+                if (!Util.isNullOrBlank(s)
+                        && !Util.isNullOrBlank(editWeight.getText().toString())
+                        && !Util.isNullOrBlank(s)) {
+                    float weight = Float.parseFloat(editWeight.getText().toString());
+                    float height = Float.parseFloat(s);
+                    //BMI = weight in KG / square of (height in metre)
+                    float bmiValue = Util.calculateBMI(weight, Float.parseFloat(s) / 100);
+
+                    editBmi.setText(Util.getFormattedFloatNumber(bmiValue));
+
+                    // BSA = squareroot of (weight X height / 3600)
+                    float bsaValue = Util.calculateBSA(weight, height);
+                } else {
+                    editBmi.setText("");
+                }
+                break;
+            case R.id.edit_weight_kilograms:
+                if (!Util.isNullOrBlank(s)
+                        && !Util.isNullOrBlank(editHeight.getText().toString())
+                        && !Util.isNullOrBlank(s)) {
+                    float weight = Float.parseFloat(s);
+                    float height = Float.parseFloat(editHeight.getText().toString());
+                    //BMI = weight in KG / square of (height in metre)
+                    float bmiValue = Util.calculateBMI(weight, height / 100);
+                    editBmi.setText(Util.getFormattedFloatNumber(bmiValue));
+
+                    // BSA = squareroot of (weight X height / 3600)
+                    float bsaValue = Util.calculateBSA(weight, height);
+                } else {
+                    editBmi.setText("");
+                }
+                break;
+        }
+    }
+
+    @Override
+    public VolleyResponseBean doInBackground(VolleyResponseBean response) {
+        VolleyResponseBean volleyResponseBean = null;
+        switch (response.getLocalBackgroundTaskType()) {
+            case GET_FRAGMENT_INITIALISATION_DATA:
+                volleyResponseBean = new VolleyResponseBean();
+                volleyResponseBean.setWebServiceType(WebServiceType.FRAGMENT_INITIALISATION);
+                LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
+                if (doctor != null)
+                    user = doctor.getUser();
+                selectedPatient = LocalDataServiceImpl.getInstance(mApp).getPatient(HealthCocoConstants.SELECTED_PATIENTS_USER_ID);
+                break;
+        }
+        if (volleyResponseBean == null)
+            volleyResponseBean = new VolleyResponseBean();
+        volleyResponseBean.setIsFromLocalAfterApiSuccess(response.isFromLocalAfterApiSuccess());
+        return volleyResponseBean;
+    }
+
+    @Override
+    public void onPostExecute(VolleyResponseBean aVoid) {
+
+    }
+}

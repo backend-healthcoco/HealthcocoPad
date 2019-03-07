@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/parent_layout_selected_vaccine_brands"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/shadow_new"
+    android:orientation="vertical"
+    android:padding="15dp">
+
+    <TextView
+        android:id="@+id/tv_brand_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/grey_dark_text"
+        android:textSize="18sp" />
+
+    <com.healthcoco.healthcocoplus.views.ExpandableGridView
+        android:id="@+id/rv_brands_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:choiceMode="singleChoice"
+        android:listSelector="@android:color/transparent"
+        android:numColumns="2"
+        android:orientation="vertical"
+        android:padding="@dimen/diagram_list_grid_item_spacing"
+        android:scrollbarStyle="outsideOverlay">
+
+    </com.healthcoco.healthcocoplus.views.ExpandableGridView>
+</LinearLayout>

@@ -52,6 +52,9 @@ public class DoctorProfile extends SugarRecord {
     private List<Education> education;
     @Ignore
     private List<String> specialities;
+
+    private String specialitiesJsonString;
+
     @Ignore
     private List<Achievement> achievements;
     private String professionalStatement;
@@ -63,6 +66,9 @@ public class DoctorProfile extends SugarRecord {
     private List<String> professionalMemberships;
     @Ignore
     private List<DoctorClinicProfile> clinicProfile;
+    @Ignore
+    private List<String> parentSpecialities;
+    private String parentSpecialitiesJsonString;
 
     public DoctorProfile() {
     }
@@ -347,6 +353,33 @@ public class DoctorProfile extends SugarRecord {
 
     public void setExperienceJsonString(String experienceJsonString) {
         this.experienceJsonString = experienceJsonString;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public List<String> getParentSpecialities() {
+        return parentSpecialities;
+    }
+
+    public void setParentSpecialities(List<String> parentSpecialities) {
+        this.parentSpecialities = parentSpecialities;
+    }
+
+    public String getParentSpecialitiesJsonString() {
+        return parentSpecialitiesJsonString;
+    }
+
+    public void setParentSpecialitiesJsonString(String parentSpecialitiesJsonString) {
+        this.parentSpecialitiesJsonString = parentSpecialitiesJsonString;
+    }
+    public String getSpecialitiesJsonString() {
+        return specialitiesJsonString;
+    }
+
+    public void setSpecialitiesJsonString(String specialitiesJsonString) {
+        this.specialitiesJsonString = specialitiesJsonString;
     }
 
     public String getFirstNameWithTitle() {

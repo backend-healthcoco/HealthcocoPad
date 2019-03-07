@@ -285,5 +285,7 @@
     <dimen name="default_horizontal_spacing">40dp</dimen>
     <dimen name="default_vertical_spacing">18dp</dimen>
     <dimen name="delete_button_size_height">56dp</dimen>
+    <dimen name="text_size_baby_achievements_parameters_label">15sp</dimen>
+    <dimen name="text_size_growth_chart_parameters_label">17sp</dimen>
 
 </resources>

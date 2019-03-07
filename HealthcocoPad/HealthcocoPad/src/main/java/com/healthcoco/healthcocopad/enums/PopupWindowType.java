@@ -60,8 +60,43 @@ public enum PopupWindowType {
         add("Ceramic-facing");
         add("Full Ceramic metal free");
         add("Zirconia");
+    }}),
+    VACCINE_FILTER(new ArrayList<Object>() {
+        {
+            add(VaccineDuration.BIRTH);
+            add(VaccineDuration.WEEKS_6);
+            add(VaccineDuration.WEEKS_10);
+            add(VaccineDuration.MONTHS_14);
+            add(VaccineDuration.MONTHS_6);
+            add(VaccineDuration.MONTHS_7);
+            add(VaccineDuration.MONTHS_9);
+            add(VaccineDuration.MONTHS_9_TO_12);
+            add(VaccineDuration.MONTHS_12);
+            add(VaccineDuration.MONTHS_15);
+            add(VaccineDuration.MONTHS_16_TO_18);
+            add(VaccineDuration.MONTH_18);
+            add(VaccineDuration.YEARS_2);
+            add(VaccineDuration.YEARS_4_To_6);
+            add(VaccineDuration.YEARS_10_To_12);
+            add(VaccineDuration.CUSTOM);
+        }
+    }),
+    VACCINE_STATUS(new ArrayList<Object>() {
+        {
+            add(VaccineStatus.GIVEN);
+            add(VaccineStatus.PLANNED);
+        }
+    }),
+    ACHIEVEMENT_DURATION(new ArrayList<Object>() {{
+        add("DAY");
+        add("DAY(S)");
+        add("MONTH");
+        add("MONTH(S)");
+        add("WEEK");
+        add("WEEK(S)");
+        add("YEAR");
+        add("YEAR(S)");
     }});
-
     private final ArrayList<Object> list;
 
     PopupWindowType(ArrayList<Object> list) {

@@ -41,9 +41,6 @@ import com.healthcoco.healthcocopad.bean.DOB;
 import com.healthcoco.healthcocopad.bean.DoctorExperience;
 import com.healthcoco.healthcocopad.bean.server.AppointmentSlot;
 import com.healthcoco.healthcocopad.bean.server.DoctorProfile;
-import com.healthcoco.healthcocopad.bean.server.Hospital;
-import com.healthcoco.healthcocopad.bean.server.LocationAndAccessControl;
-import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.enums.DoctorExperienceUnit;
 import com.healthcoco.healthcocopad.enums.VisitIdType;
@@ -73,7 +70,7 @@ import java.util.regex.Pattern;
 public class Util {
     private static final String TAG = Util.class.getSimpleName();
     private static Toast visibleToast;
-
+    private static final String SEPARATOR_COMMA = ", ";
     /**
      * Check the device to make sure it has the Google Play Services APK. If
      * it doesn't, display a dialog that allows users to download the APK from
@@ -991,6 +988,21 @@ public class Util {
         color = "#80" + color;
 
         return color;
+    }
+
+    public static String getStringFromListOfString(List<String> stringList) {
+        String shadeText = "";
+        if (!Util.isNullOrEmptyList(stringList)) {
+            for (String note :
+                    stringList) {
+                int index = stringList.indexOf(note);
+                if (index == stringList.size() - 1)
+                    shadeText = shadeText + note;
+                else
+                    shadeText = shadeText + note + SEPARATOR_COMMA;
+            }
+        }
+        return shadeText;
     }
 
     public static int getTextColor(String colorCode) {

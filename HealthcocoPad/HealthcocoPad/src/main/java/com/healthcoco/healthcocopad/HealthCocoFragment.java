@@ -14,7 +14,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -47,10 +46,10 @@ import com.healthcoco.healthcocopad.enums.MapType;
 import com.healthcoco.healthcocopad.enums.PatientProfileScreenType;
 import com.healthcoco.healthcocopad.enums.PopupWindowType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
-import com.healthcoco.healthcocopad.fragments.CommonOpenUpPatientDetailFragment;
 import com.healthcoco.healthcocopad.fragments.PatientProfileDetailFragment;
 import com.healthcoco.healthcocopad.listeners.CommonListDialogItemClickListener;
 import com.healthcoco.healthcocopad.listeners.CommonOptionsDialogItemClickListener;
+import com.healthcoco.healthcocopad.popupwindow.HealthcocoPopupWindow;
 import com.healthcoco.healthcocopad.popupwindow.PopupWindowListener;
 import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
@@ -61,7 +60,7 @@ import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.ScreenDimensions;
 import com.healthcoco.healthcocopad.utilities.Util;
-import com.healthcoco.healthcocopad.popupwindow.HealthcocoPopupWindow;
+import com.healthcoco.healthcocopad.views.HealthcocoBottomSheetDialog;
 
 import org.parceler.Parcels;
 
@@ -243,12 +242,14 @@ public abstract class HealthCocoFragment extends Fragment implements GsonRequest
     }
 
     protected void showLoadingOverlay(boolean showLoading) {
-        LinearLayout loadingOverlay = (LinearLayout) view.findViewById(R.id.loading_overlay);
-        if (loadingOverlay != null) {
-            if (showLoading)
-                loadingOverlay.setVisibility(View.VISIBLE);
-            else
-                loadingOverlay.setVisibility(View.GONE);
+        if (view != null) {
+            LinearLayout loadingOverlay = (LinearLayout) view.findViewById(R.id.loading_overlay);
+            if (loadingOverlay != null) {
+                if (showLoading)
+                    loadingOverlay.setVisibility(View.VISIBLE);
+                else
+                    loadingOverlay.setVisibility(View.GONE);
+            }
         }
     }
 
@@ -536,6 +537,61 @@ public abstract class HealthCocoFragment extends Fragment implements GsonRequest
         else
             startActivityForResult(intent, requestCode);
     }
+
+    protected void openCommonOpenUpActivityUsingParcel(CommonOpenUpFragmentType fragmentType, String[] tagArray, Object[] intentData) {
+        openCommonOpenUpActivityUsingParcel(fragmentType, 0, tagArray, intentData);
+    }
+
+    protected void openCommonOpenUpActivityUsingParcel(CommonOpenUpFragmentType fragmentType) {
+        openCommonOpenUpActivityUsingParcel(fragmentType, 0, null, null);
+    }
+
+    protected void openCommonOpenUpActivityUsingParcel(CommonOpenUpFragmentType fragmentType, int requestCode, String[] tagArray, Object... intentData) {
+        Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
+        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, fragmentType.ordinal());
+        if (tagArray != null && intentData != null && tagArray.length == intentData.length) {
+            for (int i = 0; i < tagArray.length; i++) {
+                if (tagArray[i] != null && intentData[i] != null)
+                    intent.putExtra(tagArray[i], Parcels.wrap(intentData[i]));
+            }
+        }
+        if (requestCode == 0)
+            startActivity(intent);
+        else
+            startActivityForResult(intent, requestCode);
+    }
+
+    protected HealthcocoBottomSheetDialog initBottomSheetDialogWindows(View anchorView, PopupWindowType
+            popupWindowType, PopupWindowListener popupWindowListener) {
+        return initBottomSheetDialogWindows(anchorView, popupWindowType, null, 0, false, popupWindowListener);
+    }
+
+    protected HealthcocoBottomSheetDialog initBottomSheetDialogWindows(View anchorView, PopupWindowType
+            popupWindowType, List<Object> list, PopupWindowListener popupWindowListener) {
+        return initBottomSheetDialogWindows(anchorView, popupWindowType, list, 0, false, popupWindowListener);
+    }
+
+    protected HealthcocoBottomSheetDialog initBottomSheetDialogWindows(View anchorView, PopupWindowType
+            popupWindowType, List<Object> list, int dropdownLayoutId, PopupWindowListener popupWindowListener) {
+        return initBottomSheetDialogWindows(anchorView, popupWindowType, list, dropdownLayoutId, false, popupWindowListener);
+    }
+
+    protected HealthcocoBottomSheetDialog initBottomSheetDialogWindows(View anchorView, PopupWindowType
+            popupWindowType, List<Object> list, boolean isTvAllVisible, PopupWindowListener popupWindowListener) {
+        return initBottomSheetDialogWindows(anchorView, popupWindowType, list, 0, isTvAllVisible, popupWindowListener);
+    }
+
+    protected HealthcocoBottomSheetDialog initBottomSheetDialogWindows(View anchorView, PopupWindowType
+            popupWindowType, List<Object> list, int dropdownLayoutId, boolean isTvAllVisible, PopupWindowListener popupWindowListener) {
+        HealthcocoBottomSheetDialog healthcocoBottomSheetDialog = null;
+        if (dropdownLayoutId > 0)
+            healthcocoBottomSheetDialog = new HealthcocoBottomSheetDialog(mActivity, anchorView, popupWindowType, list, dropdownLayoutId, isTvAllVisible, popupWindowListener);
+        else
+            healthcocoBottomSheetDialog = new HealthcocoBottomSheetDialog(mActivity, anchorView, popupWindowType, list, isTvAllVisible, popupWindowListener);
+        healthcocoBottomSheetDialog.setContentView(healthcocoBottomSheetDialog.getPopupView());
+        return healthcocoBottomSheetDialog;
+    }
+
 
     protected void openMapViewActivity(CommonOpenUpFragmentType fragmentType, String uniqueId, MapType mapType, int requestCode) {
         Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);

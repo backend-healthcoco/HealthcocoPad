@@ -28,8 +28,6 @@ import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.adapter.CommonViewPagerAdapter;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.AmountResponse;
-import com.healthcoco.healthcocopad.bean.server.ClinicDetailResponse;
-import com.healthcoco.healthcocopad.bean.server.ClinicDoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.DoctorClinicProfile;
 import com.healthcoco.healthcocopad.bean.server.DoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
@@ -60,6 +58,7 @@ import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -114,6 +113,9 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
     private PatientTreatmentDetailFragment treatmentDetailFragment;
     private PatientInvoiceDetailFragment invoiceDetailFragment;
     private PatientReceiptDetailFragment receiptDetailFragment;
+    private VaccinationListFragment vaccinationListFragment;
+    private GrowthChartListFragment growthChartListFragment;
+    private BabyAchievementsListFragment babyAchievementsListFragment;
     private HealthcocoPopupWindow doctorsListPopupWindow;
     private boolean isProfileTabClicked = true;
     private boolean isVisitsTabClicked = false;
@@ -124,6 +126,10 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
     private boolean isTreatmentTabClicked = false;
     private boolean isInvoiceTabClicked = false;
     private boolean isReceiptTabClicked = false;
+    private boolean isVaccinationClickedOnce = false;
+    private boolean isBabyAchievementsClickedOnce = false;
+    private boolean isGrowthChartClickedOnce = false;
+
     private boolean isSingleDoctor = false;
     private TextView tvGenderDate;
     private int ordinal;
@@ -131,6 +137,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
     private Boolean pidHasDate;
     private boolean receiversRegistered;
     private AccountPackageType packageType;
+    private DoctorClinicProfile doctorClinicProfile;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -188,6 +195,85 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
         fragmentsList.clear();
         if (mViewPager.getAdapter() != null)
             mViewPager.getAdapter().notifyDataSetChanged();
+
+        AccountPackageType packageType = doctorClinicProfile.getPackageType();
+        ArrayList<PatientDetailTabType> tabItemList = null;
+        if (doctorClinicProfile.isClinic()) {
+            tabItemList = packageType.getTabItemList();
+            if (!Util.isNullOrEmptyList(doctorProfile.getParentSpecialities())) {
+//                // For only Dentist
+//                if (doctorProfile.getParentSpecialities().contains("Dentist")) {
+//                    if (tabItemList.contains(PatientDetailTabType.PATIENT_DETAIL_DENTAL_IMAGING_REPORT))
+//                        tabItemList.remove(PatientDetailTabType.PATIENT_DETAIL_DENTAL_IMAGING_REPORT);
+//                    if (packageType == AccountPackageType.ADVANCE || packageType == AccountPackageType.PRO)
+//                        tabItemList.add(PatientDetailTabType.PATIENT_DETAIL_DENTAL_IMAGING_REPORT);
+//                } else {
+//                    tabItemList.remove(PatientDetailTabType.PATIENT_DETAIL_DENTAL_IMAGING_REPORT);
+//                }
+
+                // For only Peda
+                if (doctorProfile.getParentSpecialities().contains("Pediatrician")) {
+                    if (tabItemList.contains(PatientDetailTabType.PATIENT_DETAIL_VACCINATION))
+                        tabItemList.remove(PatientDetailTabType.PATIENT_DETAIL_VACCINATION);
+                    if (tabItemList.contains(PatientDetailTabType.PATIENT_DETAIL_GROWTH_CHART))
+                        tabItemList.remove(PatientDetailTabType.PATIENT_DETAIL_GROWTH_CHART);
+                    if (tabItemList.contains(PatientDetailTabType.PATIENT_DETAIL_BABY_ACHIEVEMENTS))
+                        tabItemList.remove(PatientDetailTabType.PATIENT_DETAIL_BABY_ACHIEVEMENTS);
+                    if (packageType == AccountPackageType.ADVANCE || packageType == AccountPackageType.PRO) {
+                        tabItemList.add(PatientDetailTabType.PATIENT_DETAIL_VACCINATION);
+                        tabItemList.add(PatientDetailTabType.PATIENT_DETAIL_GROWTH_CHART);
+                        tabItemList.add(PatientDetailTabType.PATIENT_DETAIL_BABY_ACHIEVEMENTS);
+                    }
+                } else {
+                    tabItemList.remove(PatientDetailTabType.PATIENT_DETAIL_VACCINATION);
+                    tabItemList.remove(PatientDetailTabType.PATIENT_DETAIL_GROWTH_CHART);
+                    tabItemList.remove(PatientDetailTabType.PATIENT_DETAIL_BABY_ACHIEVEMENTS);
+                }
+            }
+        }
+        ArrayList<PatientDetailTabType> newList = new ArrayList<>();
+        for (String permissionTypeString :
+                user.getUiPermissions().getTabPermissions()) {
+            PatientDetailTabType commonOpenDetailType = PatientDetailTabType.getPatientDetailTabType(permissionTypeString);
+            newList.add(commonOpenDetailType);
+            if (newList.contains(PatientDetailTabType.PATIENT_DETAIL_INVOICE))
+                newList.add(PatientDetailTabType.PATIENT_DETAIL_RECEIPT);
+            else if (newList.contains(PatientDetailTabType.PATIENT_DETAIL_RECEIPT))
+                newList.add(PatientDetailTabType.PATIENT_DETAIL_INVOICE);
+        }
+
+        if (!Util.isNullOrEmptyList(tabItemList)) {
+            Iterator<PatientDetailTabType> i = tabItemList.iterator();
+            while (i.hasNext()) {
+                PatientDetailTabType openDetailType = i.next();
+                if (newList.contains(openDetailType)) {
+                    switch (openDetailType) {
+                        case PATIENT_DETAIL_REPORTS:
+                        case PATIENT_DETAIL_CLINICAL_NOTES:
+                        case PATIENT_DETAIL_PRESCRIPTION:
+                        case PATIENT_DETAIL_RECEIPT:
+                        case PATIENT_DETAIL_TREATMENT:
+                        case PATIENT_DETAIL_INVOICE:
+                        case PATIENT_DETAIL_VISIT:
+                        case PATIENT_DETAIL_PROFILE:
+                        case PATIENT_DETAIL_APPOINTMENT:
+                        case PATIENT_DETAIL_VACCINATION:
+//                        case GROWTH_CHART:
+//                        case BABY_ACHIEVEMENTS:
+                            break;
+                        case PATIENT_DETAIL_GROWTH_CHART:
+                        case PATIENT_DETAIL_BABY_ACHIEVEMENTS:
+                            break;
+                    }
+                } else {
+                    switch (openDetailType) {
+                        case PATIENT_DETAIL_GROWTH_CHART:
+                        case PATIENT_DETAIL_BABY_ACHIEVEMENTS:
+                            break;
+                    }
+                }
+            }
+        }
         if (packageType != null) {
             for (PatientDetailTabType detailTabType :
                     packageType.getTabItemList()) {
@@ -206,43 +292,40 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                         healthcocoFragment = appointmentFragment;
                         break;
                     case PATIENT_DETAIL_CLINICAL_NOTES:
-                        if (user.getUiPermissions().getTabPermissions().contains(detailTabType.getValue())) {
-                            clinicalNotesDetailFragment = new PatientClinicalNotesDetailFragment();
-                            healthcocoFragment = clinicalNotesDetailFragment;
-                        }
+                        clinicalNotesDetailFragment = new PatientClinicalNotesDetailFragment();
+                        healthcocoFragment = clinicalNotesDetailFragment;
                         break;
                     case PATIENT_DETAIL_PRESCRIPTION:
-                        if (user.getUiPermissions().getTabPermissions().contains(detailTabType.getValue())) {
-                            prescriptionDetailFragment = new PatientPrescriptionDetailFragment();
-                            healthcocoFragment = prescriptionDetailFragment;
-                        }
+                        prescriptionDetailFragment = new PatientPrescriptionDetailFragment();
+                        healthcocoFragment = prescriptionDetailFragment;
                         break;
                     case PATIENT_DETAIL_REPORTS:
-                        if (user.getUiPermissions().getTabPermissions().contains(detailTabType.getValue())) {
-                            reportsDetailFragment = new PatientReportsDetailFragment();
-                            healthcocoFragment = reportsDetailFragment;
-                        }
+                        reportsDetailFragment = new PatientReportsDetailFragment();
+                        healthcocoFragment = reportsDetailFragment;
                         break;
-//                case PATIENT_DETAIL_IMPORTANT:
-//                    healthcocoFragment = new PatientImportantDetailFragment();
-//                    break;
                     case PATIENT_DETAIL_TREATMENT:
-                        if (user.getUiPermissions().getTabPermissions().contains(detailTabType.getValue())) {
-                            treatmentDetailFragment = new PatientTreatmentDetailFragment();
-                            healthcocoFragment = treatmentDetailFragment;
-                        }
+                        treatmentDetailFragment = new PatientTreatmentDetailFragment();
+                        healthcocoFragment = treatmentDetailFragment;
                         break;
                     case PATIENT_DETAIL_INVOICE:
-                        if (user.getUiPermissions().getTabPermissions().contains(detailTabType.getValue())) {
-                            invoiceDetailFragment = new PatientInvoiceDetailFragment();
-                            healthcocoFragment = invoiceDetailFragment;
-                        }
+                        invoiceDetailFragment = new PatientInvoiceDetailFragment();
+                        healthcocoFragment = invoiceDetailFragment;
                         break;
                     case PATIENT_DETAIL_RECEIPT:
-                        if (user.getUiPermissions().getTabPermissions().contains(detailTabType.getValue())) {
-                            receiptDetailFragment = new PatientReceiptDetailFragment();
-                            healthcocoFragment = receiptDetailFragment;
-                        }
+                        receiptDetailFragment = new PatientReceiptDetailFragment();
+                        healthcocoFragment = receiptDetailFragment;
+                        break;
+                    case PATIENT_DETAIL_VACCINATION:
+                        vaccinationListFragment = new VaccinationListFragment();
+                        healthcocoFragment = vaccinationListFragment;
+                        break;
+                    case PATIENT_DETAIL_GROWTH_CHART:
+                        growthChartListFragment = new GrowthChartListFragment();
+                        healthcocoFragment = growthChartListFragment;
+                        break;
+                    case PATIENT_DETAIL_BABY_ACHIEVEMENTS:
+                        babyAchievementsListFragment = new BabyAchievementsListFragment();
+                        healthcocoFragment = babyAchievementsListFragment;
                         break;
                 }
                 if (healthcocoFragment != null)
@@ -271,7 +354,9 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
         mViewPager.setAdapter(viewPagerAdapter);
     }
 
-    private void openFragment(ActionbarType actionbarType, int actionBarTitle, ActionbarLeftRightActionTypeDrawables leftAction, ActionbarLeftRightActionTypeDrawables rightAction, HealthCocoFragment fragment) {
+    private void openFragment(ActionbarType actionbarType,
+                              int actionBarTitle, ActionbarLeftRightActionTypeDrawables
+                                      leftAction, ActionbarLeftRightActionTypeDrawables rightAction, HealthCocoFragment fragment) {
         Bundle bundle = new Bundle();
         initActionBar(actionbarType, actionBarTitle, leftAction, rightAction);
         bundle.putInt(HealthCocoConstants.TAG_FRAGMENT_NAME, fragmentType.ordinal());
@@ -280,7 +365,9 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
         transaction.commit();
     }
 
-    public void initActionBar(ActionbarType actionbarType, int title, ActionbarLeftRightActionTypeDrawables leftAction, ActionbarLeftRightActionTypeDrawables rightAction) {
+    public void initActionBar(ActionbarType actionbarType,
+                              int title, ActionbarLeftRightActionTypeDrawables
+                                      leftAction, ActionbarLeftRightActionTypeDrawables rightAction) {
         if (actionbarType == ActionbarType.HIDDEN) {
             hideActionBar();
         } else {
@@ -460,6 +547,24 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                         receiptDetailFragment.refreshData(PatientDetailTabType.PATIENT_DETAIL_RECEIPT);
                         isReceiptTabClicked = true;
                     }
+//                case PATIENT_DETAIL_VACCINATION:
+//                    if (!isVaccinationClickedOnce) {
+//                        vaccinationListFragment.getListFromLocal(true);
+//                        isVaccinationClickedOnce = true;
+//                    }
+//                    break;
+//                case PATIENT_DETAIL_GROWTH_CHART:
+//                    if (!isGrowthChartClickedOnce) {
+//                        growthChartListFragment.getListFromLocal(true);
+//                        isGrowthChartClickedOnce = true;
+//                    }
+//                    break;
+//                case PATIENT_DETAIL_BABY_ACHIEVEMENTS:
+//                    if (!isBabyAchievementsClickedOnce) {
+//                        babyAchievementsListFragment.getListFromLocal(true);
+//                        isBabyAchievementsClickedOnce = true;
+//                    }
+//                    break;
             }
         }
         ((CommonOpenUpActivity) mActivity).initActionbarTitle(patientDetailTabType.getActionBarTitleId());
@@ -484,6 +589,12 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                 invoiceDetailFragment.setUserData(user, loginedUser, selectedPatient);
             if (receiptDetailFragment != null)
                 receiptDetailFragment.setUserData(user, loginedUser, selectedPatient);
+            if (vaccinationListFragment != null)
+                vaccinationListFragment.setUserData(user, selectedPatient);
+            if (growthChartListFragment != null)
+                growthChartListFragment.setUserData(user, selectedPatient);
+            if (babyAchievementsListFragment != null)
+                babyAchievementsListFragment.setUserData(user, selectedPatient);
         } else {
             mActivity.showLoading(false);
             WebDataServiceImpl.getInstance(mApp).getPatientProfile(RegisteredPatientDetailsUpdated.class, HealthCocoConstants.SELECTED_PATIENTS_USER_ID, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(), this, this);
@@ -557,6 +668,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                 if (doctor != null && doctor.getUser() != null && !Util.isNullOrBlank(doctor.getUser().getUniqueId()) && selectedPatient != null && !Util.isNullOrBlank(selectedPatient.getUserId())) {
                     loginedUser = doctor.getUser().getUniqueId();
                     doctorProfile = LocalDataServiceImpl.getInstance(mApp).getDoctorProfileObject(user.getUniqueId());
+                    doctorClinicProfile = LocalDataServiceImpl.getInstance(mApp).getDoctorClinicProfile(user.getUniqueId(), user.getForeignLocationId());
                     doctorProfileList = LocalDataServiceImpl.getInstance(mApp).getRegisterDoctorDetails(user.getForeignLocationId());
                 }
                 DoctorClinicProfile doctorClinicProfile = LocalDataServiceImpl.getInstance(mApp).getDoctorClinicProfile(user.getUniqueId(), user.getForeignLocationId());
@@ -761,10 +873,6 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
             filter.addAction(INTENT_REFRESH_AMOUNT_DETAILS);
             LocalBroadcastManager.getInstance(mActivity).registerReceiver(refreshAmountDetailsReceiver, filter);
             receiversRegistered = true;
-
-
         }
-
     }
-
 }

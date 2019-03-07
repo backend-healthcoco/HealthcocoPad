@@ -15,6 +15,7 @@ import java.util.Map;
  * Created by Shreshtha on 21-01-2017.
  */
 public class LocalDatabaseUtils {
+    private static final String TAG = LocalDatabaseUtils.class.getSimpleName();
 
     public static final String KEY_SYNC_ALL_TYPE = "sync_all_type";
     public static final String KEY_FOREIGN_CUSTOM_HISTORY_ID = "foreign_custom_history_id";
@@ -123,8 +124,10 @@ public class LocalDatabaseUtils {
     public static final String KEY_BALANCE_AMOUNT = "balance_amount";
     public static final String KEY_DRUG_ID = "drug_id";
     public static final String KEY_FOR_DOCTOR = "for_doctor";
-    private static final String TAG = LocalDatabaseUtils.class.getSimpleName();
     public static String KEY_FOREIGN_ROLE_ID = "foreign_role_id";
+    public static final String KEY_VACCINE_ID = "vaccine_id";
+    public static final String KEY_DURATION = "duration";
+    public static final String KEY_DUE_DATE = "due_date";
 
     public static String getSearchTermEqualsIgnoreCaseQuery(String filedName, String value) {
         return filedName + " LIKE \"%" + value + "%\"" + " COLLATE NOCASE ";

@@ -73,7 +73,14 @@ public enum CommonOpenUpFragmentType {
     BLOGS(R.string.blogs),
     CHANGE_PIN(R.string.change_pin),
     BLOG_DETAIL(R.string.blog_detail),
-    FEEDBACK_DOCTOR(R.string.feedback);
+    FEEDBACK_DOCTOR(R.string.feedback),
+    ADD_VACCINATION(R.string.add_vaccination),
+    ADD_CUSTOM_VACCINATION(R.string.add_vaccination),
+    UPDATE_VACCINE(R.string.update_vaccine),
+    UPDATE_BRAND(R.string.update_brand),
+    UPDATE_VACCINE_BRAND_GROUP(R.string.update_vaccine),
+    ADD_GROWTH_CHART(R.string.health_parameters),
+    UPDATE_BABY_ACHIEVEMENTS(R.string.edit_baby_achievemsts);;
 
     private final int titleId;
 

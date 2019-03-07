@@ -2044,5 +2044,27 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
         doctorListPopupWindow.setOutsideTouchable(true);
         doctorListPopupWindow.setContentView(doctorListPopupWindow.getPopupView());
     }
+    protected void openCommonOpenUpActivityUsingParcel(CommonOpenUpFragmentType fragmentType, String[] tagArray, Object[] intentData) {
+        openCommonOpenUpActivityUsingParcel(fragmentType, 0, tagArray, intentData);
+    }
+
+    public void openCommonOpenUpActivityUsingParcel(CommonOpenUpFragmentType fragmentType) {
+        openCommonOpenUpActivityUsingParcel(fragmentType, 0, null, null);
+    }
+
+    public void openCommonOpenUpActivityUsingParcel(CommonOpenUpFragmentType fragmentType, int requestCode, String[] tagArray, Object... intentData) {
+        Intent intent = new Intent(this, CommonOpenUpActivity.class);
+        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, fragmentType.ordinal());
+        if (tagArray != null && intentData != null && tagArray.length == intentData.length) {
+            for (int i = 0; i < tagArray.length; i++) {
+                if (tagArray[i] != null && intentData[i] != null)
+                    intent.putExtra(tagArray[i], Parcels.wrap(intentData[i]));
+            }
+        }
+        if (requestCode == 0)
+            startActivity(intent);
+        else
+            startActivityForResult(intent, requestCode);
+    }
 
 }

@@ -67,6 +67,6 @@
     <color name="dot_emptyborder">#87898C</color>
     <color name="transparent">#00000000</color>
     <color name="white_transparent">#29e7e7e7</color>
-
+    <color name="yellow">#FFA000</color>
 
 </resources>

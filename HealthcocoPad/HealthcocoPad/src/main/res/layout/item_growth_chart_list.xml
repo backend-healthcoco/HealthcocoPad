@@ -1,0 +1,409 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="start"
+    android:background="@drawable/shadow_new"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="8dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:drawablePadding="@dimen/drawable_text_padding"
+                android:gravity="center_vertical"
+                android:src="@drawable/tab_cal_date_normal_item"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/tv_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:gravity="center"
+                android:text="26/4/2015"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_emr_date" />
+        </LinearLayout>
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="@dimen/item_padding"
+            android:layout_marginTop="@dimen/item_padding"
+            android:background="@color/grey_background" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:gravity="start"
+            android:text="@string/health_parameters"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center|start"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/weight_kilograms"
+                        android:textColor="@color/grey_darker"
+                        android:textSize="@dimen/text_size_growth_chart_parameters_label" />
+
+                    <com.healthcoco.healthcocoplus.views.TextViewFontAwesome
+                        android:id="@+id/tv_weight_kilograms"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="1dp"
+                        android:gravity="center"
+                        android:singleLine="true"
+                        android:text="@string/no_text_dash"
+                        android:textColor="@color/grey_dark_text"
+                        android:textSize="@dimen/text_size_growth_chart_parameters_label" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:gravity="center|start"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/height_cm"
+                        android:textColor="@color/grey_darker"
+                        android:textSize="@dimen/text_size_growth_chart_parameters_label" />
+
+                    <com.healthcoco.healthcocoplus.views.TextViewFontAwesome
+                        android:id="@+id/tv_height_cm"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="1dp"
+                        android:gravity="center"
+                        android:singleLine="true"
+                        android:text="@string/no_text_dash"
+                        android:textColor="@color/grey_dark_text"
+                        android:textSize="@dimen/text_size_growth_chart_parameters_label" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center|start"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/temp"
+                        android:textColor="@color/grey_darker"
+                        android:textSize="@dimen/text_size_growth_chart_parameters_label" />
+
+                    <com.healthcoco.healthcocoplus.views.TextViewFontAwesome
+                        android:id="@+id/tv_temp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="1dp"
+                        android:gravity="center"
+                        android:singleLine="true"
+                        android:text="@string/no_text_dash"
+                        android:textColor="@color/grey_dark_text"
+                        android:textSize="@dimen/text_size_growth_chart_parameters_label" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:gravity="end"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/head_circumference"
+                        android:textColor="@color/grey_darker"
+                        android:textSize="@dimen/text_size_growth_chart_parameters_label" />
+
+                    <com.healthcoco.healthcocoplus.views.TextViewFontAwesome
+                        android:id="@+id/tv_head_circumference"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="1dp"
+                        android:gravity="center"
+                        android:singleLine="true"
+                        android:text="@string/no_text_dash"
+                        android:textColor="@color/grey_dark_text"
+                        android:textSize="@dimen/text_size_growth_chart_parameters_label" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center|start"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/bmi_metre_square"
+                        android:textColor="@color/grey_darker"
+                        android:textSize="@dimen/text_size_growth_chart_parameters_label" />
+
+                    <com.healthcoco.healthcocoplus.views.TextViewFontAwesome
+                        android:id="@+id/tv_bmi"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="1dp"
+                        android:gravity="center"
+                        android:singleLine="true"
+                        android:text="@string/no_text_dash"
+                        android:textColor="@color/grey_dark_text"
+                        android:textSize="@dimen/text_size_growth_chart_parameters_label" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:gravity="center|start"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/bp_mm_hg"
+                        android:textColor="@color/grey_darker"
+                        android:textSize="@dimen/text_size_growth_chart_parameters_label" />
+
+                    <com.healthcoco.healthcocoplus.views.TextViewFontAwesome
+                        android:id="@+id/tv_bp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="1dp"
+                        android:gravity="center"
+                        android:singleLine="true"
+                        android:text="@string/no_text_dash"
+                        android:textColor="@color/grey_dark_text"
+                        android:textSize="@dimen/text_size_growth_chart_parameters_label" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:gravity="center|start"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/blood_sugar_f_mg_dl"
+                        android:textColor="@color/grey_darker"
+                        android:textSize="@dimen/text_size_growth_chart_parameters_label" />
+
+                    <com.healthcoco.healthcocoplus.views.TextViewFontAwesome
+                        android:id="@+id/tv_blood_sugar_f_mg_dl"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="1dp"
+                        android:gravity="center"
+                        android:singleLine="true"
+                        android:text="@string/no_text_dash"
+                        android:textColor="@color/grey_dark_text"
+                        android:textSize="@dimen/text_size_growth_chart_parameters_label" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:gravity="center|start"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/blood_sugar_pp_mg_dl"
+                        android:textColor="@color/grey_darker"
+                        android:textSize="@dimen/text_size_growth_chart_parameters_label" />
+
+                    <com.healthcoco.healthcocoplus.views.TextViewFontAwesome
+                        android:id="@+id/tv_blood_sugar_pp_mg_dl"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="1dp"
+                        android:gravity="center"
+                        android:singleLine="true"
+                        android:text="@string/no_text_dash"
+                        android:textColor="@color/grey_dark_text"
+                        android:textSize="@dimen/text_size_growth_chart_parameters_label" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center|start"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/bmd"
+                        android:textColor="@color/grey_darker"
+                        android:textSize="@dimen/text_size_growth_chart_parameters_label" />
+
+                    <com.healthcoco.healthcocoplus.views.TextViewFontAwesome
+                        android:id="@+id/tv_bmd"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="1dp"
+                        android:gravity="center"
+                        android:singleLine="true"
+                        android:text="@string/no_text_dash"
+                        android:textColor="@color/grey_dark_text"
+                        android:textSize="@dimen/text_size_growth_chart_parameters_label" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/container_bottom_buttons"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="visible">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="@dimen/item_padding"
+                android:layout_marginTop="10dp"
+                android:background="@color/grey_background" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:baselineAligned="false"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:id="@+id/bt_edit_growth_chart"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:padding="5dp">
+
+                    <com.healthcoco.healthcocoplus.custom.AutoFitTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="5dp"
+                        android:background="@color/white"
+                        android:drawablePadding="5dp"
+                        android:drawableStart="@drawable/icon_edit_selector"
+                        android:gravity="center|start"
+                        android:text="@string/edit"
+                        android:textColor="@drawable/text_selector_grey_blue"
+                        android:textSize="@dimen/text_size_bt_history_edit_sms_email" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/bt_discard_growth_chart"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:padding="5dp">
+
+                    <com.healthcoco.healthcocoplus.custom.AutoFitTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="5dp"
+                        android:background="@color/white"
+                        android:drawablePadding="5dp"
+                        android:drawableStart="@drawable/discard_selector"
+                        android:gravity="center|start"
+                        android:text="@string/discard"
+                        android:textColor="@drawable/text_selector_grey_blue"
+                        android:textSize="@dimen/text_size_bt_history_edit_sms_email" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</FrameLayout>

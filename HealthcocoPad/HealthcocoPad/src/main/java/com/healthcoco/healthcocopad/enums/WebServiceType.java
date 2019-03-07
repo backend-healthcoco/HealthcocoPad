@@ -526,7 +526,29 @@ public enum WebServiceType {
 
     ADD_REMOVE_FAVORITE(Method.GET, "favourite/addRemove/"),
 
-    GET_HARDCODED_BLOOD_GROUPS(0, "");
+    GET_HARDCODED_BLOOD_GROUPS(0, ""),
+
+    GET_VACCINATION(Method.GET, "paediatric/vaccine/getList"),
+
+    ADD_EDIT_VACCINATION(Method.POST, "paediatric/vaccine/addEdit"),
+
+    ADD_EDIT_MULTIPLE_VACCINATION(Method.POST, "paediatric/vaccine/addEditMultiple"),
+
+    GET_VACCINATION_BRAND(Method.GET, "paediatric/vaccine/getBrands"),
+
+    GET_VACCINATION_BRAND_MULTIPLE(Method.GET, "paediatric/vaccine/getMultipleBrands"),
+
+    GET_VACCINES_SOLR_LIST(Method.GET, "paediatric/vaccine/getMasterList"),
+
+    GET_GROWTH_CHART(Method.GET, "paediatric/growthChart/getList"),
+
+    ADD_GROWTH_CHART(Method.POST, "paediatric/growthChart/addEdit"),
+
+    DISCARD_GROWTH_CHART(Method.GET, "paediatric/growthChart/discard/"),
+
+    GET_BABY_ACHIEVEMENTS(Method.GET, "paediatric/achievement/getList/"),
+
+    ADD_EDIT_BABY_ACHIEVEMENTS(Method.POST, "paediatric/achievement/addEdit");
 
     private int methodType;
     private String url;

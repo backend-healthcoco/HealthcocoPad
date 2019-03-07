@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="start"
+    android:background="@drawable/shadow_new"
+    android:orientation="horizontal"
+    android:padding="20dp">
+
+    <CheckBox
+        android:id="@+id/cb_vaccine"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:button="@drawable/icon_check_radio_selector"
+        android:checked="false"
+        android:gravity="center"
+        android:minWidth="30dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_vaccine_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="abc,asklsd,jkjkjsd"
+            android:textColor="@color/black"
+            android:textSize="15sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="60"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/due_on"
+                    android:textColor="@color/grey_darker"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:id="@+id/tv_due_date"
+                    style="@style/registration_edittext"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:drawablePadding="10dp"
+                    android:drawableStart="@drawable/tab_cal_date_normal_item"
+                    android:textAllCaps="true"
+                    android:textColor="@color/grey_darker"
+                    android:textSize="13sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="40"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/tv_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:drawablePadding="15dp"
+                    android:drawableRight="@drawable/arrow_down_drug"
+                    android:gravity="center"
+                    android:hint="@string/select_status"
+                    android:textColor="@color/grey_darker"
+                    android:textSize="13sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_vaccine_milestone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/grey_dark_text"
+            android:textSize="12sp" />
+    </LinearLayout>
+</LinearLayout>

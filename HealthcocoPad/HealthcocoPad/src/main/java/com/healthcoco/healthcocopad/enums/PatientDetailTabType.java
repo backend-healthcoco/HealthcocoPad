@@ -5,8 +5,6 @@ import android.view.View;
 
 import com.healthcoco.healthcocopad.R;
 
-import org.parceler.Parcel;
-
 /**
  * Created by neha on 14/10/16.
  */
@@ -20,8 +18,11 @@ public enum PatientDetailTabType {
     PATIENT_DETAIL_APPOINTMENT(6, R.string.appointment, R.string.appointment, R.drawable.selector_ic_apoointment_tab, View.VISIBLE, View.VISIBLE, "APPOINTMENT"),
     PATIENT_DETAIL_TREATMENT(7, R.string.treatment, R.string.treatment, R.drawable.selector_ic_treatment_tab, View.VISIBLE, View.VISIBLE, "TREATMENT"),
     PATIENT_DETAIL_INVOICE(8, R.string.invoice, R.string.invoice, R.drawable.selector_ic_invoice_tab, View.VISIBLE, View.VISIBLE, "BILLING"),
-    PATIENT_DETAIL_RECEIPT(9, R.string.receipt, R.string.receipt, R.drawable.selector_ic_receipt_tab, View.VISIBLE, View.VISIBLE, "BILLING");
+    PATIENT_DETAIL_RECEIPT(9, R.string.receipt, R.string.receipt, R.drawable.selector_ic_receipt_tab, View.VISIBLE, View.VISIBLE, "BILLING"),
     //        PATIENT_DETAIL_BILLING(7, R.string.billing, R.drawable.selector_ic_treatment_tab, new PatientTreatmentDetailFragment());
+    PATIENT_DETAIL_VACCINATION(10, R.string.vaccination, R.string.vaccination, R.drawable.selector_ic_receipt_tab, View.VISIBLE, View.VISIBLE, "PATIENT_DETAIL_VACCINATION"),
+    PATIENT_DETAIL_GROWTH_CHART(11, R.string.growth_chart, R.string.growth_chart, R.drawable.selector_ic_receipt_tab, View.VISIBLE, View.VISIBLE, "PATIENT_DETAIL_GROWTH_CHART"),
+    PATIENT_DETAIL_BABY_ACHIEVEMENTS(12, R.string.achievements, R.string.baby_achievements, R.drawable.selector_ic_receipt_tab, View.VISIBLE, View.VISIBLE, "PATIENT_DETAIL_BABY_ACHIEVEMENTS");
     private final int textId;
     private final int drawableId;
     private final String value;
@@ -69,4 +70,12 @@ public enum PatientDetailTabType {
         return value;
     }
 
+    public static PatientDetailTabType getPatientDetailTabType(String permission) {
+        for (PatientDetailTabType commonOpenDetailType :
+                values()) {
+            if (permission.equals(commonOpenDetailType.getValue()))
+                return commonOpenDetailType;
+        }
+        return null;
+    }
 }

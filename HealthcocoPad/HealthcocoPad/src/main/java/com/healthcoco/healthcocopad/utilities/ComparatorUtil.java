@@ -2,10 +2,10 @@ package com.healthcoco.healthcocopad.utilities;
 
 import android.text.TextUtils;
 
+import com.healthcoco.healthcocopad.bean.server.BabyAchievementsResponse;
 import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
 import com.healthcoco.healthcocopad.bean.server.CityResponse;
 import com.healthcoco.healthcocopad.bean.server.ClinicalNotes;
-import com.healthcoco.healthcocopad.bean.server.Complaint;
 import com.healthcoco.healthcocopad.bean.server.ComplaintSuggestions;
 import com.healthcoco.healthcocopad.bean.server.DiagnosisSuggestions;
 import com.healthcoco.healthcocopad.bean.server.Disease;
@@ -17,16 +17,15 @@ import com.healthcoco.healthcocopad.bean.server.EcgDetailSuggestions;
 import com.healthcoco.healthcocopad.bean.server.EchoSuggestions;
 import com.healthcoco.healthcocopad.bean.server.Events;
 import com.healthcoco.healthcocopad.bean.server.GeneralExaminationSuggestions;
+import com.healthcoco.healthcocopad.bean.server.GrowthChartResponse;
 import com.healthcoco.healthcocopad.bean.server.HistoryDetailsResponse;
 import com.healthcoco.healthcocopad.bean.server.HistoryPresentComplaintSuggestions;
 import com.healthcoco.healthcocopad.bean.server.HolterSuggestions;
 import com.healthcoco.healthcocopad.bean.server.IndicationOfUsgSuggestions;
-import com.healthcoco.healthcocopad.bean.server.Investigation;
 import com.healthcoco.healthcocopad.bean.server.InvestigationSuggestions;
 import com.healthcoco.healthcocopad.bean.server.Invoice;
 import com.healthcoco.healthcocopad.bean.server.MenstrualHistorySuggestions;
 import com.healthcoco.healthcocopad.bean.server.NotesSuggestions;
-import com.healthcoco.healthcocopad.bean.server.Observation;
 import com.healthcoco.healthcocopad.bean.server.ObservationSuggestions;
 import com.healthcoco.healthcocopad.bean.server.ObstetricHistorySuggestions;
 import com.healthcoco.healthcocopad.bean.server.PaSuggestions;
@@ -46,6 +45,7 @@ import com.healthcoco.healthcocopad.bean.server.TempTemplate;
 import com.healthcoco.healthcocopad.bean.server.TreatmentService;
 import com.healthcoco.healthcocopad.bean.server.Treatments;
 import com.healthcoco.healthcocopad.bean.server.UserGroups;
+import com.healthcoco.healthcocopad.bean.server.VaccineCustomResponse;
 import com.healthcoco.healthcocopad.bean.server.VisitDetails;
 import com.healthcoco.healthcocopad.bean.server.XrayDetailSuggestions;
 import com.healthcoco.healthcocopad.calendar.weekview.WeekViewEvent;
@@ -394,6 +394,43 @@ public class ComparatorUtil {
             if (receiptResponse1.getReceivedDate() != null && receiptResponse2.getReceivedDate() != null) {
                 Date date1 = new Date(receiptResponse1.getReceivedDate());
                 Date date2 = new Date(receiptResponse2.getReceivedDate());
+                return date2.compareTo(date1);
+            }
+            return 0;
+        }
+    };
+    public static Comparator<VaccineCustomResponse> vaccineDateComparator = new Comparator<VaccineCustomResponse>() {
+
+        @Override
+        public int compare(VaccineCustomResponse dentalImagingResponse1, VaccineCustomResponse dentalImagingResponse2) {
+            if (dentalImagingResponse1.getDueDate() != null && dentalImagingResponse2.getDueDate() != null) {
+                Date date1 = new Date(dentalImagingResponse1.getDueDate());
+                Date date2 = new Date(dentalImagingResponse2.getDueDate());
+                return date1.compareTo(date2);
+            }
+            return 0;
+        }
+    };
+    public static Comparator<GrowthChartResponse> growthChartDateComparator = new Comparator<GrowthChartResponse>() {
+
+        @Override
+        public int compare(GrowthChartResponse growthChartResponse1, GrowthChartResponse growthChartResponse2) {
+            if (growthChartResponse1.getUpdatedTime() != null && growthChartResponse2.getUpdatedTime() != null) {
+                Date date1 = new Date(growthChartResponse1.getUpdatedTime());
+                Date date2 = new Date(growthChartResponse2.getUpdatedTime());
+                return date2.compareTo(date1);
+            }
+            return 0;
+        }
+    };
+
+    public static Comparator<BabyAchievementsResponse> babyAchievementsDateComparator = new Comparator<BabyAchievementsResponse>() {
+
+        @Override
+        public int compare(BabyAchievementsResponse babyAchievementsResponse1, BabyAchievementsResponse babyAchievementsResponse2) {
+            if (babyAchievementsResponse1.getUpdatedTime() != null && babyAchievementsResponse2.getUpdatedTime() != null) {
+                Date date1 = new Date(babyAchievementsResponse1.getUpdatedTime());
+                Date date2 = new Date(babyAchievementsResponse2.getUpdatedTime());
                 return date2.compareTo(date1);
             }
             return 0;

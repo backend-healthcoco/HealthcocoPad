@@ -16,10 +16,8 @@ import com.healthcoco.healthcocopad.bean.DOB;
 import com.healthcoco.healthcocopad.bean.DoctorExperience;
 import com.healthcoco.healthcocopad.bean.Duration;
 import com.healthcoco.healthcocopad.bean.PersonalHistory;
-import com.healthcoco.healthcocopad.bean.server.UIPermissions;
 import com.healthcoco.healthcocopad.bean.UiPermissionsBoth;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
-import com.healthcoco.healthcocopad.bean.server.WorkingHours;
 import com.healthcoco.healthcocopad.bean.server.*;
 import com.healthcoco.healthcocopad.enums.AdvanceSearchOptionsType;
 import com.healthcoco.healthcocopad.enums.AppointmentStatusType;
@@ -31,6 +29,7 @@ import com.healthcoco.healthcocopad.enums.RecordType;
 import com.healthcoco.healthcocopad.enums.RoleType;
 import com.healthcoco.healthcocopad.enums.SuggestionType;
 import com.healthcoco.healthcocopad.enums.SyncAllType;
+import com.healthcoco.healthcocopad.enums.VaccineDuration;
 import com.healthcoco.healthcocopad.enums.VisitedForType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.enums.WeekDayNameType;
@@ -52,6 +51,7 @@ import com.orm.query.Select;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import static com.orm.util.ReflectionUtil.getDomainClasses;
@@ -1263,7 +1263,11 @@ public class LocalDataServiceImpl {
         addEducationsList(doctorProfile.getDoctorId(), doctorProfile.getEducation());
 
         //saving Specialities
-        addSpecialities(doctorProfile.getDoctorId(), doctorProfile.getSpecialities());
+//        addSpecialities(doctorProfile.getDoctorId(), doctorProfile.getSpecialities());
+        doctorProfile.setSpecialitiesJsonString(getJsonFromObject(doctorProfile.getSpecialities()));
+        //saving  Parent Specialities
+        doctorProfile.setParentSpecialitiesJsonString(getJsonFromObject(doctorProfile.getParentSpecialities()));
+
 
         deleteAchievementsIfAlreadyExists(LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, doctorProfile.getDoctorId());
         //saving Achievement Details
@@ -1979,7 +1983,8 @@ public class LocalDataServiceImpl {
             doctorProfile.setOtherEmailAddresses((ArrayList<String>) (Object) getObjectsListFronJson(String.class, doctorProfile.getOtherEmailAddressesJsonString()));
             doctorProfile.setExperience((DoctorExperience) getObjectFromJson(DoctorExperience.class, doctorProfile.getExperienceJsonString()));
             doctorProfile.setEducation((List<Education>) getListByKeyValue(Education.class, LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, doctorProfile.getDoctorId()));
-            doctorProfile.setSpecialities(getSpecialities(LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, doctorProfile.getDoctorId()));
+            doctorProfile.setParentSpecialities((ArrayList<String>) (Object) getObjectsListFronJson(String.class, doctorProfile.getParentSpecialitiesJsonString()));
+            doctorProfile.setSpecialities((ArrayList<String>) (Object) getObjectsListFronJson(String.class, doctorProfile.getSpecialitiesJsonString()));
             doctorProfile.setAchievements((List<Achievement>) getListByKeyValue(Achievement.class, LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, doctorProfile.getDoctorId()));
             doctorProfile.setRegistrationDetails((List<DoctorRegistrationDetail>) getListByKeyValue(DoctorRegistrationDetail.class, LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, doctorProfile.getDoctorId()));
             doctorProfile.setExperienceDetails((List<DoctorExperienceDetail>) getListByKeyValue(DoctorExperienceDetail.class, LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, doctorProfile.getDoctorId()));
@@ -3765,7 +3770,7 @@ public class LocalDataServiceImpl {
                 responseListener.onResponse(volleyResponseBean);
         } catch (
                 Exception e
-        ) {
+                ) {
             e.printStackTrace();
             showErrorLocal(volleyResponseBean, errorListener);
         }
@@ -4749,7 +4754,7 @@ public class LocalDataServiceImpl {
         List<DiagnosticTestsPrescription> list = (List<DiagnosticTestsPrescription>) getObjectsList(DiagnosticTestsPrescription.class, LocalDatabaseUtils.KEY_FOREIGN_TABLE_ID, foreignTableId);
         if (!Util.isNullOrEmptyList(list)) {
             for (DiagnosticTestsPrescription diagnosticTestsPrescription : list
-            ) {
+                    ) {
                 DiagnosticTest diagnosticTest = getDiagnosticTest(diagnosticTestsPrescription.getForeignDiagnosticTestId());
                 if (diagnosticTest != null) {
                     diagnosticTestsPrescription.setTest(diagnosticTest);
@@ -5833,6 +5838,267 @@ public class LocalDataServiceImpl {
         return kioskTabPermission;
     }
 
+    //Peda
+    public VolleyResponseBean getVaccinationList(WebServiceType webServiceType, String doctorId, String locationId, String hospitalId, String selectedPatientId, int size, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        return getVaccinationList(webServiceType, doctorId, locationId, hospitalId, selectedPatientId, size, null, responseListener, errorListener);
+    }
+
+    public VolleyResponseBean getVaccinationList(WebServiceType webServiceType, String doctorId, String locationId, String hospitalId, String selectedPatientId, int size, LinkedHashMap<String, VaccineDuration> statusLinkedHashMap, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
+        volleyResponseBean.setWebServiceType(webServiceType);
+        volleyResponseBean.setIsDataFromLocal(true);
+        volleyResponseBean.setIsUserOnline(HealthCocoConstants.isNetworkOnline);
+        try {
+
+            String whereCondition = "Select * from " + StringUtil.toSQLName(VaccineResponse.class.getSimpleName())
+                    + " where "
+                    + LocalDatabaseUtils.KEY_PATIENT_ID + "=\"" + selectedPatientId + "\"";
+
+// for filter option
+            StringBuilder commaSepValueBuilder = new StringBuilder();
+            if (!Util.isNullOrEmptyList(statusLinkedHashMap)) {
+                for (VaccineDuration filter :
+                        statusLinkedHashMap.values()) {
+                    if (commaSepValueBuilder.length() != 0)
+                        commaSepValueBuilder.append(", ");
+                    commaSepValueBuilder.append('"' + filter.getValue() + '"');
+                }
+                whereCondition = whereCondition + " AND " + LocalDatabaseUtils.KEY_DURATION + " IN " + "(" + commaSepValueBuilder + ")";
+            }
+            whereCondition = whereCondition
+                    + " ORDER BY " + LocalDatabaseUtils.KEY_DUE_DATE;
+
+            LogUtils.LOGD(TAG, "Select Query " + whereCondition);
+            List<VaccineResponse> list = SugarRecord.findWithQuery(VaccineResponse.class, whereCondition);
+            if (!Util.isNullOrEmptyList(list))
+                for (VaccineResponse vaccineResponse : list) {
+                    vaccineResponse.setAge((DOB) getObject(DOB.class, LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, vaccineResponse.getUniqueId()));
+                    vaccineResponse.setVaccineBrand((VaccineBrand) getObjectFromJson(VaccineBrand.class, vaccineResponse.getVaccineBrandJsonString()));
+                }
+
+            volleyResponseBean.setDataList(getObjectsListFromMap(list));
+            if (responseListener != null)
+                responseListener.onResponse(volleyResponseBean);
+        } catch (Exception e) {
+            e.printStackTrace();
+            showErrorLocal(volleyResponseBean, errorListener);
+        }
+        return volleyResponseBean;
+    }
+
+    public void addVaccinationList(ArrayList<VaccineResponse> list) {
+        for (VaccineResponse vaccineResponse :
+                list) {
+            addVaccineResponse(vaccineResponse);
+        }
+    }
+
+    public void addVaccineResponse(VaccineResponse vaccineResponse) {
+        vaccineResponse.setVaccineBrandJsonString(getJsonFromObject(vaccineResponse.getVaccineBrand()));
+        // setting DOB
+        if (vaccineResponse.getAge() != null) {
+            vaccineResponse.getAge().setForeignUniqueId(vaccineResponse.getUniqueId());
+            deleteDOBRecordIfAlreadyPresent(LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, vaccineResponse.getUniqueId());
+            vaccineResponse.getAge().save();
+        }
+        vaccineResponse.save();
+    }
+
+    private void deleteDOBRecordIfAlreadyPresent(String key, String value) {
+        DOB.deleteAll(DOB.class, key + "= ?", value);
+    }
+
+    public VolleyResponseBean getVaccinationBrandsList(WebServiceType webServiceType,
+                                                       ArrayList<String> vaccineIds, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
+        volleyResponseBean.setWebServiceType(webServiceType);
+        volleyResponseBean.setIsDataFromLocal(true);
+        volleyResponseBean.setIsUserOnline(HealthCocoConstants.isNetworkOnline);
+        try {
+            List<VaccineBrandResponse> list = getVaccinationBrands(vaccineIds);
+            volleyResponseBean.setDataList(getObjectsListFromMap(list));
+            if (responseListener != null)
+                responseListener.onResponse(volleyResponseBean);
+        } catch (Exception e) {
+            e.printStackTrace();
+            showErrorLocal(volleyResponseBean, errorListener);
+        }
+        return volleyResponseBean;
+    }
+
+    public VolleyResponseBean getVaccinationBrandsList(WebServiceType webServiceType, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        return getVaccinationBrandsList(webServiceType, null, responseListener, errorListener);
+    }
+
+    private List<VaccineBrandResponse> getVaccinationBrands(ArrayList<String> vaccineIds) {
+        String whereCondition = "Select * from " + StringUtil.toSQLName(VaccineBrandResponse.class.getSimpleName());
+
+        StringBuilder commaSepValueBuilder = new StringBuilder();
+        if (!Util.isNullOrEmptyList(vaccineIds)) {
+            for (String vaccineId :
+                    vaccineIds) {
+                if (commaSepValueBuilder.length() != 0)
+                    commaSepValueBuilder.append(", ");
+                commaSepValueBuilder.append('"' + vaccineId + '"');
+            }
+            whereCondition = whereCondition + " WHERE " + LocalDatabaseUtils.KEY_VACCINE_ID + " IN " + "(" + commaSepValueBuilder + ")";
+            //specifying order by limit and offset query
+//            String conditionsLimit = " ORDER BY " + LocalDatabaseUtils.KEY_FROM_DATE + " ASC ";
+        }
+//            whereCondition = whereCondition + conditionsLimit;
+        LogUtils.LOGD(TAG, "Select Query " + whereCondition);
+        List<VaccineBrandResponse> list = SugarRecord.findWithQuery(VaccineBrandResponse.class, whereCondition);
+        if (!Util.isNullOrEmptyList(list)) {
+            for (VaccineBrandResponse vaccineBrandResponse :
+                    list) {
+                vaccineBrandResponse.setVaccineBrand((VaccineBrand) getObjectFromJson(VaccineBrand.class, vaccineBrandResponse.getVaccineBrandJsonString()));
+                vaccineBrandResponse.setVaccine(getVaccineResponse(vaccineBrandResponse.getVaccineId()));
+            }
+            return list;
+        }
+        return null;
+    }
+
+    private VaccineResponse getVaccineResponse(String vaccineId) {
+        return Select.from(VaccineResponse.class)
+                .where(Condition.prop(LocalDatabaseUtils.KEY_VACCINE_ID).eq(vaccineId)).first();
+    }
+
+    public void addVaccinationBrandsList(ArrayList<VaccineBrandResponse> dataList) {
+        if (!Util.isNullOrEmptyList(dataList)) {
+            for (VaccineBrandResponse brandResponse : dataList) {
+                addBrandResponse(brandResponse);
+            }
+        }
+    }
+
+    public void addBrandResponse(VaccineBrandResponse response) {
+        deleteAllFrom(VaccineBrandResponse.class, LocalDatabaseUtils.KEY_UNIQUE_ID, response.getUniqueId());
+        response.setVaccineBrandJsonString(getJsonFromObject(response.getVaccineBrand()));
+        if (response.getVaccine() != null)
+            addVaccineResponse(response.getVaccine());
+        response.save();
+    }
+
+    public void addGrowthChartList(ArrayList<GrowthChartResponse> dataList) {
+        deleteAllFrom(GrowthChartResponse.class, LocalDatabaseUtils.KEY_PATIENT_ID, HealthCocoConstants.SELECTED_PATIENTS_USER_ID);
+        if (!Util.isNullOrEmptyList(dataList)) {
+            for (GrowthChartResponse growthChartResponse : dataList) {
+                addGrowthChartResponse(growthChartResponse);
+            }
+        }
+    }
+
+    public void addGrowthChartResponse(GrowthChartResponse response) {
+        response.setAgeJsonString(getJsonFromObject(response.getAge()));
+        response.setBloodPressureJsonString(getJsonFromObject(response.getBloodPressure()));
+        response.save();
+    }
+
+    public VolleyResponseBean getGrowthChartList(WebServiceType webServiceType, String doctorId, String locationId, String hospitalId, String patientId, int pageNum, int maxSize, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
+        volleyResponseBean.setWebServiceType(webServiceType);
+        volleyResponseBean.setIsDataFromLocal(true);
+        volleyResponseBean.setIsUserOnline(HealthCocoConstants.isNetworkOnline);
+        try {
+            List<GrowthChartResponse> list = getGrowthChart(patientId, locationId, hospitalId, doctorId, pageNum, maxSize);
+            volleyResponseBean.setDataList(getObjectsListFromMap(list));
+            if (responseListener != null)
+                responseListener.onResponse(volleyResponseBean);
+        } catch (Exception e) {
+            e.printStackTrace();
+            showErrorLocal(volleyResponseBean, errorListener);
+        }
+        return volleyResponseBean;
+    }
+
+    private List<GrowthChartResponse> getGrowthChart(String patientId, String locationId, String hospitalId, String doctorId, int pageNum, int maxSize) {
+        String whereCondition = "Select * from " + StringUtil.toSQLName(GrowthChartResponse.class.getSimpleName())
+                + " where "
+                + LocalDatabaseUtils.KEY_PATIENT_ID + "=\"" + patientId + "\"";
+        whereCondition = whereCondition + " AND "
+                + LocalDatabaseUtils.KEY_DOCTOR_ID + "=\"" + doctorId + "\""
+                + " AND "
+                + LocalDatabaseUtils.KEY_HOSPITAL_ID + "=\"" + hospitalId + "\""
+                + " AND "
+                + LocalDatabaseUtils.KEY_LOCATION_ID + "=\"" + locationId + "\"";
+        whereCondition = whereCondition + " AND " + LocalDatabaseUtils.KEY_DISCARDED + "=" + LocalDatabaseUtils.BOOLEAN_FALSE_VALUE;
+        String conditionsLimit = " ORDER BY " + LocalDatabaseUtils.KEY_UPDATED_TIME + " DESC "
+                + " LIMIT " + maxSize
+                + " OFFSET " + (pageNum * maxSize);
+
+        whereCondition = whereCondition + conditionsLimit;
+        LogUtils.LOGD(TAG, "Select Query " + whereCondition);
+        List<GrowthChartResponse> list = SugarRecord.findWithQuery(GrowthChartResponse.class, whereCondition);
+        if (!Util.isNullOrEmptyList(list)) {
+            for (GrowthChartResponse nutritionResponse : list) {
+                getGrowthChartResponse(nutritionResponse);
+            }
+            return list;
+        }
+        return null;
+    }
+
+    private void getGrowthChartResponse(GrowthChartResponse growthChartResponse) {
+        growthChartResponse.setBloodPressure((BloodPressure) getObjectFromJson(BloodPressure.class, growthChartResponse.getBloodPressureJsonString()));
+        growthChartResponse.setAge((DOB) getObjectFromJson(DOB.class, growthChartResponse.getAgeJsonString()));
+    }
+
+    public VolleyResponseBean getBabyAchievementsList(WebServiceType webServiceType, String patientId, int pageNum, int maxSize, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
+        volleyResponseBean.setWebServiceType(webServiceType);
+        volleyResponseBean.setIsDataFromLocal(true);
+        volleyResponseBean.setIsUserOnline(HealthCocoConstants.isNetworkOnline);
+        try {
+            List<BabyAchievementsResponse> list = getBabyAchievements(patientId, pageNum, maxSize);
+            volleyResponseBean.setDataList(getObjectsListFromMap(list));
+            if (responseListener != null)
+                responseListener.onResponse(volleyResponseBean);
+        } catch (Exception e) {
+            e.printStackTrace();
+            showErrorLocal(volleyResponseBean, errorListener);
+        }
+        return volleyResponseBean;
+    }
+
+    private List<BabyAchievementsResponse> getBabyAchievements(String patientId, int pageNum, int maxSize) {
+        String whereCondition = "Select * from " + StringUtil.toSQLName(BabyAchievementsResponse.class.getSimpleName())
+                + " where "
+                + LocalDatabaseUtils.KEY_PATIENT_ID + "=\"" + patientId + "\"";
+        String conditionsLimit = " ORDER BY " + LocalDatabaseUtils.KEY_UPDATED_TIME + " DESC "
+                + " LIMIT " + maxSize
+                + " OFFSET " + (pageNum * maxSize);
+
+        whereCondition = whereCondition + conditionsLimit;
+        LogUtils.LOGD(TAG, "Select Query " + whereCondition);
+        List<BabyAchievementsResponse> list = SugarRecord.findWithQuery(BabyAchievementsResponse.class, whereCondition);
+        if (!Util.isNullOrEmptyList(list)) {
+            for (BabyAchievementsResponse achievementsResponse : list) {
+                getBabyAchievementsResponse(achievementsResponse);
+            }
+            return list;
+        }
+        return null;
+    }
+
+    private void getBabyAchievementsResponse(BabyAchievementsResponse achievementsResponse) {
+        achievementsResponse.setDuration((AchievementsDuration) getObjectFromJson(AchievementsDuration.class, achievementsResponse.getDurationJsonString()));
+    }
+
+    public void addBabyAchievementsList(ArrayList<BabyAchievementsResponse> dataList) {
+        deleteAllFrom(BabyAchievementsResponse.class, LocalDatabaseUtils.KEY_PATIENT_ID, HealthCocoConstants.SELECTED_PATIENTS_USER_ID);
+        if (!Util.isNullOrEmptyList(dataList)) {
+            for (BabyAchievementsResponse babyAchievementsResponse : dataList) {
+                addBabyAchievementsResponse(babyAchievementsResponse);
+            }
+        }
+    }
+
+
+    public void addBabyAchievementsResponse(BabyAchievementsResponse babyAchievementsResponse) {
+        babyAchievementsResponse.setDurationJsonString(getJsonFromObject(babyAchievementsResponse.getDuration()));
+        babyAchievementsResponse.save();
+    }
 
     private enum FromTableType {
         ADD_TEMPLATES, ADD_TREATMENT, ADD_PRESCRIPTION

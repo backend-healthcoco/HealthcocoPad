@@ -1,6 +1,5 @@
 package com.healthcoco.healthcocopad.recyclerview;
 
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +23,8 @@ public abstract class HealthcocoComonRecylcerViewHolder extends RecyclerView.Vie
     protected HealthCocoApplication mApp;
     protected LayoutInflater inflater;
     protected HealthCocoActivity mActivity;
+    protected Object listenerObject;
+    private final View view;
 
     public HealthcocoComonRecylcerViewHolder(HealthCocoActivity activity, View itemView,
                                              HealthcocoRecyclerViewItemClickListener onItemClickListener) {
@@ -32,11 +33,28 @@ public abstract class HealthcocoComonRecylcerViewHolder extends RecyclerView.Vie
         inflater = mActivity.getLayoutInflater();
         mApp = ((HealthCocoApplication) mActivity.getApplication());
         this.onItemClickListener = onItemClickListener;
+        this.view = itemView;
+        initViews(itemView);
+    }
+
+    public HealthcocoComonRecylcerViewHolder(HealthCocoActivity activity, View itemView,
+                                             HealthcocoRecyclerViewItemClickListener onItemClickListener, Object listenerObject) {
+        super(itemView);
+        mActivity = activity;
+        inflater = mActivity.getLayoutInflater();
+        mApp = ((HealthCocoApplication) mActivity.getApplication());
+        this.onItemClickListener = onItemClickListener;
+        this.listenerObject = listenerObject;
+        this.view = itemView;
         initViews(itemView);
     }
 
     public HealthcocoComonRecylcerViewHolder(HealthCocoActivity activity, View itemView) {
         this(activity, itemView, null);
+    }
+
+    public View getContentView() {
+        return view;
     }
 
     public abstract void initViews(View itemView);

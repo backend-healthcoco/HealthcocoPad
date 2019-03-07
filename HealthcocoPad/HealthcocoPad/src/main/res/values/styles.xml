@@ -251,4 +251,21 @@
         <item name="android:textSize">@dimen/text_size_registration_logo</item>
 
     </style>
+
+
+    <style name="add_dental_work_card_input_radio_button_style">
+        <item name="android:paddingBottom">12dp</item>
+        <item name="android:paddingTop">12dp</item>
+        <item name="android:textColor">@drawable/text_black_normal_blue_selected</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:drawableLeft">@drawable/icon_check_radio_selector</item>
+        <item name="android:drawablePadding">5dp</item>
+        <item name="android:gravity">center|start</item>
+        <item name="android:textColorHint">@color/grey_hint_color</item>
+        <item name="android:checked">false</item>
+        <item name="android:button">@android:color/transparent</item>
+    </style>
+    <style name="DialogTheme" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">@color/blue_action_bar</item>
+    </style>
 </resources>

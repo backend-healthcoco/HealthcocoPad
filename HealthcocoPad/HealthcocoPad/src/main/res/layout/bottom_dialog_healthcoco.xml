@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_all"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/background_light"
+        android:gravity="center|start"
+        android:padding="20dp"
+        android:tag="@string/all"
+        android:text="@string/all"
+        android:textColor="@drawable/text_blue_black_selector"
+        android:textStyle="bold"
+        android:visibility="visible" />
+
+    <com.healthcoco.healthcocopad.views.BottomSheetListView
+        android:id="@+id/lv_popup_options"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:divider="@null"
+        android:fillViewport="true"
+        android:scrollbars="none" />
+
+</LinearLayout>

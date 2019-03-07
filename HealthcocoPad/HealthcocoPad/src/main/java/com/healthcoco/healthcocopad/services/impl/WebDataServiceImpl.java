@@ -27,12 +27,14 @@ import com.healthcoco.healthcocopad.bean.request.AddMedicalFamilyHistoryRequest;
 import com.healthcoco.healthcocopad.bean.request.AddReceiptRequest;
 import com.healthcoco.healthcocopad.bean.request.AppointmentRequestToSend;
 import com.healthcoco.healthcocopad.bean.request.AssignGroupRequest;
+import com.healthcoco.healthcocopad.bean.request.BabyAchievementsRequest;
 import com.healthcoco.healthcocopad.bean.request.ClinicImageToSend;
 import com.healthcoco.healthcocopad.bean.request.ClinicalNoteToSend;
 import com.healthcoco.healthcocopad.bean.request.DoctorSignupHandheldContinueRequest;
 import com.healthcoco.healthcocopad.bean.request.DrugInteractionRequest;
 import com.healthcoco.healthcocopad.bean.request.EventRequest;
 import com.healthcoco.healthcocopad.bean.request.Feedback;
+import com.healthcoco.healthcocopad.bean.request.GrowthChartRequest;
 import com.healthcoco.healthcocopad.bean.request.InvoiceRequest;
 import com.healthcoco.healthcocopad.bean.request.PrescriptionRequest;
 import com.healthcoco.healthcocopad.bean.request.PrintPatientCardRequest;
@@ -41,17 +43,13 @@ import com.healthcoco.healthcocopad.bean.request.ProfessionalStatementRequest;
 import com.healthcoco.healthcocopad.bean.request.RegisterNewPatientRequest;
 import com.healthcoco.healthcocopad.bean.request.TreatmentRequest;
 import com.healthcoco.healthcocopad.bean.request.UserPermissionsRequest;
-import com.healthcoco.healthcocopad.bean.request.UserVerification;
-import com.healthcoco.healthcocopad.bean.server.AdviceSuggestion;
+import com.healthcoco.healthcocopad.bean.request.VaccineRequest;
 import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
-import com.healthcoco.healthcocopad.bean.server.ClinicDoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.Diagram;
 import com.healthcoco.healthcocopad.bean.server.Disease;
 import com.healthcoco.healthcocopad.bean.server.DoctorClinicProfile;
-import com.healthcoco.healthcocopad.bean.server.DoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.Drug;
 import com.healthcoco.healthcocopad.bean.server.DrugType;
-import com.healthcoco.healthcocopad.bean.server.Events;
 import com.healthcoco.healthcocopad.bean.server.GCMRequest;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.NotificationResponse;
@@ -66,13 +64,13 @@ import com.healthcoco.healthcocopad.bean.server.TempTemplate;
 import com.healthcoco.healthcocopad.bean.server.TreatmentService;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.bean.server.UserGroups;
+import com.healthcoco.healthcocopad.bean.server.VaccineResponse;
 import com.healthcoco.healthcocopad.bean.server.VisitDetails;
 import com.healthcoco.healthcocopad.enums.BooleanTypeValues;
 import com.healthcoco.healthcocopad.enums.LocalTabelType;
 import com.healthcoco.healthcocopad.enums.RecordState;
 import com.healthcoco.healthcocopad.enums.RoleType;
 import com.healthcoco.healthcocopad.enums.UserState;
-import com.healthcoco.healthcocopad.enums.VisitedForType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.GCMRefreshListener;
 import com.healthcoco.healthcocopad.services.GsonRequest;
@@ -1813,5 +1811,137 @@ public class WebDataServiceImpl implements GCMRefreshListener {
         }
     }
 
+    public void getVaccinationList(Class<?> class1, WebServiceType webServiceType,
+                                   String doctorId, String locationId, String hospitalId, String patientId,
+                                   Long updatedTime, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        if (HealthCocoConstants.isNetworkOnline) {
+            String url = webServiceType.getUrl() + "?"
+                    + HealthCocoConstants.PARAM_PATIENT_ID + patientId
+//                    + HealthCocoConstants.PARAM_DOCTOR_ID + doctorId
+//                    + HealthCocoConstants.PARAM_LOCATION_ID + locationId
+//                    + HealthCocoConstants.PARAM_HOSPITAL_ID + hospitalId
+                    + HealthCocoConstants.PARAM_UPDATED_TIME + updatedTime;
+            getResponse(Request.Priority.IMMEDIATE, webServiceType, class1, url, null, null, responseListener,
+                    errorListener);
+        } else {
+            errorListener.onNetworkUnavailable(webServiceType);
+        }
+    }
 
+    public void getVaccinationBrandList(Class<?> class1, WebServiceType webServiceType, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        getVaccinationBrandList(class1, webServiceType, null, responseListener, errorListener);
+    }
+
+    public void getVaccinationBrandList(Class<?> class1, WebServiceType webServiceType,
+                                        ArrayList<String> vaccineIds, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        if (HealthCocoConstants.isNetworkOnline) {
+            String url = webServiceType.getUrl();
+            if (!Util.isNullOrEmptyList(vaccineIds)) {
+                String matrixTests = "";
+                for (String vaccineId :
+                        vaccineIds) {
+                    matrixTests = matrixTests + HealthCocoConstants.PARAM_MATRIX_VACCINE_ID + vaccineId;
+                }
+                if (!Util.isNullOrBlank(matrixTests))
+                    url = url + matrixTests;
+            }
+            getResponse(Request.Priority.IMMEDIATE, webServiceType, class1, url, null, null, responseListener,
+                    errorListener);
+        } else {
+            errorListener.onNetworkUnavailable(webServiceType);
+        }
+    }
+
+    public void addEditVaccinationList(Class<?> class1, WebServiceType webServiceType, ArrayList<VaccineRequest> list,
+                                       Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        if (HealthCocoConstants.isNetworkOnline) {
+            String url = webServiceType.getUrl();
+            getResponse(Request.Priority.IMMEDIATE, webServiceType, class1, url, list, null, responseListener,
+                    errorListener);
+        } else {
+            errorListener.onNetworkUnavailable(webServiceType);
+        }
+    }
+
+    public void addVaccine(Class<VaccineResponse> class1, WebServiceType webServiceType, VaccineRequest vaccineRequest, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        if (HealthCocoConstants.isNetworkOnline) {
+            String url = webServiceType.getUrl();
+            getResponse(Request.Priority.IMMEDIATE, webServiceType, class1, url, vaccineRequest, null, responseListener,
+                    errorListener);
+        } else {
+            errorListener.onNetworkUnavailable(webServiceType);
+        }
+    }
+
+    public void getVaccinesSolrList(Class<?> class1, WebServiceType webServiceType, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        if (HealthCocoConstants.isNetworkOnline) {
+            String url = webServiceType.getUrl();
+            getResponse(Request.Priority.IMMEDIATE, webServiceType, class1, url, null, null, responseListener,
+                    errorListener);
+        } else {
+            errorListener.onNetworkUnavailable(webServiceType);
+        }
+    }
+
+    public void getGrowthChartList(Class<?> class1, WebServiceType webServiceType, String doctorId, String locationId, String hospitalId, String patientId,
+                                   Long updatedTime, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        if (HealthCocoConstants.isNetworkOnline) {
+
+            String url = webServiceType.getUrl() + "?"
+                    + HealthCocoConstants.PARAM_PATIENT_ID + patientId
+                    + HealthCocoConstants.PARAM_DOCTOR_ID + doctorId
+                    + HealthCocoConstants.PARAM_LOCATION_ID + locationId
+                    + HealthCocoConstants.PARAM_HOSPITAL_ID + hospitalId
+                    + HealthCocoConstants.PARAM_UPDATED_TIME + updatedTime;
+            getResponse(Request.Priority.IMMEDIATE, webServiceType, class1, url, null, null, responseListener,
+                    errorListener);
+        } else {
+            errorListener.onNetworkUnavailable(webServiceType);
+        }
+    }
+
+    public void addGrowthChart(Class<?> class1, WebServiceType webServiceType,
+                               GrowthChartRequest growthChartRequest, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        if (HealthCocoConstants.isNetworkOnline) {
+            String url = webServiceType.getUrl();
+            checkNetworkStatus(mApp);
+            getResponse(Request.Priority.IMMEDIATE, webServiceType, class1, url, growthChartRequest, null, responseListener,
+                    errorListener);
+        } else {
+            errorListener.onNetworkUnavailable(webServiceType);
+        }
+    }
+
+    public void discardGrowthChart(Class<?> class1, WebServiceType webServiceType,
+                                   String uniueId, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        String url = webServiceType.getUrl() + uniueId + "?"
+                + HealthCocoConstants.PARAM_DISCARDED_AMPERCENT + true;
+        getResponse(webServiceType, class1, url, null, null, responseListener,
+                errorListener);
+    }
+
+    public void getBabyAchievementsList(Class<?> class1, WebServiceType webServiceType, String patientId,
+                                        Long updatedTime, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        if (HealthCocoConstants.isNetworkOnline) {
+
+            String url = webServiceType.getUrl() + patientId + "?"
+                    + HealthCocoConstants.PARAM_UPDATED_TIME + updatedTime;
+            getResponse(Request.Priority.IMMEDIATE, webServiceType, class1, url, null, null, responseListener,
+                    errorListener);
+        } else {
+            errorListener.onNetworkUnavailable(webServiceType);
+        }
+    }
+
+    public void addAchievements(Class<?> class1, BabyAchievementsRequest babyAchievementsRequest, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        WebServiceType webServiceType = WebServiceType.ADD_EDIT_BABY_ACHIEVEMENTS;
+        if (HealthCocoConstants.isNetworkOnline) {
+            String url = webServiceType.getUrl();
+            checkNetworkStatus(mApp);
+            getResponse(Request.Priority.IMMEDIATE, webServiceType, class1, url, babyAchievementsRequest, null, responseListener,
+                    errorListener);
+        } else {
+            errorListener.onNetworkUnavailable(webServiceType);
+        }
+    }
 }

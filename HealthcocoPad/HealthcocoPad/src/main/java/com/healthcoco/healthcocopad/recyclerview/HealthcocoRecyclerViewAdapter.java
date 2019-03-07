@@ -7,19 +7,34 @@ import android.view.ViewGroup;
 
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.R;
+import com.healthcoco.healthcocopad.bean.server.BabyAchievementsResponse;
 import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
 import com.healthcoco.healthcocopad.bean.server.ClinicDoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.ClinicImage;
 import com.healthcoco.healthcocopad.bean.server.Events;
+import com.healthcoco.healthcocopad.bean.server.GrowthChartResponse;
 import com.healthcoco.healthcocopad.bean.server.RegisteredDoctorProfile;
+import com.healthcoco.healthcocopad.bean.server.VaccineBrandAssociationRequest;
+import com.healthcoco.healthcocopad.bean.server.VaccineBrandResponse;
+import com.healthcoco.healthcocopad.bean.server.VaccineResponse;
+import com.healthcoco.healthcocopad.bean.server.VaccineSolarResponse;
 import com.healthcoco.healthcocopad.enums.AdapterType;
 import com.healthcoco.healthcocopad.enums.KioskSubItemType;
+import com.healthcoco.healthcocopad.utilities.Util;
 import com.healthcoco.healthcocopad.viewholders.AboutDoctorListViewHolder;
+import com.healthcoco.healthcocopad.viewholders.BabyAchievementViewHolder;
+import com.healthcoco.healthcocopad.viewholders.BrandListRecycleViewHolder;
 import com.healthcoco.healthcocopad.viewholders.ClinicImageListItemHolder;
 import com.healthcoco.healthcocopad.viewholders.DoctorListViewHolder;
 import com.healthcoco.healthcocopad.viewholders.EventItemViewHolder;
+import com.healthcoco.healthcocopad.viewholders.GrowthChartViewHolder;
 import com.healthcoco.healthcocopad.viewholders.KioskSubItemViewHolder;
 import com.healthcoco.healthcocopad.viewholders.QueueItemViewHolder;
+import com.healthcoco.healthcocopad.viewholders.SelectedBrandListViewHolder;
+import com.healthcoco.healthcocopad.viewholders.UpdateBrandListViewHolder;
+import com.healthcoco.healthcocopad.viewholders.UpdateVaccineListViewHolder;
+import com.healthcoco.healthcocopad.viewholders.VaccinationListViewHolder;
+import com.healthcoco.healthcocopad.viewholders.VaccinationSolrListViewHolder;
 
 import java.util.ArrayList;
 
@@ -102,8 +117,59 @@ public class HealthcocoRecyclerViewAdapter extends RecyclerView.Adapter<Healthco
                 convertView = mInflater.inflate(R.layout.list_item_clinic_images, parent, false);
                 viewHolder = new ClinicImageListItemHolder(mActivity, convertView, onItemClickListener);
                 break;
+            case VACCINATION:
+                convertView = mInflater.inflate(R.layout.list_item_vaccination, null);
+                convertView.setLayoutParams(getLayoutParams(convertView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                viewHolder = new VaccinationListViewHolder(mActivity, convertView, onItemClickListener, listenerObject);
+                return viewHolder;
+            case SEARCH_VACCINATION:
+                convertView = mInflater.inflate(R.layout.list_item_solr_vaccination, null);
+                convertView.setLayoutParams(getLayoutParams(convertView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                viewHolder = new VaccinationSolrListViewHolder(mActivity, convertView, onItemClickListener, listenerObject);
+                return viewHolder;
+            case UPDATE_VACCINE:
+                convertView = mInflater.inflate(R.layout.list_item_upadate_vaccine, null);
+                convertView.setLayoutParams(getLayoutParams(convertView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                viewHolder = new UpdateVaccineListViewHolder(mActivity, convertView, onItemClickListener, listenerObject);
+                return viewHolder;
+            case UPDATE_BRAND:
+                convertView = mInflater.inflate(R.layout.list_item_upadate_brand_old, null);
+                convertView.setLayoutParams(getLayoutParams(convertView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                viewHolder = new UpdateBrandListViewHolder(mActivity, convertView, onItemClickListener, listenerObject);
+                return viewHolder;
+            case BRAND_LIST:
+                convertView = mInflater.inflate(R.layout.list_item_brand_list, null);
+                convertView.setLayoutParams(getLayoutParams(convertView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                viewHolder = new BrandListRecycleViewHolder(mActivity, convertView, onItemClickListener, listenerObject);
+                return viewHolder;
+            case SELECTED_BRAND:
+                convertView = mInflater.inflate(R.layout.sub_item_selected_brand, null);
+                convertView.setLayoutParams(getLayoutParams(convertView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                viewHolder = new SelectedBrandListViewHolder(mActivity, convertView, onItemClickListener, listenerObject);
+                return viewHolder;
+            case GROWTH_CHART:
+                convertView = mInflater.inflate(R.layout.item_growth_chart_list, null);
+                convertView.setLayoutParams(getLayoutParams(convertView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                viewHolder = new GrowthChartViewHolder(mActivity, convertView, onItemClickListener, listenerObject);
+                return viewHolder;
+            case BABY_ACHIEVEMENTS:
+                convertView = mInflater.inflate(R.layout.item_baby_achievements_list, null);
+                convertView.setLayoutParams(getLayoutParams(convertView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                viewHolder = new BabyAchievementViewHolder(mActivity, convertView, onItemClickListener, listenerObject);
+                return viewHolder;
         }
         return viewHolder;
+    }
+
+    private ViewGroup.LayoutParams getLayoutParams(View convertView, int width, int height) {
+        ViewGroup.LayoutParams layoutParams = convertView.getLayoutParams();
+        if (layoutParams == null)
+            layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+//        if (width > 0)
+        layoutParams.width = width;
+//        if (height > 0)
+        layoutParams.height = height;
+        return layoutParams;
     }
 
     @Override
@@ -146,13 +212,63 @@ public class HealthcocoRecyclerViewAdapter extends RecyclerView.Adapter<Healthco
                     clinicImageListItemHolder.applyData(object);
                 }
                 break;
+            case VACCINATION:
+                if (holder instanceof VaccinationListViewHolder && object instanceof VaccineResponse) {
+                    VaccinationListViewHolder vaccinationListViewHolder = ((VaccinationListViewHolder) holder);
+                    vaccinationListViewHolder.applyData(object);
+                }
+                break;
+            case SEARCH_VACCINATION:
+                if (holder instanceof VaccinationSolrListViewHolder && object instanceof VaccineSolarResponse) {
+                    VaccinationSolrListViewHolder vaccinationSolrListViewHolder = ((VaccinationSolrListViewHolder) holder);
+                    vaccinationSolrListViewHolder.applyData(object);
+                }
+                break;
+            case UPDATE_VACCINE:
+                if (holder instanceof UpdateVaccineListViewHolder && object instanceof VaccineResponse) {
+                    UpdateVaccineListViewHolder updateVaccineListViewHolder = ((UpdateVaccineListViewHolder) holder);
+                    updateVaccineListViewHolder.applyData(object);
+                }
+                break;
+            case UPDATE_BRAND:
+                if (holder instanceof UpdateBrandListViewHolder && object instanceof VaccineBrandAssociationRequest) {
+                    UpdateBrandListViewHolder updateVaccineListViewHolder = ((UpdateBrandListViewHolder) holder);
+                    updateVaccineListViewHolder.applyData(object);
+                }
+                break;
+            case BRAND_LIST:
+                if (holder instanceof BrandListRecycleViewHolder && object instanceof VaccineBrandResponse) {
+                    BrandListRecycleViewHolder brandListViewHolder = ((BrandListRecycleViewHolder) holder);
+                    brandListViewHolder.applyData(object);
+                }
+                break;
+            case SELECTED_BRAND:
+                if (holder instanceof SelectedBrandListViewHolder && object instanceof VaccineBrandResponse) {
+                    SelectedBrandListViewHolder selectedBrandListViewHolder = ((SelectedBrandListViewHolder) holder);
+                    selectedBrandListViewHolder.applyData(object);
+                }
+                break;
+            case GROWTH_CHART:
+                if (holder instanceof GrowthChartViewHolder && object instanceof GrowthChartResponse) {
+                    GrowthChartViewHolder growthChartViewHolder = ((GrowthChartViewHolder) holder);
+                    growthChartViewHolder.applyData(object);
+                }
+                break;
+            case BABY_ACHIEVEMENTS:
+                if (holder instanceof BabyAchievementViewHolder && object instanceof BabyAchievementsResponse) {
+                    BabyAchievementViewHolder babyAchievementViewHolder = ((BabyAchievementViewHolder) holder);
+                    babyAchievementViewHolder.applyData(object);
+                }
+                break;
         }
 
     }
 
     @Override
     public int getItemCount() {
-        return list.size();
+         if (!Util.isNullOrEmptyList(list))
+            return list.size();
+        return 0;
     }
 
     public void setListData(ArrayList<Object> list) {
@@ -161,7 +277,9 @@ public class HealthcocoRecyclerViewAdapter extends RecyclerView.Adapter<Healthco
 
 
     public Object getItem(int position) {
-        return list.get(position);
+        if (!Util.isNullOrEmptyList(list))
+            return list.get(position);
+        return null;
     }
 }
 

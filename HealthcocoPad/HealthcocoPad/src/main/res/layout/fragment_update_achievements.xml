@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:text="@string/achievement_with_colon"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size_add_growth_chart_parameters_label"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tv_achievement"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size_add_growth_chart_parameters_label" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="start"
+        android:text="@string/achievement_date_with_colon"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size_add_growth_chart_parameters_label"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tv_achievement_date"
+        style="@style/add_drug_detail_edittext_textview_padding"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawablePadding="5dp"
+        android:drawableStart="@drawable/tab_cal_date_normal_item"
+        android:drawableRight="@drawable/arrow_down_drug"
+        android:hint="@string/select_date"
+        android:singleLine="true" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="start"
+        android:text="@string/duration_with_colon"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size_add_growth_chart_parameters_label"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/edit_duration"
+            style="@style/add_drug_detail_edittext_textview_padding"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.40"
+            android:gravity="center"
+            android:hint="@string/duration"
+            android:inputType="number" />
+
+        <TextView
+            android:id="@+id/tv_duration"
+            style="@style/add_drug_detail_edittext_textview_padding"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="20dp"
+            android:layout_weight="0.60"
+            android:drawablePadding="5dp"
+            android:drawableRight="@drawable/arrow_down_drug"
+            android:hint="@string/unit"
+            android:inputType="number"
+            android:singleLine="true" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="start"
+        android:text="@string/note_with_colon"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size_add_growth_chart_parameters_label"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tv_note"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size_add_growth_chart_parameters_label" />
+
+</LinearLayout>
