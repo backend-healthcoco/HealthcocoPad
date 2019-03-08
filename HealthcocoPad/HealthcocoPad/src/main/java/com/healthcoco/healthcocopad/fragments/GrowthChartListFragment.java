@@ -15,8 +15,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
@@ -55,7 +55,6 @@ public class GrowthChartListFragment extends HealthCocoFragment implements View.
     private User user;
     private RecyclerView rvGrowthChartList;
     private ProgressBar progressLoading;
-    private LinearLayout containerNoDataFound;
     private SwipeRefreshLayout swipeRefreshLayout;
     private HealthcocoRecyclerViewAdapter adapter;
     private boolean isInitialLoading;
@@ -66,6 +65,7 @@ public class GrowthChartListFragment extends HealthCocoFragment implements View.
     public static final int MAX_SIZE = 10;
     private int PAGE_NUMBER = 0;
     private GrowthChartResponse growthChartResponse;
+    private TextView tvNoGrowthChartFound;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -96,7 +96,7 @@ public class GrowthChartListFragment extends HealthCocoFragment implements View.
 //        rvGrowthChartList.addItemDecoration(new VerticalRecyclerViewItemDecoration(spacingInPixelsVerticalBlogs));
         progressLoading = (ProgressBar) view.findViewById(R.id.progress_loading);
         btAddGrowthChart = (FontAwesomeButton) view.findViewById(R.id.bt_add);
-//        containerNoDataFound = initNoDataFoundView(NoDataFoundType.NO_GROWTH_CHART);
+        tvNoGrowthChartFound = (TextView) view.findViewById(R.id.tv_no_growth_chart_found);
         progressLoading = (ProgressBar) view.findViewById(R.id.progress_loading);
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
     }
@@ -165,10 +165,10 @@ public class GrowthChartListFragment extends HealthCocoFragment implements View.
         if (!Util.isNullOrEmptyList(list)) {
             Collections.sort(list, ComparatorUtil.growthChartDateComparator);
             rvGrowthChartList.setVisibility(View.VISIBLE);
-            containerNoDataFound.setVisibility(View.GONE);
+            tvNoGrowthChartFound.setVisibility(View.GONE);
         } else {
             rvGrowthChartList.setVisibility(View.GONE);
-            containerNoDataFound.setVisibility(View.VISIBLE);
+            tvNoGrowthChartFound.setVisibility(View.VISIBLE);
         }
         progressLoading.setVisibility(View.GONE);
         adapter.setListData((ArrayList<Object>) (Object) list);

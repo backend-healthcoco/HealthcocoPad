@@ -48,7 +48,7 @@
         android:textSize="@dimen/text_size_no_results"
         android:textStyle="bold" />
 
-    <!--<com.healthcoco.healthcocoplus.views.FontAwesomeButton-->
+    <!--<com.healthcoco.healthcocopad.views.FontAwesomeButton-->
     <!--android:id="@+id/bt_add"-->
     <!--style="?android:attr/borderlessButtonStyle"-->
     <!--android:layout_width="match_parent"-->

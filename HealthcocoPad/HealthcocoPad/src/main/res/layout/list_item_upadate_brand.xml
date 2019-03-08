@@ -14,7 +14,7 @@
         android:textColor="@color/grey_dark_text"
         android:textSize="18sp" />
 
-    <com.healthcoco.healthcocoplus.views.ExpandableGridView
+    <com.healthcoco.healthcocopad.views.ExpandableGridView
         android:id="@+id/rv_brands_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -25,5 +25,5 @@
         android:padding="@dimen/diagram_list_grid_item_spacing"
         android:scrollbarStyle="outsideOverlay">
 
-    </com.healthcoco.healthcocoplus.views.ExpandableGridView>
+    </com.healthcoco.healthcocopad.views.ExpandableGridView>
 </LinearLayout>

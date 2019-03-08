@@ -1,11 +1,13 @@
 package com.healthcoco.healthcocopad.bean.server;
 
+import com.orm.SugarRecord;
+
 import org.parceler.Parcel;
 
 import java.util.ArrayList;
 
 @Parcel
-public class VaccineCustomResponse {
+public class VaccineCustomResponse extends SugarRecord {
     private String duration;
     private Long dueDate;
     private ArrayList<VaccineResponse> vaccineResponse;

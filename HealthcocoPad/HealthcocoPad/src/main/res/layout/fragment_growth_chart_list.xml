@@ -35,11 +35,11 @@
             </LinearLayout>
 
             <TextView
-                android:id="@+id/tv_no_receipts_found"
+                android:id="@+id/tv_no_growth_chart_found"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="@string/no_receipts_found"
+                android:text="@string/no_growth_chart"
                 android:textSize="@dimen/text_size_no_results"
                 android:textStyle="bold"
                 android:visibility="visible" />

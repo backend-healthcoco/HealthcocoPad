@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
@@ -49,7 +50,6 @@ public class BabyAchievementsListFragment extends HealthCocoFragment implements
     private User user;
     private RecyclerView rvBabyAchievementsList;
     private ProgressBar progressLoading;
-    private LinearLayout containerNoDataFound;
     private SwipeRefreshLayout swipeRefreshLayout;
     private HealthcocoRecyclerViewAdapter adapter;
     private boolean isInitialLoading;
@@ -58,6 +58,7 @@ public class BabyAchievementsListFragment extends HealthCocoFragment implements
     private LinkedHashMap<String, BabyAchievementsResponse> babyAchievementsResponseLinkedHashMap = new LinkedHashMap<>();
     public static final int MAX_SIZE = 10;
     private int PAGE_NUMBER = 0;
+    private TextView tvNoBabyAchievementFound;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -87,7 +88,7 @@ public class BabyAchievementsListFragment extends HealthCocoFragment implements
         rvBabyAchievementsList.setLayoutManager(new LinearLayoutManager(mActivity, LinearLayoutManager.VERTICAL, false));
 //        rvBabyAchievementsList.addItemDecoration(new VerticalRecyclerViewItemDecoration(spacingInPixelsVerticalBlogs));
         progressLoading = (ProgressBar) view.findViewById(R.id.progress_loading);
-//        containerNoDataFound = initNoDataFoundView(NoDataFoundType.NO_BABY_ACHIEVEMENTS);
+        tvNoBabyAchievementFound = (TextView) view.findViewById(R.id.tv_no_baby_achievements_found);
         progressLoading = (ProgressBar) view.findViewById(R.id.progress_loading);
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
     }
@@ -146,10 +147,10 @@ public class BabyAchievementsListFragment extends HealthCocoFragment implements
         if (!Util.isNullOrEmptyList(list)) {
 //            Collections.sort(list, ComparatorUtil.babyAchievementsDateComparator);
             rvBabyAchievementsList.setVisibility(View.VISIBLE);
-            containerNoDataFound.setVisibility(View.GONE);
+            tvNoBabyAchievementFound.setVisibility(View.GONE);
         } else {
             rvBabyAchievementsList.setVisibility(View.GONE);
-            containerNoDataFound.setVisibility(View.VISIBLE);
+            tvNoBabyAchievementFound.setVisibility(View.VISIBLE);
         }
         progressLoading.setVisibility(View.GONE);
         adapter.setListData((ArrayList<Object>) (Object) list);

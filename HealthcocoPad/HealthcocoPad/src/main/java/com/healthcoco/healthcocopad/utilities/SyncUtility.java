@@ -173,7 +173,11 @@ public class SyncUtility implements Response.Listener<VolleyResponseBean>, GsonR
                 case GET_TEMPLATES_LIST:
                     new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_TEMPLATES, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
                     break;
-
+                case GET_VACCINATION_BRAND:
+                    if (!Util.isNullOrEmptyList(response.getDataList())) {
+                        new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_VACCINATION_BRAND, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                    }
+                    break;
                 default:
                     break;
             }
@@ -288,6 +292,10 @@ public class SyncUtility implements Response.Listener<VolleyResponseBean>, GsonR
                             addSuggestionsList(WebServiceType.GET_DIAGNOSIS_SUGGESTIONS, LocalTabelType.DIAGNOSIS_SUGGESTIONS,
                                     response.getDataList(), null, null);
                 break;
+            case ADD_VACCINATION_BRAND:
+                if (!Util.isNullOrEmptyList(response.getDataList()))
+                    LocalDataServiceImpl.getInstance(mApp).addVaccinationBrandsList((ArrayList<VaccineBrandResponse>) (ArrayList<?>) response.getDataList());
+                break;
 //            case ADD_DISEASE_LIST:
 //                if (!Util.isNullOrEmptyList(response.getDataList()))
 //                    LocalDataServiceImpl.getInstance(mApp).addDiseaseList((ArrayList<Disease>) (ArrayList<?>) response.getDataList());
@@ -307,6 +315,7 @@ public class SyncUtility implements Response.Listener<VolleyResponseBean>, GsonR
     public void onPostExecute(VolleyResponseBean aVoid) {
 
     }
+
     public void getVaccinesBrandsList() {
         WebDataServiceImpl.getInstance(mApp).getVaccinationBrandList(VaccineBrandResponse.class, WebServiceType.GET_VACCINATION_BRAND, this, this);
     }

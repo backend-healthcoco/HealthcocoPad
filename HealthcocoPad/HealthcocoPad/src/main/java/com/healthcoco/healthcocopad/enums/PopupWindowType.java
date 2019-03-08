@@ -86,7 +86,7 @@ public enum PopupWindowType {
             add(VaccineStatus.GIVEN);
             add(VaccineStatus.PLANNED);
         }
-    }),
+    }),BRAND_TYPE,
     ACHIEVEMENT_DURATION(new ArrayList<Object>() {{
         add("DAY");
         add("DAY(S)");

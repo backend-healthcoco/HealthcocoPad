@@ -14,7 +14,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -60,7 +59,6 @@ public class VaccinationListFragment extends HealthCocoFragment implements View.
     private RecyclerView rvVaccineList;
     private ProgressBar progressLoading;
     private FontAwesomeButton btAddVaccine;
-    private LinearLayout containerNoDataFound;
     private SwipeRefreshLayout swipeRefreshLayout;
     private HealthcocoRecyclerViewAdapter adapter;
     private boolean isInitialLoading;
@@ -70,6 +68,7 @@ public class VaccinationListFragment extends HealthCocoFragment implements View.
     private FloatingActionButton fbFilterVaccine;
     private static LinkedHashMap<String, VaccineDuration> statusLinkedHashMap = new LinkedHashMap<>();
     private boolean forAll = true;
+    private TextView tvNoVaccineFound;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -99,6 +98,7 @@ public class VaccinationListFragment extends HealthCocoFragment implements View.
         btAddVaccine = (FontAwesomeButton) view.findViewById(R.id.bt_add);
         fbFilterVaccine = (FloatingActionButton) view.findViewById(R.id.fb_filter_vaccine);
         progressLoading = (ProgressBar) view.findViewById(R.id.progress_loading);
+        tvNoVaccineFound = (TextView) view.findViewById(R.id.tv_no_vaccine_found);
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
         initBottomSheetDialogWindows(fbFilterVaccine, PopupWindowType.VACCINE_FILTER, new ArrayList<Object>(PopupWindowType.VACCINE_FILTER.getList()), R.layout.layout_bottom_dialog_item_with_checkbox, true, this);
     }
@@ -158,10 +158,10 @@ public class VaccinationListFragment extends HealthCocoFragment implements View.
         if (!Util.isNullOrEmptyList(list)) {
             Collections.sort(list, ComparatorUtil.vaccineDateComparator);
             rvVaccineList.setVisibility(View.VISIBLE);
-            containerNoDataFound.setVisibility(View.GONE);
+            tvNoVaccineFound.setVisibility(View.GONE);
         } else {
             rvVaccineList.setVisibility(View.GONE);
-            containerNoDataFound.setVisibility(View.VISIBLE);
+            tvNoVaccineFound.setVisibility(View.VISIBLE);
         }
         progressLoading.setVisibility(View.GONE);
         adapter.setListData((ArrayList<Object>) (Object) list);
@@ -361,5 +361,9 @@ public class VaccinationListFragment extends HealthCocoFragment implements View.
     @Override
     public User getUser() {
         return user;
+    }
+
+    public void initBottomPopupSheet() {
+        initBottomSheetDialogWindows(fbFilterVaccine, PopupWindowType.VACCINE_FILTER, new ArrayList<Object>(PopupWindowType.VACCINE_FILTER.getList()), R.layout.layout_bottom_dialog_item_with_checkbox, true, this);
     }
 }

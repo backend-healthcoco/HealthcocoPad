@@ -28,6 +28,7 @@ public class VaccineResponse extends SugarRecord {
     protected String vaccineBrandJsonString;
     @Ignore
     private DOB age;
+    protected String ageJsonString;
     private String patientId;
     private String doctorId;
     private String locationId;
@@ -221,5 +222,13 @@ public class VaccineResponse extends SugarRecord {
 
     public void setSelected(boolean selected) {
         this.selected = selected;
+    }
+
+    public String getAgeJsonString() {
+        return ageJsonString;
+    }
+
+    public void setAgeJsonString(String ageJsonString) {
+        this.ageJsonString = ageJsonString;
     }
 }

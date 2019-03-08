@@ -16,6 +16,7 @@ import com.healthcoco.healthcocopad.bean.server.GrowthChartResponse;
 import com.healthcoco.healthcocopad.bean.server.RegisteredDoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.VaccineBrandAssociationRequest;
 import com.healthcoco.healthcocopad.bean.server.VaccineBrandResponse;
+import com.healthcoco.healthcocopad.bean.server.VaccineCustomResponse;
 import com.healthcoco.healthcocopad.bean.server.VaccineResponse;
 import com.healthcoco.healthcocopad.bean.server.VaccineSolarResponse;
 import com.healthcoco.healthcocopad.enums.AdapterType;
@@ -213,7 +214,7 @@ public class HealthcocoRecyclerViewAdapter extends RecyclerView.Adapter<Healthco
                 }
                 break;
             case VACCINATION:
-                if (holder instanceof VaccinationListViewHolder && object instanceof VaccineResponse) {
+                if (holder instanceof VaccinationListViewHolder && object instanceof VaccineCustomResponse) {
                     VaccinationListViewHolder vaccinationListViewHolder = ((VaccinationListViewHolder) holder);
                     vaccinationListViewHolder.applyData(object);
                 }

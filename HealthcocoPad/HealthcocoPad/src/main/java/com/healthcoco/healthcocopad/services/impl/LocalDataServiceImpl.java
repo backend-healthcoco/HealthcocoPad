@@ -5872,7 +5872,7 @@ public class LocalDataServiceImpl {
             List<VaccineResponse> list = SugarRecord.findWithQuery(VaccineResponse.class, whereCondition);
             if (!Util.isNullOrEmptyList(list))
                 for (VaccineResponse vaccineResponse : list) {
-                    vaccineResponse.setAge((DOB) getObject(DOB.class, LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, vaccineResponse.getUniqueId()));
+                    vaccineResponse.setAge((DOB) getObjectFromJson(DOB.class, vaccineResponse.getAgeJsonString()));
                     vaccineResponse.setVaccineBrand((VaccineBrand) getObjectFromJson(VaccineBrand.class, vaccineResponse.getVaccineBrandJsonString()));
                 }
 
@@ -5895,12 +5895,7 @@ public class LocalDataServiceImpl {
 
     public void addVaccineResponse(VaccineResponse vaccineResponse) {
         vaccineResponse.setVaccineBrandJsonString(getJsonFromObject(vaccineResponse.getVaccineBrand()));
-        // setting DOB
-        if (vaccineResponse.getAge() != null) {
-            vaccineResponse.getAge().setForeignUniqueId(vaccineResponse.getUniqueId());
-            deleteDOBRecordIfAlreadyPresent(LocalDatabaseUtils.KEY_FOREIGN_UNIQUE_ID, vaccineResponse.getUniqueId());
-            vaccineResponse.getAge().save();
-        }
+        vaccineResponse.setAgeJsonString(getJsonFromObject(vaccineResponse.getAge()));
         vaccineResponse.save();
     }
 

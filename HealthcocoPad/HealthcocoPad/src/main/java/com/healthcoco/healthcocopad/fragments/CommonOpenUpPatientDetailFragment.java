@@ -62,6 +62,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import static com.healthcoco.healthcocopad.R.id.container_middle_action;
 import static com.healthcoco.healthcocopad.R.id.container_right_action;
 
 /**
@@ -180,8 +181,6 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
         patientProfileLayout = (LinearLayout) view.findViewById(R.id.patient_profile_layout);
         doctorNameLayout = (LinearLayout) view.findViewById(R.id.layout_doctor_name);
         ((CommonOpenUpActivity) mActivity).showRightAction(false);
-
-
     }
 
     @Override
@@ -189,6 +188,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
         mViewPager.addOnPageChangeListener(this);
         tabhost.setOnTabChangedListener(this);
         ((CommonOpenUpActivity) mActivity).initActionbarRightAction(this);
+        ((CommonOpenUpActivity) mActivity).initActionbarMiddleAction(this);
     }
 
     private void initTabs() {
@@ -489,18 +489,21 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
             setPatientDetailHeaderVisibility(patientDetailTabType.getPatientDetailHeaderVisibility());
             switch (patientDetailTabType) {
                 case PATIENT_DETAIL_PROFILE:
+                    ((CommonOpenUpActivity) mActivity).showMiddleAction(false);
                     if (!isProfileTabClicked) {
                         profileFragment.refreshData();
                         isProfileTabClicked = true;
                     }
                     break;
                 case PATIENT_DETAIL_VISIT:
+                    ((CommonOpenUpActivity) mActivity).showMiddleAction(false);
                     if (!isVisitsTabClicked) {
                         visitsFragment.refreshData(PatientDetailTabType.PATIENT_DETAIL_VISIT, clinicDoctorProfileList);
                         isVisitsTabClicked = true;
                     }
                     break;
                 case PATIENT_DETAIL_APPOINTMENT:
+                    ((CommonOpenUpActivity) mActivity).showMiddleAction(false);
                     doctorNameLayout.setVisibility(View.INVISIBLE);
                     if (!isAppointmentTabClicked) {
                         appointmentFragment.refreshData();
@@ -508,18 +511,21 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                     }
                     break;
                 case PATIENT_DETAIL_CLINICAL_NOTES:
+                    ((CommonOpenUpActivity) mActivity).showMiddleAction(false);
                     if (!isClinicalNotesTabClicked) {
                         clinicalNotesDetailFragment.refreshData(PatientDetailTabType.PATIENT_DETAIL_CLINICAL_NOTES, clinicDoctorProfileList);
                         isClinicalNotesTabClicked = true;
                     }
                     break;
                 case PATIENT_DETAIL_PRESCRIPTION:
+                    ((CommonOpenUpActivity) mActivity).showMiddleAction(false);
                     if (!isPrescriptionTabClicked) {
                         prescriptionDetailFragment.refreshData(PatientDetailTabType.PATIENT_DETAIL_PRESCRIPTION, clinicDoctorProfileList);
                         isPrescriptionTabClicked = true;
                     }
                     break;
                 case PATIENT_DETAIL_REPORTS:
+                    ((CommonOpenUpActivity) mActivity).showMiddleAction(false);
                     doctorNameLayout.setVisibility(View.INVISIBLE);
                     if (!isReportsTabClicked) {
                         reportsDetailFragment.refreshData(PatientDetailTabType.PATIENT_DETAIL_REPORTS, clinicDoctorProfileList);
@@ -527,12 +533,14 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                     }
                     break;
                 case PATIENT_DETAIL_TREATMENT:
+                    ((CommonOpenUpActivity) mActivity).showMiddleAction(false);
                     if (!isTreatmentTabClicked) {
                         treatmentDetailFragment.refreshData(PatientDetailTabType.PATIENT_DETAIL_TREATMENT, clinicDoctorProfileList);
                         isTreatmentTabClicked = true;
                     }
                     break;
                 case PATIENT_DETAIL_INVOICE:
+                    ((CommonOpenUpActivity) mActivity).showMiddleAction(false);
                     tvDueAmount.setVisibility(View.VISIBLE);
                     doctorNameLayout.setVisibility(View.INVISIBLE);
                     if (!isInvoiceTabClicked) {
@@ -541,30 +549,37 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                     }
                     break;
                 case PATIENT_DETAIL_RECEIPT:
+                    ((CommonOpenUpActivity) mActivity).showMiddleAction(false);
                     tvDueAmount.setVisibility(View.VISIBLE);
                     doctorNameLayout.setVisibility(View.INVISIBLE);
                     if (!isReceiptTabClicked) {
                         receiptDetailFragment.refreshData(PatientDetailTabType.PATIENT_DETAIL_RECEIPT);
                         isReceiptTabClicked = true;
                     }
-//                case PATIENT_DETAIL_VACCINATION:
-//                    if (!isVaccinationClickedOnce) {
-//                        vaccinationListFragment.getListFromLocal(true);
-//                        isVaccinationClickedOnce = true;
-//                    }
-//                    break;
-//                case PATIENT_DETAIL_GROWTH_CHART:
-//                    if (!isGrowthChartClickedOnce) {
-//                        growthChartListFragment.getListFromLocal(true);
-//                        isGrowthChartClickedOnce = true;
-//                    }
-//                    break;
-//                case PATIENT_DETAIL_BABY_ACHIEVEMENTS:
-//                    if (!isBabyAchievementsClickedOnce) {
-//                        babyAchievementsListFragment.getListFromLocal(true);
-//                        isBabyAchievementsClickedOnce = true;
-//                    }
-//                    break;
+                case PATIENT_DETAIL_VACCINATION:
+                    ((CommonOpenUpActivity) mActivity).showMiddleAction(true);
+                    doctorNameLayout.setVisibility(View.INVISIBLE);
+                    if (!isVaccinationClickedOnce) {
+                        vaccinationListFragment.getListFromLocal(true);
+                        isVaccinationClickedOnce = true;
+                    }
+                    break;
+                case PATIENT_DETAIL_GROWTH_CHART:
+                    ((CommonOpenUpActivity) mActivity).showMiddleAction(false);
+                    doctorNameLayout.setVisibility(View.INVISIBLE);
+                    if (!isGrowthChartClickedOnce) {
+                        growthChartListFragment.getListFromLocal(true);
+                        isGrowthChartClickedOnce = true;
+                    }
+                    break;
+                case PATIENT_DETAIL_BABY_ACHIEVEMENTS:
+                    ((CommonOpenUpActivity) mActivity).showMiddleAction(false);
+                    doctorNameLayout.setVisibility(View.INVISIBLE);
+                    if (!isBabyAchievementsClickedOnce) {
+                        babyAchievementsListFragment.getListFromLocal(true);
+                        isBabyAchievementsClickedOnce = true;
+                    }
+                    break;
             }
         }
         ((CommonOpenUpActivity) mActivity).initActionbarTitle(patientDetailTabType.getActionBarTitleId());
@@ -646,6 +661,9 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
         switch (v.getId()) {
             case container_right_action:
                 openGlobalRecordAccessDialogFragment();
+                break;
+            case container_middle_action:
+                vaccinationListFragment.initBottomPopupSheet();
                 break;
         }
     }

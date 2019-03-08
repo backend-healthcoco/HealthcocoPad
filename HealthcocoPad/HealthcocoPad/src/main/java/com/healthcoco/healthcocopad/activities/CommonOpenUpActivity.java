@@ -26,18 +26,18 @@ import com.healthcoco.healthcocopad.enums.ActionbarType;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.fragments.AboutDoctorFragment;
 import com.healthcoco.healthcocopad.fragments.AboutUsFragment;
-import com.healthcoco.healthcocopad.fragments.AddEditClinicImageFragment;
 import com.healthcoco.healthcocopad.fragments.AddClinicalNotesVisitNormalFragment;
+import com.healthcoco.healthcocopad.fragments.AddEditClinicImageFragment;
 import com.healthcoco.healthcocopad.fragments.AddEditNormalVisitPrescriptionFragment;
 import com.healthcoco.healthcocopad.fragments.AddEditNormalVisitsFragment;
+import com.healthcoco.healthcocopad.fragments.AddGrowthChartFragment;
 import com.healthcoco.healthcocopad.fragments.AddInvoiceFragment;
 import com.healthcoco.healthcocopad.fragments.AddNewTemplateFragment;
 import com.healthcoco.healthcocopad.fragments.AddNewTreatmentFragment;
 import com.healthcoco.healthcocopad.fragments.AddReceiptFragment;
-import com.healthcoco.healthcocopad.fragments.AppointmentFeedbackFragment;
+import com.healthcoco.healthcocopad.fragments.AddVaccinationFragment;
 import com.healthcoco.healthcocopad.fragments.AppointmentTabsFragment;
 import com.healthcoco.healthcocopad.fragments.BlogDetailFragment;
-import com.healthcoco.healthcocopad.fragments.CommonHealthFeedsFragment;
 import com.healthcoco.healthcocopad.fragments.CommonOpenUpPatientDetailFragment;
 import com.healthcoco.healthcocopad.fragments.CommonUiPermissionsFragment;
 import com.healthcoco.healthcocopad.fragments.ContactsListFragment;
@@ -59,9 +59,13 @@ import com.healthcoco.healthcocopad.fragments.SettingKioskFragment;
 import com.healthcoco.healthcocopad.fragments.SettingPrintSetupFragment;
 import com.healthcoco.healthcocopad.fragments.SettingUIPermissionsFragment;
 import com.healthcoco.healthcocopad.fragments.SettingsNameHideActivateFragment;
-import com.healthcoco.healthcocopad.fragments.SyncFragment;
 import com.healthcoco.healthcocopad.fragments.SettingsNameHideActivateTabFragment;
+import com.healthcoco.healthcocopad.fragments.SyncFragment;
 import com.healthcoco.healthcocopad.fragments.TemplateListFragment;
+import com.healthcoco.healthcocopad.fragments.UpdateBabyAchievementsFragment;
+import com.healthcoco.healthcocopad.fragments.UpdateBrandsNextFragment;
+import com.healthcoco.healthcocopad.fragments.UpdateVaccinationCommonFragment;
+import com.healthcoco.healthcocopad.fragments.UpdateVaccineBrandGroupFragment;
 import com.healthcoco.healthcocopad.fragments.VideoFragment;
 import com.healthcoco.healthcocopad.fragments.WebViewFragments;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
@@ -202,7 +206,7 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
                 break;
             case PATIENT_DETAIL:
                 hideSoftKeyboardOnStartUp();
-                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.WITH_GLOBAL_ACCESS_BUTTON, R.string.patient_profile, new CommonOpenUpPatientDetailFragment());
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.WITH_FILTER, ActionbarLeftRightActionTypeDrawables.WITH_GLOBAL_ACCESS_BUTTON, R.string.patient_profile, new CommonOpenUpPatientDetailFragment());
                 break;
             case HISTORY_DISEASE_LIST:
                 openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_CROSS, ActionbarLeftRightActionTypeDrawables.WITH_SAVE, R.string.past_history, new DiseaseListFragment());
@@ -274,6 +278,24 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
             case CHANGE_PIN:
                 openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_CROSS, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, R.string.change_pin, new ChangePinFragment());
                 break;
+            case ADD_VACCINATION:
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.WITH_SAVE, fragmentType.getTitleId(), new AddVaccinationFragment());
+                break;
+            case UPDATE_VACCINE:
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, fragmentType.getTitleId(), new UpdateVaccinationCommonFragment());
+                break;
+            case UPDATE_VACCINE_BRAND_GROUP:
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, fragmentType.getTitleId(), new UpdateVaccineBrandGroupFragment());
+                break;
+            case UPDATE_BRAND:
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, fragmentType.getTitleId(), new UpdateBrandsNextFragment());
+                break;
+            case ADD_GROWTH_CHART:
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.WITH_SAVE, fragmentType.getTitleId(), new AddGrowthChartFragment());
+                break;
+            case UPDATE_BABY_ACHIEVEMENTS:
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.WITH_SAVE, fragmentType.getTitleId(), new UpdateBabyAchievementsFragment());
+                break;
         }
     }
 
@@ -296,13 +318,13 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
     }
 
     private void openFragment(ActionbarType actionbarType, ActionbarLeftRightActionTypeDrawables leftAction, ActionbarLeftRightActionTypeDrawables rightAction, int actionBarTitle, HealthCocoFragment fragment) {
-        initActionBar(actionbarType, actionBarTitle, leftAction, rightAction);
+        initActionBar(actionbarType, actionBarTitle, leftAction, null, rightAction);
         transaction.add(R.id.layout_fragment_common_open_up, fragment, fragment.getClass().getSimpleName());
         transaction.commit();
     }
 
-    private void openFragment(ActionbarType actionbarType, CommonOpenUpFragmentType fragmentType, ActionbarLeftRightActionTypeDrawables leftAction, ActionbarLeftRightActionTypeDrawables rightAction, HealthCocoFragment fragment) {
-        initActionBar(actionbarType, fragmentType.getTitleId(), leftAction, rightAction);
+    private void openFragment(ActionbarType actionbarType, ActionbarLeftRightActionTypeDrawables leftAction, ActionbarLeftRightActionTypeDrawables middleAction, ActionbarLeftRightActionTypeDrawables rightAction, int actionBarTitle, HealthCocoFragment fragment) {
+        initActionBar(actionbarType, actionBarTitle, leftAction, middleAction, rightAction);
         transaction.add(R.id.layout_fragment_common_open_up, fragment, fragment.getClass().getSimpleName());
         transaction.commit();
     }
@@ -320,7 +342,7 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
         if (tvTitle != null) tvTitle.setText(titleId);
     }
 
-    public void initActionBar(ActionbarType actionbarType, int title, ActionbarLeftRightActionTypeDrawables leftAction, ActionbarLeftRightActionTypeDrawables rightAction) {
+    public void initActionBar(ActionbarType actionbarType, int title, ActionbarLeftRightActionTypeDrawables leftAction, ActionbarLeftRightActionTypeDrawables middleAction, ActionbarLeftRightActionTypeDrawables rightAction) {
         if (actionbarType == ActionbarType.HIDDEN) {
             hideActionBar();
         } else {
@@ -328,7 +350,22 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
             actionbar.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
             toolbar.setContentInsetsAbsolute(0, 0);
             toolbar.addView(actionbar);
-            LinearLayout containerLeftAction = (LinearLayout) actionbar.findViewById(R.id.container_left_action);
+            initLeftActionView(leftAction, actionbar);
+            initRightActionView(rightAction, actionbar);
+            initMiddleActionView(middleAction, actionbar);
+            TextView tvTitle = (TextView) toolbar.findViewById(R.id.tv_title);
+            if (tvTitle != null) {
+                if (title > 0)
+                    tvTitle.setText(title);
+                else tvTitle.setText("");
+            }
+        }
+        setupUI(toolbar);
+    }
+
+    public void initLeftActionView(ActionbarLeftRightActionTypeDrawables leftAction, View actionbar) {
+        LinearLayout containerLeftAction = (LinearLayout) actionbar.findViewById(R.id.container_left_action);
+        if (containerLeftAction != null) {
             if (leftAction != null && leftAction != ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION) {
                 containerLeftAction.setVisibility(View.VISIBLE);
                 View leftView = getLayoutInflater().inflate(leftAction.getLayoutId(), null);
@@ -350,8 +387,12 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
                 });
             } else
                 containerLeftAction.setVisibility(View.GONE);
+        }
+    }
 
-            LinearLayout containerRightAction = (LinearLayout) actionbar.findViewById(R.id.container_right_action);
+    public void initRightActionView(ActionbarLeftRightActionTypeDrawables rightAction, View actionbar) {
+        LinearLayout containerRightAction = (LinearLayout) actionbar.findViewById(R.id.container_right_action);
+        if (containerRightAction != null) {
             if (rightAction != null && rightAction != ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION) {
                 containerRightAction.setVisibility(View.VISIBLE);
                 View rightView = getLayoutInflater().inflate(rightAction.getLayoutId(), null);
@@ -368,12 +409,29 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
             } else {
                 containerRightAction.setVisibility(View.GONE);
             }
-            if (title > 0) {
-                TextView tvTitle = (TextView) toolbar.findViewById(R.id.tv_title);
-                tvTitle.setText(title);
+        }
+    }
+
+    public void initMiddleActionView(ActionbarLeftRightActionTypeDrawables middleAction, View actionbar) {
+        LinearLayout containerMiddleAction = (LinearLayout) actionbar.findViewById(R.id.container_middle_action);
+        if (containerMiddleAction != null) {
+            if (middleAction != null && middleAction != ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION) {
+                containerMiddleAction.setVisibility(View.VISIBLE);
+                View rightView = getLayoutInflater().inflate(middleAction.getLayoutId(), null);
+                if (rightView != null) {
+                    if (middleAction.isDrawableBackground()) {
+                        ImageButton imageButton = (ImageButton) rightView;
+                        imageButton.setImageResource(middleAction.getDrawableTitleId());
+                    } else {
+                        TextView button = (TextView) rightView;
+                        button.setText(middleAction.getDrawableTitleId());
+                    }
+                    containerMiddleAction.addView(rightView);
+                }
+            } else {
+                containerMiddleAction.setVisibility(View.GONE);
             }
         }
-        setupUI(toolbar);
     }
 
     public void setupUI(final View view) {
@@ -508,6 +566,22 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
         }
     }
 
+    public LinearLayout initActionbarMiddleAction(View.OnClickListener listener) {
+        LinearLayout middleAction = (LinearLayout) findViewById(R.id.container_middle_action);
+        middleAction.setOnClickListener(listener);
+        return middleAction;
+    }
+
+    public void showMiddleAction(boolean show) {
+        LinearLayout middleAction = (LinearLayout) findViewById(R.id.container_middle_action);
+        if (middleAction != null) {
+            if (!show)
+                middleAction.setVisibility(View.GONE);
+            else
+                middleAction.setVisibility(View.VISIBLE);
+        }
+    }
+
     public void enableRightActionButton(boolean isEnabled) {
         LinearLayout rightAction = (LinearLayout) findViewById(R.id.container_right_action);
         if (rightAction != null) {
@@ -515,28 +589,6 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
 //            Button rightActionButton = (Button) rightAction.getChildAt(0);
 //            if (rightActionButton != null)
 //                rightActionButton.setEnabled(isEnabled);
-        }
-    }
-
-    public void initRightActionView(ActionbarLeftRightActionTypeDrawables rightAction, View actionbar) {
-        LinearLayout containerRightAction = (LinearLayout) actionbar.findViewById(R.id.container_right_action);
-        if (containerRightAction != null) {
-            if (rightAction != null && rightAction != ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION) {
-                containerRightAction.setVisibility(View.VISIBLE);
-                View rightView = getLayoutInflater().inflate(rightAction.getLayoutId(), null);
-                if (rightView != null) {
-                    if (rightAction.isDrawableBackground()) {
-                        ImageButton imageButton = (ImageButton) rightView;
-                        imageButton.setImageResource(rightAction.getDrawableTitleId());
-                    } else {
-                        TextView button = (TextView) rightView;
-                        button.setText(rightAction.getDrawableTitleId());
-                    }
-                    containerRightAction.addView(rightView);
-                }
-            } else {
-                containerRightAction.setVisibility(View.GONE);
-            }
         }
     }
 

@@ -79,7 +79,7 @@
                         android:textColor="@color/grey_darker"
                         android:textSize="@dimen/text_size_growth_chart_parameters_label" />
 
-                    <com.healthcoco.healthcocoplus.views.TextViewFontAwesome
+                    <com.healthcoco.healthcocopad.views.TextViewFontAwesome
                         android:id="@+id/tv_weight_kilograms"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -106,7 +106,7 @@
                         android:textColor="@color/grey_darker"
                         android:textSize="@dimen/text_size_growth_chart_parameters_label" />
 
-                    <com.healthcoco.healthcocoplus.views.TextViewFontAwesome
+                    <com.healthcoco.healthcocopad.views.TextViewFontAwesome
                         android:id="@+id/tv_height_cm"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -139,7 +139,7 @@
                         android:textColor="@color/grey_darker"
                         android:textSize="@dimen/text_size_growth_chart_parameters_label" />
 
-                    <com.healthcoco.healthcocoplus.views.TextViewFontAwesome
+                    <com.healthcoco.healthcocopad.views.TextViewFontAwesome
                         android:id="@+id/tv_temp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -166,7 +166,7 @@
                         android:textColor="@color/grey_darker"
                         android:textSize="@dimen/text_size_growth_chart_parameters_label" />
 
-                    <com.healthcoco.healthcocoplus.views.TextViewFontAwesome
+                    <com.healthcoco.healthcocopad.views.TextViewFontAwesome
                         android:id="@+id/tv_head_circumference"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -200,7 +200,7 @@
                         android:textColor="@color/grey_darker"
                         android:textSize="@dimen/text_size_growth_chart_parameters_label" />
 
-                    <com.healthcoco.healthcocoplus.views.TextViewFontAwesome
+                    <com.healthcoco.healthcocopad.views.TextViewFontAwesome
                         android:id="@+id/tv_bmi"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -227,7 +227,7 @@
                         android:textColor="@color/grey_darker"
                         android:textSize="@dimen/text_size_growth_chart_parameters_label" />
 
-                    <com.healthcoco.healthcocoplus.views.TextViewFontAwesome
+                    <com.healthcoco.healthcocopad.views.TextViewFontAwesome
                         android:id="@+id/tv_bp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -262,7 +262,7 @@
                         android:textColor="@color/grey_darker"
                         android:textSize="@dimen/text_size_growth_chart_parameters_label" />
 
-                    <com.healthcoco.healthcocoplus.views.TextViewFontAwesome
+                    <com.healthcoco.healthcocopad.views.TextViewFontAwesome
                         android:id="@+id/tv_blood_sugar_f_mg_dl"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -289,7 +289,7 @@
                         android:textColor="@color/grey_darker"
                         android:textSize="@dimen/text_size_growth_chart_parameters_label" />
 
-                    <com.healthcoco.healthcocoplus.views.TextViewFontAwesome
+                    <com.healthcoco.healthcocopad.views.TextViewFontAwesome
                         android:id="@+id/tv_blood_sugar_pp_mg_dl"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -325,7 +325,7 @@
                         android:textColor="@color/grey_darker"
                         android:textSize="@dimen/text_size_growth_chart_parameters_label" />
 
-                    <com.healthcoco.healthcocoplus.views.TextViewFontAwesome
+                    <com.healthcoco.healthcocopad.views.TextViewFontAwesome
                         android:id="@+id/tv_bmd"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -369,7 +369,7 @@
                     android:gravity="center"
                     android:padding="5dp">
 
-                    <com.healthcoco.healthcocoplus.custom.AutoFitTextView
+                    <com.healthcoco.healthcocopad.custom.AutoFitTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="5dp"
@@ -390,7 +390,7 @@
                     android:gravity="center"
                     android:padding="5dp">
 
-                    <com.healthcoco.healthcocoplus.custom.AutoFitTextView
+                    <com.healthcoco.healthcocopad.custom.AutoFitTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="5dp"
