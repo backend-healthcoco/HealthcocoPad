@@ -54,26 +54,26 @@
                 android:visibility="gone" />
 
             <android.support.design.widget.FloatingActionButton
-                android:id="@+id/fb_filter_vaccine"
+                android:id="@+id/bt_add"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|bottom"
                 android:layout_margin="20dp"
                 android:padding="10dp"
-                android:src="@drawable/img_filter_contact_normal" />
+                android:src="@drawable/actionbar_add_me" />
         </FrameLayout>
     </com.healthcoco.healthcocopad.views.CustomSwipeRefreshLayout>
 
-    <com.healthcoco.healthcocopad.views.FontAwesomeButton
-        android:id="@+id/bt_add"
-        style="?android:attr/borderlessButtonStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/selector_btn_blue_grey"
-        android:padding="10dp"
-        android:text="@string/icon_add_vaccine"
-        android:textAllCaps="false"
-        android:textColor="@drawable/text_selector_white_translucent"
-        android:textSize="16sp" />
+    <!--<com.healthcoco.healthcocopad.views.FontAwesomeButton-->
+    <!--android:id="@+id/bt_add"-->
+    <!--style="?android:attr/borderlessButtonStyle"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:background="@drawable/selector_btn_blue_grey"-->
+    <!--android:padding="10dp"-->
+    <!--android:text="@string/icon_add_vaccine"-->
+    <!--android:textAllCaps="false"-->
+    <!--android:textColor="@drawable/text_selector_white_translucent"-->
+    <!--android:textSize="16sp" />-->
 
 </LinearLayout>

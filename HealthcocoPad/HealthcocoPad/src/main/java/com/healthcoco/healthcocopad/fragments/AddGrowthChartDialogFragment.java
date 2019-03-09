@@ -1,6 +1,5 @@
 package com.healthcoco.healthcocopad.fragments;
 
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -8,9 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
-import com.healthcoco.healthcocopad.HealthCocoFragment;
+import com.android.volley.Response;
+import com.healthcoco.healthcocopad.HealthCocoDialogFragment;
 import com.healthcoco.healthcocopad.R;
-import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.bean.BloodPressure;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.request.GrowthChartRequest;
@@ -24,6 +23,7 @@ import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.HealthcocoTextWatcherListener;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
+import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.EditTextTextViewErrorUtil;
@@ -34,7 +34,8 @@ import org.parceler.Parcels;
 
 import java.util.ArrayList;
 
-public class AddGrowthChartFragment extends HealthCocoFragment implements View.OnClickListener, HealthcocoTextWatcherListener, LocalDoInBackgroundListenerOptimised {
+public class AddGrowthChartDialogFragment extends HealthCocoDialogFragment implements View.OnClickListener, HealthcocoTextWatcherListener,
+        LocalDoInBackgroundListenerOptimised, GsonRequest.ErrorListener, Response.Listener<VolleyResponseBean> {
     private EditText editWeight;
     private EditText editHeight;
     private EditText editTemperature;
@@ -59,9 +60,10 @@ public class AddGrowthChartFragment extends HealthCocoFragment implements View.O
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        setWidthHeight(0.50, 0.80);
         init();
-        Intent intent = mActivity.getIntent();
-        growthChartResponse = Parcels.unwrap(intent.getParcelableExtra(GrowthChartListFragment.TAG_GROWTH_CHART_DATA));
+        Bundle bundle = getArguments();
+        growthChartResponse = Parcels.unwrap(bundle.getParcelable(GrowthChartListFragment.TAG_GROWTH_CHART_DATA));
         new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_FRAGMENT_INITIALISATION_DATA, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
@@ -87,12 +89,13 @@ public class AddGrowthChartFragment extends HealthCocoFragment implements View.O
 
     @Override
     public void initListeners() {
-        ((CommonOpenUpActivity) mActivity).initActionbarRightAction(this);
+        initSaveCancelButton(this);
+        initActionbarTitle(getResources().getString(R.string.add_growth_chart));
         editHeight.addTextChangedListener(new HealthcocoTextWatcher(editHeight, this));
         editWeight.addTextChangedListener(new HealthcocoTextWatcher(editWeight, this));
     }
 
-    private void initData() {
+    public void initData() {
         if (growthChartResponse != null) {
             if (growthChartResponse.getWeight() > 0)
                 editWeight.setText(String.valueOf(Util.formatDoubleNumber(growthChartResponse.getWeight())));
@@ -122,7 +125,7 @@ public class AddGrowthChartFragment extends HealthCocoFragment implements View.O
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.container_right_action:
+            case R.id.bt_save:
                 validateData();
                 break;
         }
@@ -133,7 +136,13 @@ public class AddGrowthChartFragment extends HealthCocoFragment implements View.O
         String msg = null;
         String systolic = Util.getValidatedValueOrNull(editSys);
         String diastolic = Util.getValidatedValueOrNull(editDias);
-        if ((Util.isNullOrBlank(systolic) && !Util.isNullOrBlank(diastolic) || (!Util.isNullOrBlank(systolic) && Util.isNullOrBlank(diastolic))))
+        String weight = Util.getValidatedValueOrNull(editWeight);
+        String height = Util.getValidatedValueOrNull(editHeight);
+        if (Util.isNullOrBlank(weight))
+            msg = getResources().getString(R.string.please_fill_weight);
+        else if (Util.isNullOrBlank(height))
+            msg = getResources().getString(R.string.please_fill_height);
+        else if ((Util.isNullOrBlank(systolic) && !Util.isNullOrBlank(diastolic) || (!Util.isNullOrBlank(systolic) && Util.isNullOrBlank(diastolic))))
             msg = getResources().getString(R.string.please_add_systolic_and_diastolic_both);
 
         if (Util.isNullOrBlank(msg)) {
@@ -210,7 +219,7 @@ public class AddGrowthChartFragment extends HealthCocoFragment implements View.O
                             GrowthChartResponse growthChartResponse = (GrowthChartResponse) response.getData();
                             LocalDataServiceImpl.getInstance(mApp).addGrowthChartResponse(growthChartResponse);
                             Util.sendBroadcast(mApp, GrowthChartListFragment.INTENT_REFRESH_REQUEST_LIST_FROM_SERVER);
-                            ((CommonOpenUpActivity) mActivity).finish();
+                            getDialog().dismiss();
                         }
                     }
                     break;

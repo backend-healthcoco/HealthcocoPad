@@ -8,7 +8,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <include layout="@layout/layout_edit_search" />
+        <include layout="@layout/layout_edit_search_common" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_vaccines"

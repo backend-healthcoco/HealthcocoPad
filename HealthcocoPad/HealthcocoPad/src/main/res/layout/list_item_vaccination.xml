@@ -27,7 +27,7 @@
                 android:text="Due On"
                 android:textAllCaps="true"
                 android:textColor="@color/white"
-                android:textSize="12sp" />
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/tv_date_of_vaccine"
@@ -36,7 +36,7 @@
                 android:layout_marginTop="3dp"
                 android:textAllCaps="true"
                 android:textColor="@color/black"
-                android:textSize="14sp"
+                android:textSize="16sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -46,7 +46,7 @@
                 android:layout_marginTop="3dp"
                 android:textAllCaps="true"
                 android:textColor="@color/grey_dark_text"
-                android:textSize="14sp" />
+                android:textSize="16sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -55,22 +55,22 @@
             android:layout_weight="50"
             android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tv_vaccine_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:textSize="15sp" />
+            <TextView
+                android:id="@+id/tv_vaccine_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="17sp" />
 
-        <TextView
-            android:id="@+id/tv_vaccine_count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:layout_marginTop="5dp"
-            android:textColor="@color/green_logo"
-            android:textSize="13sp" />
-    </LinearLayout>
+            <TextView
+                android:id="@+id/tv_vaccine_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginTop="5dp"
+                android:textColor="@color/green_logo"
+                android:textSize="15sp" />
+        </LinearLayout>
 
         <TextView
             android:id="@+id/tv_update_vaccine"
@@ -81,7 +81,7 @@
             android:text="@string/update"
             android:textAllCaps="true"
             android:textColor="@drawable/text_blue_translucent_selector"
-            android:textSize="14sp" />
+            android:textSize="16sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -102,13 +102,15 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="@string/updated_by"
-            android:textColor="@color/orange" />
+            android:textColor="@color/orange"
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/tv_updated_by"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:textColor="@color/orange" />
+            android:textColor="@color/orange"
+            android:textSize="16sp" />
     </LinearLayout>
 </LinearLayout>

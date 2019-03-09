@@ -23,7 +23,7 @@
                 android:layout_gravity="center_vertical"
                 android:drawablePadding="@dimen/drawable_text_padding"
                 android:gravity="center_vertical"
-                android:src="@drawable/img_appointmnt"
+                android:src="@drawable/tab_cal_date_normal_item"
                 android:textColor="@color/black" />
 
             <TextView
@@ -64,7 +64,7 @@
                     android:textSize="@dimen/text_size_baby_achievements_parameters_label"
                     android:textStyle="bold" />
 
-                <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+                <TextView
                     android:id="@+id/tv_achievements"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -91,7 +91,7 @@
                     android:textSize="@dimen/text_size_baby_achievements_parameters_label"
                     android:textStyle="bold" />
 
-                <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+                <TextView
                     android:id="@+id/tv_achievement_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -118,7 +118,7 @@
                     android:textSize="@dimen/text_size_baby_achievements_parameters_label"
                     android:textStyle="bold" />
 
-                <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+                <TextView
                     android:id="@+id/tv_duration"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -145,7 +145,7 @@
                     android:textSize="@dimen/text_size_baby_achievements_parameters_label"
                     android:textStyle="bold" />
 
-                <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+                <TextView
                     android:id="@+id/tv_notes"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -176,6 +176,6 @@
             android:text="@string/update"
             android:textAllCaps="true"
             android:textColor="@drawable/text_blue_translucent_selector"
-            android:textSize="14sp" />
+            android:textSize="16sp" />
     </LinearLayout>
 </FrameLayout>

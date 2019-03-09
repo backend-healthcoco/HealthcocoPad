@@ -13,7 +13,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -25,7 +24,6 @@ import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocopad.enums.AdapterType;
-import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.LocalTabelType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
@@ -270,7 +268,6 @@ public class BabyAchievementsListFragment extends HealthCocoFragment implements
 
     @Override
     public void updateBabyAchievements(BabyAchievementsResponse babyAchievementsResponse) {
-        openCommonOpenUpActivityUsingParcel(CommonOpenUpFragmentType.UPDATE_BABY_ACHIEVEMENTS,
-                new String[]{TAG_BABY_ACHIEVEMENTS_DATA}, new Object[]{babyAchievementsResponse});
+        openDialogFragment(new UpdateBabyAchievementsFragment(), TAG_BABY_ACHIEVEMENTS_DATA, babyAchievementsResponse, 0);
     }
 }

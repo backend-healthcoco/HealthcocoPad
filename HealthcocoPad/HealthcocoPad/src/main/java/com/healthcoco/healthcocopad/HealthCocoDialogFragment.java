@@ -51,6 +51,7 @@ import com.healthcoco.healthcocopad.utilities.EditTextTextViewErrorUtil;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.ScreenDimensions;
 import com.healthcoco.healthcocopad.utilities.Util;
+import com.healthcoco.healthcocopad.views.HealthcocoBottomSheetDialog;
 
 import org.parceler.Parcels;
 
@@ -421,8 +422,43 @@ public abstract class HealthCocoDialogFragment extends DialogFragment implements
     }
 
     protected void initPopupWindows(View anchorView, PopupWindowType popupWindowType, List<Object> list, int dropDownLayoutId, PopupWindowListener popupWindowListener) {
-        HealthcocoPopupWindow healthcocoPopupWindow = new HealthcocoPopupWindow(mActivity, anchorView, popupWindowType, list, dropDownLayoutId, popupWindowListener);
+        HealthcocoPopupWindow healthcocoPopupWindow = null;
+        if (dropDownLayoutId > 0)
+            healthcocoPopupWindow = new HealthcocoPopupWindow(mActivity, anchorView, popupWindowType, list, dropDownLayoutId, popupWindowListener);
+        else
+            healthcocoPopupWindow = new HealthcocoPopupWindow(mActivity, anchorView, popupWindowType, list, popupWindowListener);
         healthcocoPopupWindow.setOutsideTouchable(true);
         healthcocoPopupWindow.setContentView(healthcocoPopupWindow.getPopupView());
+    }
+
+    protected HealthcocoBottomSheetDialog initBottomSheetDialogWindows(View anchorView, PopupWindowType
+            popupWindowType, PopupWindowListener popupWindowListener) {
+        return initBottomSheetDialogWindows(anchorView, popupWindowType, null, 0, false, popupWindowListener);
+    }
+
+    protected HealthcocoBottomSheetDialog initBottomSheetDialogWindows(View anchorView, PopupWindowType
+            popupWindowType, List<Object> list, PopupWindowListener popupWindowListener) {
+        return initBottomSheetDialogWindows(anchorView, popupWindowType, list, 0, false, popupWindowListener);
+    }
+
+    protected HealthcocoBottomSheetDialog initBottomSheetDialogWindows(View anchorView, PopupWindowType
+            popupWindowType, List<Object> list, int dropdownLayoutId, PopupWindowListener popupWindowListener) {
+        return initBottomSheetDialogWindows(anchorView, popupWindowType, list, dropdownLayoutId, false, popupWindowListener);
+    }
+
+    protected HealthcocoBottomSheetDialog initBottomSheetDialogWindows(View anchorView, PopupWindowType
+            popupWindowType, List<Object> list, boolean isTvAllVisible, PopupWindowListener popupWindowListener) {
+        return initBottomSheetDialogWindows(anchorView, popupWindowType, list, 0, isTvAllVisible, popupWindowListener);
+    }
+
+    protected HealthcocoBottomSheetDialog initBottomSheetDialogWindows(View anchorView, PopupWindowType
+            popupWindowType, List<Object> list, int dropdownLayoutId, boolean isTvAllVisible, PopupWindowListener popupWindowListener) {
+        HealthcocoBottomSheetDialog healthcocoBottomSheetDialog = null;
+        if (dropdownLayoutId > 0)
+            healthcocoBottomSheetDialog = new HealthcocoBottomSheetDialog(mActivity, anchorView, popupWindowType, list, dropdownLayoutId, isTvAllVisible, popupWindowListener);
+        else
+            healthcocoBottomSheetDialog = new HealthcocoBottomSheetDialog(mActivity, anchorView, popupWindowType, list, isTvAllVisible, popupWindowListener);
+        healthcocoBottomSheetDialog.setContentView(healthcocoBottomSheetDialog.getPopupView());
+        return healthcocoBottomSheetDialog;
     }
 }

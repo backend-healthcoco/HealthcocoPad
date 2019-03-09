@@ -1,7 +1,6 @@
 package com.healthcoco.healthcocopad.fragments;
 
 import android.app.DatePickerDialog;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,9 +10,9 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.healthcoco.healthcocopad.HealthCocoFragment;
+import com.android.volley.Response;
+import com.healthcoco.healthcocopad.HealthCocoDialogFragment;
 import com.healthcoco.healthcocopad.R;
-import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.request.BabyAchievementsRequest;
 import com.healthcoco.healthcocopad.bean.server.AchievementsDuration;
@@ -28,6 +27,7 @@ import com.healthcoco.healthcocopad.enums.PopupWindowType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
 import com.healthcoco.healthcocopad.listeners.PopupWindowListener;
+import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
@@ -40,7 +40,8 @@ import org.parceler.Parcels;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class UpdateBabyAchievementsFragment extends HealthCocoFragment implements LocalDoInBackgroundListenerOptimised, View.OnClickListener, PopupWindowListener, com.healthcoco.healthcocopad.popupwindow.PopupWindowListener {
+public class UpdateBabyAchievementsFragment extends HealthCocoDialogFragment implements LocalDoInBackgroundListenerOptimised,
+        View.OnClickListener, PopupWindowListener, com.healthcoco.healthcocopad.popupwindow.PopupWindowListener, GsonRequest.ErrorListener, Response.Listener<VolleyResponseBean> {
     private static final String DATE_FORMAT_USED_IN_THIS_SCREEN = "dd/MM/yyyy";
     private BabyAchievementsResponse babyAchievementsResponse;
     private TextView tvAchievement;
@@ -62,8 +63,9 @@ public class UpdateBabyAchievementsFragment extends HealthCocoFragment implement
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         init();
-        Intent intent = mActivity.getIntent();
-        babyAchievementsResponse = Parcels.unwrap(intent.getParcelableExtra(BabyAchievementsListFragment.TAG_BABY_ACHIEVEMENTS_DATA));
+        setWidthHeight(0.50, 0.80);
+        Bundle bundle = getArguments();
+        babyAchievementsResponse = Parcels.unwrap(bundle.getParcelable(BabyAchievementsListFragment.TAG_BABY_ACHIEVEMENTS_DATA));
         new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_FRAGMENT_INITIALISATION_DATA, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
@@ -84,9 +86,10 @@ public class UpdateBabyAchievementsFragment extends HealthCocoFragment implement
 
     @Override
     public void initListeners() {
-        ((CommonOpenUpActivity) mActivity).initActionbarRightAction(this);
+        initSaveCancelButton(this);
+        initActionbarTitle(getResources().getString(R.string.edit_baby_achievemsts));
         tvAchievementDate.setOnClickListener(this);
-        initBottomSheetDialogWindows(tvDuration, PopupWindowType.ACHIEVEMENT_DURATION, PopupWindowType.ACHIEVEMENT_DURATION.getList(), this);
+        initPopupWindows(tvDuration, PopupWindowType.ACHIEVEMENT_DURATION, PopupWindowType.ACHIEVEMENT_DURATION.getList());
     }
 
     @Override
@@ -116,7 +119,7 @@ public class UpdateBabyAchievementsFragment extends HealthCocoFragment implement
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.container_right_action:
+            case R.id.bt_save:
                 validateData();
                 break;
             case R.id.tv_achievement_date:
@@ -209,7 +212,7 @@ public class UpdateBabyAchievementsFragment extends HealthCocoFragment implement
                             BabyAchievementsResponse babyAchievementsResponse = (BabyAchievementsResponse) response.getData();
                             LocalDataServiceImpl.getInstance(mApp).addBabyAchievementsResponse(babyAchievementsResponse);
                             Util.sendBroadcast(mApp, BabyAchievementsListFragment.INTENT_REFRESH_REQUEST_LIST_FROM_SERVER);
-                            ((CommonOpenUpActivity) mActivity).finish();
+                            getDialog().dismiss();
                         }
                     }
                     break;
@@ -218,7 +221,7 @@ public class UpdateBabyAchievementsFragment extends HealthCocoFragment implement
         mActivity.hideLoading();
     }
 
-    private void initData() {
+    public void initData() {
         if (babyAchievementsResponse != null) {
             if (!Util.isNullOrBlank(babyAchievementsResponse.getAchievement()))
                 tvAchievement.setText(Util.getValidatedValue(babyAchievementsResponse.getAchievement()));

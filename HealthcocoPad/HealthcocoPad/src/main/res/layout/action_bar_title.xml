@@ -6,13 +6,12 @@
     android:gravity="center"
     android:orientation="horizontal">
 
-    <TextView
+    <com.healthcoco.healthcocopad.custom.AutoFitTextView
         android:id="@+id/tv_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:background="@color/blue_action_bar"
-        android:fontFamily="sans-serif-light"
         android:gravity="center"
         android:paddingLeft="50dp"
         android:paddingRight="50dp"
@@ -20,9 +19,21 @@
         android:text="Action Bar Title"
         android:textColor="@color/white"
         android:textSize="@dimen/actionbar_title_size"
-        android:textStyle="bold" />
+        android:textStyle="bold"  />
 
     <include layout="@layout/container_left_action" />
+
+    <include
+        layout="@layout/container_middle_action"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center|end"
+        android:gravity="center|end"
+        android:orientation="horizontal"
+        android:paddingRight="5dp"
+        android:layout_toLeftOf="@+id/container_right_action" />
 
     <include layout="@layout/container_right_action" />
 </RelativeLayout>

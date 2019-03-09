@@ -1351,4 +1351,6 @@
     <string name="bmi_metre_square">BMI(kg/m\u00B2)</string>
     <string name="kg_sqr">kg/m\u00B2</string>
     <string name="please_select_given_date">Please Select Given Date</string>
+    <string name="please_fill_weight">Please fill weight</string>
+    <string name="please_fill_height">Please fill height</string>
 </resources>

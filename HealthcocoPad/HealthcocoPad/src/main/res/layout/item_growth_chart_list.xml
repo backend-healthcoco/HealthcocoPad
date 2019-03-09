@@ -15,7 +15,8 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -37,7 +38,6 @@
                 android:textSize="@dimen/text_size_emr_date" />
         </LinearLayout>
 
-
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
@@ -52,7 +52,7 @@
             android:gravity="start"
             android:text="@string/health_parameters"
             android:textColor="@color/black"
-            android:textSize="18sp" />
+            android:textSize="20sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -66,8 +66,9 @@
                 android:orientation="horizontal">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:gravity="center|start"
                     android:orientation="horizontal">
 
@@ -76,10 +77,10 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="@string/weight_kilograms"
-                        android:textColor="@color/grey_darker"
+                        android:textColor="@color/black"
                         android:textSize="@dimen/text_size_growth_chart_parameters_label" />
 
-                    <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+                    <TextView
                         android:id="@+id/tv_weight_kilograms"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -92,9 +93,9 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
+                    android:layout_weight="1"
                     android:gravity="center|start"
                     android:orientation="horizontal">
 
@@ -103,11 +104,38 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="@string/height_cm"
-                        android:textColor="@color/grey_darker"
+                        android:textColor="@color/black"
                         android:textSize="@dimen/text_size_growth_chart_parameters_label" />
 
-                    <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+                    <TextView
                         android:id="@+id/tv_height_cm"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="1dp"
+                        android:gravity="center"
+                        android:singleLine="true"
+                        android:text="@string/no_text_dash"
+                        android:textColor="@color/grey_dark_text"
+                        android:textSize="@dimen/text_size_growth_chart_parameters_label" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center|start"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/temp"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_growth_chart_parameters_label" />
+
+                    <TextView
+                        android:id="@+id/tv_temp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="1dp"
@@ -126,8 +154,9 @@
                 android:layout_marginTop="5dp">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:gravity="center|start"
                     android:orientation="horizontal">
 
@@ -135,38 +164,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="@string/temp"
-                        android:textColor="@color/grey_darker"
+                        android:text="@string/head_circumference"
+                        android:textColor="@color/black"
                         android:textSize="@dimen/text_size_growth_chart_parameters_label" />
-
-                    <com.healthcoco.healthcocopad.views.TextViewFontAwesome
-                        android:id="@+id/tv_temp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="1dp"
-                        android:gravity="center"
-                        android:singleLine="true"
-                        android:text="@string/no_text_dash"
-                        android:textColor="@color/grey_dark_text"
-                        android:textSize="@dimen/text_size_growth_chart_parameters_label" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
-                    android:gravity="end"
-                    android:orientation="horizontal">
 
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="@string/head_circumference"
-                        android:textColor="@color/grey_darker"
-                        android:textSize="@dimen/text_size_growth_chart_parameters_label" />
-
-                    <com.healthcoco.healthcocopad.views.TextViewFontAwesome
                         android:id="@+id/tv_head_circumference"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -178,17 +180,10 @@
                         android:textSize="@dimen/text_size_growth_chart_parameters_label" />
                 </LinearLayout>
 
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:orientation="horizontal">
-
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:gravity="center|start"
                     android:orientation="horizontal">
 
@@ -197,10 +192,10 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="@string/bmi_metre_square"
-                        android:textColor="@color/grey_darker"
+                        android:textColor="@color/black"
                         android:textSize="@dimen/text_size_growth_chart_parameters_label" />
 
-                    <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+                    <TextView
                         android:id="@+id/tv_bmi"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -213,9 +208,9 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
+                    android:layout_weight="1"
                     android:gravity="center|start"
                     android:orientation="horizontal">
 
@@ -223,11 +218,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="@string/bp_mm_hg"
-                        android:textColor="@color/grey_darker"
+                        android:text="@string/bp_mm_hg_text"
+                        android:textColor="@color/black"
                         android:textSize="@dimen/text_size_growth_chart_parameters_label" />
 
-                    <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+                    <TextView
                         android:id="@+id/tv_bp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -244,13 +239,13 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:orientation="vertical">
+                android:layout_marginTop="5dp">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
+                    android:layout_weight="1"
                     android:gravity="center|start"
                     android:orientation="horizontal">
 
@@ -259,10 +254,10 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="@string/blood_sugar_f_mg_dl"
-                        android:textColor="@color/grey_darker"
+                        android:textColor="@color/black"
                         android:textSize="@dimen/text_size_growth_chart_parameters_label" />
 
-                    <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+                    <TextView
                         android:id="@+id/tv_blood_sugar_f_mg_dl"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -275,9 +270,10 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
+                    android:layout_weight="1"
                     android:gravity="center|start"
                     android:orientation="horizontal">
 
@@ -286,10 +282,10 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="@string/blood_sugar_pp_mg_dl"
-                        android:textColor="@color/grey_darker"
+                        android:textColor="@color/black"
                         android:textSize="@dimen/text_size_growth_chart_parameters_label" />
 
-                    <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+                    <TextView
                         android:id="@+id/tv_blood_sugar_pp_mg_dl"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -300,15 +296,6 @@
                         android:textColor="@color/grey_dark_text"
                         android:textSize="@dimen/text_size_growth_chart_parameters_label" />
                 </LinearLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:orientation="horizontal"
-                android:weightSum="2">
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -322,10 +309,10 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="@string/bmd"
-                        android:textColor="@color/grey_darker"
+                        android:textColor="@color/black"
                         android:textSize="@dimen/text_size_growth_chart_parameters_label" />
 
-                    <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+                    <TextView
                         android:id="@+id/tv_bmd"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

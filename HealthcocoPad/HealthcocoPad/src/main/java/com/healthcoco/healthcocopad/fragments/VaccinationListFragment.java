@@ -58,17 +58,16 @@ public class VaccinationListFragment extends HealthCocoFragment implements View.
     private User user;
     private RecyclerView rvVaccineList;
     private ProgressBar progressLoading;
-    private FontAwesomeButton btAddVaccine;
     private SwipeRefreshLayout swipeRefreshLayout;
     private HealthcocoRecyclerViewAdapter adapter;
     private boolean isInitialLoading;
     private LinkedHashMap<String, VaccineCustomResponse> customResponseLinkedHashMap;
     private boolean receiversRegistered;
     private int size = 5;
-    private FloatingActionButton fbFilterVaccine;
     private static LinkedHashMap<String, VaccineDuration> statusLinkedHashMap = new LinkedHashMap<>();
     private boolean forAll = true;
     private TextView tvNoVaccineFound;
+    private FloatingActionButton fbAddVaccine;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -95,18 +94,16 @@ public class VaccinationListFragment extends HealthCocoFragment implements View.
         rvVaccineList = (RecyclerView) view.findViewById(R.id.rv_list);
         rvVaccineList.setLayoutManager(new LinearLayoutManager(mActivity, LinearLayoutManager.VERTICAL, false));
         progressLoading = (ProgressBar) view.findViewById(R.id.progress_loading);
-        btAddVaccine = (FontAwesomeButton) view.findViewById(R.id.bt_add);
-        fbFilterVaccine = (FloatingActionButton) view.findViewById(R.id.fb_filter_vaccine);
+        fbAddVaccine = (FloatingActionButton) view.findViewById(R.id.bt_add);
         progressLoading = (ProgressBar) view.findViewById(R.id.progress_loading);
         tvNoVaccineFound = (TextView) view.findViewById(R.id.tv_no_vaccine_found);
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
-        initBottomSheetDialogWindows(fbFilterVaccine, PopupWindowType.VACCINE_FILTER, new ArrayList<Object>(PopupWindowType.VACCINE_FILTER.getList()), R.layout.layout_bottom_dialog_item_with_checkbox, true, this);
     }
 
     @Override
     public void initListeners() {
         swipeRefreshLayout.setOnRefreshListener(this);
-        btAddVaccine.setOnClickListener(this);
+        fbAddVaccine.setOnClickListener(this);
     }
 
     private void initAdapters() {
@@ -363,7 +360,7 @@ public class VaccinationListFragment extends HealthCocoFragment implements View.
         return user;
     }
 
-    public void initBottomPopupSheet() {
-        initBottomSheetDialogWindows(fbFilterVaccine, PopupWindowType.VACCINE_FILTER, new ArrayList<Object>(PopupWindowType.VACCINE_FILTER.getList()), R.layout.layout_bottom_dialog_item_with_checkbox, true, this);
+    public void initBottomPopupSheet(View v) {
+        initBottomSheetDialogWindows(v, PopupWindowType.VACCINE_FILTER, new ArrayList<Object>(PopupWindowType.VACCINE_FILTER.getList()), R.layout.layout_bottom_dialog_item_with_checkbox, true, this);
     }
 }

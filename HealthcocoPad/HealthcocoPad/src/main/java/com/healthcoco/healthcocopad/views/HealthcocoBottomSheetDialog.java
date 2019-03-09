@@ -2,7 +2,6 @@ package com.healthcoco.healthcocopad.views;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.design.widget.BottomSheetDialog;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
@@ -12,8 +11,8 @@ import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.HealthCocoApplication;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.enums.PopupWindowType;
-import com.healthcoco.healthcocopad.popupwindow.PopupWindowListener;
 import com.healthcoco.healthcocopad.popupwindow.PopupListViewAdapter;
+import com.healthcoco.healthcocopad.popupwindow.PopupWindowListener;
 import com.healthcoco.healthcocopad.utilities.Util;
 
 import java.util.ArrayList;
@@ -23,7 +22,7 @@ import java.util.List;
  * Created by Shreshtha on 01-Mar-18.
  */
 
-public class HealthcocoBottomSheetDialog extends BottomSheetDialog implements View.OnClickListener, AdapterView.OnItemClickListener {
+public class HealthcocoBottomSheetDialog extends com.healthcoco.healthcocopad.custom.BottomSheetDialog implements View.OnClickListener, AdapterView.OnItemClickListener {
     private final View anchorView;
     private final HealthCocoApplication mApp;
     private List<Object> list;

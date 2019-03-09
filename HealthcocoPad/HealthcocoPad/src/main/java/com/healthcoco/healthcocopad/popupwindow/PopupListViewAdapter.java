@@ -10,11 +10,8 @@ import android.widget.TextView;
 
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.R;
-import com.healthcoco.healthcocopad.bean.server.AppointmentSlot;
 import com.healthcoco.healthcocopad.bean.server.AvailableTimeSlots;
-import com.healthcoco.healthcocopad.bean.server.ClinicDoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.DoctorClinicProfile;
-import com.healthcoco.healthcocopad.bean.server.DoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.RegisteredDoctorProfile;
 import com.healthcoco.healthcocopad.dialogFragment.BookAppointmentDialogFragment;
 import com.healthcoco.healthcocopad.enums.AppointmentSlotsType;
@@ -22,6 +19,9 @@ import com.healthcoco.healthcocopad.enums.PatientProfileScreenType;
 import com.healthcoco.healthcocopad.enums.PatientTreatmentStatus;
 import com.healthcoco.healthcocopad.enums.PopupWindowType;
 import com.healthcoco.healthcocopad.enums.UnitType;
+import com.healthcoco.healthcocopad.enums.VaccineDuration;
+import com.healthcoco.healthcocopad.enums.VaccineStatus;
+import com.healthcoco.healthcocopad.fragments.VaccinationListFragment;
 import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
 import com.healthcoco.healthcocopad.utilities.DownloadImageFromUrlUtil;
 import com.healthcoco.healthcocopad.utilities.Util;
@@ -110,6 +110,25 @@ public class PopupListViewAdapter extends BaseAdapter {
                     e.printStackTrace();
                 }
                 break;
+            case VACCINE_FILTER:
+                try {
+                    TextView tvName = (TextView) convertView.findViewById(R.id.tv_name);
+                    ImageView imageView = (ImageView) convertView.findViewById(R.id.iv_item);
+                    if (objData instanceof VaccineDuration) {
+                        VaccineDuration filter = (VaccineDuration) objData;
+                        tvName.setText(filter.getValue());
+                        if (VaccinationListFragment.getStatusLinkedHashMap().containsKey(filter.getValue())) {
+                            tvName.setSelected(true);
+                            imageView.setVisibility(View.VISIBLE);
+                        } else {
+                            tvName.setSelected(false);
+                            imageView.setVisibility(View.GONE);
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
             default:
                 TextView textView;
                 if (convertView instanceof TextView)
@@ -159,6 +178,18 @@ public class PopupListViewAdapter extends BaseAdapter {
                         tvBullet.setSelected(false);
                     } else
                         tvBullet.setSelected(true);
+                }
+                break;
+            case VACCINE_FILTER:
+                if (object instanceof VaccineDuration) {
+                    VaccineDuration vaccineDuration = (VaccineDuration) object;
+                    text = vaccineDuration.getValue();
+                }
+                break;
+            case VACCINE_STATUS:
+                if (object instanceof VaccineStatus) {
+                    VaccineStatus vaccineStatus = (VaccineStatus) object;
+                    text = vaccineStatus.getStatus();
                 }
                 break;
             default:

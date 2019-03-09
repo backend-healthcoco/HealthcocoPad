@@ -30,7 +30,6 @@ import com.healthcoco.healthcocopad.fragments.AddClinicalNotesVisitNormalFragmen
 import com.healthcoco.healthcocopad.fragments.AddEditClinicImageFragment;
 import com.healthcoco.healthcocopad.fragments.AddEditNormalVisitPrescriptionFragment;
 import com.healthcoco.healthcocopad.fragments.AddEditNormalVisitsFragment;
-import com.healthcoco.healthcocopad.fragments.AddGrowthChartFragment;
 import com.healthcoco.healthcocopad.fragments.AddInvoiceFragment;
 import com.healthcoco.healthcocopad.fragments.AddNewTemplateFragment;
 import com.healthcoco.healthcocopad.fragments.AddNewTreatmentFragment;
@@ -62,7 +61,6 @@ import com.healthcoco.healthcocopad.fragments.SettingsNameHideActivateFragment;
 import com.healthcoco.healthcocopad.fragments.SettingsNameHideActivateTabFragment;
 import com.healthcoco.healthcocopad.fragments.SyncFragment;
 import com.healthcoco.healthcocopad.fragments.TemplateListFragment;
-import com.healthcoco.healthcocopad.fragments.UpdateBabyAchievementsFragment;
 import com.healthcoco.healthcocopad.fragments.UpdateBrandsNextFragment;
 import com.healthcoco.healthcocopad.fragments.UpdateVaccinationCommonFragment;
 import com.healthcoco.healthcocopad.fragments.UpdateVaccineBrandGroupFragment;
@@ -290,12 +288,12 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
             case UPDATE_BRAND:
                 openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, fragmentType.getTitleId(), new UpdateBrandsNextFragment());
                 break;
-            case ADD_GROWTH_CHART:
-                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.WITH_SAVE, fragmentType.getTitleId(), new AddGrowthChartFragment());
-                break;
-            case UPDATE_BABY_ACHIEVEMENTS:
-                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.WITH_SAVE, fragmentType.getTitleId(), new UpdateBabyAchievementsFragment());
-                break;
+//            case ADD_GROWTH_CHART:
+//                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.WITH_SAVE, fragmentType.getTitleId(), new AddGrowthChartDialogFragment());
+//                break;
+//            case UPDATE_BABY_ACHIEVEMENTS:
+//                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.WITH_SAVE, fragmentType.getTitleId(), new UpdateBabyAchievementsFragment());
+//                break;
         }
     }
 
@@ -572,7 +570,7 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
         return middleAction;
     }
 
-    public void showMiddleAction(boolean show) {
+    public LinearLayout showMiddleAction(boolean show) {
         LinearLayout middleAction = (LinearLayout) findViewById(R.id.container_middle_action);
         if (middleAction != null) {
             if (!show)
@@ -580,6 +578,7 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
             else
                 middleAction.setVisibility(View.VISIBLE);
         }
+        return middleAction;
     }
 
     public void enableRightActionButton(boolean isEnabled) {

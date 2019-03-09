@@ -62,7 +62,6 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import static com.healthcoco.healthcocopad.R.id.container_middle_action;
 import static com.healthcoco.healthcocopad.R.id.container_right_action;
 
 /**
@@ -139,6 +138,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
     private boolean receiversRegistered;
     private AccountPackageType packageType;
     private DoctorClinicProfile doctorClinicProfile;
+    private LinearLayout middleAction;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -181,6 +181,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
         patientProfileLayout = (LinearLayout) view.findViewById(R.id.patient_profile_layout);
         doctorNameLayout = (LinearLayout) view.findViewById(R.id.layout_doctor_name);
         ((CommonOpenUpActivity) mActivity).showRightAction(false);
+        middleAction = ((CommonOpenUpActivity) mActivity).showMiddleAction(false);
     }
 
     @Override
@@ -188,7 +189,6 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
         mViewPager.addOnPageChangeListener(this);
         tabhost.setOnTabChangedListener(this);
         ((CommonOpenUpActivity) mActivity).initActionbarRightAction(this);
-        ((CommonOpenUpActivity) mActivity).initActionbarMiddleAction(this);
     }
 
     private void initTabs() {
@@ -556,6 +556,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                         receiptDetailFragment.refreshData(PatientDetailTabType.PATIENT_DETAIL_RECEIPT);
                         isReceiptTabClicked = true;
                     }
+                    break;
                 case PATIENT_DETAIL_VACCINATION:
                     ((CommonOpenUpActivity) mActivity).showMiddleAction(true);
                     doctorNameLayout.setVisibility(View.INVISIBLE);
@@ -604,8 +605,10 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                 invoiceDetailFragment.setUserData(user, loginedUser, selectedPatient);
             if (receiptDetailFragment != null)
                 receiptDetailFragment.setUserData(user, loginedUser, selectedPatient);
-            if (vaccinationListFragment != null)
+            if (vaccinationListFragment != null) {
                 vaccinationListFragment.setUserData(user, selectedPatient);
+                vaccinationListFragment.initBottomPopupSheet(middleAction);
+            }
             if (growthChartListFragment != null)
                 growthChartListFragment.setUserData(user, selectedPatient);
             if (babyAchievementsListFragment != null)
@@ -661,9 +664,6 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
         switch (v.getId()) {
             case container_right_action:
                 openGlobalRecordAccessDialogFragment();
-                break;
-            case container_middle_action:
-                vaccinationListFragment.initBottomPopupSheet();
                 break;
         }
     }

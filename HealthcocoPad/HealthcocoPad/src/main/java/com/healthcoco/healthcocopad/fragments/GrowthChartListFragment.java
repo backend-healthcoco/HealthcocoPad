@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -26,7 +27,6 @@ import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocopad.enums.AdapterType;
-import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.LocalTabelType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
@@ -40,7 +40,6 @@ import com.healthcoco.healthcocopad.utilities.ComparatorUtil;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
-import com.healthcoco.healthcocopad.views.FontAwesomeButton;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -60,7 +59,7 @@ public class GrowthChartListFragment extends HealthCocoFragment implements View.
     private boolean isInitialLoading;
     private boolean isEndOfListAchieved;
     private boolean receiversRegistered;
-    private FontAwesomeButton btAddGrowthChart;
+    private FloatingActionButton btAddGrowthChart;
     private LinkedHashMap<String, GrowthChartResponse> growthChartResponseLinkedHashMap = new LinkedHashMap<>();
     public static final int MAX_SIZE = 10;
     private int PAGE_NUMBER = 0;
@@ -95,7 +94,7 @@ public class GrowthChartListFragment extends HealthCocoFragment implements View.
         rvGrowthChartList.setLayoutManager(new LinearLayoutManager(mActivity, LinearLayoutManager.VERTICAL, false));
 //        rvGrowthChartList.addItemDecoration(new VerticalRecyclerViewItemDecoration(spacingInPixelsVerticalBlogs));
         progressLoading = (ProgressBar) view.findViewById(R.id.progress_loading);
-        btAddGrowthChart = (FontAwesomeButton) view.findViewById(R.id.bt_add);
+        btAddGrowthChart = (FloatingActionButton) view.findViewById(R.id.fb_add_growth_chart);
         tvNoGrowthChartFound = (TextView) view.findViewById(R.id.tv_no_growth_chart_found);
         progressLoading = (ProgressBar) view.findViewById(R.id.progress_loading);
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
@@ -130,8 +129,9 @@ public class GrowthChartListFragment extends HealthCocoFragment implements View.
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.bt_add:
-                openCommonOpenUpActivity(CommonOpenUpFragmentType.ADD_GROWTH_CHART, null, null, HealthCocoConstants.REQUEST_CODE_GROWTH_CHART_LIST);
+            case R.id.fb_add_growth_chart:
+                openDialogFragment(new AddGrowthChartDialogFragment(), HealthCocoConstants.REQUEST_CODE_GROWTH_CHART_LIST);
+//                openCommonOpenUpActivity(CommonOpenUpFragmentType.ADD_GROWTH_CHART, null, null, HealthCocoConstants.REQUEST_CODE_GROWTH_CHART_LIST);
                 break;
         }
     }
@@ -299,8 +299,9 @@ public class GrowthChartListFragment extends HealthCocoFragment implements View.
 
     @Override
     public void editGrowthChart(GrowthChartResponse growthChartResponse) {
-        openCommonOpenUpActivityUsingParcel(CommonOpenUpFragmentType.ADD_GROWTH_CHART,
-                new String[]{TAG_GROWTH_CHART_DATA}, new Object[]{growthChartResponse});
+//        openCommonOpenUpActivityUsingParcel(CommonOpenUpFragmentType.ADD_GROWTH_CHART,
+//                new String[]{TAG_GROWTH_CHART_DATA}, new Object[]{growthChartResponse});
+        openDialogFragment(new AddGrowthChartDialogFragment(), TAG_GROWTH_CHART_DATA, growthChartResponse, HealthCocoConstants.REQUEST_CODE_GROWTH_CHART_LIST);
     }
 
     @Override
