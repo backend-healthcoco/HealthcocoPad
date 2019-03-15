@@ -1,5 +1,6 @@
 package com.healthcoco.healthcocopad.fragments;
 
+import android.app.DatePickerDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -14,6 +15,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -39,13 +41,14 @@ import com.healthcoco.healthcocopad.recyclerview.HealthcocoRecyclerViewAdapter;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.ComparatorUtil;
+import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.SyncUtility;
 import com.healthcoco.healthcocopad.utilities.Util;
-import com.healthcoco.healthcocopad.views.FontAwesomeButton;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -68,6 +71,7 @@ public class VaccinationListFragment extends HealthCocoFragment implements View.
     private boolean forAll = true;
     private TextView tvNoVaccineFound;
     private FloatingActionButton fbAddVaccine;
+    private TextView tvChangeDate;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -98,6 +102,8 @@ public class VaccinationListFragment extends HealthCocoFragment implements View.
         progressLoading = (ProgressBar) view.findViewById(R.id.progress_loading);
         tvNoVaccineFound = (TextView) view.findViewById(R.id.tv_no_vaccine_found);
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
+        tvChangeDate = (TextView) view.findViewById(R.id.tv_change_date);
+        tvChangeDate.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -123,7 +129,31 @@ public class VaccinationListFragment extends HealthCocoFragment implements View.
             case R.id.bt_add:
                 openCommonOpenUpActivity(CommonOpenUpFragmentType.ADD_VACCINATION, null, null, HealthCocoConstants.REQUEST_CODE_VACCINATION_LIST);
                 break;
+            case R.id.tv_change_date:
+                openDatePickerDialog();
+                break;
         }
+    }
+
+    private void openDatePickerDialog() {
+        Calendar calendar = Calendar.getInstance();
+        calendar = DateTimeUtil.setCalendarDefaultvalue(calendar, Util.getValidatedValueOrNull(tvChangeDate));
+        DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), R.style.DialogTheme, new DatePickerDialog.OnDateSetListener() {
+
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+//                tvChangeDate.setText(DateTimeUtil.getBirthDateFormat(dayOfMonth, monthOfYear + 1, year));
+                changeDateOfVaccination((DateTimeUtil.getLongFromFormattedFormatString(DateTimeUtil.DATE_FORMAT_DAY_MONTH_YEAR_SLASH, DateTimeUtil.getBirthDateFormat(dayOfMonth, monthOfYear + 1, year))));
+            }
+        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+        datePickerDialog.getDatePicker().setMinDate(DateTimeUtil.getLongFromFormattedFormatString(DateTimeUtil.DATE_FORMAT_DAY_MONTH_YEAR_SLASH, Util.getDOB(selectedPatient.getDob())));
+        datePickerDialog.show();
+    }
+
+    private void changeDateOfVaccination(long vaccineStartDate) {
+        mActivity.showLoading(false);
+        WebDataServiceImpl.getInstance(mApp).updateVaccineStartDateList(Boolean.class, WebServiceType.UPDATE_VACCINE_START_DATE,
+                selectedPatient.getUserId(), vaccineStartDate, this, this);
     }
 
     public void getListFromLocal(boolean showLoading) {
@@ -213,6 +243,17 @@ public class VaccinationListFragment extends HealthCocoFragment implements View.
                 showLoadingOverlay(false);
                 progressLoading.setVisibility(View.GONE);
                 isInitialLoading = false;
+                break;
+            case UPDATE_VACCINE_START_DATE:
+                if (response.getData() != null && response.getData() instanceof Boolean) {
+                    boolean isDataSuccess = (boolean) response.getData();
+                    if (isDataSuccess) {
+                        Util.sendBroadcast(mApp, INTENT_REFRESH_REQUEST_LIST_FROM_SERVER);
+                    }
+                } else {
+                    Util.showToast(mActivity, response.getErrMsg());
+                }
+                mActivity.hideLoading();
                 break;
             default:
                 break;

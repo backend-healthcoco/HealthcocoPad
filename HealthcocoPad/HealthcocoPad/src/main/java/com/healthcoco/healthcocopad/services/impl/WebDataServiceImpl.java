@@ -1944,4 +1944,17 @@ public class WebDataServiceImpl implements GCMRefreshListener {
             errorListener.onNetworkUnavailable(webServiceType);
         }
     }
+
+    public void updateVaccineStartDateList(Class<?> class1, WebServiceType updateVaccineStartDate, String patientId,
+                                           long vaccineStartDate, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        WebServiceType webServiceType = WebServiceType.UPDATE_VACCINE_START_DATE;
+        if (HealthCocoConstants.isNetworkOnline) {
+            String url = webServiceType.getUrl() + patientId + "/" + vaccineStartDate;
+            checkNetworkStatus(mApp);
+            getResponse(Request.Priority.IMMEDIATE, webServiceType, class1, url, null, null, responseListener,
+                    errorListener);
+        } else {
+            errorListener.onNetworkUnavailable(webServiceType);
+        }
+    }
 }

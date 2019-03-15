@@ -57,6 +57,25 @@ public class DateTimeUtil {
     }
 
     /**
+     * @param timeInDayMonthYearFormat : String date in format
+     * @return
+     */
+    public static DOB getDob(String format, String timeInDayMonthYearFormat) {
+        if (!Util.isNullOrBlank(timeInDayMonthYearFormat)) {
+            long timeInMillis = getLongFromFormattedDayMonthYearFormatString(format, timeInDayMonthYearFormat);
+            Calendar cal = getCalendarInstance();
+            cal.setTime(new Date(timeInMillis));
+
+            DOB dob = new DOB();
+            dob.setDays(cal.get(Calendar.DAY_OF_MONTH));
+            dob.setMonths(cal.get(Calendar.MONTH) + 1);
+            dob.setYears(cal.get(Calendar.YEAR));
+            return dob;
+        }
+        return null;
+    }
+
+    /**
      * @param timeInDayMonthYearFormat : String date in format "dd/MM/yyyy"
      * @return
      */

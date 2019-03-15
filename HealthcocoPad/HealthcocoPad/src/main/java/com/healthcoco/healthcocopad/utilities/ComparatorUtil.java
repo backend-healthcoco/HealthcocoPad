@@ -415,15 +415,14 @@ public class ComparatorUtil {
 
         @Override
         public int compare(GrowthChartResponse growthChartResponse1, GrowthChartResponse growthChartResponse2) {
-            if (growthChartResponse1.getUpdatedTime() != null && growthChartResponse2.getUpdatedTime() != null) {
-                Date date1 = new Date(growthChartResponse1.getUpdatedTime());
-                Date date2 = new Date(growthChartResponse2.getUpdatedTime());
+            if (growthChartResponse1.getAge() != null && growthChartResponse2.getAge() != null) {
+                Date date1 = new Date(DateTimeUtil.getLongFromFormattedFormatString(DateTimeUtil.DATE_FORMAT_DAY_MONTH_YEAR_SLASH, Util.getDOB(growthChartResponse1.getAge())));
+                Date date2 = new Date(DateTimeUtil.getLongFromFormattedFormatString(DateTimeUtil.DATE_FORMAT_DAY_MONTH_YEAR_SLASH, Util.getDOB(growthChartResponse2.getAge())));
                 return date2.compareTo(date1);
             }
             return 0;
         }
     };
-
     public static Comparator<BabyAchievementsResponse> babyAchievementsDateComparator = new Comparator<BabyAchievementsResponse>() {
 
         @Override

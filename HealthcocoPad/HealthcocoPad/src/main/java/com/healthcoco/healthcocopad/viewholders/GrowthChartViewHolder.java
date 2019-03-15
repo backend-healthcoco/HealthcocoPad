@@ -58,8 +58,8 @@ public class GrowthChartViewHolder extends HealthcocoComonRecylcerViewHolder imp
     public void applyData(Object object) {
         objDta = (GrowthChartResponse) object;
         if (objDta != null) {
-            if (objDta.getUpdatedTime() != null)
-                tvDate.setText(DateTimeUtil.getFormatedDate(objDta.getUpdatedTime()));
+            if (objDta.getAge() != null)
+                tvDate.setText(Util.getDOB(objDta.getAge()));
             if (objDta.getWeight() != null && objDta.getWeight() > 0)
                 tvWeight.setText(":-" + Util.getFormattedDoubleNumber(objDta.getWeight()));
             else tvWeight.setText(R.string.no_text_dash);

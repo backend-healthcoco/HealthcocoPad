@@ -1,11 +1,14 @@
 package com.healthcoco.healthcocopad.fragments;
 
+import android.app.DatePickerDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.android.volley.Response;
 import com.healthcoco.healthcocopad.HealthCocoDialogFragment;
@@ -26,6 +29,7 @@ import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimis
 import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
+import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
 import com.healthcoco.healthcocopad.utilities.EditTextTextViewErrorUtil;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.Util;
@@ -33,6 +37,7 @@ import com.healthcoco.healthcocopad.utilities.Util;
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class AddGrowthChartDialogFragment extends HealthCocoDialogFragment implements View.OnClickListener, HealthcocoTextWatcherListener,
         LocalDoInBackgroundListenerOptimised, GsonRequest.ErrorListener, Response.Listener<VolleyResponseBean> {
@@ -49,6 +54,7 @@ public class AddGrowthChartDialogFragment extends HealthCocoDialogFragment imple
     private GrowthChartResponse growthChartResponse;
     private User user;
     private RegisteredPatientDetailsUpdated selectedPatient;
+    private TextView tvDate;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -85,6 +91,7 @@ public class AddGrowthChartDialogFragment extends HealthCocoDialogFragment imple
         editBloodSugarF = (EditText) view.findViewById(R.id.edit_blood_sugar_f_mg_dl);
         editBloodSugarPP = (EditText) view.findViewById(R.id.edit_blood_sugar_pp_mg_dl);
         editBmd = (EditText) view.findViewById(R.id.edit_bmd);
+        tvDate = (TextView) view.findViewById(R.id.tv_date);
     }
 
     @Override
@@ -93,6 +100,7 @@ public class AddGrowthChartDialogFragment extends HealthCocoDialogFragment imple
         initActionbarTitle(getResources().getString(R.string.add_growth_chart));
         editHeight.addTextChangedListener(new HealthcocoTextWatcher(editHeight, this));
         editWeight.addTextChangedListener(new HealthcocoTextWatcher(editWeight, this));
+        tvDate.setOnClickListener(this);
     }
 
     public void initData() {
@@ -113,6 +121,8 @@ public class AddGrowthChartDialogFragment extends HealthCocoDialogFragment imple
                 editBloodSugarPP.setText(Util.getValidatedValue(growthChartResponse.getBloodSugarPP()));
             if (!Util.isNullOrBlank(growthChartResponse.getBmd()))
                 editBmd.setText(Util.getValidatedValue(growthChartResponse.getBmd()));
+            if (growthChartResponse.getAge() != null)
+                tvDate.setText(Util.getDOB(growthChartResponse.getAge()));
             if (growthChartResponse.getBloodPressure() != null) {
                 if (!Util.isNullOrBlank(growthChartResponse.getBloodPressure().getSystolic()))
                     editSys.setText(Util.getValidatedValue(growthChartResponse.getBloodPressure().getSystolic()));
@@ -128,7 +138,26 @@ public class AddGrowthChartDialogFragment extends HealthCocoDialogFragment imple
             case R.id.bt_save:
                 validateData();
                 break;
+            case R.id.tv_date:
+                openDatePickerDialog();
+                break;
         }
+    }
+
+    private void openDatePickerDialog() {
+        Calendar calendar = Calendar.getInstance();
+        calendar = DateTimeUtil.setCalendarDefaultvalue(calendar, DateTimeUtil.getCurrentFormattedDate(DateTimeUtil.DATE_FORMAT_DAY_MONTH_YEAR_SLASH));
+        DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), R.style.DialogTheme, new DatePickerDialog.OnDateSetListener() {
+
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                tvDate.setText(DateTimeUtil.getBirthDateFormat(dayOfMonth, monthOfYear + 1, year));
+
+            }
+        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+        datePickerDialog.getDatePicker().setMinDate(DateTimeUtil.getLongFromFormattedFormatString(DateTimeUtil.DATE_FORMAT_DAY_MONTH_YEAR_SLASH, Util.getDOB(selectedPatient.getDob())));
+        datePickerDialog.getDatePicker().setMaxDate(DateTimeUtil.getCurrentDateLong());
+        datePickerDialog.show();
     }
 
     private void validateData() {
@@ -166,7 +195,7 @@ public class AddGrowthChartDialogFragment extends HealthCocoDialogFragment imple
         growthChartRequest.setSkullCircumference(getValidatedDoubleValue(editHeadCircumfence.getText().toString()));
         growthChartRequest.setBmi(getValidatedDoubleValue(editBmi.getText().toString()));
         growthChartRequest.setTemperature(Util.getValidatedValueOrNull(editTemperature));
-        growthChartRequest.setAge(selectedPatient.getDob());
+        growthChartRequest.setAge(DateTimeUtil.getDob(DateTimeUtil.DATE_FORMAT_DAY_MONTH_YEAR_SLASH, String.valueOf(tvDate.getText())));
         growthChartRequest.setBloodSugarF(Util.getValidatedValueOrNull(editBloodSugarF));
         growthChartRequest.setBloodSugarPP(Util.getValidatedValueOrNull(editBloodSugarPP));
         growthChartRequest.setBmd(Util.getValidatedValueOrNull(editBmd));

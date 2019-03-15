@@ -1,7 +1,6 @@
 package com.healthcoco.healthcocopad.enums;
 
 import com.android.volley.Request.Method;
-import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 
 /**
  * Created by Shreshtha on 20-01-2017.
@@ -548,7 +547,8 @@ public enum WebServiceType {
 
     GET_BABY_ACHIEVEMENTS(Method.GET, "paediatric/achievement/getList/"),
 
-    ADD_EDIT_BABY_ACHIEVEMENTS(Method.POST, "paediatric/achievement/addEdit");
+    ADD_EDIT_BABY_ACHIEVEMENTS(Method.POST, "paediatric/achievement/addEdit"),
+    UPDATE_VACCINE_START_DATE(Method.GET, "paediatric/vaccine/updateChart/");
 
     private int methodType;
     private String url;

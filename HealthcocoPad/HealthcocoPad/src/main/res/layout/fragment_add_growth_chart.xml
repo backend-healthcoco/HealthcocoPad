@@ -27,6 +27,37 @@
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="60"
+                    android:gravity="start"
+                    android:text="@string/date"
+                    android:textColor="@color/grey_dark_text"
+                    android:textSize="@dimen/text_size_add_growth_chart_parameters_label" />
+
+                <TextView
+                    android:id="@+id/tv_date"
+                    style="@style/add_drug_detail_edittext_textview_padding"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="40"
+                    android:drawablePadding="5dp"
+                    android:drawableRight="@drawable/arrow_down_drug"
+                    android:drawableStart="@drawable/tab_cal_date_normal_item"
+                    android:gravity="start"
+                    android:text="@string/select_date"
+                    android:singleLine="true"
+                    android:textColor="@color/grey_dark_text"
+                    android:textSize="@dimen/text_size_add_growth_chart_parameters_label" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center|start"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_weight="70"
                     android:gravity="start"
                     android:text="@string/weight_kilograms"

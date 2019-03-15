@@ -5,6 +5,22 @@
     android:background="@color/grey_background"
     android:orientation="vertical">
 
+    <TextView
+        android:id="@+id/tv_change_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:drawablePadding="5dp"
+        android:drawableRight="@drawable/arrow_down_drug"
+        android:drawableStart="@drawable/tab_cal_date_normal_item"
+        android:gravity="start"
+        android:padding="8dp"
+        android:layout_marginRight="10dp"
+        android:singleLine="true"
+        android:text="@string/change_date"
+        android:textColor="@color/grey_darker"
+        android:textSize="@dimen/text_size_add_growth_chart_parameters_label" />
+
     <com.healthcoco.healthcocopad.views.CustomSwipeRefreshLayout
         android:id="@+id/swipe_refresh_layout"
         android:layout_width="match_parent"

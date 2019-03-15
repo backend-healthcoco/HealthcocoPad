@@ -1353,4 +1353,5 @@
     <string name="please_select_given_date">Please Select Given Date</string>
     <string name="please_fill_weight">Please fill weight</string>
     <string name="please_fill_height">Please fill height</string>
+    <string name="change_date">Change Date</string>
 </resources>
