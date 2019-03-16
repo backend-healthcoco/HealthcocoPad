@@ -8,8 +8,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.v4.app.NotificationCompat;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -17,8 +15,11 @@ import com.google.firebase.messaging.RemoteMessage;
 import com.google.gson.Gson;
 import com.healthcoco.healthcocopad.activities.SplashScreenActivity;
 import com.healthcoco.healthcocopad.bean.server.NotificationResponse;
+import com.healthcoco.healthcocopad.fragments.BabyAchievementsListFragment;
 import com.healthcoco.healthcocopad.fragments.ContactsListFragment;
+import com.healthcoco.healthcocopad.fragments.GrowthChartListFragment;
 import com.healthcoco.healthcocopad.fragments.QueueFragment;
+import com.healthcoco.healthcocopad.fragments.VaccinationListFragment;
 import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
@@ -26,7 +27,6 @@ import com.healthcoco.healthcocopad.utilities.Util;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Map;
 
 /**
@@ -63,6 +63,15 @@ public class HealthcocoFCMListener extends FirebaseMessagingService {
                         return;
                     case PATIENT_REFRESH:
                         Util.sendBroadcast((HealthCocoApplication) getApplicationContext(), ContactsListFragment.INTENT_GET_CONTACT_LIST_SERVER);
+                        return;
+                    case REFRESH_VACCINATION:
+                        Util.sendBroadcast((HealthCocoApplication) getApplicationContext(), VaccinationListFragment.INTENT_REFRESH_REQUEST_LIST_FROM_SERVER);
+                        return;
+                    case REFRESH_GROWTH_CHART:
+                        Util.sendBroadcast((HealthCocoApplication) getApplicationContext(), GrowthChartListFragment.INTENT_REFRESH_REQUEST_LIST_FROM_SERVER);
+                        return;
+                    case REFRESH_BABY_ACHIEVEMENTS:
+                        Util.sendBroadcast((HealthCocoApplication) getApplicationContext(), BabyAchievementsListFragment.INTENT_REFRESH_REQUEST_LIST_FROM_SERVER);
                         return;
                     case CLINICAL_NOTES_REFRESH:
                     case PATIENT_VISIT_REFRESH:

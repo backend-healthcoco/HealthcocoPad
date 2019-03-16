@@ -33,6 +33,7 @@ import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.LocalTabelType;
 import com.healthcoco.healthcocopad.enums.PopupWindowType;
 import com.healthcoco.healthcocopad.enums.VaccineDuration;
+import com.healthcoco.healthcocopad.enums.VaccineStatus;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
 import com.healthcoco.healthcocopad.listeners.PopupWindowListener;
@@ -72,6 +73,7 @@ public class VaccinationListFragment extends HealthCocoFragment implements View.
     private TextView tvNoVaccineFound;
     private FloatingActionButton fbAddVaccine;
     private TextView tvChangeDate;
+    private boolean isGiven = true;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -110,6 +112,7 @@ public class VaccinationListFragment extends HealthCocoFragment implements View.
     public void initListeners() {
         swipeRefreshLayout.setOnRefreshListener(this);
         fbAddVaccine.setOnClickListener(this);
+        tvChangeDate.setOnClickListener(this);
     }
 
     private void initAdapters() {
@@ -182,6 +185,9 @@ public class VaccinationListFragment extends HealthCocoFragment implements View.
     }
 
     private void notifyAdapter(ArrayList<VaccineCustomResponse> list) {
+        if (isGiven)
+            tvChangeDate.setVisibility(View.VISIBLE);
+        else tvChangeDate.setVisibility(View.GONE);
         if (!Util.isNullOrEmptyList(list)) {
             Collections.sort(list, ComparatorUtil.vaccineDateComparator);
             rvVaccineList.setVisibility(View.VISIBLE);
@@ -267,6 +273,11 @@ public class VaccinationListFragment extends HealthCocoFragment implements View.
         for (VaccineCustomResponse vaccineCustomResponse :
                 responseArrayList) {
             customResponseLinkedHashMap.put(vaccineCustomResponse.getDuration(), vaccineCustomResponse);
+            for (VaccineResponse vaccineResponse :
+                    vaccineCustomResponse.getVaccineResponse()) {
+                if (vaccineResponse.getStatus() == VaccineStatus.GIVEN)
+                    isGiven = false;
+            }
         }
         notifyAdapter(responseArrayList);
     }

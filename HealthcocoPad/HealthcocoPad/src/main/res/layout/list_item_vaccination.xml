@@ -2,115 +2,130 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_gravity="start"
-    android:background="@drawable/shadow_new"
-    android:orientation="vertical"
-    android:padding="15dp">
+    android:orientation="horizontal"
+    android:padding="@dimen/item_visits_button_padding_left_right_20dp">
 
-    <LinearLayout
+    <ImageView
+        android:id="@+id/image_view"
+        android:layout_width="@dimen/list_item_image_size"
+        android:layout_height="@dimen/list_item_image_size"
+        android:layout_gravity="start"
+        android:paddingRight="@dimen/item_visits_button_padding_left_right_20dp"
+        android:src="@drawable/icon_list_vaccinations" />
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="start"
-        android:orientation="horizontal">
+        android:background="@drawable/shadow_new"
+        android:orientation="vertical"
+        android:padding="15dp">
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="25"
-            android:orientation="vertical">
+            android:layout_gravity="start"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="25"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_vaccine_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/shape_rectangle_grey"
+                    android:text="Due On"
+                    android:textAllCaps="true"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/tv_date_of_vaccine"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:textAllCaps="true"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_age_for_vaccine"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:textAllCaps="true"
+                    android:textColor="@color/grey_dark_text"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="50"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_vaccine_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="17sp" />
+
+                <TextView
+                    android:id="@+id/tv_vaccine_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_marginTop="5dp"
+                    android:textColor="@color/green_logo"
+                    android:textSize="15sp" />
+            </LinearLayout>
 
             <TextView
-                android:id="@+id/tv_vaccine_status"
+                android:id="@+id/tv_update_vaccine"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/shape_rectangle_grey"
-                android:text="Due On"
-                android:textAllCaps="true"
-                android:textColor="@color/white"
-                android:textSize="14sp" />
-
-            <TextView
-                android:id="@+id/tv_date_of_vaccine"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
                 android:layout_marginTop="3dp"
+                android:text="@string/update"
                 android:textAllCaps="true"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/tv_age_for_vaccine"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
-                android:textAllCaps="true"
-                android:textColor="@color/grey_dark_text"
+                android:textColor="@drawable/text_blue_translucent_selector"
                 android:textSize="16sp" />
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:id="@+id/layout_updated_by"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="50"
-            android:orientation="vertical">
+            android:layout_marginTop="@dimen/drawable_text_padding"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginRight="@dimen/drawable_text_padding"
+                android:src="@drawable/icon_syringe" />
 
             <TextView
-                android:id="@+id/tv_vaccine_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:textSize="17sp" />
+                android:gravity="center"
+                android:text="@string/updated_by"
+                android:textColor="@color/orange"
+                android:textSize="16sp" />
 
             <TextView
-                android:id="@+id/tv_vaccine_count"
+                android:id="@+id/tv_updated_by"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:layout_marginTop="5dp"
-                android:textColor="@color/green_logo"
-                android:textSize="15sp" />
+                android:gravity="center"
+                android:textColor="@color/orange"
+                android:textSize="16sp" />
         </LinearLayout>
-
-        <TextView
-            android:id="@+id/tv_update_vaccine"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="3dp"
-            android:text="@string/update"
-            android:textAllCaps="true"
-            android:textColor="@drawable/text_blue_translucent_selector"
-            android:textSize="16sp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/layout_updated_by"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/drawable_text_padding"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginRight="@dimen/drawable_text_padding"
-            android:src="@drawable/icon_syringe" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/updated_by"
-            android:textColor="@color/orange"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/tv_updated_by"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textColor="@color/orange"
-            android:textSize="16sp" />
     </LinearLayout>
 </LinearLayout>

@@ -182,6 +182,7 @@ public class AddGrowthChartDialogFragment extends HealthCocoDialogFragment imple
     }
 
     private void addRequest() {
+        mActivity.showLoading(false);
         GrowthChartRequest growthChartRequest = new GrowthChartRequest();
         growthChartRequest.setDoctorId(user.getUniqueId());
         growthChartRequest.setLocationId(user.getForeignLocationId());

@@ -21,7 +21,8 @@ public enum NotificationContentType {
     INVOICE_REFRESH,
     RECEIPT_REFRESH,
     DISCHARGE_SUMMARY_REFRESH,
-    REFRESH;
+    REFRESH,
+    REFRESH_VACCINATION,REFRESH_GROWTH_CHART,REFRESH_BABY_ACHIEVEMENTS;
 
     private final int titleId;
     private final WebServiceType webServiceType;

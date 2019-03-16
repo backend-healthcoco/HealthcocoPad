@@ -1,181 +1,196 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_gravity="start"
-    android:background="@drawable/shadow_new"
-    android:orientation="vertical">
+    android:orientation="horizontal"
+    android:padding="@dimen/item_visits_button_padding_left_right_20dp">
 
-    <LinearLayout
+    <ImageView
+        android:id="@+id/image_view"
+        android:layout_width="@dimen/list_item_image_size"
+        android:layout_height="@dimen/list_item_image_size"
+        android:layout_gravity="start"
+        android:paddingRight="@dimen/item_visits_button_padding_left_right_20dp"
+        android:src="@drawable/icon_list_achievement" />
+
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:padding="8dp">
+        android:layout_gravity="start"
+        android:background="@drawable/shadow_new"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="8dp">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:drawablePadding="@dimen/drawable_text_padding"
-                android:gravity="center_vertical"
-                android:src="@drawable/tab_cal_date_normal_item"
-                android:textColor="@color/black" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:drawablePadding="@dimen/drawable_text_padding"
+                    android:gravity="center_vertical"
+                    android:src="@drawable/tab_cal_date_normal_item"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:id="@+id/tv_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:gravity="center"
+                    android:text="26/4/2015"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_emr_date" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="@dimen/item_padding"
+                android:layout_marginTop="@dimen/item_padding"
+                android:background="@color/grey_background" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="start"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/achievement_with_colon"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_baby_achievements_parameters_label"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tv_achievements"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:paddingBottom="5dp"
+                        android:text="@string/description"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_baby_achievements_parameters_label" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:gravity="start"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/achievement_date_with_colon"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_baby_achievements_parameters_label"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tv_achievement_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:singleLine="true"
+                        android:text="@string/no_text_dash"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_baby_achievements_parameters_label" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:gravity="start"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/duration_with_colon"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_baby_achievements_parameters_label"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tv_duration"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:singleLine="true"
+                        android:text="@string/no_text_dash"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_baby_achievements_parameters_label" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:gravity="start"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/note_with_colon"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_baby_achievements_parameters_label"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tv_notes"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:paddingBottom="5dp"
+                        android:text="@string/no_text_dash"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_baby_achievements_parameters_label" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="@dimen/item_padding"
+                android:layout_marginTop="@dimen/item_padding"
+                android:background="@color/grey_background" />
 
             <TextView
-                android:id="@+id/tv_date"
+                android:id="@+id/tv_update_achievement"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:gravity="center"
-                android:text="26/4/2015"
-                android:textColor="@color/black"
-                android:textSize="@dimen/text_size_emr_date" />
+                android:layout_gravity="end"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="3dp"
+                android:drawableLeft="@drawable/icon_edit_selected"
+                android:drawablePadding="5dp"
+                android:text="@string/update"
+                android:textAllCaps="true"
+                android:textColor="@drawable/text_blue_translucent_selector"
+                android:textSize="16sp" />
         </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginBottom="@dimen/item_padding"
-            android:layout_marginTop="@dimen/item_padding"
-            android:background="@color/grey_background" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="start"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="@string/achievement_with_colon"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/text_size_baby_achievements_parameters_label"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tv_achievements"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:paddingBottom="5dp"
-                    android:text="@string/description"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/text_size_baby_achievements_parameters_label" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:gravity="start"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="@string/achievement_date_with_colon"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/text_size_baby_achievements_parameters_label"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tv_achievement_date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:singleLine="true"
-                    android:text="@string/no_text_dash"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/text_size_baby_achievements_parameters_label" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:gravity="start"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="@string/duration_with_colon"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/text_size_baby_achievements_parameters_label"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tv_duration"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:singleLine="true"
-                    android:text="@string/no_text_dash"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/text_size_baby_achievements_parameters_label" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:gravity="start"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="@string/note_with_colon"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/text_size_baby_achievements_parameters_label"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tv_notes"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingBottom="5dp"
-                    android:gravity="center"
-                    android:text="@string/no_text_dash"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/text_size_baby_achievements_parameters_label" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginBottom="@dimen/item_padding"
-            android:layout_marginTop="@dimen/item_padding"
-            android:background="@color/grey_background" />
-
-        <TextView
-            android:id="@+id/tv_update_achievement"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="3dp"
-            android:drawableLeft="@drawable/icon_edit_selected"
-            android:drawablePadding="5dp"
-            android:text="@string/update"
-            android:textAllCaps="true"
-            android:textColor="@drawable/text_blue_translucent_selector"
-            android:textSize="16sp" />
-    </LinearLayout>
-</FrameLayout>
+    </FrameLayout>
+</LinearLayout>

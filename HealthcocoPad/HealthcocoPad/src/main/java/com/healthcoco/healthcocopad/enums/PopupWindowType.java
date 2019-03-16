@@ -88,13 +88,9 @@ public enum PopupWindowType {
         }
     }),BRAND_TYPE,
     ACHIEVEMENT_DURATION(new ArrayList<Object>() {{
-        add("DAY");
         add("DAY(S)");
-        add("MONTH");
         add("MONTH(S)");
-        add("WEEK");
         add("WEEK(S)");
-        add("YEAR");
         add("YEAR(S)");
     }});
     private final ArrayList<Object> list;

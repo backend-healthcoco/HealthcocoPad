@@ -20,9 +20,9 @@ public enum PatientDetailTabType {
     PATIENT_DETAIL_INVOICE(8, R.string.invoice, R.string.invoice, R.drawable.selector_ic_invoice_tab, View.VISIBLE, View.VISIBLE, "BILLING"),
     PATIENT_DETAIL_RECEIPT(9, R.string.receipt, R.string.receipt, R.drawable.selector_ic_receipt_tab, View.VISIBLE, View.VISIBLE, "BILLING"),
     //        PATIENT_DETAIL_BILLING(7, R.string.billing, R.drawable.selector_ic_treatment_tab, new PatientTreatmentDetailFragment());
-    PATIENT_DETAIL_VACCINATION(10, R.string.vaccination, R.string.vaccination, R.drawable.selector_ic_receipt_tab, View.VISIBLE, View.VISIBLE, "PATIENT_DETAIL_VACCINATION"),
-    PATIENT_DETAIL_GROWTH_CHART(11, R.string.growth_chart, R.string.growth_chart, R.drawable.selector_ic_receipt_tab, View.VISIBLE, View.VISIBLE, "PATIENT_DETAIL_GROWTH_CHART"),
-    PATIENT_DETAIL_BABY_ACHIEVEMENTS(12, R.string.achievements, R.string.baby_achievements, R.drawable.selector_ic_receipt_tab, View.VISIBLE, View.VISIBLE, "PATIENT_DETAIL_BABY_ACHIEVEMENTS");
+    PATIENT_DETAIL_VACCINATION(10, R.string.vaccination, R.string.vaccination, R.drawable.selector_ic_vaccination_tab, View.VISIBLE, View.VISIBLE, "PATIENT_DETAIL_VACCINATION"),
+    PATIENT_DETAIL_GROWTH_CHART(11, R.string.growth_chart, R.string.growth_chart, R.drawable.selector_ic_growth_chart_tab, View.VISIBLE, View.VISIBLE, "PATIENT_DETAIL_GROWTH_CHART"),
+    PATIENT_DETAIL_BABY_ACHIEVEMENTS(12, R.string.achievements, R.string.baby_achievements, R.drawable.selector_ic_achievements_tab, View.VISIBLE, View.VISIBLE, "PATIENT_DETAIL_BABY_ACHIEVEMENTS");
     private final int textId;
     private final int drawableId;
     private final String value;

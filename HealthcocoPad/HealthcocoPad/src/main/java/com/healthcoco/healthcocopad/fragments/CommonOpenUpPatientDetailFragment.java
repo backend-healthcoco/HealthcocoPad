@@ -240,6 +240,11 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                 newList.add(PatientDetailTabType.PATIENT_DETAIL_RECEIPT);
             else if (newList.contains(PatientDetailTabType.PATIENT_DETAIL_RECEIPT))
                 newList.add(PatientDetailTabType.PATIENT_DETAIL_INVOICE);
+
+            if (newList.contains(PatientDetailTabType.PATIENT_DETAIL_VACCINATION)) {
+                newList.add(PatientDetailTabType.PATIENT_DETAIL_GROWTH_CHART);
+                newList.add(PatientDetailTabType.PATIENT_DETAIL_BABY_ACHIEVEMENTS);
+            }
         }
 
         if (!Util.isNullOrEmptyList(tabItemList)) {
@@ -258,18 +263,18 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                         case PATIENT_DETAIL_PROFILE:
                         case PATIENT_DETAIL_APPOINTMENT:
                         case PATIENT_DETAIL_VACCINATION:
-//                        case GROWTH_CHART:
-//                        case BABY_ACHIEVEMENTS:
-                            break;
                         case PATIENT_DETAIL_GROWTH_CHART:
                         case PATIENT_DETAIL_BABY_ACHIEVEMENTS:
                             break;
+//                        case PATIENT_DETAIL_GROWTH_CHART:
+//                        case PATIENT_DETAIL_BABY_ACHIEVEMENTS:
+//                            break;
                     }
                 } else {
                     switch (openDetailType) {
-                        case PATIENT_DETAIL_GROWTH_CHART:
-                        case PATIENT_DETAIL_BABY_ACHIEVEMENTS:
-                            break;
+//                        case PATIENT_DETAIL_GROWTH_CHART:
+//                        case PATIENT_DETAIL_BABY_ACHIEVEMENTS:
+//                            break;
                     }
                 }
             }

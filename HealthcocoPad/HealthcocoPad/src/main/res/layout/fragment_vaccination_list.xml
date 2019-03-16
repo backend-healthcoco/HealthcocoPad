@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/grey_background"
+    android:background="@color/white"
     android:orientation="vertical">
 
     <TextView
@@ -11,12 +11,14 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end"
         android:drawablePadding="5dp"
-        android:drawableRight="@drawable/arrow_down_drug"
+        android:layout_margin="4dp"
+        android:drawableEnd="@drawable/arrow_down_drug"
         android:drawableStart="@drawable/tab_cal_date_normal_item"
         android:gravity="start"
         android:padding="8dp"
-        android:layout_marginRight="10dp"
+        android:background="@drawable/shape_rounded_corners_blue_background_white"
         android:singleLine="true"
+        android:visibility="visible"
         android:text="@string/change_date"
         android:textColor="@color/grey_darker"
         android:textSize="@dimen/text_size_add_growth_chart_parameters_label" />
