@@ -177,6 +177,7 @@ public class UpdateBabyAchievementsFragment extends HealthCocoDialogFragment imp
         achievementsDuration.setDurationUnit(drugDurationUnit);
         babyAchievementsReques.setDuration(achievementsDuration);
         babyAchievementsReques.setPatientId(selectedPatient.getUserId());
+        babyAchievementsReques.setDoctorId(user.getUniqueId());
         if (babyAchievementsResponse != null)
             babyAchievementsReques.setUniqueId(babyAchievementsResponse.getUniqueId());
         mActivity.showLoading(false);
