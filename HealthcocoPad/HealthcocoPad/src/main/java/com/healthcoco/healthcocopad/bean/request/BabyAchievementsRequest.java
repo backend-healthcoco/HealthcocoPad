@@ -8,6 +8,8 @@ public class BabyAchievementsRequest {
     @Unique
     private String uniqueId;
     private String patientId;
+    private String doctorId;
+
     private String achievement;
     private Long achievementDate;
     private String note;
@@ -60,5 +62,13 @@ public class BabyAchievementsRequest {
 
     public void setDuration(AchievementsDuration duration) {
         this.duration = duration;
+    }
+
+    public String getDoctorId() {
+        return doctorId;
+    }
+
+    public void setDoctorId(String doctorId) {
+        this.doctorId = doctorId;
     }
 }
