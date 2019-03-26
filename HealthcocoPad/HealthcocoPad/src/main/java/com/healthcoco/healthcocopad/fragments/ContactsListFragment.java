@@ -30,7 +30,6 @@ import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.activities.HomeActivity;
 import com.healthcoco.healthcocopad.adapter.ContactsListAdapter;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
-import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
 import com.healthcoco.healthcocopad.bean.server.ClinicDetailResponse;
 import com.healthcoco.healthcocopad.bean.server.DoctorClinicProfile;
 import com.healthcoco.healthcocopad.bean.server.DoctorProfile;
@@ -67,7 +66,6 @@ import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimis
 import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
-import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
@@ -709,6 +707,8 @@ public class ContactsListFragment extends HealthCocoFragment implements
                             && !Util.isNullOrBlank(user.getForeignLocationId())) {
 //                        if (packageType != null) {
                         initFilterFragment();
+                        if (isInHomeActivity)
+                            Util.sendBroadcast(mApp, MenuDrawerFragment.INTENT_REFRESH_PATIENT_COUNT);
                         getListFromLocal(true);
 //                        } else
 //                            showConfirmationAlert(null, mActivity.getResources().getString(R.string.confirm_discard_patient), null);
@@ -740,6 +740,8 @@ public class ContactsListFragment extends HealthCocoFragment implements
                             isEndOfListAchievedServer = false;
                             mActivity.updateProgressDialog(100, getProgressCount(response));
                         }
+                        if (isInHomeActivity)
+                            Util.sendBroadcast(mApp, MenuDrawerFragment.INTENT_REFRESH_PATIENT_COUNT);
                         response.setIsFromLocalAfterApiSuccess(true);
                         new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_PATIENTS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
                         return;
@@ -1043,12 +1045,12 @@ public class ContactsListFragment extends HealthCocoFragment implements
             case SEARCH_PATIENTS:
                 volleyResponseBean = LocalDataServiceImpl.getInstance(mApp)
                         .getSearchedPatientsListPageWise(WebServiceType.GET_CONTACTS, user,
-                                PAGE_NUMBER, MAX_SIZE, filterType, selectedSearchType, getSearchEditTextValue(selectedSearchType), pidHasDate, null, null);
+                                PAGE_NUMBER, MAX_SIZE, filterType, selectedSearchType, getSearchEditTextValue(selectedSearchType), pidHasDate, BooleanTypeValues.FALSE, null, null);
                 break;
             case SORT_LIST_BY_GROUP:
                 volleyResponseBean = LocalDataServiceImpl.getInstance(mApp)
                         .getPatientsListWithGroup(WebServiceType.GET_CONTACTS, user, selectedGroupId,
-                                false, PAGE_NUMBER, MAX_SIZE, null, null);
+                                BooleanTypeValues.FALSE, PAGE_NUMBER, MAX_SIZE, null, null);
                 break;
             case CLEAR_PATIENTS:
                 LocalDataServiceImpl.getInstance(mApp).clearPatientsList();

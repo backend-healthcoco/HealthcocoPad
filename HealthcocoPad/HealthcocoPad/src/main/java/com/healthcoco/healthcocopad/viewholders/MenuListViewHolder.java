@@ -8,6 +8,7 @@ import android.widget.TextView;
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.HealthCocoApplication;
 import com.healthcoco.healthcocopad.R;
+import com.healthcoco.healthcocopad.bean.MenuItem;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.enums.FragmentType;
@@ -28,21 +29,17 @@ public class MenuListViewHolder {
         this.mApp = (HealthCocoApplication) mActivity.getApplication();
     }
 
-    public void applyData(FragmentType fragmentType) {
-        ivMenuIcon.setBackgroundResource(fragmentType.getDrawableId());
-        tvItemName.setText(fragmentType.getTitleId());
-        tempMethod(fragmentType);
+    public void applyData(MenuItem menuItem) {
+        ivMenuIcon.setBackgroundResource(menuItem.getFragmentType().getDrawableId());
+        tvItemName.setText(menuItem.getFragmentType().getTitleId());
+        tempMethod(menuItem);
     }
 
-    private void tempMethod(FragmentType fragmentType) {
+    private void tempMethod(MenuItem menuItem) {
         String notifNo = "";
-        switch (fragmentType) {
+        switch (menuItem.getFragmentType()) {
             case CONTACTS:
-                LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
-                if (doctor != null) {
-                    User user = doctor.getUser();
-                    notifNo = LocalDataServiceImpl.getInstance(mApp).getListCount(user) + "";
-                }
+                notifNo = menuItem.getNotifNo();
                 break;
             default:
                 notifNo = "";
@@ -51,7 +48,7 @@ public class MenuListViewHolder {
         tvNotifNo.setText(notifNo);
     }
 
-    public View getContentView(FragmentType fragmentType) {
+    public View getContentView(MenuItem menuItem) {
         convertView = null;
 //        switch (fragmentType.getMenuType()) {
 //            case SEPARATOR:

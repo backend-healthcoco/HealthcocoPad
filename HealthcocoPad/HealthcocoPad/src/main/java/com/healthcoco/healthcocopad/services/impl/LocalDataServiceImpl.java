@@ -272,7 +272,7 @@ public class LocalDataServiceImpl {
             }
     }
 
-    public VolleyResponseBean getListSize(LocalTabelType tableType, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+    public VolleyResponseBean getListSize(LocalTabelType tableType, BooleanTypeValues discarded, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
         volleyResponseBean.setWebServiceType(WebServiceType.GET_PATIENTS_COUNT);
         volleyResponseBean.setIsDataFromLocal(true);
@@ -284,7 +284,7 @@ public class LocalDataServiceImpl {
                     if (doctor != null) {
                         User user = doctor.getUser();
                         String whereCondition = "SELECT count(*) FROM " + StringUtil.toSQLName(RegisteredPatientDetailsUpdated.class.getSimpleName())
-                                + getWhereConditionForPatientsList(user);
+                                + getWhereConditionForPatientsList(user, discarded);
 
                         LogUtils.LOGD(TAG, "Select Query " + whereCondition);
                         SQLiteStatement statement = SugarRecord.getSugarDataBase().compileStatement(whereCondition);
@@ -2307,7 +2307,7 @@ public class LocalDataServiceImpl {
 
     public VolleyResponseBean getSearchedPatientsListPageWise(WebServiceType webServiceType, User user,
                                                               int pageNum, int maxSize, FilterItemType filterType, AdvanceSearchOptionsType advanceSearchOptionsType, String searchTerm,
-                                                              Boolean pidHasDate, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+                                                              Boolean pidHasDate, BooleanTypeValues discarded, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
         volleyResponseBean.setWebServiceType(webServiceType);
         volleyResponseBean.setIsDataFromLocal(true);
@@ -2315,7 +2315,7 @@ public class LocalDataServiceImpl {
         try {
             //forming where condition query
             String whereCondition = "Select * from " + StringUtil.toSQLName(RegisteredPatientDetailsUpdated.class.getSimpleName())
-                    + getWhereConditionForPatientsList(user);
+                    + getWhereConditionForPatientsList(user, discarded);
             if (advanceSearchOptionsType != null && !Util.isNullOrBlank(searchTerm)) {
                 switch (advanceSearchOptionsType) {
                     case GENERAL_SEARCH:
@@ -2423,11 +2423,12 @@ public class LocalDataServiceImpl {
         return volleyResponseBean;
     }
 
-    private String getWhereConditionForPatientsList(User user) {
+    private String getWhereConditionForPatientsList(User user, BooleanTypeValues discarded) {
         String whereCondition = " where "
                 + LocalDatabaseUtils.KEY_HOSPITAL_ID + "=\"" + user.getForeignHospitalId() + "\""
                 + " AND "
-                + LocalDatabaseUtils.KEY_LOCATION_ID + "=\"" + user.getForeignLocationId() + "\"";
+                + LocalDatabaseUtils.KEY_LOCATION_ID + "=\"" + user.getForeignLocationId() + "\""
+                + " AND " + LocalDatabaseUtils.KEY_IS_PATIENT_DISCARDED + "=" + discarded.getBooleanIntValue();
         if (RoleType.isOnlyConsultant(user.getRoleTypes())) {
             whereCondition = whereCondition
                     + " AND " + LocalDatabaseUtils.KEY_IS_PART_OF_CONSULTANT_DOCTOR + "=" + LocalDatabaseUtils.BOOLEAN_TRUE_VALUE
@@ -2515,7 +2516,7 @@ public class LocalDataServiceImpl {
     }
 
     public VolleyResponseBean getPatientsListWithGroup(WebServiceType webServiceType, User user, String groupId,
-                                                       boolean discarded, int pageNum, int maxSize,
+                                                       BooleanTypeValues discarded, int pageNum, int maxSize,
                                                        Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
         volleyResponseBean.setWebServiceType(webServiceType);
@@ -2524,7 +2525,7 @@ public class LocalDataServiceImpl {
         try {
             //forming where condition query
             String whereCondition = "Select * from " + StringUtil.toSQLName(RegisteredPatientDetailsUpdated.class.getSimpleName())
-                    + getWhereConditionForPatientsList(user);
+                    + getWhereConditionForPatientsList(user, discarded);
             whereCondition = whereCondition
                     + " AND "
                     + LocalDatabaseUtils.getSearchTermEqualsIgnoreCaseQuery(LocalDatabaseUtils.KEY_GROUP_IDS_JSON_STRING, groupId);

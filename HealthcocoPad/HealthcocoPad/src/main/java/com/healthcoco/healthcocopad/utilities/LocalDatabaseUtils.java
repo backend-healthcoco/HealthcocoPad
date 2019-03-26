@@ -128,6 +128,7 @@ public class LocalDatabaseUtils {
     public static final String KEY_VACCINE_ID = "vaccine_id";
     public static final String KEY_DURATION = "duration";
     public static final String KEY_DUE_DATE = "due_date";
+    public static final String KEY_IS_PATIENT_DISCARDED = "is_patient_discarded";
 
     public static String getSearchTermEqualsIgnoreCaseQuery(String filedName, String value) {
         return filedName + " LIKE \"%" + value + "%\"" + " COLLATE NOCASE ";

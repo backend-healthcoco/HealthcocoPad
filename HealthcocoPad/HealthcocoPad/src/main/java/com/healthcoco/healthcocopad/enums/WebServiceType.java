@@ -66,7 +66,7 @@ public enum WebServiceType {
     GET_APPOINTMENT_BY_APPOINTMENT_ID(Method.GET, "appointment/"),
 
     GET_CONTACTS(Method.GET,
-            "contacts/handheld/?discarded=true"),
+            "contacts/handheld/?"),
 
     LOGIN(Method.POST, "login/user?"),
 
