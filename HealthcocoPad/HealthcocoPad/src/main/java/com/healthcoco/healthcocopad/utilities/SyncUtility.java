@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import com.android.volley.Response;
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.HealthCocoApplication;
+import com.healthcoco.healthcocopad.bean.UiPermissionsBoth;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.BloodGroup;
 import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
@@ -178,6 +179,11 @@ public class SyncUtility implements Response.Listener<VolleyResponseBean>, GsonR
                         new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_VACCINATION_BRAND, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
                     }
                     break;
+                case GET_BOTH_PERMISSIONS_FOR_DOCTOR:
+                    if (response.getData() != null) {
+                        new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_BOTH_USER_UI_PERMISSIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                    }
+                    break;
                 default:
                     break;
             }
@@ -296,6 +302,11 @@ public class SyncUtility implements Response.Listener<VolleyResponseBean>, GsonR
                 if (!Util.isNullOrEmptyList(response.getDataList()))
                     LocalDataServiceImpl.getInstance(mApp).addVaccinationBrandsList((ArrayList<VaccineBrandResponse>) (ArrayList<?>) response.getDataList());
                 break;
+            case ADD_BOTH_USER_UI_PERMISSIONS:
+                if (response.getData() != null)
+                    LocalDataServiceImpl.getInstance(mApp).
+                            addBothUserUiPermissions((UiPermissionsBoth) response.getData());
+                break;
 //            case ADD_DISEASE_LIST:
 //                if (!Util.isNullOrEmptyList(response.getDataList()))
 //                    LocalDataServiceImpl.getInstance(mApp).addDiseaseList((ArrayList<Disease>) (ArrayList<?>) response.getDataList());
@@ -319,4 +330,11 @@ public class SyncUtility implements Response.Listener<VolleyResponseBean>, GsonR
     public void getVaccinesBrandsList() {
         WebDataServiceImpl.getInstance(mApp).getVaccinationBrandList(VaccineBrandResponse.class, WebServiceType.GET_VACCINATION_BRAND, this, this);
     }
+
+    public void getUIPermissions() {
+        if (user != null) {
+            WebDataServiceImpl.getInstance(mApp).getBothUIPermissionsForDoctor(UiPermissionsBoth.class, user.getUniqueId(), this, this);
+        }
+    }
+
 }

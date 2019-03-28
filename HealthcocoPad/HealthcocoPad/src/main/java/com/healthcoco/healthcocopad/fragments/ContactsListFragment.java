@@ -70,6 +70,7 @@ import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
+import com.healthcoco.healthcocopad.utilities.SyncUtility;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.healthcoco.healthcocopad.views.CustomAutoCompleteTextView;
 import com.healthcoco.healthcocopad.views.FontAwesomeButton;
@@ -749,6 +750,10 @@ public class ContactsListFragment extends HealthCocoFragment implements
                     notifyAdapter(new ArrayList<RegisteredPatientDetailsUpdated>(patientsListHashMap.values()));
                     if (!isOnLoadMore) {
                         refreshMenuFragmentContactsCount();
+                    }
+                    if (isInHomeActivity) {
+//                        new SyncUtility(mApp, mActivity, user, null).getContactsList();
+                        new SyncUtility(mApp, mActivity, user, null).getUIPermissions();
                     }
                     break;
                 case ADD_PATIENT_TO_QUEUE:
