@@ -232,21 +232,22 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
             }
         }
         ArrayList<PatientDetailTabType> newList = new ArrayList<>();
-        for (String permissionTypeString :
-                user.getUiPermissions().getTabPermissions()) {
-            PatientDetailTabType commonOpenDetailType = PatientDetailTabType.getPatientDetailTabType(permissionTypeString);
-            newList.add(commonOpenDetailType);
-            if (newList.contains(PatientDetailTabType.PATIENT_DETAIL_INVOICE))
-                newList.add(PatientDetailTabType.PATIENT_DETAIL_RECEIPT);
-            else if (newList.contains(PatientDetailTabType.PATIENT_DETAIL_RECEIPT))
-                newList.add(PatientDetailTabType.PATIENT_DETAIL_INVOICE);
+        if (user != null && user.getUiPermissions() != null && user.getUiPermissions() != null) {
+            for (String permissionTypeString :
+                    user.getUiPermissions().getTabPermissions()) {
+                PatientDetailTabType commonOpenDetailType = PatientDetailTabType.getPatientDetailTabType(permissionTypeString);
+                newList.add(commonOpenDetailType);
+                if (newList.contains(PatientDetailTabType.PATIENT_DETAIL_INVOICE))
+                    newList.add(PatientDetailTabType.PATIENT_DETAIL_RECEIPT);
+                else if (newList.contains(PatientDetailTabType.PATIENT_DETAIL_RECEIPT))
+                    newList.add(PatientDetailTabType.PATIENT_DETAIL_INVOICE);
 
-            if (newList.contains(PatientDetailTabType.PATIENT_DETAIL_VACCINATION)) {
-                newList.add(PatientDetailTabType.PATIENT_DETAIL_GROWTH_CHART);
-                newList.add(PatientDetailTabType.PATIENT_DETAIL_BABY_ACHIEVEMENTS);
+                if (newList.contains(PatientDetailTabType.PATIENT_DETAIL_VACCINATION)) {
+                    newList.add(PatientDetailTabType.PATIENT_DETAIL_GROWTH_CHART);
+                    newList.add(PatientDetailTabType.PATIENT_DETAIL_BABY_ACHIEVEMENTS);
+                }
             }
         }
-
         if (!Util.isNullOrEmptyList(tabItemList)) {
             Iterator<PatientDetailTabType> i = tabItemList.iterator();
             while (i.hasNext()) {

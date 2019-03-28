@@ -71,6 +71,7 @@ public class Util {
     private static final String TAG = Util.class.getSimpleName();
     private static Toast visibleToast;
     private static final String SEPARATOR_COMMA = ", ";
+
     /**
      * Check the device to make sure it has the Google Play Services APK. If
      * it doesn't, display a dialog that allows users to download the APK from
@@ -1053,4 +1054,12 @@ public class Util {
     }
 */
 
+    public static String getValidMobileNumber(String phone) {
+        String s = "";
+        s = phone.replaceAll(" ", "");
+        s = s.replaceFirst("^0+(?!$)", "").trim();
+        s = s.replaceAll("\\s+", "");
+        s = s.replace("+91", "");
+        return s;
+    }
 }

@@ -136,7 +136,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.healthcoco.healthcocopad.activities.HomeActivity.REQUEST_CALL_PERMISSIONS;
-import static com.healthcoco.healthcocopad.activities.HomeActivity.REQUEST_PERMISSIONS;
 
 /**
  * Created by Shreshtha on 18-01-2017.
@@ -145,6 +144,7 @@ import static com.healthcoco.healthcocopad.activities.HomeActivity.REQUEST_PERMI
 public class HealthCocoActivity extends AppCompatActivity implements GsonRequest.ErrorListener, LocalDoInBackgroundListenerOptimised, Response.Listener<VolleyResponseBean> {
     protected static final String TAG = HealthCocoActivity.class.getSimpleName();
     private static final long DEFAULT_LOADING_TIME = 20000;
+    public static final int REQUEST_PERMISSIONS = 101;
     public static long GCM_WAIT_TIME = 2000;
     protected HealthCocoApplication mApp;
     ClinicalNotesDynamicField clinicalNotesDynamicField;
@@ -999,9 +999,6 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
                 case GET_DRUG_DOSAGE:
                     new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_DRUG_DOSAGE, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
                     return;
-                case GET_DATA_PERMISSION:
-                    new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_DATA_PERMISSIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
-                    return;
                 case GET_CONTACTS:
                     if (isPagingRequired)
                         updateProgress(DefaultSyncServiceType.GET_CONTACTS);
@@ -1159,6 +1156,9 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
                     break;
                 case GET_BOTH_PERMISSIONS_FOR_DOCTOR:
                     new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_BOTH_USER_UI_PERMISSIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                    break;
+                case GET_DATA_PERMISSION:
+                    new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_DATA_PERMISSIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
                     break;
                 default:
                     break;
@@ -2044,6 +2044,7 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
         doctorListPopupWindow.setOutsideTouchable(true);
         doctorListPopupWindow.setContentView(doctorListPopupWindow.getPopupView());
     }
+
     protected void openCommonOpenUpActivityUsingParcel(CommonOpenUpFragmentType fragmentType, String[] tagArray, Object[] intentData) {
         openCommonOpenUpActivityUsingParcel(fragmentType, 0, tagArray, intentData);
     }
