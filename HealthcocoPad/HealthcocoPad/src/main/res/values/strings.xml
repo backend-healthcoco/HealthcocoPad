@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Healthcoco Pad</string>
-    <string name="app_version_name">1.1.1</string>
+    <string name="app_version_name">1.1.2</string>
     <string name="app_version_about_us_name">v%s(Beta)</string>
     <string name="database_name">healthcoco_pad.db</string>
     <string name="join">Join</string>
