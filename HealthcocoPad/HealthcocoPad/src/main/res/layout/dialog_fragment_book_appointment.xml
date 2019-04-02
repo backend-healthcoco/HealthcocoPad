@@ -277,11 +277,13 @@
                                         android:layout_height="wrap_content"
                                         android:visibility="visible">
 
-                                        <EditText
+                                        <com.healthcoco.healthcocopad.custom.CustomEditText
                                             android:id="@+id/edit_mobile_number"
                                             android:layout_width="0dp"
                                             android:layout_height="wrap_content"
                                             android:layout_weight="1"
+                                            android:drawablePadding="10dp"
+                                            android:drawableRight="@drawable/icon_phone_book"
                                             android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
                                             android:gravity="start"
                                             android:hint="@string/please_enter_mobile_no"

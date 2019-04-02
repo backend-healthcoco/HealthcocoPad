@@ -1435,7 +1435,7 @@ public class LocalDataServiceImpl {
 
     public VolleyResponseBean addPatientsList(ArrayList<RegisteredPatientDetailsUpdated> patientsList) {
         VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
-        volleyResponseBean.setWebServiceType(WebServiceType.REGISTER_PATIENT);
+        volleyResponseBean.setWebServiceType(WebServiceType.GET_CONTACTS);
         volleyResponseBean.setIsDataFromLocal(true);
         volleyResponseBean.setIsUserOnline(HealthCocoConstants.isNetworkOnline);
         try {

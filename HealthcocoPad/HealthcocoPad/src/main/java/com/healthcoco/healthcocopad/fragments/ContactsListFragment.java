@@ -731,6 +731,10 @@ public class ContactsListFragment extends HealthCocoFragment implements
                             resetListAndPagingServer();
                             getContactsList(true);
                             return;
+                        } else if (Util.isNullOrEmptyList(responseList) && !response.isFromLocalAfterApiSuccess()) {
+                            resetListAndPagingServer();
+                            getContactsList(true);
+                            return;
                         }
                     } else if (!Util.isNullOrEmptyList(response.getDataList())) {
                         if (Util.isNullOrEmptyList(response.getDataList()) || response.getDataList().size() < MAX_NUMBER_OF_CONTACT || Util.isNullOrEmptyList(response.getDataList())) {
@@ -1044,7 +1048,6 @@ public class ContactsListFragment extends HealthCocoFragment implements
                     volleyResponseBean.setWebServiceType(WebServiceType.GET_CONTACTS);
                     volleyResponseBean.setDataList(response.getDataList());
                 }
-                break;
             case GET_PATIENTS:
             case SORT_LIST_BY_RECENTLY_ADDED:
             case SEARCH_PATIENTS:

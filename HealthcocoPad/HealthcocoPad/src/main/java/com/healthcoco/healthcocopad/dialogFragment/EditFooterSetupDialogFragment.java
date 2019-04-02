@@ -205,7 +205,8 @@ public class EditFooterSetupDialogFragment extends HealthCocoDialogFragment
         String fontSize = String.valueOf(autotvFontSize.getText());
         String bottomText = String.valueOf(etBottomText.getText());
         String signatureText = String.valueOf(etSignatureText.getText());
-
+        if (footerSetup == null)
+            footerSetup = new FooterSetup();
 
         footerSetup.setBottomSignText(signatureText);
 

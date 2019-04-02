@@ -927,6 +927,7 @@ public class SyncFragment extends HealthCocoFragment implements View.OnClickList
                 case GET_BOTH_PERMISSIONS_FOR_DOCTOR:
                     if (response.getData() != null) {
                         new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_BOTH_USER_UI_PERMISSIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                        return;
                     }
                     break;
                 default:

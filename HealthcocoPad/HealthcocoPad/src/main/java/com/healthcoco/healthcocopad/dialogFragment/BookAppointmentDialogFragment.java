@@ -1,13 +1,21 @@
 package com.healthcoco.healthcocopad.dialogFragment;
 
+import android.Manifest;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,6 +36,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.android.volley.Response;
+import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.HealthCocoDialogFragment;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
@@ -45,6 +54,7 @@ import com.healthcoco.healthcocopad.bean.server.RegisteredDoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.bean.server.WorkingHours;
+import com.healthcoco.healthcocopad.custom.CustomEditText;
 import com.healthcoco.healthcocopad.custom.ExistingPatientAutoCompleteAdapter;
 import com.healthcoco.healthcocopad.custom.HealthcocoTextWatcher;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
@@ -64,6 +74,7 @@ import com.healthcoco.healthcocopad.fragments.NotificationResponseDataFragment;
 import com.healthcoco.healthcocopad.fragments.PatientAppointmentDetailFragment;
 import com.healthcoco.healthcocopad.fragments.QueueFragment;
 import com.healthcoco.healthcocopad.listeners.AutoCompleteTextViewListener;
+import com.healthcoco.healthcocopad.listeners.DrawableClickListener;
 import com.healthcoco.healthcocopad.listeners.HealthcocoTextWatcherListener;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
 import com.healthcoco.healthcocopad.popupwindow.HealthcocoPopupWindow;
@@ -85,12 +96,14 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import static android.app.Activity.RESULT_OK;
+
 /**
  * Created by Shreshtha on 03-03-2017.
  */
 public class BookAppointmentDialogFragment extends HealthCocoDialogFragment implements
         GsonRequest.ErrorListener, LocalDoInBackgroundListenerOptimised, Response.Listener<VolleyResponseBean>,
-        View.OnClickListener, AdapterView.OnItemClickListener, HealthcocoTextWatcherListener, AutoCompleteTextViewListener, PopupWindowListener {
+        View.OnClickListener, AdapterView.OnItemClickListener, HealthcocoTextWatcherListener, AutoCompleteTextViewListener, PopupWindowListener, DrawableClickListener {
     public static final String INTENT_REFRESH_SELECTED_PATIENT = "com.healthcoco.REFRESH_SELECTED_PATIENT";
     public static final String TIME_SLOT_FORMAT_USED_IN_THIS_SCREEN = "hh:mm aaa";
     public static final String TIME_FORMAT_RECEIVED_FROM_SERVER = "H:mm";
@@ -127,7 +140,7 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
     private TextView tvSelectedTime;
     private TextView tvAppointmentSlotDuration;
     private Button btAddNewPatient;
-    private EditText editMobileNumber;
+    private CustomEditText editMobileNumber;
     private ImageButton btClearMobileNumber;
     private FrameLayout containerDetailsAddNewPatient;
     private ExistingPatientAutoCompleteAdapter existingPatientAutotvAdapter;
@@ -233,7 +246,7 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
         cbSmsPatient = (CheckBox) view.findViewById(R.id.cb_sms_patient);
 
         btAddNewPatient = (Button) view.findViewById(R.id.bt_add_new_patient);
-        editMobileNumber = (EditText) view.findViewById(R.id.edit_mobile_number);
+        editMobileNumber = (CustomEditText) view.findViewById(R.id.edit_mobile_number);
         btClearMobileNumber = (ImageButton) view.findViewById(R.id.bt_clear_mobile_number);
         autotvPatientName = (AutoCompleteTextView) view.findViewById(R.id.autotv_patient_name);
         containerDetailsAddNewPatient = (FrameLayout) view.findViewById(R.id.container_details_add_new_patient);
@@ -265,6 +278,7 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
         tvSelectedDate.addTextChangedListener(new HealthcocoTextWatcher(tvSelectedDate, this));
         btSelectPatient.setOnClickListener(this);
         tvSelectedTime.setOnClickListener(this);
+        editMobileNumber.setDrawableClickListener(this);
         switch (bookAppointmentFromScreenType) {
             case CALENDAR_LIST_ADD_NEW:
                 containerPatientProfileHeader.setOnClickListener(this);
@@ -808,6 +822,26 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
         if (requestCode == REQUEST_CODE_BOOK_APPOINTMENT) {
 //            if (resultCode == HealthCocoConstants.RESULT_CODE_CONTACTS_LIST) {
 //            }
+        } else if (requestCode == HealthCocoConstants.PICK_CONTACT) {
+            if (resultCode == RESULT_OK) {
+                Uri contactData = data.getData();
+                ContentResolver cr = mActivity.getContentResolver();
+                Cursor cursor = cr.query(contactData, null, null, null, null);
+                if (cursor.moveToFirst()) {
+                    String id = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
+                    Integer hasPhone = cursor.getInt(cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER));
+                    String phone = null;
+                    if (hasPhone > 0) {
+                        Cursor cp = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
+                                ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?", new String[]{id}, null);
+                        if (cp != null && cp.moveToFirst()) {
+                            phone = cp.getString(cp.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                            cp.close();
+                        }                    // Todo something when contact number selected
+                        editMobileNumber.setText(Util.getValidMobileNumber(phone));
+                    }
+                }
+            }
         }
     }
 
@@ -927,5 +961,42 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
         }
     }
 
+
+    @Override
+    public void onClick(DrawablePosition target) {
+        switch (target) {
+            case RIGHT:
+                requestPermission();
+                break;
+        }
+    }
+
+    public void requestPermission() {
+        requestAppPermissions(new
+                String[]{Manifest.permission.READ_CONTACTS}, HealthCocoActivity.REQUEST_PERMISSIONS);
+    }
+
+    public void requestAppPermissions(final String[] requestedPermissions,
+                                      final int requestCode) {
+        int permissionCheck = PackageManager.PERMISSION_GRANTED;
+        for (String permission : requestedPermissions) {
+            permissionCheck = permissionCheck + ContextCompat.checkSelfPermission(getContext(), permission);
+        }
+        requestPermissions(requestedPermissions, requestCode);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        int permissionCheck = PackageManager.PERMISSION_GRANTED;
+        for (int permission : grantResults) {
+            permissionCheck = permissionCheck + permission;
+        }
+        if ((grantResults.length > 0) && permissionCheck == PackageManager.PERMISSION_GRANTED) {
+            Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+            startActivityForResult(intent, HealthCocoConstants.PICK_CONTACT);
+        }
+    }
 
 }

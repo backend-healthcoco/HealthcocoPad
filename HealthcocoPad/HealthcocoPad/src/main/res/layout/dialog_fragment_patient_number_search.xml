@@ -38,13 +38,14 @@
                 android:textColor="@color/black"
                 android:textSize="@dimen/texrt_size_patient_mobile_search_number" />
 
-            <EditText
+            <com.healthcoco.healthcocopad.custom.CustomEditText
                 android:id="@+id/edit_mobile_number"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:background="@drawable/edit_text_bottom_line_blue"
                 android:digits="0123456789"
+                android:drawablePadding="10dp"
+                android:drawableRight="@drawable/icon_phone_book"
                 android:hint="@string/mobile_number"
                 android:inputType="phone"
                 android:maxLength="10"
@@ -52,13 +53,6 @@
                 android:textColorHint="@color/grey_hint_color"
                 android:textSize="@dimen/texrt_size_patient_mobile_search_number" />
 
-            <ImageView
-                android:id="@+id/iv_phonebook"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:visibility="gone"
-                android:src="@drawable/ic_pay_selected" />
         </LinearLayout>
 
 

@@ -178,6 +178,8 @@ public class EditPageSetupDialogFragment extends HealthCocoDialogFragment
             msg = getResources().getString(R.string.please_enter_right_margin);
         if (Util.isNullOrBlank(msg)) {
 
+            if (pageSetup == null)
+                pageSetup = new PageSetup();
             if (!pageSize.equals(getString(R.string.select)))
                 pageSetup.setPageSize(pageSize);
             pageSetup.setBottomMargin(Integer.parseInt(bottomMargin));

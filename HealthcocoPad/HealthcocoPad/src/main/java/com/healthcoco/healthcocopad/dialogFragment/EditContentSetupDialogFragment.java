@@ -175,6 +175,8 @@ public class EditContentSetupDialogFragment extends HealthCocoDialogFragment
     }
 
     private void validateData() {
+        if (contentSetup == null)
+            contentSetup = new ContentSetup();
         String fontSize = String.valueOf(autotvFontSize.getText());
         String lineSpace = String.valueOf(autotvLineSpace.getText());
         String instructionAlign = String.valueOf(autotvInstructionAlign.getText());

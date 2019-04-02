@@ -228,8 +228,8 @@ public class EditHeaderSetupDialogFragment extends HealthCocoDialogFragment
     }
 
     private void validateData() {
-
-
+        if (headerSetup == null)
+            headerSetup = new HeaderSetup();
         View checkedRadioButton = view.findViewById(radioIncludeHeader.getCheckedRadioButtonId());
         if (checkedRadioButton != null) {
             String showheader = (String.valueOf(checkedRadioButton.getTag())).toUpperCase();

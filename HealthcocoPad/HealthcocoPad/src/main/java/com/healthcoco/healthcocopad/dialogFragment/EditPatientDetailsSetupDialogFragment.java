@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.healthcoco.healthcocopad.HealthCocoDialogFragment;
 import com.healthcoco.healthcocopad.R;
+import com.healthcoco.healthcocopad.bean.server.HeaderSetup;
 import com.healthcoco.healthcocopad.bean.server.PatientDetails;
 import com.healthcoco.healthcocopad.bean.server.PrintSettings;
 import com.healthcoco.healthcocopad.bean.server.Style;
@@ -295,7 +296,8 @@ public class EditPatientDetailsSetupDialogFragment extends HealthCocoDialogFragm
         } else
             patientDetails.setShowCity(false);
 
-
+        if (printSettings.getHeaderSetup() == null)
+            printSettings.setHeaderSetup(new HeaderSetup());
         printSettings.getHeaderSetup().setPatientDetails(patientDetails);
         addPrintSettingsListener.onSaveClicked(printSettings);
         dismiss();

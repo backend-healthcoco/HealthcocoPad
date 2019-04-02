@@ -27,8 +27,10 @@ import com.healthcoco.healthcocopad.bean.server.AlreadyRegisteredPatientsRespons
 import com.healthcoco.healthcocopad.bean.server.DoctorClinicProfile;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.User;
+import com.healthcoco.healthcocopad.custom.CustomEditText;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
+import com.healthcoco.healthcocopad.listeners.DrawableClickListener;
 import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
@@ -42,10 +44,9 @@ import static android.app.Activity.RESULT_OK;
 /**
  * Created by Shreshtha on 03-03-2017.
  */
-public class PatientNumberSearchDialogFragment extends HealthCocoDialogFragment implements View.OnClickListener, Response.Listener<VolleyResponseBean>, GsonRequest.ErrorListener {
+public class PatientNumberSearchDialogFragment extends HealthCocoDialogFragment implements View.OnClickListener, Response.Listener<VolleyResponseBean>, GsonRequest.ErrorListener, DrawableClickListener {
     private static final int REQUEST_CODE_PATIENT_NUMBER_SERACH = 101;
-    private static final int PICK_CONTACT = 1000;
-    private EditText editMobileNumber;
+    private CustomEditText editMobileNumber;
     private Button btProceed;
     private Button btSkip;
     private User user;
@@ -82,8 +83,7 @@ public class PatientNumberSearchDialogFragment extends HealthCocoDialogFragment 
 
     @Override
     public void initViews() {
-        editMobileNumber = (EditText) view.findViewById(R.id.edit_mobile_number);
-        ivPhonebook = (ImageView) view.findViewById(R.id.iv_phonebook);
+        editMobileNumber = (CustomEditText) view.findViewById(R.id.edit_mobile_number);
         btProceed = (Button) view.findViewById(R.id.bt_proceed);
         btSkip = (Button) view.findViewById(R.id.bt_skip);
         mActivity.showSoftKeyboard(editMobileNumber);
@@ -100,7 +100,7 @@ public class PatientNumberSearchDialogFragment extends HealthCocoDialogFragment 
         btSkip.setOnClickListener(this);
         initCrossButton();
         initActionbarTitle(getResources().getString(R.string.add_new_patient));
-        ivPhonebook.setOnClickListener(this);
+        editMobileNumber.setDrawableClickListener(this);
     }
 
     public void initData() {
@@ -114,9 +114,6 @@ public class PatientNumberSearchDialogFragment extends HealthCocoDialogFragment 
                 break;
             case R.id.bt_skip:
                 openRegistrationFragment(null);
-                break;
-            case R.id.iv_phonebook:
-                requestPermission();
                 break;
         }
     }
@@ -144,7 +141,7 @@ public class PatientNumberSearchDialogFragment extends HealthCocoDialogFragment 
         }
         if ((grantResults.length > 0) && permissionCheck == PackageManager.PERMISSION_GRANTED) {
             Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
-            startActivityForResult(intent, PICK_CONTACT);
+            startActivityForResult(intent, HealthCocoConstants.PICK_CONTACT);
         }
     }
 
@@ -239,26 +236,35 @@ public class PatientNumberSearchDialogFragment extends HealthCocoDialogFragment 
                 && resultCode == HealthCocoConstants.RESULT_CODE_REGISTRATION) {
             getTargetFragment().onActivityResult(requestCode, resultCode, data);
             dismiss();
-        } else if (requestCode == PICK_CONTACT) {
-            if (resultCode == RESULT_OK) {
-                Uri contactData = data.getData();
-                ContentResolver cr = mActivity.getContentResolver();
-                Cursor cursor = cr.query(contactData, null, null, null, null);
-                if (cursor.moveToFirst()) {
-                    String id = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
-                    Integer hasPhone = cursor.getInt(cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER));
-                    String phone = null;
-                    if (hasPhone > 0) {
-                        Cursor cp = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
-                                ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?", new String[]{id}, null);
-                        if (cp != null && cp.moveToFirst()) {
-                            phone = cp.getString(cp.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-                            cp.close();
-                        }                    // Todo something when contact number selected
-                        editMobileNumber.setText(Util.getValidMobileNumber(phone));
+        } else if (requestCode == HealthCocoConstants.PICK_CONTACT) {
+                if (resultCode == RESULT_OK) {
+                    Uri contactData = data.getData();
+                    ContentResolver cr = mActivity.getContentResolver();
+                    Cursor cursor = cr.query(contactData, null, null, null, null);
+                    if (cursor.moveToFirst()) {
+                        String id = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
+                        Integer hasPhone = cursor.getInt(cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER));
+                        String phone = null;
+                        if (hasPhone > 0) {
+                            Cursor cp = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
+                                    ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?", new String[]{id}, null);
+                            if (cp != null && cp.moveToFirst()) {
+                                phone = cp.getString(cp.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                                cp.close();
+                            }                    // Todo something when contact number selected
+                            editMobileNumber.setText(Util.getValidMobileNumber(phone));
+                        }
                     }
                 }
-            }
+        }
+    }
+
+    @Override
+    public void onClick(DrawablePosition target) {
+        switch (target) {
+            case RIGHT:
+                requestPermission();
+                break;
         }
     }
 }
