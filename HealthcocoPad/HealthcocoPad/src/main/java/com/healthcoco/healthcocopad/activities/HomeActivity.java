@@ -635,8 +635,6 @@ public class HomeActivity extends HealthCocoActivity implements View.OnClickList
         requestAppPermissions(new
                 String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE,
                 android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                android.Manifest.permission.CALL_PHONE,
-                android.Manifest.permission.PROCESS_OUTGOING_CALLS,
                 android.Manifest.permission.ACCESS_COARSE_LOCATION,
                 android.Manifest.permission.ACCESS_FINE_LOCATION,
         }, REQUEST_PERMISSIONS);

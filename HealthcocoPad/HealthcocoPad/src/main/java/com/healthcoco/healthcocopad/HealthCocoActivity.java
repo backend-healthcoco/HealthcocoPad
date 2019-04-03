@@ -1738,7 +1738,9 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                requestCallPermission();
+                Intent callIntent = new Intent(Intent.ACTION_DIAL);
+                callIntent.setData(Uri.parse("tel:" + mobileNo));
+                startActivity(callIntent);
             }
         });
         alertBuilder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
@@ -1751,20 +1753,6 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
         alertBuilder.show();
     }
 
-    private void requestCallPermission() {
-        requestAppPermissions(new
-                String[]{android.Manifest.permission.CALL_PHONE,
-                android.Manifest.permission.PROCESS_OUTGOING_CALLS,
-        }, REQUEST_CALL_PERMISSIONS);
-    }
-
-
-    private void requestPermission() {
-        requestAppPermissions(new
-                String[]{android.Manifest.permission.CALL_PHONE,
-                android.Manifest.permission.PROCESS_OUTGOING_CALLS,
-        }, REQUEST_PERMISSIONS);
-    }
 
     public void requestAppPermissions(final String[] requestedPermissions, final int requestCode) {
         int permissionCheck = PackageManager.PERMISSION_GRANTED;
@@ -1782,22 +1770,6 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
             permissionCheck = permissionCheck + permission;
         }
         if ((grantResults.length > 0) && permissionCheck == PackageManager.PERMISSION_GRANTED) {
-            Intent callIntent = new Intent(Intent.ACTION_CALL);
-            callIntent.setData(Uri.parse("tel:" + mobileNumber));
-            if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
-                startActivity(callIntent);
-            }
-            if (requestCode == REQUEST_CALL_PERMISSIONS)
-                startActivity(callIntent);
-
-        } else {
 
         }
     }

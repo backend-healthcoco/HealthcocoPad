@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
@@ -14,7 +15,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.android.volley.Response;
@@ -140,9 +140,13 @@ public class PatientNumberSearchDialogFragment extends HealthCocoDialogFragment 
             permissionCheck = permissionCheck + permission;
         }
         if ((grantResults.length > 0) && permissionCheck == PackageManager.PERMISSION_GRANTED) {
-            Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
-            startActivityForResult(intent, HealthCocoConstants.PICK_CONTACT);
+            openContactBook();
         }
+    }
+
+    private void openContactBook() {
+        Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+        startActivityForResult(intent, HealthCocoConstants.PICK_CONTACT);
     }
 
     private void validateData() {
@@ -237,25 +241,25 @@ public class PatientNumberSearchDialogFragment extends HealthCocoDialogFragment 
             getTargetFragment().onActivityResult(requestCode, resultCode, data);
             dismiss();
         } else if (requestCode == HealthCocoConstants.PICK_CONTACT) {
-                if (resultCode == RESULT_OK) {
-                    Uri contactData = data.getData();
-                    ContentResolver cr = mActivity.getContentResolver();
-                    Cursor cursor = cr.query(contactData, null, null, null, null);
-                    if (cursor.moveToFirst()) {
-                        String id = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
-                        Integer hasPhone = cursor.getInt(cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER));
-                        String phone = null;
-                        if (hasPhone > 0) {
-                            Cursor cp = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
-                                    ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?", new String[]{id}, null);
-                            if (cp != null && cp.moveToFirst()) {
-                                phone = cp.getString(cp.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-                                cp.close();
-                            }                    // Todo something when contact number selected
-                            editMobileNumber.setText(Util.getValidMobileNumber(phone));
-                        }
+            if (resultCode == RESULT_OK) {
+                Uri contactData = data.getData();
+                ContentResolver cr = mActivity.getContentResolver();
+                Cursor cursor = cr.query(contactData, null, null, null, null);
+                if (cursor.moveToFirst()) {
+                    String id = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
+                    Integer hasPhone = cursor.getInt(cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER));
+                    String phone = null;
+                    if (hasPhone > 0) {
+                        Cursor cp = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
+                                ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?", new String[]{id}, null);
+                        if (cp != null && cp.moveToFirst()) {
+                            phone = cp.getString(cp.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                            cp.close();
+                        }                    // Todo something when contact number selected
+                        editMobileNumber.setText(Util.getValidMobileNumber(phone));
                     }
                 }
+            }
         }
     }
 
@@ -263,7 +267,9 @@ public class PatientNumberSearchDialogFragment extends HealthCocoDialogFragment 
     public void onClick(DrawablePosition target) {
         switch (target) {
             case RIGHT:
-                requestPermission();
+                if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT)
+                    requestPermission();
+                else openContactBook();
                 break;
         }
     }
