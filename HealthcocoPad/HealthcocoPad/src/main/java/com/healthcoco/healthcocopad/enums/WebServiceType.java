@@ -548,8 +548,12 @@ public enum WebServiceType {
     GET_BABY_ACHIEVEMENTS(Method.GET, "paediatric/achievement/getList/"),
 
     ADD_EDIT_BABY_ACHIEVEMENTS(Method.POST, "paediatric/achievement/addEdit"),
-    UPDATE_VACCINE_START_DATE(Method.GET, "paediatric/vaccine/updateChart/");
 
+    UPDATE_VACCINE_START_DATE(Method.GET, "paediatric/vaccine/updateChart/"),
+
+    DELETE_PATIENT(Method.DELETE, "register/patient/"),
+
+    UPDATE_PATINET_MOBILE_NUMBER(Method.GET, "register/patient/");
     private int methodType;
     private String url;
 

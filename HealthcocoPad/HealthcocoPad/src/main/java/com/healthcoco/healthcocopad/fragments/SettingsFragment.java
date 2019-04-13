@@ -165,6 +165,9 @@ public class SettingsFragment extends HealthCocoFragment implements AdapterView.
             case HELP_IMPROVE:
                 openCommonOpenUpActivity(CommonOpenUpFragmentType.FEEDBACK, null, 0);
                 break;
+            case DELETED_PATIENTS:
+                openCommonOpenUpActivity(CommonOpenUpFragmentType.DELETED_PATIENTS, itemType.ordinal());
+                break;
 //            case SYNC_CONTACT:
 //                openCommonOpenUpActivity(CommonOpenUpFragmentType.SYNC_CONTACT, null, 0);
 //                break;

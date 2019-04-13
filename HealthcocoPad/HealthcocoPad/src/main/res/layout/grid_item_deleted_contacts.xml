@@ -98,83 +98,21 @@
             android:orientation="horizontal"
             android:paddingBottom="10dp"
             android:paddingLeft="10dp"
+            android:gravity="end"
             android:paddingRight="10dp"
             android:visibility="visible">
 
-            <ImageButton
-                android:id="@+id/bt_edit"
+            <TextView
+                android:id="@+id/bt_restore"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_marginLeft="8dp"
-                android:background="@drawable/tab_edit_contact_list_selector"
-                android:padding="10dp" />
+                android:text="@string/restore"
+                android:textColor="@color/white"
+                android:textAllCaps="true"
+                android:textSize="12sp"
+                android:background="@drawable/selector_shape_round_corner_blue_translucent_selected"
+                android:padding="8dp" />
 
-            <ImageButton
-                android:id="@+id/bt_discard"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_marginStart="16dp"
-                android:layout_toRightOf="@id/bt_edit"
-                android:background="@drawable/tab_discard_contact_list_selector"
-                android:padding="10dp"
-                android:visibility="gone" />
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true">
-
-                <ImageButton
-                    android:id="@+id/bt_queue"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:background="@drawable/tab_queue_contact_list_selector"
-                    android:padding="10dp"
-                    android:visibility="gone" />
-
-                <ImageButton
-                    android:id="@+id/bt_call"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:background="@drawable/tab_call_contact_list_selector"
-                    android:padding="10dp" />
-
-                <ImageButton
-                    android:id="@+id/bt_group"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:background="@drawable/tab_add_group_contact_list_selector"
-                    android:padding="10dp" />
-
-                <ImageButton
-                    android:id="@+id/bt_prescription"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:background="@drawable/tab_rx_contact_list_selector" />
-
-                <ImageButton
-                    android:id="@+id/bt_option"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:background="@drawable/ic_more"
-                    android:padding="12dp" />
-            </LinearLayout>
         </RelativeLayout>
     </LinearLayout>
 

@@ -1669,8 +1669,9 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
     }
 
     public String getFormattedVersionName() {
-        return String.format(getResources().getString(R.string.app_version_about_us_name),
-                getResources().getString(R.string.app_version_name));
+//        return String.format(getResources().getString(R.string.app_version_about_us_name),
+//                getResources().getString(R.string.app_version_name));
+        return getResources().getString(R.string.app_version_name);
     }
 
     public void initChangeViewButton(View.OnClickListener onClickListener) {
@@ -2000,6 +2001,16 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
     public void initPopupWindows(View anchorView, PopupWindowType
             popupWindowType, List<Object> list, PopupWindowListener popupWindowListener) {
         HealthcocoPopupWindow healthcocoPopupWindow = new HealthcocoPopupWindow(this, anchorView, popupWindowType, list, popupWindowListener);
+        healthcocoPopupWindow.setOutsideTouchable(true);
+        healthcocoPopupWindow.setContentView(healthcocoPopupWindow.getPopupView());
+    }
+
+    public void initPopupWindows(View anchorView, PopupWindowType popupWindowType, List<Object> list, int dropDownLayoutId, PopupWindowListener popupWindowListener) {
+        HealthcocoPopupWindow healthcocoPopupWindow = null;
+        if (dropDownLayoutId > 0)
+            healthcocoPopupWindow = new HealthcocoPopupWindow(this, anchorView, popupWindowType, list, dropDownLayoutId, popupWindowListener);
+        else
+            healthcocoPopupWindow = new HealthcocoPopupWindow(this, anchorView, popupWindowType, list, popupWindowListener);
         healthcocoPopupWindow.setOutsideTouchable(true);
         healthcocoPopupWindow.setContentView(healthcocoPopupWindow.getPopupView());
     }

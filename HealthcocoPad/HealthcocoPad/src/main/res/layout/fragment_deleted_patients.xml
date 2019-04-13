@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/grey_background"
+    android:clickable="true"
+    android:orientation="vertical">
+
+    <include
+        layout="@layout/layout_dialog_search"
+        android:visibility="visible" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <com.healthcoco.healthcocopad.views.CustomSwipeRefreshLayout
+            android:id="@+id/swipe_refresh_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/gv_contacts"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:listSelector="@android:color/transparent"
+                    android:overScrollMode="never"
+                    android:padding="10dp"
+                    android:scrollbarStyle="outsideOverlay"
+                    android:visibility="visible" />
+
+                <ProgressBar
+                    android:id="@+id/progress_loading"
+                    style="?android:attr/progressBarStyleSmall"
+                    android:layout_width="@dimen/round_progress_bar_size"
+                    android:layout_height="@dimen/round_progress_bar_size"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerInParent="true"
+                    android:gravity="center_horizontal"
+                    android:progressDrawable="@drawable/progress_loading"
+                    android:visibility="visible" />
+
+                <TextView
+                    android:id="@+id/tv_no_patients"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:gravity="center"
+                    android:text="@string/no_patients"
+                    android:textStyle="bold" />
+            </RelativeLayout>
+        </com.healthcoco.healthcocopad.views.CustomSwipeRefreshLayout>
+
+    </LinearLayout>
+</LinearLayout>

@@ -14,11 +14,11 @@
         android:padding="10dp">
 
         <TextView
+            android:id="@+id/tv_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:gravity="center"
-            android:text="@string/please_enter_patient_mobile_number_to_register"
             android:textColor="@color/grey_dark_text"
             android:textSize="18sp" />
 

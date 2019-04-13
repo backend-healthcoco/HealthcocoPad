@@ -26,6 +26,7 @@ import com.healthcoco.healthcocopad.viewholders.AboutDoctorListViewHolder;
 import com.healthcoco.healthcocopad.viewholders.BabyAchievementViewHolder;
 import com.healthcoco.healthcocopad.viewholders.BrandListRecycleViewHolder;
 import com.healthcoco.healthcocopad.viewholders.ClinicImageListItemHolder;
+import com.healthcoco.healthcocopad.viewholders.ContactsListViewForDeletedPatientHolder;
 import com.healthcoco.healthcocopad.viewholders.DoctorListViewHolder;
 import com.healthcoco.healthcocopad.viewholders.EventItemViewHolder;
 import com.healthcoco.healthcocopad.viewholders.GrowthChartViewHolder;
@@ -158,6 +159,11 @@ public class HealthcocoRecyclerViewAdapter extends RecyclerView.Adapter<Healthco
                 convertView.setLayoutParams(getLayoutParams(convertView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                 viewHolder = new BabyAchievementViewHolder(mActivity, convertView, onItemClickListener, listenerObject);
                 return viewHolder;
+            case CONTACT_LIST_FOR_DELETED:
+                convertView = mInflater.inflate(R.layout.grid_item_deleted_contacts, null);
+                convertView.setLayoutParams(getLayoutParams(convertView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                viewHolder = new ContactsListViewForDeletedPatientHolder(mActivity, convertView, onItemClickListener, listenerObject, viewType);
+                return viewHolder;
         }
         return viewHolder;
     }
@@ -259,6 +265,12 @@ public class HealthcocoRecyclerViewAdapter extends RecyclerView.Adapter<Healthco
                 if (holder instanceof BabyAchievementViewHolder && object instanceof BabyAchievementsResponse) {
                     BabyAchievementViewHolder babyAchievementViewHolder = ((BabyAchievementViewHolder) holder);
                     babyAchievementViewHolder.applyData(object);
+                }
+                break;
+            case CONTACT_LIST_FOR_DELETED:
+                if (holder instanceof ContactsListViewForDeletedPatientHolder) {
+                    ContactsListViewForDeletedPatientHolder selectedBrandListViewHolder = ((ContactsListViewForDeletedPatientHolder) holder);
+                    selectedBrandListViewHolder.applyData(object);
                 }
                 break;
         }

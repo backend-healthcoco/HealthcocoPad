@@ -1354,4 +1354,16 @@
     <string name="please_fill_weight">Please fill weight</string>
     <string name="please_fill_height">Please fill height</string>
     <string name="change_date">Change Date</string>
+    <string name="edit_mobile_number">Edit Mobile Number</string>
+    <string name="confirm_delete_patient">Are you sure you want to delete Patient &#160;</string>
+    <string name="patient_not_updated">Patient Not Updated</string>
+    <string name="edit_patient_mobile_number">Edit Patient Mobile Number</string>
+    <string name="please_enter_patient_mobile_number_to_update">Please Enter Patient Mobile Number To Update</string>
+    <string name="mobile_number_not_updated">Mobile number not updated</string>
+    <string name="mobile_number_updated">Mobile Number Updated</string>
+    <string name="deleted_patients">Deleted Patients</string>
+    <string name="restore">Restore</string>
+    <string name="delete_patient">Delete Patient</string>
+    <string name="confirm_undo_delete_patient">Are you sure you want to restore Patient &#160;</string>
+
 </resources>

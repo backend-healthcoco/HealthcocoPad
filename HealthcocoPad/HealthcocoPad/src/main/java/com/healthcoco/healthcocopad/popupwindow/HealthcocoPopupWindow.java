@@ -74,6 +74,9 @@ public class HealthcocoPopupWindow extends PopupWindow implements View.OnClickLi
             case DOCTOR_LIST:
                 update(v, 0, 0, (int) mActivity.getResources().getDimension(R.dimen.doctor_name_textview_width), LinearLayout.LayoutParams.WRAP_CONTENT);
                 break;
+            case CONTACT_LIST_OPTION_TYPE:
+                update(v, 0, 0, (int) mActivity.getResources().getDimension(R.dimen.doctor_name_textview_width), LinearLayout.LayoutParams.WRAP_CONTENT);
+                break;
             default:
                 update(v, 0, 0, anchorView.getWidth(), LinearLayout.LayoutParams.WRAP_CONTENT);
                 break;

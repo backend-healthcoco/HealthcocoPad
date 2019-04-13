@@ -13,33 +13,29 @@ import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.HealthCocoViewHolder;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
+import com.healthcoco.healthcocopad.enums.ContactListItemOptionType;
 import com.healthcoco.healthcocopad.enums.PatientProfileScreenType;
+import com.healthcoco.healthcocopad.enums.PopupWindowType;
 import com.healthcoco.healthcocopad.listeners.ContactsItemOptionsListener;
 import com.healthcoco.healthcocopad.listeners.ImageLoadedListener;
+import com.healthcoco.healthcocopad.popupwindow.PopupWindowListener;
 import com.healthcoco.healthcocopad.utilities.DownloadImageFromUrlUtil;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
-import com.nostra13.universalimageloader.core.ImageLoader;
 
-public class ContactsGridViewHolder extends HealthCocoViewHolder implements OnClickListener, ImageLoadedListener {
+public class ContactsGridViewHolder extends HealthCocoViewHolder implements OnClickListener, ImageLoadedListener, PopupWindowListener {
     private final String TAG = ContactsGridViewHolder.class.getSimpleName();
-    private final ImageLoader imageLoader;
-    public TextView tvHeaderView;
     private HealthCocoActivity mActivity;
     private View convertView;
-    private ImageButton btAddToGroup;
-    private int position;
     private ContactsItemOptionsListener optionsListener;
     private RegisteredPatientDetailsUpdated objData;
     private TextView tvContactName;
     private TextView tvContactNumber;
     private ImageView ivContactProfile;
-    private ImageButton btMail;
     private ImageButton btCall;
     private TextView tvInitialAlphabet;
     private LinearLayout containerTop;
     private RelativeLayout containerBottom;
-    private TextView tvCreatedTime;
     private TextView tvPatientId;
     private ImageButton btEdit;
     private ImageButton btDiscard;
@@ -47,18 +43,17 @@ public class ContactsGridViewHolder extends HealthCocoViewHolder implements OnCl
     private ImageButton btGroup;
     private ImageButton btPrescription;
     private TextView tvGenderDate;
-    private TextView tvPatientAge;
-    private boolean mobileNumberOptional;
     private Boolean pidHasDate;
     private LinearLayout layoutDiscarded;
+    private ImageButton btOption;
 
 
     public ContactsGridViewHolder(HealthCocoActivity mActivity, ContactsItemOptionsListener optionsListener, int position) {
         this.mActivity = mActivity;
         this.optionsListener = optionsListener;
-        this.position = position;
-        imageLoader = ImageLoader.getInstance();
-        mobileNumberOptional = optionsListener.isMobileNumberOptional();
+//        this.position = position;
+//        imageLoader = ImageLoader.getInstance();
+//        mobileNumberOptional = optionsListener.isMobileNumberOptional();
         pidHasDate = optionsListener.isPidHasDate();
     }
 
@@ -91,6 +86,9 @@ public class ContactsGridViewHolder extends HealthCocoViewHolder implements OnCl
         }
         DownloadImageFromUrlUtil.loadImageWithInitialAlphabet(mActivity, PatientProfileScreenType.IN_PATIENTS_LIST, objData, null, ivContactProfile, tvInitialAlphabet);
 //        checkIsDiscarded(objData.isPatientDiscarded());
+        if (!objData.getDoctorId().equals(optionsListener.getUser().getUniqueId())) {
+            btOption.setVisibility(View.GONE);
+        } else btOption.setVisibility(View.VISIBLE);
     }
 
 
@@ -104,6 +102,7 @@ public class ContactsGridViewHolder extends HealthCocoViewHolder implements OnCl
         btEdit = (ImageButton) convertView.findViewById(R.id.bt_edit);
         btDiscard = (ImageButton) convertView.findViewById(R.id.bt_discard);
         btQueue = (ImageButton) convertView.findViewById(R.id.bt_queue);
+        btOption = (ImageButton) convertView.findViewById(R.id.bt_option);
         btCall = (ImageButton) convertView.findViewById(R.id.bt_call);
         btGroup = (ImageButton) convertView.findViewById(R.id.bt_group);
         btPrescription = (ImageButton) convertView.findViewById(R.id.bt_prescription);
@@ -120,6 +119,9 @@ public class ContactsGridViewHolder extends HealthCocoViewHolder implements OnCl
         btGroup.setOnClickListener(this);
         btPrescription.setOnClickListener(this);
         containerTop.setOnClickListener(this);
+        mActivity.initPopupWindows(btOption, PopupWindowType.CONTACT_LIST_OPTION_TYPE,
+                PopupWindowType.CONTACT_LIST_OPTION_TYPE.getList(),R.layout.layout_popup_dialog_item_with_icon, this);
+
 
         if (!optionsListener.isInHomeActivity())
             containerBottom.setVisibility(View.GONE);
@@ -168,5 +170,34 @@ public class ContactsGridViewHolder extends HealthCocoViewHolder implements OnCl
     public void onImageLoaded(Bitmap bitmap) {
         if (objData != null)
             objData.setProfileImageBitmap(bitmap);
+    }
+
+    @Override
+    public void onItemSelected(PopupWindowType popupWindowType, Object object) {
+        switch (popupWindowType) {
+            case CONTACT_LIST_OPTION_TYPE:
+                if (object != null && object instanceof ContactListItemOptionType) {
+                    ContactListItemOptionType listItemOptionType = (ContactListItemOptionType) object;
+                    switch (listItemOptionType) {
+                        case DELETE_PATIENT:
+                            if (objData.getDoctorId().equals(optionsListener.getUser().getUniqueId())) {
+                                if (!Util.isNullOrBlank(objData.getUniqueId()))
+                                    optionsListener.onDeletePatientClicked(objData);
+                                else
+                                    Util.showToast(mActivity, R.string.no_mobile_number_found);
+                            }
+                            break;
+                        case EDIT_MOBILE_NUMBER:
+                            optionsListener.onEditPatientNumberClicked(objData);
+                            break;
+                    }
+                }
+                break;
+        }
+    }
+
+    @Override
+    public void onEmptyListFound() {
+
     }
 }

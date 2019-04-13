@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/dialog_title" />
+
+    <EditText
+        android:id="@+id/edit_advice"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/white"
+        android:gravity="top|left"
+        android:hint="@string/write_advice"
+        android:padding="10dp"
+        android:singleLine="true"
+        android:textColor="@color/black"
+        android:textColorHint="@color/grey_hint_color"
+        android:textSize="@dimen/edit_text_size" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.8dp"
+        android:background="@color/blue_action_bar" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="horizontal">
+
+        <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+            android:id="@+id/bt_cancel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="1dp"
+            android:layout_weight="1"
+            android:background="@drawable/dialog_btn_selector"
+            android:gravity="center"
+            android:padding="15dp"
+            android:text="@string/icon_cancel_delete_cross"
+            android:textColor="@color/blue_action_bar"
+            android:textSize="@dimen/button_size_dialog" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/blue_action_bar" />
+
+        <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+            android:id="@+id/bt_save"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/dialog_btn_selector"
+            android:gravity="center"
+            android:padding="15dp"
+            android:text="@string/icon_save"
+            android:textColor="@color/blue_action_bar"
+            android:textSize="@dimen/button_size_dialog" />
+
+    </LinearLayout>
+
+</LinearLayout>

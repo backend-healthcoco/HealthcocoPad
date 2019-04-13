@@ -288,5 +288,7 @@
     <dimen name="text_size_baby_achievements_parameters_label">18sp</dimen>
     <dimen name="text_size_growth_chart_parameters_label">18sp</dimen>
     <dimen name="text_size_add_growth_chart_parameters_label">18sp</dimen>
+    <dimen name="button_size_dialog">13sp</dimen>
+    <dimen name="item_spacing_grid_item">12dp</dimen>
 
 </resources>

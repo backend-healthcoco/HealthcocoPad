@@ -40,6 +40,7 @@ import com.healthcoco.healthcocopad.fragments.BlogDetailFragment;
 import com.healthcoco.healthcocopad.fragments.CommonOpenUpPatientDetailFragment;
 import com.healthcoco.healthcocopad.fragments.CommonUiPermissionsFragment;
 import com.healthcoco.healthcocopad.fragments.ContactsListFragment;
+import com.healthcoco.healthcocopad.fragments.DeletedPatientsFragment;
 import com.healthcoco.healthcocopad.fragments.DiagramsListFragment;
 import com.healthcoco.healthcocopad.fragments.DiseaseListFragment;
 import com.healthcoco.healthcocopad.fragments.DoctorDetailsFragment;
@@ -294,6 +295,10 @@ public class CommonOpenUpActivity extends HealthCocoActivity {
 //            case UPDATE_BABY_ACHIEVEMENTS:
 //                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK, ActionbarLeftRightActionTypeDrawables.WITH_SAVE, fragmentType.getTitleId(), new UpdateBabyAchievementsFragment());
 //                break;
+            case DELETED_PATIENTS:
+                openFragment(ActionbarType.TITLE, ActionbarLeftRightActionTypeDrawables.WITH_BACK,
+                        ActionbarLeftRightActionTypeDrawables.NO_LEFT_RIGHT_ACTION, fragmentType.getTitleId(), new DeletedPatientsFragment());
+                break;
         }
     }
 

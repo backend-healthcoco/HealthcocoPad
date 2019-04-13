@@ -25,6 +25,7 @@ public enum SettingsItemType {
 //    HISTORY(R.string.history_small, R.string.search_history, R.string.settings_no_history_added, ClassType.HISTORY),
 //    TEMPLATE(R.string.templates, R.string.search_template, R.string.no_templates, ClassType.TEMPLATE),
     UI_PERMISSION(R.string.ui_permission, R.string.search_ui_permission, R.string.settings_no_ui_permission, ClassType.UI_PERMISSION),
+    DELETED_PATIENTS(R.string.deleted_patients, 0, 0, null),
     PRINT(R.string.print, 0, 0, null),
     KIOSK(R.string.kiosk_setting, 0, 0, null),
     SYNC(R.string.sync, 0, 0, null),

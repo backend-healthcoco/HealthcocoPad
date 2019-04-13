@@ -339,7 +339,8 @@ public class WebDataServiceImpl implements GCMRefreshListener {
                 url = url + HealthCocoConstants.PARAM_ROLE + RoleType.CONSULTANT_DOCTOR
                         + HealthCocoConstants.PARAM_DOCTOR_ID + doctorId;
             }
-
+            if (updatedTime > 0)
+                size = 0;
             if (pageNo >= 0 && size > 0) {
                 url = url + HealthCocoConstants.PARAM_PAGE + pageNo + HealthCocoConstants.PARAM_SIZE + size;
             }
@@ -1952,6 +1953,46 @@ public class WebDataServiceImpl implements GCMRefreshListener {
             String url = webServiceType.getUrl() + patientId + "/" + vaccineStartDate;
             checkNetworkStatus(mApp);
             getResponse(Request.Priority.IMMEDIATE, webServiceType, class1, url, null, null, responseListener,
+                    errorListener);
+        } else {
+            errorListener.onNetworkUnavailable(webServiceType);
+        }
+    }
+
+    public void deletePatient(Class<?> class1, WebServiceType webServiceType, String doctorId, String locationId, String hospitalId, String patientId, boolean discarded, Response.Listener<VolleyResponseBean> responseListener,
+                              GsonRequest.ErrorListener errorListener) {
+        String url = webServiceType.getUrl()
+                + doctorId
+                + "/" + locationId
+                + "/" + hospitalId
+                + "/" + patientId
+                + HealthCocoConstants.PARAM_TAG_DELETE
+                + "?" + HealthCocoConstants.PARAM_DISCARDED_AMPERCENT + discarded;
+        checkNetworkStatus(mApp);
+        if (HealthCocoConstants.isNetworkOnline) {
+            getResponse(webServiceType, class1, url, null, null, responseListener,
+                    errorListener);
+        } else {
+            errorListener.onNetworkUnavailable(webServiceType);
+        }
+    }
+
+    public void updatePatientMobileNumber(Class<?> class1, WebServiceType webServiceType, User user, String oldPatientId,
+                                          String newPatientId, String mobileNumber, Response.Listener<VolleyResponseBean> responseListener,
+                                          GsonRequest.ErrorListener errorListener) {
+        String url = webServiceType.getUrl()
+                + user.getUniqueId()
+                + "/" + user.getForeignLocationId()
+                + "/" + user.getForeignHospitalId()
+                + "/" + oldPatientId
+                + "?";
+        if (!Util.isNullOrBlank(newPatientId))
+            url = url + HealthCocoConstants.PARAM_NEW_PATIENT_ID + newPatientId;
+        if (!Util.isNullOrBlank(mobileNumber))
+            url = url + HealthCocoConstants.PARAM_MOBILE_NUMBER + mobileNumber;
+        checkNetworkStatus(mApp);
+        if (HealthCocoConstants.isNetworkOnline) {
+            getResponse(webServiceType, class1, url, null, null, responseListener,
                     errorListener);
         } else {
             errorListener.onNetworkUnavailable(webServiceType);

@@ -12,16 +12,19 @@ import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.HealthCocoViewHolder;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
+import com.healthcoco.healthcocopad.enums.ContactListItemOptionType;
 import com.healthcoco.healthcocopad.enums.PatientProfileScreenType;
+import com.healthcoco.healthcocopad.enums.PopupWindowType;
 import com.healthcoco.healthcocopad.listeners.ContactsItemOptionsListener;
 import com.healthcoco.healthcocopad.listeners.ImageLoadedListener;
+import com.healthcoco.healthcocopad.popupwindow.PopupWindowListener;
 import com.healthcoco.healthcocopad.utilities.DownloadImageFromUrlUtil;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.ScreenDimensions;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
-public class ContactsListViewHolder extends HealthCocoViewHolder implements OnClickListener, ImageLoadedListener {
+public class ContactsListViewHolder extends HealthCocoViewHolder implements OnClickListener, ImageLoadedListener, PopupWindowListener {
     private final String TAG = ContactsListViewHolder.class.getSimpleName();
     private final ImageLoader imageLoader;
     private HealthCocoActivity mActivity;
@@ -40,6 +43,7 @@ public class ContactsListViewHolder extends HealthCocoViewHolder implements OnCl
     private LinearLayout containerTop;
     private boolean mobileNumberOptional;
     private LinearLayout layoutDiscarded;
+    private ImageButton btOption;
 
 
     public ContactsListViewHolder(HealthCocoActivity mActivity, ContactsItemOptionsListener optionsListener, int position) {
@@ -63,6 +67,9 @@ public class ContactsListViewHolder extends HealthCocoViewHolder implements OnCl
         tvContactNumber.setText(Util.getValidatedValue(objData.getMobileNumber()));
         DownloadImageFromUrlUtil.loadImageWithInitialAlphabet(mActivity, PatientProfileScreenType.IN_PATIENTS_LIST, objData, null, ivContactProfile, tvInitialAlphabet);
 //        checkIsDiscarded(objData.isPatientDiscarded());
+        if (!objData.getDoctorId().equals(optionsListener.getUser().getUniqueId())) {
+            btOption.setVisibility(View.GONE);
+        } else btOption.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -73,6 +80,7 @@ public class ContactsListViewHolder extends HealthCocoViewHolder implements OnCl
         containerTop.setLayoutParams(new LinearLayout.LayoutParams(ScreenDimensions.SCREEN_WIDTH, LinearLayout.LayoutParams.MATCH_PARENT));
         tvContactName = (TextView) convertView.findViewById(R.id.tv_contact_name);
         tvContactNumber = (TextView) convertView.findViewById(R.id.tv_contact_number);
+        btOption = (ImageButton) convertView.findViewById(R.id.bt_option);
         btCall = (ImageButton) convertView.findViewById(R.id.bt_call);
         btDiscard = (ImageButton) convertView.findViewById(R.id.bt_discard);
         btPrescription = (ImageButton) convertView.findViewById(R.id.bt_prescription);
@@ -87,6 +95,8 @@ public class ContactsListViewHolder extends HealthCocoViewHolder implements OnCl
         btPrescription.setOnClickListener(this);
         btAddToGroup.setOnClickListener(this);
         containerTop.setOnClickListener(this);
+        mActivity.initPopupWindows(btOption, PopupWindowType.CONTACT_LIST_OPTION_TYPE,
+                PopupWindowType.CONTACT_LIST_OPTION_TYPE.getList(),R.layout.layout_popup_dialog_item_with_icon, this);
 
 //        if (mobileNumberOptional)
 //            btDiscard.setVisibility(View.VISIBLE);
@@ -131,5 +141,33 @@ public class ContactsListViewHolder extends HealthCocoViewHolder implements OnCl
     public void onImageLoaded(Bitmap bitmap) {
         if (objData != null)
             objData.setProfileImageBitmap(bitmap);
+    }
+
+    @Override
+    public void onItemSelected(PopupWindowType popupWindowType, Object object) {
+        switch (popupWindowType) {
+            case CONTACT_LIST_OPTION_TYPE:
+                if (object != null && object instanceof ContactListItemOptionType) {
+                    ContactListItemOptionType listItemOptionType = (ContactListItemOptionType) object;
+                    switch (listItemOptionType) {
+                        case DELETE_PATIENT:
+                            if (objData.getDoctorId().equals(optionsListener.getUser().getUniqueId())) {
+                                if (!Util.isNullOrBlank(objData.getUniqueId()))
+                                    optionsListener.onDeletePatientClicked(objData);
+                                else
+                                    Util.showToast(mActivity, R.string.no_mobile_number_found);
+                            }
+                            break;
+                        case EDIT_MOBILE_NUMBER:
+                            optionsListener.onEditPatientNumberClicked(objData);
+                            break;
+                    }
+                }    break;
+        }
+    }
+
+    @Override
+    public void onEmptyListFound() {
+
     }
 }

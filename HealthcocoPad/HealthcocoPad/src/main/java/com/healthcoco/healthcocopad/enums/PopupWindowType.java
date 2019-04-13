@@ -92,6 +92,10 @@ public enum PopupWindowType {
         add("MONTH(S)");
         add("WEEK(S)");
         add("YEAR(S)");
+    }}),
+    CONTACT_LIST_OPTION_TYPE(new ArrayList<Object>() {{
+        add(ContactListItemOptionType.EDIT_MOBILE_NUMBER);
+        add(ContactListItemOptionType.DELETE_PATIENT);
     }});
     private final ArrayList<Object> list;
 

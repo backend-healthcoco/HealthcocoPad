@@ -80,7 +80,8 @@ public enum CommonOpenUpFragmentType {
     UPDATE_BRAND(R.string.update_brand),
     UPDATE_VACCINE_BRAND_GROUP(R.string.update_vaccine),
     ADD_GROWTH_CHART(R.string.health_parameters),
-    UPDATE_BABY_ACHIEVEMENTS(R.string.edit_baby_achievemsts);;
+    UPDATE_BABY_ACHIEVEMENTS(R.string.edit_baby_achievemsts),
+    DELETED_PATIENTS(R.string.deleted_patients);
 
     private final int titleId;
 

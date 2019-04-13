@@ -2306,6 +2306,49 @@ public class LocalDataServiceImpl {
     }
 
     public VolleyResponseBean getSearchedPatientsListPageWise(WebServiceType webServiceType, User user,
+                                                              int pageNum, int maxSize, String searchTerm, BooleanTypeValues discarded,
+                                                              Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
+        volleyResponseBean.setWebServiceType(webServiceType);
+        volleyResponseBean.setIsDataFromLocal(true);
+        volleyResponseBean.setIsUserOnline(HealthCocoConstants.isNetworkOnline);
+        try {
+            //forming where condition query
+            String whereCondition = "Select * from " + StringUtil.toSQLName(RegisteredPatientDetailsUpdated.class.getSimpleName())
+                    + getWhereConditionForPatientsList(user, discarded);
+            if (!Util.isNullOrBlank(searchTerm))
+                whereCondition = whereCondition
+                        + " AND "
+                        + "(" + LocalDatabaseUtils.getSearchTermEqualsIgnoreCaseQuery(LocalDatabaseUtils.KEY_LOCAL_PATIENT_NAME, searchTerm)
+                        + " OR "
+                        + LocalDatabaseUtils.getSearchTermEqualsIgnoreCaseQuery(LocalDatabaseUtils.KEY_MOBILE_NUMBER, searchTerm)
+                        + ")";
+
+            //specifying order by limit and offset query
+            String conditionsLimit = " ORDER BY " + LocalDatabaseUtils.KEY_LOCAL_PATIENT_NAME + " COLLATE NOCASE ASC  "
+                    + " LIMIT " + maxSize
+                    + " OFFSET " + (pageNum * maxSize);
+
+            whereCondition = whereCondition + conditionsLimit;
+            LogUtils.LOGD(TAG, "Select Query " + whereCondition);
+            List<RegisteredPatientDetailsUpdated> list = SugarRecord.findWithQuery(RegisteredPatientDetailsUpdated.class, whereCondition);
+
+            if (!Util.isNullOrEmptyList(list)) {
+                for (RegisteredPatientDetailsUpdated registeredPatientDetailsUpdated : list) {
+                    getPatientRestDetails(registeredPatientDetailsUpdated);
+                }
+            }
+            volleyResponseBean.setDataList(getObjectsListFromMap(list));
+            if (responseListener != null)
+                responseListener.onResponse(volleyResponseBean);
+        } catch (Exception e) {
+            e.printStackTrace();
+            showErrorLocal(volleyResponseBean, errorListener);
+        }
+        return volleyResponseBean;
+    }
+
+    public VolleyResponseBean getSearchedPatientsListPageWise(WebServiceType webServiceType, User user,
                                                               int pageNum, int maxSize, FilterItemType filterType, AdvanceSearchOptionsType advanceSearchOptionsType, String searchTerm,
                                                               Boolean pidHasDate, BooleanTypeValues discarded, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         VolleyResponseBean volleyResponseBean = new VolleyResponseBean();

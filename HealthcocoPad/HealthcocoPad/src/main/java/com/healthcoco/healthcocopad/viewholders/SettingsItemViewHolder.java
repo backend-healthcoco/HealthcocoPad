@@ -1,7 +1,6 @@
 package com.healthcoco.healthcocopad.viewholders;
 
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
@@ -64,6 +63,7 @@ public class SettingsItemViewHolder extends HealthCocoViewHolder {
                 case HELP_IMPROVE:
                 case SIGN_OUT:
                 case GROUPS:
+                case DELETED_PATIENTS:
                     tvVersionName.setVisibility(View.GONE);
                     bottomView.setVisibility(View.GONE);
                     LayoutParams params = new LayoutParams(

@@ -97,4 +97,7 @@
     <string name="icon_select_file">&#xf067;&#160;Select File</string>
     <string name="icon_add_vaccine">&#xf067;&#160; Add Vaccine</string>
     <string name="icon_add_growth_chart">&#xf067;&#160; Add Growth Chart</string>
+    <string name="icon_save">&#xf00c;&#160;SAVE</string>
+    <string name="icon_cancel_delete_cross">&#xf00d;&#160;CANCEL</string>
+
 </resources>

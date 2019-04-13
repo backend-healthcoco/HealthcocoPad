@@ -15,7 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.android.volley.Response;
 import com.healthcoco.healthcocopad.HealthCocoActivity;
@@ -26,16 +26,20 @@ import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.AlreadyRegisteredPatientsResponse;
 import com.healthcoco.healthcocopad.bean.server.DoctorClinicProfile;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
+import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.custom.CustomEditText;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
+import com.healthcoco.healthcocopad.fragments.ContactsListFragment;
 import com.healthcoco.healthcocopad.listeners.DrawableClickListener;
 import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.Util;
+
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 
@@ -51,7 +55,9 @@ public class PatientNumberSearchDialogFragment extends HealthCocoDialogFragment 
     private Button btSkip;
     private User user;
     private boolean isMobileNumberOptional;
-    private ImageView ivPhonebook;
+    private boolean isForMobileNoEdit;
+    private RegisteredPatientDetailsUpdated selectedPatient;
+    private TextView tvDescription;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -77,8 +83,14 @@ public class PatientNumberSearchDialogFragment extends HealthCocoDialogFragment 
 
     @Override
     public void init() {
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            isForMobileNoEdit = bundle.getBoolean(ContactsListFragment.TAG_IS_FOR_MOBILE_NUMBER_EDIT, false);
+            selectedPatient = Parcels.unwrap(bundle.getParcelable(ContactsListFragment.TAG_PATIENT_DATA));
+        }
         initViews();
         initListeners();
+        initData();
     }
 
     @Override
@@ -86,11 +98,21 @@ public class PatientNumberSearchDialogFragment extends HealthCocoDialogFragment 
         editMobileNumber = (CustomEditText) view.findViewById(R.id.edit_mobile_number);
         btProceed = (Button) view.findViewById(R.id.bt_proceed);
         btSkip = (Button) view.findViewById(R.id.bt_skip);
+        tvDescription = (TextView) view.findViewById(R.id.tv_description);
         mActivity.showSoftKeyboard(editMobileNumber);
         Util.setFocusToEditText(mActivity, editMobileNumber);
 
-        if (isMobileNumberOptional) {
+        if (!isForMobileNoEdit && isMobileNumberOptional) {
             btSkip.setVisibility(View.VISIBLE);
+        } else btSkip.setVisibility(View.GONE);
+        if (isForMobileNoEdit) {
+            tvDescription.setText(R.string.please_enter_patient_mobile_number_to_update);
+            initActionbarTitle(getString(R.string.edit_patient_mobile_number));
+            btProceed.setText(R.string.update);
+        } else {
+            tvDescription.setText(R.string.please_enter_patient_mobile_number_to_register);
+            initActionbarTitle(getString(R.string.patient_mobile_number));
+            btProceed.setText(R.string.proceed);
         }
     }
 
@@ -104,6 +126,8 @@ public class PatientNumberSearchDialogFragment extends HealthCocoDialogFragment 
     }
 
     public void initData() {
+        if (isForMobileNoEdit && selectedPatient != null && !Util.isNullOrBlank(selectedPatient.getMobileNumber()))
+            editMobileNumber.setText(selectedPatient.getMobileNumber());
     }
 
     @Override
@@ -199,14 +223,31 @@ public class PatientNumberSearchDialogFragment extends HealthCocoDialogFragment 
                                 .getDataList();
                         LocalDataServiceImpl.getInstance(mApp).addAlreadyRegisteredPatients(list);
                         openPatientNumberSearchResultsFragment();
+                    } else if (isForMobileNoEdit) {
+                        updatePatientsMobileNumber();
                     } else {
                         openRegistrationFragment(String.valueOf(editMobileNumber.getText()));
+                    }
+                    break;
+                case UPDATE_PATINET_MOBILE_NUMBER:
+                    if (response.getData() instanceof Boolean) {
+                        boolean isDataSuccess = (boolean) response.getData();
+                        if (isDataSuccess) {
+                            Util.sendBroadcast(mApp, ContactsListFragment.INTENT_REFRESH_CONTACTS_LIST_FROM_SERVER);
+                            Util.showToast(mActivity, R.string.mobile_number_updated);
+                            getDialog().dismiss();
+                        } else Util.showToast(mActivity, R.string.mobile_number_not_updated);
                     }
                     break;
             }
         }
         mActivity.hideLoading();
-        getDialog().dismiss();
+    }
+
+    private void updatePatientsMobileNumber() {
+        mActivity.showLoading(false);
+        WebDataServiceImpl.getInstance(mApp).updatePatientMobileNumber(Boolean.class, WebServiceType.UPDATE_PATINET_MOBILE_NUMBER,
+                user, selectedPatient.getUserId(), null, String.valueOf(editMobileNumber.getText()), this, this);
     }
 
     private void openRegistrationFragment(String mobileNumber) {
@@ -220,6 +261,10 @@ public class PatientNumberSearchDialogFragment extends HealthCocoDialogFragment 
     private void openPatientNumberSearchResultsFragment() {
         Bundle args = new Bundle();
         PatientNumberSearchResultsDialogFragment patientNumberSearchResultsDialogFragment = new PatientNumberSearchResultsDialogFragment();
+        if (isForMobileNoEdit) {
+            args.putBoolean(ContactsListFragment.TAG_IS_FOR_MOBILE_NUMBER_EDIT, true);
+            args.putParcelable(ContactsListFragment.TAG_PATIENT_DATA, Parcels.wrap(selectedPatient));
+        }
         args.putString(HealthCocoConstants.TAG_MOBILE_NUMBER, String.valueOf(editMobileNumber.getText()));
         args.putBoolean(PatientNumberSearchResultsDialogFragment.TAG_IS_FROM_HOME_ACTIVITY, true);
         patientNumberSearchResultsDialogFragment.setArguments(args);

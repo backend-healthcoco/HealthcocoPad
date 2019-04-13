@@ -15,6 +15,7 @@ import com.healthcoco.healthcocopad.bean.server.DoctorClinicProfile;
 import com.healthcoco.healthcocopad.bean.server.RegisteredDoctorProfile;
 import com.healthcoco.healthcocopad.dialogFragment.BookAppointmentDialogFragment;
 import com.healthcoco.healthcocopad.enums.AppointmentSlotsType;
+import com.healthcoco.healthcocopad.enums.ContactListItemOptionType;
 import com.healthcoco.healthcocopad.enums.PatientProfileScreenType;
 import com.healthcoco.healthcocopad.enums.PatientTreatmentStatus;
 import com.healthcoco.healthcocopad.enums.PopupWindowType;
@@ -124,6 +125,19 @@ public class PopupListViewAdapter extends BaseAdapter {
                             tvName.setSelected(false);
                             imageView.setVisibility(View.GONE);
                         }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+            case CONTACT_LIST_OPTION_TYPE:
+                try {
+                    TextView tvTypeName = (TextView) convertView.findViewById(R.id.tv_type_name);
+                    ImageView ivTypeIcon = (ImageView) convertView.findViewById(R.id.iv_type_image);
+                    if (objData instanceof ContactListItemOptionType) {
+                        ContactListItemOptionType itemOptionType = (ContactListItemOptionType) objData;
+                        tvTypeName.setText(mActivity.getResources().getText(itemOptionType.getValue()));
+                        ivTypeIcon.setImageResource(itemOptionType.getDrawableId());
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

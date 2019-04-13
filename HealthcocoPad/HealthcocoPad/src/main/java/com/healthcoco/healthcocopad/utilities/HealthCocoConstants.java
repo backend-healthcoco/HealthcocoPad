@@ -160,6 +160,8 @@ public class HealthCocoConstants {
     public static final int REQUEST_CODE_UPDATA_BRAND_GROUP = 222;
     public static final int RESULT_CODE_UPDATA_BRAND_GROUP = 223;
     public static final int REQUEST_CODE_GROWTH_CHART_LIST = 224;
+    public static final int REQUEST_CODE_ADD_ADVICE = 225;
+    public static final int RESULT_CODE_ADD_ADVICE = 226;
     public static final int PICK_CONTACT = 1000;
     public static boolean isNetworkOnline;
     public static String SELECTED_PATIENTS_USER_ID = null;
@@ -168,6 +170,7 @@ public class HealthCocoConstants {
     public static String VISIT_ID_REPORTS = null;
     public static String VISIT_ID_PRESCRIPTION = null;
     public static String VISIT_ID_TREATMENT = null;
-
+    public static final String PARAM_NEW_PATIENT_ID = "newPatientId=";
+    public static final String PARAM_MOBILE_NUMBER = "&mobileNumber=";
 
 }

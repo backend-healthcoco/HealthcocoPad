@@ -44,9 +44,11 @@ import com.healthcoco.healthcocopad.bean.server.Prescription;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.TempTemplate;
 import com.healthcoco.healthcocopad.bean.server.User;
+import com.healthcoco.healthcocopad.custom.CustomEditText;
 import com.healthcoco.healthcocopad.custom.DummyTabFactory;
 import com.healthcoco.healthcocopad.custom.HealthcocoTextWatcher;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
+import com.healthcoco.healthcocopad.dialogFragment.AddAdviceDialogFragment;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.PrescriptionPermissionType;
 import com.healthcoco.healthcocopad.enums.SelectDrugItemType;
@@ -56,11 +58,11 @@ import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.AddNewPrescriptionListener;
 import com.healthcoco.healthcocopad.listeners.AddTemplatesListener;
 import com.healthcoco.healthcocopad.listeners.DiagnosticTestItemListener;
+import com.healthcoco.healthcocopad.listeners.DrawableClickListener;
 import com.healthcoco.healthcocopad.listeners.HealthcocoTextWatcherListener;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
 import com.healthcoco.healthcocopad.listeners.SelectDrugItemClickListener;
 import com.healthcoco.healthcocopad.listeners.SelectedDrugsListItemListener;
-import com.healthcoco.healthcocopad.listeners.TemplateListItemListener;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
@@ -77,8 +79,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.healthcoco.healthcocopad.fragments.AddClinicalNotesVisitMyScriptFragment.CHARACTER_TO_BE_REPLACED;
 import static com.healthcoco.healthcocopad.fragments.AddClinicalNotesSubFragment.CHARACTER_TO_REPLACE_COMMA_WITH_SPACES;
+import static com.healthcoco.healthcocopad.fragments.AddClinicalNotesVisitMyScriptFragment.CHARACTER_TO_BE_REPLACED;
 import static com.healthcoco.healthcocopad.fragments.AddVisitSuggestionsFragment.TAG_SUGGESTIONS_TYPE;
 import static com.healthcoco.healthcocopad.fragments.MyScriptAddVisitsFragment.TAG_SELECTED_SUGGESTION_OBJECT;
 
@@ -89,10 +91,11 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
         TabHost.OnTabChangeListener, ViewPager.OnPageChangeListener, View.OnClickListener,
         SelectDrugItemClickListener, SelectedDrugsListItemListener, AddTemplatesListener,
         DiagnosticTestItemListener, AddNewPrescriptionListener, LocalDoInBackgroundListenerOptimised,
-        View.OnTouchListener, HealthcocoTextWatcherListener {
+        View.OnTouchListener, HealthcocoTextWatcherListener, DrawableClickListener {
     public static final String INTENT_ON_SUGGESTION_ITEM_CLICK = "com.healthcoco.healthcocopad.fragments.AddEditNormalVisitPrescriptionFragment.ON_SUGGESTION_ITEM_CLICK";
     public static final String TAG_PRESCRIPTION_DATA = "prescriptionData";
     public static final String TAG_PRESCRIPTION_ID = "prescriptionId";
+    public static final String TAG_ADVICE_STRING = "adviceString";
     private boolean receiversRegistered;
     private ViewPager viewPagerPrescription;
     private TabHost tabhost;
@@ -105,7 +108,7 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
     private EditText etDuration;
     private LinearLayout containerAdviceSuggestionsList;
     private AddAdviseSuggestionsFragment addAdviseSuggestionsFragment;
-    private EditText editAdvice;
+    private CustomEditText editAdvice;
     private LinearLayout containerDiagnosticTests;
     private ScrollViewWithHeaderNewPrescriptionLayout svContainer;
     private RelativeLayout tvHeader;
@@ -209,7 +212,7 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
         tabhost = (TabHost) view.findViewById(android.R.id.tabhost);
         etDuration = (EditText) view.findViewById(R.id.et_duration);
         etHeaderTwoDuration = (EditText) view.findViewById(R.id.et_header_two_duration);
-        editAdvice = (EditText) view.findViewById(R.id.edit_advice);
+        editAdvice = (CustomEditText) view.findViewById(R.id.edit_advice);
         svContainer = (ScrollViewWithHeaderNewPrescriptionLayout) view.findViewById(R.id.sv_container);
         tvHeader = (RelativeLayout) view.findViewById(R.id.tv_header);
         tvHeaderOne = (LinearLayout) view.findViewById(R.id.tv_header_one);
@@ -246,6 +249,7 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
         etDuration.addTextChangedListener(new HealthcocoTextWatcher(etDuration, this));
         etHeaderTwoDuration.addTextChangedListener(new HealthcocoTextWatcher(etHeaderTwoDuration, this));
         ((CommonOpenUpActivity) mActivity).initSaveButton(this);
+        editAdvice.setDrawableClickListener(this);
     }
 
     private void initScrollView() {
@@ -833,6 +837,32 @@ public class AddEditNormalVisitPrescriptionFragment extends HealthCocoFragment i
             initTabsFragmentsList();
             initViewPagerAdapter();
             initSuggestionsFragment();
+        }
+    }
+
+    @Override
+    public void onClick(DrawablePosition target) {
+        switch (target) {
+            case RIGHT:
+                Bundle bundle = new Bundle();
+                if (!Util.isNullOrBlank(editAdvice.getText().toString()))
+                    bundle.putString(TAG_ADVICE_STRING, editAdvice.getText().toString());
+                AddAdviceDialogFragment dialogFragment = new AddAdviceDialogFragment();
+                dialogFragment.setArguments(bundle);
+                dialogFragment.setTargetFragment(this, HealthCocoConstants.REQUEST_CODE_ADD_ADVICE);
+                dialogFragment.show(mActivity.getSupportFragmentManager(), dialogFragment.getClass().getSimpleName());
+                break;
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == HealthCocoConstants.REQUEST_CODE_ADD_ADVICE) {
+            if (resultCode == HealthCocoConstants.RESULT_CODE_ADD_ADVICE && data != null) {
+                String advice = data.getStringExtra(TAG_ADVICE_STRING);
+                editAdvice.setText(Util.getValidatedValue(advice));
+            }
         }
     }
 }

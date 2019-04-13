@@ -51,6 +51,7 @@ public enum AccountPackageType {
                 add(SettingsItemType.PRINT);
                 add(SettingsItemType.KIOSK);
                 add(SettingsItemType.UI_PERMISSION);
+                add(SettingsItemType.DELETED_PATIENTS);
                 add(SettingsItemType.HELP_IMPROVE);
 //                add(SettingsItemType.SYNC_CONTACT);
                 add(SettingsItemType.SYNC);
@@ -99,7 +100,7 @@ public enum AccountPackageType {
                 add(SettingsItemType.KIOSK);
                 add(SettingsItemType.UI_PERMISSION);
                 add(SettingsItemType.HELP_IMPROVE);
-//                add(SettingsItemType.SYNC_CONTACT);
+                add(SettingsItemType.DELETED_PATIENTS);
                 add(SettingsItemType.SYNC);
                 add(SettingsItemType.ABOUT);
 //                add(SettingsItemType.RATE_US);
