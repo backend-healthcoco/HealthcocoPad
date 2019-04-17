@@ -34,7 +34,7 @@ public class ClinicDoctorProfile extends SugarRecord {
     private Long createdTime;
     private Long updatedTime;
     private UserState userState;
-
+    private Boolean isActive;
     public String getUniqueId() {
         return uniqueId;
     }
@@ -177,5 +177,13 @@ public class ClinicDoctorProfile extends SugarRecord {
         else if (!title.trim().contains("."))
             title = title + ".";
         return title + " " + firstName;
+    }
+
+    public Boolean getActive() {
+        return isActive;
+    }
+
+    public void setActive(Boolean active) {
+        isActive = active;
     }
 }

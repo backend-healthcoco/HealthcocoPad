@@ -1,0 +1,31 @@
+<resources>
+    <dimen name="initial_screen_icon_height_size">350px</dimen>
+    <dimen name="initial_screen_icon_width_size">437px</dimen>
+    <dimen name="hcc_pad_top_logo_width">26px</dimen>
+    <dimen name="hcc_pad_top_logo_height">42px</dimen>
+    <dimen name="tab_home_image_size">28px</dimen>
+    <dimen name="tab_global_access_button_size">45px</dimen>
+    <dimen name="visits_icon_with_circle_size">40px</dimen>
+    <dimen name="widget_delete_icon_size">50px</dimen>
+    <dimen name="widget_space_icon_size">50px</dimen>
+    <dimen name="widget_enter_icon_size">50px</dimen>
+    <dimen name="treatment_tooth_height">60px</dimen>
+    <dimen name="video_placeholder_height">250px</dimen>
+    <dimen name="treatment_tooth_width">35px</dimen>
+
+    <dimen name="visits_icon_notes">60px</dimen>
+    <dimen name="visits_icon_drugs">60px</dimen>
+    <dimen name="visits_icon_template">60px</dimen>
+    <dimen name="visits_icon_test">60px</dimen>
+    <dimen name="visits_icon_advice">60px</dimen>
+    <dimen name="visits_icon_diagram">60px</dimen>
+    <dimen name="image_width_manage_clinic">40px</dimen>
+    <dimen name="image_height_manage_clinic">30px</dimen>
+    <dimen name="list_item_image_size">58px</dimen>
+    <dimen name="doctor_name_textview_width">250px</dimen>
+    <dimen name="event_popup_width">400px</dimen>
+    <dimen name="queue_doctor_name_textview_width">200px</dimen>
+    <dimen name="calendar_date_textview_width">200px</dimen>
+    <dimen name="date_textview_width">160px</dimen>
+
+</resources>

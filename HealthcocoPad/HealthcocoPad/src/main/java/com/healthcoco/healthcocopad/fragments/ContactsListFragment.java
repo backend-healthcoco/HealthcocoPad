@@ -790,7 +790,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
                             resetListAndPagingServer();
                             getContactsList(true);
                             return;
-                        } else if (Util.isNullOrEmptyList(responseList) && !response.isFromLocalAfterApiSuccess()) {
+                        } else if (!isEditTextSearching && Util.isNullOrEmptyList(responseList) && !response.isFromLocalAfterApiSuccess()) {
                             resetListAndPagingServer();
                             getContactsList(true);
                             return;
@@ -809,6 +809,8 @@ public class ContactsListFragment extends HealthCocoFragment implements
                         response.setIsFromLocalAfterApiSuccess(true);
                         new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_PATIENTS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
                         return;
+                    }else {
+                        mActivity.hideProgressDialog();
                     }
 //                    else {
 //                        long count = LocalDataServiceImpl.getInstance(mApp).getListCount(user);
@@ -924,7 +926,6 @@ public class ContactsListFragment extends HealthCocoFragment implements
             patientsListHashMap.clear();
         PAGE_NUMBER = 0;
         isEndOfListAchieved = false;
-        isEditTextSearching = false;
         gvContacts.resetPreLastPosition(0);
 //        notifyAdapter(new ArrayList<RegisteredPatientDetailsUpdated>(patientsListHashMap.values()));
     }

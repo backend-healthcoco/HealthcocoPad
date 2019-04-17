@@ -647,7 +647,8 @@ public class LocalDataServiceImpl {
     public List<ClinicDoctorProfile> getClinicDoctorsList(int maxSize, String locationId) {
         String whereCondition = "Select * from " + StringUtil.toSQLName(ClinicDoctorProfile.class.getSimpleName())
                 + " where "
-                + LocalDatabaseUtils.KEY_LOCATION_ID + "=\"" + locationId + "\"";
+                + LocalDatabaseUtils.KEY_LOCATION_ID + "=\"" + locationId + "\""
+                + " AND " + LocalDatabaseUtils.KEY_IS_ACTIVE + "=" + BooleanTypeValues.TRUE.getBooleanIntValue();
 
         //specifying order by limit and offset query
         String conditionsLimit = " ORDER BY " + LocalDatabaseUtils.KEY_CREATED_TIME + " DESC ";
