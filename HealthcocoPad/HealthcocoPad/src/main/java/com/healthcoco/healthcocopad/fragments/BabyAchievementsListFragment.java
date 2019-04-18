@@ -33,10 +33,12 @@ import com.healthcoco.healthcocopad.recyclerview.EndlessRecyclerViewScrollListen
 import com.healthcoco.healthcocopad.recyclerview.HealthcocoRecyclerViewAdapter;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
+import com.healthcoco.healthcocopad.utilities.ComparatorUtil;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 
 public class BabyAchievementsListFragment extends HealthCocoFragment implements
@@ -123,6 +125,7 @@ public class BabyAchievementsListFragment extends HealthCocoFragment implements
                 showLoadingOverlay(true);
             }
             if (isInitialLoading) {
+                resetListAndPagingAttributes();
                 progressLoading.setVisibility(View.GONE);
             } else {
                 progressLoading.setVisibility(View.VISIBLE);
@@ -143,7 +146,7 @@ public class BabyAchievementsListFragment extends HealthCocoFragment implements
 
     private void notifyAdapter(ArrayList<BabyAchievementsResponse> list) {
         if (!Util.isNullOrEmptyList(list)) {
-//            Collections.sort(list, ComparatorUtil.babyAchievementsDateComparator);
+            Collections.sort(list, ComparatorUtil.babyAchievementsDateComparator);
             rvBabyAchievementsList.setVisibility(View.VISIBLE);
             tvNoBabyAchievementFound.setVisibility(View.GONE);
         } else {
@@ -157,7 +160,8 @@ public class BabyAchievementsListFragment extends HealthCocoFragment implements
 
     @Override
     public void onRefresh() {
-        getListFromLocal(true);
+        resetListAndPagingAttributes();
+        getBabyAchievementsList(false);
     }
 
     @Override
@@ -179,6 +183,12 @@ public class BabyAchievementsListFragment extends HealthCocoFragment implements
         Util.showToast(mActivity, R.string.user_offline);
         showLoadingOverlay(false);
         swipeRefreshLayout.setRefreshing(false);
+    }
+
+    private void resetListAndPagingAttributes() {
+        isInitialLoading = true;
+        PAGE_NUMBER = 0;
+        isEndOfListAchieved = false;
     }
 
     @Override

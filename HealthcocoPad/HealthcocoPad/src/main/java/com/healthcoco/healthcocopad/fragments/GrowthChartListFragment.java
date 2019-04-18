@@ -177,7 +177,7 @@ public class GrowthChartListFragment extends HealthCocoFragment implements View.
 
     @Override
     public void onRefresh() {
-        getListFromLocal(true);
+        getGrowthChartList(false);
     }
 
     @Override

@@ -1244,6 +1244,30 @@ public class LocalDataServiceImpl {
                 if (!Util.isNullOrEmptyList(tempEventsList))
                     latestUpdatedTime = tempEventsList.get(0).getUpdatedTime();
                 break;
+            case GET_VACCINATION:
+                List<VaccineResponse> vaccineResponses = VaccineResponse.find(VaccineResponse.class,
+                         LocalDatabaseUtils.KEY_PATIENT_ID + "= ?",
+                        new String[]{ HealthCocoConstants.SELECTED_PATIENTS_USER_ID},
+                        null, "updated_time DESC", "1");
+                if (!Util.isNullOrEmptyList(vaccineResponses))
+                    latestUpdatedTime = vaccineResponses.get(0).getUpdatedTime();
+                break;
+            case GET_GROWTH_CHART:
+                List<GrowthChartResponse> growthChartResponses = GrowthChartResponse.find(GrowthChartResponse.class,
+                        LocalDatabaseUtils.KEY_DOCTOR_ID + "= ? AND " + LocalDatabaseUtils.KEY_PATIENT_ID + "= ?",
+                        new String[]{doctorId, "" + HealthCocoConstants.SELECTED_PATIENTS_USER_ID},
+                        null, "updated_time DESC", "1");
+                if (!Util.isNullOrEmptyList(growthChartResponses))
+                    latestUpdatedTime = growthChartResponses.get(0).getUpdatedTime();
+                break;
+            case GET_BABY_ACHIEVEMENTS:
+                List<BabyAchievementsResponse> achievementsResponses = BabyAchievementsResponse.find(BabyAchievementsResponse.class,
+                        LocalDatabaseUtils.KEY_DOCTOR_ID + "= ? AND " + LocalDatabaseUtils.KEY_PATIENT_ID + "= ?",
+                        new String[]{doctorId, "" + HealthCocoConstants.SELECTED_PATIENTS_USER_ID},
+                        null, "updated_time DESC", "1");
+                if (!Util.isNullOrEmptyList(achievementsResponses))
+                    latestUpdatedTime = achievementsResponses.get(0).getUpdatedTime();
+                break;
         }
         if (latestUpdatedTime == null)
             latestUpdatedTime = 0l;
@@ -6134,6 +6158,9 @@ public class LocalDataServiceImpl {
         }
     }
 
+    public void deletePatient(String userId) {
+        RegisteredPatientDetailsUpdated.deleteAll(RegisteredPatientDetailsUpdated.class, LocalDatabaseUtils.KEY_USER_ID + "= ?", userId);
+    }
 
     public void addBabyAchievementsResponse(BabyAchievementsResponse babyAchievementsResponse) {
         babyAchievementsResponse.setDurationJsonString(getJsonFromObject(babyAchievementsResponse.getDuration()));

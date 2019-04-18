@@ -322,10 +322,10 @@ public class GsonRequest extends JsonRequest<VolleyResponseBean> {
         SyncAll syncAll = new SyncAll();
         syncAll.setLastSyncedTime(new Date().getTime());
         switch (webServiceType) {
-            case GET_CONTACTS:
-                syncAll.setSyncAllType(SyncAllType.CONTACT);
-                LocalDataServiceImpl.getInstance(mApp).addSyncAllObject(syncAll);
-                break;
+//            case GET_CONTACTS:
+//                syncAll.setSyncAllType(SyncAllType.CONTACT);
+//                LocalDataServiceImpl.getInstance(mApp).addSyncAllObject(syncAll);
+//                break;
             case GET_GROUPS:
                 syncAll.setSyncAllType(SyncAllType.GROUP);
                 LocalDataServiceImpl.getInstance(mApp).addSyncAllObject(syncAll);

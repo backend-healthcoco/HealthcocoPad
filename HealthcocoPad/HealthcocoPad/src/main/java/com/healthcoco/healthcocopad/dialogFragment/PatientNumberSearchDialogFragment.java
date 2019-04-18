@@ -29,6 +29,7 @@ import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.custom.CustomEditText;
+import com.healthcoco.healthcocopad.enums.BooleanTypeValues;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.fragments.ContactsListFragment;
@@ -184,7 +185,9 @@ public class PatientNumberSearchDialogFragment extends HealthCocoDialogFragment 
             msg = getResources().getString(R.string.please_enter_valid_mobile_no);
 
         if (Util.isNullOrBlank(msg)) {
-            searchPatients(mobileNo);
+            if (!isForMobileNoEdit)
+                searchPatients(mobileNo);
+            else searchPatientsForChangeNumber(mobileNo);
         } else {
 //            if (!isMobileNumberOptional)
             Util.showAlert(mActivity, msg);
@@ -195,7 +198,11 @@ public class PatientNumberSearchDialogFragment extends HealthCocoDialogFragment 
         mActivity.showLoading(false);
         WebDataServiceImpl.getInstance(mApp).getAlreadyRegisteredPatients(AlreadyRegisteredPatientsResponse.class, mobileNo, user, this, this);
     }
-
+    private void searchPatientsForChangeNumber(String mobileNo) {
+        mActivity.showLoading(false);
+        WebDataServiceImpl.getInstance(mApp).getAlreadyRegisteredPatientsForChangeNumber(AlreadyRegisteredPatientsResponse.class,
+                mobileNo, user, BooleanTypeValues.TRUE, this, this);
+    }
 
     @Override
     public void onErrorResponse(VolleyResponseBean volleyResponseBean, String errorMessage) {
@@ -233,6 +240,7 @@ public class PatientNumberSearchDialogFragment extends HealthCocoDialogFragment 
                     if (response.getData() instanceof Boolean) {
                         boolean isDataSuccess = (boolean) response.getData();
                         if (isDataSuccess) {
+                            LocalDataServiceImpl.getInstance(mApp).deletePatient(selectedPatient.getUserId());
                             Util.sendBroadcast(mApp, ContactsListFragment.INTENT_REFRESH_CONTACTS_LIST_FROM_SERVER);
                             Util.showToast(mActivity, R.string.mobile_number_updated);
                             getDialog().dismiss();

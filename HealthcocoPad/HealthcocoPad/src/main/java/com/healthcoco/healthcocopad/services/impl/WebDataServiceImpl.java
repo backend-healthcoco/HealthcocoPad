@@ -738,6 +738,24 @@ public class WebDataServiceImpl implements GCMRefreshListener {
         }
     }
 
+    public void getAlreadyRegisteredPatientsForChangeNumber(Class<?> class1, String mobileNo, User user, BooleanTypeValues isDiscarded, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        WebServiceType webServiceType = WebServiceType.SEARCH_PATIENTS;
+        checkNetworkStatus(mApp.getApplicationContext());
+        String url = webServiceType.getUrl();
+        if (HealthCocoConstants.isNetworkOnline) {
+            url = url
+                    + mobileNo + "/"
+                    + user.getUniqueId() + "/"
+                    + user.getForeignLocationId() + "/"
+                    + user.getForeignHospitalId() + "?"
+                    + HealthCocoConstants.PARAM_FOR_CHANGE_NUMBER + isDiscarded.getBooleanFlag();
+
+            getResponse(webServiceType, class1, url, null, null, responseListener, errorListener);
+        } else {
+            errorListener.onErrorResponse(null, mApp.getResources().getString(R.string.user_offline));
+        }
+    }
+
     public void getAlreadyRegisteredPatients(Class<?> class1, String mobileNo, User user, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         WebServiceType webServiceType = WebServiceType.SEARCH_PATIENTS;
         checkNetworkStatus(mApp.getApplicationContext());

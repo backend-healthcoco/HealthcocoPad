@@ -154,6 +154,8 @@ public class HealthCocoConstants {
     public static final String PARAM_MATRIX_HOSPITAL_ID = ";hospitalId=";
     public static final String PARAM_FROM = "&from=";
     public static final String PARAM_TO = "&to=";
+    public static final String PARAM_FOR_CHANGE_NUMBER = "&forChangeNumber=";
+
     public static final String PARAM_MATRIX_VACCINE_ID = ";vaccineId=";
     public static final int REQUEST_CODE_VACCINATION_LIST = 220;
     public static final int REQUEST_CODE_VACCINATION_DATA = 221;
