@@ -1275,7 +1275,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="3dp"
             android:layout_marginLeft="@dimen/list_item_padding"
-            android:text="@string/procedures"
+            android:text="@string/procedures_treatment_given"
             android:textColor="@color/black"
             android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label_19sp" />
 

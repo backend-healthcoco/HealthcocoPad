@@ -243,7 +243,7 @@ public class MenuDrawerFragment extends HealthCocoFragment implements View.OnCli
                     if (!Util.isNullOrEmptyList(menuListHashMap)) {
 
                         if (doctorProfile != null) {
-                            if (doctorProfile.getSpecialities().contains("Dentist")) {
+                            if (!Util.isNullOrEmptyList(doctorProfile.getSpecialities()) && doctorProfile.getSpecialities().contains("Dentist")) {
                                 if (packageType == AccountPackageType.ADVANCE || packageType == AccountPackageType.PRO)
                                     menuListHashMap.put(FragmentType.VIDEOS, new MenuItem(FragmentType.VIDEOS, "", false));
                             } else

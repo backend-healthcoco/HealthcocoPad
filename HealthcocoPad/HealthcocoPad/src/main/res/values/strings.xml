@@ -703,6 +703,7 @@
     <string name="ears_exam">Ears</string>
     <string name="oral_cavity_throat_exam">Oral Cavity Throat</string>
     <string name="procedures">Procedures</string>
+    <string name="procedures_treatment_given">Procedures/Treatment Given</string>
     <string name="pc_throat">Throat</string>
     <string name="indirect_larygoscopy_exam">Indirect Larygoscopy</string>
     <string name="pc_oral_cavity">Oral Cavity</string>

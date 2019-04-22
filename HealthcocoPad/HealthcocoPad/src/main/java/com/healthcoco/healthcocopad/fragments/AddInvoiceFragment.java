@@ -1,5 +1,6 @@
 package com.healthcoco.healthcocopad.fragments;
 
+import android.app.DatePickerDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -13,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.TabHost;
 import android.widget.TextView;
@@ -21,11 +23,9 @@ import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.adapter.ContactsDetailViewPagerAdapter;
-import com.healthcoco.healthcocopad.adapter.SelectedInvoiceItemsListAdapter;
 import com.healthcoco.healthcocopad.bean.TotalTreatmentCostDiscountValues;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.request.InvoiceRequest;
-import com.healthcoco.healthcocopad.bean.request.TreatmentRequest;
 import com.healthcoco.healthcocopad.bean.server.DiagnosticTest;
 import com.healthcoco.healthcocopad.bean.server.DoctorClinicProfile;
 import com.healthcoco.healthcocopad.bean.server.DoctorProfile;
@@ -35,9 +35,7 @@ import com.healthcoco.healthcocopad.bean.server.InvoiceItem;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.Quantity;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
-import com.healthcoco.healthcocopad.bean.server.TreatmentItem;
 import com.healthcoco.healthcocopad.bean.server.TreatmentService;
-import com.healthcoco.healthcocopad.bean.server.Treatments;
 import com.healthcoco.healthcocopad.bean.server.UnitValue;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.custom.DummyTabFactory;
@@ -49,12 +47,10 @@ import com.healthcoco.healthcocopad.enums.PatientProfileScreenType;
 import com.healthcoco.healthcocopad.enums.QuantityEnum;
 import com.healthcoco.healthcocopad.enums.SelectDrugItemType;
 import com.healthcoco.healthcocopad.enums.UnitType;
-import com.healthcoco.healthcocopad.enums.VisitIdType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.DiagnosticTestItemListener;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
 import com.healthcoco.healthcocopad.listeners.SelectDrugItemClickListener;
-import com.healthcoco.healthcocopad.listeners.SelectedInvoiceListItemListener;
 import com.healthcoco.healthcocopad.listeners.SelectedTreatmentItemClickListener;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
@@ -66,7 +62,8 @@ import com.healthcoco.healthcocopad.views.ScrollViewWithHeaderNewPrescriptionLay
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Calendar;
+import java.util.Date;
 
 
 /**
@@ -93,16 +90,7 @@ public class AddInvoiceFragment extends HealthCocoFragment implements LocalDoInB
     private SelectedInvoiceListFragment selectedInvoiceListFragment;
     private boolean receiversRegistered;
     private Invoice invoice;
-    BroadcastReceiver getModifiedValueOfInvoiceReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, final Intent intent) {
-            if (intent != null && intent.hasExtra(SelectedInvoiceListFragment.TAG_TOTAL_COST_DISCOUNT_DETAIL_VALUES)) {
-                TotalTreatmentCostDiscountValues totalTreatmentCostDiscountValues = Parcels.unwrap(intent.getParcelableExtra(SelectedInvoiceListFragment.TAG_TOTAL_COST_DISCOUNT_DETAIL_VALUES));
-                setModifiedValues(totalTreatmentCostDiscountValues);
-            }
-        }
-
-    };
+    private TextView tvDate;
     //    private Treatments treatment;
     private DoctorProfile doctorProfile;
     private TreatmentListFragment treatmentListFragment;
@@ -111,7 +99,7 @@ public class AddInvoiceFragment extends HealthCocoFragment implements LocalDoInB
     private ScrollViewWithHeaderNewPrescriptionLayout svContainer;
     private boolean isFromVisit;
     private Boolean pidHasDate;
-
+    private long selectedFromDateTimeMillis;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -123,8 +111,6 @@ public class AddInvoiceFragment extends HealthCocoFragment implements LocalDoInB
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-
         Intent intent = mActivity.getIntent();
         if (intent != null) {
             invoice = Parcels.unwrap(intent.getParcelableExtra(AddInvoiceFragment.TAG_INVOICE_ID));
@@ -153,7 +139,7 @@ public class AddInvoiceFragment extends HealthCocoFragment implements LocalDoInB
         svContainer = (ScrollViewWithHeaderNewPrescriptionLayout) view.findViewById(R.id.sv_container);
         layoutNextReviewOn = (LinearLayout) view.findViewById(R.id.layout_next_review);
         layoutNextReviewOn.setVisibility(View.INVISIBLE);
-        view.findViewById(R.id.tv_date).setVisibility(View.GONE);
+        tvDate = (TextView) view.findViewById(R.id.tv_date);
     }
 
     @Override
@@ -161,7 +147,7 @@ public class AddInvoiceFragment extends HealthCocoFragment implements LocalDoInB
         ((CommonOpenUpActivity) mActivity).initSaveButton(this);
         tabhost.setOnTabChangedListener(this);
         viewPager.addOnPageChangeListener(this);
-
+        tvDate.setOnClickListener(this);
         ((CommonOpenUpActivity) mActivity).initRightActionView(ActionbarLeftRightActionTypeDrawables.WITH_SAVE, view);
         btSave = ((CommonOpenUpActivity) mActivity).initActionbarRightAction(this);
     }
@@ -193,6 +179,16 @@ public class AddInvoiceFragment extends HealthCocoFragment implements LocalDoInB
         return tabhost.newTabSpec(simpleName).setIndicator(view1).setContent(new DummyTabFactory(mActivity));
     }
 
+    BroadcastReceiver getModifiedValueOfInvoiceReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, final Intent intent) {
+            if (intent != null && intent.hasExtra(SelectedInvoiceListFragment.TAG_TOTAL_COST_DISCOUNT_DETAIL_VALUES)) {
+                TotalTreatmentCostDiscountValues totalTreatmentCostDiscountValues = Parcels.unwrap(intent.getParcelableExtra(SelectedInvoiceListFragment.TAG_TOTAL_COST_DISCOUNT_DETAIL_VALUES));
+                setModifiedValues(totalTreatmentCostDiscountValues);
+            }
+        }
+
+    };
 
     private void initViewPagerAdapter() {
         viewPager.setOffscreenPageLimit(fragmentsList.size());
@@ -270,9 +266,33 @@ public class AddInvoiceFragment extends HealthCocoFragment implements LocalDoInB
                 break;
             default:
                 break;
+            case R.id.tv_date:
+                openDatePickerDialog();
+                break;
         }
     }
 
+    private void openDatePickerDialog() {
+        Calendar calendar = Calendar.getInstance();
+        calendar = DateTimeUtil.setCalendarDefaultvalue(DateTimeUtil.DATE_FORMAT_DAY_MONTH_YEAR_SLASH, calendar, tvDate);
+        DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                selectedFromDateTimeMillis = getSelectedFromDateTime(year, monthOfYear, dayOfMonth);
+                tvDate.setText(DateTimeUtil.getFormatedDate(selectedFromDateTimeMillis));
+            }
+        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+        datePickerDialog.show();
+    }
+
+    private long getSelectedFromDateTime(int year, int month, int day) {
+        Calendar calendar1 = DateTimeUtil.getCalendarInstance();
+        calendar1.set(Calendar.YEAR, year);
+        calendar1.set(Calendar.MONTH, month);
+        calendar1.set(Calendar.DAY_OF_MONTH, day);
+        return calendar1.getTimeInMillis();
+    }
 
     private void validateData() {
         int msgId = getBlankInvoiceMsg();
@@ -294,6 +314,7 @@ public class AddInvoiceFragment extends HealthCocoFragment implements LocalDoInB
         invoiceToSend.setTotalDiscount(invoice.getTotalDiscount());
         invoiceToSend.setTotalTax(invoice.getTotalTax());
         invoiceToSend.setGrandTotal(invoice.getGrandTotal());
+        invoiceToSend.setCreatedTime(DateTimeUtil.getLongFromFormattedFormatString(DateTimeUtil.DATE_FORMAT_DAY_MONTH_YEAR_SLASH, String.valueOf(tvDate.getText())));
         if (invoice.getUniqueId() != null)
             invoiceToSend.setUniqueId(invoice.getUniqueId());
         if (invoice.getUniqueInvoiceId() != null)

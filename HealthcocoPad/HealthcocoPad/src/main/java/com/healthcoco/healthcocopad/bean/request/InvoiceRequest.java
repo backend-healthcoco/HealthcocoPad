@@ -38,6 +38,16 @@ public class InvoiceRequest {
         return doctorId;
     }
 
+    private Long createdTime;
+
+    public Long getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(Long createdTime) {
+        this.createdTime = createdTime;
+    }
+
     public void setDoctorId(String doctorId) {
         this.doctorId = doctorId;
     }
