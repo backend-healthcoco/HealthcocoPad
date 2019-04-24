@@ -36,7 +36,7 @@ public class HealthCocoConstants {
     public static final String TAG_SELECTED_DIAGRAM = "selectedDiagram";
     public static final String TAG_MAP_TYPE = "mapType";
     public static final String PARAM_IS_OBJECT_REQUIRED = "?isObjectRequired=true";
-
+    public static final String PARAM_TYPE = "&type=";
     public static final String TAG_INTENT_DATA = "intentData";
     public static final String TAG_PATIENT_PROFILE = "patientProfile";
     public static final String TAG_SELECTED_DATE_TIME_IN_MILLIS = "selectedTimeInMillis";
@@ -105,6 +105,9 @@ public class HealthCocoConstants {
     public static final int RESULT_CODE_ADD_VIDEO = 217;
     public static final int REQUEST_CODE_CHANGE_PIN = 218;
     public static final int RESULT_CODE_CHANGE_PIN = 219;
+    public static final int RESULT_CODE_ADD_GENERAL_NOTE = 227;
+    public static final int RESULT_CODE_ADD_HEADER_SETUP = 228;
+    public static final int REQUEST_CODE_ADD_EDIT_PRINT_SETTING = 229;
 
 
     public static final String PARAM_IS_DOCTOR_APP_TRUE = "&isDoctorApp=true";

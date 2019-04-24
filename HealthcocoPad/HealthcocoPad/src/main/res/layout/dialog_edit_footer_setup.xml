@@ -35,7 +35,8 @@
                     android:layout_height="wrap_content"
                     android:text="@string/include_footer"
                     android:textColor="@color/black_greyish"
-                    android:textSize="@dimen/text_size_add_clinical_note_points" />
+                    android:textSize="@dimen/text_size_add_clinical_note_points"
+                    android:textStyle="bold" />
 
                 <RadioGroup
                     android:id="@+id/rg_include_footer"
@@ -87,7 +88,8 @@
                     android:layout_height="wrap_content"
                     android:text="@string/include_signature"
                     android:textColor="@color/black_greyish"
-                    android:textSize="@dimen/text_size_add_clinical_note_points" />
+                    android:textSize="@dimen/text_size_add_clinical_note_points"
+                    android:textStyle="bold" />
 
                 <RadioGroup
                     android:id="@+id/rg_include_signature"
@@ -140,7 +142,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/include_signature_text"
                 android:textColor="@color/black_greyish"
-                android:textSize="@dimen/text_size_add_clinical_note_points" />
+                android:textSize="@dimen/text_size_add_clinical_note_points"
+                android:textStyle="bold" />
 
             <RadioGroup
                 android:id="@+id/rg_include_signature_text"
@@ -178,6 +181,194 @@
                     android:textColor="@drawable/text_light_grey_normal_blue_selected"
                     android:textSize="@dimen/text_size_registration_title" />
             </RadioGroup>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="@dimen/list_item_padding">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/include_footer_image"
+                android:textColor="@color/black_greyish"
+                android:textSize="@dimen/text_size_add_clinical_note_points"
+                android:textStyle="bold" />
+
+            <RadioGroup
+                android:id="@+id/rg_include_footer_image"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/list_item_padding"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <com.healthcoco.healthcocopad.views.FontAwesomeRadioButton
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:background="@android:color/transparent"
+                    android:button="@android:color/transparent"
+                    android:paddingLeft="@dimen/list_item_padding"
+                    android:paddingRight="@dimen/list_item_padding"
+                    android:tag="@string/yes_capital"
+                    android:text="@string/text_check_yes"
+                    android:textColor="@drawable/text_light_grey_normal_blue_selected"
+                    android:textSize="@dimen/text_size_registration_title" />
+
+                <com.healthcoco.healthcocopad.views.FontAwesomeRadioButton
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:background="@android:color/transparent"
+                    android:button="@android:color/transparent"
+                    android:checked="false"
+                    android:paddingLeft="@dimen/list_item_padding"
+                    android:paddingRight="@dimen/list_item_padding"
+                    android:tag="@string/no_capital"
+                    android:text="@string/text_check_no"
+                    android:textColor="@drawable/text_light_grey_normal_blue_selected"
+                    android:textSize="@dimen/text_size_registration_title" />
+            </RadioGroup>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="@dimen/list_item_padding">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/footer_height"
+                android:textColor="@color/black_greyish"
+                android:textSize="@dimen/text_size_add_clinical_note_points"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/et_footer_height"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/list_item_padding"
+                android:layout_weight="1"
+                android:background="@drawable/shape_rounded_corners_grey_border_solid_white"
+                android:cursorVisible="true"
+                android:focusableInTouchMode="true"
+                android:gravity="start"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:orientation="horizontal"
+                android:padding="@dimen/list_item_padding"
+                android:textColorHint="@color/grey_light_text"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="top|start"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:paddingTop="10dp"
+                android:text="@string/footer_image"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_add_clinical_note_points"
+                android:textStyle="bold"
+                android:visibility="visible" />
+
+            <LinearLayout
+                android:id="@+id/bt_select_footer_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_margin="5dp"
+                android:background="@drawable/shape_rounded_corners_solid_blue"
+                android:clickable="true"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingBottom="5dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="5dp">
+
+                <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="5dp"
+                    android:text="@string/fa_plus"
+                    android:textColor="@drawable/text_selector_white_translucent"
+                    android:textSize="@dimen/text_size_add_clinical_note_add_diagram_btn" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:clickable="false"
+                    android:gravity="center_vertical"
+                    android:text="@string/upload_image"
+                    android:textAllCaps="false"
+                    android:textColor="@drawable/text_selector_white_translucent"
+                    android:textSize="@dimen/text_size_add_clinical_note_add_diagram_btn"
+                    android:visibility="visible" />
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/iv_footer_image"
+            android:layout_width="@dimen/width_height_print_setting_image"
+            android:layout_height="@dimen/width_height_print_setting_image"
+            android:layout_gravity="center"
+            android:orientation="horizontal" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/list_item_padding">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/note_with_colon"
+                android:textColor="@color/black_greyish"
+                android:textSize="@dimen/text_size_add_clinical_note_points"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/print_setting_note_text_1"
+                android:textColor="@color/black_greyish"
+                android:textSize="@dimen/text_size_add_clinical_note_points" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/print_setting_note_text_2"
+                android:textColor="@color/black_greyish"
+                android:textSize="@dimen/text_size_add_clinical_note_points" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/print_setting_note_text_3"
+                android:textColor="@color/black_greyish"
+                android:textSize="@dimen/text_size_add_clinical_note_points" />
+
 
         </LinearLayout>
 
@@ -273,7 +464,8 @@
                 android:paddingBottom="@dimen/list_item_padding"
                 android:text="@string/signature_text"
                 android:textColor="@color/black_greyish"
-                android:textSize="@dimen/text_size_add_clinical_note_points" />
+                android:textSize="@dimen/text_size_add_clinical_note_points"
+                android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/et_signature_text"

@@ -63,7 +63,6 @@ import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 
 
 /**
@@ -205,6 +204,8 @@ public class AddInvoiceFragment extends HealthCocoFragment implements LocalDoInB
         tvGrandTotal.setText(Util.formatDoubleNumber(invoice.getGrandTotal()));
         if (invoice.getTotalTax() != null)
             tvTotalTax.setText(Util.formatDoubleNumber(invoice.getTotalTax().getValue()));
+        if (invoice != null && invoice.getCreatedTime() != null)
+            tvDate.setText(DateTimeUtil.getFormatedDate(invoice.getCreatedTime()));
     }
 
     private void initSelectedInvoiceListFragment() {
@@ -314,7 +315,10 @@ public class AddInvoiceFragment extends HealthCocoFragment implements LocalDoInB
         invoiceToSend.setTotalDiscount(invoice.getTotalDiscount());
         invoiceToSend.setTotalTax(invoice.getTotalTax());
         invoiceToSend.setGrandTotal(invoice.getGrandTotal());
-        invoiceToSend.setCreatedTime(DateTimeUtil.getLongFromFormattedFormatString(DateTimeUtil.DATE_FORMAT_DAY_MONTH_YEAR_SLASH, String.valueOf(tvDate.getText())));
+        if (!Util.isNullOrBlank(tvDate.getText().toString()))
+            invoiceToSend.setCreatedTime(DateTimeUtil.getLongFromFormattedFormatString(DateTimeUtil.DATE_FORMAT_DAY_MONTH_YEAR_SLASH, String.valueOf(tvDate.getText())));
+        else
+            invoiceToSend.setCreatedTime(DateTimeUtil.getCurrentDateLong());
         if (invoice.getUniqueId() != null)
             invoiceToSend.setUniqueId(invoice.getUniqueId());
         if (invoice.getUniqueInvoiceId() != null)

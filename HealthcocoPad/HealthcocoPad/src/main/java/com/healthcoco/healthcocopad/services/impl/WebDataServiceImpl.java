@@ -14,6 +14,7 @@ import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.AppointmentFeedback;
 import com.healthcoco.healthcocopad.bean.DoctorContactUs;
 import com.healthcoco.healthcocopad.bean.DoctorProfileToSend;
+import com.healthcoco.healthcocopad.bean.FileDetails;
 import com.healthcoco.healthcocopad.bean.PersonalHistory;
 import com.healthcoco.healthcocopad.bean.VersionCheckRequest;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
@@ -2016,4 +2017,18 @@ public class WebDataServiceImpl implements GCMRefreshListener {
             errorListener.onNetworkUnavailable(webServiceType);
         }
     }
+
+    public void addPrintSettingImageToServer(Class<?> class1, FileDetails fileDetails, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        WebServiceType webServiceType = WebServiceType.UPDATE_PRINT_SETTING_FILE;
+        if (HealthCocoConstants.isNetworkOnline) {
+            String url = webServiceType.getUrl() + "?"
+                    + HealthCocoConstants.PARAM_TYPE + "print";
+            checkNetworkStatus(mApp);
+            getResponse(Request.Priority.IMMEDIATE, webServiceType, class1, url, fileDetails, null, responseListener,
+                    errorListener);
+        } else {
+            errorListener.onNetworkUnavailable(webServiceType);
+        }
+    }
+
 }

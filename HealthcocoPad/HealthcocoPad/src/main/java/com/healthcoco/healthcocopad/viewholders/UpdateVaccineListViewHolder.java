@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.healthcoco.healthcocopad.HealthCocoActivity;
@@ -33,6 +34,7 @@ public class UpdateVaccineListViewHolder extends HealthcocoComonRecylcerViewHold
     private TextView tvDueDate;
     private TextView tvAddNote;
     private static final String DATE_FORMAT_USED_IN_THIS_SCREEN = "dd MMM yyyy";
+    private ImageView ivCancelDate;
 
     public UpdateVaccineListViewHolder(HealthCocoActivity activity, View itemView, HealthcocoRecyclerViewItemClickListener onItemClickListener, Object listenerObject) {
         super(activity, itemView, onItemClickListener, listenerObject);
@@ -46,11 +48,13 @@ public class UpdateVaccineListViewHolder extends HealthcocoComonRecylcerViewHold
         tvGivenDate = (TextView) itemView.findViewById(R.id.tv_given_date);
         cbVaccine = (CheckBox) itemView.findViewById(R.id.cb_select_vaccine);
         tvAddNote = itemView.findViewById(R.id.tv_add_note);
+        ivCancelDate = (ImageView) itemView.findViewById(R.id.iv_cancel_date);
         tvAddNote.setOnClickListener(this);
         cbVaccine.setOnCheckedChangeListener(this);
         cbVaccine.setOnClickListener(this);
 //        tvDueDate.setOnClickListener(this);
         tvGivenDate.setOnClickListener(this);
+        ivCancelDate.setOnClickListener(this);
     }
 
     @Override
@@ -67,7 +71,10 @@ public class UpdateVaccineListViewHolder extends HealthcocoComonRecylcerViewHold
 
             if (vaccineResponse.getGivenDate() != null && vaccineResponse.getGivenDate() > 0)
                 tvGivenDate.setText(DateTimeUtil.getFormatedDateAndTime(DATE_FORMAT_USED_IN_THIS_SCREEN, vaccineResponse.getGivenDate()));
-            else tvGivenDate.setText("");
+            else{
+                tvGivenDate.setText(DateTimeUtil.getCurrentFormattedDate(DATE_FORMAT_USED_IN_THIS_SCREEN));
+                vaccineResponse.setGivenDate(DateTimeUtil. getLongFromFormattedDateTime(DATE_FORMAT_USED_IN_THIS_SCREEN, tvGivenDate.getText().toString()));
+            }
             if (vaccineResponse.getStatus() == VaccineStatus.GIVEN)
                 selectVaccinationListener.isVaccinationClicked(true, vaccineResponse);
             cbVaccine.setChecked(selectVaccinationListener.isVaccinationSelected(vaccineResponse.getUniqueId()));
@@ -77,8 +84,9 @@ public class UpdateVaccineListViewHolder extends HealthcocoComonRecylcerViewHold
                     cbVaccine.setClickable(false);
                     tvGivenDate.setClickable(false);
                     tvAddNote.setClickable(false);
+                    ivCancelDate.setVisibility(View.GONE);
                 }
-            }
+            } else ivCancelDate.setVisibility(View.VISIBLE);
             if (vaccineResponse.isSelected()) {
                 cbVaccine.setChecked(true);
             }
@@ -103,6 +111,10 @@ public class UpdateVaccineListViewHolder extends HealthcocoComonRecylcerViewHold
             case R.id.tv_add_note:
                 openAddEditVaccineNoteDialogFragment(vaccineResponse.getNote());
                 break;
+            case R.id.iv_cancel_date:
+                tvGivenDate.setText("");
+                ivCancelDate.setVisibility(View.GONE);
+                break;
         }
     }
 
@@ -125,10 +137,11 @@ public class UpdateVaccineListViewHolder extends HealthcocoComonRecylcerViewHold
                 cbVaccine.setChecked(false);
                 if (textView.getId() == R.id.tv_due_date) {
                     vaccineResponse.setDueDate(DateTimeUtil.getLongFromFormattedDateTime(DATE_FORMAT_USED_IN_THIS_SCREEN, tvDueDate.getText().toString()));
+                    cbVaccine.setChecked(true);
                 } else if (textView.getId() == R.id.tv_given_date) {
                     vaccineResponse.setGivenDate(DateTimeUtil.getLongFromFormattedDateTime(DATE_FORMAT_USED_IN_THIS_SCREEN, tvGivenDate.getText().toString()));
+                    ivCancelDate.setVisibility(View.VISIBLE);
                 }
-                cbVaccine.setChecked(true);
             }
         }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
         datePickerDialog.show();

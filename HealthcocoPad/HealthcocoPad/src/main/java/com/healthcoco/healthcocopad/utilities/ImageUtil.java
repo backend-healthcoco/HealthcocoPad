@@ -29,6 +29,7 @@ public class ImageUtil {
     public static final int MEDIA_TYPE_IMAGE = 1;
     public static final String DEFAULT_CLINIC_LOGO_NAME = "clinicLogoImage";
     public static final String DEFAULT_CLINIC_IMAGE_NAME = "clinicImage";
+    public static final String DEFAULT_PRINT_SETTING_IMAGE_NAME = "printSettingImage";
     public static final String DEFAULT_PATIENT_IMAGE_NAME = "patientImage";
     public static final String DEFAULT_IMAGE_NAME = "defaultFileName";
     private static final String TAG = ImageUtil.class.getSimpleName();

@@ -39,7 +39,7 @@ public class PrintSettings extends SugarRecord {
     private String contentLineSpace;
     private String contentLineStyle;
     private Boolean showDrugGenericNames;
-
+    private String generalNotes;
 
     public String getUniqueId() {
         return uniqueId;
@@ -183,5 +183,21 @@ public class PrintSettings extends SugarRecord {
 
     public void setShowDrugGenericNames(Boolean showDrugGenericNames) {
         this.showDrugGenericNames = showDrugGenericNames;
+    }
+
+    public static String getTableName() {
+        return TABLE_NAME;
+    }
+
+    public static void setTableName(String tableName) {
+        TABLE_NAME = tableName;
+    }
+
+    public String getGeneralNotes() {
+        return generalNotes;
+    }
+
+    public void setGeneralNotes(String generalNotes) {
+        this.generalNotes = generalNotes;
     }
 }

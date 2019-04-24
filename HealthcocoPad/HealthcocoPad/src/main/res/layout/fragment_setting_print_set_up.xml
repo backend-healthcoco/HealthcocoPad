@@ -23,6 +23,12 @@
             <include layout="@layout/layout_item_print_footer_setup" />
 
             <include layout="@layout/layout_item_patient_details" />
+
+            <include layout="@layout/layout_item_general_notes" />
+
+            <include layout="@layout/layout_item_letterhead_header" />
+
+            <include layout="@layout/layout_item_letterhead_footer" />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

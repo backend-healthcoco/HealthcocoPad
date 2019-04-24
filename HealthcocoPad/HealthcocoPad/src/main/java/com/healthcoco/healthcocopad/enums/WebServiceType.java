@@ -553,7 +553,10 @@ public enum WebServiceType {
 
     DELETE_PATIENT(Method.DELETE, "register/patient/"),
 
-    UPDATE_PATINET_MOBILE_NUMBER(Method.GET, "register/patient/");
+    UPDATE_PATINET_MOBILE_NUMBER(Method.GET, "register/patient/"),
+
+    UPDATE_PRINT_SETTING_FILE(Method.POST, "printSettings/upload/file");
+
     private int methodType;
     private String url;
 

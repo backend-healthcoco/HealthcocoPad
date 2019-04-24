@@ -1,5 +1,6 @@
 package com.healthcoco.healthcocopad.fragments;
 
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -7,6 +8,7 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -29,6 +31,7 @@ import com.healthcoco.healthcocopad.bean.server.RightText;
 import com.healthcoco.healthcocopad.bean.server.Style;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
+import com.healthcoco.healthcocopad.dialogFragment.AddEditGeneralNotesDialogFragment;
 import com.healthcoco.healthcocopad.dialogFragment.EditContentSetupDialogFragment;
 import com.healthcoco.healthcocopad.dialogFragment.EditFooterSetupDialogFragment;
 import com.healthcoco.healthcocopad.dialogFragment.EditHeaderSetupDialogFragment;
@@ -41,8 +44,12 @@ import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimis
 import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
+import com.healthcoco.healthcocopad.utilities.DownloadImageFromUrlUtil;
+import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.healthcoco.healthcocopad.views.TextViewFontAwesome;
+
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -55,6 +62,8 @@ import java.util.List;
 public class SettingPrintSetupFragment extends HealthCocoFragment implements GsonRequest.ErrorListener,
         LocalDoInBackgroundListenerOptimised, Response.Listener<VolleyResponseBean>, View.OnClickListener, AddPrintSettingsListener {
 
+    public static final String TAG_HEADER_PRINT_SETTING_DATA = "printSetting";
+    public static final String TAG_GENERAL_NOTES = "generalNotes";
     private TextView tvPageSize;
     private TextView tvBottomMargin;
     private TextView tvTopMargin;
@@ -95,6 +104,14 @@ public class SettingPrintSetupFragment extends HealthCocoFragment implements Gso
 
     private User user;
     private boolean isInitialLoading = true;
+    private TextView tvGeneralNotesText;
+    private TextViewFontAwesome btEditGeneralNotes;
+    private TextView tvShowFooterImage;
+    private TextView tvShowHeaderImage;
+    private TextView tvFooterHeight;
+    private TextView tvHeaderHeight;
+    private ImageView ivHeaderImage;
+    private ImageView ivFooterImage;
 
 
     @Override
@@ -158,6 +175,19 @@ public class SettingPrintSetupFragment extends HealthCocoFragment implements Gso
         btEditHeader = (TextViewFontAwesome) view.findViewById(R.id.bt_edit_header_setup);
         btEditFooter = (TextViewFontAwesome) view.findViewById(R.id.bt_edit_footer_setup);
         btEditPatirntDetails = (TextViewFontAwesome) view.findViewById(R.id.bt_edit_patient_details);
+
+        tvGeneralNotesText = (TextView) view.findViewById(R.id.tv_general_notes_text);
+        tvShowFooterImage = (TextView) view.findViewById(R.id.tv_show_footer_image);
+        tvShowHeaderImage = (TextView) view.findViewById(R.id.tv_show_header_image);
+        tvFooterHeight = (TextView) view.findViewById(R.id.tv_footer_height);
+        tvHeaderHeight = (TextView) view.findViewById(R.id.tv_header_height);
+        tvIncludeHeader = (TextView) view.findViewById(R.id.tv_include_header);
+        tvIncludeFooter = (TextView) view.findViewById(R.id.tv_include_footer);
+        ivHeaderImage = (ImageView) view.findViewById(R.id.iv_header_image);
+        ivFooterImage = (ImageView) view.findViewById(R.id.iv_footer_image);
+        btEditGeneralNotes = (TextViewFontAwesome) view.findViewById(R.id.bt_edit_general_notes);
+        ivHeaderImage.setVisibility(View.GONE);
+        ivFooterImage.setVisibility(View.GONE);
     }
 
     @Override
@@ -169,6 +199,9 @@ public class SettingPrintSetupFragment extends HealthCocoFragment implements Gso
         btEditHeader.setOnClickListener(this);
         btEditFooter.setOnClickListener(this);
         btEditPatirntDetails.setOnClickListener(this);
+        btEditGeneralNotes.setOnClickListener(this);
+        ivHeaderImage.setOnClickListener(this);
+        ivFooterImage.setOnClickListener(this);
     }
 
     @Override
@@ -196,17 +229,34 @@ public class SettingPrintSetupFragment extends HealthCocoFragment implements Gso
                 editFooterSetupDialogFragment.show(mActivity.getSupportFragmentManager(),
                         editFooterSetupDialogFragment.getClass().getSimpleName());
                 break;
-
             case R.id.bt_edit_patient_details:
                 EditPatientDetailsSetupDialogFragment editPatientDetailsSetupDialogFragment = new EditPatientDetailsSetupDialogFragment(this);
                 editPatientDetailsSetupDialogFragment.show(mActivity.getSupportFragmentManager(),
                         editPatientDetailsSetupDialogFragment.getClass().getSimpleName());
                 break;
-
+            case R.id.bt_edit_general_notes:
+                Bundle args = new Bundle();
+                args.putString(TAG_GENERAL_NOTES, printSettings.getGeneralNotes());
+                AddEditGeneralNotesDialogFragment dialogFragment = new AddEditGeneralNotesDialogFragment();
+                dialogFragment.setArguments(args);
+                dialogFragment.setTargetFragment(this, HealthCocoConstants.REQUEST_CODE_ADD_EDIT_PRINT_SETTING);
+                dialogFragment.show(mActivity.getSupportFragmentManager(), dialogFragment.getClass().getSimpleName());
+                break;
             case R.id.container_right_action:
                 addPrintSettings();
                 break;
-
+            case R.id.iv_header_image:
+                if (printSettings != null &&
+                        printSettings.getHeaderSetup() != null &&
+                        !Util.isNullOrBlank(printSettings.getHeaderSetup().getHeaderImageUrl()))
+                    mActivity.openEnlargedImageDialogFragment(printSettings.getHeaderSetup().getHeaderImageUrl());
+                break;
+            case R.id.iv_footer_image:
+                if (printSettings != null &&
+                        printSettings.getFooterSetup() != null &&
+                        !Util.isNullOrBlank(printSettings.getFooterSetup().getFooterImageUrl()))
+                    mActivity.openEnlargedImageDialogFragment(printSettings.getFooterSetup().getFooterImageUrl());
+                break;
         }
 
     }
@@ -303,7 +353,12 @@ public class SettingPrintSetupFragment extends HealthCocoFragment implements Gso
             refreshHeaderDetails(printSettings);
             refreshFooterDetails(printSettings);
             refreshPatientDetails(printSettings);
+            refreshGeneralNotesDetails(printSettings);
         }
+    }
+    private void refreshGeneralNotesDetails(PrintSettings printSettings) {
+        if (!Util.isNullOrBlank(printSettings.getGeneralNotes()))
+            tvGeneralNotesText.setText(Util.getValidatedValue(printSettings.getGeneralNotes()));
     }
 
     private void refreshPatientDetails(PrintSettings printSettings) {
@@ -390,6 +445,16 @@ public class SettingPrintSetupFragment extends HealthCocoFragment implements Gso
             if (!Util.isNullOrBlank(footerSetup.getBottomSignText()))
                 tvBottomSignatureText.setText(footerSetup.getBottomSignText());
 
+            if (footerSetup.getShowImageFooter())
+                tvShowFooterImage.setText(R.string.yes);
+            else
+                tvShowFooterImage.setText(R.string.no);
+            if (!Util.isNullOrBlank(footerSetup.getFooterImageUrl())) {
+                DownloadImageFromUrlUtil.loadImageUsingImageLoader(null, ivFooterImage, footerSetup.getFooterImageUrl());
+                ivFooterImage.setVisibility(View.VISIBLE);
+            }
+            tvFooterHeight.setText(Util.getFormattedDoubleNumber(footerSetup.getFooterHeight()));
+
             if (!Util.isNullOrEmptyList(footerSetup.getBottomText())) {
                 List<BottomTextStyle> bottomTextList = footerSetup.getBottomText();
                 for (BottomTextStyle style : bottomTextList) {
@@ -435,6 +500,18 @@ public class SettingPrintSetupFragment extends HealthCocoFragment implements Gso
                 tvIncludelogo.setText(R.string.yes);
             else
                 tvIncludelogo.setText(R.string.no);
+
+            if (headerSetup.getShowHeaderImage())
+                tvShowHeaderImage.setText(R.string.yes);
+            else
+                tvShowHeaderImage.setText(R.string.no);
+
+            tvHeaderHeight.setText(Util.getFormattedDoubleNumber(headerSetup.getHeaderHeight()));
+
+            if (!Util.isNullOrBlank(headerSetup.getHeaderImageUrl())) {
+                DownloadImageFromUrlUtil.loadImageUsingImageLoader(null, ivHeaderImage, headerSetup.getHeaderImageUrl());
+                ivHeaderImage.setVisibility(View.VISIBLE);
+            }
 
             layoutTopRightText.removeAllViews();
             layoutTopLeftText.removeAllViews();
@@ -567,5 +644,21 @@ public class SettingPrintSetupFragment extends HealthCocoFragment implements Gso
     @Override
     public Object getPrintSettings() {
         return printSettings;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == HealthCocoConstants.REQUEST_CODE_ADD_EDIT_PRINT_SETTING) {
+            if (resultCode == HealthCocoConstants.RESULT_CODE_ADD_GENERAL_NOTE) {
+                String stringExtra = data.getStringExtra(TAG_GENERAL_NOTES);
+                tvGeneralNotesText.setText(stringExtra);
+                printSettings.setGeneralNotes(stringExtra);
+            } else if (resultCode == HealthCocoConstants.RESULT_CODE_ADD_HEADER_SETUP) {
+                PrintSettings printSettings = Parcels.unwrap(data.getParcelableExtra(TAG_HEADER_PRINT_SETTING_DATA));
+                this.printSettings = printSettings;
+                initData(this.printSettings);
+            }
+        }
     }
 }

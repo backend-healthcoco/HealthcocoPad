@@ -1366,5 +1366,22 @@
     <string name="restore">Restore</string>
     <string name="delete_patient">Delete Patient</string>
     <string name="confirm_undo_delete_patient">Are you sure you want to restore Patient &#160;</string>
-
+    <string name="include_header_image">Include Header Image</string>
+    <string name="header_image">Header Image</string>
+    <string name="upload_image">Upload Image</string>
+    <string name="header_height">Header Height</string>
+    <string name="print_setting_note_text_1">1.Set image height to see image in the print.</string>
+    <string name="print_setting_note_text_2">2.Please set "Include Footer Image" as YES to upload the image. And uploaded image will be shown in the footer section of print.</string>
+    <string name="print_setting_note_text_2_for_header">2.Please set "Include Header Image" as YES to upload the image. And uploaded image will be shown in the header section of print.</string>
+    <string name="print_setting_note_text_3">3.Uploaded image is shown below on Print Settings page.</string>
+    <string name="include_footer_image">Include Footer Image</string>
+    <string name="footer_image">Footer Image</string>
+    <string name="footer_height">Footer Height</string>
+    <string name="general_notes">General Notes</string>
+    <string name="show_footer_image">Show Footer Image&#160;:</string>
+    <string name="show_header_image">Show Header Image&#160;:</string>
+    <string name="footer_height_with_colon">Footer Height&#160;:</string>
+    <string name="header_height_with_colon">Header Height&#160;:</string>
+    <string name="letterhead_header">Letterhead Header</string>
+    <string name="letterhead_footer">Letterhead Footer</string>
 </resources>

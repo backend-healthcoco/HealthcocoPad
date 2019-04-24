@@ -97,6 +97,7 @@ import com.healthcoco.healthcocopad.dialogFragment.AddNewSuggestionDialogFragmen
 import com.healthcoco.healthcocopad.dialogFragment.AddNewTreatmentDialogFragment;
 import com.healthcoco.healthcocopad.dialogFragment.AddUpdateNameDialogFragment;
 import com.healthcoco.healthcocopad.dialogFragment.ChangeAppointmentStatusDialogFragment;
+import com.healthcoco.healthcocopad.dialogFragment.CommonOptionsDialogFragment;
 import com.healthcoco.healthcocopad.dialogFragment.EnlargedImageViewDialogFragment;
 import com.healthcoco.healthcocopad.dialogFragment.PatientCardDialogFragment;
 import com.healthcoco.healthcocopad.dialogFragment.SelectCategoryDialogFragment;
@@ -105,6 +106,7 @@ import com.healthcoco.healthcocopad.enums.AddUpdateNameDialogType;
 import com.healthcoco.healthcocopad.enums.BooleanTypeValues;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.DefaultSyncServiceType;
+import com.healthcoco.healthcocopad.enums.DialogType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.LocalTabelType;
 import com.healthcoco.healthcocopad.enums.PopupWindowType;
@@ -113,6 +115,7 @@ import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.fragments.DoctorProfileFragment;
 import com.healthcoco.healthcocopad.fragments.InitialSyncFragment;
 import com.healthcoco.healthcocopad.fragments.MenuDrawerFragment;
+import com.healthcoco.healthcocopad.listeners.CommonOptionsDialogItemClickListener;
 import com.healthcoco.healthcocopad.listeners.DoctorListPopupWindowListener;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
 import com.healthcoco.healthcocopad.listeners.QueueListitemlistener;
@@ -134,8 +137,6 @@ import org.parceler.Parcels;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.healthcoco.healthcocopad.activities.HomeActivity.REQUEST_CALL_PERMISSIONS;
 
 /**
  * Created by Shreshtha on 18-01-2017.
@@ -1666,6 +1667,11 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
         } else {
             doCloudPrinting(filePath);
         }
+    }
+
+    public void openDialogFragment(DialogType dialogTypeTitle, CommonOptionsDialogItemClickListener listener) {
+        CommonOptionsDialogFragment mDialogFragment = new CommonOptionsDialogFragment(dialogTypeTitle, listener);
+        mDialogFragment.show(getSupportFragmentManager(), CommonOptionsDialogItemClickListener.class.getSimpleName());
     }
 
     public String getFormattedVersionName() {

@@ -18,6 +18,9 @@ public class FooterSetup extends SugarRecord {
     private Boolean showPoweredBy;
     private Boolean showBottomSignText;
     private String bottomSignText;
+    private String footerImageUrl;
+    private Double footerHeight;
+    private Boolean showImageFooter;
 
     @Ignore
     private List<BottomTextStyle> bottomText;
@@ -68,5 +71,29 @@ public class FooterSetup extends SugarRecord {
 
     public void setBottomText(List<BottomTextStyle> bottomText) {
         this.bottomText = bottomText;
+    }
+
+    public String getFooterImageUrl() {
+        return footerImageUrl;
+    }
+
+    public void setFooterImageUrl(String footerImageUrl) {
+        this.footerImageUrl = footerImageUrl;
+    }
+
+    public Double getFooterHeight() {
+        return footerHeight;
+    }
+
+    public void setFooterHeight(Double footerHeight) {
+        this.footerHeight = footerHeight;
+    }
+
+    public Boolean getShowImageFooter() {
+        return showImageFooter;
+    }
+
+    public void setShowImageFooter(Boolean showImageFooter) {
+        this.showImageFooter = showImageFooter;
     }
 }

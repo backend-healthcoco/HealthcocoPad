@@ -605,6 +605,7 @@ public class SyncFragment extends HealthCocoFragment implements View.OnClickList
                         new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_PATIENTS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
                         return;
                     }
+                    Util.sendBroadcast(mApp, MenuDrawerFragment.INTENT_REFRESH_PATIENT_COUNT);
                     break;
 
                 case GET_DATA_PERMISSION:

@@ -1,6 +1,11 @@
 package com.healthcoco.healthcocopad.dialogFragment;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,19 +14,34 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.android.volley.Response;
 import com.healthcoco.healthcocopad.HealthCocoDialogFragment;
 import com.healthcoco.healthcocopad.R;
+import com.healthcoco.healthcocopad.bean.FileDetails;
+import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.BottomTextStyle;
 import com.healthcoco.healthcocopad.bean.server.FooterSetup;
 import com.healthcoco.healthcocopad.bean.server.PrintSettings;
-import com.healthcoco.healthcocopad.bean.server.Style;
 import com.healthcoco.healthcocopad.custom.AutoCompleteTextViewAdapter;
 import com.healthcoco.healthcocopad.enums.AutoCompleteTextViewType;
+import com.healthcoco.healthcocopad.enums.DialogType;
+import com.healthcoco.healthcocopad.enums.OptionsType;
+import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.AddPrintSettingsListener;
+import com.healthcoco.healthcocopad.listeners.CommonOptionsDialogItemClickListener;
+import com.healthcoco.healthcocopad.services.GsonRequest;
+import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
+import com.healthcoco.healthcocopad.utilities.BitmapUtil;
+import com.healthcoco.healthcocopad.utilities.DownloadImageFromUrlUtil;
+import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
+import com.healthcoco.healthcocopad.utilities.ImageUtil;
+import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.healthcoco.healthcocopad.views.CustomAutoCompleteTextView;
 
@@ -32,7 +52,7 @@ import java.util.List;
  * Created by Prashant on 07-02-2018.
  */
 public class EditFooterSetupDialogFragment extends HealthCocoDialogFragment
-        implements View.OnClickListener {
+        implements View.OnClickListener, CommonOptionsDialogItemClickListener, GsonRequest.ErrorListener, Response.Listener<VolleyResponseBean> {
 
     public ArrayList<Object> fontSizeArrayList = new ArrayList<Object>() {{
         add("5pt");
@@ -63,6 +83,12 @@ public class EditFooterSetupDialogFragment extends HealthCocoDialogFragment
     private ImageButton btCross;
     private Button btSave;
     private AddPrintSettingsListener addPrintSettingsListener;
+    private RadioGroup radioIncludeFooterImage;
+    private EditText etFooterHeight;
+    private LinearLayout btSelectFooterImage;
+    private ImageView ivFooterImage;
+    private Uri cameraImageUri;
+    private String imageString;
 
     public EditFooterSetupDialogFragment(AddPrintSettingsListener addPrintSettingsListener) {
         this.addPrintSettingsListener = addPrintSettingsListener;
@@ -90,13 +116,13 @@ public class EditFooterSetupDialogFragment extends HealthCocoDialogFragment
         initData();
     }
 
-
     @Override
     public void initViews() {
         autotvFontSize = (CustomAutoCompleteTextView) view.findViewById(R.id.et_font_size);
         radioIncludeFooter = (RadioGroup) view.findViewById(R.id.rg_include_footer);
         radioIncludeSignature = (RadioGroup) view.findViewById(R.id.rg_include_signature);
         radioIncludeSignatureText = (RadioGroup) view.findViewById(R.id.rg_include_signature_text);
+        radioIncludeFooterImage = (RadioGroup) view.findViewById(R.id.rg_include_footer_image);
         etBottomText = (EditText) view.findViewById(R.id.et_bottom_text);
         etSignatureText = (EditText) view.findViewById(R.id.et_signature_text);
         tvTextStyleBold = (TextView) view.findViewById(R.id.tv_text_style_bold);
@@ -105,11 +131,13 @@ public class EditFooterSetupDialogFragment extends HealthCocoDialogFragment
         tvTitle = (TextView) view.findViewById(R.id.tv_title);
         btCross = (ImageButton) view.findViewById(R.id.bt_cross);
         btSave = (Button) view.findViewById(R.id.bt_save);
-
+        etFooterHeight = (EditText) view.findViewById(R.id.et_footer_height);
+        btSelectFooterImage = (LinearLayout) view.findViewById(R.id.bt_select_footer_image);
+        ivFooterImage = (ImageView) view.findViewById(R.id.iv_footer_image);
         tvTitle.setText(R.string.footer);
 
         initAutoTvAdapter(autotvFontSize, AutoCompleteTextViewType.BLOOD_GROUP, fontSizeArrayList);
-
+        ivFooterImage.setVisibility(View.GONE);
     }
 
     @Override
@@ -118,6 +146,8 @@ public class EditFooterSetupDialogFragment extends HealthCocoDialogFragment
         btCross.setOnClickListener(this);
         tvTextStyleBold.setOnClickListener(this);
         tvTextStyleIttalic.setOnClickListener(this);
+        btSelectFooterImage.setOnClickListener(this);
+        ivFooterImage.setOnClickListener(this);
     }
 
 
@@ -158,7 +188,21 @@ public class EditFooterSetupDialogFragment extends HealthCocoDialogFragment
                 if (radioButton1 != null)
                     radioButton1.setChecked(true);
             }
+            if (footerSetup.getShowImageFooter()) {
+                RadioButton radioButton1 = (RadioButton) radioIncludeFooterImage.findViewWithTag(yesTag.toUpperCase());
+                if (radioButton1 != null)
+                    radioButton1.setChecked(true);
+            } else {
+                RadioButton radioButton1 = (RadioButton) radioIncludeFooterImage.findViewWithTag(noTag.toUpperCase());
+                if (radioButton1 != null)
+                    radioButton1.setChecked(true);
+            }
+            etFooterHeight.setText(Util.getFormattedDoubleNumber(footerSetup.getFooterHeight()));
 
+            if (!Util.isNullOrBlank(footerSetup.getFooterImageUrl())) {
+                DownloadImageFromUrlUtil.loadImageUsingImageLoader(null, ivFooterImage, footerSetup.getFooterImageUrl());
+                ivFooterImage.setVisibility(View.VISIBLE);
+            }
             if (!Util.isNullOrEmptyList(footerSetup.getBottomText())) {
                 List<BottomTextStyle> bottomTextList = footerSetup.getBottomText();
                 for (BottomTextStyle style : bottomTextList) {
@@ -197,6 +241,15 @@ public class EditFooterSetupDialogFragment extends HealthCocoDialogFragment
                 break;
             case R.id.tv_text_style_ittalic:
                 tvTextStyleIttalic.setSelected(!tvTextStyleIttalic.isSelected());
+                break;
+            case R.id.iv_footer_image:
+                if (!Util.isNullOrBlank(imageString))
+                    mActivity.openEnlargedImageDialogFragment(imageString);
+                else if (!Util.isNullOrBlank(footerSetup.getFooterImageUrl()))
+                    mActivity.openEnlargedImageDialogFragment(footerSetup.getFooterImageUrl());
+                break;
+            case R.id.bt_select_footer_image:
+                mActivity.openDialogFragment(DialogType.SELECT_IMAGE, this);
                 break;
         }
     }
@@ -240,6 +293,19 @@ public class EditFooterSetupDialogFragment extends HealthCocoDialogFragment
         } else
             footerSetup.setShowSignature(false);
 
+        View checkedRadioButton3 = view.findViewById(radioIncludeFooterImage.getCheckedRadioButtonId());
+        if (checkedRadioButton3 != null) {
+            String showlogo = (String.valueOf(checkedRadioButton3.getTag())).toUpperCase();
+            if (showlogo.equalsIgnoreCase(yesTag))
+                footerSetup.setShowImageFooter(true);
+            else
+                footerSetup.setShowImageFooter(false);
+        } else
+            footerSetup.setShowImageFooter(false);
+        if (!Util.isNullOrBlank(etFooterHeight.getText().toString()))
+            footerSetup.setFooterHeight(Double.parseDouble(etFooterHeight.getText().toString()));
+        footerSetup.setFooterImageUrl(imageString);
+
         if (!Util.isNullOrBlank(bottomText)) {
             List<BottomTextStyle> styles = new ArrayList<>();
             BottomTextStyle bottomTextStyle = new BottomTextStyle();
@@ -272,7 +338,6 @@ public class EditFooterSetupDialogFragment extends HealthCocoDialogFragment
 
     }
 
-
     private void initAutoTvAdapter(AutoCompleteTextView autoCompleteTextView, final AutoCompleteTextViewType autoCompleteTextViewType, ArrayList<Object> list) {
         try {
             if (!Util.isNullOrEmptyList(list)) {
@@ -295,5 +360,92 @@ public class EditFooterSetupDialogFragment extends HealthCocoDialogFragment
         }
     }
 
+    @Override
+    public void onOptionsItemSelected(Object object) {
+        OptionsType optionsType = (OptionsType) object;
+        if (optionsType != null) {
+            LogUtils.LOGD(TAG, getResources().getString(optionsType.getStringId()));
+            switch (optionsType) {
+                case CAMERA:
+                    cameraImageUri = mActivity.openCamera(this, "reportImage");
+                    break;
+                case GALLERY:
+                    mActivity.openGallery(this);
+                    break;
+            }
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            try {
+                if (requestCode == HealthCocoConstants.REQUEST_CODE_CAMERA && cameraImageUri != null) {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(mActivity.getContentResolver(), cameraImageUri);
+                    if (bitmap != null) {
+                        showImage(cameraImageUri.getPath(), bitmap);
+                    }
+                } else if (requestCode == HealthCocoConstants.REQUEST_CODE_GALLERY && data.getData() != null) {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(mActivity.getContentResolver(), data.getData());
+                    if (bitmap != null) {
+                        cameraImageUri = data.getData();
+                        showImage(cameraImageUri.getPath(), bitmap);
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void showImage(String filePath, Bitmap originalBitmap) {
+        originalBitmap = ImageUtil.getRotatedBitmapIfRequiredFromPath(filePath, originalBitmap);
+        //croping bitmap to show on image as per its dimensions
+        Bitmap bitmap = BitmapUtil.scaleCenterCrop(originalBitmap, Util.getValidatedWidth(ivFooterImage.getWidth()), Util.getValidatedHeight(ivFooterImage.getHeight()));
+        if (bitmap != null) ivFooterImage.setImageBitmap(bitmap);
+        //passing original bitmap to server
+        FileDetails fileDetails = getFileDetails(ImageUtil.DEFAULT_PRINT_SETTING_IMAGE_NAME, originalBitmap);
+        mActivity.showLoading(false);
+        WebDataServiceImpl.getInstance(mApp).addPrintSettingImageToServer(String.class, fileDetails, this, this);
+    }
+
+    private FileDetails getFileDetails(String fileName, Bitmap bitmap) {
+        FileDetails fileDetails = new FileDetails();
+        fileDetails.setFileEncoded(ImageUtil.encodeTobase64(bitmap));
+        fileDetails.setFileExtension(ImageUtil.DEFAULT_IMAGE_EXTENSION);
+        fileDetails.setFileName(fileName);
+        fileDetails.setBitmap(bitmap);
+        return fileDetails;
+    }
+
+    @Override
+    public void onErrorResponse(VolleyResponseBean volleyResponseBean, String errorMessage) {
+        LogUtils.LOGD(TAG, "ADD_RECORD Fail");
+        mActivity.hideLoading();
+    }
+
+    @Override
+    public void onNetworkUnavailable(WebServiceType webServiceType) {
+        Util.showToast(mActivity, R.string.user_offline);
+        mActivity.hideLoading();
+    }
+
+    @Override
+    public void onResponse(VolleyResponseBean response) {
+        LogUtils.LOGD(TAG, "ADD_RECORD Success");
+        switch (response.getWebServiceType()) {
+            case UPDATE_PRINT_SETTING_FILE:
+                if (response.isValidData(response)) {
+                    imageString = (String) response.getData();
+                    if (!Util.isNullOrBlank(imageString)) {
+                        ivFooterImage.setVisibility(View.VISIBLE);
+                        DownloadImageFromUrlUtil.loadImageUsingImageLoader(null, ivFooterImage, imageString);
+                    }
+                }
+                break;
+        }
+        mActivity.hideLoading();
+    }
 
 }

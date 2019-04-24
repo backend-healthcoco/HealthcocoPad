@@ -17,7 +17,9 @@ public class HeaderSetup extends SugarRecord {
     private String headerHtml;
     private Boolean customHeader;
     private Boolean customLogo;
-
+    private String headerImageUrl;
+    private Double headerHeight;
+    private Boolean showHeaderImage;
     @Ignore
     private PatientDetails patientDetails;
     @Ignore
@@ -79,5 +81,29 @@ public class HeaderSetup extends SugarRecord {
 
     public void setTopRightText(List<RightText> topRightText) {
         this.topRightText = topRightText;
+    }
+
+    public String getHeaderImageUrl() {
+        return headerImageUrl;
+    }
+
+    public void setHeaderImageUrl(String headerImageUrl) {
+        this.headerImageUrl = headerImageUrl;
+    }
+
+    public Double getHeaderHeight() {
+        return headerHeight;
+    }
+
+    public void setHeaderHeight(Double headerHeight) {
+        this.headerHeight = headerHeight;
+    }
+
+    public Boolean getShowHeaderImage() {
+        return showHeaderImage;
+    }
+
+    public void setShowHeaderImage(Boolean showHeaderImage) {
+        this.showHeaderImage = showHeaderImage;
     }
 }

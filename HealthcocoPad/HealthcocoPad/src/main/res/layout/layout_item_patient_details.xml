@@ -7,7 +7,6 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/image_patient_detail_layout"
         android:layout_marginLeft="@dimen/margin_left_right_add_vital_signs"
         android:layout_marginRight="@dimen/margin_left_right_add_vital_signs"
         android:layout_marginTop="@dimen/margin_left_right_add_vital_signs"

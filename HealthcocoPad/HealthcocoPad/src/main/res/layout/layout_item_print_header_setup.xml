@@ -65,6 +65,28 @@
                     </LinearLayout>
 
 
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/list_item_padding">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/show_header_image"
+                            android:textColor="@color/black_greyish"
+                            android:textSize="@dimen/text_size_add_clinical_note_points" />
+
+                        <TextView
+                            android:id="@+id/tv_show_header_image"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/layout_padding_5dp"
+                            android:textSize="@dimen/text_size_add_clinical_note_points" />
+                    </LinearLayout>
+
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -106,6 +128,26 @@
 
                         <TextView
                             android:id="@+id/tv_include_logo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/layout_padding_5dp"
+                            android:textSize="@dimen/text_size_add_clinical_note_points" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/list_item_padding">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/header_height_with_colon"
+                            android:textColor="@color/black_greyish"
+                            android:textSize="@dimen/text_size_add_clinical_note_points" />
+
+                        <TextView
+                            android:id="@+id/tv_header_height"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/layout_padding_5dp"

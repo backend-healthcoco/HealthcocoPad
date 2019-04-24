@@ -1,33 +1,48 @@
 package com.healthcoco.healthcocopad.dialogFragment;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.android.volley.Response;
 import com.healthcoco.healthcocopad.HealthCocoDialogFragment;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.adapter.HeaderLeftListAdapter;
 import com.healthcoco.healthcocopad.adapter.HeaderListAdapter;
-import com.healthcoco.healthcocopad.adapter.TreatmentListAdapter;
-import com.healthcoco.healthcocopad.bean.server.FooterSetup;
+import com.healthcoco.healthcocopad.bean.FileDetails;
+import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.HeaderSetup;
 import com.healthcoco.healthcocopad.bean.server.LeftText;
 import com.healthcoco.healthcocopad.bean.server.PrintSettings;
 import com.healthcoco.healthcocopad.bean.server.RightText;
-import com.healthcoco.healthcocopad.bean.server.Style;
-import com.healthcoco.healthcocopad.custom.AutoCompleteTextViewAdapter;
-import com.healthcoco.healthcocopad.enums.AutoCompleteTextViewType;
+import com.healthcoco.healthcocopad.custom.ExpandableHeightListView;
+import com.healthcoco.healthcocopad.enums.DialogType;
+import com.healthcoco.healthcocopad.enums.OptionsType;
+import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.AddPrintSettingsListener;
+import com.healthcoco.healthcocopad.listeners.CommonOptionsDialogItemClickListener;
+import com.healthcoco.healthcocopad.services.GsonRequest;
+import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
+import com.healthcoco.healthcocopad.utilities.BitmapUtil;
+import com.healthcoco.healthcocopad.utilities.DownloadImageFromUrlUtil;
+import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
+import com.healthcoco.healthcocopad.utilities.ImageUtil;
+import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.healthcoco.healthcocopad.views.CustomAutoCompleteTextView;
 
@@ -38,7 +53,7 @@ import java.util.List;
  * Created by Prashant on 07-02-2018.
  */
 public class EditHeaderSetupDialogFragment extends HealthCocoDialogFragment
-        implements View.OnClickListener {
+        implements View.OnClickListener, CommonOptionsDialogItemClickListener, GsonRequest.ErrorListener, Response.Listener<VolleyResponseBean> {
 
     public ArrayList<Object> fontSizeArrayList = new ArrayList<Object>() {{
         add("5pt");
@@ -59,8 +74,8 @@ public class EditHeaderSetupDialogFragment extends HealthCocoDialogFragment
     private RadioGroup radioIncludeLogo;
     private TextView tvTopLeftText;
     private TextView tvTopRightText;
-    private ListView lvTopLeftText;
-    private ListView lvTopRightText;
+    private ExpandableHeightListView lvTopLeftText;
+    private ExpandableHeightListView lvTopRightText;
     private String yesTag = "yes";
     private String noTag = "no";
     private TextView tvTitle;
@@ -69,6 +84,12 @@ public class EditHeaderSetupDialogFragment extends HealthCocoDialogFragment
     private HeaderLeftListAdapter leftAdapter;
     private HeaderListAdapter rightAdapter;
     private AddPrintSettingsListener addPrintSettingsListener;
+    private RadioGroup radioIncludeHeaderImage;
+    private EditText etHeaderHeight;
+    private LinearLayout btSelectHeaderImage;
+    private ImageView ivHeaderImage;
+    private Uri cameraImageUri;
+    private String imageString;
 
     public EditHeaderSetupDialogFragment(AddPrintSettingsListener addPrintSettingsListener) {
         this.addPrintSettingsListener = addPrintSettingsListener;
@@ -100,9 +121,10 @@ public class EditHeaderSetupDialogFragment extends HealthCocoDialogFragment
     private void initAdapter() {
         leftAdapter = new HeaderLeftListAdapter(mActivity);
         lvTopLeftText.setAdapter(leftAdapter);
-
+        lvTopLeftText.setExpanded(true);
         rightAdapter = new HeaderListAdapter(mActivity);
         lvTopRightText.setAdapter(rightAdapter);
+        lvTopRightText.setExpanded(true);
     }
 
 
@@ -110,11 +132,15 @@ public class EditHeaderSetupDialogFragment extends HealthCocoDialogFragment
     public void initViews() {
         radioIncludeHeader = (RadioGroup) view.findViewById(R.id.rg_include_header);
         radioIncludeLogo = (RadioGroup) view.findViewById(R.id.rg_include_logo);
-
+        radioIncludeHeaderImage = (RadioGroup) view.findViewById(R.id.rg_include_header_image);
+        etHeaderHeight = (EditText) view.findViewById(R.id.et_header_height);
+        btSelectHeaderImage = (LinearLayout) view.findViewById(R.id.bt_select_header_image);
+        ivHeaderImage = (ImageView) view.findViewById(R.id.iv_header_image);
+        ivHeaderImage.setVisibility(View.GONE);
         tvTopLeftText = (TextView) view.findViewById(R.id.tv_top_left_text);
         tvTopRightText = (TextView) view.findViewById(R.id.tv_top_right_text);
-        lvTopLeftText = (ListView) view.findViewById(R.id.lv_top_left_text);
-        lvTopRightText = (ListView) view.findViewById(R.id.lv_top_right_text);
+        lvTopLeftText = (ExpandableHeightListView) view.findViewById(R.id.lv_top_left_text);
+        lvTopRightText = (ExpandableHeightListView) view.findViewById(R.id.lv_top_right_text);
 
         tvTitle = (TextView) view.findViewById(R.id.tv_title);
         btCross = (ImageButton) view.findViewById(R.id.bt_cross);
@@ -130,6 +156,8 @@ public class EditHeaderSetupDialogFragment extends HealthCocoDialogFragment
         btCross.setOnClickListener(this);
         tvTopLeftText.setOnClickListener(this);
         tvTopRightText.setOnClickListener(this);
+        btSelectHeaderImage.setOnClickListener(this);
+        ivHeaderImage.setOnClickListener(this);
     }
 
 
@@ -156,6 +184,21 @@ public class EditHeaderSetupDialogFragment extends HealthCocoDialogFragment
                 RadioButton radioButton1 = (RadioButton) radioIncludeLogo.findViewWithTag(noTag.toUpperCase());
                 if (radioButton1 != null)
                     radioButton1.setChecked(true);
+            }
+            if (headerSetup.getShowHeaderImage()) {
+                RadioButton radioButton1 = (RadioButton) radioIncludeHeaderImage.findViewWithTag(yesTag.toUpperCase());
+                if (radioButton1 != null)
+                    radioButton1.setChecked(true);
+            } else {
+                RadioButton radioButton1 = (RadioButton) radioIncludeHeaderImage.findViewWithTag(noTag.toUpperCase());
+                if (radioButton1 != null)
+                    radioButton1.setChecked(true);
+            }
+            etHeaderHeight.setText(Util.getFormattedDoubleNumber(headerSetup.getHeaderHeight()));
+
+            if (!Util.isNullOrBlank(headerSetup.getHeaderImageUrl())) {
+                DownloadImageFromUrlUtil.loadImageUsingImageLoader(null, ivHeaderImage, headerSetup.getHeaderImageUrl());
+                ivHeaderImage.setVisibility(View.VISIBLE);
             }
 
             if (Util.isNullOrEmptyList(headerSetup.getTopLeftText()))
@@ -224,6 +267,15 @@ public class EditHeaderSetupDialogFragment extends HealthCocoDialogFragment
                 lvTopLeftText.setVisibility(View.GONE);
                 lvTopRightText.setVisibility(View.VISIBLE);
                 break;
+            case R.id.iv_header_image:
+                if (!Util.isNullOrBlank(imageString))
+                    mActivity.openEnlargedImageDialogFragment(imageString);
+                else if (!Util.isNullOrBlank(headerSetup.getHeaderImageUrl()))
+                    mActivity.openEnlargedImageDialogFragment(headerSetup.getHeaderImageUrl());
+                break;
+            case R.id.bt_select_header_image:
+                openDialogFragment(DialogType.SELECT_IMAGE, this);
+                break;
         }
     }
 
@@ -250,6 +302,18 @@ public class EditHeaderSetupDialogFragment extends HealthCocoDialogFragment
         } else
             headerSetup.setCustomLogo(false);
 
+        View checkedRadioButton2 = view.findViewById(radioIncludeHeaderImage.getCheckedRadioButtonId());
+        if (checkedRadioButton2 != null) {
+            String showlogo = (String.valueOf(checkedRadioButton2.getTag())).toUpperCase();
+            if (showlogo.equalsIgnoreCase(yesTag))
+                headerSetup.setShowHeaderImage(true);
+            else
+                headerSetup.setShowHeaderImage(false);
+        } else
+            headerSetup.setShowHeaderImage(false);
+        if (!Util.isNullOrBlank(etHeaderHeight.getText().toString()))
+            headerSetup.setHeaderHeight(Double.parseDouble(etHeaderHeight.getText().toString()));
+        headerSetup.setHeaderImageUrl(imageString);
 
         if (!Util.isNullOrZeroNumber(lvTopLeftText.getChildCount()))
             headerSetup.setTopLeftText(getTopLeftText());
@@ -354,5 +418,92 @@ public class EditHeaderSetupDialogFragment extends HealthCocoDialogFragment
         return rightTextList;
     }
 
+    @Override
+    public void onOptionsItemSelected(Object object) {
+        OptionsType optionsType = (OptionsType) object;
+        if (optionsType != null) {
+            LogUtils.LOGD(TAG, getResources().getString(optionsType.getStringId()));
+            switch (optionsType) {
+                case CAMERA:
+                    cameraImageUri = mActivity.openCamera(this, "reportImage");
+                    break;
+                case GALLERY:
+                    mActivity.openGallery(this);
+                    break;
+            }
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            try {
+                if (requestCode == HealthCocoConstants.REQUEST_CODE_CAMERA && cameraImageUri != null) {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(mActivity.getContentResolver(), cameraImageUri);
+                    if (bitmap != null) {
+                        showImage(cameraImageUri.getPath(), bitmap);
+                    }
+                } else if (requestCode == HealthCocoConstants.REQUEST_CODE_GALLERY && data.getData() != null) {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(mActivity.getContentResolver(), data.getData());
+                    if (bitmap != null) {
+                        cameraImageUri = data.getData();
+                        showImage(cameraImageUri.getPath(), bitmap);
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void showImage(String filePath, Bitmap originalBitmap) {
+        originalBitmap = ImageUtil.getRotatedBitmapIfRequiredFromPath(filePath, originalBitmap);
+        //croping bitmap to show on image as per its dimensions
+        Bitmap bitmap = BitmapUtil.scaleCenterCrop(originalBitmap, Util.getValidatedWidth(ivHeaderImage.getWidth()), Util.getValidatedHeight(ivHeaderImage.getHeight()));
+        if (bitmap != null) ivHeaderImage.setImageBitmap(bitmap);
+        //passing original bitmap to server
+        FileDetails fileDetails = getFileDetails(ImageUtil.DEFAULT_PRINT_SETTING_IMAGE_NAME, originalBitmap);
+        mActivity.showLoading(false);
+        WebDataServiceImpl.getInstance(mApp).addPrintSettingImageToServer(String.class, fileDetails, this, this);
+    }
+
+    private FileDetails getFileDetails(String fileName, Bitmap bitmap) {
+        FileDetails fileDetails = new FileDetails();
+        fileDetails.setFileEncoded(ImageUtil.encodeTobase64(bitmap));
+        fileDetails.setFileExtension(ImageUtil.DEFAULT_IMAGE_EXTENSION);
+        fileDetails.setFileName(fileName);
+        fileDetails.setBitmap(bitmap);
+        return fileDetails;
+    }
+
+    @Override
+    public void onErrorResponse(VolleyResponseBean volleyResponseBean, String errorMessage) {
+        LogUtils.LOGD(TAG, "ADD_RECORD Fail");
+        mActivity.hideLoading();
+    }
+
+    @Override
+    public void onNetworkUnavailable(WebServiceType webServiceType) {
+        Util.showToast(mActivity, R.string.user_offline);
+        mActivity.hideLoading();
+    }
+
+    @Override
+    public void onResponse(VolleyResponseBean response) {
+        LogUtils.LOGD(TAG, "ADD_RECORD Success");
+        switch (response.getWebServiceType()) {
+            case UPDATE_PRINT_SETTING_FILE:
+                if (response.isValidData(response)) {
+                    imageString = (String) response.getData();
+                    if (!Util.isNullOrBlank(imageString)) {
+                        ivHeaderImage.setVisibility(View.VISIBLE);
+                        DownloadImageFromUrlUtil.loadImageUsingImageLoader(null, ivHeaderImage, imageString);
+                    }
+                }
+                break;
+        }
+        mActivity.hideLoading();
+    }
 
 }
