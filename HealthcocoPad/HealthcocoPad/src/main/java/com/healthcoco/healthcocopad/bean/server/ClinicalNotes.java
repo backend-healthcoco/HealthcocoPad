@@ -82,7 +82,7 @@ public class ClinicalNotes extends SugarRecord {
     private String generalHistoryAllergies;
     private String generalHistorySurgical;
     private String painScale;
-
+    private String priorConsultations;
 
     @Ignore
     private AppointmentRequest appointmentRequest;
@@ -578,6 +578,14 @@ public class ClinicalNotes extends SugarRecord {
 
     public void setProcedureNote(String procedureNote) {
         this.procedureNote = procedureNote;
+    }
+
+    public String getPriorConsultations() {
+        return priorConsultations;
+    }
+
+    public void setPriorConsultations(String priorConsultations) {
+        this.priorConsultations = priorConsultations;
     }
 
     public boolean areAllFieldsNull() {

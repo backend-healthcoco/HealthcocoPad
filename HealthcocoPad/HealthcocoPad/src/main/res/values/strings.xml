@@ -712,6 +712,7 @@
     <string name="general_history">General History</string>
     <string name="nose_exam">Nose</string>
     <string name="neck_exam">Neck</string>
+    <string name="prior_consultations">Prior Consultations</string>
     <string name="usg_gender_count">Usg Gender Count</string>
     <string name="lmp">LMP</string>
     <string name="pain_scale">Pain Scale</string>

@@ -87,6 +87,8 @@ public class ClinicalNoteToSend {
     private String generalHistoryAllergies;
     private String generalHistorySurgical;
     private String painScale;
+    private String priorConsultations;
+
     @Ignore
     private AppointmentRequest appointmentRequest;
 
@@ -604,5 +606,13 @@ public class ClinicalNoteToSend {
 
     public void setPainScale(String painScale) {
         this.painScale = painScale;
+    }
+
+    public String getPriorConsultations() {
+        return priorConsultations;
+    }
+
+    public void setPriorConsultations(String priorConsultations) {
+        this.priorConsultations = priorConsultations;
     }
 }

@@ -190,7 +190,7 @@ public class SelectedDiagramDetailFragment extends HealthCocoFragment implements
                             ((AddVisitsActivity) mActivity).setResult(HealthCocoConstants.RESULT_CODE_DIAGRAM_DETAIL, intent);
                             ((AddVisitsActivity) mActivity).finish();
                         } else {
-                            ((CommonOpenUpActivity) mActivity).setResult(HealthCocoConstants.RESULT_CODE_DIAGRAM_DETAIL, intent);
+                            ((CommonOpenUpActivity) mActivity).setResult(HealthCocoConstants.RESULT_CODE_DIAGRAM_DETAIL, new Intent().putExtra(HealthCocoConstants.TAG_DIAGRAM_DATA, Parcels.wrap(diagramResponse)));
                             ((CommonOpenUpActivity) mActivity).finish();
                         }
                     }

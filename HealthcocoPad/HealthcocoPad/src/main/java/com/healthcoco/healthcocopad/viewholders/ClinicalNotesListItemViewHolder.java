@@ -14,9 +14,10 @@ import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.HealthCocoViewHolder;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
+import com.healthcoco.healthcocopad.bean.BloodPressure;
+import com.healthcoco.healthcocopad.bean.DrugInteractions;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.AppointmentRequest;
-import com.healthcoco.healthcocopad.bean.BloodPressure;
 import com.healthcoco.healthcocopad.bean.server.ClinicalNotes;
 import com.healthcoco.healthcocopad.bean.server.Diagram;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
@@ -178,6 +179,8 @@ public class ClinicalNotesListItemViewHolder extends HealthCocoViewHolder implem
     private TextView tvEarsExam;
     private TextView tvPastHistory;
     private TextView tvFamilyHistory;
+    private TextView tvPriorConsultations;
+    private LinearLayout layoutPriorConsultations;
 
     public ClinicalNotesListItemViewHolder(HealthCocoActivity mActivity,
                                            Object listenerObject, boolean isInEmrList) {
@@ -422,6 +425,10 @@ public class ClinicalNotesListItemViewHolder extends HealthCocoViewHolder implem
             layoutProcedures.setVisibility(View.VISIBLE);
             initSuggestionsText(ClinicalNotesPermissionType.PROCEDURES, clinicalNote.getProcedureNote());
         }
+        if (!Util.isNullOrBlank(clinicalNote.getPriorConsultations())) {
+            layoutPriorConsultations.setVisibility(View.VISIBLE);
+            initSuggestionsText(ClinicalNotesPermissionType.PRIOR_CONSULTATIONS, clinicalNote.getPriorConsultations());
+        }
         if (!Util.isNullOrEmptyList(clinicalNote.getDiagrams())) {
             layoutDiagrams.setVisibility(View.VISIBLE);
             initDiagramsPagerAdapter(clinicalNote.getDiagrams());
@@ -607,6 +614,9 @@ public class ClinicalNotesListItemViewHolder extends HealthCocoViewHolder implem
             case PROCEDURES:
                 tvProcedures.setText(text);
                 break;
+            case PRIOR_CONSULTATIONS:
+                tvPriorConsultations.setText(text);
+                break;
 
         }
     }
@@ -721,6 +731,9 @@ public class ClinicalNotesListItemViewHolder extends HealthCocoViewHolder implem
         layoutProcedures = (LinearLayout) contentView.findViewById(R.id.layout_procedure_notes);
 
         tvProcedures = (TextView) contentView.findViewById(R.id.tv_text_procedure_notes);
+        layoutPriorConsultations = (LinearLayout) contentView.findViewById(R.id.layout_prior_consultations);
+
+        tvPriorConsultations = (TextView) contentView.findViewById(R.id.tv_text_prior_consultations);
         tvPcNose = (TextView) contentView.findViewById(R.id.tv_text_pc_nose);
         tvPcEars = (TextView) contentView.findViewById(R.id.tv_text_pc_ears);
         tvPcThroat = (TextView) contentView.findViewById(R.id.tv_text_pc_throat);
@@ -793,6 +806,7 @@ public class ClinicalNotesListItemViewHolder extends HealthCocoViewHolder implem
         tvNotes.setText("");
         tvPcNose.setText("");
         tvProcedures.setText("");
+        tvPriorConsultations.setText("");
         tvPcEars.setText("");
         tvPcThroat.setText("");
         tvPcOralCavity.setText("");
@@ -861,6 +875,7 @@ public class ClinicalNotesListItemViewHolder extends HealthCocoViewHolder implem
         layoutPastHistory.setVisibility(View.GONE);
         layoutFamilyHistory.setVisibility(View.GONE);
         layoutProcedures.setVisibility(View.GONE);
+        layoutPriorConsultations.setVisibility(View.GONE);
     }
 
     /**

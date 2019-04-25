@@ -1293,6 +1293,35 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/layout_prior_consultations"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="3dp"
+            android:layout_marginLeft="@dimen/list_item_padding"
+            android:text="@string/prior_consultations"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label_19sp" />
+
+        <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+            android:id="@+id/tv_text_prior_consultations"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/list_item_padding"
+            android:gravity="center|start"
+            android:lineSpacingExtra="2dp"
+            android:paddingTop="2dp"
+            android:textAllCaps="false"
+            android:textSize="@dimen/text_size_add_clinical_note_vital_signs_label_child"
+            android:visibility="visible" />
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/layout_notes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

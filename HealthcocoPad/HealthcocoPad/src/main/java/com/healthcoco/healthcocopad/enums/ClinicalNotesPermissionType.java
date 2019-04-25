@@ -40,6 +40,7 @@ public enum ClinicalNotesPermissionType {
     NOSE_EXAM("NOSE_EXAM", R.string.nose_exam, R.string.nose_exam, false, R.layout.layout_item_add_myscript_clinical_note_permision, AutoCompleteTextViewType.NOSE_EXAM, 45, SuggestionType.NOSE_EXAM),
     NECK_EXAM("NECK_EXAM", R.string.neck_exam, R.string.neck_exam, false, R.layout.layout_item_add_myscript_clinical_note_permision, AutoCompleteTextViewType.NECK_EXAM, 46, SuggestionType.NECK_EXAM),
     USG_GENDER_COUNT("USG_GENDER_COUNT", R.string.usg_gender_count, R.string.usg_gender_count, false, R.layout.layout_item_add_myscript_clinical_note_permision, AutoCompleteTextViewType.USG_GENDER_COUNT, 47, SuggestionType.USG_GENDER_COUNT),
+    PRIOR_CONSULTATIONS("PRIOR_CONSULTATIONS",R.string.prior_consultations, R.string.prior_consultations, false, R.layout.layout_item_add_clinical_note_permision),
     LMP("LMP", R.string.lmp, R.string.lmp, false, R.layout.layout_item_add_myscript_clinical_note_permision, AutoCompleteTextViewType.LMP, 48, SuggestionType.LMP),
     NOTES("NOTES", R.string.notes, R.string.write_note, false, R.layout.layout_item_add_myscript_clinical_note_permision),
     DIAGRAM("DIAGRAM", R.string.diagrams, R.string.diagrams, true, R.layout.layout_item_add_myscript_clinical_note_permision),

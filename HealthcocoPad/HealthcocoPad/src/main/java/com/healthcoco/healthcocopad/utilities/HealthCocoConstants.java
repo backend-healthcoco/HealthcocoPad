@@ -108,6 +108,7 @@ public class HealthCocoConstants {
     public static final int RESULT_CODE_ADD_GENERAL_NOTE = 227;
     public static final int RESULT_CODE_ADD_HEADER_SETUP = 228;
     public static final int REQUEST_CODE_ADD_EDIT_PRINT_SETTING = 229;
+    public static final String TAG_DIAGRAM_DATA = "diagramData";
 
 
     public static final String PARAM_IS_DOCTOR_APP_TRUE = "&isDoctorApp=true";

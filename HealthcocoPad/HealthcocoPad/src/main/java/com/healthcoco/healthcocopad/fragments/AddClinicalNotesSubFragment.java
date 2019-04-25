@@ -9,7 +9,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,9 +24,10 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
+import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
+import com.healthcoco.healthcocopad.bean.BloodPressure;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.request.ClinicalNoteToSend;
-import com.healthcoco.healthcocopad.bean.BloodPressure;
 import com.healthcoco.healthcocopad.bean.server.ClinicalNotes;
 import com.healthcoco.healthcocopad.bean.server.Diagram;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
@@ -44,8 +44,8 @@ import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimis
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.DownloadImageFromUrlUtil;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
-import com.healthcoco.healthcocopad.utilities.ImageUtil;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
+import com.healthcoco.healthcocopad.utilities.ReflectionUtil;
 import com.healthcoco.healthcocopad.utilities.Util;
 
 import org.parceler.Parcels;
@@ -86,7 +86,7 @@ public class AddClinicalNotesSubFragment extends HealthCocoFragment implements V
     private TextView editHeartRate;
     private ClinicalNotes clinicalNotes;
     private ArrayList<String> clinicalNotesUiPermissionsList;
-    private HashMap<String, String> diagramsList = new HashMap<>();
+    private HashMap<String, Diagram> diagramsList = new HashMap<>();
     private LinearLayout containerDiagrams;
     private User user;
     private ScrollView svScrollView;
@@ -98,7 +98,7 @@ public class AddClinicalNotesSubFragment extends HealthCocoFragment implements V
     private List<ClinicalNotes> clinicalNotesList;
     private String clinicalNoteId;
     private boolean isInitialLoading = true;
-
+    private String selectedDiagramID;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -297,6 +297,9 @@ public class AddClinicalNotesSubFragment extends HealthCocoFragment implements V
                     if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.PROCEDURES.getValue())
                             || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getProcedureNote())))
                         addPermissionItem(ClinicalNotesPermissionType.PROCEDURES);
+                    if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.PRIOR_CONSULTATIONS.getValue())
+                            || (clinicalNotes != null && !Util.isNullOrBlank(clinicalNotes.getPriorConsultations())))
+                        addPermissionItem(ClinicalNotesPermissionType.PRIOR_CONSULTATIONS);
                     if (clinicalNotesUiPermissionsList.contains(ClinicalNotesPermissionType.DIAGRAM.getValue())
                             || (clinicalNotes != null && !Util.isNullOrEmptyList(clinicalNotes.getDiagrams()))) {
                         parentDiagrams.setVisibility(View.VISIBLE);
@@ -313,7 +316,7 @@ public class AddClinicalNotesSubFragment extends HealthCocoFragment implements V
         if (!Util.isNullOrEmptyList(list)) {
             for (Diagram diagram :
                     list) {
-                addDiagramInContainer(diagram.getTags(), diagram.getUniqueId(), diagram.getDiagramUrl());
+                addDiagramInContainer(diagram, diagram.getTags(), diagram.getUniqueId(), diagram.getDiagramUrl());
             }
         }
     }
@@ -399,6 +402,9 @@ public class AddClinicalNotesSubFragment extends HealthCocoFragment implements V
                     break;
                 case PROCEDURES:
                     text = clinicalNotes.getProcedureNote();
+                    break;
+                case PRIOR_CONSULTATIONS:
+                    text = clinicalNotes.getPriorConsultations();
                     break;
                 case PAST_HISTORY:
                     text = clinicalNotes.getPastHistory();
@@ -769,7 +775,9 @@ public class AddClinicalNotesSubFragment extends HealthCocoFragment implements V
                     case PROCEDURES:
                         clinicalNoteToSend.setProcedureNote(getFormattedText(Util.getValidatedValueOrBlankWithoutTrimming((TextView) parentPermissionItems.findViewWithTag(ClinicalNotesPermissionType.PROCEDURES.getValue()))));
                         break;
-
+                    case PRIOR_CONSULTATIONS:
+                        clinicalNotes.setPriorConsultations(getFormattedText(Util.getValidatedValueOrBlankWithoutTrimming((TextView) parentPermissionItems.findViewWithTag(ClinicalNotesPermissionType.PRIOR_CONSULTATIONS.getValue()))));
+                        break;
                     case PAST_HISTORY:
                         clinicalNoteToSend.setPastHistory(getFormattedText(Util.getValidatedValueOrBlankWithoutTrimming((TextView) parentPermissionItems.findViewWithTag(ClinicalNotesPermissionType.PAST_HISTORY.getValue()))));
                         break;
@@ -903,12 +911,13 @@ public class AddClinicalNotesSubFragment extends HealthCocoFragment implements V
         alertBuilder.show();
     }
 
-    private void addDiagramInContainer(String diagramTag, String diagramUniqueId, Object object) {
+    private void addDiagramInContainer(Diagram diagram, String diagramTag, String diagramUniqueId, Object object) {
         RelativeLayout frameLayout = (RelativeLayout) mActivity.getLayoutInflater().inflate(R.layout.diagram_add_visits_item, null);
         ImageView ivDiagram = (ImageView) frameLayout.findViewById(R.id.iv_diagram);
         ImageButton btDelete = (ImageButton) frameLayout.findViewById(R.id.bt_delete);
         TextView tvtag = (TextView) frameLayout.findViewById(R.id.tv_tag);
         btDelete.setOnClickListener(this);
+        frameLayout.setOnClickListener(this);
         Bitmap bitmap = null;
         if (object instanceof byte[]) {
             byte[] byteArray = (byte[]) object;
@@ -923,7 +932,8 @@ public class AddClinicalNotesSubFragment extends HealthCocoFragment implements V
         }
         tvtag.setText(diagramTag);
         frameLayout.setTag(diagramUniqueId);
-        diagramsList.put(diagramUniqueId, diagramUniqueId);
+        frameLayout.setTag(diagram);
+        diagramsList.put(diagramUniqueId, diagram);
         containerDiagrams.addView(frameLayout);
 //        svScrollView.fullScroll(ScrollView.FOCUS_UP);
     }
@@ -933,18 +943,43 @@ public class AddClinicalNotesSubFragment extends HealthCocoFragment implements V
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_ADD_CLINICAL_NOTES) {
             if (resultCode == HealthCocoConstants.RESULT_CODE_DIAGRAM_DETAIL && data != null) {
-                String diagramUniqueId = data.getStringExtra(HealthCocoConstants.TAG_UNIQUE_ID);
-                String diagramTag = data.getStringExtra(SelectedDiagramDetailFragment.SELECTED_DIAGRAM_TAG);
-                if (!Util.isNullOrBlank(diagramUniqueId) && ImageUtil.DIAGRAM_SELECTED_BYTE_ARRAY != null && ImageUtil.DIAGRAM_SELECTED_BYTE_ARRAY.length > 0) {
-                    addDiagramInContainer(diagramTag, diagramUniqueId, ImageUtil.DIAGRAM_SELECTED_BYTE_ARRAY);
-                }
+                Diagram diagram = Parcels.unwrap(data.getParcelableExtra(HealthCocoConstants.TAG_DIAGRAM_DATA));
+                refreshdiagramViews(diagram);
             }
         }
+    }
+
+    private void refreshdiagramViews(Diagram diagram) {
+        if (!Util.isNullOrEmptyList(diagramsList)) {
+            Diagram diagramToEdit = diagramsList.get(selectedDiagramID);
+            if (diagramToEdit != null) {
+                try {
+                    ReflectionUtil.copy(diagramToEdit, diagram);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                diagramsList.remove(selectedDiagramID);
+                diagramsList.put(diagramToEdit.getUniqueId(), diagramToEdit);
+            }
+        } else diagramsList.put(diagram.getUniqueId(), diagram);
+        ArrayList<Diagram> diagramArrayList = new ArrayList<>();
+        for (Diagram dig :
+                diagramsList.values()) {
+            diagramArrayList.add(dig);
+        }
+        initDiagrams(diagramArrayList);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.layout_diagram:
+                Diagram selectedDiagram = (Diagram) v.getTag();
+                if (selectedDiagram != null && !Util.isNullOrBlank(selectedDiagram.getDiagramUrl())) {
+                    openDiagramDetailActivity(selectedDiagram);
+                    selectedDiagramID = selectedDiagram.getUniqueId();
+                }
+                break;
             case R.id.bt_delete:
                 View parentView = (View) v.getParent();
                 String diagramUniqueId = (String) parentView.getTag();
@@ -956,6 +991,14 @@ public class AddClinicalNotesSubFragment extends HealthCocoFragment implements V
                 openCommonOpenUpActivity(CommonOpenUpFragmentType.SELECT_DIAGRAM, null, HealthCocoConstants.REQUEST_CODE_ADD_CLINICAL_NOTES);
                 break;
         }
+    }
+
+    private void openDiagramDetailActivity(Diagram diagram) {
+        Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
+        intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.SELECTED_DIAGRAM_DETAIL.ordinal());
+        intent.putExtra(HealthCocoConstants.TAG_DIAGRAM_TAG, diagram.getTags());
+        intent.putExtra(HealthCocoConstants.TAG_SELECTED_DIAGRAM, Parcels.wrap(diagram));
+        startActivityForResult(intent, HealthCocoConstants.REQUEST_CODE_ADD_CLINICAL_NOTES);
     }
 
     public void refreshData(ClinicalNotes clinicalNotes) {
@@ -974,7 +1017,7 @@ public class AddClinicalNotesSubFragment extends HealthCocoFragment implements V
                 for (Diagram diagram :
                         clinicalNotes.getDiagrams()) {
                     if (!Util.isNullOrBlank(diagram.getUniqueId()) && !Util.isNullOrBlank(diagram.getDiagramUrl())) {
-                        addDiagramInContainer(diagram.getTags(), diagram.getUniqueId(), diagram.getDiagramUrl());
+                        addDiagramInContainer(diagram, diagram.getTags(), diagram.getUniqueId(), diagram.getDiagramUrl());
                     }
                 }
             }
