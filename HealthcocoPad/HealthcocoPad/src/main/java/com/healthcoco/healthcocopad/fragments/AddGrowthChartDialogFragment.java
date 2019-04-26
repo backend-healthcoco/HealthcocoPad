@@ -155,8 +155,6 @@ public class AddGrowthChartDialogFragment extends HealthCocoDialogFragment imple
 
             }
         }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
-        datePickerDialog.getDatePicker().setMinDate(DateTimeUtil.getLongFromFormattedFormatString(DateTimeUtil.DATE_FORMAT_DAY_MONTH_YEAR_SLASH, Util.getDOB(selectedPatient.getDob())));
-        datePickerDialog.getDatePicker().setMaxDate(DateTimeUtil.getCurrentDateLong());
         datePickerDialog.show();
     }
 

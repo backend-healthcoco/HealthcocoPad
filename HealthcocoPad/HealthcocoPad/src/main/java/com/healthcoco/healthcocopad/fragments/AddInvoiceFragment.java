@@ -92,13 +92,14 @@ public class AddInvoiceFragment extends HealthCocoFragment implements LocalDoInB
     private TextView tvDate;
     //    private Treatments treatment;
     private DoctorProfile doctorProfile;
-    private TreatmentListFragment treatmentListFragment;
+    private TreatmentListFragment allTreatmentListFragment;
     private DiagnosticTestListFragment diagnosticTestListFragment;
     private DrugListFragment drugListFragment;
     private ScrollViewWithHeaderNewPrescriptionLayout svContainer;
     private boolean isFromVisit;
     private Boolean pidHasDate;
     private long selectedFromDateTimeMillis;
+    private TreatmentCustomListFragment customTreatmentListFragment;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -156,9 +157,16 @@ public class AddInvoiceFragment extends HealthCocoFragment implements LocalDoInB
         fragmentsList = new ArrayList<>();
 
         // init fragment 1
-        treatmentListFragment = new TreatmentListFragment(this);
-        addFragment(treatmentListFragment, R.string.treatment, false);
-
+        allTreatmentListFragment = new TreatmentListFragment(this);
+        addFragment(allTreatmentListFragment, R.string.treatment, false);
+// init fragment 2
+        if (doctorProfile.getSpecialities().contains("Dentist")) {
+            // init fragment 2
+            customTreatmentListFragment = new TreatmentCustomListFragment(this);
+            addFragment(customTreatmentListFragment, R.string.featured, false);
+        } else {
+            tabhost.getTabWidget().setVisibility(View.GONE);
+        }
         drugListFragment = new DrugListFragment(this);
         addFragment(drugListFragment, R.string.rx_text, false);
 

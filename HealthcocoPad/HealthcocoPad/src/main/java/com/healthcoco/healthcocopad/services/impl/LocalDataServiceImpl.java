@@ -1262,8 +1262,8 @@ public class LocalDataServiceImpl {
                 break;
             case GET_BABY_ACHIEVEMENTS:
                 List<BabyAchievementsResponse> achievementsResponses = BabyAchievementsResponse.find(BabyAchievementsResponse.class,
-                        LocalDatabaseUtils.KEY_DOCTOR_ID + "= ? AND " + LocalDatabaseUtils.KEY_PATIENT_ID + "= ?",
-                        new String[]{doctorId, "" + HealthCocoConstants.SELECTED_PATIENTS_USER_ID},
+                        LocalDatabaseUtils.KEY_PATIENT_ID + "= ?",
+                        new String[]{HealthCocoConstants.SELECTED_PATIENTS_USER_ID},
                         null, "updated_time DESC", "1");
                 if (!Util.isNullOrEmptyList(achievementsResponses))
                     latestUpdatedTime = achievementsResponses.get(0).getUpdatedTime();

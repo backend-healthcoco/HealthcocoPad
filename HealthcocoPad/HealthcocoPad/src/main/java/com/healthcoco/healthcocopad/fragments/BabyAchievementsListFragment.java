@@ -170,7 +170,7 @@ public class BabyAchievementsListFragment extends HealthCocoFragment implements
         if (volleyResponseBean != null && !Util.isNullOrBlank(volleyResponseBean.getErrMsg())) {
             errorMsg = volleyResponseBean.getErrMsg();
         } else {
-            errorMsg = getResources().getString(R.string.error);
+            errorMsg = mActivity.getResources().getString(R.string.error);
         }
         Util.showToast(mActivity, errorMsg);
         progressLoading.setVisibility(View.GONE);

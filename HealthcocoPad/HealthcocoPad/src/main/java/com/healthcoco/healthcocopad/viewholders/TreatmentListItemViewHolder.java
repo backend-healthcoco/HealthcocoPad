@@ -3,7 +3,6 @@ package com.healthcoco.healthcocopad.viewholders;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -218,7 +217,10 @@ public class TreatmentListItemViewHolder extends HealthCocoViewHolder implements
         layoutNextReviewDetail = (LinearLayout) contentView.findViewById(R.id.layout_next_review_detail_for_treatment);
         layoutNextReviewDetail.setVisibility(View.GONE);
 
-        if (user.getUiPermissions().getTabPermissions().contains(PATIENT_DETAIL_INVOICE.getValue()))
+        if (user != null
+                && user.getUiPermissions() != null
+                && !Util.isNullOrEmptyList(user.getUiPermissions().getTabPermissions())
+                && user.getUiPermissions().getTabPermissions().contains(PATIENT_DETAIL_INVOICE.getValue()))
             btGenerateInvoice.setVisibility(View.VISIBLE);
         else btGenerateInvoice.setVisibility(View.GONE);
 
