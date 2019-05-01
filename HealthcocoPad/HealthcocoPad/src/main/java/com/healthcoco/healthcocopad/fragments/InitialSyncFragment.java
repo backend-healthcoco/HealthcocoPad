@@ -27,7 +27,7 @@ import com.healthcoco.healthcocopad.utilities.Util;
  * Created by Shreshtha on 25-01-2017.
  */
 public class InitialSyncFragment extends HealthCocoFragment {
-    public static final int MAX_SIZE = 50;
+    public static final int MAX_SIZE = 150;
     public static final String INTENT_ACTION_INITIAL_SYNC = "com.healthcoco.INTENT_ACTION_INITIAL_SYNC";
     public static int PAGE_NUMBER = 0;
     public static boolean isPageLoading = false;
@@ -135,21 +135,21 @@ public class InitialSyncFragment extends HealthCocoFragment {
     public int setProgress(DefaultSyncServiceType syncServiceType) {
         int finalProgress = 0;
         try {
-            switch (syncServiceType) {
-                case GET_CONTACTS:
-//                case GET_GROUPS:
-                    int percentage = 0;
-                    if (MAX_COUNT > 0) {
-                        float receivedData = (PAGE_NUMBER * MAX_SIZE);
-                        float amount = receivedData / MAX_COUNT;
-                        percentage = (int) (amount * 100);
-                        if (receivedData > (MAX_COUNT - MAX_SIZE))
-                            percentage = 100;
-                        LogUtils.LOGD(TAG, "RecievedData : " + receivedData + " Amount : " + amount + " Precentage : " + percentage);
-                    }
-                    tvLoadingTitle.setText(String.format(getResources().getString(syncServiceType.getLoadingTitle(), String.valueOf(percentage) + "%%")));
-                    return finalProgress;
-            }
+//            switch (syncServiceType) {
+//                case GET_CONTACTS:
+////                case GET_GROUPS:
+//                    int percentage = 0;
+//                    if (MAX_COUNT > 0) {
+//                        float receivedData = (PAGE_NUMBER * MAX_SIZE);
+//                        float amount = receivedData / MAX_COUNT;
+//                        percentage = (int) (amount * 100);
+//                        if (receivedData > (MAX_COUNT - MAX_SIZE))
+//                            percentage = 100;
+//                        LogUtils.LOGD(TAG, "RecievedData : " + receivedData + " Amount : " + amount + " Precentage : " + percentage);
+//                    }
+//                    tvLoadingTitle.setText(String.format(getResources().getString(syncServiceType.getLoadingTitle(), String.valueOf(percentage) + "%%")));
+//                    return finalProgress;
+//            }
             if (!isPageLoading) {
                 finalProgress = progressLoading.getProgress() + progressUpdateValue;
                 progressLoading.setProgress(finalProgress);
