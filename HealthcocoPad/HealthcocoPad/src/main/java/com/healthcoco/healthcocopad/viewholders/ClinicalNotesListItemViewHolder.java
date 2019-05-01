@@ -3,6 +3,8 @@ package com.healthcoco.healthcocopad.viewholders;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.View;
 import android.widget.ImageView;
@@ -15,7 +17,6 @@ import com.healthcoco.healthcocopad.HealthCocoViewHolder;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.bean.BloodPressure;
-import com.healthcoco.healthcocopad.bean.DrugInteractions;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.AppointmentRequest;
 import com.healthcoco.healthcocopad.bean.server.ClinicalNotes;
@@ -23,6 +24,7 @@ import com.healthcoco.healthcocopad.bean.server.Diagram;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.bean.server.VitalSigns;
+import com.healthcoco.healthcocopad.enums.AdapterType;
 import com.healthcoco.healthcocopad.enums.AddUpdateNameDialogType;
 import com.healthcoco.healthcocopad.enums.ClinicalNotesPermissionType;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
@@ -34,6 +36,8 @@ import com.healthcoco.healthcocopad.fragments.CommonOpenUpPatientDetailFragment;
 import com.healthcoco.healthcocopad.fragments.PatientClinicalNotesDetailFragment;
 import com.healthcoco.healthcocopad.listeners.CommonEMRItemClickListener;
 import com.healthcoco.healthcocopad.listeners.VisitDetailCombinedItemListener;
+import com.healthcoco.healthcocopad.recyclerview.HealthcocoRecyclerViewAdapter;
+import com.healthcoco.healthcocopad.recyclerview.HealthcocoRecyclerViewItemClickListener;
 import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
@@ -41,6 +45,7 @@ import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
+import com.healthcoco.healthcocopad.views.HorizontalRecyclerViewItemDecoration;
 import com.healthcoco.healthcocopad.views.TextViewFontAwesome;
 
 import org.parceler.Parcels;
@@ -52,7 +57,7 @@ import java.util.List;
  * Created by neha on 19/03/16.
  */
 public class ClinicalNotesListItemViewHolder extends HealthCocoViewHolder implements View.OnClickListener,
-        Response.Listener<VolleyResponseBean>, GsonRequest.ErrorListener {
+        Response.Listener<VolleyResponseBean>, GsonRequest.ErrorListener, HealthcocoRecyclerViewItemClickListener {
 
     private static final String TAG = ClinicalNotesListItemViewHolder.class.getSimpleName();
     private static final int REQUEST_CODE_CLINICAL_NOTES = 111;
@@ -69,7 +74,7 @@ public class ClinicalNotesListItemViewHolder extends HealthCocoViewHolder implem
     private ClinicalNotes clinicalNote;
     private LinearLayout btEmail;
     private TextView tvNotedBy;
-    private LinearLayout containerDiagrams;
+    private RecyclerView containerDiagrams;
     private LinearLayout layoutDiagrams;
     private TextView tvCNID;
     private LinearLayout layoutVitalSigns;
@@ -181,6 +186,7 @@ public class ClinicalNotesListItemViewHolder extends HealthCocoViewHolder implem
     private TextView tvFamilyHistory;
     private TextView tvPriorConsultations;
     private LinearLayout layoutPriorConsultations;
+    private HealthcocoRecyclerViewAdapter adapter;
 
     public ClinicalNotesListItemViewHolder(HealthCocoActivity mActivity,
                                            Object listenerObject, boolean isInEmrList) {
@@ -626,7 +632,18 @@ public class ClinicalNotesListItemViewHolder extends HealthCocoViewHolder implem
         View contentView = inflater.inflate(R.layout.temp_item_clinic_note, null);
         initViews(contentView);
         initListeners();
+        initCurrentPlanAdapter();
         return contentView;
+    }
+
+    private void initCurrentPlanAdapter() {
+        int spacingInPixels = mActivity.getResources().getDimensionPixelSize(R.dimen.item_spacing_diagram_list_item);
+        containerDiagrams.setLayoutManager(new LinearLayoutManager(mActivity, LinearLayoutManager.HORIZONTAL, false));
+        containerDiagrams.addItemDecoration(new HorizontalRecyclerViewItemDecoration(spacingInPixels));
+
+        adapter = new HealthcocoRecyclerViewAdapter(mActivity, AdapterType.DIAGRAM_LIST, this, this);
+        containerDiagrams.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
     }
 
     private void initViews(View contentView) {
@@ -679,7 +696,7 @@ public class ClinicalNotesListItemViewHolder extends HealthCocoViewHolder implem
         layoutNotes = (LinearLayout) contentView.findViewById(R.id.layout_notes);
         tvNotes = (TextView) contentView.findViewById(R.id.tv_text_notes);
         layoutDiagrams = (LinearLayout) contentView.findViewById(R.id.layout_diagrams);
-        containerDiagrams = (LinearLayout) contentView.findViewById(R.id.container_diagrams);
+        containerDiagrams = (RecyclerView) contentView.findViewById(R.id.container_diagrams);
 
         layoutDiscarded = (LinearLayout) contentView.findViewById(R.id.layout_discarded);
 
@@ -826,7 +843,6 @@ public class ClinicalNotesListItemViewHolder extends HealthCocoViewHolder implem
         tvEarsExam.setText("");
         tvFamilyHistory.setText("");
         tvPastHistory.setText("");
-        containerDiagrams.removeAllViews();
 
         layoutPresentComplaints.setVisibility(View.GONE);
         layoutComplaints.setVisibility(View.GONE);
@@ -891,21 +907,22 @@ public class ClinicalNotesListItemViewHolder extends HealthCocoViewHolder implem
 
     private void initDiagramsPagerAdapter(List<Diagram> list) {
         LogUtils.LOGD(TAG, "Diagrams size " + list.size());
-        containerDiagrams.removeAllViews();
-        for (Diagram diagram :
-                list) {
-            if (!Util.isNullOrBlank(diagram.getDiagramUrl())) {
-                int index = list.indexOf(diagram);
-                ClinicalNoteItemDiagramViewHolder viewHolder = new ClinicalNoteItemDiagramViewHolder(mActivity);
-                viewHolder.initData(diagram);
-                if (index < list.size() - 1) {
-                    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(mActivity.getResources().getDimensionPixelOffset(R.dimen.width_height_clinical_note_item_diagram), mActivity.getResources().getDimensionPixelOffset(R.dimen.width_height_clinical_note_item_diagram));
-                    layoutParams.setMargins(0, 0, mActivity.getResources().getDimensionPixelOffset(R.dimen.padding_between_clinical_item_diagram), 0);
-                    viewHolder.setLayoutParams(layoutParams);
-                }
-                containerDiagrams.addView(viewHolder);
-            }
-        }
+        adapter.setListData((ArrayList<Object>) (Object) list);
+        containerDiagrams.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+//        for (Diagram diagram :
+//                list) {
+//            if (!Util.isNullOrBlank(diagram.getDiagramUrl())) {
+//                int index = list.indexOf(diagram);
+//                ClinicalNoteItemDiagramViewHolder viewHolder = new ClinicalNoteItemDiagramViewHolder(mActivity);
+//                viewHolder.setData(diagram);
+////                if (index < list.size() - 1) {
+////                    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(mActivity.getResources().getDimensionPixelOffset(R.dimen.width_height_clinical_note_item_diagram), mActivity.getResources().getDimensionPixelOffset(R.dimen.width_height_clinical_note_item_diagram));
+////                    layoutParams.setMargins(0, 0, mActivity.getResources().getDimensionPixelOffset(R.dimen.padding_between_clinical_item_diagram), 0);
+////                    viewHolder.setLayoutParams(layoutParams);
+////                }
+//            }
+//        }
     }
 
     @Override
@@ -1090,5 +1107,10 @@ public class ClinicalNotesListItemViewHolder extends HealthCocoViewHolder implem
         if (commonEMRItemClickListener != null)
             commonEMRItemClickListener.showLoading(true);
         WebDataServiceImpl.getInstance(mApp).discardClinicalNotes(ClinicalNotes.class, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(), clinicalNotes.getUniqueId(), HealthCocoConstants.SELECTED_PATIENTS_USER_ID, this, this);
+    }
+
+    @Override
+    public void onItemClicked(Object object) {
+
     }
 }

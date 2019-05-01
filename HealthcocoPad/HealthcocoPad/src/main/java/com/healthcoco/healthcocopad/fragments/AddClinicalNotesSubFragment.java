@@ -776,7 +776,7 @@ public class AddClinicalNotesSubFragment extends HealthCocoFragment implements V
                         clinicalNoteToSend.setProcedureNote(getFormattedText(Util.getValidatedValueOrBlankWithoutTrimming((TextView) parentPermissionItems.findViewWithTag(ClinicalNotesPermissionType.PROCEDURES.getValue()))));
                         break;
                     case PRIOR_CONSULTATIONS:
-                        clinicalNotes.setPriorConsultations(getFormattedText(Util.getValidatedValueOrBlankWithoutTrimming((TextView) parentPermissionItems.findViewWithTag(ClinicalNotesPermissionType.PRIOR_CONSULTATIONS.getValue()))));
+                        clinicalNoteToSend.setPriorConsultations(getFormattedText(Util.getValidatedValueOrBlankWithoutTrimming((TextView) parentPermissionItems.findViewWithTag(ClinicalNotesPermissionType.PRIOR_CONSULTATIONS.getValue()))));
                         break;
                     case PAST_HISTORY:
                         clinicalNoteToSend.setPastHistory(getFormattedText(Util.getValidatedValueOrBlankWithoutTrimming((TextView) parentPermissionItems.findViewWithTag(ClinicalNotesPermissionType.PAST_HISTORY.getValue()))));
@@ -960,14 +960,14 @@ public class AddClinicalNotesSubFragment extends HealthCocoFragment implements V
                 }
                 diagramsList.remove(selectedDiagramID);
                 diagramsList.put(diagramToEdit.getUniqueId(), diagramToEdit);
+            } else diagramsList.put(diagram.getUniqueId(), diagram);
+            ArrayList<Diagram> diagramArrayList = new ArrayList<>();
+            for (Diagram dig :
+                    diagramsList.values()) {
+                diagramArrayList.add(dig);
             }
-        } else diagramsList.put(diagram.getUniqueId(), diagram);
-        ArrayList<Diagram> diagramArrayList = new ArrayList<>();
-        for (Diagram dig :
-                diagramsList.values()) {
-            diagramArrayList.add(dig);
+            initDiagrams(diagramArrayList);
         }
-        initDiagrams(diagramArrayList);
     }
 
     @Override

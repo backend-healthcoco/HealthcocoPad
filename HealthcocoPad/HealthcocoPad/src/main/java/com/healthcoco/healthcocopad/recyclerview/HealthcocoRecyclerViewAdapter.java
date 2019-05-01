@@ -21,11 +21,13 @@ import com.healthcoco.healthcocopad.bean.server.VaccineResponse;
 import com.healthcoco.healthcocopad.bean.server.VaccineSolarResponse;
 import com.healthcoco.healthcocopad.enums.AdapterType;
 import com.healthcoco.healthcocopad.enums.KioskSubItemType;
+import com.healthcoco.healthcocopad.utilities.ScreenDimensions;
 import com.healthcoco.healthcocopad.utilities.Util;
 import com.healthcoco.healthcocopad.viewholders.AboutDoctorListViewHolder;
 import com.healthcoco.healthcocopad.viewholders.BabyAchievementViewHolder;
 import com.healthcoco.healthcocopad.viewholders.BrandListRecycleViewHolder;
 import com.healthcoco.healthcocopad.viewholders.ClinicImageListItemHolder;
+import com.healthcoco.healthcocopad.viewholders.ClinicalNoteItemDiagramViewHolder;
 import com.healthcoco.healthcocopad.viewholders.ContactsListViewForDeletedPatientHolder;
 import com.healthcoco.healthcocopad.viewholders.DoctorListViewHolder;
 import com.healthcoco.healthcocopad.viewholders.EventItemViewHolder;
@@ -164,6 +166,11 @@ public class HealthcocoRecyclerViewAdapter extends RecyclerView.Adapter<Healthco
                 convertView.setLayoutParams(getLayoutParams(convertView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                 viewHolder = new ContactsListViewForDeletedPatientHolder(mActivity, convertView, onItemClickListener, listenerObject, viewType);
                 return viewHolder;
+            case DIAGRAM_LIST:
+                convertView = mInflater.inflate(R.layout.item_clinical_note_diagram, null);
+                convertView.setLayoutParams(getLayoutParams(convertView, ViewGroup.LayoutParams.WRAP_CONTENT, (int) mActivity.getResources().getDimension(R.dimen.width_height_clinical_note_item_diagram)));
+                viewHolder = new ClinicalNoteItemDiagramViewHolder(mActivity, convertView);
+                return viewHolder;
         }
         return viewHolder;
     }
@@ -273,13 +280,19 @@ public class HealthcocoRecyclerViewAdapter extends RecyclerView.Adapter<Healthco
                     selectedBrandListViewHolder.applyData(object);
                 }
                 break;
+            case DIAGRAM_LIST:
+                if (holder instanceof ClinicalNoteItemDiagramViewHolder) {
+                    ClinicalNoteItemDiagramViewHolder clinicalNoteItemDiagramViewHolder = ((ClinicalNoteItemDiagramViewHolder) holder);
+                    clinicalNoteItemDiagramViewHolder.applyData(object);
+                }
+                break;
         }
 
     }
 
     @Override
     public int getItemCount() {
-         if (!Util.isNullOrEmptyList(list))
+        if (!Util.isNullOrEmptyList(list))
             return list.size();
         return 0;
     }
