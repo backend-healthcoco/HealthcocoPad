@@ -71,6 +71,7 @@ public class Util {
     private static final String TAG = Util.class.getSimpleName();
     private static Toast visibleToast;
     private static final String SEPARATOR_COMMA = ", ";
+    public static boolean isSyncActive = false;
 
     /**
      * Check the device to make sure it has the Google Play Services APK. If
@@ -251,6 +252,15 @@ public class Util {
             e.printStackTrace();
         }
         return versionName;
+    }
+
+    public static boolean isNetworkOnline(HealthCocoActivity mActivity) {
+        checkNetworkStatus(mActivity);
+        if (!HealthCocoConstants.isNetworkOnline) {
+            showToast(mActivity, R.string.user_offline);
+            return false;
+        }
+        return true;
     }
 
     public static String getValidatedValueOrDash(HealthCocoActivity mActivity, String text) {

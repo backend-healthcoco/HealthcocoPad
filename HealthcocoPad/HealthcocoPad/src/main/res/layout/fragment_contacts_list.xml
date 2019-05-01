@@ -18,6 +18,46 @@
             android:visibility="visible" />
 
         <LinearLayout
+            android:id="@+id/layout_sync_progress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/layout_margin"
+                android:paddingTop="@dimen/layout_margin"
+                android:paddingRight="@dimen/layout_margin"
+                android:paddingBottom="@dimen/text_between_padding">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sync_in_progress"
+                    android:textColor="@color/black_greyish" />
+
+                <TextView
+                    android:id="@+id/tv_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/layout_margin"
+                    android:text=""
+                    android:textColor="@color/black_greyish" />
+
+            </LinearLayout>
+
+            <ProgressBar
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:indeterminate="true" />
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/child_edit_search"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -57,8 +97,8 @@
                     android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
                     android:clickable="true"
                     android:drawableEnd="@drawable/arrow_down_drug"
-                    android:drawablePadding="10dp"
                     android:drawableRight="@drawable/arrow_down_drug"
+                    android:drawablePadding="10dp"
                     android:editable="false"
                     android:focusable="false"
                     android:focusableInTouchMode="false"
@@ -92,8 +132,8 @@
                     android:background="@drawable/edit_text_bottom_line_grey_blue_solid_white_selector"
                     android:clickable="true"
                     android:drawableEnd="@drawable/arrow_down_drug"
-                    android:drawablePadding="10dp"
                     android:drawableRight="@drawable/arrow_down_drug"
+                    android:drawablePadding="10dp"
                     android:editable="false"
                     android:focusable="false"
                     android:focusableInTouchMode="false"
@@ -178,8 +218,8 @@
                         android:id="@+id/tv_no_patients"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
+                        android:layout_alignParentLeft="true"
                         android:layout_alignParentTop="true"
                         android:gravity="center"
                         android:text="@string/no_patients"
@@ -203,8 +243,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|right"
-        android:layout_marginBottom="@dimen/fab_margin_bottom"
         android:layout_marginRight="@dimen/fab_margin_right"
+        android:layout_marginBottom="@dimen/fab_margin_bottom"
         android:src="@drawable/tab_add_contact"
         app:layout_anchorGravity="bottom|right|end" />
 </android.support.design.widget.CoordinatorLayout>

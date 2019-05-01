@@ -57,6 +57,24 @@
             android:textSize="@dimen/text_size_doctor_profile_name" />
 
         <LinearLayout
+            android:id="@+id/layout_sync_in_progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:text="@string/sync_in_progress"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_doctor_profile_name" />
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/bt_sync_all"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -93,8 +111,8 @@
         android:divider="@null"
         android:listSelector="@android:color/transparent"
         android:paddingLeft="10dp"
-        android:paddingRight="10dp"
         android:paddingTop="10dp"
+        android:paddingRight="10dp"
         android:scrollbarStyle="outsideOverlay" />
 
 </LinearLayout>

@@ -71,6 +71,7 @@ import com.healthcoco.healthcocopad.bean.server.ObservationSuggestions;
 import com.healthcoco.healthcocopad.bean.server.ObstetricHistorySuggestions;
 import com.healthcoco.healthcocopad.bean.server.OralCavityThroatExamSuggestions;
 import com.healthcoco.healthcocopad.bean.server.PaSuggestions;
+import com.healthcoco.healthcocopad.bean.server.PatientCount;
 import com.healthcoco.healthcocopad.bean.server.PcEarsSuggestions;
 import com.healthcoco.healthcocopad.bean.server.PcNoseSuggestions;
 import com.healthcoco.healthcocopad.bean.server.PcOralCavitySuggestions;
@@ -952,14 +953,14 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
                 case GET_TEMPLATES_LIST:
                     if (defaultWebServicesList.contains(DefaultSyncServiceType.getSyncType(webServiceType)))
                         defaultWebServicesList.remove(DefaultSyncServiceType.getSyncType(webServiceType));
+                    updateProgress(DefaultSyncServiceType.GET_BOTH_UI_PERMISSIONS);
+                    break;
+                case GET_BOTH_PERMISSIONS_FOR_DOCTOR:
+                    if (defaultWebServicesList.contains(DefaultSyncServiceType.getSyncType(webServiceType)))
+                        defaultWebServicesList.remove(DefaultSyncServiceType.getSyncType(webServiceType));
                     updateProgress(DefaultSyncServiceType.GET_CONTACTS);
                     break;
                 case GET_CONTACTS:
-                    if (defaultWebServicesList.contains(DefaultSyncServiceType.getSyncType(webServiceType)))
-                        defaultWebServicesList.remove(DefaultSyncServiceType.getSyncType(webServiceType));
-                    updateProgress(DefaultSyncServiceType.GET_BOTH_UI_PERMISSIONS);
-                    return;
-                case GET_BOTH_PERMISSIONS_FOR_DOCTOR:
                     if (defaultWebServicesList.contains(DefaultSyncServiceType.getSyncType(webServiceType)))
                         defaultWebServicesList.remove(DefaultSyncServiceType.getSyncType(webServiceType));
                     updateProgress(DefaultSyncServiceType.SYNC_COMPLETE);
@@ -1173,7 +1174,7 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
         ArrayList<Object> responseList = response.getDataList();
         int maxCount = 0;
         switch (response.getWebServiceType()) {
-            case GET_CONTACTS:
+           /* case GET_CONTACTS:
                 boolean isEndOfListAchieved = false;
                 if (Util.isNullOrEmptyList(responseList)
                         || responseList.size() < InitialSyncFragment.MAX_SIZE
@@ -1190,7 +1191,7 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
                     } else InitialSyncFragment.MAX_COUNT = maxCount;
                     return true;
                 } else resetInitialSyncPaginationAttributes();
-                return false;
+                return false;*/
             default:
                 resetInitialSyncPaginationAttributes();
         }
@@ -1278,8 +1279,10 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
                 ArrayList<RegisteredPatientDetailsUpdated> patientsList = null;
                 if (!Util.isNullOrEmptyList(response.getDataList())) {
                     patientsList = (ArrayList<RegisteredPatientDetailsUpdated>) (ArrayList<?>) response.getDataList();
-                    if (!Util.isNullOrEmptyList(patientsList))
+                    if (!Util.isNullOrEmptyList(patientsList)) {
                         LocalDataServiceImpl.getInstance(mApp).addPatientsList(patientsList);
+                        updatePatientCount(response);
+                    }
                 }
                 break;
 //            case ADD_EDUCATION_QUALIFICATION:
@@ -2055,6 +2058,26 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
             startActivity(intent);
         else
             startActivityForResult(intent, requestCode);
+    }
+
+    private void updatePatientCount(VolleyResponseBean response) {
+        long totalCount = 0;
+        if (response.getData() != null && response.getData() instanceof Long)
+            totalCount = (long) response.getData();
+        else if (response.getData() != null && response.getData() instanceof Double) {
+            Double data = (Double) response.getData();
+            totalCount = Math.round(data);
+        }
+        if (response.getData() != null && !Util.isNullOrZeroNumber(totalCount)) {
+            PatientCount patientCount = new PatientCount();
+            patientCount.setDoctorId(user.getUniqueId());
+            patientCount.setLocationId(user.getForeignLocationId());
+            patientCount.setHospitalId(user.getForeignHospitalId());
+            patientCount.setCount(totalCount);
+            patientCount.setSyncCompleted(false);
+            LocalDataServiceImpl.getInstance(mApp).
+                    addPatientCount(patientCount);
+        }
     }
 
 }

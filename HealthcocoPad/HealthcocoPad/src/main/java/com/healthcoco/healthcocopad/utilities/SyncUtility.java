@@ -18,6 +18,7 @@ import com.healthcoco.healthcocopad.bean.server.DrugDosage;
 import com.healthcoco.healthcocopad.bean.server.DrugDurationUnit;
 import com.healthcoco.healthcocopad.bean.server.DrugType;
 import com.healthcoco.healthcocopad.bean.server.Location;
+import com.healthcoco.healthcocopad.bean.server.PatientCount;
 import com.healthcoco.healthcocopad.bean.server.Profession;
 import com.healthcoco.healthcocopad.bean.server.Reference;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
@@ -29,6 +30,8 @@ import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.LocalTabelType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
+import com.healthcoco.healthcocopad.fragments.ContactsListFragment;
+import com.healthcoco.healthcocopad.fragments.MenuDrawerFragment;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
 import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
@@ -45,6 +48,10 @@ public class SyncUtility implements Response.Listener<VolleyResponseBean>, GsonR
     private HealthCocoApplication mApp;
     private User user;
     private RegisteredPatientDetailsUpdated selectedPatient;
+    Long latestUpdatedTimeContact = 0l;
+    private long MAX_COUNT;
+    private int PAGE_NUMBER = 0;
+    private boolean isEndOfListAchieved = true;
 
     public SyncUtility(HealthCocoApplication mApp, HealthCocoActivity mActivity, User user, RegisteredPatientDetailsUpdated selectedPatient) {
         this.mApp = mApp;
@@ -73,12 +80,18 @@ public class SyncUtility implements Response.Listener<VolleyResponseBean>, GsonR
 
     @Override
     public void onErrorResponse(VolleyResponseBean volleyResponseBean, String errorMessage) {
-
+        if (Util.isSyncActive) {
+            Util.isSyncActive = false;
+            Util.sendBroadcast(mApp, ContactsListFragment.INTENT_REFRESH_PATIENT_COUNT);
+        }
     }
 
     @Override
     public void onNetworkUnavailable(WebServiceType webServiceType) {
-
+        if (Util.isSyncActive) {
+            Util.isSyncActive = false;
+            Util.sendBroadcast(mApp, ContactsListFragment.INTENT_REFRESH_PATIENT_COUNT);
+        }
     }
 
     @Override
@@ -131,9 +144,6 @@ public class SyncUtility implements Response.Listener<VolleyResponseBean>, GsonR
                 case GET_CALENDAR_EVENTS:
                     new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_CALENDAR_EVENTS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
                     break;
-                case GET_CONTACTS:
-                    new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_PATIENTS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
-                    break;
                 case GET_EDUCATION_QUALIFICATION:
                     new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_EDUCATION_QUALIFICATION, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
                     break;
@@ -182,6 +192,25 @@ public class SyncUtility implements Response.Listener<VolleyResponseBean>, GsonR
                 case GET_BOTH_PERMISSIONS_FOR_DOCTOR:
                     if (response.getData() != null) {
                         new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_BOTH_USER_UI_PERMISSIONS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                    }
+                    break;
+                case GET_CONTACTS:
+                    if (!Util.isNullOrEmptyList(response.getDataList())) {
+                        if (Util.isNullOrZeroNumber(MAX_COUNT) || isTotalCountIsGreater())
+                            updatePatientCount(response);
+                        if (Util.isNullOrEmptyList(response.getDataList()) || response.getDataList().size() < ContactsListFragment.MAX_NUMBER_OF_CONTACT
+                                || Util.isNullOrEmptyList(response.getDataList())) {
+                            isEndOfListAchieved = true;
+                        } else {
+                            PAGE_NUMBER = PAGE_NUMBER + 1;
+                        }
+                        new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_PATIENTS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                        return;
+                    } else {
+                        if (Util.isSyncActive && !response.isFromLocalAfterApiSuccess()) {
+                            Util.isSyncActive = false;
+                            Util.sendBroadcast(mApp, ContactsListFragment.INTENT_REFRESH_PATIENT_COUNT);
+                        }
                     }
                     break;
                 default:
@@ -256,8 +285,16 @@ public class SyncUtility implements Response.Listener<VolleyResponseBean>, GsonR
                 break;
             case ADD_PATIENTS:
                 if (!Util.isNullOrEmptyList(response.getDataList()))
-                    LocalDataServiceImpl.getInstance(mApp).
-                            addPatientsList((ArrayList<RegisteredPatientDetailsUpdated>) (ArrayList<?>) response.getDataList());
+                    LocalDataServiceImpl.getInstance(mApp).addPatientsList((ArrayList<RegisteredPatientDetailsUpdated>) (ArrayList<?>) response.getDataList());
+                response.setIsFromLocalAfterApiSuccess(true);
+                if (!isEndOfListAchieved && !Util.isNullOrZeroNumber(MAX_COUNT)) {
+                    syncContact();
+                } else {
+                    Util.isSyncActive = false;
+                    resetListAndPagingAttributes();
+                }
+                Util.sendBroadcast(mApp, MenuDrawerFragment.INTENT_REFRESH_PATIENT_COUNT);
+                Util.sendBroadcast(mApp, ContactsListFragment.INTENT_REFRESH_PATIENT_COUNT);
                 break;
 //            case ADD_EDUCATION_QUALIFICATION:
 //                if (!Util.isNullOrEmptyList(response.getDataList()))
@@ -335,6 +372,72 @@ public class SyncUtility implements Response.Listener<VolleyResponseBean>, GsonR
         if (user != null) {
             WebDataServiceImpl.getInstance(mApp).getBothUIPermissionsForDoctor(UiPermissionsBoth.class, user.getUniqueId(), this, this);
         }
+    }
+
+    public void getContactsList() {
+        Util.isSyncActive = true;
+        MAX_COUNT = LocalDataServiceImpl.getInstance(mApp).getPatientCountLong(user);
+        if (!Util.isNullOrZeroNumber(MAX_COUNT)) {
+            isPaginationRequired();
+            syncContact();
+        } else {
+            isEndOfListAchieved = false;
+            latestUpdatedTimeContact = 0l;
+            syncContact();
+        }
+    }
+
+    private void syncContact() {
+        if (isEndOfListAchieved) {
+            latestUpdatedTimeContact = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(user, LocalTabelType.REGISTERED_PATIENTS_DETAILS);
+        }
+        WebDataServiceImpl.getInstance(mApp).getContactsList(RegisteredPatientDetailsUpdated.class, user.getUniqueId(),
+                user.getForeignHospitalId(), user.getForeignLocationId(), latestUpdatedTimeContact, user, PAGE_NUMBER, ContactsListFragment.MAX_NUMBER_OF_CONTACT, null, this, this);
+    }
+
+    private boolean isPaginationRequired() {
+        long count = LocalDataServiceImpl.getInstance(mApp).getListCount(user);
+        if (count < MAX_COUNT) {
+            PAGE_NUMBER = (int) (count / ContactsListFragment.MAX_NUMBER_OF_CONTACT);
+            isEndOfListAchieved = false;
+            latestUpdatedTimeContact = 0l;
+            return true;
+        } else
+            return false;
+    }
+
+    private void resetListAndPagingAttributes() {
+        PAGE_NUMBER = 0;
+        isEndOfListAchieved = true;
+    }
+
+    private void updatePatientCount(VolleyResponseBean response) {
+        long totalCount = 0;
+        if (response.getData() != null && response.getData() instanceof Long)
+            totalCount = (long) response.getData();
+        else if (response.getData() != null && response.getData() instanceof Double) {
+            Double data = (Double) response.getData();
+            totalCount = Math.round(data);
+        }
+        if (!Util.isNullOrZeroNumber(totalCount)) {
+            MAX_COUNT = totalCount;
+            PatientCount patientCount = new PatientCount();
+            patientCount.setDoctorId(user.getUniqueId());
+            patientCount.setLocationId(user.getForeignLocationId());
+            patientCount.setHospitalId(user.getForeignHospitalId());
+            patientCount.setCount(totalCount);
+            patientCount.setSyncCompleted(false);
+            LocalDataServiceImpl.getInstance(mApp).
+                    addPatientCount(patientCount);
+        }
+    }
+
+    private boolean isTotalCountIsGreater() {
+        long count = LocalDataServiceImpl.getInstance(mApp).getListCount(user);
+        if (count <= MAX_COUNT)
+            return false;
+        else
+            return true;
     }
 
 }
