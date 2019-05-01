@@ -291,4 +291,5 @@
     <dimen name="button_size_dialog">13sp</dimen>
     <dimen name="item_spacing_grid_item">12dp</dimen>
     <dimen name="width_height_print_setting_image">150dp</dimen>
+    <dimen name="item_spacing_diagram_list_item">10dp</dimen>
 </resources>
