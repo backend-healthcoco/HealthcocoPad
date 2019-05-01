@@ -1385,4 +1385,5 @@
     <string name="header_height_with_colon">Header Height&#160;:</string>
     <string name="letterhead_header">Letterhead Header</string>
     <string name="letterhead_footer">Letterhead Footer</string>
+    <string name="sync_in_progress">Sync in Progress</string>
 </resources>
