@@ -52,7 +52,6 @@ import com.healthcoco.healthcocopad.bean.server.ObservationSuggestions;
 import com.healthcoco.healthcocopad.bean.server.ObstetricHistorySuggestions;
 import com.healthcoco.healthcocopad.bean.server.OralCavityThroatExamSuggestions;
 import com.healthcoco.healthcocopad.bean.server.PaSuggestions;
-import com.healthcoco.healthcocopad.bean.server.PatientCount;
 import com.healthcoco.healthcocopad.bean.server.PcEarsSuggestions;
 import com.healthcoco.healthcocopad.bean.server.PcNoseSuggestions;
 import com.healthcoco.healthcocopad.bean.server.PcOralCavitySuggestions;
@@ -115,7 +114,6 @@ public class SyncFragment extends HealthCocoFragment implements View.OnClickList
     private DoctorProfile doctorProfile;
     private TextView tvInitialAlphabet;
     private ListView lvSyncAll;
-    private LinearLayout layoutSyncInProgress;
     private boolean isEndOfListAchieved = true;
     private int PAGE_NUMBER = 0;
     private SyncAllAdapter adapter;
@@ -149,13 +147,11 @@ public class SyncFragment extends HealthCocoFragment implements View.OnClickList
     public void initViews() {
         ivImage = (ImageView) view.findViewById(R.id.iv_image);
         progressLoading = (ProgressBar) view.findViewById(R.id.progress_loading);
-        layoutSyncInProgress = (LinearLayout) view.findViewById(R.id.layout_sync_in_progress);
         tvDoctorName = (TextView) view.findViewById(R.id.tv_doctor_name);
         btSyncAll = (LinearLayout) view.findViewById(R.id.bt_sync_all);
         tvRefresh = (TextView) view.findViewById(R.id.tv_refresh);
         lvSyncAll = (ListView) view.findViewById(R.id.lv_sync_all);
         tvInitialAlphabet = (TextView) view.findViewById(R.id.tv_initial_aplhabet);
-        refreshPatientsSyncing();
     }
 
     @Override
@@ -216,16 +212,14 @@ public class SyncFragment extends HealthCocoFragment implements View.OnClickList
             case R.id.bt_sync_all:
                 Util.checkNetworkStatus(mActivity);
                 if (HealthCocoConstants.isNetworkOnline)
-                    if (!Util.isSyncActive)
-                        syncAll();
-                    else
-                        Util.showToast(mActivity, R.string.user_offline);
+                    syncAll();
+                else
+                    Util.showToast(mActivity, R.string.user_offline);
                 break;
         }
     }
 
     private void syncAll() {
-        Util.isSyncActive = true;
         isSyncAllClicked = true;
         new Thread(new Runnable() {
             public void run() {
@@ -256,210 +250,203 @@ public class SyncFragment extends HealthCocoFragment implements View.OnClickList
     }
 
     private void startSyning(SyncAllType syncAllType) {
-        startAnimation(syncAllType);
-        ClinicalNotesDynamicField clinicalNotesDynamicField = LocalDataServiceImpl.getInstance(mApp).getClinicalNotesDynamicField();
-        switch (syncAllType) {
-            case CONTACT:
-                //getting contacts data
-                MAX_COUNT = LocalDataServiceImpl.getInstance(mApp).getPatientCountLong(user);
-                if (!Util.isNullOrZeroNumber(MAX_COUNT)) {
-                    isPaginationRequired();
+        if (isEndOfListAchieved) {
+            startAnimation(syncAllType);
+            ClinicalNotesDynamicField clinicalNotesDynamicField = LocalDataServiceImpl.getInstance(mApp).getClinicalNotesDynamicField();
+            switch (syncAllType) {
+                case CONTACT:
+
                     syncContact();
-                } else {
-                    isEndOfListAchieved = false;
-                    latestUpdatedTimeContact = 0l;
-                    syncContact();
-                }
-                break;
-            case DATA_PERMISSIONS:
-                isEndOfListAchieved = true;
-                //getting contacts data
-                WebDataServiceImpl.getInstance(mApp).getDataPermission(DataPermissions.class, user.getUniqueId(), this, this);
 
-                break;
-            case GROUP:
-                //getting GroupsList
-                Long latestUpdatedTimeGroup = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.USER_GROUP);
-                WebDataServiceImpl.getInstance(mApp).getGroupsList(WebServiceType.GET_GROUPS, UserGroups.class, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(), latestUpdatedTimeGroup, null, this, this);
-                break;
-            case HISTORY:
-                Long latestUpdatedTimeHistory = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.DISEASE);
-                WebDataServiceImpl.getInstance(mApp).getDiseaseList(Disease.class, user.getUniqueId(), latestUpdatedTimeHistory, null, this, this);
+                    break;
+                case DATA_PERMISSIONS:
+                    //getting contacts data
+                    WebDataServiceImpl.getInstance(mApp).getDataPermission(DataPermissions.class, user.getUniqueId(), this, this);
 
-                break;
-            case DRUG_CUSTOM:
-                Long latestUpdatedTimeDrug = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.TEMP_DRUG);
-                WebDataServiceImpl.getInstance(mApp).getDrugsList(WebServiceType.GET_DRUGS_LIST_CUSTOM, Drug.class, user.getUniqueId(), latestUpdatedTimeDrug, true, this, this);
-                break;
-            case FREQUENCY:
-                //getting dosages/frequency
-                Long latestUpdatedTimeDosage = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.DRUG_DOSAGE);
-                WebDataServiceImpl.getInstance(mApp)
-                        .getDosageDirection(WebServiceType.GET_DRUG_DOSAGE, DrugDosage.class, true, this.user.getUniqueId(), latestUpdatedTimeDosage, this, this);
-                break;
-            case DIRECTION:
-                //getting directions
-                Long latestUpdatedTimeDirection = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.DRUG_DIRECTION);
-                WebDataServiceImpl.getInstance(mApp)
-                        .getDosageDirection(WebServiceType.GET_DIRECTION, DrugDirection.class, true, this.user.getUniqueId(), latestUpdatedTimeDirection, this, this);
-                break;
-            case NOTES_DIAGRAM:
-                //getting diagrams list
-                Long latestUpdatedTimeNotes = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.DIAGRAMS);
-                WebDataServiceImpl.getInstance(mApp).getDiagramsList(Diagram.class, latestUpdatedTimeNotes, user.getUniqueId(), this, this);
-                break;
-            case CLINICAL_NOTES_DATA:
-            case CLINICAL_NOTE_COMPLAINT_SUGGESTIONS:
-                Long latestUpdatedTimeComplaint = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.COMPLAINT);
-                WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(ComplaintSuggestions.class, WebServiceType.GET_COMPLAINT_SUGGESTIONS, clinicalNotesDynamicField.getComplaint(), user.getUniqueId(),
-                        latestUpdatedTimeComplaint, this, this);
-                break;
-            case CLINICAL_NOTE_OBSERVATION_SUGGESTIONS:
-                Long latestUpdatedTimeObservation = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.OBSERVATION);
-                WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(ObservationSuggestions.class, WebServiceType.GET_OBSERVATION_SUGGESTIONS, clinicalNotesDynamicField.getObservation(), user.getUniqueId(),
-                        latestUpdatedTimeObservation, this, this);
-                break;
-            case CLINICAL_NOTE_INVESTIGATION_SUGGESTIONS:
-                Long latestUpdatedTimeInvestigation = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.INVESTIGATION);
-                WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(InvestigationSuggestions.class, WebServiceType.GET_INVESTIGATION_SUGGESTIONS, clinicalNotesDynamicField.getInvestigation(), user.getUniqueId(),
-                        latestUpdatedTimeInvestigation, this, this);
-                break;
-            case CLINICAL_NOTE_OBSTETRIC_HISTORY_SUGGESTIONS:
-                Long latestUpdatedTimeObstetricHistory = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.OBSTETRIC_HISTORY_SUGGESTIONS);
-                WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(ObstetricHistorySuggestions.class, WebServiceType.GET_OBSTETRIC_HISTORY_SUGGESTIONS, clinicalNotesDynamicField.getObstetricHistory(), user.getUniqueId(),
-                        latestUpdatedTimeObstetricHistory, this, this);
-                break;
-            case CLINICAL_NOTE_GENERAL_EXAMINATION_SUGGESTIONS:
-                Long latestUpdatedTimeGeneralExamination = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.GENERAL_EXAMINATION_SUGGESTIONS);
-                WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(GeneralExaminationSuggestions.class, WebServiceType.GET_GENERAL_EXAMINATION_SUGGESTIONS, clinicalNotesDynamicField.getGeneralExam(), user.getUniqueId(),
-                        latestUpdatedTimeGeneralExamination, this, this);
-                break;
-            case CLINICAL_NOTE_PRESENT_COMPLAINT_SUGGESTIONS:
-                Long latestUpdatedTimePresentComplaint = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.PRESENT_COMPLAINT_SUGGESTIONS);
-                WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(PresentComplaintSuggestions.class, WebServiceType.GET_PRESENT_COMPLAINT_SUGGESTIONS, clinicalNotesDynamicField.getPresentComplaint(), user.getUniqueId(),
-                        latestUpdatedTimePresentComplaint, this, this);
-                break;
-            case CLINICAL_NOTE_HISTORY_OF_PRESENT_COMPLAINT_SUGGESTIONS:
-                Long latestUpdatedTimeHistoryPresentComplaint = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.HISTORY_OF_PRESENT_COMPLAINT_SUGGESTIONS);
-                WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(HistoryPresentComplaintSuggestions.class, WebServiceType.GET_HISTORY_OF_PRESENT_COMPLAINT_SUGGESTIONS, clinicalNotesDynamicField.getPresentComplaintHistory(), user.getUniqueId(),
-                        latestUpdatedTimeHistoryPresentComplaint, this, this);
-                break;
-            case CLINICAL_NOTE_SYSTEMIC_EXAMINATION_SUGGESTIONS:
-                Long latestUpdatedTimeSystemicExamination = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.SYSTEMIC_EXAMINATION_SUGGESTIONS);
-                WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(SystemicExaminationSuggestions.class, WebServiceType.GET_SYSTEMIC_EXAMINATION_SUGGESTIONS, clinicalNotesDynamicField.getSystemExam(), user.getUniqueId(),
-                        latestUpdatedTimeSystemicExamination, this, this);
-                break;
-            case CLINICAL_NOTE_PROVISIONAL_DIAGNOSIS_SUGGESTIONS:
-                Long latestUpdatedTimeProvisionalDiagnosis = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.PROVISIONAL_DIAGNOSIS_SUGGESTIONS);
-                WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(ProvisionalDiagnosisSuggestions.class, WebServiceType.GET_PROVISIONAL_DIAGNOSIS_SUGGESTIONS, clinicalNotesDynamicField.getProvisionalDiagnosis(), user.getUniqueId(),
-                        latestUpdatedTimeProvisionalDiagnosis, this, this);
-                break;
-            case CLINICAL_NOTE_ECG_DETAILS_SUGGESTIONS:
-                Long latestUpdatedTimeEcgDetails = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.ECG_DETAILS_SUGGESTIONS);
-                WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(EcgDetailSuggestions.class, WebServiceType.GET_ECG_SUGGESTIONS, clinicalNotesDynamicField.getEcgDetails(), user.getUniqueId(),
-                        latestUpdatedTimeEcgDetails, this, this);
-                break;
-            case CLINICAL_NOTE_ECHO_SUGGESTIONS:
-                Long latestUpdatedTimeEco = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.ECHO_SUGGESTIONS);
-                WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(EchoSuggestions.class, WebServiceType.GET_ECHO_SUGGESTIONS, clinicalNotesDynamicField.getEcho(), user.getUniqueId(),
-                        latestUpdatedTimeEco, this, this);
-                break;
-            case CLINICAL_NOTE_X_RAY_DETAILS_SUGGESTIONS:
-                Long latestUpdatedTimeXrayDetails = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.X_RAY_DETAILS_SUGGESTIONS);
-                WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(XrayDetailSuggestions.class, WebServiceType.GET_XRAY_SUGGESTIONS, clinicalNotesDynamicField.getGetxRayDetails(), user.getUniqueId(),
-                        latestUpdatedTimeXrayDetails, this, this);
-                break;
-            case CLINICAL_NOTE_HOLTER_SUGGESTIONS:
-                Long latestUpdatedTimeHolder = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.HOLTER_SUGGESTIONS);
-                WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(HolterSuggestions.class, WebServiceType.GET_HOLTER_SUGGESTIONS, clinicalNotesDynamicField.getHolter(), user.getUniqueId(),
-                        latestUpdatedTimeHolder, this, this);
-                break;
-            case CLINICAL_NOTE_PA_SUGGESTIONS:
-                Long latestUpdatedTimePa = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.PA_SUGGESTIONS);
-                WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(PaSuggestions.class, WebServiceType.GET_PA_SUGGESTIONS, clinicalNotesDynamicField.getPa(), user.getUniqueId(),
-                        latestUpdatedTimePa, this, this);
-                break;
-            case CLINICAL_NOTE_PV_SUGGESTIONS:
-                Long latestUpdatedTimePv = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.PV_SUGGESTIONS);
-                WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(PvSuggestions.class, WebServiceType.GET_PV_SUGGESTIONS, clinicalNotesDynamicField.getPv(), user.getUniqueId(),
-                        latestUpdatedTimePv, this, this);
-                break;
-            case CLINICAL_NOTE_PS_SUGGESTIONS:
-                Long latestUpdatedTimePs = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.PS_SUGGESTIONS);
-                WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(PsSuggestions.class, WebServiceType.GET_PS_SUGGESTIONS, clinicalNotesDynamicField.getPs(), user.getUniqueId(),
-                        latestUpdatedTimePs, this, this);
-                break;
-            case CLINICAL_NOTE_INDICATION_OF_USG_SUGGESTIONS:
-                Long latestUpdatedTimeIndicationOfUsg = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.INDICATION_OF_USG_SUGGESTIONS);
-                WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(IndicationOfUsgSuggestions.class, WebServiceType.GET_INDICATION_OF_USG_SUGGESTIONS, clinicalNotesDynamicField.getIndicationOfUSG(), user.getUniqueId(),
-                        latestUpdatedTimeIndicationOfUsg, this, this);
-                break;
-            case CLINICAL_NOTE_NOTES_SUGGESTIONS:
-                Long latestUpdatedTimeNote = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.NOTES_SUGGESTIONS);
-                WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(NotesSuggestions.class, WebServiceType.GET_NOTES_SUGGESTIONS, clinicalNotesDynamicField.getNote(), user.getUniqueId(),
-                        latestUpdatedTimeNote, this, this);
-                break;
-            case CLINICAL_NOTE_MENSTRUAL_HISTORY_SUGGESTIONS:
-                Long latestUpdatedTimeMenstrualHistory = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.MENSTRUAL_HISTORY_SUGGESTIONS);
-                WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(MenstrualHistorySuggestions.class, WebServiceType.GET_MENSTRUAL_HISTORY_SUGGESTIONS, clinicalNotesDynamicField.getMenstrualHistory(), user.getUniqueId(),
-                        latestUpdatedTimeMenstrualHistory, this, this);
-                break;
-            case CLINICAL_NOTE_DIAGNOSIS_SUGGESTIONS:
-                Long latestUpdatedTimeDiagnosis = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.DIAGNOSIS);
-                WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(DiagnosisSuggestions.class, WebServiceType.GET_DIAGNOSIS_SUGGESTIONS, clinicalNotesDynamicField.getDiagnosis(), user.getUniqueId(),
-                        latestUpdatedTimeDiagnosis, this, this);
-                break;
-            case CLINICAL_NOTE_EAR_EXAM_SUGGESTIONS:
-                Long latestUpdatedTimeEarExam = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.EAR_EXAM_SUGGESTIONS);
-                WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(EarsExamSuggestions.class, WebServiceType.GET_EAR_EXAM_SUGGESTIONS, clinicalNotesDynamicField.getEarsExam(), user.getUniqueId(),
-                        latestUpdatedTimeEarExam, this, this);
-                break;
-            case CLINICAL_NOTE_INDIRECT_LARYGOSCOPY_EXAM_SUGGESTIONS:
-                Long latestUpdatedTimeIndirectLarygocsopyExam = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.INDIRECT_LARYGOSCOPY_EXAM_SUGGESTIONS);
-                WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(IndirectLarygoscopyExamSuggestions.class, WebServiceType.GET_INDIRECT_LARYGOSCOPY_EXAM_SUGGESTIONS, clinicalNotesDynamicField.getIndirectLarygoscopyExam(), user.getUniqueId(),
-                        latestUpdatedTimeIndirectLarygocsopyExam, this, this);
+                    break;
+                case GROUP:
+                    //getting GroupsList
+                    Long latestUpdatedTimeGroup = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.USER_GROUP);
+                    WebDataServiceImpl.getInstance(mApp).getGroupsList(WebServiceType.GET_GROUPS, UserGroups.class, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(), latestUpdatedTimeGroup, null, this, this);
+                    break;
+                case HISTORY:
+                    Long latestUpdatedTimeHistory = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.DISEASE);
+                    WebDataServiceImpl.getInstance(mApp).getDiseaseList(Disease.class, user.getUniqueId(), latestUpdatedTimeHistory, null, this, this);
 
-                break;
-            case CLINICAL_NOTE_NECK_EXAM_SUGGESTIONS:
-                Long latestUpdatedTimeNeckExam = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.NECK_EXAM_SUGGESTIONS);
-                WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(NeckExamSuggestions.class, WebServiceType.GET_NECK_EXAM_SUGGESTIONS, clinicalNotesDynamicField.getNeckExam(), user.getUniqueId(),
-                        latestUpdatedTimeNeckExam, this, this);
-                break;
-            case CLINICAL_NOTE_NOSE_EXAM_SUGGESTIONS:
-                Long latestUpdatedTimeNoseExam = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.NOSE_EXAM_SUGGESTIONS);
-                WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(NoseExamSuggestions.class, WebServiceType.GET_NOSE_EXAM_SUGGESTIONS, clinicalNotesDynamicField.getNoseExam(), user.getUniqueId(),
-                        latestUpdatedTimeNoseExam, this, this);
-                break;
-            case CLINICAL_NOTE_ORAL_CAVITY_THROAT_EXAM_SUGGESTIONS:
-                Long latestUpdatedTimeOralCavityExam = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.ORAL_CAVITY_THROAT_EXAM_SUGGESTIONS);
-                WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(OralCavityThroatExamSuggestions.class, WebServiceType.GET_ORAL_CAVITY_THROAT_EXAM_SUGGESTIONS, clinicalNotesDynamicField.getOralCavityThroatExam(), user.getUniqueId(),
-                        latestUpdatedTimeOralCavityExam, this, this);
-                break;
-            case CLINICAL_NOTE_PC_EARS_SUGGESTIONS:
-                Long latestUpdatedTimePcEars = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.PC_EARS_SUGGESTIONS);
-                WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(PcEarsSuggestions.class, WebServiceType.GET_PC_EARS_SUGGESTIONS, clinicalNotesDynamicField.getPcEars(), user.getUniqueId(),
-                        latestUpdatedTimePcEars, this, this);
-                break;
-            case CLINICAL_NOTE_PC_NOSE_SUGGESTIONS:
-                Long latestUpdatedTimePcNose = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.PC_NOSE_SUGGESTIONS);
-                WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(PcNoseSuggestions.class, WebServiceType.GET_PC_NOSE_SUGGESTIONS, clinicalNotesDynamicField.getPcNose(), user.getUniqueId(),
-                        latestUpdatedTimePcNose, this, this);
-                break;
-            case CLINICAL_NOTE_PC_ORAL_CAVITY_SUGGESTIONS:
-                Long latestUpdatedTimePcOralCavity = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.PC_ORAL_CAVITY_SUGGESTIONS);
-                WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(PcOralCavitySuggestions.class, WebServiceType.GET_PC_ORAL_CAVITY_SUGGESTIONS, clinicalNotesDynamicField.getPcOralCavity(), user.getUniqueId(),
-                        latestUpdatedTimePcOralCavity, this, this);
-                break;
-            case CLINICAL_NOTE_PC_THROAT_SUGGESTIONS:
-                Long latestUpdatedTimePcThroat = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.PC_THROAT_SUGGESTIONS);
-                WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(PcThroatSuggestions.class, WebServiceType.GET_PC_THROAT_SUGGESTIONS, clinicalNotesDynamicField.getPcThroat(), user.getUniqueId(),
-                        latestUpdatedTimePcThroat, this, this);
-                break;
-            case CLINICAL_NOTE_PROCEDURE_NOTE_SUGGESTIONS:
-                Long latestUpdatedTimeProcedureNote = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.PROCEDURE_NOTE_SUGGESTIONS);
-                WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(ProcedureNoteSuggestions.class, WebServiceType.GET_PROCEDURE_NOTE_SUGGESTIONS, clinicalNotesDynamicField.getProcedureNote(), user.getUniqueId(),
-                        latestUpdatedTimeProcedureNote, this, this);
-                break;
+                    break;
+                case DRUG_CUSTOM:
+                    Long latestUpdatedTimeDrug = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.TEMP_DRUG);
+                    WebDataServiceImpl.getInstance(mApp).getDrugsList(WebServiceType.GET_DRUGS_LIST_CUSTOM, Drug.class, user.getUniqueId(), latestUpdatedTimeDrug, true, this, this);
+                    break;
+                case FREQUENCY:
+                    //getting dosages/frequency
+                    Long latestUpdatedTimeDosage = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.DRUG_DOSAGE);
+                    WebDataServiceImpl.getInstance(mApp)
+                            .getDosageDirection(WebServiceType.GET_DRUG_DOSAGE, DrugDosage.class, true, this.user.getUniqueId(), latestUpdatedTimeDosage, this, this);
+                    break;
+                case DIRECTION:
+                    //getting directions
+                    Long latestUpdatedTimeDirection = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.DRUG_DIRECTION);
+                    WebDataServiceImpl.getInstance(mApp)
+                            .getDosageDirection(WebServiceType.GET_DIRECTION, DrugDirection.class, true, this.user.getUniqueId(), latestUpdatedTimeDirection, this, this);
+                    break;
+                case NOTES_DIAGRAM:
+                    //getting diagrams list
+                    Long latestUpdatedTimeNotes = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.DIAGRAMS);
+                    WebDataServiceImpl.getInstance(mApp).getDiagramsList(Diagram.class, latestUpdatedTimeNotes, user.getUniqueId(), this, this);
+                    break;
+                case CLINICAL_NOTES_DATA:
+                case CLINICAL_NOTE_COMPLAINT_SUGGESTIONS:
+                    Long latestUpdatedTimeComplaint = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.COMPLAINT);
+                    WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(ComplaintSuggestions.class, WebServiceType.GET_COMPLAINT_SUGGESTIONS, clinicalNotesDynamicField.getComplaint(), user.getUniqueId(),
+                            latestUpdatedTimeComplaint, this, this);
+                    break;
+                case CLINICAL_NOTE_OBSERVATION_SUGGESTIONS:
+                    Long latestUpdatedTimeObservation = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.OBSERVATION);
+                    WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(ObservationSuggestions.class, WebServiceType.GET_OBSERVATION_SUGGESTIONS, clinicalNotesDynamicField.getObservation(), user.getUniqueId(),
+                            latestUpdatedTimeObservation, this, this);
+                    break;
+                case CLINICAL_NOTE_INVESTIGATION_SUGGESTIONS:
+                    Long latestUpdatedTimeInvestigation = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.INVESTIGATION);
+                    WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(InvestigationSuggestions.class, WebServiceType.GET_INVESTIGATION_SUGGESTIONS, clinicalNotesDynamicField.getInvestigation(), user.getUniqueId(),
+                            latestUpdatedTimeInvestigation, this, this);
+                    break;
+                case CLINICAL_NOTE_OBSTETRIC_HISTORY_SUGGESTIONS:
+                    Long latestUpdatedTimeObstetricHistory = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.OBSTETRIC_HISTORY_SUGGESTIONS);
+                    WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(ObstetricHistorySuggestions.class, WebServiceType.GET_OBSTETRIC_HISTORY_SUGGESTIONS, clinicalNotesDynamicField.getObstetricHistory(), user.getUniqueId(),
+                            latestUpdatedTimeObstetricHistory, this, this);
+                    break;
+                case CLINICAL_NOTE_GENERAL_EXAMINATION_SUGGESTIONS:
+                    Long latestUpdatedTimeGeneralExamination = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.GENERAL_EXAMINATION_SUGGESTIONS);
+                    WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(GeneralExaminationSuggestions.class, WebServiceType.GET_GENERAL_EXAMINATION_SUGGESTIONS, clinicalNotesDynamicField.getGeneralExam(), user.getUniqueId(),
+                            latestUpdatedTimeGeneralExamination, this, this);
+                    break;
+                case CLINICAL_NOTE_PRESENT_COMPLAINT_SUGGESTIONS:
+                    Long latestUpdatedTimePresentComplaint = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.PRESENT_COMPLAINT_SUGGESTIONS);
+                    WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(PresentComplaintSuggestions.class, WebServiceType.GET_PRESENT_COMPLAINT_SUGGESTIONS, clinicalNotesDynamicField.getPresentComplaint(), user.getUniqueId(),
+                            latestUpdatedTimePresentComplaint, this, this);
+                    break;
+                case CLINICAL_NOTE_HISTORY_OF_PRESENT_COMPLAINT_SUGGESTIONS:
+                    Long latestUpdatedTimeHistoryPresentComplaint = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.HISTORY_OF_PRESENT_COMPLAINT_SUGGESTIONS);
+                    WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(HistoryPresentComplaintSuggestions.class, WebServiceType.GET_HISTORY_OF_PRESENT_COMPLAINT_SUGGESTIONS, clinicalNotesDynamicField.getPresentComplaintHistory(), user.getUniqueId(),
+                            latestUpdatedTimeHistoryPresentComplaint, this, this);
+                    break;
+                case CLINICAL_NOTE_SYSTEMIC_EXAMINATION_SUGGESTIONS:
+                    Long latestUpdatedTimeSystemicExamination = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.SYSTEMIC_EXAMINATION_SUGGESTIONS);
+                    WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(SystemicExaminationSuggestions.class, WebServiceType.GET_SYSTEMIC_EXAMINATION_SUGGESTIONS, clinicalNotesDynamicField.getSystemExam(), user.getUniqueId(),
+                            latestUpdatedTimeSystemicExamination, this, this);
+                    break;
+                case CLINICAL_NOTE_PROVISIONAL_DIAGNOSIS_SUGGESTIONS:
+                    Long latestUpdatedTimeProvisionalDiagnosis = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.PROVISIONAL_DIAGNOSIS_SUGGESTIONS);
+                    WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(ProvisionalDiagnosisSuggestions.class, WebServiceType.GET_PROVISIONAL_DIAGNOSIS_SUGGESTIONS, clinicalNotesDynamicField.getProvisionalDiagnosis(), user.getUniqueId(),
+                            latestUpdatedTimeProvisionalDiagnosis, this, this);
+                    break;
+                case CLINICAL_NOTE_ECG_DETAILS_SUGGESTIONS:
+                    Long latestUpdatedTimeEcgDetails = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.ECG_DETAILS_SUGGESTIONS);
+                    WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(EcgDetailSuggestions.class, WebServiceType.GET_ECG_SUGGESTIONS, clinicalNotesDynamicField.getEcgDetails(), user.getUniqueId(),
+                            latestUpdatedTimeEcgDetails, this, this);
+                    break;
+                case CLINICAL_NOTE_ECHO_SUGGESTIONS:
+                    Long latestUpdatedTimeEco = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.ECHO_SUGGESTIONS);
+                    WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(EchoSuggestions.class, WebServiceType.GET_ECHO_SUGGESTIONS, clinicalNotesDynamicField.getEcho(), user.getUniqueId(),
+                            latestUpdatedTimeEco, this, this);
+                    break;
+                case CLINICAL_NOTE_X_RAY_DETAILS_SUGGESTIONS:
+                    Long latestUpdatedTimeXrayDetails = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.X_RAY_DETAILS_SUGGESTIONS);
+                    WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(XrayDetailSuggestions.class, WebServiceType.GET_XRAY_SUGGESTIONS, clinicalNotesDynamicField.getGetxRayDetails(), user.getUniqueId(),
+                            latestUpdatedTimeXrayDetails, this, this);
+                    break;
+                case CLINICAL_NOTE_HOLTER_SUGGESTIONS:
+                    Long latestUpdatedTimeHolder = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.HOLTER_SUGGESTIONS);
+                    WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(HolterSuggestions.class, WebServiceType.GET_HOLTER_SUGGESTIONS, clinicalNotesDynamicField.getHolter(), user.getUniqueId(),
+                            latestUpdatedTimeHolder, this, this);
+                    break;
+                case CLINICAL_NOTE_PA_SUGGESTIONS:
+                    Long latestUpdatedTimePa = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.PA_SUGGESTIONS);
+                    WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(PaSuggestions.class, WebServiceType.GET_PA_SUGGESTIONS, clinicalNotesDynamicField.getPa(), user.getUniqueId(),
+                            latestUpdatedTimePa, this, this);
+                    break;
+                case CLINICAL_NOTE_PV_SUGGESTIONS:
+                    Long latestUpdatedTimePv = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.PV_SUGGESTIONS);
+                    WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(PvSuggestions.class, WebServiceType.GET_PV_SUGGESTIONS, clinicalNotesDynamicField.getPv(), user.getUniqueId(),
+                            latestUpdatedTimePv, this, this);
+                    break;
+                case CLINICAL_NOTE_PS_SUGGESTIONS:
+                    Long latestUpdatedTimePs = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.PS_SUGGESTIONS);
+                    WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(PsSuggestions.class, WebServiceType.GET_PS_SUGGESTIONS, clinicalNotesDynamicField.getPs(), user.getUniqueId(),
+                            latestUpdatedTimePs, this, this);
+                    break;
+                case CLINICAL_NOTE_INDICATION_OF_USG_SUGGESTIONS:
+                    Long latestUpdatedTimeIndicationOfUsg = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.INDICATION_OF_USG_SUGGESTIONS);
+                    WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(IndicationOfUsgSuggestions.class, WebServiceType.GET_INDICATION_OF_USG_SUGGESTIONS, clinicalNotesDynamicField.getIndicationOfUSG(), user.getUniqueId(),
+                            latestUpdatedTimeIndicationOfUsg, this, this);
+                    break;
+                case CLINICAL_NOTE_NOTES_SUGGESTIONS:
+                    Long latestUpdatedTimeNote = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.NOTES_SUGGESTIONS);
+                    WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(NotesSuggestions.class, WebServiceType.GET_NOTES_SUGGESTIONS, clinicalNotesDynamicField.getNote(), user.getUniqueId(),
+                            latestUpdatedTimeNote, this, this);
+                    break;
+                case CLINICAL_NOTE_MENSTRUAL_HISTORY_SUGGESTIONS:
+                    Long latestUpdatedTimeMenstrualHistory = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.MENSTRUAL_HISTORY_SUGGESTIONS);
+                    WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(MenstrualHistorySuggestions.class, WebServiceType.GET_MENSTRUAL_HISTORY_SUGGESTIONS, clinicalNotesDynamicField.getMenstrualHistory(), user.getUniqueId(),
+                            latestUpdatedTimeMenstrualHistory, this, this);
+                    break;
+                case CLINICAL_NOTE_DIAGNOSIS_SUGGESTIONS:
+                    Long latestUpdatedTimeDiagnosis = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.DIAGNOSIS);
+                    WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(DiagnosisSuggestions.class, WebServiceType.GET_DIAGNOSIS_SUGGESTIONS, clinicalNotesDynamicField.getDiagnosis(), user.getUniqueId(),
+                            latestUpdatedTimeDiagnosis, this, this);
+                    break;
+                case CLINICAL_NOTE_EAR_EXAM_SUGGESTIONS:
+                    Long latestUpdatedTimeEarExam = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.EAR_EXAM_SUGGESTIONS);
+                    WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(EarsExamSuggestions.class, WebServiceType.GET_EAR_EXAM_SUGGESTIONS, clinicalNotesDynamicField.getEarsExam(), user.getUniqueId(),
+                            latestUpdatedTimeEarExam, this, this);
+                    break;
+                case CLINICAL_NOTE_INDIRECT_LARYGOSCOPY_EXAM_SUGGESTIONS:
+                    Long latestUpdatedTimeIndirectLarygocsopyExam = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.INDIRECT_LARYGOSCOPY_EXAM_SUGGESTIONS);
+                    WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(IndirectLarygoscopyExamSuggestions.class, WebServiceType.GET_INDIRECT_LARYGOSCOPY_EXAM_SUGGESTIONS, clinicalNotesDynamicField.getIndirectLarygoscopyExam(), user.getUniqueId(),
+                            latestUpdatedTimeIndirectLarygocsopyExam, this, this);
+
+                    break;
+                case CLINICAL_NOTE_NECK_EXAM_SUGGESTIONS:
+                    Long latestUpdatedTimeNeckExam = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.NECK_EXAM_SUGGESTIONS);
+                    WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(NeckExamSuggestions.class, WebServiceType.GET_NECK_EXAM_SUGGESTIONS, clinicalNotesDynamicField.getNeckExam(), user.getUniqueId(),
+                            latestUpdatedTimeNeckExam, this, this);
+                    break;
+                case CLINICAL_NOTE_NOSE_EXAM_SUGGESTIONS:
+                    Long latestUpdatedTimeNoseExam = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.NOSE_EXAM_SUGGESTIONS);
+                    WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(NoseExamSuggestions.class, WebServiceType.GET_NOSE_EXAM_SUGGESTIONS, clinicalNotesDynamicField.getNoseExam(), user.getUniqueId(),
+                            latestUpdatedTimeNoseExam, this, this);
+                    break;
+                case CLINICAL_NOTE_ORAL_CAVITY_THROAT_EXAM_SUGGESTIONS:
+                    Long latestUpdatedTimeOralCavityExam = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.ORAL_CAVITY_THROAT_EXAM_SUGGESTIONS);
+                    WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(OralCavityThroatExamSuggestions.class, WebServiceType.GET_ORAL_CAVITY_THROAT_EXAM_SUGGESTIONS, clinicalNotesDynamicField.getOralCavityThroatExam(), user.getUniqueId(),
+                            latestUpdatedTimeOralCavityExam, this, this);
+                    break;
+                case CLINICAL_NOTE_PC_EARS_SUGGESTIONS:
+                    Long latestUpdatedTimePcEars = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.PC_EARS_SUGGESTIONS);
+                    WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(PcEarsSuggestions.class, WebServiceType.GET_PC_EARS_SUGGESTIONS, clinicalNotesDynamicField.getPcEars(), user.getUniqueId(),
+                            latestUpdatedTimePcEars, this, this);
+                    break;
+                case CLINICAL_NOTE_PC_NOSE_SUGGESTIONS:
+                    Long latestUpdatedTimePcNose = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.PC_NOSE_SUGGESTIONS);
+                    WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(PcNoseSuggestions.class, WebServiceType.GET_PC_NOSE_SUGGESTIONS, clinicalNotesDynamicField.getPcNose(), user.getUniqueId(),
+                            latestUpdatedTimePcNose, this, this);
+                    break;
+                case CLINICAL_NOTE_PC_ORAL_CAVITY_SUGGESTIONS:
+                    Long latestUpdatedTimePcOralCavity = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.PC_ORAL_CAVITY_SUGGESTIONS);
+                    WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(PcOralCavitySuggestions.class, WebServiceType.GET_PC_ORAL_CAVITY_SUGGESTIONS, clinicalNotesDynamicField.getPcOralCavity(), user.getUniqueId(),
+                            latestUpdatedTimePcOralCavity, this, this);
+                    break;
+                case CLINICAL_NOTE_PC_THROAT_SUGGESTIONS:
+                    Long latestUpdatedTimePcThroat = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.PC_THROAT_SUGGESTIONS);
+                    WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(PcThroatSuggestions.class, WebServiceType.GET_PC_THROAT_SUGGESTIONS, clinicalNotesDynamicField.getPcThroat(), user.getUniqueId(),
+                            latestUpdatedTimePcThroat, this, this);
+                    break;
+                case CLINICAL_NOTE_PROCEDURE_NOTE_SUGGESTIONS:
+                    Long latestUpdatedTimeProcedureNote = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.PROCEDURE_NOTE_SUGGESTIONS);
+                    WebDataServiceImpl.getInstance(mApp).getClinicalNoteSuggestionsList(ProcedureNoteSuggestions.class, WebServiceType.GET_PROCEDURE_NOTE_SUGGESTIONS, clinicalNotesDynamicField.getProcedureNote(), user.getUniqueId(),
+                            latestUpdatedTimeProcedureNote, this, this);
+                    break;
 
           /*  case CLINICAL_NOTE_EAR_EXAM_SUGGESTIONS:
             case CLINICAL_NOTE_INDIRECT_LARYGOSCOPY_EXAM_SUGGESTIONS:
@@ -471,33 +458,34 @@ public class SyncFragment extends HealthCocoFragment implements View.OnClickList
             case CLINICAL_NOTE_PC_ORAL_CAVITY_SUGGESTIONS:
             case CLINICAL_NOTE_PC_THROAT_SUGGESTIONS:
             case CLINICAL_NOTE_PROCEDURE_NOTE_SUGGESTIONS:*/
-            case CLINICAL_NOTE_ADVICE_SUGGESTIONS:
-                Long latestUpdatedTimeAdvice = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.ADVICE_SUGGESTIONS);
-                WebDataServiceImpl.getInstance(mApp).getAdviceSuggestionsList(AdviceSuggestion.class, WebServiceType.GET_SEARCH_ADVICE_SOLR, user.getUniqueId(),
-                        latestUpdatedTimeAdvice, this, this);
-                break;
+                case CLINICAL_NOTE_ADVICE_SUGGESTIONS:
+                    Long latestUpdatedTimeAdvice = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.ADVICE_SUGGESTIONS);
+                    WebDataServiceImpl.getInstance(mApp).getAdviceSuggestionsList(AdviceSuggestion.class, WebServiceType.GET_SEARCH_ADVICE_SOLR, user.getUniqueId(),
+                            latestUpdatedTimeAdvice, this, this);
+                    break;
 
-            case DRUG_TYPE:
-                //getting drugTypesList
-                Long latestUpdatedTimeStrengthUnit = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.STRENGTH_UNIT);
-                WebDataServiceImpl.getInstance(mApp)
-                        .getDrugType(WebServiceType.GET_DRUG_TYPE, DrugType.class, false, this.user.getUniqueId(), latestUpdatedTimeStrengthUnit, this, this);
-                break;
-            case DRUG_DURATION_UNIT:
-                //getting durationUnit
-                Long latestUpdatedTimeDuration = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.DRUG_DURATION_UNIT);
-                WebDataServiceImpl.getInstance(mApp)
-                        .getDosageDirection(WebServiceType.GET_DURATION_UNIT, DrugDurationUnit.class, true, this.user.getUniqueId(), latestUpdatedTimeDuration, this, this);
-                break;
-            case REFERENCES:
-                //getting references
-                Long latestUpdatedTimeReference = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.REFERENCE);
-                WebDataServiceImpl.getInstance(mApp)
-                        .getReference(Reference.class, user.getUniqueId(), latestUpdatedTimeReference, BooleanTypeValues.TRUE, this, this);
-                break;
-            case UI_PERMISSIONS:
-                WebDataServiceImpl.getInstance(mApp).getBothUIPermissionsForDoctor(UiPermissionsBoth.class, user.getUniqueId(), this, this);
-                break;
+                case DRUG_TYPE:
+                    //getting drugTypesList
+                    Long latestUpdatedTimeStrengthUnit = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.STRENGTH_UNIT);
+                    WebDataServiceImpl.getInstance(mApp)
+                            .getDrugType(WebServiceType.GET_DRUG_TYPE, DrugType.class, false, this.user.getUniqueId(), latestUpdatedTimeStrengthUnit, this, this);
+                    break;
+                case DRUG_DURATION_UNIT:
+                    //getting durationUnit
+                    Long latestUpdatedTimeDuration = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.DRUG_DURATION_UNIT);
+                    WebDataServiceImpl.getInstance(mApp)
+                            .getDosageDirection(WebServiceType.GET_DURATION_UNIT, DrugDurationUnit.class, true, this.user.getUniqueId(), latestUpdatedTimeDuration, this, this);
+                    break;
+                case REFERENCES:
+                    //getting references
+                    Long latestUpdatedTimeReference = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(LocalTabelType.REFERENCE);
+                    WebDataServiceImpl.getInstance(mApp)
+                            .getReference(Reference.class, user.getUniqueId(), latestUpdatedTimeReference, BooleanTypeValues.TRUE, this, this);
+                    break;
+                case UI_PERMISSIONS:
+                    WebDataServiceImpl.getInstance(mApp).getBothUIPermissionsForDoctor(UiPermissionsBoth.class, user.getUniqueId(), this, this);
+                    break;
+            }
         }
     }
 
@@ -506,7 +494,7 @@ public class SyncFragment extends HealthCocoFragment implements View.OnClickList
             latestUpdatedTimeContact = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(user, LocalTabelType.REGISTERED_PATIENTS_DETAILS_SYNC);
         }
         WebDataServiceImpl.getInstance(mApp).getContactsList(RegisteredPatientDetailsUpdated.class, user.getUniqueId(),
-                user.getForeignHospitalId(), user.getForeignLocationId(), latestUpdatedTimeContact, user, PAGE_NUMBER, ContactsListFragment.MAX_NUMBER_OF_CONTACT, null, this, this);
+                user.getForeignHospitalId(), user.getForeignLocationId(), latestUpdatedTimeContact, user, PAGE_NUMBER, MAX_NUMBER_OF_EVENTS, null, this, this);
 //                WebDataServiceImpl.getInstance(mApp).getContactsList(RegisteredPatientDetailsUpdated.class, user.getUniqueId(),
 //                        user.getForeignHospitalId(), user.getForeignLocationId(), latestUpdatedTimeContact, user,
 //                        this, this);
@@ -574,27 +562,22 @@ public class SyncFragment extends HealthCocoFragment implements View.OnClickList
 
     @Override
     public void onErrorResponse(VolleyResponseBean volleyResponseBean, String errorMessage) {
+        mActivity.hideProgressDialog();
         LogUtils.LOGD(TAG, "Success " + String.valueOf(volleyResponseBean.getWebServiceType()));
         stopAnimationAndStartNext(volleyResponseBean.getWebServiceType());
         if (Util.isNullOrEmptyList(syncAllTypeList))
             for (SyncAllType syncAllType : syncAllTypeList)
                 stopAnimation(false, syncAllType);
-
-        Util.isSyncActive = false;
-        Util.sendBroadcast(mApp, ContactsListFragment.INTENT_REFRESH_PATIENT_COUNT);
-        refreshPatientsSyncing();
     }
 
     @Override
     public void onNetworkUnavailable(WebServiceType webServiceType) {
+        mActivity.hideProgressDialog();
         if (Util.isNullOrEmptyList(syncAllTypeList))
             for (SyncAllType syncAllType : syncAllTypeList)
                 stopAnimation(false, syncAllType);
 
         Util.showToast(mActivity, R.string.user_offline);
-        Util.isSyncActive = false;
-        Util.sendBroadcast(mApp, ContactsListFragment.INTENT_REFRESH_PATIENT_COUNT);
-        refreshPatientsSyncing();
     }
 
     @Override
@@ -605,30 +588,26 @@ public class SyncFragment extends HealthCocoFragment implements View.OnClickList
                 case FRAGMENT_INITIALISATION:
                     if (!Util.isNullOrEmptyList(syncAllHashmap))
                         initData();
-                    if (Util.isSyncActive)
-                        isEndOfListAchieved = false;
                     break;
                 case GET_CONTACTS:
+//                    SyncAllType syncAllTypeContact = SyncAllType.CONTACT;
+                 /*   if (!Util.isNullOrEmptyList(response.getDataList())) {
+                        new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_PATIENTS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                        return;
+                    }*/
                     if (!Util.isNullOrEmptyList(response.getDataList())) {
-                        if (Util.isNullOrZeroNumber(MAX_COUNT) || isTotalCountIsGreater()) {
-                            updatePatientCount(response);
-                        }
-                        if (Util.isNullOrEmptyList(response.getDataList()) || response.getDataList().size() < ContactsListFragment.MAX_NUMBER_OF_CONTACT
-                                || Util.isNullOrEmptyList(response.getDataList())) {
+                        if (Util.isNullOrEmptyList(response.getDataList()) || response.getDataList().size() < MAX_NUMBER_OF_EVENTS || Util.isNullOrEmptyList(response.getDataList())) {
                             isEndOfListAchieved = true;
+                            mActivity.updateProgressDialog(10, 10);
                         } else {
-                            PAGE_NUMBER = PAGE_NUMBER + 1;
+                            showProgressDialog(response);
                         }
                         new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_PATIENTS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
                         return;
-                    } else {
-                        if (Util.isSyncActive && !response.isFromLocalAfterApiSuccess()) {
-                            isEndOfListAchieved = true;
-                            Util.isSyncActive = false;
-                            Util.sendBroadcast(mApp, ContactsListFragment.INTENT_REFRESH_PATIENT_COUNT);
-                        }
                     }
+                    Util.sendBroadcast(mApp, MenuDrawerFragment.INTENT_REFRESH_PATIENT_COUNT);
                     break;
+
                 case GET_DATA_PERMISSION:
 //                    SyncAllType syncAllTypeContact = SyncAllType.CONTACT;
                     if (response.getData() != null) {
@@ -955,27 +934,52 @@ public class SyncFragment extends HealthCocoFragment implements View.OnClickList
                 default:
                     break;
             }
-            if (isEndOfListAchieved) {
-                Util.isSyncActive = false;
-                stopAnimationAndStartNext(response.getWebServiceType());
-                refreshPatientsSyncing();
-            }
+
+            stopAnimationAndStartNext(response.getWebServiceType());
             if (Util.isNullOrEmptyList(syncAllTypeList))
                 stopAnimation();
         }
         mActivity.hideLoading();
     }
 
-    private boolean isPaginationRequired() {
+    private boolean isPaginationRequired(VolleyResponseBean response) {
+        if (response.getData() instanceof Long)
+            MAX_COUNT = (long) response.getData();
+        else if (response.getData() instanceof Double) {
+            Double data = (Double) response.getData();
+            MAX_COUNT = Math.round(data);
+        }
         long count = LocalDataServiceImpl.getInstance(mApp).getListCount(user);
 
         if (count < MAX_COUNT) {
-            PAGE_NUMBER = (int) (count / ContactsListFragment.MAX_NUMBER_OF_CONTACT);
+            mActivity.showProgressDialog();
+            PAGE_NUMBER = (int) (count / MAX_NUMBER_OF_EVENTS);
+            int progess = (int) ((PAGE_NUMBER * MAX_NUMBER_OF_EVENTS * 100) / MAX_COUNT);
+            mActivity.updateProgressDialog(MAX_COUNT, progess);
             isEndOfListAchieved = false;
             latestUpdatedTimeContact = 0l;
+            syncContact();
             return true;
-        } else
-            return false;
+        } else return false;
+    }
+
+    private void showProgressDialog(VolleyResponseBean response) {
+        if (response.getData() instanceof Long)
+            MAX_COUNT = (long) response.getData();
+        else if (response.getData() instanceof Double) {
+            Double data = (Double) response.getData();
+            MAX_COUNT = Math.round(data);
+            if (MAX_COUNT > (2 * MAX_NUMBER_OF_EVENTS)) {
+                if (isEndOfListAchieved)
+                    mActivity.showProgressDialog();
+            }
+            isEndOfListAchieved = false;
+            PAGE_NUMBER = PAGE_NUMBER + 1;
+            int progess = (int) ((MAX_NUMBER_OF_EVENTS * 100) / MAX_COUNT);
+            mActivity.updateProgressDialog(MAX_COUNT, progess);
+
+        }
+
     }
 
     private void stopAnimationAndStartNext(WebServiceType webServiceType) {
@@ -1062,17 +1066,17 @@ public class SyncFragment extends HealthCocoFragment implements View.OnClickList
             case ADD_PATIENTS:
                 LocalDataServiceImpl.getInstance(mApp).
                         addPatientsList((ArrayList<RegisteredPatientDetailsUpdated>) (ArrayList<?>) response.getDataList());
-                response.setIsFromLocalAfterApiSuccess(true);
-                if (!isEndOfListAchieved && !Util.isNullOrZeroNumber(MAX_COUNT)) {
+//                updateSyncObjectInHashMap(SyncAllType.CONTACT);
+
+                if (!isEndOfListAchieved) {
                     syncContact();
                 } else {
-                    Util.isSyncActive = false;
-                    resetListAndPagingAttributes();
-                    updateSyncObjectInHashMap(SyncAllType.CONTACT);
+                    if (!isPaginationRequired(response)) {
+                        mActivity.hideProgressDialog();
+                        resetListAndPagingAttributes();
+                        updateSyncObjectInHashMap(SyncAllType.CONTACT);
+                    }
                 }
-                Util.sendBroadcast(mApp, MenuDrawerFragment.INTENT_REFRESH_PATIENT_COUNT);
-                Util.sendBroadcast(mApp, ContactsListFragment.INTENT_REFRESH_PATIENT_COUNT);
-
                 break;
             case ADD_DATA_PERMISSIONS:
                 LocalDataServiceImpl.getInstance(mApp).
@@ -1361,44 +1365,5 @@ public class SyncFragment extends HealthCocoFragment implements View.OnClickList
             }
         } else
             onNetworkUnavailable(null);
-    }
-
-    private void updatePatientCount(VolleyResponseBean response) {
-        long totalCount = 0;
-        if (response.getData() != null && response.getData() instanceof Long)
-            totalCount = (long) response.getData();
-        else if (response.getData() != null && response.getData() instanceof Double) {
-            Double data = (Double) response.getData();
-            totalCount = Math.round(data);
-        }
-        if (!Util.isNullOrZeroNumber(totalCount)) {
-            MAX_COUNT = totalCount;
-            PatientCount patientCount = new PatientCount();
-            patientCount.setDoctorId(user.getUniqueId());
-            patientCount.setLocationId(user.getForeignLocationId());
-            patientCount.setHospitalId(user.getForeignHospitalId());
-            patientCount.setCount(totalCount);
-            patientCount.setSyncCompleted(false);
-            LocalDataServiceImpl.getInstance(mApp).
-                    addPatientCount(patientCount);
-        }
-    }
-
-    private boolean isTotalCountIsGreater() {
-        long count = LocalDataServiceImpl.getInstance(mApp).getListCount(user);
-        if (count <= MAX_COUNT)
-            return false;
-        else
-            return true;
-    }
-
-    private void refreshPatientsSyncing() {
-        if (Util.isSyncActive) {
-            layoutSyncInProgress.setVisibility(View.VISIBLE);
-            btSyncAll.setVisibility(View.GONE);
-        } else {
-            layoutSyncInProgress.setVisibility(View.GONE);
-            btSyncAll.setVisibility(View.VISIBLE);
-        }
     }
 }

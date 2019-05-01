@@ -6170,44 +6170,4 @@ public class LocalDataServiceImpl {
     private enum FromTableType {
         ADD_TEMPLATES, ADD_TREATMENT, ADD_PRESCRIPTION
     }
-
-
-    public void addPatientCount(PatientCount patientCount) {
-        PatientCount patientCountOld = Select.from(PatientCount.class).where(Condition.prop(LocalDatabaseUtils.KEY_LOCATION_ID).eq(patientCount.getLocationId()),
-                Condition.prop(LocalDatabaseUtils.KEY_HOSPITAL_ID).eq(patientCount.getHospitalId()),
-                Condition.prop(LocalDatabaseUtils.KEY_DOCTOR_ID).eq(patientCount.getDoctorId())).first();
-        if (patientCountOld != null)
-            patientCountOld.delete();
-        patientCount.save();
-    }
-
-    public PatientCount getPatientCount(User user) {
-        PatientCount patientCount = Select.from(PatientCount.class).where(Condition.prop(LocalDatabaseUtils.KEY_LOCATION_ID).eq(user.getForeignLocationId()),
-                Condition.prop(LocalDatabaseUtils.KEY_HOSPITAL_ID).eq(user.getForeignHospitalId()),
-                Condition.prop(LocalDatabaseUtils.KEY_DOCTOR_ID).eq(user.getUniqueId())).first();
-        return patientCount;
-    }
-
-    public long getPatientCountLong(User user) {
-        PatientCount patientCount = getPatientCount(user);
-        if (patientCount != null)
-            return patientCount.getCount();
-        else
-            return 0l;
-    }
-
-    public boolean getPatientSycnStatus(User user) {
-        PatientCount patientCount = getPatientCount(user);
-        return patientCount.isSyncCompleted();
-    }
-
-    public void updatePatientCount(User user, Long count, Boolean syncStatus) {
-        PatientCount patientCount = getPatientCount(user);
-        if (count != null)
-            patientCount.setCount(count);
-        if (syncStatus != null)
-            patientCount.setSyncCompleted(syncStatus);
-        patientCount.update();
-    }
-
 }
