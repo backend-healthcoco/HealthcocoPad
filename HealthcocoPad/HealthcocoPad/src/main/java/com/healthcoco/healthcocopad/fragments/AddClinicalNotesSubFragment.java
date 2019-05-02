@@ -967,6 +967,8 @@ public class AddClinicalNotesSubFragment extends HealthCocoFragment implements V
                 diagramArrayList.add(dig);
             }
             initDiagrams(diagramArrayList);
+        } else if (!Util.isNullOrBlank(diagram.getUniqueId()) && !Util.isNullOrBlank(diagram.getDiagramUrl())) {
+            addDiagramInContainer(diagram, diagram.getTags(), diagram.getUniqueId(), diagram.getDiagramUrl());
         }
     }
 
