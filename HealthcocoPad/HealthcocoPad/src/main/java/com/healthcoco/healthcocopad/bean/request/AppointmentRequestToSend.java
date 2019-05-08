@@ -40,7 +40,7 @@ public class AppointmentRequestToSend {
     private DOB dob;
     private boolean isChild;
     private Integer age;
-
+    private String pnum;
 
     public String getLocationId() {
         return locationId;
@@ -248,5 +248,13 @@ public class AppointmentRequestToSend {
 
     public void setAge(Integer age) {
         this.age = age;
+    }
+
+    public String getPnum() {
+        return pnum;
+    }
+
+    public void setPnum(String pnum) {
+        this.pnum = pnum;
     }
 }

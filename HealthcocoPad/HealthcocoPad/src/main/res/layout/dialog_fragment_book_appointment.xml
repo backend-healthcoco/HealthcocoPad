@@ -325,6 +325,30 @@
                                             android:textColorHint="@color/grey_hint_color" />
 
                                     </android.support.design.widget.TextInputLayout>
+                                    <LinearLayout
+                                        android:id="@+id/layout_pnum"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_centerInParent="true"
+                                        android:gravity="center"
+                                        android:orientation="horizontal">
+
+                                        <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+                                            style="@style/registration_font_awesome_logos"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="@string/fa_sticky_note" />
+
+                                        <AutoCompleteTextView
+                                            android:id="@+id/edit_pnum"
+                                            style="@style/registration_edittext"
+                                            android:layout_width="0dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_weight="1"
+                                            android:hint="@string/pnum"
+                                            android:inputType="textPersonName|textNoSuggestions|textCapWords"
+                                            android:singleLine="true" />
+                                    </LinearLayout>
 
                                     <LinearLayout
                                         android:id="@+id/container_gender_age"

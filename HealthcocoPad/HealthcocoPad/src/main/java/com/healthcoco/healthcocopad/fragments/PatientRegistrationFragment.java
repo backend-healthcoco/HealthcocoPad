@@ -37,12 +37,12 @@ import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.adapter.GroupsGridViewAdapter;
 import com.healthcoco.healthcocopad.adapter.NotesListViewAdapter;
 import com.healthcoco.healthcocopad.bean.Address;
+import com.healthcoco.healthcocopad.bean.FileDetails;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.request.RegisterNewPatientRequest;
 import com.healthcoco.healthcocopad.bean.server.AlreadyRegisteredPatientsResponse;
 import com.healthcoco.healthcocopad.bean.server.BloodGroup;
 import com.healthcoco.healthcocopad.bean.server.CityResponse;
-import com.healthcoco.healthcocopad.bean.FileDetails;
 import com.healthcoco.healthcocopad.bean.server.DoctorClinicProfile;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.Profession;
@@ -63,7 +63,6 @@ import com.healthcoco.healthcocopad.enums.DialogType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.LocalTabelType;
 import com.healthcoco.healthcocopad.enums.OptionsType;
-import com.healthcoco.healthcocopad.enums.PatientProfileScreenType;
 import com.healthcoco.healthcocopad.enums.RecordType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.CommonListDialogItemClickListener;
@@ -176,7 +175,11 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
     private TextView tvNoGroups;
     private LinearLayout containerAge;
     private DoctorClinicProfile doctorClinicProfile;
-
+    private EditText editPnum;
+    private boolean isPnumChange = false;
+    private TextView tvPId;
+    private LinearLayout layoutPnum;
+    private LinearLayout layoutPID;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -253,7 +256,10 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
         tvNoGroups = (TextView) view.findViewById(R.id.tv_no_groups);
         gvGroups = (GridView) view.findViewById(R.id.gv_groups);
         loadingExistingPatientsList = (LinearLayout) view.findViewById(R.id.loading_existing_patients_list);
-
+        editPnum = (EditText) view.findViewById(R.id.edit_pnum);
+        tvPId = (TextView) view.findViewById(R.id.tv_pid);
+        layoutPnum = (LinearLayout) view.findViewById(R.id.layout_pnum);
+        layoutPID = (LinearLayout) view.findViewById(R.id.layout_pid);
     }
 
     @Override
@@ -266,7 +272,7 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
         btDeleteReferredBy.setOnClickListener(this);
         btAddNote.setOnClickListener(this);
 //        editMobileNumber.addTextChangedListener(new HealthcocoTextWatcher(editMobileNumber, this));
-
+        editPnum.addTextChangedListener(new HealthcocoTextWatcher(editPnum, this));
     }
 
     private void initDefaultData() {
@@ -336,7 +342,13 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
                 }
             }
         }
-
+        if (doctorClinicProfile.getPidHasDate()) {
+            layoutPnum.setVisibility(View.GONE);
+            layoutPID.setVisibility(View.VISIBLE);
+        } else {
+            layoutPnum.setVisibility(View.VISIBLE);
+            layoutPID.setVisibility(View.GONE);
+        }
     }
 
     private void initPatientDetails(Object patientDetails) {
@@ -359,11 +371,15 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
         String panNumber = "";
         String drivingLicense = "";
         String colorCode = "";
+        String pNum = "";
+        String pId = "";
         if (patientDetails instanceof RegisteredPatientDetailsUpdated) {
             RegisteredPatientDetailsUpdated registeredPatientDetailsUpdated = (RegisteredPatientDetailsUpdated) patientDetails;
             imageUrl = Util.getValidatedValue(registeredPatientDetailsUpdated.getImageUrl());
             name = Util.getValidatedValue(registeredPatientDetailsUpdated.getLocalPatientName());
             mobileNumber = Util.getValidatedValue(registeredPatientDetailsUpdated.getMobileNumber());
+            pNum = Util.getValidatedValue(registeredPatientDetailsUpdated.getPnum());
+            pId = Util.getValidatedValue(registeredPatientDetailsUpdated.getPid());
             gender = Util.getValidatedValue(registeredPatientDetailsUpdated.getGender());
             birthday = Util.getDOB(registeredPatientDetailsUpdated.getDob());
             groupIdsToAssign = registeredPatientDetailsUpdated.getGroupIds();
@@ -414,6 +430,12 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
             editMobileNumber.setText(mobileNumber);
             editMobileNumber.setTextColor(Color.BLACK);
         }
+        if (!Util.isNullOrBlank(pNum))
+            editPnum.setText(pNum);
+        else editPnum.setText("");
+        if (!Util.isNullOrBlank(pId))
+            tvPId.setText(pId);
+        else tvPId.setText("");
 
         autotvCity.setText(city);
         editLocality.setText(locality);
@@ -447,11 +469,15 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.container_right_action:
-                Util.checkNetworkStatus(mActivity);
-                if (HealthCocoConstants.isNetworkOnline)
-                    validateData();
-                else
-                    onNetworkUnavailable(null);
+                if (isPnumChange)
+                    checkForPnumExist();
+                else {
+                    Util.checkNetworkStatus(mActivity);
+                    if (HealthCocoConstants.isNetworkOnline)
+                        validateData();
+                    else
+                        onNetworkUnavailable(null);
+                }
                 break;
             case R.id.tv_birthday:
                 openBirthDatePickerDialog();
@@ -475,6 +501,24 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
             case R.id.bt_add_note:
                 mActivity.openAddUpdateNameDialogFragment(WebServiceType.LOCAL_STRING_SAVE, AddUpdateNameDialogType.LOCAL_STRING_SAVE, this, null, "", REQUEST_CODE_REGISTER_PATIENT);
                 break;
+        }
+    }
+
+    private void checkForPnumExist() {
+        String msg = null;
+        EditText selectedEditText = null;
+        String pnum = Util.getValidatedValueOrNull(editPnum);
+        if (Util.isNullOrBlank(pnum)) {
+            selectedEditText = editPnum;
+            msg = getResources().getString(R.string.please_enter_pnum);
+        }
+        if (Util.isNullOrBlank(msg)) {
+            mActivity.showLoading(false);
+            WebDataServiceImpl.getInstance(mApp).checkForPnumExist(Boolean.class, user.getForeignLocationId(), user.getForeignHospitalId(),
+                    pnum, this, this);
+        } else {
+            Util.showErrorOnEditText(selectedEditText);
+            Util.showAlert(mActivity, msg);
         }
     }
 
@@ -747,8 +791,40 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
                 }
                 loadingExistingPatientsList.setVisibility(View.GONE);
                 return;
+            case GET_CHECK_PNUM_EXIST:
+                if (response.getData() instanceof Boolean) {
+                    boolean isDataSuccess = (boolean) response.getData();
+                    if (isDataSuccess) {
+                        showExistedPnumAlert();
+                    } else addPatient();
+                }
+                break;
         }
         mActivity.hideLoading();
+    }
+
+    private void showExistedPnumAlert() {
+        final AlertDialog.Builder alertBuilder = new AlertDialog.Builder(mActivity);
+        alertBuilder.setTitle(R.string.check_pnum_exist);
+        alertBuilder.setMessage(R.string.validation_text_for_pnum);
+        alertBuilder.setCancelable(false);
+        alertBuilder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        alertBuilder.create();
+        alertBuilder.show();
+    }
+
+    private void addPatient() {
+        Util.checkNetworkStatus(mActivity);
+        if (HealthCocoConstants.isNetworkOnline)
+            validateData();
+        else
+            onNetworkUnavailable(null);
     }
 
     private void getGroupsList() {

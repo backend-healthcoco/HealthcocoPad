@@ -223,7 +223,7 @@
                                 android:layout_marginRight="5dp"
                                 android:background="@color/white"
                                 android:gravity="center|start"
-                                android:text="@string/reschedule"
+                                android:text="@string/edit_reschedule"
                                 android:textColor="@drawable/text_selector_grey_blue"
                                 android:textSize="@dimen/text_size_bt_history_edit_sms_email" />
                         </LinearLayout>

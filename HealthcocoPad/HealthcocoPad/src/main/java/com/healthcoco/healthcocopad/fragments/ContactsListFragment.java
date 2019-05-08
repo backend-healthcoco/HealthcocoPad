@@ -320,7 +320,9 @@ public class ContactsListFragment extends HealthCocoFragment implements
 //        swipeRefreshLayout.setColorSchemeResources(R.color.blue_action_bar);
 
         if (!isInHomeActivity) {
-            initEditSearchView(R.string.name_mobile_number, new HealthcocoTextWatcher(editSearch, this), true);
+            if (isPidHasDate())
+                initEditSearchView(R.string.name_mobile_number, new HealthcocoTextWatcher(editSearch, this), true);
+            else initEditSearchView(R.string.search_patient_with_name_number_and_pnum, this);
             btAddNewPatient.setVisibility(View.GONE);
 //            btAddNewPatient.setVisibility(View.GONE);
         } else {

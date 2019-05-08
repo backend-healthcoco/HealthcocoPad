@@ -2031,4 +2031,15 @@ public class WebDataServiceImpl implements GCMRefreshListener {
         }
     }
 
+    public void checkForPnumExist(Class<?> class1, String locationId, String hospitalId, String pnum, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        WebServiceType webServiceType = WebServiceType.GET_CHECK_PNUM_EXIST;
+        if (HealthCocoConstants.isNetworkOnline) {
+            String url = webServiceType.getUrl() + locationId + "/" + hospitalId + "/" + pnum;
+            checkNetworkStatus(mApp);
+            getResponse(Request.Priority.IMMEDIATE, webServiceType, class1, url, null, null, responseListener,
+                    errorListener);
+        } else {
+            errorListener.onNetworkUnavailable(webServiceType);
+        }
+    }
 }

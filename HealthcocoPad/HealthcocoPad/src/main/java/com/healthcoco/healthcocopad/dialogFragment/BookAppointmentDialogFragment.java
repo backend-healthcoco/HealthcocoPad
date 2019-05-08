@@ -1,11 +1,13 @@
 package com.healthcoco.healthcocopad.dialogFragment;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
@@ -174,6 +176,9 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
     private EditText editAge;
     private LinearLayout containerAge;
     private LinearLayout containerGender;
+    private EditText editPnum;
+    private LinearLayout layoutPnum;
+    private boolean isPnumChange = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -219,7 +224,7 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
         }
         mActivity.showLoading(false);
         if (!Util.isNullOrBlank(appointmentId))
-            initActionbarTitle(getResources().getString(R.string.please_reschedule_appointment));
+            initActionbarTitle(getResources().getString(R.string.edit_reschedule_appointment));
         else
             initActionbarTitle(getResources().getString(R.string.new_appointment));
 
@@ -267,6 +272,8 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
         editAge = (EditText) view.findViewById(R.id.edit_age);
         containerAge = (LinearLayout) view.findViewById(R.id.container_age);
         containerGender = (LinearLayout) view.findViewById(R.id.container_gender_age);
+        editPnum = (EditText) view.findViewById(R.id.edit_pnum);
+        layoutPnum = (LinearLayout) view.findViewById(R.id.layout_pnum);
         tvBirthDay.setOnClickListener(this);
         refreshSelectedDate(DateTimeUtil.getCurrentDateLong());
     }
@@ -294,6 +301,7 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
         btClearMobileNumber.setOnClickListener(this);
         editMobileNumber.addTextChangedListener(new HealthcocoTextWatcher(editMobileNumber, this));
         autotvPatientName.addTextChangedListener(new HealthcocoTextWatcher(autotvPatientName, this));
+        editPnum.addTextChangedListener(new HealthcocoTextWatcher(editPnum, this));
     }
 
     @Override
@@ -321,6 +329,9 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
                 tvAppointmentSlotDuration.setText(formattedString);
             }
         }
+        if (doctorClinicProfile.getPidHasDate())
+            layoutPnum.setVisibility(View.GONE);
+        else layoutPnum.setVisibility(View.VISIBLE);
     }
 
 
@@ -498,11 +509,45 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
                     }
                     loadingExistingPatientsList.setVisibility(View.GONE);
                     return;
+                case GET_CHECK_PNUM_EXIST:
+                    if (response.getData() instanceof Boolean) {
+                        boolean isDataSuccess = (boolean) response.getData();
+                        if (isDataSuccess) {
+                            showExistedPnumAlert();
+                        } else bookAppointment();
+                    }
+                    break;
                 default:
                     break;
             }
         }
         mActivity.hideLoading();
+    }
+
+    private void bookAppointment() {
+        if (user != null) {
+            Util.checkNetworkStatus(mActivity);
+            if (HealthCocoConstants.isNetworkOnline) {
+                validateData();
+            } else
+                Util.showToast(mActivity, R.string.user_offline);
+        }
+    }
+
+    private void showExistedPnumAlert() {
+        final AlertDialog.Builder alertBuilder = new AlertDialog.Builder(mActivity);
+        alertBuilder.setTitle(R.string.check_pnum_exist);
+        alertBuilder.setMessage(R.string.validation_text_for_pnum);
+        alertBuilder.setCancelable(false);
+        alertBuilder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        alertBuilder.create();
+        alertBuilder.show();
     }
 
     private void showSearchedPatientsListPopUp(List<AlreadyRegisteredPatientsResponse> list) {
@@ -638,7 +683,9 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
                 openContactsListScreen();
                 break;
             case R.id.bt_save:
-                if (user != null) {
+                if (isPnumChange)
+                    checkForPnumExist();
+                else if (user != null) {
                     Util.checkNetworkStatus(mActivity);
                     if (HealthCocoConstants.isNetworkOnline) {
                         validateData();
@@ -660,6 +707,25 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
             case R.id.tv_birthday:
                 openBirthDatePickerDialog();
                 break;
+        }
+    }
+
+    private void checkForPnumExist() {
+        clearPreviousAlerts();
+        String msg = null;
+        EditText selectedEditText = null;
+        String pnum = Util.getValidatedValueOrNull(editPnum);
+        if (Util.isNullOrBlank(pnum)) {
+            selectedEditText = editPnum;
+            msg = getResources().getString(R.string.please_enter_pnum);
+        }
+        if (Util.isNullOrBlank(msg)) {
+            mActivity.showLoading(false);
+            WebDataServiceImpl.getInstance(mApp).checkForPnumExist(Boolean.class, user.getForeignLocationId(), user.getForeignHospitalId(),
+                    pnum, this, this);
+        } else {
+            Util.showErrorOnEditText(selectedEditText);
+            Util.showAlert(mActivity, msg);
         }
     }
 
@@ -770,6 +836,8 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
         appointment.setToDate(DateTimeUtil.getLongFromFormattedDayMonthYearFormatString(DATE_FORMAT_USED_IN_THIS_SCREEN, selecetdDate));
         appointment.setTime(new WorkingHours(selectedFromTimeInMinutes, selectedFromTimeInMinutes + (float) tvAppointmentSlotDuration.getTag()));
         appointment.setDob(DateTimeUtil.getDob(String.valueOf(tvBirthDay.getText())));
+        if (!doctorClinicProfile.getPidHasDate())
+            appointment.setPnum(Util.getValidatedValueOrNull(editPnum));
         String age = Util.getValidatedValueOrNull(editAge);
         if (!Util.isNullOrBlank(age))
             appointment.setAge(Integer.parseInt(age));

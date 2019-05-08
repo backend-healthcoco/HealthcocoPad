@@ -179,6 +179,58 @@
                                  android:maxLines="1"
                                  android:text="" />-->
                         </LinearLayout>
+                        <LinearLayout
+                            android:id="@+id/layout_pid"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                style="@style/registration_textview"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:maxLines="1"
+                                android:text="PID" />
+
+                                <TextView
+                                    android:id="@+id/tv_pid"
+                                    style="@style/registration_edittext"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:maxLines="1" />
+
+                        </LinearLayout>
+                        <LinearLayout
+                            android:id="@+id/layout_pnum"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                style="@style/registration_textview"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:maxLines="1"
+                                android:text="P-NUM" />
+
+                                <EditText
+                                    android:id="@+id/edit_pnum"
+                                    style="@style/registration_edittext"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:clickable="false"
+                                    android:digits="0123456789"
+                                    android:editable="false"
+                                    android:focusable="false"
+                                    android:hint="@string/pnum"
+                                    android:maxLines="1" />
+
+                        </LinearLayout>
+
                     </LinearLayout>
                 </LinearLayout>
 

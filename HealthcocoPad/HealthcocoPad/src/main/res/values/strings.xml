@@ -981,6 +981,7 @@
     <string name="alert_add_treatment">Blank treatment cannot be saved.Add Treatments</string>
     <string name="alert_add_invoice">Blank invoice cannot be saved.Add Services</string>
     <string name="please_reschedule_appointment">Please Reschedule Appointment</string>
+    <string name="edit_reschedule_appointment">Edit/Reschedule Appointment</string>
     <string name="reschedule_appointment">Reschedule Appointment</string>
     <string name="reschedule_event">Reschedule Event</string>
     <string name="new_event">New Event</string>
@@ -1386,4 +1387,11 @@
     <string name="letterhead_header">Letterhead Header</string>
     <string name="letterhead_footer">Letterhead Footer</string>
     <string name="sync_in_progress">Sync in Progress</string>
+    <string name="pnum">P-Num</string>
+    <string name="validation_text_for_pnum">This PNUM is already existed/created. Please enter another PNUM.</string>
+    <string name="please_enter_pnum">Please Enter Pnum</string>
+    <string name="check_pnum_exist">Check PNUM exist?</string>
+    <string name="edit_reschedule">Edit/Reschedule</string>
+    <string name="search_patient_with_name_number_and_pnum">Patient Name/Mobile number/PNUM</string>
+
 </resources>

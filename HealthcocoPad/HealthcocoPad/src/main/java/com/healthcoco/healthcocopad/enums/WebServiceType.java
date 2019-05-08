@@ -555,7 +555,8 @@ public enum WebServiceType {
 
     UPDATE_PATINET_MOBILE_NUMBER(Method.GET, "register/patient/"),
 
-    UPDATE_PRINT_SETTING_FILE(Method.POST, "printSettings/upload/file");
+    UPDATE_PRINT_SETTING_FILE(Method.POST, "printSettings/upload/file"),
+    GET_CHECK_PNUM_EXIST(Method.GET, "register/checkIfPnumExist/");
 
     private int methodType;
     private String url;
