@@ -957,6 +957,14 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
     @Override
     public void afterTextChange(View v, String s) {
         switch (v.getId()) {
+            case R.id.edit_pnum:
+                if (selectedPatient == null)
+                    isPnumChange = true;
+                else if (selectedPatient != null)
+                    if (!s.equals(selectedPatient.getPnum())) {
+                        isPnumChange = true;
+                    }
+                break;
             case R.id.autotv_patient_name:
                 if (!Util.isNullOrBlank(s) && containerPatientProfileHeader.getVisibility() == View.VISIBLE)
                     showSelectedPatientHeader(false);

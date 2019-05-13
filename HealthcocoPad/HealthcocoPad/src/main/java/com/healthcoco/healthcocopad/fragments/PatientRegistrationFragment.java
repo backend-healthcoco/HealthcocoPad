@@ -1096,8 +1096,15 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
                     getExistingPatientsList(s);
                 }
                 break;
+            case R.id.edit_pnum:
+                if (!isEditPatient && selectedPatient == null)
+                    isPnumChange = true;
+                else if (isEditPatient && selectedPatient != null)
+                    if (!s.equals(selectedPatient.getPnum())) {
+                        isPnumChange = true;
+                    }
+                break;
         }
-
     }
 
     private void getExistingPatientsList(String mobileNo) {
