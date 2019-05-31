@@ -320,9 +320,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
 //        swipeRefreshLayout.setColorSchemeResources(R.color.blue_action_bar);
 
         if (!isInHomeActivity) {
-            if (isPidHasDate())
-                initEditSearchView(R.string.name_mobile_number, new HealthcocoTextWatcher(editSearch, this), true);
-            else initEditSearchView(R.string.search_patient_with_name_number_and_pnum, this);
+            initEditSearchView(R.string.name_mobile_number, new HealthcocoTextWatcher(editSearch, this), true);
             btAddNewPatient.setVisibility(View.GONE);
 //            btAddNewPatient.setVisibility(View.GONE);
         } else {
@@ -331,6 +329,12 @@ public class ContactsListFragment extends HealthCocoFragment implements
         }
 
         childEditSearch.setVisibility(View.GONE);
+    }
+
+    private void initData() {
+        if (isPidHasDate())
+            initEditSearchView(R.string.name_mobile_number, new HealthcocoTextWatcher(editSearch, this), true);
+        else initEditSearchView(R.string.search_patient_with_name_number_and_pnum, this);
     }
 
     @Override
@@ -860,6 +864,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
                             && !Util.isNullOrBlank(user.getForeignLocationId())) {
 //                        if (packageType != null) {
                         initFilterFragment();
+                        initData();
                         if (isInHomeActivity)
                             Util.sendBroadcast(mApp, MenuDrawerFragment.INTENT_REFRESH_PATIENT_COUNT);
                         getListFromLocal(true);

@@ -47,7 +47,7 @@ public class RegisterNewPatientRequest {
     private AddMedicalFamilyHistoryRequest familyMedicalHistoryHandler;
     private PersonalHistory personalHistoryAddRequest;
     private boolean isChild;
-
+    private String pnum;
     public String getUserId() {
         return userId;
     }
@@ -318,5 +318,13 @@ public class RegisterNewPatientRequest {
 
     public void setChild(boolean child) {
         isChild = child;
+    }
+
+    public String getPnum() {
+        return pnum;
+    }
+
+    public void setPnum(String pnum) {
+        this.pnum = pnum;
     }
 }

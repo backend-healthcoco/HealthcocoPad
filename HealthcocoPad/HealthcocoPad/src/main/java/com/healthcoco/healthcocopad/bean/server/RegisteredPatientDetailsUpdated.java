@@ -30,6 +30,7 @@ public class RegisteredPatientDetailsUpdated extends SugarRecord {
     protected String profession;
     protected String consultantDoctorIdsJsonString;
     @Unique
+    private String backendPatientId;
     private String uniqueId;
     @Ignore
     private Bitmap profileImageBitmap;
@@ -430,5 +431,13 @@ public class RegisteredPatientDetailsUpdated extends SugarRecord {
 
     public void setPnum(String pnum) {
         this.pnum = pnum;
+    }
+
+    public String getBackendPatientId() {
+        return backendPatientId;
+    }
+
+    public void setBackendPatientId(String backendPatientId) {
+        this.backendPatientId = backendPatientId;
     }
 }

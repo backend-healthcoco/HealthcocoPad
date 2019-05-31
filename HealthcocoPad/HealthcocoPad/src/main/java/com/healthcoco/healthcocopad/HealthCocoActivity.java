@@ -1785,6 +1785,7 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
     }
 
     public void syncContacts(boolean isPageWiseLoading, User user) {
+        this.user = user;
         Long latestUpdatedTime = 0l;
         if (!isPageWiseLoading) {
             latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(user, LocalTabelType.REGISTERED_PATIENTS_DETAILS);
@@ -2068,7 +2069,7 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
             Double data = (Double) response.getData();
             totalCount = Math.round(data);
         }
-        if (response.getData() != null && !Util.isNullOrZeroNumber(totalCount)) {
+        if (response.getData() != null && !Util.isNullOrZeroNumber(totalCount)&& user != null) {
             PatientCount patientCount = new PatientCount();
             patientCount.setDoctorId(user.getUniqueId());
             patientCount.setLocationId(user.getForeignLocationId());

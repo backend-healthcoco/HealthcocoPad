@@ -13,6 +13,7 @@ import java.util.List;
 public class Patient extends SugarRecord {
     protected String notesJsonString;
     @Unique
+    private String backendPatientId;
     private String patientId;
     private String bloodGroup;
     private String profession;
@@ -157,5 +158,13 @@ public class Patient extends SugarRecord {
 
     public void setPatientDiscarded(boolean patientDiscarded) {
         isPatientDiscarded = patientDiscarded;
+    }
+
+    public String getBackendPatientId() {
+        return backendPatientId;
+    }
+
+    public void setBackendPatientId(String backendPatientId) {
+        this.backendPatientId = backendPatientId;
     }
 }

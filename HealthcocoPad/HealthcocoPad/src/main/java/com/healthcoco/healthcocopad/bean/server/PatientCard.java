@@ -12,6 +12,7 @@ import java.util.List;
 public class PatientCard extends SugarRecord {
     protected String notesJsonString;
     @Unique
+    private String backendPatientId;
     private String uniqueId;
 
     private String userId;
@@ -380,5 +381,13 @@ public class PatientCard extends SugarRecord {
 
     public void setPnum(String pnum) {
         this.pnum = pnum;
+    }
+
+    public String getBackendPatientId() {
+        return backendPatientId;
+    }
+
+    public void setBackendPatientId(String backendPatientId) {
+        this.backendPatientId = backendPatientId;
     }
 }

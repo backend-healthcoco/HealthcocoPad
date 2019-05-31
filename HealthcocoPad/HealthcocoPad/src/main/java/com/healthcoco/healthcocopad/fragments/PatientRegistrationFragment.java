@@ -602,7 +602,8 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
 
         if (doctorClinicProfile.isVaccinationModuleOn())
             patientDetails.setChild(true);
-
+        if (!doctorClinicProfile.getPidHasDate())
+            patientDetails.setPnum(Util.getValidatedValueOrNull(editPnum));
         String age = Util.getValidatedValueOrNull(editAge);
         if (!Util.isNullOrBlank(age))
             patientDetails.setAge(Integer.parseInt(age));

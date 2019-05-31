@@ -223,8 +223,6 @@
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
                                     android:clickable="false"
-                                    android:digits="0123456789"
-                                    android:editable="false"
                                     android:focusable="false"
                                     android:hint="@string/pnum"
                                     android:maxLines="1" />
