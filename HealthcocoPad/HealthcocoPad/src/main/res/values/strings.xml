@@ -1393,5 +1393,7 @@
     <string name="check_pnum_exist">Check PNUM exist?</string>
     <string name="edit_reschedule">Edit/Reschedule</string>
     <string name="search_patient_with_name_number_and_pnum">Patient Name/Mobile number/PNUM</string>
+    <string name="freshchat_file_provider_authority">com.healthcoco.healthcocoplus.provider</string>
+    <string name="chat">Chat</string>
 
 </resources>

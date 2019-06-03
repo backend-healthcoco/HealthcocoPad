@@ -35,6 +35,7 @@ public class DoctorProfileToSend {
     private String registerNumber;
     private String roleId;
     private String userId;
+    private String freshchatRestoreId;
 
     public String getHospitalId() {
         return hospitalId;
@@ -186,5 +187,13 @@ public class DoctorProfileToSend {
 
     public void setLocationId(String locationId) {
         this.locationId = locationId;
+    }
+
+    public String getFreshchatRestoreId() {
+        return freshchatRestoreId;
+    }
+
+    public void setFreshchatRestoreId(String freshchatRestoreId) {
+        this.freshchatRestoreId = freshchatRestoreId;
     }
 }

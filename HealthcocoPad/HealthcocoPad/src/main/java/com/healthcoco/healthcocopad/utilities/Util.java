@@ -35,6 +35,7 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.HealthCocoApplication;
 import com.healthcoco.healthcocopad.R;
+import com.healthcoco.healthcocopad.activities.HomeActivity;
 import com.healthcoco.healthcocopad.activities.SplashScreenActivity;
 import com.healthcoco.healthcocopad.bean.ConsultationFee;
 import com.healthcoco.healthcocopad.bean.DOB;
@@ -1071,5 +1072,21 @@ public class Util {
         s = s.replaceAll("\\s+", "");
         s = s.replace("+91", "");
         return s;
+    }
+
+    public static void addFreshchatRestoreIdInPreferences(Context context, String restoreId) {
+        ObscuredSharedPreferences prefs = ObscuredSharedPreferences.getPrefs(context,
+                context.getResources().getString(R.string.app_name), Context.MODE_PRIVATE);
+
+        //save data
+        prefs.edit().putString(HomeActivity.TAG_FRESHCHAT_RESTORE_ID, restoreId).commit();
+    }
+
+    public static String geFreshchatRestoreIdFromPreferences(Context context) {
+        ObscuredSharedPreferences prefs = ObscuredSharedPreferences.getPrefs(context,
+                context.getResources().getString(R.string.app_name), Context.MODE_PRIVATE);
+        //retrieve data
+        String restoreId = prefs.getString(HomeActivity.TAG_FRESHCHAT_RESTORE_ID, "");
+        return restoreId;
     }
 }

@@ -13,6 +13,8 @@ import android.view.Display;
 
 import com.android.volley.Response;
 import com.crashlytics.android.Crashlytics;
+import com.freshchat.consumer.sdk.Freshchat;
+import com.freshchat.consumer.sdk.FreshchatConfig;
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.HealthcocoFCMListener;
 import com.healthcoco.healthcocopad.R;
@@ -28,7 +30,6 @@ import com.healthcoco.healthcocopad.enums.DeviceType;
 import com.healthcoco.healthcocopad.enums.UserState;
 import com.healthcoco.healthcocopad.enums.VersionCheckType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
-import com.healthcoco.healthcocopad.fragments.KioskFragment;
 import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
@@ -71,6 +72,14 @@ public class SplashScreenActivity extends HealthCocoActivity implements GsonRequ
         super.onStart();
         initScreenDimensions();
         init();
+        initFreshchatConfig();
+    }
+
+    private void initFreshchatConfig() {
+        FreshchatConfig freshchatConfig = new FreshchatConfig("48f0123c-e61b-4ae8-9c5d-0306af5fdd8f", "8f3d8e8c-ef11-4b0a-9e07-4fa162852cee");
+        freshchatConfig.setCameraCaptureEnabled(true);
+        freshchatConfig.setGallerySelectionEnabled(true);
+        Freshchat.getInstance(getApplicationContext()).init(freshchatConfig);
     }
 
     private void initScreenDimensions() {

@@ -17,11 +17,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.print.PrintManager;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -31,7 +33,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.Response;
+import com.freshchat.consumer.sdk.Freshchat;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.healthcoco.healthcocopad.activities.CloudPrintActivity;
 import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.adapter.MyPrintDocumentAdapter;
@@ -104,13 +110,16 @@ import com.healthcoco.healthcocopad.dialogFragment.PatientCardDialogFragment;
 import com.healthcoco.healthcocopad.dialogFragment.SelectCategoryDialogFragment;
 import com.healthcoco.healthcocopad.dialogFragment.VerifyLoctionAdminDialogFragment;
 import com.healthcoco.healthcocopad.enums.AddUpdateNameDialogType;
+import com.healthcoco.healthcocopad.enums.AppType;
 import com.healthcoco.healthcocopad.enums.BooleanTypeValues;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.DefaultSyncServiceType;
+import com.healthcoco.healthcocopad.enums.DeviceType;
 import com.healthcoco.healthcocopad.enums.DialogType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.LocalTabelType;
 import com.healthcoco.healthcocopad.enums.PopupWindowType;
+import com.healthcoco.healthcocopad.enums.RoleType;
 import com.healthcoco.healthcocopad.enums.SuggestionType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.fragments.DoctorProfileFragment;
@@ -1722,13 +1731,47 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
                 try {
                     // Resets Instance ID and revokes all tokens.
                     FirebaseInstanceId.getInstance().deleteInstanceId();
-                    FirebaseInstanceId.getInstance().getToken();
+                    FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                            if (!task.isSuccessful()) {
+                                Log.w(TAG, "getInstanceId failed", task.getException());
+                                return;
+                            }
+
+                            // Get new Instance ID token
+                            String token = task.getResult().getToken();
+                            sendRegistrationToServer(token);
+                            Freshchat.getInstance(getApplicationContext()).setPushRegistrationToken(token);
+                        }
+                    });
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
                 return null;
             }
         }.execute();
+    }
+
+    /**
+     * Sending registration Id and rest details to server
+     *
+     * @param token : token(RegistrationId) received from GCM server after successfull registration
+     */
+    private void sendRegistrationToServer(String token) {
+        LoginResponse doctor = LocalDataServiceImpl.getInstance((HealthCocoApplication) this.getApplicationContext()).getDoctor();
+        GCMRequest gcmRequest = new GCMRequest();
+        gcmRequest.setDeviceId(Util.getDeviceId(this) + AppType.HEALTHCOCO_PAD);
+        gcmRequest.setPushToken(token);
+        gcmRequest.setDeviceType(DeviceType.ANDROID_PAD);
+        gcmRequest.setRole(RoleType.DOCTOR);
+        if (doctor != null && doctor.getUser() != null) {
+            ArrayList<String> userIdsList = new ArrayList<>();
+            userIdsList.add(doctor.getUser().getUniqueId());
+            gcmRequest.setUserIds(userIdsList);
+        }
+        LocalDataServiceImpl.getInstance((HealthCocoApplication) this.getApplicationContext()).addGCMRequest(gcmRequest);
+        WebDataServiceImpl.getInstance((HealthCocoApplication) this.getApplicationContext()).sendGcmRegistrationId(false);
     }
 
     public void refreshMenuFragment(User user) {
@@ -2069,7 +2112,7 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
             Double data = (Double) response.getData();
             totalCount = Math.round(data);
         }
-        if (response.getData() != null && !Util.isNullOrZeroNumber(totalCount)&& user != null) {
+        if (response.getData() != null && !Util.isNullOrZeroNumber(totalCount) && user != null) {
             PatientCount patientCount = new PatientCount();
             patientCount.setDoctorId(user.getUniqueId());
             patientCount.setLocationId(user.getForeignLocationId());

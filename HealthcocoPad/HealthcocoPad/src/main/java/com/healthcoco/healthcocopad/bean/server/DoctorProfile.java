@@ -69,6 +69,7 @@ public class DoctorProfile extends SugarRecord {
     @Ignore
     private List<String> parentSpecialities;
     private String parentSpecialitiesJsonString;
+    private String freshchatRestoreId;
 
     public DoctorProfile() {
     }
@@ -390,4 +391,11 @@ public class DoctorProfile extends SugarRecord {
         return title + " " + firstName;
     }
 
+    public String getFreshchatRestoreId() {
+        return freshchatRestoreId;
+    }
+
+    public void setFreshchatRestoreId(String freshchatRestoreId) {
+        this.freshchatRestoreId = freshchatRestoreId;
+    }
 }

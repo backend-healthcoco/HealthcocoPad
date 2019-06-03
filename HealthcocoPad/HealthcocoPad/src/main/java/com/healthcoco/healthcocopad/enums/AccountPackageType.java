@@ -20,6 +20,7 @@ public enum AccountPackageType {
                 put(FragmentType.CLINIC_PROFILE, new MenuItem(FragmentType.CLINIC_PROFILE, "", false));
                 put(FragmentType.VIDEOS, new MenuItem(FragmentType.VIDEOS, "", false));
                 put(FragmentType.HELP_IMPROVE, new MenuItem(FragmentType.HELP_IMPROVE, "", false));
+                put(FragmentType.CHAT, new MenuItem(FragmentType.CHAT, "", false));
                 put(FragmentType.SETTINGS, new MenuItem(FragmentType.SETTINGS, "", false));
                 put(FragmentType.KIOSK, new MenuItem(FragmentType.KIOSK, "", false));
 //                put(FragmentType.NEED_HELP, new MenuItem(FragmentType.NEED_HELP, "", false));
@@ -68,6 +69,7 @@ public enum AccountPackageType {
         put(FragmentType.CLINIC_PROFILE, new MenuItem(FragmentType.CLINIC_PROFILE, "", false));
         put(FragmentType.VIDEOS, new MenuItem(FragmentType.VIDEOS, "", false));
         put(FragmentType.HELP_IMPROVE, new MenuItem(FragmentType.HELP_IMPROVE, "", false));
+        put(FragmentType.CHAT, new MenuItem(FragmentType.CHAT, "", false));
         put(FragmentType.SETTINGS, new MenuItem(FragmentType.SETTINGS, "", false));
         put(FragmentType.KIOSK, new MenuItem(FragmentType.KIOSK, "", false));
 //                put(FragmentType.NEED_HELP, new MenuItem(FragmentType.NEED_HELP, "", false));
@@ -114,6 +116,7 @@ public enum AccountPackageType {
         put(FragmentType.CLINIC_PROFILE, new MenuItem(FragmentType.CLINIC_PROFILE, "", false));
 //        put(FragmentType.VIDEOS, new MenuItem(FragmentType.VIDEOS, "", false));
         put(FragmentType.HELP_IMPROVE, new MenuItem(FragmentType.HELP_IMPROVE, "", false));
+        put(FragmentType.CHAT, new MenuItem(FragmentType.CHAT, "", false));
         put(FragmentType.SETTINGS, new MenuItem(FragmentType.SETTINGS, "", false));
         put(FragmentType.KIOSK, new MenuItem(FragmentType.KIOSK, "", false));
 //        put(FragmentType.LAB_REPORTS, new MenuItem(FragmentType.LAB_REPORTS, "", false));
@@ -142,6 +145,7 @@ public enum AccountPackageType {
         put(FragmentType.CLINIC_PROFILE, new MenuItem(FragmentType.CLINIC_PROFILE, "", false));
 //        put(FragmentType.VIDEOS, new MenuItem(FragmentType.VIDEOS, "", false));
         put(FragmentType.HELP_IMPROVE, new MenuItem(FragmentType.HELP_IMPROVE, "", false));
+        put(FragmentType.CHAT, new MenuItem(FragmentType.CHAT, "", false));
         put(FragmentType.SETTINGS, new MenuItem(FragmentType.SETTINGS, "", false));
 //        put(FragmentType.KIOSK, new MenuItem(FragmentType.KIOSK, "", false));
 //        put(FragmentType.DENTAL_WORKS, new MenuItem(FragmentType.DENTAL_WORKS, "", false));

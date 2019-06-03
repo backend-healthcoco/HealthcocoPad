@@ -27,12 +27,18 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.Response;
+import com.freshchat.consumer.sdk.Freshchat;
+import com.freshchat.consumer.sdk.FreshchatUser;
+import com.freshchat.consumer.sdk.exception.MethodNotAllowedException;
 import com.google.gson.Gson;
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.HealthcocoFCMListener;
 import com.healthcoco.healthcocopad.R;
+import com.healthcoco.healthcocopad.bean.DoctorExperience;
+import com.healthcoco.healthcocopad.bean.DoctorProfileToSend;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
+import com.healthcoco.healthcocopad.bean.server.DoctorClinicProfile;
 import com.healthcoco.healthcocopad.bean.server.DoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.NotificationResponse;
@@ -97,15 +103,10 @@ public class HomeActivity extends HealthCocoActivity implements View.OnClickList
     private ContactsListFragment contactsFragment;
     private FilterFragment filterFragment;
     private boolean isKiosk;
-    BroadcastReceiver initialSyncSuccessreceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, final Intent intent) {
-            if (intent.getAction() != null && intent.getAction().equals(INTENT_SYNC_SUCCESS)) {
-                refreshFragments();
-            }
-        }
-    };
+    public static final String TAG_FRESHCHAT_RESTORE_ID = "restoreId";
     private boolean isFromSplash;
+    private DoctorClinicProfile doctorClinicProfile;
+    private DoctorProfile doctorProfile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,6 +115,10 @@ public class HomeActivity extends HealthCocoActivity implements View.OnClickList
         LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
         if (doctor != null && doctor.getUser() != null && !Util.isNullOrBlank(doctor.getUser().getUniqueId())) {
             user = doctor.getUser();
+            if (user != null) {
+                doctorClinicProfile = LocalDataServiceImpl.getInstance(mApp).getDoctorClinicProfile(user.getUniqueId(), user.getForeignLocationId());
+                doctorProfile = LocalDataServiceImpl.getInstance(mApp).getDoctorProfileObject(user.getUniqueId());
+            }
             init();
         }
     }
@@ -143,7 +148,55 @@ public class HomeActivity extends HealthCocoActivity implements View.OnClickList
             }
         }
         refreshFragments();
+        initFreshchatConfig(user);
     }
+
+    private void initFreshchatConfig(User user) {
+        if(doctorProfile!=null) {
+            String restoreIdFromPreferences = doctorProfile.getFreshchatRestoreId();
+            FreshchatUser freshUser = null;
+            if (!Util.isNullOrBlank(restoreIdFromPreferences)) {
+                try {
+                    freshUser = Freshchat.getInstance(getApplicationContext()).identifyUser(user.getUniqueId(), restoreIdFromPreferences).getUser();
+                } catch (MethodNotAllowedException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (freshUser != null) {
+                try {
+                    Freshchat.getInstance(getApplicationContext()).setUser(freshUser);
+                    Freshchat.getInstance(getApplicationContext()).identifyUser(user.getUniqueId(), freshUser.getRestoreId());
+                } catch (MethodNotAllowedException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                FreshchatUser freshUserNew = Freshchat.getInstance(getApplicationContext()).getUser();
+                if (!Util.isNullOrBlank(user.getFirstName()))
+                    freshUserNew.setFirstName(user.getFirstName());
+                if (!Util.isNullOrBlank(user.getLastName()))
+                    freshUserNew.setLastName(user.getLastName());
+                if (!Util.isNullOrBlank(user.getEmailAddress()))
+                    freshUserNew.setEmail(user.getEmailAddress());
+                if (!Util.isNullOrBlank(user.getMobileNumber()))
+                    freshUserNew.setPhone("+91", user.getMobileNumber());
+                try {
+                    Freshchat.getInstance(getApplicationContext()).setUser(freshUserNew);
+                    Freshchat.getInstance(getApplicationContext()).identifyUser(user.getUniqueId(), null);
+                } catch (MethodNotAllowedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    BroadcastReceiver initialSyncSuccessreceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, final Intent intent) {
+            if (intent.getAction() != null && intent.getAction().equals(INTENT_SYNC_SUCCESS)) {
+                refreshFragments();
+            }
+        }
+    };
 
     private void openNotificationResponseDataFragment(String notificationResponseData) {
         if (!Util.isNullOrBlank(notificationResponseData)) {
@@ -229,7 +282,10 @@ public class HomeActivity extends HealthCocoActivity implements View.OnClickList
                 break;
             case HELP_IMPROVE:
                 openCommonOpenUpActivity(CommonOpenUpFragmentType.FEEDBACK, null, 0);
-                return;
+                break;
+            case CHAT:
+                Freshchat.showConversations(getApplicationContext());
+                break;
             default:
                 break;
         }
@@ -345,6 +401,12 @@ public class HomeActivity extends HealthCocoActivity implements View.OnClickList
             LocalBroadcastManager.getInstance(this).registerReceiver(initialSyncSuccessreceiver, updateExistingContact);
             receiversRegistered = true;
         }
+        String restoreId = Freshchat.getInstance(getApplicationContext()).getUser().getRestoreId();
+        saveRestoreIdForUser(restoreId);
+//        if (homeScreenTabsFragment != null) {
+//        initFragment(FragmentType.CONTACTS);
+//        setActionbarTitle(getResources().getString(selectedFramentType.getTitleId()));
+//        }
     }
 
     @Override
@@ -688,5 +750,26 @@ public class HomeActivity extends HealthCocoActivity implements View.OnClickList
         transaction.commit();
     }
 
+    private void saveRestoreIdForUser(String restoreId) {
+        if (!Util.isNullOrBlank(restoreId)) {
+            Util.addFreshchatRestoreIdInPreferences(this, restoreId);
+            DoctorProfileToSend profile = new DoctorProfileToSend();
+            profile.setFirstName(doctorProfile.getFirstName());
+            profile.setTitle(doctorProfile.getTitle(true));
+            if (!Util.isNullOrBlank(doctorProfile.getGender()))
+                profile.setGender(doctorProfile.getGender());
+            if (doctorProfile.getDob() != null)
+                profile.setDob(doctorProfile.getDob());
+            if (!Util.isNullOrEmptyList(doctorProfile.getSpecialities()))
+                profile.setSpeciality(doctorProfile.getSpecialities());
+            if (doctorProfile.getExperience() != null) {
+                DoctorExperience selectedDoctorExperinece = doctorProfile.getExperience();
+                profile.setExperience(selectedDoctorExperinece.getExperience());
+            }
+            profile.setDoctorId(doctorProfile.getDoctorId());
+            profile.setFreshchatRestoreId(restoreId);
+            WebDataServiceImpl.getInstance(mApp).updateDoctorProfile(DoctorProfile.class, profile, this, this);
+        }
+    }
 
 }
