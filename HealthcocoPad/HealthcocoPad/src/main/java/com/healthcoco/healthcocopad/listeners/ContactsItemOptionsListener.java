@@ -2,20 +2,21 @@ package com.healthcoco.healthcocopad.listeners;
 
 import android.support.v4.widget.SwipeRefreshLayout;
 
-import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
+import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsNew;
+import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsNew;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.enums.ChangeViewType;
 
 public interface ContactsItemOptionsListener {
-    public void onAddToGroupClicked(RegisteredPatientDetailsUpdated selecetdPatient);
+    public void onAddToGroupClicked(RegisteredPatientDetailsNew selecetdPatient);
 
-    public void onCallClicked(RegisteredPatientDetailsUpdated selecetdPatient);
+    public void onCallClicked(RegisteredPatientDetailsNew selecetdPatient);
 
     public boolean isPositionVisible(int position);
 
-    public void onAddPrescriptionClicked(RegisteredPatientDetailsUpdated selecetdPatient);
+    public void onAddPrescriptionClicked(RegisteredPatientDetailsNew selecetdPatient);
 
-    public void onItemContactDetailClicked(RegisteredPatientDetailsUpdated selecetdPatient);
+    public void onItemContactDetailClicked(RegisteredPatientDetailsNew selecetdPatient);
 
     public SwipeRefreshLayout getSwipeRefreshLayout();
 
@@ -25,18 +26,18 @@ public interface ContactsItemOptionsListener {
 
     public Boolean isPidHasDate();
 
-    public void onEditClicked(RegisteredPatientDetailsUpdated patientDetailsUpdated);
+    public void onEditClicked(RegisteredPatientDetailsNew patientDetailsUpdated);
 
-    public void onDiscardClicked(RegisteredPatientDetailsUpdated patientDetailsUpdated);
+    public void onDiscardClicked(RegisteredPatientDetailsNew patientDetailsUpdated);
 
-    void onQueueClicked(RegisteredPatientDetailsUpdated objData);
+    void onQueueClicked(RegisteredPatientDetailsNew objData);
 
     public ChangeViewType getChangedViewType();
 
     public User getUser();
 
-    public void onEditPatientNumberClicked(RegisteredPatientDetailsUpdated selecetdPatient);
+    public void onEditPatientNumberClicked(RegisteredPatientDetailsNew selecetdPatient);
 
-    public void onDeletePatientClicked(RegisteredPatientDetailsUpdated selecetdPatient);
+    public void onDeletePatientClicked(RegisteredPatientDetailsNew selecetdPatient);
 
 }

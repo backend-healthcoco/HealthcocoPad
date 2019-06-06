@@ -21,6 +21,7 @@ import com.healthcoco.healthcocopad.bean.server.ClinicDoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.DoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.PatientCard;
 import com.healthcoco.healthcocopad.bean.server.RegisteredDoctorProfile;
+import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsNew;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.custom.CircularImageView;
 import com.healthcoco.healthcocopad.enums.PatientProfileScreenType;
@@ -66,6 +67,11 @@ public class DownloadImageFromUrlUtil {
             int imageHeight = context.getResources().getDimensionPixelOffset(patientProfileScreenType.getImageWidth());
             if (object instanceof RegisteredPatientDetailsUpdated) {
                 RegisteredPatientDetailsUpdated registeredPatientDetailsDetailsUpdated = (RegisteredPatientDetailsUpdated) object;
+                url = registeredPatientDetailsDetailsUpdated.getThumbnailUrl();
+                colorCode = registeredPatientDetailsDetailsUpdated.getColorCode();
+                name = registeredPatientDetailsDetailsUpdated.getLocalPatientName();
+            } else if (object instanceof RegisteredPatientDetailsNew) {
+                RegisteredPatientDetailsNew registeredPatientDetailsDetailsUpdated = (RegisteredPatientDetailsNew) object;
                 url = registeredPatientDetailsDetailsUpdated.getThumbnailUrl();
                 colorCode = registeredPatientDetailsDetailsUpdated.getColorCode();
                 name = registeredPatientDetailsDetailsUpdated.getLocalPatientName();

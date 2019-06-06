@@ -60,6 +60,7 @@ import com.healthcoco.healthcocopad.bean.server.Profession;
 import com.healthcoco.healthcocopad.bean.server.Records;
 import com.healthcoco.healthcocopad.bean.server.Reference;
 import com.healthcoco.healthcocopad.bean.server.RegisteredDoctorProfile;
+import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsNew;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.TempTemplate;
 import com.healthcoco.healthcocopad.bean.server.TreatmentService;
@@ -318,6 +319,44 @@ public class WebDataServiceImpl implements GCMRefreshListener {
         }
     }
 
+    public void getContactsListNew(Class<RegisteredPatientDetailsNew> class1, String doctorId,
+                                   String hospitalId, String locationId, long updatedTime, User user, Response.Listener<VolleyResponseBean> responseListener,
+                                   GsonRequest.ErrorListener errorListener) {
+        getContactsListNew(class1, doctorId, hospitalId, locationId, updatedTime, user, 0, 0, null, responseListener, errorListener);
+    }
+
+    public void getContactsListNew(Class<RegisteredPatientDetailsNew> class1, String doctorId,
+                                   String hospitalId, String locationId, long updatedTime, User user, int pageNo, int size, Response.Listener<VolleyResponseBean> responseListener,
+                                   GsonRequest.ErrorListener errorListener) {
+        getContactsListNew(class1, doctorId, hospitalId, locationId, updatedTime, user, pageNo, size, null, responseListener, errorListener);
+    }
+
+    public void getContactsListNew(Class<RegisteredPatientDetailsNew> class1, String doctorId,
+                                   String hospitalId, String locationId, long updatedTime, User user, int pageNo, int size, String searchTerm, Response.Listener<VolleyResponseBean> responseListener,
+                                   GsonRequest.ErrorListener errorListener) {
+        WebServiceType webServiceType = WebServiceType.GET_CONTACTS_NEW;
+        checkNetworkStatus(mApp.getApplicationContext());
+        if (HealthCocoConstants.isNetworkOnline) {
+            String url = webServiceType.getUrl()
+                    + HealthCocoConstants.PARAM_HOSPITAL_ID + hospitalId
+                    + HealthCocoConstants.PARAM_LOCATION_ID + locationId
+                    + HealthCocoConstants.PARAM_UPDATED_TIME + updatedTime;
+
+            if (RoleType.isOnlyConsultantOrIsOnlyDoctorOrBoth(user.getRoleTypes())) {
+                url = url + HealthCocoConstants.PARAM_ROLE + RoleType.CONSULTANT_DOCTOR
+                        + HealthCocoConstants.PARAM_DOCTOR_ID + doctorId;
+            }
+
+            if (pageNo >= 0 && size > 0) {
+                url = url + HealthCocoConstants.PARAM_PAGE + pageNo + HealthCocoConstants.PARAM_SIZE + size;
+            }
+            if (!Util.isNullOrBlank(searchTerm))
+                url = url + HealthCocoConstants.PARAM_SEARCH_TERM + searchTerm;
+            getResponse(Request.Priority.HIGH, WebServiceType.GET_CONTACTS_NEW, class1, url, null, null, responseListener, errorListener);
+        } else {
+            errorListener.onNetworkUnavailable(webServiceType);
+        }
+    }
 
     public void getContactsList(Class<RegisteredPatientDetailsUpdated> class1, String doctorId,
                                 String hospitalId, String locationId, long updatedTime, User user, Response.Listener<VolleyResponseBean> responseListener,
@@ -801,7 +840,7 @@ public class WebDataServiceImpl implements GCMRefreshListener {
                 errorListener);
     }
 
-    public void addPatientToQueue(WebServiceType webServiceType, Class<?> class1, RegisteredPatientDetailsUpdated object, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+    public void addPatientToQueue(WebServiceType webServiceType, Class<?> class1, RegisteredPatientDetailsNew object, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
         String url = webServiceType.getUrl();
         if (HealthCocoConstants.isNetworkOnline) {
             getResponse(webServiceType, class1, url, object, null, responseListener, errorListener);

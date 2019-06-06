@@ -689,7 +689,7 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                 LoginResponse doctor = LocalDataServiceImpl.getInstance(mApp).getDoctor();
                 if (doctor != null && doctor.getUser() != null && !Util.isNullOrBlank(doctor.getUser().getUniqueId()))
                     user = doctor.getUser();
-                if (doctor != null && doctor.getUser() != null && !Util.isNullOrBlank(doctor.getUser().getUniqueId()) && selectedPatient != null && !Util.isNullOrBlank(selectedPatient.getUserId())) {
+                if (doctor != null && doctor.getUser() != null && !Util.isNullOrBlank(doctor.getUser().getUniqueId())) {
                     loginedUser = doctor.getUser().getUniqueId();
                     doctorProfile = LocalDataServiceImpl.getInstance(mApp).getDoctorProfileObject(user.getUniqueId());
                     doctorClinicProfile = LocalDataServiceImpl.getInstance(mApp).getDoctorClinicProfile(user.getUniqueId(), user.getForeignLocationId());
@@ -745,7 +745,13 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
 //                            prescriptionDetailFragment.refreshData(PatientDetailTabType.PATIENT_DETAIL_PRESCRIPTION);
                         }
                     } else {
+                        initTabs();
+                        initViewPagerAdapter();
                         initData();
+                        if (ordinal != 0) {
+                            PatientDetailTabType patientDetailTabType = PatientDetailTabType.values()[ordinal];
+                            mViewPager.setCurrentItem(packageType.getTabItemList().indexOf(patientDetailTabType));
+                        }
                     }
                     break;
                 case GET_PATIENT_PROFILE:

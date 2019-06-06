@@ -37,6 +37,7 @@ import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.Profession;
 import com.healthcoco.healthcocopad.bean.server.Reference;
 import com.healthcoco.healthcocopad.bean.server.RegisteredDoctorProfile;
+import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsNew;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.bean.server.UserGroups;
@@ -129,6 +130,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
     private ContactsListAdapter contactsListAdapter;
     private TextView tvNoPatients;
     private LinkedHashMap<String, RegisteredPatientDetailsUpdated> patientsListHashMap = new LinkedHashMap<>();
+    private LinkedHashMap<String, RegisteredPatientDetailsNew> patientDetailsNewLinkedHashMap = new LinkedHashMap<>();
     private User user;
     BroadcastReceiver refreshGroupsListFromServerReceiver = new BroadcastReceiver() {
         @Override
@@ -226,7 +228,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
     private boolean mobileNumberOptional;
     private Boolean pidHasDate;
     private AccountPackageType packageType;
-    private RegisteredPatientDetailsUpdated tempSelectedPatient;
+    private RegisteredPatientDetailsNew tempSelectedPatient;
     public static final String TAG_IS_FOR_MOBILE_NUMBER_EDIT = "isForMobileNumberEdit";
     public static final String TAG_PATIENT_DATA = "selectedPatient";
 
@@ -467,7 +469,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
     }
 
     @Override
-    public void onAddToGroupClicked(RegisteredPatientDetailsUpdated selecetdPatient) {
+    public void onAddToGroupClicked(RegisteredPatientDetailsNew selecetdPatient) {
         GroupsListDialogFragment dialogFragment = new GroupsListDialogFragment();
         Bundle bundle = new Bundle();
         bundle.putParcelable(GroupsListDialogFragment.TAG_SELECTED_PATIENT_ID, Parcels.wrap(selecetdPatient.getUserId()));
@@ -478,7 +480,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
     }
 
     @Override
-    public void onCallClicked(RegisteredPatientDetailsUpdated selecetdPatient) {
+    public void onCallClicked(RegisteredPatientDetailsNew selecetdPatient) {
         if (!Util.isNullOrBlank(selecetdPatient.getMobileNumber()))
             mActivity.showCallConfirmationAlert(selecetdPatient.getMobileNumber());
         else
@@ -496,7 +498,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
     }
 
     @Override
-    public void onAddPrescriptionClicked(RegisteredPatientDetailsUpdated selecetdPatient) {
+    public void onAddPrescriptionClicked(RegisteredPatientDetailsNew selecetdPatient) {
         HealthCocoConstants.SELECTED_PATIENTS_USER_ID = selecetdPatient.getUserId();
         Intent intent = new Intent(mActivity, CommonOpenUpActivity.class);
         intent.putExtra(HealthCocoConstants.TAG_FRAGMENT_NAME, CommonOpenUpFragmentType.PATIENT_DETAIL.ordinal());
@@ -506,17 +508,15 @@ public class ContactsListFragment extends HealthCocoFragment implements
     }
 
     @Override
-    public void onItemContactDetailClicked(RegisteredPatientDetailsUpdated selecetdPatient) {
-        if (selecetdPatient.getPatient() != null && !Util.isNullOrBlank(selecetdPatient.getPatient().getPatientId())) {
-            HealthCocoConstants.SELECTED_PATIENTS_USER_ID = selecetdPatient.getUserId();
-            if (isInHomeActivity()) {
-                openCommonOpenUpActivity(CommonOpenUpFragmentType.PATIENT_DETAIL, null, REQUEST_CODE_CONTACTS_DETAIL);
-                contactsListAdapter.notifyDataSetChanged();
-            } else {
-                Util.sendBroadcast(mApp, BookAppointmentDialogFragment.INTENT_REFRESH_SELECTED_PATIENT);
-                ((CommonOpenUpActivity) mActivity).setResult(HealthCocoConstants.RESULT_CODE_CONTACTS_LIST);
-                ((CommonOpenUpActivity) mActivity).finish();
-            }
+    public void onItemContactDetailClicked(RegisteredPatientDetailsNew selecetdPatient) {
+        HealthCocoConstants.SELECTED_PATIENTS_USER_ID = selecetdPatient.getUserId();
+        if (isInHomeActivity()) {
+            openCommonOpenUpActivity(CommonOpenUpFragmentType.PATIENT_DETAIL, null, REQUEST_CODE_CONTACTS_DETAIL);
+            contactsListAdapter.notifyDataSetChanged();
+        } else {
+            Util.sendBroadcast(mApp, BookAppointmentDialogFragment.INTENT_REFRESH_SELECTED_PATIENT);
+            ((CommonOpenUpActivity) mActivity).setResult(HealthCocoConstants.RESULT_CODE_CONTACTS_LIST);
+            ((CommonOpenUpActivity) mActivity).finish();
         }
     }
 
@@ -541,17 +541,17 @@ public class ContactsListFragment extends HealthCocoFragment implements
     }
 
     @Override
-    public void onEditClicked(RegisteredPatientDetailsUpdated patientDetailsUpdated) {
-        openRegistrationFragment(patientDetailsUpdated.getForeignPatientId(), REQUEST_CODE_CONTACTS_DETAIL, true);
+    public void onEditClicked(RegisteredPatientDetailsNew patientDetailsUpdated) {
+        openRegistrationFragment(patientDetailsUpdated.getUserId(), REQUEST_CODE_CONTACTS_DETAIL, true);
     }
 
     @Override
-    public void onDiscardClicked(RegisteredPatientDetailsUpdated patientDetailsUpdated) {
+    public void onDiscardClicked(RegisteredPatientDetailsNew patientDetailsUpdated) {
         showConfirmationAlert(null, mActivity.getResources().getString(R.string.confirm_discard_patient), patientDetailsUpdated);
     }
 
     @Override
-    public void onQueueClicked(RegisteredPatientDetailsUpdated selecetdPatient) {
+    public void onQueueClicked(RegisteredPatientDetailsNew selecetdPatient) {
 //        mActivity.showLoading(false);
         WebDataServiceImpl.getInstance(mApp).addPatientToQueue(WebServiceType.ADD_PATIENT_TO_QUEUE, RegisteredPatientDetailsUpdated.class, selecetdPatient, this, this);
     }
@@ -567,7 +567,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
     }
 
     @Override
-    public void onEditPatientNumberClicked(RegisteredPatientDetailsUpdated selecetdPatient) {
+    public void onEditPatientNumberClicked(RegisteredPatientDetailsNew selecetdPatient) {
         PatientNumberSearchDialogFragment patientNumberSearchDialogFragment = new PatientNumberSearchDialogFragment();
         patientNumberSearchDialogFragment.setTargetFragment(this, REQUEST_CODE_CONTACTS_DETAIL);
         Bundle bundle = new Bundle();
@@ -578,7 +578,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
     }
 
     @Override
-    public void onDeletePatientClicked(RegisteredPatientDetailsUpdated selecetdPatient) {
+    public void onDeletePatientClicked(RegisteredPatientDetailsNew selecetdPatient) {
         tempSelectedPatient = selecetdPatient;
         if (selecetdPatient.getDoctorId().equals(user.getUniqueId())) {
             if (!Util.isNullOrBlank(selecetdPatient.getUniqueId()))
@@ -588,7 +588,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
         }
     }
 
-    public void showDeletePatientConfirmationAlert(final RegisteredPatientDetailsUpdated selecetdPatient) {
+    public void showDeletePatientConfirmationAlert(final RegisteredPatientDetailsNew selecetdPatient) {
         final AlertDialog.Builder alertBuilder = new AlertDialog.Builder(mActivity);
         alertBuilder.setTitle(R.string.confirm);
         alertBuilder.setMessage(getResources().getString(
@@ -611,7 +611,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
         alertBuilder.show();
     }
 
-    private void deletePatient(RegisteredPatientDetailsUpdated selecetdPatient) {
+    private void deletePatient(RegisteredPatientDetailsNew selecetdPatient) {
         mActivity.showLoading(false);
         WebDataServiceImpl.getInstance(mApp).deletePatient(Boolean.class, WebServiceType.DELETE_PATIENT, user.getUniqueId(), user.getForeignLocationId(), user.getForeignHospitalId(), selecetdPatient.getUserId(), true, this, this);
     }
@@ -652,6 +652,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
                 childEditSearch.setVisibility(View.VISIBLE);
                 break;
             case R.id.bt_cancel:
+            case R.id.bt_clear:
                 clearSearchResults();
                 childEditSearch.setVisibility(View.GONE);
                 parentEditSearch.setVisibility(View.VISIBLE);
@@ -684,7 +685,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
             case LIST_VIEW:
 //                contactsListAdapter = new ContactsListAdapter(mActivity, this, changeViewType);
 //                lvContacts.setAdapter(contactsListAdapter);
-                notifyAdapter(new ArrayList<RegisteredPatientDetailsUpdated>(patientsListHashMap.values()));
+                notifyAdapterUpdate(new ArrayList<RegisteredPatientDetailsNew>(patientDetailsNewLinkedHashMap.values()));
                 lvContacts.setVisibility(View.VISIBLE);
                 containerFilterFragment.setVisibility(View.VISIBLE);
                 ((HomeActivity) mActivity).disableFilterButton();
@@ -719,7 +720,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
             visibleView.setVisibility(View.GONE);
         }
         progressLoading.setVisibility(View.GONE);
-        contactsListAdapter.setListData(patientsList);
+//        contactsListAdapter.setListData(patientsList);
         contactsListAdapter.notifyDataSetChanged();
     }
 
@@ -767,11 +768,11 @@ public class ContactsListFragment extends HealthCocoFragment implements
     public void getContactsList(boolean showLoading) {
         if (!isSyncRequired()) {
             if (isEndOfListAchievedServer) {
-                latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(user, LocalTabelType.REGISTERED_PATIENTS_DETAILS);
+                latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(user, LocalTabelType.REGISTERED_PATIENTS_DETAILS_NEW);
                 if (showLoading)
                     mActivity.showLoading(false);
             }
-            WebDataServiceImpl.getInstance(mApp).getContactsList(RegisteredPatientDetailsUpdated.class, user.getUniqueId(),
+            WebDataServiceImpl.getInstance(mApp).getContactsListNew(RegisteredPatientDetailsNew.class, user.getUniqueId(),
                     user.getForeignHospitalId(), user.getForeignLocationId(), latestUpdatedTime, user, PAGE_NUMBER_SERVER, MAX_NUMBER_OF_CONTACT, null, this, this);
         } else {
             swipeRefreshLayout.setRefreshing(false);
@@ -842,7 +843,8 @@ public class ContactsListFragment extends HealthCocoFragment implements
                 if (data != null && data.getParcelableExtra(HealthCocoConstants.TAG_PATIENT_PROFILE) != null) {
                     RegisteredPatientDetailsUpdated patientDetails = Parcels.unwrap(data.getParcelableExtra(HealthCocoConstants.TAG_PATIENT_PROFILE));
                     patientsListHashMap.put(patientDetails.getUserId(), patientDetails);
-                    notifyAdapter(new ArrayList<RegisteredPatientDetailsUpdated>(patientsListHashMap.values()));
+                    notifyAdapterUpdate(new ArrayList<RegisteredPatientDetailsNew>(patientDetailsNewLinkedHashMap.values()));
+
 //                getListFromLocal(false);
                 }
             } else if (resultCode == HealthCocoConstants.RESULT_CODE_GROUPS_LIST) {
@@ -862,18 +864,61 @@ public class ContactsListFragment extends HealthCocoFragment implements
                     if (user != null && !Util.isNullOrBlank(user.getUniqueId())
                             && !Util.isNullOrBlank(user.getForeignHospitalId())
                             && !Util.isNullOrBlank(user.getForeignLocationId())) {
-//                        if (packageType != null) {
                         initFilterFragment();
                         initData();
                         if (isInHomeActivity)
                             Util.sendBroadcast(mApp, MenuDrawerFragment.INTENT_REFRESH_PATIENT_COUNT);
                         getListFromLocal(true);
-//                        } else
-//                            showConfirmationAlert(null, mActivity.getResources().getString(R.string.confirm_discard_patient), null);
+                        if (isSyncRequired()) {
+                            getContactsList(false);
+                        }
                         return;
-
                     }
                     break;
+                case GET_CONTACTS_NEW:
+                    if (response.isDataFromLocal()) {
+                        ArrayList<RegisteredPatientDetailsNew> responseList = (ArrayList<RegisteredPatientDetailsNew>) (ArrayList<?>) response
+                                .getDataList();
+                        isInitialLoading = false;
+                        formHashMapAndRefreshNew(responseList);
+                        if (Util.isNullOrEmptyList(responseList) || responseList.size() < MAX_SIZE || Util.isNullOrEmptyList(responseList))
+                            isEndOfListAchieved = true;
+                        else isEndOfListAchieved = false;
+
+                        if (isInHomeActivity && isInitialLoading && !isEditTextSearching && !response.isFromLocalAfterApiSuccess() && response.isUserOnline()) {
+                            resetListAndPagingServer();
+                            getContactsList(true);
+                            return;
+                        } else if (!isEditTextSearching && Util.isNullOrEmptyList(responseList) && !response.isFromLocalAfterApiSuccess()) {
+                            resetListAndPagingServer();
+                            getContactsList(true);
+                            return;
+                        }
+                    } else if (!Util.isNullOrEmptyList(response.getDataList())) {
+                        if (Util.isNullOrEmptyList(response.getDataList()) || response.getDataList().size() < MAX_NUMBER_OF_CONTACT || Util.isNullOrEmptyList(response.getDataList())) {
+                            isEndOfListAchievedServer = true;
+                        } else {
+                            PAGE_NUMBER_SERVER = PAGE_NUMBER_SERVER + 1;
+                            isEndOfListAchievedServer = false;
+                        }
+                        response.setIsFromLocalAfterApiSuccess(true);
+                        if (isInHomeActivity) {
+                            new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_PATIENTS_NEW, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                            return;
+                        }
+                    }
+                    if (!isOnLoadMore) {
+                        refreshMenuFragmentContactsCount();
+                    }
+                    if (isInitialLoading && isInHomeActivity) {
+                        new SyncUtility(mApp, mActivity, user, null).getUIPermissions();
+                    }
+                    if (isInHomeActivity) {
+                        notifyAdapterUpdate(new ArrayList<RegisteredPatientDetailsNew>(patientDetailsNewLinkedHashMap.values()));
+                        Util.sendBroadcast(mApp, MenuDrawerFragment.INTENT_REFRESH_PATIENT_COUNT);
+                    }
+                    break;
+
                 case GET_CONTACTS:
                     if (response.isDataFromLocal()) {
                         ArrayList<RegisteredPatientDetailsUpdated> responseList = (ArrayList<RegisteredPatientDetailsUpdated>) (ArrayList<?>) response
@@ -974,7 +1019,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
                         boolean isDataSuccess = (boolean) response.getData();
                         if (isDataSuccess) {
                             tempSelectedPatient.setPatientDiscarded(true);
-                            LocalDataServiceImpl.getInstance(mApp).addPatient(tempSelectedPatient);
+                            LocalDataServiceImpl.getInstance(mApp).addPatientNew(tempSelectedPatient);
                             resetListAndPagingAttributes();
                             getListFromLocal(false);
                         } else Util.showToast(mActivity, R.string.patient_not_updated);
@@ -986,6 +1031,32 @@ public class ContactsListFragment extends HealthCocoFragment implements
         progressLoading.setVisibility(View.GONE);
         mActivity.hideLoading();
         swipeRefreshLayout.setRefreshing(false);
+    }
+
+    private void formHashMapAndRefreshNew(ArrayList<RegisteredPatientDetailsNew> responseList) {
+        if (!Util.isNullOrEmptyList(responseList)) {
+            for (RegisteredPatientDetailsNew patientDetails :
+                    responseList) {
+                patientDetailsNewLinkedHashMap.put(patientDetails.getUserId(), patientDetails);
+            }
+        }
+        notifyAdapterUpdate(new ArrayList<RegisteredPatientDetailsNew>(patientDetailsNewLinkedHashMap.values()));
+    }
+
+    private void notifyAdapterUpdate(List<RegisteredPatientDetailsNew> patientsList) {
+        LogUtils.LOGD(TAG, "Success notifyAdapter :" + patientsList.size());
+        View visibleView = getChangedView(changeViewType);
+        LogUtils.LOGD(TAG, "Success notifyAdapter :" + patientsList.size());
+        if (!Util.isNullOrEmptyList(patientsList)) {
+            tvNoPatients.setVisibility(View.GONE);
+            visibleView.setVisibility(View.VISIBLE);
+        } else {
+            tvNoPatients.setVisibility(View.VISIBLE);
+            visibleView.setVisibility(View.GONE);
+        }
+        progressLoading.setVisibility(View.GONE);
+        contactsListAdapter.setListData(patientsList);
+        contactsListAdapter.notifyDataSetChanged();
     }
 
     private void sortList(Intent intent, FilterItemType itemType) {
@@ -1055,7 +1126,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
             progressLoading.setVisibility(View.VISIBLE);
         }
 
-        LocalBackgroundTaskType localBackgroundTaskType = LocalBackgroundTaskType.GET_PATIENTS;
+        LocalBackgroundTaskType localBackgroundTaskType = LocalBackgroundTaskType.GET_PATIENTS_NEW;
         if (filterType != null) {
             localBackgroundTaskType = filterType.getLocalBackgroundTaskType();
             refreshFilterItemSelection(filterType);
@@ -1123,6 +1194,15 @@ public class ContactsListFragment extends HealthCocoFragment implements
                     LocalDataServiceImpl.getInstance(mApp).
                             addDoctorProfile((DoctorProfile) response.getData());
                 break;
+            case ADD_PATIENTS_NEW:
+                volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).
+                        addPatientsListNew((ArrayList<RegisteredPatientDetailsNew>) (ArrayList<?>) response.getDataList());
+            case GET_PATIENTS_NEW:
+            case SEARCH_PATIENTS:
+                volleyResponseBean = LocalDataServiceImpl.getInstance(mApp)
+                        .getSearchedPatientsListNewPageWise(WebServiceType.GET_CONTACTS_NEW, user,
+                                PAGE_NUMBER, MAX_SIZE, lastTextSearched, BooleanTypeValues.FALSE, null, null);
+                break;
             case ADD_PATIENTS:
                 volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).
                         addPatientsList((ArrayList<RegisteredPatientDetailsUpdated>) (ArrayList<?>) response.getDataList());
@@ -1135,7 +1215,6 @@ public class ContactsListFragment extends HealthCocoFragment implements
                 }
             case GET_PATIENTS:
             case SORT_LIST_BY_RECENTLY_ADDED:
-            case SEARCH_PATIENTS:
                 volleyResponseBean = LocalDataServiceImpl.getInstance(mApp)
                         .getSearchedPatientsListPageWise(WebServiceType.GET_CONTACTS, user,
                                 PAGE_NUMBER, MAX_SIZE, filterType, selectedSearchType, getSearchEditTextValue(selectedSearchType), pidHasDate, BooleanTypeValues.FALSE, null, null);
@@ -1223,7 +1302,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
         WebDataServiceImpl.getInstance(mApp).getRegisterDoctor(RegisteredDoctorProfile.class, user.getForeignLocationId(), user.getForeignHospitalId(), this, this);
     }
 
-    private void showConfirmationAlert(String title, String msg, final RegisteredPatientDetailsUpdated patientDetailsUpdated) {
+    private void showConfirmationAlert(String title, String msg, final RegisteredPatientDetailsNew patientDetailsUpdated) {
         if (Util.isNullOrBlank(title))
             title = mActivity.getResources().getString(R.string.confirm);
         final AlertDialog.Builder alertBuilder = new AlertDialog.Builder(mActivity);

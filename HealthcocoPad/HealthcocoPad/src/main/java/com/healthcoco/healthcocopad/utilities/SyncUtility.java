@@ -21,6 +21,7 @@ import com.healthcoco.healthcocopad.bean.server.Location;
 import com.healthcoco.healthcocopad.bean.server.PatientCount;
 import com.healthcoco.healthcocopad.bean.server.Profession;
 import com.healthcoco.healthcocopad.bean.server.Reference;
+import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsNew;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.Specialities;
 import com.healthcoco.healthcocopad.bean.server.User;
@@ -213,6 +214,25 @@ public class SyncUtility implements Response.Listener<VolleyResponseBean>, GsonR
                         }
                     }
                     break;
+                case GET_CONTACTS_NEW:
+                    if (!Util.isNullOrEmptyList(response.getDataList())) {
+                        if (Util.isNullOrZeroNumber(MAX_COUNT) || isTotalCountIsGreater()) {
+                            updatePatientCount(response);
+                        }
+                        if (Util.isNullOrEmptyList(response.getDataList()) || response.getDataList().size() < ContactsListFragment.MAX_NUMBER_OF_CONTACT || Util.isNullOrEmptyList(response.getDataList())) {
+                            isEndOfListAchieved = true;
+                        } else {
+                            PAGE_NUMBER = PAGE_NUMBER + 1;
+                        }
+                        new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_PATIENTS_NEW, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                        return;
+                    } else {
+                        if (Util.isSyncActive && !response.isFromLocalAfterApiSuccess()) {
+                            Util.isSyncActive = false;
+                            Util.sendBroadcast(mApp, ContactsListFragment.INTENT_REFRESH_PATIENT_COUNT);
+                        }
+                    }
+                    break;
                 default:
                     break;
             }
@@ -288,7 +308,21 @@ public class SyncUtility implements Response.Listener<VolleyResponseBean>, GsonR
                     LocalDataServiceImpl.getInstance(mApp).addPatientsList((ArrayList<RegisteredPatientDetailsUpdated>) (ArrayList<?>) response.getDataList());
                 response.setIsFromLocalAfterApiSuccess(true);
                 if (!isEndOfListAchieved && !Util.isNullOrZeroNumber(MAX_COUNT)) {
-                    syncContact();
+                    syncContactNew();
+                } else {
+                    Util.isSyncActive = false;
+                    resetListAndPagingAttributes();
+                }
+                Util.sendBroadcast(mApp, MenuDrawerFragment.INTENT_REFRESH_PATIENT_COUNT);
+                Util.sendBroadcast(mApp, ContactsListFragment.INTENT_REFRESH_PATIENT_COUNT);
+                break;
+            case ADD_PATIENTS_NEW:
+                if (!Util.isNullOrEmptyList(response.getDataList()))
+                    LocalDataServiceImpl.getInstance(mApp).
+                            addPatientsListNew((ArrayList<RegisteredPatientDetailsNew>) (ArrayList<?>) response.getDataList());
+                response.setIsFromLocalAfterApiSuccess(true);
+                if (!isEndOfListAchieved && !Util.isNullOrZeroNumber(MAX_COUNT)) {
+                    syncContactNew();
                 } else {
                     Util.isSyncActive = false;
                     resetListAndPagingAttributes();
@@ -379,12 +413,20 @@ public class SyncUtility implements Response.Listener<VolleyResponseBean>, GsonR
         MAX_COUNT = LocalDataServiceImpl.getInstance(mApp).getPatientCountLong(user);
         if (!Util.isNullOrZeroNumber(MAX_COUNT)) {
             isPaginationRequired();
-            syncContact();
+            syncContactNew();
         } else {
             isEndOfListAchieved = false;
             latestUpdatedTimeContact = 0l;
-            syncContact();
+            syncContactNew();
         }
+    }
+
+    private void syncContactNew() {
+        if (isEndOfListAchieved) {
+            latestUpdatedTimeContact = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(user, LocalTabelType.REGISTERED_PATIENTS_DETAILS_NEW);
+        }
+        WebDataServiceImpl.getInstance(mApp).getContactsListNew(RegisteredPatientDetailsNew.class, user.getUniqueId(),
+                user.getForeignHospitalId(), user.getForeignLocationId(), latestUpdatedTimeContact, user, PAGE_NUMBER, ContactsListFragment.MAX_NUMBER_OF_CONTACT, null, this, this);
     }
 
     private void syncContact() {

@@ -91,6 +91,7 @@ import com.healthcoco.healthcocopad.bean.server.PsSuggestions;
 import com.healthcoco.healthcocopad.bean.server.PvSuggestions;
 import com.healthcoco.healthcocopad.bean.server.Reference;
 import com.healthcoco.healthcocopad.bean.server.RegisteredDoctorProfile;
+import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsNew;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.Specialities;
 import com.healthcoco.healthcocopad.bean.server.SystemicExaminationSuggestions;
@@ -969,6 +970,7 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
                         defaultWebServicesList.remove(DefaultSyncServiceType.getSyncType(webServiceType));
                     updateProgress(DefaultSyncServiceType.GET_CONTACTS);
                     break;
+                case GET_CONTACTS_NEW:
                 case GET_CONTACTS:
                     if (defaultWebServicesList.contains(DefaultSyncServiceType.getSyncType(webServiceType)))
                         defaultWebServicesList.remove(DefaultSyncServiceType.getSyncType(webServiceType));
@@ -1010,6 +1012,9 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
                 case GET_DRUG_DOSAGE:
                     new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_DRUG_DOSAGE, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
                     return;
+                case GET_CONTACTS_NEW:
+                    new LocalDataBackgroundtaskOptimised(this, LocalBackgroundTaskType.ADD_PATIENTS_NEW, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                    break;
                 case GET_CONTACTS:
                     if (isPagingRequired)
                         updateProgress(DefaultSyncServiceType.GET_CONTACTS);
@@ -1183,6 +1188,9 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
         ArrayList<Object> responseList = response.getDataList();
         int maxCount = 0;
         switch (response.getWebServiceType()) {
+            case GET_CONTACTS_NEW:
+                resetInitialSyncPaginationAttributes();
+                return false;
            /* case GET_CONTACTS:
                 boolean isEndOfListAchieved = false;
                 if (Util.isNullOrEmptyList(responseList)
@@ -1284,7 +1292,16 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
                             (ArrayList<CalendarEvents>) (ArrayList<?>) response
                                     .getDataList());
                 break;
-            case ADD_PATIENTS:
+            case ADD_PATIENTS_NEW:
+                ArrayList<RegisteredPatientDetailsNew> list = null;
+                if (!Util.isNullOrEmptyList(response.getDataList()))
+                    list = (ArrayList<RegisteredPatientDetailsNew>) (ArrayList<?>) response.getDataList();
+                if (!Util.isNullOrEmptyList(list)) {
+                    LocalDataServiceImpl.getInstance(mApp).addPatientsListNew(list);
+                    updatePatientCount(response);
+                }
+                break;
+                case ADD_PATIENTS:
                 ArrayList<RegisteredPatientDetailsUpdated> patientsList = null;
                 if (!Util.isNullOrEmptyList(response.getDataList())) {
                     patientsList = (ArrayList<RegisteredPatientDetailsUpdated>) (ArrayList<?>) response.getDataList();
@@ -1831,11 +1848,11 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
         this.user = user;
         Long latestUpdatedTime = 0l;
         if (!isPageWiseLoading) {
-            latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(user, LocalTabelType.REGISTERED_PATIENTS_DETAILS);
-            WebDataServiceImpl.getInstance(mApp).getContactsList(RegisteredPatientDetailsUpdated.class, user.getUniqueId(),
+            latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(user, LocalTabelType.REGISTERED_PATIENTS_DETAILS_NEW);
+            WebDataServiceImpl.getInstance(mApp).getContactsListNew(RegisteredPatientDetailsNew.class, user.getUniqueId(),
                     user.getForeignHospitalId(), user.getForeignLocationId(), latestUpdatedTime, user, this, this);
         } else {
-            WebDataServiceImpl.getInstance(mApp).getContactsList(RegisteredPatientDetailsUpdated.class, user.getUniqueId(),
+            WebDataServiceImpl.getInstance(mApp).getContactsListNew(RegisteredPatientDetailsNew.class, user.getUniqueId(),
                     user.getForeignHospitalId(), user.getForeignLocationId(), 0l, user, InitialSyncFragment.PAGE_NUMBER, InitialSyncFragment.MAX_SIZE, null, this, this);
         }
 //        Long latestUpdatedTime = LocalDataServiceImpl.getInstance(mApp).getLatestUpdatedTime(user, LocalTabelType.REGISTERED_PATIENTS_DETAILS);

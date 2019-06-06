@@ -608,6 +608,27 @@ public class SyncFragment extends HealthCocoFragment implements View.OnClickList
                     if (Util.isSyncActive)
                         isEndOfListAchieved = false;
                     break;
+                case GET_CONTACTS_NEW:
+                    if (!Util.isNullOrEmptyList(response.getDataList())) {
+                        if (Util.isNullOrZeroNumber(MAX_COUNT) || isTotalCountIsGreater()) {
+                            updatePatientCount(response);
+                        }
+                        if (Util.isNullOrEmptyList(response.getDataList()) || response.getDataList().size() < ContactsListFragment.MAX_NUMBER_OF_CONTACT
+                                || Util.isNullOrEmptyList(response.getDataList())) {
+                            isEndOfListAchieved = true;
+                        } else {
+                            updateSyncProgress();
+                        }
+                        new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_PATIENTS_NEW, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
+                        return;
+                    } else {
+                        if (Util.isSyncActive && !response.isFromLocalAfterApiSuccess()) {
+                            isEndOfListAchieved = true;
+                            Util.isSyncActive = false;
+                            Util.sendBroadcast(mApp, ContactsListFragment.INTENT_REFRESH_PATIENT_COUNT);
+                        }
+                    }
+                    break;
                 case GET_CONTACTS:
                     if (!Util.isNullOrEmptyList(response.getDataList())) {
                         if (Util.isNullOrZeroNumber(MAX_COUNT) || isTotalCountIsGreater()) {
@@ -966,6 +987,10 @@ public class SyncFragment extends HealthCocoFragment implements View.OnClickList
         mActivity.hideLoading();
     }
 
+    private void updateSyncProgress() {
+        PAGE_NUMBER = PAGE_NUMBER + 1;
+    }
+
     private boolean isPaginationRequired() {
         long count = LocalDataServiceImpl.getInstance(mApp).getListCount(user);
 
@@ -993,6 +1018,9 @@ public class SyncFragment extends HealthCocoFragment implements View.OnClickList
         if (webServiceType != null)
             switch (webServiceType) {
                 case GET_CONTACTS:
+                    syncAllType = SyncAllType.CONTACT;
+                    break;
+                case GET_CONTACTS_NEW:
                     syncAllType = SyncAllType.CONTACT;
                     break;
                 case GET_DATA_PERMISSION:

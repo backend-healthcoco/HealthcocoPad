@@ -359,7 +359,7 @@ public class MenuDrawerFragment extends HealthCocoFragment implements View.OnCli
                 volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getDoctorProfileResponse(WebServiceType.GET_DOCTOR_PROFILE, doctorProfile.getDoctorId(), null, null);
                 break;
             case GET_PATIENT_COUNT:
-                volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getListSize(LocalTabelType.REGISTERED_PATIENTS_DETAILS, BooleanTypeValues.FALSE, null, null);
+                volleyResponseBean = LocalDataServiceImpl.getInstance(mApp).getListSize(LocalTabelType.REGISTERED_PATIENTS_DETAILS_NEW, BooleanTypeValues.FALSE, null, null);
                 break;
         }
         volleyResponseBean.setIsFromLocalAfterApiSuccess(response.isFromLocalAfterApiSuccess());

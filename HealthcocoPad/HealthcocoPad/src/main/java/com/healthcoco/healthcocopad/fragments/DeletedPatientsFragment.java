@@ -12,8 +12,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +24,7 @@ import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
+import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsNew;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.custom.HealthcocoTextWatcher;
@@ -68,6 +67,7 @@ public class DeletedPatientsFragment extends HealthCocoFragment implements Local
     private TextView tvNoPatients;
 
     private LinkedHashMap<String, RegisteredPatientDetailsUpdated> patientsListHashMap = new LinkedHashMap<>();
+    private LinkedHashMap<String, RegisteredPatientDetailsNew> patientDetailsNewLinkedHashMap = new LinkedHashMap<>();
     private SwipeRefreshLayout swipeRefreshLayout;
     private FloatingActionButton btAddNewPatient;
     private AsyncTask<VolleyResponseBean, VolleyResponseBean, VolleyResponseBean> asynTaskGetPatients;
@@ -167,6 +167,11 @@ public class DeletedPatientsFragment extends HealthCocoFragment implements Local
                     user = doctor.getUser();
                 }
                 break;
+            case GET_PATIENTS_NEW:
+                volleyResponseBean = LocalDataServiceImpl.getInstance(mApp)
+                        .getSearchedPatientsListNewPageWise(WebServiceType.GET_CONTACTS_NEW, user,
+                                PAGE_NUMBER, MAX_SIZE, lastTextSearched, BooleanTypeValues.TRUE, null, null);
+                break;
             case GET_PATIENTS:
                 volleyResponseBean = LocalDataServiceImpl.getInstance(mApp)
                         .getSearchedPatientsListPageWise(WebServiceType.GET_CONTACTS, user,
@@ -211,12 +216,48 @@ public class DeletedPatientsFragment extends HealthCocoFragment implements Local
                         response.setIsFromLocalAfterApiSuccess(true);
                     }
                     break;
+                case GET_CONTACTS_NEW:
+                    if (response.isDataFromLocal()) {
+                        ArrayList<RegisteredPatientDetailsNew> responseList = (ArrayList<RegisteredPatientDetailsNew>) (ArrayList<?>) response
+                                .getDataList();
+                        isInitialLoading = false;
+                        formHashMapAndRefreshNew(responseList);
+                        if (Util.isNullOrEmptyList(responseList) || responseList.size() < MAX_SIZE || Util.isNullOrEmptyList(responseList))
+                            isEndOfListAchieved = true;
+                        else isEndOfListAchieved = false;
+                        response.setIsFromLocalAfterApiSuccess(true);
+                    }
+                    break;
             }
             notifyAdapter(new ArrayList<RegisteredPatientDetailsUpdated>(patientsListHashMap.values()));
             isInitialLoading = false;
             mActivity.hideLoading();
             swipeRefreshLayout.setRefreshing(false);
         }
+    }
+
+    private void formHashMapAndRefreshNew(ArrayList<RegisteredPatientDetailsNew> responseList) {
+        if (!Util.isNullOrEmptyList(responseList)) {
+            for (RegisteredPatientDetailsNew patientDetails :
+                    responseList) {
+                patientDetailsNewLinkedHashMap.put(patientDetails.getUserId(), patientDetails);
+            }
+        }
+        notifyAdapterUpdate(new ArrayList<RegisteredPatientDetailsNew>(patientDetailsNewLinkedHashMap.values()));
+    }
+
+    private void notifyAdapterUpdate(List<RegisteredPatientDetailsNew> patientsList) {
+        LogUtils.LOGD(TAG, "Success notifyAdapter :" + patientsList.size());
+        if (!Util.isNullOrEmptyList(patientsList)) {
+            lvContacts.setVisibility(View.VISIBLE);
+            tvNoPatients.setVisibility(View.GONE);
+        } else {
+            lvContacts.setVisibility(View.GONE);
+            tvNoPatients.setVisibility(View.VISIBLE);
+        }
+        progressLoading.setVisibility(View.GONE);
+        adapter.setListData((ArrayList<Object>) (Object) patientsList);
+        adapter.notifyDataSetChanged();
     }
 
     private void formHashMapAndRefresh(ArrayList<RegisteredPatientDetailsUpdated> responseList) {

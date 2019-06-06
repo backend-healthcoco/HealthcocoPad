@@ -6,6 +6,7 @@ import android.widget.BaseAdapter;
 
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.HealthCocoViewHolder;
+import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsNew;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.listeners.ContactsItemOptionsListener;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
@@ -22,7 +23,7 @@ import java.util.List;
 public class ContactsListAdapter extends BaseAdapter {
     private static final String TAG = ContactsListAdapter.class.getSimpleName();
     private ContactsItemOptionsListener contactsItemOptionsListener;
-    private List<RegisteredPatientDetailsUpdated> mContacts;
+    private List<RegisteredPatientDetailsNew> mContacts;
     private HealthCocoActivity mActivity;
     private HealthCocoViewHolder healthCocoViewHolder;
 
@@ -31,7 +32,7 @@ public class ContactsListAdapter extends BaseAdapter {
         this.contactsItemOptionsListener = contactsItemOptionsListener;
     }
 
-    public void setListData(final List<RegisteredPatientDetailsUpdated> contacts) {
+    public void setListData(final List<RegisteredPatientDetailsNew> contacts) {
         this.mContacts = contacts;
     }
 
@@ -65,7 +66,7 @@ public class ContactsListAdapter extends BaseAdapter {
     public View getView(final int position, View convertView, final ViewGroup parent) {
         if (contactsItemOptionsListener.getChangedViewType() != null) {
             LogUtils.LOGD(TAG, "Success getView " + position);
-            RegisteredPatientDetailsUpdated patient = (RegisteredPatientDetailsUpdated) getItem(position);
+            RegisteredPatientDetailsNew patient = (RegisteredPatientDetailsNew) getItem(position);
             boolean loadImage;
             if (convertView == null) {
                 switch (contactsItemOptionsListener.getChangedViewType()) {

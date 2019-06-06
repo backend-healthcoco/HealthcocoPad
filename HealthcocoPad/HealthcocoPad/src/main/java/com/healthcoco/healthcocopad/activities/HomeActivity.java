@@ -152,7 +152,7 @@ public class HomeActivity extends HealthCocoActivity implements View.OnClickList
     }
 
     private void initFreshchatConfig(User user) {
-        if(doctorProfile!=null) {
+        if (doctorProfile != null) {
             String restoreIdFromPreferences = doctorProfile.getFreshchatRestoreId();
             FreshchatUser freshUser = null;
             if (!Util.isNullOrBlank(restoreIdFromPreferences)) {
@@ -402,7 +402,9 @@ public class HomeActivity extends HealthCocoActivity implements View.OnClickList
             receiversRegistered = true;
         }
         String restoreId = Freshchat.getInstance(getApplicationContext()).getUser().getRestoreId();
-        saveRestoreIdForUser(restoreId);
+        if (doctorProfile != null) {
+            saveRestoreIdForUser(restoreId);
+        }
 //        if (homeScreenTabsFragment != null) {
 //        initFragment(FragmentType.CONTACTS);
 //        setActionbarTitle(getResources().getString(selectedFramentType.getTitleId()));

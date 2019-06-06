@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.HealthCocoViewHolder;
 import com.healthcoco.healthcocopad.R;
+import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsNew;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.enums.ContactListItemOptionType;
 import com.healthcoco.healthcocopad.enums.PatientProfileScreenType;
@@ -28,7 +29,7 @@ public class ContactsGridViewHolder extends HealthCocoViewHolder implements OnCl
     private HealthCocoActivity mActivity;
     private View convertView;
     private ContactsItemOptionsListener optionsListener;
-    private RegisteredPatientDetailsUpdated objData;
+    private RegisteredPatientDetailsNew objData;
     private TextView tvContactName;
     private TextView tvContactNumber;
     private ImageView ivContactProfile;
@@ -59,7 +60,7 @@ public class ContactsGridViewHolder extends HealthCocoViewHolder implements OnCl
 
     @Override
     public void setData(Object data) {
-        this.objData = (RegisteredPatientDetailsUpdated) data;
+        this.objData = (RegisteredPatientDetailsNew) data;
     }
 
     @Override
