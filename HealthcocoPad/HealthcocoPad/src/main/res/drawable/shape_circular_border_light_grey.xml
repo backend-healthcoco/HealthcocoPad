@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <solid android:color="@color/grey_background" />
+
+    <corners
+        android:bottomLeftRadius="@dimen/image_patient_profile_bitmap"
+        android:bottomRightRadius="@dimen/image_patient_profile_bitmap"
+        android:topLeftRadius="@dimen/image_patient_profile_bitmap"
+        android:topRightRadius="@dimen/image_patient_profile_bitmap" />
+
+</shape>

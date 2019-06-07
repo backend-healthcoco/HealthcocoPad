@@ -31,6 +31,7 @@ import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.bean.server.UserGroups;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
+import com.healthcoco.healthcocopad.custom.ShimmerFrameLayout;
 import com.healthcoco.healthcocopad.dialogFragment.AddEditDrugAndAllergyDetailDialogFragment;
 import com.healthcoco.healthcocopad.dialogFragment.AddEditPersonalHistoryDetailDialogFragment;
 import com.healthcoco.healthcocopad.enums.BooleanTypeValues;
@@ -145,6 +146,9 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
     private LinearLayout containerNotes;
     private TextView tvGenderDate;
     private CommonOpenUpPatientDetailFragment patientDetailFragmentUpdated;
+    private ShimmerFrameLayout shimmerFrameLayout;
+    private LinearLayout shimmerViewContainer;
+    private LinearLayout layoutPatientDetail;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -249,6 +253,9 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
         containerFamilyHistory = (LinearLayout) mainContainerFamilyHistory.findViewById(R.id.container_family_history);
         showNoHistoryText(R.string.edit_to_assign_family_history);
         containerFamilyHistory.addView(tvNoDataText);
+        shimmerViewContainer = view.findViewById(R.id.shimmer_view_container);
+        shimmerFrameLayout = view.findViewById(R.id.shimmer_view);
+        layoutPatientDetail = view.findViewById(R.id.layout_patient_detail);
     }
 
     @Override
@@ -292,6 +299,13 @@ public class PatientProfileDetailFragment extends HealthCocoFragment implements 
             initProfileData();
             initGroups();
             initNotes();
+            shimmerViewContainer.setVisibility(View.GONE);
+            shimmerFrameLayout.stopShimmer();
+            layoutPatientDetail.setVisibility(View.VISIBLE);
+        } else {
+            shimmerViewContainer.setVisibility(View.VISIBLE);
+            shimmerFrameLayout.startShimmer();
+            layoutPatientDetail.setVisibility(View.GONE);
         }
     }
 

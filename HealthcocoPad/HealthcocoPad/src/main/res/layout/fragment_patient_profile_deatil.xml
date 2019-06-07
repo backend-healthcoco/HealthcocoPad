@@ -10,448 +10,479 @@
     android:paddingTop="@dimen/patient_detail_top_bottom_paddding">
 
     <LinearLayout
+        android:id="@+id/layout_patient_detail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/shape_emr_item_background"
+        android:visibility="visible"
         android:orientation="vertical">
-
-        <LinearLayout
-            android:id="@+id/parent_profile_image"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginRight="10dp"
-            android:orientation="horizontal"
-            android:padding="10dp">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center">
-
-                <FrameLayout
-                    android:id="@+id/profile_image"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center|start"
-                    android:background="@android:color/transparent">
-
-                    <TextView
-                        android:id="@+id/tv_initial_aplhabet"
-                        style="@style/TextRobotoStyle"
-                        android:layout_width="@dimen/initial_alphabet_patient_detail"
-                        android:layout_height="@dimen/initial_alphabet_patient_detail"
-                        android:layout_gravity="center"
-                        android:background="@android:color/transparent"
-                        android:gravity="center"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/text_size_patients_list_initial_alphabet" />
-
-                    <com.healthcoco.healthcocopad.custom.CircularImageView
-                        android:id="@+id/iv_image"
-                        android:layout_width="@dimen/image_patient_deatail"
-                        android:layout_height="@dimen/image_patient_deatail"
-                        android:layout_gravity="center"
-                        android:background="@drawable/shape_circle_blue_theme"
-                        android:scaleType="centerCrop"
-                        android:visibility="visible"
-                        app:civ_border_overlay="true"
-                        app:civ_border_width="@dimen/border_profile_images" />
-                </FrameLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="20dp"
-                android:gravity="center|start"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/tv_name"
-                    style="@style/TextRobotoStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="jij"
-                    android:textColor="@color/blue_action_bar"
-                    android:textSize="@dimen/text_size_patient_name_deatil_fragment" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/tv_patient_id"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:maxLines="1"
-                        android:text="P103456790"
-                        android:textSize="@dimen/text_size_patient_id_deatil_fragment" />
-
-                    <TextView
-                        android:id="@+id/tv_patient_gender"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:maxLines="1"
-                        android:text="P103456790"
-                        android:textSize="@dimen/text_size_patient_id_deatil_fragment" />
-                </LinearLayout>
-            </LinearLayout>
-        </LinearLayout>
-    </LinearLayout>
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/patient_detail_top_bottom_paddding"
-        android:fillViewport="true"
-        android:overScrollMode="never"
-        android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/shape_emr_item_background"
             android:orientation="vertical">
 
             <LinearLayout
+                android:id="@+id/parent_profile_image"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/shape_emr_item_background"
-                android:orientation="vertical"
+                android:layout_height="match_parent"
+                android:layout_marginRight="10dp"
+                android:orientation="horizontal"
                 android:padding="10dp">
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="horizontal">
+                    android:gravity="center">
 
-                    <ImageView
-                        android:layout_width="wrap_content"
+                    <FrameLayout
+                        android:id="@+id/profile_image"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingRight="@dimen/patient_profile_image_padding"
-                        android:src="@drawable/ic_important" />
+                        android:layout_gravity="center|start"
+                        android:background="@android:color/transparent">
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/past_history"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/text_size_patient_deatil_fragment" />
+                        <TextView
+                            android:id="@+id/tv_initial_aplhabet"
+                            style="@style/TextRobotoStyle"
+                            android:layout_width="@dimen/initial_alphabet_patient_detail"
+                            android:layout_height="@dimen/initial_alphabet_patient_detail"
+                            android:layout_gravity="center"
+                            android:background="@android:color/transparent"
+                            android:gravity="center"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/text_size_patients_list_initial_alphabet" />
 
-                    <com.healthcoco.healthcocopad.views.FontAwesomeButton
-                        android:id="@+id/bt_edit_patient_profile_past_history"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:background="@android:color/transparent"
-                        android:paddingLeft="@dimen/patient_profile_image_padding"
-                        android:paddingRight="@dimen/patient_profile_image_padding"
-                        android:text="@string/fa_edit_text_icon"
-                        android:textColor="@color/grey_dark_text"
-                        android:textSize="@dimen/edit_button_text_size_18sp" />
+                        <com.healthcoco.healthcocopad.custom.CircularImageView
+                            android:id="@+id/iv_image"
+                            android:layout_width="@dimen/image_patient_deatail"
+                            android:layout_height="@dimen/image_patient_deatail"
+                            android:layout_gravity="center"
+                            android:background="@drawable/shape_circle_blue_theme"
+                            android:scaleType="centerCrop"
+                            android:visibility="visible"
+                            app:civ_border_overlay="true"
+                            app:civ_border_width="@dimen/border_profile_images" />
+                    </FrameLayout>
                 </LinearLayout>
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginBottom="5dp"
-                    android:background="@color/grey_light_divider" />
-
-                <LinearLayout
-                    android:id="@+id/container_past_history"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:orientation="vertical"></LinearLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/patient_detail_top_bottom_paddding"
-                android:background="@drawable/shape_emr_item_background"
-                android:orientation="vertical"
-                android:padding="10dp">
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingRight="@dimen/patient_profile_image_padding"
-                        android:src="@drawable/ic_important" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/family_history"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/text_size_patient_deatil_fragment" />
-
-                    <com.healthcoco.healthcocopad.views.FontAwesomeButton
-                        android:id="@+id/bt_edit_patient_profile_family_history"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:background="@android:color/transparent"
-                        android:paddingLeft="@dimen/patient_profile_image_padding"
-                        android:paddingRight="@dimen/patient_profile_image_padding"
-                        android:text="@string/fa_edit_text_icon"
-                        android:textColor="@color/grey_dark_text"
-                        android:textSize="@dimen/edit_button_text_size_18sp" />
-                </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginBottom="5dp"
-                    android:background="@color/grey_light_divider" />
-
-                <LinearLayout
-                    android:id="@+id/container_family_history"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:orientation="vertical"></LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/patient_detail_top_bottom_paddding"
-                android:background="@drawable/shape_emr_item_background"
-                android:orientation="vertical"
-                android:padding="10dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingRight="@dimen/patient_profile_image_padding"
-                        android:src="@drawable/ic_important" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/personal_history"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/text_size_patient_deatil_fragment" />
-
-                    <com.healthcoco.healthcocopad.views.FontAwesomeButton
-                        android:id="@+id/bt_edit_patient_profile_personal_history"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:background="@android:color/transparent"
-                        android:paddingLeft="@dimen/patient_profile_image_padding"
-                        android:paddingRight="@dimen/patient_profile_image_padding"
-                        android:text="@string/fa_edit_text_icon"
-                        android:textColor="@color/grey_dark_text"
-                        android:textSize="@dimen/edit_button_text_size_18sp" />
-                </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginBottom="5dp"
-                    android:background="@color/grey_light_divider" />
-
-                <LinearLayout
-                    android:id="@+id/container_personal_history"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="20dp"
+                    android:gravity="center|start"
                     android:orientation="vertical">
 
-                    <include layout="@layout/item_patient_detail_personal_history" />
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/patient_detail_top_bottom_paddding"
-                android:background="@color/white"
-                android:orientation="vertical"
-                android:padding="10dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingRight="@dimen/patient_profile_image_padding"
-                        android:src="@drawable/ic_important" />
-
                     <TextView
-                        android:layout_width="0dp"
+                        android:id="@+id/tv_name"
+                        style="@style/TextRobotoStyle"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="@string/drug_allergy"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/text_size_patient_deatil_fragment" />
+                        android:text="jij"
+                        android:textColor="@color/blue_action_bar"
+                        android:textSize="@dimen/text_size_patient_name_deatil_fragment" />
 
-                    <com.healthcoco.healthcocopad.views.FontAwesomeButton
-                        android:id="@+id/bt_edit_patient_profile_drug_and_allergy"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:background="@android:color/transparent"
-                        android:paddingLeft="@dimen/patient_profile_image_padding"
-                        android:paddingRight="@dimen/patient_profile_image_padding"
-                        android:text="@string/fa_edit_text_icon"
-                        android:textColor="@color/grey_dark_text"
-                        android:textSize="@dimen/edit_button_text_size_18sp" />
-                </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginBottom="5dp"
-                    android:background="@color/grey_light_divider" />
-
-                <LinearLayout
-                    android:id="@+id/container_drug_and_allergy"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:orientation="vertical">
-
-                    <include layout="@layout/item_patient_detail_drugs_and_alleries" />
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/patient_detail_top_bottom_paddding"
-                android:background="@drawable/shape_emr_item_background"
-                android:orientation="vertical"
-                android:padding="10dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="horizontal">
-
-                    <com.healthcoco.healthcocopad.views.TextViewFontAwesome
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingRight="@dimen/patient_profile_image_padding"
-                        android:text="@string/fa_groups_icon"
-                        android:textColor="@color/grey_dark_text" />
-
-                    <TextView
-                        android:layout_width="0dp"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="@string/groups"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/text_size_patient_deatil_fragment" />
+                        android:orientation="horizontal">
 
-                    <com.healthcoco.healthcocopad.views.FontAwesomeButton
-                        android:id="@+id/bt_edit_patient_profile_groups"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:background="@android:color/transparent"
-                        android:paddingLeft="@dimen/patient_profile_image_padding"
-                        android:paddingRight="@dimen/patient_profile_image_padding"
-                        android:text="@string/fa_edit_text_icon"
-                        android:textColor="@color/grey_dark_text"
-                        android:textSize="@dimen/edit_button_text_size_18sp" />
+                        <TextView
+                            android:id="@+id/tv_patient_id"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:maxLines="1"
+                            android:text="P103456790"
+                            android:textSize="@dimen/text_size_patient_id_deatil_fragment" />
+
+                        <TextView
+                            android:id="@+id/tv_patient_gender"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:maxLines="1"
+                            android:text="P103456790"
+                            android:textSize="@dimen/text_size_patient_id_deatil_fragment" />
+                    </LinearLayout>
                 </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginBottom="5dp"
-                    android:background="@color/grey_light_divider" />
-
-                <LinearLayout
-                    android:id="@+id/container_groups"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:orientation="vertical"></LinearLayout>
             </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/patient_detail_top_bottom_paddding"
-                android:background="@drawable/shape_emr_item_background"
-                android:orientation="vertical"
-                android:padding="10dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="horizontal">
-
-                    <com.healthcoco.healthcocopad.views.TextViewFontAwesome
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingRight="@dimen/patient_profile_image_padding"
-                        android:text="@string/fa_note_icon"
-                        android:textColor="@color/black" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/notes"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/text_size_patient_deatil_fragment" />
-
-                    <com.healthcoco.healthcocopad.views.FontAwesomeButton
-                        android:id="@+id/bt_edit_patient_profile_notes"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:background="@android:color/transparent"
-                        android:paddingLeft="@dimen/patient_profile_image_padding"
-                        android:paddingRight="@dimen/patient_profile_image_padding"
-                        android:text="@string/fa_edit_text_icon"
-                        android:textColor="@color/grey_dark_text"
-                        android:textSize="@dimen/edit_button_text_size_18sp" />
-                </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginBottom="5dp"
-                    android:background="@color/grey_light_divider" />
-
-                <LinearLayout
-                    android:id="@+id/container_notes"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:orientation="vertical"></LinearLayout>
-            </LinearLayout>
-
-            <include layout="@layout/item_patient_detail_patient_data" />
         </LinearLayout>
-    </ScrollView>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/patient_detail_top_bottom_paddding"
+            android:fillViewport="true"
+            android:overScrollMode="never"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/shape_emr_item_background"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingRight="@dimen/patient_profile_image_padding"
+                            android:src="@drawable/ic_important" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/past_history"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/text_size_patient_deatil_fragment" />
+
+                        <com.healthcoco.healthcocopad.views.FontAwesomeButton
+                            android:id="@+id/bt_edit_patient_profile_past_history"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:background="@android:color/transparent"
+                            android:paddingLeft="@dimen/patient_profile_image_padding"
+                            android:paddingRight="@dimen/patient_profile_image_padding"
+                            android:text="@string/fa_edit_text_icon"
+                            android:textColor="@color/grey_dark_text"
+                            android:textSize="@dimen/edit_button_text_size_18sp" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginBottom="5dp"
+                        android:background="@color/grey_light_divider" />
+
+                    <LinearLayout
+                        android:id="@+id/container_past_history"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:orientation="vertical"></LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/patient_detail_top_bottom_paddding"
+                    android:background="@drawable/shape_emr_item_background"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingRight="@dimen/patient_profile_image_padding"
+                            android:src="@drawable/ic_important" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/family_history"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/text_size_patient_deatil_fragment" />
+
+                        <com.healthcoco.healthcocopad.views.FontAwesomeButton
+                            android:id="@+id/bt_edit_patient_profile_family_history"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:background="@android:color/transparent"
+                            android:paddingLeft="@dimen/patient_profile_image_padding"
+                            android:paddingRight="@dimen/patient_profile_image_padding"
+                            android:text="@string/fa_edit_text_icon"
+                            android:textColor="@color/grey_dark_text"
+                            android:textSize="@dimen/edit_button_text_size_18sp" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginBottom="5dp"
+                        android:background="@color/grey_light_divider" />
+
+                    <LinearLayout
+                        android:id="@+id/container_family_history"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:orientation="vertical"></LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/patient_detail_top_bottom_paddding"
+                    android:background="@drawable/shape_emr_item_background"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingRight="@dimen/patient_profile_image_padding"
+                            android:src="@drawable/ic_important" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/personal_history"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/text_size_patient_deatil_fragment" />
+
+                        <com.healthcoco.healthcocopad.views.FontAwesomeButton
+                            android:id="@+id/bt_edit_patient_profile_personal_history"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:background="@android:color/transparent"
+                            android:paddingLeft="@dimen/patient_profile_image_padding"
+                            android:paddingRight="@dimen/patient_profile_image_padding"
+                            android:text="@string/fa_edit_text_icon"
+                            android:textColor="@color/grey_dark_text"
+                            android:textSize="@dimen/edit_button_text_size_18sp" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginBottom="5dp"
+                        android:background="@color/grey_light_divider" />
+
+                    <LinearLayout
+                        android:id="@+id/container_personal_history"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:orientation="vertical">
+
+                        <include layout="@layout/item_patient_detail_personal_history" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/patient_detail_top_bottom_paddding"
+                    android:background="@color/white"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingRight="@dimen/patient_profile_image_padding"
+                            android:src="@drawable/ic_important" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/drug_allergy"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/text_size_patient_deatil_fragment" />
+
+                        <com.healthcoco.healthcocopad.views.FontAwesomeButton
+                            android:id="@+id/bt_edit_patient_profile_drug_and_allergy"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:background="@android:color/transparent"
+                            android:paddingLeft="@dimen/patient_profile_image_padding"
+                            android:paddingRight="@dimen/patient_profile_image_padding"
+                            android:text="@string/fa_edit_text_icon"
+                            android:textColor="@color/grey_dark_text"
+                            android:textSize="@dimen/edit_button_text_size_18sp" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginBottom="5dp"
+                        android:background="@color/grey_light_divider" />
+
+                    <LinearLayout
+                        android:id="@+id/container_drug_and_allergy"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:orientation="vertical">
+
+                        <include layout="@layout/item_patient_detail_drugs_and_alleries" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/patient_detail_top_bottom_paddding"
+                    android:background="@drawable/shape_emr_item_background"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingRight="@dimen/patient_profile_image_padding"
+                            android:text="@string/fa_groups_icon"
+                            android:textColor="@color/grey_dark_text" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/groups"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/text_size_patient_deatil_fragment" />
+
+                        <com.healthcoco.healthcocopad.views.FontAwesomeButton
+                            android:id="@+id/bt_edit_patient_profile_groups"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:background="@android:color/transparent"
+                            android:paddingLeft="@dimen/patient_profile_image_padding"
+                            android:paddingRight="@dimen/patient_profile_image_padding"
+                            android:text="@string/fa_edit_text_icon"
+                            android:textColor="@color/grey_dark_text"
+                            android:textSize="@dimen/edit_button_text_size_18sp" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginBottom="5dp"
+                        android:background="@color/grey_light_divider" />
+
+                    <LinearLayout
+                        android:id="@+id/container_groups"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:orientation="vertical"></LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/patient_detail_top_bottom_paddding"
+                    android:background="@drawable/shape_emr_item_background"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <com.healthcoco.healthcocopad.views.TextViewFontAwesome
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingRight="@dimen/patient_profile_image_padding"
+                            android:text="@string/fa_note_icon"
+                            android:textColor="@color/black" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/notes"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/text_size_patient_deatil_fragment" />
+
+                        <com.healthcoco.healthcocopad.views.FontAwesomeButton
+                            android:id="@+id/bt_edit_patient_profile_notes"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:background="@android:color/transparent"
+                            android:paddingLeft="@dimen/patient_profile_image_padding"
+                            android:paddingRight="@dimen/patient_profile_image_padding"
+                            android:text="@string/fa_edit_text_icon"
+                            android:textColor="@color/grey_dark_text"
+                            android:textSize="@dimen/edit_button_text_size_18sp" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginBottom="5dp"
+                        android:background="@color/grey_light_divider" />
+
+                    <LinearLayout
+                        android:id="@+id/container_notes"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:orientation="vertical"></LinearLayout>
+                </LinearLayout>
+
+                <include layout="@layout/item_patient_detail_patient_data" />
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/shimmer_view_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/blue_action_bar"
+        android:visibility="gone">
+
+        <com.healthcoco.healthcocopad.custom.ShimmerFrameLayout
+            android:id="@+id/shimmer_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <include layout="@layout/item_shimmer_for_patient_profile" />
+
+            </LinearLayout>
+        </com.healthcoco.healthcocopad.custom.ShimmerFrameLayout>
+    </LinearLayout>
+
 </LinearLayout>
