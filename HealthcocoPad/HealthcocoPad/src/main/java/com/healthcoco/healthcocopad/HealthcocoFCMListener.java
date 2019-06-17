@@ -10,6 +10,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 
+import com.freshchat.consumer.sdk.Freshchat;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.google.gson.Gson;
@@ -46,6 +47,9 @@ public class HealthcocoFCMListener extends FirebaseMessagingService {
             LogUtils.LOGD(TAG, "From: " + message.getFrom());
             LogUtils.LOGD(TAG, "Message : " + (String) data.get(KEY));
             generateNotification((String) data.get(KEY));
+        }
+        if (Freshchat.isFreshchatNotification(message)) {
+            Freshchat.handleFcmMessage(getApplicationContext(), message);
         }
     }
 

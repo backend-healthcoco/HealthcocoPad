@@ -18,6 +18,7 @@ import com.healthcoco.healthcocopad.adapter.PatientNumberSearchAdapter;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.AlreadyRegisteredPatientsResponse;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
+import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsNew;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.enums.AddUpdateNameDialogType;
@@ -50,7 +51,7 @@ public class PatientNumberSearchResultsDialogFragment extends HealthCocoDialogFr
     private String mobileNumber;
     private boolean isFromHomeActivity;
     private boolean isForMobileNoEdit;
-    private RegisteredPatientDetailsUpdated selectedPatient;
+    private RegisteredPatientDetailsNew selectedPatient;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

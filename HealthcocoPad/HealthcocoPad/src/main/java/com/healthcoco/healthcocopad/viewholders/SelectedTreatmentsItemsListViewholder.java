@@ -8,7 +8,6 @@ import android.widget.TextView;
 
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.HealthCocoApplication;
-import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.HealthCocoViewHolder;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.TotalTreatmentCostDiscountValues;
@@ -79,7 +78,7 @@ public class SelectedTreatmentsItemsListViewholder extends HealthCocoViewHolder 
     public void applyData() {
         if (objData.getTreatmentService() != null) {
             tvTreatmentName.setText(String.valueOf(objData.getTreatmentService().getName()));
-            if (doctorProfile != null) {
+            if (doctorProfile != null && !Util.isNullOrEmptyList(doctorProfile.getSpecialities())) {
                 if (doctorProfile.getSpecialities().contains("Dentist")) {
                     tvTreatmentMaterial.setVisibility(View.INVISIBLE);
                     if (!Util.isNullOrEmptyList(objData.getTreatmentService().getFieldsRequired())) {

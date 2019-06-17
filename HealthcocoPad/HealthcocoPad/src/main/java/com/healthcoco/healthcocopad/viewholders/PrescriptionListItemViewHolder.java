@@ -17,6 +17,7 @@ import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.AppointmentRequest;
 import com.healthcoco.healthcocopad.bean.server.DiagnosticTestsPrescription;
+import com.healthcoco.healthcocopad.bean.server.Drug;
 import com.healthcoco.healthcocopad.bean.server.DrugItem;
 import com.healthcoco.healthcocopad.bean.server.Prescription;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
@@ -392,11 +393,38 @@ public class PrescriptionListItemViewHolder extends HealthCocoViewHolder impleme
                 } else
                     onNetworkUnavailable(null);
                 popupWindow.dismiss();
-
+                break;
+            case R.id.tv_whatsapp:
+                sendWhatsappMsg();
+                popupWindow.dismiss();
                 break;
             default:
                 break;
         }
+    }
+
+    private void sendWhatsappMsg() {
+        if (!Util.isNullOrEmptyList(prescription.getItems())) {
+            String formattedDrugName = "Patient Detail: " + "\n "
+                    + Util.getValidatedValue(selectedPatient.getFirstName()) + " " + Util.getValidatedValue(selectedPatient.getLastName()) + "\n "
+                    + Util.getValidatedValue(selectedPatient.getGender()) + " " + Util.getValidatedValue(Util.getFormattedAge(selectedPatient.getDob())) + "\n\n  "
+                    + "Rx :";
+
+            for (DrugItem drugItem : prescription.getItems()) {
+                if (drugItem.getDrug() != null) {
+                    Drug drug = drugItem.getDrug();
+                    if (drug.getDrugType() != null &&
+                            !Util.isNullOrBlank(drug.getDrugType().getType()) &&
+                            !Util.isNullOrBlank(drug.getDrugName()))
+                        if (Util.isNullOrBlank(formattedDrugName))
+                            formattedDrugName = "\u2022 " + formattedDrugName + Util.getValidatedValue(drug.getDrugType().getType()) + " " + Util.getValidatedValue(drug.getDrugName()) + " " + Util.getValidatedValue(drugItem.getDosage());
+                        else
+                            formattedDrugName = formattedDrugName + "\n" + "\u2022 " + Util.getValidatedValue(drug.getDrugType().getType()) + " " + Util.getValidatedValue(drug.getDrugName()) + " " + Util.getValidatedValue(drugItem.getDosage());
+                }
+            }
+            formattedDrugName = formattedDrugName + "\n " + "Powered by Healthcoco";
+            mActivity.sendMsgToWhatsapp(formattedDrugName, selectedPatient.getMobileNumber());
+        } else Util.showToast(mActivity, "No Prescription available");
     }
 
     private void openNewTemplatesFragment() {

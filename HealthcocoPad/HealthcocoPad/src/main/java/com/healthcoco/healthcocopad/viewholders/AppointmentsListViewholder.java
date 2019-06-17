@@ -14,6 +14,7 @@ import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.request.AppointmentRequestToSend;
 import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
+import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.WorkingHours;
 import com.healthcoco.healthcocopad.dialogFragment.BookAppointmentDialogFragment;
 import com.healthcoco.healthcocopad.enums.AppointmentStatusType;
@@ -21,6 +22,7 @@ import com.healthcoco.healthcocopad.enums.BookAppointmentFromScreenType;
 import com.healthcoco.healthcocopad.enums.CreatedByType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.fragments.PatientAppointmentDetailFragment;
+import com.healthcoco.healthcocopad.listeners.AppointmentListListner;
 import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
@@ -37,6 +39,7 @@ public class AppointmentsListViewholder extends HealthCocoViewHolder implements
         View.OnClickListener, Response.Listener<VolleyResponseBean>, GsonRequest.ErrorListener {
 
     public static final String DATE_FORMAT_USED_IN_THIS_SCREEN = "EEE, MMM dd,yyyy";
+    private RegisteredPatientDetailsUpdated selectedPatient;
     private HealthCocoActivity mActivity;
     private TextView tvAppointmentID;
     private CalendarEvents appointment;
@@ -56,11 +59,19 @@ public class AppointmentsListViewholder extends HealthCocoViewHolder implements
     private LinearLayout containerBottomOptions;
     private TextView tvNote;
     private BookAppointmentFromScreenType screenType;
+    private LinearLayout btSendWhatsapp;
 
     public AppointmentsListViewholder(HealthCocoActivity mActivity, BookAppointmentFromScreenType screenType) {
         super(mActivity);
         this.mActivity = mActivity;
         this.screenType = screenType;
+    }
+
+    public AppointmentsListViewholder(HealthCocoActivity mActivity, BookAppointmentFromScreenType screenType, AppointmentListListner appointmentListListner) {
+        super(mActivity);
+        this.mActivity = mActivity;
+        this.screenType = screenType;
+        this.selectedPatient = appointmentListListner.getSelectedPatient();
     }
 
     @Override
@@ -138,6 +149,7 @@ public class AppointmentsListViewholder extends HealthCocoViewHolder implements
         btRemind = (LinearLayout) view.findViewById(R.id.bt_remind);
         btConfirm = (LinearLayout) view.findViewById(R.id.bt_confirm);
         btReschedule = (LinearLayout) view.findViewById(R.id.bt_reschedule);
+        btSendWhatsapp = (LinearLayout) view.findViewById(R.id.bt_send_whatsapp);
         containerBottomOptions = (LinearLayout) view.findViewById(R.id.container_bottom_options);
 
         tvDiscardedCancelled = (TextView) view.findViewById(R.id.tv_discarded);
@@ -146,6 +158,7 @@ public class AppointmentsListViewholder extends HealthCocoViewHolder implements
         btConfirm.setOnClickListener(this);
         btReschedule.setOnClickListener(this);
         btRemind.setOnClickListener(this);
+        btSendWhatsapp.setOnClickListener(this);
         return view;
     }
 
@@ -196,6 +209,18 @@ public class AppointmentsListViewholder extends HealthCocoViewHolder implements
                     openAddAppointmentScreen();
                 } else
                     onNetworkUnavailable(null);
+                break;
+            case R.id.bt_send_whatsapp:
+                String msg = "Patient Detail: " + "\n "
+                        + Util.getValidatedValue(selectedPatient.getFirstName()) + " " + Util.getValidatedValue(selectedPatient.getLastName()) + "\n "
+                        + Util.getValidatedValue(selectedPatient.getGender()) + " " + Util.getValidatedValue(Util.getFormattedAge(selectedPatient.getDob())) + "\n "
+                        + "Your appointment with " + appointment.getDoctorName()
+                        + " has been scheduled @ "
+                        + DateTimeUtil.getFormattedTime(0, Math.round(appointment.getTime().getFromTime())) + ", "
+                        + DateTimeUtil.getFormattedDateTime(PatientAppointmentDetailFragment.DATE_FORMAT_USED_IN_THIS_SCREEN, appointment.getFromDate())
+                        + ", " + " at" + "  " + appointment.getLocationName() + "\n "
+                        + "Powered by Healthcoco";
+                mActivity.sendMsgToWhatsapp(msg, selectedPatient.getMobileNumber());
                 break;
         }
     }

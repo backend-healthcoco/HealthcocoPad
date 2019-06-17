@@ -29,6 +29,7 @@ import com.healthcoco.healthcocopad.enums.BookAppointmentFromScreenType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.LocalTabelType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
+import com.healthcoco.healthcocopad.listeners.AppointmentListListner;
 import com.healthcoco.healthcocopad.listeners.LoadMorePageListener;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
 import com.healthcoco.healthcocopad.services.GsonRequest;
@@ -48,7 +49,7 @@ import java.util.HashMap;
  * Created by Shreshtha on 07-03-2017.
  */
 public class PatientAppointmentDetailFragment extends HealthCocoFragment implements SwipeRefreshLayout.OnRefreshListener,
-        LocalDoInBackgroundListenerOptimised,
+        LocalDoInBackgroundListenerOptimised,AppointmentListListner,
         Response.Listener<VolleyResponseBean>, GsonRequest.ErrorListener, LoadMorePageListener, View.OnClickListener {
     public static final String DATE_FORMAT_USED_IN_THIS_SCREEN = "dd MMM yyyy";
     public static final String INTENT_GET_APPOINTMENT_LIST_LOCAL = "com.healthcoco.APPOINTMENT_LIST_LOCAL";
@@ -149,7 +150,7 @@ public class PatientAppointmentDetailFragment extends HealthCocoFragment impleme
     }
 
     private void initAdapter() {
-        adapter = new AppointmentsListAdapter(mActivity);
+        adapter = new AppointmentsListAdapter(mActivity,this);
         lvAppointment.setAdapter(adapter);
     }
 
@@ -334,5 +335,10 @@ public class PatientAppointmentDetailFragment extends HealthCocoFragment impleme
                 openAddNewAppointmentScreen();
                 break;
         }
+    }
+
+    @Override
+    public RegisteredPatientDetailsUpdated getSelectedPatient() {
+        return selectedPatient;
     }
 }

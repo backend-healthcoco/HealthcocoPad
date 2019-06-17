@@ -25,6 +25,7 @@ import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.request.AppointmentRequestToSend;
+import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.bean.server.WorkingHours;
 import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
@@ -66,6 +67,7 @@ public class AppointmentDetailsPopupWindow extends PopupWindow implements View.O
     private final String TAG = AppointmentDetailsPopupWindow.class.getSimpleName();
 
     private final View anchorView;
+    private RegisteredPatientDetailsUpdated selectedPatient;
     protected HealthCocoApplication mApp;
     private HealthCocoActivity mActivity;
     private int dropDownLayoutId;
@@ -107,6 +109,7 @@ public class AppointmentDetailsPopupWindow extends PopupWindow implements View.O
     private QueueListitemlistener queueListitemlistener;
     private BookAppointmentFromScreenType screenType = APPOINTMENTS_QUEUE_RESCHEDULE;
     private Boolean pidHasDate;
+    private ImageView btSendWhatsapp;
 
 
     public AppointmentDetailsPopupWindow(Context context, View view, Object object, QueueListitemlistener queueListitemlistener) {
@@ -118,7 +121,7 @@ public class AppointmentDetailsPopupWindow extends PopupWindow implements View.O
         calendarEvents = (CalendarEvents) object;
         this.queueListitemlistener = queueListitemlistener;
         pidHasDate = queueListitemlistener.isPidHasDate();
-
+        this.selectedPatient = queueListitemlistener.getSelectedPatient();
     }
 
     public View getPopupView() {
@@ -160,6 +163,7 @@ public class AppointmentDetailsPopupWindow extends PopupWindow implements View.O
         btEdit = (ImageView) linearLayout.findViewById(R.id.bt_edit_appointment);
         btDiscard = (ImageView) linearLayout.findViewById(R.id.bt_discard_appointment);
         btPrint = (ImageView) linearLayout.findViewById(R.id.bt_print_patient_card);
+        btSendWhatsapp = (ImageView) linearLayout.findViewById(R.id.bt_send_whastapp);
         btDismiss = (ImageView) linearLayout.findViewById(R.id.bt_dismiss);
 
         layoutScheduledAt.setVisibility(View.GONE);
@@ -196,6 +200,7 @@ public class AppointmentDetailsPopupWindow extends PopupWindow implements View.O
         btEdit.setOnClickListener(this);
         btDismiss.setOnClickListener(this);
         layoutPatientDetails.setOnClickListener(this);
+        btSendWhatsapp.setOnClickListener(this);
         tvAppointmentStatus.setOnClickListener(this);
     }
 
@@ -267,6 +272,18 @@ public class AppointmentDetailsPopupWindow extends PopupWindow implements View.O
                 break;
             case R.id.tv_appointment_status:
                 mActivity.openChangeAppointmentStatusDialogFragment(calendarEvents.getAppointmentId());
+                break;
+            case R.id.bt_send_whastapp:
+                String formattedAppointmentMessage = "Patient Detail: " + "\n "
+                        + Util.getValidatedValue(selectedPatient.getFirstName()) + " " + Util.getValidatedValue(selectedPatient.getLastName()) + "\n "
+                        + Util.getValidatedValue(selectedPatient.getGender()) + " " + Util.getValidatedValue(Util.getFormattedAge(selectedPatient.getDob())) + "\n "
+                        + "Your appointment with " + calendarEvents.getDoctorName()
+                        + " has been scheduled @ "
+                        + DateTimeUtil.getFormattedTime(0, Math.round(calendarEvents.getTime().getFromTime())) + ", "
+                        + DateTimeUtil.getFormattedDateTime(PatientAppointmentDetailFragment.DATE_FORMAT_USED_IN_THIS_SCREEN, calendarEvents.getFromDate())
+                        + ", " + " at" + "  " + calendarEvents.getLocationName() + "\n "
+                        + "Powered by Healthcoco";
+                mActivity.sendMsgToWhatsapp(formattedAppointmentMessage, selectedPatient.getMobileNumber());
                 break;
 
         }

@@ -31,6 +31,7 @@ import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.freshchat.consumer.sdk.Freshchat;
@@ -146,6 +147,7 @@ import com.healthcoco.healthcocopad.utilities.Util;
 import org.parceler.Parcels;
 
 import java.io.File;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -1301,7 +1303,7 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
                     updatePatientCount(response);
                 }
                 break;
-                case ADD_PATIENTS:
+            case ADD_PATIENTS:
                 ArrayList<RegisteredPatientDetailsUpdated> patientsList = null;
                 if (!Util.isNullOrEmptyList(response.getDataList())) {
                     patientsList = (ArrayList<RegisteredPatientDetailsUpdated>) (ArrayList<?>) response.getDataList();
@@ -2141,4 +2143,20 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
         }
     }
 
+    public void sendMsgToWhatsapp(String msg, String mobileNumber) {
+        PackageManager packageManager = getPackageManager();
+        Intent i = new Intent(Intent.ACTION_VIEW);
+        try {
+            String url = "https://api.whatsapp.com/send?phone=" + "+91" + mobileNumber + "&text=" +
+                    URLEncoder.encode(msg, "UTF-8");
+            i.setPackage("com.whatsapp");
+            i.setData(Uri.parse(url));
+            if (i.resolveActivity(packageManager) != null) {
+                startActivity(i);
+            } else Toast.makeText(this, "WhatsApp not Installed", Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(this, "WhatsApp not Installed", Toast.LENGTH_SHORT).show();
+        }
+    }
 }

@@ -178,5 +178,5 @@ public class HealthCocoConstants {
     public static String VISIT_ID_TREATMENT = null;
     public static final String PARAM_NEW_PATIENT_ID = "newPatientId=";
     public static final String PARAM_MOBILE_NUMBER = "&mobileNumber=";
-
+    public static final String PARAM_USER_ID = "&userId=";
 }

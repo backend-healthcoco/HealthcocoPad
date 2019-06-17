@@ -400,7 +400,7 @@ public class PatientVisitDetailFragment extends HealthCocoFragment implements Re
 
     @Override
     public RegisteredPatientDetailsUpdated getSelectedPatient() {
-        return null;
+        return selectedPatient;
     }
 
     @Override

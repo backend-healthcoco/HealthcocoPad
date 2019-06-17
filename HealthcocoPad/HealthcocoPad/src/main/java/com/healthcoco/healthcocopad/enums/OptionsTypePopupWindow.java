@@ -15,6 +15,7 @@ public enum OptionsTypePopupWindow {
     VISITS_PRESCRIPTION(new ArrayList<Integer>() {{
         add(R.id.tv_sms);
         add(R.id.tv_email);
+        add(R.id.tv_whatsapp);
     }}),
     VISITS_OTHERS(new ArrayList<Integer>() {{
         add(R.id.tv_email);
@@ -22,6 +23,7 @@ public enum OptionsTypePopupWindow {
     PRESCRIPTIONS(new ArrayList<Integer>() {{
         add(R.id.tv_discard);
         add(R.id.tv_save_as_template);
+        add(R.id.tv_whatsapp);
     }}),
     CLINICAL_NOTES(new ArrayList<Integer>() {{
         add(R.id.tv_discard);

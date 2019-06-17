@@ -16,7 +16,6 @@ import com.android.volley.Response;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
-import com.healthcoco.healthcocopad.bean.UserPermissionsResponse;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.BottomTextStyle;
 import com.healthcoco.healthcocopad.bean.server.ContentSetup;
@@ -28,7 +27,6 @@ import com.healthcoco.healthcocopad.bean.server.PageSetup;
 import com.healthcoco.healthcocopad.bean.server.PatientDetails;
 import com.healthcoco.healthcocopad.bean.server.PrintSettings;
 import com.healthcoco.healthcocopad.bean.server.RightText;
-import com.healthcoco.healthcocopad.bean.server.Style;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocopad.dialogFragment.AddEditGeneralNotesDialogFragment;
@@ -356,6 +354,7 @@ public class SettingPrintSetupFragment extends HealthCocoFragment implements Gso
             refreshGeneralNotesDetails(printSettings);
         }
     }
+
     private void refreshGeneralNotesDetails(PrintSettings printSettings) {
         if (!Util.isNullOrBlank(printSettings.getGeneralNotes()))
             tvGeneralNotesText.setText(Util.getValidatedValue(printSettings.getGeneralNotes()));
@@ -453,7 +452,8 @@ public class SettingPrintSetupFragment extends HealthCocoFragment implements Gso
                 DownloadImageFromUrlUtil.loadImageUsingImageLoader(null, ivFooterImage, footerSetup.getFooterImageUrl());
                 ivFooterImage.setVisibility(View.VISIBLE);
             }
-            tvFooterHeight.setText(Util.getFormattedDoubleNumber(footerSetup.getFooterHeight()));
+            if (footerSetup.getFooterHeight() != null)
+                tvFooterHeight.setText(Util.getFormattedDoubleNumber(footerSetup.getFooterHeight()));
 
             if (!Util.isNullOrEmptyList(footerSetup.getBottomText())) {
                 List<BottomTextStyle> bottomTextList = footerSetup.getBottomText();
@@ -506,7 +506,8 @@ public class SettingPrintSetupFragment extends HealthCocoFragment implements Gso
             else
                 tvShowHeaderImage.setText(R.string.no);
 
-            tvHeaderHeight.setText(Util.getFormattedDoubleNumber(headerSetup.getHeaderHeight()));
+            if (headerSetup.getHeaderHeight() != null)
+                tvHeaderHeight.setText(Util.getFormattedDoubleNumber(headerSetup.getHeaderHeight()));
 
             if (!Util.isNullOrBlank(headerSetup.getHeaderImageUrl())) {
                 DownloadImageFromUrlUtil.loadImageUsingImageLoader(null, ivHeaderImage, headerSetup.getHeaderImageUrl());
@@ -589,9 +590,12 @@ public class SettingPrintSetupFragment extends HealthCocoFragment implements Gso
         if (printSettings.getContentSetup() != null) {
             ContentSetup contentSetup = printSettings.getContentSetup();
 
-            tvFontsize.setText(contentSetup.getFontSize());
-            tvLineSpace.setText(printSettings.getContentLineSpace());
-            tvShowInstructionAlign.setText(contentSetup.getInstructionAlign());
+            if (!Util.isNullOrBlank(contentSetup.getFontSize()))
+                tvFontsize.setText(contentSetup.getFontSize());
+            if (!Util.isNullOrBlank(printSettings.getContentLineSpace()))
+                tvLineSpace.setText(printSettings.getContentLineSpace());
+            if (!Util.isNullOrBlank(contentSetup.getInstructionAlign()))
+                tvShowInstructionAlign.setText(contentSetup.getInstructionAlign());
             if (contentSetup.getShowTreatmentcost())
                 tvShowTreatmentCost.setText(R.string.yes);
             else

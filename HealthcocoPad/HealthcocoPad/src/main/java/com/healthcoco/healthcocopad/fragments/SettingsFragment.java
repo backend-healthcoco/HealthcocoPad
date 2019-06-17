@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.freshchat.consumer.sdk.Freshchat;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
@@ -229,6 +230,7 @@ public class SettingsFragment extends HealthCocoFragment implements AdapterView.
                 gcmRequest.setUserIds(null);
                 LocalDataServiceImpl.getInstance(mApp).addGCMRequest(gcmRequest);
                 LocalDataServiceImpl.getInstance(mApp).clearAllTables(mActivity);
+                Freshchat.resetUser(mActivity);
                 mApp.cancelAllPendingRequests();
                 return null;
             }

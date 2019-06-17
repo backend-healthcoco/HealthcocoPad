@@ -197,7 +197,8 @@ public class EditFooterSetupDialogFragment extends HealthCocoDialogFragment
                 if (radioButton1 != null)
                     radioButton1.setChecked(true);
             }
-            etFooterHeight.setText(Util.getFormattedDoubleNumber(footerSetup.getFooterHeight()));
+            if (footerSetup.getFooterHeight() != null)
+                etFooterHeight.setText(Util.getFormattedDoubleNumber(footerSetup.getFooterHeight()));
 
             if (!Util.isNullOrBlank(footerSetup.getFooterImageUrl())) {
                 DownloadImageFromUrlUtil.loadImageUsingImageLoader(null, ivFooterImage, footerSetup.getFooterImageUrl());

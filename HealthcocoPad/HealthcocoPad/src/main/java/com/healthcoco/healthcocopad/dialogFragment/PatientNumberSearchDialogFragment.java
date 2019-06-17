@@ -26,6 +26,7 @@ import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.AlreadyRegisteredPatientsResponse;
 import com.healthcoco.healthcocopad.bean.server.DoctorClinicProfile;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
+import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsNew;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.custom.CustomEditText;
@@ -57,7 +58,7 @@ public class PatientNumberSearchDialogFragment extends HealthCocoDialogFragment 
     private User user;
     private boolean isMobileNumberOptional;
     private boolean isForMobileNoEdit;
-    private RegisteredPatientDetailsUpdated selectedPatient;
+    private RegisteredPatientDetailsNew selectedPatient;
     private TextView tvDescription;
 
     @Override

@@ -13,15 +13,17 @@ import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.AppointmentRequest;
 import com.healthcoco.healthcocopad.bean.server.ClinicalNotes;
+import com.healthcoco.healthcocopad.bean.server.Drug;
+import com.healthcoco.healthcocopad.bean.server.DrugItem;
 import com.healthcoco.healthcocopad.bean.server.Prescription;
 import com.healthcoco.healthcocopad.bean.server.Records;
+import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.Treatments;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.bean.server.VisitDetails;
 import com.healthcoco.healthcocopad.enums.RoleType;
 import com.healthcoco.healthcocopad.enums.VisitedForType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
-import com.healthcoco.healthcocopad.fragments.PatientClinicalNotesDetailFragment;
 import com.healthcoco.healthcocopad.fragments.PatientVisitDetailFragment;
 import com.healthcoco.healthcocopad.listeners.VisitDetailCombinedItemListener;
 import com.healthcoco.healthcocopad.services.GsonRequest;
@@ -41,6 +43,7 @@ import java.util.List;
 public class VisitDetailCombinedViewHolder extends HealthCocoViewHolder implements View.OnClickListener, GsonRequest.ErrorListener, Response.Listener<VolleyResponseBean> {
 
     private static final String DATE_FORMAT_USED_IN_THIS_SCREEN = "EEE, dd MMM yyyy";
+    private final RegisteredPatientDetailsUpdated selectedPatient;
     private VisitDetails visitDetail;
     private LinearLayout btPrint;
     private LinearLayout btSms;
@@ -66,6 +69,7 @@ public class VisitDetailCombinedViewHolder extends HealthCocoViewHolder implemen
     private TextView textViewNextReviewDate;
     private LinearLayout layoutNextReviewDetail;
     private Boolean isDiscarded;
+    private LinearLayout btSendWhatsapp;
 
     public VisitDetailCombinedViewHolder(HealthCocoActivity mActivity, VisitDetailCombinedItemListener listItemClickListener) {
         super(mActivity);
@@ -73,7 +77,7 @@ public class VisitDetailCombinedViewHolder extends HealthCocoViewHolder implemen
         this.listItemClickListener = listItemClickListener;
         this.user = listItemClickListener.getUser();
         this.loginedUser = listItemClickListener.getLoginedUser();
-
+        this.selectedPatient = listItemClickListener.getSelectedPatient();
     }
 
     @Override
@@ -117,6 +121,7 @@ public class VisitDetailCombinedViewHolder extends HealthCocoViewHolder implemen
         btHistory = (LinearLayout) contentView.findViewById(R.id.bt_history_visit);
         btDiscard = (LinearLayout) contentView.findViewById(R.id.bt_discard_visit);
         btSaveAsTemplate = (LinearLayout) contentView.findViewById(R.id.bt_save_as_template_visit);
+        btSendWhatsapp = (LinearLayout) contentView.findViewById(R.id.bt_send_whatsapp);
         containerBottomButtons = (LinearLayout) contentView.findViewById(R.id.container_bottom_buttons_combined);
         layoutDiscarded = (LinearLayout) contentView.findViewById(R.id.layout_discarded_visit);
     }
@@ -161,6 +166,7 @@ public class VisitDetailCombinedViewHolder extends HealthCocoViewHolder implemen
         btClone.setOnClickListener(this);
         btDiscard.setOnClickListener(this);
         btSaveAsTemplate.setOnClickListener(this);
+        btSendWhatsapp.setOnClickListener(this);
     }
 
     @Override
@@ -343,7 +349,37 @@ public class VisitDetailCombinedViewHolder extends HealthCocoViewHolder implemen
                     showConfirmationAlert(v.getId(), mActivity.getResources().getString(titleId), mActivity.getResources().getString(msgId));
                 } else onNetworkUnavailable(null);
                 break;
+            case R.id.bt_send_whatsapp:
+                sendWhatsappMsg();
+                break;
         }
+    }
+
+    private void sendWhatsappMsg() {
+        if (visitDetail != null && !Util.isNullOrEmptyList(visitDetail.getPrescriptions()) && visitDetail.getPrescriptions().get(0) != null) {
+            if (!Util.isNullOrEmptyList(visitDetail.getPrescriptions().get(0).getItems())) {
+                String formattedDrugName = "Patient Detail: " + "\n "
+                        + Util.getValidatedValue(selectedPatient.getFirstName()) + " " + Util.getValidatedValue(selectedPatient.getLastName()) + "\n "
+                        + Util.getValidatedValue(selectedPatient.getGender()) + " " + Util.getValidatedValue(Util.getFormattedAge(selectedPatient.getDob())) + "\n\n  "
+                        + "Rx :";
+
+                for (DrugItem drugItem : visitDetail.getPrescriptions().get(0).getItems()) {
+                    if (drugItem.getDrug() != null) {
+                        Drug drug = drugItem.getDrug();
+                        if (drug.getDrugType() != null &&
+                                !Util.isNullOrBlank(drug.getDrugType().getType()) &&
+                                !Util.isNullOrBlank(drug.getDrugName()))
+                            if (Util.isNullOrBlank(formattedDrugName))
+                                formattedDrugName = "\u2022 " + formattedDrugName + Util.getValidatedValue(drug.getDrugType().getType()) + " " + Util.getValidatedValue(drug.getDrugName()) + " " + Util.getValidatedValue(drugItem.getDosage());
+                            else
+                                formattedDrugName = formattedDrugName + "\n" + "\u2022 " + Util.getValidatedValue(drug.getDrugType().getType()) + " " + Util.getValidatedValue(drug.getDrugName()) + " " + Util.getValidatedValue(drugItem.getDosage());
+                    }
+                }
+
+                formattedDrugName = formattedDrugName + "\n " + "Powered by Healthcoco";
+                mActivity.sendMsgToWhatsapp(formattedDrugName, selectedPatient.getMobileNumber());
+            }
+        }else Util.showToast(mActivity,"No Prescription available");
     }
 
     private void discardVisit() {

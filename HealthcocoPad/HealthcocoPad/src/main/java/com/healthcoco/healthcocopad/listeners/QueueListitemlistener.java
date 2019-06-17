@@ -1,5 +1,6 @@
 package com.healthcoco.healthcocopad.listeners;
 
+import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.User;
 
 /**
@@ -13,5 +14,5 @@ public interface QueueListitemlistener {
     public User getUser();
 
     public Boolean isPidHasDate();
-
+    public RegisteredPatientDetailsUpdated getSelectedPatient();
 }

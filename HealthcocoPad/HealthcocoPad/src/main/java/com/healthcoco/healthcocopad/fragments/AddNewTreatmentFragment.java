@@ -148,7 +148,7 @@ public class AddNewTreatmentFragment extends HealthCocoFragment implements Local
         treatmentListFragment = new TreatmentListFragment(this);
         addFragment(treatmentListFragment, R.string.all, false);
 
-        if (doctorProfile.getSpecialities().contains("Dentist")) {
+        if (doctorProfile != null && !Util.isNullOrEmptyList(doctorProfile.getSpecialities()) && doctorProfile.getSpecialities().contains("Dentist")) {
             // init fragment 2
             customListFragment = new TreatmentCustomListFragment(this);
             addFragment(customListFragment, R.string.featured, true);

@@ -506,6 +506,27 @@ public class Util {
         }
     }
 
+    public static void sendBroadcastParcelableData(HealthCocoApplication mApp, String intentFilter, Object extra) {
+        try {
+            Intent intent = new Intent(intentFilter);
+            if (extra != null)
+                intent.putExtra(HealthCocoConstants.TAG_BROADCAST_EXTRA, Parcels.wrap(extra));
+            LocalBroadcastManager.getInstance(mApp.getApplicationContext()).sendBroadcast(intent);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static String getFormattedAge(DOB dob) {
+        if (dob != null) {
+            Calendar calendar = Calendar.getInstance();
+            LogUtils.LOGD(TAG, "Date patient " + dob.getYears() + "," + dob.getMonths() + "," + dob.getDays());
+            calendar.set(dob.getYears(), dob.getMonths() - 1, dob.getDays(), 0, 0);
+            return DateTimeUtil.getDateDifference(calendar);
+        }
+        return "";
+    }
+
     public static String getFormattedGenderAge(Object object) {
         String formattedString = "";
         String gender = "";

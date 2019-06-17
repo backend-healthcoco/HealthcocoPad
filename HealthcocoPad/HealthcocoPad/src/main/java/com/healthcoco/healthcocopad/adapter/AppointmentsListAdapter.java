@@ -7,7 +7,10 @@ import android.widget.BaseAdapter;
 
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
+import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.enums.BookAppointmentFromScreenType;
+import com.healthcoco.healthcocopad.fragments.PatientAppointmentDetailFragment;
+import com.healthcoco.healthcocopad.listeners.AppointmentListListner;
 import com.healthcoco.healthcocopad.skscustomclasses.CustomListData;
 import com.healthcoco.healthcocopad.skscustomclasses.CustomListDataFormatter;
 import com.healthcoco.healthcocopad.utilities.ComparatorUtil;
@@ -21,15 +24,14 @@ import java.util.List;
  * Created by neha on 05/05/16.
  */
 public class AppointmentsListAdapter extends BaseAdapter {
+    private final AppointmentListListner appointmentListListner;
     private HealthCocoActivity mActivity;
     private AppointmentsListViewholder holder;
     private List<Pair<String, List<?>>> all;
 
-    public AppointmentsListAdapter() {
-    }
-
-    public AppointmentsListAdapter(HealthCocoActivity activity) {
+    public AppointmentsListAdapter(HealthCocoActivity activity, AppointmentListListner appointmentListListner) {
         this.mActivity = activity;
+        this.appointmentListListner = appointmentListListner;
     }
 
     @Override
@@ -67,7 +69,7 @@ public class AppointmentsListAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            holder = new AppointmentsListViewholder(mActivity, BookAppointmentFromScreenType.APPOINTMENTS_LIST_RESCHEDULE);
+            holder = new AppointmentsListViewholder(mActivity, BookAppointmentFromScreenType.APPOINTMENTS_LIST_RESCHEDULE,appointmentListListner);
             convertView = holder.getContentView();
             convertView.setTag(holder);
         } else

@@ -194,7 +194,8 @@ public class EditHeaderSetupDialogFragment extends HealthCocoDialogFragment
                 if (radioButton1 != null)
                     radioButton1.setChecked(true);
             }
-            etHeaderHeight.setText(Util.getFormattedDoubleNumber(headerSetup.getHeaderHeight()));
+            if (headerSetup.getHeaderHeight() != null)
+                etHeaderHeight.setText(Util.getFormattedDoubleNumber(headerSetup.getHeaderHeight()));
 
             if (!Util.isNullOrBlank(headerSetup.getHeaderImageUrl())) {
                 DownloadImageFromUrlUtil.loadImageUsingImageLoader(null, ivHeaderImage, headerSetup.getHeaderImageUrl());

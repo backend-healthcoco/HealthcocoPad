@@ -104,6 +104,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
     public static final String INTENT_REFRESH_CONTACTS_LIST_FROM_SERVER = "com.healthcoco.healthcocopad.fragments.ContactsListFragment.REFRESH_CONTACTS_LIST_FROM_SERVER";
     public static final String INTENT_REFRESH_GROUPS_LIST_FROM_SERVER = "com.healthcoco.healthcocopad.fragments.ContactsListFragment.REFRESH_GROUPS_LIST_FROM_SERVER";
     public static final String INTENT_GET_CLINIC_PROFILE = "com.healthcoco.REFRESH_CLINIC_PROFILE_DETAILS";
+    public static final String INTENT_REFRESH_CONTACTS_BY_USERID_LIST_FROM_SERVER = "com.healthcoco.healthcocopad.fragments.ContactsListFragment.INTENT_REFRESH_CONTACTS_BY_USERID_LIST_FROM_SERVER";
 
     //variables need for pagination
     public static final int MAX_SIZE = 22;
@@ -278,6 +279,14 @@ public class ContactsListFragment extends HealthCocoFragment implements
         }
     };
 
+    BroadcastReceiver contactsByUserIdFromServerReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, final Intent intent) {
+            String selectedPatientId = Parcels.unwrap(intent.getParcelableExtra(HealthCocoConstants.TAG_BROADCAST_EXTRA));
+            getContactsListByUserId(false, selectedPatientId);
+        }
+    };
+
     @Override
     public void initListeners() {
         gvContacts.setLoadMoreListener(this);
@@ -367,6 +376,11 @@ public class ContactsListFragment extends HealthCocoFragment implements
             IntentFilter filterClinicProfile = new IntentFilter();
             filterClinicProfile.addAction(INTENT_GET_CLINIC_PROFILE);
             LocalBroadcastManager.getInstance(mActivity).registerReceiver(refreshClinicProfileReceiver, filterClinicProfile);
+
+            //            broadcast to get contacts list from server by userId
+            IntentFilter contactslistserverintentfilter = new IntentFilter();
+            contactslistserverintentfilter.addAction(INTENT_REFRESH_CONTACTS_BY_USERID_LIST_FROM_SERVER);
+            LocalBroadcastManager.getInstance(mActivity).registerReceiver(contactsByUserIdFromServerReceiver, contactslistserverintentfilter);
 
 
 //            broadcast to finish this activity
@@ -924,37 +938,37 @@ public class ContactsListFragment extends HealthCocoFragment implements
                         ArrayList<RegisteredPatientDetailsUpdated> responseList = (ArrayList<RegisteredPatientDetailsUpdated>) (ArrayList<?>) response
                                 .getDataList();
 //                        isInitialLoading = false;
-                        mActivity.hideProgressDialog();
-                        formHashMapAndRefresh(responseList);
-                        if (Util.isNullOrEmptyList(responseList) || responseList.size() < MAX_SIZE || Util.isNullOrEmptyList(responseList))
-                            isEndOfListAchieved = true;
-                        else isEndOfListAchieved = false;
-                        if (isInitialLoading && !isEditTextSearching && !response.isFromLocalAfterApiSuccess() && response.isUserOnline()) {
-                            resetListAndPagingServer();
-                            getContactsList(false);
-                            return;
-                        } else if (!isEditTextSearching && Util.isNullOrEmptyList(responseList) && !response.isFromLocalAfterApiSuccess()) {
-                            resetListAndPagingServer();
-                            getContactsList(false);
-                            return;
-                        }
-                    } else if (!Util.isNullOrEmptyList(response.getDataList())) {
-                        if (Util.isNullOrEmptyList(response.getDataList()) || response.getDataList().size() < MAX_NUMBER_OF_CONTACT || Util.isNullOrEmptyList(response.getDataList())) {
-                            isEndOfListAchievedServer = true;
-                            mActivity.updateProgressDialog(100, 100);
-                        } else {
-                            PAGE_NUMBER_SERVER = PAGE_NUMBER_SERVER + 1;
-                            isEndOfListAchievedServer = false;
-                            mActivity.updateProgressDialog(100, getProgressCount(response));
-                        }
-                        if (isInHomeActivity)
-                            Util.sendBroadcast(mApp, MenuDrawerFragment.INTENT_REFRESH_PATIENT_COUNT);
-                        response.setIsFromLocalAfterApiSuccess(true);
+//                        mActivity.hideProgressDialog();
+//                        formHashMapAndRefresh(responseList);
+//                        if (Util.isNullOrEmptyList(responseList) || responseList.size() < MAX_SIZE || Util.isNullOrEmptyList(responseList))
+//                            isEndOfListAchieved = true;
+//                        else isEndOfListAchieved = false;
+//                        if (isInitialLoading && !isEditTextSearching && !response.isFromLocalAfterApiSuccess() && response.isUserOnline()) {
+//                            resetListAndPagingServer();
+//                            getContactsList(false);
+//                            return;
+//                        } else if (!isEditTextSearching && Util.isNullOrEmptyList(responseList) && !response.isFromLocalAfterApiSuccess()) {
+//                            resetListAndPagingServer();
+//                            getContactsList(false);
+//                            return;
+//                        }
+//                    } else if (!Util.isNullOrEmptyList(response.getDataList())) {
+//                        if (Util.isNullOrEmptyList(response.getDataList()) || response.getDataList().size() < MAX_NUMBER_OF_CONTACT || Util.isNullOrEmptyList(response.getDataList())) {
+//                            isEndOfListAchievedServer = true;
+//                            mActivity.updateProgressDialog(100, 100);
+//                        } else {
+//                            PAGE_NUMBER_SERVER = PAGE_NUMBER_SERVER + 1;
+//                            isEndOfListAchievedServer = false;
+//                            mActivity.updateProgressDialog(100, getProgressCount(response));
+//                        }
+//                        if (isInHomeActivity)
+//                            Util.sendBroadcast(mApp, MenuDrawerFragment.INTENT_REFRESH_PATIENT_COUNT);
+//                        response.setIsFromLocalAfterApiSuccess(true);
                         new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_PATIENTS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
-                        return;
-                    } else {
-                        mActivity.hideProgressDialog();
-                    }
+//                        return;
+//                    } else {
+//                        mActivity.hideProgressDialog();
+//                    }
 //                    else {
 //                        long count = LocalDataServiceImpl.getInstance(mApp).getListCount(user);
 //                        if ((Double) response.getData() > count) {
@@ -964,15 +978,15 @@ public class ContactsListFragment extends HealthCocoFragment implements
 //                            getContactsList(true);
 //                        }
 //                    }
-                    isEditTextSearching = false;
-                    isInitialLoading = false;
-                    notifyAdapter(new ArrayList<RegisteredPatientDetailsUpdated>(patientsListHashMap.values()));
-                    if (!isOnLoadMore) {
-                        refreshMenuFragmentContactsCount();
-                    }
-                    if (isInitialLoading && isInHomeActivity) {
-//                        new SyncUtility(mApp, mActivity, user, null).getContactsList();
-                        new SyncUtility(mApp, mActivity, user, null).getUIPermissions();
+//                    isEditTextSearching = false;
+//                    isInitialLoading = false;
+//                    notifyAdapter(new ArrayList<RegisteredPatientDetailsUpdated>(patientsListHashMap.values()));
+//                    if (!isOnLoadMore) {
+//                        refreshMenuFragmentContactsCount();
+//                    }
+//                    if (isInitialLoading && isInHomeActivity) {
+////                        new SyncUtility(mApp, mActivity, user, null).getContactsList();
+//                        new SyncUtility(mApp, mActivity, user, null).getUIPermissions();
                     }
                     break;
                 case ADD_PATIENT_TO_QUEUE:
@@ -1371,4 +1385,10 @@ public class ContactsListFragment extends HealthCocoFragment implements
             return true;
         }
     }
+
+    public void getContactsListByUserId(boolean showLoading, String selectedPatientId) {
+        WebDataServiceImpl.getInstance(mApp).getContactByUserId(RegisteredPatientDetailsUpdated.class, user.getUniqueId(),
+                user.getForeignHospitalId(), user.getForeignLocationId(), selectedPatientId, this, this);
+    }
+
 }

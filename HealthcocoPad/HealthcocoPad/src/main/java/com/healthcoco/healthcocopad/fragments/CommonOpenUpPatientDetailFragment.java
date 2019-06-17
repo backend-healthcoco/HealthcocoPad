@@ -201,8 +201,8 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
         if (doctorClinicProfile.isClinic()) {
             tabItemList = packageType.getTabItemList();
             if (!Util.isNullOrEmptyList(doctorProfile.getParentSpecialities())) {
-//                // For only Dentist
 //                if (doctorProfile.getParentSpecialities().contains("Dentist")) {
+//                // For only Dentist
 //                    if (tabItemList.contains(PatientDetailTabType.PATIENT_DETAIL_DENTAL_IMAGING_REPORT))
 //                        tabItemList.remove(PatientDetailTabType.PATIENT_DETAIL_DENTAL_IMAGING_REPORT);
 //                    if (packageType == AccountPackageType.ADVANCE || packageType == AccountPackageType.PRO)
@@ -742,30 +742,28 @@ public class CommonOpenUpPatientDetailFragment extends HealthCocoFragment implem
                         if (ordinal != 0) {
                             PatientDetailTabType patientDetailTabType = PatientDetailTabType.values()[ordinal];
                             mViewPager.setCurrentItem(packageType.getTabItemList().indexOf(patientDetailTabType));
-//                            prescriptionDetailFragment.refreshData(PatientDetailTabType.PATIENT_DETAIL_PRESCRIPTION);
                         }
-                    } else {
-                        initTabs();
-                        initViewPagerAdapter();
-                        initData();
-                        if (ordinal != 0) {
-                            PatientDetailTabType patientDetailTabType = PatientDetailTabType.values()[ordinal];
-                            mViewPager.setCurrentItem(packageType.getTabItemList().indexOf(patientDetailTabType));
-                        }
-                    }
+                    } else initData();
                     break;
                 case GET_PATIENT_PROFILE:
                     if (response.getData() != null && response.getData() instanceof RegisteredPatientDetailsUpdated) {
                         selectedPatient = (RegisteredPatientDetailsUpdated) response.getData();
                         LocalDataServiceImpl.getInstance(mApp).addPatient(selectedPatient);
-                        new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_FRAGMENT_INITIALISATION_DATA, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                        if (selectedPatient != null) {
+                            initTabs();
+                            initViewPagerAdapter();
+                            initData();
+                            if (ordinal != 0) {
+                                PatientDetailTabType patientDetailTabType = PatientDetailTabType.values()[ordinal];
+                                mViewPager.setCurrentItem(packageType.getTabItemList().indexOf(patientDetailTabType));
+                            }
+                        }
                     }
                     break;
                 case GET_REGISTER_DOCTOR:
                     if (!Util.isNullOrEmptyList(response.getDataList())) {
                         doctorProfileList = (ArrayList<RegisteredDoctorProfile>) (ArrayList) response.getDataList();
                         formHashMapAndRefresh(doctorProfileList);
-//                        initSelectedDoctorClinicData();
                         new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.ADD_REGISTER_DOCTOR, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, response);
 
                     }

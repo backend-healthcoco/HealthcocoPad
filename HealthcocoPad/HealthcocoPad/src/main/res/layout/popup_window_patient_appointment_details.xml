@@ -23,6 +23,13 @@
             android:paddingTop="@dimen/list_item_padding">
 
             <ImageView
+                android:id="@+id/bt_send_whastapp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/patient_profile_image_padding"
+                android:src="@drawable/icon_print_selector" />
+
+            <ImageView
                 android:id="@+id/bt_print_patient_card"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

@@ -20,6 +20,7 @@ import com.healthcoco.healthcocopad.bean.server.DoctorClinicProfile;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.PatientCard;
 import com.healthcoco.healthcocopad.bean.server.RegisteredDoctorProfile;
+import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.bean.server.WorkingHours;
 import com.healthcoco.healthcocopad.calendar.weekview.DateTimeInterpreter;
@@ -410,5 +411,10 @@ public class CalendarFragment extends HealthCocoFragment implements WeekView.Eve
     @Override
     public Boolean isPidHasDate() {
         return pidHasDate;
+    }
+
+    @Override
+    public RegisteredPatientDetailsUpdated getSelectedPatient() {
+        return null;
     }
 }

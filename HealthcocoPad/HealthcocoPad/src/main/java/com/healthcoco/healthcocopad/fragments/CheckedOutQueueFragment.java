@@ -27,6 +27,7 @@ import com.healthcoco.healthcocopad.bean.server.ClinicDoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.DoctorClinicProfile;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.RegisteredDoctorProfile;
+import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocopad.enums.AdapterType;
@@ -41,6 +42,7 @@ import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.ComparatorUtil;
 import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
+import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
 
@@ -89,6 +91,7 @@ public class CheckedOutQueueFragment extends HealthCocoFragment implements Local
     private long selectedMonthDayYearInMillis;
     private boolean receiversRegistered;
     private Boolean pidHasDate;
+    private RegisteredPatientDetailsUpdated selectedPatient;
 
 
     @Override
@@ -255,6 +258,7 @@ public class CheckedOutQueueFragment extends HealthCocoFragment implements Local
                 DoctorClinicProfile doctorClinicProfile = LocalDataServiceImpl.getInstance(mApp).getDoctorClinicProfile(user.getUniqueId(), user.getForeignLocationId());
                 if (doctorClinicProfile != null && doctorClinicProfile.getPidHasDate() != null)
                     pidHasDate = doctorClinicProfile.getPidHasDate();
+                selectedPatient = LocalDataServiceImpl.getInstance(mApp).getPatient(HealthCocoConstants.SELECTED_PATIENTS_USER_ID);
 
                 return volleyResponseBean;
             case GET_CALENDAR_EVENTS:
@@ -303,6 +307,11 @@ public class CheckedOutQueueFragment extends HealthCocoFragment implements Local
     @Override
     public Boolean isPidHasDate() {
         return pidHasDate;
+    }
+
+    @Override
+    public RegisteredPatientDetailsUpdated getSelectedPatient() {
+        return selectedPatient;
     }
 
     @Override

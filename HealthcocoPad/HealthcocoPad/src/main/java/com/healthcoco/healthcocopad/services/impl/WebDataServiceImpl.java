@@ -2081,4 +2081,17 @@ public class WebDataServiceImpl implements GCMRefreshListener {
             errorListener.onNetworkUnavailable(webServiceType);
         }
     }
+    public void getContactByUserId(Class<RegisteredPatientDetailsUpdated> class1, String doctorId,
+                                   String hospitalId, String locationId, String patientId, Response.Listener<VolleyResponseBean> responseListener,
+                                   GsonRequest.ErrorListener errorListener) {
+        WebServiceType webServiceType = WebServiceType.GET_CONTACTS;
+        checkNetworkStatus(mApp.getApplicationContext());
+        if (HealthCocoConstants.isNetworkOnline) {
+            String url = webServiceType.getUrl();
+            url = url + HealthCocoConstants.PARAM_USER_ID + patientId;
+            getResponse(Request.Priority.HIGH, WebServiceType.GET_CONTACTS, class1, url, null, null, responseListener, errorListener);
+        } else {
+            errorListener.onNetworkUnavailable(webServiceType);
+        }
+    }
 }

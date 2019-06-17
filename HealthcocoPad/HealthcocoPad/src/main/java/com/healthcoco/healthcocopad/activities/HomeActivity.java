@@ -404,6 +404,11 @@ public class HomeActivity extends HealthCocoActivity implements View.OnClickList
         String restoreId = Freshchat.getInstance(getApplicationContext()).getUser().getRestoreId();
         if (doctorProfile != null) {
             saveRestoreIdForUser(restoreId);
+        } else {
+            doctorProfile = LocalDataServiceImpl.getInstance(mApp).getDoctorProfileObject(user.getUniqueId());
+            if (doctorProfile != null) {
+                saveRestoreIdForUser(restoreId);
+            }
         }
 //        if (homeScreenTabsFragment != null) {
 //        initFragment(FragmentType.CONTACTS);

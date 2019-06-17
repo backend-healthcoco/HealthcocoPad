@@ -53,7 +53,7 @@ import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
 import com.healthcoco.healthcocopad.bean.server.DoctorClinicProfile;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.RegisteredDoctorProfile;
-import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
+import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsNew;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.bean.server.WorkingHours;
 import com.healthcoco.healthcocopad.custom.CustomEditText;
@@ -118,7 +118,7 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
     private static final int REQUEST_CODE_BOOK_APPOINTMENT = 101;
     public List<RegisteredDoctorProfile> registeredDoctorProfileList;
     private User user;
-    private RegisteredPatientDetailsUpdated selectedPatient;
+    private RegisteredPatientDetailsNew selectedPatient;
     private AppointmentTimeSlotDetails appointmentTimeSlotDetails;
     private TextView tvSelectedDate;
     private AppointmentSlotAdapter adapter;
@@ -348,7 +348,7 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
         }
         if (containerPatientProfileHeader.getVisibility() == View.VISIBLE && selectedPatient != null) {
             HealthCocoConstants.SELECTED_PATIENTS_USER_ID = selectedPatient.getUserId();
-            initActionPatientDetailActionBar(PatientProfileScreenType.IN_EMR_HEADER, view, selectedPatient);
+            initActionPatientDetailActionBarNew(PatientProfileScreenType.IN_EMR_HEADER, view, selectedPatient);
         }
     }
 
@@ -651,7 +651,7 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
                             HealthCocoConstants.SELECTED_PATIENTS_USER_ID = selectedAppointment.getPatientId();
                     }
                     if (bookAppointmentFromScreenType != BookAppointmentFromScreenType.APPOINTMENTS_QUEUE_ADD_NEW)
-                        selectedPatient = LocalDataServiceImpl.getInstance(mApp).getPatient(HealthCocoConstants.SELECTED_PATIENTS_USER_ID);
+                        selectedPatient = LocalDataServiceImpl.getInstance(mApp).getPatientNew(HealthCocoConstants.SELECTED_PATIENTS_USER_ID);
                     registeredDoctorProfileList = LocalDataServiceImpl.getInstance(mApp).getRegisterDoctorDetails(user.getForeignLocationId());
                     doctorClinicProfile = LocalDataServiceImpl.getInstance(mApp).getDoctorClinicProfile(user.getUniqueId(), user.getForeignLocationId());
                     if (doctorClinicProfile != null && doctorClinicProfile.getMobileNumberOptional() != null)
@@ -943,13 +943,15 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
 
     private void getAndRefreshSelectedPatient(boolean isExistingPatientPartOfClinic) {
         LogUtils.LOGD(TAG, "SELECTED_PATIENTS_USER_ID selected " + HealthCocoConstants.SELECTED_PATIENTS_USER_ID);
-        selectedPatient = LocalDataServiceImpl.getInstance(mApp).getPatient(HealthCocoConstants.SELECTED_PATIENTS_USER_ID);
+        selectedPatient = LocalDataServiceImpl.getInstance(mApp).getPatientNew(HealthCocoConstants.SELECTED_PATIENTS_USER_ID);
         if (isExistingPatientPartOfClinic && selectedPatient == null) {
             mActivity.showLoading(false);
-            Util.sendBroadcast(mApp, ContactsListFragment.INTENT_REFRESH_CONTACTS_LIST_FROM_SERVER);
+            Util.sendBroadcastParcelableData(mApp, ContactsListFragment.INTENT_REFRESH_CONTACTS_BY_USERID_LIST_FROM_SERVER, HealthCocoConstants.SELECTED_PATIENTS_USER_ID);
             return;
-        } else
+        } else {
+            selectedPatient = LocalDataServiceImpl.getInstance(mApp).getSelectedPatientNew(HealthCocoConstants.SELECTED_PATIENTS_USER_ID);
             mActivity.hideLoading();
+        }
         editMobileNumber.setText("");
         autotvPatientName.setText("");
         initPatientProfile();

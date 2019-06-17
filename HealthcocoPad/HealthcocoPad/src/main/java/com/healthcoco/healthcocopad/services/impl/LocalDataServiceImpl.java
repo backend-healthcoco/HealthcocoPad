@@ -2659,6 +2659,17 @@ public class LocalDataServiceImpl {
         RegisteredPatientDetailsUpdated.deleteAll(RegisteredPatientDetailsUpdated.class);
     }
 
+    public RegisteredPatientDetailsNew getPatientNew(String selecetdPatientId) {
+        RegisteredPatientDetailsNew patient = Select.from(RegisteredPatientDetailsNew.class)
+                .where(Condition.prop(LocalDatabaseUtils.KEY_USER_ID).eq(selecetdPatientId),
+                        Condition.prop(LocalDatabaseUtils.KEY_LOCATION_ID).eq(MenuDrawerFragment.SELECTED_LOCATION_ID)).first();
+        if (patient != null) {
+            RegisteredPatientDetailsNew patientDetail = getPatientNewDetails(patient);
+            return patientDetail;
+        }
+        return null;
+    }
+
     public RegisteredPatientDetailsUpdated getPatient(String selecetdPatientId) {
         RegisteredPatientDetailsUpdated patient = Select.from(RegisteredPatientDetailsUpdated.class)
                 .where(Condition.prop(LocalDatabaseUtils.KEY_USER_ID).eq(selecetdPatientId),
@@ -6309,4 +6320,13 @@ public class LocalDataServiceImpl {
         patientCount.update();
     }
 
+    public RegisteredPatientDetailsNew getSelectedPatientNew(String selecetdPatientId) {
+        RegisteredPatientDetailsNew patient = Select.from(RegisteredPatientDetailsNew.class)
+                .where(Condition.prop(LocalDatabaseUtils.KEY_USER_ID).eq(selecetdPatientId)).first();
+        if (patient != null) {
+            RegisteredPatientDetailsNew patientDetail = getPatientNewDetails(patient);
+            return patientDetail;
+        }
+        return null;
+    }
 }

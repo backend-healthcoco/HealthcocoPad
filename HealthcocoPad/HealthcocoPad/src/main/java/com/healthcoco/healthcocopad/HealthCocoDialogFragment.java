@@ -28,6 +28,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
+import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsNew;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.Specialities;
 import com.healthcoco.healthcocopad.dialogFragment.AddUpdateNameDialogFragment;
@@ -370,6 +371,54 @@ public abstract class HealthCocoDialogFragment extends DialogFragment implements
             startActivity(intent);
         else
             startActivityForResult(intent, requestCode);
+    }
+
+    protected void initActionPatientDetailActionBarNew(final PatientProfileScreenType patientProfileScreenType, View parent,
+            final RegisteredPatientDetailsNew selectedPatient) {
+        if (selectedPatient != null) {
+            TextView tvInitialAlphabet = (TextView) parent.findViewById(R.id.tv_initial_aplhabet);
+            TextView tvPatientName = (TextView) parent.findViewById(R.id.tv_name);
+            TextView tvGenderAge = (TextView) parent.findViewById(R.id.tv_gender_age);
+
+            ProgressBar progressLoading = (ProgressBar) parent.findViewById(R.id.progress_loading);
+
+            ImageView ivContactProfile = (ImageView) parent.findViewById(R.id.iv_image);
+            ivContactProfile.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (!Util.isNullOrBlank(selectedPatient.getImageUrl()))
+                        mActivity.openEnlargedImageDialogFragment(selectedPatient.getImageUrl());
+                }
+            });
+
+            ImageButton btBack = (ImageButton) parent.findViewById(R.id.bt_back);
+            if (btBack != null) {
+                btBack.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        try {
+                            if (patientProfileScreenType == PatientProfileScreenType.IN_ADD_VISIT_HEADER) {
+                                ((CommonOpenUpActivity) mActivity).finishThisActivity();
+                                return;
+                            }
+                        } catch (Exception e) {
+
+                        }
+                        mActivity.finish();
+                    }
+                });
+            }
+            tvPatientName.setText(selectedPatient.getLocalPatientName());
+            if (tvGenderAge != null) {
+                String formattedGenderAge = Util.getFormattedGenderAge(selectedPatient);
+                if (!Util.isNullOrBlank(formattedGenderAge)) {
+                    tvGenderAge.setVisibility(View.VISIBLE);
+                    tvGenderAge.setText(formattedGenderAge);
+                } else
+                    tvGenderAge.setVisibility(View.GONE);
+            }
+            DownloadImageFromUrlUtil.loadImageWithInitialAlphabet(mActivity, patientProfileScreenType, selectedPatient, progressLoading, ivContactProfile, tvInitialAlphabet);
+        }
     }
 
     protected void initActionPatientDetailActionBar(final PatientProfileScreenType patientProfileScreenType, View parent, final RegisteredPatientDetailsUpdated selectedPatient) {

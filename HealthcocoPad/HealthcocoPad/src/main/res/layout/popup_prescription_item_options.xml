@@ -41,6 +41,14 @@
                     android:textColor="@drawable/text_popup_item_selector" />
 
                 <TextView
+                    android:id="@+id/tv_whatsapp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/popup_item_padding"
+                    android:text="@string/send_whatsapp"
+                    android:textColor="@drawable/text_popup_item_selector" />
+
+                <TextView
                     android:id="@+id/tv_print"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

@@ -1098,7 +1098,7 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
                 }
                 break;
             case R.id.edit_pnum:
-                if (!isEditPatient && selectedPatient == null)
+                if (!isEditPatient && selectedPatient == null && !doctorClinicProfile.getPidHasDate())
                     isPnumChange = true;
                 else if (isEditPatient && selectedPatient != null)
                     if (!s.equals(selectedPatient.getPnum())) {
