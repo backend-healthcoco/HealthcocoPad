@@ -831,6 +831,8 @@ public class ContactsListFragment extends HealthCocoFragment implements
     private void resetListAndPagingAttributes() {
         if (patientsListHashMap != null)
             patientsListHashMap.clear();
+        if (patientDetailsNewLinkedHashMap != null)
+            patientDetailsNewLinkedHashMap.clear();
         PAGE_NUMBER = 0;
         isEndOfListAchieved = false;
         gvContacts.resetPreLastPosition(0);
@@ -1230,12 +1232,12 @@ public class ContactsListFragment extends HealthCocoFragment implements
             case GET_PATIENTS:
             case SORT_LIST_BY_RECENTLY_ADDED:
                 volleyResponseBean = LocalDataServiceImpl.getInstance(mApp)
-                        .getSearchedPatientsListPageWise(WebServiceType.GET_CONTACTS, user,
+                        .getSearchedPatientsListNewPageWise(WebServiceType.GET_CONTACTS_NEW, user,
                                 PAGE_NUMBER, MAX_SIZE, filterType, selectedSearchType, getSearchEditTextValue(selectedSearchType), pidHasDate, BooleanTypeValues.FALSE, null, null);
                 break;
             case SORT_LIST_BY_GROUP:
                 volleyResponseBean = LocalDataServiceImpl.getInstance(mApp)
-                        .getPatientsListWithGroup(WebServiceType.GET_CONTACTS, user, selectedGroupId,
+                        .getPatientsListNewWithGroup(WebServiceType.GET_CONTACTS_NEW, user, selectedGroupId,
                                 BooleanTypeValues.FALSE, PAGE_NUMBER, MAX_SIZE, null, null);
                 break;
             case CLEAR_PATIENTS:

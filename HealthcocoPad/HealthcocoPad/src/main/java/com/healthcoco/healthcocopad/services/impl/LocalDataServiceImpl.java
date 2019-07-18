@@ -2589,6 +2589,124 @@ public class LocalDataServiceImpl {
         return volleyResponseBean;
     }
 
+    public VolleyResponseBean getSearchedPatientsListNewPageWise(WebServiceType webServiceType, User user,
+                                                                 int pageNum, int maxSize, FilterItemType filterType, AdvanceSearchOptionsType advanceSearchOptionsType, String searchTerm,
+                                                                 Boolean pidHasDate, BooleanTypeValues discarded, Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
+        volleyResponseBean.setWebServiceType(webServiceType);
+        volleyResponseBean.setIsDataFromLocal(true);
+        volleyResponseBean.setIsUserOnline(HealthCocoConstants.isNetworkOnline);
+        try {
+            //forming where condition query
+            String whereCondition = "Select * from " + StringUtil.toSQLName(RegisteredPatientDetailsNew.class.getSimpleName())
+                    + getWhereConditionForPatientsList(user, discarded);
+            if (advanceSearchOptionsType != null && !Util.isNullOrBlank(searchTerm)) {
+                switch (advanceSearchOptionsType) {
+                    case GENERAL_SEARCH:
+                        if (pidHasDate != null && (!pidHasDate)) {
+                            whereCondition = whereCondition
+                                    + " AND "
+                                    + "(" + LocalDatabaseUtils.getSearchTermEqualsIgnoreCaseQuery(LocalDatabaseUtils.KEY_LOCAL_PATIENT_NAME, searchTerm)
+                                    + " OR "
+                                    + LocalDatabaseUtils.getSearchTermEqualsIgnoreCaseQuery(LocalDatabaseUtils.KEY_PID, searchTerm)
+                                    + " OR "
+                                    + LocalDatabaseUtils.getSearchTermEqualsIgnoreCaseQuery(LocalDatabaseUtils.KEY_PNUM, searchTerm)
+                                    + " OR "
+                                    + LocalDatabaseUtils.getSearchTermEqualsIgnoreCaseQuery(LocalDatabaseUtils.KEY_MOBILE_NUMBER, searchTerm)
+                                    + ")";
+                        } else {
+                            whereCondition = whereCondition
+                                    + " AND "
+                                    + "(" + LocalDatabaseUtils.getSearchTermEqualsIgnoreCaseQuery(LocalDatabaseUtils.KEY_LOCAL_PATIENT_NAME, searchTerm)
+                                    + " OR "
+                                    + LocalDatabaseUtils.getSearchTermEqualsIgnoreCaseQuery(LocalDatabaseUtils.KEY_PID, searchTerm)
+                                    + " OR "
+                                    + LocalDatabaseUtils.getSearchTermEqualsIgnoreCaseQuery(LocalDatabaseUtils.KEY_MOBILE_NUMBER, searchTerm)
+                                    + ")";
+                        }
+                        break;
+                    case PATIENT_NAME:
+                        whereCondition = whereCondition
+                                + " AND "
+                                + LocalDatabaseUtils.getSearchTermEqualsIgnoreCaseQuery(LocalDatabaseUtils.KEY_LOCAL_PATIENT_NAME, searchTerm);
+                        break;
+                    case MOBILE_NUMBER:
+                        whereCondition = whereCondition
+                                + " AND "
+                                + LocalDatabaseUtils.getSearchTermEqualsIgnoreCaseQuery(LocalDatabaseUtils.KEY_MOBILE_NUMBER, searchTerm);
+                        break;
+                    case PATIENT_ID:
+                        if (pidHasDate != null && (!pidHasDate)) {
+                            whereCondition = whereCondition
+                                    + " AND "
+                                    + "(" + LocalDatabaseUtils.getSearchTermEqualsIgnoreCaseQuery(LocalDatabaseUtils.KEY_PNUM, searchTerm)
+                                    + " OR "
+                                    + LocalDatabaseUtils.getSearchTermEqualsIgnoreCaseQuery(LocalDatabaseUtils.KEY_PID, searchTerm)
+                                    + ")";
+                        } else {
+                            whereCondition = whereCondition
+                                    + " AND "
+                                    + LocalDatabaseUtils.getSearchTermEqualsIgnoreCaseQuery(LocalDatabaseUtils.KEY_PID, searchTerm);
+                        }
+                        break;
+                    case REFERENCE:
+                        whereCondition = whereCondition
+                                + " AND "
+                                + LocalDatabaseUtils.getSearchFromJsonQuery(LocalDatabaseUtils.KEY_REFERRED_BY_JSON_STRING, LocalDatabaseUtils.JSON_KEY_REFERENCE, searchTerm);
+                        break;
+                    case PROFESSION:
+                        whereCondition = whereCondition
+                                + " AND "
+                                + LocalDatabaseUtils.getSearchTermEqualsIgnoreCaseQuery(LocalDatabaseUtils.KEY_PROFESSION, searchTerm);
+                        break;
+                    case BLOOD_GROUP:
+                        whereCondition = whereCondition
+                                + " AND "
+                                + LocalDatabaseUtils.getSearchTermEqualsIgnoreCaseQuery(LocalDatabaseUtils.KEY_BLOOD_GROUP, searchTerm);
+                        break;
+                    case EMAIL:
+                        whereCondition = whereCondition
+                                + " AND "
+                                + LocalDatabaseUtils.getSearchTermEqualsIgnoreCaseQuery(LocalDatabaseUtils.KEY_EMAIL_ADDRESS, searchTerm);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            //specifying order by limit and offset query
+            String conditionsLimit = " ORDER BY " + LocalDatabaseUtils.KEY_LOCAL_PATIENT_NAME + " COLLATE NOCASE ASC  "
+                    + " LIMIT " + maxSize
+                    + " OFFSET " + (pageNum * maxSize);
+            if (filterType != null)
+                switch (filterType) {
+                    case RECENTLY_ADDED:
+                        //specifying order by limit and offset query
+                        conditionsLimit = " ORDER BY " + LocalDatabaseUtils.KEY_CREATED_TIME + " DESC "
+                                + " LIMIT " + maxSize
+                                + " OFFSET " + (pageNum * maxSize);
+                        break;
+                }
+
+
+            whereCondition = whereCondition + conditionsLimit;
+            LogUtils.LOGD(TAG, "Select Query " + whereCondition);
+            List<RegisteredPatientDetailsNew> list = SugarRecord.findWithQuery(RegisteredPatientDetailsNew.class, whereCondition);
+
+            if (!Util.isNullOrEmptyList(list)) {
+                for (RegisteredPatientDetailsNew registeredPatientDetailsUpdated : list) {
+                    getPatientNewDetails(registeredPatientDetailsUpdated);
+                }
+            }
+            volleyResponseBean.setDataList(getObjectsListFromMap(list));
+            if (responseListener != null)
+                responseListener.onResponse(volleyResponseBean);
+        } catch (Exception e) {
+            e.printStackTrace();
+            showErrorLocal(volleyResponseBean, errorListener);
+        }
+        return volleyResponseBean;
+    }
+
     private String getWhereConditionForPatientsList(User user, BooleanTypeValues discarded) {
         String whereCondition = " where "
                 + LocalDatabaseUtils.KEY_HOSPITAL_ID + "=\"" + user.getForeignHospitalId() + "\""
@@ -2719,6 +2837,45 @@ public class LocalDataServiceImpl {
             if (!Util.isNullOrEmptyList(list)) {
                 for (RegisteredPatientDetailsUpdated registeredPatientDetailsUpdated : list) {
                     getPatientRestDetails(registeredPatientDetailsUpdated);
+                }
+            }
+            volleyResponseBean.setDataList(getObjectsListFromMap(list));
+            if (responseListener != null)
+                responseListener.onResponse(volleyResponseBean);
+        } catch (Exception e) {
+            e.printStackTrace();
+            showErrorLocal(volleyResponseBean, errorListener);
+        }
+        return volleyResponseBean;
+    }
+
+    public VolleyResponseBean getPatientsListNewWithGroup(WebServiceType webServiceType, User user, String groupId,
+                                                          BooleanTypeValues discarded, int pageNum, int maxSize,
+                                                          Response.Listener<VolleyResponseBean> responseListener, GsonRequest.ErrorListener errorListener) {
+        VolleyResponseBean volleyResponseBean = new VolleyResponseBean();
+        volleyResponseBean.setWebServiceType(webServiceType);
+        volleyResponseBean.setIsDataFromLocal(true);
+        volleyResponseBean.setIsUserOnline(HealthCocoConstants.isNetworkOnline);
+        try {
+            //forming where condition query
+            String whereCondition = "Select * from " + StringUtil.toSQLName(RegisteredPatientDetailsNew.class.getSimpleName())
+                    + getWhereConditionForPatientsList(user, discarded);
+            whereCondition = whereCondition
+                    + " AND "
+                    + LocalDatabaseUtils.getSearchTermEqualsIgnoreCaseQuery(LocalDatabaseUtils.KEY_GROUP_IDS_JSON_STRING, groupId);
+            //specifying order by limit and offset query
+//            String conditionsLimit = " ORDER BY " + LocalDatabaseUtils.KEY_LOCAL_PATIENT_NAME + " COLLATE NOCASE ASC  "
+//                    + " LIMIT " + maxSize
+//                    + " OFFSET " + (pageNum * maxSize);
+            String conditionsLimit = " LIMIT " + maxSize
+                    + " OFFSET " + (pageNum * maxSize);
+            whereCondition = whereCondition + conditionsLimit;
+            LogUtils.LOGD(TAG, "Select Query " + whereCondition);
+            List<RegisteredPatientDetailsNew> list = SugarRecord.findWithQuery(RegisteredPatientDetailsNew.class, whereCondition);
+
+            if (!Util.isNullOrEmptyList(list)) {
+                for (RegisteredPatientDetailsNew registeredPatientDetailsUpdated : list) {
+                    getPatientNewDetails(registeredPatientDetailsUpdated);
                 }
             }
             volleyResponseBean.setDataList(getObjectsListFromMap(list));
@@ -3949,7 +4106,7 @@ public class LocalDataServiceImpl {
                 responseListener.onResponse(volleyResponseBean);
         } catch (
                 Exception e
-                ) {
+        ) {
             e.printStackTrace();
             showErrorLocal(volleyResponseBean, errorListener);
         }
@@ -4933,7 +5090,7 @@ public class LocalDataServiceImpl {
         List<DiagnosticTestsPrescription> list = (List<DiagnosticTestsPrescription>) getObjectsList(DiagnosticTestsPrescription.class, LocalDatabaseUtils.KEY_FOREIGN_TABLE_ID, foreignTableId);
         if (!Util.isNullOrEmptyList(list)) {
             for (DiagnosticTestsPrescription diagnosticTestsPrescription : list
-                    ) {
+            ) {
                 DiagnosticTest diagnosticTest = getDiagnosticTest(diagnosticTestsPrescription.getForeignDiagnosticTestId());
                 if (diagnosticTest != null) {
                     diagnosticTestsPrescription.setTest(diagnosticTest);
