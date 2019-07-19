@@ -2440,6 +2440,8 @@ public class LocalDataServiceImpl {
                         + LocalDatabaseUtils.getSearchTermEqualsIgnoreCaseQuery(LocalDatabaseUtils.KEY_MOBILE_NUMBER, searchTerm)
                         + " OR "
                         + LocalDatabaseUtils.getSearchTermEqualsIgnoreCaseQuery(LocalDatabaseUtils.KEY_PNUM, searchTerm)
+                        + " OR "
+                        + LocalDatabaseUtils.getSearchTermEqualsIgnoreCaseQuery(LocalDatabaseUtils.KEY_PID, searchTerm)
                         + ")";
 
             //specifying order by limit and offset query

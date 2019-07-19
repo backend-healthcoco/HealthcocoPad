@@ -13,7 +13,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:orientation="horizontal">
 
         <com.healthcoco.healthcocopad.views.CustomSwipeRefreshLayout
@@ -28,14 +29,19 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
-                <android.support.v7.widget.RecyclerView
+                <com.healthcoco.healthcocopad.views.GridViewLoadMore
                     android:id="@+id/gv_contacts"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:columnWidth="5dp"
+                    android:divider="@null"
+                    android:horizontalSpacing="12dp"
                     android:listSelector="@android:color/transparent"
+                    android:numColumns="3"
                     android:overScrollMode="never"
                     android:padding="10dp"
                     android:scrollbarStyle="outsideOverlay"
+                    android:verticalSpacing="12dp"
                     android:visibility="visible" />
 
                 <ProgressBar

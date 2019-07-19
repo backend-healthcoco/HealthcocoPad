@@ -595,7 +595,7 @@ public class ContactsListFragment extends HealthCocoFragment implements
     public void onDeletePatientClicked(RegisteredPatientDetailsNew selecetdPatient) {
         tempSelectedPatient = selecetdPatient;
         if (selecetdPatient.getDoctorId().equals(user.getUniqueId())) {
-            if (!Util.isNullOrBlank(selecetdPatient.getUniqueId()))
+            if (!Util.isNullOrBlank(selecetdPatient.getUserId()))
                 showDeletePatientConfirmationAlert(selecetdPatient);
             else
                 Util.showToast(mActivity, R.string.no_mobile_number_found);

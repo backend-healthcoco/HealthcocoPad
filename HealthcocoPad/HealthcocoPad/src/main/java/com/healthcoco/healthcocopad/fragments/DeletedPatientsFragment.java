@@ -9,9 +9,6 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +19,8 @@ import android.widget.TextView;
 import com.android.volley.Response;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
+import com.healthcoco.healthcocopad.adapter.ContactsListAdapter;
+import com.healthcoco.healthcocopad.adapter.DeleteContactsListAdapter;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsNew;
@@ -29,20 +28,20 @@ import com.healthcoco.healthcocopad.bean.server.RegisteredPatientDetailsUpdated;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.custom.HealthcocoTextWatcher;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
-import com.healthcoco.healthcocopad.custom.VerticalRecyclerViewItemDecoration;
 import com.healthcoco.healthcocopad.enums.AdapterType;
 import com.healthcoco.healthcocopad.enums.BooleanTypeValues;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.ContactsItemOptionsForDeletedListener;
 import com.healthcoco.healthcocopad.listeners.HealthcocoTextWatcherListener;
+import com.healthcoco.healthcocopad.listeners.LoadMorePageListener;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
-import com.healthcoco.healthcocopad.recyclerview.EndlessRecyclerViewScrollListener;
 import com.healthcoco.healthcocopad.recyclerview.HealthcocoRecyclerViewAdapter;
 import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
+import com.healthcoco.healthcocopad.views.GridViewLoadMore;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -51,7 +50,7 @@ import java.util.Locale;
 
 public class DeletedPatientsFragment extends HealthCocoFragment implements LocalDoInBackgroundListenerOptimised, Response.Listener<VolleyResponseBean>,
         GsonRequest.ErrorListener, SwipeRefreshLayout.OnRefreshListener, ContactsItemOptionsForDeletedListener,
-        HealthcocoTextWatcherListener {
+        HealthcocoTextWatcherListener, LoadMorePageListener {
 
     public static final String INTENT_REFRESH_CONTACTS_LIST_FROM_LOCAL = "com.healthcoco.healthcocoplus.fragments.DeletedPatientsFragment.REFRESH_CONTACTS_LIST_FROM_LOCAL";
 
@@ -62,8 +61,8 @@ public class DeletedPatientsFragment extends HealthCocoFragment implements Local
     private boolean isInitialLoading = true;
     //other variables
     private ProgressBar progressLoading;
-    private RecyclerView lvContacts;
-    private HealthcocoRecyclerViewAdapter adapter;
+    private GridViewLoadMore lvContacts;
+    private DeleteContactsListAdapter adapter;
     private TextView tvNoPatients;
 
     private LinkedHashMap<String, RegisteredPatientDetailsUpdated> patientsListHashMap = new LinkedHashMap<>();
@@ -107,52 +106,70 @@ public class DeletedPatientsFragment extends HealthCocoFragment implements Local
     @Override
     public void initViews() {
         progressLoading = (ProgressBar) view.findViewById(R.id.progress_loading);
-        lvContacts = (RecyclerView) view.findViewById(R.id.gv_contacts);
+        lvContacts = (GridViewLoadMore) view.findViewById(R.id.gv_contacts);
         tvNoPatients = (TextView) view.findViewById(R.id.tv_no_patients);
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
 
         editSearch = (EditText) view.findViewById(R.id.edit_search);
-        GridLayoutManager gridLayoutManagerVertical = new GridLayoutManager(mActivity,
-                3, //The number of Columns in the grid
-                LinearLayoutManager.VERTICAL,
-                false);
-        int spacingInPixelsVerticalBlogs = getResources().getDimensionPixelSize(R.dimen.item_spacing_grid_item);
-        lvContacts.addItemDecoration(new VerticalRecyclerViewItemDecoration(spacingInPixelsVerticalBlogs));
-        lvContacts.setLayoutManager(gridLayoutManagerVertical);
-        lvContacts.addOnScrollListener(new EndlessRecyclerViewScrollListener((LinearLayoutManager) lvContacts.getLayoutManager()) {
-            @Override
-            public void onLoadMore(int current_page) {
-                if (!isEndOfListAchieved && !isInitialLoading && !isLoadingFromSearch) {
-                    PAGE_NUMBER++;
-                    getListFromLocal(false);
-                }
-            }
-        });
+//        GridLayoutManager gridLayoutManagerVertical = new GridLayoutManager(mActivity,
+//                3, //The number of Columns in the grid
+//                LinearLayoutManager.VERTICAL,
+//                false);
+//        int spacingInPixelsVerticalBlogs = getResources().getDimensionPixelSize(R.dimen.item_spacing_grid_item);
+//        lvContacts.addItemDecoration(new VerticalRecyclerViewItemDecoration(spacingInPixelsVerticalBlogs));
+//        lvContacts.setLayoutManager(gridLayoutManagerVertical);
+//        lvContacts.setLayoutManager(new LinearLayoutManager(mActivity, LinearLayoutManager.VERTICAL, false));
+//        lvContacts.addOnScrollListener(new EndlessRecyclerViewScrollListener((LinearLayoutManager) lvContacts.getLayoutManager()) {
+//            @Override
+//            public void onLoadMore(int current_page) {
+//                if (!isEndOfListAchieved && !isInitialLoading && !isLoadingFromSearch) {
+//                    PAGE_NUMBER++;
+//                    getListFromLocal(false);
+//                }
+//            }
+//        });
+    }
+
+    @Override
+    public void loadMore() {
+        if (!isEndOfListAchieved && !isInitialLoading && !isLoadingFromSearch) {
+            PAGE_NUMBER++;
+            getListFromLocal(false);
+        }
+    }
+
+    @Override
+    public boolean isEndOfListAchieved() {
+        return false;
     }
 
     @Override
     public void initListeners() {
         initEditSearchView(R.string.name_mobile_number, new HealthcocoTextWatcher(editSearch, this), true);
         swipeRefreshLayout.setOnRefreshListener(this);
+        lvContacts.setLoadMoreListener(this);
+        lvContacts.setSwipeRefreshLayout(swipeRefreshLayout);
     }
 
     private void initAdapter() {
-        adapter = new HealthcocoRecyclerViewAdapter(mActivity, AdapterType.CONTACT_LIST_FOR_DELETED, this);
+        adapter = new DeleteContactsListAdapter(mActivity, this);
         lvContacts.setAdapter(adapter);
+//        adapter = new HealthcocoRecyclerViewAdapter(mActivity, AdapterType.CONTACT_LIST_FOR_DELETED, this);
+//        lvContacts.setAdapter(adapter);
     }
 
     private void notifyAdapter(List<RegisteredPatientDetailsUpdated> patientsList) {
-        LogUtils.LOGD(TAG, "Success notifyAdapter :" + patientsList.size());
-        if (!Util.isNullOrEmptyList(patientsList)) {
-            lvContacts.setVisibility(View.VISIBLE);
-            tvNoPatients.setVisibility(View.GONE);
-        } else {
-            lvContacts.setVisibility(View.GONE);
-            tvNoPatients.setVisibility(View.VISIBLE);
-        }
-        progressLoading.setVisibility(View.GONE);
-        adapter.setListData((ArrayList<Object>) (Object) patientsList);
-        adapter.notifyDataSetChanged();
+//        LogUtils.LOGD(TAG, "Success notifyAdapter :" + patientsList.size());
+//        if (!Util.isNullOrEmptyList(patientsList)) {
+//            lvContacts.setVisibility(View.VISIBLE);
+//            tvNoPatients.setVisibility(View.GONE);
+//        } else {
+//            lvContacts.setVisibility(View.GONE);
+//            tvNoPatients.setVisibility(View.VISIBLE);
+//        }
+//        progressLoading.setVisibility(View.GONE);
+//        adapter.setListData(patientsList);
+//        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -256,7 +273,7 @@ public class DeletedPatientsFragment extends HealthCocoFragment implements Local
             tvNoPatients.setVisibility(View.VISIBLE);
         }
         progressLoading.setVisibility(View.GONE);
-        adapter.setListData((ArrayList<Object>) (Object) patientsList);
+        adapter.setListData(patientsList);
         adapter.notifyDataSetChanged();
     }
 
@@ -279,7 +296,7 @@ public class DeletedPatientsFragment extends HealthCocoFragment implements Local
         } else {
             progressLoading.setVisibility(View.VISIBLE);
         }
-        asynTaskGetPatients = new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_PATIENTS, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        asynTaskGetPatients = new LocalDataBackgroundtaskOptimised(mActivity, LocalBackgroundTaskType.GET_PATIENTS_NEW, this, this, this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     @Override
@@ -352,8 +369,8 @@ public class DeletedPatientsFragment extends HealthCocoFragment implements Local
     };
 
     private void resetListAndPagingAttributes() {
-        if (patientsListHashMap != null)
-            patientsListHashMap.clear();
+        if (patientDetailsNewLinkedHashMap != null)
+            patientDetailsNewLinkedHashMap.clear();
         isResetList = true;
         PAGE_NUMBER = 0;
         isEndOfListAchieved = false;
@@ -371,4 +388,5 @@ public class DeletedPatientsFragment extends HealthCocoFragment implements Local
         }
         lastTextSearched = searchedText;
     }
+
 }

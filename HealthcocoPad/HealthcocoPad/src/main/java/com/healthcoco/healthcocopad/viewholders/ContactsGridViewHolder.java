@@ -182,7 +182,7 @@ public class ContactsGridViewHolder extends HealthCocoViewHolder implements OnCl
                     switch (listItemOptionType) {
                         case DELETE_PATIENT:
                             if (objData.getDoctorId().equals(optionsListener.getUser().getUniqueId())) {
-                                if (!Util.isNullOrBlank(objData.getUniqueId()))
+                                if (!Util.isNullOrBlank(objData.getUserId()))
                                     optionsListener.onDeletePatientClicked(objData);
                                 else
                                     Util.showToast(mActivity, R.string.no_mobile_number_found);

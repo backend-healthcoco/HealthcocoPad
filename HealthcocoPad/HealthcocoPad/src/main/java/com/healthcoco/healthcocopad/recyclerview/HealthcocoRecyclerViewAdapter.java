@@ -161,11 +161,11 @@ public class HealthcocoRecyclerViewAdapter extends RecyclerView.Adapter<Healthco
                 convertView.setLayoutParams(getLayoutParams(convertView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                 viewHolder = new BabyAchievementViewHolder(mActivity, convertView, onItemClickListener, listenerObject);
                 return viewHolder;
-            case CONTACT_LIST_FOR_DELETED:
-                convertView = mInflater.inflate(R.layout.grid_item_deleted_contacts, null);
-                convertView.setLayoutParams(getLayoutParams(convertView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                viewHolder = new ContactsListViewForDeletedPatientHolder(mActivity, convertView, onItemClickListener, listenerObject, viewType);
-                return viewHolder;
+//            case CONTACT_LIST_FOR_DELETED:
+//                convertView = mInflater.inflate(R.layout.grid_item_deleted_contacts, null);
+//                convertView.setLayoutParams(getLayoutParams(convertView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+//                viewHolder = new ContactsListViewForDeletedPatientHolder(mActivity, convertView, onItemClickListener, listenerObject, viewType);
+//                return viewHolder;
             case DIAGRAM_LIST:
                 convertView = mInflater.inflate(R.layout.item_clinical_note_diagram, null);
                 convertView.setLayoutParams(getLayoutParams(convertView, ViewGroup.LayoutParams.WRAP_CONTENT, (int) mActivity.getResources().getDimension(R.dimen.width_height_clinical_note_item_diagram)));
@@ -275,10 +275,10 @@ public class HealthcocoRecyclerViewAdapter extends RecyclerView.Adapter<Healthco
                 }
                 break;
             case CONTACT_LIST_FOR_DELETED:
-                if (holder instanceof ContactsListViewForDeletedPatientHolder) {
-                    ContactsListViewForDeletedPatientHolder selectedBrandListViewHolder = ((ContactsListViewForDeletedPatientHolder) holder);
-                    selectedBrandListViewHolder.applyData(object);
-                }
+//                if (holder instanceof ContactsListViewForDeletedPatientHolder) {
+//                    ContactsListViewForDeletedPatientHolder selectedBrandListViewHolder = ((ContactsListViewForDeletedPatientHolder) holder);
+//                    selectedBrandListViewHolder.applyData(object);
+//                }
                 break;
             case DIAGRAM_LIST:
                 if (holder instanceof ClinicalNoteItemDiagramViewHolder) {

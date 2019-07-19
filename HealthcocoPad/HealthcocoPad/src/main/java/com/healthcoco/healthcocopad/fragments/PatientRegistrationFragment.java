@@ -862,7 +862,7 @@ public class PatientRegistrationFragment extends HealthCocoFragment implements V
     private void refreshContactsData(RegisteredPatientDetailsUpdated patientDetails) {
         LocalDataServiceImpl.getInstance(mApp).addPatient(patientDetails);
         mActivity.syncContacts(false, user);
-        Util.sendBroadcast(mApp, ContactsListFragment.INTENT_GET_CONTACT_LIST_LOCAL);
+        Util.sendBroadcast(mApp, ContactsListFragment.INTENT_GET_CONTACT_LIST_SERVER);
     }
 
     private void openPatientDetailScreen(RegisteredPatientDetailsUpdated selecetdPatient) {

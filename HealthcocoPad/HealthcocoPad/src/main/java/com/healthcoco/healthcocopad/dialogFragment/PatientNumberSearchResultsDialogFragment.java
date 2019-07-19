@@ -225,7 +225,7 @@ public class PatientNumberSearchResultsDialogFragment extends HealthCocoDialogFr
                     boolean isDataSuccess = (boolean) response.getData();
                     if (isDataSuccess) {
                         LocalDataServiceImpl.getInstance(mApp).deletePatient(selectedPatient.getUserId());
-                        Util.sendBroadcast(mApp, ContactsListFragment.INTENT_REFRESH_CONTACTS_LIST_FROM_SERVER);
+                        Util.sendBroadcast(mApp, ContactsListFragment.INTENT_GET_CONTACT_LIST_SERVER);
                         closeThisActivity();
                         Util.showToast(mActivity, R.string.mobile_number_updated);
                     } else Util.showToast(mActivity, R.string.mobile_number_not_updated);
