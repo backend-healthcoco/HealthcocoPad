@@ -28,6 +28,7 @@ import com.healthcoco.healthcocopad.fragments.WebViewFragments;
 import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
+import com.healthcoco.healthcocopad.utilities.BCrypt;
 import com.healthcoco.healthcocopad.utilities.DevConfig;
 import com.healthcoco.healthcocopad.utilities.EditTextTextViewErrorUtil;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
@@ -44,6 +45,8 @@ import java.util.ArrayList;
 
 public class LoginDialogFragment extends HealthCocoDialogFragment implements View.OnClickListener, GsonRequest.ErrorListener, Response.Listener<VolleyResponseBean> {
     public static final String INTENT_SIGNUP_SUCCESS = "com.healthcoco.healthcocopad.dialogFragment.LoginDialogFragment";
+    private static final String KEY_WORD = "$2a$12$HHBRV5pOMt9wQ9Ve.2mnhu";
+
     BroadcastReceiver signUpSuccessReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, final Intent intent) {
@@ -175,18 +178,19 @@ public class LoginDialogFragment extends HealthCocoDialogFragment implements Vie
             msg = getResources().getString(R.string.please_enter_password_to_login);
             errorViewList.add(editPassword);
         }
-        if (Util.isNullOrBlank(msg))
+        if (Util.isNullOrBlank(msg)) {
+            mActivity.showLoading(false);
             loginUser(userName, password);
-        else {
+        } else {
             EditTextTextViewErrorUtil.showErrorOnEditText(mActivity, view, errorViewList, msg);
         }
     }
 
     private void loginUser(String userName, String password) {
-        mActivity.showLoading(false);
         User user = new User();
         user.setUsername(userName);
-        user.setPassword(Util.getSHA3SecurePassword(password));
+        String hashpw = BCrypt.hashpw(password, KEY_WORD);
+        user.setPassword(hashpw);
         WebDataServiceImpl.getInstance(mApp).loginUser(LoginResponse.class, user, this, this);
     }
 

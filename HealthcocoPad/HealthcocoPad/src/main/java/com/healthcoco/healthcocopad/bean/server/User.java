@@ -39,7 +39,7 @@ public class User extends SugarRecord {
     private String secPhoneNumber;
 
     private String imageUrl;
-    private char[] password;
+    private String password;
     private String username;
 
     protected String foreignHospitalId;
@@ -194,11 +194,11 @@ public class User extends SugarRecord {
         this.colorCode = colorCode;
     }
 
-    public char[] getPassword() {
+    public String getPassword() {
         return password;
     }
 
-    public void setPassword(char[] password) {
+    public void setPassword(String password) {
         this.password = password;
     }
 
