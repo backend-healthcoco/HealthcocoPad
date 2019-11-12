@@ -22,7 +22,7 @@ android {
         applicationId "com.healthcoco.healthcocopad"
         minSdkVersion 17
         targetSdkVersion 28
-        versionCode 26
+        versionCode 27
         versionName "@string/app_version_name"
     }
     buildTypes {

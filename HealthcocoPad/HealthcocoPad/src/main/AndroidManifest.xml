@@ -56,7 +56,7 @@
             android:value="@string/database_name" />
         <meta-data
             android:name="VERSION"
-            android:value="17" />
+            android:value="18" />
         <meta-data
             android:name="QUERY_LOG"
             android:value="false" />
