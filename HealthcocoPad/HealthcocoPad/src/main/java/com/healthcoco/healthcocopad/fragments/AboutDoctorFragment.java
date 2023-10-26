@@ -2,26 +2,24 @@ package com.healthcoco.healthcocopad.fragments;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TabHost;
 import android.widget.TextView;
-import android.widget.Toolbar;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
-import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.adapter.ContactsDetailViewPagerAdapter;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.ClinicDetailResponse;
@@ -34,7 +32,6 @@ import com.healthcoco.healthcocopad.custom.DummyTabFactory;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocopad.enums.DoctorAndClinicTabsType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
-import com.healthcoco.healthcocopad.enums.PatientRegistrationTabsType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
 import com.healthcoco.healthcocopad.listeners.PatientRegistrationDetailsListener;
@@ -116,7 +113,7 @@ public class AboutDoctorFragment extends HealthCocoFragment implements ViewPager
         parentlogo = (FrameLayout) view.findViewById(R.id.parent_logo);
 
 
-        mActivity.setSupportActionBar((android.support.v7.widget.Toolbar) view.findViewById(R.id.toolbar));
+        mActivity.setSupportActionBar((Toolbar) view.findViewById(R.id.toolbar));
         mActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         collapsingToolbarLayout = (CollapsingToolbarLayout) view.findViewById(R.id.collapsing_toolbar);

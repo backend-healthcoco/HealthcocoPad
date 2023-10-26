@@ -3,22 +3,21 @@ package com.healthcoco.healthcocopad.popupwindow;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.R;
-import com.healthcoco.healthcocopad.bean.server.ClinicDoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.RegisteredDoctorProfile;
 import com.healthcoco.healthcocopad.enums.AdapterType;
 import com.healthcoco.healthcocopad.enums.PopupWindowType;

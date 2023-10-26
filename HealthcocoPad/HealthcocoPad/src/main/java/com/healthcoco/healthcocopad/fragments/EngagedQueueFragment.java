@@ -1,17 +1,17 @@
 package com.healthcoco.healthcocopad.fragments;
 
 
+import static com.healthcoco.healthcocopad.enums.AppointmentStatusType.CONFIRM;
+import static com.healthcoco.healthcocopad.enums.CalendarStatus.CHECKED_OUT;
+import static com.healthcoco.healthcocopad.enums.CalendarStatus.ENGAGED;
+import static com.healthcoco.healthcocopad.fragments.CheckedOutQueueFragment.INTENT_REFRESH_CHECKED_OUT_QUEUE_DATA;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,11 +19,16 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
-import com.healthcoco.healthcocopad.bean.server.ClinicDoctorProfile;
 import com.healthcoco.healthcocopad.bean.server.DoctorClinicProfile;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.RegisteredDoctorProfile;
@@ -41,7 +46,6 @@ import com.healthcoco.healthcocopad.recyclerview.HealthcocoRecyclerViewAdapter;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
 import com.healthcoco.healthcocopad.utilities.ComparatorUtil;
-import com.healthcoco.healthcocopad.utilities.DateTimeUtil;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.Util;
@@ -49,14 +53,6 @@ import com.healthcoco.healthcocopad.utilities.Util;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-
-import static com.healthcoco.healthcocopad.enums.AppointmentStatusType.ALL;
-import static com.healthcoco.healthcocopad.enums.AppointmentStatusType.CONFIRM;
-import static com.healthcoco.healthcocopad.enums.CalendarStatus.CHECKED_OUT;
-import static com.healthcoco.healthcocopad.enums.CalendarStatus.ENGAGED;
-import static com.healthcoco.healthcocopad.enums.CalendarStatus.WAITING;
-import static com.healthcoco.healthcocopad.fragments.CheckedOutQueueFragment.INTENT_REFRESH_CHECKED_OUT_QUEUE_DATA;
-import static com.healthcoco.healthcocopad.fragments.WaitingQueueFragment.INTENT_REFRESH_WAITING_QUEUE_DATA;
 
 /**
  * Created by Prashant on 01-03-2018.

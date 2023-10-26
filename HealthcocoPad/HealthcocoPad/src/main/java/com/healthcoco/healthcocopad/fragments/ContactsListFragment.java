@@ -8,10 +8,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +20,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.android.volley.Response;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
@@ -84,6 +81,10 @@ import java.util.List;
 import java.util.Locale;
 
 import static com.healthcoco.healthcocopad.dialogFragment.BookAppointmentDialogFragment.TAG_SELECTED_USER_DATA;
+
+import androidx.fragment.app.FragmentTransaction;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 /**
  * Created by Shreshtha on 31-01-2017.

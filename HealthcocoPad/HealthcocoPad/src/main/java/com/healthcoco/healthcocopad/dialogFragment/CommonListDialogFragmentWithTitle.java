@@ -3,8 +3,6 @@ package com.healthcoco.healthcocopad.dialogFragment;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -15,6 +13,11 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.android.volley.Response;
 import com.healthcoco.healthcocopad.HealthCocoDialogFragment;
@@ -595,4 +598,5 @@ public class CommonListDialogFragmentWithTitle extends HealthCocoDialogFragment 
     public void onPostExecute(VolleyResponseBean aVoid) {
 
     }
+
 }

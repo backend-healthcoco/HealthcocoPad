@@ -1,8 +1,9 @@
 package com.healthcoco.healthcocopad.recyclerview;
 
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.HealthCocoApplication;

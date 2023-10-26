@@ -3,7 +3,6 @@ package com.healthcoco.healthcocopad.calendar.pinlockview;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.os.Build;
-import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -14,6 +13,8 @@ import android.view.animation.ScaleAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.healthcoco.healthcocopad.R;
 

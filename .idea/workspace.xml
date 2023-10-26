@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AndroidLayouts">
+    <shared>
+      <config />
+    </shared>
+  </component>
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="NONE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="1e4d3a17-0626-4aaf-b10b-2497d01345c8" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/healthcoco-pad.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/HealthcocoPad/HealthcocoPad/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/HealthcocoPad/HealthcocoPad/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/HealthcocoPad/SugarOrm/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/HealthcocoPad/SugarOrm/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/HealthcocoPad/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/HealthcocoPad/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/HealthcocoPad/gradle.properties" beforeDir="false" afterPath="$PROJECT_DIR$/HealthcocoPad/gradle.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/HealthcocoPad/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/HealthcocoPad/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/HealthcocoPad/settings.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/HealthcocoPad/settings.gradle" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="GenerateSignedApkSettings">
+    <option name="KEY_STORE_PATH" value="$PROJECT_DIR$/HealthcocoPad/HealthcocoPad.jks" />
+    <option name="KEY_ALIAS" value="healthcoco" />
+    <option name="REMEMBER_PASSWORDS" value="true" />
+    <option name="BUILD_TARGET_KEY" value="apk" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2X4NgafQJEzBOfTX9RotLMsKAzK" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "AndroidProguardConfigPaths": "/home/shreshtha/Android/Sdk/tools/proguard/proguard-android.txt",
+    "AndroidRunProguardForReleaseBuild": "true",
+    "ApkExportedModule": "healthcoco-pad",
+    "BundleExportedModule": "healthcoco-pad",
+    "ExportedApkPathForhealthcoco-pad": "/home/shreshtha/HealthcocoProjects/healthcoco-pad/healthcoco-pad.apk",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "cidr.known.project.marker": "true",
+    "com.google.services.firebase.aqiPopupShown": "true",
+    "last_opened_file_path": "/home/shreshtha/HealthcocoProjects/healthcoco-pad/HealthcocoPad/HealthcocoPad.jks",
+    "project.structure.last.edited": "Facets",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2"
+  }
+}]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="1e4d3a17-0626-4aaf-b10b-2497d01345c8" name="Changes" comment="" />
+      <created>1697884504177</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1697884504177</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+  </component>
+</project>

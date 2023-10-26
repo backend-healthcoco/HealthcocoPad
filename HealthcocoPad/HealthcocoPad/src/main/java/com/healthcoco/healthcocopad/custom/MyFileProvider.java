@@ -1,6 +1,7 @@
 package com.healthcoco.healthcocopad.custom;
 
-import android.support.v4.content.FileProvider;
+
+import androidx.core.content.FileProvider;
 
 public class MyFileProvider extends FileProvider {
     //we extend fileprovider to stop collision with chatbot library file provider

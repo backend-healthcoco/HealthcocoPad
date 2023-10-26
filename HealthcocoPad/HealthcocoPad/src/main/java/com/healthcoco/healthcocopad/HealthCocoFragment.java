@@ -1,12 +1,9 @@
 package com.healthcoco.healthcocopad;
 
+import static android.content.Context.INPUT_METHOD_SERVICE;
+
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.TextInputLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -23,11 +20,17 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
 import com.android.volley.Response;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.material.textfield.TextInputLayout;
 import com.healthcoco.healthcocopad.activities.AddVisitsActivity;
 import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
@@ -66,8 +69,6 @@ import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static android.content.Context.INPUT_METHOD_SERVICE;
 
 /**
  * Created by Shreshtha on 18-01-2017.

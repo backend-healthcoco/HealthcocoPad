@@ -2,16 +2,11 @@ package com.healthcoco.healthcocopad.custom;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.view.ViewGroup;
 
-public class BottomSheetDialog extends android.support.design.widget.BottomSheetDialog{
+import androidx.annotation.NonNull;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        getWindow().setLayout(500 /*our width*/, ViewGroup.LayoutParams.MATCH_PARENT);
-    }
+public class BottomSheetDialog extends com.google.android.material.bottomsheet.BottomSheetDialog {
 
     public BottomSheetDialog(@NonNull Context context) {
         super(context);
@@ -24,4 +19,11 @@ public class BottomSheetDialog extends android.support.design.widget.BottomSheet
     protected BottomSheetDialog(@NonNull Context context, boolean cancelable, OnCancelListener cancelListener) {
         super(context, cancelable, cancelListener);
     }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        getWindow().setLayout(500 /*our width*/, ViewGroup.LayoutParams.MATCH_PARENT);
+    }
 }
+

@@ -12,7 +12,6 @@ import android.os.Process;
 import android.view.Display;
 
 import com.android.volley.Response;
-import com.crashlytics.android.Crashlytics;
 import com.freshchat.consumer.sdk.Freshchat;
 import com.freshchat.consumer.sdk.FreshchatConfig;
 import com.healthcoco.healthcocopad.HealthCocoActivity;
@@ -38,7 +37,6 @@ import com.healthcoco.healthcocopad.utilities.LogUtils;
 import com.healthcoco.healthcocopad.utilities.ScreenDimensions;
 import com.healthcoco.healthcocopad.utilities.Util;
 
-import io.fabric.sdk.android.Fabric;
 
 /**
  * Created by neha on 18/01/17.
@@ -55,7 +53,6 @@ public class SplashScreenActivity extends HealthCocoActivity implements GsonRequ
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_splash_screen);
         Intent intent = getIntent();
         notificationResponseData = intent.getStringExtra(HealthcocoFCMListener.TAG_NOTIFICATION_RESPONSE);
@@ -79,7 +76,7 @@ public class SplashScreenActivity extends HealthCocoActivity implements GsonRequ
         FreshchatConfig freshchatConfig = new FreshchatConfig("48f0123c-e61b-4ae8-9c5d-0306af5fdd8f", "8f3d8e8c-ef11-4b0a-9e07-4fa162852cee");
         freshchatConfig.setCameraCaptureEnabled(true);
         freshchatConfig.setGallerySelectionEnabled(true);
-        Freshchat.getInstance(getApplicationContext()).init(freshchatConfig);
+        Freshchat.getInstance(mApp.getApplicationContext()).init(freshchatConfig);
     }
 
     private void initScreenDimensions() {

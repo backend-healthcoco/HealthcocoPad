@@ -1,0 +1,3 @@
+com.myscript.atk.text
+string myscript_core_placeholder
+string myscript_text_placeholder

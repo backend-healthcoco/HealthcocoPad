@@ -9,11 +9,6 @@ import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.view.ViewPager;
 import android.text.InputFilter;
 import android.text.Spanned;
 import android.util.Log;
@@ -83,6 +78,12 @@ import static com.healthcoco.healthcocopad.fragments.AddClinicalNotesSubFragment
 import static com.healthcoco.healthcocopad.fragments.AddClinicalNotesVisitMyScriptFragment.CHARACTER_TO_BE_REPLACED;
 import static com.healthcoco.healthcocopad.fragments.AddVisitSuggestionsFragment.TAG_SUGGESTIONS_TYPE;
 import static com.healthcoco.healthcocopad.fragments.MyScriptAddVisitsFragment.TAG_SELECTED_SUGGESTION_OBJECT;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.viewpager.widget.ViewPager;
 
 /**
  * Created by Shreshtha on 02-03-2017.

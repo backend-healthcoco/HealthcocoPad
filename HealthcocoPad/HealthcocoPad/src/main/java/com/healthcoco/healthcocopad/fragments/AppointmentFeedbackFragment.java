@@ -2,8 +2,6 @@ package com.healthcoco.healthcocopad.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,6 +40,9 @@ import org.parceler.Parcels;
 import java.util.ArrayList;
 
 import static com.healthcoco.healthcocopad.enums.PopupWindowType.DOCTOR_CLINIC_PROFILE;
+
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 
 
 /**

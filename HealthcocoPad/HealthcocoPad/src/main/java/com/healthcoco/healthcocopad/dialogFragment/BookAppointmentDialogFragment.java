@@ -1,6 +1,9 @@
 package com.healthcoco.healthcocopad.dialogFragment;
 
+import static android.app.Activity.RESULT_OK;
+
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -16,9 +19,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +36,10 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.TimePicker;
+
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.android.volley.Response;
 import com.healthcoco.healthcocopad.HealthCocoActivity;
@@ -97,8 +101,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
-
-import static android.app.Activity.RESULT_OK;
 
 /**
  * Created by Shreshtha on 03-03-2017.
@@ -885,6 +887,7 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
         }
     }
 
+    @SuppressLint("Range")
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -897,8 +900,8 @@ public class BookAppointmentDialogFragment extends HealthCocoDialogFragment impl
                 ContentResolver cr = mActivity.getContentResolver();
                 Cursor cursor = cr.query(contactData, null, null, null, null);
                 if (cursor.moveToFirst()) {
-                    String id = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
-                    Integer hasPhone = cursor.getInt(cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER));
+                    @SuppressLint("Range") String id = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
+                    @SuppressLint("Range") Integer hasPhone = cursor.getInt(cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER));
                     String phone = null;
                     if (hasPhone > 0) {
                         Cursor cp = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,

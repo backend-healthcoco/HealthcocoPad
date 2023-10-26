@@ -8,9 +8,11 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.widget.EditText;
 
+import androidx.appcompat.widget.AppCompatEditText;
+
 import com.healthcoco.healthcocopad.listeners.DrawableClickListener;
 
-public class CustomEditText extends android.support.v7.widget.AppCompatEditText {
+public class CustomEditText extends AppCompatEditText {
 
     private Drawable drawableRight;
     private Drawable drawableLeft;

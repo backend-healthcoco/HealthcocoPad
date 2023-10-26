@@ -1,6 +1,10 @@
 package com.healthcoco.healthcocopad.fragments;
 
 
+import static com.healthcoco.healthcocopad.dialogFragment.AddEventDialogFragment.TAG_FROM_SCREEN_TYPE;
+import static com.healthcoco.healthcocopad.enums.AddEventsFromScreenType.EVENTS_LIST_ADD_NEW;
+import static com.healthcoco.healthcocopad.enums.AppointmentStatusType.CONFIRM;
+
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.BroadcastReceiver;
@@ -9,11 +13,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,13 +20,17 @@ import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
-import com.healthcoco.healthcocopad.bean.server.CalendarEvents;
 import com.healthcoco.healthcocopad.bean.server.Events;
 import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.RegisteredDoctorProfile;
@@ -35,7 +38,6 @@ import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.custom.HealthcocoTextWatcher;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
 import com.healthcoco.healthcocopad.dialogFragment.AddEventDialogFragment;
-import com.healthcoco.healthcocopad.dialogFragment.BookAppointmentDialogFragment;
 import com.healthcoco.healthcocopad.enums.AdapterType;
 import com.healthcoco.healthcocopad.enums.AddEventsFromScreenType;
 import com.healthcoco.healthcocopad.enums.AppointmentStatusType;
@@ -68,10 +70,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-
-import static com.healthcoco.healthcocopad.dialogFragment.AddEventDialogFragment.TAG_FROM_SCREEN_TYPE;
-import static com.healthcoco.healthcocopad.enums.AddEventsFromScreenType.EVENTS_LIST_ADD_NEW;
-import static com.healthcoco.healthcocopad.enums.AppointmentStatusType.CONFIRM;
 
 /**
  * Created by Prashant on 28-05-2018.

@@ -3,11 +3,12 @@ package com.healthcoco.healthcocopad.calendar.pinlockview;
 import android.animation.LayoutTransition;
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.support.annotation.IntDef;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+
+import androidx.annotation.IntDef;
 
 import com.healthcoco.healthcocopad.R;
 

@@ -1,5 +1,7 @@
 package com.orm;
 
+import static com.orm.SugarContext.getSugarContext;
+
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -25,8 +27,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
-
-import static com.orm.SugarContext.getSugarContext;
 
 public class SugarRecord {
     public static final String SUGAR = "Sugar";
@@ -316,7 +316,7 @@ public class SugarRecord {
     }
 
     public static <T> long sum(Class<T> type, String field) {
-        return sum(type, field, null, null);
+        return sum(type, field, null, (String) null);
     }
 
     public static <T> long sum(Class<T> type, String field, String whereClause, String... whereArgs) {

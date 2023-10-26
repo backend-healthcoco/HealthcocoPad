@@ -1,7 +1,8 @@
 package com.healthcoco.healthcocopad.recyclerview;
 
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * Created by neha on 04/01/18.

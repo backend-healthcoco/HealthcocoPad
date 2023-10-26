@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.content.LocalBroadcastManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -76,6 +75,8 @@ import java.util.List;
 import java.util.Locale;
 
 import static com.healthcoco.healthcocopad.enums.WebServiceType.FRAGMENT_INITIALISATION;
+
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 /**
  * Created by neha on 15/04/17.

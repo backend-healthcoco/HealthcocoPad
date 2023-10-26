@@ -87,7 +87,7 @@
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_size_signup" />
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp">
@@ -105,7 +105,7 @@
                             android:textColor="@color/black"
                             android:textColorHint="@color/grey_hint_color"
                             android:textSize="@dimen/text_size_signup" />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
                     <requestFocus></requestFocus>
                 </LinearLayout>
@@ -172,7 +172,7 @@
                         android:textColorHint="@color/grey_hint_color"
                         android:textSize="@dimen/text_size_signup" />
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
@@ -191,11 +191,11 @@
                             android:textColor="@color/black"
                             android:textColorHint="@color/grey_hint_color"
                             android:textSize="@dimen/text_size_signup" />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
                 </LinearLayout>
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp">
@@ -213,7 +213,7 @@
                         android:textColor="@color/black"
                         android:textColorHint="@color/grey_hint_color"
                         android:textSize="@dimen/text_size_signup" />
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
                     android:id="@+id/tv_speciality"
@@ -230,7 +230,7 @@
                     android:textColorHint="@color/grey_hint_color"
                     android:textSize="@dimen/text_size_signup" />
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp">
@@ -248,7 +248,7 @@
                         android:textColor="@color/black"
                         android:textColorHint="@color/grey_hint_color"
                         android:textSize="@dimen/text_size_signup" />
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -274,7 +274,7 @@
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_size_signup" />
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/layout_padding">
@@ -293,7 +293,7 @@
                             android:textColor="@color/black"
                             android:textColorHint="@color/grey_hint_color"
                             android:textSize="@dimen/text_size_signup" />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
 
             </LinearLayout>

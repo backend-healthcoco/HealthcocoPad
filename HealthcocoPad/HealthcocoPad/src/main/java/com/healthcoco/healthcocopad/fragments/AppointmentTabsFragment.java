@@ -1,9 +1,6 @@
 package com.healthcoco.healthcocopad.fragments;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +8,10 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TabHost;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
 
 import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
@@ -20,11 +21,9 @@ import com.healthcoco.healthcocopad.bean.request.RegisterNewPatientRequest;
 import com.healthcoco.healthcocopad.custom.DummyTabFactory;
 import com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType;
 import com.healthcoco.healthcocopad.enums.FollowUpAppointmentTabsType;
-import com.healthcoco.healthcocopad.enums.PatientRegistrationTabsType;
 import com.healthcoco.healthcocopad.listeners.PatientRegistrationDetailsListener;
 import com.healthcoco.healthcocopad.utilities.HealthCocoConstants;
 import com.healthcoco.healthcocopad.utilities.Util;
-import com.healthcoco.healthcocopad.views.CustomViewPager;
 
 import java.util.ArrayList;
 

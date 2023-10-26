@@ -1,5 +1,7 @@
 package com.healthcoco.healthcocopad.popupwindow;
 
+import static androidx.core.app.ActivityCompat.startActivityForResult;
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -8,7 +10,6 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.content.LocalBroadcastManager;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,11 +54,12 @@ import com.healthcoco.healthcocopad.utilities.Util;
 
 import org.parceler.Parcels;
 
-import static android.support.v4.app.ActivityCompat.startActivityForResult;
 import static com.healthcoco.healthcocopad.dialogFragment.BookAppointmentDialogFragment.TAG_APPOINTMENT_ID;
 import static com.healthcoco.healthcocopad.enums.BookAppointmentFromScreenType.APPOINTMENTS_QUEUE_RESCHEDULE;
 import static com.healthcoco.healthcocopad.enums.PatientDetailTabType.PATIENT_DETAIL_INVOICE;
 import static com.healthcoco.healthcocopad.enums.PatientDetailTabType.PATIENT_DETAIL_RECEIPT;
+
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 /**
  * Created by neha on 03/05/17.

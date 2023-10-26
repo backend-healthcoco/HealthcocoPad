@@ -1,12 +1,7 @@
 package com.healthcoco.healthcocopad.fragments;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
-import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -16,10 +11,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import androidx.appcompat.widget.Toolbar;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
 import com.android.volley.Response;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
-import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.HealthcocoBlogResponse;
 import com.healthcoco.healthcocopad.enums.WebServiceType;

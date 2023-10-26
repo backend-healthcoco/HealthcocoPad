@@ -1,9 +1,10 @@
 package com.healthcoco.healthcocopad.viewholders;
 
-import android.support.v7.widget.AppCompatCheckBox;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+
+import androidx.appcompat.widget.AppCompatCheckBox;
 
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.HealthCocoViewHolder;

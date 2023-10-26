@@ -349,7 +349,7 @@
                                             android:visibility="visible" />
                                     </LinearLayout>
 
-                                    <android.support.design.widget.TextInputLayout
+                                    <com.google.android.material.textfield.TextInputLayout
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:layout_marginTop="5dp"
@@ -367,7 +367,7 @@
                                             android:singleLine="true"
                                             android:textColorHint="@color/grey_hint_color" />
 
-                                    </android.support.design.widget.TextInputLayout>
+                                    </com.google.android.material.textfield.TextInputLayout>
 
                                 </LinearLayout>
 

@@ -1,6 +1,7 @@
 package com.healthcoco.healthcocopad.dialogFragment;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -9,8 +10,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,6 +45,9 @@ import org.parceler.Parcels;
 import java.util.ArrayList;
 
 import static android.app.Activity.RESULT_OK;
+
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 
 /**
  * Created by Shreshtha on 03-03-2017.
@@ -287,6 +289,7 @@ public class PatientNumberSearchDialogFragment extends HealthCocoDialogFragment 
 //        startActivity(intent);
 //    }
 
+    @SuppressLint("Range")
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -300,8 +303,8 @@ public class PatientNumberSearchDialogFragment extends HealthCocoDialogFragment 
                 ContentResolver cr = mActivity.getContentResolver();
                 Cursor cursor = cr.query(contactData, null, null, null, null);
                 if (cursor.moveToFirst()) {
-                    String id = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
-                    Integer hasPhone = cursor.getInt(cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER));
+                    @SuppressLint("Range") String id = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
+                    @SuppressLint("Range") Integer hasPhone = cursor.getInt(cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER));
                     String phone = null;
                     if (hasPhone > 0) {
                         Cursor cp = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,

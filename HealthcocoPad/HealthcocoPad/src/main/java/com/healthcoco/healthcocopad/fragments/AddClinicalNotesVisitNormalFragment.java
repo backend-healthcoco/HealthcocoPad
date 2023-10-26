@@ -1,5 +1,12 @@
 package com.healthcoco.healthcocopad.fragments;
 
+import static com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType.GET_VISIT_DETAILS;
+import static com.healthcoco.healthcocopad.fragments.AddClinicalNotesSubFragment.CHARACTER_TO_REPLACE_COMMA_WITH_SPACES;
+import static com.healthcoco.healthcocopad.fragments.AddClinicalNotesSubFragment.TAG_CLINICAL_NOTES_DATA;
+import static com.healthcoco.healthcocopad.fragments.AddClinicalNotesVisitMyScriptFragment.CHARACTER_TO_BE_REPLACED;
+import static com.healthcoco.healthcocopad.fragments.AddVisitSuggestionsFragment.TAG_SUGGESTIONS_TYPE;
+import static com.healthcoco.healthcocopad.fragments.MyScriptAddVisitsFragment.TAG_SELECTED_SUGGESTION_OBJECT;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -7,9 +14,6 @@ import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.LocalBroadcastManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -18,6 +22,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
@@ -81,13 +89,6 @@ import org.parceler.Parcels;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import static com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType.GET_VISIT_DETAILS;
-import static com.healthcoco.healthcocopad.fragments.AddClinicalNotesVisitMyScriptFragment.CHARACTER_TO_BE_REPLACED;
-import static com.healthcoco.healthcocopad.fragments.AddClinicalNotesSubFragment.CHARACTER_TO_REPLACE_COMMA_WITH_SPACES;
-import static com.healthcoco.healthcocopad.fragments.AddClinicalNotesSubFragment.TAG_CLINICAL_NOTES_DATA;
-import static com.healthcoco.healthcocopad.fragments.AddVisitSuggestionsFragment.TAG_SUGGESTIONS_TYPE;
-import static com.healthcoco.healthcocopad.fragments.MyScriptAddVisitsFragment.TAG_SELECTED_SUGGESTION_OBJECT;
 
 /**
  * Created by Shreshtha on 16-05-2017.

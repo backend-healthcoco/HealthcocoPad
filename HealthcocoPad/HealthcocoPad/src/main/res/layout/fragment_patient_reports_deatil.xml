@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <android.support.design.widget.CoordinatorLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/main_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -59,7 +59,7 @@
             </RelativeLayout>
         </com.healthcoco.healthcocopad.views.CustomSwipeRefreshLayout>
 
-        <android.support.design.widget.FloatingActionButton
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fl_bt_add_report"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -70,7 +70,7 @@
             android:src="@drawable/actionbar_add_me"
             app:layout_anchorGravity="bottom|right|end" />
 
-    </android.support.design.widget.CoordinatorLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <include layout="@layout/loading_healthcoco_overlay" />
 

@@ -1,1 +1,18 @@
-include ':healthcocoPad', ':MyScript_ATK-SingleLineWidget-android-widget', ':MyScript_ATK-IMCommon-android-component', ':MyScript_ATK-Text-android-component', ':MyScript_ATK-Core-android-component', ':SugarOrm'
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+        maven { url 'https://jitpack.io' }
+    }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+        maven { url 'https://jitpack.io' }
+    }
+}
+include ':MyScript_ATK-SingleLineWidget-android-widget', ':MyScript_ATK-IMCommon-android-component', ':MyScript_ATK-Text-android-component', ':MyScript_ATK-Core-android-component', ':SugarOrm'
+include ':HealthcocoPad'

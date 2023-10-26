@@ -13,7 +13,7 @@
         android:background="@color/grey_background"
         android:orientation="vertical">
 
-        <android.support.design.widget.CoordinatorLayout
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:id="@+id/rootLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -30,24 +30,24 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
-                    android:paddingBottom="100dp"
                     android:paddingLeft="@dimen/list_item_clinic_profile_padding"
+                    android:paddingTop="@dimen/list_item_clinic_profile_padding"
                     android:paddingRight="@dimen/list_item_clinic_profile_padding"
-                    android:paddingTop="@dimen/list_item_clinic_profile_padding" />
+                    android:paddingBottom="100dp" />
             </ScrollView>
 
-            <android.support.design.widget.FloatingActionButton
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/bt_add_more"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|right"
-                android:layout_marginBottom="@dimen/fab_margin_bottom"
                 android:layout_marginRight="@dimen/fab_margin_right"
+                android:layout_marginBottom="@dimen/fab_margin_bottom"
                 android:elevation="10dp"
                 android:src="@drawable/icon_add_education"
                 android:visibility="visible"
                 app:fabSize="normal"
                 app:pressedTranslationZ="10dp" />
-        </android.support.design.widget.CoordinatorLayout>
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
     </LinearLayout>
 </LinearLayout>

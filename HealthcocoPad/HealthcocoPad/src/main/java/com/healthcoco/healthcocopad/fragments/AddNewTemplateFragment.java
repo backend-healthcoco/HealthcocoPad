@@ -1,12 +1,12 @@
 package com.healthcoco.healthcocopad.fragments;
 
+import static com.healthcoco.healthcocopad.fragments.AddEditNormalVisitPrescriptionFragment.TAG_PRESCRIPTION_DATA;
+
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +17,9 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TabHost;
 import android.widget.TextView;
+
+import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
 
 import com.android.volley.Response;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
@@ -43,7 +46,6 @@ import com.healthcoco.healthcocopad.listeners.HealthcocoTextWatcherListener;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
 import com.healthcoco.healthcocopad.listeners.SelectDrugItemClickListener;
 import com.healthcoco.healthcocopad.listeners.SelectedDrugsListItemListener;
-import com.healthcoco.healthcocopad.listeners.TemplateListItemListener;
 import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.services.impl.LocalDataServiceImpl;
 import com.healthcoco.healthcocopad.services.impl.WebDataServiceImpl;
@@ -57,8 +59,6 @@ import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.healthcoco.healthcocopad.fragments.AddEditNormalVisitPrescriptionFragment.TAG_PRESCRIPTION_DATA;
 
 /**
  * Created by Shreshtha on 27-03-2017.

@@ -1,17 +1,21 @@
 package com.healthcoco.healthcocopad.fragments;
 
+import static com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType.SETTINGS_UI_PERMISSION_CLINICAL_NOTES;
+import static com.healthcoco.healthcocopad.enums.UIPermissionsItemType.PATIENT_TAB_PERMISSION;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
@@ -38,11 +42,6 @@ import org.parceler.Parcels;
 
 import java.util.Arrays;
 import java.util.List;
-
-import static com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType.SETTINGS_UI_PERMISSION_CLINICAL_NOTES;
-import static com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType.SETTINGS_UI_PERMISSION_PRESCRIPTION;
-import static com.healthcoco.healthcocopad.enums.CommonOpenUpFragmentType.SETTINGS_UI_PERMISSION_VISITS;
-import static com.healthcoco.healthcocopad.enums.UIPermissionsItemType.PATIENT_TAB_PERMISSION;
 
 /**
  * Created by Shreshtha on 27-02-2017.

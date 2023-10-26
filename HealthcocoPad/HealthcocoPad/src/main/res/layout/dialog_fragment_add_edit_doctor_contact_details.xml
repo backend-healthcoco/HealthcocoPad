@@ -14,7 +14,7 @@
         android:orientation="vertical"
         android:padding="10dp">
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:theme="@style/TextLabelLayoutStyle">
@@ -35,9 +35,9 @@
                 android:textColor="@color/black"
                 android:textColorHint="@color/grey_hint_color"
                 android:textSize="@dimen/text_size_doctor_profile_item_header_child" />
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -59,9 +59,9 @@
                 android:textColor="@color/black"
                 android:textColorHint="@color/grey_hint_color"
                 android:textSize="@dimen/text_size_doctor_profile_item_header_child" />
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -81,6 +81,6 @@
                 android:textColor="@color/black"
                 android:textColorHint="@color/grey_hint_color"
                 android:textSize="@dimen/text_size_doctor_profile_item_header_child" />
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
 </LinearLayout>

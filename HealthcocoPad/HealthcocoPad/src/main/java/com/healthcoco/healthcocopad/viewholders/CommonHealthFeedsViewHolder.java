@@ -3,10 +3,11 @@ package com.healthcoco.healthcocopad.viewholders;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.android.volley.Response;
 import com.healthcoco.healthcocopad.HealthCocoActivity;

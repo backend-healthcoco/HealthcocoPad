@@ -41,7 +41,7 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
-                <android.support.v7.widget.RecyclerView
+                <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_list"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -71,7 +71,7 @@
                 android:indeterminateDrawable="@drawable/progress_loading"
                 android:visibility="gone" />
 
-            <android.support.design.widget.FloatingActionButton
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/bt_add"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

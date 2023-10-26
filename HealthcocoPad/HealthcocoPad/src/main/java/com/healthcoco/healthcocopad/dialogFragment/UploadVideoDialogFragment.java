@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -53,6 +52,8 @@ import java.util.ArrayList;
 
 import static com.healthcoco.healthcocopad.dialogFragment.SelectCategoryDialogFragment.TAG_SELECTED_CATEGORY;
 import static com.healthcoco.healthcocopad.utilities.FileChooser.getPath;
+
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 /**
  * Created by Prashant on 02-07-2018.

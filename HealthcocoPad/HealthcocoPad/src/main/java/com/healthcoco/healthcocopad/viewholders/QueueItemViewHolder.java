@@ -44,7 +44,6 @@ import org.parceler.Parcels;
 
 import java.util.ArrayList;
 
-import static android.support.v4.app.ActivityCompat.startActivityForResult;
 import static com.healthcoco.healthcocopad.enums.BookAppointmentFromScreenType.APPOINTMENTS_LIST_RESCHEDULE;
 
 /**

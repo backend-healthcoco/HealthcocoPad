@@ -10,12 +10,12 @@
 
         <include layout="@layout/layout_edit_search_common" />
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_vaccines"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:overScrollMode="never"></android.support.v7.widget.RecyclerView>
+            android:overScrollMode="never"></androidx.recyclerview.widget.RecyclerView>
 
     </LinearLayout>
 </FrameLayout>

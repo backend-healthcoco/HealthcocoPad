@@ -1,6 +1,5 @@
 package com.healthcoco.healthcocopad.fragments;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -8,14 +7,15 @@ import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.fragment.app.Fragment;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.viewpager.widget.ViewPager;
 
 import com.android.volley.Response;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
@@ -34,7 +34,6 @@ import com.healthcoco.healthcocopad.enums.HealthCocoFileType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.PatientProfileScreenType;
 import com.healthcoco.healthcocopad.enums.WebServiceType;
-import com.healthcoco.healthcocopad.listeners.DoctorProfileListener;
 import com.healthcoco.healthcocopad.listeners.DownloadFileFromUrlListener;
 import com.healthcoco.healthcocopad.listeners.LocalDoInBackgroundListenerOptimised;
 import com.healthcoco.healthcocopad.services.GsonRequest;

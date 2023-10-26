@@ -1,13 +1,14 @@
 package com.healthcoco.healthcocopad.fragments;
 
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.viewpager.widget.ViewPager;
+
 import com.android.volley.Response;
+import com.google.android.material.tabs.TabLayout;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.adapter.ViewPagerAdapterTabLayout;

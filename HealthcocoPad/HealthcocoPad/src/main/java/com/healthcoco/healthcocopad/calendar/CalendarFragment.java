@@ -5,8 +5,6 @@ import android.graphics.Color;
 import android.graphics.RectF;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.content.LocalBroadcastManager;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,6 +57,9 @@ import static com.healthcoco.healthcocopad.enums.AppointmentStatusType.CONFIRM;
 import static com.healthcoco.healthcocopad.enums.BookAppointmentFromScreenType.APPOINTMENTS_QUEUE_ADD_NEW;
 import static com.healthcoco.healthcocopad.fragments.QueueFragment.TAG_CHANGED_DATE;
 import static com.healthcoco.healthcocopad.fragments.QueueFragment.TAG_IS_FROM_CALENDAR;
+
+import androidx.annotation.Nullable;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 
 public class CalendarFragment extends HealthCocoFragment implements WeekView.EventClickListener, MonthLoader.MonthChangeListener, WeekView.ScrollListener, LocalDoInBackgroundListenerOptimised, WeekView.EmptyViewLongPressListener, QueueListitemlistener {

@@ -3,10 +3,6 @@ package com.healthcoco.healthcocopad.fragments;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,6 +45,11 @@ import static com.healthcoco.healthcocopad.enums.AppointmentStatusType.CONFIRM;
 import static com.healthcoco.healthcocopad.enums.CalendarStatus.SCHEDULED;
 import static com.healthcoco.healthcocopad.enums.CalendarStatus.WAITING;
 import static com.healthcoco.healthcocopad.fragments.WaitingQueueFragment.INTENT_REFRESH_WAITING_QUEUE_DATA;
+
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 /**
  * Created by Prashant on 01-03-2018.

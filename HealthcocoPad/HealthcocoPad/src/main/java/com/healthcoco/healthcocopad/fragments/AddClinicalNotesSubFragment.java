@@ -1,5 +1,8 @@
 package com.healthcoco.healthcocopad.fragments;
 
+import static com.healthcoco.healthcocopad.enums.ClinicalNotesPermissionType.PRESENT_COMPLAINT;
+import static com.healthcoco.healthcocopad.utilities.HealthCocoConstants.REQUEST_CODE_ADD_CLINICAL_NOTES;
+
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -8,7 +11,6 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +21,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -56,9 +60,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import static com.healthcoco.healthcocopad.enums.ClinicalNotesPermissionType.PRESENT_COMPLAINT;
-import static com.healthcoco.healthcocopad.utilities.HealthCocoConstants.REQUEST_CODE_ADD_CLINICAL_NOTES;
 
 /**
  * Created by Shreshtha on 18-05-2017.

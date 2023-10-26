@@ -129,7 +129,7 @@
             android:src="@drawable/icon_add_reference_normal" />
     </RelativeLayout>
 
-    <android.support.v4.widget.SwipeRefreshLayout
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh_layout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -161,5 +161,5 @@
                 android:textSize="@dimen/text_size_no_results"
                 android:textStyle="bold" />
         </LinearLayout>
-    </android.support.v4.widget.SwipeRefreshLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </LinearLayout>

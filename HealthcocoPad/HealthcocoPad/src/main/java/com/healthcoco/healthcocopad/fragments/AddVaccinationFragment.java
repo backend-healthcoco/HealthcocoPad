@@ -2,13 +2,14 @@ package com.healthcoco.healthcocopad.fragments;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
@@ -19,7 +20,6 @@ import com.healthcoco.healthcocopad.bean.server.LoginResponse;
 import com.healthcoco.healthcocopad.bean.server.User;
 import com.healthcoco.healthcocopad.bean.server.VaccineSolarResponse;
 import com.healthcoco.healthcocopad.custom.LocalDataBackgroundtaskOptimised;
-//import com.healthcoco.healthcocopad.custom.VerticalRecyclerViewItemDecoration;
 import com.healthcoco.healthcocopad.enums.AdapterType;
 import com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType;
 import com.healthcoco.healthcocopad.enums.VaccineStatus;

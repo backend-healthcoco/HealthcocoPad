@@ -3,8 +3,6 @@ package com.healthcoco.healthcocopad.utilities;
 import android.app.Activity;
 import android.os.Process;
 
-import com.crashlytics.android.Crashlytics;
-import com.google.firebase.crash.FirebaseCrash;
 
 /**
  * Created by Shreshtha on 03-02-2017.
@@ -21,9 +19,6 @@ public class MyExceptionHandler implements
 
     public void uncaughtException(Thread thread, Throwable exception) {
         exception.printStackTrace();
-//send crashes to non-fatal tab of Fabric crashlytics
-        Crashlytics.logException(exception);
-        FirebaseCrash.report(exception);
 //        //for restarting the Activity
 //        if (mActivity != null) {
 //            mActivity.finishAffinity(); // Get tracker.

@@ -11,10 +11,6 @@ import android.graphics.RectF;
 import android.graphics.Region;
 import android.graphics.Typeface;
 import android.os.Build;
-import android.support.annotation.Nullable;
-import android.support.v4.view.GestureDetectorCompat;
-import android.support.v4.view.ViewCompat;
-import android.support.v4.view.animation.FastOutLinearInInterpolator;
 import android.text.Layout;
 import android.text.SpannableStringBuilder;
 import android.text.StaticLayout;
@@ -48,6 +44,11 @@ import java.util.Locale;
 
 import static com.healthcoco.healthcocopad.utilities.DateTimeUtil.isSameDay;
 import static com.healthcoco.healthcocopad.utilities.DateTimeUtil.today;
+
+import androidx.annotation.Nullable;
+import androidx.core.view.GestureDetectorCompat;
+import androidx.core.view.ViewCompat;
+import androidx.interpolator.view.animation.FastOutLinearInInterpolator;
 
 
 public class WeekView extends View {

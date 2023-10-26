@@ -7,10 +7,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +17,7 @@ import android.widget.TabWidget;
 import android.widget.TextView;
 
 import com.android.volley.Response;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.activities.AddVisitsActivity;
@@ -79,6 +76,10 @@ import static com.healthcoco.healthcocopad.enums.LocalBackgroundTaskType.GET_VIS
 import static com.healthcoco.healthcocopad.fragments.AddClinicalNotesVisitNormalFragment.TAG_CLINICAL_NOTE_ID;
 import static com.healthcoco.healthcocopad.fragments.AddEditNormalVisitPrescriptionFragment.TAG_PRESCRIPTION_ID;
 import static com.healthcoco.healthcocopad.fragments.AddNewTreatmentFragment.TAG_TREATMENT_ID;
+
+import androidx.fragment.app.Fragment;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.viewpager.widget.ViewPager;
 
 /**
  * Created by Shreshtha on 15-05-2017.

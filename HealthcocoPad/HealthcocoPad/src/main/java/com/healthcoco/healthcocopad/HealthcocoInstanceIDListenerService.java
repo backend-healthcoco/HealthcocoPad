@@ -5,8 +5,6 @@ import android.util.Log;
 
 import com.android.volley.Response;
 import com.freshchat.consumer.sdk.Freshchat;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.FirebaseInstanceIdService;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.healthcoco.healthcocopad.bean.VolleyResponseBean;
 import com.healthcoco.healthcocopad.bean.server.GCMRequest;

@@ -7,8 +7,6 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +25,9 @@ import com.healthcoco.healthcocopad.utilities.ScreenDimensions;
 import com.healthcoco.healthcocopad.utilities.Util;
 
 import static com.healthcoco.healthcocopad.activities.HomeActivity.REQUEST_PERMISSIONS;
+
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 
 public class EnlargedImageViewDialogFragment extends HealthCocoDialogFragment implements NetworkImageViewRequestListener, DownloadFileFromUrlListener {
     public static final String TAG_PRINT_PDF = "printPdf";

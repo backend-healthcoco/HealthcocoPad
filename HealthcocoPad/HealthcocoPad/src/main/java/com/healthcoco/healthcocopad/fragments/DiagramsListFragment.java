@@ -4,8 +4,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -46,6 +44,9 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 import static com.healthcoco.healthcocopad.activities.HomeActivity.REQUEST_PERMISSIONS;
+
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 
 public class DiagramsListFragment extends HealthCocoFragment implements OnItemClickListener,
         LocalDoInBackgroundListenerOptimised, DiagramsGridItemListener,

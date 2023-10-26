@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -16,6 +15,8 @@ import android.widget.AutoCompleteTextView;
 import android.widget.LinearLayout;
 import android.widget.TabHost;
 import android.widget.TextView;
+
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.android.volley.Response;
 import com.healthcoco.healthcocopad.HealthCocoFragment;

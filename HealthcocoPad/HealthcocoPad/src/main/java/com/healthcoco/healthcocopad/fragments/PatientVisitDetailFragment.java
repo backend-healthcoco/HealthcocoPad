@@ -8,9 +8,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +15,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.android.volley.Response;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.healthcoco.healthcocopad.HealthCocoFragment;
 import com.healthcoco.healthcocopad.R;
 import com.healthcoco.healthcocopad.activities.AddVisitsActivity;
@@ -61,6 +59,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import static com.healthcoco.healthcocopad.enums.WebServiceType.GET_PATIENT_VISIT;
+
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 /**
  * Created by Shreshtha on 07-03-2017.

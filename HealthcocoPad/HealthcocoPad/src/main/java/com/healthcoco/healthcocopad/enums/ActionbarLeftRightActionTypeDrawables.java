@@ -1,7 +1,8 @@
 package com.healthcoco.healthcocopad.enums;
 
-import android.support.v7.widget.AppCompatButton;
 import android.widget.ImageButton;
+
+import androidx.appcompat.widget.AppCompatButton;
 
 import com.healthcoco.healthcocopad.R;
 

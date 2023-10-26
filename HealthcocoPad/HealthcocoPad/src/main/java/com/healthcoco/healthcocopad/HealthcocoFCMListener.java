@@ -8,7 +8,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
-import android.support.v4.app.NotificationCompat;
+
+import androidx.core.app.NotificationCompat;
 
 import com.freshchat.consumer.sdk.Freshchat;
 import com.google.firebase.messaging.FirebaseMessagingService;

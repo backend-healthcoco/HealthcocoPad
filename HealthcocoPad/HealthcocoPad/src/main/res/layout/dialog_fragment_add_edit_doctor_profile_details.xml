@@ -107,7 +107,7 @@
                     android:textColor="@color/black"
                     android:textSize="@dimen/text_size_signup" />
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:theme="@style/TextLabelLayoutStyle">
@@ -122,7 +122,7 @@
                         android:hint="@string/full_name"
                         android:inputType="textPersonName|textNoSuggestions|textCapWords"
                         android:singleLine="true" />
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
 
             <TextView

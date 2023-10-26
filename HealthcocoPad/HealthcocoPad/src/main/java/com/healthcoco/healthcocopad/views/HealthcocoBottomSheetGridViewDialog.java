@@ -1,17 +1,18 @@
 package com.healthcoco.healthcocopad.views;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomSheetDialog;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 import com.healthcoco.healthcocopad.HealthCocoApplication;
 import com.healthcoco.healthcocopad.R;
+import com.healthcoco.healthcocopad.custom.BottomSheetDialog;
 import com.healthcoco.healthcocopad.enums.PopupWindowType;
 import com.healthcoco.healthcocopad.listeners.PopupWindowListener;
 import com.healthcoco.healthcocopad.popupwindow.PopupListViewAdapter;

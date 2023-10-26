@@ -2,14 +2,15 @@ package com.healthcoco.healthcocopad;
 
 import android.app.Activity;
 import android.content.Context;
-import android.support.multidex.MultiDex;
-import android.support.multidex.MultiDexApplication;
 import android.text.TextUtils;
+
+import androidx.multidex.MultiDex;
+import androidx.multidex.MultiDexApplication;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
-import com.crashlytics.android.Crashlytics;
+import com.bugsee.library.Bugsee;
 import com.healthcoco.healthcocopad.listeners.GCMRefreshListener;
 import com.healthcoco.healthcocopad.services.GsonRequest;
 import com.healthcoco.healthcocopad.utilities.LogUtils;
@@ -24,7 +25,6 @@ import com.orm.SugarContext;
 
 import java.util.ArrayList;
 
-import io.fabric.sdk.android.Fabric;
 
 /**
  * Created by Shreshtha on 20-01-2017.
@@ -54,9 +54,9 @@ public class HealthCocoApplication extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+        Bugsee.launch(this, "c6eb8bfb-c751-4083-ae70-f3f09e6f2ccd");
         SugarContext.init(this);
         initImageLoader();
-        Fabric.with(this, new Crashlytics());
     }
 
     public <T> void addToRequestQueue(Request<T> req, String tag) {

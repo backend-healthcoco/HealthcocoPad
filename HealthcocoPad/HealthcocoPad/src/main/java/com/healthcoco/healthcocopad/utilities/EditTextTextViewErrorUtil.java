@@ -2,13 +2,13 @@ package com.healthcoco.healthcocopad.utilities;
 
 import android.app.Activity;
 import android.content.Context;
-import android.support.design.widget.TextInputLayout;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ScrollView;
 
+import com.google.android.material.textfield.TextInputLayout;
 import com.healthcoco.healthcocopad.HealthCocoActivity;
 
 import java.util.ArrayList;

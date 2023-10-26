@@ -2,11 +2,12 @@ package com.healthcoco.healthcocopad.views;
 
 import android.content.Context;
 import android.os.Parcelable;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ListView;
+
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.healthcoco.healthcocopad.custom.SavedState;
 import com.healthcoco.healthcocopad.listeners.LoadMorePageListener;

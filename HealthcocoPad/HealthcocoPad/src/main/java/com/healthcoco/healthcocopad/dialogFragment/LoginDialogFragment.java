@@ -5,13 +5,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.android.volley.Response;
 import com.healthcoco.healthcocopad.HealthCocoDialogFragment;
@@ -86,8 +87,8 @@ public class LoginDialogFragment extends HealthCocoDialogFragment implements Vie
 //        editUserName.setText("avinash.sevlani@healthcoco.com");
 //        editUserName.setText("nehasantani06@gmail.com");
 //        editPassword.setText("neha");
-        editUserName.setText("neha.pateliya@healthcoco.com");
-        editPassword.setText("nehaneha");
+        editUserName.setText("salujagulshan@gmail.com");
+        editPassword.setText("gulsal008");
     }
 
     @Override

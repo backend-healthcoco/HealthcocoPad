@@ -17,12 +17,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.print.PrintManager;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.FileProvider;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -33,12 +27,18 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
+import androidx.fragment.app.Fragment;
+
 import com.android.volley.Response;
 import com.freshchat.consumer.sdk.Freshchat;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.healthcoco.healthcocopad.activities.CloudPrintActivity;
 import com.healthcoco.healthcocopad.activities.CommonOpenUpActivity;
 import com.healthcoco.healthcocopad.adapter.MyPrintDocumentAdapter;
@@ -1749,19 +1749,20 @@ public class HealthCocoActivity extends AppCompatActivity implements GsonRequest
             protected Void doInBackground(Void... params) {
                 try {
                     // Resets Instance ID and revokes all tokens.
-                    FirebaseInstanceId.getInstance().deleteInstanceId();
-                    FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    FirebaseMessaging.getInstance().deleteToken();
+                    FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
                         @Override
-                        public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        public void onComplete(@NonNull Task<String> task) {
                             if (!task.isSuccessful()) {
                                 Log.w(TAG, "getInstanceId failed", task.getException());
                                 return;
                             }
 
                             // Get new Instance ID token
-                            String token = task.getResult().getToken();
+                            String token = task.getResult();
                             sendRegistrationToServer(token);
                             Freshchat.getInstance(getApplicationContext()).setPushRegistrationToken(token);
+
                         }
                     });
                 } catch (Exception e) {

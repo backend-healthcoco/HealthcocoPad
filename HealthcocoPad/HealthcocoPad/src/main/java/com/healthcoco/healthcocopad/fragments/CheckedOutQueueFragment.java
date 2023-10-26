@@ -7,11 +7,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,6 +49,12 @@ import static com.healthcoco.healthcocopad.enums.AppointmentStatusType.ALL;
 import static com.healthcoco.healthcocopad.enums.AppointmentStatusType.CONFIRM;
 import static com.healthcoco.healthcocopad.enums.CalendarStatus.CHECKED_OUT;
 import static com.healthcoco.healthcocopad.enums.CalendarStatus.ENGAGED;
+
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 /**
  * Created by Prashant on 01-03-2018.

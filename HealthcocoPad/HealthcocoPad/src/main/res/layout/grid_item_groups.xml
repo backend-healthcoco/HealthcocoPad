@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="horizontal">
 
-    <android.support.v7.widget.AppCompatCheckBox
+    <androidx.appcompat.widget.AppCompatCheckBox
         android:id="@+id/ch_ui_permission"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
